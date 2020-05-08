@@ -286,8 +286,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
                 loader: "less-loader", // compiles Less to CSS
                 options: {
                   modifyVars: {
-                    'primary-color': '#F56C1D',
-                    'info-color': '#F56C1D'
+                    'primary-color': '#e2001a',
+                    'info-color': '#e2001a'
                   },
                   javascriptEnabled: true
                 }

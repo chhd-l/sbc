@@ -88,13 +88,13 @@ export default class LoginForm extends React.Component<any, any> {
             <p
               style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
             >
-              © 2017-2019 南京万米信息技术有限公司
+              {/* © 2017-2019 南京万米信息技术有限公司 */}© Royal Canin SAS 2020
             </p>
-            <p
+            {/* <p
               style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
             >
               版本号：{Const.COPY_VERSION}
-            </p>
+            </p> */}
           </div>
         </FormItem>
       </Form>

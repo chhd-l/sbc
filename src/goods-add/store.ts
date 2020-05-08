@@ -296,7 +296,25 @@ export default class AppStore extends Store {
   _getGoodsDetail = async (goodsId?: string) => {
     let goodsDetail: any = await getGoodsDetail(goodsId);
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
-      goodsDetail = fromJS(goodsDetail.res.context);
+      let tmpContext = goodsDetail.res.context;
+      // 合并多属性字段
+      let goodsPropDetailRelsOrigin = tmpContext.goodsPropDetailRels;
+      if (goodsPropDetailRelsOrigin) {
+        let tmpGoodsPropDetailRels = [];
+        goodsPropDetailRelsOrigin.forEach((item) => {
+          let tmpItem = tmpGoodsPropDetailRels.find(
+            (t) => t.propId === item.propId
+          );
+          if (tmpItem) {
+            tmpItem.detailIds.push(item.detailId);
+          } else {
+            item.detailIds = [item.detailId];
+            tmpGoodsPropDetailRels.push(item);
+          }
+        });
+        tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
+      }
+      goodsDetail = fromJS(tmpContext);
     } else {
       message.error('查询商品信息失败');
       return false;
@@ -1016,13 +1034,19 @@ export default class AppStore extends Store {
           (i) => i.get('select') == 'select'
         );
         let detailId = propValue.get('detailId');
-        goodsPropDatil = goodsPropDatil.push(
-          Map({
-            propId: propId,
-            goodsId: goodsId,
-            detailId: detailId
-          })
+        const propValues = goodsPropDetails.filter(
+          (i) => i.get('select') == 'select'
         );
+        let detailIds = propValues.map((p) => p.get('detailId'));
+        detailIds.forEach((dItem) => {
+          goodsPropDatil = goodsPropDatil.push(
+            Map({
+              propId: propId,
+              goodsId: goodsId,
+              detailId: dItem
+            })
+          );
+        });
       });
       param = param.set('goodsPropDetailRels', goodsPropDatil);
     }
@@ -1281,13 +1305,19 @@ export default class AppStore extends Store {
           (i) => i.get('select') == 'select'
         );
         let detailId = propValue.get('detailId');
-        goodsPropDatil = goodsPropDatil.push(
-          Map({
-            propId: propId,
-            goodsId: goodsId,
-            detailId: detailId
-          })
+        const propValues = goodsPropDetails.filter(
+          (i) => i.get('select') == 'select'
         );
+        let detailIds = propValues.map((p) => p.get('detailId'));
+        detailIds.forEach((dItem) => {
+          goodsPropDatil = goodsPropDatil.push(
+            Map({
+              propId: propId,
+              goodsId: goodsId,
+              detailId: dItem
+            })
+          );
+        });
       });
       param = param.set('goodsPropDetailRels', goodsPropDatil);
     }
@@ -1903,7 +1933,7 @@ export default class AppStore extends Store {
           goodsPropList.size > 0
         ) {
           goodsPropList.forEach((item) => {
-            const { detailId, propId } = item.toJS();
+            const { detailIds, propId } = item.toJS();
             const index = catePropDetail.findIndex(
               (p) => p.get('propId') === propId
             );
@@ -1911,6 +1941,9 @@ export default class AppStore extends Store {
               let detailList = catePropDetail
                 .getIn([index, 'goodsPropDetails'])
                 .map((d) => {
+                  let detailId = detailIds.find(
+                    (tmpId) => tmpId === d.get('detailId')
+                  );
                   if (d.get('detailId') == detailId) {
                     return d.set('select', 'select');
                   }

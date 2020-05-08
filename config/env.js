@@ -49,7 +49,7 @@ let evnMap = {
   test2: require('./env-config/test2.js'),
   test3: require('./env-config/test3.js'),
   local: require('./env-config/local.js'),
-  "dev:205": require('./env-config/dev:205.js'),
+  "dev:205": require('./env-config/dev_205.js'),
 }
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be

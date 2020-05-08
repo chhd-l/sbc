@@ -7,4 +7,3 @@ build
 .vscode
 .vscode/settings.json
 .awcache
-web_modules/qmkit/config.ts

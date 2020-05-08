@@ -525,6 +525,11 @@ const routes = [
   {
     path: '/enterprise-customer-list',
     asyncComponent: () => import('./enterprise-customer-list')
+  },
+  // clinic
+  {
+    path: '/clinic',
+    asyncComponent: () => import('./clinic')
   }
 ];
 

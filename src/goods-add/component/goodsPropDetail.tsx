@@ -2,10 +2,11 @@ import { IList } from 'typings/globalType';
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
-import { Form, Row, Col, Select } from 'antd';
+import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
 
 const { Option } = Select;
 const FormItem = Form.Item;
+const TreeNode = Tree.TreeNode;
 
 const formItemLayout = {
   labelCol: {
@@ -42,7 +43,6 @@ export default class GoodsPropDetail extends React.Component<any, any> {
 
   render() {
     const { propList } = this.props.relaxProps;
-
     return (
       <div>
         <div
@@ -69,12 +69,19 @@ export default class GoodsPropDetail extends React.Component<any, any> {
                     key={detList.get(0).get('propId')}
                   >
                     {detList.map((det) => (
-                      <Col span={10} key={det.get('propId') + det.get('cateId')}>
+                      <Col
+                        span={10}
+                        key={det.get('propId') + det.get('cateId')}
+                      >
                         <FormItem
                           {...formItemLayout}
                           label={det.get('propName')}
                         >
-                          {this._getPropSelect(
+                          {/* {this._getPropSelect(
+                            det.get('goodsPropDetails'),
+                            det.get('propId')
+                          )} */}
+                          {this._getPropTree(
                             det.get('goodsPropDetails'),
                             det.get('propId')
                           )}
@@ -113,11 +120,69 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     );
   };
 
+  _getPropTree = (propValues, propId) => {
+    const propVals = propValues.filter(
+      (item) => item.get('select') === 'select'
+    );
+    const selected = propVals.length
+      ? propVals.toJS().map((item) => {
+          return {
+            label: item.detailName,
+            value: item.detailId
+          };
+        })
+      : [];
+    return (
+      <TreeSelect
+        getPopupContainer={() => document.getElementById('page-content')}
+        treeCheckable={true}
+        showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+        treeCheckStrictly={true}
+        placeholder="请选择属性信息"
+        notFoundContent="暂无信息"
+        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+        treeDefaultExpandAll
+        showSearch={false}
+        defaultValue={selected}
+        onChange={(value) => this._onChange(propId, value)}
+      >
+        {this.generateStoreCateTree(propValues)}
+      </TreeSelect>
+    );
+  };
+
+  /**
+   * 店铺分类树形下拉框
+   * @param propValues
+   */
+  generateStoreCateTree = (propValues) => {
+    return propValues.map((item) => {
+      if (item.get('children') && item.get('children').count()) {
+        return (
+          <TreeNode
+            key={item.get('detailId')}
+            value={item.get('detailId')}
+            title={item.get('detailName')}
+          >
+            {this.generateStoreCateTree(item.get('children'))}
+          </TreeNode>
+        );
+      }
+      return (
+        <TreeNode
+          key={item.get('detailId')}
+          value={item.get('detailId')}
+          title={item.get('detailName')}
+        />
+      );
+    });
+  };
+
   /**
    *
    */
-  _onChange = (propId, detailId) => {
+  _onChange = (propId, detailIds) => {
     const { changePropVal } = this.props.relaxProps;
-    changePropVal({ propId, detailId });
+    changePropVal({ propId, detailIds: detailIds.map((d) => d.value) });
   };
 }

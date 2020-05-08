@@ -21,6 +21,7 @@ import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
 import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
 
+const { TextArea } = Input;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
 const TreeNode = Tree.TreeNode;
@@ -255,8 +256,8 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     min: 1,
-                    max: 40,
-                    message: '1-40字符'
+                    max: 225,
+                    message: '1-225字符'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -271,7 +272,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsName'),
                 initialValue: goods.get('goodsName')
-              })(<Input placeholder="请填写商品名称，不超过40字" />)}
+              })(<Input placeholder="请填写商品名称，不超过225字" />)}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -439,8 +440,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 40,
-                    message: '1-40字符'
+                    max: 225,
+                    message: '1-225字符'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -455,7 +456,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="请填商品副标题，不超过40字" />)}
+              })(<Input placeholder="请填商品副标题，不超过225字" />)}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -481,6 +482,28 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* <Row>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="商品描述">
+              {getFieldDecorator('goodsSubtitle', {
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(
+                        rule,
+                        value,
+                        callback,
+                        '商品描述'
+                      );
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
+                initialValue: goods.get('goodsSubtitle')
+              })(<TextArea rows={4} placeholder="请填商品描述" />)}
+            </FormItem>
+          </Col>
+        </Row> */}
         <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="销售类型">

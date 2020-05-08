@@ -64,11 +64,15 @@ export default class AppStore extends Store {
       if (menusRes.res.code === Const.SUCCESS_CODE) {
         let dataList = fromJS(menusRes.res.context);
         if (window.companyType == 0) {
-          dataList = dataList.filterNot(item => item.get('title') == '业务员统计')
+          dataList = dataList.filterNot(
+            (item) => item.get('title') == '业务员统计'
+          );
         }
         // 非自营店铺 隐藏企业会员
         if (window.companyType == 1) {
-          dataList = dataList.filterNot(item => item.get('title') == '企业会员')
+          dataList = dataList.filterNot(
+            (item) => item.get('title') == '企业会员'
+          );
         }
         // 主页菜单不在权限中配置，写死第一个
         dataList = dataList.insert(
@@ -82,6 +86,25 @@ export default class AppStore extends Store {
             icon: '1505551659667.jpg',
             authNm: '',
             url: '/',
+            reqType: '',
+            authRemark: '',
+            isMenuUrl: null,
+            sort: 0
+          })
+        );
+        // 临时新增一个Clinic
+        // 主页菜单不在权限中配置，写死第一个
+        dataList = dataList.insert(
+          4,
+          fromJS({
+            id: 'menu_clinic',
+            pid: 'menu_0',
+            realId: -1,
+            title: 'Clinic',
+            grade: 1,
+            icon: '1505551659667.jpg',
+            authNm: '',
+            url: '/clinic',
             reqType: '',
             authRemark: '',
             isMenuUrl: null,

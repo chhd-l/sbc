@@ -10,9 +10,9 @@
 var Common = require('./common');
 
 module.exports = {
-  host: 'https://supplierbff.saastest.kstore.shop',
-  HOST: 'https://supplierbff.saastest.kstore.shop',
-  X_XITE_ADMIN_HOST: 'https://web-server.saastest.kstore.shop',
-  X_XITE_OPEN_HOST: 'https://admin-api.saastest.kstore.shop',
+  host: 'http://52.168.31.130:8390',
+  HOST: 'http://52.168.31.130:8390',
+  X_XITE_ADMIN_HOST: 'http://52.168.31.130:3000',
+  X_XITE_OPEN_HOST: 'http://52.168.31.130:3000',
   ...Common
 };

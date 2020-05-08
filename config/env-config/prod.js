@@ -10,11 +10,9 @@
 var Common = require('./common');
 
 module.exports = {
-  // host: 'http://114.67.93.106:8390',
-  // HOST: 'http://114.67.93.106:8390',
-  host: 'https://supplierbff.s2b.wanmi.com',
-  HOST: 'https://supplierbff.s2b.wanmi.com',
-  X_XITE_ADMIN_HOST: 'https://web-server.s2b.wanmi.com',
-  X_XITE_OPEN_HOST: 'https://admin-api.s2b.wanmi.com',
+  host: 'http://52.168.31.130:8390',
+  HOST: 'http://52.168.31.130:8390',
+  X_XITE_ADMIN_HOST: 'http://52.168.31.130:3000',
+  X_XITE_OPEN_HOST: 'http://52.168.31.130:3000',
   ...Common
 };

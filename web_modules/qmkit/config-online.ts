@@ -1,6 +1,6 @@
 import Common from './config-common';
 export default {
   // online
-  HOST: 'https://supplierbff.s2b.wanmi.com',
+  HOST: 'http://52.168.31.130:8390',
   ...Common
 };

@@ -6,23 +6,89 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 export default class SearchForm extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchForm: {
+        clinicId: '',
+        clinicName: '',
+        clinicPhone: '',
+        clinicCity: '',
+        clinicZip: ''
+      }
+    };
+  }
+  init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+    const query = this.state.searchForm;
+    console.log(pageNum, pageSize);
+
+    console.log(query);
+  };
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+
+  onSearch = () => {
+    this.init({ pageNum: 0, pageSize: 10 });
+  };
   render() {
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>
-          <Input addonBefore="Clinic ID" />
+          <Input
+            addonBefore="Clinic ID"
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.onFormChange({
+                field: 'clinicId',
+                value
+              });
+            }}
+          />
         </FormItem>
 
         <FormItem>
-          <Input addonBefore="Clinic Name" />
+          <Input
+            addonBefore="Clinic Name"
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.onFormChange({
+                field: 'clinicName',
+                value
+              });
+            }}
+          />
         </FormItem>
 
         <FormItem>
-          <Input addonBefore="Clinic Phone" />
+          <Input
+            addonBefore="Clinic Phone"
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.onFormChange({
+                field: 'clinicPhone',
+                value
+              });
+            }}
+          />
         </FormItem>
 
         <FormItem>
-          <SelectGroup label="Clinic City" style={{ width: 80 }}>
+          <SelectGroup
+            label="Clinic City"
+            style={{ width: 80 }}
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              this.onFormChange({
+                field: 'clinicCity',
+                value
+              });
+            }}
+          >
             <Option value="">All</Option>
             <Option value="0">Mexico City</Option>
             <Option value="1">Monterrey</Option>
@@ -30,11 +96,28 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
 
         <FormItem>
-          <Input addonBefore="Clinic Zip" />
+          <Input
+            addonBefore="Clinic Zip"
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.onFormChange({
+                field: 'clinicZip',
+                value
+              });
+            }}
+          />
         </FormItem>
 
         <FormItem>
-          <Button type="primary" htmlType="submit" icon="search">
+          <Button
+            type="primary"
+            htmlType="submit"
+            icon="search"
+            onClick={(e) => {
+              e.preventDefault();
+              this.onSearch();
+            }}
+          >
             Search
           </Button>
         </FormItem>

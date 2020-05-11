@@ -482,10 +482,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        {/* <Row>
+        <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="商品描述">
-              {getFieldDecorator('goodsSubtitle', {
+              {getFieldDecorator('goodsDescription', {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
@@ -498,12 +498,12 @@ class GoodsForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoods.bind(this, 'goodsSubtitle'),
-                initialValue: goods.get('goodsSubtitle')
+                onChange: this._editGoods.bind(this, 'goodsDescription'),
+                initialValue: goods.get('goodsDescription')
               })(<TextArea rows={4} placeholder="请填商品描述" />)}
             </FormItem>
           </Col>
-        </Row> */}
+        </Row>
         <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="销售类型">

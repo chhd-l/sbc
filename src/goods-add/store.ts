@@ -1030,10 +1030,10 @@ export default class AppStore extends Store {
         let { propId, goodsPropDetails } = item.toJS();
         goodsPropDetails = fromJS(goodsPropDetails);
         let goodsId = goods.get('goodsId');
-        const propValue = goodsPropDetails.find(
-          (i) => i.get('select') == 'select'
-        );
-        let detailId = propValue.get('detailId');
+        // const propValue = goodsPropDetails.find(
+        //   (i) => i.get('select') == 'select'
+        // );
+        // let detailId = propValue.get('detailId');
         const propValues = goodsPropDetails.filter(
           (i) => i.get('select') == 'select'
         );

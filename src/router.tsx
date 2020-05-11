@@ -535,6 +535,10 @@ const routes = [
   {
     path: '/clinic-add',
     asyncComponent: () => import('./clinic-add')
+  },
+  {
+    path: '/clinic-edit/:id',
+    asyncComponent: () => import('./clinic-add')
   }
 ];
 

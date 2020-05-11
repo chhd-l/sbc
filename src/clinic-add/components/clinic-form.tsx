@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
+import * as webapi from './../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -11,20 +12,50 @@ const layout = {
 };
 
 class ClinicForm extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       clinicForm: {
-        clinicName: '',
-        clinicPhone: '',
-        clinicCity: '',
-        clinicZip: '',
+        clinicsId: '',
+        clinicsOwner: 'john',
+        clinicsName: '',
+        phone: '',
+        primaryCity: '',
+        primaryZip: '',
         longitude: '',
         latitude: '',
-        clinicAddress: ''
+        location: ''
       }
     };
+    this.getDetail = this.getDetail.bind(this);
+
+    if (this.props.clinicId) {
+      this.getDetail(this.props.clinicId);
+    }
   }
+  getDetail = async (id) => {
+    const { res } = await webapi.getClinicById({
+      clinicsId: id
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        clinicForm: res.context
+      });
+      this.props.form.setFieldsValue({
+        clinicsId: res.context.clinicsId,
+        clinicsName: res.context.clinicsName,
+        phone: res.context.phone,
+        primaryCity: res.context.primaryCity,
+        primaryZip: res.context.primaryZip,
+        longitude: res.context.longitude,
+        latitude: res.context.latitude,
+        location: res.context.location
+      });
+    } else {
+      message.error(res.message || 'get data faild');
+    }
+    console.log(this.state.clinicForm);
+  };
   onFormChange = ({ field, value }) => {
     let data = this.state.clinicForm;
     data[field] = value;
@@ -32,22 +63,56 @@ class ClinicForm extends React.Component<any, any> {
       clinicForm: data
     });
   };
-  onCreate = () => {
-    console.log(this.state.clinicForm);
+  onCreate = async () => {
+    const clinicForm = this.state.clinicForm;
+    const { res } = await webapi.addClinic({
+      ...clinicForm
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'create success');
+    } else {
+      message.error(res.message || 'create faild');
+    }
+  };
+  onUpdate = async () => {
+    let clinicForm = this.state.clinicForm;
+    clinicForm.clinicsId = this.props.clinicId;
+    const { res } = await webapi.updateClinic({
+      ...clinicForm
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'update success');
+    } else {
+      message.error(res.message || 'update faild');
+    }
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        if (this.props.pageType === 'create') {
+          this.onCreate();
+        }
+        if (this.props.pageType === 'edit') {
+          this.onUpdate();
+        }
+      }
+    });
   };
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form {...layout} style={{ width: '600px' }}>
+      <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
         <FormItem label="Clinic Name">
-          {getFieldDecorator('clinicName', {
+          {getFieldDecorator('clinicsName', {
             rules: [{ required: true, message: 'Please input clinic name!' }]
           })(
             <Input
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({
-                  field: 'clinicName',
+                  field: 'clinicsName',
                   value
                 });
               }}
@@ -55,7 +120,7 @@ class ClinicForm extends React.Component<any, any> {
           )}
         </FormItem>
         <FormItem label="Clinic Phone Number">
-          {getFieldDecorator('clinicPhoneNumber', {
+          {getFieldDecorator('phone', {
             rules: [
               { required: true, message: 'Please input clinic phone number!' }
             ]
@@ -64,7 +129,7 @@ class ClinicForm extends React.Component<any, any> {
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({
-                  field: 'clinicPhone',
+                  field: 'phone',
                   value
                 });
               }}
@@ -72,28 +137,32 @@ class ClinicForm extends React.Component<any, any> {
           )}
         </FormItem>
         <FormItem label="Clinic City">
-          <Select
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              this.onFormChange({
-                field: 'clinicCity',
-                value
-              });
-            }}
-          >
-            <Option value="0">Mexico City</Option>
-            <Option value="1">Monterrey</Option>
-          </Select>
+          {getFieldDecorator('primaryCity', {
+            rules: [{ required: true, message: 'Please select clinic city!' }]
+          })(
+            <Select
+              onChange={(value) => {
+                value = value === '' ? null : value;
+                this.onFormChange({
+                  field: 'primaryCity',
+                  value
+                });
+              }}
+            >
+              <Option value="Mexico City">Mexico City</Option>
+              <Option value="Monterrey">Monterrey</Option>
+            </Select>
+          )}
         </FormItem>
         <FormItem label="Clinic Zip">
-          {getFieldDecorator('clinicZip', {
+          {getFieldDecorator('primaryZip', {
             rules: [{ required: true, message: 'Please input clinic zip!' }]
           })(
             <Input
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.onFormChange({
-                  field: 'clinicZip',
+                  field: 'primaryZip',
                   value
                 });
               }}
@@ -131,29 +200,30 @@ class ClinicForm extends React.Component<any, any> {
           )}
         </FormItem>
         <FormItem label="Clinic Address">
-          <Input.TextArea
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              this.onFormChange({
-                field: 'clinicAddress',
-                value
-              });
-            }}
-          />
+          {getFieldDecorator('location')(
+            <Input.TextArea
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onFormChange({
+                  field: 'location',
+                  value
+                });
+              }}
+            />
+          )}
         </FormItem>
         <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              this.onCreate();
-            }}
-          >
-            Create
-          </Button>
+          {this.props.pageType === 'edit' ? (
+            <Button type="primary" htmlType="submit">
+              Update
+            </Button>
+          ) : (
+            <Button type="primary" htmlType="submit">
+              Create
+            </Button>
+          )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="clinic">Back List</Link>
+            <Link to="/clinic">Back List</Link>
           </Button>
         </FormItem>
       </Form>

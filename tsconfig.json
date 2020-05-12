@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["es5", "es6", "dom", "es7", "esnext"],
+    "lib": ["es5", "es6", "dom", "es7", "esnext", "esnext.intl", "es2017.intl", "es2018.intl", "dom.iterable","scripthost"],
     "module": "esnext",
     "sourceMap": false,
     "noImplicitAny": false,

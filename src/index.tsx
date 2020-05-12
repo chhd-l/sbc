@@ -10,24 +10,29 @@ import './index.less';
 import Main from './main';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import { IntlProvider } from 'react-intl';
+import es_ES from '../web_modules/qmkit/es_ES';
 
 moment.locale('zh-cn');
 
 const B2BBoss = () => (
-  <LocaleProvider locale={zhCN}>
-    <Provider store={store}>
-      <Router history={history}>
-        <div className="father">
-          <Switch>
-            {routeWithSubRoutes(homeRoutes, noop)}
-            <Route component={Main} />
-          </Switch>
-        </div>
-      </Router>
-    </Provider>
-  </LocaleProvider>
+  <IntlProvider locale="es" messages={es_ES}>
+    <LocaleProvider locale={enUS}>
+      <Provider store={store}>
+        <Router history={history}>
+          <div className="father">
+            <Switch>
+              {routeWithSubRoutes(homeRoutes, noop)}
+              <Route component={Main} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
+    </LocaleProvider>
+  </IntlProvider>
 );
 
 ReactDOM.render(<B2BBoss />, document.getElementById('root'));

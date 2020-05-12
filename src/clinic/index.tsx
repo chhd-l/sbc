@@ -13,27 +13,27 @@ export default class ClinicList extends Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Clinic ID',
+          title: 'Prescriber ID',
           dataIndex: 'clinicsId',
           key: 'clinicID'
         },
         {
-          title: 'Clinic Name',
+          title: 'Prescriber Name',
           dataIndex: 'clinicsName',
           key: 'clinicName'
         },
         {
-          title: 'Clinic Phone',
+          title: 'Prescriber Phone',
           dataIndex: 'phone',
           key: 'clinicPhone'
         },
         {
-          title: 'Clinic City',
+          title: 'Prescriber City',
           dataIndex: 'primaryCity',
           key: 'clinicCity'
         },
         {
-          title: 'Clinic Zip',
+          title: 'Prescriber Zip',
           dataIndex: 'primaryZip',
           key: 'clinicZip'
         },
@@ -46,6 +46,16 @@ export default class ClinicList extends Component<any, any> {
           title: 'Latitude',
           dataIndex: 'latitude',
           key: 'latitude'
+        },
+        {
+          title: 'Prescriber Type',
+          dataIndex: 'prescriberType',
+          key: 'prescriberType'
+        },
+        {
+          title: 'Reward Rate',
+          dataIndex: 'rewardRate',
+          key: 'rewardRate'
         },
         {
           title: 'Action',
@@ -133,12 +143,12 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title="Clinic List" />
+          <Headline title="Prescriber List" />
           {/*搜索条件*/}
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="Clinic ID"
+                addonBefore="Prescriber ID"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -151,7 +161,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Clinic Name"
+                addonBefore="Prescriber Name"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -164,7 +174,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Clinic Phone"
+                addonBefore="Prescriber Phone"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -177,7 +187,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
-                label="Clinic City"
+                label="Prescriber City"
                 style={{ width: 80 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -195,7 +205,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Clinic Zip"
+                addonBefore="Prescriber Zip"
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({

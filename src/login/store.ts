@@ -104,11 +104,57 @@ export default class AppStore extends Store {
             grade: 1,
             icon: '1505551659667.jpg',
             authNm: '',
-            url: '/clinic',
+            url: '',
             reqType: '',
             authRemark: '',
             isMenuUrl: null,
-            sort: 0
+            sort: 4,
+            children: [
+              {
+                id: 'menu_clinic_msg',
+                pid: 'menu_0',
+                realId: -1,
+                title: 'Clinic',
+                grade: 2,
+                icon: '1505551659667.jpg',
+                authNm: '',
+                url: '',
+                reqType: '',
+                authRemark: '',
+                isMenuUrl: null,
+                sort: 0,
+                children: [
+                  {
+                    id: 'menu_clinic_list',
+                    pid: 'menu_0',
+                    realId: -1,
+                    title: 'Clinic List',
+                    grade: 3,
+                    icon: '1505551659667.jpg',
+                    authNm: '',
+                    url: '/clinic',
+                    reqType: '',
+                    authRemark: '',
+                    isMenuUrl: null,
+                    sort: 0
+                  },
+                  {
+                    id: 'menu_clinic_new',
+                    pid: 'menu_0',
+                    realId: -1,
+                    title: 'New Clinic',
+                    grade: 3,
+                    icon: '1505551659667.jpg',
+                    authNm: '',
+                    url: '/clinic-add',
+                    reqType: '',
+                    authRemark: '',
+                    isMenuUrl: null,
+                    sort: 1
+                  }
+                ]
+              }
+            ]
           })
         );
 

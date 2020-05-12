@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Select, Input, Button } from 'antd';
 import { SelectGroup, AreaSelect, noop } from 'qmkit';
+import * as webapi from './../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -17,12 +18,18 @@ export default class SearchForm extends React.Component<any, any> {
         clinicZip: ''
       }
     };
+    this.init();
   }
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
-    console.log(pageNum, pageSize);
-
-    console.log(query);
+    const { res } = await webapi.fetchClinicList({
+      ...query,
+      pageNum,
+      pageSize
+    });
+    if (res.code === 'K-000000') {
+      this.props.getClinicList(res.context);
+    }
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;

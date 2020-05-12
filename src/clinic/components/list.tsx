@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Divider } from 'antd';
 import { Link } from 'react-router-dom';
 
 const columns = [
@@ -37,6 +37,17 @@ const columns = [
     title: 'Latitude',
     dataIndex: 'latitude',
     key: 'latitude'
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text, record) => (
+      <span>
+        <Link to="/clinic-add">Edit</Link>
+        <Divider type="vertical" />
+        <a>Delete</a>
+      </span>
+    )
   }
 ];
 const data = [
@@ -79,6 +90,7 @@ export default class SearchForm extends React.Component<any, any> {
     },
     loading: false
   };
+
   handleTableChange(pagination) {
     console.log(pagination);
   }
@@ -87,7 +99,7 @@ export default class SearchForm extends React.Component<any, any> {
     return (
       <div>
         <Button>
-          <Link to="/clinic-add">Add</Link>{' '}
+          <Link to="/clinic-add">Add</Link>
         </Button>
         <Table
           columns={columns}

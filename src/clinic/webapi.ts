@@ -6,11 +6,23 @@ type TResult = {
   context: any;
 };
 /**
- * 获取客户列表
+ * 获取Clinic列表
  * @param filterParams
  */
-export function fetchCustomerList(filterParams = {}) {
-  return Fetch<TResult>('/customer/page', {
+export function fetchClinicList(filterParams = {}) {
+  return Fetch<TResult>('/clinics/queryPrescription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+/**
+ * delete Clinic
+ * @param filterParams
+ */
+export function deleteClinic(filterParams = {}) {
+  return Fetch<TResult>('/clinics/delPrescription', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

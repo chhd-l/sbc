@@ -1,65 +1,64 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const columns = [
-  {
-    title: 'Clinic ID',
-    dataIndex: 'clinicsId',
-    key: 'clinicID'
-  },
-  {
-    title: 'Clinic Name',
-    dataIndex: 'clinicsName',
-    key: 'clinicName'
-  },
-  {
-    title: 'Clinic Phone',
-    dataIndex: 'phone',
-    key: 'clinicPhone'
-  },
-  {
-    title: 'Clinic City',
-    dataIndex: 'primaryCity',
-    key: 'clinicCity'
-  },
-  {
-    title: 'Clinic Zip',
-    dataIndex: 'primaryZip',
-    key: 'clinicZip'
-  },
-  {
-    title: 'Longitude',
-    dataIndex: 'longitude',
-    key: 'longitude'
-  },
-  {
-    title: 'Latitude',
-    dataIndex: 'latitude',
-    key: 'latitude'
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <span>
-        <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
-        <Divider type="vertical" />
-        <a>Delete</a>
-      </span>
-    )
-  }
-];
-
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      columns: [
+        {
+          title: 'Clinic ID',
+          dataIndex: 'clinicsId',
+          key: 'clinicID'
+        },
+        {
+          title: 'Clinic Name',
+          dataIndex: 'clinicsName',
+          key: 'clinicName'
+        },
+        {
+          title: 'Clinic Phone',
+          dataIndex: 'phone',
+          key: 'clinicPhone'
+        },
+        {
+          title: 'Clinic City',
+          dataIndex: 'primaryCity',
+          key: 'clinicCity'
+        },
+        {
+          title: 'Clinic Zip',
+          dataIndex: 'primaryZip',
+          key: 'clinicZip'
+        },
+        {
+          title: 'Longitude',
+          dataIndex: 'longitude',
+          key: 'longitude'
+        },
+        {
+          title: 'Latitude',
+          dataIndex: 'latitude',
+          key: 'latitude'
+        },
+        {
+          title: 'Action',
+          key: 'action',
+          render: (text, record) => (
+            <span>
+              <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
+              <Divider type="vertical" />
+              <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a>
+            </span>
+          )
+        }
+      ],
       clinicList: [],
       pagination: {
         current: 1,
@@ -98,6 +97,17 @@ export default class ClinicList extends Component<any, any> {
       });
     }
   };
+  delClinic = async (id) => {
+    const { res } = await webapi.deleteClinic({
+      clinicsId: id
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'delete success');
+      this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
+    } else {
+      message.error(res.message || 'delete faild');
+    }
+  };
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
     data[field] = value;
@@ -115,7 +125,9 @@ export default class ClinicList extends Component<any, any> {
     });
     this.init({ pageNum: pagination.current, pageSize: 10 });
   }
+
   render() {
+    const { columns } = this.state;
     return (
       <div>
         <BreadCrumb />

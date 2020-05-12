@@ -17,3 +17,15 @@ export function fetchClinicList(filterParams = {}) {
     })
   });
 }
+/**
+ * delete Clinic
+ * @param filterParams
+ */
+export function deleteClinic(filterParams = {}) {
+  return Fetch<TResult>('/clinics/delPrescription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -4,7 +4,7 @@ export default class Headline extends React.PureComponent<any, any> {
   props: {
     children?: any;
     state?: any;
-    title?: string;
+    title?: any;
     number?: string;
     //禁止显示line
     lineDisable?: Boolean;

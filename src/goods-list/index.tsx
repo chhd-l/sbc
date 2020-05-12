@@ -7,6 +7,7 @@ import SearchForm from './components/search-form';
 import Tool from './components/tool';
 import Tab from './components/tab';
 import FreightModal from './components/freight-modal';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsView extends React.Component<any, any> {
@@ -28,7 +29,7 @@ export default class GoodsView extends React.Component<any, any> {
             <Breadcrumb.Item>商品列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="商品列表" />
+            <Headline title={<FormattedMessage id="product" />} />
 
             {/*搜索*/}
             <SearchForm />

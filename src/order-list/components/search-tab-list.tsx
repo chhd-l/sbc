@@ -3,6 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Tabs } from 'antd';
 import List from './list';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class SearchList extends React.Component<any, any> {
@@ -30,35 +31,55 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab="全部" key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待审核" key="flowState-INIT">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.pendingReview" />}
+            key="flowState-INIT"
+          >
+            <List />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.toBeFormed" />}
+            key="flowState-GROUPON"
+          >
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待成团" key="flowState-GROUPON">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.toBeDelivered" />}
+            key="flowState-AUDIT"
+          >
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待发货" key="flowState-AUDIT">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.toBeReceived" />}
+            key="flowState-DELIVERED"
+          >
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待收货" key="flowState-DELIVERED">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.received" />}
+            key="flowState-CONFIRMED"
+          >
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="已收货" key="flowState-CONFIRMED">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.completed" />}
+            key="flowState-COMPLETED"
+          >
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="已完成" key="flowState-COMPLETED">
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="已作废" key="flowState-VOID">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.outOfDate" />}
+            key="flowState-VOID"
+          >
             <List />
           </Tabs.TabPane>
         </Tabs>

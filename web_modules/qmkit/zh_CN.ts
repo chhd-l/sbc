@@ -83,4 +83,35 @@ export default {
   "paid":"已付款",
   "remarks":"备注",
 
+  'productFirstLetterUpperCase': '商品',
+
+  'recipient': '收件人',
+
+  
+  'amount': '金额	',
+
+
+  'order.orderList': '订单列表',
+  'order.orderNumber': '订单编号',
+  'order.shippingStatus': '发货状态',
+  'order.paymentStatus': '付款状态',
+  'order.orderStatus': '订单状态',
+  'order.orderSource': '订单来源',
+  'order.startDate': '开始日期',
+  'order.endDate': '结束日期',
+  'order.bulkOperations': '批量操作',
+  'order.pendingReview': '待审核',
+  'order.toBeFormed': '待成团',
+  'order.notShipped': '未发货',
+  'order.toBeDelivered': '待发货',
+  'order.toBeReceived': '待收货',
+  'order.paid': '已付款',
+  'order.received': '已收货',
+  'order.completed': '已完成',
+  'order.outOfDate': '已作废',
+  'order.ship': '发货',
+  'order.seeDetails': '查看详情',
+  'order.PCOrder': 'PC订单',
+  'order.H5Order': 'H5订单',
+  'order.AppOrder': 'APP订单',
 };

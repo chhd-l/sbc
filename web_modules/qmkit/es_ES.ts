@@ -64,9 +64,9 @@ export default {
   'product.publishItemInfo3': 'One-click import of platform commodity library',
   // 'product.productVideo': 'Product video',
   // 'product.productVideo': 'Product video',
-  
-  
-  
+
+
+
 
   'product': 'productsss',
   'consumerList':'Consumer List',
@@ -143,6 +143,37 @@ export default {
   "paid":"paid",
   "remarks":"Remarks",
   "operating":"Operating",
+  'productFirstLetterUpperCase': 'Product',
+
+
+  'recipient': 'Recipient',
+
+  
+  'amount': 'Amount	',
+
+
+  'order.orderList': 'Order List',
+  'order.orderNumber': 'Order number',
+  'order.shippingStatus': 'Shipping status',
+  'order.paymentStatus': 'Payment status',
+  'order.orderStatus': 'Order Status',
+  'order.orderSource': 'Order source',
+  'order.startDate': 'Start date',
+  'order.endDate': 'End date',
+  'order.bulkOperations': 'Bulk operations',
+  'order.pendingReview': 'Pending review',
+  'order.toBeFormed': 'To be formed',
+  'order.toBeDelivered': 'To be delivered',
+  'order.toBeReceived': 'To be received',
+  'order.paid': 'Paid',
+  'order.received': 'Received',
+  'order.completed': 'Completed',
+  'order.outOfDate': 'Out of date',
+  'order.ship': 'Ship',
+  'order.seeDetails': 'See details',
+  'order.PCOrder': 'PC order',
+  'order.H5Order': 'H5 Order',
+  'order.AppOrder': 'APP Order',
 };
 
 

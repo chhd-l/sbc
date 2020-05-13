@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -11,7 +12,7 @@ const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return '未发货';
+    return <FormattedMessage id="order.notShipped" />;
   } else if (status == 'SHIPPED') {
     return '全部发货';
   } else if (status == 'PART_SHIPPED') {
@@ -37,19 +38,19 @@ const payStatus = (status) => {
 
 const flowState = (status) => {
   if (status == 'INIT') {
-    return '待审核';
+    return <FormattedMessage id="order.pendingReview" />;
   } else if (status == 'GROUPON') {
-    return '待成团';
+    return <FormattedMessage id="order.toBeFormed" />;
   } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return '待发货';
+    return <FormattedMessage id="order.toBeDelivered" />;
   } else if (status == 'DELIVERED') {
-    return '待收货';
+    return <FormattedMessage id="order.toBeReceived" />;
   } else if (status == 'CONFIRMED') {
-    return '已收货';
+    return <FormattedMessage id="order.received" />;
   } else if (status == 'COMPLETED') {
-    return '已完成';
+    return <FormattedMessage id="order.completed" />;
   } else if (status == 'VOID') {
-    return '已作废';
+    return <FormattedMessage id="order.outOfDate" />;
   }
 };
 
@@ -186,20 +187,30 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '100px' }}>商品</th>
-                      <th style={{ width: '10%' }}>客户名称</th>
-                      <th style={{ width: '15%' }}>收件人</th>
-                      <th style={{ width: '10%' }}>
-                        金额
-                        <br />
-                        数量
+                      <th style={{ width: '100px' }}>
+                        <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '5%' }}>postCode</th>
-                      <th style={{ width: '5%' }}>rfc</th>
-                      <th style={{ width: '5%' }}>发货状态</th>
-                      <th style={{ width: '5%' }}>订单状态</th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="consumerName" />
+                      </th>
+                      <th style={{ width: '15%' }}>
+                        <FormattedMessage id="recipient" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="amount" />
+                        <br />
+                        <FormattedMessage id="quantity" />
+                      </th>
+                      {/* <th style={{ width: '5%' }}>postCode</th> */}
+                      {/* <th style={{ width: '5%' }}>rfc</th> */}
+                      <th style={{ width: '5%' }}>
+                        <FormattedMessage id="order.shippingStatus" />
+                      </th>
+                      <th style={{ width: '5%' }}>
+                        <FormattedMessage id="order.orderStatus" />
+                      </th>
                       <th className="operation-th" style={{ width: '10%' }}>
-                        付款状态
+                        <FormattedMessage id="order.paymentStatus" />
                       </th>
                     </tr>
                   </thead>
@@ -287,7 +298,7 @@ export default class ListView extends React.Component<any, any> {
         } else if (orderSource == 'APP') {
           orderType = 'APP订单';
         } else if (orderSource == 'PC') {
-          orderType = 'PC订单';
+          orderType = 'PC order';
         } else if (orderSource == 'LITTLEPROGRAM') {
           orderType = '小程序订单';
         }
@@ -423,7 +434,7 @@ export default class ListView extends React.Component<any, any> {
                                   onClick={() => this._toDeliveryForm(id)}
                                   style={{ marginLeft: 20 }}
                                 >
-                                  发货
+                                  <FormattedMessage id="order.ship" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -438,7 +449,7 @@ export default class ListView extends React.Component<any, any> {
                             ) && (
                               <AuthWrapper functionName="fOrderDetail002">
                                 <a onClick={() => this._toDeliveryForm(id)}>
-                                  发货
+                                  <FormattedMessage id="order.ship" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -461,7 +472,7 @@ export default class ListView extends React.Component<any, any> {
                               style={{ marginLeft: 20, marginRight: 20 }}
                               to={`/order-detail/${id}`}
                             >
-                              查看详情
+                              <FormattedMessage id="order.seeDetails" />
                             </Link>
                           </AuthWrapper>
                         </span>

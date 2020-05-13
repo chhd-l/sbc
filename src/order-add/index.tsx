@@ -6,6 +6,7 @@ import { Headline, BreadCrumb } from 'qmkit';
 import CustomerInfo from './components/customer-info';
 import GoodsList from './components/goods-list';
 import { Button, Breadcrumb } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 import ExtraInfo from './components/extra-info';
 import Form from 'antd/lib/form/Form';
@@ -30,12 +31,20 @@ class CreateOrder extends React.Component<any, any> {
         <BreadCrumb thirdLevel={this.props.edit && true}>
           {/* {this.props.edit ? <Breadcrumb.Item>订单列表</Breadcrumb.Item> : null} */}
           <Breadcrumb.Item>
-            {this.props.edit ? '修改订单' : ''}
+            {this.props.edit ? <FormattedMessage id="order.editOrder" /> : ''}
           </Breadcrumb.Item>
         </BreadCrumb>
         <Form>
           <div className="container">
-            <Headline title={this.props.edit ? '修改订单' : '代客下单'} />
+            <Headline
+              title={
+                this.props.edit ? (
+                  <FormattedMessage id="order.editOrder" />
+                ) : (
+                  <FormattedMessage id="order.valetOrder" />
+                )
+              }
+            />
 
             {/*客戶信息*/}
             <CustomerInfo
@@ -50,7 +59,9 @@ class CreateOrder extends React.Component<any, any> {
               }}
             />
 
-            <strong style={styles.title}>商品清单: </strong>
+            <strong style={styles.title}>
+              <FormattedMessage id="product.productList" />:{' '}
+            </strong>
 
             {/*商品列表*/}
             <GoodsList
@@ -127,7 +138,7 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
             htmlType="submit"
             loading={this.state.submitting}
           >
-            保存
+            <FormattedMessage id="save" />
           </Button>
           &nbsp;&nbsp;
           <Button
@@ -136,7 +147,7 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
               this.props.history.go(-1);
             }}
           >
-            取消
+            <FormattedMessage id="cancel" />
           </Button>
         </div>
       </div>

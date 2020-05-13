@@ -69,11 +69,20 @@ export default class AppStore extends Store {
           );
         }
         // 非自营店铺 隐藏企业会员
-        if (window.companyType == 1) {
-          dataList = dataList.filterNot(
-            (item) => item.get('title') == '企业会员'
-          );
-        }
+        // if (window.companyType == 1) {
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '企业会员'
+        );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '评价管理'
+        );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == 'Order list(3PL)'
+        );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '积分订单'
+        );
+        // }
         // 主页菜单不在权限中配置，写死第一个
         dataList = dataList.insert(
           0,
@@ -93,9 +102,7 @@ export default class AppStore extends Store {
           })
         );
         // 临时新增一个Clinic
-        // 主页菜单不在权限中配置，写死第一个
-        dataList = dataList.insert(
-          4,
+        dataList = dataList.push(
           fromJS({
             id: 'menu_clinic',
             pid: 'menu_0',
@@ -159,13 +166,20 @@ export default class AppStore extends Store {
         );
 
         const allGradeMenus = this._getChildren(
-          dataList.filter((item) => item.get('grade') == 1),
+          dataList.filter((item) => item.get('grade') === 1),
           dataList
         );
-        sessionStorage.setItem(
-          cache.LOGIN_MENUS,
-          JSON.stringify(allGradeMenus.toJS())
-        );
+        console.log(allGradeMenus.toJS());
+        debugger;
+        let filterMenu = allGradeMenus
+          .toJS()
+          .filter(
+            (item) =>
+              item.title !== '数谋' &&
+              item.title !== '魔方' &&
+              item.title !== '应用'
+          );
+        sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(filterMenu));
 
         const functionsRes = (await webapi.fetchFunctions()) as any;
         sessionStorage.setItem(

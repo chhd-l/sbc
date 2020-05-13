@@ -251,6 +251,17 @@ export default {
   'Refund': 'Refund',
   'Refund': 'Refund',
   'Refund': 'Refund',
+
+
+  'operationLog':'Operation log',
+  'operatorType':'Operator type',
+  'operator':'Operator',
+  'time':'Time',
+  'operationCategory':'Operation category',
+  'paymentOrder':'Payment order',
+  'createOrder':'Create Order',
+  'order':'Order',
+  'back':'Back'
 };
 
 

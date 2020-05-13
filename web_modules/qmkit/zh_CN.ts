@@ -151,4 +151,17 @@ export default {
   'order.pleaseSelectOrderToOperate': '请选择需要操作的订单',
   'order.batchReview': '批量审核',
   'order.batchExpert': '批量导出',
+
+
+
+
+  'operationLog':'操作日志',
+  'operatorType':'操作方',
+  'operator':'操作人',
+  'time':'时间',
+  'operationCategory':'操作类别',
+  'paymentOrder':'订单支付',
+  'createOrder':'创建订单',
+  'order':'订单',
+  'back':'返回'
 };

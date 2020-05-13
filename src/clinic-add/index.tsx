@@ -30,7 +30,9 @@ export default class ClinicList extends Component<any, any> {
         {this.props.match.params.id ? <div></div> : <BreadCrumb />}
         <div className="container">
           <Headline
-            title={this.props.match.params.id ? 'Edit Clinic' : 'New Clinic'}
+            title={
+              this.props.match.params.id ? 'Edit Prescriber' : 'New Prescriber'
+            }
           />
           <ClinicForm
             pageType={this.state.pageType}

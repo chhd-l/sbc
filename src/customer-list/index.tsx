@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, AuthWrapper, util,BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
 import ButtonGroup from './components/button-group';
@@ -11,6 +11,7 @@ import AddRelatedModal from './components/add-related-modal';
 import UpdateRelaterForm from './components/update-related-modal';
 import SelfSearchForm from './components/self-search-form';
 import SelfCustomerList from './components/self-tab-data-grid';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Customer extends React.Component<any, any> {
@@ -36,7 +37,7 @@ export default class Customer extends React.Component<any, any> {
     return (
       <AuthWrapper functionName="f_customer_0">
         <div>
-          <BreadCrumb/>
+          <BreadCrumb />
           {/*导航面包屑*/}
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>客户</Breadcrumb.Item>
@@ -44,7 +45,7 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container customer">
-            <Headline title="客户列表" />
+            <Headline title={<FormattedMessage id="consumerList" />} />
             {util.isThirdStore() ? (
               <div>
                 {/*非自营店铺展示*/}

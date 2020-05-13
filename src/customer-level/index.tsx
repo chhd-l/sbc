@@ -1,7 +1,7 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
 import { Breadcrumb } from 'antd';
-import { AuthWrapper, Headline, util,BreadCrumb } from 'qmkit';
+import { AuthWrapper, Headline, util, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import ListView from './component/list';
 import LevelModal from './component/level-modal';
@@ -10,6 +10,7 @@ import Tool from './component/toolbar';
 import SelfTips from './component/self-tips';
 import SelfListView from './component/self-list';
 import SelfLevelViewModal from './component/self-level-view-modal';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 模块的顶级父组件装饰@StoreProvider
@@ -33,14 +34,14 @@ export default class CustomerLevel extends React.Component<any, any> {
     return (
       <AuthWrapper functionName="f_customer_level_0">
         <div>
-          <BreadCrumb/>
+          <BreadCrumb />
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>客户</Breadcrumb.Item>
             <Breadcrumb.Item>客户管理</Breadcrumb.Item>
             <Breadcrumb.Item>客户等级</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="客户等级" />
+            <Headline title={<FormattedMessage id="consumerLevel" />} />
             {util.isThirdStore() ? (
               <div>
                 <Tips />
@@ -50,7 +51,7 @@ export default class CustomerLevel extends React.Component<any, any> {
               </div>
             ) : (
               <div>
-                <SelfTips />
+                {/* <SelfTips /> */}
                 <SelfListView />
                 <SelfLevelViewModal />
               </div>

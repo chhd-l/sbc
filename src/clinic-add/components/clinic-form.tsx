@@ -104,7 +104,7 @@ class ClinicForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
-        <FormItem label="Clinic Name">
+        <FormItem label="Prescriber Name">
           {getFieldDecorator('clinicsName', {
             rules: [{ required: true, message: 'Please input clinic name!' }]
           })(
@@ -119,7 +119,7 @@ class ClinicForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Clinic Phone Number">
+        <FormItem label="Prescriber Phone Number">
           {getFieldDecorator('phone', {
             rules: [
               { required: true, message: 'Please input clinic phone number!' }
@@ -136,7 +136,7 @@ class ClinicForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Clinic City">
+        <FormItem label="Prescriber City">
           {getFieldDecorator('primaryCity', {
             rules: [{ required: true, message: 'Please select clinic city!' }]
           })(
@@ -154,7 +154,7 @@ class ClinicForm extends React.Component<any, any> {
             </Select>
           )}
         </FormItem>
-        <FormItem label="Clinic Zip">
+        <FormItem label="Prescriber Zip">
           {getFieldDecorator('primaryZip', {
             rules: [{ required: true, message: 'Please input clinic zip!' }]
           })(
@@ -199,7 +199,7 @@ class ClinicForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Clinic Address">
+        <FormItem label="Prescriber Address">
           {getFieldDecorator('location')(
             <Input.TextArea
               onChange={(e) => {

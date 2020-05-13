@@ -2,7 +2,8 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Tabs } from 'antd';
 import { noop } from 'qmkit';
-import SelfCustomerList from "./self-list";
+import SelfCustomerList from './self-list';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class SelfTabDataGrid extends React.Component<any, any> {
@@ -24,19 +25,19 @@ export default class SelfTabDataGrid extends React.Component<any, any> {
 
     return (
       <Tabs onChange={(key) => onSelfTabChange(key)} activeKey={key}>
-        <Tabs.TabPane tab="全部" key="-1">
+        <Tabs.TabPane tab={<FormattedMessage id="all" />} key="-1">
           <SelfCustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="已审核" key="1">
+        <Tabs.TabPane tab={<FormattedMessage id="audited" />} key="1">
           <SelfCustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="待审核" key="0">
+        <Tabs.TabPane tab={<FormattedMessage id="pendingReview" />} key="0">
           <SelfCustomerList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="审核未通过" key="2">
+        <Tabs.TabPane tab={<FormattedMessage id="reviewFailed" />} key="2">
           <SelfCustomerList />
         </Tabs.TabPane>
       </Tabs>

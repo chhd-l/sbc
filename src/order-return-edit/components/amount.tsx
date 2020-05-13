@@ -39,14 +39,20 @@ export default class Amount extends React.Component<any, any> {
   };
 
   render() {
-    const { applyStatus, applyPrice, applyIntegral, returnDetail } = this.props.relaxProps;
+    const {
+      applyStatus,
+      applyPrice,
+      applyIntegral,
+      returnDetail
+    } = this.props.relaxProps;
     const goodsPrice = Number.parseFloat(
       returnDetail
         .get('returnItems')
         .reduce((sum, item) => sum + item.get('splitPrice'), 0)
         .toFixed(2)
     );
-    const shouldIntegral = returnDetail.getIn(['returnPoints', 'applyPoints']) || 0;
+    const shouldIntegral =
+      returnDetail.getIn(['returnPoints', 'applyPoints']) || 0;
 
     return (
       <div style={{ marginBottom: 20 }}>
@@ -56,16 +62,12 @@ export default class Amount extends React.Component<any, any> {
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退金额: </span>
               <strong>
-                ￥{applyStatus ? applyPrice.toFixed(2) : goodsPrice.toFixed(2)}
+                ${applyStatus ? applyPrice.toFixed(2) : goodsPrice.toFixed(2)}
               </strong>
             </label>
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退积分: </span>
-              <strong>
-                {applyStatus
-                  ? applyIntegral
-                  : shouldIntegral}
-              </strong>
+              <strong>{applyStatus ? applyIntegral : shouldIntegral}</strong>
             </label>
           </div>
         </div>

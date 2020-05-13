@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Relax} from 'plume2';
-import {noop, QMFloat} from 'qmkit';
-import {IMap} from 'typings/globalType';
+import { Relax } from 'plume2';
+import { noop, QMFloat } from 'qmkit';
+import { IMap } from 'typings/globalType';
 
 @Relax
 export default class Amount extends React.Component<any, any> {
@@ -39,11 +39,16 @@ export default class Amount extends React.Component<any, any> {
   };
 
   render() {
-    const {applyStatus, applyPrice, applyIntegral, tradeDetail} = this.props.relaxProps;
+    const {
+      applyStatus,
+      applyPrice,
+      applyIntegral,
+      tradeDetail
+    } = this.props.relaxProps;
     const shouldPrice = tradeDetail
       .get('tradeItems')
-      .filter(sku => sku.get('num') > 0)
-      .map(sku => {
+      .filter((sku) => sku.get('num') > 0)
+      .map((sku) => {
         if (sku.get('num') < sku.get('canReturnNum')) {
           //小于可退数量,直接单价乘以数量
           return QMFloat.accMul(sku.get('price'), sku.get('num'));
@@ -61,46 +66,55 @@ export default class Amount extends React.Component<any, any> {
       .reduce((one, two) => QMFloat.accAdd(one, two));
 
     // 可退积分
-    const shouldIntegral = tradeDetail.getIn(['tradePrice', 'points']) == null ? 0 : tradeDetail
-        .get('tradeItems')
-        .filter((sku) => sku.get('num') > 0)
-        .map((sku) => {
-          if (sku.get('num') < sku.get('canReturnNum')) {
-            // 小于可退数量,直接均摊积分乘以数量
-            return Math.floor(QMFloat.accMul(sku.get('skuPoint'), sku.get('num')));
-          } else {
-            // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
-            return Math.floor(QMFloat.accSubtr(
-              sku.get('points'),
-              Math.floor(QMFloat.accMul(
-                sku.get('skuPoint'),
-                QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))
-              )))
-            );
-          }
-        })
-        .reduce((one, two) => one + two) || 0;
+    const shouldIntegral =
+      tradeDetail.getIn(['tradePrice', 'points']) == null
+        ? 0
+        : tradeDetail
+            .get('tradeItems')
+            .filter((sku) => sku.get('num') > 0)
+            .map((sku) => {
+              if (sku.get('num') < sku.get('canReturnNum')) {
+                // 小于可退数量,直接均摊积分乘以数量
+                return Math.floor(
+                  QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
+                );
+              } else {
+                // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
+                return Math.floor(
+                  QMFloat.accSubtr(
+                    sku.get('points'),
+                    Math.floor(
+                      QMFloat.accMul(
+                        sku.get('skuPoint'),
+                        QMFloat.accSubtr(
+                          sku.get('totalNum'),
+                          sku.get('canReturnNum')
+                        )
+                      )
+                    )
+                  )
+                );
+              }
+            })
+            .reduce((one, two) => one + two) || 0;
 
     return (
-      <div style={{marginBottom: 20}}>
+      <div style={{ marginBottom: 20 }}>
         <div style={styles.priceContainer}>
-          <div style={styles.applyPrice}/>
+          <div style={styles.applyPrice} />
           <div style={styles.priceBox}>
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退金额: </span>
               <strong>
-                ￥{applyStatus
-                ? applyPrice.toFixed(2)
-                : QMFloat.addZero(shouldPrice)}
+                $
+                {applyStatus
+                  ? applyPrice.toFixed(2)
+                  : QMFloat.addZero(shouldPrice)}
               </strong>
             </label>
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退积分: </span>
-              <strong>
-                {applyStatus
-                  ? applyIntegral
-                  : shouldIntegral}
-              </strong>
+              <strong>{applyStatus ? applyIntegral : shouldIntegral}</strong>
             </label>
           </div>
         </div>
@@ -112,10 +126,10 @@ export default class Amount extends React.Component<any, any> {
    * 修改申请退款状态
    */
   _editApplyStatus = (key: string, e) => {
-    const {editPriceItem} = this.props.relaxProps;
+    const { editPriceItem } = this.props.relaxProps;
 
     // 获取复选框状态
-    const {checked} = e.target;
+    const { checked } = e.target;
 
     this.props.form.resetFields(['applyPrice']);
 
@@ -127,7 +141,7 @@ export default class Amount extends React.Component<any, any> {
    * 修改申请退款的金额
    */
   _editApplyPrice = (key: string, returnPrice) => {
-    const {editPriceItem} = this.props.relaxProps;
+    const { editPriceItem } = this.props.relaxProps;
 
     editPriceItem(key, returnPrice);
   };

@@ -77,9 +77,6 @@ export default class AppStore extends Store {
           (item) => item.get('title') == '评价管理'
         );
         dataList = dataList.filterNot(
-          (item) => item.get('title') == 'Order list(3PL)'
-        );
-        dataList = dataList.filterNot(
           (item) => item.get('title') == '积分订单'
         );
         // }
@@ -101,8 +98,13 @@ export default class AppStore extends Store {
             sort: 0
           })
         );
-        // 临时新增一个Clinic
-        dataList = dataList.push(
+
+        let allGradeMenus = this._getChildren(
+          dataList.filter((item) => item.get('grade') === 1),
+          dataList
+        );
+        let allMenu = allGradeMenus.insert(
+          4,
           fromJS({
             id: 'menu_clinic',
             pid: 'menu_0',
@@ -165,11 +167,7 @@ export default class AppStore extends Store {
           })
         );
 
-        const allGradeMenus = this._getChildren(
-          dataList.filter((item) => item.get('grade') === 1),
-          dataList
-        );
-        let filterMenu = allGradeMenus
+        let filterMenu = allMenu
           .toJS()
           .filter(
             (item) =>
@@ -177,6 +175,7 @@ export default class AppStore extends Store {
               item.title !== '魔方' &&
               item.title !== '应用'
           );
+
         sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(filterMenu));
 
         const functionsRes = (await webapi.fetchFunctions()) as any;

@@ -61,13 +61,13 @@ export default class ReturnRecord extends React.Component<any, any> {
       title: '应退金额',
       dataIndex: 'returnPrice',
       key: 'returnPrice',
-      render: (returnPrice) => <div>￥{returnPrice.toFixed(2)}</div>
+      render: (returnPrice) => <div>${returnPrice.toFixed(2)}</div>
     },
     {
       title: '退单改价',
       dataIndex: 'actualReturnPrice',
       key: 'actualReturnPrice',
-      render: (price) => <div>￥{price.toFixed(2)}</div>
+      render: (price) => <div>${price.toFixed(2)}</div>
     },
     {
       title: '退款方式',

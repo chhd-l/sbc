@@ -829,7 +829,7 @@ export default class AppStore extends Store {
       if (newPrice != oldPrice) {
         confirm({
           title: 'Delivery cost change',
-          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥${oldPrice}变更为￥${newPrice}，您可手动修改后再保存或者直接保存！`,
+          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由$${oldPrice}变更为$${newPrice}，您可手动修改后再保存或者直接保存！`,
           okText: 'Save directly',
           cancelText: 'I want to modify',
           onOk: () => this.onCreateOrder(edit, forceCommit, false)

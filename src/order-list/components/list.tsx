@@ -562,7 +562,7 @@ export default class ListView extends React.Component<any, any> {
                       {v.getIn(['consignee', 'phone'])}
                     </td>
                     <td style={{ width: '10%' }}>
-                      ￥{tradePrice.toFixed(2)}
+                      ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
                     <td style={{ width: '5%' }}>

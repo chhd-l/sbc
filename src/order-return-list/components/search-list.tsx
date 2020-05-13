@@ -522,7 +522,7 @@ export default class SearchList extends React.Component<any, any> {
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
                   <td style={{ width: '12%' }}>
-                    {'￥' + parseFloat(payPrice).toFixed(2)}
+                    {'$' + parseFloat(payPrice).toFixed(2)}
                   </td>
                   {/*应退积分*/}
                   <td style={{ width: '10%' }}>{applyPoints}</td>
@@ -540,7 +540,7 @@ export default class SearchList extends React.Component<any, any> {
                   {/*实退金额*/}
                   <td style={{ width: '12%' }}>
                     {returnFlowState == 'COMPLETED'
-                      ? '￥' + parseFloat(actualReturnPrice).toFixed(2)
+                      ? '$' + parseFloat(actualReturnPrice).toFixed(2)
                       : '-'}
                   </td>
                   {/*实退积分*/}

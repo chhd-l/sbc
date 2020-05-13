@@ -372,21 +372,17 @@ export default class GoodsList extends React.Component<any, any> {
             width="110px"
             key="salePrice"
             render={(rowInfo) => {
-              if (rowInfo.gift) return '￥0.00';
+              if (rowInfo.gift) return '$0.00';
               const goodsIntervalPrices = this.props.relaxProps
                 .goodsIntervalPrices;
-              let price = '￥' + rowInfo.salePrice.toFixed(2);
+              let price = '$' + rowInfo.salePrice.toFixed(2);
               if (rowInfo.priceType === 1) {
                 const buyCount = rowInfo.buyCount;
                 if (buyCount == 0) {
                   const minPrice = rowInfo.intervalMinPrice;
                   const maxPrice = rowInfo.intervalMaxPrice;
                   price =
-                    '￥' +
-                    minPrice.toFixed(2) +
-                    '-' +
-                    '￥' +
-                    maxPrice.toFixed(2);
+                    '$' + minPrice.toFixed(2) + '-' + '$' + maxPrice.toFixed(2);
                 } else {
                   const prices = fromJS(rowInfo.intervalPriceIds || [])
                     .map((id) =>
@@ -397,7 +393,7 @@ export default class GoodsList extends React.Component<any, any> {
                     .filter((f) => f && f.get('count') <= buyCount)
                     .maxBy((f) => f.get('count'));
                   if (prices) {
-                    price = '￥' + prices.get('price').toFixed(2);
+                    price = '$' + prices.get('price').toFixed(2);
                   }
                 }
               }
@@ -405,7 +401,7 @@ export default class GoodsList extends React.Component<any, any> {
                 <div>
                   {rowInfo.oldLevelPrice != undefined && (
                     <p style={styles.lineThrough}>
-                      ￥{rowInfo.oldLevelPrice.toFixed(2)}
+                      ${rowInfo.oldLevelPrice.toFixed(2)}
                     </p>
                   )}
                   <p>{price}</p>
@@ -496,9 +492,7 @@ export default class GoodsList extends React.Component<any, any> {
                     {this.props.edit &&
                     (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? record.initBuyCount
-                        ? `已下单${record.initBuyCount}件 剩余库存${
-                            record.stock
-                          }件`
+                        ? `已下单${record.initBuyCount}件 剩余库存${record.stock}件`
                         : `库存: ${QMFloat.accAdd(
                             record.stock,
                             buySku.get('buyCount')
@@ -533,14 +527,14 @@ export default class GoodsList extends React.Component<any, any> {
             width="110px"
             key="subtotal"
             render={(_text, record: any) => {
-              if (record.gift) return '￥0.00';
+              if (record.gift) return '$0.00';
               const { goodsIntervalPrices } = this.props.relaxProps;
               let price = record.salePrice;
               if (
                 record.priceType === 1 &&
-                (goodsIntervalPrices &&
-                  goodsIntervalPrices.count() > 0 &&
-                  goodsIntervalPrices.get(0) != null)
+                goodsIntervalPrices &&
+                goodsIntervalPrices.count() > 0 &&
+                goodsIntervalPrices.get(0) != null
               ) {
                 const buyCount = record.buyCount;
                 const prices = goodsIntervalPrices
@@ -559,7 +553,8 @@ export default class GoodsList extends React.Component<any, any> {
               }
               return (
                 <span>
-                  ￥{(price * record.buyCount
+                  $
+                  {(price * record.buyCount
                     ? price * record.buyCount
                     : 0.0
                   ).toFixed(2)}{' '}
@@ -617,7 +612,8 @@ export default class GoodsList extends React.Component<any, any> {
                 >
                   <Button>领取赠品</Button>
                 </Popover>
-                &nbsp;&nbsp;{giftMarketing.get('subType') == 5
+                &nbsp;&nbsp;
+                {giftMarketing.get('subType') == 5
                   ? `已满足满${level.get('fullCount')}件获赠品`
                   : `已满足满${level.get('fullAmount')}元获赠品`}
               </div>
@@ -652,7 +648,7 @@ export default class GoodsList extends React.Component<any, any> {
                       this._enableSpecVal(checked);
                     }}
                   >
-                    订单改价:￥
+                    订单改价:$
                   </Checkbox>
                 }
               >
@@ -713,7 +709,7 @@ export default class GoodsList extends React.Component<any, any> {
                       this._enableDeliverFee(checked);
                     }}
                   >
-                    配送费用:￥
+                    配送费用:$
                   </Checkbox>
                 }
               >
@@ -766,44 +762,46 @@ export default class GoodsList extends React.Component<any, any> {
             </div>
             <div style={styles.priceCom}>
               <div style={styles.priceCol}>
-                <span style={styles.itemsText}>￥{totalMoney}</span>
-                <span style={styles.itemsText}>-￥{reductionPrice}</span>
-                <span style={styles.itemsText}>-￥{discountPrice}</span>
+                <span style={styles.itemsText}>${totalMoney}</span>
+                <span style={styles.itemsText}>-${reductionPrice}</span>
+                <span style={styles.itemsText}>-${discountPrice}</span>
                 {goodsList.get('isEnableSpecVal') && (
                   <span style={styles.itemsText}>
-                    ￥{(goodsList.get('specVal') || 0).toFixed(2)}
+                    ${(goodsList.get('specVal') || 0).toFixed(2)}
                   </span>
                 )}
-                <span style={styles.itemsText}>￥{deliverFee}</span>
-                <span style={styles.itemsText}>￥{payTotal}</span>
+                <span style={styles.itemsText}>${deliverFee}</span>
+                <span style={styles.itemsText}>${payTotal}</span>
               </div>
               {oldTradePrice.size != 0 && (
                 <div style={styles.priceLine}>
                   <span style={styles.itemsText}>
-                    ￥{(oldTradePrice.get('goodsPrice') || 0).toFixed(2)}
+                    ${(oldTradePrice.get('goodsPrice') || 0).toFixed(2)}
                   </span>
                   <span style={styles.itemsText}>
-                    -￥{(oldTradePrice.get('reduction')
+                    -$
+                    {(oldTradePrice.get('reduction')
                       ? oldTradePrice.getIn(['reduction', 'discounts'])
                       : 0
                     ).toFixed(2)}
                   </span>
                   <span style={styles.itemsText}>
-                    -￥{(oldTradePrice.get('discount')
+                    -$
+                    {(oldTradePrice.get('discount')
                       ? oldTradePrice.getIn(['discount', 'discounts'])
                       : 0
                     ).toFixed(2)}
                   </span>
                   {goodsList.get('isEnableSpecVal') && (
                     <span style={styles.itemsText}>
-                      ￥{(oldTradePrice.get('privilegePrice') || 0).toFixed(2)}
+                      ${(oldTradePrice.get('privilegePrice') || 0).toFixed(2)}
                     </span>
                   )}
                   <span style={styles.itemsText}>
-                    ￥{(oldTradePrice.get('deliveryPrice') || 0).toFixed(2)}
+                    ${(oldTradePrice.get('deliveryPrice') || 0).toFixed(2)}
                   </span>
                   <span style={styles.itemsText}>
-                    ￥{(oldTradePrice.get('totalPrice') || 0).toFixed(2)}
+                    ${(oldTradePrice.get('totalPrice') || 0).toFixed(2)}
                   </span>
                 </div>
               )}
@@ -812,7 +810,8 @@ export default class GoodsList extends React.Component<any, any> {
         </div>
 
         {this.state.addAddressVisible && (
-          <Modal  maskClosable={false}
+          <Modal
+            maskClosable={false}
             title="选择商品"
             width={1100}
             visible={this.state.addAddressVisible}
@@ -912,7 +911,7 @@ export default class GoodsList extends React.Component<any, any> {
     return (
       <label style={styles.priceItem as any}>
         <span style={styles.name}>订单改价: </span>
-        <strong>￥{(specVal || 0).toFixed(2)}</strong>
+        <strong>${(specVal || 0).toFixed(2)}</strong>
       </label>
     );
   };

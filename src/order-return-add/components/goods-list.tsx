@@ -44,17 +44,16 @@ export default class GoodsList extends React.Component<any, any> {
           rowKey="skuId"
         />
 
-        {giftDataSource &&
-          giftDataSource.length > 0 && (
-            <Table
-              showHeader={false}
-              bordered
-              dataSource={giftDataSource}
-              columns={giftColumns}
-              pagination={false}
-              rowKey="skuId"
-            />
-          )}
+        {giftDataSource && giftDataSource.length > 0 && (
+          <Table
+            showHeader={false}
+            bordered
+            dataSource={giftDataSource}
+            columns={giftColumns}
+            pagination={false}
+            rowKey="skuId"
+          />
+        )}
 
         {/*小计*/}
         <Amount form={this.props.form} flushState={this.props.flushState} />
@@ -82,7 +81,7 @@ export default class GoodsList extends React.Component<any, any> {
    * 商品与赠品公用(通过itemType区分展示个性内容)
    * itemType=0表示商品 , itemType=1表示赠品
    */
-  _getColumns = itemType => {
+  _getColumns = (itemType) => {
     const { getFieldDecorator } = this.props.form;
 
     return [
@@ -97,7 +96,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: text => `${itemType == 1 ? '【赠品】' : ''}${text}`
+        render: (text) => `${itemType == 1 ? '【赠品】' : ''}${text}`
       },
       {
         title: '规格',
@@ -109,11 +108,11 @@ export default class GoodsList extends React.Component<any, any> {
         title: '退货单价',
         key: 'price',
         width: 100,
-        render: rowInfo => {
+        render: (rowInfo) => {
           return itemType == 1 ? (
-            <div>￥{rowInfo.price.toFixed(2)}</div>
+            <div>${rowInfo.price.toFixed(2)}</div>
           ) : (
-            <div>￥{rowInfo.price}</div>
+            <div>${rowInfo.price}</div>
           );
         }
       },
@@ -167,9 +166,9 @@ export default class GoodsList extends React.Component<any, any> {
         title: '退货金额小计',
         key: 'total',
         width: 100,
-        render: rowInfo => {
+        render: (rowInfo) => {
           if (itemType == 1) {
-            return <div>￥{(rowInfo.price * rowInfo.num).toFixed(2)}</div>;
+            return <div>${(rowInfo.price * rowInfo.num).toFixed(2)}</div>;
           } else {
             return this._getRowTotalPrice(rowInfo);
           }
@@ -190,7 +189,7 @@ export default class GoodsList extends React.Component<any, any> {
   /**
    * 计算每一项的小计金额
    */
-  _getRowTotalPrice = rowInfo => {
+  _getRowTotalPrice = (rowInfo) => {
     const num = rowInfo.num || 0;
     if (num < rowInfo.canReturnNum) {
       //小于可退数量,直接单价乘以数量

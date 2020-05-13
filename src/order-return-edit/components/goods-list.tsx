@@ -42,17 +42,16 @@ export default class GoodsList extends React.Component<any, any> {
           rowKey="skuId"
         />
 
-        {giftDataSource &&
-          giftDataSource.length > 0 && (
-            <Table
-              showHeader={false}
-              bordered
-              dataSource={giftDataSource}
-              columns={giftColumns}
-              pagination={false}
-              rowKey="skuId"
-            />
-          )}
+        {giftDataSource && giftDataSource.length > 0 && (
+          <Table
+            showHeader={false}
+            bordered
+            dataSource={giftDataSource}
+            columns={giftColumns}
+            pagination={false}
+            rowKey="skuId"
+          />
+        )}
 
         {/*小计*/}
         <Amount form={this.props.form} flushState={this.props.flushState} />
@@ -105,7 +104,7 @@ export default class GoodsList extends React.Component<any, any> {
         title: '退货单价',
         key: 'price',
         width: 100,
-        render: (rowInfo) => <div>￥{rowInfo.price.toFixed(2)}</div>
+        render: (rowInfo) => <div>${rowInfo.price.toFixed(2)}</div>
       },
       {
         title: '退货数量',
@@ -155,7 +154,11 @@ export default class GoodsList extends React.Component<any, any> {
         title: '退货金额小计',
         key: 'total',
         width: 100,
-        render: (rowInfo) => <div>￥{rowInfo.splitPrice ? rowInfo.splitPrice.toFixed(2) : '0.00'}</div>
+        render: (rowInfo) => (
+          <div>
+            ${rowInfo.splitPrice ? rowInfo.splitPrice.toFixed(2) : '0.00'}
+          </div>
+        )
       }
     ];
   };

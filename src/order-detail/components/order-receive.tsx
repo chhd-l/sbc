@@ -76,7 +76,7 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'payOrderPrice',
       key: 'payOrderPrice',
       render: (text, record) =>
-        record.payOrderStatus == 1 ? '' : '￥' + (text || 0).toFixed(2)
+        record.payOrderStatus == 1 ? '' : '$' + (text || 0).toFixed(2)
     },
     {
       title: 'Payment Method',
@@ -155,7 +155,7 @@ export default class OrderReceive extends React.Component<any, any> {
             <label style={styles.orderNum}>
               {<FormattedMessage id="orderNumber" />}:{id}
               &nbsp;&nbsp;&nbsp;&nbsp;
-              {<FormattedMessage id="amountReceivable" />}:￥
+              {<FormattedMessage id="amountReceivable" />}:$
               {(totalPayCash || 0).toFixed(2)}
             </label>
           </div>

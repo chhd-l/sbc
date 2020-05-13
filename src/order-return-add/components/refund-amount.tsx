@@ -39,7 +39,12 @@ export default class RefundAmount extends React.Component<any, any> {
   };
 
   render() {
-    const { applyStatus, applyPrice, applyIntegral, tradeDetail } = this.props.relaxProps;
+    const {
+      applyStatus,
+      applyPrice,
+      applyIntegral,
+      tradeDetail
+    } = this.props.relaxProps;
 
     const totalPrice = tradeDetail.getIn(['tradePrice', 'totalPrice']) || 0;
 
@@ -52,16 +57,12 @@ export default class RefundAmount extends React.Component<any, any> {
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退金额: </span>
               <strong>
-                ￥{applyStatus ? applyPrice.toFixed(2) : totalPrice.toFixed(2)}
+                ${applyStatus ? applyPrice.toFixed(2) : totalPrice.toFixed(2)}
               </strong>
             </label>
             <label style={styles.priceItem as any}>
               <span style={styles.name}>应退积分: </span>
-              <strong>
-                {applyStatus
-                    ? applyIntegral
-                    : shouldIntegral}
-              </strong>
+              <strong>{applyStatus ? applyIntegral : shouldIntegral}</strong>
             </label>
             <div style={{ marginTop: 20, width: 245 }} />
           </div>

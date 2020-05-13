@@ -421,41 +421,43 @@ export default class AppStore extends Store {
     // 可退积分
     let shouldIntegral;
     // true为退款申请，否则为退货申请
-    if (!data.get('isReturn')){
-      shouldIntegral = tradeDetail.getIn(['tradePrice', 'points']) == null
-        ? 0 : tradeDetail.getIn(['tradePrice', 'points']);
+    if (!data.get('isReturn')) {
+      shouldIntegral =
+        tradeDetail.getIn(['tradePrice', 'points']) == null
+          ? 0
+          : tradeDetail.getIn(['tradePrice', 'points']);
     } else {
       shouldIntegral =
         tradeDetail.getIn(['tradePrice', 'points']) == null
           ? 0
           : tradeDetail
-          .get('tradeItems')
-          .filter((sku) => sku.get('num') > 0)
-          .map((sku) => {
-            if (sku.get('num') < sku.get('canReturnNum')) {
-              // 小于可退数量,直接均摊积分乘以数量
-              return Math.floor(
-                QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
-              );
-            } else {
-              // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
-              return Math.floor(
-                QMFloat.accSubtr(
-                  sku.get('points') || 0,
-                  Math.floor(
-                    QMFloat.accMul(
-                      sku.get('skuPoint'),
-                      QMFloat.accSubtr(
-                        sku.get('totalNum'),
-                        sku.get('canReturnNum')
+              .get('tradeItems')
+              .filter((sku) => sku.get('num') > 0)
+              .map((sku) => {
+                if (sku.get('num') < sku.get('canReturnNum')) {
+                  // 小于可退数量,直接均摊积分乘以数量
+                  return Math.floor(
+                    QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
+                  );
+                } else {
+                  // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
+                  return Math.floor(
+                    QMFloat.accSubtr(
+                      sku.get('points') || 0,
+                      Math.floor(
+                        QMFloat.accMul(
+                          sku.get('skuPoint'),
+                          QMFloat.accSubtr(
+                            sku.get('totalNum'),
+                            sku.get('canReturnNum')
+                          )
+                        )
                       )
                     )
-                  )
-                )
-              );
-            }
-          })
-          .reduce((one, two) => one + two) || 0;
+                  );
+                }
+              })
+              .reduce((one, two) => one + two) || 0;
     }
 
     param = param.set('returnPrice', {
@@ -476,7 +478,7 @@ export default class AppStore extends Store {
       // 在线支付要判断退款金额不能大于剩余退款金额
       if (data.get('isOnLine')) {
         Modal.warning({
-          title: `该订单剩余可退金额为：￥${data.get('canApplyPrice')}`,
+          title: `该订单剩余可退金额为：$${data.get('canApplyPrice')}`,
           content: '退款金额不可大于可退金额，请修改',
           okText: '确定'
         });
@@ -485,7 +487,7 @@ export default class AppStore extends Store {
         let onAdd = this.onAdd;
         // 线下，给出提示
         confirm({
-          title: `该订单剩余可退金额为：￥${data.get('canApplyPrice')}`,
+          title: `该订单剩余可退金额为：$${data.get('canApplyPrice')}`,
           content: '当前退款金额超出了可退金额，是否继续？',
           onOk() {
             return onAdd(param);

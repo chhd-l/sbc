@@ -91,16 +91,10 @@ export default class AppStore extends Store {
     const detailMap: IMap = fromJS(returnDetail.res || Map());
 
     const selectedReturnReason = detailMap.get('returnReason')
-      ? detailMap
-          .get('returnReason')
-          .keySeq()
-          .first()
+      ? detailMap.get('returnReason').keySeq().first()
       : '0';
     const selectedReturnWay = detailMap.get('returnWay')
-      ? detailMap
-          .get('returnWay')
-          .keySeq()
-          .first()
+      ? detailMap.get('returnWay').keySeq().first()
       : '0';
 
     this.transaction(() => {
@@ -267,8 +261,8 @@ export default class AppStore extends Store {
       // 在线支付要判断退款金额不能大于剩余退款金额
       if (data.get('isOnLine')) {
         Modal.warning({
-          title: `该订单剩余可退金额为：￥${remainPrice.toFixed(2)}`,
-          content: `退款金额不可大于可退金额，请修改`,
+          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
+          content: '退款金额不可大于可退金额，请修改',
           okText: '确定'
         });
         return;
@@ -280,7 +274,7 @@ export default class AppStore extends Store {
         let onModify = this.onModify;
         // 线下，给出提示
         confirm({
-          title: `该订单剩余可退金额为：￥${remainPrice.toFixed(2)}`,
+          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
           content: '当前退款金额超出了可退金额，是否继续？',
           onOk() {
             return onModify(param);

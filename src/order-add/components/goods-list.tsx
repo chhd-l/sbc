@@ -301,22 +301,18 @@ export default class GoodsList extends React.Component<any, any> {
             width="110px"
             key="salePrice"
             render={(rowInfo) => {
-              if (rowInfo.gift) return '￥0.00';
+              if (rowInfo.gift) return '$0.00';
               if (this.props.edit) return rowInfo.levelPrice.toFixed(2);
               const goodsIntervalPrices = this.props.relaxProps
                 .goodsIntervalPrices;
-              let price = '￥' + rowInfo.salePrice.toFixed(2);
+              let price = '$' + rowInfo.salePrice.toFixed(2);
               if (rowInfo.priceType === 1) {
                 const buyCount = rowInfo.buyCount;
                 if (buyCount == 0) {
                   const minPrice = rowInfo.intervalMinPrice;
                   const maxPrice = rowInfo.intervalMaxPrice;
                   price =
-                    '￥' +
-                    minPrice.toFixed(2) +
-                    '-' +
-                    '￥' +
-                    maxPrice.toFixed(2);
+                    '$' + minPrice.toFixed(2) + '-' + '$' + maxPrice.toFixed(2);
                 } else {
                   const prices = fromJS(rowInfo.intervalPriceIds || [])
                     .map((id) =>
@@ -327,7 +323,7 @@ export default class GoodsList extends React.Component<any, any> {
                     .filter((f) => f && f.get('count') <= buyCount)
                     .maxBy((f) => f.get('count'));
                   if (prices) {
-                    price = '￥' + prices.get('price').toFixed(2);
+                    price = '$' + prices.get('price').toFixed(2);
                   }
                 }
               }
@@ -455,7 +451,7 @@ export default class GoodsList extends React.Component<any, any> {
             width="110px"
             key="subtotal"
             render={(_text, record: any) => {
-              if (record.gift) return '￥0.00';
+              if (record.gift) return '$0.00';
               if (this.props.edit)
                 return (record.buyCount * record.levelPrice).toFixed(2);
               const { goodsIntervalPrices } = this.props.relaxProps;
@@ -483,7 +479,7 @@ export default class GoodsList extends React.Component<any, any> {
               }
               return (
                 <span>
-                  ￥
+                  $
                   {(price * record.buyCount
                     ? price * record.buyCount
                     : 0.0
@@ -544,7 +540,7 @@ export default class GoodsList extends React.Component<any, any> {
                     }}
                   >
                     <FormattedMessage id="order.orderPriceChange" />
-                    :￥
+                    :$
                   </Checkbox>
                 }
               >
@@ -606,7 +602,7 @@ export default class GoodsList extends React.Component<any, any> {
                     }}
                   >
                     <FormattedMessage id="shippingFees" />
-                    :￥
+                    :$
                   </Checkbox>
                 }
               >
@@ -685,34 +681,34 @@ export default class GoodsList extends React.Component<any, any> {
             </div>
             <div style={styles.priceCom}>
               <div style={styles.priceCol}>
-                <span style={styles.itemsText}>￥{totalMoney}</span>
+                <span style={styles.itemsText}>${totalMoney}</span>
                 {reductionPrice != 0 && (
                   <span style={styles.itemsText}>
-                    -￥{reductionPrice.toFixed(2)}
+                    -${reductionPrice.toFixed(2)}
                   </span>
                 )}
                 {discountPrice != 0 && (
                   <span style={styles.itemsText}>
-                    -￥{discountPrice.toFixed(2)}
+                    -${discountPrice.toFixed(2)}
                   </span>
                 )}
                 {couponPrice != 0 && (
                   <span style={styles.itemsText}>
-                    -￥{couponPrice.toFixed(2)}
+                    -${couponPrice.toFixed(2)}
                   </span>
                 )}
                 {pointsPrice != 0 && (
                   <span style={styles.itemsText}>
-                    -￥{pointsPrice.toFixed(2)}
+                    -${pointsPrice.toFixed(2)}
                   </span>
                 )}
                 {goodsList.get('isEnableSpecVal') && (
                   <span style={styles.itemsText}>
-                    ￥{(goodsList.get('specVal') || 0).toFixed(2)}
+                    ${(goodsList.get('specVal') || 0).toFixed(2)}
                   </span>
                 )}
-                <span style={styles.itemsText}>￥{deliverFee}</span>
-                <span style={styles.itemsText}>￥{payTotal}</span>
+                <span style={styles.itemsText}>${deliverFee}</span>
+                <span style={styles.itemsText}>${payTotal}</span>
               </div>
             </div>
           </div>
@@ -822,7 +818,7 @@ export default class GoodsList extends React.Component<any, any> {
         <span style={styles.name}>
           <FormattedMessage id="order.orderPriceChange" />:{' '}
         </span>
-        <strong>￥{(specVal || 0).toFixed(2)}</strong>
+        <strong>${(specVal || 0).toFixed(2)}</strong>
       </label>
     );
   };

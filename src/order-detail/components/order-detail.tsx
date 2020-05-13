@@ -39,7 +39,7 @@ const columns = [
     title: 'Price',
     dataIndex: 'levelPrice',
     key: 'levelPrice',
-    render: (levelPrice) => <span>￥{levelPrice.toFixed(2)}</span>
+    render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
   },
   {
     title: 'Quantity',
@@ -48,7 +48,7 @@ const columns = [
   },
   {
     title: 'Subtotal',
-    render: (row) => <span>￥{(row.num * row.levelPrice).toFixed(2)}</span>
+    render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
   }
 ];
 
@@ -348,25 +348,25 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 <span style={styles.name}>
                   {<FormattedMessage id="productAmount" />}:
                 </span>
-                <strong>￥{(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
+                <strong>${(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
               </label>
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
                   {<FormattedMessage id="pointsDeduction" />}:
                 </span>
-                <strong>-￥{(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
+                <strong>-${(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
               </label>
               {/* {reduction && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>满减优惠: </span>
-                  <strong>-￥{reduction.discounts.toFixed(2)}</strong>
+                  <strong>-${reduction.discounts.toFixed(2)}</strong>
                 </label>
               )}
 
               {discount && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>满折优惠: </span>
-                  <strong>-￥{discount.discounts.toFixed(2)}</strong>
+                  <strong>-${discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
 
@@ -375,7 +375,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   <label style={styles.priceItem as any}>
                     <span style={styles.name}>优惠券: </span>
                     <strong>
-                      -￥{(tradePrice.couponPrice || 0).toFixed(2)}
+                      -${(tradePrice.couponPrice || 0).toFixed(2)}
                     </strong>
                   </label>
                 </div>
@@ -386,7 +386,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   <label style={styles.priceItem as any}>
                     <span style={styles.name}>订单改价: </span>
                     <strong>
-                      ￥{(tradePrice.privilegePrice || 0).toFixed(2)}
+                      ${(tradePrice.privilegePrice || 0).toFixed(2)}
                     </strong>
                   </label>
                 </div>
@@ -396,14 +396,14 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 <span style={styles.name}>
                   {<FormattedMessage id="shippingFees" />}:{' '}
                 </span>
-                <strong>￥{(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
+                <strong>${(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
               </label>
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
                   {<FormattedMessage id="totalPayable" />}:{' '}
                 </span>
-                <strong>￥{(tradePrice.totalPrice || 0).toFixed(2)}</strong>
+                <strong>${(tradePrice.totalPrice || 0).toFixed(2)}</strong>
               </label>
             </div>
           </div>

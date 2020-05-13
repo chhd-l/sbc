@@ -403,11 +403,11 @@ export default class GoodsAdd extends React.Component<any, any> {
                 .first()
                 .get('priceType');
               return priceType === 1
-                ? '￥' +
+                ? '$' +
                     (rowInfo.intervalMinPrice || 0).toFixed(2) +
                     '-' +
                     (rowInfo.intervalMaxPrice || 0).toFixed(2)
-                : '￥' + (rowInfo.salePrice || 0).toFixed(2);
+                : '$' + (rowInfo.salePrice || 0).toFixed(2);
             }}
           />
         </DataGrid>

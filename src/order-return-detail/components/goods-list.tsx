@@ -31,7 +31,7 @@ const columns = [
     title: <FormattedMessage id="returnUnitPrice" />,
     dataIndex: 'price',
     key: 'price',
-    render: (price) => <div>￥{price.toFixed(2)}</div>
+    render: (price) => <div>${price.toFixed(2)}</div>
   },
   {
     title: <FormattedMessage id="quantityReturned" />,
@@ -42,7 +42,7 @@ const columns = [
     title: <FormattedMessage id="subtotalOfReturnAmount" />,
     dataIndex: 'splitPrice',
     key: 'splitPriceTotal',
-    render: (splitPrice) => <div>￥{splitPrice.toFixed(2)}</div>
+    render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
   }
 ];
 
@@ -156,7 +156,7 @@ export default class GoodsList extends React.Component<any, any> {
                 <FormattedMessage id="refundableAmount" />:{' '}
               </span>
               <strong>
-                ￥
+                $
                 {totalPrice
                   ? parseFloat(totalPrice).toFixed(2)
                   : Number(0).toFixed(2)}
@@ -174,7 +174,7 @@ export default class GoodsList extends React.Component<any, any> {
                   <FormattedMessage id="actualRefundAmount" />:{' '}
                 </span>
                 <strong>
-                  ￥
+                  $
                   {applyPrice
                     ? parseFloat(applyPrice).toFixed(2)
                     : Number(0).toFixed(2)}

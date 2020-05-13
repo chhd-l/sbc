@@ -5,6 +5,7 @@ import { Relax } from 'plume2';
 import { noop, FindArea, Fetch, ValidConst, AreaSelect, QMMethod } from 'qmkit';
 import FormItem from 'antd/lib/form/FormItem';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 const AreaSelectBox = styled.div`
   .ant-form-item-children {
     display: inline-block;
@@ -222,16 +223,27 @@ class CustomerInfo extends Component<any, any> {
     }
     return (
       <div>
-        <strong style={styles.title}>客户信息: </strong>
+        <strong style={styles.title}>
+          <FormattedMessage id="consumerInfo" />:{' '}
+        </strong>
         <Row type="flex" align="top">
           <Col span={10}>
-            <FormItem {...formItemLayoutOne} label="客户账号" hasFeedback>
+            <FormItem
+              {...formItemLayoutOne}
+              label={<FormattedMessage id="consumerAccount" />}
+              hasFeedback
+            >
               {this.props.edit ? (
                 <label>{this.props.selectedCustomerInfo}</label>
               ) : (
                 getFieldDecorator('customerInfo', {
                   initialValue: this.props.selectedCustomerInfo,
-                  rules: [{ required: true, message: '必须选择一个会员' }]
+                  rules: [
+                    {
+                      required: true,
+                      message: <FormattedMessage id="order.mustSelectAMember" />
+                    }
+                  ]
                 })(
                   <AutoComplete
                     size="large"
@@ -249,7 +261,11 @@ class CustomerInfo extends Component<any, any> {
 
         {!selected ? null : (
           <div>
-            <FormItem label="收货信息" hasFeedback {...formItemLayout}>
+            <FormItem
+              label={<FormattedMessage id="deliveryInformation" />}
+              hasFeedback
+              {...formItemLayout}
+            >
               {
                 <Radio.Group
                   value={this.props.selectedAddrId}
@@ -268,8 +284,11 @@ class CustomerInfo extends Component<any, any> {
                     showType === 2 || k < 10 ? (
                       <div key={k} className="addressDisplay">
                         <Radio value={v.get('deliveryAddressId')}>
-                          收货人：{v.get('consigneeName')}&nbsp; 联系电话：
-                          {v.get('consigneeNumber')}&nbsp; 收货信息：
+                          <FormattedMessage id="receiver" />：
+                          {v.get('consigneeName')}&nbsp;{' '}
+                          <FormattedMessage id="phoneNumber" />：
+                          {v.get('consigneeNumber')}&nbsp;{' '}
+                          <FormattedMessage id="deliveryInformation" />：
                           {FindArea.addressInfo(
                             v.get('provinceId')
                               ? v.get('provinceId').toString()
@@ -278,7 +297,11 @@ class CustomerInfo extends Component<any, any> {
                             v.get('areaId') ? v.get('areaId').toString() : ''
                           )}
                           {v.get('deliveryAddress')}&nbsp;
-                          {v.get('isDefaltAddress') === 1 ? '默认地址' : ''}
+                          {v.get('isDefaltAddress') === 1 ? (
+                            <FormattedMessage id="defaultAddress" />
+                          ) : (
+                            ''
+                          )}
                         </Radio>
                       </div>
                     ) : null
@@ -290,7 +313,7 @@ class CustomerInfo extends Component<any, any> {
                         showMore(2);
                       }}
                     >
-                      更多
+                      <FormattedMessage id="more" />
                     </a>
                   ) : (
                     ''
@@ -298,7 +321,7 @@ class CustomerInfo extends Component<any, any> {
                   <div className="addressDisplay">
                     <Radio value="tempId">
                       <span style={{ color: '#F56C1D' }}>
-                        没有可用地址，请填写临时地址
+                        <FormattedMessage id="order.noAddressAvailable" />
                       </span>
                     </Radio>
                   </div>
@@ -314,7 +337,9 @@ class CustomerInfo extends Component<any, any> {
                     rules: [
                       {
                         required: selected ? true : false,
-                        message: '必须选择一个收货地址'
+                        message: (
+                          <FormattedMessage id="order.mustChooseAShippingAddress" />
+                        )
                       }
                     ]
                   })(<input type="hidden" />)}
@@ -328,10 +353,21 @@ class CustomerInfo extends Component<any, any> {
             <Col span={10}>
               <Col offset={5}>
                 <AreaSelectBox>
-                  <FormItem label="所在地区" {...formItemLayoutTwo} hasFeedback>
+                  <FormItem
+                    label={<FormattedMessage id="area" />}
+                    {...formItemLayoutTwo}
+                    hasFeedback
+                  >
                     {getFieldDecorator('consigneeAddressIds', {
                       ...addressInit,
-                      rules: [{ required: true, message: '请选择省市区' }]
+                      rules: [
+                        {
+                          required: true,
+                          message: (
+                            <FormattedMessage id="order.pleaseSelectProvinceOrCityOrDistrict" />
+                          )
+                        }
+                      ]
                     })(
                       <AreaSelect
                         getPopupContainer={() =>
@@ -345,17 +381,33 @@ class CustomerInfo extends Component<any, any> {
                     )}
                   </FormItem>
                 </AreaSelectBox>
-                <FormItem label="详细地址" hasFeedback {...formItemLayoutTwo}>
+                <FormItem
+                  label={<FormattedMessage id="detailAddress" />}
+                  hasFeedback
+                  {...formItemLayoutTwo}
+                >
                   {getFieldDecorator('consigneeAddress', {
                     ...detailAddress,
                     rules: [
                       {
                         required: true,
                         whitespace: true,
-                        message: '请填写详细地址'
+                        message: (
+                          <FormattedMessage id="inputDetailAddressTip1" />
+                        )
                       },
-                      { min: 5, message: '详细地址长度必须为5-60个字符之间' },
-                      { max: 60, message: '详细地址长度必须为5-60个字符之间' }
+                      {
+                        min: 5,
+                        message: (
+                          <FormattedMessage id="inputDetailAddressTip2" />
+                        )
+                      },
+                      {
+                        max: 60,
+                        message: (
+                          <FormattedMessage id="inputDetailAddressTip2" />
+                        )
+                      }
                     ]
                   })(
                     <Input
@@ -369,14 +421,20 @@ class CustomerInfo extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label=" 收货人" hasFeedback {...formItemLayoutTwo}>
+                <FormItem
+                  label={<FormattedMessage id="receiver" />}
+                  hasFeedback
+                  {...formItemLayoutTwo}
+                >
                   {getFieldDecorator('consigneeName', {
                     ...name,
                     rules: [
                       {
                         required: true,
                         whitespace: true,
-                        message: '请填写收货人'
+                        message: (
+                          <FormattedMessage id="order.inputReceiverTip" />
+                        )
                       },
                       {
                         validator: (rule, value, callback) => {
@@ -384,7 +442,7 @@ class CustomerInfo extends Component<any, any> {
                             rule,
                             value,
                             callback,
-                            '收货人',
+                            <FormattedMessage id="receiver" />,
                             2,
                             15
                           );
@@ -400,14 +458,21 @@ class CustomerInfo extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="手机号码" hasFeedback {...formItemLayoutTwo}>
+                <FormItem
+                  label={<FormattedMessage id="phoneNumber2" />}
+                  hasFeedback
+                  {...formItemLayoutTwo}
+                >
                   {getFieldDecorator('consigneeDetailAddress', {
                     ...phone,
                     rules: [
-                      { required: true, message: '请填写手机号码' },
+                      {
+                        required: true,
+                        message: <FormattedMessage id="inputPhoneNumberTip" />
+                      },
                       {
                         pattern: ValidConst.phone,
-                        message: '请输入正确的手机号码'
+                        message: <FormattedMessage id="inputPhoneNumberTip2" />
                       }
                     ]
                   })(

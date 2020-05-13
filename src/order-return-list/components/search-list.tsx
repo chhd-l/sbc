@@ -7,6 +7,7 @@ import { Checkbox, message, Modal, Pagination, Spin, Tooltip } from 'antd';
 import { AuthWrapper, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
+import { FormattedMessage } from 'react-intl';
 
 const defaultImg = require('../img/none.png');
 
@@ -130,16 +131,32 @@ export default class SearchList extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th>商品</th>
-                      <th style={{ width: '10%' }}>订单号</th>
-                      <th style={{ width: '98px' }}>退单时间</th>
-                      <th style={{ width: '10%' }}>客户名称</th>
-                      <th style={{ width: '12%' }}>应退金额</th>
-                      <th style={{ width: '10%' }}>应退积分</th>
-                      <th style={{ width: '10%' }}>退单状态</th>
-                      <th style={{ width: '12%' }}>实退金额</th>
+                      <th>
+                        <FormattedMessage id="product" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="orderNumber" />
+                      </th>
+                      <th style={{ width: '98px' }}>
+                        <FormattedMessage id="refundTime" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="consumerName" />
+                      </th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="refundableAmount" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="pointsRefundable" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="chargebackStatus" />
+                      </th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="actualRefundAmount" />
+                      </th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        实退积分
+                        <FormattedMessage id="actualRefundPoints" />
                       </th>
                     </tr>
                   </thead>
@@ -258,7 +275,9 @@ export default class SearchList extends React.Component<any, any> {
       const enableReturn =
         (returnFlowState === 'RECEIVED' ||
           (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
-        refundStatus != null && refundStatus != 2 && refundStatus != 3;
+        refundStatus != null &&
+        refundStatus != 2 &&
+        refundStatus != 3;
 
       return (
         <tr
@@ -456,33 +475,35 @@ export default class SearchList extends React.Component<any, any> {
                         ) : null;
                       })}
 
-                    {/*第4张特殊处理*/
-                    //@ts-ignore
-                    v.get('returnItems').concat(returnGifts).size > 3 ? (
-                      <div style={styles.imgBg}>
-                        <img
+                    {
+                      /*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('returnItems').concat(returnGifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={
+                              v
+                                .get('returnItems')
+                                .concat(returnGifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('returnItems')
+                                    .concat(returnGifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
                           //@ts-ignore
-                          src={
-                            v
-                              .get('returnItems')
-                              .concat(returnGifts)
-                              .get(3)
-                              .get('pic')
-                              ? v
-                                  .get('returnItems')
-                                  .concat(returnGifts)
-                                  .get(3)
-                                  .get('pic')
-                              : defaultImg
-                          }
-                          style={styles.imgFourth}
-                        />
-                        //@ts-ignore
-                        <div style={styles.imgNum}>
-                          共{v.get('returnItems').concat(returnGifts).size}件
+                          <div style={styles.imgNum}>
+                            共{v.get('returnItems').concat(returnGifts).size}件
+                          </div>
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null
+                    }
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*订单编号*/}

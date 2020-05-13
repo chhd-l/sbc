@@ -21,6 +21,7 @@ import {
   checkAuth
 } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

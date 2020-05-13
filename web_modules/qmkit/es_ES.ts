@@ -2,6 +2,17 @@
  * 多语言英文
  */
 export default {
+  'enterUpTo100Characters': 'Enter up to 100 characters',
+  'fillInTheRemarks': 'Fill in the remarks',
+  'address': 'Address',
+  'extraInformation': 'Extra information',
+  'inputPhoneNumberTip': 'Please enter the phone number',
+  'inputPhoneNumberTip2': 'Please enter the correct phone number',
+  'more': 'More',
+  'receiver': 'Receiver',
+  'defaultAddress': 'Default address',
+  'phoneNumber': 'Phone number',
+  'phoneNumber2': 'Phone number',
   'piece': 'Piece',
   'total': 'Total',
   'all': 'All',
@@ -95,94 +106,96 @@ export default {
   'batchImport': 'Batch Import',
   'addSpecifications': 'Add specifications',
   'newProduct': 'New product',
-  
+
   // 'product.productVideo': 'Product video',
   // 'product.productVideo': 'Product video',
 
 
 
 
-  'product': 'productsss',
-  'consumerList':'Consumer List',
-  'consumerName':'Consumer Name',
-  'area'	:'Area',
-  'selectAddress':'Please select an address',
-  'consumerType'	:'Consumer Type',
-  'platformLevel':'customer Level',
-  'accountStatus'	:'Account Status',
-  'accountNumber'	:'Account Number',
-  'auditors'	:'Auditors',
-  'search' 	:'Search',
-  'audited'	:'Audited',
-  'contactPerson':	'Contact Person',
-  'contactPhoneNumber'	:'Contact phone number',
-  'tourist':	'Tourist',
-  'platformConsumers':	'Platform Consumers',
-  'enable':	'Enable',
-  'disabled':'Disabled',
-  'consumerLevel':	'Consumer Level',
-  'levelName'	:'Level Name',
-  'levelBadge':	'Level Badge',
-  'view':'View',
-
-  'orderDetails':'Order details',
-  'deliveryRecord':'Delivery Record',
-  'collectionRecords':'Collection records',
-    
-  'toBeDelivered'	:"To be delivered",
-  'ship':"Ship",
-  'orderNumber':"Order number",
-  'consumer':"Consumer",
-  'consumerAccount'	:"Consumer Account",
-  'orderTime':	"Order time",
-    
-  'skuCode':	"SKU code",
-  'productName':	"Product name",
-  'weight':	"Weight",
-  'price':	"Price",
-  'quantity':	"Quantity",
-  'subtotal':	"Subtotal",
-  'productAmount':	"Product amount",
-  'pointsDeduction':	"Points deduction",
-  'shippingFees':	"Shipping fees",
-  'totalPayable':	"Total payable",
-    
-  'sellerNotes':	"Seller notes",
-  'buyerNotes':	"Buyer notes" ,
+  'product': 'Product',
+  'consumerList': 'Consumer List',
+  'consumerName': 'Consumer Name',
+  'area': 'Area',
+  'detailAddress': 'Detail address',
+  'selectAddress': 'Please select an address',
+  'consumerType': 'Consumer Type',
+  'platformLevel': 'customer Level',
+  'accountStatus': 'Account Status',
+  'accountNumber': 'Account Number',
+  'auditors': 'Auditors',
+  'search': 'Search',
+  'audited': 'Audited',
+  'contactPerson': 'Contact Person',
+  'contactPhoneNumber': 'Contact phone number',
+  'tourist': 'Tourist',
+  'platformConsumers': 'Platform Consumers',
+  'enable': 'Enable',
+  'disabled': 'Disabled',
+  'consumerLevel': 'Consumer Level',
+  'levelName': 'Level Name',
+  'levelBadge': 'Level Badge',
+  'view': 'View',
   'noData': 'no data',
   'save': 'Save',
+  'cancel': 'Cancel',
 
-  
+  'orderDetails': 'Order details',
+  'deliveryRecord': 'Delivery Record',
+  'collectionRecords': 'Collection records',
 
- 
+  'toBeDelivered': "To be delivered",
+  'ship': "Ship",
+  'orderNumber': "Order number",
+  'consumer': "Consumer",
+  'consumerAccount': "Consumer Account",
+  'consumerInfo': "Consumer information",
+  'orderTime': "Order time",
+
+  'skuCode': "SKU code",
+  'productName': "Product name",
+  'weight': "Weight",
+  'price': "Price",
+  'quantity': "Quantity",
+  'subtotal': "Subtotal",
+  'productAmount': "Product amount",
+  'pointsDeduction': "Points deduction",
+  'shippingFees': "Shipping fees",
+  'totalPayable': "Total payable",
+
+  'sellerNotes': "Seller notes",
+  'buyerNotes': "Buyer notes",
+
+
+
+
   'orderAttachment': "Order attachment",
   'none': "none",
   'paymentMethod': "Payment method",
   'onlinePayment': "online payment",
-  'invoiceInformation': 'Invoice information',
+  'offlinePayment': "Offline payment",
   'generalInvoice': 'General invoice ',
   'details': 'details',
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
   'expressDelivery	': "Express delivery",
-  'deliveryInformation':	"delivery information",
-  'confirm':'Confirm',
-  'cancel':'Cancel',
+  'deliveryInformation': "delivery information",
+  'confirm': 'Confirm',
 
 
-  "serialNumber":"Serial number",
-  "shipped":"Shipped",
-  "thisShipment":"This shipment",
-  "amountReceivable":"Amount receivable",
-  "collectionSerialNumber":"Collection serial number"	,
-  "collectionTime":"Collection time",
-  "amountReceived":"Amount received",
-  "accountsReceivable":"Accounts receivable",
-  "accessories" :"Accessories",
-  "status ":"Status",
-  "paid":"paid",
-  "remarks":"Remarks",
-  "operating":"Operating",
+  "serialNumber": "Serial number",
+  "shipped": "Shipped",
+  "thisShipment": "This shipment",
+  "amountReceivable": "Amount receivable",
+  "collectionSerialNumber": "Collection serial number",
+  "collectionTime": "Collection time",
+  "amountReceived": "Amount received",
+  "accountsReceivable": "Accounts receivable",
+  "accessories": "Accessories",
+  "status ": "Status",
+  "paid": "paid",
+  "remarks": "Remarks",
+  "operating": "Operating",
 
   'productFirstLetterUpperCase': 'Product',
 
@@ -240,7 +253,36 @@ export default {
   'order.pleaseSelectOrderToOperate': 'Please select the order that needs to be operated',
   'order.batchReview': 'Batch review',
   'order.batchExpert': 'Batch expert',
+  'order.editOrder': 'Edit order',
+  'order.mustSelectAMember': 'Must select a member',
+  'order.noAddressAvailable': 'No address available, please fill in temporary address',
+  'order.mustChooseAShippingAddress': 'Must choose a shipping address',
+  'order.pleaseSelectProvinceOrCityOrDistrict': 'Please select province/city/district',
+  'order.inputDetailAddressTip1': 'Please fill in the detailed address',
+  'order.inputDetailAddressTip2': 'Detailed address length must be between 5-60 characters',
+  'order.inputReceiverTip': 'Please fill in the receiver',
+  'order.uploadValidateTip': 'Supported picture formats: jpg, jpeg, png, gif, file size no more than 5M, maximum upload 10',
+  'order.uploadValidateTip2': 'Image size cannot exceed 5MB',
 
+  'invoice.invoiceInformation': 'Invoice information',
+  'invoice.noInvoiceRequired': 'No invoice required',
+  'invoice.personal': 'Personal',
+  'invoice.company': 'Company',
+  'invoice.pleaseSelectInvoiceItem': 'Please select invoice item',
+  'invoice.mustSelectInvoiceItem': 'Must select invoice item',
+  'invoice.invoiceHeader': 'Invoice header',
+  'invoice.mustFillInTheInvoiceHeader': 'Must fill in the invoice header',
+  'invoice.invoiceHeaderValidateTip1': 'Invoice header must be at least 1 character',
+  'invoice.invoiceHeaderValidateTip2': 'Invoice header can enter up to 50 characters',
+  'invoice.taxpayerIdentificationNumber': 'Taxpayer Identification Number',
+  'invoice.taxpayerIdentificationNumberValidateTip': 'Please enter the correct taxpayer identification number and must be 15-20 characters',
+  'invoice.taxpayerIdentificationNumberValidateTip2': 'Wrong filling will not be used as tax certificate or cannot be reimbursed',
+  'invoice.companyFullName': 'Full name of company',
+  'invoice.companyTaxpayerIdentificationNumber': 'Company taxpayer identification number',
+  'invoice.companyPhone': 'Company phone ',
+  'invoice.basicBankAccountNumber': 'Basic bank account number',
+  'invoice.bank': 'Bank',
+  'invoice.useSeparateInvoiceReceiptInformation': 'Use separate invoice receipt information',
 
   'operationLog':'Operation log',
   'operatorType':'Operator type',
@@ -269,7 +311,15 @@ export default {
 "attachmentTips":"Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10",
 "refundableAmount":"Refundable amount",
 "pointsRefundable":"Points Refundable",
-"commodity":'Commodity'
+"commodity":'Commodity',
+  'refundList': 'Refund list',
+  'chargebackNumber': 'Chargeback number',
+  'refundTime': 'Refund time',
+  'chargebackStatus': 'Chargeback status',
+  'actualRefundAmount': 'Actual refund amount',
+  'actualRefundPoints': 'Actual refund Points',
+  'Refund': 'Refund',
+
 };
 
 
@@ -289,3 +339,59 @@ export default {
 // Category name 分类名称
 // Add Subcategory 添加子分类
 // Sub-category 上级分类
+
+// Refund list	退单列表
+// Chargeback number	退单编号
+// Order number	订单编号
+// Product name	商品名称
+// Consumer name	客户名称
+// Recipient	收件人
+// Start date	开始日期
+// End date	结束日期
+// Search	搜索
+// Bulk operations	批量操作
+// Bulk export	批量导出
+// All	全部
+// Pending review	待审核
+// To be filled out logistics information	待填写物流信息
+// Waiting for the merchant to receive the goods	待商家收货
+// Pending refund	待退款
+// completed	已完成
+// Rejected	拒绝收货
+// Refused to refund	拒绝退款
+// Out of date	已作废
+// Refund failed	退款失败
+// Product	商品
+// Order number	订单号
+// Refund time	退单时间
+// Consumer's name	客户名称
+// Refundable amount	应退金额
+// Points Refundable	应退积分
+// Chargeback status	退单状态
+// Actual refund amount	实退金额
+// Refund Points	实退积分
+// Chargeback	代退单
+// Pending refund	待退款
+// Refund	退款
+// Refused to refund	拒绝退款
+// See details	查看详情
+// Refund details	退单详情
+// Pending refund	待退款
+// Refund	退款
+// Refused to refund	拒绝退款
+// Refund number:	退单号：
+// Chargeback	代退单
+// Application time:	申请时间：
+// Order number:	订单号：
+// Consumer:	客户：
+// Consumer account:	客户账号：
+// Consumer type: Tourist	客户等级：游客
+// SKU code	SKU编码
+// Weight	规格
+// Return unit price	退货单价
+// Quantity returned	退货数量
+// Subtotal of return amount	退货金额小计
+// Refundable amount:	应退金额:
+// Return reason: 	退货原因:?
+// Other return instructions:	其他退货说明:?
+// Chargeback attachment:	退单附件:

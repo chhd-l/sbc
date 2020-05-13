@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import {} from 'immutable';
 import { Form, Input, Select, Button } from 'antd';
 import { Headline, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -44,13 +45,16 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="发起售后申请" number={total.toString()} />
+        <Headline
+          title={<FormattedMessage id="initiateApplication" />}
+          number={total.toString()}
+        />
 
         <div>
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="订单编号"
+                addonBefore={<FormattedMessage id="order.orderNumber" />}
                 onChange={(e) => {
                   this.setState({
                     id: (e.target as any).value
@@ -121,7 +125,7 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                搜索
+                {<FormattedMessage id="search" />}
               </Button>
             </FormItem>
           </Form>
@@ -147,8 +151,12 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">客户名称</Option>
-        <Option value="buyerAccount">客户账号</Option>
+        <Option value="buyerName">
+          {<FormattedMessage id="consumerName" />}
+        </Option>
+        <Option value="buyerAccount">
+          {<FormattedMessage id="consumerAccount" />}
+        </Option>
       </Select>
     );
   };
@@ -170,8 +178,12 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">收件人</Option>
-        <Option value="consigneePhone">收件人手机</Option>
+        <Option value="consigneeName">
+          {<FormattedMessage id="recipient" />}
+        </Option>
+        <Option value="consigneePhone">
+          {<FormattedMessage id="recipientPhone" />}
+        </Option>
       </Select>
     );
   };
@@ -193,8 +205,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">商品名称</Option>
-        <Option value="skuNo">SKU编码</Option>
+        <Option value="skuName">{<FormattedMessage id="productName" />}</Option>
+        <Option value="skuNo">{<FormattedMessage id="skuCode" />}</Option>
       </Select>
     );
   };

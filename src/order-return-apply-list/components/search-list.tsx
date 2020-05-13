@@ -5,6 +5,7 @@ import { Spin, Pagination } from 'antd';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
 import { Const, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../img/none.png');
 
 @Relax
@@ -59,16 +60,28 @@ export default class SearchList extends React.Component<any, any> {
               >
                 <thead className="ant-table-thead">
                   <tr>
-                    <th style={{ width: '300' }}>商品</th>
-                    <th style={{ width: '10%' }}>客户名称</th>
-                    <th style={{ width: '15%' }}>收件人</th>
-                    <th style={{ width: '10%' }}>
-                      金额<br />数量
+                    <th style={{ width: '300' }}>
+                      {<FormattedMessage id="commodity" />}
                     </th>
-                    <th style={{ width: '10%' }}>发货状态</th>
-                    <th style={{ width: '10%' }}>订单状态</th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="consumerName" />}
+                    </th>
+                    <th style={{ width: '15%' }}>
+                      {<FormattedMessage id="recipient" />}
+                    </th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="amount" />}
+                      <br />
+                      {<FormattedMessage id="quantity" />}
+                    </th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="shippingStatus" />}
+                    </th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="orderStatus" />}
+                    </th>
                     <th style={{ width: '10%', textAlign: 'right' }}>
-                      付款状态
+                      {<FormattedMessage id="paymentStatus" />}
                     </th>
                   </tr>
                 </thead>
@@ -82,7 +95,8 @@ export default class SearchList extends React.Component<any, any> {
             {total == 0 ? (
               <div className="ant-table-placeholder">
                 <span>
-                  <i className="anticon anticon-frown-o" />暂无数据
+                  <i className="anticon anticon-frown-o" />
+                  {<FormattedMessage id="nodata" />}
                 </span>
               </div>
             ) : null}
@@ -148,9 +162,10 @@ export default class SearchList extends React.Component<any, any> {
                         {id}
                       </span>
                       <span style={{ marginLeft: 60 }}>
-                        下单时间：{moment(
-                          v.getIn(['tradeState', 'createTime'])
-                        ).format(Const.TIME_FORMAT)}
+                        {<FormattedMessage id="orderTime" />}:
+                        {moment(v.getIn(['tradeState', 'createTime'])).format(
+                          Const.TIME_FORMAT
+                        )}
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
                         <a
@@ -159,7 +174,7 @@ export default class SearchList extends React.Component<any, any> {
                             apply(id);
                           }}
                         >
-                          申请
+                          {<FormattedMessage id="application" />}
                         </a>
                       </span>
                     </div>
@@ -197,33 +212,35 @@ export default class SearchList extends React.Component<any, any> {
                         }
                       })}
 
-                    {/*第4张特殊处理*/
-                    //@ts-ignore
-                    v.get('tradeItems').concat(gifts).size > 3 ? (
-                      <div style={styles.imgBg}>
-                        <img
+                    {
+                      /*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
                           //@ts-ignore
-                          src={
-                            v
-                              .get('tradeItems')
-                              .concat(gifts)
-                              .get(3)
-                              .get('pic')
-                              ? v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                              : defaultImg
-                          }
-                          style={styles.imgFourth}
-                        />
-                        //@ts-ignore
-                        <div style={styles.imgNum}>
-                          共{v.get('tradeItems').concat(gifts).size}件
+                          <div style={styles.imgNum}>
+                            total {v.get('tradeItems').concat(gifts).size}
+                          </div>
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null
+                    }
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*客户名称*/}
@@ -231,15 +248,15 @@ export default class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '15%' }}>
                     {/*收件人姓名*/}
-                    收件人：{v.getIn(['consignee', 'name'])}
+                    {<FormattedMessage id="recipient" />}：
+                    {v.getIn(['consignee', 'name'])}
                     <br />
                     {/*收件人手机号码*/}
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '10%' }}>
                     {tradePrice.toFixed(2)}
-                    <br />
-                    （{num}件)
+                    <br />( total {num})
                   </td>
                   {/*发货状态*/}
                   <td style={{ width: '10%' }}>

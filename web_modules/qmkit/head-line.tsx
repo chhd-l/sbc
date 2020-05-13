@@ -18,7 +18,7 @@ export default class Headline extends React.PureComponent<any, any> {
       >
         <h3>
           {this.props.title}
-          {this.props.number && <small>{`(共${this.props.number}条)`}</small>}
+          {this.props.number && <small>{`(Total ${this.props.number})`}</small>}
           {this.props.smallTitle && <small>{this.props.smallTitle}</small>}
         </h3>
         {this.props.children}

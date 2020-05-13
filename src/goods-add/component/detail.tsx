@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { noop, UEditor } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Detail extends React.Component<any, any> {
@@ -50,7 +51,10 @@ export default class Detail extends React.Component<any, any> {
     return (
       <div>
         <Tabs defaultActiveKey="main" onChange={() => {}}>
-          <Tabs.TabPane tab="商品详情" key="main">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="product.productDetail" />}
+            key="main"
+          >
             <UEditor
               ref={(UEditor) => {
                 refDetailEditor((UEditor && UEditor.editor) || {});

@@ -16,6 +16,7 @@ import PicModal from './component/pic-modal';
 import ImgModal from './component/img-modal';
 import Logistics from './component/logistics';
 import VideoModal from './component/video-modal';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsAdd extends React.Component<any, any> {
@@ -66,7 +67,9 @@ export default class GoodsAdd extends React.Component<any, any> {
       <div>
         <BreadCrumb thirdLevel={true}>
           {/* <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item> */}
-          <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {gid ? <FormattedMessage id="product.editProduct" /> : '新增商品'}
+          </Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
@@ -76,7 +79,9 @@ export default class GoodsAdd extends React.Component<any, any> {
         </Breadcrumb> */}
         <div className="container" style={{ paddingBottom: 50 }}>
           <Headline
-            title={gid ? '编辑商品' : '新增商品'}
+            title={
+              gid ? <FormattedMessage id="product.editProduct" /> : '新增商品'
+            }
             state={this._getState(gid)}
           />
 
@@ -85,7 +90,10 @@ export default class GoodsAdd extends React.Component<any, any> {
             onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="基础信息" key="main">
+              <Tabs.TabPane
+                tab={<FormattedMessage id="product.basicInformation" />}
+                key="main"
+              >
                 {/*商品基本信息*/}
                 <Goods />
                 {/*商品属性信息*/}
@@ -107,7 +115,7 @@ export default class GoodsAdd extends React.Component<any, any> {
 
             {checkAuth(priceFuncName) && (
               <Tabs.TabPane
-                tab="价格及订货量"
+                tab={<FormattedMessage id="product.priceAndOrderAmount" />}
                 key="price"
                 disabled={!this.store.state().getIn(['goods', 'goodsId'])}
               >

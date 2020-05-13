@@ -20,6 +20,7 @@ import { fromJS, Map } from 'immutable';
 import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
 import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
+import { FormattedMessage } from 'react-intl';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -129,13 +130,20 @@ export default class Info extends React.Component<any, any> {
         <Alert
           message={
             <div>
-              <p>操作说明：</p>
               <p>
-                1、平台开启了商品审核后，首次新增的商品默认为待审核状态，已审核并且上架的商品才可出售；
+                <FormattedMessage id="operationInstruction" />：
               </p>
-              <p>2、如果不需设置价格或者订货量可在编辑基础信息后直接保存；</p>
               <p>
-                3、您可通过编辑SKU对单个SKU的市场价、上下架状态、价格及订货量进行设置；
+                1、
+                <FormattedMessage id="operationInstruction.first" />
+              </p>
+              <p>
+                2、
+                <FormattedMessage id="operationInstruction.second" />
+              </p>
+              <p>
+                3、
+                <FormattedMessage id="operationInstruction.third" />
               </p>
             </div>
           }
@@ -149,7 +157,7 @@ export default class Info extends React.Component<any, any> {
             fontWeight: 'bold'
           }}
         >
-          基本信息
+          <FormattedMessage id="product.basicInformation" />
         </div>
         <div>
           <WrapperForm
@@ -246,7 +254,10 @@ class GoodsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品名称">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.productName" />}
+            >
               {getFieldDecorator('goodsName', {
                 rules: [
                   {
@@ -276,7 +287,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="SPU编码">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.SPU" />}
+            >
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
@@ -303,7 +317,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="平台类目">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.platformCategory" />}
+            >
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -355,7 +372,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="店铺分类">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.storeCategory" />}
+            >
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
@@ -396,7 +416,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品品牌">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.brand" />}
+            >
               {getFieldDecorator(
                 'brandId',
                 brandExists
@@ -413,7 +436,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="计量单位">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.unitMeasurement" />}
+            >
               {getFieldDecorator('goodsUnit', {
                 rules: [
                   {
@@ -435,7 +461,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品副标题">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.productSubtitle" />}
+            >
               {getFieldDecorator('goodsSubtitle', {
                 rules: [
                   {
@@ -460,7 +489,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="划线价">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.marketPrice" />}
+            >
               {getFieldDecorator('linePrice', {
                 rules: [
                   {
@@ -471,7 +503,7 @@ class GoodsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: '最大值为9999999.99',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -484,7 +516,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品描述">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.productDescription" />}
+            >
               {getFieldDecorator('goodsDescription', {
                 rules: [
                   {
@@ -504,7 +539,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="销售类型">
               {getFieldDecorator('saleType', {
@@ -524,7 +559,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-        </Row>
+        </Row> */}
         {/* <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem {...formItemLayout} label="市场价">
@@ -577,7 +612,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row> */}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="上下架">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.onOrOffShelves" />}
+            >
               {getFieldDecorator('addedFlag', {
                 rules: [
                   {
@@ -589,11 +627,15 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('addedFlag')
               })(
                 <RadioGroup>
-                  <Radio value={1}>上架</Radio>
-                  <Radio value={0}>下架</Radio>
+                  <Radio value={1}>
+                    <FormattedMessage id="product.onShelves" />
+                  </Radio>
+                  <Radio value={0}>
+                    <FormattedMessage id="product.offShelves" />
+                  </Radio>
                   {isEditGoods && (
                     <Radio value={2} disabled={true}>
-                      部分上架
+                      <FormattedMessage id="product.partialOnShelves" />
                     </Radio>
                   )}
                 </RadioGroup>
@@ -603,7 +645,10 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品图片">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.productImage" />}
+            >
               <div style={{ width: 550 }}>
                 <ImageLibraryUpload
                   images={images}
@@ -615,13 +660,18 @@ class GoodsForm extends React.Component<any, any> {
                   skuId=""
                 />
               </div>
-              <Tips title="建议尺寸:800*800px,单张大小不超过2M,最多可上传10张" />
+              <Tips
+                title={<FormattedMessage id="product.recommendedSizeImg" />}
+              />
             </FormItem>
           </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="商品视频">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.productVideo" />}
+            >
               <div style={{ width: 550 }}>
                 <VideoLibraryUpload
                   modalVisible={modalVisible}
@@ -631,7 +681,9 @@ class GoodsForm extends React.Component<any, any> {
                   skuId=""
                 />
               </div>
-              <Tips title="商品视频大小推荐30M，最大限制50M，支持文件类型：mp4，推荐时长小于等于90s，大于等于6s，推荐视频比例7：9" />
+              <Tips
+                title={<FormattedMessage id="product.recommendedSizeVideo" />}
+              />
             </FormItem>
           </Col>
         </Row>

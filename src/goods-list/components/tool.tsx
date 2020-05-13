@@ -4,6 +4,7 @@ import { Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
 import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import { noop, AuthWrapper, checkAuth } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const confirm = Modal.confirm;
 
 @withRouter
@@ -46,7 +47,8 @@ export default class Tool extends React.Component<any, any> {
             getPopupContainer={() => document.getElementById('page-content')}
           >
             <Button>
-              批量操作<Icon type="down" />
+              {<FormattedMessage id="product.batchOperation" />}
+              <Icon type="down" />
             </Button>
           </Dropdown>
         )}

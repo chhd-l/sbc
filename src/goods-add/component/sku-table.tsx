@@ -17,6 +17,7 @@ import { IList } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -134,7 +135,7 @@ class SkuForm extends React.Component<any, any> {
     }
 
     columns = columns.unshift({
-      title: '图片',
+      title: <FormattedMessage id="product.image" />,
       key: 'img',
       className: 'goodsImg',
       render: (rowInfo) => {
@@ -174,7 +175,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          SKU编码
+          <FormattedMessage id="product.SKU" />
         </div>
       ),
       key: 'goodsInfoNo',
@@ -223,14 +224,15 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          市场价
+          <FormattedMessage id="product.marketPrice" />
           <br />
           <Checkbox
             disabled={priceOpt === 0}
             checked={marketPriceChecked}
             onChange={(e) => this._synchValue(e, 'marketPrice')}
           >
-            全部相同&nbsp;
+            <FormattedMessage id="allTheSame" />
+            &nbsp;
             <Tooltip placement="top" title={'勾选后所有SKU都使用相同的市场价'}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
@@ -286,13 +288,14 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          库存
+          <FormattedMessage id="product.inventory" />
           <br />
           <Checkbox
             checked={stockChecked}
             onChange={(e) => this._synchValue(e, 'stock')}
           >
-            全部相同&nbsp;
+            <FormattedMessage id="allTheSame" />
+            &nbsp;
             <Tooltip placement="top" title={'勾选后所有SKU都使用相同的库存'}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
@@ -329,40 +332,40 @@ class SkuForm extends React.Component<any, any> {
       )
     });
 
-    columns = columns.push({
-      title: '条形码',
-      key: 'goodsInfoBarcode',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('goodsInfoBarcode_' + rowInfo.id, {
-                rules: [
-                  {
-                    max: 20,
-                    message: '0-20字符'
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'goodsInfoBarcode'
-                ),
-                initialValue: rowInfo.goodsInfoBarcode
-              })(<Input />)}
-            </FormItem>
-          </Col>
-        </Row>
-      )
-    });
+    // columns = columns.push({
+    //   title: '条形码',
+    //   key: 'goodsInfoBarcode',
+    //   render: (rowInfo) => (
+    //     <Row>
+    //       <Col span={12}>
+    //         <FormItem style={styles.tableFormItem}>
+    //           {getFieldDecorator('goodsInfoBarcode_' + rowInfo.id, {
+    //             rules: [
+    //               {
+    //                 max: 20,
+    //                 message: '0-20字符'
+    //               }
+    //             ],
+    //             onChange: this._editGoodsItem.bind(
+    //               this,
+    //               rowInfo.id,
+    //               'goodsInfoBarcode'
+    //             ),
+    //             initialValue: rowInfo.goodsInfoBarcode
+    //           })(<Input />)}
+    //         </FormItem>
+    //       </Col>
+    //     </Row>
+    //   )
+    // });
 
     columns = columns.push({
-      title: '操作',
+      title: <FormattedMessage id="operation" />,
       key: 'opt',
       render: (rowInfo) =>
         specSingleFlag ? null : (
           <Button onClick={() => this._deleteGoodsInfo(rowInfo.id)}>
-            删除
+            <FormattedMessage id="delete" />
           </Button>
         )
     });

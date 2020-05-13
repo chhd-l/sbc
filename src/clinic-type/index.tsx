@@ -37,21 +37,21 @@ export default class ClinicList extends Component<any, any> {
       typeList: [
         {
           id: '1',
-          name: 'clinics',
+          name: 'Vet',
           descripetion:
-            'clinics descripetion clinics descripetion clinics descripetion clinics descripetion'
+            'Vet descripetion Vet descripetion Vet descripetion Vet descripetion'
         },
         {
           id: '2',
-          name: 'spt',
+          name: 'Spt',
           descripetion:
-            'spt descripetion spt descripetion spt descripetion spt descripetion spt descripetion'
+            'Spt descripetion Spt descripetion Spt descripetion Spt descripetion Spt descripetion'
         },
         {
           id: '3',
-          name: 'pro',
+          name: 'Pro',
           descripetion:
-            'pro descripetion pro descripetion pro descripetion pro descripetion'
+            'Pro descripetion Pro descripetion Pro descripetion Pro descripetion'
         }
       ],
       pagination: {

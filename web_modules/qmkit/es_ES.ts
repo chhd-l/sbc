@@ -63,6 +63,39 @@ export default {
   'product.publishItemInfo1': 'Publish directly delicacy managment',
   'product.publishItemInfo2': 'Excel file quick import',
   'product.publishItemInfo3': 'One-click import of platform commodity library',
+  'product.postGoods': 'Post goods',
+  'product.chooseAPublishingMethod': 'Choose a publishing method',
+  'product.storeCategoryInfo': 'Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is no classification, all products will be classified into the default classification',
+  'product.addFirstLeverCate': 'Add the first level category',
+  'categoryName': 'Category name',
+  'addSubcategory': 'Add Subcategory',
+  'product.importInfo1': 'Please download the product import template first, and fill in the product data according to the requirements in the annotation. Failure to fill in the requirements will cause the product import to fail.',
+  'product.importInfo2': 'Please choose .xlsx or .xls file, the file size is ≤ 2M, only one file can be imported at a time, it is recommended that no more than 500 product data are imported at a time.',
+  'product.downloadProductImportTemplate': 'Download product import template',
+  'productImport': 'Product import',
+  'uploadData': 'Upload data',
+  'uploadDataInfo': 'Upload data',
+  'finish': 'Finish',
+  'chooseFileToUpload': 'Choose file to upload',
+  'confirmToImport': 'Confirm to import',
+  'subCategory': 'Sub-category',
+  'pendingProducts': 'Pending products',
+  'batchDeletion': 'Batch deletion',
+  'pendingReview': 'Pending review',
+  'reviewFailed': 'Review failed',
+  'banned': 'Banned',
+  'reason': 'Reason',
+  'priceSettingMethod': 'Price setting method',
+  'approvalStatus': 'Approval Status',
+  'commodityLibraryImport': 'Commodity library import',
+  'commodityLibraryImportInfo': 'The products imported from the commodity library are initially reviewed / off the shelf. Please add the information before selling them;',
+  'instructions': 'Instructions:',
+  'status': 'Status',
+  'import': 'Import',
+  'batchImport': 'Batch Import',
+  'addSpecifications': 'Add specifications',
+  'newProduct': 'New product',
+  
   // 'product.productVideo': 'Product video',
   // 'product.productVideo': 'Product video',
 
@@ -81,11 +114,8 @@ export default {
   'auditors'	:'Auditors',
   'search' 	:'Search',
   'audited'	:'Audited',
-  'pendingReview':	'Pending review',
-  'reviewFailed'	:'Review failed',
   'contactPerson':	'Contact Person',
   'contactPhoneNumber'	:'Contact phone number',
-  'approvalStatus'	:'Approval Status',
   'tourist':	'Tourist',
   'platformConsumers':	'Platform Consumers',
   'enable':	'Enable',
@@ -119,9 +149,10 @@ export default {
     
   'sellerNotes':	"Seller notes",
   'buyerNotes':	"Buyer notes" ,
-  
   'noData': 'no data',
   'save': 'Save',
+
+  
 
  
   'orderAttachment': "Order attachment",
@@ -226,13 +257,7 @@ export default {
 
 
 
-// Publish directly 直接发布
-// Product template import 商品模板导入
-// Product pool import 商品库导入
-// 1.Please download the product import template first, and fill in the product data according to the requirements in the annotation. Failure to fill in the requirements will cause the product import to fail.
-// 1、请先下载商品导入模板，并按照批注中的要求填写商品数据，未按要求填写将会导致商品导入失败。
-// 2.Please choose .xlsx or .xls file, the file size is ≤ 2M, only one file can be imported at a time, it is recommended that no more than 500 product data are imported at a time.
-// 2.请选择 .xlsx或 .xls文件，文件大小≤2M，每次只能导入一个文件，建议每次导入不超过500条商品数据。
+
 // Download product import template 下载商品导入模板
 // Upload data 上传数据
 // Finish 完成

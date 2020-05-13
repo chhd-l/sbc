@@ -6,6 +6,7 @@ import AppStore from './store';
 import SearchForm from './components/search-form';
 import Tool from './components/tool';
 import Tab from './components/tab';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCheck extends React.Component<any, any> {
@@ -31,7 +32,7 @@ export default class GoodsCheck extends React.Component<any, any> {
             <Breadcrumb.Item>待审核商品</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="待审核商品" />
+            <Headline title={<FormattedMessage id="pendingProducts" />} />
 
             {/*搜索*/}
             <SearchForm />

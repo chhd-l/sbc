@@ -7,6 +7,7 @@ import AppStore from './store';
 import CateList from './component/cate-list';
 import CateModal from './component/cate-modal';
 import Tool from './component/tool';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
@@ -26,9 +27,9 @@ export default class GoodsCate extends React.Component<any, any> {
           <Breadcrumb.Item>店铺分类</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container">
-          <Headline title="店铺分类" />
+          <Headline title={<FormattedMessage id="product.storeCategory" />} />
           <Alert
-            message="店铺分类为您店铺范围内的商品分类，最多可添加2个层级，没有任何分类时，所有商品将会归类到默认分类"
+            message={<FormattedMessage id="product.storeCategoryInfo" />}
             type="info"
           />
 

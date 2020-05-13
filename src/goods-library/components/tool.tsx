@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Button, message, Modal } from 'antd';
 import { IList } from 'typings/globalType';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -25,7 +26,9 @@ export default class Tool extends React.Component<any, any> {
   render() {
     return (
       <div className="handle-bar">
-        <Button onClick={this._spuCheckedFunc}>批量导入</Button>
+        <Button onClick={this._spuCheckedFunc}>
+          <FormattedMessage id="batchImport" />
+        </Button>
       </div>
     );
   }

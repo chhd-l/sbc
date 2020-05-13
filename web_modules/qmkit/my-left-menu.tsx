@@ -47,7 +47,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     // 账户管理特殊处理左侧菜单的显示
     if (path == '/account-manage') {
       return (
-        <Sider width={136} className="leftSideNav">
+        <Sider width={190} className="leftSideNav">
           <Menu
             mode="inline"
             // theme="dark"
@@ -129,7 +129,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       currFirstMenu.get('children').size > 0
     ) {
       return (
-        <Sider width={136} className="leftSideNav">
+        <Sider width={190} className="leftSideNav">
           <Menu
             mode="inline"
             // theme="dark"

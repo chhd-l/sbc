@@ -10,6 +10,7 @@ import {
   Upload
 } from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const Dragger = Upload.Dragger;
 const Step = Steps.Step;
@@ -21,15 +22,15 @@ const header = {
 
 const steps = [
   {
-    title: '下载商品导入模板',
+    title: <FormattedMessage id="product.downloadProductImportTemplate" />,
     content: 'First-content'
   },
   {
-    title: '上传数据',
+    title: <FormattedMessage id="uploadData" />,
     content: 'Second-content'
   },
   {
-    title: '完成',
+    title: <FormattedMessage id="finish" />,
     content: 'Third-content'
   }
 ];
@@ -71,21 +72,18 @@ export default class GoodsImport extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>商品导入</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="productImport" />
+          </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container">
-          <Headline title="商品导入" />
+          <Headline title={<FormattedMessage id="productImport" />} />
           <Alert
             message="操作说明："
             description={
               <ul>
-                <li>
-                  1、请先下载商品导入模板，并按照批注中的要求填写商品数据，未按要求填写将会导致商品导入失败。
-                </li>
-                <li>
-                  2、请选择 .xlsx或
-                  .xls文件，文件大小≤2M，每次只能导入一个文件，建议每次导入不超过500条商品数据。
-                </li>
+                <li>1、{<FormattedMessage id="product.importInfo1" />}</li>
+                <li>2、{<FormattedMessage id="product.importInfo2" />}</li>
               </ul>
             }
           />
@@ -105,11 +103,13 @@ export default class GoodsImport extends React.Component<any, any> {
                 style={{ marginTop: 10 }}
                 onClick={this.toDownTempl}
               >
-                下载商品导入模板
+                {
+                  <FormattedMessage id="product.downloadProductImportTemplate" />
+                }
               </Button>
               <div style={{ marginTop: 40 }}>
                 <Button type="primary" onClick={this._next}>
-                  下一步
+                  {<FormattedMessage id="product.next" />}
                 </Button>
               </div>
             </div>
@@ -132,7 +132,8 @@ export default class GoodsImport extends React.Component<any, any> {
                       style={{ fontSize: 14, color: 'black' }}
                     >
                       {' '}
-                      <Icon type="upload" />选择文件上传
+                      <Icon type="upload" />
+                      <FormattedMessage id="chooseFileToUpload" />
                     </p>
                   </div>
                 </Dragger>
@@ -140,15 +141,13 @@ export default class GoodsImport extends React.Component<any, any> {
                 {err ? (
                   <div style={styles.tip}>
                     <span style={styles.error}>导入失败！</span>
-                    您可以<a onClick={this.toExcel}>
-                      下载错误表格
-                    </a>，查看错误原因，修改后重新导入。
+                    您可以<a onClick={this.toExcel}>下载错误表格</a>
+                    ，查看错误原因，修改后重新导入。
                   </div>
                 ) : null}
 
                 <p style={styles.grey}>
-                  请选择 .xlsx或
-                  .xls文件，文件大小≤2M，每次只能导入一个文件，建议每次导入不超过500条商品数据。
+                  <FormattedMessage id="product.importInfo2" />
                 </p>
 
                 {errBtn ? (
@@ -160,14 +159,14 @@ export default class GoodsImport extends React.Component<any, any> {
                     重新导入
                   </Button>
                 ) : (
-                    <Button
-                      type="primary"
-                      onClick={this._importGoods}
-                      disabled={isImport}
-                    >
-                      确认导入
+                  <Button
+                    type="primary"
+                    onClick={this._importGoods}
+                    disabled={isImport}
+                  >
+                    <FormattedMessage id="confirmToImport" />
                   </Button>
-                  )}
+                )}
               </div>
             </Spin>
           ) : null}
@@ -300,7 +299,7 @@ export default class GoodsImport extends React.Component<any, any> {
 
 const styles = {
   uploadTit: {
-    margin: '40px 200px'
+    margin: '40px 80px'
   },
   content: {
     background: '#fcfcfc',

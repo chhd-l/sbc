@@ -68,7 +68,11 @@ export default class GoodsAdd extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           {/* <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item> */}
           <Breadcrumb.Item>
-            {gid ? <FormattedMessage id="product.editProduct" /> : '新增商品'}
+            {gid ? (
+              <FormattedMessage id="product.editProduct" />
+            ) : (
+              <FormattedMessage id="newProduct" />
+            )}
           </Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
@@ -80,7 +84,11 @@ export default class GoodsAdd extends React.Component<any, any> {
         <div className="container" style={{ paddingBottom: 50 }}>
           <Headline
             title={
-              gid ? <FormattedMessage id="product.editProduct" /> : '新增商品'
+              gid ? (
+                <FormattedMessage id="product.editProduct" />
+              ) : (
+                <FormattedMessage id="newProduct" />
+              )
             }
             state={this._getState(gid)}
           />

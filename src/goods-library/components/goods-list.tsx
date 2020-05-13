@@ -7,6 +7,7 @@ import { IList } from 'typings/globalType';
 
 const { Column } = DataGrid;
 const defaultImg = require('../img/none.png');
+import { FormattedMessage } from 'react-intl';
 
 @withRouter
 @Relax
@@ -83,7 +84,7 @@ export default class GoodsList extends React.Component<any, any> {
         pagination={{ total, current: pageNum, onChange: this._getData }}
       >
         <Column
-          title="图片"
+          title={<FormattedMessage id="image" />}
           dataIndex="goodsImg"
           key="goodsImg"
           render={(img) =>
@@ -95,14 +96,14 @@ export default class GoodsList extends React.Component<any, any> {
           }
         />
         <Column
-          title="商品名称"
+          title={<FormattedMessage id="product.productName" />}
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
           width={200}
         />
         <Column
-          title="市场价"
+          title={<FormattedMessage id="product.marketPrice" />}
           dataIndex="marketPrice"
           key="marketPrice"
           render={(rowInfo) => {
@@ -110,7 +111,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="商品类目"
+          title={<FormattedMessage id="product.platformCategory" />}
           dataIndex="cateId"
           key="cateId"
           render={(rowInfo) => {
@@ -124,7 +125,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="品牌"
+          title={<FormattedMessage id="product.brand" />}
           dataIndex="brandId"
           key="brandId"
           render={(rowInfo) => {
@@ -138,7 +139,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="状态"
+          title={<FormattedMessage id="status" />}
           dataIndex="addStatus"
           key="addStatus"
           render={(addStatus) => {
@@ -149,7 +150,7 @@ export default class GoodsList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           dataIndex="addStatus"
           key="addGoodsLibraryFlag"
           render={(addStatus, record) => {
@@ -167,7 +168,7 @@ export default class GoodsList extends React.Component<any, any> {
                 }}
                 onClick={() => onImport([record['goodsId']])}
               >
-                导入{' '}
+                {<FormattedMessage id="import" />}{' '}
               </a>
             );
           }}

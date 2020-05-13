@@ -5,6 +5,7 @@ import { Modal, Table } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -69,13 +70,13 @@ class CateList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: '分类名称',
+      title: <FormattedMessage id="categoryName" />,
       dataIndex: 'cateName',
       key: 'cateName',
       className: 'namerow'
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="operation" />,
       key: 'option',
       width: '30%',
       render: (rowInfo) => this._getOption(rowInfo)
@@ -96,54 +97,49 @@ class CateList extends React.Component<any, any> {
         {rowInfo.get('isDefault') == 1
           ? '-'
           : hasAuth
-            ? // 一级分类(非默认分类)可添加子分类
-              [
-                rowInfo.get('cateGrade') < 2 &&
-                  rowInfo.get('isDefault') != 1 &&
-                  checkAuth('f_goods_cate_1') && (
-                    <a
-                      key="item1"
-                      style={styles.edit}
-                      onClick={this._addChildrenCate.bind(
-                        this,
-                        rowInfo.get('storeCateId'),
-                        rowInfo.get('cateName')
-                      )}
-                    >
-                      添加子分类
-                    </a>
-                  ),
-                // 非默认分类可编辑
+          ? // 一级分类(非默认分类)可添加子分类
+            [
+              rowInfo.get('cateGrade') < 2 &&
                 rowInfo.get('isDefault') != 1 &&
-                  checkAuth('f_goods_cate_1') && (
-                    <a
-                      key="item2"
-                      style={styles.edit}
-                      onClick={this._showEditModal.bind(
-                        this,
-                        rowInfo.get('storeCateId'),
-                        rowInfo.get('cateName'),
-                        rowInfo.get('cateParentId')
-                      )}
-                    >
-                      编辑
-                    </a>
-                  ),
-                // 非默认分类可删除
-                rowInfo.get('isDefault') != 1 &&
-                  checkAuth('f_goods_cate_2') && (
-                    <a
-                      key="item3"
-                      onClick={this._delete.bind(
-                        this,
-                        rowInfo.get('storeCateId')
-                      )}
-                    >
-                      删除
-                    </a>
-                  )
-              ]
-            : '-'}
+                checkAuth('f_goods_cate_1') && (
+                  <a
+                    key="item1"
+                    style={styles.edit}
+                    onClick={this._addChildrenCate.bind(
+                      this,
+                      rowInfo.get('storeCateId'),
+                      rowInfo.get('cateName')
+                    )}
+                  >
+                    <FormattedMessage id="addSubcategory" />
+                  </a>
+                ),
+              // 非默认分类可编辑
+              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+                <a
+                  key="item2"
+                  style={styles.edit}
+                  onClick={this._showEditModal.bind(
+                    this,
+                    rowInfo.get('storeCateId'),
+                    rowInfo.get('cateName'),
+                    rowInfo.get('cateParentId')
+                  )}
+                >
+                  <FormattedMessage id="edit" />
+                </a>
+              ),
+              // 非默认分类可删除
+              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_2') && (
+                <a
+                  key="item3"
+                  onClick={this._delete.bind(this, rowInfo.get('storeCateId'))}
+                >
+                  <FormattedMessage id="delete" />
+                </a>
+              )
+            ]
+          : '-'}
       </div>
     );
   };

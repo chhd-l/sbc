@@ -119,7 +119,11 @@ export default class CateList extends React.Component<any, any> {
           className="nameBox"
           width={200}
         />
-        <Column title="SPU编码" dataIndex="goodsNo" key="goodsNo" />
+        <Column
+          title={<FormattedMessage id="product.SPU" />}
+          dataIndex="goodsNo"
+          key="goodsNo"
+        />
         {/* <Column
           title="销售类型"
           key="saleType"
@@ -137,9 +141,9 @@ export default class CateList extends React.Component<any, any> {
         <Column
           title={
             <span>
-              市场价
+              <FormattedMessage id="product.marketPrice" />
               <br />
-              设价方式
+              <FormattedMessage id="priceSettingMethod" />
             </span>
           }
           key="marketPrice"

@@ -4,6 +4,7 @@ import { Button, Modal, message } from 'antd';
 import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import { noop, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -33,7 +34,9 @@ export default class Tool extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <AuthWrapper functionName="f_goods_del">
-          <Button onClick={this._spuCheckedFunc}>批量删除</Button>
+          <Button onClick={this._spuCheckedFunc}>
+            <FormattedMessage id="batchDeletion" />
+          </Button>
         </AuthWrapper>
       </div>
     );

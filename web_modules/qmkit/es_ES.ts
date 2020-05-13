@@ -102,7 +102,7 @@ export default {
 
 
 
-  'product': 'productsss',
+  'product': 'Product',
   'consumerList':'Consumer List',
   'consumerName':'Consumer Name',
   'area'	:'Area',
@@ -240,6 +240,17 @@ export default {
   'order.pleaseSelectOrderToOperate': 'Please select the order that needs to be operated',
   'order.batchReview': 'Batch review',
   'order.batchExpert': 'Batch expert',
+  'refundList': 'Refund list',
+  'chargebackNumber': 'Chargeback number',
+  'refundTime': 'Refund time',
+  'refundableAmount': 'Refundable amount',
+  'pointsRefundable': 'Points Refundable',
+  'chargebackStatus': 'Chargeback status',
+  'actualRefundAmount': 'Actual refund amount',
+  'actualRefundPoints': 'Actual refund Points',
+  'Refund': 'Refund',
+  'Refund': 'Refund',
+  'Refund': 'Refund',
 };
 
 
@@ -259,3 +270,59 @@ export default {
 // Category name 分类名称
 // Add Subcategory 添加子分类
 // Sub-category 上级分类
+
+// Refund list	退单列表
+// Chargeback number	退单编号
+// Order number	订单编号
+// Product name	商品名称
+// Consumer name	客户名称
+// Recipient	收件人
+// Start date	开始日期
+// End date	结束日期
+// Search	搜索
+// Bulk operations	批量操作
+// Bulk export	批量导出
+// All	全部
+// Pending review	待审核
+// To be filled out logistics information	待填写物流信息
+// Waiting for the merchant to receive the goods	待商家收货
+// Pending refund	待退款
+// completed	已完成
+// Rejected	拒绝收货
+// Refused to refund	拒绝退款
+// Out of date	已作废
+// Refund failed	退款失败
+// Product	商品
+// Order number	订单号
+// Refund time	退单时间
+// Consumer's name	客户名称
+// Refundable amount	应退金额
+// Points Refundable	应退积分
+// Chargeback status	退单状态
+// Actual refund amount	实退金额
+// Refund Points	实退积分
+// Chargeback	代退单
+// Pending refund	待退款
+// Refund	退款
+// Refused to refund	拒绝退款
+// See details	查看详情
+// Refund details	退单详情
+// Pending refund	待退款
+// Refund	退款
+// Refused to refund	拒绝退款
+// Refund number:	退单号：
+// Chargeback	代退单
+// Application time:	申请时间：
+// Order number:	订单号：
+// Consumer:	客户：
+// Consumer account:	客户账号：
+// Consumer type: Tourist	客户等级：游客
+// SKU code	SKU编码
+// Weight	规格
+// Return unit price	退货单价
+// Quantity returned	退货数量
+// Subtotal of return amount	退货金额小计
+// Refundable amount:	应退金额:
+// Return reason: 	退货原因:?
+// Other return instructions:	其他退货说明:?
+// Chargeback attachment:	退单附件:

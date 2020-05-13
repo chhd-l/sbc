@@ -165,7 +165,7 @@ export default class ListView extends React.Component<any, any> {
       currentPage,
       orderRejectModalVisible
     } = this.props.relaxProps;
-
+    console.log(dataList, 'dataList');
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -186,18 +186,16 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '100px' }}>商品</th>
+                      <th style={{ width: '300' }}>商品</th>
                       <th style={{ width: '10%' }}>客户名称</th>
                       <th style={{ width: '15%' }}>收件人</th>
-                      <th style={{ width: '10%' }}>
-                        金额
-                        <br />
-                        数量
-                      </th>
-                      <th style={{ width: '5%' }}>postCode</th>
-                      <th style={{ width: '5%' }}>rfc</th>
-                      <th style={{ width: '5%' }}>发货状态</th>
-                      <th style={{ width: '5%' }}>订单状态</th>
+                      {/* <th style={{ width: '10%' }}>
+                        金额<br />数量
+                      </th> */}
+                      {/* <th style={{ width: '10%' }}>postCode</th>
+                      <th style={{ width: '10%' }}>rfc</th> */}
+                      <th style={{ width: '10%' }}>发货状态</th>
+                      <th style={{ width: '10%' }}>订单状态</th>
                       <th className="operation-th" style={{ width: '10%' }}>
                         付款状态
                       </th>
@@ -341,130 +339,6 @@ export default class ListView extends React.Component<any, any> {
                                 .toString()
                             : ''}
                         </span>
-                        <span style={{ marginRight: 0, float: 'right' }}>
-                          {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' &&
-                            v.get('tradeItems') &&
-                            !v
-                              .get('tradeItems')
-                              .get(0)
-                              .get('isFlashSaleGoods') && (
-                              <AuthWrapper functionName="edit_order_f_001">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    verify(id, buyerId);
-                                  }}
-                                >
-                                  修改
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                              'NON_CHECKED' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => {
-                                    onAudit(id, 'CHECKED');
-                                  }}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  审核
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                              'NON_CHECKED' &&
-                            v.getIn(['tradeState', 'payState']) != 'PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => this._showRejectedConfirm(id)}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  驳回
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*待发货状态显示*/}
-                          {needAudit &&
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                >
-                                  回审
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  发货
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED_PART' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'PART_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  发货
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003">
-                              <a
-                                onClick={() => {
-                                  this._showConfirm(id);
-                                }}
-                                href="javascript:void(0)"
-                              >
-                                确认收货
-                              </a>
-                            </AuthWrapper>
-                          )}
-                          <AuthWrapper functionName="fOrderDetail001">
-                            <Link
-                              style={{ marginLeft: 20, marginRight: 20 }}
-                              to={`/order-detail/${id}`}
-                            >
-                              查看详情
-                            </Link>
-                          </AuthWrapper>
-                        </span>
                       </div>
                     </td>
                   </tr>
@@ -478,7 +352,7 @@ export default class ListView extends React.Component<any, any> {
                         display: 'flex',
                         alignItems: 'flex-end',
                         padding: '16px 0',
-                        width: '100'
+                        width: '300'
                       }}
                     >
                       {/*商品图片*/}
@@ -536,22 +410,25 @@ export default class ListView extends React.Component<any, any> {
                       {/*收件人手机号码*/}
                       {v.getIn(['consignee', 'phone'])}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    {/* <td style={{ width: '10%' }}>
                       ￥{tradePrice.toFixed(2)}
-                      <br />（{num}件)
+                      <br />
+                      （{num}件)
+                    </td> */}
+                    {/* <td style={{ width: '10%' }}>
+                      1
+                      {v.getIn(['invoice', 'postCode'])}
                     </td>
-                    <td style={{ width: '5%' }}>
-                      1{/* {v.getIn(['invoice', 'postCode'])} */}
-                    </td>
-                    <td style={{ width: '5%' }}>
-                      1{/* {v.getIn(['invoice', 'rfc'])} */}
-                    </td>
+                    <td style={{ width: '10%' }}>
+                      1
+                      {v.getIn(['invoice', 'rfc'])}
+                    </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '5%' }}>
+                    <td style={{ width: '10%' }}>
                       {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
                     </td>
                     {/*订单状态*/}
-                    <td style={{ width: '5%' }}>
+                    <td style={{ width: '10%' }}>
                       {flowState(v.getIn(['tradeState', 'flowState']))}
                     </td>
                     {/*支付状态*/}

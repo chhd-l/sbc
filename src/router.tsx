@@ -7,6 +7,16 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-list')
   },
+  {
+    path: '/order-list-limited',
+    exact: true,
+    asyncComponent: () => import('./order-list-limited')
+  },
+  {
+    path: '/order-return-list-limited',
+    exact: true,
+    asyncComponent: () => import('./order-return-list-limited')
+  },
   //分销记录
   {
     path: '/distribution-record',

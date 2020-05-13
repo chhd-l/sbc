@@ -8,6 +8,7 @@ import { IList } from 'typings/globalType';
 const { Column } = DataGrid;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
+import { FormattedMessage } from 'react-intl';
 
 @withRouter
 @Relax
@@ -99,7 +100,7 @@ export default class CateList extends React.Component<any, any> {
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
         <Column
-          title="图片"
+          title={<FormattedMessage id="product.image" />}
           dataIndex="goodsImg"
           key="goodsImg"
           render={(img) =>
@@ -111,14 +112,15 @@ export default class CateList extends React.Component<any, any> {
           }
         />
         <Column
-          title="商品名称"
+          // title="商品名称"
+          title={<FormattedMessage id="product.productName" />}
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
           width={200}
         />
         <Column title="SPU编码" dataIndex="goodsNo" key="goodsNo" />
-        <Column
+        {/* <Column
           title="销售类型"
           key="saleType"
           render={(rowInfo) => {
@@ -131,7 +133,7 @@ export default class CateList extends React.Component<any, any> {
               </div>
             );
           }}
-        />
+        /> */}
         <Column
           title={
             <span>
@@ -154,14 +156,16 @@ export default class CateList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="店铺分类"
+          // title="店铺分类"
+          title={<FormattedMessage id="product.storeCategory" />}
           dataIndex="storeCateIds"
           key="storeCateIds"
           width={150}
           render={this._renderStoreCateList}
         />
         <Column
-          title="品牌"
+          // title="品牌"
+          title={<FormattedMessage id="product.brand" />}
           dataIndex="brandId"
           key="brandId"
           render={(rowInfo) => {
@@ -175,22 +179,22 @@ export default class CateList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="上下架"
+          title={<FormattedMessage id="product.onOrOffShelves" />}
           dataIndex="addedFlag"
           key="addedFlag"
           render={(rowInfo) => {
             if (rowInfo == 0) {
-              return '下架';
+              return <FormattedMessage id="product.offShelves" />;
             }
             if (rowInfo == 2) {
-              return '部分上架';
+              return <FormattedMessage id="product.partialOnShelves" />;
             }
-            return '上架';
+            return <FormattedMessage id="product.onShelves" />;
           }}
         />
         <Column
           align="center"
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           key="goodsId"
           className="operation-th"
           render={(rowInfo) => {
@@ -245,7 +249,7 @@ export default class CateList extends React.Component<any, any> {
               })
             }
           >
-            编辑
+            <FormattedMessage id="edit" />
           </a>
         </AuthWrapper>
         <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -258,7 +262,7 @@ export default class CateList extends React.Component<any, any> {
               })
             }
           >
-            设价
+            <FormattedMessage id="product.setPrice" />
           </a>
         </AuthWrapper>
         {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
@@ -269,7 +273,7 @@ export default class CateList extends React.Component<any, any> {
                 spuOnSale([rowInfo.goodsId]);
               }}
             >
-              上架
+              <FormattedMessage id="product.onShelves" />
             </a>
           </AuthWrapper>
         ) : null}
@@ -281,7 +285,7 @@ export default class CateList extends React.Component<any, any> {
                 spuOffSale([rowInfo.goodsId]);
               }}
             >
-              下架
+              <FormattedMessage id="product.offShelves" />
             </a>
           </AuthWrapper>
         ) : null}
@@ -292,7 +296,7 @@ export default class CateList extends React.Component<any, any> {
               this._delete(rowInfo.goodsId);
             }}
           >
-            删除
+            <FormattedMessage id="delete" />
           </a>
         </AuthWrapper>
       </div>
@@ -345,7 +349,7 @@ export default class CateList extends React.Component<any, any> {
                     })
                   }
                 >
-                  编辑
+                  <FormattedMessage id="edit" />
                 </a>
               </AuthWrapper>
               <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -360,7 +364,7 @@ export default class CateList extends React.Component<any, any> {
                       })
                     }
                   >
-                    设价
+                    <FormattedMessage id="product.setPrice" />
                   </a>
                 )}
               </AuthWrapper>

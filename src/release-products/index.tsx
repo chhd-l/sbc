@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headline, AuthWrapper,BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const icon1 = require('./img/icon1.png');
 const icon2 = require('./img/icon2.png');
@@ -10,7 +11,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <BreadCrumb/>
+        <BreadCrumb />
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
           <Breadcrumb.Item>商品管理</Breadcrumb.Item>
@@ -29,8 +30,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
                     <div className="context">
                       <img src={icon1} alt="" />
                       <div>
-                        <h2>直接发布</h2>
-                        <p>直接发布 精细管理</p>
+                        <h2>
+                          <FormattedMessage id="product.publishDirectly" />
+                        </h2>
+                        <p>
+                          <FormattedMessage id="product.publishItemInfo1" />
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -42,8 +47,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
                     <div className="context">
                       <img src={icon2} alt="" />
                       <div>
-                        <h2>商品模板导入</h2>
-                        <p>Excel文件 快速导入</p>
+                        <h2>
+                          <FormattedMessage id="product.productTemplateImport" />
+                        </h2>
+                        <p>
+                          <FormattedMessage id="product.publishItemInfo2" />
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -55,8 +64,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
                     <div className="context">
                       <img src={icon3} alt="" />
                       <div>
-                        <h2>商品库导入</h2>
-                        <p>平台商品库 一键导入</p>
+                        <h2>
+                          <FormattedMessage id="product.productPoolImport" />
+                        </h2>
+                        <p>
+                          <FormattedMessage id="product.publishItemInfo3" />
+                        </p>
                       </div>
                     </div>
                   </div>

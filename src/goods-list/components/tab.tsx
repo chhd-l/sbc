@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import { noop } from 'qmkit';
 
 import GoodsList from '../components/goods-list';
+import { FormattedMessage } from 'react-intl';
 
 const TabPane = Tabs.TabPane;
 
@@ -26,18 +27,21 @@ export default class Tab extends React.Component<any, any> {
     return (
       <Tabs
         defaultActiveKey={addedFlag}
-        onChange={key => onStateTabChange(key)}
+        onChange={(key) => onStateTabChange(key)}
       >
-        <TabPane tab="全部" key="-1">
+        <TabPane tab={<FormattedMessage id="all" />} key="-1">
           <GoodsList />
         </TabPane>
-        <TabPane tab="上架中" key="1">
+        <TabPane tab={<FormattedMessage id="product.onShelves" />} key="1">
           <GoodsList />
         </TabPane>
-        <TabPane tab="部分上架" key="2">
+        <TabPane
+          tab={<FormattedMessage id="product.partialOnShelves" />}
+          key="2"
+        >
           <GoodsList />
         </TabPane>
-        <TabPane tab="下架中" key="0">
+        <TabPane tab={<FormattedMessage id="product.offShelves" />} key="0">
           <GoodsList />
         </TabPane>
       </Tabs>

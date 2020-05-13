@@ -14,6 +14,7 @@ import {
 import { noop } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -83,11 +84,11 @@ class SpecForm extends React.Component<any, any> {
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
           <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
-            规格设置
+            <FormattedMessage id="product.specificationSetting" />
           </div>
           <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
-              设置商品多规格
+              <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
             </Checkbox>
           </div>
           <div style={styles.bg}>
@@ -294,7 +295,8 @@ class SpecForm extends React.Component<any, any> {
 
             {specSingleFlag ? null : (
               <Button onClick={this._addSpec}>
-                <Icon type="plus" />添加规格
+                <Icon type="plus" />
+                添加规格
               </Button>
             )}
           </div>
@@ -389,11 +391,7 @@ class SpecForm extends React.Component<any, any> {
    *  获取整数随机数
    */
   _getRandom = () => {
-    return parseInt(
-      Math.random()
-        .toString()
-        .substring(2, 18)
-    );
+    return parseInt(Math.random().toString().substring(2, 18));
   };
   r;
 }

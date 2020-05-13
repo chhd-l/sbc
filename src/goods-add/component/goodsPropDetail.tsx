@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -53,9 +54,9 @@ export default class GoodsPropDetail extends React.Component<any, any> {
             fontWeight: 'bold'
           }}
         >
-          属性信息
+          <FormattedMessage id="product.attributeInformation" />
           <span style={{ marginLeft: 10, fontSize: 10, color: '#86877F' }}>
-            客户前台可根据属性筛选商品，不填写或填写错误，可能导致商品无法被找到，影响您的销售，请认真准确填写
+            <FormattedMessage id="product.attributeInformationDetail" />
           </span>
         </div>
         <div>

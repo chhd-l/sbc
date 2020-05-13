@@ -4,6 +4,7 @@ import { Form, Input, Select, Row, Col, Alert } from 'antd';
 import { noop, FindArea } from 'qmkit';
 import { IMap, IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const { Option } = Select;
 const formItemLayout = {
@@ -51,7 +52,7 @@ export default class Logistics extends React.Component<any, any> {
     return (
       <div>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
-          物流信息
+          <FormattedMessage id="product.logisticsInformation" />
         </div>
         <div>
           <WrapperForm
@@ -107,7 +108,10 @@ class LogisticsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="运费模板">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.shippinTemplate" />}
+            >
               <div>
                 {getFieldDecorator(
                   'freightTempId',
@@ -156,7 +160,10 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="物流重量">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.logisticsWeight" />}
+            >
               {getFieldDecorator('goodsWeight', {
                 rules: [
                   {
@@ -171,7 +178,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     min: 0.001,
                     message: '最小值为0.001',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value))
                         ? 0.001
                         : parseFloat(value);
@@ -181,7 +188,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999.999,
                     message: '最大值为9999.999',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value))
                         ? 0.001
                         : parseFloat(value);
@@ -201,7 +208,10 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="物流体积">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.logisticsVolumn" />}
+            >
               {getFieldDecorator('goodsCubage', {
                 rules: [
                   {
@@ -216,7 +226,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     min: 0.000001,
                     message: '最小值为0.000001',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value))
                         ? 0.000001
                         : parseFloat(value);
@@ -226,7 +236,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 999.999999,
                     message: '最大值为999.999999',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value))
                         ? 0.000001
                         : parseFloat(value);

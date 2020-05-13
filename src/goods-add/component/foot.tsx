@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button } from 'antd';
 import { noop, history, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Foot extends React.Component<any, any> {
@@ -40,7 +41,7 @@ export default class Foot extends React.Component<any, any> {
                 style={{ marginRight: 10 }}
                 loading={saveLoading}
               >
-                直接保存
+                <FormattedMessage id="product.saveDirectly" />
               </Button>
             </AuthWrapper>,
             <AuthWrapper key="002" functionName={this.props.priceFuncName}>
@@ -49,7 +50,7 @@ export default class Foot extends React.Component<any, any> {
                 style={{ marginLeft: 10 }}
                 loading={saveLoading}
               >
-                下一步
+                <FormattedMessage id="product.next" />
               </Button>
             </AuthWrapper>
           ]

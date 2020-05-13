@@ -73,6 +73,15 @@ export default class AppStore extends Store {
         dataList = dataList.filterNot(
           (item) => item.get('title') == '企业会员'
         );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '评价管理'
+        );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == 'Order list(3PL)'
+        );
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '积分订单'
+        );
         // }
         // 主页菜单不在权限中配置，写死第一个
         dataList = dataList.insert(

@@ -15,6 +15,7 @@ import GoodsAdd from './goods-add';
 import { fromJS } from 'immutable';
 import { noop, ValidConst, QMFloat, QMMethod } from 'qmkit';
 import './goods-list-style.css';
+import { FormattedMessage } from 'react-intl';
 // import UUID from 'uuid-js';
 
 import styled from 'styled-components';
@@ -210,7 +211,7 @@ export default class GoodsList extends React.Component<any, any> {
             type="primary"
             onClick={() => {
               if (!selectedCustomerId) {
-                message.error('请选择会员');
+                message.error('Please select member');
                 return;
               }
 
@@ -219,7 +220,7 @@ export default class GoodsList extends React.Component<any, any> {
               });
             }}
           >
-            新增商品
+            <FormattedMessage id="addProduct" />
           </Button>
         )}
 
@@ -232,7 +233,7 @@ export default class GoodsList extends React.Component<any, any> {
             rules: [
               {
                 required: selectedCustomerId ? true : false,
-                message: '必须选择一个商品'
+                message: 'Must select a product'
               }
             ]
           })(<input type="hidden" />)}
@@ -249,14 +250,14 @@ export default class GoodsList extends React.Component<any, any> {
           pagination={false}
         >
           <Column
-            title="序号"
+            title={<FormattedMessage id="serialNumber" />}
             key="index"
             width="61px"
             render={(_text, _record, index) => <span>{index + 1}</span>}
           />
 
           <Column
-            title="SKU编码"
+            title={<FormattedMessage id="skuCode" />}
             dataIndex="goodsInfoNo"
             width="140px"
             key="goodsInfoNo"
@@ -264,28 +265,39 @@ export default class GoodsList extends React.Component<any, any> {
 
           <Column
             width="20%"
-            title="商品名称"
+            title={<FormattedMessage id="productName" />}
             key="goodsInfoName"
             render={(rowInfo) => {
               if (rowInfo.gift) {
-                return '【赠品】' + rowInfo.goodsInfoName;
+                return (
+                  '【' +
+                  <FormattedMessage id="giveaway" /> +
+                  '】' +
+                  rowInfo.goodsInfoName
+                );
               }
               return rowInfo.goodsInfoName;
             }}
           />
           <Column
-            title="规格"
+            title={<FormattedMessage id="weight" />}
             width="10%"
             key="goodsSpecs"
-            render={(rowInfo) =>{
-	            if (rowInfo.gift) {
-		            return rowInfo.goodsSpecs;
-	            }
-	            return rowInfo.specText;
+            render={(rowInfo) => {
+              if (rowInfo.gift) {
+                return rowInfo.goodsSpecs;
+              }
+              return rowInfo.specText;
             }}
           />
           <Column
-            title={this.props.edit?'单价':'会员价'}
+            title={
+              this.props.edit ? (
+                <FormattedMessage id="price" />
+              ) : (
+                <FormattedMessage id="memberPrice" />
+              )
+            }
             width="110px"
             key="salePrice"
             render={(rowInfo) => {
@@ -331,7 +343,7 @@ export default class GoodsList extends React.Component<any, any> {
             width="175px"
             className="centerItem"
             key="num"
-            title="数量"
+            title={<FormattedMessage id="quantity" />}
             render={(_text, record: any) => {
               //赠品数量显示
               if (record.gift) {
@@ -350,10 +362,14 @@ export default class GoodsList extends React.Component<any, any> {
                         ? record.buyCount.toString()
                         : '0',
                     rules: [
-                      { required: true, message: '必须输入采购量' },
+                      {
+                        required: true,
+                        message: 'Purchase quantity must be entered'
+                      },
                       {
                         pattern: ValidConst.noZeroNumber,
-                        message: '采购量只能是大于0的整数'
+                        message:
+                          'Purchase volume can only be an integer greater than 0'
                       },
                       {
                         validator: (_rule, value, callback) => {
@@ -374,9 +390,13 @@ export default class GoodsList extends React.Component<any, any> {
                           }
                           if (stock < value) {
                             if (this.props.edit) {
-                              callback('加购量不可大于剩余库存');
+                              callback(
+                                'The purchase volume cannot be greater than the remaining inventory'
+                              );
                             } else {
-                              callback('采购量不可大于库存量');
+                              callback(
+                                'Purchase volume cannot be greater than inventory'
+                              );
                             }
                             return;
                           }
@@ -384,11 +404,15 @@ export default class GoodsList extends React.Component<any, any> {
                             const maxCount = record.maxCount;
                             const count = record.count;
                             if (maxCount && maxCount < value) {
-                              callback('采购量不可大于限订量');
+                              callback(
+                                'The purchase volume cannot be greater than the limit order quantity'
+                              );
                               return;
                             }
                             if (count && count > value) {
-                              callback('采购量不可小于起定量');
+                              callback(
+                                'The purchase volume cannot be less than the minimum quantity'
+                              );
                               return;
                             }
                           }
@@ -408,13 +432,15 @@ export default class GoodsList extends React.Component<any, any> {
                     {this.props.edit &&
                     (record.initBuyCount || (buySku && buySku.get('buyCount')))
                       ? null
-                      : `库存: ${record.stock} ${
+                      : `${(<FormattedMessage id="stock" />)}: ${
+                          record.stock
+                        } ${
                           record.priceType === 0
                             ? (record.count
-                                ? '最小起定量: ' + record.count
+                                ? 'Minimum order quantity: ' + record.count
                                 : '') +
                               (record.maxCount
-                                ? '最大限订量: ' + record.maxCount
+                                ? 'Maximum amount: ' + record.maxCount
                                 : '')
                             : ''
                         }`}
@@ -425,7 +451,7 @@ export default class GoodsList extends React.Component<any, any> {
           />
 
           <Column
-            title="小计"
+            title={<FormattedMessage id="total" />}
             width="110px"
             key="subtotal"
             render={(_text, record: any) => {
@@ -436,9 +462,9 @@ export default class GoodsList extends React.Component<any, any> {
               let price = record.salePrice;
               if (
                 record.priceType === 1 &&
-                (goodsIntervalPrices &&
+                goodsIntervalPrices &&
                   goodsIntervalPrices.count() > 0 &&
-                  goodsIntervalPrices.get(0) != null)
+                  goodsIntervalPrices.get(0) != null
               ) {
                 const buyCount = record.buyCount;
                 const prices = goodsIntervalPrices
@@ -457,7 +483,8 @@ export default class GoodsList extends React.Component<any, any> {
               }
               return (
                 <span>
-                  ￥{(price * record.buyCount
+                  ￥
+                  {(price * record.buyCount
                     ? price * record.buyCount
                     : 0.0
                   ).toFixed(2)}{' '}
@@ -468,7 +495,7 @@ export default class GoodsList extends React.Component<any, any> {
 
           {!this.props.edit && (
             <Column
-              title="操作"
+              title={<FormattedMessage id="operation" />}
               key="opt"
               width="61px"
               render={(_text, record: any) => (
@@ -482,7 +509,7 @@ export default class GoodsList extends React.Component<any, any> {
                     }
                   }}
                 >
-                  删除
+                  <FormattedMessage id="delete" />
                 </a>
               )}
             />
@@ -508,7 +535,7 @@ export default class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e: any) => {
                       if (!selectedCustomerId) {
-                        message.error('请选择会员');
+                        message.error('Please select member');
                         return;
                       }
                       //开启或者取消特价
@@ -516,7 +543,8 @@ export default class GoodsList extends React.Component<any, any> {
                       this._enableSpecVal(checked);
                     }}
                   >
-                    订单改价:￥
+                    <FormattedMessage id="order.orderPriceChange" />
+                    :￥
                   </Checkbox>
                 }
               >
@@ -527,11 +555,11 @@ export default class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableSpecVal'),
-                      message: '请输入金额'
+                      message: 'Please enter the amount'
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: '请输入正确的金额'
+                      message: 'Please enter the correct amount'
                     }
                   ]
                 })(
@@ -570,14 +598,15 @@ export default class GoodsList extends React.Component<any, any> {
                     disabled={selectedCustomerId ? false : true}
                     onChange={(e) => {
                       if (!selectedCustomerId) {
-                        message.error('请选择会员');
+                        message.error('Please select member');
                         return;
                       }
                       const checked = (e.target as any).checked;
                       this._enableDeliverFee(checked);
                     }}
                   >
-                    配送费用:￥
+                    <FormattedMessage id="shippingFees" />
+                    :￥
                   </Checkbox>
                 }
               >
@@ -588,11 +617,11 @@ export default class GoodsList extends React.Component<any, any> {
                   rules: [
                     {
                       required: goodsList.get('isEnableDeliverFee'),
-                      message: '请输入金额'
+                      message: 'Please enter the amount'
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: '请输入正确的金额'
+                      message: 'Please enter the correct amount'
                     }
                   ]
                 })(
@@ -619,24 +648,40 @@ export default class GoodsList extends React.Component<any, any> {
 
           <div style={styles.bottomPrice}>
             <div style={styles.title}>
-              <span style={styles.itemsText}>商品金额:</span>
+              <span style={styles.itemsText}>
+                <FormattedMessage id="productAmount" />:
+              </span>
               {reductionPrice != 0 && (
-                <span style={styles.itemsText}>满减金额:</span>
+                <span style={styles.itemsText}>
+                  <FormattedMessage id="fullReductionAmount" />:
+                </span>
               )}
               {discountPrice != 0 && (
-                <span style={styles.itemsText}>满折金额:</span>
+                <span style={styles.itemsText}>
+                  <FormattedMessage id="fullDiscountAmount" />:
+                </span>
               )}
               {couponPrice != 0 && (
-                <span style={styles.itemsText}>优惠券:</span>
+                <span style={styles.itemsText}>
+                  <FormattedMessage id="coupon" />:
+                </span>
               )}
               {pointsPrice != 0 && (
-                <span style={styles.itemsText}>积分抵扣:</span>
+                <span style={styles.itemsText}>
+                  <FormattedMessage id="pointsDeduction" />:
+                </span>
               )}
               {goodsList.get('isEnableSpecVal') && (
-                <span style={styles.itemsText}>订单改价:</span>
+                <span style={styles.itemsText}>
+                  <FormattedMessage id="order.orderPriceChange" />:
+                </span>
               )}
-              <span style={styles.itemsText}>配送费用:</span>
-              <span style={styles.itemsText}>应付总额:</span>
+              <span style={styles.itemsText}>
+                <FormattedMessage id="shippingFees" />:
+              </span>
+              <span style={styles.itemsText}>
+                <FormattedMessage id="totalPayable" />:
+              </span>
             </div>
             <div style={styles.priceCom}>
               <div style={styles.priceCol}>
@@ -674,8 +719,9 @@ export default class GoodsList extends React.Component<any, any> {
         </div>
 
         {this.state.addAddressVisible && (
-          <Modal  maskClosable={false}
-            title="选择商品"
+          <Modal
+            maskClosable={false}
+            title="Select product"
             width={1100}
             visible={this.state.addAddressVisible}
             onOk={async () => {
@@ -696,7 +742,7 @@ export default class GoodsList extends React.Component<any, any> {
                 .concat(newKeys.toSet())
                 .toList();
               if (wholeKeys.count() > 50) {
-                message.error('购买商品种类不能超过50种');
+                message.error('No more than 50 types of purchased goods');
                 return;
               }
               saveNewSkuIds(wholeKeys);
@@ -739,8 +785,8 @@ export default class GoodsList extends React.Component<any, any> {
             onCancel={() => {
               this.setState({ addAddressVisible: false });
             }}
-            okText="确认"
-            cancelText="取消"
+            okText={<FormattedMessage id="confirm" />}
+            cancelText={<FormattedMessage id="cancel" />}
           >
             {
               <GoodsAdd
@@ -773,7 +819,9 @@ export default class GoodsList extends React.Component<any, any> {
 
     return (
       <label style={styles.priceItem as any}>
-        <span style={styles.name}>订单改价: </span>
+        <span style={styles.name}>
+          <FormattedMessage id="order.orderPriceChange" />:{' '}
+        </span>
         <strong>￥{(specVal || 0).toFixed(2)}</strong>
       </label>
     );

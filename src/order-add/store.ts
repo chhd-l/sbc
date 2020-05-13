@@ -240,8 +240,8 @@ export default class AppStore extends Store {
           Math.round(
             (Math.floor((tradeItem.get('splitPrice') / total) * 1000000) /
               1000000) *
-            newTotal *
-            100
+              newTotal *
+              100
           ) / 100;
         splitPriceTotal = QMFloat.accAdd(splitPriceTotal, herePrice);
         return tradeItem.set('splitPrice', herePrice);
@@ -276,7 +276,7 @@ export default class AppStore extends Store {
     const detail = fromJS(orderInfo);
     const tradeState = detail.get('tradeState');
     if (tradeState.get('flowState') == 'VOID') {
-      message.error('订单已作废，不能修改订单！');
+      message.error('The order has been cancelled and cannot be modified!');
       history.push('/order-list');
       return;
     }
@@ -286,7 +286,9 @@ export default class AppStore extends Store {
     const { res: newBuyer } = await webapi.fetchSingleCustomer(buyer.get('id'));
     const { context } = newBuyer as any;
     if (!context || !fromJS(context).get('customerId')) {
-      message.error('客户已被删除，不能修改订单！');
+      message.error(
+        'The customer has been deleted and the order cannot be modified!'
+      );
       history.push('/order-list');
       return;
     }
@@ -549,7 +551,7 @@ export default class AppStore extends Store {
   addCustomer = async (customer) => {
     const { res } = await webapi.addCustomer(customer);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('Successful operation');
       this.switchCustomerFormVisible(false);
     } else {
       message.error(res.message);
@@ -597,7 +599,7 @@ export default class AppStore extends Store {
     });
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('添加收货地址成功');
+      message.success('Successfully added shipping address');
       const { res } = (await webapi.addressList(customerId)) as any;
       let { code, context, message: errorInfo } = res;
 
@@ -628,7 +630,7 @@ export default class AppStore extends Store {
     });
     if (res.code === Const.SUCCESS_CODE) {
       address = fromJS(res).get('context');
-      message.success('更新收货地址成功');
+      message.success('Successfully updated delivery address');
       let editId = '';
       if (this.state().get('addressType') == 1) {
         editId = this.state().get('editDeliveryAddressId');
@@ -830,10 +832,10 @@ export default class AppStore extends Store {
       oldPrice = (oldPrice || 0).toFixed(2);
       if (newPrice != oldPrice) {
         confirm({
-          title: '配送费用变更',
+          title: 'Delivery cost change',
           content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥${oldPrice}变更为￥${newPrice}，您可手动修改后再保存或者直接保存！`,
-          okText: '直接保存',
-          cancelText: '我要修改',
+          okText: 'Save directly',
+          cancelText: 'I want to modify',
           onOk: () => this.onCreateOrder(edit, forceCommit, false)
         });
         return;
@@ -1073,7 +1075,11 @@ export default class AppStore extends Store {
     this.dispatch('order:submitting', false);
 
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(edit ? '修改订单成功' : '恭喜，下单成功');
+      message.success(
+        edit
+          ? 'Modified order successfully'
+          : 'Congratulations, the order is successful'
+      );
       history.push('/order-list');
     } else {
       message.error(res.message);
@@ -1189,5 +1195,5 @@ export default class AppStore extends Store {
     }
   };
 
-  onDelGift = () => { };
+  onDelGift = () => {};
 }

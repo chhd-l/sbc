@@ -2,6 +2,11 @@
  * 多语言英文
  */
 export default {
+  'stock': 'Stock',
+  'giveaway': 'Giveaway',
+  'addProduct': 'Add product',
+  'brand': 'Brand',
+  'catogery': 'Catogery',
   'enterUpTo100Characters': 'Enter up to 100 characters',
   'fillInTheRemarks': 'Fill in the remarks',
   'address': 'Address',
@@ -139,11 +144,9 @@ export default {
   'noData': 'no data',
   'save': 'Save',
   'cancel': 'Cancel',
-
   'orderDetails': 'Order details',
   'deliveryRecord': 'Delivery Record',
   'collectionRecords': 'Collection records',
-
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
   'orderNumber': "Order number",
@@ -151,24 +154,23 @@ export default {
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",
   'orderTime': "Order time",
-
   'skuCode': "SKU code",
+  'spuCode': "SPU code",
   'productName': "Product name",
   'weight': "Weight",
   'price': "Price",
+  'memberPrice': "member price",
   'quantity': "Quantity",
   'subtotal': "Subtotal",
   'productAmount': "Product amount",
+  'fullReductionAmount': "Full reduction amount",
+  'fullDiscountAmount': "Full discount amount",
+  'coupon': "Coupon",
   'pointsDeduction': "Points deduction",
   'shippingFees': "Shipping fees",
   'totalPayable': "Total payable",
-
   'sellerNotes': "Seller notes",
   'buyerNotes': "Buyer notes",
-
-
-
-
   'orderAttachment': "Order attachment",
   'none': "none",
   'paymentMethod': "Payment method",
@@ -181,8 +183,6 @@ export default {
   'expressDelivery	': "Express delivery",
   'deliveryInformation': "delivery information",
   'confirm': 'Confirm',
-
-
   "serialNumber": "Serial number",
   "shipped": "Shipped",
   "thisShipment": "This shipment",
@@ -196,14 +196,9 @@ export default {
   "paid": "paid",
   "remarks": "Remarks",
   "operating": "Operating",
-
   'productFirstLetterUpperCase': 'Product',
-
-
   'recipient': 'Recipient',
   'recipientPhone': 'Recipient phone',
-
-
   'amount': 'Amount	',
 
 
@@ -263,6 +258,7 @@ export default {
   'order.inputReceiverTip': 'Please fill in the receiver',
   'order.uploadValidateTip': 'Supported picture formats: jpg, jpeg, png, gif, file size no more than 5M, maximum upload 10',
   'order.uploadValidateTip2': 'Image size cannot exceed 5MB',
+  'order.orderPriceChange': 'Order price change',
 
   'invoice.invoiceInformation': 'Invoice information',
   'invoice.noInvoiceRequired': 'No invoice required',
@@ -284,34 +280,34 @@ export default {
   'invoice.bank': 'Bank',
   'invoice.useSeparateInvoiceReceiptInformation': 'Use separate invoice receipt information',
 
-  'operationLog':'Operation log',
-  'operatorType':'Operator type',
-  'operator':'Operator',
-  'time':'Time',
-  'operationCategory':'Operation category',
-  'paymentOrder':'Payment order',
-  'createOrder':'Create Order',
-  'order':'Order',
-  'back':'Back',
+  'operationLog': 'Operation log',
+  'operatorType': 'Operator type',
+  'operator': 'Operator',
+  'time': 'Time',
+  'operationCategory': 'Operation category',
+  'paymentOrder': 'Payment order',
+  'createOrder': 'Create Order',
+  'order': 'Order',
+  'back': 'Back',
 
-  "initiateApplication":"Initiate after-sales application",
-  "amountQuantity"	:	"Amount (Quantity)",
-  "shippingStatus"	:	"Shipping status",
-"orderStatus"	:	"Order Status",
-"paymentStatus"	:	"Payment status",
-"notShipped"	:	"Not shipped",
-"application"	:	"Application",
-"newChargeback"	:	"New chargeback",
-"refundInformation"	:	"Refund information",
-"refundReason": "Refund reason"	,
-"selectRefundReacon": "Please select the reason for refund",
-"returnInstructions":"Return instructions",
-"attachmentInformation":"Attachment information",
+  "initiateApplication": "Initiate after-sales application",
+  "amountQuantity": "Amount (Quantity)",
+  "shippingStatus": "Shipping status",
+  "orderStatus": "Order Status",
+  "paymentStatus": "Payment status",
+  "notShipped": "Not shipped",
+  "application": "Application",
+  "newChargeback": "New chargeback",
+  "refundInformation": "Refund information",
+  "refundReason": "Refund reason",
+  "selectRefundReacon": "Please select the reason for refund",
+  "returnInstructions": "Return instructions",
+  "attachmentInformation": "Attachment information",
 
-"attachmentTips":"Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10",
-"refundableAmount":"Refundable amount",
-"pointsRefundable":"Points Refundable",
-"commodity":'Commodity',
+  "attachmentTips": "Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10",
+  "refundableAmount": "Refundable amount",
+  "pointsRefundable": "Points Refundable",
+  "commodity": 'Commodity',
   'refundList': 'Refund list',
   'chargebackNumber': 'Chargeback number',
   'refundTime': 'Refund time',

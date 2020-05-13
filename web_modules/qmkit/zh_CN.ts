@@ -2,6 +2,12 @@
  * 多语言英文
  */
 export default {
+  'stock': '库存',
+  'giveaway': '赠品',
+  'serialNumber': '序号',
+  'addProduct': '新增商品',
+  'catogery': '分类',
+  'brand': '品牌',
   'piece': '件',
   'total': '共',
   'product': 'productsss',
@@ -46,12 +52,17 @@ export default {
   'orderTime': "下单时间",
 
   'skuCode': "SKU编码",
+  'spuCode': "SPU编码",
   'productName': "商品名称",
   'weight': "规格",
   'price': "单价",
+  'memberPrice': "会员价",
   'quantity': "数量",
   'subtotal': "金额小计",
   'productAmount': "商品金额",
+  'fullReductionAmount': "满减金额",
+  'fullDiscountAmount': "满折金额",
+  'coupon': "优惠券",
   'pointsDeduction': "积分抵扣",
   'shippingFees': "配送费用",
   'totalPayable': "应付总额",
@@ -151,39 +162,6 @@ export default {
   'order.pleaseSelectOrderToOperate': '请选择需要操作的订单',
   'order.batchReview': '批量审核',
   'order.batchExpert': '批量导出',
-
-
-
-
-  'operationLog':'操作日志',
-  'operatorType':'操作方',
-  'operator':'操作人',
-  'time':'时间',
-  'operationCategory':'操作类别',
-  'paymentOrder':'订单支付',
-  'createOrder':'创建订单',
-  'order':'订单',
-  'back':'返回',
-
-  "initiateApplication":"发起售后申请",
-  "amountQuantity"	:	"金额数量",
-  "shippingStatus"	:	"发货状态",
-"orderStatus"	:	"订单状态",
-"paymentStatus"	:	"付款状态",
-"notShipped"	:	"未发货",
-"application"	:	"申请",
-"newChargeback"	:	"新增退单",
-"refundInformation"	:	"退单信息",
-"refundReason": "退单原因"	,
-"selectRefundReacon": "请选择退单原因",
-"returnInstructions":"退货说明",
-"attachmentInformation":"附件信息",
-
-"attachmentTips":"请将您的退货凭据添加到附件,支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张",
-"refundableAmount":"应退金额",
-"pointsRefundable":"应退积分",
-"commodity":'商品',
-
   'order.editOrder': '修改订单',
   'order.mustSelectAMember': '必须选择一个会员',
   'order.noAddressAvailable': '没有可用地址，请填写临时地址',
@@ -194,6 +172,7 @@ export default {
   'order.inputReceiverTip': '请填写收货人',
   'order.uploadValidateTip': '支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张',
   'order.uploadValidateTip2': '图片大小不能超过5MB',
+  'order.orderPriceChange': '订单改价',
 
   'invoice.invoiceInformation': '发票信息',
   'invoice.noInvoiceRequired': '不需要发票',
@@ -215,4 +194,34 @@ export default {
   'invoice.bank': '开户行',
   'invoice.useSeparateInvoiceReceiptInformation': '使用单独的发票收货信息',
 
+
+
+  'operationLog': '操作日志',
+  'operatorType': '操作方',
+  'operator': '操作人',
+  'time': '时间',
+  'operationCategory': '操作类别',
+  'paymentOrder': '订单支付',
+  'createOrder': '创建订单',
+  'order': '订单',
+  'back': '返回',
+
+  "initiateApplication": "发起售后申请",
+  "amountQuantity": "金额数量",
+  "shippingStatus": "发货状态",
+  "orderStatus": "订单状态",
+  "paymentStatus": "付款状态",
+  "notShipped": "未发货",
+  "application": "申请",
+  "newChargeback": "新增退单",
+  "refundInformation": "退单信息",
+  "refundReason": "退单原因",
+  "selectRefundReacon": "请选择退单原因",
+  "returnInstructions": "退货说明",
+  "attachmentInformation": "附件信息",
+
+  "attachmentTips": "请将您的退货凭据添加到附件,支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张",
+  "refundableAmount": "应退金额",
+  "pointsRefundable": "应退积分",
+  "commodity": '商品',
 };

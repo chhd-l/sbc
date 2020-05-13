@@ -4,6 +4,7 @@ import { Form, Input, Select, Button, Table, Tree } from 'antd';
 import { DataGrid, SelectGroup, TreeSelectGroup, QMMethod, Const } from 'qmkit';
 import * as webapi from '../webapi';
 import { fromJS, Set } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 import Store from '../store';
 
@@ -17,8 +18,12 @@ const goodsOptionSelect = (
     style={{ width: 100 }}
     getPopupContainer={() => document.getElementById('modal-head')}
   >
-    <Option value="0">SPU编码</Option>
-    <Option value="1">SKU编码</Option>
+    <Option value="0">
+      <FormattedMessage id="spuCode" />
+    </Option>
+    <Option value="1">
+      <FormattedMessage id="skuCode" />
+    </Option>
   </Select>
 );
 
@@ -93,7 +98,7 @@ class SearchForm extends React.Component<any, any> {
           <FormItem>
             {getFieldDecorator('likeGoodsName', {
               initialValue: params.get('likeGoodsName')
-            })(<Input addonBefore="商品名称" />)}
+            })(<Input addonBefore={<FormattedMessage id="productName" />} />)}
           </FormItem>
 
           <FormItem>
@@ -103,9 +108,13 @@ class SearchForm extends React.Component<any, any> {
               <TreeSelectGroup
                 getPopupContainer={() => document.getElementById('modal-head')}
                 dropdownStyle={{ zIndex: 1053 }}
-                label="分类"
+                label={<FormattedMessage id="catogery" />}
               >
-                <TreeNode key="0" value="0" title="全部">
+                <TreeNode
+                  key="0"
+                  value="0"
+                  title={<FormattedMessage id="all" />}
+                >
                   {this.loop(fromJS(cates), fromJS(cates), 0)}
                 </TreeNode>
               </TreeSelectGroup>
@@ -116,20 +125,26 @@ class SearchForm extends React.Component<any, any> {
             {getFieldDecorator('brandId', {
               initialValue: params.get('brandId').toString()
             })(
-              <SelectGroup
-                getPopupContainer={() => document.getElementById('modal-head')}
-                label="品牌"
-                dropdownStyle={{ zIndex: 1053 }}
-              >
-                <Option key="0" value="0">
-                  全部
-                </Option>
-                {brands.map((v) => (
-                  <Option key={v.brandId} value={v.brandId + ''}>
-                    {v.brandName}
-                  </Option>
-                ))}
-              </SelectGroup>
+              <FormattedMessage id="brand">
+                {(txt) => (
+                  <SelectGroup
+                    getPopupContainer={() =>
+                      document.getElementById('modal-head')
+                    }
+                    label={txt.toString()}
+                    dropdownStyle={{ zIndex: 1053 }}
+                  >
+                    <Option key="0" value="0">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {brands.map((v) => (
+                      <Option key={v.brandId} value={v.brandId + ''}>
+                        {v.brandName}
+                      </Option>
+                    ))}
+                  </SelectGroup>
+                )}
+              </FormattedMessage>
             )}
           </FormItem>
 
@@ -149,7 +164,7 @@ class SearchForm extends React.Component<any, any> {
               this.props.onSearch(params);
             }}
           >
-            搜索
+            <FormattedMessage id="search" />
           </Button>
         </Form>
       </div>
@@ -329,28 +344,28 @@ export default class GoodsAdd extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU编码"
+            title={<FormattedMessage id="skuCode" />}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
           />
 
           <Column
-            title="商品名称"
+            title={<FormattedMessage id="productName" />}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
           />
 
           <Column
-            title="规格"
+            title={<FormattedMessage id="weight" />}
             dataIndex="specText"
             key="specText"
             width="20%"
           />
 
           <Column
-            title="分类"
+            title={<FormattedMessage id="catogery" />}
             key="goodsCate"
             render={(rowInfo) => {
               const cId = fromJS(spus)
@@ -362,7 +377,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           />
 
           <Column
-            title="品牌"
+            title={<FormattedMessage id="brand" />}
             key="goodsBrand"
             render={(rowInfo) => {
               const bId = fromJS(spus)
@@ -380,7 +395,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           />
 
           <Column
-            title="单价"
+            title={<FormattedMessage id="price" />}
             key="marketPrice"
             render={(rowInfo) => {
               const priceType = fromJS(spus)

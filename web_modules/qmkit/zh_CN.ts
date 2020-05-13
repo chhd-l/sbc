@@ -163,5 +163,25 @@ export default {
   'paymentOrder':'订单支付',
   'createOrder':'创建订单',
   'order':'订单',
-  'back':'返回'
+  'back':'返回',
+
+  "initiateApplication":"发起售后申请",
+  "amountQuantity"	:	"金额数量",
+  "shippingStatus"	:	"发货状态",
+"orderStatus"	:	"订单状态",
+"paymentStatus"	:	"付款状态",
+"notShipped"	:	"未发货",
+"application"	:	"申请",
+"newChargeback"	:	"新增退单",
+"refundInformation"	:	"退单信息",
+"refundReason": "退单原因"	,
+"selectRefundReacon": "请选择退单原因",
+"returnInstructions":"退货说明",
+"attachmentInformation":"附件信息",
+
+"attachmentTips":"请将您的退货凭据添加到附件,支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张",
+"refundableAmount":"应退金额",
+"pointsRefundable":"应退积分",
+"commodity":'商品'
+
 };

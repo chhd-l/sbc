@@ -250,7 +250,26 @@ export default {
   'paymentOrder':'Payment order',
   'createOrder':'Create Order',
   'order':'Order',
-  'back':'Back'
+  'back':'Back',
+
+  "initiateApplication":"Initiate after-sales application",
+  "amountQuantity"	:	"Amount (Quantity)",
+  "shippingStatus"	:	"Shipping status",
+"orderStatus"	:	"Order Status",
+"paymentStatus"	:	"Payment status",
+"notShipped"	:	"Not shipped",
+"application"	:	"Application",
+"newChargeback"	:	"New chargeback",
+"refundInformation"	:	"Refund information",
+"refundReason": "Refund reason"	,
+"selectRefundReacon": "Please select the reason for refund",
+"returnInstructions":"Return instructions",
+"attachmentInformation":"Attachment information",
+
+"attachmentTips":"Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10",
+"refundableAmount":"Refundable amount",
+"pointsRefundable":"Points Refundable",
+"commodity":'Commodity'
 };
 
 

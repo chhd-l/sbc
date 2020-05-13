@@ -133,6 +133,7 @@ export default {
   'ship':"Ship",
   'orderNumber':"Order number",
   'consumer':"Consumer",
+  'consumerAccount'	:"Consumer Account",
   'orderTime':	"Order time",
     
   'skuCode':	"SKU code",
@@ -152,6 +153,8 @@ export default {
   'save': 'Save',
 
   
+
+ 
   'orderAttachment': "Order attachment",
   'none': "none",
   'paymentMethod': "Payment method",
@@ -162,22 +165,25 @@ export default {
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
   'expressDelivery	': "Express delivery",
-  'deliveryInformation': "delivery information",
+  'deliveryInformation':	"delivery information",
+  'confirm':'Confirm',
+  'cancel':'Cancel',
 
 
-  "serialNumber": "Serial number",
-  "shipped": "Shipped",
-  "thisShipment": "This shipment",
-  "amountReceivable": "Amount receivable",
-  "collectionSerialNumber": "Collection serial number",
-  "collectionTime": "Collection time",
-  "amountReceived": "Amount received",
-  "accountsReceivable": "Accounts receivable",
-  "accessories": "Accessories",
-  "status ": "Status",
-  "paid": "paid",
-  "remarks": "Remarks",
-  "operating": "Operating",
+  "serialNumber":"Serial number",
+  "shipped":"Shipped",
+  "thisShipment":"This shipment",
+  "amountReceivable":"Amount receivable",
+  "collectionSerialNumber":"Collection serial number"	,
+  "collectionTime":"Collection time",
+  "amountReceived":"Amount received",
+  "accountsReceivable":"Accounts receivable",
+  "accessories" :"Accessories",
+  "status ":"Status",
+  "paid":"paid",
+  "remarks":"Remarks",
+  "operating":"Operating",
+
   'productFirstLetterUpperCase': 'Product',
 
 

@@ -6,6 +6,7 @@ import { IMap, IList } from 'typings/globalType';
 import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 订单发货记录
@@ -75,10 +76,7 @@ export default class OrderDelivery extends React.Component<any, any> {
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
-            dataSource={detail
-              .get('tradeItems')
-              .concat(gifts)
-              .toJS()}
+            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
             pagination={false}
             bordered
           />
@@ -87,7 +85,7 @@ export default class OrderDelivery extends React.Component<any, any> {
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" onClick={() => deliver()}>
-                  发货
+                  {<FormattedMessage id="ship" />}
                 </Button>
               </AuthWrapper>
             </div>
@@ -111,7 +109,9 @@ export default class OrderDelivery extends React.Component<any, any> {
                   key={i}
                   style={{ display: 'flex', flexDirection: 'column' }}
                 >
-                  <label style={styles.title}>发货记录</label>
+                  <label style={styles.title}>
+                    {<FormattedMessage id="deliveryRecord" />}
+                  </label>
                   <Table
                     rowKey={(_record, index) => index.toString()}
                     columns={this._deliveryRecordColumns()}
@@ -136,7 +136,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                           />
                         </label>
                       ) : (
-                        '无'
+                        'none'
                       )}
                     </div>
                     {flowState === 'CONFIRMED' ||
@@ -178,9 +178,9 @@ export default class OrderDelivery extends React.Component<any, any> {
           </div>
         </div>
 
-        <Modal  maskClosable={false}
+        <Modal
+          maskClosable={false}
           title="发货"
-           
           visible={modalVisible}
           onCancel={this._hideDeliveryModal}
           onOk={() => {
@@ -208,38 +208,38 @@ export default class OrderDelivery extends React.Component<any, any> {
 
     return [
       {
-        title: '序号',
+        title: 'No.',
         key: 'index',
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU编码',
+        title: 'SKU Code',
         dataIndex: 'skuNo',
         key: 'skuNo'
       },
       {
-        title: '商品名称',
+        title: 'Product Name',
         dataIndex: 'skuName',
         key: 'skuName'
       },
       {
-        title: '规格',
+        title: 'Weight',
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: '数量',
+        title: 'Quantity',
         dataIndex: 'num',
         key: 'num'
       },
       {
-        title: '已发货数',
+        title: 'Shipped',
         dataIndex: 'deliveredNum',
         key: 'deliveredNum',
         render: (deliveredNum) => (deliveredNum ? deliveredNum : 0)
       },
       {
-        title: '本次发货数',
+        title: 'This Shipment',
         key: 'deliveringNum',
         render: (_, row) => {
           return (
@@ -260,27 +260,27 @@ export default class OrderDelivery extends React.Component<any, any> {
   _deliveryRecordColumns = () => {
     return [
       {
-        title: '序号',
+        title: 'No.',
         key: 'index',
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU编码',
+        title: 'SKU Code',
         dataIndex: 'skuNo',
         key: 'skuNo'
       },
       {
-        title: '商品名称',
+        title: 'Product Name',
         dataIndex: 'itemName',
         key: 'itemName'
       },
       {
-        title: '规格',
+        title: 'Weight',
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
       {
-        title: '本次发货数',
+        title: 'This Shipment',
         dataIndex: 'itemNum',
         key: 'itemNum'
       }

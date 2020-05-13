@@ -4,16 +4,17 @@ import { Table, Tooltip, Menu, Popover } from 'antd';
 import { noop, Const, util } from 'qmkit';
 import { IList } from 'typings/globalType';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const payTypeDic = {
-  0: '线上支付',
-  1: '线下支付'
+  0: 'Online Payment',
+  1: 'Offline Payment'
 };
 
 const payOrderStatusDic = {
-  0: '已付款',
-  1: '未付款',
-  2: '待确认'
+  0: 'paid',
+  1: 'unpaid',
+  2: 'to be confirmed'
 };
 
 /**
@@ -59,42 +60,39 @@ export default class OrderReceive extends React.Component<any, any> {
   //收款列表
   receiveColumns = [
     {
-      title: '收款流水号',
+      title: 'Collection Serial Number',
       dataIndex: 'receivableNo',
       key: 'receivableNo'
     },
     {
-      title: '收款时间',
+      title: 'Collection Time',
       dataIndex: 'receiveTime',
       key: 'receiveTime',
       render: (receiveTime) =>
-        receiveTime &&
-        moment(receiveTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
-      title: '实收金额',
+      title: 'Amount Received',
       dataIndex: 'payOrderPrice',
       key: 'payOrderPrice',
       render: (text, record) =>
         record.payOrderStatus == 1 ? '' : '￥' + (text || 0).toFixed(2)
     },
     {
-      title: '支付方式',
+      title: 'Payment Method',
       dataIndex: 'payType',
       key: 'payType',
       render: (payType) => payTypeDic[payType]
     },
     {
-      title: '收款账户',
+      title: 'Accounts Receivable',
       dataIndex: 'receivableAccount',
       key: 'receivableAccount',
       render: (receivableAccount) =>
         receivableAccount ? this._desensitizeAccount(receivableAccount) : '-'
     },
     {
-      title: '附件',
+      title: 'Accessories',
       dataIndex: 'encloses',
       key: 'encloses',
       render: (encloses) =>
@@ -111,34 +109,34 @@ export default class OrderReceive extends React.Component<any, any> {
             </a>
           </Popover>
         ) : (
-          '无'
+          'none'
         )
     },
     {
-      title: '状态',
+      title: 'Status',
       dataIndex: 'payOrderStatus',
       key: 'payOrderStatus',
       render: (payOrderStatus) => payOrderStatusDic[payOrderStatus]
     },
     ,
     {
-      title: '备注',
+      title: 'Remarks',
       dataIndex: 'comment',
       key: 'comment',
       render: (comment) => (
         <span>
           {comment ? (
             <Tooltip title={this._renderComment(comment)} placement="top">
-              <a href="javascript:void(0);">查看</a>
+              <a href="javascript:void(0);">{<FormattedMessage id="view" />}</a>
             </Tooltip>
           ) : (
-            '无'
+            'none'
           )}
         </span>
       )
     },
     {
-      title: '操作',
+      title: 'Operation',
       dataIndex: 'operate',
       key: 'operate',
       render: (_text, record) => this._renderOperator(record)
@@ -155,9 +153,10 @@ export default class OrderReceive extends React.Component<any, any> {
         <div style={styles.addReceive}>
           <div style={styles.orderInfo}>
             <label style={styles.orderNum}>
-              订单号：{id}&nbsp;&nbsp;&nbsp;&nbsp;应收金额：￥{(
-                totalPayCash || 0
-              ).toFixed(2)}
+              {<FormattedMessage id="orderNumber" />}:{id}
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              {<FormattedMessage id="amountReceivable" />}:￥
+              {(totalPayCash || 0).toFixed(2)}
             </label>
           </div>
         </div>
@@ -197,7 +196,9 @@ export default class OrderReceive extends React.Component<any, any> {
     return (
       <Menu>
         <Menu.Item key="0">
-          <a onClick={() => onConfirm(id)}>确认</a>
+          <a onClick={() => onConfirm(id)}>
+            {<FormattedMessage id="confirm" />}
+          </a>
         </Menu.Item>
         <Menu.Divider />
       </Menu>

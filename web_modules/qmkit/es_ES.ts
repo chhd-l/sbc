@@ -209,6 +209,17 @@ export default {
   'order.pleaseSelectOrderToOperate': 'Please select the order that needs to be operated',
   'order.batchReview': 'Batch review',
   'order.batchExpert': 'Batch expert',
+
+
+  'operationLog':'Operation log',
+  'operatorType':'Operator type',
+  'operator':'Operator',
+  'time':'Time',
+  'operationCategory':'Operation category',
+  'paymentOrder':'Payment order',
+  'createOrder':'Create Order',
+  'order':'Order',
+  'back':'Back'
 };
 
 

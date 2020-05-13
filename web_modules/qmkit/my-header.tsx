@@ -166,7 +166,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           {baseConfig && (
             <Dropdown overlay={menuPreview} trigger={['click']}>
               <a className="ant-dropdown-link" href="#">
-                <Icon type="eye-o" /><span style={styles.dropdownText}>预览</span><Icon type="down" />
+                <Icon type="eye-o" /><span style={styles.dropdownText}>Preview</span><Icon type="down" />
               </a>
             </Dropdown>
           )}

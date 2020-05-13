@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Table, Row, Col, Button, Collapse } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 enum operatorDic {
   BOSS = '平台',
@@ -15,33 +16,29 @@ enum operatorDic {
 
 const columns = [
   {
-    title: '操作方',
+    title: 'Operator Type',
     dataIndex: 'operator.platform',
     key: 'operator.platform',
-    render: val => `${operatorDic[val]}`
+    render: (val) => `${operatorDic[val]}`
   },
   {
-    title: '操作人',
+    title: 'Operator',
     dataIndex: 'operator.name',
     key: 'operator.name'
   },
   {
-    title: '时间',
+    title: 'Time',
     dataIndex: 'eventTime',
     key: 'eventTime',
-    render: time =>
-      time &&
-      moment(time)
-        .format(Const.TIME_FORMAT)
-        .toString()
+    render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
   },
   {
-    title: '操作类别',
+    title: 'Operation Category',
     dataIndex: 'eventType',
     key: 'eventType'
   },
   {
-    title: '操作日志',
+    title: 'Operation Log',
     dataIndex: 'eventDetail',
     key: 'eventDetail',
     width: '50%'
@@ -69,7 +66,11 @@ export default class OperateLog extends React.Component<any, any> {
       <div>
         <div style={styles.backItem}>
           <Collapse>
-            <Panel header="操作日志" key="1" style={customPanelStyle}>
+            <Panel
+              header={<FormattedMessage id="operationLog" />}
+              key="1"
+              style={customPanelStyle}
+            >
               <Row>
                 <Col span={24}>
                   <Table
@@ -86,7 +87,7 @@ export default class OperateLog extends React.Component<any, any> {
         </div>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
-            返回
+            {<FormattedMessage id="back" />}
           </Button>
         </div>
       </div>

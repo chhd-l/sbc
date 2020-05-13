@@ -1,6 +1,7 @@
 import React from 'react';
 import options from './cascader-address-option';
 import { Cascader } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 地址组件
@@ -37,7 +38,7 @@ export default class AreaSelect extends React.Component<any, any> {
         ) : null}
         <Cascader
           options={options}
-          placeholder={placeholder ? placeholder : '请选择地址'}
+          placeholder={placeholder ? placeholder : 'Please select an address'}
           style={{ top: 0, marginTop: 4 }}
           {...rest}
         />

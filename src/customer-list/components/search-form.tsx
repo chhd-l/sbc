@@ -3,6 +3,7 @@ import { Relax, IMap } from 'plume2';
 import { Form, Select, Input, Button } from 'antd';
 import { SelectGroup, AreaSelect, noop } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 type TList = List<IMap>;
 
@@ -35,7 +36,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="客户名称"
+            addonBefore={<FormattedMessage id="consumerName" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -49,7 +50,7 @@ export default class SearchForm extends React.Component<any, any> {
         {/*省市区*/}
         <FormItem>
           <AreaSelect
-            label="所在地区"
+            label={<FormattedMessage id="area" />}
             getPopupContainer={() => document.getElementById('page-content')}
             onChange={(value) => {
               onFormChange({
@@ -63,7 +64,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="级别"
+            label={<FormattedMessage id="platformLevel" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -73,7 +74,9 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
+            <Option value="">
+              <FormattedMessage id="all" />
+            </Option>
             {customerLevels.map((v) => (
               <Option
                 key={v.get('storeLevelId').toString()}
@@ -88,7 +91,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="账号状态"
+            label={<FormattedMessage id="accountStatus" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -98,15 +101,21 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
-            <Option value="0">启用</Option>
-            <Option value="1">禁用</Option>
+            <Option value="">
+              <FormattedMessage id="all" />
+            </Option>
+            <Option value="0">
+              <FormattedMessage id="enable" />
+            </Option>
+            <Option value="1">
+              <FormattedMessage id="disabled" />
+            </Option>
           </SelectGroup>
         </FormItem>
 
         <FormItem>
           <Input
-            addonBefore="账号"
+            addonBefore={<FormattedMessage id="accountNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -129,7 +138,7 @@ export default class SearchForm extends React.Component<any, any> {
         {/*value*/}
         {/*})*/}
         {/*}}>*/}
-        {/*<Option value="">全部</Option>*/}
+        {/*<Option value=""><FormattedMessage id="all" /></Option>*/}
         {/*{employee.map(v =>*/}
         {/*<Option*/}
         {/*key={v.get('employeeId').toString()}*/}
@@ -150,7 +159,7 @@ export default class SearchForm extends React.Component<any, any> {
               onSearch();
             }}
           >
-            搜索
+            <FormattedMessage id="search" />
           </Button>
         </FormItem>
       </Form>

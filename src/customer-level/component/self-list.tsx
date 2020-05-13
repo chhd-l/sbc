@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
 const { Column } = DataGrid;
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
 
@@ -23,11 +24,7 @@ export default class SelfListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      selfDataList,
-      loading,
-      onView
-    } = this.props.relaxProps;
+    const { selfDataList, loading, onView } = this.props.relaxProps;
 
     return (
       <DataGrid
@@ -37,13 +34,13 @@ export default class SelfListView extends React.Component<any, any> {
         dataSource={selfDataList.toJS()}
       >
         <Column
-          title="等级名称"
+          title={<FormattedMessage id="levelName" />}
           key="customerLevelName"
           dataIndex="customerLevelName"
         />
 
         <Column
-          title="等级徽章"
+          title={<FormattedMessage id="levelBadge" />}
           key="rankBadgeImg"
           dataIndex="rankBadgeImg"
           render={(rankBadgeImg) =>
@@ -53,18 +50,19 @@ export default class SelfListView extends React.Component<any, any> {
                 style={{ width: 40, height: 40, display: 'inline-block' }}
               />
             ) : (
-                '-'
-              )}
+              '-'
+            )
+          }
         />
 
-        <Column
+        {/* <Column
           title="所需成长值"
           key="growthValue"
           dataIndex="growthValue"
-        />
+        /> */}
 
         <Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           render={(rowInfo) => {
             const { customerLevelId } = rowInfo;
             return (
@@ -72,9 +70,9 @@ export default class SelfListView extends React.Component<any, any> {
                 <a
                   href="javascript:void(0);"
                   onClick={() => onView(customerLevelId)}
-                // style={{ marginRight: 5 }}
+                  // style={{ marginRight: 5 }}
                 >
-                  查看
+                  {<FormattedMessage id="view" />}
                 </a>
               </div>
             );
@@ -84,4 +82,3 @@ export default class SelfListView extends React.Component<any, any> {
     );
   }
 }
-

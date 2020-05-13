@@ -5,6 +5,7 @@ import { Tooltip } from 'antd';
 import { withRouter } from 'react-router';
 import { DataGrid, noop, FindArea } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const { Column } = DataGrid;
@@ -72,7 +73,7 @@ export default class SelfCustomerList extends React.Component<any, any> {
         pagination={{
           current: selfCurrentPage,
           pageSize: selfPageSize,
-          total:selfTotal,
+          total: selfTotal,
           onChange: (pageNum, pageSize) => {
             initForSelf({ pageNum: pageNum - 1, pageSize });
           }
@@ -80,33 +81,35 @@ export default class SelfCustomerList extends React.Component<any, any> {
         dataSource={selfDataList.toJS()}
       >
         <Column
-          title="客户名称"
+          title={<FormattedMessage id="consumerName" />}
           key="customerName"
           dataIndex="customerName"
           render={(customerName) => (customerName ? customerName : '-')}
         />
 
         <Column
-          title="账号"
+          title={<FormattedMessage id="accountNumber" />}
           key="customerAccount"
           dataIndex="customerAccount"
         />
 
         <Column
-          title="平台等级"
-          key='customerLevelName'
-          dataIndex='customerLevelName'
-          render={(customerLevelName) => customerLevelName ? customerLevelName : '-'}
+          title={<FormattedMessage id="platformLevel" />}
+          key="customerLevelName"
+          dataIndex="customerLevelName"
+          render={(customerLevelName) =>
+            customerLevelName ? customerLevelName : '-'
+          }
         />
-
+        {/* 
         <Column
           title="成长值"
           key='growthValue'
           dataIndex='growthValue'
-        />
+        /> */}
 
         <Column
-          title="地区"
+          title={<FormattedMessage id="area" />}
           width="166px"
           render={(rowData) => {
             const data = fromJS(rowData);
@@ -126,21 +129,21 @@ export default class SelfCustomerList extends React.Component<any, any> {
         />
 
         <Column
-          title="联系人"
+          title={<FormattedMessage id="contactPerson" />}
           key="contactName"
           dataIndex="contactName"
           render={(contactName) => (contactName ? contactName : '-')}
         />
 
         <Column
-          title="联系方式"
+          title={<FormattedMessage id="contactPhoneNumber" />}
           key="contactPhone"
           dataIndex="contactPhone"
           render={(contactPhone) => (contactPhone ? contactPhone : '-')}
         />
 
         <Column
-          title="客户类型"
+          title={<FormattedMessage id="consumerType" />}
           key="customerType"
           dataIndex="customerType"
           render={(customerType, record) =>
@@ -169,30 +172,32 @@ export default class SelfCustomerList extends React.Component<any, any> {
                       this._renderToolTips((record as any).customerId, false)
                     }
                   >
-                    查看
+                    <FormattedMessage id="view" />
                   </a>
                 </Tooltip>
               </div>
             ) : (
-              <div>平台客户</div>
+              <div>{<FormattedMessage id="platformConsumers" />}</div>
             )
           }
         />
 
         <Column
-          title="审核状态"
+          title={<FormattedMessage id="approvalStatus" />}
           key="checkState"
           dataIndex="checkState"
           render={(checkState, record) => {
             let statusString = <div>-</div>;
             if (checkState == 0) {
-              statusString = <div>待审核</div>;
+              statusString = (
+                <div>{<FormattedMessage id="pendingReview" />}</div>
+              );
             } else if (checkState == 1) {
-              statusString = <div>已审核</div>;
+              statusString = <div>{<FormattedMessage id="audited" />}</div>;
             } else if (checkState == 2) {
               statusString = (
                 <div>
-                  <p>审核未通过</p>
+                  <p>{<FormattedMessage id="reviewFailed" />}</p>
                   <Tooltip placement="top" title={record['rejectReason']}>
                     <a href="javascript:void(0);">原因</a>
                   </Tooltip>
@@ -207,7 +212,7 @@ export default class SelfCustomerList extends React.Component<any, any> {
         selfForm.get('checkState') === '-1' ||
         selfForm.get('checkState') === '1' ? (
           <Column
-            title="账号状态"
+            title={<FormattedMessage id="accountStatus" />}
             key="customerStatus"
             dataIndex="customerStatus"
             render={(customerStatus, rowData) => {
@@ -216,14 +221,14 @@ export default class SelfCustomerList extends React.Component<any, any> {
                 if (customerStatus == 1) {
                   return (
                     <div>
-                      <p>禁用</p>
+                      <p>{<FormattedMessage id="disabled" />}</p>
                       <Tooltip placement="top" title={rowData['forbidReason']}>
                         <a href="javascript:void(0);">原因</a>
                       </Tooltip>
                     </div>
                   );
                 } else {
-                  return <span>{CUSTOMER_STATUS[customerStatus]}</span>;
+                  return <p>{<FormattedMessage id="enable" />}</p>;
                 }
               } else {
                 return <span>-</span>;
@@ -233,7 +238,7 @@ export default class SelfCustomerList extends React.Component<any, any> {
         ) : null}
 
         <Column
-          title="业务员"
+          title={<FormattedMessage id="auditors" />}
           key="employeeName"
           dataIndex="employeeName"
           render={(employeeName) => (employeeName ? employeeName : '-')}
@@ -256,5 +261,4 @@ export default class SelfCustomerList extends React.Component<any, any> {
     newState['tooltipVisible'] = tooltipVisible;
     this.setState(newState);
   };
-
 }

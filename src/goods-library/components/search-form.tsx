@@ -4,6 +4,7 @@ import { Button, Form, Input, Select, Tree } from 'antd';
 import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const SelectBox = styled.div`
   .ant-select-dropdown-menu-item,
@@ -87,7 +88,7 @@ export default class SearchForm extends React.Component<any, any> {
         <Form className="filter-content" layout="inline">
           <FormItem>
             <Input
-              addonBefore="商品名称"
+              addonBefore={<FormattedMessage id="product.productName" />}
               value={likeGoodsName}
               onChange={(e: any) => {
                 onFormFieldChange({
@@ -100,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
           <FormItem>
             <TreeSelectGroup
               getPopupContainer={() => document.getElementById('page-content')}
-              label="平台类目"
+              label={<FormattedMessage id="product.platformCategory" />}
               placeholder="请选择分类"
               notFoundContent="暂无分类"
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -120,7 +121,7 @@ export default class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
-                label="品牌"
+                label={<FormattedMessage id="product.brand" />}
                 defaultValue="全部"
                 showSearch
                 optionFilterProp="children"
@@ -129,7 +130,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <Option key="-1" value="-1">
-                  全部
+                  {<FormattedMessage id="product.all" />}
                 </Option>
                 {brandList.map((v, i) => {
                   return (
@@ -151,7 +152,7 @@ export default class SearchForm extends React.Component<any, any> {
                 onSearch();
               }}
             >
-              搜索
+              {<FormattedMessage id="product.search" />}
             </Button>
           </FormItem>
         </Form>

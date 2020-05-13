@@ -7,6 +7,7 @@ import AppStore from './store';
 import SearchForm from './components/search-form';
 import Tool from './components/tool';
 import GoodsList from './components/goods-list';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsLibraryImport extends React.Component<any, any> {
@@ -30,13 +31,15 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
             <Breadcrumb.Item>商品库导入</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="商品库导入" />
+            <Headline
+              title={<FormattedMessage id="commodityLibraryImport" />}
+            />
             <Alert
-              message="操作说明："
+              message={<FormattedMessage id="Instructions" />}
               description={
                 <ul>
                   <li>
-                    商品库导入的商品初始为已审核/下架状态，请补充完信息后再上架销售；
+                    <FormattedMessage id="commodityLibraryImportInfo" />
                   </li>
                 </ul>
               }

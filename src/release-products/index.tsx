@@ -18,10 +18,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
           <Breadcrumb.Item>发布商品</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container">
-          <Headline title="发布商品" />
+          <Headline title={<FormattedMessage id="product.postGoods" />} />
 
           <div className="release-box">
-            <h1>选择发布方式</h1>
+            <h1>
+              <FormattedMessage id="product.chooseAPublishingMethod" />
+            </h1>
 
             <div className="release-content">
               <AuthWrapper functionName="f_goods_add_1">

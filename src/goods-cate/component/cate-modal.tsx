@@ -7,6 +7,7 @@ import { IMap } from 'typings/globalType';
 import { Map } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -62,9 +63,9 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal  maskClosable={false}
+      <Modal
+        maskClosable={false}
         title={formData.get('storeCateId') ? '编辑' : '新增'}
-         
         visible={modalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
@@ -131,7 +132,11 @@ class CateModalForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form className="login-form">
-        <FormItem {...formItemLayout} label="分类名称" hasFeedback>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="categoryName" />}
+          hasFeedback
+        >
           {getFieldDecorator('cateName', {
             rules: [
               { required: true, whitespace: true, message: '请输入分类名称' },
@@ -146,7 +151,10 @@ class CateModalForm extends React.Component<any, any> {
             onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="上级分类">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="subCategory" />}
+        >
           {formData.get('cateParentName')
             ? formData.get('cateParentName')
             : '无'}

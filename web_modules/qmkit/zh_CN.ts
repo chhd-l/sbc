@@ -40,6 +40,7 @@ export default {
   'ship'	:"发货",
   'orderNumber':	"订单号",
   'consumer'	:"客户",
+  'consumerAccount'	:"客户账号",
   'orderTime':	"下单时间",
     
   'skuCode':	"SKU编码",
@@ -66,6 +67,8 @@ export default {
   'deliveryMethod':'配送方式',
   'expressDelivery': "快递配送",
   'deliveryInformation':"收货信息",
+  'confirm':'确认',
+  'cancel':'取消',
 
 
   "serialNumber":"序号",

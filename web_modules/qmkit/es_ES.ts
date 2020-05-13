@@ -102,6 +102,7 @@ export default {
   'ship':"Ship",
   'orderNumber':"Order number",
   'consumer':"Consumer",
+  'consumerAccount'	:"Consumer Account",
   'orderTime':	"Order time",
     
   'skuCode':	"SKU code",
@@ -128,6 +129,8 @@ export default {
   'deliveryMethod':'Delivery method',
   'expressDelivery	': "Express delivery",
   'deliveryInformation':	"delivery information",
+  'confirm':'Confirm',
+  'cancel':'Cancel',
 
 
   "serialNumber":"Serial number",

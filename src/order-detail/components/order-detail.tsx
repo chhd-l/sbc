@@ -16,6 +16,7 @@ import { fromJS, Map } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const columns = [
   {
@@ -25,28 +26,28 @@ const columns = [
     render: (text) => text
   },
   {
-    title: '商品名称',
+    title: 'Product Name',
     dataIndex: 'skuName',
     key: 'skuName'
   },
   {
-    title: '规格',
+    title: 'Weight',
     dataIndex: 'specDetails',
     key: 'specDetails'
   },
   {
-    title: '单价',
+    title: 'Price',
     dataIndex: 'levelPrice',
     key: 'levelPrice',
     render: (levelPrice) => <span>￥{levelPrice.toFixed(2)}</span>
   },
   {
-    title: '数量',
+    title: 'Quantity',
     dataIndex: 'num',
     key: 'num'
   },
   {
-    title: '金额小计',
+    title: 'Subtotal',
     render: (row) => <span>￥{(row.num * row.levelPrice).toFixed(2)}</span>
   }
 ];
@@ -55,7 +56,7 @@ const invoiceContent = (invoice) => {
   let invoiceContent = '';
 
   if (invoice.type == '0') {
-    invoiceContent += '普通发票';
+    invoiceContent += 'general invoice';
   } else if (invoice.type == '1') {
     invoiceContent += '增值税专用发票';
   } else if (invoice.type == '-1') {
@@ -77,19 +78,19 @@ const invoiceContent = (invoice) => {
 
 const flowState = (status) => {
   if (status == 'INIT') {
-    return '待审核';
+    return 'Pending review';
   } else if (status == 'GROUPON') {
-    return '待成团';
+    return 'To be formed';
   } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return '待发货';
+    return 'to be delivered';
   } else if (status == 'DELIVERED') {
-    return '待收货';
+    return 'To be received';
   } else if (status == 'CONFIRMED') {
-    return '已收货';
+    return 'Received';
   } else if (status == 'COMPLETED') {
-    return '已完成';
+    return 'Completed';
   } else if (status == 'VOID') {
-    return '已作废';
+    return 'Out of date';
   }
 };
 
@@ -194,11 +195,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
     let orderSource = detail.get('orderSource');
     let orderType = '';
     if (orderSource == 'WECHAT') {
-      orderType = 'H5订单';
+      orderType = 'H5 Order';
     } else if (orderSource == 'APP') {
-      orderType = 'APP订单';
+      orderType = 'APP Order';
     } else if (orderSource == 'PC') {
-      orderType = 'PC订单';
+      orderType = 'PC Order';
     } else if (orderSource == 'LITTLEPROGRAM') {
       orderType = '小程序订单';
     } else {
@@ -293,7 +294,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                订单号：{detail.get('id')}{' '}
+                {<FormattedMessage id="orderNumber" />}:{detail.get('id')}{' '}
                 {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 <span style={styles.platform}>{orderType}</span>
@@ -303,20 +304,24 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                下单时间：
+                {<FormattedMessage id="orderTime" />}:
                 {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                客户：{detail.getIn(['buyer', 'name'])}
+                {<FormattedMessage id="consumer" />}:
+                {detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                客户账号：{detail.getIn(['buyer', 'account'])}
+                {<FormattedMessage id="consumerAccount" />}:
+                {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  {(util.isThirdStore() ? '客户等级：  ' : '平台等级：  ') +
+                  {(util.isThirdStore()
+                    ? 'Consumer Level:  '
+                    : 'Platform Level:  ') +
                     detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
@@ -340,14 +345,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>商品金额:</span>
+                <span style={styles.name}>
+                  {<FormattedMessage id="productAmount" />}:
+                </span>
                 <strong>￥{(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
               </label>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>积分抵扣:</span>
+                <span style={styles.name}>
+                  {<FormattedMessage id="pointsDeduction" />}:
+                </span>
                 <strong>-￥{(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
               </label>
-              {reduction && (
+              {/* {reduction && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>满减优惠: </span>
                   <strong>-￥{reduction.discounts.toFixed(2)}</strong>
@@ -381,15 +390,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     </strong>
                   </label>
                 </div>
-              ) : null}
+              ) : null} */}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>配送费用: </span>
+                <span style={styles.name}>
+                  {<FormattedMessage id="shippingFees" />}:{' '}
+                </span>
                 <strong>￥{(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
               </label>
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>应付总额: </span>
+                <span style={styles.name}>
+                  {<FormattedMessage id="totalPayable" />}:{' '}
+                </span>
                 <strong>￥{(tradePrice.totalPrice || 0).toFixed(2)}</strong>
               </label>
             </div>
@@ -407,11 +420,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
               marginLeft: 20
             }}
           >
-            卖家备注:
+            {<FormattedMessage id="sellerNotes" />}:
             {sellerRemarkVisible == true && (
               <a onClick={() => setSellerRemarkVisible(false)}>
                 <Icon type="edit" />
-                {detail.get('sellerRemark') || '无'}
+                {detail.get('sellerRemark') || 'none'}
               </a>
             )}
             {sellerRemarkVisible == false && (
@@ -429,40 +442,49 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 />
 
                 <a style={styles.pr20} onClick={() => remedySellerRemark()}>
-                  确认
+                  {<FormattedMessage id="confirm" />}
                 </a>
-                <a onClick={() => setSellerRemarkVisible(true)}>取消</a>
+                <a onClick={() => setSellerRemarkVisible(true)}>
+                  {<FormattedMessage id="cancel" />}
+                </a>
               </div>
             )}
           </div>
           <label style={styles.inforItem}>
-            买家备注: {detail.get('buyerRemark') || '无'}
+            {<FormattedMessage id="buyerNotes" />}:{' '}
+            {detail.get('buyerRemark') || 'none'}
           </label>
           <label style={styles.inforItem}>
-            订单附件: {this._renderEncloses(enclo)}
+            {<FormattedMessage id="orderAttachment" />}:{' '}
+            {this._renderEncloses(enclo)}
           </label>
 
           <label style={styles.inforItem}>
-            支付方式: {detail.getIn(['payInfo', 'desc']) || '暂无信息'}
+            {<FormattedMessage id="paymentMethod" />}:{' '}
+            {detail.getIn(['payInfo', 'desc']) || 'none'}
           </label>
           {
             <label style={styles.inforItem}>
-              发票信息: {invoice ? invoiceContent(invoice) || '' : '无'}
+              {<FormattedMessage id="invoiceInformation" />}:{' '}
+              {invoice ? invoiceContent(invoice) || '' : 'none'}
             </label>
           }
           {invoice.address && (
             <label style={styles.inforItem}>
-              发票收货地址:{' '}
+              {<FormattedMessage id="invoiceReceivingAddress" />}:{' '}
               {invoice && invoice.type == -1
-                ? '无'
+                ? 'none'
                 : `${invoice.contacts} ${invoice.phone}
-                ${invoice.address || '无'}`}
+                ${invoice.address || 'none'}`}
             </label>
           )}
-          <label style={styles.inforItem}>配送方式: 快递配送</label>
           <label style={styles.inforItem}>
-            收货信息：{consignee.name} {consignee.phone}{' '}
-            {consignee.detailAddress}
+            {<FormattedMessage id="deliveryMethod" />}:{' '}
+            {<FormattedMessage id="expressDelivery" />}
+          </label>
+          <label style={styles.inforItem}>
+            {<FormattedMessage id="deliveryInformation" />}:{consignee.name}{' '}
+            {consignee.phone} {consignee.detailAddress}
           </label>
 
           {tradeState.get('obsoleteReason') && (
@@ -492,7 +514,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   //附件
   _renderEncloses(encloses) {
     if (encloses.size == 0 || encloses[0] === '') {
-      return <span>无</span>;
+      return <span>{<FormattedMessage id="none" />}</span>;
     }
 
     return encloses.map((v, k) => {
@@ -588,7 +610,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       onDelivery();
                     }}
                   >
-                    发货
+                    {<FormattedMessage id="ship" />}
                   </a>
                 </AuthWrapper>
               )}
@@ -620,7 +642,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 onDelivery();
               }}
             >
-              发货
+              {<FormattedMessage id="ship" />}
             </a>
           </AuthWrapper>
         </div>

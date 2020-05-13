@@ -1,12 +1,25 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message } from 'antd';
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Select,
+  message,
+  Table,
+  Row,
+  Col
+} from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
+
+const { Column } = Table;
 
 const layout = {
   labelCol: { span: 8 },
@@ -102,6 +115,9 @@ class ClinicForm extends React.Component<any, any> {
       }
     });
   };
+  addAreaPrice() {
+    console.log('新增');
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -243,7 +259,84 @@ class ClinicForm extends React.Component<any, any> {
             </FormItem>
           </Form>
         </TabPane>
-        <TabPane tab="Reward Rate" key="reward"></TabPane>
+        <TabPane tab="Reward Rate" key="reward">
+          {/*区间价价table*/}
+          <Table
+            style={{ paddingTop: '10px' }}
+            pagination={false}
+            rowKey="intervalPriceId"
+            footer={() => <Button>+ Add section</Button>}
+          >
+            <Column
+              title={
+                <div>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px'
+                    }}
+                  >
+                    *
+                  </span>
+                  order amount
+                </div>
+              }
+              key="area"
+              width={80}
+              render={(rowInfo, _i, index) => {
+                return (
+                  <Row>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input addonBefore=" ≥ " disabled={index == 0} />
+                      </FormItem>
+                    </Col>
+                  </Row>
+                );
+              }}
+            />
+            <Column
+              title={
+                <div>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px'
+                    }}
+                  >
+                    *
+                  </span>
+                  reward rate
+                </div>
+              }
+              key="price"
+              width={80}
+              render={(rowInfo) => {
+                return (
+                  <Row>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input />
+                      </FormItem>
+                    </Col>
+                  </Row>
+                );
+              }}
+            />
+            <Column
+              title={<FormattedMessage id="operation" />}
+              key="opt"
+              width={80}
+              render={(rowInfo, _x, i) => {
+                return i > 0 ? <Button>Delete</Button> : null;
+              }}
+            />
+          </Table>
+        </TabPane>
       </Tabs>
     );
   }

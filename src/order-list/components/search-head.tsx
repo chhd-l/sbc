@@ -104,7 +104,7 @@ export default class SearchHead extends Component<any, any> {
                 href="javascript:;"
                 onClick={() => this._showBatchAudit()}
               >
-                批量审核
+                <FormattedMessage id="order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -112,7 +112,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              批量导出
+              <FormattedMessage id="order.batchExpert" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -194,8 +194,12 @@ export default class SearchHead extends Component<any, any> {
                     <Option value="NOT_YET_SHIPPED">
                       <FormattedMessage id="order.notShipped" />
                     </Option>
-                    <Option value="PART_SHIPPED">部分发货</Option>
-                    <Option value="SHIPPED">全部发货</Option>
+                    <Option value="PART_SHIPPED">
+                      <FormattedMessage id="order.partialShipment" />
+                    </Option>
+                    <Option value="SHIPPED">
+                      <FormattedMessage id="order.allShipments" />
+                    </Option>
                   </SelectGroup>
                 )}
               </FormattedMessage>
@@ -223,8 +227,12 @@ export default class SearchHead extends Component<any, any> {
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    <Option value="NOT_PAID">未付款</Option>
-                    <Option value="UNCONFIRMED">待确认</Option>
+                    <Option value="NOT_PAID">
+                      <FormattedMessage id="order.unpaid" />
+                    </Option>
+                    <Option value="UNCONFIRMED">
+                      <FormattedMessage id="order.toBeConfirmed" />
+                    </Option>
                     <Option value="PAID">
                       <FormattedMessage id="paid" />
                     </Option>
@@ -264,7 +272,9 @@ export default class SearchHead extends Component<any, any> {
                     <Option value="APP">
                       <FormattedMessage id="order.AppOrder" />
                     </Option>
-                    <Option value="LITTLEPROGRAM">小程序订单</Option>
+                    <Option value="LITTLEPROGRAM">
+                      <FormattedMessage id="order.miniProgramOrder" />
+                    </Option>
                   </SelectGroup>
                 )}
               </FormattedMessage>
@@ -380,7 +390,9 @@ export default class SearchHead extends Component<any, any> {
         <Option value="buyerName">
           <FormattedMessage id="consumerName" />
         </Option>
-        <Option value="buyerAccount">客户账号</Option>
+        <Option value="buyerAccount">
+          <FormattedMessage id="consumerAccount" />
+        </Option>
       </Select>
     );
   };
@@ -397,8 +409,12 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">商品名称</Option>
-        <Option value="skuNo">SKU编码</Option>
+        <Option value="skuName">
+          <FormattedMessage id="productName" />
+        </Option>
+        <Option value="skuNo">
+          <FormattedMessage id="skuCode" />
+        </Option>
       </Select>
     );
   };
@@ -418,7 +434,9 @@ export default class SearchHead extends Component<any, any> {
         <Option value="consigneeName">
           <FormattedMessage id="recipient" />
         </Option>
-        <Option value="consigneePhone">收件人手机</Option>
+        <Option value="consigneePhone">
+          <FormattedMessage id="recipientPhone" />
+        </Option>
       </Select>
     );
   };
@@ -435,14 +453,14 @@ export default class SearchHead extends Component<any, any> {
       .toJS();
 
     if (checkedIds.length == 0) {
-      message.error('请选择需要操作的订单');
+      message.error('Please select the order that needs to be operated');
       return;
     }
 
     const confirm = Modal.confirm;
     confirm({
-      title: '审核',
-      content: '确认审核已选择订单？',
+      title: <FormattedMessage id="order.audit" />,
+      content: <FormattedMessage id="order.confirmAudit" />,
       onOk() {
         onBatchAudit();
       },
@@ -454,8 +472,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: '导出筛选出的订单',
-      byIdsTitle: '导出选中的订单',
+      byParamsTitle: <FormattedMessage id="order.exportFilterOrder" />,
+      byIdsTitle: <FormattedMessage id="order.exportSelectedOrder" />,
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

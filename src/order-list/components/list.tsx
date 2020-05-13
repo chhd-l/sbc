@@ -14,25 +14,25 @@ const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
     return <FormattedMessage id="order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return '全部发货';
+    return <FormattedMessage id="order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return '部分发货';
+    return <FormattedMessage id="order.partialShipment" />;
   } else if (status == 'VOID') {
-    return '作废';
+    return <FormattedMessage id="order.invalid" />;
   } else {
-    return '未知';
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return '未付款';
+    return <FormattedMessage id="order.unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return '待确认';
+    return <FormattedMessage id="order.toBeConfirmed" />;
   } else if (status == 'PAID') {
-    return '已付款';
+    return <FormattedMessage id="order.paid" />;
   } else {
-    return '未知';
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
@@ -65,14 +65,21 @@ class RejectForm extends React.Component<any, any> {
         <FormItem>
           {getFieldDecorator('comment', {
             rules: [
-              { required: true, message: '请输入驳回原因' },
+              {
+                required: true,
+                message: <FormattedMessage id="order.rejectionReasonTip" />
+              },
               { validator: this.checkComment }
             ]
           })(
-            <Input.TextArea
-              placeholder="请输入驳回原因"
-              autosize={{ minRows: 4, maxRows: 4 }}
-            />
+            <FormattedMessage id="order.rejectionReasonTip">
+              {(txt) => (
+                <Input.TextArea
+                  placeholder={txt.toString()}
+                  autosize={{ minRows: 4, maxRows: 4 }}
+                />
+              )}
+            </FormattedMessage>
           )}
         </FormItem>
       </Form>
@@ -86,7 +93,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Please fill in less than 100 characters'));
       return;
     }
     callback();
@@ -225,7 +232,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    暂无数据
+                    <FormattedMessage id="noData" />
                   </span>
                 </div>
               ) : null}
@@ -244,9 +251,9 @@ export default class ListView extends React.Component<any, any> {
 
           <Modal
             maskClosable={false}
-            title="请输入驳回原因"
+            title={<FormattedMessage id="order.rejectionReasonTip" />}
             visible={orderRejectModalVisible}
-            okText="保存"
+            okText={<FormattedMessage id="save" />}
             onOk={() => this._handleOK()}
             onCancel={() => this._handleCancel()}
           >
@@ -294,13 +301,13 @@ export default class ListView extends React.Component<any, any> {
         const orderSource = v.get('orderSource');
         let orderType = '';
         if (orderSource == 'WECHAT') {
-          orderType = 'H5订单';
+          orderType = 'H5 order';
         } else if (orderSource == 'APP') {
-          orderType = 'APP订单';
+          orderType = 'APP order';
         } else if (orderSource == 'PC') {
           orderType = 'PC order';
         } else if (orderSource == 'LITTLEPROGRAM') {
-          orderType = '小程序订单';
+          orderType = 'Mini Program order';
         }
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
@@ -333,19 +340,23 @@ export default class ListView extends React.Component<any, any> {
                           <span style={{ marginLeft: 20, color: '#000' }}>
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
-                              <span style={styles.platform}>代客下单</span>
+                              <span style={styles.platform}>
+                                <FormattedMessage id="order.valetOrder" />
+                              </span>
                             )}
                             {orderType != '' && (
                               <span style={styles.platform}>{orderType}</span>
                             )}
                             {v.get('grouponFlag') && (
-                              <span style={styles.platform}>拼团</span>
+                              <span style={styles.platform}>
+                                <FormattedMessage id="order.fightTogether" />
+                              </span>
                             )}
                           </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          下单时间：
+                          <FormattedMessage id="orderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -370,7 +381,7 @@ export default class ListView extends React.Component<any, any> {
                                     verify(id, buyerId);
                                   }}
                                 >
-                                  修改
+                                  <FormattedMessage id="edit" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -385,7 +396,7 @@ export default class ListView extends React.Component<any, any> {
                                   href="javascript:void(0)"
                                   style={{ marginLeft: 20 }}
                                 >
-                                  审核
+                                  <FormattedMessage id="order.audit" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -399,7 +410,7 @@ export default class ListView extends React.Component<any, any> {
                                   href="javascript:void(0)"
                                   style={{ marginLeft: 20 }}
                                 >
-                                  驳回
+                                  <FormattedMessage id="order.turnDown" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -418,7 +429,7 @@ export default class ListView extends React.Component<any, any> {
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  回审
+                                  <FormattedMessage id="order.review" />
                                 </a>
                               </AuthWrapper>
                             )}
@@ -463,7 +474,7 @@ export default class ListView extends React.Component<any, any> {
                                 }}
                                 href="javascript:void(0)"
                               >
-                                确认收货
+                                <FormattedMessage id="order.confirmReceipt" />
                               </a>
                             </AuthWrapper>
                           )}
@@ -530,7 +541,9 @@ export default class ListView extends React.Component<any, any> {
                             />
                             //@ts-ignore
                             <div style={styles.imgNum}>
-                              共{v.get('tradeItems').concat(gifts).size}件
+                              <FormattedMessage id="total" />
+                              {v.get('tradeItems').concat(gifts).size}{' '}
+                              <FormattedMessage id="piece" />
                             </div>
                           </div>
                         ) : null
@@ -542,14 +555,15 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '15%' }}>
                       {/*收件人姓名*/}
-                      收件人：{v.getIn(['consignee', 'name'])}
+                      <FormattedMessage id="recipient" />：
+                      {v.getIn(['consignee', 'name'])}
                       <br />
                       {/*收件人手机号码*/}
                       {v.getIn(['consignee', 'phone'])}
                     </td>
                     <td style={{ width: '10%' }}>
                       ￥{tradePrice.toFixed(2)}
-                      <br />（{num}件)
+                      <br />（{num} <FormattedMessage id="piece" />)
                     </td>
                     <td style={{ width: '5%' }}>
                       1{/* {v.getIn(['invoice', 'postCode'])} */}
@@ -601,8 +615,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '回审',
-      content: '确认将选中的订单退回重新审核?',
+      title: <FormattedMessage id="order.review" />,
+      content: <FormattedMessage id="order.confirmReview" />,
       onOk() {
         onRetrial(tdId);
       },
@@ -630,8 +644,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: <FormattedMessage id="order.confirmReceipt" />,
+      content: <FormattedMessage id="order.confirmReceivedAllProducts" />,
       onOk() {
         onConfirm(tdId);
       },

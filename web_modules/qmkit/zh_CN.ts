@@ -2,6 +2,8 @@
  * 多语言英文
  */
 export default {
+  'piece': '件',
+  'total': '共',
   'product': 'productsss',
   'consumerList':'客户列表',
   'consumerName':'客户名称',
@@ -56,41 +58,50 @@ export default {
     
   'sellerNotes':	"卖家备注",
   'buyerNotes':	"买家备注" ,
+
+  'noData': '暂无数据',
+  'save': '保存',
+
+  
+
+
   'orderAttachment': "订单附件",
   'none': "无",
   'paymentMethod': "支付方式",
-  'onlinePayment'	: "在线支付",
+  'onlinePayment': "在线支付",
   'invoiceInformation': '发票信息',
-  'generalInvoice':'普通发票 ',
-  'details'	: '明细',
-  'invoiceReceivingAddress':"发票收货地址",
-  'deliveryMethod':'配送方式',
+  'generalInvoice': '普通发票 ',
+  'details': '明细',
+  'invoiceReceivingAddress': "发票收货地址",
+  'deliveryMethod': '配送方式',
   'expressDelivery': "快递配送",
   'deliveryInformation':"收货信息",
   'confirm':'确认',
   'cancel':'取消',
 
 
-  "serialNumber":"序号",
-  "shipped":"已发货数",
-  "thisShipment":"本次发货数",
+
+  "serialNumber": "序号",
+  "shipped": "已发货数",
+  "thisShipment": "本次发货数",
 
 
-  "amountReceivable":"应收金额",
-  "collectionSerialNumber":"收款流水号"	,
-  "collectionTime":"收款时间",
-  "amountReceived":"实收金额",
-  "accountsReceivable":"收款账户",
-  "accessories" :"附件",
-  "status ":"状态",
-  "paid":"已付款",
-  "remarks":"备注",
+  "amountReceivable": "应收金额",
+  "collectionSerialNumber": "收款流水号",
+  "collectionTime": "收款时间",
+  "amountReceived": "实收金额",
+  "accountsReceivable": "收款账户",
+  "accessories": "附件",
+  "status ": "状态",
+  "paid": "已付款",
+  "remarks": "备注",
 
   'productFirstLetterUpperCase': '商品',
 
   'recipient': '收件人',
+  'recipientPhone': '收件人手机',
 
-  
+
   'amount': '金额	',
 
 
@@ -109,12 +120,35 @@ export default {
   'order.toBeDelivered': '待发货',
   'order.toBeReceived': '待收货',
   'order.paid': '已付款',
+  'order.unpaid': '未付款',
+  'order.toBeConfirmed': '待确认',
   'order.received': '已收货',
+  'order.confirmReceipt': '确认收货',
   'order.completed': '已完成',
   'order.outOfDate': '已作废',
   'order.ship': '发货',
+  'order.allShipments': '全部发货',
+  'order.partialShipment': '部分发货',
+  'order.invalid': '作废',
+  'order.unknown': '未知',
   'order.seeDetails': '查看详情',
   'order.PCOrder': 'PC订单',
   'order.H5Order': 'H5订单',
   'order.AppOrder': 'APP订单',
+  'order.miniProgramOrder': '小程序订单',
+  'order.rejectionReasonTip': '请输入驳回原因',
+  'order.100charactersLimitTip': '备注请填写小于100字符',
+  'order.valetOrder': '代客下单',
+  'order.fightTogether': '拼团',
+  'order.audit': '审核',
+  'order.turnDown': '驳回',
+  'order.review': '回审',
+  'order.confirmReceivedAllProducts': '确认已收到全部货品?',
+  'order.confirmReview': '确认将选中的订单退回重新审核?',
+  'order.confirmAudit': '确认审核已选择订单?',
+  'order.exportFilterOrder': '导出筛选出的订单',
+  'order.exportSelectedOrder': '导出选中的订单',
+  'order.pleaseSelectOrderToOperate': '请选择需要操作的订单',
+  'order.batchReview': '批量审核',
+  'order.batchExpert': '批量导出',
 };

@@ -22,6 +22,7 @@ import {
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -110,10 +111,7 @@ export default class SearchHead extends Component<any, any> {
         )}
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
-            <a
-              href="javascript:;"
-              onClick={() => this._handleBatchExport()}
-            >
+            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
               批量导出
             </a>
           </AuthWrapper>
@@ -123,12 +121,12 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="订单列表" />
+        <Headline title={<FormattedMessage id="order.orderList" />} />
         <div>
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="订单编号"
+                addonBefore={<FormattedMessage id="order.orderNumber" />}
                 onChange={(e) => {
                   this.setState({
                     id: (e.target as any).value
@@ -172,76 +170,104 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
 
             <FormItem>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                defaultValue=""
-                label="发货状态"
-                onChange={(value) => {
-                  this.setState({
-                    tradeState: {
-                      deliverStatus: value,
-                      payState: this.state.tradeState.payState,
-                      orderSource: this.state.tradeState.orderSource
+              <FormattedMessage id="order.shippingStatus">
+                {(txt) => (
+                  <SelectGroup
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
                     }
-                  });
-                }}
-              >
-                <Option value="">全部</Option>
-                <Option value="NOT_YET_SHIPPED">未发货</Option>
-                <Option value="PART_SHIPPED">部分发货</Option>
-                <Option value="SHIPPED">全部发货</Option>
-              </SelectGroup>
+                    defaultValue=""
+                    label={txt.toString()}
+                    onChange={(value) => {
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: value,
+                          payState: this.state.tradeState.payState,
+                          orderSource: this.state.tradeState.orderSource
+                        }
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_YET_SHIPPED">
+                      <FormattedMessage id="order.notShipped" />
+                    </Option>
+                    <Option value="PART_SHIPPED">部分发货</Option>
+                    <Option value="SHIPPED">全部发货</Option>
+                  </SelectGroup>
+                )}
+              </FormattedMessage>
             </FormItem>
 
             <FormItem>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                onChange={(value) =>
-                  this.setState({
-                    tradeState: {
-                      deliverStatus: this.state.tradeState.deliverStatus,
-                      payState: value,
-                      orderSource: this.state.tradeState.orderSource
+              <FormattedMessage id="order.paymentStatus">
+                {(txt) => (
+                  <SelectGroup
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
                     }
-                  })
-                }
-                label="付款状态"
-                defaultValue=""
-              >
-                <Option value="">全部</Option>
-                <Option value="NOT_PAID">未付款</Option>
-                <Option value="UNCONFIRMED">待确认</Option>
-                <Option value="PAID">已付款</Option>
-              </SelectGroup>
+                    onChange={(value) =>
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: this.state.tradeState.deliverStatus,
+                          payState: value,
+                          orderSource: this.state.tradeState.orderSource
+                        }
+                      })
+                    }
+                    label={txt.toString()}
+                    defaultValue=""
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_PAID">未付款</Option>
+                    <Option value="UNCONFIRMED">待确认</Option>
+                    <Option value="PAID">
+                      <FormattedMessage id="paid" />
+                    </Option>
+                  </SelectGroup>
+                )}
+              </FormattedMessage>
             </FormItem>
 
             <FormItem>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                defaultValue=""
-                label="订单来源"
-                onChange={(value) => {
-                  this.setState({
-                    tradeState: {
-                      deliverStatus: this.state.tradeState.deliverStatus,
-                      payState: this.state.tradeState.payState,
-                      orderSource: value
+              <FormattedMessage id="order.orderSource">
+                {(txt) => (
+                  <SelectGroup
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
                     }
-                  });
-                }}
-              >
-                <Option value="">全部</Option>
-                <Option value="PC">PC订单</Option>
-                <Option value="WECHAT">H5订单</Option>
-                <Option value="APP">APP订单</Option>
-                <Option value="LITTLEPROGRAM">小程序订单</Option>
-              </SelectGroup>
+                    defaultValue=""
+                    label={txt.toString()}
+                    onChange={(value) => {
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: this.state.tradeState.deliverStatus,
+                          payState: this.state.tradeState.payState,
+                          orderSource: value
+                        }
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="PC">
+                      <FormattedMessage id="order.PCOrder" />
+                    </Option>
+                    <Option value="WECHAT">
+                      <FormattedMessage id="order.H5Order" />
+                    </Option>
+                    <Option value="APP">
+                      <FormattedMessage id="order.AppOrder" />
+                    </Option>
+                    <Option value="LITTLEPROGRAM">小程序订单</Option>
+                  </SelectGroup>
+                )}
+              </FormattedMessage>
             </FormItem>
 
             <FormItem>
@@ -306,7 +332,7 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                搜索
+                <FormattedMessage id="search" />
               </Button>
             </FormItem>
           </Form>
@@ -321,7 +347,8 @@ export default class SearchHead extends Component<any, any> {
                 }
               >
                 <Button>
-                  批量操作 <Icon type="down" />
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -350,7 +377,9 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">客户名称</Option>
+        <Option value="buyerName">
+          <FormattedMessage id="consumerName" />
+        </Option>
         <Option value="buyerAccount">客户账号</Option>
       </Select>
     );
@@ -386,7 +415,9 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">收件人</Option>
+        <Option value="consigneeName">
+          <FormattedMessage id="recipient" />
+        </Option>
         <Option value="consigneePhone">收件人手机</Option>
       </Select>
     );

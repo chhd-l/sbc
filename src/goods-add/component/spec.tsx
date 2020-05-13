@@ -178,7 +178,7 @@ class SpecForm extends React.Component<any, any> {
                           <Button
                             onClick={() => this._deleteSpec(item.get('specId'))}
                           >
-                            删除
+                            <FormattedMessage id="delete" />
                           </Button>
                         </Col>
                         <Col span={10}>
@@ -296,7 +296,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Button onClick={this._addSpec}>
                 <Icon type="plus" />
-                添加规格
+                <FormattedMessage id="product.addSpecifications" />
               </Button>
             )}
           </div>

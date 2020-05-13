@@ -92,6 +92,8 @@ export default {
   'status': 'Status',
   'import': 'Import',
   'batchImport': 'Batch Import',
+  'addSpecifications': 'Add specifications',
+  'newProduct': 'New product',
   
   // 'product.productVideo': 'Product video',
   // 'product.productVideo': 'Product video',

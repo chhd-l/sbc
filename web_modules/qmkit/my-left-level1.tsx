@@ -64,7 +64,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     }
 
     return (
-      <Sider width={104} className="leftHeader">
+      <Sider width={134} className="leftHeader">
         <Menu
           style={{ width: '100 %', backgroundColor: '#4d4d4d' }}
           inlineIndent={16}

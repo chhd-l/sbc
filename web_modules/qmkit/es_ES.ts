@@ -328,7 +328,8 @@ export default {
   'quantityReturned': 'Quantity returned',
   'subtotalOfReturnAmount': 'Subtotal of return amount',
   'Refund': 'Refund',
-
+  'returnReason': 'Return reason',
+  'chargebackAttachment': 'Chargeback attachment',
 };
 
 

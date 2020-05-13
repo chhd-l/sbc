@@ -297,8 +297,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="consumerLevel" />：
-                  {detail.getIn(['buyer', 'levelName'])}
+                  <FormattedMessage id="consumerLevel" />： Tourist
+                  {/* {detail.getIn(['buyer', 'levelName'])} */}
                 </p>
               )}
             </Col>

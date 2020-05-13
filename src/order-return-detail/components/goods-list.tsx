@@ -193,13 +193,14 @@ export default class GoodsList extends React.Component<any, any> {
         </div>
         <div style={styles.returnReason}>
           <label style={styles.inforItem}>
-            退货原因:{' '}
+            <FormattedMessage id="returnReason" />:{' '}
             {Object.getOwnPropertyNames(returnReason).map(
               (key) => returnReason[key]
             )}
           </label>
           <label style={styles.inforItem}>
-            退货说明: {detail.get('description')}
+            <FormattedMessage id="chargebackAttachment" />:{' '}
+            {detail.get('description')}
           </label>
           {
             /**退货才有退货方式**/
@@ -213,7 +214,9 @@ export default class GoodsList extends React.Component<any, any> {
             ) : null
           }
           <div style={styles.inforItem}>
-            <label>退单附件: </label>
+            <label>
+              <FormattedMessage id="returnInstructions" />:{' '}
+            </label>
             {images.map((imageObj, index) => (
               <Popover
                 key={'pp-' + index}

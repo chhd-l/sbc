@@ -95,9 +95,9 @@ export default {
   
   // 'product.productVideo': 'Product video',
   // 'product.productVideo': 'Product video',
-  
-  
-  
+
+
+
 
   'product': 'productsss',
   'consumerList':'Consumer List',
@@ -121,6 +121,87 @@ export default {
   'levelName'	:'Level Name',
   'levelBadge':	'Level Badge',
   'view':'View',
+
+  'orderDetails':'Order details',
+  'deliveryRecord':'Delivery Record',
+  'collectionRecords':'Collection records',
+    
+  'toBeDelivered'	:"To be delivered",
+  'ship':"Ship",
+  'orderNumber':"Order number",
+  'consumer':"Consumer",
+  'orderTime':	"Order time",
+    
+  'skuCode':	"SKU code",
+  'productName':	"Product name",
+  'weight':	"Weight",
+  'price':	"Price",
+  'quantity':	"Quantity",
+  'subtotal':	"Subtotal",
+  'productAmount':	"Product amount",
+  'pointsDeduction':	"Points deduction",
+  'shippingFees':	"Shipping fees",
+  'totalPayable':	"Total payable",
+    
+  'sellerNotes':	"Seller notes",
+  'buyerNotes':	"Buyer notes" ,
+  'orderAttachment': "Order attachment",
+  'none': "none",
+  'paymentMethod': "Payment method",
+  'onlinePayment'	: "online payment",
+  'invoiceInformation': 'Invoice information',
+  'generalInvoice':'General invoice ',
+  'details'	: 'details',
+  'invoiceReceivingAddress':"Invoice receiving address",
+  'deliveryMethod':'Delivery method',
+  'expressDelivery	': "Express delivery",
+  'deliveryInformation':	"delivery information",
+
+
+  "serialNumber":"Serial number",
+  "shipped":"Shipped",
+  "thisShipment":"This shipment",
+  "amountReceivable":"Amount receivable",
+  "collectionSerialNumber":"Collection serial number"	,
+  "collectionTime":"Collection time",
+  "amountReceived":"Amount received",
+  "accountsReceivable":"Accounts receivable",
+  "accessories" :"Accessories",
+  "status ":"Status",
+  "paid":"paid",
+  "remarks":"Remarks",
+  "operating":"Operating",
+  'productFirstLetterUpperCase': 'Product',
+
+
+  'recipient': 'Recipient',
+
+  
+  'amount': 'Amount	',
+
+
+  'order.orderList': 'Order List',
+  'order.orderNumber': 'Order number',
+  'order.shippingStatus': 'Shipping status',
+  'order.paymentStatus': 'Payment status',
+  'order.orderStatus': 'Order Status',
+  'order.orderSource': 'Order source',
+  'order.startDate': 'Start date',
+  'order.endDate': 'End date',
+  'order.bulkOperations': 'Bulk operations',
+  'order.pendingReview': 'Pending review',
+  'order.toBeFormed': 'To be formed',
+  'order.toBeDelivered': 'To be delivered',
+  'order.toBeReceived': 'To be received',
+  'order.paid': 'Paid',
+  'order.received': 'Received',
+  'order.completed': 'Completed',
+  'order.outOfDate': 'Out of date',
+  'order.ship': 'Ship',
+  'order.seeDetails': 'See details',
+  'order.PCOrder': 'PC order',
+  'order.H5Order': 'H5 Order',
+  'order.AppOrder': 'APP Order',
 };
 
 

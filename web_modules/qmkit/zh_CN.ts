@@ -29,5 +29,89 @@ export default {
   'levelName'	:'等级名称',
   'levelBadge':	'等级徽章',
   'view':'查看',
-  'operation':'操作'
+  'operation':'操作',
+
+
+  'orderDetails':	'订单详情',
+  'deliveryRecord':	'发货记录',
+  'collectionRecords':	'收款记录',
+    
+  'toBeDelivered'	:"待发货",
+  'ship'	:"发货",
+  'orderNumber':	"订单号",
+  'consumer'	:"客户",
+  'orderTime':	"下单时间",
+    
+  'skuCode':	"SKU编码",
+  'productName':	"商品名称",
+  'weight':	"规格",
+  'price':	"单价",
+  'quantity':	"数量",
+  'subtotal':	"金额小计",
+  'productAmount':	"商品金额",
+  'pointsDeduction':	"积分抵扣",
+  'shippingFees':	"配送费用",
+  'totalPayable':	"应付总额",
+    
+  'sellerNotes':	"卖家备注",
+  'buyerNotes':	"买家备注" ,
+  'orderAttachment': "订单附件",
+  'none': "无",
+  'paymentMethod': "支付方式",
+  'onlinePayment'	: "在线支付",
+  'invoiceInformation': '发票信息',
+  'generalInvoice':'普通发票 ',
+  'details'	: '明细',
+  'invoiceReceivingAddress':"发票收货地址",
+  'deliveryMethod':'配送方式',
+  'expressDelivery': "快递配送",
+  'deliveryInformation':"收货信息",
+
+
+  "serialNumber":"序号",
+  "shipped":"已发货数",
+  "thisShipment":"本次发货数",
+
+
+  "amountReceivable":"应收金额",
+  "collectionSerialNumber":"收款流水号"	,
+  "collectionTime":"收款时间",
+  "amountReceived":"实收金额",
+  "accountsReceivable":"收款账户",
+  "accessories" :"附件",
+  "status ":"状态",
+  "paid":"已付款",
+  "remarks":"备注",
+
+  'productFirstLetterUpperCase': '商品',
+
+  'recipient': '收件人',
+
+  
+  'amount': '金额	',
+
+
+  'order.orderList': '订单列表',
+  'order.orderNumber': '订单编号',
+  'order.shippingStatus': '发货状态',
+  'order.paymentStatus': '付款状态',
+  'order.orderStatus': '订单状态',
+  'order.orderSource': '订单来源',
+  'order.startDate': '开始日期',
+  'order.endDate': '结束日期',
+  'order.bulkOperations': '批量操作',
+  'order.pendingReview': '待审核',
+  'order.toBeFormed': '待成团',
+  'order.notShipped': '未发货',
+  'order.toBeDelivered': '待发货',
+  'order.toBeReceived': '待收货',
+  'order.paid': '已付款',
+  'order.received': '已收货',
+  'order.completed': '已完成',
+  'order.outOfDate': '已作废',
+  'order.ship': '发货',
+  'order.seeDetails': '查看详情',
+  'order.PCOrder': 'PC订单',
+  'order.H5Order': 'H5订单',
+  'order.AppOrder': 'APP订单',
 };

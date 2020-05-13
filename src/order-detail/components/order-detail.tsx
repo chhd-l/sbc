@@ -19,7 +19,7 @@ import moment from 'moment';
 
 const columns = [
   {
-    title: 'SKU编码',
+    title: 'SKU Code',
     dataIndex: 'skuNo',
     key: 'skuNo',
     render: (text) => text
@@ -303,9 +303,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                下单时间：{moment(tradeState.get('createTime')).format(
-                  Const.TIME_FORMAT
-                )}
+                下单时间：
+                {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
             </Col>
             <Col span={8}>
@@ -391,10 +390,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>应付总额: </span>
-                <strong>
-                  ￥
-                  {(tradePrice.totalPrice || 0).toFixed(2)}
-                </strong>
+                <strong>￥{(tradePrice.totalPrice || 0).toFixed(2)}</strong>
               </label>
             </div>
           </div>

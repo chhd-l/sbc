@@ -9,6 +9,7 @@ import OrderDelivery from './components/order-delivery';
 import OrderReceive from './components/order-receive';
 
 import { Headline, BreadCrumb } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 订单详情
@@ -33,22 +34,30 @@ export default class OrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>订单详情</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {<FormattedMessage id="orderDetails" />}
+          </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container">
-          <Headline title="订单详情" />
+          <Headline title={<FormattedMessage id="orderDetails" />} />
 
           <Tabs
             onChange={(key) => this.store.onTabsChange(key)}
             activeKey={this.store.state().get('tab')}
           >
-            <Tabs.TabPane tab="订单详情" key="1">
+            <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="发货记录" key="2">
+            <Tabs.TabPane
+              tab={<FormattedMessage id="deliveryRecord" />}
+              key="2"
+            >
               <OrderDelivery />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="收款记录" key="3">
+            <Tabs.TabPane
+              tab={<FormattedMessage id="collectionRecords" />}
+              key="3"
+            >
               <OrderReceive />
             </Tabs.TabPane>
           </Tabs>

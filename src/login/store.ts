@@ -169,8 +169,6 @@ export default class AppStore extends Store {
           dataList.filter((item) => item.get('grade') === 1),
           dataList
         );
-        console.log(allGradeMenus.toJS());
-        debugger;
         let filterMenu = allGradeMenus
           .toJS()
           .filter(

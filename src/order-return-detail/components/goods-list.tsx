@@ -7,38 +7,39 @@ import { fromJS } from 'immutable';
 import { Const, Logistics } from 'qmkit';
 
 import { Table } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const columns = [
   {
-    title: 'SKU编码',
+    title: <FormattedMessage id="product.SKU" />,
     dataIndex: 'skuNo',
     key: 'skuNo',
     render: (text) => <span>{text}</span>
   },
   {
-    title: '商品名称',
+    title: <FormattedMessage id="product.productName" />,
     dataIndex: 'skuName',
     key: 'skuName'
   },
   {
-    title: '规格',
+    title: <FormattedMessage id="weigth" />,
     dataIndex: 'specDetails',
     key: 'specDetails',
     render: (s) => <div>{s}</div>
   },
   {
-    title: '退货单价',
+    title: <FormattedMessage id="returnUnitPrice" />,
     dataIndex: 'price',
     key: 'price',
     render: (price) => <div>￥{price.toFixed(2)}</div>
   },
   {
-    title: '退货数量',
+    title: <FormattedMessage id="quantityReturned" />,
     dataIndex: 'num',
     key: 'num'
   },
   {
-    title: '退货金额小计',
+    title: <FormattedMessage id="subtotalOfReturnAmount" />,
     dataIndex: 'splitPrice',
     key: 'splitPriceTotal',
     render: (splitPrice) => <div>￥{splitPrice.toFixed(2)}</div>
@@ -151,25 +152,30 @@ export default class GoodsList extends React.Component<any, any> {
           <div />
           <div style={styles.priceBox}>
             <label style={styles.priceItem as any}>
-              <span style={styles.name}>应退金额: </span>
+              <span style={styles.name}>
+                <FormattedMessage id="refundableAmount" />:{' '}
+              </span>
               <strong>
-                ￥{totalPrice
+                ￥
+                {totalPrice
                   ? parseFloat(totalPrice).toFixed(2)
                   : Number(0).toFixed(2)}
               </strong>
             </label>
             <label style={styles.priceItem as any}>
-              <span style={styles.name}>应退积分: </span>
-              <strong>
-                {applyPoints
-                ? applyPoints : Number(0)}
-              </strong>
+              <span style={styles.name}>
+                <FormattedMessage id="pointsRefundable" />:{' '}
+              </span>
+              <strong>{applyPoints ? applyPoints : Number(0)}</strong>
             </label>
             {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>实退金额: </span>
+                <span style={styles.name}>
+                  <FormattedMessage id="actualRefundAmount" />:{' '}
+                </span>
                 <strong>
-                  ￥{applyPrice
+                  ￥
+                  {applyPrice
                     ? parseFloat(applyPrice).toFixed(2)
                     : Number(0).toFixed(2)}
                 </strong>
@@ -177,11 +183,10 @@ export default class GoodsList extends React.Component<any, any> {
             )}
             {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>实退积分: </span>
-                <strong>
-                  {actualPoints
-                  ? actualPoints : Number(0)}
-                </strong>
+                <span style={styles.name}>
+                  <FormattedMessage id="actualRefundPoints" />:{' '}
+                </span>
+                <strong>{actualPoints ? actualPoints : Number(0)}</strong>
               </label>
             )}
           </div>
@@ -196,15 +201,17 @@ export default class GoodsList extends React.Component<any, any> {
           <label style={styles.inforItem}>
             退货说明: {detail.get('description')}
           </label>
-          {/**退货才有退货方式**/
-          returnType == 'RETURN' ? (
-            <label style={styles.inforItem}>
-              退货方式:{' '}
-              {Object.getOwnPropertyNames(returnWay).map(
-                (key) => returnWay[key]
-              )}
-            </label>
-          ) : null}
+          {
+            /**退货才有退货方式**/
+            returnType == 'RETURN' ? (
+              <label style={styles.inforItem}>
+                退货方式:{' '}
+                {Object.getOwnPropertyNames(returnWay).map(
+                  (key) => returnWay[key]
+                )}
+              </label>
+            ) : null
+          }
           <div style={styles.inforItem}>
             <label>退单附件: </label>
             {images.map((imageObj, index) => (

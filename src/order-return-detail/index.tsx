@@ -8,6 +8,7 @@ import OrderStatusHead from './components/order-status-head';
 import GoodsList from './components/goods-list';
 import ReturnRecord from './components/return-record';
 import OperateLog from './components/operate-log';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 退单详情
@@ -29,11 +30,13 @@ export default class ReturnOrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>退单详情</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="refundDetails" />
+          </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container" style={{ paddingBottom: 50 }}>
-          <Headline title="退单详情" />
+          <Headline title={<FormattedMessage id="refundDetails" />} />
           <OrderStatusHead />
           <GoodsList />
           {/*<ReceiverRecord/>*/}

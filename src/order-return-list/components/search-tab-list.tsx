@@ -3,6 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Tabs } from 'antd';
 import List from './search-list';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class SearchTabList extends React.Component<any, any> {
@@ -25,48 +26,74 @@ export default class SearchTabList extends React.Component<any, any> {
     return (
       <div>
         <Tabs
-          onChange={key => {
+          onChange={(key) => {
             onTabChange(key);
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab="全部" key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
-
-          <Tabs.TabPane tab="待审核" key="flowState-INIT">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="pendingReview" />}
+            key="flowState-INIT"
+          >
             {tab.get('key') === 'flowState-INIT' ? <List /> : null}
           </Tabs.TabPane>
-
-          <Tabs.TabPane tab="待填写物流信息" key="flowState-AUDIT">
+          {<FormattedMessage id="pendingReview" />}
+          <Tabs.TabPane
+            tab={<FormattedMessage id="toBeFilledOutLogisticsInformation" />}
+            key="flowState-AUDIT"
+          >
             {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
           </Tabs.TabPane>
-
-          <Tabs.TabPane tab="待商家收货" key="flowState-DELIVERED">
+          <Tabs.TabPane
+            tab={
+              <FormattedMessage id="waitingForTheMerchantToReceiveTheGoods" />
+            }
+            key="flowState-DELIVERED"
+          >
             {tab.get('key') === 'flowState-DELIVERED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待退款" key="flowState-RECEIVED">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="pendingRefund" />}
+            key="flowState-RECEIVED"
+          >
             {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="已完成" key="flowState-COMPLETED">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.completed" />}
+            key="flowState-COMPLETED"
+          >
             {tab.get('key') === 'flowState-COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="拒绝收货" key="flowState-REJECT_RECEIVE">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="rejected" />}
+            key="flowState-REJECT_RECEIVE"
+          >
             {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="拒绝退款" key="flowState-REJECT_REFUND">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="refusedToRefund" />}
+            key="flowState-REJECT_REFUND"
+          >
             {tab.get('key') === 'flowState-REJECT_REFUND' ? <List /> : null}
           </Tabs.TabPane>
-
-          <Tabs.TabPane tab="已作废" key="flowState-VOID">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="order.outOfDate" />}
+            key="flowState-VOID"
+          >
             {tab.get('key') === 'flowState-VOID' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="退款失败" key="flowState-REFUND_FAILED">
+          <Tabs.TabPane
+            tab={<FormattedMessage id="refundFailed" />}
+            key="flowState-REFUND_FAILED"
+          >
             {tab.get('key') === 'flowState-REFUND_FAILED' ? <List /> : null}
           </Tabs.TabPane>
         </Tabs>

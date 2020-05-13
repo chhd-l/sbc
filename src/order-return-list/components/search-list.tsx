@@ -420,7 +420,7 @@ export default class SearchList extends React.Component<any, any> {
                                 }
                               }}
                             >
-                              退款
+                              <FormattedMessage id="refund" />
                             </a>
                           </AuthWrapper>
                         )}
@@ -438,7 +438,7 @@ export default class SearchList extends React.Component<any, any> {
                                 )
                               }
                             >
-                              拒绝退款
+                              <FormattedMessage id="refusedToRefund" />
                             </a>
                           </AuthWrapper>
                         )}
@@ -447,7 +447,7 @@ export default class SearchList extends React.Component<any, any> {
                             style={{ marginRight: 18, marginLeft: 20 }}
                             to={`/order-return-detail/${rid}`}
                           >
-                            查看详情
+                            <FormattedMessage id="order.seeDetails" />
                           </Link>
                         </AuthWrapper>
                       </span>

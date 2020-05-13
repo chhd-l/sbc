@@ -122,13 +122,14 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="退单列表" />
+        <Headline title={<FormattedMessage id="refundList" />} />
 
         <div>
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="退单编号"
+                // addonBefore="退单编号"
+                addonBefore={<FormattedMessage id="chargebackNumber" />}
                 onChange={(e) => {
                   this.setState(
                     { rid: (e.target as any).value },
@@ -139,7 +140,8 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="订单编号"
+                // addonBefore="订单编号"
+                addonBefore={<FormattedMessage id="orderNumber" />}
                 onChange={(e) => {
                   this.setState(
                     { tid: (e.target as any).value },
@@ -252,7 +254,7 @@ export default class SearchHead extends Component<any, any> {
                   this.props.relaxProps.onSearch(this.state);
                 }}
               >
-                搜索
+                <FormattedMessage id="search" />
               </Button>
             </FormItem>
           </Form>
@@ -266,7 +268,8 @@ export default class SearchHead extends Component<any, any> {
                 placement="bottomLeft"
               >
                 <Button>
-                  批量操作 <Icon type="down" />
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -308,10 +311,14 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.goodsOptions}
-        style={{ width: 100 }}
+        style={{ width: 130 }}
       >
-        <Option value="skuName">商品名称</Option>
-        <Option value="skuNo">SKU编码</Option>
+        <Option value="skuName">
+          <FormattedMessage id="product.productName" />
+        </Option>
+        <Option value="skuNo">
+          <FormattedMessage id="product.SKU" />
+        </Option>
       </Select>
     );
   };
@@ -342,10 +349,14 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.buyerOptions}
-        style={{ width: 100 }}
+        style={{ width: 150 }}
       >
-        <Option value="buyerName">客户名称</Option>
-        <Option value="buyerAccount">客户账号</Option>
+        <Option value="buyerName">
+          <FormattedMessage id="consumerName" />
+        </Option>
+        <Option value="buyerAccount">
+          <FormattedMessage id="consumerAccount" />
+        </Option>
       </Select>
     );
   };
@@ -376,10 +387,14 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.consigneeOptions}
-        style={{ width: 100 }}
+        style={{ width: 150 }}
       >
-        <Option value="consigneeName">收件人</Option>
-        <Option value="consigneePhone">收件人手机</Option>
+        <Option value="consigneeName">
+          <FormattedMessage id="recipient" />
+        </Option>
+        <Option value="consigneePhone">
+          <FormattedMessage id="recipientPhone" />
+        </Option>
       </Select>
     );
   };

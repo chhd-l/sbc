@@ -8,6 +8,7 @@ import { AuthWrapper, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { fromJS } from 'immutable';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -125,9 +126,9 @@ export default class OrderStatusHead extends React.Component<any, any> {
     const enableReturn =
       (returnFlowState === 'RECEIVED' ||
         (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
-      (refundRecord.get('refundStatus') != null &&
-        refundRecord.get('refundStatus') != 2 &&
-        refundRecord.get('refundStatus') != 3);
+      refundRecord.get('refundStatus') != null &&
+      refundRecord.get('refundStatus') != 2 &&
+      refundRecord.get('refundStatus') != 3;
 
     return (
       <div>
@@ -179,18 +180,17 @@ export default class OrderStatusHead extends React.Component<any, any> {
               )}
 
               {/*退货单的已审核状态*/}
-              {returnFlowState === 'AUDIT' &&
-                returnType == 'RETURN' && (
-                  <AuthWrapper functionName="rolf003">
-                    <a
-                      style={styles.pr20}
-                      href="javascript:;"
-                      onClick={() => this._showDeliver(onDeliver, rid)}
-                    >
-                      填写物流
-                    </a>
-                  </AuthWrapper>
-                )}
+              {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
+                <AuthWrapper functionName="rolf003">
+                  <a
+                    style={styles.pr20}
+                    href="javascript:;"
+                    onClick={() => this._showDeliver(onDeliver, rid)}
+                  >
+                    填写物流
+                  </a>
+                </AuthWrapper>
+              )}
 
               {returnFlowState === 'DELIVERED' && (
                 <AuthWrapper functionName="rolf004">
@@ -246,7 +246,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                         }
                       }}
                     >
-                      退款
+                      <FormattedMessage id="refund" />
                     </a>
                   </div>
                 </AuthWrapper>
@@ -261,7 +261,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                       this._showRejectRefund(onRejectRefund, rid, 0 == payType)
                     }
                   >
-                    拒绝退款
+                    <FormattedMessage id="refusedToRefund" />
                   </a>
                 </AuthWrapper>
               )}
@@ -270,29 +270,35 @@ export default class OrderStatusHead extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                退单号：{detail.get('id')}{' '}
+                <FormattedMessage id="chargebackNumber" />：{detail.get('id')}{' '}
                 {detail.get('platform') != 'CUSTOMER' && (
-                  <span style={styles.platform}>代退单</span>
+                  <span style={styles.platform}>
+                    <FormattedMessage id="Chargeback" />
+                  </span>
                 )}
               </p>
               <p style={styles.darkText}>
-                申请时间：{moment(detail.get('createTime')).format(
-                  Const.TIME_FORMAT
-                )}
+                <FormattedMessage id="applicationTime" />：
+                {moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
-              <p style={styles.darkText}>订单号：{detail.get('tid')}</p>
+              <p style={styles.darkText}>
+                <FormattedMessage id="orderNumber" />：{detail.get('tid')}
+              </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                客户：{detail.getIn(['buyer', 'name'])}
+                <FormattedMessage id="consumer" />：
+                {detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                客户账号：{this._parsePhone(detail.getIn(['buyer', 'account']))}
+                <FormattedMessage id="consumerAccount" />：
+                {this._parsePhone(detail.getIn(['buyer', 'account']))}
               </p>
 
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  客户等级：{detail.getIn(['buyer', 'levelName'])}
+                  <FormattedMessage id="consumerLevel" />：
+                  {detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
             </Col>

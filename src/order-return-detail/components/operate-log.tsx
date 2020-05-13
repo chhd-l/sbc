@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Table, Button, Collapse } from 'antd';
 import { IMap } from 'typings/globalType';
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 enum operatorDic {
   BOSS = '平台',
@@ -15,32 +16,32 @@ enum operatorDic {
 
 const columns = [
   {
-    title: '操作方',
+    title: <FormattedMessage id="operatorType" />,
     dataIndex: 'operator',
     key: 'operator',
-    render: operator => {
+    render: (operator) => {
       return operatorDic[operator.platform];
     }
   },
   {
-    title: '操作人',
+    title: <FormattedMessage id="operator" />,
     dataIndex: 'operator',
     key: 'operatorName',
-    render: operator => operator.name
+    render: (operator) => operator.name
   },
   {
-    title: '时间',
+    title: <FormattedMessage id="time" />,
     dataIndex: 'eventTime',
     key: 'eventTime',
-    render: t => moment(t).format(Const.TIME_FORMAT)
+    render: (t) => moment(t).format(Const.TIME_FORMAT)
   },
   {
-    title: '操作类别',
+    title: <FormattedMessage id="operationCategory" />,
     dataIndex: 'eventType',
     key: 'eventType'
   },
   {
-    title: '操作日志',
+    title: <FormattedMessage id="operationLog" />,
     dataIndex: 'eventDetail',
     key: 'eventDetail',
     width: '50%'
@@ -89,7 +90,11 @@ export default class OperateLog extends React.Component<any, any> {
           }}
         >
           <Collapse>
-            <Panel header="操作日志" key="1" style={customPanelStyle}>
+            <Panel
+              header={<FormattedMessage id="operationLog" />}
+              key="1"
+              style={customPanelStyle}
+            >
               <Table
                 bordered
                 rowKey={() => Math.random().toString()}

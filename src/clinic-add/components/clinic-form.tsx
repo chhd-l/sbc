@@ -40,13 +40,15 @@ class ClinicForm extends React.Component<any, any> {
         longitude: '',
         latitude: '',
         location: ''
-      }
+      },
+      cityArr: []
     };
     this.getDetail = this.getDetail.bind(this);
 
     if (this.props.clinicId) {
       this.getDetail(this.props.clinicId);
     }
+    this.queryClinicsDictionary('city');
   }
   getDetail = async (id) => {
     const { res } = await webapi.getClinicById({
@@ -70,6 +72,18 @@ class ClinicForm extends React.Component<any, any> {
       message.error(res.message || 'get data faild');
     }
     console.log(this.state.clinicForm);
+  };
+  queryClinicsDictionary = async (type: String) => {
+    const { res } = await webapi.queryClinicsDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        cityArr: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.clinicForm;
@@ -119,6 +133,7 @@ class ClinicForm extends React.Component<any, any> {
     console.log('新增');
   }
   render() {
+    const { cityArr } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Tabs>
@@ -180,8 +195,13 @@ class ClinicForm extends React.Component<any, any> {
                     });
                   }}
                 >
-                  <Option value="Mexico City">Mexico City</Option>
-                  <Option value="Monterrey">Monterrey</Option>
+                  {cityArr.map((item) => (
+                    <Option value={item.valueEn} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                  {/* <Option value="Mexico City">Mexico City</Option>
+                  <Option value="Monterrey">Monterrey</Option> */}
                 </Select>
               )}
             </FormItem>

@@ -82,12 +82,13 @@ export default class ClinicList extends Component<any, any> {
         primaryCity: '',
         primaryZip: ''
       },
+      cityArr: [],
       loading: false
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
-
+    this.queryClinicsDictionary('city');
     this.init();
   }
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -105,6 +106,18 @@ export default class ClinicList extends Component<any, any> {
         pagination: pagination,
         clinicList: clinicList
       });
+    }
+  };
+  queryClinicsDictionary = async (type: String) => {
+    const { res } = await webapi.queryClinicsDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        cityArr: res.context
+      });
+    } else {
+      message.error(res.message);
     }
   };
   delClinic = async (id) => {
@@ -137,7 +150,7 @@ export default class ClinicList extends Component<any, any> {
   }
 
   render() {
-    const { columns } = this.state;
+    const { columns, cityArr } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -198,8 +211,11 @@ export default class ClinicList extends Component<any, any> {
                 }}
               >
                 <Option value="">All</Option>
-                <Option value="0">Mexico City</Option>
-                <Option value="1">Monterrey</Option>
+                {cityArr.map((item) => (
+                  <Option value={item.valueEn} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
               </SelectGroup>
             </FormItem>
 

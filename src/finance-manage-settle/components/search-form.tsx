@@ -5,6 +5,7 @@ import moment from 'moment';
 import { noop } from 'qmkit';
 import { Relax } from 'plume2';
 import { IMap } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const AutoOption = AutoComplete.Option;
@@ -120,7 +121,7 @@ export default class SearchForm extends React.Component<any, any> {
                 fetchSettleList();
               }}
             >
-              搜索
+              {<FormattedMessage id="search" />}
             </Button>
           </FormItem>
         </Form>

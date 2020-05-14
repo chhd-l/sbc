@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 
 import { noop } from 'qmkit';
 import List from './list';
+import { FormattedMessage } from 'react-intl';
 
 const TableBox = styled.div`
   .ant-table-thead > tr > th,
@@ -40,14 +41,13 @@ export default class TabList extends React.Component<any, any> {
           }}
           activeKey={queryParams.get('settleStatus').toString()}
         >
-          <Tabs.TabPane tab="未结算" key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="unsettlement" />} key="0">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="已结算" key="1">
+          <Tabs.TabPane tab={<FormattedMessage id="settled" />} key="1">
             <List />
           </Tabs.TabPane>
-
         </Tabs>
       </TableBox>
     );

@@ -9,6 +9,7 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
 import TabList from './components/tab-list';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class FinancialSettlement extends React.Component<any, any> {
@@ -30,19 +31,19 @@ export default class FinancialSettlement extends React.Component<any, any> {
           </Breadcrumb> */}
           <div className="container">
             <Headline
-              title="财务结算"
-              smallTitle={`您的结算日是每月${this.store
+              title={<FormattedMessage id="financialSettlement" />}
+              smallTitle={`Your settlement date is ${this.store
                 .state()
                 .get(
                   'accountDay'
-                )}日，当月不包含所设日期时，将会顺延到下一个结算日`}
+                )}th of each month, when the month does not include the set date, it will be postponed to the next settlement date`}
             />
 
             <SearchForm />
             <AuthWrapper functionName="f_settle_export">
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulkExport()}>
-                  批量导出
+                  {<FormattedMessage id="bulkExport" />}
                 </Button>
               </div>
             </AuthWrapper>

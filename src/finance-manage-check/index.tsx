@@ -8,6 +8,7 @@ import AppStore from './store';
 import SearchForm from './components/search-form';
 import RefundList from './components/refund-list';
 import RevenueList from './components/revenue-list';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class FinancialAccounts extends React.Component<any, any> {
@@ -33,12 +34,14 @@ export default class FinancialAccounts extends React.Component<any, any> {
             <Breadcrumb.Item>财务对账</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="财务对账" />
+            <Headline
+              title={<FormattedMessage id="financialReconciliation" />}
+            />
             <SearchForm />
             <AuthWrapper functionName="f_check_export">
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulk_export()}>
-                  批量导出
+                  {<FormattedMessage id="bulkExport" />}
                 </Button>
               </div>
             </AuthWrapper>
@@ -46,12 +49,18 @@ export default class FinancialAccounts extends React.Component<any, any> {
               onChange={(key) => this.store.onTabChange(key)}
               activeKey={this.store.state().get('tabKey')}
             >
-              <Tabs.TabPane tab="收入对账" key="1">
+              <Tabs.TabPane
+                tab={<FormattedMessage id="revenueReconciliation" />}
+                key="1"
+              >
                 {/*收入对账*/}
                 <RevenueList />
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="退款对账" key="2">
+              <Tabs.TabPane
+                tab={<FormattedMessage id="refundReconciliation" />}
+                key="2"
+              >
                 {/*退款对账*/}
                 <RefundList />
               </Tabs.TabPane>

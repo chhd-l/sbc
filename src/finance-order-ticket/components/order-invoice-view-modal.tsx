@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Modal, Form } from 'antd';
 import { noop } from 'qmkit';
 import OrderInvoiceViewForm from './order-invoice-view-form';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class OrderInvoiceViewModal extends React.Component<any, any> {
@@ -32,8 +33,9 @@ export default class OrderInvoiceViewModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal  maskClosable={false}
-        title={`订单开票详情`}
+      <Modal
+        maskClosable={false}
+        title={<FormattedMessage id="orderDetails" />}
         visible={viewVisible}
         onOk={() => onViewHide()}
         onCancel={() => onViewHide()}

@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Button, message } from 'antd';
 
 import { history, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class ButtonGroup extends React.Component<any, any> {
@@ -21,7 +22,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       <AuthWrapper functionName="f_vendor_new_accounts">
         <div className="handle-bar">
           <Button type="primary" onClick={() => this._toNewAccounts()}>
-            新增账号
+            {<FormattedMessage id="addAccount" />}
           </Button>
         </div>
       </AuthWrapper>

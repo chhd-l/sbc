@@ -1,7 +1,7 @@
 //财务-资金管理-订单开票
 import React from 'react';
 import { Breadcrumb } from 'antd';
-import { Headline, AuthWrapper,BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 
@@ -12,6 +12,7 @@ import OrderInvoiceAddModal from './components/order-invoice-modal';
 import OrderInvoiceViewModal from './components/order-invoice-view-modal';
 
 import { StoreProvider } from 'plume2';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class FinanceOrderReceive extends React.Component<any, any> {
@@ -37,14 +38,14 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
     return (
       <AuthWrapper functionName="fetchOrderInovices">
         <div>
-          <BreadCrumb/>
+          <BreadCrumb />
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>财务</Breadcrumb.Item>
             <Breadcrumb.Item>开票管理</Breadcrumb.Item>
             <Breadcrumb.Item>订单开票</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="订单开票" />
+            <Headline title={<FormattedMessage id="orderInvoice" />} />
             <SearchForm />
             <ButtonGroup />
             <OrderInvoiceList />

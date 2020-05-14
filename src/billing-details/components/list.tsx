@@ -6,6 +6,7 @@ import { IList } from 'typings/globalType';
 import { AuthWrapper, noop, util } from 'qmkit';
 
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const DateTable = styled.div`
   .ant-table-thead > tr.ant-table-row-hover > td,
@@ -59,7 +60,7 @@ export default class List extends React.Component<any, any> {
             disabled={settleList.length == 0}
             onClick={() => exportSettlementDetailList(this.props.settleId)}
           >
-            导出明细
+            {<FormattedMessage id="exportDetails" />}
           </Button>
         </AuthWrapper>
         <DateTable>
@@ -71,7 +72,7 @@ export default class List extends React.Component<any, any> {
             onExpandedRowsChange={(expandedRows) => {
               this._onExpandedRowsChange(expandedRows);
             }}
-            scroll={{ x: 2500, y: 600 }}
+            scroll={{ y: 600 }}
             rowClassName={() => {
               return 'tableRowCss';
             }}
@@ -88,7 +89,7 @@ export default class List extends React.Component<any, any> {
   _renderColumns = (): any[] => {
     return [
       {
-        title: '序号',
+        title: 'Serial Number',
         key: 'index',
         dataIndex: 'index',
         render: (value, row) => {
@@ -97,7 +98,7 @@ export default class List extends React.Component<any, any> {
         width: 80
       },
       {
-        title: '订单入账时间',
+        title: 'Order Credit Time',
         dataIndex: 'finalTime',
         key: 'finalTime',
         render: (value, row) => {
@@ -106,7 +107,7 @@ export default class List extends React.Component<any, any> {
         width: 120
       },
       {
-        title: '订单编号',
+        title: 'Order Number',
         dataIndex: 'tradeCode',
         key: 'tradeCode',
         render: (value, row) => {
@@ -115,13 +116,13 @@ export default class List extends React.Component<any, any> {
         width: 110
       },
       {
-        title: '订单类型',
+        title: 'Order Type',
         dataIndex: 'orderType',
         key: 'orderType',
         width: 110
       },
       {
-        title: '商品编码/名称/规格',
+        title: 'Product code/name/weight',
         dataIndex: 'goodsName',
         key: 'goodsName',
         width: 220,
@@ -163,13 +164,13 @@ export default class List extends React.Component<any, any> {
         }
       },
       {
-        title: '所属类目',
+        title: 'Category',
         dataIndex: 'cateName',
         key: 'cateName',
         width: 80
       },
       {
-        title: '商品单价',
+        title: 'Product Price',
         dataIndex: 'goodsPrice',
         key: 'goodsPrice',
         render: (value) => {
@@ -178,126 +179,31 @@ export default class List extends React.Component<any, any> {
         width: 100
       },
       {
-        title: '数量',
+        title: 'Quantity',
         dataIndex: 'num',
         key: 'num',
         width: 50
       },
+
       {
-        title: '满减优惠',
-        dataIndex: 'reductionPrice',
-        key: 'reductionPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 80
-      },
-      {
-        title: '满折优惠',
-        dataIndex: 'discountPrice',
-        key: 'discountPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 80
-      },
-      {
-        title: '店铺券优惠',
-        dataIndex: 'storeCouponPrice',
-        key: 'storeCouponPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 95
-      },
-      {
-        title: '通用券优惠',
-        dataIndex: 'commonCouponPriceString',
-        key: 'commonCouponPriceString',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 95
-      },
-      {
-        title: '积分抵扣',
-        dataIndex: 'pointPrice',
-        key: 'pointPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 95
-      },
-      {
-        title: '订单改价差额',
-        key: 'specialPrice',
-        dataIndex: 'specialPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value, false, true);
-        },
-        width: 150
-      },
-      {
-        title: '商品实付金额',
-        dataIndex: 'splitPayPrice',
-        key: 'splitPayPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 100
-      },
-      {
-        title: '类目扣率',
-        dataIndex: 'cateRate',
-        key: 'cateRate',
-        width: 100
-      },
-      {
-        title: '平台佣金',
-        key: 'platformPriceString',
-        dataIndex: 'platformPriceString',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 100
-      },
-      {
-        title: '分销佣金',
-        key: 'commission',
-        dataIndex: 'commission',
-        render: (value) => {
-          return util.FORMAT_YUAN(value);
-        },
-        width: 100
-      },
-      {
-        title: '运费',
+        title: 'Freight',
         dataIndex: 'deliveryPrice',
         key: 'deliveryPrice',
         render: (value, row) => {
           return this._handleRowSpan(row, util.FORMAT_YUAN(value));
         },
         width: 100
-      },
-      {
-        title: '退单改价差额',
-        dataIndex: 'returnSpecialPrice',
-        key: 'returnSpecialPrice',
-        render: (value, row) => {
-          return this._handleRowSpan(row, util.FORMAT_YUAN(value));
-        },
-        width: 100
-      },
-      {
-        title: '店铺应收金额',
-        key: 'storePrice',
-        dataIndex: 'storePrice',
-        fixed: 'right',
-        render: (value, row) => {
-          return this._handleRowSpan(row, util.FORMAT_YUAN(value));
-        },
-        width: 140
       }
+      // {
+      //   title: '店铺应收金额',
+      //   key: 'storePrice',
+      //   dataIndex: 'storePrice',
+      //   fixed: 'right',
+      //   render: (value, row) => {
+      //     return this._handleRowSpan(row, util.FORMAT_YUAN(value));
+      //   },
+      //   width: 140
+      // }
     ];
   };
 

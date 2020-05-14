@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Form } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -57,33 +58,54 @@ export default class OrderInvoiceViewForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="开票状态">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="invoiceStatus" />}
+        >
           <label>{invoiceStateDic[invoiceView.get('invoiceState')]}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="订单号">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="orderNumber" />}
+        >
           <label>{invoiceView.get('orderNo')}</label>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="客户名称">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="consumerName" />}
+        >
           <label>{invoiceView.get('customerName')}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="订单金额">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="orderAmount" />}
+        >
           <label>
             {'￥'}
             {invoiceView.get('orderPrice') &&
               invoiceView.get('orderPrice').toFixed(2)}
           </label>
         </FormItem>
-        <FormItem {...formItemLayout} label="付款状态">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="paymentStatus" />}
+        >
           <label>{payOrderStatusDic[invoiceView.get('payOrderStatus')]}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="发票类型">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="invoiceType" />}
+        >
           <label>{invoiceType[invoiceView.get('invoiceType')]}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="发票抬头">
-          <label>{invoiceView.get('invoiceTitle') || '个人'}</label>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="invoice.invoiceHeader" />}
+        >
+          <label>{invoiceView.get('invoiceTitle') || 'personal'}</label>
         </FormItem>
-        {invoiceView.get('taxNo') ? (
+        {/* {invoiceView.get('taxNo') ? (
           <FormItem {...formItemLayout} label="纳税人识别号">
             <label>{invoiceView.get('taxNo') || '无'}</label>
           </FormItem>
@@ -103,14 +125,23 @@ export default class OrderInvoiceViewForm extends React.Component<any, any> {
               <label>{invoiceView.get('bankName')}</label>
             </FormItem>
           </div>
-        ) : null}
-        <FormItem {...formItemLayout} label="开票项目">
+        ) : null} */}
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="billingItems" />}
+        >
           <label>{invoiceView.get('projectName')}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="发票收件信息">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="invoiceReceiptInformation" />}
+        >
           <label>{invoiceView.get('invoiceAddress')}</label>
         </FormItem>
-        <FormItem {...formItemLayout} label="开票时间">
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="billingTime" />}
+        >
           <label>
             {invoiceView.get('invoiceTime')
               ? moment(invoiceView.get('invoiceTime'))

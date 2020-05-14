@@ -91,8 +91,6 @@ export default {
   'cancel': '取消',
 
 
-
-  "serialNumber": "序号",
   "shipped": "已发货数",
   "thisShipment": "本次发货数",
 
@@ -224,4 +222,102 @@ export default {
   "refundableAmount": "应退金额",
   "pointsRefundable": "应退积分",
   "commodity": '商品',
+
+
+  'partnerAccount':'商家收款账户',
+  'instructions':'操作说明',
+  'financeTips1':'1、平台会给您首次创建的银行账户进行一笔小额打款，平台打款后您可以看到收到打款按钮，确认后您的账号才生效;',
+  'financeTips2':'2、您可将通过打款验证的任何一个账户设为主账户，平台给您结算时会优先打款至主账户;',
+  'storeName':'店铺名称' ,
+  'petFoodStore':'宠物粮食店',
+  'entryTime': '入驻时间',
+  'partnerID': '商家编号',
+  'contractValidity': '合同有效期',
+  'addAccount' :'新增账号',
+  'bank':'银行',
+  'accountName':'帐户名',
+  'subBranch':'支行',
+  'receivePayment':'收到平台打款',
+  'mainAccount':'主账号' ,
+  'changeAccount':'变更当前收款账户',
+  'deleteAccount':'删除账号',
+  'setMainAccount':'设置主账号',
+
+  'financialReconciliation'	:'财务对账',
+'bulkExport':'批量导出',
+'revenueReconciliation':	'收入对账',
+'refundReconciliation'	:'退款对账',
+'VISA':	'VISA',
+'AMERICAN EXPRESS'	:'AMERICAN EXPRESS',
+'masterCard':	'MasterCard',
+
+'balance'	:'余额',
+'total2'	:'合计',
+'revenueReconciliationDetails':	'收入对账明细',
+'paymentChannel':	'支付渠道',
+'transactionSerialNumber':	'交易流水号',
+'export':	'导出',
+'paymentTime':	'支付时间',
+'paymentAmount'	:'支付金额',
+
+
+
+'financialSettlement':'财务结算',
+'settlementTips1':"您的结算日是每月"	,
+'settlementTips2':"日，当月不包含所设日期时，将会顺延到下一个结算日",
+// 'settlementTips':'Your settlement date is 1,15th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
+
+'unsettlement':'未结算'	,
+'settled':'已结算'	,
+'statementGenerationTime':'结算单生成时间'	,
+'statementNumber':'结算单号'	,
+'billingPeriod':'结算时间段'	,
+'statementTime':'结算时间'	,
+'totalPaidGoods':'商品实付总额'	,
+'totalFreight':'运费总额'	,
+
+'inquiryDetails':'查询明细'	,
+'settlementDetails':'结算明细'	,
+'exportDetails':'导出明细'	,
+
+'orderCreditTime':'订单入账时间'	,
+'orderType':'订单类型' ,
+// 'Product code / name / weight':'商品编码/名称/规格'	,
+'category':'所属类目'	,
+'productPrice':'商品单价'	,
+'freight':'运费'	,
+
+'orderInvoice':'订单开票'	,
+
+'invoiceStatus':'开票状态'	,
+
+'add':'新增'	,
+'bulkOperation':'批量操作'	,
+'bulkInvoice':'批量开票'	,
+
+'billingTime':'开票时间'	,
+'orderAmount':'订单金额'	,
+'invoiceType':'发票类型'	,
+
+
+'ordinaryInvoice':'普通发票'	,
+'personal':'个人'	,
+'toBeInvoiced':'待开票'	,
+'billing':'开票'	,
+'billingItems':'开票项目' ,
+
+'supportedBillingTypes':'支持的开票类型',
+'doesNotSupportInvoicing':'不支持开票'	,
+
+'vatSpecialInvoice':'增值税专用发票'	,
+'saveSettings':'保存设置'	,
+"invoiceReceiptInformation":"发票收件信息",
+'Edit':'编辑'	,
+'Delete':'删除'	,
+
+
+
+
+   
+
 };

@@ -12,18 +12,19 @@ import AccountModal from './components/account-modal';
 import MoneyModal from './components/money-modal';
 import DeleteModal from './components/delete-modal';
 import MainModal from './components/main-modal';
+import { FormattedMessage } from 'react-intl';
 
 const AccountModalForm = Form.create({})(AccountModal);
 
 let factory = React.createFactory('div');
-let child1 = factory(null, '操作说明:');
+let child1 = factory(null, 'Instructions:');
 let child2 = factory(
   null,
-  '1、平台会给您首次创建的银行账户进行一笔小额打款，平台打款后您可以看到收到打款按钮，确认后您的账号才生效;'
+  '1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;'
 );
 let child3 = factory(
   null,
-  '2、您可将通过打款验证的任何一个账户设为主账户，平台给您结算时会优先打款至主账户；'
+  '2. You can set any account that passes the verification as the main account, and the platform will give priority to the main account when you settle the payment;'
 );
 let tips = React.createElement('div', null, child1, child2, child3);
 
@@ -46,7 +47,7 @@ export default class VendorPaymentAccount extends React.Component<any, any> {
             <Breadcrumb.Item>商家收款账户</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="商家收款账户" />
+            <Headline title={<FormattedMessage id="partnerAccount" />} />
             <Alert message={tips} type="info" showIcon />
             <Info />
 

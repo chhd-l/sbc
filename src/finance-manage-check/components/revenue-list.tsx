@@ -1,6 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, history, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const { Column } = DataGrid;
 
 @Relax
@@ -30,7 +31,7 @@ export default class RevenueList extends React.Component<any, any> {
     } = this.props.relaxProps;
     return (
       <div>
-        <div className="totalAmount">
+        {/* <div className="totalAmount">
           <ul>
             {incomeTotal.toJS().length > 0
               ? incomeTotal.map((v, i) => {
@@ -53,7 +54,7 @@ export default class RevenueList extends React.Component<any, any> {
                 })
               : null}
           </ul>
-        </div>
+        </div> */}
 
         <div>
           <DataGrid
@@ -62,7 +63,7 @@ export default class RevenueList extends React.Component<any, any> {
             pagination={false}
           >
             <Column
-              title="序号"
+              title={<FormattedMessage id="serialNumber" />}
               dataIndex="index"
               key="index"
               width="50"
@@ -70,7 +71,7 @@ export default class RevenueList extends React.Component<any, any> {
                 return index + 1;
               }}
             />
-            <Column
+            {/* <Column
               title="转账汇款"
               dataIndex="CASH"
               key="CASH"
@@ -123,9 +124,18 @@ export default class RevenueList extends React.Component<any, any> {
               render={(_text, rowData: any) => {
                 return <span>{rowData.payItemAmountMap.POINT}</span>;
               }}
+            /> */}
+            <Column
+              title="PayU"
+              dataIndex="PayU"
+              key="PayU"
+              width="100"
+              render={(_text, rowData: any) => {
+                return <span>{rowData.payItemAmountMap.POINT}</span>;
+              }}
             />
             <Column
-              title="余额"
+              title={<FormattedMessage id="balance" />}
               dataIndex="BALANCE"
               key="BALANCE"
               width="100"
@@ -161,13 +171,13 @@ export default class RevenueList extends React.Component<any, any> {
             {/*}}*/}
             {/*/>*/}
             <Column
-              title="合计"
+              title={<FormattedMessage id="total2" />}
               dataIndex="totalAmount"
               key="totalAmount"
               width="100"
             />
             <Column
-              title="操作"
+              title={<FormattedMessage id="operation" />}
               dataIndex="operate"
               key="operate"
               width="100"
@@ -188,7 +198,7 @@ export default class RevenueList extends React.Component<any, any> {
                         })
                       }
                     >
-                      明细
+                      {<FormattedMessage id="details" />}
                     </a>
                   </AuthWrapper>
                 );

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { noop, DataGrid } from 'qmkit';
 import { IList } from 'typings/globalType';
 const { Column } = DataGrid;
+import { FormattedMessage } from 'react-intl';
 
 const Content = styled.div`
   padding-bottom: 20px;
@@ -101,9 +102,11 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约类目</H2>
+            <H2>
+              <FormattedMessage id="signedCategory" />
+            </H2>
             <GreyText>
-              已签约{cateList.length}个类目 最多可签约200个类目
+              {cateList.length} <FormattedMessage id="signedCategoryInfo" />
             </GreyText>
             <Button onClick={this._showSortsModal}>编辑签约类目</Button>
           </div>
@@ -114,19 +117,19 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="类目"
+                title={<FormattedMessage id="category" />}
                 dataIndex="cateName"
                 key="cateName"
                 width="15%"
               />
               <Column
-                title="上级类目"
+                title={<FormattedMessage id="superiorCategory" />}
                 dataIndex="parentGoodCateNames"
                 key="parentGoodCateNames"
                 width="20%"
               />
               <Column
-                title="类目扣率"
+                title={<FormattedMessage id="categoryDeductionRate" />}
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -140,7 +143,7 @@ export default class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title="经营资质"
+                title={<FormattedMessage id="businessQualification" />}
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"

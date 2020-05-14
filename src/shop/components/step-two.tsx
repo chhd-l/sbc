@@ -16,6 +16,7 @@ import {
 import styled from 'styled-components';
 import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const front = require('../img/front.png');
 const back = require('../img/back.png');
@@ -27,12 +28,12 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 10 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 10 }
   }
 };
 
@@ -177,7 +178,7 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={true}
-                label="统一社会信用代码"
+                label={<FormattedMessage id="unifiedSocialCreditCode" />}
               >
                 {getFieldDecorator('socialCreditCode', {
                   initialValue: info.get('socialCreditCode'),
@@ -201,7 +202,11 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} required={true} label="企业名称">
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="enterpriseName" />}
+              >
                 {getFieldDecorator('companyName', {
                   initialValue: info.get('companyName'),
                   rules: [
@@ -233,7 +238,10 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="住所">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="address" />}
+              >
                 {getFieldDecorator('address', {
                   initialValue: info.get('address'),
                   rules: [
@@ -263,7 +271,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="法定代表人">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="legalRepresentative" />}
+              >
                 {getFieldDecorator('legalRepresentative', {
                   initialValue: info.get('legalRepresentative'),
                   rules: [
@@ -295,7 +306,10 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="注册资本">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="registeredCapital" />}
+              >
                 {getFieldDecorator('registeredCapital', {
                   initialValue: info.get('registeredCapital'),
                   rules: [
@@ -331,7 +345,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="成立日期">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="establishmentDate" />}
+              >
                 {getFieldDecorator('foundDate', {
                   ...foundDate,
                   rules: [
@@ -363,7 +380,10 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限自">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="businessPeriodSince" />}
+              >
                 {getFieldDecorator('businessTermStart', {
                   ...businessTermStart,
                   rules: [
@@ -393,7 +413,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限至">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="businessPeriodTo" />}
+              >
                 {getFieldDecorator('businessTermEnd', {
                   ...businessTermEnd,
                   rules: [
@@ -428,7 +451,7 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 required={true}
                 {...newtailFormItemLayout}
-                label="经营范围"
+                label={<FormattedMessage id="businessScope" />}
               >
                 {getFieldDecorator('businessScope', {
                   initialValue: info.get('businessScope'),
@@ -465,7 +488,9 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 required={true}
                 {...formItemLayout}
-                label="营业执照副本电子版"
+                label={
+                  <FormattedMessage id="electronicCopyOfBusinessLicense" />
+                }
               >
                 <PicBox>
                   <QMUpload
@@ -502,7 +527,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="法人身份证">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="corporateIdentityCard" />}
+              >
                 <PicBox>
                   <QMUpload
                     name="uploadFile"
@@ -583,8 +611,13 @@ export default class StepTwo extends React.Component<any, any> {
     const form = this.props.form;
     form.validateFields(null, (errs) => {
       //时间都填了且截至时间小于或等于起始时间
-      if (form.getFieldValue('businessTermStart') && form.getFieldValue('businessTermEnd')
-        && !form.getFieldValue('businessTermStart').isBefore(form.getFieldValue('businessTermEnd'))) {
+      if (
+        form.getFieldValue('businessTermStart') &&
+        form.getFieldValue('businessTermEnd') &&
+        !form
+          .getFieldValue('businessTermStart')
+          .isBefore(form.getFieldValue('businessTermEnd'))
+      ) {
         form.resetFields(['businessTermEnd']);
         let errorObject = {};
         errorObject['businessTermEnd'] = {

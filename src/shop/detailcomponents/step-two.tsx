@@ -4,18 +4,19 @@ import { Row, Col, Form, Modal } from 'antd';
 import styled from 'styled-components';
 
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 8 }
+    sm: { span: 12 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 16 }
+    sm: { span: 12 }
   }
 };
 
@@ -23,12 +24,12 @@ const formItemPhoto = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 8 }
+    sm: { span: 12 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 16 }
+    sm: { span: 12 }
   }
 };
 
@@ -103,7 +104,7 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={true}
-                label="统一社会信用代码"
+                label={<FormattedMessage id="unifiedSocialCreditCode" />}
               >
                 <p style={{ color: '#333' }}>
                   {company && info.get('socialCreditCode')
@@ -113,7 +114,11 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} required={true} label="企业名称">
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="enterpriseName" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('companyName')
                     ? info.get('companyName')
@@ -122,14 +127,20 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="住所">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="address" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('address') ? info.get('address') : '无'}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="法定代表人">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="legalRepresentative" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('legalRepresentative')
                     ? info.get('legalRepresentative')
@@ -138,7 +149,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="注册资本">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="registeredCapital" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('registeredCapital')
                     ? info.get('registeredCapital') + '万元'
@@ -147,7 +161,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="成立日期">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="establishmentDate" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('foundDate')
                     ? moment(info.get('foundDate')).format('YYYY年MM月DD日')
@@ -156,7 +173,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限自">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="businessPeriodSince" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('businessTermStart')
                     ? moment(info.get('businessTermStart')).format(
@@ -167,7 +187,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限至">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="businessPeriodTo" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('businessTermEnd')
                     ? moment(info.get('businessTermEnd')).format(
@@ -179,7 +202,11 @@ export default class StepTwo extends React.Component<any, any> {
             </Col>
 
             <Col span={12}>
-              <FormItem required={true} {...formItemLayout} label="经营范围">
+              <FormItem
+                required={true}
+                {...formItemLayout}
+                label={<FormattedMessage id="businessScope" />}
+              >
                 <p style={{ color: '#333' }}>
                   {company && info.get('businessScope')
                     ? info.get('businessScope')
@@ -193,13 +220,18 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 required={true}
                 {...formItemPhoto}
-                label="营业执照副本电子版"
+                label={
+                  <FormattedMessage id="electronicCopyOfBusinessLicense" />
+                }
               >
                 <PicBox>{this._renderBussinessLicence(businessLicence)}</PicBox>
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="法人身份证">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="corporateIdentityCard" />}
+              >
                 <PicBox>{this._renderBussinessLicence(IDImages)}</PicBox>
               </FormItem>
             </Col>

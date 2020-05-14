@@ -4,6 +4,7 @@ import { IMap, Relax } from 'plume2';
 import { Tag } from 'antd';
 import styled from 'styled-components';
 import { DataGrid } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { Column } = DataGrid;
 
@@ -78,15 +79,19 @@ export default class StepFour extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>结算日</H2>
+            <H2>
+              <FormattedMessage id="settlementDate" />
+            </H2>
             <GreyText>
-              已添加{accountDays ? accountDays.length : 0}
-              个结算日，最多可添加5个结算日
+              {accountDays ? accountDays.length : 0}{' '}
+              <FormattedMessage id="settlementDateInfo1" />
             </GreyText>
           </div>
 
           <AddBox>
-            <h2>每月：</h2>
+            <h2>
+              <FormattedMessage id="everyMonth" />：
+            </h2>
             <div>
               <div>
                 {accountDays.length > 0
@@ -98,9 +103,9 @@ export default class StepFour extends React.Component<any, any> {
                       );
                     })
                   : null}
-                日
+                <FormattedMessage id="day" />
                 <GreyText>
-                  当月不包含所设日期时，将会顺延到下一个结算日
+                  <FormattedMessage id="settlementDateInfo2" />
                 </GreyText>
               </div>
             </div>
@@ -110,14 +115,15 @@ export default class StepFour extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 20 }}>
             <Red>*</Red>
-            <H2>结算银行账户 </H2>
+            <H2>
+              <FormattedMessage id="settlementBankAccount" />{' '}
+            </H2>
             <GreyText>
-              已添加{offlineAccount ? offlineAccount.count() : 0}
-              个结算账户，最多可添加5个结算账户，如需修改结算账户请在财务模块操作
+              {offlineAccount ? offlineAccount.count() : 0}{' '}
+              <FormattedMessage id="settlementDateInfo3" />
             </GreyText>
           </div>
         </Content>
-
         <Content>
           <NoBorder>
             <DataGrid
@@ -126,21 +132,33 @@ export default class StepFour extends React.Component<any, any> {
               rowKey="accountId"
             >
               <Column
-                title="序号"
+                title={<FormattedMessage id="No." />}
                 dataIndex="accountId"
                 key="accountId"
                 render={(_text, _rowData: any, index) => {
                   return index + 1;
                 }}
               />
-              <Column title="银行" dataIndex="bankName" key="bankName" />
               <Column
-                title="账户名"
+                title={<FormattedMessage id="bank" />}
+                dataIndex="bankName"
+                key="bankName"
+              />
+              <Column
+                title={<FormattedMessage id="accountName" />}
                 dataIndex="accountName"
                 key="accountName"
               />
-              <Column title="账号" dataIndex="bankNo" key="bankNo" />
-              <Column title="支行" dataIndex="bankBranch" key="bankBranch" />
+              <Column
+                title={<FormattedMessage id="account" />}
+                dataIndex="bankNo"
+                key="bankNo"
+              />
+              <Column
+                title={<FormattedMessage id="sub-branch" />}
+                dataIndex="bankBranch"
+                key="bankBranch"
+              />
               <Column
                 title="收到平台打款"
                 dataIndex="isReceived"
@@ -148,7 +166,7 @@ export default class StepFour extends React.Component<any, any> {
                 render={(isReceived) => (isReceived == 1 ? '已验证' : '未验证')}
               />
               <Column
-                title="主账号"
+                title={<FormattedMessage id="mainAccount" />}
                 align="center"
                 dataIndex="isDefaultAccount"
                 key="isDefaultAccount"

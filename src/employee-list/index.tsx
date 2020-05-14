@@ -40,7 +40,7 @@ export default class EmployeeList extends React.Component<any, any> {
         </Breadcrumb> */}
         <AuthWrapper functionName="fetchEmploy">
           <div className="container">
-            <Headline title="员工列表" />
+            <Headline title={<FormattedMessage id="employeeList" />} />
 
             <WrapperForm ref={(form) => (window['_form'] = form)} />
 

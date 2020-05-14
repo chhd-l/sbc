@@ -5,6 +5,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { DataGrid } from 'qmkit';
 import { Relax, IMap } from 'plume2';
+import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
 const { Column } = DataGrid;
@@ -88,9 +89,12 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约类目</H2>
+            <H2>
+              <FormattedMessage id="signedCategory" />
+            </H2>
             <GreyText>
-              已签约{cateList ? cateList.length : 0}个类目 最多可签约200个类目
+              {cateList ? cateList.length : 0}{' '}
+              <FormattedMessage id="signedCategoryInfo" />
             </GreyText>
           </div>
           <TableBox>
@@ -101,19 +105,19 @@ export default class StepThree extends React.Component<any, any> {
               rowKey="contractCateId"
             >
               <Column
-                title="类目"
+                title={<FormattedMessage id="category" />}
                 dataIndex="cateName"
                 key="cateName"
                 width="15%"
               />
               <Column
-                title="上级类目"
+                title={<FormattedMessage id="superiorCategory" />}
                 dataIndex="parentGoodCateNames"
                 key="parentGoodCateNames"
                 width="20%"
               />
               <Column
-                title="类目扣率"
+                title={<FormattedMessage id="categoryDeductionRate" />}
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -127,7 +131,7 @@ export default class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title="经营资质"
+                title={<FormattedMessage id="businessQualification" />}
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"

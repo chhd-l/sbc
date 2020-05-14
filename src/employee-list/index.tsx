@@ -1,7 +1,7 @@
 import React from 'react';
-import { Row,Col,Button } from 'antd';
+import { Row, Col, Button } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb,cache,AuthWrapper} from 'qmkit';
+import { Headline, BreadCrumb, cache, AuthWrapper } from 'qmkit';
 import List from './components/list';
 import SearchForm from './components/search-form';
 import ButtonGroup from './components/button-group';
@@ -12,6 +12,7 @@ import OperateModal from './components/modal';
 import EmployeeConnectModal from './components/employee-connect-modal';
 import EmployeeAdjustModal from './components/employee-adjust-modal';
 import DepartTree from './components/depart-tree';
+import { FormattedMessage } from 'react-intl';
 
 const WrapperForm = Form.create()(SearchForm as any);
 const ModalForm = Form.create()(OperateModal as any);
@@ -23,10 +24,10 @@ export default class EmployeeList extends React.Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
-    this.store.init();        
+    this.store.init();
   }
 
-  render() {    
+  render() {
     //计算部门人数总和
     const totolEmployeeNum = this.store.state().get('countNum');
     return (
@@ -38,67 +39,81 @@ export default class EmployeeList extends React.Component<any, any> {
           <Breadcrumb.Item>员工列表</Breadcrumb.Item>
         </Breadcrumb> */}
         <AuthWrapper functionName="fetchEmploy">
-        <div className="container">
-          <Headline title="员工列表" />
+          <div className="container">
+            <Headline title="员工列表" />
 
-          <WrapperForm ref={(form) => (window['_form'] = form)} />
+            <WrapperForm ref={(form) => (window['_form'] = form)} />
 
-          <ButtonGroup />
+            <ButtonGroup />
 
-          <Row>
-            <Col span={3}>
-              <p style={Object.assign({ cursor: 'pointer' },this.state.click?{color:'#F56C1D'}:{})} 
-              onClick={()=>this._showAll()}>{`全部部门  ${totolEmployeeNum}`}</p>
-              { this.store.state().get('departTree').size>0 
-              && this.store.state().get('defaultExpandedKeys').length>0 
-              && <DepartTree/> }              
-            </Col>     
-            <Col span={1}></Col>
-            <Col span={20}>                          
-              <List />
-            </Col>             
-          </Row>
+            <Row>
+              <Col span={3}>
+                <p
+                  style={Object.assign(
+                    { cursor: 'pointer' },
+                    this.state.click ? { color: '#F56C1D' } : {}
+                  )}
+                  onClick={() => this._showAll()}
+                >
+                  <FormattedMessage id="allDepartment" />{' '}
+                  {`${totolEmployeeNum}`}
+                </p>
+                {this.store.state().get('departTree').size > 0 &&
+                  this.store.state().get('defaultExpandedKeys').length > 0 && (
+                    <DepartTree />
+                  )}
+              </Col>
+              <Col span={1}></Col>
+              <Col span={20}>
+                <List />
+              </Col>
+            </Row>
 
-          <EmployeeModal />
+            <EmployeeModal />
 
-          {/* 业务员交接弹框 */}
-          <EmployeeConnectForm/>
+            {/* 业务员交接弹框 */}
+            <EmployeeConnectForm />
 
-          {/* 调整部门弹框 */}
-          <EmployeeAdjustForm/>
+            {/* 调整部门弹框 */}
+            <EmployeeAdjustForm />
 
-          {/* 禁用弹框 */}
-          <ModalForm />
-        </div>
+            {/* 禁用弹框 */}
+            <ModalForm />
+          </div>
         </AuthWrapper>
       </div>
     );
   }
 
-  _calculate=(list)=>{    
-     return list.reduce((pre,current)=>{
-       pre = pre + current.get('employeeNum')
-       return pre;
-     },this.store.state().get('restNum'))
-  }
+  _calculate = (list) => {
+    return list.reduce((pre, current) => {
+      pre = pre + current.get('employeeNum');
+      return pre;
+    }, this.store.state().get('restNum'));
+  };
 
-  _showAll=()=>{    
-    this.setState({
-      click:!this.state.click
-    },()=>{
-      this.store.toggleClick();
-      if(this.state.click){   
-        this.store.lastDepartmentIds(this.store.state().get('searchForm').get('departmentIds'));      
-        this.store.onFormChange({
-          field: 'departmentIds',
-          value: []
-        });   
-      }else{
-        this.store.onFormChange({
-          field: 'departmentIds',
-          value:this.store.state().get('lastDepartmentIds')
-        });   
+  _showAll = () => {
+    this.setState(
+      {
+        click: !this.state.click
+      },
+      () => {
+        this.store.toggleClick();
+        if (this.state.click) {
+          this.store.lastDepartmentIds(
+            this.store.state().get('searchForm').get('departmentIds')
+          );
+          this.store.onFormChange({
+            field: 'departmentIds',
+            value: []
+          });
+        } else {
+          this.store.onFormChange({
+            field: 'departmentIds',
+            value: this.store.state().get('lastDepartmentIds')
+          });
+        }
       }
-    })
-  }   
+    );
+  };
 }

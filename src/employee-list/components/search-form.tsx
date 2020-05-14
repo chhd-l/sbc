@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Button, Form, Input, Select } from 'antd';
 import { noop, SelectGroup } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -33,7 +34,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="员工姓名"
+            addonBefore={<FormattedMessage id="employeeName" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -46,7 +47,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="员工手机"
+            addonBefore={<FormattedMessage id="employeePhone" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -59,7 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="工号"
+            addonBefore={<FormattedMessage id="employeeNo" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -72,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         {/* <FormItem>
           <Input
-            addonBefore="部门"
+            addonBefore={<FormattedMessage id="basicSetting" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -85,7 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         {/* <FormItem>
           <Input
-            addonBefore="账户名称"
+            addonBefore={<FormattedMessage id="basicSetting" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -96,27 +97,27 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem> */}
 
-        <FormItem >
+        <FormItem>
           <SelectGroup
-            label="角色"
-            mode="multiple" 
-            showSearch    
-            getPopupContainer={() => document.getElementById('page-content')}            
-            style={{ width: 300 }}            
+            label={<FormattedMessage id="roles" />}
+            mode="multiple"
+            showSearch
+            getPopupContainer={() => document.getElementById('page-content')}
+            style={{ width: 300 }}
             onChange={(e) => {
               onFormChange({
                 field: 'roleIds',
                 value: e
               });
             }}
-          >       
+          >
             {this._renderOption(roles)}
           </SelectGroup>
         </FormItem>
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="状态"
+            label={<FormattedMessage id="status" />}
             style={{ width: 80 }}
             defaultValue={null}
             onChange={(e) => {
@@ -138,7 +139,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="是否主管"
+            label={<FormattedMessage id="supervisor" />}
             style={{ width: 80 }}
             defaultValue={''}
             onChange={(value) => {
@@ -157,10 +158,10 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="是否业务员"
+            label={<FormattedMessage id="assistant" />}
             style={{ width: 80 }}
             defaultValue={''}
-            onChange={(value) => {              
+            onChange={(value) => {
               onFormChange({
                 field: 'isEmployee',
                 value
@@ -176,7 +177,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="是否激活会员账户"
+            label={<FormattedMessage id="whetherToActivateTheMemberAccount" />}
             style={{ width: 80 }}
             defaultValue={''}
             onChange={(value) => {
@@ -199,7 +200,7 @@ export default class SearchForm extends React.Component<any, any> {
             onClick={() => onSearch()}
             htmlType="submit"
           >
-            搜索
+            <FormattedMessage id="search" />
           </Button>
         </FormItem>
       </Form>

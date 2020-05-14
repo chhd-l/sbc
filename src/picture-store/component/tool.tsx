@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button, Form, Input } from 'antd';
 import { noop, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -35,12 +36,14 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_picturePort_1">
           <Button type="primary" onClick={this._upload}>
-            上传图片
+            {/* 上传图片 */}
+            <FormattedMessage id="uploadImage" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_resourceCate_2">
           <Button type="primary" onClick={this._showModal}>
-            新增分类
+            {/* 新增分类 */}
+            <FormattedMessage id="addCategory" />
           </Button>
         </AuthWrapper>
         <div style={{ float: 'right' }}>
@@ -63,7 +66,7 @@ export default class Tool extends React.Component<any, any> {
                 }}
               >
                 {' '}
-                搜索{' '}
+                <FormattedMessage id="search" />{' '}
               </Button>
             </FormItem>
           </Form>

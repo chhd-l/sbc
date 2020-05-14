@@ -6,6 +6,7 @@ import EquitiesList from './component/role-lists';
 
 import RoleModal from './component/role-modal';
 import RoleTool from './component/role-tool';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class CustomerEquities extends React.Component<any, any> {
@@ -19,7 +20,7 @@ export default class CustomerEquities extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container">
-          <Headline title="角色权限" />
+          <Headline title={<FormattedMessage id="rolePermissions" />} />
           <AuthWrapper functionName={'f_role_add'}>
             {/*工具条*/}
             <RoleTool />

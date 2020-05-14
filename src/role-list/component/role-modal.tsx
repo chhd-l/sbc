@@ -5,6 +5,7 @@ import { noop, QMMethod } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { Map } from 'immutable';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -91,7 +92,9 @@ export default class RoleModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={isAdd ? '新增' : '编辑'}
+        title={
+          isAdd ? <FormattedMessage id="add" /> : <FormattedMessage id="edit" />
+        }
         visible={modalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
@@ -159,7 +162,11 @@ class CateModalForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form className="login-form">
-        <FormItem {...formItemLayout} label="角色名称" hasFeedback>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="roleName" />}
+          hasFeedback
+        >
           {getFieldDecorator('roleName', {
             rules: [
               { required: true, whitespace: true, message: '请输入角色名称' },

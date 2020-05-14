@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { List } from 'immutable';
 import { Tree } from 'antd';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const TreeNode = Tree.TreeNode;
@@ -71,7 +72,9 @@ export default class CateList extends React.Component<any, any> {
 
     return (
       <div>
-        <div style={styles.title}>素材目录</div>
+        <div style={styles.title}>
+          <FormattedMessage id="videoContent" />
+        </div>
         <Tree
           className="draggable-tree"
           autoExpandParent={false}

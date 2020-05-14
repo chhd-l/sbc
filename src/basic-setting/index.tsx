@@ -4,6 +4,7 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import SettingForm from './components/setting-form';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class BasicSetting extends React.Component<any, any> {
@@ -25,7 +26,7 @@ export default class BasicSetting extends React.Component<any, any> {
         <div>
           <BreadCrumb />
           <div className="container">
-            <Headline title="基本设置" />
+            <Headline title={<FormattedMessage id="basicSetting" />} />
             <SettingFormDetail />
           </div>
         </div>

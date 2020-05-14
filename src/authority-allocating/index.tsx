@@ -5,6 +5,7 @@ import AppStore from './store';
 import AuthorityManager from './components/authority-manager';
 
 import { AuthWrapper, Headline, BreadCrumb } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class AuthorityAllocating extends React.Component<any, any> {

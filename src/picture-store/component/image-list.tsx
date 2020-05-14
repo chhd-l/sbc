@@ -6,6 +6,7 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { Modal, Pagination, message } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 
@@ -58,16 +59,16 @@ export default class ImageList extends React.Component<any, any> {
             checked={allChecked}
             onChange={this._onchangeCheckedAll.bind(this)}
           >
-            全选
+            <FormattedMessage id="selectAll" />
           </Checkbox>
           <AuthWrapper functionName="f_image_del">
             <a onClick={this._delete} style={styles.link}>
-              删除
+              <FormattedMessage id="delete" />
             </a>
           </AuthWrapper>
           <AuthWrapper functionName="f_picturePort_1">
             <a style={styles.link} onClick={this._showModal}>
-              移动
+              <FormattedMessage id="move" />
             </a>
           </AuthWrapper>
         </div>
@@ -102,7 +103,8 @@ export default class ImageList extends React.Component<any, any> {
         {(imageList || fromJS([])).size == 0 ? (
           <div className="ant-table-placeholder">
             <span>
-              <i className="anticon anticon-frown-o" />暂无数据
+              <i className="anticon anticon-frown-o" />
+              暂无数据
             </span>
           </div>
         ) : (

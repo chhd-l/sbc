@@ -4,6 +4,7 @@ import { IMap, Relax } from 'plume2';
 import { Form, Input, Button, Col, Row } from 'antd';
 import { noop, ValidConst, AreaSelect, QMMethod } from 'qmkit';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -112,19 +113,25 @@ export default class StepOneEdit extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={8}>
-              <span>审核状态：</span>{' '}
+              <span>
+                <FormattedMessage id="reviewStatus" />：
+              </span>{' '}
               {storeInfo.get('auditState') != null
                 ? AUDIT_STATE[storeInfo.get('auditState')]
                 : '-'}
             </Col>
             <Col span={8}>
-              <span>账号状态：</span>{' '}
+              <span>
+                <FormattedMessage id="accountStatus" />：
+              </span>{' '}
               {storeInfo.get('accountState') != null
                 ? ACCOUNT_STATE[storeInfo.get('accountState')]
                 : '-'}
             </Col>
             <Col span={8}>
-              <span>店铺状态：</span>{' '}
+              <span>
+                <FormattedMessage id="storeStatus" />：
+              </span>{' '}
               {storeInfo.get('storeState') != null
                 ? STORE_STATE[storeInfo.get('storeState')]
                 : '-'}
@@ -324,7 +331,9 @@ export default class StepOneEdit extends React.Component<any, any> {
                   getPopupContainer={() =>
                     document.getElementById('page-content')
                   }
-                  onChange={value => onChange({ field: 'area', value: value })}
+                  onChange={(value) =>
+                    onChange({ field: 'area', value: value })
+                  }
                 />
               )}
             </FormItem>
@@ -349,7 +358,7 @@ export default class StepOneEdit extends React.Component<any, any> {
               })(
                 <Input
                   placeholder="请输入详细地址"
-                  onChange={e =>
+                  onChange={(e) =>
                     onChange({
                       field: 'addressDetail',
                       value: (e.target as any).value
@@ -380,7 +389,7 @@ export default class StepOneEdit extends React.Component<any, any> {
   _onSave = () => {
     const form = this.props.form;
     const { onEditStoreInfo, company } = this.props.relaxProps;
-    form.validateFields(null, errs => {
+    form.validateFields(null, (errs) => {
       //如果校验通过
       if (!errs) {
         onEditStoreInfo(company.get('storeInfo'));

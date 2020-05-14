@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { List } from 'immutable';
 import { Tree } from 'antd';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const TreeNode = Tree.TreeNode;
@@ -47,8 +48,8 @@ export default class CateList extends React.Component<any, any> {
       defaultCheckedKeys
     } = this.props.relaxProps;
     //分类列表生成树形结构
-    const loop = cateList =>
-      cateList.map(item => {
+    const loop = (cateList) =>
+      cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
             <TreeNode
@@ -71,7 +72,9 @@ export default class CateList extends React.Component<any, any> {
 
     return (
       <div>
-        <div style={styles.title}>图片目录</div>
+        <div style={styles.title}>
+          <FormattedMessage id="imageContent" />
+        </div>
         <Tree
           className="draggable-tree"
           autoExpandParent={false}
@@ -92,7 +95,7 @@ export default class CateList extends React.Component<any, any> {
    * @param value 选中的id
    * @private
    */
-  _select = value => {
+  _select = (value) => {
     const { selectImageCate, queryImagePage } = this.props.relaxProps;
     //记录选中的分类，以便后续的分页查询
     const cateId = value[0];
@@ -108,7 +111,7 @@ export default class CateList extends React.Component<any, any> {
    * @param expandedKeys
    * @private
    */
-  _expand = expandedKeys => {
+  _expand = (expandedKeys) => {
     const { onExpandCate } = this.props.relaxProps;
     onExpandCate(expandedKeys);
   };

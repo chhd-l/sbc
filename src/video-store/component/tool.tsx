@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Button, Form, Input, message } from 'antd';
 import { noop, AuthWrapper } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
 const FormItem = Form.Item;
@@ -41,17 +42,17 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_videoStore_1">
           <Button type="primary" onClick={this._upload}>
-            上传视频
+            <FormattedMessage id="uploadVideo" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_resourceCate_2">
           <Button type="primary" onClick={this._showModal}>
-            新增分类
+            <FormattedMessage id="addCategory" />
           </Button>
         </AuthWrapper>
         <AuthWrapper functionName="f_videoStore_1">
           <Button type="primary" onClick={this._showMoveModal}>
-            移动
+            <FormattedMessage id="move" />
           </Button>
         </AuthWrapper>
         <div style={{ float: 'right' }}>
@@ -74,7 +75,7 @@ export default class Tool extends React.Component<any, any> {
                 }}
               >
                 {' '}
-                搜索{' '}
+                <FormattedMessage id="search" />{' '}
               </Button>
             </FormItem>
           </Form>

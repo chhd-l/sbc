@@ -5,6 +5,7 @@ import { List } from 'immutable';
 import moment from 'moment';
 
 import { Const, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
 
@@ -55,19 +56,23 @@ export default class ListView extends React.Component<any, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        操作人账号
+                        <FormattedMessage id="operatorAccount" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        操作人姓名
+                        <FormattedMessage id="operatorName" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        操作人IP
+                        <FormattedMessage id="operatorIP" />
                       </th>
                       <th style={{ width: '15%', paddingLeft: 10 }}>
-                        操作时间
+                        <FormattedMessage id="operatorTime" />
                       </th>
-                      <th style={{ width: '10%', paddingLeft: 10 }}>模块</th>
-                      <th style={{ width: '10%', paddingLeft: 5 }}>操作类型</th>
+                      <th style={{ width: '10%', paddingLeft: 10 }}>
+                        <FormattedMessage id="module" />
+                      </th>
+                      <th style={{ width: '10%', paddingLeft: 5 }}>
+                        <FormattedMessage id="operatorType" />
+                      </th>
                       <th
                         style={{
                           width: '34%',
@@ -75,7 +80,7 @@ export default class ListView extends React.Component<any, any> {
                           paddingLeft: 10
                         }}
                       >
-                        操作内容
+                        <FormattedMessage id="operatorContent" />
                       </th>
                     </tr>
                   </thead>
@@ -89,7 +94,8 @@ export default class ListView extends React.Component<any, any> {
               {!loading && total == 0 ? (
                 <div className="ant-table-placeholder">
                   <span>
-                    <i className="anticon anticon-frown-o" />暂无数据
+                    <i className="anticon anticon-frown-o" />
+                    暂无数据
                   </span>
                 </div>
               ) : null}
@@ -154,9 +160,7 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '15%' }}>
                       {/*操作时间*/}
                       {opTime
-                        ? moment(opTime)
-                            .format(Const.TIME_FORMAT)
-                            .toString()
+                        ? moment(opTime).format(Const.TIME_FORMAT).toString()
                         : '-'}
                     </td>
                     <td style={{ width: '10%' }}>

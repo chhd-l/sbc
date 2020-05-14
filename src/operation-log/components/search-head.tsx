@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { Const, noop, SelectGroup, AuthWrapper } from 'qmkit';
 import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -73,7 +74,7 @@ export default class SearchHead extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="操作人账号"
+                addonBefore={<FormattedMessage id="operatorAccount" />}
                 onChange={(e) => {
                   search.opAccount = (e.target as any).value;
                   this.setState({ search: search });
@@ -82,21 +83,20 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="操作人姓名"
+                addonBefore={<FormattedMessage id="operatorName" />}
                 onChange={(e) => {
                   search.opName = (e.target as any).value;
                   this.setState({ search: search });
                 }}
               />
             </FormItem>
-
             <FormItem>
               <SelectGroup
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
                 defaultValue=""
-                label="模块"
+                label={<FormattedMessage id="module" />}
                 onChange={(value) => {
                   search.opModule = value;
                   this.setState({ search: search });
@@ -115,7 +115,7 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="操作类型"
+                addonBefore={<FormattedMessage id="operatorType" />}
                 onChange={(e) => {
                   search.opCode = (e.target as any).value;
                   this.setState({ search: search });
@@ -124,7 +124,7 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
             <FormItem>
               <Input
-                addonBefore="操作内容"
+                addonBefore={<FormattedMessage id="operatorContent" />}
                 onChange={(e) => {
                   search.opContext = (e.target as any).value;
                   this.setState({ search: search });
@@ -195,7 +195,7 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                搜索
+                <FormattedMessage id="search" />
               </Button>
             </FormItem>
             <AuthWrapper functionName="f_operation_log_export">
@@ -226,7 +226,7 @@ export default class SearchHead extends Component<any, any> {
                     onExportByParams(params);
                   }}
                 >
-                  导出
+                  <FormattedMessage id="export" />
                 </Button>
               </FormItem>
             </AuthWrapper>

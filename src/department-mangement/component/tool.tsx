@@ -4,6 +4,7 @@ import { Relax, IMap } from 'plume2';
 import { Map } from 'immutable';
 import { Button } from 'antd';
 import { AuthWrapper, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Tool extends React.Component<any, any> {
@@ -30,15 +31,17 @@ export default class Tool extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <Button type="primary" onClick={this._showCateModal}>
-          新增一级部门
+          <FormattedMessage id="product.addFirstLeverCate" />
         </Button>
         {departments.count() === 0 ? (
           <Link to="/department-import">
-            <Button type="primary">批量创建部门</Button>
+            <Button type="primary">
+              <FormattedMessage id="addDetachDepartments" />
+            </Button>
           </Link>
         ) : (
           <Button disabled={true} type="primary">
-            批量创建部门
+            <FormattedMessage id="addDetachDepartments" />
           </Button>
         )}
       </div>

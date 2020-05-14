@@ -4,6 +4,7 @@ import { IMap, Relax } from 'plume2';
 import { Form, Col, Row } from 'antd';
 import { FindArea } from 'qmkit';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -92,19 +93,25 @@ export default class StepOneEdit extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={8}>
-              <span>审核状态：</span>{' '}
+              <span>
+                <FormattedMessage id="reviewStatus" />：
+              </span>{' '}
               {storeInfo.get('auditState') != null
                 ? AUDIT_STATE[storeInfo.get('auditState')]
                 : '-'}
             </Col>
             <Col span={8}>
-              <span>账号状态：</span>{' '}
+              <span>
+                <FormattedMessage id="accountStatus" />：
+              </span>{' '}
               {storeInfo.get('accountState') != null
                 ? ACCOUNT_STATE[storeInfo.get('accountState')]
                 : '-'}
             </Col>
             <Col span={8}>
-              <span>店铺状态：</span>{' '}
+              <span>
+                <FormattedMessage id="storeStatus" />：
+              </span>{' '}
               {storeInfo.get('storeState') != null
                 ? STORE_STATE[storeInfo.get('storeState')]
                 : '-'}
@@ -146,31 +153,67 @@ export default class StepOneEdit extends React.Component<any, any> {
         </GreyBg>
         <div style={{ width: 520 }}>
           <Form>
-            <FormItem {...formItemLayout} required={true} label="商家编号">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="partnerNumber" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('supplierCode')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="商家名称">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="partnerName" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('supplierName')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="店铺名称">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="storeName" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('storeName')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系人">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="contact" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('contactPerson')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系方式">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="contactDetails" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('contactMobile')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系邮箱">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="contactEmail" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('contactEmail')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="所在地区">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="area" />}
+            >
               <p style={{ color: '#333' }}>{area}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="详细地址">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="address" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('addressDetail')}</p>
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="商家账号">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="partnerAccount" />}
+            >
               <p style={{ color: '#333' }}>{storeInfo.get('accountName')}</p>
             </FormItem>
           </Form>

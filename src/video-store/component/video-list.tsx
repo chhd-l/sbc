@@ -6,6 +6,7 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { Modal, Pagination, message } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 
@@ -59,11 +60,17 @@ export default class VideoList extends React.Component<any, any> {
             onChange={this._onchangeCheckedAll.bind(this)}
             style={{ width: '10%', display: 'inline-block' }}
           >
-            全选
+            {/* <FormattedMessage id="selectAll" /> */}
           </Checkbox>
-          <span style={styles.videoItem}>视频名称</span>
-          <span style={styles.videoItem}>视频链接</span>
-          <span style={styles.videoItem}>操作</span>
+          <span style={styles.videoItem}>
+            <FormattedMessage id="videoName" />
+          </span>
+          <span style={styles.videoItem}>
+            <FormattedMessage id="videoUrl" />
+          </span>
+          <span style={styles.videoItem}>
+            <FormattedMessage id="operation" />
+          </span>
         </div>
         <div>
           {(videoList || fromJS([])).map((item, index) => {
@@ -97,7 +104,7 @@ export default class VideoList extends React.Component<any, any> {
                     onClick={this._delete.bind(this, item.get('resourceId'))}
                     style={styles.videoItem}
                   >
-                    删除
+                    <FormattedMessage id="delete" />
                   </a>
                 </AuthWrapper>
               </div>
@@ -107,7 +114,8 @@ export default class VideoList extends React.Component<any, any> {
         {(videoList || fromJS([])).size == 0 ? (
           <div className="ant-table-placeholder">
             <span>
-              <i className="anticon anticon-frown-o" />暂无数据
+              <i className="anticon anticon-frown-o" />
+              暂无数据
             </span>
           </div>
         ) : (

@@ -2,12 +2,13 @@ import React from 'react';
 import { Form, Breadcrumb, Button, Tabs } from 'antd';
 import { StoreProvider } from 'plume2';
 
-import { history, Headline, AuthWrapper,BreadCrumb } from 'qmkit';
+import { history, Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import StepOne from './infocomponents/step-one-info';
 import StepTwo from './detailcomponents/step-two';
 import StepThree from './infocomponents/step-three-info';
 import StepFour from './editcomponents/step-four-edit';
+import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
 const StepTwoForm = Form.create()(StepTwo);
@@ -33,7 +34,7 @@ export default class ShopInfo extends React.Component<any, any> {
     return (
       <AuthWrapper functionName="f_storeInfo_0">
         <div>
-          <BreadCrumb/>
+          <BreadCrumb />
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>设置</Breadcrumb.Item>
             <Breadcrumb.Item>店铺设置</Breadcrumb.Item>
@@ -41,15 +42,27 @@ export default class ShopInfo extends React.Component<any, any> {
           </Breadcrumb> */}
 
           <div className="container">
-            <Headline title="店铺信息" />
+            <Headline title={<FormattedMessage id="storeInformation" />} />
             <Tabs
-              onChange={key => this.store.setCurrentTab(key)}
+              onChange={(key) => this.store.setCurrentTab(key)}
               activeKey={currentTab}
             >
-              <Tabs.TabPane tab="基本信息" key="0" />
-              <Tabs.TabPane tab="工商信息" key="1" />
-              <Tabs.TabPane tab="签约信息" key="2" />
-              <Tabs.TabPane tab="财务信息" key="3" />
+              <Tabs.TabPane
+                tab={<FormattedMessage id="basicInformation" />}
+                key="0"
+              />
+              <Tabs.TabPane
+                tab={<FormattedMessage id="businessInformation" />}
+                key="1"
+              />
+              <Tabs.TabPane
+                tab={<FormattedMessage id="signedInformation" />}
+                key="2"
+              />
+              <Tabs.TabPane
+                tab={<FormattedMessage id="financialInformation" />}
+                key="3"
+              />
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}
@@ -58,7 +71,7 @@ export default class ShopInfo extends React.Component<any, any> {
           <AuthWrapper functionName="f_storeInfoEdit_0">
             <div className="bar-button">
               <Button type="primary" onClick={() => this._edit()}>
-                编辑
+                <FormattedMessage id="edit" />
               </Button>
             </div>
           </AuthWrapper>
@@ -72,6 +85,6 @@ export default class ShopInfo extends React.Component<any, any> {
    * @private
    */
   _edit = () => {
-    history.push(`/store-info-edit`);
+    history.push('/store-info-edit');
   };
 }

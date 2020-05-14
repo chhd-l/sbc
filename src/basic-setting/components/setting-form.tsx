@@ -5,6 +5,7 @@ import { Const, Tips, QMUpload, cache } from 'qmkit';
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { message } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -82,7 +83,11 @@ export default class settingForm extends React.Component<any, any> {
       >
         <Row>
           <Col span={18}>
-            <FormItem required={false} {...formItemLayout} label="店铺logo">
+            <FormItem
+              required={false}
+              {...formItemLayout}
+              label={<FormattedMessage id="storeLogo" />}
+            >
               <div className="clearfix logoImg">
                 <QMUpload
                   style={styles.box}
@@ -107,13 +112,17 @@ export default class settingForm extends React.Component<any, any> {
                   initialValue: this.state.storeLogo
                 })(<Input type="hidden" />)}
               </div>
-              <Tips title="PC商城首页logo、移动端登录页logo、管理端logo，最多可添加1张，仅限jpg、jpeg、png、gif，建议尺寸100px*100px，大小不超过1M" />
+              <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span={18}>
-            <FormItem {...formItemLayout} required={false} label="店铺店招">
+            <FormItem
+              {...formItemLayout}
+              required={false}
+              label={<FormattedMessage id="shop" />}
+            >
               <Row>
                 <Col span={24}>
                   <div className="clearfix bannerImg">
@@ -142,14 +151,14 @@ export default class settingForm extends React.Component<any, any> {
                   </div>
                 </Col>
               </Row>
-              <Tips title="PC商城店铺店招，最多可添加1张，图片格式仅限jpg、jpeg、png、gif，建议尺寸1920px*120px，大小不超过2M" />
+              <Tips title={<FormattedMessage id="storeSettingInfo2" />} />
             </FormItem>
           </Col>
         </Row>
 
         <div className="bar-button">
           <Button type="primary" htmlType="submit">
-            保存
+            {<FormattedMessage id="save" />}
           </Button>
         </div>
       </Form>
@@ -249,13 +258,15 @@ export default class settingForm extends React.Component<any, any> {
   };
 
   _buildFileList = (fileList: Array<any>): Array<any> => {
-    return fileList.filter((file) => file.status === 'done').map((file) => {
-      return {
-        uid: file.uid,
-        status: file.status,
-        url: file.response ? file.response[0] : file.url
-      };
-    });
+    return fileList
+      .filter((file) => file.status === 'done')
+      .map((file) => {
+        return {
+          uid: file.uid,
+          status: file.status,
+          url: file.response ? file.response[0] : file.url
+        };
+      });
   };
 }
 

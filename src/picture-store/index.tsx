@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Breadcrumb } from 'antd';
 
-import { Headline, AuthWrapper,BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 
 import ImageList from './component/image-list';
@@ -11,6 +11,7 @@ import CateModal from './component/cate-modal';
 import CateList from './component/cate-list';
 import Tool from './component/tool';
 import { StoreProvider } from 'plume2';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class PictureStore extends React.Component<any, any> {
@@ -31,7 +32,7 @@ export default class PictureStore extends React.Component<any, any> {
             <Breadcrumb.Item>图片库</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
-            <Headline title="图片库" />
+            <Headline title={<FormattedMessage id="imageAsset" />} />
             <div>
               <Row>
                 <Col span={4}>

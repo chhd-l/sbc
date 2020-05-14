@@ -1,13 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
-import { Form, Input, Select, Radio, Switch,DatePicker,TreeSelect } from 'antd';
+import {
+  Form,
+  Input,
+  Select,
+  Radio,
+  Switch,
+  DatePicker,
+  TreeSelect
+} from 'antd';
 import { List } from 'immutable';
 import { Const } from 'qmkit';
 import moment from 'moment';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 import { QMMethod, ValidConst } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const RadioGroup = Radio.Group;
 const { TreeNode } = TreeSelect;
@@ -18,19 +27,19 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 10 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 10 }
   }
 };
 
 export default class EditForm extends React.Component<any, any> {
-  state = {    
+  state = {
     changePassword: false,
-    value:undefined
+    value: undefined
   };
 
   _store: Store;
@@ -47,20 +56,20 @@ export default class EditForm extends React.Component<any, any> {
 
   constructor(props, ctx) {
     super(props);
-    this._store = ctx['_plume$Store'];  
+    this._store = ctx['_plume$Store'];
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
     const _state = this._store.state();
-    const roles = _state.get('roles'); 
+    const roles = _state.get('roles');
     //管理部门的账号集合
-    const manageDepartmentIdList = _state.get('manageDepartmentIdList');     
-    const isMaster = _state.get('isMaster');      
+    const manageDepartmentIdList = _state.get('manageDepartmentIdList');
+    const isMaster = _state.get('isMaster');
     //扁平化roles,获取roleIds集合
-    const roleIds = roles.map(role=>{
-      return role.get('roleInfoId')
+    const roleIds = roles.map((role) => {
+      return role.get('roleInfoId');
     });
     const employeeForm = _state.get('employeeForm');
     //部门树
@@ -74,13 +83,13 @@ export default class EditForm extends React.Component<any, any> {
     let birthday = {};
     let sex = {
       initialValue: 0
-    };    
+    };
     let departmentIdList = {};
 
     let roleIdList = {};
     let isEmployee = {};
-    //表单控件是否禁用   
-    const editDisable = _state.get('editDisable') && _state.get('edit');            
+    //表单控件是否禁用
+    const editDisable = _state.get('editDisable') && _state.get('edit');
 
     //如果是编辑状态
     if (_state.get('edit')) {
@@ -104,20 +113,26 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('position')
       };
 
-      birthday={
-        initialValue: employeeForm.get('birthday')?moment(employeeForm.get('birthday')):null
+      birthday = {
+        initialValue: employeeForm.get('birthday')
+          ? moment(employeeForm.get('birthday'))
+          : null
       };
 
-      departmentIdList={
-        initialValue: employeeForm.get('departmentIds')?
-        isMaster==0?
-        employeeForm.get('departmentIds').split(',').filter(v=>manageDepartmentIdList.toJS().includes(v)):
-        employeeForm.get('departmentIds').split(','):[]
+      departmentIdList = {
+        initialValue: employeeForm.get('departmentIds')
+          ? isMaster == 0
+            ? employeeForm
+                .get('departmentIds')
+                .split(',')
+                .filter((v) => manageDepartmentIdList.toJS().includes(v))
+            : employeeForm.get('departmentIds').split(',')
+          : []
       };
 
-      sex={
+      sex = {
         initialValue: employeeForm.get('sex') || 0
-      }
+      };
 
       isEmployee = {
         initialValue: employeeForm.get('isEmployee')
@@ -126,13 +141,16 @@ export default class EditForm extends React.Component<any, any> {
       //取最新的roleIds集合与该员工下面挂的roleIds的交集，防止有的角色已经删除仍然显示的情况
       roleIdList = {
         initialValue: employeeForm.get('roleIds')
-          ? employeeForm.get('roleIds').split(',').reduce((pre,cur)=>{      
-            let current = Number(cur);
-            if(roleIds.toJS().includes(current)){                           
-              pre.push(cur);
-            }
-            return pre;
-          },[])
+          ? employeeForm
+              .get('roleIds')
+              .split(',')
+              .reduce((pre, cur) => {
+                let current = Number(cur);
+                if (roleIds.toJS().includes(current)) {
+                  pre.push(cur);
+                }
+                return pre;
+              }, [])
           : []
       };
     }
@@ -141,12 +159,12 @@ export default class EditForm extends React.Component<any, any> {
       <Form>
         <FormItem
           {...formItemLayout}
-          label="员工姓名"
-          hasFeedback          
+          label={<FormattedMessage id="employeeName" />}
+          hasFeedback
         >
           {getFieldDecorator('employeeName', {
             ...employeeName,
-            rules: [              
+            rules: [
               {
                 required: true,
                 whitespace: true,
@@ -156,7 +174,7 @@ export default class EditForm extends React.Component<any, any> {
                 min: 1,
                 max: 20,
                 message: '1-20个字符'
-              },
+              }
               // {
               //   validator: (rule, value, callback) => {
               //     QMMethod.validatorTrimMinAndMax(
@@ -170,12 +188,12 @@ export default class EditForm extends React.Component<any, any> {
               //   }
               // }
             ]
-          })(<Input disabled={editDisable} placeholder="仅限1-20位字符"/>)}
+          })(<Input disabled={editDisable} placeholder="仅限1-20位字符" />)}
         </FormItem>
 
         <FormItem
           {...formItemLayout}
-          label="手机号"
+          label={<FormattedMessage id="employeePhone" />}
           hasFeedback
           required={true}
         >
@@ -185,16 +203,13 @@ export default class EditForm extends React.Component<any, any> {
               { required: true, message: '员工手机不能为空' },
               { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
             ]
-          })(<Input disabled={editDisable} placeholder="仅限11位数字"/>)}
+          })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label="邮箱"                    
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="email" />}>
           {getFieldDecorator('email', {
             ...email,
-            rules: [              
+            rules: [
               { pattern: ValidConst.email, message: '请输入正确的邮箱' },
               {
                 validator: (rule, value, callback) => {
@@ -208,17 +223,17 @@ export default class EditForm extends React.Component<any, any> {
                   );
                 }
               }
-            ]           
-          })(<Input disabled={editDisable} placeholder="仅限0-50位字符"/>)}
+            ]
+          })(<Input disabled={editDisable} placeholder="仅限0-50位字符" />)}
         </FormItem>
 
         <FormItem
           {...formItemLayout}
-          label="工号"                    
+          label={<FormattedMessage id="employeeNo" />}
         >
           {getFieldDecorator('jobNo', {
             ...jobNo,
-            rules: [             
+            rules: [
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorMinAndMax(
@@ -232,16 +247,16 @@ export default class EditForm extends React.Component<any, any> {
                 }
               }
             ]
-          })(<Input disabled={editDisable} placeholder="仅限0-20位字符"/>)}
+          })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
         </FormItem>
 
         <FormItem
           {...formItemLayout}
-          label="岗位"                    
+          label={<FormattedMessage id="position" />}
         >
           {getFieldDecorator('position', {
             ...position,
-            rules: [             
+            rules: [
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorMinAndMax(
@@ -253,93 +268,98 @@ export default class EditForm extends React.Component<any, any> {
                     20
                   );
                 }
-              }           
+              }
             ]
-          })(<Input disabled={editDisable} placeholder="仅限0-20位字符"/>)}
+          })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
         </FormItem>
 
         <FormItem
           {...formItemLayout}
-          label="生日"                    
+          label={<FormattedMessage id="birthday" />}
         >
           {getFieldDecorator('birthday', {
-            ...birthday,           
-          })(  
-          <DatePicker  
-            disabled={editDisable}
-            getCalendarContainer={() =>
+            ...birthday
+          })(
+            <DatePicker
+              disabled={editDisable}
+              getCalendarContainer={() =>
                 document.getElementById('page-content')
-            }
-            allowClear={true}
-            format={Const.DAY_FORMAT}
-            placeholder={'生日'}            
-        />)}
+              }
+              allowClear={true}
+              format={Const.DAY_FORMAT}
+              placeholder={'生日'}
+            />
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label="性别"                    
-        >    
-        {getFieldDecorator('sex', {
-            ...sex,           
-          })(  
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Gender" />}>
+          {getFieldDecorator('sex', {
+            ...sex
+          })(
             <RadioGroup
               disabled={editDisable}
               value={employeeForm.get('sex')}
               //onChange={(e) => console.log(e.target.value)}
             >
-            <Radio value={0}>
-              <span style={styles.darkColor}>保密</span>
-            </Radio>
-            <Radio value={1}>
-              <span style={styles.darkColor}>男</span>
-            </Radio>
-            <Radio value={2}>
-              <span style={styles.darkColor}>女</span>
-            </Radio>           
-          </RadioGroup>        
-         )}
+              <Radio value={0}>
+                <span style={styles.darkColor}>保密</span>
+              </Radio>
+              <Radio value={1}>
+                <span style={styles.darkColor}>男</span>
+              </Radio>
+              <Radio value={2}>
+                <span style={styles.darkColor}>女</span>
+              </Radio>
+            </RadioGroup>
+          )}
         </FormItem>
 
         <FormItem
           {...formItemLayout}
-          label="归属部门"                    
+          label={<FormattedMessage id="attributionDepartment" />}
         >
           {getFieldDecorator('departmentIdList', {
-            ...departmentIdList,           
-          })(  
-          <TreeSelect     
-            disabled={editDisable || (isMaster==0 && manageDepartmentIdList.size==0)}            
-            // treeData = {treeData.toJS()}                        
-            showSearch={false}
-            style={{ width: '100%' }}          
-            value={departmentIdList}
-            dropdownStyle={{ maxHeight:550, overflow: 'auto' }}
-            placeholder="请选择，可多选"
-            allowClear
-            multiple
-            treeDefaultExpandAll
-            onChange={this.onChange}
-          >
-            {this._loop(departTree)}                 
-          </TreeSelect>   
-        )}
+            ...departmentIdList
+          })(
+            <TreeSelect
+              disabled={
+                editDisable ||
+                (isMaster == 0 && manageDepartmentIdList.size == 0)
+              }
+              // treeData = {treeData.toJS()}
+              showSearch={false}
+              style={{ width: '100%' }}
+              value={departmentIdList}
+              dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
+              placeholder="请选择，可多选"
+              allowClear
+              multiple
+              treeDefaultExpandAll
+              onChange={this.onChange}
+            >
+              {this._loop(departTree)}
+            </TreeSelect>
+          )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="系统角色" hasFeedback>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="systemRole" />}
+          hasFeedback
+        >
           {getFieldDecorator('roleIdList', {
-            ...roleIdList         
+            ...roleIdList
           })(
-            <Select   
+            <Select
               placeholder="请选择，可多选"
-              disabled={editDisable}                
-              mode="multiple"         
+              disabled={editDisable}
+              mode="multiple"
               showSearch
               filterOption={(input, option: { props }) =>
                 option.props.children
                   .toLowerCase()
                   .indexOf(input.toLowerCase()) >= 0
-              }     
+              }
             >
               {this._renderOption(roles)}
               {/* {
@@ -371,7 +391,14 @@ export default class EditForm extends React.Component<any, any> {
             })(<Input />)}
           </FormItem>
         ) : null} */}
-        <FormItem {...formItemLayout} label={<span>是否业务员</span>}>
+        <FormItem
+          {...formItemLayout}
+          label={
+            <span>
+              <FormattedMessage id="assistant" />
+            </span>
+          }
+        >
           {getFieldDecorator('isEmployee', {
             ...isEmployee,
             rules: [{ required: true, message: '请选择是否是业务员' }]
@@ -459,18 +486,15 @@ export default class EditForm extends React.Component<any, any> {
           </div>
         ) : null} */}
 
-         {
-           _state.get('edit')?
-           null:
-           <FormItem {...formItemLayout} colon={false} label=" ">
-           <div style={{ display: 'flex', flexDirection: 'row' }}>
-             {getFieldDecorator('isSendPassword')(
-               <Checkbox >短信通知员工</Checkbox>
-             )}
-           </div>
+        {_state.get('edit') ? null : (
+          <FormItem {...formItemLayout} colon={false} label=" ">
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {getFieldDecorator('isSendPassword')(
+                <Checkbox>短信通知员工</Checkbox>
+              )}
+            </div>
           </FormItem>
-         }
-     
+        )}
       </Form>
     );
   }
@@ -503,49 +527,52 @@ export default class EditForm extends React.Component<any, any> {
     callback();
   };
 
-  onChange=(ids,value)=>{            
-    this.setState({value:value})
+  onChange = (ids, value) => {
+    this.setState({ value: value });
     //存放目标部门IDlist
     // const { setTargetDeparts } = this.props.relaxProps;
     // setTargetDeparts(ids)
-  }
+  };
 
-  
-
-  _loop=(allDeparts)=>{     
+  _loop = (allDeparts) => {
     const _state = this._store.state();
-    const manageDepartmentIdList = _state.get('manageDepartmentIdList');    
-     //是否为主账号
-    const isMaster = _state.get('isMaster');    
-    return allDeparts.map(dep=>{
+    const manageDepartmentIdList = _state.get('manageDepartmentIdList');
+    //是否为主账号
+    const isMaster = _state.get('isMaster');
+    return allDeparts.map((dep) => {
       //子部门
-      if(dep.get('children') && dep.get('children').size >0 ){
+      if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-           <TreeNode        
-               disabled={isMaster==0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))}        
-               value={dep.get('departmentId')}               
-               title={dep.get('departmentName')}
-            >             
-              {this._loop(childDeparts)}
-           </TreeNode>
-        )
+          <TreeNode
+            disabled={
+              isMaster == 0 &&
+              !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))
+            }
+            value={dep.get('departmentId')}
+            title={dep.get('departmentName')}
+          >
+            {this._loop(childDeparts)}
+          </TreeNode>
+        );
       }
       return (
-        <TreeNode  
-          disabled={isMaster==0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))}                    
-          value={dep.get('departmentId')}        
+        <TreeNode
+          disabled={
+            isMaster == 0 &&
+            !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))
+          }
+          value={dep.get('departmentId')}
           title={dep.get('departmentName')}
         />
       );
-    })
-   }
+    });
+  };
 }
 
-const styles={
+const styles = {
   darkColor: {
     fontSize: 12,
     color: '#333'
-  },
-}
-
+  }
+};

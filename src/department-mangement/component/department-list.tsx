@@ -5,6 +5,7 @@ import { Modal, Table, Icon } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -69,23 +70,23 @@ class DepartmentList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: '部门名称',
+      title: <FormattedMessage id="departmentName" />,
       dataIndex: 'departmentName',
       key: 'departmentName',
       className: 'namerow'
     },
     {
-      title: '主管',
+      title: <FormattedMessage id="supervivor" />,
       key: 'employeeName',
       render: (rowInfo) => this._setDirector(rowInfo)
     },
     {
-      title: '员工数',
+      title: <FormattedMessage id="employeeNumber" />,
       dataIndex: 'employeeNum',
       key: 'employeeNum'
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -162,7 +163,7 @@ class DepartmentList extends React.Component<any, any> {
               rowInfo.get('parentDepartmentId')
             )}
           >
-            编辑
+            <FormattedMessage id="edit" />
           </a>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_delete'}>
@@ -173,7 +174,7 @@ class DepartmentList extends React.Component<any, any> {
               rowInfo.get('employeeNum')
             )}
           >
-            删除
+            <FormattedMessage id="delete" />
           </a>
         </AuthWrapper>
       </div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button } from 'antd';
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class RoleTool extends React.Component<any, any> {
@@ -32,7 +33,8 @@ export default class RoleTool extends React.Component<any, any> {
         {/*</div>*/}
         <div className="handle-bar">
           <Button type="primary" onClick={this._showCateModal}>
-            新增角色
+            {/* 新增角色 */}
+            <FormattedMessage id="addRole" />
           </Button>
         </div>
       </div>

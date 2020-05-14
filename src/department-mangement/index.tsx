@@ -8,6 +8,7 @@ import DepartmentList from './component/department-list';
 import DepartmentModal from './component/department-modal';
 import Tool from './component/tool';
 import LeaderModal from './component/leader-modal';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
@@ -22,16 +23,20 @@ export default class GoodsCate extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container">
-          <Headline title="部门管理" />
+          <Headline title={<FormattedMessage id="departmentManagement" />} />
           <div style={{ marginBottom: 16 }}>
             <Alert
               message=""
               description={
                 <div>
-                  <p>初始化时可使用“批量创建”部门的方式导入；</p>
-                  <p>支持同级部门间的拖拽排序；</p>
                   <p>
-                    每个部门可设置一位主管，主管可看到并管理其部门以及子部门的员工，主管拥有其部门以及其子部门业务员的所有数据权限；
+                    <FormattedMessage id="departmentManagementInfo1" />
+                  </p>
+                  <p>
+                    <FormattedMessage id="departmentManagementInfo2" />
+                  </p>
+                  <p>
+                    <FormattedMessage id="departmentManagementInfo3" />
                   </p>
                 </div>
               }

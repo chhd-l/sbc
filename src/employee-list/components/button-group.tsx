@@ -5,6 +5,7 @@ import { AuthWrapper, noop, history, cache } from 'qmkit';
 import { List } from 'immutable';
 import { checkMenu } from '../../../web_modules/qmkit/checkAuth';
 import { IMap, IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -25,7 +26,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       toggleHide: Function;
       onBatchActivateAccount: Function;
       onFormChange: Function;
-      searchForm: IMap
+      searchForm: IMap;
     };
   };
 
@@ -47,7 +48,12 @@ export default class ButtonGroup extends React.Component<any, any> {
   };
 
   render() {
-    const { onAdd, toggleHide, onFormChange, searchForm } = this.props.relaxProps;
+    const {
+      onAdd,
+      toggleHide,
+      onFormChange,
+      searchForm
+    } = this.props.relaxProps;
 
     return (
       <div
@@ -57,7 +63,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <div>
           <AuthWrapper functionName={'updateEmployee'}>
             <Button type="primary" onClick={() => onAdd()}>
-              新增
+              <FormattedMessage id="add" />
             </Button>
           </AuthWrapper>
 
@@ -67,7 +73,7 @@ export default class ButtonGroup extends React.Component<any, any> {
               getPopupContainer={() => document.getElementById('page-content')}
             >
               <Button style={{ marginLeft: 10 }}>
-                批量操作
+                <FormattedMessage id="product.batchOperation" />
                 <Icon type="down" />
               </Button>
             </Dropdown>
@@ -75,14 +81,18 @@ export default class ButtonGroup extends React.Component<any, any> {
         </div>
 
         <div style={styles.box}>
-          <Checkbox id="hide-employee" checked={searchForm.get('isHiddenDimission')} onChange={(e) => {
-            toggleHide((e.target as any).checked ? '1' : '0');
-            onFormChange({
-              field: 'isHiddenDimission',
-              value: (e.target as any).checked ? 1 : 0
-            });
-          }}>
-            隐藏离职员工
+          <Checkbox
+            id="hide-employee"
+            checked={searchForm.get('isHiddenDimission')}
+            onChange={(e) => {
+              toggleHide((e.target as any).checked ? '1' : '0');
+              onFormChange({
+                field: 'isHiddenDimission',
+                value: (e.target as any).checked ? 1 : 0
+              });
+            }}
+          >
+            <FormattedMessage id="hideLeavingEmployees" />
           </Checkbox>
         </div>
       </div>
@@ -144,7 +154,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           <AuthWrapper functionName={'f_batch_employee_active'}>
             <a href="javascript:;" onClick={() => this._batchActive()}>
               会员账户激活
-          </a>
+            </a>
           </AuthWrapper>
         </Menu.Item>
 
@@ -276,5 +286,5 @@ const styles = {
   box: {
     padding: 10,
     paddingLeft: 20
-  },
-}
+  }
+};

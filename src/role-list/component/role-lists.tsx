@@ -6,6 +6,7 @@ import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { AuthWrapper, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const confirm = Modal.confirm;
@@ -66,13 +67,13 @@ class CateList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: '角色名称',
+      title: <FormattedMessage id="roleName" />,
       dataIndex: 'roleName',
       key: 'roleName'
     },
 
     {
-      title: '权限',
+      title: <FormattedMessage id="permission" />,
       dataIndex: 'menuNames',
       key: 'menuNames',
       render: (menuNames) => {
@@ -80,7 +81,7 @@ class CateList extends React.Component<any, any> {
       }
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -97,7 +98,7 @@ class CateList extends React.Component<any, any> {
             style={{ marginLeft: 20, marginRight: 20 }}
             to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`}
           >
-            设置权限
+            <FormattedMessage id="setPermission" />
           </Link>
         </AuthWrapper>
         <AuthWrapper functionName={'f_role_edit'}>
@@ -105,12 +106,14 @@ class CateList extends React.Component<any, any> {
             style={styles.edit}
             onClick={this._showEditModal.bind(this, rowInfo)}
           >
-            编辑
+            <FormattedMessage id="edit" />
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName={'f_role_delete'}>
-          <a onClick={this._delete.bind(this, rowInfo.roleInfoId)}>删除</a>
+          <a onClick={this._delete.bind(this, rowInfo.roleInfoId)}>
+            <FormattedMessage id="delete" />
+          </a>
         </AuthWrapper>
       </div>
     );

@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { DataGrid, noop, AuthWrapper } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Modal } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const { Column } = DataGrid;
@@ -43,13 +44,17 @@ export default class CateList extends React.Component<any, any> {
     return (
       <DataGrid rowKey="cateId" dataSource={dataList.toJS()}>
         <Column
-          title="分类名称"
+          title={<FormattedMessage id="categoryName" />}
           dataIndex="cateName"
           key="cateName"
           className="namerow"
           width="50%"
         />
-        <Column title="操作" key="option" render={this._getOption} />
+        <Column
+          title={<FormattedMessage id="operation" />}
+          key="option"
+          render={this._getOption}
+        />
       </DataGrid>
     );
   }
@@ -71,7 +76,7 @@ export default class CateList extends React.Component<any, any> {
                 rowInfo.get('cateName')
               )}
             >
-              新增子分类
+              <FormattedMessage id="addSubcategory" />
             </a>
           </AuthWrapper>
         ) : null}
@@ -86,13 +91,15 @@ export default class CateList extends React.Component<any, any> {
                 rowInfo.get('cateParentId')
               )}
             >
-              编辑
+              <FormattedMessage id="edit" />
             </a>
           </AuthWrapper>
         ) : null}
         {rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_1">
-            <a onClick={this._delete.bind(this, rowInfo.get('cateId'))}>删除</a>
+            <a onClick={this._delete.bind(this, rowInfo.get('cateId'))}>
+              <FormattedMessage id="delete" />
+            </a>
           </AuthWrapper>
         ) : null}
       </div>

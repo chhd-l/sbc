@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button } from 'antd';
 import { noop, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Tool extends React.Component<any, any> {
@@ -20,7 +21,7 @@ export default class Tool extends React.Component<any, any> {
       <AuthWrapper functionName="f_resourceCate_2">
         <div className="handle-bar">
           <Button type="primary" onClick={this._showCateModal}>
-            新增一级分类
+            <FormattedMessage id="product.addFirstLeverCate" />
           </Button>
         </div>
       </AuthWrapper>

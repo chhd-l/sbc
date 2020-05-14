@@ -392,7 +392,98 @@ export default {
   'Refund': 'Refund',
   'returnReason': 'Return reason',
   'chargebackAttachment': 'Chargeback attachment',
-};
+
+
+
+  'partnerAccount':'Partner Account',
+  'financeTips1':'1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;',
+  'financeTips2':'2. You can set any account that passes the verification as the main account, and the platform will give priority to the main account when you settle the payment;',
+  'storeName':'Store name' ,
+  'petFoodStore':'Pet food store',
+  'entryTime': 'Entry time',
+  'partnerID': 'Partner ID',
+  'contractValidity': 'Contract validity',
+  'addAccount' :'Add Account',
+  'bank':'Bank',
+  'accountName':'Account name',
+  'subBranch':'Sub-branch',
+  'receivePayment':'Receive payment',
+  'mainAccount':'Main account' ,
+  'changeAccount':'Change the current account',
+  'deleteAccount':'Delete account',
+  'setMainAccount':'Set the main account',
+
+  'financialReconciliation'	:'Financial Reconciliation',
+  'bulkExport':'Bulk Export',
+  'revenueReconciliation':	'Revenue Reconciliation',
+  'refundReconciliation'	:'Refund Reconciliation',
+  'VISA':	'VISA',
+  'AMERICAN EXPRESS'	:'AMERICAN EXPRESS',
+  'masterCard':	'MasterCard',
+
+  'balance'	:'Balance',
+  'total2'	:'total',
+  'revenueReconciliationDetails':	'Revenue Reconciliation Details',
+  'paymentChannel':	'Payment Channel',
+  'transactionSerialNumber':	'Transaction Serial Number',
+  'export':	'Export',
+  'paymentTime':	'Payment Time',
+  'paymentAmount'	:'Payment Amount',
+
+
+  'financialSettlement':'Financial Settlement',
+'settlementTips1':'Your settlement date is',
+'settlementTips2':'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
+
+'unsettlement':'Unsettlement'	,
+'settled':'Settled'	,
+'statementGenerationTime':'Statement Generation Time'	,
+'statementTime':'Billing Time'	,
+'statementNumber':'Statement Number'	,
+'billingPeriod':'Billing Period'	,
+'totalPaidGoods':'Total Paid Goods'	,
+'totalFreight':'Total Freight'	,
+
+'inquiryDetails':'Inquiry Details'	,
+'settlementDetails':'Settlement Details'	,
+'exportDetails':'Export Details'	,
+
+'orderCreditTime':'Order Credit Time'	,
+'orderType':'Order Type' ,
+// 'Product code / name / weight':'商品编码/名称/规格'	,
+'category':'Category'	,
+'productPrice':'Product Price'	,
+'freight':'Freight'	,
+
+'orderInvoice':'Order Invoice'	,
+
+'invoiceStatus':'Invoice Status'	,
+
+'add':'Add'	,
+'bulkOperation':'Bulk Operation'	,
+'bulkInvoice':'Bulk Invoice'	,
+
+'billingTime':'Billing Time'	,
+'orderAmount':'Order Amount'	,
+'invoiceType':'Invoice Type'	,
+
+
+'ordinaryInvoice':'Ordinary invoice'	,
+'personal':'Personal'	,
+'toBeInvoiced':'To be invoiced'	,
+'viewBilling':'View Billing'	,
+'billingItems':'Billing Items' ,
+
+'supportedBillingTypes':'Supported billing types',
+'doesNotSupportInvoicing':'Does not support invoicing'	,
+
+'vatSpecialInvoice':'VAT special invoice'	,
+"invoiceReceiptInformation":"Invoice receipt information",
+'saveSettings':'Save Settings'	,
+'Edit':'Edit'	,
+'Delete':'Delete'	,
+
+  };
 
 
 

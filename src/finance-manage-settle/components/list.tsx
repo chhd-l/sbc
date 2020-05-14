@@ -5,6 +5,7 @@ import { DataGrid, Const, noop, history, util, AuthWrapper } from 'qmkit';
 import moment from 'moment';
 
 import { IMap } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 
 const { Column } = DataGrid;
 
@@ -48,42 +49,46 @@ export default class List extends React.Component<any, any> {
       >
         {queryParams.get('settleStatus') == 1 && (
           <Column
-            title="结算时间"
+            title={<FormattedMessage id="statementTime" />}
             key="settleTime"
             dataIndex="settleTime"
             render={(value) => {
-              return moment(value)
-                .format(Const.DAY_FORMAT)
-                .toString();
+              return moment(value).format(Const.DAY_FORMAT).toString();
             }}
           />
         )}
 
         <Column
-          title="结算单生成时间"
+          title={<FormattedMessage id="statementGenerationTime" />}
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
-            return moment(value)
-              .format(Const.DAY_FORMAT)
-              .toString();
+            return moment(value).format(Const.DAY_FORMAT).toString();
           }}
         />
 
-        <Column title="结算单号" key="statementNo" dataIndex="settlementCode" />
+        <Column
+          title={<FormattedMessage id="statementNumber" />}
+          key="statementNo"
+          dataIndex="settlementCode"
+        />
 
         <Column
-          title="结算时间段"
+          title={<FormattedMessage id="billingPeriod" />}
           key="statementTime"
           render={(row) => {
             return `${row.startTime}～${row.endTime}`;
           }}
         />
 
-        <Column title="店铺名称" key="storeName" dataIndex="storeName" />
+        <Column
+          title={<FormattedMessage id="storeName" />}
+          key="storeName"
+          dataIndex="storeName"
+        />
 
         <Column
-          title="商品实付总额"
+          title={<FormattedMessage id="totalPaidGoods" />}
           key="splitPayPrice"
           dataIndex="splitPayPrice"
           render={(value) => {
@@ -92,7 +97,7 @@ export default class List extends React.Component<any, any> {
         />
 
         <Column
-          title="运费总额"
+          title={<FormattedMessage id="totalFreight" />}
           key="deliveryPrice"
           dataIndex="deliveryPrice"
           render={(value) => {
@@ -100,7 +105,7 @@ export default class List extends React.Component<any, any> {
           }}
         />
 
-        <Column
+        {/* <Column
           title="通用券优惠总额"
           key="commonCouponPrice"
           dataIndex="commonCouponPrice"
@@ -143,10 +148,10 @@ export default class List extends React.Component<any, any> {
           render={(value) => {
             return util.FORMAT_YUAN((Math.floor(value * 100) / 100).toFixed(2));
           }}
-        />
+        /> */}
 
         <Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           key="operation"
           render={(row) => {
             return (
@@ -156,7 +161,7 @@ export default class List extends React.Component<any, any> {
                     history.push(`/billing-details/${row.settleId}`)
                   }
                 >
-                  查询明细
+                  {<FormattedMessage id="inquiryDetails" />}
                 </a>
               </AuthWrapper>
             );

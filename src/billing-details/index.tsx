@@ -11,6 +11,7 @@ import List from './components/list';
 import Bottom from './components/bottom';
 import AppStore from './store';
 import './style.css';
+import { FormattedMessage } from 'react-intl';
 
 const OptionDiv = styled.div`
   width: 100%;
@@ -42,11 +43,13 @@ export default class BillingDetails extends React.Component<any, any> {
         }}
       >
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>结算明细</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {<FormattedMessage id="settlementDetails" />}
+          </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title="结算明细" />
+          <Headline title={<FormattedMessage id="settlementDetails" />} />
           <OptionDiv>
             <Tooltip
               overlayStyle={{
@@ -57,7 +60,8 @@ export default class BillingDetails extends React.Component<any, any> {
               title={this._renderTitle}
             >
               <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />&nbsp;&nbsp;操作说明
+                <Icon type="question-circle-o" />
+                &nbsp;&nbsp;{<FormattedMessage id="instructions" />}
               </a>
             </Tooltip>
           </OptionDiv>

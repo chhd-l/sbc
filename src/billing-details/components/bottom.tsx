@@ -5,6 +5,7 @@ import { IMap } from 'typings/globalType';
 import { Relax } from 'plume2';
 
 import { history, noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Bottom extends React.Component<any, any> {
@@ -25,7 +26,7 @@ export default class Bottom extends React.Component<any, any> {
       <div>
         <div style={{ marginTop: 20 }}>
           <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
-            返回
+            {<FormattedMessage id="back" />}
           </Button>
         </div>
 

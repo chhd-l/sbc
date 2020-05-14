@@ -2,6 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Button, Select, DatePicker } from 'antd';
 import { SelectGroup, noop, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -35,7 +36,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="客户名称"
+            addonBefore={<FormattedMessage id="consumerName" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -48,7 +49,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Input
-            addonBefore="订单号"
+            addonBefore={<FormattedMessage id="orderNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -81,7 +82,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="开票状态"
+            label={<FormattedMessage id="invoiceStatus" />}
             style={{ width: 80 }}
             onChange={(e) => {
               onFormChange({
@@ -91,7 +92,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
             defaultValue={''}
           >
-            <Option value={null}>全部</Option>
+            <Option value={null}>{<FormattedMessage id="all" />}</Option>
             <Option value="1">已开票</Option>
             <Option value="0">待开票</Option>
           </SelectGroup>
@@ -127,7 +128,7 @@ export default class SearchForm extends React.Component<any, any> {
               onSearch();
             }}
           >
-            搜索
+            {<FormattedMessage id="search" />}
           </Button>
         </FormItem>
       </Form>

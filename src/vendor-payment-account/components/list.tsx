@@ -2,6 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Menu, Dropdown, Icon, message } from 'antd';
 import { noop, DataGrid, AuthWrapper, checkAuth } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { Column } = DataGrid;
 
@@ -43,7 +44,7 @@ export default class List extends React.Component<any, any> {
         rowKey="bankNo"
       >
         <Column
-          title="序号"
+          title={<FormattedMessage id="serialNumber" />}
           dataIndex="index"
           key="index"
           render={(_text, _rowData: any, index) => {
@@ -51,28 +52,44 @@ export default class List extends React.Component<any, any> {
           }}
         />
         />
-        <Column title="银行" dataIndex="bankName" key="bankName" />
-        <Column title="账户名" dataIndex="accountName" key="accountName" />
-        <Column title="账号" dataIndex="bankNo" key="bankNo" />
-        <Column title="支行" dataIndex="bankBranch" key="bankBranch" />
         <Column
-          title="收到平台打款"
+          title={<FormattedMessage id="bank" />}
+          dataIndex="bankName"
+          key="bankName"
+        />
+        <Column
+          title={<FormattedMessage id="accountName" />}
+          dataIndex="accountName"
+          key="accountName"
+        />
+        <Column
+          title={<FormattedMessage id="accountNumber" />}
+          dataIndex="bankNo"
+          key="bankNo"
+        />
+        <Column
+          title={<FormattedMessage id="subBranch" />}
+          dataIndex="bankBranch"
+          key="bankBranch"
+        />
+        <Column
+          title={<FormattedMessage id="receivePayment" />}
           dataIndex="isReceived"
           key="isReceived"
           render={(text, _record, _i) => {
-            return text == 0 ? <span>否</span> : <span>是</span>;
+            return text == 0 ? <span>N</span> : <span>Y</span>;
           }}
         />
         <Column
-          title="主账号"
+          title={<FormattedMessage id="mainAccount" />}
           dataIndex="isDefaultAccount"
           key="isDefaultAccount"
           render={(text, _record, _i) => {
-            return text == 0 ? <span>否</span> : <span>是</span>;
+            return text == 0 ? <span>N</span> : <span>Y</span>;
           }}
         />
         <Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           dataIndex="operation"
           key="operation"
           render={(_text, record, _i) => {
@@ -81,11 +98,9 @@ export default class List extends React.Component<any, any> {
                 checkAuth('f_acc_del') ||
                 checkAuth('master_account_setting'))) ||
               ((record as any).isReceived == 0 &&
-                (checkAuth('f_acc_del') || checkAuth('f_acc_rec_confirm'))) ? (
-                this._menu(record)
-              ) : (
-                '-'
-              );
+                (checkAuth('f_acc_del') || checkAuth('f_acc_rec_confirm')))
+              ? this._menu(record)
+              : '-';
           }}
         />
       </DataGrid>
@@ -97,43 +112,37 @@ export default class List extends React.Component<any, any> {
     return record.isReceived == 1 ? (
       <div className="operation-box">
         <AuthWrapper functionName="f_vendor_new_accounts">
-          <a
-            href="javascript:;"
-            onClick={() => this._showAccountModal(record)}
-          >
-            变更当前收款账户
-            </a>
+          <a href="javascript:;" onClick={() => this._showAccountModal(record)}>
+            {<FormattedMessage id="changeAccount" />}
+          </a>
         </AuthWrapper>
         <AuthWrapper functionName="f_acc_del">
           <a href="javascript:;" onClick={() => deleteAccount(record)}>
-            删除账号
-            </a>
+            {<FormattedMessage id="deleteAccount" />}
+          </a>
         </AuthWrapper>
         <AuthWrapper functionName="master_account_setting">
           <a href="javascript:;" onClick={() => this._setMainAccount(record)}>
-            设置主账号
-            </a>
+            {<FormattedMessage id="setMainAccount" />}
+          </a>
         </AuthWrapper>
       </div>
     ) : (
-        <div className="operation-box">
-          {record.remitPrice && (
-            <AuthWrapper functionName="f_acc_rec_confirm">
-              <a
-                href="javascript:;"
-                onClick={() => this._showMoneyModal(record)}
-              >
-                收到打款
-              </a>
-            </AuthWrapper>
-          )}
-          <AuthWrapper functionName="f_acc_del">
-            <a href="javascript:;" onClick={() => deleteAccount(record)}>
-              删除账号
+      <div className="operation-box">
+        {record.remitPrice && (
+          <AuthWrapper functionName="f_acc_rec_confirm">
+            <a href="javascript:;" onClick={() => this._showMoneyModal(record)}>
+              {<FormattedMessage id="receivePayment" />}
             </a>
           </AuthWrapper>
-        </div>
-      );
+        )}
+        <AuthWrapper functionName="f_acc_del">
+          <a href="javascript:;" onClick={() => deleteAccount(record)}>
+            {<FormattedMessage id="deleteAccount" />}
+          </a>
+        </AuthWrapper>
+      </div>
+    );
   };
 
   /**

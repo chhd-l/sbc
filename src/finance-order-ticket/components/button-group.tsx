@@ -2,6 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Button, Popconfirm, Dropdown, Icon, Menu } from 'antd';
 import { noop, ExportModal, AuthWrapper, checkAuth } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class ButtonGroup extends React.Component<any, any> {
@@ -38,7 +39,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="editOrderInvoices">
           <Button type="primary" onClick={() => onShow()}>
-            新增
+            {<FormattedMessage id="add" />}
           </Button>
         </AuthWrapper>
 
@@ -49,7 +50,8 @@ export default class ButtonGroup extends React.Component<any, any> {
             getPopupContainer={() => document.getElementById('page-content')}
           >
             <Button>
-              批量操作<Icon type="down" />
+              {<FormattedMessage id="bulkOperation" />}
+              <Icon type="down" />
             </Button>
           </Dropdown>
         ) : null}
@@ -78,14 +80,16 @@ export default class ButtonGroup extends React.Component<any, any> {
               okText="确定"
               cancelText="取消"
             >
-              <a href="javascript:void(0);">批量开票</a>
+              <a href="javascript:void(0);">
+                {<FormattedMessage id="bulkInvoice" />}
+              </a>
             </Popconfirm>
           </AuthWrapper>
         </Menu.Item>
         <Menu.Item>
           <AuthWrapper functionName="exportOpenOrderInvoice">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              批量导出
+              {<FormattedMessage id="bulkExport" />}
             </a>
           </AuthWrapper>
         </Menu.Item>

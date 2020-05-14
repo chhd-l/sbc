@@ -6,6 +6,7 @@ import { IMap } from 'typings/globalType';
 import moment from 'moment';
 
 import { Const, util } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
@@ -26,15 +27,16 @@ export default class BillingDetails extends React.Component<any, any> {
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 10 }}>
             <span style={styles.space}>
-              结算时间段：{settlement.get('startTime')}～{settlement.get(
-                'endTime'
-              )}
+              {<FormattedMessage id="billingPeriod" />}:
+              {settlement.get('startTime')}～{settlement.get('endTime')}
             </span>
             <span style={styles.space}>
-              结算单号：{settlement.get('settlementCode')}
+              {<FormattedMessage id="statementNumber" />}:
+              {settlement.get('settlementCode')}
             </span>
             <span style={styles.space}>
-              结算单生成时间：{moment(settlement.get('createTime'))
+              {<FormattedMessage id="statementGenerationTime" />}:
+              {moment(settlement.get('createTime'))
                 .format(Const.DAY_FORMAT)
                 .toString()}
             </span>
@@ -42,7 +44,9 @@ export default class BillingDetails extends React.Component<any, any> {
 
           <Row>
             <Col span={3}>
-              <p style={styles.nav}>商品实付总额</p>
+              <p style={styles.nav}>
+                {<FormattedMessage id="totalPaidGoods" />}
+              </p>
               <p style={styles.num}>
                 {settlement.get('splitPayPrice')
                   ? util.FORMAT_YUAN(settlement.get('splitPayPrice'))
@@ -50,50 +54,10 @@ export default class BillingDetails extends React.Component<any, any> {
               </p>
             </Col>
             <Col span={3}>
-              <p style={styles.nav}>运费总额</p>
+              <p style={styles.nav}>{<FormattedMessage id="totalFreight" />}</p>
               <p style={styles.num}>
                 {settlement.get('deliveryPrice')
                   ? util.FORMAT_YUAN(settlement.get('deliveryPrice'))
-                  : '¥0.00'}
-              </p>
-            </Col>
-            <Col span={3}>
-              <p style={styles.nav}>通用券优惠总额</p>
-              <p style={styles.num}>
-                {settlement.get('commonCouponPrice')
-                  ? util.FORMAT_YUAN(settlement.get('commonCouponPrice'))
-                  : '¥0.00'}
-              </p>
-            </Col>
-            <Col span={3}>
-              <p style={styles.nav}>积分抵扣总额</p>
-              <p style={styles.num}>
-                {settlement.get('pointPrice')
-                  ? util.FORMAT_YUAN(settlement.get('pointPrice'))
-                  : '¥0.00'}
-              </p>
-            </Col>
-            <Col span={3}>
-              <p style={styles.nav}>平台佣金总额</p>
-              <p style={styles.num}>
-                {settlement.get('platformPrice')
-                  ? util.FORMAT_YUAN(settlement.get('platformPrice'))
-                  : '¥0.00'}
-              </p>
-            </Col>
-            <Col span={3}>
-              <p style={styles.nav}>分销佣金总额</p>
-              <p style={styles.num}>
-                {settlement.get('commissionPrice')
-                  ? util.FORMAT_YUAN(settlement.get('commissionPrice'))
-                  : '¥0.00'}
-              </p>
-            </Col>
-            <Col span={3}>
-              <p style={styles.nav}>店铺应收总额</p>
-              <p style={styles.num}>
-                {settlement.get('storePrice')
-                  ? util.FORMAT_YUAN(settlement.get('storePrice'))
                   : '¥0.00'}
               </p>
             </Col>

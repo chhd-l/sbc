@@ -3,6 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Form, Checkbox, Button, Switch } from 'antd';
 import styled from 'styled-components';
 import { noop, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const TicketBg = styled.div`
@@ -50,11 +51,15 @@ export default class Info extends React.Component<any, any> {
         <TicketBg>
           <Form layout="inline">
             <FormItem>
-              <label>支持的开票类型:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+              <label>
+                {<FormattedMessage id="supportedBillingTypes" />}
+                :&nbsp;&nbsp;&nbsp;&nbsp;
+              </label>
               <Switch
                 checked={invoiceType.get('isSupportInvoice') == 0}
                 onChange={(e) => onSwitchChange(e.valueOf())}
-              />&nbsp;&nbsp; 不支持开票
+              />
+              &nbsp;&nbsp; {<FormattedMessage id="doesNotSupportInvoicing" />}
             </FormItem>
 
             <FormItem>
@@ -68,7 +73,7 @@ export default class Info extends React.Component<any, any> {
                   })
                 }
               >
-                普通发票
+                {<FormattedMessage id="ordinaryInvoice" />}
               </Checkbox>
             </FormItem>
 
@@ -83,13 +88,13 @@ export default class Info extends React.Component<any, any> {
                   })
                 }
               >
-                增值税专用发票
+                {<FormattedMessage id="vatSpecialInvoice" />}
               </Checkbox>
             </FormItem>
 
             <FormItem className="saveButton">
               <Button type="primary" onClick={() => onSaveInvoiceType()}>
-                保存设置
+                {<FormattedMessage id="saveSettings" />}
               </Button>
             </FormItem>
           </Form>

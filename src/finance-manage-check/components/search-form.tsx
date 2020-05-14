@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Button, Form, DatePicker } from 'antd';
 
 import { noop } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -65,7 +66,7 @@ export default class SearchForm extends React.Component<any, any> {
               }
               allowClear={false}
               format="YYYY-MM-DD"
-              placeholder={['起始时间', '结束时间']}
+              placeholder={['Start Time', 'End Time']}
               onChange={(date, dateString) =>
                 this._handleDateParams(date, dateString)
               }
@@ -90,7 +91,7 @@ export default class SearchForm extends React.Component<any, any> {
                 searchByDate();
               }}
             >
-              搜索
+              {<FormattedMessage id="search" />}
             </Button>
           </FormItem>
         </Form>

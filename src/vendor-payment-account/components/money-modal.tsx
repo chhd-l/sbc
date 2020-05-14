@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Modal } from 'antd';
 import { noop } from 'qmkit';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const ListText = styled.div`
   line-height: 20px;
@@ -51,9 +52,9 @@ export default class MoneyModal extends React.Component<any, any> {
     }
     return (
       <div>
-        <Modal  maskClosable={false}
+        <Modal
+          maskClosable={false}
           title="确认首次打款"
-           
           visible={moneyVisible}
           onCancel={this._handleModelCancel}
           onOk={() =>
@@ -64,26 +65,26 @@ export default class MoneyModal extends React.Component<any, any> {
         >
           <ListText>
             <p>
-              <span>账户名：</span>
+              <span>{<FormattedMessage id="accountName" />}:</span>
               {moneyModalContent.get('accountName')}
             </p>
             <p>
-              <span>账号：</span>
+              <span>{<FormattedMessage id="accountNumber" />}:</span>
               {moneyModalContent.get('bankNo')}
             </p>
             <p>
-              <span>银行：</span>
+              <span>{<FormattedMessage id="bank" />}:</span>
               {moneyModalContent.get('bankName')}
             </p>
             <p>
-              <span>支行名称：</span>
+              <span>{<FormattedMessage id="subBranch" />}:</span>
               {moneyModalContent.get('bankBranch')}
             </p>
             <p>
-              <span>平台首次打款金额:￥</span>
+              <span>平台首次打款金额:$</span>
               {moneyModalContent.get('remitPrice')
                 ? moneyModalContent.get('remitPrice').toFixed(2)
-                : '无'}
+                : 'none'}
             </p>
           </ListText>
         </Modal>

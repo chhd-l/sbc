@@ -4,18 +4,19 @@ import { Const, DataGrid, noop, AuthWrapper, checkAuth } from 'qmkit';
 import { List } from 'immutable';
 import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
 import momnet from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
 const { Column } = DataGrid;
 
 const invoiceStateDic = {
-  0: '待开票',
+  0: 'To be invoiced',
   1: '已开票'
 };
 
 const invoiceTypeDic = {
-  0: '普通发票',
-  1: '增值税专用发票'
+  0: 'Ordinary Invoice',
+  1: 'Vat Special Invoice'
 };
 const payOrderStatusDic = {
   0: '已付款',
@@ -92,23 +93,29 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title="开票时间"
+          title={<FormattedMessage id="billingTime" />}
           key="invoiceTime"
           dataIndex="invoiceTime"
           render={(invoiceTime) => (
             <span>
               {invoiceTime
-                ? momnet(invoiceTime)
-                    .format(Const.TIME_FORMAT)
-                    .toString()
+                ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString()
                 : '-'}
             </span>
           )}
         />
-        <Column title="订单号" key="orderNo" dataIndex="orderNo" />
-        <Column title="客户名称" key="customerName" dataIndex="customerName" />
         <Column
-          title="订单金额"
+          title={<FormattedMessage id="orderNumber" />}
+          key="orderNo"
+          dataIndex="orderNo"
+        />
+        <Column
+          title={<FormattedMessage id="consumerName" />}
+          key="customerName"
+          dataIndex="customerName"
+        />
+        <Column
+          title={<FormattedMessage id="orderAmount" />}
           key="orderPrice"
           dataIndex="orderPrice"
           render={(orderPrice) => (
@@ -118,7 +125,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           )}
         />
         <Column
-          title="付款状态"
+          title={<FormattedMessage id="paymentStatus" />}
           dataIndex="payOrderStatus"
           key="payOrderStatus"
           render={(payOrderStatus) => (
@@ -127,21 +134,21 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         />
 
         <Column
-          title="发票类型"
+          title={<FormattedMessage id="invoiceType" />}
           dataIndex="invoiceType"
           key="invoiceType"
           render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
 
         <Column
-          title="发票抬头"
+          title={<FormattedMessage id="invoice.invoiceHeader" />}
           dataIndex="invoiceTitle"
           key="invoiceTitle"
           render={(invoiceTitle) => <span>{invoiceTitle || '个人'}</span>}
         />
 
         <Column
-          title="开票状态"
+          title={<FormattedMessage id="invoiceStatus" />}
           dataIndex="invoiceState"
           key="invoiceState"
           render={(invoiceState) => (
@@ -149,7 +156,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           )}
         />
         <Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           render={(rowInfo) => this._renderOperate(rowInfo)}
         />
         {/*<Column
@@ -171,11 +178,9 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
     //待确认
     return checkAuth('fetchOrderInovices') ||
-      checkAuth('destoryOpenOrderInvoice') ? (
-      this._renderMenu(orderInvoiceId, invoiceState)
-    ) : (
-      '-'
-    );
+      checkAuth('destoryOpenOrderInvoice')
+      ? this._renderMenu(orderInvoiceId, invoiceState)
+      : '-';
   }
 
   _renderMenu = (id: string, invoiceState: number) => {
@@ -183,30 +188,26 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
     return (
       <div className="operation-box">
-          <AuthWrapper functionName="fetchOrderInovices">
-            <a
-              href="javascript:void(0);"
-              onClick={() => onSearchByInvoiceId(id)}
-            >
-              查看
+        <AuthWrapper functionName="fetchOrderInovices">
+          <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
+            {<FormattedMessage id="view" />}
+          </a>
+        </AuthWrapper>
+
+        <AuthWrapper functionName="destoryOpenOrderInvoice">
+          <Popconfirm
+            title={invoiceState == 0 ? '确定已开票？' : '确定作废开票记录？'}
+            onConfirm={() => {
+              invoiceState == 0 ? onConfirm(id) : onDestory(id);
+            }}
+            okText="Confirm"
+            cancelText="Cancel"
+          >
+            <a href="javascript:void(0);">
+              {invoiceState == 0 ? 'Billing' : 'Cancellation'}
             </a>
-          </AuthWrapper>
-
-          <AuthWrapper functionName="destoryOpenOrderInvoice">
-            <Popconfirm
-              title={invoiceState == 0 ? '确定已开票？' : '确定作废开票记录？'}
-              onConfirm={() => {
-                invoiceState == 0 ? onConfirm(id) : onDestory(id);
-              }}
-              okText="确定"
-              cancelText="取消"
-            >
-              <a href="javascript:void(0);">
-                {invoiceState == 0 ? '开票' : ' 作废'}
-              </a>
-            </Popconfirm>
-          </AuthWrapper>
-
+          </Popconfirm>
+        </AuthWrapper>
       </div>
     );
   };

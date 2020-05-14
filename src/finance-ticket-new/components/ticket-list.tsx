@@ -3,6 +3,7 @@ import { Relax } from 'plume2';
 import { Icon, Modal } from 'antd';
 import { DataGrid, noop, AuthWrapper } from 'qmkit';
 import { List } from 'immutable';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const { Column } = DataGrid;
@@ -58,11 +59,15 @@ export default class TicketList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column title="开票项目" dataIndex="projectName" key="ticket" />
         <Column
-          title="操作"
+          title={<FormattedMessage id="billingItems" />}
+          dataIndex="projectName"
+          key="ticket"
+        />
+        <Column
+          title={<FormattedMessage id="operation" />}
           key="action"
-          render={rowInfo => this._renderOperate(rowInfo)}
+          render={(rowInfo) => this._renderOperate(rowInfo)}
         />
       </DataGrid>
     );
@@ -82,7 +87,7 @@ export default class TicketList extends React.Component<any, any> {
               href="javascript:;"
               onClick={() => onEdit(rowInfo.projectId)}
             >
-              编辑
+              {<FormattedMessage id="edit" />}
             </a>
           </AuthWrapper>
           <span className="ant-divider" />
@@ -91,7 +96,7 @@ export default class TicketList extends React.Component<any, any> {
               href="javascript:;"
               onClick={() => this._handleDelete(rowInfo.projectId)}
             >
-              删除
+              {<FormattedMessage id="delete" />}
             </a>
           </AuthWrapper>
         </span>

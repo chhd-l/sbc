@@ -41,10 +41,11 @@ class ClinicForm extends React.Component<any, any> {
         latitude: '',
         location: ''
       },
-      cityArr: []
+      cityArr: [],
+      sectionList: []
     };
     this.getDetail = this.getDetail.bind(this);
-
+    this.addSection = this.addSection.bind(this);
     if (this.props.clinicId) {
       this.getDetail(this.props.clinicId);
     }
@@ -129,8 +130,19 @@ class ClinicForm extends React.Component<any, any> {
       }
     });
   };
-  addAreaPrice() {
-    console.log('新增');
+
+  addSection() {
+    debugger;
+    let section = {
+      timeZone: '',
+      orderAmount: '',
+      rewardRate: ''
+    };
+    let sectionList = this.state.sectionList;
+    sectionList.push(section);
+    this.setState({
+      sectionList: sectionList
+    });
   }
   render() {
     const { cityArr } = this.state;
@@ -285,7 +297,10 @@ class ClinicForm extends React.Component<any, any> {
             style={{ paddingTop: '10px' }}
             pagination={false}
             rowKey="intervalPriceId"
-            footer={() => <Button>+ Add section</Button>}
+            dataSource={this.state.sectionList}
+            footer={() => (
+              <Button onClick={() => this.addSection()}>+ Add section</Button>
+            )}
           >
             <Column
               title={
@@ -300,17 +315,27 @@ class ClinicForm extends React.Component<any, any> {
                   >
                     *
                   </span>
-                  order amount
+                  Time Zome
                 </div>
               }
-              key="area"
-              width={80}
-              render={(rowInfo, _i, index) => {
+              key="timeZone"
+              width={180}
+              render={(rowInfo) => {
                 return (
                   <Row>
                     <Col span={10}>
                       <FormItem>
-                        <Input addonBefore=" ≥ " disabled={index == 0} />
+                        <Select style={{ minWidth: '200px' }}>
+                          <Option value="Year" key="year">
+                            Every Year
+                          </Option>
+                          <Option value="month" key="month">
+                            Every Month
+                          </Option>
+                          <Option value="week" key="week">
+                            Every Week
+                          </Option>
+                        </Select>
                       </FormItem>
                     </Col>
                   </Row>
@@ -330,11 +355,41 @@ class ClinicForm extends React.Component<any, any> {
                   >
                     *
                   </span>
-                  reward rate
+                  Order Amount
                 </div>
               }
-              key="price"
-              width={80}
+              key="orderAmount"
+              width={180}
+              render={(rowInfo, _i, index) => {
+                return (
+                  <Row>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input addonBefore=" ≥ " />
+                      </FormItem>
+                    </Col>
+                  </Row>
+                );
+              }}
+            />
+            <Column
+              title={
+                <div>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px'
+                    }}
+                  >
+                    *
+                  </span>
+                  Reward Rate
+                </div>
+              }
+              key="rewardRate"
+              width={180}
               render={(rowInfo) => {
                 return (
                   <Row>
@@ -352,7 +407,7 @@ class ClinicForm extends React.Component<any, any> {
               key="opt"
               width={80}
               render={(rowInfo, _x, i) => {
-                return i > 0 ? <Button>Delete</Button> : null;
+                return <Button>Delete</Button>;
               }}
             />
           </Table>

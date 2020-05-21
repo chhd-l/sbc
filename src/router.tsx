@@ -553,6 +553,10 @@ const routes = [
   {
     path: '/clinic-type',
     asyncComponent: () => import('./clinic-type')
+  },
+  {
+    path: '/clinic-reward-rate',
+    asyncComponent: () => import('./clinic-reward-rate')
   }
 ];
 

@@ -173,14 +173,10 @@ export default class AppStore extends Store {
           })
         );
 
-        let filterMenu = allMenu
-          .toJS()
-          .filter(
-            (item) =>
-              item.title !== '数谋' &&
-              item.title !== '魔方' &&
-              item.title !== '应用'
-          );
+        let filterMenu = allMenu.toJS().filter(
+          (item) => item.title !== '数谋' && item.title !== '魔方'
+          // && item.title !== '应用'
+        );
 
         sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(filterMenu));
 

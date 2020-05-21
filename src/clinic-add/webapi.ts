@@ -55,3 +55,42 @@ export function queryClinicsDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * get rewardList
+ * @param filterParams
+ */
+export function queryClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/queryClinicsReward', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * add rewardList
+ * @param filterParams
+ */
+export function addClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/addClinicsReward', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * update rewardList
+ * @param filterParams
+ */
+export function updateClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/upDateClinicsReward', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

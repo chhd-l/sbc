@@ -293,6 +293,31 @@ class ClinicForm extends React.Component<any, any> {
         </TabPane>
         <TabPane tab="Reward Rate" key="reward">
           {/*区间价价table*/}
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <label style={{ minWidth: '200px', marginRight: '10px' }}>
+            Time Zome:
+          </label>
+          Every
+          <Select style={{ minWidth: '200px', marginLeft: '10px' }}>
+            <Option value="Year" key="year">
+              Year
+            </Option>
+            <Option value="month" key="month">
+              Month
+            </Option>
+            <Option value="week" key="week">
+              Week
+            </Option>
+          </Select>
           <Table
             style={{ paddingTop: '10px' }}
             pagination={false}
@@ -302,46 +327,6 @@ class ClinicForm extends React.Component<any, any> {
               <Button onClick={() => this.addSection()}>+ Add section</Button>
             )}
           >
-            <Column
-              title={
-                <div>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span>
-                  Time Zome
-                </div>
-              }
-              key="timeZone"
-              width={180}
-              render={(rowInfo) => {
-                return (
-                  <Row>
-                    <Col span={10}>
-                      <FormItem>
-                        <Select style={{ minWidth: '200px' }}>
-                          <Option value="Year" key="year">
-                            Every Year
-                          </Option>
-                          <Option value="month" key="month">
-                            Every Month
-                          </Option>
-                          <Option value="week" key="week">
-                            Every Week
-                          </Option>
-                        </Select>
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
             <Column
               title={
                 <div>
@@ -407,7 +392,12 @@ class ClinicForm extends React.Component<any, any> {
               key="opt"
               width={80}
               render={(rowInfo, _x, i) => {
-                return <Button>Delete</Button>;
+                return (
+                  <div>
+                    <Button>Save</Button>
+                    <Button>Delete</Button>
+                  </div>
+                );
               }}
             />
           </Table>

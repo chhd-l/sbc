@@ -289,6 +289,8 @@ export default {
   'recipient': 'Recipient',
   'recipientPhone': 'Recipient phone',
   'amount': 'Amount	',
+  'cateImage': 'Category image',
+  'cateDsc': 'Category description',
 
 
   'order.orderList': 'Order List',

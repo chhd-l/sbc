@@ -7,6 +7,7 @@ declare type IList = List<any>;
 export default class CateActor extends Actor {
   defaultState() {
     return {
+      cateList: [],
       dataList: [],
       allDataList: [],
       // 弹框是否显示
@@ -14,7 +15,36 @@ export default class CateActor extends Actor {
       // 表单内容
       formData: {},
       childFlag: false,
-      goodsFlag: false
+      goodsFlag: false,
+      goods: {
+        // 分类编号
+        cateId: '',
+        // 品牌编号
+        brandId: '',
+        // 商品名称
+        goodsName: '',
+        // SPU编码
+        goodsNo: '',
+        // 计量单位
+        goodsUnit: '',
+        // 上下架状态
+        addedFlag: 1,
+        // 商品详情
+        goodsDetail: '',
+        // 市场价
+        mktPrice: '',
+        // 成本价
+        costPrice: '',
+        goodsSubTitle: '',
+        //商品视频
+        goodsVideo: '',
+        //是否允许独立设价
+        allowPriceSet: 0,
+        saleType: 0
+      },
+      sourceCateList: [],
+      images: [],
+      resCateAllList: []
     };
   }
 
@@ -25,10 +55,10 @@ export default class CateActor extends Actor {
   init(state, dataList: IList) {
     // 改变数据形态，变为层级结构
     const newDataList = dataList
-      .filter(item => item.get('cateParentId') == 0)
-      .map(data => {
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
         const children = dataList.filter(
-          item => item.get('cateParentId') == data.get('storeCateId')
+          (item) => item.get('cateParentId') == data.get('storeCateId')
         );
         if (!children.isEmpty()) {
           data = data.set('children', children);
@@ -43,7 +73,7 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: editFormData')
   editCateInfo(state, data: IMap) {
-    return state.update('formData', formData => formData.merge(data));
+    return state.update('formData', (formData) => formData.merge(data));
   }
 
   /**
@@ -79,5 +109,53 @@ export default class CateActor extends Actor {
   @Action('cateActor: goods')
   image(state, flag: boolean) {
     return state.set('goodsFlag', flag);
+  }
+  /**
+   * 初始化分类
+   * @param state
+   * @param dataList
+   */
+  @Action('cateActor: initCateList')
+  initCateList(state, dataList: IList) {
+    // 改变数据形态，变为层级结构
+    const newDataList = dataList
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
+        const children = dataList
+          .filter((item) => item.get('cateParentId') == data.get('cateId'))
+          .map((childrenData) => {
+            const lastChildren = dataList.filter(
+              (item) => item.get('cateParentId') == childrenData.get('cateId')
+            );
+            if (!lastChildren.isEmpty()) {
+              childrenData = childrenData.set('children', lastChildren);
+            }
+            return childrenData;
+          });
+
+        if (!children.isEmpty()) {
+          data = data.set('children', children);
+        }
+        return data;
+      });
+    return state.set('cateList', newDataList).set('sourceCateList', dataList);
+  }
+  /**
+   * 修改商品信息
+   * @param state
+   * @param data
+   */
+  @Action('cateActor: editGoods')
+  editGoods(state, data: IMap) {
+    return state.update('goods', (goods) => goods.merge(data));
+  }
+  /**
+   * 素材分类选择
+   * @param state
+   * @param cateId
+   */
+  @Action('cateActor: cateId')
+  editCateId(state, cateId) {
+    return state.set('videoCateId', cateId);
   }
 }

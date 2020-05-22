@@ -66,3 +66,36 @@ export const dragSort = (param) => {
     body: JSON.stringify(param)
   });
 };
+
+/**
+ * 获取类目列表
+ */
+export const getSignCateList = () => {
+  // return Fetch<TResult>('/contract/goods/cate/list/1', {
+  // return Fetch('/contract/goods/cate/list/1');
+  return Fetch('/contract/goods/cate/list');
+};
+
+/**
+ * 获取对应类目下所有的属性信息
+ */
+export const getCateIdsPropDetail = (cateId: string) => {
+  return Fetch(`/goods/goodsProp/${cateId}`);
+};
+/**
+ * 获取图片类目列表
+ */
+export const getImgCates = () => {
+  return Fetch('/store/resourceCates');
+};
+/**
+ * 分页获取图片列表
+ * @param param
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function fetchImages(params = {}) {
+  return Fetch('/store/resources', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

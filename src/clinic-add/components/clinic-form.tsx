@@ -40,13 +40,15 @@ class ClinicForm extends React.Component<any, any> {
         longitude: '',
         latitude: '',
         location: ''
-      }
+      },
+      cityArr: []
     };
     this.getDetail = this.getDetail.bind(this);
 
     if (this.props.clinicId) {
       this.getDetail(this.props.clinicId);
     }
+    this.queryClinicsDictionary('city');
   }
   getDetail = async (id) => {
     const { res } = await webapi.getClinicById({
@@ -70,6 +72,18 @@ class ClinicForm extends React.Component<any, any> {
       message.error(res.message || 'get data faild');
     }
     console.log(this.state.clinicForm);
+  };
+  queryClinicsDictionary = async (type: String) => {
+    const { res } = await webapi.queryClinicsDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        cityArr: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.clinicForm;
@@ -115,229 +129,149 @@ class ClinicForm extends React.Component<any, any> {
       }
     });
   };
-  addAreaPrice() {
-    console.log('新增');
-  }
+
   render() {
+    const { cityArr } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Tabs>
-        <TabPane tab="Basic infomation" key="basic">
-          <Form
-            {...layout}
-            style={{ width: '600px' }}
-            onSubmit={this.handleSubmit}
-          >
-            <FormItem label="Prescriber Name">
-              {getFieldDecorator('clinicsName', {
-                rules: [
-                  { required: true, message: 'Please input clinic name!' }
-                ]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'clinicsName',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Prescriber Phone Number">
-              {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input clinic phone number!'
-                  }
-                ]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'phone',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Prescriber City">
-              {getFieldDecorator('primaryCity', {
-                rules: [
-                  { required: true, message: 'Please select clinic city!' }
-                ]
-              })(
-                <Select
-                  onChange={(value) => {
-                    value = value === '' ? null : value;
-                    this.onFormChange({
-                      field: 'primaryCity',
-                      value
-                    });
-                  }}
-                >
-                  <Option value="Mexico City">Mexico City</Option>
-                  <Option value="Monterrey">Monterrey</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem label="Prescriber Zip">
-              {getFieldDecorator('primaryZip', {
-                rules: [{ required: true, message: 'Please input clinic zip!' }]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'primaryZip',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Longitude">
-              {getFieldDecorator('longitude', {
-                rules: [{ required: true, message: 'Please input Longitude!' }]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'longitude',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Latitude">
-              {getFieldDecorator('latitude', {
-                rules: [{ required: true, message: 'Please input Latitude!' }]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'latitude',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Prescriber Address">
-              {getFieldDecorator('location')(
-                <Input.TextArea
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'location',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-              {this.props.pageType === 'edit' ? (
-                <Button type="primary" htmlType="submit">
-                  Update
-                </Button>
-              ) : (
-                <Button type="primary" htmlType="submit">
-                  Create
-                </Button>
-              )}
-              <Button style={{ marginLeft: '20px' }}>
-                <Link to="/clinic">Back List</Link>
+      <div>
+        <Form
+          {...layout}
+          style={{ width: '600px' }}
+          onSubmit={this.handleSubmit}
+        >
+          <FormItem label="Prescriber Name">
+            {getFieldDecorator('clinicsName', {
+              rules: [{ required: true, message: 'Please input clinic name!' }]
+            })(
+              <Input
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'clinicsName',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="Prescriber Phone Number">
+            {getFieldDecorator('phone', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input clinic phone number!'
+                }
+              ]
+            })(
+              <Input
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'phone',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="Prescriber City">
+            {getFieldDecorator('primaryCity', {
+              rules: [{ required: true, message: 'Please select clinic city!' }]
+            })(
+              <Select
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'primaryCity',
+                    value
+                  });
+                }}
+              >
+                {cityArr.map((item) => (
+                  <Option value={item.valueEn} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+                {/* <Option value="Mexico City">Mexico City</Option>
+                  <Option value="Monterrey">Monterrey</Option> */}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem label="Prescriber Zip">
+            {getFieldDecorator('primaryZip', {
+              rules: [{ required: true, message: 'Please input clinic zip!' }]
+            })(
+              <Input
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'primaryZip',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="Longitude">
+            {getFieldDecorator('longitude', {
+              rules: [{ required: true, message: 'Please input Longitude!' }]
+            })(
+              <Input
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'longitude',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="Latitude">
+            {getFieldDecorator('latitude', {
+              rules: [{ required: true, message: 'Please input Latitude!' }]
+            })(
+              <Input
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'latitude',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="Prescriber Address">
+            {getFieldDecorator('location')(
+              <Input.TextArea
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'location',
+                    value
+                  });
+                }}
+              />
+            )}
+          </FormItem>
+          <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+            {this.props.pageType === 'edit' ? (
+              <Button type="primary" htmlType="submit">
+                Update
               </Button>
-            </FormItem>
-          </Form>
-        </TabPane>
-        <TabPane tab="Reward Rate" key="reward">
-          {/*区间价价table*/}
-          <Table
-            style={{ paddingTop: '10px' }}
-            pagination={false}
-            rowKey="intervalPriceId"
-            footer={() => <Button>+ Add section</Button>}
-          >
-            <Column
-              title={
-                <div>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span>
-                  order amount
-                </div>
-              }
-              key="area"
-              width={80}
-              render={(rowInfo, _i, index) => {
-                return (
-                  <Row>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input addonBefore=" ≥ " disabled={index == 0} />
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
-            <Column
-              title={
-                <div>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span>
-                  reward rate
-                </div>
-              }
-              key="price"
-              width={80}
-              render={(rowInfo) => {
-                return (
-                  <Row>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input />
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
-            <Column
-              title={<FormattedMessage id="operation" />}
-              key="opt"
-              width={80}
-              render={(rowInfo, _x, i) => {
-                return i > 0 ? <Button>Delete</Button> : null;
-              }}
-            />
-          </Table>
-        </TabPane>
-      </Tabs>
+            ) : (
+              <Button type="primary" htmlType="submit">
+                Create
+              </Button>
+            )}
+            <Button style={{ marginLeft: '20px' }}>
+              <Link to="/clinic">Back List</Link>
+            </Button>
+          </FormItem>
+        </Form>
+      </div>
     );
   }
 }

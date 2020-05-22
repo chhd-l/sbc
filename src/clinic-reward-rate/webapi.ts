@@ -5,12 +5,13 @@ type TResult = {
   message: string;
   context: any;
 };
+
 /**
- * Add Clinic
+ * get rewardList
  * @param filterParams
  */
-export function addClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/addPrescription', {
+export function queryClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/queryClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -19,23 +20,11 @@ export function addClinic(filterParams = {}) {
 }
 
 /**
- * Add Clinic
+ * add rewardList
  * @param filterParams
  */
-export function updateClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/upDatePrescription', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-/**
- * Add Clinic
- * @param filterParams
- */
-export function getClinicById(filterParams = {}) {
-  return Fetch<TResult>('/clinics/prescriptionById', {
+export function addClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/addClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -44,11 +33,23 @@ export function getClinicById(filterParams = {}) {
 }
 
 /**
- * get City
+ * update rewardList
  * @param filterParams
  */
-export function queryClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+export function updateClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/upDateClinicsReward', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+/**
+ * delete rewardList
+ * @param filterParams
+ */
+export function delClinicsReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/delClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -29,3 +29,16 @@ export function deleteClinic(filterParams = {}) {
     })
   });
 }
+
+/**
+ * get City
+ * @param filterParams
+ */
+export function queryClinicsDictionary(filterParams = {}) {
+  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

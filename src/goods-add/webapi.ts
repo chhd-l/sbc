@@ -29,7 +29,16 @@ export const getCateList = () => {
  * 获取店铺分类列表
  */
 export const getStoreCateList = () => {
-  return Fetch('/storeCate');
+  // return Fetch('/storeCate');
+  let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+  let params = {
+    goodsCateId: 1129,
+    storeId: loginInfo.storeId
+  };
+  return Fetch('/storeCate/storeCateByCondition', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
 };
 
 /**

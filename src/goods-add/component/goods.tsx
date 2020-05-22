@@ -398,7 +398,7 @@ class GoodsForm extends React.Component<any, any> {
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
-                  disabled
+                  // disabled
                 >
                   {this.generateStoreCateTree(storeCateList)}
                 </TreeSelect>

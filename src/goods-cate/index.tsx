@@ -8,6 +8,7 @@ import CateList from './component/cate-list';
 import CateModal from './component/cate-modal';
 import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
+import PicModal from './component/pic-modal';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
@@ -15,6 +16,12 @@ export default class GoodsCate extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
+    //初始化素材
+    this.store.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
   }
 
   render() {
@@ -41,6 +48,8 @@ export default class GoodsCate extends React.Component<any, any> {
 
           {/*弹框*/}
           <CateModal />
+
+          <PicModal />
         </div>
       </div>
     );

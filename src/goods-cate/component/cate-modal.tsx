@@ -1,25 +1,28 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, TreeSelect, Tree, message } from 'antd';
 import { Relax } from 'plume2';
-import { noop, QMMethod } from 'qmkit';
-import { IMap } from 'typings/globalType';
-import { Map } from 'immutable';
+import { noop, QMMethod, Tips } from 'qmkit';
+import { Map, fromJS } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormattedMessage } from 'react-intl';
+import { IList, IMap } from 'typings/globalType';
+import ImageLibraryUpload from './image-library-upload';
+const TreeNode = Tree.TreeNode;
+const { TextArea } = Input;
 
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 10 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 10 }
   }
 };
 
@@ -35,11 +38,15 @@ export default class CateModal extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      cateList: IList;
       modalVisible: boolean;
       doAdd: Function;
       editFormData: Function;
       formData: IMap;
       closeModal: Function;
+      sourceCateList: IList;
+      goods: IMap;
+      modalVisibleFun: Function;
     };
   };
 
@@ -53,7 +60,18 @@ export default class CateModal extends React.Component<any, any> {
     // 类目信息
     formData: 'formData',
     // 关闭弹窗
-    closeModal: noop
+    closeModal: noop,
+    sourceCateList: 'sourceCateList',
+    goods: 'goods',
+    cateList: 'cateList',
+    checkFlag: 'checkFlag',
+    showGoodsPropDetail: noop,
+    updateGoodsForm: noop,
+    editGoods: noop,
+    images: 'images',
+    modalVisibleFun: noop,
+    clickImg: noop,
+    removeImg: noop
   };
 
   render() {
@@ -109,9 +127,24 @@ class CateModalForm extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      cateList: IList;
       formData: IMap;
       closeModal: Function;
       editFormData: Function;
+      sourceCateList: IList;
+      goods: IMap;
+      editGoods: Function;
+      showBrandModal: Function;
+      showCateModal: Function;
+      checkFlag: boolean;
+      enterpriseFlag: boolean;
+      flashsaleGoods: IList;
+      updateGoodsForm: Function;
+      showGoodsPropDetail: Function;
+      images: IList;
+      clickImg: Function;
+      removeImg: Function;
+      modalVisibleFun: Function;
     };
     form;
   };
@@ -128,8 +161,46 @@ class CateModalForm extends React.Component<any, any> {
 
   render() {
     const formData = this._store.state().get('formData');
+    console.log(formData, 'formData');
     const cateName = formData.get('cateName');
+    // const sourceCateList:IList = formData.get('')
+    // console.log(cateName, 'cateName')
     const { getFieldDecorator } = this.props.form;
+
+    //处理分类的树形图结构数据
+    const loop = (cateList) =>
+      cateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          // 一二级类目不允许选择
+          return (
+            <TreeNode
+              key={item.get('cateId')}
+              disabled={true}
+              value={item.get('cateId')}
+              title={item.get('cateName')}
+            >
+              {loop(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return (
+          <TreeNode
+            key={item.get('cateId')}
+            value={item.get('cateId')}
+            title={item.get('cateName')}
+          />
+        );
+      });
+    const {
+      sourceCateList,
+      goods,
+      cateList,
+      images,
+      modalVisibleFun,
+      clickImg,
+      removeImg
+    } = this.props.relaxProps;
+    console.log(cateList, sourceCateList, 'cateList');
     return (
       <Form className="login-form">
         <FormItem
@@ -159,6 +230,90 @@ class CateModalForm extends React.Component<any, any> {
             ? formData.get('cateParentName')
             : '无'}
         </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="product.platformCategory" />}
+        >
+          {getFieldDecorator('cateId', {
+            rules: [
+              {
+                required: true,
+                message: '请选择平台商品类目'
+              },
+              {
+                validator: (_rule, value, callback) => {
+                  if (!value) {
+                    callback();
+                    return;
+                  }
+
+                  let overLen = false;
+                  sourceCateList.forEach((val) => {
+                    if (val.get('cateParentId') + '' == value) overLen = true;
+                    return;
+                  });
+
+                  if (overLen) {
+                    callback(new Error('请选择最末级的分类'));
+                    return;
+                  }
+
+                  callback();
+                }
+              }
+            ],
+            onChange: this._editGoods.bind(this, 'cateId'),
+            initialValue:
+              goods.get('cateId') && goods.get('cateId') != ''
+                ? goods.get('cateId')
+                : undefined
+          })(
+            <TreeSelect
+              getPopupContainer={() => document.getElementById('page-content')}
+              placeholder="请选择分类"
+              notFoundContent="暂无分类"
+              // disabled={cateDisabled}
+              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              treeDefaultExpandAll
+            >
+              {loop(cateList)}
+            </TreeSelect>
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="cateImage" />}
+        >
+          <div style={{ width: 550 }}>
+            <ImageLibraryUpload
+              images={images}
+              modalVisible={modalVisibleFun}
+              clickImg={clickImg}
+              removeImg={removeImg}
+              imgType={0}
+              imgCount={10}
+              skuId=""
+            />
+          </div>
+          <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+        </FormItem>
+        <FormItem
+          labelCol={2}
+          {...formItemLayout}
+          label={<FormattedMessage id="cateDsc" />}
+        >
+          {getFieldDecorator('goodsDescription', {
+            rules: [
+              {
+                validator: (rule, value, callback) => {
+                  QMMethod.validatorEmoji(rule, value, callback, '商品描述');
+                }
+              }
+            ],
+            onChange: this._editGoods.bind(this, 'goodsDescription'),
+            initialValue: goods.get('goodsDescription')
+          })(<TextArea rows={4} placeholder="请填商品描述" />)}
+        </FormItem>
       </Form>
     );
   }
@@ -169,5 +324,102 @@ class CateModalForm extends React.Component<any, any> {
   _changeCateName = (e) => {
     const store = this._store as any;
     store.editFormData(Map({ cateName: e.target.value }));
+  };
+  /**
+   * 选中平台类目时，实时显示对应类目下的所有属性信息
+   */
+  _onChange = (value) => {
+    const { showGoodsPropDetail } = this.props.relaxProps;
+    showGoodsPropDetail(value);
+  };
+  /**
+   * 修改商品项
+   */
+  _editGoods = (key: string, e) => {
+    const {
+      editGoods,
+      showBrandModal,
+      showCateModal,
+      checkFlag,
+      enterpriseFlag,
+      flashsaleGoods,
+      updateGoodsForm
+    } = this.props.relaxProps;
+    const { setFieldsValue } = this.props.form;
+    if (e && e.target) {
+      e = e.target.value;
+    }
+    console.log(key, 'key');
+    if (key === 'cateId') {
+      this._onChange(e);
+      if (e === '-1') {
+        showCateModal();
+      }
+    } else if (key === 'brandId' && e === '0') {
+      showBrandModal();
+    }
+
+    if (key === 'saleType' && e == 0) {
+      if (!flashsaleGoods.isEmpty()) {
+        message.error('该商品正在参加秒杀活动，不可更改销售类型！', 3, () => {
+          let goods = Map({
+            [key]: fromJS(1)
+          });
+          editGoods(goods);
+          setFieldsValue({ saleType: 1 });
+        });
+      } else {
+        let message = '';
+        //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
+        if (checkFlag == 'true') {
+          if (enterpriseFlag) {
+            //分销商品和企业购商品
+            message =
+              '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
+          } else {
+            //分销商品
+            message =
+              '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
+          }
+        } else {
+          if (enterpriseFlag) {
+            message =
+              '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
+          }
+        }
+        if (message != '') {
+          // confirm({
+          //   title: '提示',
+          //   content: message,
+          //   onOk() {
+          let goods = Map({
+            [key]: fromJS(e)
+          });
+          editGoods(goods);
+          //   },
+          //   onCancel() {
+          //     let goods = Map({
+          //       [key]: fromJS(1)
+          //     });
+          //     editGoods(goods);
+          //     setFieldsValue({ saleType: 1 });
+          //   },
+          //   okText: '确定',
+          //   cancelText: '取消'
+          // });
+        } else {
+          let goods = Map({
+            [key]: fromJS(e)
+          });
+          editGoods(goods);
+        }
+      }
+    } else {
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      updateGoodsForm(this.props.form);
+      editGoods(goods);
+    }
   };
 }

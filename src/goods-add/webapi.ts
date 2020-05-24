@@ -20,6 +20,8 @@ export const getGoodsDetail = (goodsId: string) => {
  * 获取类目列表
  */
 export const getCateList = () => {
+  // return Fetch<TResult>('/contract/goods/cate/list/1', {
+  // return Fetch('/contract/goods/cate/list/1');
   return Fetch('/contract/goods/cate/list');
 };
 

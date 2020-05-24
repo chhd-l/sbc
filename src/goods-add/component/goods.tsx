@@ -362,7 +362,7 @@ class GoodsForm extends React.Component<any, any> {
                   }
                   placeholder="请选择分类"
                   notFoundContent="暂无分类"
-                  disabled={cateDisabled}
+                  // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                 >
@@ -398,6 +398,7 @@ class GoodsForm extends React.Component<any, any> {
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
+                  disabled
                 >
                   {this.generateStoreCateTree(storeCateList)}
                 </TreeSelect>
@@ -515,9 +516,19 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={8}>
+          <Col span={16}>
             <FormItem
-              {...formItemLayout}
+              labelCol={{
+                span: 2,
+                xs: { span: 24 },
+                sm: { span: 6 }
+              }}
+              wrapperCol={{
+                span: 24,
+                xs: { span: 24 },
+                sm: { span: 18 }
+              }}
+              // {...formItemLayout}
               label={<FormattedMessage id="product.productDescription" />}
             >
               {getFieldDecorator('goodsDescription', {
@@ -633,11 +644,11 @@ class GoodsForm extends React.Component<any, any> {
                   <Radio value={0}>
                     <FormattedMessage id="product.offShelves" />
                   </Radio>
-                  {isEditGoods && (
+                  {/* {isEditGoods && (
                     <Radio value={2} disabled={true}>
                       <FormattedMessage id="product.partialOnShelves" />
                     </Radio>
-                  )}
+                  )} */}
                 </RadioGroup>
               )}
             </FormItem>

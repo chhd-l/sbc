@@ -613,6 +613,11 @@ const auditDidNotPass = [
   {
     path: '/shop-info-edit',
     asyncComponent: () => import('./shop/info-edit')
+  },
+  //字典维护界面
+  {
+    path: '/dictionary',
+    asyncComponent: () => import('./dictionary')
   }
 ];
 

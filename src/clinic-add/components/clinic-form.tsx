@@ -37,11 +37,13 @@ class ClinicForm extends React.Component<any, any> {
         phone: '',
         primaryCity: '',
         primaryZip: '',
+        clinicsType: '',
         longitude: '',
         latitude: '',
         location: ''
       },
       cityArr: [],
+      typeArr: [],
       sectionList: []
     };
     this.getDetail = this.getDetail.bind(this);
@@ -49,12 +51,15 @@ class ClinicForm extends React.Component<any, any> {
 
     if (this.props.clinicId) {
       this.getDetail(this.props.clinicId);
+      this.queryClinicsReward(this.props.clinicId);
     }
     this.queryClinicsDictionary('city');
-    this.queryClinicsReward();
+    this.queryClinicsDictionary('clinicType');
   }
-  queryClinicsReward = async () => {
-    const { res } = await webapi.queryClinicsReward();
+  queryClinicsReward = async (id) => {
+    const { res } = await webapi.queryClinicsReward({
+      clinicsId: id
+    });
     if (res.code === 'K-000000') {
       if (res.context.length > 0) {
         this.setState({
@@ -101,12 +106,30 @@ class ClinicForm extends React.Component<any, any> {
         message.error(res.message);
       }
     } else {
-      const { res } = await webapi.addClinicsReward(row);
-      if (res.code === 'K-000000') {
-        message.success('add success');
+      //新增else
+      if (this.state.clinicForm.clinicsId) {
+        //通过基本信息的clinicId判断是否已存在诊所
+        const { res } = await webapi.getClinicById({
+          clinicsId: this.state.clinicForm.clinicsId
+        });
+        if (res.code === 'K-000000' && res.context.clinicsId) {
+          row.clinicsId = res.context.clinicsId;
+
+          this.addRewardRate(row);
+        } else {
+          message.error('Please create the basic information first ');
+        }
       } else {
-        message.error(res.message);
+        message.error('Please create the basic information first ');
       }
+    }
+  };
+  addRewardRate = async (row) => {
+    const { res } = await webapi.addClinicsReward(row);
+    if (res.code === 'K-000000') {
+      message.success('create success');
+    } else {
+      message.error(res.message);
     }
   };
   deleteRewardRate = async (row) => {
@@ -183,16 +206,22 @@ class ClinicForm extends React.Component<any, any> {
     } else {
       message.error(res.message || 'get data faild');
     }
-    console.log(this.state.clinicForm);
   };
   queryClinicsDictionary = async (type: String) => {
     const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
     if (res.code === 'K-000000') {
-      this.setState({
-        cityArr: res.context
-      });
+      if (type === 'city') {
+        this.setState({
+          cityArr: res.context
+        });
+      }
+      if (type === 'clinicType') {
+        this.setState({
+          typeArr: res.context
+        });
+      }
     } else {
       message.error(res.message);
     }
@@ -243,7 +272,7 @@ class ClinicForm extends React.Component<any, any> {
   };
 
   render() {
-    const { cityArr } = this.state;
+    const { cityArr, typeArr } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Tabs>
@@ -347,6 +376,31 @@ class ClinicForm extends React.Component<any, any> {
                     });
                   }}
                 />
+              )}
+            </FormItem>
+            <FormItem label="Prescriber Type">
+              {getFieldDecorator('clinicsType', {
+                rules: [
+                  { required: true, message: 'Please select Prescriber Type!' }
+                ]
+              })(
+                <Select
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    this.onFormChange({
+                      field: 'clinicsType',
+                      value
+                    });
+                  }}
+                >
+                  {typeArr.map((item) => (
+                    <Option value={item.valueEn} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                  {/* <Option value="Mexico City">Mexico City</Option>
+                  <Option value="Monterrey">Monterrey</Option> */}
+                </Select>
               )}
             </FormItem>
             <FormItem label="Longitude">

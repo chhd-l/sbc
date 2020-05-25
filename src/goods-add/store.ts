@@ -82,7 +82,7 @@ export default class AppStore extends Store {
     // 保证品牌分类等信息先加载完
     await Promise.all([
       getCateList(),
-      getStoreCateList(),
+      // getStoreCateList(),
       getBrandList(),
       checkSalesType(goodsId),
       isFlashsele(goodsId)
@@ -92,18 +92,18 @@ export default class AppStore extends Store {
         'goodsActor: initCateList',
         fromJS((results[0].res as any).context)
       );
-      this.dispatch(
-        'goodsActor: initStoreCateList',
-        fromJS((results[1].res as any).context)
-      );
+      // this.dispatch(
+      //   'goodsActor: initStoreCateList',
+      //   fromJS((results[1].res as any).context.storeCateResponseVOList)
+      // );
       this.dispatch(
         'goodsActor: initBrandList',
-        fromJS((results[2].res as any).context)
+        fromJS((results[1].res as any).context)
       );
-      this.dispatch('formActor:check', fromJS((results[3].res as any).context));
+      this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch(
         'goodsActor:flashsaleGoods',
-        fromJS((results[4].res as any).context).get('flashSaleGoodsVOList')
+        fromJS((results[3].res as any).context).get('flashSaleGoodsVOList')
       );
     });
     // 如果是编辑则判断是否有企业购商品
@@ -1948,7 +1948,18 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  /**
+   * 对应类目、商品下的所有属性信息
+   */
+  changeStoreCategory = async (goodsCateId) => {
+    const result: any = await getStoreCateList(goodsCateId);
+    if (result.res.code === Const.SUCCESS_CODE) {
+      this.dispatch(
+        'goodsActor: initStoreCateList',
+        fromJS((result.res as any).context.storeCateResponseVOList)
+      );
+    }
+  };
   /**
    * 将数组切为每两个元素为一个对象的新数组
    * @param propDetail

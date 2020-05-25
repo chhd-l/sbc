@@ -21,6 +21,7 @@ import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
 import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
 import { FormattedMessage } from 'react-intl';
+import { consoleTestResultHandler } from 'tslint/lib/test';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -65,6 +66,7 @@ export default class Info extends React.Component<any, any> {
 
       editImages: Function;
       showGoodsPropDetail: Function;
+      changeStoreCategory: Function;
       updateGoodsForm: Function;
       showBrandModal: Function;
       showCateModal: Function;
@@ -102,6 +104,7 @@ export default class Info extends React.Component<any, any> {
     // 修改图片
     editImages: noop,
     showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
     updateGoodsForm: noop,
     // 显示品牌窗口
     showBrandModal: noop,
@@ -210,13 +213,17 @@ class GoodsForm extends React.Component<any, any> {
       video
     } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
+    console.log(
+      storeCateList,
+      'storeCateList------------------------------------'
+    );
     const storeCateValues =
       (storeCateIds &&
         storeCateIds.toJS().map((id) => {
           return { value: id };
         })) ||
       [];
-
+    // const storeCateValues = [];
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
@@ -398,7 +405,7 @@ class GoodsForm extends React.Component<any, any> {
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
-                  // disabled
+                  disabled={!goods.get('cateId')}
                 >
                   {this.generateStoreCateTree(storeCateList)}
                 </TreeSelect>
@@ -706,8 +713,10 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail } = this.props.relaxProps;
+    const { showGoodsPropDetail, changeStoreCategory } = this.props.relaxProps;
     showGoodsPropDetail(value);
+    changeStoreCategory(value);
+    console.log(value, 'value');
   };
   /**
    * 修改商品项
@@ -853,8 +862,8 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     });
-
     const storeCateIds = originValues;
+
     const goods = Map({
       ['storeCateIds']: storeCateIds
     });

@@ -66,6 +66,7 @@ export default class CateModal extends React.Component<any, any> {
       flashsaleGoods: IList;
       updateGoodsForm: Function;
       showGoodsPropDetail: Function;
+      changeStoreCategory: Function;
       images: IList;
       clickImg: Function;
       removeImg: Function;
@@ -97,6 +98,7 @@ export default class CateModal extends React.Component<any, any> {
     cateList: 'cateList',
     checkFlag: 'checkFlag',
     showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
     updateGoodsForm: noop,
     editGoods: noop,
     images: 'images',
@@ -175,6 +177,7 @@ class CateModalForm extends React.Component<any, any> {
       flashsaleGoods: IList;
       updateGoodsForm: Function;
       showGoodsPropDetail: Function;
+      changeStoreCategory: Function;
       images: IList;
       clickImg: Function;
       removeImg: Function;
@@ -207,6 +210,7 @@ class CateModalForm extends React.Component<any, any> {
     cateList: 'cateList',
     checkFlag: 'checkFlag',
     showGoodsPropDetail: noop,
+    changeStoreCategory: noop,
     updateGoodsForm: noop,
     editGoods: noop,
     images: 'images',
@@ -498,11 +502,13 @@ class CateModalForm extends React.Component<any, any> {
       editGoods(goods);
     }
   };
-  /**
-   * 选中平台类目时，实时显示对应类目下的所有属性信息
-   */
-  _onChange = (value) => {
-    const { showGoodsPropDetail } = this.props.relaxProps;
-    showGoodsPropDetail(value);
-  };
+  // /**
+  //  * 选中平台类目时，实时显示对应类目下的所有属性信息
+  //  */
+  // _onChange = (value) => {
+  //   const { showGoodsPropDetail } = this.props.relaxProps;
+  //   showGoodsPropDetail(value);
+  //   console.log(value, 'value')
+  //   // changeStoreCategory
+  // };
 }

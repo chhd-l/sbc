@@ -6,18 +6,14 @@ export default class FormActor extends Actor {
       form: {
         //客户名称
         customerName: '',
-        // 省
-        provinceId: '',
-        //市
-        cityId: '',
-        //区
-        areaId: '',
-        //等级
-        customerLevelId: '',
         //账号
         customerAccount: '',
         //客户类型
-        customerType: '-1'
+        customerType: '',
+        //邮箱
+        email: '',
+        //手机号
+        phoneNumber: ''
       }
     };
   }

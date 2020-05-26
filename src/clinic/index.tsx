@@ -53,8 +53,8 @@ export default class ClinicList extends Component<any, any> {
           key: 'clinicsType'
         },
         {
-          title: 'Reward Rate',
-          dataIndex: 'rewardRate',
+          title: 'Reward Type',
+          dataIndex: 'rewardType',
           key: 'rewardRate'
         },
         {

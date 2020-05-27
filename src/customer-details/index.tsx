@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { BreadCrumb } from 'qmkit';
+import BasicInfomation from './component/basic-infomation';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -34,12 +36,20 @@ class CustomerDetails extends React.Component<any, any> {
 
   render() {
     return (
-      <Tabs>
-        <TabPane tab="Basic infomation" key="basic"></TabPane>
-        <TabPane tab="Pet infomation" key="pet"></TabPane>
-        <TabPane tab="Delivery Rate" key="delivery"></TabPane>
-        <TabPane tab="Billing Rate" key="billing"></TabPane>
-      </Tabs>
+      <div>
+        <BreadCrumb />
+        {/*导航面包屑*/}
+        <div className="container">
+          <Tabs>
+            <TabPane tab="Basic infomation" key="basic">
+              <BasicInfomation></BasicInfomation>
+            </TabPane>
+            <TabPane tab="Pet infomation" key="pet"></TabPane>
+            <TabPane tab="Delivery infomation" key="delivery"></TabPane>
+            <TabPane tab="Billing infomation" key="billing"></TabPane>
+          </Tabs>
+        </div>
+      </div>
     );
   }
 }

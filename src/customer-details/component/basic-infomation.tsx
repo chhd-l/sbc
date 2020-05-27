@@ -33,12 +33,111 @@ class BasicInfomation extends React.Component<any, any> {
   }
 
   render() {
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 }
+      }
+    };
+    const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Row gutter={16}>
-          <Col span={12}>col-12</Col>
-          <Col span={12}>col-12</Col>
-        </Row>
+        <Form {...formItemLayout}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <FormItem label="First Name" hasFeedback validateStatus="success">
+                {getFieldDecorator('firstName', {
+                  rules: [
+                    { required: true, message: 'Please input First Name!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Last Name" hasFeedback validateStatus="success">
+                {getFieldDecorator('lastName', {
+                  rules: [
+                    { required: true, message: 'Please input Last Name!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Birth Date" hasFeedback validateStatus="success">
+                {getFieldDecorator('birthDate', {
+                  rules: [
+                    { required: true, message: 'Please input Birth Date!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Email" hasFeedback validateStatus="success">
+                {getFieldDecorator('email', {
+                  rules: [{ required: true, message: 'Please input Email!' }]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                label="Phone Number"
+                hasFeedback
+                validateStatus="success"
+              >
+                {getFieldDecorator('phoneNumber', {
+                  rules: [
+                    { required: true, message: 'Please input Phone Number!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Post Code" hasFeedback validateStatus="success">
+                {getFieldDecorator('postCode', {
+                  rules: [
+                    { required: true, message: 'Please input Post Code!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="City" hasFeedback validateStatus="success">
+                {getFieldDecorator('city', {
+                  rules: [{ required: true, message: 'Please input City!' }]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Country" hasFeedback validateStatus="success">
+                {getFieldDecorator('country', {
+                  rules: [{ required: true, message: 'Please input Country!' }]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Address 1" hasFeedback validateStatus="success">
+                {getFieldDecorator('address1', {
+                  rules: [
+                    { required: true, message: 'Please input Address 1!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Address 2" hasFeedback validateStatus="success">
+                {getFieldDecorator('address2', {
+                  rules: [
+                    { required: true, message: 'Please input Address 2!' }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
       </div>
     );
   }

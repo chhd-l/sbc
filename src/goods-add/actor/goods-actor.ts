@@ -44,9 +44,10 @@ export default class GoodsActor extends Actor {
       //保存状态loading
       saveLoading: false,
       detailEditor: {},
-      detailEditor_0: {},
-      detailEditor_1: {},
-      detailEditor_2: {},
+      detailEditor0: {},
+      detailEditor1: {},
+      detailEditor2: {},
+      detailEditor3: {},
       tabDetailEditor: {},
       editor: 'detail',
       // 当前处于基础信息tab还是价格tab：main | price
@@ -55,8 +56,9 @@ export default class GoodsActor extends Actor {
       cateDisabled: true,
       goodsTabs: [],
       //正在进行或将要进行的抢购商品
-      flashsaleGoods: []
-    }
+      flashsaleGoods: [],
+      goodsDetailTab: []
+    };
   }
 
   /**
@@ -85,6 +87,7 @@ export default class GoodsActor extends Actor {
         if (!children.isEmpty()) {
           data = data.set('children', children);
         }
+        console.log(data, 'data--------------');
         return data;
       });
     return state.set('cateList', newDataList).set('sourceCateList', dataList);
@@ -145,8 +148,9 @@ export default class GoodsActor extends Actor {
   }
 
   @Action('goodsActor: detailEditor')
-  detailEditor(state, detailEditor) {
-    return state.set('detailEditor', detailEditor);
+  detailEditor(state, obj) {
+    // return state.set('detailEditor', detailEditor);
+    return state.set(obj.ref, obj.detailEditor);
   }
 
   @Action('goodsActor: tabDetailEditor')
@@ -175,13 +179,8 @@ export default class GoodsActor extends Actor {
       goods.set(
         'goodsNo',
         'P' +
-          new Date()
-            .getTime()
-            .toString()
-            .slice(4, 10) +
-          Math.random()
-            .toString()
-            .slice(2, 5)
+          new Date().getTime().toString().slice(4, 10) +
+          Math.random().toString().slice(2, 5)
       )
     );
   }
@@ -219,5 +218,9 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:flashsaleGoods')
   setFlashsaleGoods(state, context) {
     return state.set('flashsaleGoods', context);
+  }
+  @Action('goodsActor: setGoodsDetailTab')
+  setGoodsDetailTab(state, dataList) {
+    return state.set('goodsDetailTab', dataList);
   }
 }

@@ -123,7 +123,9 @@ class CateList extends React.Component<any, any> {
                     this,
                     rowInfo.get('storeCateId'),
                     rowInfo.get('cateName'),
-                    rowInfo.get('cateParentId')
+                    rowInfo.get('cateParentId'),
+                    rowInfo.get('goodsCateId'),
+                    rowInfo.get('children')
                   )}
                 >
                   <FormattedMessage id="edit" />
@@ -158,7 +160,9 @@ class CateList extends React.Component<any, any> {
   _showEditModal = (
     storeCateId: string,
     cateName: string,
-    cateParentId: number
+    cateParentId: number,
+    goodsCateId: number,
+    children: IList
   ) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
@@ -172,7 +176,9 @@ class CateList extends React.Component<any, any> {
       storeCateId,
       cateName,
       cateParentName,
-      cateParentId
+      cateParentId,
+      goodsCateId,
+      children
     });
     showEditModal(cateInfo);
   };

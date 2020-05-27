@@ -100,6 +100,7 @@ export default class AppStore extends Store {
    */
   doAdd = async () => {
     const formData = this.state().get('formData');
+    console.log('doAdd');
     let result: any;
     if (formData.get('storeCateId')) {
       result = await editCate(formData);
@@ -299,7 +300,8 @@ export default class AppStore extends Store {
     ) {
       this.editPriceSetting('priceOpt', 2);
     }
-    // this.dispatch('goodsActor: editGoods', goods);
+    console.log(1);
+    this.dispatch('cateActor: editGoods', goods);
   };
   /**
    * 更改设价方式

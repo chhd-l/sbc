@@ -213,10 +213,6 @@ class GoodsForm extends React.Component<any, any> {
       video
     } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    console.log(
-      storeCateList,
-      'storeCateList------------------------------------'
-    );
     const storeCateValues =
       (storeCateIds &&
         storeCateIds.toJS().map((id) => {
@@ -468,9 +464,19 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={8}>
+          <Col span={16}>
             <FormItem
-              {...formItemLayout}
+              // {...formItemLayout}
+              labelCol={{
+                span: 2,
+                xs: { span: 24 },
+                sm: { span: 6 }
+              }}
+              wrapperCol={{
+                span: 24,
+                xs: { span: 24 },
+                sm: { span: 18 }
+              }}
               label={<FormattedMessage id="product.productSubtitle" />}
             >
               {getFieldDecorator('goodsSubtitle', {
@@ -496,6 +502,8 @@ class GoodsForm extends React.Component<any, any> {
               })(<Input placeholder="请填商品副标题，不超过225字" />)}
             </FormItem>
           </Col>
+        </Row>
+        <Row>
           <Col span={8}>
             <FormItem
               {...formItemLayout}

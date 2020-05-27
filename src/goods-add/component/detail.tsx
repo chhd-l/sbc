@@ -16,6 +16,7 @@ export default class Detail extends React.Component<any, any> {
       goodsTabs: IList;
       chooseImgs: List<any>;
       imgType: number;
+      goodsDetailTab: IList;
 
       editGoods: Function;
       refDetailEditor: Function;
@@ -31,6 +32,7 @@ export default class Detail extends React.Component<any, any> {
     chooseImgs: 'chooseImgs',
     imgType: 'imgType',
     goodsTabs: 'goodsTabs',
+    goodsDetailTab: 'goodsDetailTab',
     // 修改商品基本信息
     editGoods: noop,
     refDetailEditor: noop,
@@ -46,11 +48,57 @@ export default class Detail extends React.Component<any, any> {
       reftabDetailEditor,
       chooseImgs,
       imgType,
-      goodsTabs
+      goodsTabs,
+      goodsDetailTab
     } = this.props.relaxProps;
+    let goodsDetailTabContent: any = {};
+    let goodsDetailContent;
+    if (goods.get('goodsDetail')) {
+      goodsDetailContent = goods.get('goodsDetail');
+      console.log(goodsDetailContent, 'goods------------');
+      try {
+        goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
+      } catch {
+        goodsDetailTab.map((item) => {
+          goodsDetailTabContent[item.get('name')] = '';
+        });
+      }
+    }
     return (
       <div>
-        <Tabs defaultActiveKey="main" onChange={() => {}}>
+        <Tabs defaultActiveKey="main1" animated={false}>
+          {goodsDetailTab.map((item, i) => {
+            return (
+              <Tabs.TabPane
+                // tab={<FormattedMessage id="product.productDetail" />}
+                tab={item.get('name')}
+                key={'main' + i}
+              >
+                <UEditor
+                  ref={(UEditor) => {
+                    refDetailEditor({
+                      detailEditor: (UEditor && UEditor.editor) || {},
+                      ref: 'detailEditor' + i
+                    });
+                    this.child = UEditor;
+                  }}
+                  id={'main' + i}
+                  height="320"
+                  // content="112"
+                  // content = {JSON.parse(goods.get('goodsDetail'))[item.get('name')]}
+                  content={goodsDetailTabContent[item.get('name')]}
+                  insertImg={() => {
+                    this._handleClick();
+                    this.props.relaxProps.editEditor('detail');
+                  }}
+                  chooseImgs={chooseImgs.toJS()}
+                  imgType={imgType}
+                />
+              </Tabs.TabPane>
+            );
+          })}
+        </Tabs>
+        {/* <Tabs defaultActiveKey="main" onChange={() => {}}>
           <Tabs.TabPane
             tab={<FormattedMessage id="product.productDetail" />}
             key="main"
@@ -101,7 +149,7 @@ export default class Detail extends React.Component<any, any> {
                 </Tabs.TabPane>
               );
             })}
-        </Tabs>
+        </Tabs> */}
       </div>
     );
   }

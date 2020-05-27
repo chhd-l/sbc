@@ -163,10 +163,10 @@ class CateModalForm extends React.Component<any, any> {
     const formData = this._store.state().get('formData');
     console.log(formData, 'formData');
     const cateName = formData.get('cateName');
-    // const sourceCateList:IList = formData.get('')
-    // console.log(cateName, 'cateName')
+    const goodsCateId = formData.get('goodsCateId');
+    const goodsDescription = formData.get('cateDescription');
     const { getFieldDecorator } = this.props.form;
-
+    // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
@@ -263,12 +263,14 @@ class CateModalForm extends React.Component<any, any> {
               }
             ],
             onChange: this._editGoods.bind(this, 'cateId'),
-            initialValue:
-              goods.get('cateId') && goods.get('cateId') != ''
-                ? goods.get('cateId')
-                : undefined
+            initialValue: goodsCateId
           })(
             <TreeSelect
+              disabled={
+                (formData.get('cateParentId') &&
+                  formData.get('cateParentId') !== 0) ||
+                formData.get('children')
+              }
               getPopupContainer={() => document.getElementById('page-content')}
               placeholder="请选择分类"
               notFoundContent="暂无分类"
@@ -302,7 +304,7 @@ class CateModalForm extends React.Component<any, any> {
           {...formItemLayout}
           label={<FormattedMessage id="cateDsc" />}
         >
-          {getFieldDecorator('goodsDescription', {
+          {getFieldDecorator('cateDescription', {
             rules: [
               {
                 validator: (rule, value, callback) => {
@@ -310,8 +312,8 @@ class CateModalForm extends React.Component<any, any> {
                 }
               }
             ],
-            onChange: this._editGoods.bind(this, 'goodsDescription'),
-            initialValue: goods.get('goodsDescription')
+            onChange: this._editGoods.bind(this, 'cateDescription'),
+            initialValue: goodsDescription
           })(<TextArea rows={4} placeholder="请填商品描述" />)}
         </FormItem>
       </Form>
@@ -419,6 +421,7 @@ class CateModalForm extends React.Component<any, any> {
         [key]: fromJS(e)
       });
       updateGoodsForm(this.props.form);
+      console.log(editGoods);
       editGoods(goods);
     }
   };

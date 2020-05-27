@@ -47,7 +47,8 @@ import {
   fetchBossCustomerList,
   fetchCustomerList,
   checkEnterpriseType,
-  enterpriseToGeneralgoods
+  enterpriseToGeneralgoods,
+  getDetailTab
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 
@@ -85,7 +86,8 @@ export default class AppStore extends Store {
       // getStoreCateList(),
       getBrandList(),
       checkSalesType(goodsId),
-      isFlashsele(goodsId)
+      isFlashsele(goodsId),
+      getDetailTab()
     ]).then((results) => {
       console.log(results, 'results');
       this.dispatch(
@@ -104,6 +106,10 @@ export default class AppStore extends Store {
       this.dispatch(
         'goodsActor:flashsaleGoods',
         fromJS((results[3].res as any).context).get('flashSaleGoodsVOList')
+      );
+      this.dispatch(
+        'goodsActor: setGoodsDetailTab',
+        fromJS((results[4].res as any).context.sysDictionaryVOS)
       );
     });
     // 如果是编辑则判断是否有企业购商品
@@ -288,8 +294,14 @@ export default class AppStore extends Store {
    */
   _getGoodsDetail = async (goodsId?: string) => {
     let goodsDetail: any = await getGoodsDetail(goodsId);
+    // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
+      let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
+      this.dispatch(
+        'goodsActor: initStoreCateList',
+        fromJS((storeCateList.res as any).context.storeCateResponseVOList)
+      );
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = tmpContext.goodsPropDetailRels;
       if (goodsPropDetailRelsOrigin) {
@@ -321,6 +333,7 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
+      console.log(goods, 'goods');
 
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
@@ -792,8 +805,8 @@ export default class AppStore extends Store {
     this.dispatch('formActor:areaprice', areaPriceForm);
   };
 
-  refDetailEditor = (detailEditor) => {
-    this.dispatch('goodsActor: detailEditor', detailEditor);
+  refDetailEditor = (detailEditorObj) => {
+    this.dispatch('goodsActor: detailEditor', detailEditorObj);
   };
 
   reftabDetailEditor = (obj) => {
@@ -926,6 +939,26 @@ export default class AppStore extends Store {
     // -----商品信息-------
     let goods = data.get('goods');
 
+    let goodsDetailTab = data.get('goodsDetailTab');
+    const detailEditor1 = data.get('detailEditor1') || {};
+    const detailEditor2 = data.get('detailEditor2') || {};
+    const detailEditor3 = data.get('detailEditor3') || {};
+    const detailEditor4 = data.get('detailEditor4') || {};
+    // console.log(detailEditor.getContent(), 'detailEditor1')
+
+    let goodsDetailTabTemplate = {};
+    // if(goods.get('goodsDetail')) {
+    //   goodsDetailContent = goods.get('goodsDetail')
+    //   console.log(goodsDetailContent, 'goods------------')
+    //   goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'))
+    // }
+    goodsDetailTab.map((item, i) => {
+      goodsDetailTabTemplate[item.get('name')] = data
+        .get('detailEditor' + i)
+        .getContent();
+    });
+    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
       return false;
@@ -944,21 +977,17 @@ export default class AppStore extends Store {
     // 是否多规格标记
     goods = goods.set('moreSpecFlag', data.get('specSingleFlag') ? 0 : 1);
     // 详情
-    const detailEditor = data.get('detailEditor') || {};
-    goods = goods.set(
-      'goodsDetail',
-      detailEditor.getContent ? detailEditor.getContent() : ''
-    );
+
     const tabs = [];
     if (
-      data.get('detailEditor_0') &&
-      data.get('detailEditor_0').val &&
-      data.get('detailEditor_0').val.getContent
+      data.get('detailEditor0') &&
+      data.get('detailEditor0').val &&
+      data.get('detailEditor0').val.getContent
     ) {
       tabs.push({
         goodsId: goods.get('goodsId'),
-        tabId: data.get('detailEditor_0').tabId,
-        tabDetail: data.get('detailEditor_0').val.getContent()
+        tabId: data.get('detailEditor0').tabId,
+        tabDetail: data.get('detailEditor0').val.getContent()
       });
     }
     if (
@@ -983,6 +1012,7 @@ export default class AppStore extends Store {
         tabDetail: data.get('detailEditor_2').val.getContent()
       });
     }
+
     if (data.get('video') && JSON.stringify(data.get('video')) !== '{}') {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }

@@ -310,3 +310,19 @@ export function fetchBossCustomerList(customerIds) {
     })
   });
 }
+
+/**
+ * 获取商品详情页签字典
+ * @param filterParams
+ */
+export function getDetailTab() {
+  let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+  let params = {
+    type: 'goodsDetailTab',
+    storeId: loginInfo.storeId
+  };
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

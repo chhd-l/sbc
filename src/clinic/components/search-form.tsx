@@ -15,7 +15,8 @@ export default class SearchForm extends React.Component<any, any> {
         clinicName: '',
         clinicPhone: '',
         clinicCity: '',
-        clinicZip: ''
+        clinicZip: '',
+        clinicType: ''
       }
     };
     this.init();
@@ -113,6 +114,24 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           />
+        </FormItem>
+
+        <FormItem>
+          <SelectGroup
+            label="Clinic Type"
+            style={{ width: 80 }}
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              this.onFormChange({
+                field: 'clinicType',
+                value
+              });
+            }}
+          >
+            <Option value="">All</Option>
+            <Option value="0">Mexico City</Option>
+            <Option value="1">Monterrey</Option>
+          </SelectGroup>
         </FormItem>
 
         <FormItem>

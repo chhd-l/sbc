@@ -557,6 +557,14 @@ const routes = [
   {
     path: '/clinic-reward-rate',
     asyncComponent: () => import('./clinic-reward-rate')
+  },
+  {
+    path: '/clinic-type-add',
+    asyncComponent: () => import('./clinic-type-add')
+  },
+  {
+    path: '/clinic-type-edit/:id',
+    asyncComponent: () => import('./clinic-type-add')
   }
 ];
 

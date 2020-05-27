@@ -49,12 +49,12 @@ export default class ClinicList extends Component<any, any> {
         },
         {
           title: 'Prescriber Type',
-          dataIndex: 'prescriberType',
-          key: 'prescriberType'
+          dataIndex: 'clinicsType',
+          key: 'clinicsType'
         },
         {
-          title: 'Reward Rate',
-          dataIndex: 'rewardRate',
+          title: 'Reward Type',
+          dataIndex: 'rewardType',
           key: 'rewardRate'
         },
         {
@@ -80,15 +80,18 @@ export default class ClinicList extends Component<any, any> {
         clinicsName: '',
         phone: '',
         primaryCity: '',
-        primaryZip: ''
+        primaryZip: '',
+        clinicsType: ''
       },
       cityArr: [],
+      typeArr: [],
       loading: false
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
     this.queryClinicsDictionary('city');
+    this.queryClinicsDictionary('clinicType');
     this.init();
   }
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -113,9 +116,16 @@ export default class ClinicList extends Component<any, any> {
       type: type
     });
     if (res.code === 'K-000000') {
-      this.setState({
-        cityArr: res.context
-      });
+      if (type === 'city') {
+        this.setState({
+          cityArr: res.context
+        });
+      }
+      if (type === 'clinicType') {
+        this.setState({
+          typeArr: res.context
+        });
+      }
     } else {
       message.error(res.message);
     }
@@ -150,7 +160,7 @@ export default class ClinicList extends Component<any, any> {
   }
 
   render() {
-    const { columns, cityArr } = this.state;
+    const { columns, cityArr, typeArr } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -230,6 +240,27 @@ export default class ClinicList extends Component<any, any> {
                   });
                 }}
               />
+            </FormItem>
+
+            <FormItem>
+              <SelectGroup
+                label="Prescriber Type"
+                style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'clinicsType',
+                    value
+                  });
+                }}
+              >
+                <Option value="">All</Option>
+                {typeArr.map((item) => (
+                  <Option value={item.valueEn} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </SelectGroup>
             </FormItem>
 
             <FormItem>

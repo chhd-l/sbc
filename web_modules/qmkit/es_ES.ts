@@ -424,20 +424,18 @@ export default {
 
 
 
-  'partnerAccount':'Partner Account',
   'financeTips1':'1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;',
   'financeTips2':'2. You can set any account that passes the verification as the main account, and the platform will give priority to the main account when you settle the payment;',
-  'storeName':'Store name' ,
+
   'petFoodStore':'Pet food store',
   'entryTime': 'Entry time',
   'partnerID': 'Partner ID',
   'contractValidity': 'Contract validity',
   'addAccount' :'Add Account',
-  'bank':'Bank',
   'accountName':'Account name',
   'subBranch':'Sub-branch',
   'receivePayment':'Receive payment',
-  'mainAccount':'Main account' ,
+
   'changeAccount':'Change the current account',
   'deleteAccount':'Delete account',
   'setMainAccount':'Set the main account',
@@ -455,7 +453,6 @@ export default {
   'revenueReconciliationDetails':	'Revenue Reconciliation Details',
   'paymentChannel':	'Payment Channel',
   'transactionSerialNumber':	'Transaction Serial Number',
-  'export':	'Export',
   'paymentTime':	'Payment Time',
   'paymentAmount'	:'Payment Amount',
 
@@ -488,7 +485,6 @@ export default {
 
 'invoiceStatus':'Invoice Status'	,
 
-'add':'Add'	,
 'bulkOperation':'Bulk Operation'	,
 'bulkInvoice':'Bulk Invoice'	,
 
@@ -512,6 +508,7 @@ export default {
 'Edit':'Edit'	,
 'Delete':'Delete'	,
 
+'customerAccount':'Customer Account'
   };
 
 

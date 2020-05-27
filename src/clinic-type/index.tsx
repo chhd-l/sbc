@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Form, Select, Table } from 'antd';
+import { Table, Button, Divider, message } from 'antd';
 import { Link } from 'react-router-dom';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
+import * as webapi from './webapi';
 
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
@@ -18,9 +16,9 @@ export default class ClinicList extends Component<any, any> {
           width: '30%'
         },
         {
-          title: 'Descripetion',
-          dataIndex: 'descripetion',
-          key: 'descripetion',
+          title: 'Description',
+          dataIndex: 'description',
+          key: 'description',
           width: '60%'
         },
         {
@@ -29,31 +27,14 @@ export default class ClinicList extends Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
-              <a>View</a>
+              <Link to={'/clinic-type-edit/' + record.id}>Edit</Link>
+              <Divider type="vertical" />
+              <a onClick={() => this.delClinicType(record.id)}>Delete</a>
             </span>
           )
         }
       ],
-      typeList: [
-        {
-          id: '1',
-          name: 'Vet',
-          descripetion:
-            'Vet descripetion Vet descripetion Vet descripetion Vet descripetion'
-        },
-        {
-          id: '2',
-          name: 'Spt',
-          descripetion:
-            'Spt descripetion Spt descripetion Spt descripetion Spt descripetion Spt descripetion'
-        },
-        {
-          id: '3',
-          name: 'Pro',
-          descripetion:
-            'Pro descripetion Pro descripetion Pro descripetion Pro descripetion'
-        }
-      ],
+      typeList: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -61,7 +42,33 @@ export default class ClinicList extends Component<any, any> {
       },
       loading: false
     };
+    this.getTypeList('clinicType');
   }
+  getTypeList = async (type) => {
+    const { res } = await webapi.getClinicsDictionaryList({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        typeList: res.context
+      });
+    } else {
+      message.error(res.message || 'get data faild');
+    }
+    console.log(this.state.typeList);
+  };
+  delClinicType = async (id) => {
+    const { res } = await webapi.delClinicsDictionary({
+      id: id
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'delete data success');
+      this.getTypeList('clinicType');
+    } else {
+      message.error(res.message || 'delete data faild');
+    }
+    console.log(this.state.typeList);
+  };
   handleTableChange(pagination: any) {
     console.log(pagination);
   }
@@ -73,8 +80,11 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title="Prescriber List" />
+          <Headline title="Prescriber Type" />
           {/*搜索条件*/}
+          <Button>
+            <Link to="/clinic-type-add">Add</Link>
+          </Button>
           <Table
             columns={columns}
             rowKey={(record) => record.id}

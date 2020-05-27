@@ -166,21 +166,21 @@ export default class AppStore extends Store {
                     authRemark: '',
                     isMenuUrl: null,
                     sort: 1
-                  },
-                  {
-                    id: 'menu_clinic_reward',
-                    pid: 'menu_0',
-                    realId: -1,
-                    title: 'Reward Rate',
-                    grade: 3,
-                    icon: '1505551659667.jpg',
-                    authNm: '',
-                    url: '/clinic-reward-rate',
-                    reqType: '',
-                    authRemark: '',
-                    isMenuUrl: null,
-                    sort: 2
                   }
+                  // {
+                  //   id: 'menu_clinic_reward',
+                  //   pid: 'menu_0',
+                  //   realId: -1,
+                  //   title: 'Reward Rate',
+                  //   grade: 3,
+                  //   icon: '1505551659667.jpg',
+                  //   authNm: '',
+                  //   url: '/clinic-reward-rate',
+                  //   reqType: '',
+                  //   authRemark: '',
+                  //   isMenuUrl: null,
+                  //   sort: 2
+                  // }
                 ]
               }
             ]

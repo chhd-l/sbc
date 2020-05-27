@@ -31,9 +31,34 @@ export default class SearchForm extends React.Component<any, any> {
 
   render() {
     const { onFormChange, onSearch, customerLevels } = this.props.relaxProps;
+    const customerTypeArr = [
+      {
+        value: 'Member',
+        name: 'Member',
+        id: 1
+      },
+      {
+        value: 'Visitor',
+        name: 'Visitor',
+        id: 1
+      }
+    ];
 
     return (
       <Form className="filter-content" layout="inline">
+        <FormItem>
+          <Input
+            addonBefore={<FormattedMessage id="customerAccount" />}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              onFormChange({
+                field: 'customerAccount',
+                value
+              });
+            }}
+          />
+        </FormItem>
+
         <FormItem>
           <Input
             addonBefore={<FormattedMessage id="consumerName" />}
@@ -46,108 +71,51 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           />
         </FormItem>
-
-        {/*省市区*/}
-        <FormItem>
-          <AreaSelect
-            label={<FormattedMessage id="area" />}
-            getPopupContainer={() => document.getElementById('page-content')}
-            onChange={(value) => {
-              onFormChange({
-                field: 'area',
-                value
-              });
-            }}
-          />
-        </FormItem>
-
         <FormItem>
           <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="platformLevel" />}
+            label="Customer Type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'customerLevelId',
+                field: 'customerType',
                 value
               });
             }}
           >
-            <Option value="">
-              <FormattedMessage id="all" />
-            </Option>
-            {customerLevels.map((v) => (
-              <Option
-                key={v.get('storeLevelId').toString()}
-                value={v.get('storeLevelId').toString()}
-              >
-                {v.get('levelName')}
+            <Option value="">All</Option>
+            {customerTypeArr.map((item) => (
+              <Option value={item.value} key={item.id}>
+                {item.name}
               </Option>
             ))}
           </SelectGroup>
         </FormItem>
-
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="accountStatus" />}
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'customerStatus',
-                value
-              });
-            }}
-          >
-            <Option value="">
-              <FormattedMessage id="all" />
-            </Option>
-            <Option value="0">
-              <FormattedMessage id="enable" />
-            </Option>
-            <Option value="1">
-              <FormattedMessage id="disabled" />
-            </Option>
-          </SelectGroup>
-        </FormItem>
-
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="accountNumber" />}
+            addonBefore={<FormattedMessage id="email" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
-                field: 'customerAccount',
+                field: 'email',
                 value
               });
             }}
           />
         </FormItem>
 
-        {/*<FormItem>*/}
-        {/*<SelectGroup*/}
-        {/*getPopupContainer={() => document.getElementById('page-content')}*/}
-        {/*label="业务员"*/}
-        {/*style={{ width: 80 }}*/}
-        {/*onChange={value => {*/}
-        {/*value = value === '' ? null : value;*/}
-        {/*onFormChange({*/}
-        {/*field: 'employeeId',*/}
-        {/*value*/}
-        {/*})*/}
-        {/*}}>*/}
-        {/*<Option value=""><FormattedMessage id="all" /></Option>*/}
-        {/*{employee.map(v =>*/}
-        {/*<Option*/}
-        {/*key={v.get('employeeId').toString()}*/}
-        {/*value={v.get('employeeId').toString()}>*/}
-        {/*{v.get('employeeName')}*/}
-        {/*</Option>*/}
-        {/*)}*/}
-        {/*</SelectGroup>*/}
-        {/*</FormItem>*/}
+        <FormItem>
+          <Input
+            addonBefore={<FormattedMessage id="phoneNumber" />}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              onFormChange({
+                field: 'phoneNumber',
+                value
+              });
+            }}
+          />
+        </FormItem>
 
         <FormItem>
           <Button

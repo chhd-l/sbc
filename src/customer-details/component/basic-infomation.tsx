@@ -8,7 +8,8 @@ import {
   message,
   Table,
   Row,
-  Col
+  Col,
+  Radio
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -31,6 +32,9 @@ class BasicInfomation extends React.Component<any, any> {
     super(props);
     this.state = {};
   }
+  handleChange = (value) => {
+    console.log(value);
+  };
 
   render() {
     const formItemLayout = {
@@ -129,11 +133,49 @@ class BasicInfomation extends React.Component<any, any> {
             </Col>
             <Col span={12}>
               <FormItem label="Address 2" hasFeedback validateStatus="success">
-                {getFieldDecorator('address2', {
+                <Input />
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Preferred methods of communication">
+                {getFieldDecorator('preferredMethods', {
                   rules: [
-                    { required: true, message: 'Please input Address 2!' }
+                    {
+                      required: true,
+                      message:
+                        'Please Select Preferred methods of communication!'
+                    }
                   ]
-                })(<Input />)}
+                })(
+                  <Radio.Group value={this.state.value}>
+                    <Radio value="Phone">Phone</Radio>
+                    <Radio value="Email">Email</Radio>
+                  </Radio.Group>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Reference" hasFeedback validateStatus="success">
+                <Input />
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Selected clinics">
+                {getFieldDecorator('selectedClinics', {
+                  rules: [{ required: true, message: 'Please Select clinics!' }]
+                })(
+                  <Select
+                    mode="tags"
+                    placeholder="Please select"
+                    defaultValue={['a10', 'c12']}
+                    onChange={this.handleChange}
+                    style={{ width: '100%' }}
+                  >
+                    {[1, 2, 3, 4].map((item) => (
+                      <Option key={item}>{item}</Option>
+                    ))}
+                  </Select>
+                )}
               </FormItem>
             </Col>
           </Row>

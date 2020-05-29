@@ -70,21 +70,21 @@ export default class AppStore extends Store {
         }
         // 非自营店铺 隐藏企业会员
         // if (window.companyType == 1) {
-        dataList = dataList.filterNot(
-          (item) => item.get('title') == '企业会员'
-        );
-        dataList = dataList.filterNot(
-          (item) => item.get('title') == '评价管理'
-        );
-        dataList = dataList.filterNot(
-          (item) => item.get('title') == '积分订单'
-        );
-        dataList = dataList.filterNot(
-          (item) => item.get('title') == '客服设置'
-        );
-        dataList = dataList.filterNot(
-          (item) => item.get('title') == '物流设置'
-        );
+        // dataList = dataList.filterNot(
+        //   (item) => item.get('title') == '企业会员'
+        // );
+        // dataList = dataList.filterNot(
+        //   (item) => item.get('title') == '评价管理'
+        // );
+        // dataList = dataList.filterNot(
+        //   (item) => item.get('title') == '积分订单'
+        // );
+        // dataList = dataList.filterNot(
+        //   (item) => item.get('title') == '客服设置'
+        // );
+        // dataList = dataList.filterNot(
+        //   (item) => item.get('title') == '物流设置'
+        // );
         // }
         // 主页菜单不在权限中配置，写死第一个
         dataList = dataList.insert(
@@ -109,90 +109,93 @@ export default class AppStore extends Store {
           dataList.filter((item) => item.get('grade') === 1),
           dataList
         );
-        let allMenu = allGradeMenus.insert(
-          4,
-          fromJS({
-            id: 'menu_clinic',
-            pid: 'menu_0',
-            realId: -1,
-            title: 'Prescriber',
-            grade: 1,
-            icon: '1505551659667.jpg',
-            authNm: '',
-            url: '',
-            reqType: '',
-            authRemark: '',
-            isMenuUrl: null,
-            sort: 4,
-            children: [
-              {
-                id: 'menu_clinic_msg',
-                pid: 'menu_0',
-                realId: -1,
-                title: 'Prescriber',
-                grade: 2,
-                icon: '1505551659667.jpg',
-                authNm: '',
-                url: '',
-                reqType: '',
-                authRemark: '',
-                isMenuUrl: null,
-                sort: 0,
-                children: [
-                  {
-                    id: 'menu_clinic_list',
-                    pid: 'menu_0',
-                    realId: -1,
-                    title: 'Prescriber List',
-                    grade: 3,
-                    icon: '1505551659667.jpg',
-                    authNm: '',
-                    url: '/clinic',
-                    reqType: '',
-                    authRemark: '',
-                    isMenuUrl: null,
-                    sort: 0
-                  },
-                  {
-                    id: 'menu_clinic_new',
-                    pid: 'menu_0',
-                    realId: -1,
-                    title: 'Prescriber Type',
-                    grade: 3,
-                    icon: '1505551659667.jpg',
-                    authNm: '',
-                    url: '/clinic-type',
-                    reqType: '',
-                    authRemark: '',
-                    isMenuUrl: null,
-                    sort: 1
-                  }
-                  // {
-                  //   id: 'menu_clinic_reward',
-                  //   pid: 'menu_0',
-                  //   realId: -1,
-                  //   title: 'Reward Rate',
-                  //   grade: 3,
-                  //   icon: '1505551659667.jpg',
-                  //   authNm: '',
-                  //   url: '/clinic-reward-rate',
-                  //   reqType: '',
-                  //   authRemark: '',
-                  //   isMenuUrl: null,
-                  //   sort: 2
-                  // }
-                ]
-              }
-            ]
-          })
-        );
+        // let allMenu = allGradeMenus.insert(
+        //   4,
+        //   fromJS({
+        //     id: 'menu_clinic',
+        //     pid: 'menu_0',
+        //     realId: -1,
+        //     title: 'Prescriber',
+        //     grade: 1,
+        //     icon: '1505551659667.jpg',
+        //     authNm: '',
+        //     url: '',
+        //     reqType: '',
+        //     authRemark: '',
+        //     isMenuUrl: null,
+        //     sort: 4,
+        //     children: [
+        //       {
+        //         id: 'menu_clinic_msg',
+        //         pid: 'menu_0',
+        //         realId: -1,
+        //         title: 'Prescriber',
+        //         grade: 2,
+        //         icon: '1505551659667.jpg',
+        //         authNm: '',
+        //         url: '',
+        //         reqType: '',
+        //         authRemark: '',
+        //         isMenuUrl: null,
+        //         sort: 0,
+        //         children: [
+        //           {
+        //             id: 'menu_clinic_list',
+        //             pid: 'menu_0',
+        //             realId: -1,
+        //             title: 'Prescriber List',
+        //             grade: 3,
+        //             icon: '1505551659667.jpg',
+        //             authNm: '',
+        //             url: '/clinic',
+        //             reqType: '',
+        //             authRemark: '',
+        //             isMenuUrl: null,
+        //             sort: 0
+        //           },
+        //           {
+        //             id: 'menu_clinic_new',
+        //             pid: 'menu_0',
+        //             realId: -1,
+        //             title: 'Prescriber Type',
+        //             grade: 3,
+        //             icon: '1505551659667.jpg',
+        //             authNm: '',
+        //             url: '/clinic-type',
+        //             reqType: '',
+        //             authRemark: '',
+        //             isMenuUrl: null,
+        //             sort: 1
+        //           }
+        //           // {
+        //           //   id: 'menu_clinic_reward',
+        //           //   pid: 'menu_0',
+        //           //   realId: -1,
+        //           //   title: 'Reward Rate',
+        //           //   grade: 3,
+        //           //   icon: '1505551659667.jpg',
+        //           //   authNm: '',
+        //           //   url: '/clinic-reward-rate',
+        //           //   reqType: '',
+        //           //   authRemark: '',
+        //           //   isMenuUrl: null,
+        //           //   sort: 2
+        //           // }
+        //         ]
+        //       }
+        //     ]
+        //   })
+        // );
 
-        let filterMenu = allMenu.toJS().filter(
-          (item) => item.title !== '数谋' && item.title !== '魔方'
-          // && item.title !== '应用'
-        );
+        // let filterMenu = allGradeMenus.toJS().filter(
+        //   (item) => item.title !== '数谋' && item.title !== '魔方'
+        //   // && item.title !== '应用'
+        // );
 
-        sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(filterMenu));
+        sessionStorage.setItem(
+          cache.LOGIN_MENUS,
+          JSON.stringify(allGradeMenus)
+        );
 
         const functionsRes = (await webapi.fetchFunctions()) as any;
         sessionStorage.setItem(

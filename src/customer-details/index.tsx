@@ -16,6 +16,9 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { BreadCrumb } from 'qmkit';
 import BasicInfomation from './component/basic-infomation';
+import PetInfomation from './component/pet-infomation';
+import DeliveryInformation from './component/delivery-information';
+import BillingInfomation from './component/billing-infomation';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -40,13 +43,19 @@ class CustomerDetails extends React.Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Tabs>
+          <Tabs defaultActiveKey="basic">
             <TabPane tab="Basic infomation" key="basic">
               <BasicInfomation></BasicInfomation>
             </TabPane>
-            <TabPane tab="Pet infomation" key="pet"></TabPane>
-            <TabPane tab="Delivery infomation" key="delivery"></TabPane>
-            <TabPane tab="Billing infomation" key="billing"></TabPane>
+            <TabPane tab="Pet infomation" key="pet">
+              <PetInfomation></PetInfomation>
+            </TabPane>
+            <TabPane tab="Delivery infomation" key="delivery">
+              <DeliveryInformation></DeliveryInformation>
+            </TabPane>
+            <TabPane tab="Billing infomation" key="billing">
+              <BillingInfomation></BillingInfomation>
+            </TabPane>
           </Tabs>
         </div>
       </div>

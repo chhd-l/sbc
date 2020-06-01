@@ -6,11 +6,7 @@ type TResult = {
   context: any;
 };
 
-/**
- * get List
- * @param filterParams
- */
-export function getClinicsDictionaryList(filterParams = {}) {
+export function queryClinicsDictionary(filterParams = {}) {
   return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
     method: 'POST',
     body: JSON.stringify({

@@ -181,6 +181,17 @@ class PetInfomation extends React.Component<any, any> {
                     )}
                   </FormItem>
                 </Col>
+                <Col span={24}>
+                  <FormItem>
+                    <Button type="primary" htmlType="submit">
+                      Save
+                    </Button>
+
+                    <Button style={{ marginLeft: '20px' }}>
+                      <Link to="/costomer-list">Cancle</Link>
+                    </Button>
+                  </FormItem>
+                </Col>
               </Row>
             </Form>
           </Card>

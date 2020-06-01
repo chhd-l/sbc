@@ -15,17 +15,17 @@ export default class Customer extends React.Component<any, any> {
       columns: [
         {
           title: 'Consumer Account',
-          dataIndex: 'consumerAccount',
+          dataIndex: 'customerAccount',
           key: 'consumerAccount'
         },
         {
           title: 'Consumer Name',
-          dataIndex: 'consumerName',
+          dataIndex: 'customerName',
           key: 'consumerName'
         },
         {
           title: 'Consumer Type',
-          dataIndex: 'consumerType',
+          dataIndex: 'customerLevelName',
           key: 'consumerType'
         },
         {
@@ -36,7 +36,7 @@ export default class Customer extends React.Component<any, any> {
 
         {
           title: 'Phone Number',
-          dataIndex: 'phoneNumber',
+          dataIndex: 'contactPhone',
           key: 'phoneNumber'
         },
         {
@@ -68,6 +68,7 @@ export default class Customer extends React.Component<any, any> {
         customerAccount: '',
         //客户类型
         customerType: '',
+        customerTypeId: '',
         //邮箱
         email: '',
         //手机号
@@ -82,7 +83,7 @@ export default class Customer extends React.Component<any, any> {
         {
           value: 'Visitor',
           name: 'Visitor',
-          id: 1
+          id: 2
         }
       ],
       loading: false
@@ -112,16 +113,23 @@ export default class Customer extends React.Component<any, any> {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
-    console.log(query);
+
+    let params = {
+      contactPhone: query.phoneNumber,
+      customerAccount: query.customerAccount,
+      customerLevelId: query.customerTypeId,
+      customerName: query.customerName,
+      email: query.email
+    };
 
     const { res } = await webapi.getCustomerList({
-      ...query,
+      ...params,
       pageNum,
       pageSize
     });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
-      let searchList = res.context.content;
+      let searchList = res.context.detailResponseList;
       pagination.total = res.context.total;
       this.setState({
         pagination: pagination,
@@ -181,14 +189,14 @@ export default class Customer extends React.Component<any, any> {
                   onChange={(value) => {
                     value = value === '' ? null : value;
                     this.onFormChange({
-                      field: 'customerType',
+                      field: 'customerTypeId',
                       value
                     });
                   }}
                 >
                   <Option value="">All</Option>
                   {customerTypeArr.map((item) => (
-                    <Option value={item.value} key={item.id}>
+                    <Option value={item.id} key={item.id}>
                       {item.name}
                     </Option>
                   ))}
@@ -237,7 +245,7 @@ export default class Customer extends React.Component<any, any> {
             <Table
               columns={columns}
               rowKey={(record) => record.id}
-              dataSource={this.state.typeList}
+              dataSource={this.state.searchList}
               pagination={this.state.pagination}
               loading={this.state.loading}
               onChange={this.handleTableChange}

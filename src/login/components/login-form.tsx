@@ -60,12 +60,12 @@ export default class LoginForm extends React.Component<any, any> {
           })(
             <Checkbox>记住账号</Checkbox>
           )}*/}
-          <a
+          {/* <a
             style={{ float: 'left' }}
             onClick={() => history.push('/company-register')}
           >
             免费注册
-          </a>
+          </a> */}
           <a
             style={{ float: 'right' }}
             onClick={() => history.push('/find-password')}

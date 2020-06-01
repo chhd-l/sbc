@@ -1,4 +1,32 @@
 import { Fetch } from 'qmkit';
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
+
+//new
+
+// 获取customer list
+export function getCustomerList(filterParams = {}) {
+  return Fetch<TResult>('/customer/customerAccount/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//删除Customer
+
+export function delCustomer(filterParams = {}) {
+  return Fetch<TResult>('/customer', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 /**
  * 获取客户列表
@@ -56,18 +84,13 @@ export const fetchAllBossCustomerLevel = () => {
  * @param customerIds
  * @returns {Promise<IAsyncResult<T>>}
  */
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
 
 /**
  * 新增
  * @param customer
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const saveCustomer = customerForm => {
+export const saveCustomer = (customerForm) => {
   return Fetch<TResult>('/customer', {
     method: 'POST',
     body: JSON.stringify(customerForm)
@@ -122,7 +145,7 @@ export const addPlatformRelated = (customerId, customerLevel) => {
  * @param customer
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deletePlatformCustomerRelated = customerId => {
+export const deletePlatformCustomerRelated = (customerId) => {
   return Fetch<TResult>(`/customer/related/delete/${customerId}`, {
     method: 'DELETE'
   });

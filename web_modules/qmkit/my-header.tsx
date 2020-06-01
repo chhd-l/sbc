@@ -58,7 +58,8 @@ export default class MyHeader extends React.PureComponent<any, any> {
         pcDom = (
           <Menu.Item key="0">
             <a target="_blank" href={url}>
-              <div className="firstBorder">
+              {/* <div className="firstBorder"> */}
+              <div>
                 <img src={pcCodeUrl} alt="PC" width="80" height="80" />
               </div>
               <p style={{ paddingRight: 15 }}>PC端</p>
@@ -101,8 +102,8 @@ export default class MyHeader extends React.PureComponent<any, any> {
       menuPreview = (
         <Menu className="menuPreview">
           {pcDom && pcDom}
-          {h5Dom && h5Dom}
-          {miniProgramDom && miniProgramDom}
+          {/* {h5Dom && h5Dom}
+          {miniProgramDom && miniProgramDom} */}
         </Menu>
       );
     } else {

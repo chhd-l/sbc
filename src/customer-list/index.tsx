@@ -92,7 +92,9 @@ export default class Customer extends React.Component<any, any> {
     this.handleTableChange = this.handleTableChange.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.init();
+  }
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -110,7 +112,9 @@ export default class Customer extends React.Component<any, any> {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
-    const { res } = await webapi.fetchCustomerList({
+    console.log(query);
+
+    const { res } = await webapi.getCustomerList({
       ...query,
       pageNum,
       pageSize

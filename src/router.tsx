@@ -191,6 +191,11 @@ const routes = [
     path: '/customer-list',
     asyncComponent: () => import('./customer-list')
   },
+  // 客户详情
+  {
+    path: '/customer-details',
+    asyncComponent: () => import('./customer-details')
+  },
   // 客户等级
   {
     path: '/customer-level',

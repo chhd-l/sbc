@@ -8,44 +8,28 @@ import {
   Table,
   Divider,
   message,
-  Switch
+  Switch,
+  Modal,
+  InputNumber
 } from 'antd';
-import * as webapi from './webapi';
+import * as Api from './webapi';
 import { Link } from 'react-router-dom';
 import { render } from 'react-dom';
+const { Column } = Table;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const dataSource = [
-  {
-    key: '1',
-    name: 'SH',
-    type: 'City',
-    value: 'SH',
-    discription: 'SH',
-    priority: '3',
-    isEnabled: true
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
   },
-  {
-    key: '2',
-    name: 'BJ',
-    type: 'City',
-    value: 'BJ',
-    discription: 'BJ',
-    priority: '2',
-    isEnabled: false
-  },
-  {
-    key: '3',
-    name: 'SZ',
-    type: 'City',
-    value: 'SZ',
-    discription: 'SZ',
-    priority: '1',
-    isEnabled: true
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 18 }
   }
-];
+};
 
 const columns = [
   {
@@ -62,15 +46,15 @@ const columns = [
   },
   {
     title: 'value',
-    dataIndex: 'value',
-    key: 'value',
-    sorter: (a, b) => a.value.localeCompare(b.value)
+    dataIndex: 'valueEn',
+    key: 'valueEn',
+    sorter: (a, b) => a.valueEn.localeCompare(b.value)
   },
   {
-    title: 'discription',
-    dataIndex: 'discription',
-    key: 'discription',
-    sorter: (a, b) => a.discription.localeCompare(b.discription)
+    title: 'description',
+    dataIndex: 'description',
+    key: 'description',
+    sorter: (a, b) => a.description.localeCompare(b.description)
   },
   {
     title: 'priority',
@@ -99,7 +83,7 @@ const columns = [
     )
   }
 ];
-export default class ClinicList extends Component<any, any> {
+class Dictionary extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -174,15 +158,40 @@ export default class ClinicList extends Component<any, any> {
         primaryCity: '',
         primaryZip: ''
       },
-      loading: false
+      loading: false,
+      loginInfo: JSON.parse(sessionStorage.getItem('s2b-supplier@login')),
+      dataSource: [],
+      modalVisible: false
     };
   }
   handleSubmit(e) {
     e.preventDefault();
     console.log('收到表单值：', this.props.form.getFieldsValue());
   }
+  componentDidMount() {
+    this.getList();
+  }
+  async getList() {
+    let res = await Api.fetchDicList({
+      type: '',
+      storeId: this.state.loginInfo.storeId
+    });
+    if (res.res.code === 'K-000000') {
+      this.setState({
+        dataSource: res.res.context.sysDictionaryVOS.slice(0, 5)
+      });
+      // dataSource = res.res.context.sysDictionaryVOS.slice(0 , 5)
+    }
+    console.log(res, 'res');
+  }
+
+  saveDic() {
+    this.setState({ modalVisible: false });
+  }
   render() {
-    // const { columns } = this.state;
+    const { dataSource } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    console.log(Api, 'Api');
     return (
       <div>
         {/* <BreadCrumb /> */}
@@ -214,6 +223,7 @@ export default class ClinicList extends Component<any, any> {
                 Reset
               </Button>
               <Button
+                onClick={() => this.setState({ modalVisible: true })}
                 type="primary"
                 htmlType="submit"
                 style={{ marginLeft: 8 }}
@@ -222,9 +232,78 @@ export default class ClinicList extends Component<any, any> {
               </Button>
             </Form.Item>
           </Form>
-          <Table dataSource={dataSource} columns={columns} />;
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{ showSizeChanger: true }}
+          ></Table>
+          <Modal
+            title="New"
+            visible={this.state.modalVisible}
+            onOk={() => {
+              this.saveDic();
+            }}
+            onCancel={() => this.setState({ modalVisible: false })}
+          >
+            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+              <FormItem label="Name">
+                {getFieldDecorator('name', {
+                  rules: [{ required: true, message: 'Please input name!' }]
+                })(
+                  <Input
+                    placeholder="Please input name"
+                    style={{ width: 300 }}
+                  />
+                )}
+              </FormItem>
+              <FormItem label="Type">
+                {getFieldDecorator('type', {
+                  rules: [{ required: true, message: 'Please select Type!' }]
+                })(
+                  <Select
+                    placeholder="Please select Type"
+                    style={{ width: 300 }}
+                  >
+                    <Option value="86">+86</Option>
+                    <Option value="87">+87</Option>
+                  </Select>
+                )}
+              </FormItem>
+              <FormItem label="Description">
+                <Input
+                  placeholder="Please input discription"
+                  style={{ width: 300 }}
+                />
+              </FormItem>
+              <FormItem label="Value">
+                <Input
+                  placeholder="Please input Value"
+                  style={{ width: 300 }}
+                />
+              </FormItem>
+              <FormItem label="ValueEn">
+                <Input
+                  placeholder="Please input ValueEn"
+                  style={{ width: 300 }}
+                />
+              </FormItem>
+              <FormItem label="Priority">
+                <InputNumber
+                  min={1}
+                  max={10}
+                  defaultValue={3}
+                  onChange={() => {}}
+                />
+              </FormItem>
+              <FormItem label="Is Enabled">
+                <Switch checked={false} />
+              </FormItem>
+            </Form>
+          </Modal>
         </div>
       </div>
     );
   }
 }
+
+export default Form.create({ name: 'dictionary' })(Dictionary);

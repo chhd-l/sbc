@@ -35,12 +35,12 @@ export default class Tab extends React.Component<any, any> {
         <TabPane tab={<FormattedMessage id="product.onShelves" />} key="1">
           <GoodsList />
         </TabPane>
-        <TabPane
+        {/* <TabPane
           tab={<FormattedMessage id="product.partialOnShelves" />}
           key="2"
         >
           <GoodsList />
-        </TabPane>
+        </TabPane> */}
         <TabPane tab={<FormattedMessage id="product.offShelves" />} key="0">
           <GoodsList />
         </TabPane>

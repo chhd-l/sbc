@@ -44,10 +44,6 @@ export default class GoodsActor extends Actor {
       //保存状态loading
       saveLoading: false,
       detailEditor: {},
-      detailEditor0: {},
-      detailEditor1: {},
-      detailEditor2: {},
-      detailEditor3: {},
       tabDetailEditor: {},
       editor: 'detail',
       // 当前处于基础信息tab还是价格tab：main | price
@@ -170,6 +166,7 @@ export default class GoodsActor extends Actor {
    */
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
+    console.log(data.toJS());
     return state.update('goods', (goods) => goods.merge(data));
   }
 

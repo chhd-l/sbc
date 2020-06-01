@@ -9,11 +9,11 @@ type TResult = {
  * 获取Clinic列表
  * @param filterParams
  */
-export function fetchClinicList(filterParams = {}) {
-  return Fetch<TResult>('/clinics/queryPrescription', {
+export function fetchDicList(param) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+      ...param
     })
   });
 }

@@ -104,6 +104,7 @@ class LogisticsForm extends React.Component<any, any> {
         }
       });
     }
+    console.log(goods.get('freightTempId'), 'freightTempId');
     return (
       <Form>
         <Row type="flex" justify="start" gutter={16}>
@@ -127,8 +128,9 @@ class LogisticsForm extends React.Component<any, any> {
                       }
                 )(this._getFreightSelect())}
               </div>
-              <div>
-                {goods.get('freightTempId') && (
+              {/* <div>
+                {  
+                goods.get('freightTempId') && (
                   <div style={{ paddingTop: 10 }}>
                     <Alert
                       message={
@@ -154,7 +156,7 @@ class LogisticsForm extends React.Component<any, any> {
                     />
                   </div>
                 )}
-              </div>
+              </div> */}
             </FormItem>
           </Col>
         </Row>

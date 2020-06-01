@@ -135,7 +135,21 @@ class SkuForm extends React.Component<any, any> {
     }
 
     columns = columns.unshift({
-      title: <FormattedMessage id="product.image" />,
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <FormattedMessage id="product.image" />
+        </div>
+      ),
       key: 'img',
       className: 'goodsImg',
       render: (rowInfo) => {
@@ -288,6 +302,16 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
           <FormattedMessage id="product.inventory" />
           <br />
           <Checkbox

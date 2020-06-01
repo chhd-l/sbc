@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Button, Divider } from 'antd';
 import { Link } from 'react-router-dom';
+import * as Api from '../webapi';
 
 const columns = [
   {
@@ -95,6 +96,7 @@ export default class SearchForm extends React.Component<any, any> {
     console.log(pagination);
   }
   render() {
+    // console.log(Api, 'Api')
     const { data, pagination, loading } = this.state;
     return (
       <div>

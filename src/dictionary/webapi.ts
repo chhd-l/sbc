@@ -6,23 +6,36 @@ type TResult = {
   context: any;
 };
 /**
- * 获取Clinic列表
+ * 获取Dictionary列表
  * @param filterParams
  */
-export function fetchDicList(param) {
-  return Fetch<TResult>('/sysdict/querySysDictionary', {
+export function fetchDictionaryList(filterParams = {}) {
+  return Fetch<TResult>('/clinicsDictionary/page', {
     method: 'POST',
     body: JSON.stringify({
-      ...param
+      ...filterParams
     })
   });
 }
 /**
- * delete Clinic
+ * Get Dictionary Type
  * @param filterParams
  */
-export function deleteClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/delPrescription', {
+export function getDictionaryTypes(filterParams = {}) {
+  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionaryType', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * delete Dictionary
+ * @param filterParams
+ */
+export function deleteDictionary(filterParams = {}) {
+  return Fetch<TResult>('/clinicsDictionary/delClinicsDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

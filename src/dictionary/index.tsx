@@ -1,309 +1,210 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Switch,
-  Modal,
-  InputNumber
-} from 'antd';
-import * as Api from './webapi';
+import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
+import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
-import { render } from 'react-dom';
 const { Column } = Table;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 }
-  }
-};
-
-const columns = [
-  {
-    title: 'name',
-    dataIndex: 'name',
-    key: 'name',
-    sorter: (a, b) => a.name.localeCompare(b.name)
-  },
-  {
-    title: 'type',
-    dataIndex: 'type',
-    key: 'type',
-    sorter: (a, b) => a.type.localeCompare(b.type)
-  },
-  {
-    title: 'value',
-    dataIndex: 'valueEn',
-    key: 'valueEn',
-    sorter: (a, b) => a.valueEn.localeCompare(b.value)
-  },
-  {
-    title: 'description',
-    dataIndex: 'description',
-    key: 'description',
-    sorter: (a, b) => a.description.localeCompare(b.description)
-  },
-  {
-    title: 'priority',
-    dataIndex: 'priority',
-    key: 'priority',
-    sorter: (a, b) => a.priority - b.priority
-  },
-  {
-    title: 'Is Enabled',
-    dataIndex: 'isEnabled',
-    key: 'isEnabled',
-    sorter: (a, b) => a.isEnabled - b.isEnabled,
-    render: (isEnabled) => {
-      return <Switch checked={isEnabled} />;
-    }
-  },
-  {
-    title: 'Option',
-    dataIndex: 'option',
-    key: 'option',
-    render: () => (
-      <span>
-        <a>edit</a>&nbsp;
-        <a>delete</a>
-      </span>
-    )
-  }
-];
-class Dictionary extends Component<any, any> {
+export default class DitionaryList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       columns: [
         {
-          title: 'Prescriber ID',
-          dataIndex: 'clinicsId',
-          key: 'clinicID'
+          title: 'name',
+          dataIndex: 'name',
+          key: 'name'
         },
         {
-          title: 'Prescriber Name',
-          dataIndex: 'clinicsName',
-          key: 'clinicName'
+          title: 'type',
+          dataIndex: 'type',
+          key: 'type'
         },
         {
-          title: 'Prescriber Phone',
-          dataIndex: 'phone',
-          key: 'clinicPhone'
+          title: 'value',
+          dataIndex: 'valueEn',
+          key: 'value'
         },
         {
-          title: 'Prescriber City',
-          dataIndex: 'primaryCity',
-          key: 'clinicCity'
+          title: 'discription',
+          dataIndex: 'description',
+          key: 'discription'
         },
         {
-          title: 'Prescriber Zip',
-          dataIndex: 'primaryZip',
-          key: 'clinicZip'
+          title: 'priority',
+          dataIndex: 'priority',
+          key: 'priority'
         },
         {
-          title: 'Longitude',
-          dataIndex: 'longitude',
-          key: 'longitude'
-        },
-        {
-          title: 'Latitude',
-          dataIndex: 'latitude',
-          key: 'latitude'
-        },
-        {
-          title: 'Prescriber Type',
-          dataIndex: 'prescriberType',
-          key: 'prescriberType'
-        },
-        {
-          title: 'Reward Rate',
-          dataIndex: 'rewardRate',
-          key: 'rewardRate'
-        },
-        {
-          title: 'Action',
-          key: 'action',
+          title: 'Option',
+          dataIndex: 'option',
+          key: 'option',
           render: (text, record) => (
             <span>
-              <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
+              <Link to={'/dictionary-edit/' + record.id}>Edit</Link>
               <Divider type="vertical" />
-              {/* <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a> */}
+              <a onClick={() => this.deleteDictionary(record.id)}>Delete</a>
             </span>
           )
         }
       ],
-      clinicList: [],
+      dictionaryData: [],
+      dictionaryTypes: [],
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
       searchForm: {
-        clinicsId: '',
-        clinicsName: '',
-        phone: '',
-        primaryCity: '',
-        primaryZip: ''
+        keyword: '',
+        type: ''
       },
       loading: false,
       loginInfo: JSON.parse(sessionStorage.getItem('s2b-supplier@login')),
       dataSource: [],
       modalVisible: false
     };
+    this.onSearch = this.onSearch.bind(this);
+    this.handleTableChange = this.handleTableChange.bind(this);
+    this.queryClinicsDictionary();
+    this.getDictionary();
   }
-  handleSubmit(e) {
-    e.preventDefault();
-    console.log('收到表单值：', this.props.form.getFieldsValue());
-  }
-  componentDidMount() {
-    this.getList();
-  }
-  async getList() {
-    let res = await Api.fetchDicList({
-      type: '',
-      storeId: this.state.loginInfo.storeId
+  getDictionary = async (
+    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
+  ) => {
+    this.setState({
+      loading: true
     });
-    if (res.res.code === 'K-000000') {
+    const query = this.state.searchForm;
+    const { res } = await webapi.fetchDictionaryList({
+      ...query,
+      pageNum,
+      pageSize
+    });
+    if (res.code === 'K-000000') {
+      let pagination = this.state.pagination;
+      let dictionaryData = res.context.clinicsDictionaryVOList;
+      pagination.total = res.context.total;
       this.setState({
-        dataSource: res.res.context.sysDictionaryVOS.slice(0, 5)
+        pagination: pagination,
+        dictionaryData: dictionaryData,
+        loading: false
       });
-      // dataSource = res.res.context.sysDictionaryVOS.slice(0 , 5)
     }
-    console.log(res, 'res');
+  };
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+  queryClinicsDictionary = async () => {
+    const { res } = await webapi.getDictionaryTypes();
+    if (res.code === 'K-000000') {
+      this.setState({
+        dictionaryTypes: res.context.typeList
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+  onSearch = () => {
+    this.getDictionary({ pageNum: 0, pageSize: 10 });
+  };
+  handleTableChange(pagination: any) {
+    this.setState({
+      pagination: pagination
+    });
+    this.getDictionary({ pageNum: pagination.current - 1, pageSize: 10 });
   }
-
-  saveDic() {
-    this.setState({ modalVisible: false });
-  }
+  deleteDictionary = async (id) => {
+    const { res } = await webapi.deleteDictionary({
+      id: id
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'delete success');
+      this.getDictionary({
+        pageNum: this.state.pagination.current - 1,
+        pageSize: 10
+      });
+    } else {
+      message.error(res.message || 'delete faild');
+    }
+  };
   render() {
-    const { dataSource } = this.state;
-    const { getFieldDecorator } = this.props.form;
-    console.log(Api, 'Api');
+    const { columns, dictionaryTypes } = this.state;
     return (
       <div>
-        {/* <BreadCrumb /> */}
+        <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
           <Headline title="Dictionary" />
-          <Form layout="inline" onSubmit={this.handleSubmit}>
-            <FormItem label="Keyword">
+          <Form className="filter-content" layout="inline">
+            <FormItem>
               <Input
+                addonBefore="Keyword"
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'keyword',
+                    value
+                  });
+                }}
                 placeholder="Please input name or discription"
                 style={{ width: 300 }}
               />
             </FormItem>
-            <FormItem label="Type">
-              <Select placeholder="Please select Type" style={{ width: 300 }}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
+            <FormItem>
+              <SelectGroup
+                label="Type"
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'type',
+                    value
+                  });
+                }}
+                style={{ width: 80 }}
+              >
+                <Option value="">All</Option>
+                {dictionaryTypes.map((item) => (
+                  <Option value={item} key={item}>
+                    {item}
+                  </Option>
+                ))}
+              </SelectGroup>
             </FormItem>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon="search"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onSearch();
+                }}
+              >
                 Search
-              </Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginLeft: 8 }}
-              >
-                Reset
-              </Button>
-              <Button
-                onClick={() => this.setState({ modalVisible: true })}
-                type="primary"
-                htmlType="submit"
-                style={{ marginLeft: 8 }}
-              >
-                New
               </Button>
             </Form.Item>
           </Form>
+          <Button>
+            <Link to="/dictionary-add">Add</Link>
+          </Button>
           <Table
-            dataSource={dataSource}
+            rowKey={(record) => record.id}
+            dataSource={this.state.dictionaryData}
             columns={columns}
-            pagination={{ showSizeChanger: true }}
-          ></Table>
-          <Modal
-            title="New"
-            visible={this.state.modalVisible}
-            onOk={() => {
-              this.saveDic();
-            }}
-            onCancel={() => this.setState({ modalVisible: false })}
-          >
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-              <FormItem label="Name">
-                {getFieldDecorator('name', {
-                  rules: [{ required: true, message: 'Please input name!' }]
-                })(
-                  <Input
-                    placeholder="Please input name"
-                    style={{ width: 300 }}
-                  />
-                )}
-              </FormItem>
-              <FormItem label="Type">
-                {getFieldDecorator('type', {
-                  rules: [{ required: true, message: 'Please select Type!' }]
-                })(
-                  <Select
-                    placeholder="Please select Type"
-                    style={{ width: 300 }}
-                  >
-                    <Option value="86">+86</Option>
-                    <Option value="87">+87</Option>
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem label="Description">
-                <Input
-                  placeholder="Please input discription"
-                  style={{ width: 300 }}
-                />
-              </FormItem>
-              <FormItem label="Value">
-                <Input
-                  placeholder="Please input Value"
-                  style={{ width: 300 }}
-                />
-              </FormItem>
-              <FormItem label="ValueEn">
-                <Input
-                  placeholder="Please input ValueEn"
-                  style={{ width: 300 }}
-                />
-              </FormItem>
-              <FormItem label="Priority">
-                <InputNumber
-                  min={1}
-                  max={10}
-                  defaultValue={3}
-                  onChange={() => {}}
-                />
-              </FormItem>
-              <FormItem label="Is Enabled">
-                <Switch checked={false} />
-              </FormItem>
-            </Form>
-          </Modal>
+            pagination={this.state.pagination}
+            loading={this.state.loading}
+            onChange={this.handleTableChange}
+          />
         </div>
       </div>
     );
   }
 }
-
-export default Form.create({ name: 'dictionary' })(Dictionary);

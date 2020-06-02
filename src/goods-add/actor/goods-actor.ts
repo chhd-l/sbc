@@ -176,8 +176,13 @@ export default class GoodsActor extends Actor {
       goods.set(
         'goodsNo',
         'P' +
-          new Date().getTime().toString().slice(4, 10) +
-          Math.random().toString().slice(2, 5)
+          new Date()
+            .getTime()
+            .toString()
+            .slice(4, 10) +
+          Math.random()
+            .toString()
+            .slice(2, 5)
       )
     );
   }

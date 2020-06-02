@@ -11,7 +11,8 @@ import {
   Col,
   Radio,
   Menu,
-  Card
+  Card,
+  Checkbox
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -30,18 +31,152 @@ const layout = {
   wrapperCol: { span: 16 }
 };
 
-class PetInfomation extends React.Component<any, any> {
+class DeliveryInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      addressList: ['Rita', 'Rita2']
+      deliveryForm: {
+        firstName: '',
+        lastName: '',
+        consigneeNumber: '',
+        postCode: '',
+        cityId: '',
+        countryId: '',
+        address1: '',
+        address2: '',
+        rfc: ''
+      },
+      title: '',
+      countryArr: [],
+      cityArr: [],
+      // customerId:this.props.match.params.id ? this.props.match.params.id : '',
+      addressList: [],
+      isDefault: false
     };
   }
-  handleChange = (value) => {
-    console.log(value);
+  componentDidMount() {
+    this.getDict();
+    this.getAddressList();
+  }
+
+  getDict = () => {
+    let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+    let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+    this.setState({
+      countryArr: countryArr,
+      cityArr: cityArr
+    });
   };
-  onOpenChange = (value) => {
-    console.log(value);
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        this.saveDeliveryAddress();
+      }
+    });
+  };
+
+  saveDeliveryAddress = () => {
+    const { deliveryForm } = this.state;
+    let params = {
+      address1: deliveryForm.address1,
+      address2: deliveryForm.address2,
+      cityId: deliveryForm.cityId,
+      consigneeName: deliveryForm.firstName + deliveryForm.lastName,
+      consigneeNumber: deliveryForm.consigneeNumber,
+      countryId: deliveryForm.countryId,
+      customerId: deliveryForm.customerId,
+      deliveryAddress: deliveryForm.address1 + deliveryForm.address2,
+      deliveryAddressId: deliveryForm.deliveryAddressId,
+      employeeId: deliveryForm.employeeId,
+      firstName: deliveryForm.firstName,
+      isDefaltAddress: this.state.isDefault ? 1 : 0,
+      lastName: deliveryForm.lastName,
+      postCode: deliveryForm.postCode,
+      provinceId: deliveryForm.provinceId,
+      rfc: deliveryForm.rfc,
+      type: deliveryForm.type
+    };
+    webapi
+      .updateAddress(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          message.success(res.message || 'Update success');
+        } else {
+          message.error(res.message || 'Update failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Update failed');
+      });
+  };
+
+  getAddressList = () => {
+    webapi
+      .getAddressListByType(this.props.customerId, 'delivery')
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let addressList = res.context;
+          if (addressList.length > 0) {
+            let deliveryForm = addressList[0];
+
+            this.props.form.setFieldsValue({
+              firstName: addressList[0].firstName,
+              lastName: addressList[0].lastName,
+              consigneeNumber: addressList[0].consigneeNumber,
+              postCode: addressList[0].postCode,
+              cityId: addressList[0].cityId,
+              countryId: addressList[0].countryId,
+              address1: addressList[0].address1,
+              address2: addressList[0].address2,
+              rfc: addressList[0].rfc
+            });
+            this.setState({
+              addressList: addressList,
+              deliveryForm: deliveryForm,
+              title: addressList[0].consigneeName,
+              isDefault: addressList[0].isDefaltAddress === 1 ? true : false
+            });
+          }
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+
+  onFormChange = ({ field, value }) => {
+    let data = this.state.deliveryForm;
+    data[field] = value;
+    this.setState({
+      basicForm: data
+    });
+  };
+
+  delAddress = () => {
+    webapi
+      .delAddress(this.state.deliveryForm.deliveryAddressId)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          message.success(res.message || 'Delete success');
+        } else {
+          message.error(res.message || 'Delete failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Delete failed');
+      });
+  };
+  clickDefault = () => {
+    let isDefault = !this.state.isDefault;
+    this.setState({
+      isDefault: isDefault
+    });
   };
 
   render() {
@@ -55,20 +190,40 @@ class PetInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
+    const { countryArr, cityArr } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
         <Col span={3}>
-          <h3>All Pet {this.state.addressList.length}</h3>
+          <h3>All Address {this.state.addressList.length}</h3>
           <ul>
             {this.state.addressList.map((item) => (
-              <li>{item}</li>
+              <li key={item.id}>{item.consigneeName}</li>
             ))}
           </ul>
         </Col>
         <Col span={20}>
-          <Card title="Address 1">
-            <Form {...formItemLayout}>
+          <Card
+            title={this.state.title}
+            extra={
+              <div>
+                <Checkbox
+                  checked={this.state.isDefault}
+                  onChange={() => this.clickDefault()}
+                >
+                  Set default delivery address
+                </Checkbox>
+                <Button
+                  type="danger"
+                  icon="close"
+                  onClick={() => this.delAddress()}
+                >
+                  Delete
+                </Button>
+              </div>
+            }
+          >
+            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
                   <FormItem
@@ -80,7 +235,17 @@ class PetInfomation extends React.Component<any, any> {
                       rules: [
                         { required: true, message: 'Please input First Name!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'firstName',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -93,7 +258,17 @@ class PetInfomation extends React.Component<any, any> {
                       rules: [
                         { required: true, message: 'Please input Last Name!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'lastName',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -102,14 +277,24 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    {getFieldDecorator('phoneNumber', {
+                    {getFieldDecorator('consigneeNumber', {
                       rules: [
                         {
                           required: true,
                           message: 'Please input Phone Number!'
                         }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'consigneeNumber',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -122,14 +307,17 @@ class PetInfomation extends React.Component<any, any> {
                       rules: [
                         { required: true, message: 'Please input Post Code!' }
                       ]
-                    })(<Input />)}
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem label="City" hasFeedback validateStatus="success">
-                    {getFieldDecorator('city', {
-                      rules: [{ required: true, message: 'Please input City!' }]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'postCode',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -138,11 +326,50 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    {getFieldDecorator('country', {
+                    {getFieldDecorator('countryId', {
                       rules: [
                         { required: true, message: 'Please input Country!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Select
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'countryId',
+                            value
+                          });
+                        }}
+                      >
+                        {countryArr.map((item) => (
+                          <Option value={item.id} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label="City" hasFeedback validateStatus="success">
+                    {getFieldDecorator('cityId', {
+                      rules: [{ required: true, message: 'Please input City!' }]
+                    })(
+                      <Select
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'cityId',
+                            value
+                          });
+                        }}
+                      >
+                        {cityArr.map((item) => (
+                          <Option value={item.id} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -155,7 +382,17 @@ class PetInfomation extends React.Component<any, any> {
                       rules: [
                         { required: true, message: 'Please input Address 1!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'address1',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -164,18 +401,45 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    <Input />
+                    {getFieldDecorator(
+                      'address2',
+                      {}
+                    )(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'address2',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    label="Reference"
+                    label="rfcerence"
                     hasFeedback
                     validateStatus="success"
                   >
-                    <Input />
+                    {getFieldDecorator(
+                      'address2',
+                      {}
+                    )(
+                      <Input
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'rfc',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
+
                 <Col span={24}>
                   <FormItem>
                     <Button type="primary" htmlType="submit">
@@ -195,4 +459,4 @@ class PetInfomation extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(PetInfomation);
+export default Form.create()(DeliveryInfomation);

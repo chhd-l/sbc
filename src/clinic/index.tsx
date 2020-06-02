@@ -277,7 +277,7 @@ export default class ClinicList extends Component<any, any> {
               </Button>
             </FormItem>
           </Form>
-          <Button>
+          <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
             <Link to="/clinic-add">Add</Link>
           </Button>
           <Table

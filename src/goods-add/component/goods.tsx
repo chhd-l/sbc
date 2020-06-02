@@ -41,6 +41,9 @@ const formItemLayout = {
     sm: { span: 12 }
   }
 };
+const tProps = {
+  treeCheckable: 'true'
+};
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
@@ -519,7 +522,7 @@ class GoodsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: '最大值为9999999.99',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -952,6 +955,8 @@ class GoodsForm extends React.Component<any, any> {
             key={item.get('storeCateId')}
             value={item.get('storeCateId')}
             title={item.get('cateName')}
+            disabled
+            checkable={false}
           >
             {this.generateStoreCateTree(item.get('children'))}
           </TreeNode>

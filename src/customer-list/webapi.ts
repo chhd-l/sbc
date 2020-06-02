@@ -9,7 +9,7 @@ type TResult = {
 
 // 获取customer list
 export function getCustomerList(filterParams = {}) {
-  return Fetch<TResult>('/customer/customerAccount/list', {
+  return Fetch<TResult>('/pageBySupplier', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

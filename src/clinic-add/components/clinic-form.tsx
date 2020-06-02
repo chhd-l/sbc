@@ -356,8 +356,6 @@ class ClinicForm extends React.Component<any, any> {
                       {item.name}
                     </Option>
                   ))}
-                  {/* <Option value="Mexico City">Mexico City</Option>
-                  <Option value="Monterrey">Monterrey</Option> */}
                 </Select>
               )}
             </FormItem>

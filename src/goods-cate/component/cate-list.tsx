@@ -108,7 +108,8 @@ class CateList extends React.Component<any, any> {
                     onClick={this._addChildrenCate.bind(
                       this,
                       rowInfo.get('storeCateId'),
-                      rowInfo.get('cateName')
+                      rowInfo.get('cateName'),
+                      rowInfo.get('goodsCateId')
                     )}
                   >
                     <FormattedMessage id="addSubcategory" />
@@ -125,7 +126,8 @@ class CateList extends React.Component<any, any> {
                     rowInfo.get('cateName'),
                     rowInfo.get('cateParentId'),
                     rowInfo.get('goodsCateId'),
-                    rowInfo.get('children')
+                    rowInfo.get('children'),
+                    rowInfo.get('cateDescription')
                   )}
                 >
                   <FormattedMessage id="edit" />
@@ -149,9 +151,14 @@ class CateList extends React.Component<any, any> {
   /**
    * 添加子类目
    */
-  _addChildrenCate = (cateParentId: string, cateParentName: string) => {
+  _addChildrenCate = (
+    cateParentId: string,
+    cateParentName: string,
+    goodsCateId: number
+  ) => {
+    console.log(goodsCateId, 'goodsCateId');
     const { showEditModal } = this.props.relaxProps;
-    showEditModal(Map({ cateParentId, cateParentName }));
+    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
   };
 
   /**
@@ -162,7 +169,8 @@ class CateList extends React.Component<any, any> {
     cateName: string,
     cateParentId: number,
     goodsCateId: number,
-    children: IList
+    children: IList,
+    cateDescription: string
   ) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
@@ -178,7 +186,8 @@ class CateList extends React.Component<any, any> {
       cateParentName,
       cateParentId,
       goodsCateId,
-      children
+      children,
+      cateDescription
     });
     showEditModal(cateInfo);
   };

@@ -13,7 +13,7 @@ export function fetchDictionaryList(filterParams = {}) {
   return Fetch<TResult>('/clinicsDictionary/page', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+      ...param
     })
   });
 }

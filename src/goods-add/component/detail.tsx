@@ -78,7 +78,7 @@ export default class Detail extends React.Component<any, any> {
                   ref={(UEditor) => {
                     refDetailEditor({
                       detailEditor: (UEditor && UEditor.editor) || {},
-                      ref: 'detailEditor' + i
+                      ref: 'detailEditor_' + i
                     });
                     this.child = UEditor;
                   }}

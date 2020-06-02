@@ -135,7 +135,21 @@ class SkuForm extends React.Component<any, any> {
     }
 
     columns = columns.unshift({
-      title: <FormattedMessage id="product.image" />,
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <FormattedMessage id="product.image" />
+        </div>
+      ),
       key: 'img',
       className: 'goodsImg',
       render: (rowInfo) => {
@@ -260,7 +274,7 @@ class SkuForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: '最大值为9999999.99',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -288,6 +302,16 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
           <FormattedMessage id="product.inventory" />
           <br />
           <Checkbox

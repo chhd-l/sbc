@@ -201,7 +201,11 @@ export default class AppStore extends Store {
         .find((item) => item.get('isDefault') == 1)
         .get('cateId');
     }
-    cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
+    cateId = cateId
+      ? cateId
+      : this.state()
+          .get('videoCateId')
+          .toJS();
 
     //查询视频分页信息
     const videoList: any = await fetchResource({
@@ -222,7 +226,9 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseVideos',
-            fromJS(videoList.res.context).get('content').slice(0, successCount)
+            fromJS(videoList.res.context)
+              .get('content')
+              .slice(0, successCount)
           );
         }
         this.dispatch('modal: videos', fromJS(videoList.res.context)); //初始化视频分页列表
@@ -275,7 +281,9 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseImgs',
-            fromJS(imageList.res.context).get('content').slice(0, successCount)
+            fromJS(imageList.res.context)
+              .get('content')
+              .slice(0, successCount)
           );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
@@ -940,24 +948,29 @@ export default class AppStore extends Store {
     let goods = data.get('goods');
 
     let goodsDetailTab = data.get('goodsDetailTab');
-    const detailEditor1 = data.get('detailEditor1') || {};
-    const detailEditor2 = data.get('detailEditor2') || {};
-    const detailEditor3 = data.get('detailEditor3') || {};
-    const detailEditor4 = data.get('detailEditor4') || {};
-    // console.log(detailEditor.getContent(), 'detailEditor1')
+    // const detailEditor1 = data.get('detailEditor1') || {};
+    // const detailEditor2 = data.get('detailEditor2') || {};
+    // const detailEditor3 = data.get('detailEditor3') || {};
+    // const detailEditor4 = data.get('detailEditor4') || {};
+    // // console.log(detailEditor.getContent(), 'detailEditor1')
+    // console.log(detailEditor1, detailEditor2, detailEditor3, data.get('detailEditor0'))
 
-    let goodsDetailTabTemplate = {};
-    // if(goods.get('goodsDetail')) {
-    //   goodsDetailContent = goods.get('goodsDetail')
-    //   console.log(goodsDetailContent, 'goods------------')
-    //   goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'))
-    // }
-    goodsDetailTab.map((item, i) => {
-      goodsDetailTabTemplate[item.get('name')] = data
-        .get('detailEditor' + i)
-        .getContent();
-    });
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    // let goodsDetailTabTemplate = {};
+    // // if(goods.get('goodsDetail')) {
+    // //   goodsDetailContent = goods.get('goodsDetail')
+    // //   console.log(goodsDetailContent, 'goods------------')
+    // //   goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'))
+    // // }
+    // goodsDetailTab.map((item, i) => {
+    //   // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
+    //   if(i < 3) {
+    //     console.log(data.get('detailEditor_' + (i + 1)), 'detailEditor_' + (i + 1))
+    //     goodsDetailTabTemplate[item.get('name')] = data
+    //     .get('detailEditor_' + (i + 1))
+    //     .getContent();
+    //   }
+    // });
+    // goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
 
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
@@ -1106,6 +1119,8 @@ export default class AppStore extends Store {
     let skuNoMap = Map();
     let existedSkuNo = '';
     let goodsList = List();
+    let isEmptyImage = false;
+    let isEmptyStock = false;
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1132,7 +1147,12 @@ export default class AppStore extends Store {
       if (item.get('images') != null && item.get('images').count() > 0) {
         imageUrl = item.get('images').toJS()[0].artworkUrl;
       }
-
+      if (!imageUrl) {
+        isEmptyImage = true;
+      }
+      if (item.get('stock') === null) {
+        isEmptyStock = true;
+      }
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1146,6 +1166,14 @@ export default class AppStore extends Store {
         })
       );
     });
+    if (isEmptyImage) {
+      message.error('Spec image is required');
+      return false;
+    }
+    if (isEmptyStock) {
+      message.error('Spec stock is required');
+      return false;
+    }
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');
       return false;
@@ -1403,6 +1431,10 @@ export default class AppStore extends Store {
 
       if (item.get('images') != null && item.get('images').count() > 0) {
         imageUrl = item.get('images').toJS()[0].artworkUrl;
+        if (!imageUrl) {
+          message.error('Spec is required');
+          return false;
+        }
       }
 
       goodsList = goodsList.push(
@@ -1470,7 +1502,10 @@ export default class AppStore extends Store {
       return;
     }
 
-    const goodsLevelPrices = data.get('userLevelPrice').valueSeq().toList();
+    const goodsLevelPrices = data
+      .get('userLevelPrice')
+      .valueSeq()
+      .toList();
     param = param.set('goodsLevelPrices', goodsLevelPrices);
 
     // -----商品客户价格列表-------
@@ -1487,11 +1522,17 @@ export default class AppStore extends Store {
       message.error('起订量不允许超过限订量');
       return;
     }
-    const userPrice = data.get('userPrice').valueSeq().toList();
+    const userPrice = data
+      .get('userPrice')
+      .valueSeq()
+      .toList();
     param = param.set('goodsCustomerPrices', userPrice);
 
     // -----商品订货区间价格列表-------
-    const areaPrice = data.get('areaPrice').valueSeq().toList();
+    const areaPrice = data
+      .get('areaPrice')
+      .valueSeq()
+      .toList();
     //验证订货区间是否重复
     if (priceType == 1 && areaPrice != null && areaPrice.count() > 0) {
       let cmap = Map();

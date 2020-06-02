@@ -541,6 +541,21 @@ const routes = [
     path: '/enterprise-customer-list',
     asyncComponent: () => import('./enterprise-customer-list')
   },
+  // dictionary
+  {
+    path: '/dictionary',
+    asyncComponent: () => import('./dictionary')
+  },
+  // dictionary-add
+  {
+    path: '/dictionary-add',
+    asyncComponent: () => import('./dictionary-update')
+  },
+  // dictionary-edit
+  {
+    path: '/dictionary-edit/:id',
+    asyncComponent: () => import('./dictionary-update')
+  },
   // clinic
   {
     path: '/clinic',
@@ -626,11 +641,6 @@ const auditDidNotPass = [
   {
     path: '/shop-info-edit',
     asyncComponent: () => import('./shop/info-edit')
-  },
-  //字典维护界面
-  {
-    path: '/dictionary',
-    asyncComponent: () => import('./dictionary')
   }
 ];
 

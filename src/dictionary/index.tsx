@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
-import * as Api from './webapi';
+import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 const { Column } = Table;
 
@@ -208,5 +208,3 @@ export default class DitionaryList extends Component<any, any> {
     );
   }
 }
-
-export default Form.create({ name: 'dictionary' })(Dictionary);

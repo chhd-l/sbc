@@ -62,10 +62,7 @@ export default class DitionaryList extends Component<any, any> {
         keyword: '',
         type: ''
       },
-      loading: false,
-      loginInfo: JSON.parse(sessionStorage.getItem('s2b-supplier@login')),
-      dataSource: [],
-      modalVisible: false
+      loading: false
     };
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
@@ -160,6 +157,7 @@ export default class DitionaryList extends Component<any, any> {
             </FormItem>
             <FormItem>
               <SelectGroup
+                defaultValue="All"
                 label="Type"
                 onChange={(value) => {
                   value = value === '' ? null : value;

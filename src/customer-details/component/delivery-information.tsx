@@ -36,6 +36,8 @@ class DeliveryInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      customerAccount: '',
+      clinicsVOS: [],
       deliveryForm: {
         firstName: '',
         lastName: '',
@@ -52,12 +54,14 @@ class DeliveryInfomation extends React.Component<any, any> {
       cityArr: [],
       // customerId:this.props.match.params.id ? this.props.match.params.id : '',
       addressList: [],
-      isDefault: false
+      isDefault: false,
+      clinicList: []
     };
   }
   componentDidMount() {
     this.getDict();
     this.getAddressList();
+    this.getClinicList();
   }
 
   getDict = () => {
@@ -78,7 +82,7 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
 
   saveDeliveryAddress = () => {
-    const { deliveryForm } = this.state;
+    const { deliveryForm, clinicsVOS } = this.state;
     let params = {
       address1: deliveryForm.address1,
       address2: deliveryForm.address2,
@@ -96,7 +100,8 @@ class DeliveryInfomation extends React.Component<any, any> {
       postCode: deliveryForm.postCode,
       provinceId: deliveryForm.provinceId,
       rfc: deliveryForm.rfc,
-      type: deliveryForm.type
+      type: deliveryForm.type,
+      clinicsVOS: clinicsVOS
     };
     webapi
       .updateAddress(params)
@@ -119,11 +124,13 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let addressList = res.context;
+          let addressList = res.context.customerDeliveryAddressVOList;
           if (addressList.length > 0) {
             let deliveryForm = addressList[0];
-
+            debugger;
             this.props.form.setFieldsValue({
+              customerAccount: res.context.customerAccount,
+              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               firstName: addressList[0].firstName,
               lastName: addressList[0].lastName,
               consigneeNumber: addressList[0].consigneeNumber,
@@ -180,6 +187,32 @@ class DeliveryInfomation extends React.Component<any, any> {
     });
   };
 
+  getClinicList = () => {
+    webapi
+      .fetchClinicList({
+        pageNum: 0,
+        pageSize: 1000
+      })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.setState({
+            clinicList: res.context.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+  onClinicChange = (clinics) => {
+    this.setState({
+      clinicsVOS: clinics
+    });
+  };
+
   render() {
     const formItemLayout = {
       labelCol: {
@@ -191,7 +224,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-    const { countryArr, cityArr } = this.state;
+    const { countryArr, cityArr, clinicList } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
@@ -232,6 +265,68 @@ class DeliveryInfomation extends React.Component<any, any> {
           >
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem
+                    label="Consumer Account"
+                    hasFeedback
+                    validateStatus="success"
+                  >
+                    {getFieldDecorator('customerAccount', {
+                      rules: [
+                        { required: true, message: 'Please input First Name!' }
+                      ]
+                    })(<Input disabled={true} />)}
+                  </FormItem>
+                </Col>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem label="Selected clinics">
+                    {getFieldDecorator('clinicsVOS', {
+                      rules: [
+                        { required: true, message: 'Please Select clinics!' }
+                      ]
+                    })(
+                      <Select
+                        mode="tags"
+                        placeholder="Please select"
+                        style={{ width: '100%' }}
+                        onChange={(value, Option) => {
+                          let clinics = [];
+                          for (let i = 0; i < Option.length; i++) {
+                            let clinic = {
+                              clinicsId: Option[i].key,
+                              clinicsName: Option[i].props.value
+                            };
+                            clinics.push(clinic);
+                          }
+
+                          this.onClinicChange(clinics);
+                        }}
+                      >
+                        {/* {
+                        clinicList.map((item) => (
+                          <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                        ))} */}
+                        {clinicList.map((item) => (
+                          <Option value={item.clinicsName} key={item.clinicsId}>
+                            {item.clinicsName}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
                 <Col span={12}>
                   <FormItem
                     label="First Name"

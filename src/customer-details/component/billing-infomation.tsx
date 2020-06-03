@@ -36,6 +36,9 @@ class BillingInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      customerAccount: '',
+      clinicsVOS: [],
+
       billingForm: {
         firstName: '',
         lastName: '',
@@ -52,12 +55,14 @@ class BillingInfomation extends React.Component<any, any> {
       cityArr: [],
       // customerId:this.props.match.params.id ? this.props.match.params.id : '',
       addressList: [],
-      isDefault: false
+      isDefault: false,
+      clinicList: []
     };
   }
   componentDidMount() {
     this.getDict();
     this.getAddressList();
+    this.getClinicList();
   }
 
   getDict = () => {
@@ -119,11 +124,13 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let addressList = res.context;
+          let addressList = res.context.customerDeliveryAddressVOList;
           if (addressList.length > 0) {
             let billingForm = addressList[0];
 
             this.props.form.setFieldsValue({
+              customerAccount: res.context.customerAccount,
+              clinicsVOS: res.context.clinicsVOS,
               firstName: addressList[0].firstName,
               lastName: addressList[0].lastName,
               consigneeNumber: addressList[0].consigneeNumber,
@@ -179,9 +186,35 @@ class BillingInfomation extends React.Component<any, any> {
       isDefault: isDefault
     });
   };
+  getClinicList = () => {
+    webapi
+      .fetchClinicList({
+        pageNum: 0,
+        pageSize: 1000
+      })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.setState({
+            clinicList: res.context.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+
+  onClinicChange = (clinics) => {
+    this.setState({
+      clinicsVOS: clinics
+    });
+  };
 
   render() {
-    const { countryArr, cityArr } = this.state;
+    const { countryArr, cityArr, clinicList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -232,6 +265,68 @@ class BillingInfomation extends React.Component<any, any> {
           >
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem
+                    label="Consumer Account"
+                    hasFeedback
+                    validateStatus="success"
+                  >
+                    {getFieldDecorator('customerAccount', {
+                      rules: [
+                        { required: true, message: 'Please input First Name!' }
+                      ]
+                    })(<Input disabled={true} />)}
+                  </FormItem>
+                </Col>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem label="Selected clinics">
+                    {getFieldDecorator('clinicsVOS', {
+                      rules: [
+                        { required: true, message: 'Please Select clinics!' }
+                      ]
+                    })(
+                      <Select
+                        mode="tags"
+                        placeholder="Please select"
+                        style={{ width: '100%' }}
+                        onChange={(value, Option) => {
+                          let clinics = [];
+                          for (let i = 0; i < Option.length; i++) {
+                            let clinic = {
+                              clinicsId: Option[i].key,
+                              clinicsName: Option[i].props.value
+                            };
+                            clinics.push(clinic);
+                          }
+
+                          this.onClinicChange(clinics);
+                        }}
+                      >
+                        {/* {
+                        clinicList.map((item) => (
+                          <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                        ))} */}
+                        {clinicList.map((item) => (
+                          <Option value={item.clinicsName} key={item.clinicsId}>
+                            {item.clinicsName}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
                 <Col span={12}>
                   <FormItem
                     label="First Name"

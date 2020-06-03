@@ -12,7 +12,8 @@ import {
   Radio,
   Menu,
   Card,
-  DatePicker
+  DatePicker,
+  Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -37,16 +38,66 @@ class PetInfomation extends React.Component<any, any> {
     super(props);
     this.state = {
       petForm: {
-        petCategory: '',
+        petsId: '',
+        petsType: '',
         petName: '',
-        gender: '',
-        breed: '',
-        weight: '',
-        sterilizedStatus: null,
-        specialNeeds: []
+        petsSex: '',
+        petsBreed: '',
+        petsSizeValueName: '',
+        sterilized: null,
+        birthOfPets: '',
+        petsPropRelations: []
       },
-      petList: []
+      petList: [],
+      petsType: [
+        {
+          value: 'dog',
+          id: 1
+        },
+        {
+          value: 'cat',
+          id: 2
+        }
+      ],
+      petGender: [
+        {
+          value: 'male',
+          id: 0
+        },
+        {
+          value: 'female',
+          id: 1
+        }
+      ],
+      sizeArr: ['Xsmall', 'Mini', 'Medium', 'Maxi', 'Giant'],
+      petsPropRelations: [
+        'Age support',
+        'Cardiac support',
+        'Diabetes support',
+        'Digestive support',
+        'Joint support',
+        'Oral/Dental hygiene',
+        'Food sensitivities',
+        'Kidney support',
+        'Liver support',
+        'Skin and Coat support',
+        'Urinary support',
+        'Weight management',
+        'Convalescence',
+        'Skin sensitivity',
+        'Digestive sensitivity',
+        'Joint sensitivity'
+      ],
+      catBreed: [],
+      dogBreed: [],
+      currentBirthDay: '2020-01-01',
+      currentPet: {}
     };
+  }
+  componentDidMount() {
+    this.petsByConsumer();
+    this.querySysDictionary('dogBreed');
+    this.querySysDictionary('catBreed');
   }
   handleChange = (value) => {
     console.log(value);
@@ -62,9 +113,178 @@ class PetInfomation extends React.Component<any, any> {
     });
   };
 
-  petsByConsumer = () => {};
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        console.log(this.state.petForm);
+      }
+    });
+  };
+
+  querySysDictionary = (type: String) => {
+    let params = {
+      delFlag: 0,
+      storeId: 123456858,
+      type: type
+    };
+    webapi
+      .querySysDictionary(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          console.log(res);
+          if (type === 'dogBreed') {
+            let dogBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              dogBreed: dogBreed
+            });
+          }
+
+          if (type === 'catBreed') {
+            let catBreed = res.context.sysDictionaryVOS;
+            this.setState({
+              catBreed: catBreed
+            });
+          }
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+
+  petsByConsumer = () => {
+    let params = {
+      consumerAccount: this.props.customerAccount
+    };
+    webapi
+      .petsByConsumer(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let petList = res.context.context;
+          if (petList.length > 0) {
+            let currentPet = petList[0];
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              petsSizeValueName: currentPet.petsSizeValueName,
+              sterilized: currentPet.sterilized,
+              petsPropRelations: currentPet.petsPropRelations
+            });
+            this.setState({
+              petList: petList,
+              petForm: currentPet,
+              currentBirthDay: currentPet.birthOfPets
+            });
+          }
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+  editPets = () => {
+    const { petForm } = this.state;
+    let petsPropRelations = [];
+    let propId = 100;
+    for (let i = 0; i < petForm.petsPropRelations.length; i++) {
+      let prop = {
+        delFlag: 0,
+        detailId: 0,
+        indexFlag: 0,
+        petsId: this.state.currentPetId,
+        propId: propId,
+        propName: petForm.petsPropRelations[i],
+        relationId: '10086',
+        sort: 0
+      };
+      petsPropRelations.push(prop);
+      propId += 1;
+    }
+
+    let pets = {
+      birthOfPets: petForm.birthOfPets,
+      petsBreed: petForm.petsBreed,
+      petsId: petForm.petsId,
+      petsName: petForm.petsName,
+      petsSex: petForm.petsSex === 'male' ? '0' : '1',
+      petsSizeValueId: '10086',
+      petsSizeValueName: petForm.petsSizeValueName,
+      petsType: petForm.petsType,
+      sterilized: petForm.sterilized,
+      storeId: 0
+    };
+    let params = {
+      pets: pets,
+      petsPropRelations: petsPropRelations,
+      storeId: 10086,
+      userId: '10086'
+    };
+    webapi
+      .editPets(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          message.error(res.message || 'Update data success');
+        } else {
+          message.error(res.message || 'Update data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Update data failed');
+      });
+  };
+
+  petsById = (id) => {
+    let params = {
+      petsId: id
+    };
+    webapi
+      .petsById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let currentPet = res.context.context;
+          this.props.form.setFieldsValue({
+            petsType: currentPet.petsType,
+            petName: currentPet.petsName,
+            petsSex: currentPet.petsSex,
+            petsBreed: currentPet.petsBreed,
+            petsSizeValueName: currentPet.petsSizeValueName,
+            sterilized: currentPet.sterilized,
+            petsPropRelations: currentPet.petsPropRelations
+          });
+          this.setState({
+            petForm: currentPet,
+            currentBirthDay: currentPet.birthOfPets
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
 
   render() {
+    const {
+      petsType,
+      petGender,
+      sizeArr,
+      petsPropRelations,
+      catBreed,
+      dogBreed,
+      petForm
+    } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -79,16 +299,26 @@ class PetInfomation extends React.Component<any, any> {
     return (
       <Row>
         <Col span={3}>
-          <h3>All Pet( {this.state.petList.length} )</h3>
+          <h3>All Pets( {this.state.petList.length} )</h3>
           <ul>
             {this.state.petList.map((item) => (
-              <li>{item}</li>
+              <li key={item.petsId} onClick={() => this.petsById(item.petsId)}>
+                {item.petsName}
+              </li>
             ))}
           </ul>
         </Col>
         <Col span={20}>
-          <Card title="Pet 1" bordered={false} type="inner">
-            <Form {...formItemLayout}>
+          {this.state.petList.length === 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : null}
+          <Card
+            title={this.state.title}
+            style={{
+              display: this.state.petList.length === 0 ? 'none' : 'block'
+            }}
+          >
+            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
                   <FormItem
@@ -96,14 +326,30 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    {getFieldDecorator('petCategory', {
+                    {getFieldDecorator('petsType', {
                       rules: [
                         {
                           required: true,
                           message: 'Please selected Pet Category!'
                         }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Select
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'petsType',
+                            value
+                          });
+                        }}
+                      >
+                        {petsType.map((item) => (
+                          <Option value={item.value} key={item.id}>
+                            {item.value}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -116,40 +362,133 @@ class PetInfomation extends React.Component<any, any> {
                       rules: [
                         { required: true, message: 'Please input Pet Name!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Input
+                        onChange={(value) => {
+                          this.onFormChange({
+                            field: 'petName',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Gender" hasFeedback validateStatus="success">
-                    {getFieldDecorator('gender', {
+                    {getFieldDecorator('petsSex', {
                       rules: [
                         { required: true, message: 'Please selected Gender!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Select
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'petsSex',
+                            value
+                          });
+                        }}
+                      >
+                        {petGender.map((item) => (
+                          <Option value={item.value} key={item.id}>
+                            {item.value}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </FormItem>
                 </Col>
-                <Col span={12}>
-                  <FormItem label="Breed" hasFeedback validateStatus="success">
-                    {getFieldDecorator('breed', {
-                      rules: [
-                        { required: true, message: 'Please selected Breed!' }
-                      ]
-                    })(<Input />)}
-                  </FormItem>
-                </Col>
+                {petForm.petsType === 'dog' ? (
+                  <Col span={12}>
+                    <FormItem
+                      label="Breed"
+                      hasFeedback
+                      validateStatus="success"
+                    >
+                      {getFieldDecorator('petsBreed', {
+                        rules: [
+                          { required: true, message: 'Please selected Breed!' }
+                        ]
+                      })(
+                        <Select
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'petsBreed',
+                              value
+                            });
+                          }}
+                        >
+                          {dogBreed.map((item) => (
+                            <Option value={item.name} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                ) : (
+                  <Col span={12}>
+                    <FormItem
+                      label="Breed"
+                      hasFeedback
+                      validateStatus="success"
+                    >
+                      {getFieldDecorator('petsBreed', {
+                        rules: [
+                          { required: true, message: 'Please selected Breed!' }
+                        ]
+                      })(
+                        <Select
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'petsBreed',
+                              value
+                            });
+                          }}
+                        >
+                          {catBreed.map((item) => (
+                            <Option value={item.name} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                )}
 
                 <Col span={12}>
                   <FormItem label="Weight" hasFeedback validateStatus="success">
-                    {getFieldDecorator('weight', {
+                    {getFieldDecorator('petsSizeValueName', {
                       rules: [
                         { required: true, message: 'Please input Weight!' }
                       ]
-                    })(<Input />)}
+                    })(
+                      <Select
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'breeweightd',
+                            value
+                          });
+                        }}
+                      >
+                        {sizeArr.map((item) => (
+                          <Option value={item} key={item}>
+                            {item}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Sterilized status">
-                    {getFieldDecorator('sterilizedStatus', {
+                    {getFieldDecorator('sterilized', {
                       rules: [
                         {
                           required: true,
@@ -157,9 +496,9 @@ class PetInfomation extends React.Component<any, any> {
                         }
                       ]
                     })(
-                      <Radio.Group value={this.state.value}>
-                        <Radio value="Yes">Yes</Radio>
-                        <Radio value="No">No</Radio>
+                      <Radio.Group>
+                        <Radio value="0">Yes</Radio>
+                        <Radio value="1">No</Radio>
                       </Radio.Group>
                     )}
                   </FormItem>
@@ -170,7 +509,7 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    {getFieldDecorator('birthDay', {
+                    {getFieldDecorator('birthOfPets', {
                       rules: [
                         { required: true, message: 'Please input Birth Date!' }
                       ],
@@ -183,7 +522,7 @@ class PetInfomation extends React.Component<any, any> {
                         onChange={(date, dateString) => {
                           const value = dateString;
                           this.onFormChange({
-                            field: 'birthDay',
+                            field: 'birthOfPets',
                             value
                           });
                         }}
@@ -193,7 +532,7 @@ class PetInfomation extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <FormItem label="Special needs">
-                    {getFieldDecorator('specialNeeds', {
+                    {getFieldDecorator('petsPropRelations', {
                       rules: [
                         {
                           required: true,
@@ -204,11 +543,10 @@ class PetInfomation extends React.Component<any, any> {
                       <Select
                         mode="tags"
                         placeholder="Please select"
-                        defaultValue={['1', '3']}
                         onChange={this.handleChange}
                         style={{ width: '100%' }}
                       >
-                        {[1, 2, 3, 4].map((item) => (
+                        {petsPropRelations.map((item) => (
                           <Option key={item}>{item}</Option>
                         ))}
                       </Select>

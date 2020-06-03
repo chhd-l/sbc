@@ -8,7 +8,8 @@ import {
   message,
   Table,
   Row,
-  Col
+  Col,
+  Breadcrumb
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -36,10 +37,12 @@ class CustomerDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
-      // customerType: this.props.match.params.type
-      //   ? this.props.match.params.type
-      //   : 'Vistor'
-      customerType: 'Member'
+      customerType: this.props.match.params.type
+        ? this.props.match.params.type
+        : 'Vistor',
+      customerAccount: this.props.match.params.account
+        ? this.props.match.params.account
+        : ''
     };
   }
   componentDidMount() {
@@ -69,7 +72,9 @@ class CustomerDetails extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <BreadCrumb />
+        <BreadCrumb thirdLevel={true}>
+          <Breadcrumb.Item>Consumer Details</Breadcrumb.Item>
+        </BreadCrumb>
         {/*导航面包屑*/}
         <div className="container">
           {this.state.customerType === 'Member' ? (
@@ -82,6 +87,7 @@ class CustomerDetails extends React.Component<any, any> {
               <TabPane tab="Pet infomation" key="pet">
                 <PetInfomation
                   customerId={this.state.customerId}
+                  customerAccount={this.state.customerAccount}
                 ></PetInfomation>
               </TabPane>
               <TabPane tab="Delivery infomation" key="delivery">
@@ -100,11 +106,13 @@ class CustomerDetails extends React.Component<any, any> {
               <TabPane tab="Delivery infomation" key="vistor-delivery">
                 <DeliveryInformation
                   customerId={this.state.customerId}
+                  customerType="Vistor"
                 ></DeliveryInformation>
               </TabPane>
               <TabPane tab="Billing infomation" key="vistor-billing">
                 <BillingInfomation
                   customerId={this.state.customerId}
+                  customerType="Vistor"
                 ></BillingInfomation>
               </TabPane>
             </Tabs>

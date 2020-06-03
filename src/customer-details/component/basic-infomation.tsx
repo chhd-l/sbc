@@ -10,7 +10,8 @@ import {
   Row,
   Col,
   Radio,
-  DatePicker
+  DatePicker,
+  Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -171,7 +172,7 @@ class BasicInfomation extends React.Component<any, any> {
     webapi
       .fetchClinicList({
         pageNum: 0,
-        pageSize: 100
+        pageSize: 1000
       })
       .then((data) => {
         const res = data.res;

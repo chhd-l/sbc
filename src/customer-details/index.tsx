@@ -34,8 +34,33 @@ const layout = {
 class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {};
+    this.state = {
+      customerId: this.props.match.params.id ? this.props.match.params.id : '',
+      customerType: this.props.match.params.type
+        ? this.props.match.params.type
+        : 'Vistor'
+    };
   }
+  componentDidMount() {
+    this.queryClinicsDictionary('country');
+    this.queryClinicsDictionary('city');
+  }
+
+  queryClinicsDictionary = async (type: String) => {
+    const { res } = await webapi.queryClinicsDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      if (type === 'city') {
+        sessionStorage.setItem('dict-city', JSON.stringify(res.context));
+      }
+      if (type === 'country') {
+        sessionStorage.setItem('dict-country', JSON.stringify(res.context));
+      }
+    } else {
+      message.error(res.message);
+    }
+  };
 
   render() {
     return (
@@ -43,20 +68,43 @@ class CustomerDetails extends React.Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Tabs defaultActiveKey="basic">
-            <TabPane tab="Basic infomation" key="basic">
-              <BasicInfomation></BasicInfomation>
-            </TabPane>
-            <TabPane tab="Pet infomation" key="pet">
-              <PetInfomation></PetInfomation>
-            </TabPane>
-            <TabPane tab="Delivery infomation" key="delivery">
-              <DeliveryInformation></DeliveryInformation>
-            </TabPane>
-            <TabPane tab="Billing infomation" key="billing">
-              <BillingInfomation></BillingInfomation>
-            </TabPane>
-          </Tabs>
+          {this.state.customerType === 'Member' ? (
+            <Tabs defaultActiveKey="basic">
+              <TabPane tab="Basic infomation" key="basic">
+                <BasicInfomation
+                  customerId={this.state.customerId}
+                ></BasicInfomation>
+              </TabPane>
+              <TabPane tab="Pet infomation" key="pet">
+                <PetInfomation
+                  customerId={this.state.customerId}
+                ></PetInfomation>
+              </TabPane>
+              <TabPane tab="Delivery infomation" key="delivery">
+                <DeliveryInformation
+                  customerId={this.state.customerId}
+                ></DeliveryInformation>
+              </TabPane>
+              <TabPane tab="Billing infomation" key="billing">
+                <BillingInfomation
+                  customerId={this.state.customerId}
+                ></BillingInfomation>
+              </TabPane>
+            </Tabs>
+          ) : (
+            <Tabs defaultActiveKey="delivery">
+              <TabPane tab="Delivery infomation" key="vistor-delivery">
+                <DeliveryInformation
+                  customerId={this.state.customerId}
+                ></DeliveryInformation>
+              </TabPane>
+              <TabPane tab="Billing infomation" key="vistor-billing">
+                <BillingInfomation
+                  customerId={this.state.customerId}
+                ></BillingInfomation>
+              </TabPane>
+            </Tabs>
+          )}
         </div>
       </div>
     );

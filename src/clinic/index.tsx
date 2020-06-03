@@ -94,8 +94,9 @@ export default class ClinicList extends Component<any, any> {
     this.queryClinicsDictionary('clinicType');
     this.init();
   }
-  init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+  init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     const query = this.state.searchForm;
+    pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
       pageNum,
@@ -150,7 +151,12 @@ export default class ClinicList extends Component<any, any> {
   };
 
   onSearch = () => {
-    this.init({ pageNum: 0, pageSize: 10 });
+    const { pagination } = this.state;
+    pagination.pageNum = 1;
+    this.setState({
+      pagination: pagination
+    });
+    this.init({ pageNum: 1, pageSize: 10 });
   };
   handleTableChange(pagination: any) {
     this.setState({

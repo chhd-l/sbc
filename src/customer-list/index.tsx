@@ -1,5 +1,15 @@
 import React from 'react';
-import { Breadcrumb, Table, Form, Button, Input, Divider, Select } from 'antd';
+import {
+  Breadcrumb,
+  Table,
+  Form,
+  Button,
+  Input,
+  Divider,
+  Select,
+  Spin,
+  message
+} from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -44,11 +54,20 @@ export default class Customer extends React.Component<any, any> {
           key: 'operation',
           render: (text, record) => (
             <span>
-              <Link to={'/customer-details/' + record.consumerAccount}>
+              <Link
+                to={
+                  '/customer-details/' +
+                  (record.customerLevelName
+                    ? record.customerLevelName
+                    : 'Visitor') +
+                  '/' +
+                  record.customerId
+                }
+              >
                 Details
               </Link>
               <Divider type="vertical" />
-              <a onClick={() => this.removeConsumer(record.consumerAccount)}>
+              <a onClick={() => this.removeConsumer(record.customerId)}>
                 Delete
               </a>
             </span>
@@ -111,7 +130,10 @@ export default class Customer extends React.Component<any, any> {
     this.init({ pageNum: pagination.current, pageSize: 10 });
   }
 
-  init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+  init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
+    this.setState({
+      loading: true
+    });
     const query = this.state.searchForm;
 
     let params = {
@@ -121,26 +143,76 @@ export default class Customer extends React.Component<any, any> {
       customerName: query.customerName,
       email: query.email
     };
+    pageNum = pageNum - 1;
+    await webapi
+      .getCustomerList({
+        ...params,
+        pageNum,
+        pageSize
+      })
+      .then((data) => {
+        if (data.res.code === 'K-000000') {
+          let pagination = this.state.pagination;
+          let searchList = data.res.context.detailResponseList;
+          pagination.total = data.res.context.total;
+          this.setState({
+            pagination: pagination,
+            searchList: searchList,
+            loading: false
+          });
+        } else {
+          message.error(data.res.message || 'get data filed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error('get data filed');
 
-    const { res } = await webapi.getCustomerList({
-      ...params,
-      pageNum,
-      pageSize
-    });
-    if (res.code === 'K-000000') {
-      let pagination = this.state.pagination;
-      let searchList = res.context.detailResponseList;
-      pagination.total = res.context.total;
-      this.setState({
-        pagination: pagination,
-        searchList: searchList
+        this.setState({
+          loading: false
+        });
       });
-    }
   };
   onSearch = () => {
-    this.init({ pageNum: 0, pageSize: 10 });
+    const { pagination } = this.state;
+    pagination.pageNum = 1;
+    this.setState({
+      pagination: pagination
+    });
+    this.init({ pageNum: 1, pageSize: 10 });
   };
-  removeConsumer = (consumerAccount) => {};
+  removeConsumer = (constomerId) => {
+    this.setState({
+      loading: true
+    });
+    let customerIds = [];
+    customerIds.push(constomerId);
+    let params = {
+      customerIds: customerIds,
+      userId: '10086'
+    };
+    webapi
+      .delCustomer(params)
+      .then((data) => {
+        if (data.res.code === 'K-000000') {
+          message.success(data.res.message || 'Delete success');
+          this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
+        } else {
+          message.error(data.res.message || 'Delete failed');
+          this.setState({
+            loading: true
+          });
+        }
+      })
+      .catch((err) => {
+        message.error('Delete failed');
+        this.setState({
+          loading: true
+        });
+      });
+  };
 
   render() {
     const { customerTypeArr, columns } = this.state;

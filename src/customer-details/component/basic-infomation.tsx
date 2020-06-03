@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -35,26 +36,87 @@ class BasicInfomation extends React.Component<any, any> {
       basicForm: {
         firstName: '',
         lastName: '',
-        birthDate: '',
+        birthDay: '',
         email: '',
-        phoneNumber: '',
+        contactPhone: '',
         postCode: '',
         city: '',
         country: '',
         address1: '',
         address2: '',
         preferredMethods: '',
-        ref: '',
+        reference: '',
         selectedClinics: []
       },
       countryArr: [],
-      cityArr: []
+      cityArr: [],
+      currentBirthDay: '2020-01-01',
+      clinicList: [],
+      currentForm: {}
     };
   }
   componentDidMount() {
-    this.queryClinicsDictionary('country');
-    this.queryClinicsDictionary('city');
+    this.getDict();
+    this.getBasicDetails();
+    this.getClinicList();
   }
+
+  getDict = () => {
+    let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+    let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+    this.setState({
+      countryArr: countryArr,
+      cityArr: cityArr
+    });
+  };
+  getBasicDetails = () => {
+    webapi
+      .getBasicDetails(this.props.customerId)
+      .then((data) => {
+        let res = JSON.stringify(data.res);
+
+        let resObj = JSON.parse(res);
+
+        this.props.form.setFieldsValue({
+          firstName: resObj.firstName,
+          lastName: resObj.lastName,
+          // birthDay: resObj.birthDay,
+          email: resObj.email,
+          contactPhone: resObj.contactPhone,
+          postCode: resObj.postCode,
+          city: resObj.city,
+          country: resObj.country,
+          address1: resObj.house,
+          address2: resObj.housing,
+          preferredMethods: resObj.contactMethod,
+          reference: resObj.reference,
+          selectedClinics: resObj.clinicsVOS ? resObj.clinicsVOS : []
+        });
+        let basicForm = {
+          firstName: resObj.firstName,
+          lastName: resObj.lastName,
+          birthDay: resObj.birthDay,
+          email: resObj.email,
+          contactPhone: resObj.contactPhone,
+          postCode: resObj.postCode,
+          city: resObj.city,
+          country: resObj.country,
+          address1: resObj.house,
+          address2: resObj.housing,
+          preferredMethods: resObj.contactMethod,
+          reference: resObj.reference,
+          selectedClinics: resObj.clinicsVOS
+        };
+        this.setState({
+          currentBirthDay: resObj.birthDay,
+          basicForm: basicForm,
+          currentForm: resObj
+        });
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
   handleChange = (value) => {
     console.log(value);
   };
@@ -69,33 +131,65 @@ class BasicInfomation extends React.Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        console.log(this.state.basicForm);
+        this.saveBasicInfomation();
       }
     });
   };
 
-  queryClinicsDictionary = async (type: String) => {
-    const { res } = await webapi.queryClinicsDictionary({
-      type: type
-    });
-    if (res.code === 'K-000000') {
-      if (type === 'city') {
-        this.setState({
-          cityArr: res.context
+  saveBasicInfomation = () => {
+    const { basicForm, currentForm } = this.state;
+
+    (currentForm.firstName = basicForm.firstName),
+      (currentForm.lastName = basicForm.lastName),
+      (currentForm.birthDay = basicForm.birthDay),
+      (currentForm.email = basicForm.email),
+      (currentForm.contactPhone = basicForm.contactPhone),
+      (currentForm.postCode = basicForm.postCode),
+      (currentForm.city = basicForm.city),
+      (currentForm.country = basicForm.country),
+      (currentForm.house = basicForm.address1),
+      (currentForm.housing = basicForm.address2),
+      (currentForm.contactMethod = basicForm.preferredMethods),
+      (currentForm.reference = basicForm.reference),
+      (currentForm.clinicsVOS = basicForm.selectedClinics),
+      (currentForm.customerId = basicForm.customerId),
+      webapi
+        .basicDetailsUpdate(currentForm)
+        .then((data) => {
+          const res = data.res;
+          if (res.code === 'K-000000') {
+            message.success(res.message || 'Update data success');
+          } else {
+            message.error(res.message || 'Update data failed');
+          }
+        })
+        .catch((err) => {
+          message.error('Update data failed');
         });
-      }
-      if (type === 'country') {
-        this.setState({
-          countryArr: res.context
-        });
-      }
-    } else {
-      message.error(res.message);
-    }
+  };
+  getClinicList = () => {
+    webapi
+      .fetchClinicList({
+        pageNum: 0,
+        pageSize: 100
+      })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.setState({
+            clinicList: res.context.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
   };
 
   render() {
-    const { countryArr, cityArr } = this.state;
+    const { countryArr, cityArr, clinicList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -151,17 +245,17 @@ class BasicInfomation extends React.Component<any, any> {
             </Col>
             <Col span={12}>
               <FormItem label="Birth Date" hasFeedback validateStatus="success">
-                {getFieldDecorator('birthDate', {
+                {getFieldDecorator('birthDay', {
                   rules: [
                     { required: true, message: 'Please input Birth Date!' }
-                  ]
+                  ],
+                  initialValue: moment(this.state.currentBirthDay, 'YYYY-MM-DD')
                 })(
                   <DatePicker
                     onChange={(date, dateString) => {
-                      debugger;
                       const value = dateString;
                       this.onFormChange({
-                        field: 'birthDate',
+                        field: 'birthDay',
                         value
                       });
                     }}
@@ -192,7 +286,7 @@ class BasicInfomation extends React.Component<any, any> {
                 hasFeedback
                 validateStatus="success"
               >
-                {getFieldDecorator('phoneNumber', {
+                {getFieldDecorator('contactPhone', {
                   rules: [
                     { required: true, message: 'Please input Phone Number!' }
                   ]
@@ -201,7 +295,7 @@ class BasicInfomation extends React.Component<any, any> {
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'phoneNumber',
+                        field: 'contactPhone',
                         value
                       });
                     }}
@@ -296,17 +390,23 @@ class BasicInfomation extends React.Component<any, any> {
             </Col>
             <Col span={12}>
               <FormItem label="Address 2" hasFeedback validateStatus="success">
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'address2',
-                      value
-                    });
-                  }}
-                />
+                {getFieldDecorator(
+                  'address2',
+                  {}
+                )(
+                  <Input
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'address2',
+                        value
+                      });
+                    }}
+                  />
+                )}
               </FormItem>
             </Col>
+
             <Col span={12}>
               <FormItem
                 labelCol={{
@@ -351,23 +451,28 @@ class BasicInfomation extends React.Component<any, any> {
                       });
                     }}
                   >
-                    <Radio value="Phone">Phone</Radio>
-                    <Radio value="Email">Email</Radio>
+                    <Radio value="phone">Phone</Radio>
+                    <Radio value="email">Email</Radio>
                   </Radio.Group>
                 )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="Reference" hasFeedback validateStatus="success">
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'ref',
-                      value
-                    });
-                  }}
-                />
+                {getFieldDecorator(
+                  'reference',
+                  {}
+                )(
+                  <Input
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'reference',
+                        value
+                      });
+                    }}
+                  />
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
@@ -379,15 +484,30 @@ class BasicInfomation extends React.Component<any, any> {
                     mode="tags"
                     placeholder="Please select"
                     style={{ width: '100%' }}
-                    onChange={(value) => {
+                    onChange={(value, Option) => {
+                      let clinics = [];
+                      for (let i = 0; i < Option.length; i++) {
+                        let clinic = {
+                          clinicsId: Option[i].key,
+                          clinicsName: Option[i].props.value
+                        };
+                        clinics.push(clinic);
+                      }
+
                       this.onFormChange({
                         field: 'selectedClinics',
-                        value
+                        value: clinics
                       });
                     }}
                   >
-                    {[1, 2, 3, 4].map((item) => (
-                      <Option key={item}>{item}</Option>
+                    {/* {
+                    clinicList.map((item) => (
+                      <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                    ))} */}
+                    {clinicList.map((item) => (
+                      <Option value={item.clinicsName} key={item.clinicsId}>
+                        {item.clinicsName}
+                      </Option>
                     ))}
                   </Select>
                 )}
@@ -400,7 +520,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </Button>
 
                 <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/costomer-list">Cancle</Link>
+                  <Link to="/customer-list">Cancle</Link>
                 </Button>
               </FormItem>
             </Col>

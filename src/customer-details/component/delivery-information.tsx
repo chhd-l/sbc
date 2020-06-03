@@ -12,7 +12,8 @@ import {
   Radio,
   Menu,
   Card,
-  Checkbox
+  Checkbox,
+  Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -195,7 +196,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     return (
       <Row>
         <Col span={3}>
-          <h3>All Address {this.state.addressList.length}</h3>
+          <h3>All Address( {this.state.addressList.length} )</h3>
           <ul>
             {this.state.addressList.map((item) => (
               <li key={item.id}>{item.consigneeName}</li>
@@ -203,8 +204,14 @@ class DeliveryInfomation extends React.Component<any, any> {
           </ul>
         </Col>
         <Col span={20}>
+          {this.state.addressList.length === 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : null}
           <Card
             title={this.state.title}
+            style={{
+              display: this.state.addressList.length === 0 ? 'none' : 'block'
+            }}
             extra={
               <div>
                 <Checkbox
@@ -419,12 +426,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    label="rfcerence"
+                    label="Reference"
                     hasFeedback
                     validateStatus="success"
                   >
                     {getFieldDecorator(
-                      'address2',
+                      'rfc',
                       {}
                     )(
                       <Input
@@ -447,7 +454,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </Button>
 
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/costomer-list">Cancle</Link>
+                      <Link to="/customer-list">Cancle</Link>
                     </Button>
                   </FormItem>
                 </Col>

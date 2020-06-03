@@ -11,12 +11,14 @@ import {
   Col,
   Radio,
   Menu,
-  Card
+  Card,
+  DatePicker
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
@@ -34,7 +36,16 @@ class PetInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      petList: ['Rita', 'Rita2']
+      petForm: {
+        petCategory: '',
+        petName: '',
+        gender: '',
+        breed: '',
+        weight: '',
+        sterilizedStatus: null,
+        specialNeeds: []
+      },
+      petList: []
     };
   }
   handleChange = (value) => {
@@ -43,6 +54,15 @@ class PetInfomation extends React.Component<any, any> {
   onOpenChange = (value) => {
     console.log(value);
   };
+  onFormChange = ({ field, value }) => {
+    let data = this.state.petForm;
+    data[field] = value;
+    this.setState({
+      petForm: data
+    });
+  };
+
+  petsByConsumer = () => {};
 
   render() {
     const formItemLayout = {
@@ -59,7 +79,7 @@ class PetInfomation extends React.Component<any, any> {
     return (
       <Row>
         <Col span={3}>
-          <h3>All Pet {this.state.petList.length}</h3>
+          <h3>All Pet( {this.state.petList.length} )</h3>
           <ul>
             {this.state.petList.map((item) => (
               <li>{item}</li>
@@ -129,7 +149,7 @@ class PetInfomation extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <FormItem label="Sterilized status">
-                    {getFieldDecorator('preferredMethods', {
+                    {getFieldDecorator('sterilizedStatus', {
                       rules: [
                         {
                           required: true,
@@ -150,11 +170,25 @@ class PetInfomation extends React.Component<any, any> {
                     hasFeedback
                     validateStatus="success"
                   >
-                    {getFieldDecorator('birthday', {
+                    {getFieldDecorator('birthDay', {
                       rules: [
-                        { required: true, message: 'Please input Birthday!' }
-                      ]
-                    })(<Input />)}
+                        { required: true, message: 'Please input Birth Date!' }
+                      ],
+                      initialValue: moment(
+                        this.state.currentBirthDay,
+                        'YYYY-MM-DD'
+                      )
+                    })(
+                      <DatePicker
+                        onChange={(date, dateString) => {
+                          const value = dateString;
+                          this.onFormChange({
+                            field: 'birthDay',
+                            value
+                          });
+                        }}
+                      />
+                    )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
@@ -188,7 +222,7 @@ class PetInfomation extends React.Component<any, any> {
                     </Button>
 
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/costomer-list">Cancle</Link>
+                      <Link to="/customer-list">Cancle</Link>
                     </Button>
                   </FormItem>
                 </Col>

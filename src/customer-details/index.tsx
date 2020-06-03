@@ -36,9 +36,10 @@ class CustomerDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
-      customerType: this.props.match.params.type
-        ? this.props.match.params.type
-        : 'Vistor'
+      // customerType: this.props.match.params.type
+      //   ? this.props.match.params.type
+      //   : 'Vistor'
+      customerType: 'Member'
     };
   }
   componentDidMount() {
@@ -61,6 +62,9 @@ class CustomerDetails extends React.Component<any, any> {
       message.error(res.message);
     }
   };
+  clickTabs = (key) => {
+    console.log(key);
+  };
 
   render() {
     return (
@@ -69,7 +73,7 @@ class CustomerDetails extends React.Component<any, any> {
         {/*导航面包屑*/}
         <div className="container">
           {this.state.customerType === 'Member' ? (
-            <Tabs defaultActiveKey="basic">
+            <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
               <TabPane tab="Basic infomation" key="basic">
                 <BasicInfomation
                   customerId={this.state.customerId}
@@ -92,7 +96,7 @@ class CustomerDetails extends React.Component<any, any> {
               </TabPane>
             </Tabs>
           ) : (
-            <Tabs defaultActiveKey="delivery">
+            <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
               <TabPane tab="Delivery infomation" key="vistor-delivery">
                 <DeliveryInformation
                   customerId={this.state.customerId}

@@ -26,7 +26,7 @@ export function getBasicDetails(id = null) {
 }
 
 export function basicDetailsSave(filterParams = {}) {
-  return Fetch<TResult>('/customer/detail', {
+  return Fetch('/customer/detail', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -37,6 +37,19 @@ export function basicDetailsSave(filterParams = {}) {
 export function basicDetailsUpdate(filterParams = {}) {
   return Fetch<TResult>('/customer/detail/update', {
     method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * 获取Clinic列表
+ * @param filterParams
+ */
+export function fetchClinicList(filterParams = {}) {
+  return Fetch<TResult>('/clinics/queryPrescription', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
@@ -93,6 +106,36 @@ export function defaultAddress(filterParams = {}) {
 export function updateAddress(filterParams = {}) {
   return Fetch<TResult>('/customer/address', {
     method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 编辑宠物信息
+export function editPets(filterParams = {}) {
+  return Fetch<TResult>('/pets/editPets', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 根据会员信息查找宠物信息
+export function petsByConsumer(filterParams = {}) {
+  return Fetch<TResult>('/pets/petsByConsumer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 根据ID查找宠物信息
+export function petsById(filterParams = {}) {
+  return Fetch<TResult>('/pets/petsById', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })

@@ -134,9 +134,7 @@ class BasicInfomation extends React.Component<any, any> {
         message.error('Get data failed');
       });
   };
-  handleChange = (value) => {
-    console.log(value);
-  };
+
   onFormChange = ({ field, value }) => {
     let data = this.state.basicForm;
     data[field] = value;

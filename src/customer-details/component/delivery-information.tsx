@@ -282,7 +282,13 @@ class DeliveryInfomation extends React.Component<any, any> {
               <li
                 key={item.deliveryAddressId}
                 onClick={() => this.switchAddress(item.deliveryAddressId)}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.deliveryAddressId === this.state.currentId
+                      ? '#e2001a'
+                      : ''
+                }}
               >
                 {item.consigneeName}
               </li>

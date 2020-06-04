@@ -283,7 +283,13 @@ class BillingInfomation extends React.Component<any, any> {
             {this.state.addressList.map((item) => (
               <li
                 key={item.id}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.deliveryAddressId === this.state.currentId
+                      ? '#e2001a'
+                      : ''
+                }}
                 onClick={() => this.switchAddress(item.id)}
               >
                 {item.consigneeName}

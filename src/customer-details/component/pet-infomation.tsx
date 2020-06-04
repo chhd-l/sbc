@@ -178,10 +178,10 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
-
-            let petsPropRelations = this.getSpecialNeeds(
+            currentPet.petsPropRelations = this.getSpecialNeeds(
               currentPet.petsPropRelations
             );
+
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
               petName: currentPet.petsName,
@@ -189,7 +189,7 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
               petsSizeValueName: currentPet.petsSizeValueName,
               sterilized: currentPet.sterilized,
-              petsPropRelations: petsPropRelations
+              petsPropRelations: currentPet.petsPropRelations
             });
             this.setState({
               petList: petList,
@@ -207,6 +207,7 @@ class PetInfomation extends React.Component<any, any> {
   };
   editPets = () => {
     const { petForm } = this.state;
+    debugger;
     let petsPropRelations = [];
     let propId = 100;
     for (let i = 0; i < petForm.petsPropRelations.length; i++) {
@@ -247,7 +248,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.error(res.message || 'Update data success');
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Update data failed');
         }
@@ -321,7 +322,10 @@ class PetInfomation extends React.Component<any, any> {
             {this.state.petList.map((item) => (
               <li
                 key={item.petsId}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: 'pointer',
+                  color: item.petsId === petForm.petsId ? '#e2001a' : ''
+                }}
                 onClick={() => this.petsById(item.petsId)}
               >
                 {item.petsName}
@@ -569,8 +573,14 @@ class PetInfomation extends React.Component<any, any> {
                       <Select
                         mode="tags"
                         placeholder="Please select"
-                        onChange={this.handleChange}
                         style={{ width: '100%' }}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'petsPropRelations',
+                            value
+                          });
+                        }}
                       >
                         {petsPropRelations.map((item) => (
                           <Option key={item}>{item}</Option>

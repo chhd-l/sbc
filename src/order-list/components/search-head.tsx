@@ -67,6 +67,7 @@ export default class SearchHead extends Component<any, any> {
       receiverSelect: 'consigneeName',
       buyerOptions: 'buyerName',
       id: '',
+      clinicsName: '',
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
@@ -281,6 +282,17 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
 
             <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="clinicName" />}
+                onChange={(e) => {
+                  this.setState({
+                    clinicsName: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
               <RangePicker
                 getCalendarContainer={() =>
                   document.getElementById('page-content')
@@ -308,6 +320,7 @@ export default class SearchHead extends Component<any, any> {
                     goodsOptions,
                     receiverSelect,
                     id,
+                    clinicsName,
                     buyerOptionsValue,
                     goodsOptionsValue,
                     receiverSelectValue,
@@ -331,6 +344,7 @@ export default class SearchHead extends Component<any, any> {
 
                   const params = {
                     id,
+                    clinicsName,
                     [buyerOptions]: buyerOptionsValue,
                     tradeState: ts,
                     [goodsOptions]: goodsOptionsValue,

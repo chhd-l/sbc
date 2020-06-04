@@ -186,16 +186,3 @@ export function payConfirm(payOrderIds: string[]) {
     })
   });
 }
-
-/**
- * get dict
- * @param filterParams
- */
-export function queryDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}

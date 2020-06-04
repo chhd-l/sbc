@@ -36,7 +36,9 @@ export default class AppStore extends Store {
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
     //获取form数据
-    let form = this.state().get('form').toJS();
+    let form = this.state()
+      .get('form')
+      .toJS();
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
@@ -240,7 +242,9 @@ export default class AppStore extends Store {
    */
   onExportByParams = () => {
     // 搜索条件
-    let params = this.state().get('form').toJS();
+    let params = this.state()
+      .get('form')
+      .toJS();
     // tab
     const key = this.state().getIn(['tab', 'key']);
     if (key != '0') {
@@ -270,7 +274,8 @@ export default class AppStore extends Store {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref = Const.HOST + `/trade/export/params/${encrypted}`;
+          const exportHref =
+            Const.HOST + `/trade/export3pl/params/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

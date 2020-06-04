@@ -194,13 +194,13 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '100px' }}>
+                      <th>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '14%' }}>
                         <FormattedMessage id="consumerName" />
                       </th>
-                      <th style={{ width: '15%' }}>
+                      <th style={{ width: '17%' }}>
                         <FormattedMessage id="recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
@@ -210,13 +210,13 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                       {/* <th style={{ width: '5%' }}>postCode</th> */}
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '5%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.shippingStatus" />
                       </th>
-                      <th style={{ width: '5%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.orderStatus" />
                       </th>
-                      <th className="operation-th" style={{ width: '10%' }}>
+                      <th className="operation-th" style={{ width: '12%' }}>
                         <FormattedMessage id="order.paymentStatus" />
                       </th>
                     </tr>
@@ -517,71 +517,69 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.get('tradeItems').concat(gifts).size}{' '}
-                              <FormattedMessage id="piece" />
-                            </div>
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
+                          //@ts-ignore
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="total" />
+                            {v.get('tradeItems').concat(gifts).size}{' '}
+                            <FormattedMessage id="piece" />
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*客户名称*/}
                       {v.getIn(['buyer', 'name'])}
                     </td>
-                    <td style={{ width: '15%' }}>
+                    <td style={{ width: '17%' }}>
                       {/*收件人姓名*/}
-                      <FormattedMessage id="recipient" />：
+                      {/* <FormattedMessage id="recipient" />： */}
                       {v.getIn(['consignee', 'name'])}
-                      <br />
+                      {/* <br /> */}
                       {/*收件人手机号码*/}
-                      {v.getIn(['consignee', 'phone'])}
+                      {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
                       ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    <td style={{ width: '5%' }}>
-                      1{/* {v.getIn(['invoice', 'postCode'])} */}
-                    </td>
-                    <td style={{ width: '5%' }}>
-                      1{/* {v.getIn(['invoice', 'rfc'])} */}
-                    </td>
+                    {/* <td style={{ width: '5%' }}> */}
+                    {/* 1{v.getIn(['invoice', 'postCode'])} */}
+                    {/* </td> */}
+                    {/* <td style={{ width: '5%' }}> */}
+                    {/* 1{v.getIn(['invoice', 'rfc'])} */}
+                    {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '5%' }}>
+                    <td style={{ width: '12%' }}>
                       {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
                     </td>
                     {/*订单状态*/}
-                    <td style={{ width: '5%' }}>
+                    <td style={{ width: '12%' }}>
                       {flowState(v.getIn(['tradeState', 'flowState']))}
                     </td>
                     {/*支付状态*/}
                     <td
-                      style={{ width: '10%', paddingRight: 22 }}
+                      style={{ width: '12%', paddingRight: 22 }}
                       className="operation-td"
                     >
                       {payStatus(v.getIn(['tradeState', 'payState']))}

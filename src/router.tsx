@@ -40,6 +40,12 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-detail')
   },
+  //订单-详情
+  {
+    path: '/order-detail-limited/:tid',
+    exact: true,
+    asyncComponent: () => import('./order-detail-limited')
+  },
   //订单-退单列表
   {
     path: '/order-return-list',

@@ -2,6 +2,7 @@
  * 多语言英文
  */
 export default {
+  'name': 'Name',
   'stock': 'Stock',
   'giveaway': 'Giveaway',
   'addProduct': 'Add product',
@@ -204,7 +205,7 @@ export default {
   'account': 'Account',
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
-  
+
 
 
   'product': 'Product',
@@ -254,6 +255,8 @@ export default {
   'productAmount': "Product amount",
   'fullReductionAmount': "Full reduction amount",
   'fullDiscountAmount': "Full discount amount",
+  'promotionAmount': "Promotion amount",
+  'fullDiscount': "Full discount",
   'coupon': "Coupon",
   'pointsDeduction': "Points deduction",
   'shippingFees': "Shipping fees",
@@ -424,92 +427,105 @@ export default {
 
 
 
-  'financeTips1':'1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;',
-  'financeTips2':'2. You can set any account that passes the verification as the main account, and the platform will give priority to the main account when you settle the payment;',
+  'financeTips1': '1. The platform will make a small amount of money for the bank account you created for the first time. After the platform makes a payment, you can see the button to receive the money, and your account will only take effect after confirmation;',
+  'financeTips2': '2. You can set any account that passes the verification as the main account, and the platform will give priority to the main account when you settle the payment;',
 
-  'petFoodStore':'Pet food store',
+  'petFoodStore': 'Pet food store',
   'entryTime': 'Entry time',
   'partnerID': 'Partner ID',
   'contractValidity': 'Contract validity',
-  'addAccount' :'Add Account',
-  'accountName':'Account name',
-  'subBranch':'Sub-branch',
-  'receivePayment':'Receive payment',
+  'addAccount': 'Add Account',
+  'accountName': 'Account name',
+  'subBranch': 'Sub-branch',
+  'receivePayment': 'Receive payment',
 
-  'changeAccount':'Change the current account',
-  'deleteAccount':'Delete account',
-  'setMainAccount':'Set the main account',
+  'changeAccount': 'Change the current account',
+  'deleteAccount': 'Delete account',
+  'setMainAccount': 'Set the main account',
 
-  'financialReconciliation'	:'Financial Reconciliation',
-  'bulkExport':'Bulk Export',
-  'revenueReconciliation':	'Revenue Reconciliation',
-  'refundReconciliation'	:'Refund Reconciliation',
-  'VISA':	'VISA',
-  'AMERICAN EXPRESS'	:'AMERICAN EXPRESS',
-  'masterCard':	'MasterCard',
+  'financialReconciliation': 'Financial Reconciliation',
+  'bulkExport': 'Bulk Export',
+  'revenueReconciliation': 'Revenue Reconciliation',
+  'refundReconciliation': 'Refund Reconciliation',
+  'VISA': 'VISA',
+  'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
+  'masterCard': 'MasterCard',
 
-  'balance'	:'Balance',
-  'total2'	:'total',
-  'revenueReconciliationDetails':	'Revenue Reconciliation Details',
-  'paymentChannel':	'Payment Channel',
-  'transactionSerialNumber':	'Transaction Serial Number',
-  'paymentTime':	'Payment Time',
-  'paymentAmount'	:'Payment Amount',
+  'balance': 'Balance',
+  'total2': 'total',
+  'revenueReconciliationDetails': 'Revenue Reconciliation Details',
+  'paymentChannel': 'Payment Channel',
+  'transactionSerialNumber': 'Transaction Serial Number',
+  'paymentTime': 'Payment Time',
+  'paymentAmount': 'Payment Amount',
+  'paymentNumber': 'Payment number',
+
+  'financialSettlement': 'Financial Settlement',
+  'settlementTips1': 'Your settlement date is',
+  'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
+
+  'unsettlement': 'Unsettlement',
+  'settled': 'Settled',
+  'statementGenerationTime': 'Statement Generation Time',
+  'statementTime': 'Billing Time',
+  'statementNumber': 'Statement Number',
+  'billingPeriod': 'Billing Period',
+  'totalPaidGoods': 'Total Paid Goods',
+  'totalFreight': 'Total Freight',
+
+  'inquiryDetails': 'Inquiry Details',
+  'settlementDetails': 'Settlement Details',
+  'exportDetails': 'Export Details',
+
+  'orderCreditTime': 'Order Credit Time',
+  'orderType': 'Order Type',
+  // 'Product code / name / weight':'商品编码/名称/规格'	,
+  'category': 'Category',
+  'productPrice': 'Product Price',
+  'freight': 'Freight',
+
+  'orderInvoice': 'Order Invoice',
+
+  'invoiceStatus': 'Invoice Status',
+
+  'bulkOperation': 'Bulk Operation',
+  'bulkInvoice': 'Bulk Invoice',
+
+  'billingTime': 'Billing Time',
+  'orderAmount': 'Order Amount',
+  'invoiceType': 'Invoice Type',
 
 
-  'financialSettlement':'Financial Settlement',
-'settlementTips1':'Your settlement date is',
-'settlementTips2':'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
+  'ordinaryInvoice': 'Ordinary invoice',
+  'personal': 'Personal',
+  'toBeInvoiced': 'To be invoiced',
+  'viewBilling': 'View Billing',
+  'billingItems': 'Billing Items',
 
-'unsettlement':'Unsettlement'	,
-'settled':'Settled'	,
-'statementGenerationTime':'Statement Generation Time'	,
-'statementTime':'Billing Time'	,
-'statementNumber':'Statement Number'	,
-'billingPeriod':'Billing Period'	,
-'totalPaidGoods':'Total Paid Goods'	,
-'totalFreight':'Total Freight'	,
+  'supportedBillingTypes': 'Supported billing types',
+  'doesNotSupportInvoicing': 'Does not support invoicing',
 
-'inquiryDetails':'Inquiry Details'	,
-'settlementDetails':'Settlement Details'	,
-'exportDetails':'Export Details'	,
+  'vatSpecialInvoice': 'VAT special invoice',
+  "invoiceReceiptInformation": "Invoice receipt information",
+  'saveSettings': 'Save Settings',
+  'Edit': 'Edit',
+  'Delete': 'Delete',
 
-'orderCreditTime':'Order Credit Time'	,
-'orderType':'Order Type' ,
-// 'Product code / name / weight':'商品编码/名称/规格'	,
-'category':'Category'	,
-'productPrice':'Product Price'	,
-'freight':'Freight'	,
+  'customerAccount': 'Customer Account',
+  'clinicName': 'Clinic name',
+  'clinicID': 'Clinic ID',
 
-'orderInvoice':'Order Invoice'	,
-
-'invoiceStatus':'Invoice Status'	,
-
-'bulkOperation':'Bulk Operation'	,
-'bulkInvoice':'Bulk Invoice'	,
-
-'billingTime':'Billing Time'	,
-'orderAmount':'Order Amount'	,
-'invoiceType':'Invoice Type'	,
-
-
-'ordinaryInvoice':'Ordinary invoice'	,
-'personal':'Personal'	,
-'toBeInvoiced':'To be invoiced'	,
-'viewBilling':'View Billing'	,
-'billingItems':'Billing Items' ,
-
-'supportedBillingTypes':'Supported billing types',
-'doesNotSupportInvoicing':'Does not support invoicing'	,
-
-'vatSpecialInvoice':'VAT special invoice'	,
-"invoiceReceiptInformation":"Invoice receipt information",
-'saveSettings':'Save Settings'	,
-'Edit':'Edit'	,
-'Delete':'Delete'	,
-
-'customerAccount':'Customer Account'
-  };
+  'deliveryCountry': 'Delivery Country',
+  'deliveryCity': 'Delivery City',
+  'deliveryAddress1': 'Delivery address1',
+  'deliveryAddress2': 'Delivery address2',
+  'postalCode': 'Postal code',
+  'reference': 'Reference',
+  'deliveryComment': 'Delivery comment',
+  'deliveryInvoiceAddress1': 'Delivery Invoice address1',
+  'deliveryInvoiceAddress2': 'Delivery Invoice address2',
+  'cardNumber': 'Card number'
+};
 
 
 

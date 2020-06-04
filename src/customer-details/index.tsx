@@ -39,7 +39,7 @@ class CustomerDetails extends React.Component<any, any> {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerType: this.props.match.params.type
         ? this.props.match.params.type
-        : 'Vistor',
+        : 'Visitor',
       customerAccount: this.props.match.params.account
         ? this.props.match.params.account
         : ''
@@ -77,7 +77,7 @@ class CustomerDetails extends React.Component<any, any> {
         </BreadCrumb>
         {/*导航面包屑*/}
         <div className="container">
-          {this.state.customerType === 'Member' ? (
+          {this.state.customerType !== 'Visitor' ? (
             <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
               <TabPane tab="Basic infomation" key="basic">
                 <BasicInfomation

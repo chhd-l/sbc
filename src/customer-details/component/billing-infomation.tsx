@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { addressList } from '@/order-add-old/webapi';
 
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
@@ -131,21 +132,21 @@ class BillingInfomation extends React.Component<any, any> {
             this.props.form.setFieldsValue({
               customerAccount: res.context.customerAccount,
               clinicsVOS: res.context.clinicsVOS,
-              firstName: addressList[0].firstName,
-              lastName: addressList[0].lastName,
-              consigneeNumber: addressList[0].consigneeNumber,
-              postCode: addressList[0].postCode,
-              cityId: addressList[0].cityId,
-              countryId: addressList[0].countryId,
-              address1: addressList[0].address1,
-              address2: addressList[0].address2,
-              rfc: addressList[0].rfc
+              firstName: billingForm.firstName,
+              lastName: billingForm.lastName,
+              consigneeNumber: billingForm.consigneeNumber,
+              postCode: billingForm.postCode,
+              cityId: billingForm.cityId,
+              countryId: billingForm.countryId,
+              address1: billingForm.address1,
+              address2: billingForm.address2,
+              rfc: billingForm.rfc
             });
             this.setState({
               addressList: addressList,
               billingForm: billingForm,
-              title: addressList[0].consigneeName,
-              isDefault: addressList[0].isDefaltAddress === 1 ? true : false
+              title: billingForm.consigneeName,
+              isDefault: billingForm.isDefaltAddress === 1 ? true : false
             });
           }
         } else {
@@ -213,6 +214,30 @@ class BillingInfomation extends React.Component<any, any> {
     });
   };
 
+  switchAddress = (id) => {
+    const { addressList } = this.state;
+    let billingForm = addressList.find((item) => {
+      return item.id === id;
+    });
+
+    this.props.form.setFieldsValue({
+      firstName: billingForm.firstName,
+      lastName: billingForm.lastName,
+      consigneeNumber: billingForm.consigneeNumber,
+      postCode: billingForm.postCode,
+      cityId: billingForm.cityId,
+      countryId: billingForm.countryId,
+      address1: billingForm.address1,
+      address2: billingForm.address2,
+      rfc: billingForm.rfc
+    });
+    this.setState({
+      billingForm: billingForm,
+      title: billingForm.consigneeName,
+      isDefault: billingForm.isDefaltAddress === 1 ? true : false
+    });
+  };
+
   render() {
     const { countryArr, cityArr, clinicList } = this.state;
     const formItemLayout = {
@@ -232,7 +257,13 @@ class BillingInfomation extends React.Component<any, any> {
           <h3>All Address( {this.state.addressList.length} )</h3>
           <ul>
             {this.state.addressList.map((item) => (
-              <li key={item.id}>{item.consigneeName}</li>
+              <li
+                key={item.id}
+                style={{ cursor: 'pointer' }}
+                onClick={() => this.switchAddress(item.id)}
+              >
+                {item.consigneeName}
+              </li>
             ))}
           </ul>
         </Col>

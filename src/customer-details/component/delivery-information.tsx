@@ -212,6 +212,29 @@ class DeliveryInfomation extends React.Component<any, any> {
       clinicsVOS: clinics
     });
   };
+  switchAddress = (id) => {
+    const { addressList } = this.state;
+    let billingForm = addressList.find((item) => {
+      return item.id === id;
+    });
+
+    this.props.form.setFieldsValue({
+      firstName: billingForm.firstName,
+      lastName: billingForm.lastName,
+      consigneeNumber: billingForm.consigneeNumber,
+      postCode: billingForm.postCode,
+      cityId: billingForm.cityId,
+      countryId: billingForm.countryId,
+      address1: billingForm.address1,
+      address2: billingForm.address2,
+      rfc: billingForm.rfc
+    });
+    this.setState({
+      billingForm: billingForm,
+      title: billingForm.consigneeName,
+      isDefault: billingForm.isDefaltAddress === 1 ? true : false
+    });
+  };
 
   render() {
     const formItemLayout = {
@@ -232,7 +255,13 @@ class DeliveryInfomation extends React.Component<any, any> {
           <h3>All Address( {this.state.addressList.length} )</h3>
           <ul>
             {this.state.addressList.map((item) => (
-              <li key={item.id}>{item.consigneeName}</li>
+              <li
+                key={item.id}
+                onClick={() => this.switchAddress(item.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                {item.consigneeName}
+              </li>
             ))}
           </ul>
         </Col>

@@ -168,6 +168,7 @@ class BasicInfomation extends React.Component<any, any> {
           message.error('Update data failed');
         });
   };
+
   getClinicList = () => {
     webapi
       .fetchClinicList({

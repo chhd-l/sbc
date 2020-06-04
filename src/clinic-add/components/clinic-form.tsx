@@ -201,7 +201,8 @@ class ClinicForm extends React.Component<any, any> {
         primaryZip: res.context.primaryZip,
         longitude: res.context.longitude,
         latitude: res.context.latitude,
-        location: res.context.location
+        location: res.context.location,
+        clinicsType: res.context.clinicsType
       });
     } else {
       message.error(res.message || 'get data faild');

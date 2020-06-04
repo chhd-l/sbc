@@ -70,49 +70,65 @@ class BasicInfomation extends React.Component<any, any> {
       cityArr: cityArr
     });
   };
+
+  getSelectedClinic = (array) => {
+    let clinics = [];
+    if (array && array.length > 0) {
+      for (let index = 0; index < array.length; index++) {
+        clinics.push(array[index].clinicsId);
+      }
+    }
+    return clinics;
+  };
   getBasicDetails = () => {
     webapi
       .getBasicDetails(this.props.customerId)
       .then((data) => {
-        let res = JSON.stringify(data.res);
+        let res = data.res;
+        debugger;
+        if (res.code && res.code !== 'K-000000') {
+          message.error(res.message || 'Get data failed');
+        } else {
+          let res2 = JSON.stringify(data.res);
 
-        let resObj = JSON.parse(res);
-
-        this.props.form.setFieldsValue({
-          firstName: resObj.firstName,
-          lastName: resObj.lastName,
-          // birthDay: resObj.birthDay,
-          email: resObj.email,
-          contactPhone: resObj.contactPhone,
-          postCode: resObj.postCode,
-          city: resObj.city,
-          country: resObj.country,
-          address1: resObj.house,
-          address2: resObj.housing,
-          preferredMethods: resObj.contactMethod,
-          reference: resObj.reference,
-          selectedClinics: resObj.clinicsVOS ? resObj.clinicsVOS : []
-        });
-        let basicForm = {
-          firstName: resObj.firstName,
-          lastName: resObj.lastName,
-          birthDay: resObj.birthDay,
-          email: resObj.email,
-          contactPhone: resObj.contactPhone,
-          postCode: resObj.postCode,
-          city: resObj.city,
-          country: resObj.country,
-          address1: resObj.house,
-          address2: resObj.housing,
-          preferredMethods: resObj.contactMethod,
-          reference: resObj.reference,
-          selectedClinics: resObj.clinicsVOS
-        };
-        this.setState({
-          currentBirthDay: resObj.birthDay,
-          basicForm: basicForm,
-          currentForm: resObj
-        });
+          let resObj = JSON.parse(res2);
+          let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
+          this.props.form.setFieldsValue({
+            firstName: resObj.firstName,
+            lastName: resObj.lastName,
+            // birthDay: resObj.birthDay,
+            email: resObj.email,
+            contactPhone: resObj.contactPhone,
+            postCode: resObj.postCode,
+            city: resObj.city,
+            country: resObj.country,
+            address1: resObj.house,
+            address2: resObj.housing,
+            preferredMethods: resObj.contactMethod,
+            reference: resObj.reference,
+            selectedClinics: clinicsVOS
+          });
+          let basicForm = {
+            firstName: resObj.firstName,
+            lastName: resObj.lastName,
+            birthDay: resObj.birthDay,
+            email: resObj.email,
+            contactPhone: resObj.contactPhone,
+            postCode: resObj.postCode,
+            city: resObj.city,
+            country: resObj.country,
+            address1: resObj.house,
+            address2: resObj.housing,
+            preferredMethods: resObj.contactMethod,
+            reference: resObj.reference,
+            selectedClinics: resObj.clinicsVOS
+          };
+          this.setState({
+            currentBirthDay: resObj.birthDay,
+            basicForm: basicForm,
+            currentForm: resObj
+          });
+        }
       })
       .catch((err) => {
         message.error('Get data failed');
@@ -507,7 +523,7 @@ class BasicInfomation extends React.Component<any, any> {
                       <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                     ))} */}
                     {clinicList.map((item) => (
-                      <Option value={item.clinicsName} key={item.clinicsId}>
+                      <Option value={item.clinicsId} key={item.clinicsId}>
                         {item.clinicsName}
                       </Option>
                     ))}

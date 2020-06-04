@@ -117,6 +117,7 @@ class PetInfomation extends React.Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
+        this.editPets();
         console.log(this.state.petForm);
       }
     });
@@ -155,6 +156,15 @@ class PetInfomation extends React.Component<any, any> {
         message.error('Get data failed');
       });
   };
+  getSpecialNeeds = (array) => {
+    let needs = [];
+    if (array && array.length > 0) {
+      for (let index = 0; index < array.length; index++) {
+        needs.push(array[index].propName);
+      }
+    }
+    return needs;
+  };
 
   petsByConsumer = () => {
     let params = {
@@ -168,6 +178,10 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
+
+            let petsPropRelations = this.getSpecialNeeds(
+              currentPet.petsPropRelations
+            );
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
               petName: currentPet.petsName,
@@ -175,7 +189,7 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
               petsSizeValueName: currentPet.petsSizeValueName,
               sterilized: currentPet.sterilized,
-              petsPropRelations: currentPet.petsPropRelations
+              petsPropRelations: petsPropRelations
             });
             this.setState({
               petList: petList,
@@ -215,7 +229,7 @@ class PetInfomation extends React.Component<any, any> {
       petsBreed: petForm.petsBreed,
       petsId: petForm.petsId,
       petsName: petForm.petsName,
-      petsSex: petForm.petsSex === 'male' ? '0' : '1',
+      petsSex: petForm.petsSex,
       petsSizeValueId: '10086',
       petsSizeValueName: petForm.petsSizeValueName,
       petsType: petForm.petsType,
@@ -226,7 +240,7 @@ class PetInfomation extends React.Component<any, any> {
       pets: pets,
       petsPropRelations: petsPropRelations,
       storeId: 10086,
-      userId: '10086'
+      userId: this.props.customerAccount
     };
     webapi
       .editPets(params)
@@ -253,6 +267,9 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
+          let petsPropRelations = this.getSpecialNeeds(
+            currentPet.petsPropRelations
+          );
           this.props.form.setFieldsValue({
             petsType: currentPet.petsType,
             petName: currentPet.petsName,
@@ -260,7 +277,7 @@ class PetInfomation extends React.Component<any, any> {
             petsBreed: currentPet.petsBreed,
             petsSizeValueName: currentPet.petsSizeValueName,
             sterilized: currentPet.sterilized,
-            petsPropRelations: currentPet.petsPropRelations
+            petsPropRelations: petsPropRelations
           });
           this.setState({
             petForm: currentPet,
@@ -302,7 +319,11 @@ class PetInfomation extends React.Component<any, any> {
           <h3>All Pets( {this.state.petList.length} )</h3>
           <ul>
             {this.state.petList.map((item) => (
-              <li key={item.petsId} onClick={() => this.petsById(item.petsId)}>
+              <li
+                key={item.petsId}
+                style={{ cursor: 'pointer' }}
+                onClick={() => this.petsById(item.petsId)}
+              >
                 {item.petsName}
               </li>
             ))}
@@ -391,7 +412,7 @@ class PetInfomation extends React.Component<any, any> {
                         }}
                       >
                         {petGender.map((item) => (
-                          <Option value={item.value} key={item.id}>
+                          <Option value={item.id} key={item.id}>
                             {item.value}
                           </Option>
                         ))}
@@ -461,12 +482,17 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                 )}
 
-                <Col span={12}>
+                <Col
+                  span={12}
+                  style={{
+                    display: petForm.petsType === 'cat' ? 'none' : 'block'
+                  }}
+                >
                   <FormItem label="Weight" hasFeedback validateStatus="success">
                     {getFieldDecorator('petsSizeValueName', {
-                      rules: [
-                        { required: true, message: 'Please input Weight!' }
-                      ]
+                      // rules: [
+                      //   { required: true, message: 'Please input Weight!' }
+                      // ]
                     })(
                       <Select
                         onChange={(value) => {
@@ -497,8 +523,8 @@ class PetInfomation extends React.Component<any, any> {
                       ]
                     })(
                       <Radio.Group>
-                        <Radio value="0">Yes</Radio>
-                        <Radio value="1">No</Radio>
+                        <Radio value={0}>Yes</Radio>
+                        <Radio value={1}>No</Radio>
                       </Radio.Group>
                     )}
                   </FormItem>
@@ -514,7 +540,7 @@ class PetInfomation extends React.Component<any, any> {
                         { required: true, message: 'Please input Birth Date!' }
                       ],
                       initialValue: moment(
-                        this.state.currentBirthDay,
+                        new Date(this.state.currentBirthDay),
                         'YYYY-MM-DD'
                       )
                     })(

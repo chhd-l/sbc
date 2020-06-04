@@ -47,7 +47,8 @@ class DeliveryInfomation extends React.Component<any, any> {
         countryId: '',
         address1: '',
         address2: '',
-        rfc: ''
+        rfc: '',
+        deliveryAddressId: ''
       },
       title: '',
       countryArr: [],
@@ -55,7 +56,8 @@ class DeliveryInfomation extends React.Component<any, any> {
       // customerId:this.props.match.params.id ? this.props.match.params.id : '',
       addressList: [],
       isDefault: false,
-      clinicList: []
+      clinicList: [],
+      currentId: ''
     };
   }
   componentDidMount() {
@@ -108,7 +110,8 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Update success');
+          this.getAddressList();
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -116,6 +119,15 @@ class DeliveryInfomation extends React.Component<any, any> {
       .catch((err) => {
         message.error('Update failed');
       });
+  };
+  getSelectedClinic = (array) => {
+    let clinics = [];
+    if (array && array.length > 0) {
+      for (let index = 0; index < array.length; index++) {
+        clinics.push(array[index].clinicsId);
+      }
+    }
+    return clinics;
   };
 
   getAddressList = () => {
@@ -125,27 +137,38 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let addressList = res.context.customerDeliveryAddressVOList;
+
           if (addressList.length > 0) {
-            let deliveryForm = addressList[0];
-            debugger;
+            let deliveryForm = this.state.deliveryForm;
+            if (this.state.currentId) {
+              deliveryForm = addressList.find((item) => {
+                return item.deliveryAddressId === this.state.currentId;
+              });
+            } else {
+              deliveryForm = addressList[0];
+            }
+
+            let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
             this.props.form.setFieldsValue({
               customerAccount: res.context.customerAccount,
-              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
-              firstName: addressList[0].firstName,
-              lastName: addressList[0].lastName,
-              consigneeNumber: addressList[0].consigneeNumber,
-              postCode: addressList[0].postCode,
-              cityId: addressList[0].cityId,
-              countryId: addressList[0].countryId,
-              address1: addressList[0].address1,
-              address2: addressList[0].address2,
-              rfc: addressList[0].rfc
+              clinicsVOS: clinicsVOS,
+              firstName: deliveryForm.firstName,
+              lastName: deliveryForm.lastName,
+              consigneeNumber: deliveryForm.consigneeNumber,
+              postCode: deliveryForm.postCode,
+              cityId: deliveryForm.cityId,
+              countryId: deliveryForm.countryId,
+              address1: deliveryForm.address1,
+              address2: deliveryForm.address2,
+              rfc: deliveryForm.rfc
             });
             this.setState({
+              currentId: deliveryForm.deliveryAddressId,
+              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               addressList: addressList,
               deliveryForm: deliveryForm,
-              title: addressList[0].consigneeName,
-              isDefault: addressList[0].isDefaltAddress === 1 ? true : false
+              title: deliveryForm.consigneeName,
+              isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
             });
           }
         } else {
@@ -171,7 +194,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Delete success');
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Delete failed');
         }
@@ -214,25 +237,26 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
   switchAddress = (id) => {
     const { addressList } = this.state;
-    let billingForm = addressList.find((item) => {
-      return item.id === id;
+    let deliveryForm = addressList.find((item) => {
+      return item.deliveryAddressId === id;
     });
 
     this.props.form.setFieldsValue({
-      firstName: billingForm.firstName,
-      lastName: billingForm.lastName,
-      consigneeNumber: billingForm.consigneeNumber,
-      postCode: billingForm.postCode,
-      cityId: billingForm.cityId,
-      countryId: billingForm.countryId,
-      address1: billingForm.address1,
-      address2: billingForm.address2,
-      rfc: billingForm.rfc
+      firstName: deliveryForm.firstName,
+      lastName: deliveryForm.lastName,
+      consigneeNumber: deliveryForm.consigneeNumber,
+      postCode: deliveryForm.postCode,
+      cityId: deliveryForm.cityId,
+      countryId: deliveryForm.countryId,
+      address1: deliveryForm.address1,
+      address2: deliveryForm.address2,
+      rfc: deliveryForm.rfc
     });
     this.setState({
-      billingForm: billingForm,
-      title: billingForm.consigneeName,
-      isDefault: billingForm.isDefaltAddress === 1 ? true : false
+      currentId: id,
+      deliveryForm: deliveryForm,
+      title: deliveryForm.consigneeName,
+      isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
     });
   };
 
@@ -256,8 +280,8 @@ class DeliveryInfomation extends React.Component<any, any> {
           <ul>
             {this.state.addressList.map((item) => (
               <li
-                key={item.id}
-                onClick={() => this.switchAddress(item.id)}
+                key={item.deliveryAddressId}
+                onClick={() => this.switchAddress(item.deliveryAddressId)}
                 style={{ cursor: 'pointer' }}
               >
                 {item.consigneeName}
@@ -298,7 +322,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   span={12}
                   style={{
                     display:
-                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
                   <FormItem
@@ -317,7 +341,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   span={12}
                   style={{
                     display:
-                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
                   <FormItem label="Selected clinics">
@@ -348,7 +372,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                           <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                         ))} */}
                         {clinicList.map((item) => (
-                          <Option value={item.clinicsName} key={item.clinicsId}>
+                          <Option value={item.clinicsId} key={item.clinicsId}>
                             {item.clinicsName}
                           </Option>
                         ))}

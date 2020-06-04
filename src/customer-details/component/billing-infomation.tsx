@@ -49,7 +49,8 @@ class BillingInfomation extends React.Component<any, any> {
         countryId: '',
         address1: '',
         address2: '',
-        rfc: ''
+        rfc: '',
+        deliveryAddressId: ''
       },
       title: '',
       countryArr: [],
@@ -57,7 +58,8 @@ class BillingInfomation extends React.Component<any, any> {
       // customerId:this.props.match.params.id ? this.props.match.params.id : '',
       addressList: [],
       isDefault: false,
-      clinicList: []
+      clinicList: [],
+      currentId: ''
     };
   }
   componentDidMount() {
@@ -109,7 +111,8 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Update success');
+          this.getAddressList();
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -117,6 +120,16 @@ class BillingInfomation extends React.Component<any, any> {
       .catch((err) => {
         message.error('Update failed');
       });
+  };
+
+  getSelectedClinic = (array) => {
+    let clinics = [];
+    if (array && array.length > 0) {
+      for (let index = 0; index < array.length; index++) {
+        clinics.push(array[index].clinicsId);
+      }
+    }
+    return clinics;
   };
 
   getAddressList = () => {
@@ -127,11 +140,19 @@ class BillingInfomation extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           let addressList = res.context.customerDeliveryAddressVOList;
           if (addressList.length > 0) {
-            let billingForm = addressList[0];
+            let billingForm = this.state.billingForm;
+            if (this.state.currentId) {
+              billingForm = addressList.find((item) => {
+                return item.deliveryAddressId === this.state.currentId;
+              });
+            } else {
+              billingForm = addressList[0];
+            }
 
+            let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
             this.props.form.setFieldsValue({
               customerAccount: res.context.customerAccount,
-              clinicsVOS: res.context.clinicsVOS,
+              clinicsVOS: clinicsVOS,
               firstName: billingForm.firstName,
               lastName: billingForm.lastName,
               consigneeNumber: billingForm.consigneeNumber,
@@ -143,6 +164,8 @@ class BillingInfomation extends React.Component<any, any> {
               rfc: billingForm.rfc
             });
             this.setState({
+              currentId: billingForm.deliveryAddressId,
+              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               addressList: addressList,
               billingForm: billingForm,
               title: billingForm.consigneeName,
@@ -172,7 +195,7 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Delete success');
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Delete failed');
         }
@@ -232,6 +255,7 @@ class BillingInfomation extends React.Component<any, any> {
       rfc: billingForm.rfc
     });
     this.setState({
+      currentId: id,
       billingForm: billingForm,
       title: billingForm.consigneeName,
       isDefault: billingForm.isDefaltAddress === 1 ? true : false
@@ -300,7 +324,7 @@ class BillingInfomation extends React.Component<any, any> {
                   span={12}
                   style={{
                     display:
-                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
                   <FormItem
@@ -319,7 +343,7 @@ class BillingInfomation extends React.Component<any, any> {
                   span={12}
                   style={{
                     display:
-                      this.props.customerType !== 'Vistor' ? 'none' : 'block'
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
                   <FormItem label="Selected clinics">
@@ -350,7 +374,7 @@ class BillingInfomation extends React.Component<any, any> {
                           <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                         ))} */}
                         {clinicList.map((item) => (
-                          <Option value={item.clinicsName} key={item.clinicsId}>
+                          <Option value={item.clinicsId} key={item.clinicsId}>
                             {item.clinicsName}
                           </Option>
                         ))}

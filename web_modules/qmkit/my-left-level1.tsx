@@ -74,7 +74,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
         >
           {/*头部一级菜单*/}
           {auditState == 1 &&
-            this.state.allGradeMenus.toJS().map((v, i) => {
+            this.state.allGradeMenus.toJS().map((v:any, i:any) => {
               return (
                 <Menu.Item key={i.toString()}>
                   <a

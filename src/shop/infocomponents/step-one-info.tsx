@@ -5,6 +5,8 @@ import { Form, Col, Row } from 'antd';
 import { FindArea } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
+import { fromJS } from 'immutable';
+import * as webapi from './../webapi';
 
 const FormItem = Form.Item;
 
@@ -71,23 +73,31 @@ export default class StepOneEdit extends React.Component<any, any> {
     form: any;
     relaxProps?: {
       company: IMap;
+      dictionary: IMap;
     };
   };
 
   static relaxProps = {
-    company: 'company'
+    company: 'company',
+    dictionary: 'dictionary'
   };
-
+  getVuleByData(data, id) {
+    let result = data.find((x) => x.id === id);
+    if (result) {
+      return result.valueEn;
+    }
+    return '';
+  }
   render() {
     const { company } = this.props.relaxProps;
+    const { dictionary } = this.props.relaxProps;
     const storeInfo = company.get('storeInfo');
+    const countryData = dictionary.get('country').toJS();
+    const cityData = dictionary.get('city').toJS();
+    const languageData = dictionary.get('language').toJS();
+    const currencyData = dictionary.get('currency').toJS();
+    const timeZoneData = dictionary.get('timeZone').toJS();
     //拼接地址
-    const area = FindArea.addressInfo(
-      storeInfo.get('provinceId'),
-      storeInfo.get('cityId'),
-      storeInfo.get('areaId')
-    );
-
     return (
       <div>
         <GreyBg>
@@ -156,65 +166,54 @@ export default class StepOneEdit extends React.Component<any, any> {
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="partnerNumber" />}
+              label={<FormattedMessage id="storeLanguage" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('supplierCode')}</p>
+              <p style={{ color: '#333' }}>
+                {this.getVuleByData(languageData, storeInfo.get('languageId'))}
+              </p>
             </FormItem>
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="partnerName" />}
+              label={<FormattedMessage id="timeZone" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('supplierName')}</p>
+              <p style={{ color: '#333' }}>
+                {this.getVuleByData(timeZoneData, storeInfo.get('timezoneId'))}
+              </p>
             </FormItem>
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="storeName" />}
+              label={<FormattedMessage id="targetCountry" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('storeName')}</p>
+              <p style={{ color: '#333' }}>
+                {this.getVuleByData(countryData, storeInfo.get('countryId'))}
+              </p>
             </FormItem>
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="contact" />}
+              label={<FormattedMessage id="targetCity" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('contactPerson')}</p>
+              <p style={{ color: '#333' }}>
+                {this.getVuleByData(cityData, storeInfo.get('cityId'))}
+              </p>
             </FormItem>
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="contactDetails" />}
+              label={<FormattedMessage id="currency" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('contactMobile')}</p>
+              <p style={{ color: '#333' }}>
+                {this.getVuleByData(currencyData, storeInfo.get('currencyId'))}
+              </p>
             </FormItem>
             <FormItem
               {...formItemLayout}
               required={true}
-              label={<FormattedMessage id="contactEmail" />}
+              label={<FormattedMessage id="taxRate" />}
             >
-              <p style={{ color: '#333' }}>{storeInfo.get('contactEmail')}</p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="area" />}
-            >
-              <p style={{ color: '#333' }}>{area}</p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="address" />}
-            >
-              <p style={{ color: '#333' }}>{storeInfo.get('addressDetail')}</p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="partnerAccount" />}
-            >
-              <p style={{ color: '#333' }}>{storeInfo.get('accountName')}</p>
+              <p style={{ color: '#333' }}>{storeInfo.get('taxRate')}</p>
             </FormItem>
           </Form>
         </div>

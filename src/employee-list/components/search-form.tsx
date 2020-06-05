@@ -155,7 +155,7 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem>
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="assistant" />}
@@ -172,9 +172,9 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="0">是</Option>
             <Option value="1">否</Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="whetherToActivateTheMemberAccount" />}
@@ -191,7 +191,7 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="1">是</Option>
             <Option value="0">否</Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
 
         <FormItem>
           <Button
@@ -200,7 +200,10 @@ export default class SearchForm extends React.Component<any, any> {
             onClick={() => onSearch()}
             htmlType="submit"
           >
-            <FormattedMessage id="search" />
+            <span>
+              {' '}
+              <FormattedMessage id="search" />
+            </span>
           </Button>
         </FormItem>
       </Form>

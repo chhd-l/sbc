@@ -35,7 +35,7 @@ const tailFormItemLayout = {
   }
 };
 
-export default class StepFour extends React.Component<any, any> {
+export default class PaymentForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {

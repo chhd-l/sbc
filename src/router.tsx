@@ -556,6 +556,16 @@ const routes = [
     path: '/dictionary-edit/:id',
     asyncComponent: () => import('./dictionary-update')
   },
+  // dictionary
+  {
+    path: '/payment-setting',
+    asyncComponent: () => import('./payment-setting')
+  },
+  // dictionary
+  {
+    path: '/payment-setting-edit',
+    asyncComponent: () => import('./payment-setting-edit')
+  },
   // clinic
   {
     path: '/clinic',

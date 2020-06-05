@@ -1,75 +1,171 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-import { DataGrid } from 'qmkit';
 import { Relax, IMap } from 'plume2';
+import { Row, Col, Form, Modal, message } from 'antd';
+import { FormattedMessage } from 'react-intl';
+const FormItem = Form.Item;
+import * as webapi from './../webapi';
 
-const { Column } = DataGrid;
+const formItemLayout = {
+  labelCol: {
+    span: 2,
+    xs: { span: 24 },
+    sm: { span: 12 }
+  },
+  wrapperCol: {
+    span: 24,
+    xs: { span: 24 },
+    sm: { span: 12 }
+  }
+};
 
-const Content = styled.div`
-  padding-bottom: 20px;
-`;
-
-const Red = styled.span`
-  color: #e73333;
-`;
-const H2 = styled.h2`
-  color: #333333;
-  font-size: 14px;
-  display: inline;
-  font-weight: 400;
-`;
-const GreyText = styled.span`
-  color: #999999;
-  margin-left: 5px;
-  margin-right: 20px;
-`;
-
-@Relax
 export default class StepFour extends React.Component<any, any> {
-  props: {
-    form: any;
-    relaxProps?: {
-      company: IMap;
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      store: {}
     };
-  };
+    this.getContentInformation();
+  }
 
-  static relaxProps = {
-    company: 'company'
+  getContentInformation = async () => {
+    const { res } = await webapi.fetchStoreInfo();
+    if (res.code === 'K-000000') {
+      this.setState({
+        store: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
   };
 
   render() {
-    const { company } = this.props.relaxProps;
-    const offlineAccount = company.get('offlineAccount');
     return (
-      <div>
-        <Content>
-          <div style={{ marginBottom: 20 }}>
-            <Red>*</Red>
-            <H2>结算银行账户 </H2>
-            <GreyText>
-              已添加{offlineAccount ? offlineAccount.count() : 0}个结算账户，最多可添加5个结算账户
-            </GreyText>
-          </div>
-
-          <DataGrid
-            dataSource={offlineAccount.toJS()}
-            pagination={false}
-            rowKey="accountId"
-          >
-            <Column
-              title="序号"
-              dataIndex="accountId"
-              key="accountId"
-              render={(_text, _rowData: any, index) => {
-                return index + 1;
-              }}
-            />
-            <Column title="银行" dataIndex="bankName" key="bankName" />
-            <Column title="账户名" dataIndex="accountName" key="accountName" />
-            <Column title="账号" dataIndex="bankNo" key="bankNo" />
-            <Column title="支行" dataIndex="bankBranch" key="bankBranch" />
-          </DataGrid>
-        </Content>
+      <div style={{ padding: '20px 0 40px 0' }}>
+        <Form>
+          <Row>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="FAQ" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="confirmationEmail" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="privacyPolicy" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="termsOfUse" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="cookies" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="storeContactPhoneNumber" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="storeContactEmail" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="contactTimePeriod" />}
+              >
+                <p style={{ color: '#333' }}>
+                  {this.state.store.taxRate ? (
+                    this.state.store.taxRate
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </p>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
       </div>
     );
   }

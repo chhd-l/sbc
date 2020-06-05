@@ -63,7 +63,7 @@ function findArea(code: string) {
   return '';
 }
 
-function findCity(code: string) {
+export function findCity(code: string) {
   for (let c of cities) {
     if (code == c.code) {
       return c.name;

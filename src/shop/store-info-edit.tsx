@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Breadcrumb, Tabs } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline,BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 import StepOne from './editcomponents/step-one-edit';
@@ -10,6 +10,7 @@ import StepThree from './editcomponents/step-three-edit';
 import StepFour from './editcomponents/step-four-edit';
 import BrandModal from './components/brand-modal';
 import SortsModal from './components/sort-modal';
+import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
 const StepTwoForm = Form.create()(StepTwo);
@@ -30,6 +31,11 @@ export default class ShopInfoEdit extends React.Component<any, any> {
 
   componentWillMount() {
     this.store.init();
+    this.store.initCountryDictionary();
+    this.store.initCityDictionary();
+    this.store.initLanguageDictionary();
+    this.store.initCurrencyDictionary();
+    this.store.initTimeZoneDictionary();
   }
 
   render() {
@@ -37,7 +43,9 @@ export default class ShopInfoEdit extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb>
-          <Breadcrumb.Item>店铺信息编辑</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {<FormattedMessage id="storeInformationEdit" />}
+          </Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>设置</Breadcrumb.Item>
@@ -46,15 +54,24 @@ export default class ShopInfoEdit extends React.Component<any, any> {
           <Breadcrumb.Item>店铺信息编辑</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container">
-          <Headline title="店铺信息编辑" />
+          <Headline title={<FormattedMessage id="storeInformationEdit" />} />
           <Tabs
-            onChange={key => this.store.setCurrentTab(key)}
+            onChange={(key) => this.store.setCurrentTab(key)}
             activeKey={currentTab}
           >
-            <Tabs.TabPane tab="基本信息" key="0" />
-            <Tabs.TabPane tab="工商信息" key="1" />
-            <Tabs.TabPane tab="签约信息" key="2" />
-            <Tabs.TabPane tab="财务信息" key="3" />
+            <Tabs.TabPane
+              tab={<FormattedMessage id="basicInformation" />}
+              key="0"
+            />
+            <Tabs.TabPane tab={<FormattedMessage id="ssoSetting" />} key="1" />
+            <Tabs.TabPane
+              tab={<FormattedMessage id="signedInformation" />}
+              key="2"
+            />
+            <Tabs.TabPane
+              tab={<FormattedMessage id="contentInformation" />}
+              key="3"
+            />
           </Tabs>
           <div className="steps-content" style={{ marginTop: 20 }}>
             {PAIN[currentTab]}

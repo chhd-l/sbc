@@ -6,7 +6,11 @@ export default class FormActor extends Actor {
       settings: {
         storeId: '', // 店铺标识
         storeLogo: '', // 店铺logo
-        storeSign: '' // 店招
+        storeSign: '', // 店招
+        storeName: '',
+        contactPerson: '',
+        contactMobile: '',
+        contactEmail: ''
       }
     };
   }

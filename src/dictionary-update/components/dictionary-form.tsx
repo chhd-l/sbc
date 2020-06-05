@@ -7,6 +7,7 @@ import {
   Button,
   Select,
   message,
+  Switch,
   Table,
   Row,
   Col
@@ -16,7 +17,6 @@ import * as webapi from './../webapi';
 import { history } from 'qmkit';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 const layout = {
   labelCol: { span: 8 },
@@ -33,6 +33,7 @@ class DictionaryForm extends Component<any, any> {
         type: '',
         description: '',
         valueEn: '',
+        enabled: 0,
         priority: 0
       },
       dictionaryTypes: []
@@ -56,24 +57,27 @@ class DictionaryForm extends Component<any, any> {
       id: id
     });
     if (res.code === 'K-000000') {
+      let response = res.context.sysDictionaryVO;
       let dictionaryForm = {
-        id: res.context.id,
-        name: res.context.name,
-        type: res.context.type,
-        description: res.context.description,
-        valueEn: res.context.valueEn,
-        priority: res.context.priority
+        id: response.id,
+        name: response.name,
+        type: response.type,
+        description: response.description,
+        valueEn: response.valueEn,
+        priority: response.priority,
+        enabled: response.priority
       };
       this.setState({
         dictionaryForm: dictionaryForm
       });
       this.props.form.setFieldsValue({
-        id: res.context.id,
-        name: res.context.name,
-        type: res.context.type,
-        description: res.context.description,
-        valueEn: res.context.valueEn,
-        priority: res.context.priority
+        id: response.id,
+        name: response.name,
+        type: response.type,
+        description: response.description,
+        valueEn: response.valueEn,
+        priority: response.priority,
+        enabled: response.enabled === 0 ? true : false
       });
     } else {
       message.error(res.message || 'get data faild');
@@ -104,6 +108,9 @@ class DictionaryForm extends Component<any, any> {
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.dictionaryForm;
+    if (field === 'enabled') {
+      value = value ? 0 : 1;
+    }
     data[field] = value;
     this.setState({
       dictionaryForm: data
@@ -136,7 +143,6 @@ class DictionaryForm extends Component<any, any> {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dictionaryTypes } = this.state;
     return (
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
         <FormItem label="Name">
@@ -162,21 +168,30 @@ class DictionaryForm extends Component<any, any> {
               { required: true, message: 'Please select Dictionary Type' }
             ]
           })(
-            <Select
-              onChange={(value) => {
-                value = value === '' ? null : value;
+            // <Select
+            //   onChange={(value) => {
+            //     value = value === '' ? null : value;
+            //     this.onFormChange({
+            //       field: 'type',
+            //       value
+            //     });
+            //   }}
+            // >
+            //   {dictionaryTypes.map((item) => (
+            //     <Option value={item} key={item}>
+            //       {item}
+            //     </Option>
+            //   ))}
+            // </Select>
+            <Input
+              onChange={(e) => {
+                const value = (e.target as any).value;
                 this.onFormChange({
                   field: 'type',
                   value
                 });
               }}
-            >
-              {dictionaryTypes.map((item) => (
-                <Option value={item} key={item}>
-                  {item}
-                </Option>
-              ))}
-            </Select>
+            />
           )}
         </FormItem>
         <FormItem label="Value">
@@ -225,6 +240,31 @@ class DictionaryForm extends Component<any, any> {
               onChange={(value) => {
                 this.onFormChange({
                   field: 'priority',
+                  value
+                });
+              }}
+            />
+          )}
+        </FormItem>
+        <FormItem label="Enabled">
+          {getFieldDecorator(
+            'enabled',
+            {}
+          )(
+            // <InputNumber
+            //   min={0}
+            //   onChange={(value) => {
+            //     this.onFormChange({
+            //       field: 'priority',
+            //       value
+            //     });
+            //   }}
+            // />
+            <Switch
+              checked={this.state.dictionaryForm.enabled === 0 ? true : false}
+              onChange={(value) => {
+                this.onFormChange({
+                  field: 'enabled',
                   value
                 });
               }}

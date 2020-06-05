@@ -10,14 +10,14 @@ type TResult = {
  * 查询商家工商信息
  */
 export const findOne = () => {
-  return Fetch(`/company`);
+  return Fetch('/company');
 };
 
 /**
  * 保存商家基本信息
  * @param info
  */
-export const saveCompanyInfo = info => {
+export const saveCompanyInfo = (info) => {
   return Fetch<TResult>('/company', {
     method: 'PUT',
     body: JSON.stringify(info)
@@ -35,15 +35,15 @@ export const fetchAllCates = () => {
  * 获取商家签约分类
  */
 export const getCateList = () => {
-  return Fetch<TResult>(`/contract/cate/list`);
+  return Fetch<TResult>('/contract/cate/list');
 };
 
 /**
  * 保存签约分类
  * @param params
  */
-export const saveSignCate = params => {
-  return Fetch<TResult>(`/contract/renewal`, {
+export const saveSignCate = (params) => {
+  return Fetch<TResult>('/contract/renewal', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -53,7 +53,7 @@ export const saveSignCate = params => {
  * 检查是否存在
  * @param param0
  */
-export const checkExsit = cateId => {
+export const checkExsit = (cateId) => {
   return Fetch<TResult>(`/contract/cate/del/verify/${cateId}`);
 };
 
@@ -61,7 +61,7 @@ export const checkExsit = cateId => {
  * 获取品牌分类
  */
 export const getBrandList = () => {
-  return Fetch<TResult>(`/contract/brand/list`, {
+  return Fetch<TResult>('/contract/brand/list', {
     method: 'GET'
   });
 };
@@ -94,7 +94,7 @@ export const fetchBrandInfo = (id: number) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const updateBrands = (params: {}) => {
-  return Fetch<TResult>(`/contract/renewal`, {
+  return Fetch<TResult>('/contract/renewal', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -106,14 +106,14 @@ export const updateBrands = (params: {}) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchStoreInfo() {
-  return Fetch<TResult>(`/store/storeInfo`);
+  return Fetch<TResult>('/store/storeInfo');
 }
 
 /**
  * 保存商家基本信息
  * @param info
  */
-export const saveStoreInfo = info => {
+export const saveStoreInfo = (info) => {
   return Fetch<TResult>('/store/storeInfo', {
     method: 'POST',
     body: JSON.stringify(info)
@@ -124,7 +124,7 @@ export const saveStoreInfo = info => {
  * 编辑商家基本信息
  * @param info
  */
-export const editStoreInfo = info => {
+export const editStoreInfo = (info) => {
   return Fetch<TResult>('/store/storeInfo', {
     method: 'PUT',
     body: JSON.stringify(info)
@@ -137,7 +137,7 @@ export const editStoreInfo = info => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchAccountDay() {
-  return Fetch<TResult>(`/store/info`);
+  return Fetch<TResult>('/store/info');
 }
 
 /**
@@ -145,7 +145,7 @@ export function fetchAccountDay() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchAccountList() {
-  return Fetch<TResult>(`/account/list`);
+  return Fetch<TResult>('/account/list');
 }
 
 /**
@@ -154,7 +154,7 @@ export function fetchAccountList() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const updateAccounts = (params: {}) => {
-  return Fetch<TResult>(`/account/renewal`, {
+  return Fetch<TResult>('/account/renewal', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -165,7 +165,7 @@ export const updateAccounts = (params: {}) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchBaseBank() {
-  return Fetch<TResult>(`/account/base/bank`);
+  return Fetch<TResult>('/account/base/bank');
 }
 
 /**
@@ -173,5 +173,21 @@ export function fetchBaseBank() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function getBusinessEnter() {
-  return Fetch<TResult>(`/business/config`);
+  return Fetch<TResult>('/business/config');
+}
+
+/**
+ * 获取Dictionary
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function getDictionaryByType(dictionaryType: String) {
+  let params = {
+    type: dictionaryType,
+    pageNum: 0,
+    pageSize: 1000
+  };
+  return Fetch<TResult>('/sysdict/pageView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
 }

@@ -1,12 +1,14 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 
-import { Form, Input, Button, Col, Row } from 'antd';
+import { Form, Input, Button, Col, Row, Select } from 'antd';
 import { noop, ValidConst, AreaSelect, QMMethod } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from './../webapi';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 const formItemLayout = {
   labelCol: {
@@ -85,6 +87,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     form: any;
     relaxProps?: {
       company: IMap;
+      dictionary: IMap;
       onChange: Function; //改变商家基本信息
       onEditStoreInfo: Function;
     };
@@ -92,14 +95,19 @@ export default class StepOneEdit extends React.Component<any, any> {
 
   static relaxProps = {
     company: 'company',
+    dictionary: 'dictionary',
     onChange: noop,
     onEditStoreInfo: noop
   };
-
   render() {
-    const { company, onChange } = this.props.relaxProps;
+    const { company, onChange, dictionary } = this.props.relaxProps;
     const storeInfo = company.get('storeInfo');
     const { getFieldDecorator } = this.props.form;
+    const countryData = dictionary.get('country').toJS();
+    const cityData = dictionary.get('city').toJS();
+    const languageData = dictionary.get('language').toJS();
+    const currencyData = dictionary.get('currency').toJS();
+    const timeZoneData = dictionary.get('timeZone').toJS();
     const area = storeInfo.get('provinceId')
       ? [
           storeInfo.get('provinceId').toString(),
@@ -173,208 +181,162 @@ export default class StepOneEdit extends React.Component<any, any> {
         </GreyBg>
         <div style={{ width: 520 }}>
           <Form>
-            <FormItem {...formItemLayout} required={true} label="商家编号">
-              {getFieldDecorator('supplierCode', {
-                initialValue: storeInfo.get('supplierCode')
-              })(<Input disabled={true} />)}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="商家名称">
-              {getFieldDecorator('supplierName', {
-                initialValue: storeInfo.get('supplierName'),
-                rules: [
-                  { required: true, message: '请填写商家名称' },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '商家名称',
-                        1,
-                        20
-                      );
-                    }
-                  }
-                ]
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="storeLanguage" />}
+            >
+              {getFieldDecorator('languageId', {
+                initialValue: storeInfo.get('languageId'),
+                rules: [{ required: true, message: 'Please select Language!' }]
               })(
-                <Input
-                  placeholder="商家名称不得超过20字符"
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'supplierName',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="店铺名称">
-              {getFieldDecorator('storeName', {
-                initialValue: storeInfo.get('storeName'),
-                rules: [
-                  { required: true, message: '请填写店铺名称' },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '店铺名称',
-                        1,
-                        20
-                      );
-                    }
-                  }
-                ]
-              })(
-                <Input
-                  placeholder="店铺名称不得超过20字符"
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'storeName',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系人">
-              {getFieldDecorator('contactPerson', {
-                initialValue: storeInfo.get('contactPerson'),
-                rules: [
-                  { required: true, message: '请填写联系人' },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '联系人',
-                        2,
-                        15
-                      );
-                    }
-                  }
-                ]
-              })(
-                <Input
-                  placeholder="请输入常用联系人姓名"
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'contactPerson',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系方式">
-              {getFieldDecorator('contactMobile', {
-                initialValue: storeInfo.get('contactMobile'),
-                rules: [
-                  { required: true, message: '请填写联系方式' },
-                  { pattern: ValidConst.phone, message: '请输入正确的联系方式' }
-                ]
-              })(
-                <Input
-                  placeholder="请输入常用联系人11位手机号"
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'contactMobile',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="联系邮箱">
-              {getFieldDecorator('contactEmail', {
-                initialValue: storeInfo.get('contactEmail'),
-                rules: [
-                  { required: true, message: '请填写联系邮箱' },
-                  {
-                    pattern: ValidConst.email,
-                    message: '请输入正确的联系邮箱'
-                  },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '联系邮箱',
-                        1,
-                        100
-                      );
-                    }
-                  }
-                ]
-              })(
-                <Input
-                  placeholder="请输入常用联系邮箱"
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'contactEmail',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="所在地区">
-              {getFieldDecorator('area', {
-                initialValue: area,
-                rules: [{ required: true, message: '请选择所在地区' }]
-              })(
-                <AreaSelect
-                  placeholder="请选择所在地区"
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
+                // <Input
+                //   placeholder="商家名称不得超过20字符"
+                //   onChange={(e: any) =>
+                //     onChange({
+                //       field: 'supplierName',
+                //       value: e.target.value
+                //     })
+                //   }
+                // />
+                <Select
                   onChange={(value) =>
-                    onChange({ field: 'area', value: value })
+                    onChange({
+                      field: 'languageId',
+                      value: value
+                    })
                   }
-                />
+                >
+                  {languageData.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.valueEn}
+                    </Option>
+                  ))}
+                </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} required={true} label="详细地址">
-              {getFieldDecorator('addressDetail', {
-                initialValue: storeInfo.get('addressDetail'),
-                rules: [
-                  { required: true, message: '请填写详细地址' },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '详细地址',
-                        1,
-                        60
-                      );
-                    }
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="timeZone" />}
+            >
+              {getFieldDecorator('timezoneId', {
+                initialValue: storeInfo.get('timezoneId'),
+                rules: [{ required: false, message: 'Please select TimeZone!' }]
+              })(
+                <Select
+                  onChange={(value) =>
+                    onChange({
+                      field: 'timezoneId',
+                      value: value
+                    })
                   }
-                ]
+                >
+                  {timeZoneData.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.valueEn}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="targetCountry" />}
+            >
+              {getFieldDecorator('countryId', {
+                initialValue: storeInfo.get('countryId'),
+                rules: [{ required: true, message: 'Please select Country!' }]
+              })(
+                <Select
+                  onChange={(value) => {
+                    onChange({
+                      field: 'countryId',
+                      value: value
+                    });
+                  }}
+                >
+                  {countryData.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.valueEn}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="targetCity" />}
+            >
+              {getFieldDecorator('cityId', {
+                initialValue: storeInfo.get('cityId'),
+                rules: [{ required: true, message: 'Please select City!' }]
+              })(
+                <Select
+                  onChange={(value) =>
+                    onChange({
+                      field: 'cityId',
+                      value: value
+                    })
+                  }
+                >
+                  {cityData.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.valueEn}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="currency" />}
+            >
+              {getFieldDecorator('currencyId', {
+                initialValue: storeInfo.get('currencyId'),
+                rules: [{ required: true, message: 'Please select Currency!' }]
+              })(
+                <Select
+                  onChange={(value) =>
+                    onChange({
+                      field: 'currencyId',
+                      value: value
+                    })
+                  }
+                >
+                  {currencyData.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.valueEn}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label={<FormattedMessage id="taxRate" />}
+            >
+              {getFieldDecorator('taxRate', {
+                initialValue: storeInfo.get('taxRate'),
+                rules: [{ required: true, message: 'Please input taxRate!' }]
               })(
                 <Input
-                  placeholder="请输入详细地址"
-                  onChange={(e) =>
+                  onChange={(e: any) =>
                     onChange({
-                      field: 'addressDetail',
-                      value: (e.target as any).value
+                      field: 'taxRate',
+                      value: e.target.value
                     })
                   }
                 />
               )}
-            </FormItem>
-            <FormItem {...formItemLayout} required={true} label="商家账号">
-              {getFieldDecorator('accountName', {
-                initialValue: storeInfo.get('accountName')
-              })(<Input disabled={true} />)}
             </FormItem>
             <FormItem {...tailFormItemLayout}>
               <Button type="primary" onClick={this._onSave}>
-                保存
+                <FormattedMessage id="save" />
               </Button>
             </FormItem>
           </Form>

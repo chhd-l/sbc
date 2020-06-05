@@ -117,19 +117,6 @@ export default class StepThree extends React.Component<any, any> {
                 width="20%"
               />
               <Column
-                title={<FormattedMessage id="categoryDeductionRate" />}
-                dataIndex="cateRate"
-                key="cateRate"
-                width="15%"
-                render={(text) => {
-                  return (
-                    <div>
-                      <span style={{ width: 50 }}>{text}</span>&nbsp;%
-                    </div>
-                  );
-                }}
-              />
-              <Column
                 align="left"
                 title={<FormattedMessage id="businessQualification" />}
                 dataIndex="qualificationPics"

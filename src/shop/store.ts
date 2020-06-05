@@ -221,8 +221,8 @@ export default class AppStore extends Store {
           .set(
             'parentGoodCateNames',
             firstLevelInfo.get('cateName') +
-            '/' +
-            secondLevelInfo.get('cateName')
+              '/' +
+              secondLevelInfo.get('cateName')
           )
           .set('platformCateRate', info.get('cateRate'))
           .set('cateRate', '');
@@ -675,6 +675,65 @@ export default class AppStore extends Store {
     }
   };
 
+  initCountryDictionary = async () => {
+    const { res } = await webApi.getDictionaryByType('country');
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch(
+          'dictionary: country',
+          res.context.sysDictionaryPage.content
+        );
+      });
+    }
+  };
+
+  initCityDictionary = async () => {
+    const { res } = await webApi.getDictionaryByType('city');
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch(
+          'dictionary: city',
+          res.context.sysDictionaryPage.content
+        );
+      });
+    }
+  };
+
+  initLanguageDictionary = async () => {
+    const { res } = await webApi.getDictionaryByType('language');
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch(
+          'dictionary: language',
+          res.context.sysDictionaryPage.content
+        );
+      });
+    }
+  };
+
+  initCurrencyDictionary = async () => {
+    const { res } = await webApi.getDictionaryByType('currency');
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch(
+          'dictionary: currency',
+          res.context.sysDictionaryPage.content
+        );
+      });
+    }
+  };
+
+  initTimeZoneDictionary = async () => {
+    const { res } = await webApi.getDictionaryByType('timeZone');
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch(
+          'dictionary: timeZone',
+          res.context.sysDictionaryPage.content
+        );
+      });
+    }
+  };
   /**
    * 查询商家基本信息
    */
@@ -715,7 +774,6 @@ export default class AppStore extends Store {
       });
     }
   };
-
   /**
    * 修改商家基本信息字段
    */

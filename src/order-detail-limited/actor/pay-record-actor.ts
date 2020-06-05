@@ -8,19 +8,13 @@ export default class ReceiveRecordActor extends Actor {
   defaultState() {
     return {
       payRecord: [],
-      addReceiverVisible: false,
-      paymentInfo: {}
+      addReceiverVisible: false
     };
   }
 
   @Action('receive-record-actor:init')
   init(state: IMap, res: Object) {
     return state.set('payRecord', List(res));
-  }
-
-  @Action('receive-record-actor:initPaymentInfo')
-  initPaymentInfo(state: IMap, res: Object) {
-    return state.set('paymentInfo', List(res));
   }
 
   @Action('receive-record-actor:setReceiveVisible')

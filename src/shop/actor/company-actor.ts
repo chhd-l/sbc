@@ -19,6 +19,13 @@ export default class CompanyActor extends Actor {
         accountDays: [], //结算日
         delAccountIds: [] //存放已添加的而被删除的账户ID的集合
       },
+      dictionary: {
+        country: [],
+        city: [],
+        language: [],
+        currency: [],
+        timeZone: []
+      },
       checkInfo: {
         //审核信息
         auditState: null, //审核状态
@@ -150,7 +157,7 @@ export default class CompanyActor extends Actor {
     //扁平化处理
     let brandArray = new Array();
     let checkBrandArray = new Array();
-    brandList.toJS().map(v => {
+    brandList.toJS().map((v) => {
       //已审核的（平台已有的）
       if (v.goodsBrand && !v.checkBrand) {
         v.goodsBrand.contractBrandId = v.contractBrandId;
@@ -205,6 +212,31 @@ export default class CompanyActor extends Actor {
       .set('companyInfoId', fromJS(info).get('companyInfoId'));
   }
 
+  @Action('dictionary: country')
+  initCountryDictionary(state: IMap, country) {
+    return state.setIn(['dictionary', 'country'], fromJS(country));
+  }
+
+  @Action('dictionary: city')
+  initCityDictionary(state: IMap, city) {
+    return state.setIn(['dictionary', 'city'], fromJS(city));
+  }
+
+  @Action('dictionary: language')
+  initLanguageDictionary(state: IMap, language) {
+    return state.setIn(['dictionary', 'language'], fromJS(language));
+  }
+
+  @Action('dictionary: currency')
+  initCurrencyDictionary(state: IMap, currency) {
+    return state.setIn(['dictionary', 'currency'], fromJS(currency));
+  }
+
+  @Action('dictionary: timeZone')
+  initTimeZoneDictionary(state: IMap, timeZone) {
+    return state.setIn(['dictionary', 'timeZone'], fromJS(timeZone));
+  }
+
   /**
    * 存储商家基本信息单个字段
    * @param state
@@ -257,7 +289,7 @@ export default class CompanyActor extends Actor {
    */
   @Action('detail:cate')
   cateList(state: IMap, cateList: IList) {
-    let cateArray = cateList.map(v => {
+    let cateArray = cateList.map((v) => {
       v = v.set(
         'cateRate',
         v.get('cateRate') ? v.get('cateRate') : v.get('platformCateRate')

@@ -34,7 +34,6 @@ export default class AppStore extends Store {
 
   constructor(props) {
     super(props);
-    //debug
     (window as any)._store = this;
   }
 
@@ -52,7 +51,9 @@ export default class AppStore extends Store {
       const payRecordResult = (await payRecord(tid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
       const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
-      // const payRecordResult2 = await webapi.getOrderNeedAudit() as any;
+      const { res: payRecordResult2 } = (await webapi.getPaymentInfo(
+        tid
+      )) as any;
       const { res: cityDictRes } = (await queryDictionary('city')) as any;
       const { res: countryDictRes } = (await queryDictionary('country')) as any;
 
@@ -63,15 +64,15 @@ export default class AppStore extends Store {
           'receive-record-actor:init',
           payRecordResult.res.payOrderResponses
         );
-        // this.dispatch(
-        //   'receive-record-actor:initPaymentInfo',
-        //   payRecordResult2
-        // );
+        this.dispatch(
+          'receive-record-actor:initPaymentInfo',
+          payRecordResult2.context
+        );
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
         this.dispatch('dict:initCity', cityDictRes.context);
-        this.dispatch('dict:countryDict', countryDictRes.context);
+        this.dispatch('dict:initCountry', countryDictRes.context);
       });
     } else {
       message.error(errorInfo);

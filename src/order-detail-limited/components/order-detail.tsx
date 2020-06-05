@@ -12,7 +12,7 @@ import {
   Table
 } from 'antd';
 import { AuthWrapper, Const, noop, util } from 'qmkit';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
@@ -147,6 +147,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
+      countryDict: List<any>;
+      cityDict: List<any>;
       onAudit: Function;
       confirm: Function;
       retrial: Function;
@@ -165,6 +167,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
   static relaxProps = {
     detail: 'detail',
+    countryDict: 'countryDict',
+    cityDict: 'cityDict',
     onAudit: noop,
     confirm: noop,
     retrial: noop,
@@ -183,6 +187,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
   render() {
     const {
       detail,
+      countryDict,
+      cityDict,
       sellerRemarkVisible,
       setSellerRemarkVisible,
       remedySellerRemark,
@@ -353,19 +359,21 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCountry" />}: {consignee.areaId}
-              {/* countryid todo 字典 */}
+              {<FormattedMessage id="deliveryCountry" />}:{' '}
+              {countryDict.find((c) => c.id == consignee.areaId) &&
+                countryDict.find((c) => c.id == consignee.areaId).name}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {consignee.cityId}
-              {/* todo 字典 */}
+              {<FormattedMessage id="deliveryCity" />}:{' '}
+              {countryDict.find((c) => c.id == consignee.cityId) &&
+                countryDict.find((c) => c.id == consignee.cityId).name}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress1" />}: {consignee.address}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress2" />}:{' '}
-              {/* {address2} 后端暂时没有此字段 */}
+              {/* todo {address2} 后端暂时没有此字段 */}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="postalCode" />}: {consignee.postCode}

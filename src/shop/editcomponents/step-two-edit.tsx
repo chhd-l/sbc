@@ -16,6 +16,7 @@ import {
 import styled from 'styled-components';
 import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 const front = require('../img/front.png');
 const back = require('../img/back.png');
@@ -177,7 +178,7 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={true}
-                label="统一社会信用代码"
+                label={<FormattedMessage id="logIn" />}
               >
                 {getFieldDecorator('socialCreditCode', {
                   initialValue: info.get('socialCreditCode'),
@@ -201,7 +202,11 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} required={true} label="企业名称">
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="UserinfoURL" />}
+              >
                 {getFieldDecorator('companyName', {
                   initialValue: info.get('companyName'),
                   rules: [
@@ -233,7 +238,10 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="住所">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="clientID" />}
+              >
                 {getFieldDecorator('address', {
                   initialValue: info.get('address'),
                   rules: [
@@ -263,7 +271,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="法定代表人">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="issuer" />}
+              >
                 {getFieldDecorator('legalRepresentative', {
                   initialValue: info.get('legalRepresentative'),
                   rules: [
@@ -295,43 +306,43 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="注册资本">
-                {getFieldDecorator('registeredCapital', {
-                  initialValue: info.get('registeredCapital'),
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="pedirectURL" />}
+              >
+                {getFieldDecorator('legalRepresentative', {
+                  initialValue: info.get('legalRepresentative'),
                   rules: [
-                    {
-                      pattern: ValidConst.zeroPrice,
-                      message: '请输入正确的注册资本'
-                    },
                     {
                       validator: (rule, value, callback) => {
                         QMMethod.validatorMinAndMax(
                           rule,
-                          value ? value.toString() : '',
+                          value,
                           callback,
-                          '注册资本',
+                          '法定代表人',
                           0,
-                          9
+                          10
                         );
                       }
                     }
                   ]
                 })(
                   <Input
-                    style={{ width: 142 }}
                     onChange={(e: any) =>
                       mergeInfo({
-                        field: 'registeredCapital',
+                        field: 'legalRepresentative',
                         value: e.target.value
                       })
                     }
                   />
                 )}
-                &nbsp;万元
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="成立日期">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="registration" />}
+              >
                 {getFieldDecorator('foundDate', {
                   ...foundDate,
                   rules: [
@@ -363,7 +374,10 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限自">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="registerPrefix" />}
+              >
                 {getFieldDecorator('businessTermStart', {
                   ...businessTermStart,
                   rules: [
@@ -393,7 +407,10 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem {...formItemLayout} label="营业期限至">
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="registerCallback" />}
+              >
                 {getFieldDecorator('businessTermEnd', {
                   ...businessTermEnd,
                   rules: [
@@ -424,145 +441,10 @@ export default class StepTwo extends React.Component<any, any> {
             </Col>
           </Row>
           <Row>
-            <Col span={24}>
-              <FormItem
-                required={true}
-                {...newtailFormItemLayout}
-                label="经营范围"
-              >
-                {getFieldDecorator('businessScope', {
-                  initialValue: info.get('businessScope'),
-                  rules: [
-                    {
-                      validator: (rule, value, callback) => {
-                        QMMethod.validatorTrimMinAndMax(
-                          rule,
-                          value,
-                          callback,
-                          '经营范围',
-                          1,
-                          500
-                        );
-                      }
-                    }
-                  ]
-                })(
-                  <Input.TextArea
-                    style={{ height: 100 }}
-                    onChange={(e: any) =>
-                      mergeInfo({
-                        field: 'businessScope',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <FormItem
-                required={true}
-                {...formItemLayout}
-                label="营业执照副本电子版"
-              >
-                <PicBox>
-                  <QMUpload
-                    name="uploadFile"
-                    style={styles.box}
-                    fileList={businessLicence}
-                    action={
-                      Const.HOST +
-                      '/store/uploadStoreResource?resourceType=IMAGE'
-                    }
-                    listType="picture-card"
-                    accept={'.jpg,.jpeg,.png,.gif'}
-                    onChange={(info) =>
-                      this._editImages(info, 'businessLicence')
-                    }
-                    beforeUpload={this._checkUploadFile}
-                  >
-                    {businessLicence.length < 1 && (
-                      <Icon type="plus" style={styles.plus} />
-                    )}
-                  </QMUpload>
-                  {getFieldDecorator('businessLicence', {
-                    initialValue: businessLicenceImg,
-                    rules: [{ required: true, message: '请上传营业执照' }]
-                  })(<Input type="hidden" />)}
-                  <Popover content={content}>
-                    <ExamplePic>
-                      <img src={post} alt="" width="100%" />
-                      <p>示例</p>
-                    </ExamplePic>
-                  </Popover>
-                </PicBox>
-                <p>仅限jpg、jpeg、gif、png，大小不超过2M，仅限上传1张</p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem {...formItemLayout} label="法人身份证">
-                <PicBox>
-                  <QMUpload
-                    name="uploadFile"
-                    style={styles.box}
-                    fileList={frontIDCard}
-                    action={
-                      Const.HOST +
-                      '/store/uploadStoreResource?resourceType=IMAGE'
-                    }
-                    listType="picture-card"
-                    accept={'.jpg,.jpeg,.png,.gif'}
-                    onChange={(info) => this._editImages(info, 'frontIDCard')}
-                    beforeUpload={this._checkUploadFile}
-                  >
-                    {frontIDCard.length < 1 && (
-                      <Icon type="plus" style={styles.plus} />
-                    )}
-                  </QMUpload>
-                  <Popover content={person}>
-                    <ExamplePic>
-                      <img src={front} alt="" width="100%" />
-                      <p>正面示例</p>
-                    </ExamplePic>
-                  </Popover>
-                  <QMUpload
-                    style={styles.box}
-                    name="uploadFile"
-                    fileList={backIDCard}
-                    action={
-                      Const.HOST +
-                      '/store/uploadStoreResource?resourceType=IMAGE'
-                    }
-                    listType="picture-card"
-                    accept={'.jpg,.jpeg,.png,.gif'}
-                    onChange={(info) => this._editImages(info, 'backIDCard')}
-                    beforeUpload={this._checkUploadFile}
-                  >
-                    {backIDCard.length < 1 && (
-                      <Icon type="plus" style={styles.plus} />
-                    )}
-                  </QMUpload>
-                  <Popover content={personback}>
-                    <ExamplePic>
-                      <img src={back} alt="" width="100%" />
-                      <p>反面示例</p>
-                    </ExamplePic>
-                  </Popover>
-                </PicBox>
-                <p>
-                  请上传身份证正反面照片，仅限jpg、jpeg、gif、png，大小不超过2M，仅限上
-                  传2张
-                </p>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
             <Col span={12}>
               <FormItem {...tailFormItemLayout}>
                 <Button type="primary" onClick={this._next}>
-                  保存
+                  <FormattedMessage id="save" />
                 </Button>
               </FormItem>
             </Col>
@@ -580,8 +462,13 @@ export default class StepTwo extends React.Component<any, any> {
     const form = this.props.form;
     form.validateFields(null, (errs) => {
       //时间都填了且截至时间小于或等于起始时间
-      if (form.getFieldValue('businessTermStart') && form.getFieldValue('businessTermEnd')
-        && !form.getFieldValue('businessTermStart').isBefore(form.getFieldValue('businessTermEnd'))) {
+      if (
+        form.getFieldValue('businessTermStart') &&
+        form.getFieldValue('businessTermEnd') &&
+        !form
+          .getFieldValue('businessTermStart')
+          .isBefore(form.getFieldValue('businessTermEnd'))
+      ) {
         form.resetFields(['businessTermEnd']);
         let errorObject = {};
         errorObject['businessTermEnd'] = {

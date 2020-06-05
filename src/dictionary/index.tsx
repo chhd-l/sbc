@@ -3,7 +3,7 @@ import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
-const { Column } = Table;
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -83,8 +83,8 @@ export default class DitionaryList extends Component<any, any> {
     });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
-      let dictionaryData = res.context.clinicsDictionaryVOList;
-      pagination.total = res.context.total;
+      let dictionaryData = res.context.sysDictionaryPage.content;
+      pagination.total = res.context.sysDictionaryPage.total;
       this.setState({
         pagination: pagination,
         dictionaryData: dictionaryData,
@@ -103,7 +103,7 @@ export default class DitionaryList extends Component<any, any> {
     const { res } = await webapi.getDictionaryTypes();
     if (res.code === 'K-000000') {
       this.setState({
-        dictionaryTypes: res.context.typeList
+        dictionaryTypes: res.context
       });
     } else {
       message.error(res.message);
@@ -186,7 +186,10 @@ export default class DitionaryList extends Component<any, any> {
                   this.onSearch();
                 }}
               >
-                Search
+                <span>
+                  {' '}
+                  <FormattedMessage id="search" />
+                </span>
               </Button>
             </Form.Item>
           </Form>

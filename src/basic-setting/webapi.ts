@@ -9,7 +9,7 @@ type TResult = {
  * 查询基本信息
  */
 export const fetchSetting = () => {
-  return Fetch<TResult>('/store/storeBaseInfo');
+  return Fetch<TResult>('/store/storeInfo');
 };
 
 /**

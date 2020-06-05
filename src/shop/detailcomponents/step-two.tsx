@@ -104,12 +104,14 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={true}
-                label={<FormattedMessage id="unifiedSocialCreditCode" />}
+                label={<FormattedMessage id="logIn" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('socialCreditCode')
-                    ? info.get('socialCreditCode')
-                    : '无'}
+                  {company && info.get('socialCreditCode') ? (
+                    info.get('socialCreditCode')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
@@ -117,167 +119,106 @@ export default class StepTwo extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={true}
-                label={<FormattedMessage id="enterpriseName" />}
+                label={<FormattedMessage id="UserinfoURL" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('companyName')
-                    ? info.get('companyName')
-                    : '无'}
+                  {company && info.get('companyName') ? (
+                    info.get('companyName')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="address" />}
+                label={<FormattedMessage id="clientID" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('address') ? info.get('address') : '无'}
+                  {company && info.get('address') ? (
+                    info.get('address')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="legalRepresentative" />}
+                label={<FormattedMessage id="issuer" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('legalRepresentative')
-                    ? info.get('legalRepresentative')
-                    : '无'}
+                  {company && info.get('legalRepresentative') ? (
+                    info.get('legalRepresentative')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="registeredCapital" />}
+                label={<FormattedMessage id="pedirectURL" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('registeredCapital')
-                    ? info.get('registeredCapital') + '万元'
-                    : '无'}
+                  {company && info.get('registeredCapital') ? (
+                    info.get('registeredCapital') + '万元'
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="establishmentDate" />}
+                label={<FormattedMessage id="registration" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('foundDate')
-                    ? moment(info.get('foundDate')).format('YYYY年MM月DD日')
-                    : '无'}
+                  {company && info.get('foundDate') ? (
+                    moment(info.get('foundDate')).format('YYYY年MM月DD日')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="businessPeriodSince" />}
+                label={<FormattedMessage id="registerPrefix" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('businessTermStart')
-                    ? moment(info.get('businessTermStart')).format(
-                        'YYYY年MM月DD日'
-                      )
-                    : '无'}
+                  {company && info.get('businessTermStart') ? (
+                    moment(info.get('businessTermStart')).format(
+                      'YYYY年MM月DD日'
+                    )
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                label={<FormattedMessage id="businessPeriodTo" />}
+                label={<FormattedMessage id="registerCallback" />}
               >
                 <p style={{ color: '#333' }}>
-                  {company && info.get('businessTermEnd')
-                    ? moment(info.get('businessTermEnd')).format(
-                        'YYYY年MM月DD日'
-                      )
-                    : '无'}
+                  {company && info.get('businessTermEnd') ? (
+                    moment(info.get('businessTermEnd')).format('YYYY年MM月DD日')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
                 </p>
-              </FormItem>
-            </Col>
-
-            <Col span={12}>
-              <FormItem
-                required={true}
-                {...formItemLayout}
-                label={<FormattedMessage id="businessScope" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('businessScope')
-                    ? info.get('businessScope')
-                    : '无'}
-                </p>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <FormItem
-                required={true}
-                {...formItemPhoto}
-                label={
-                  <FormattedMessage id="electronicCopyOfBusinessLicense" />
-                }
-              >
-                <PicBox>{this._renderBussinessLicence(businessLicence)}</PicBox>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="corporateIdentityCard" />}
-              >
-                <PicBox>{this._renderBussinessLicence(IDImages)}</PicBox>
               </FormItem>
             </Col>
           </Row>
         </Form>
-        <Modal
-          maskClosable={false}
-          visible={this.state.showImg}
-          footer={null}
-          onCancel={() => this._hideImgModal()}
-        >
-          <div>
-            <div>
-              <img
-                style={{ width: '100%', height: '100%' }}
-                src={this.state.imgUrl}
-              />
-            </div>
-          </div>
-        </Modal>
       </div>
     );
   }
-
-  //附件
-  _renderBussinessLicence = (encloses) => {
-    if (encloses.length == 0 || encloses[0] == '') {
-      return <span>无</span>;
-    }
-    return encloses.map((v, k) => {
-      return (
-        <img
-          key={'p-' + k}
-          src={v.url}
-          width="100%"
-          onClick={() => this.setState({ showImg: true, imgUrl: v.url })}
-        />
-      );
-    });
-  };
-
-  //关闭图片弹框
-  _hideImgModal = () => {
-    this.setState({
-      showImg: false,
-      imgUrl: ''
-    });
-  };
 }

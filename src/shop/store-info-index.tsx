@@ -7,7 +7,7 @@ import AppStore from './store';
 import StepOne from './infocomponents/step-one-info';
 import StepTwo from './detailcomponents/step-two';
 import StepThree from './infocomponents/step-three-info';
-import StepFour from './editcomponents/step-four-edit';
+import StepFour from './detailcomponents/step-four';
 import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
@@ -27,6 +27,11 @@ export default class ShopInfo extends React.Component<any, any> {
 
   componentWillMount() {
     this.store.init();
+    this.store.initCountryDictionary();
+    this.store.initCityDictionary();
+    this.store.initLanguageDictionary();
+    this.store.initCurrencyDictionary();
+    this.store.initTimeZoneDictionary();
   }
 
   render() {
@@ -52,7 +57,7 @@ export default class ShopInfo extends React.Component<any, any> {
                 key="0"
               />
               <Tabs.TabPane
-                tab={<FormattedMessage id="businessInformation" />}
+                tab={<FormattedMessage id="ssoSetting" />}
                 key="1"
               />
               <Tabs.TabPane
@@ -60,7 +65,7 @@ export default class ShopInfo extends React.Component<any, any> {
                 key="2"
               />
               <Tabs.TabPane
-                tab={<FormattedMessage id="financialInformation" />}
+                tab={<FormattedMessage id="contentInformation" />}
                 key="3"
               />
             </Tabs>

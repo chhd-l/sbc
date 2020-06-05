@@ -40,6 +40,7 @@ export default class SearchList extends React.Component<any, any> {
       onRefundModalChange: Function;
       onRefundModalHide: Function;
       onAudit: Function;
+      onRealRefund: Function;
       onReject: Function;
       onDeliver: Function;
       onReceive: Function;
@@ -76,6 +77,7 @@ export default class SearchList extends React.Component<any, any> {
     onRefundModalChange: noop,
     onRefundModalHide: noop,
     onAudit: noop,
+    onRealRefund: noop,
     onReject: noop,
     onDeliver: noop,
     onReceive: noop,
@@ -229,6 +231,7 @@ export default class SearchList extends React.Component<any, any> {
     const {
       onChecked,
       onAudit,
+      onRealRefund,
       onReject,
       onDeliver,
       onReceive,
@@ -401,6 +404,16 @@ export default class SearchList extends React.Component<any, any> {
                               href="javascript:void(0)"
                               style={{ marginLeft: 20 }}
                               onClick={() => {
+                                onRealRefund(rid);
+                              }}
+                            >
+                              <FormattedMessage id="realRefund" />
+                            </a>
+
+                            <a
+                              href="javascript:void(0)"
+                              style={{ marginLeft: 20 }}
+                              onClick={() => {
                                 if (payType == 0) {
                                   this._showOnlineRefund(
                                     onOnlineRefund,
@@ -475,35 +488,33 @@ export default class SearchList extends React.Component<any, any> {
                         ) : null;
                       })}
 
-                    {
-                      /*第4张特殊处理*/
-                      //@ts-ignore
-                      v.get('returnItems').concat(returnGifts).size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
-                            //@ts-ignore
-                            src={
-                              v
-                                .get('returnItems')
-                                .concat(returnGifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('returnItems')
-                                    .concat(returnGifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
-                            style={styles.imgFourth}
-                          />
+                    {/*第4张特殊处理*/
+                    //@ts-ignore
+                    v.get('returnItems').concat(returnGifts).size > 3 ? (
+                      <div style={styles.imgBg}>
+                        <img
                           //@ts-ignore
-                          <div style={styles.imgNum}>
-                            共{v.get('returnItems').concat(returnGifts).size}件
-                          </div>
+                          src={
+                            v
+                              .get('returnItems')
+                              .concat(returnGifts)
+                              .get(3)
+                              .get('pic')
+                              ? v
+                                  .get('returnItems')
+                                  .concat(returnGifts)
+                                  .get(3)
+                                  .get('pic')
+                              : defaultImg
+                          }
+                          style={styles.imgFourth}
+                        />
+                        //@ts-ignore
+                        <div style={styles.imgNum}>
+                          共{v.get('returnItems').concat(returnGifts).size}件
                         </div>
-                      ) : null
-                    }
+                      </div>
+                    ) : null}
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*订单编号*/}

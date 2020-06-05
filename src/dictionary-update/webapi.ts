@@ -23,7 +23,7 @@ export function getDictionaryTypes(filterParams = {}) {
  * @param filterParams
  */
 export function getDictionaryDetails(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionaryById', {
+  return Fetch<TResult>('/sysdict/querySysDictionaryById', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -35,7 +35,7 @@ export function getDictionaryDetails(filterParams = {}) {
  * @param filterParams
  */
 export function addDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/addClinicsDictionary', {
+  return Fetch<TResult>('/sysdict/addSysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -48,7 +48,7 @@ export function addDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function updateDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/upDateClinicsDictionary', {
+  return Fetch<TResult>('/sysdict/updateSysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -21,6 +21,19 @@ const formItemLayout = {
   }
 };
 
+const inputItemLayout = {
+  labelCol: {
+    span: 6,
+    xs: { span: 6 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    span: 14,
+    xs: { span: 14 },
+    sm: { span: 12 }
+  }
+};
+
 export default class settingForm extends React.Component<any, any> {
   form;
 
@@ -73,8 +86,23 @@ export default class settingForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const storeId = this._store.state().getIn(['settings', 'storeId']); //店铺标识
-    const companyInfoId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-      .companyInfoId; //从缓存中获取商家标识
+    const supplierCode = this._store
+      .state()
+      .getIn(['settings', 'supplierCode']);
+    const accountName = this._store.state().getIn(['settings', 'accountName']);
+    const storeName = this._store.state().getIn(['settings', 'storeName']);
+    const contactPerson = this._store
+      .state()
+      .getIn(['settings', 'contactPerson']);
+    const contactMobile = this._store
+      .state()
+      .getIn(['settings', 'contactMobile']);
+    const contactEmail = this._store
+      .state()
+      .getIn(['settings', 'contactEmail']);
+
+    const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    const companyInfoId = companyInfo.companyInfoId; //从缓存中获取商家标识
 
     return (
       <Form
@@ -82,49 +110,55 @@ export default class settingForm extends React.Component<any, any> {
         onSubmit={this._handleSubmit}
       >
         <Row>
-          <Col span={18}>
+          <Col span={24}>
             <FormItem
               required={false}
               {...formItemLayout}
               label={<FormattedMessage id="storeLogo" />}
             >
-              <div className="clearfix logoImg">
-                <QMUpload
-                  style={styles.box}
-                  action={
-                    Const.HOST +
-                    `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`
-                  }
-                  listType="picture-card"
-                  name="uploadFile"
-                  onChange={this._editStoreLogo}
-                  fileList={this.state.storeLogoImage}
-                  accept={'.jpg,.jpeg,.png,.gif'}
-                  beforeUpload={this._checkUploadFile.bind(this, 1)}
-                >
-                  {this.state.storeLogoImage.length >= 1 ? null : (
-                    <div>
-                      <Icon type="plus" style={styles.plus} />
-                    </div>
-                  )}
-                </QMUpload>
-                {getFieldDecorator('storeLogo', {
-                  initialValue: this.state.storeLogo
-                })(<Input type="hidden" />)}
-              </div>
-              <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
+              <Row>
+                <Col span={6}>
+                  <div className="clearfix logoImg">
+                    <QMUpload
+                      style={styles.box}
+                      action={
+                        Const.HOST +
+                        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`
+                      }
+                      listType="picture-card"
+                      name="uploadFile"
+                      onChange={this._editStoreLogo}
+                      fileList={this.state.storeLogoImage}
+                      accept={'.jpg,.jpeg,.png,.gif'}
+                      beforeUpload={this._checkUploadFile.bind(this, 1)}
+                    >
+                      {this.state.storeLogoImage.length >= 1 ? null : (
+                        <div>
+                          <Icon type="plus" style={styles.plus} />
+                        </div>
+                      )}
+                    </QMUpload>
+                    {getFieldDecorator('storeLogo', {
+                      initialValue: this.state.storeLogo
+                    })(<Input type="hidden" />)}
+                  </div>
+                </Col>
+                <Col span={18}>
+                  <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
+                </Col>
+              </Row>
             </FormItem>
           </Col>
         </Row>
         <Row>
-          <Col span={18}>
+          <Col span={24}>
             <FormItem
               {...formItemLayout}
               required={false}
-              label={<FormattedMessage id="shop" />}
+              label={<FormattedMessage id="merchantLogo" />}
             >
               <Row>
-                <Col span={24}>
+                <Col span={6}>
                   <div className="clearfix bannerImg">
                     <QMUpload
                       style={styles.box}
@@ -150,8 +184,94 @@ export default class settingForm extends React.Component<any, any> {
                     })(<Input type="hidden" />)}
                   </div>
                 </Col>
+                <Col span={18}>
+                  <Tips title={<FormattedMessage id="storeSettingInfo2" />} />
+                </Col>
               </Row>
-              <Tips title={<FormattedMessage id="storeSettingInfo2" />} />
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="merchantNumber" />}
+            >
+              {getFieldDecorator('supplierCode', {
+                initialValue: supplierCode
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="merchantAccount" />}
+            >
+              {getFieldDecorator('accountName', {
+                initialValue: accountName
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="merchantName" />}
+            >
+              {getFieldDecorator('storeName', {
+                initialValue: storeName
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="Contact" />}
+            >
+              {getFieldDecorator('contactPerson', {
+                initialValue: contactPerson
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="phoneNumber" />}
+            >
+              {getFieldDecorator('contactMobile', {
+                initialValue: contactMobile
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="contactEmails" />}
+            >
+              {getFieldDecorator('contactEmail', {
+                initialValue: contactEmail
+              })(<Input />)}
             </FormItem>
           </Col>
         </Row>

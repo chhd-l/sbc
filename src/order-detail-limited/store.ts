@@ -4,10 +4,17 @@ import LoadingActor from './actor/loading-actor';
 import TidActor from './actor/tid-actor';
 import TabActor from './actor/tab-actor';
 import PayRecordActor from './actor/pay-record-actor';
+import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
 
 import * as webapi from './webapi';
-import { addPay, fetchLogistics, fetchOrderDetail, payRecord } from './webapi';
+import {
+  addPay,
+  fetchLogistics,
+  fetchOrderDetail,
+  payRecord,
+  queryDictionary
+} from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
 import { Const, history, ValidConst } from 'qmkit';
@@ -20,7 +27,8 @@ export default class AppStore extends Store {
       new TidActor(),
       new TabActor(),
       new PayRecordActor(),
-      new LogisticActor()
+      new LogisticActor(),
+      new dictActor()
     ];
   }
 
@@ -44,7 +52,8 @@ export default class AppStore extends Store {
       const payRecordResult = (await payRecord(tid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
       const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
-      // const payRecordResult2 = await webapi.getOrderNeedAudit() as any;
+      const { res: cityDictRes } = (await queryDictionary('city')) as any;
+      const { res: countryDictRes } = (await queryDictionary('country')) as any;
 
       this.transaction(() => {
         this.dispatch('loading:end');
@@ -53,13 +62,11 @@ export default class AppStore extends Store {
           'receive-record-actor:init',
           payRecordResult.res.payOrderResponses
         );
-        // this.dispatch(
-        //   'receive-record-actor:initPaymentInfo',
-        //   payRecordResult2
-        // );
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
+        this.dispatch('dict:initCity', cityDictRes.context);
+        this.dispatch('dict:initCountry', countryDictRes.context);
       });
     } else {
       message.error(errorInfo);

@@ -8,12 +8,15 @@ import {
   message,
   Table,
   Row,
-  Col
+  Col,
+  Radio,
+  Divider
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import RewardRate from '@/clinic-reward-rate';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -44,132 +47,133 @@ class ClinicForm extends React.Component<any, any> {
       },
       cityArr: [],
       typeArr: [],
-      sectionList: []
+      sectionList: [
+        {
+          id: 1,
+          orderType: 'Customer first order(CFO)',
+          rewardRate: 0
+        },
+        {
+          id: 2,
+          orderType: 'Customer second and following orders(CSFO)',
+          rewardRate: 0
+        }
+      ],
+      isEdit: this.props.clinicId ? true : false,
+      rewardMode: false,
+      timeZone: '',
+      rewardForm: {
+        clinicsId: '',
+        id: '',
+        rewardRateFirst: 0,
+        rewardRateMore: 0,
+        rewardRule: false,
+        storeId: 123456858,
+        timeZone: 'Year'
+      },
+      activeKey: 'basic',
+      isJump: false
     };
     this.getDetail = this.getDetail.bind(this);
-    this.addSection = this.addSection.bind(this);
 
     if (this.props.clinicId) {
       this.getDetail(this.props.clinicId);
-      this.queryClinicsReward(this.props.clinicId);
+      this.getClinicsReward(this.props.clinicId);
     }
     this.queryClinicsDictionary('city');
     this.queryClinicsDictionary('clinicType');
   }
-  queryClinicsReward = async (id) => {
-    const { res } = await webapi.queryClinicsReward({
-      clinicsId: id
-    });
-    if (res.code === 'K-000000') {
-      if (res.context.length > 0) {
-        this.setState({
-          sectionList: res.context,
-          timeZone: res.context[0].timeZone
-        });
-      }
-    } else {
-      message.error(res.message || 'get data faild');
-    }
+  getClinicsReward = (id) => {
+    webapi
+      .getClinicsReward(id)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          if (res.context) {
+            const { sectionList } = this.state;
+            sectionList[0].rewardRate = res.context.rewardRateFirst;
+            sectionList[1].rewardRate = res.context.rewardRateMore;
+
+            this.setState({
+              timeZone: res.context.timeZone,
+              rewardMode: res.context.rewardRule,
+              sectionList: sectionList,
+              rewardForm: res.context
+            });
+          }
+        } else {
+          message.error(res.message || 'get data faild');
+        }
+      })
+      .catch((err) => {
+        message.error('get data faild');
+      });
   };
 
-  addSection() {
-    let section = {
-      timeZone: this.state.timeZone,
-      tempId: new Date().valueOf(),
-      orderAmount: '',
-      rewardRate: ''
-    };
-    let sectionList = this.state.sectionList;
-    sectionList.push(section);
-    this.setState({
-      sectionList: sectionList
-    });
-  }
-  saveRewardRate = async (row) => {
-    if (!row.timeZone) {
+  saveReward = () => {
+    const { sectionList, rewardForm } = this.state;
+
+    if (!this.props.clinicId) {
+      message.error('Prescriber ID does not exist');
+      return;
+    }
+    if (!this.state.timeZone) {
       message.error('Time Zone can not be empty');
       return;
     }
-    if (!row.orderAmount) {
-      message.error('Order Amount can not be empty');
-      return;
-    }
-    if (!row.rewardRate) {
-      message.error('Reward Rate can not be empty');
-      return;
-    }
-    if (row.id) {
-      const { res } = await webapi.updateClinicsReward(row);
-      if (res.code === 'K-000000') {
-        message.success('update success');
-      } else {
-        message.error(res.message);
-      }
-    } else {
-      //新增else
-      if (this.state.clinicForm.clinicsId) {
-        //通过基本信息的clinicId判断是否已存在诊所
-        const { res } = await webapi.getClinicById({
-          clinicsId: this.state.clinicForm.clinicsId
-        });
-        if (res.code === 'K-000000' && res.context.clinicsId) {
-          row.clinicsId = res.context.clinicsId;
-
-          this.addRewardRate(row);
+    let params = {
+      clinicsId: this.props.clinicId,
+      id: rewardForm.id,
+      rewardRateFirst: this.state.rewardMode ? sectionList[0].rewardRate : 0,
+      rewardRateMore: this.state.rewardMode ? sectionList[1].rewardRate : 0,
+      rewardRule: this.state.rewardMode,
+      storeId: rewardForm.storeId,
+      timeZone: this.state.timeZone
+    };
+    webapi
+      .saveReward(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Please create the basic information first ');
+          message.error(res.message || 'save failed');
         }
-      } else {
-        message.error('Please create the basic information first ');
-      }
-    }
+      })
+      .catch((err) => {
+        message.error('Save failed');
+      });
   };
-  addRewardRate = async (row) => {
-    const { res } = await webapi.addClinicsReward(row);
-    if (res.code === 'K-000000') {
-      message.success('create success');
-    } else {
-      message.error(res.message);
-    }
-  };
-  deleteRewardRate = async (row) => {
-    if (row.id) {
-      const { res } = await webapi.delClinicsReward({ id: row.id });
-      if (res.code === 'K-000000') {
-        message.success('delete success');
-        let data = this.state.sectionList;
-        data = data.filter((item) => {
-          if (item.id !== row.id) {
-            return item;
-          }
-        });
-        this.setState({
-          sectionList: data
-        });
-      } else {
-        message.error(res.message);
-      }
-    } else {
-      let data = this.state.sectionList;
-      data = data.filter((item) => {
-        if (item.tempId !== row.tempId) {
-          return item;
+  clearAndSave = () => {
+    const { rewardForm } = this.state;
+    let params = {
+      clinicsId: this.props.clinicId,
+      id: rewardForm.id,
+      rewardRateFirst: 0,
+      rewardRateMore: 0,
+      rewardRule: false,
+      storeId: rewardForm.storeId,
+      timeZone: ''
+    };
+    webapi
+      .clearRulesAndSave(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.getClinicsReward(this.props.clinicId);
+          message.success(res.message || 'Successful');
+        } else {
+          message.error(res.message || 'save failed');
         }
+      })
+      .catch((err) => {
+        message.error('Save failed');
       });
-      this.setState({
-        sectionList: data
-      });
-    }
   };
+
   selectTimeZone = (value) => {
-    let data = this.state.sectionList;
-    data = data.map((item) => {
-      item.timeZone = value;
-      return item;
-    });
     this.setState({
-      timeZone: value,
-      sectionList: data
+      timeZone: value
     });
   };
   onDataChange = ({ id, field, value }) => {
@@ -240,7 +244,13 @@ class ClinicForm extends React.Component<any, any> {
       ...clinicForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'create success');
+      message.success(res.message || 'Successful');
+      if (this.state.isJump) {
+        this.setState({
+          isJump: false,
+          activeKey: 'reward'
+        });
+      }
     } else {
       message.error(res.message || 'create faild');
     }
@@ -252,7 +262,13 @@ class ClinicForm extends React.Component<any, any> {
       ...clinicForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'update success');
+      message.success(res.message || 'Successful');
+      if (this.state.isJump) {
+        this.setState({
+          isJump: false,
+          activeKey: 'reward'
+        });
+      }
     } else {
       message.error(res.message || 'update faild');
     }
@@ -271,25 +287,105 @@ class ClinicForm extends React.Component<any, any> {
       }
     });
   };
+  onChange = (e) => {
+    this.setState({
+      rewardMode: e.target.value
+    });
+  };
+  //id校验
+  compareID = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[1-9][0-9]{2,12}$/;
+    if (!reg.test(form.getFieldValue('clinicsId'))) {
+      callback('Please enter the correct Prescriber ID');
+    } else {
+      callback();
+    }
+  };
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9+-]{6,20}$/;
+    if (!reg.test(form.getFieldValue('phone'))) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9]{3,10}$/;
+    if (!reg.test(form.getFieldValue('primaryZip'))) {
+      callback('Please enter the correct Prescriber Zip');
+    } else {
+      callback();
+    }
+  };
+  //经度校验longitude
+  compareLongitude = (rule, value, callback) => {
+    const { form } = this.props;
+    if (
+      isNaN(form.getFieldValue('longitude')) ||
+      form.getFieldValue('longitude') < -180 ||
+      form.getFieldValue('longitude') > 180
+    ) {
+      callback('Please enter the correct longitude');
+    } else {
+      callback();
+    }
+  };
+  //纬度校验latitude
+  compareLatitude = (rule, value, callback) => {
+    const { form } = this.props;
+
+    if (
+      isNaN(form.getFieldValue('latitude')) ||
+      form.getFieldValue('latitude') < -90 ||
+      form.getFieldValue('latitude') > 90
+    ) {
+      callback('Please enter the correct latitude');
+    } else {
+      callback();
+    }
+  };
+  goToReward = () => {
+    this.setState({
+      isJump: true
+    });
+  };
+  stay = () => {
+    this.setState({
+      isJump: false
+    });
+  };
+
+  switchTab = (key) => {
+    this.setState({
+      activeKey: key
+    });
+  };
 
   render() {
     const { cityArr, typeArr } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Tabs>
+      <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
         <TabPane tab="Basic infomation" key="basic">
           <Form
             {...layout}
-            style={{ width: '600px' }}
+            style={{ width: '800px' }}
             onSubmit={this.handleSubmit}
           >
             <FormItem label="Prescriber ID">
               {getFieldDecorator('clinicsId', {
                 rules: [
-                  { required: true, message: 'Please input Prescriber id!' }
+                  { required: true, message: 'Please input Prescriber id!' },
+                  { validator: this.compareID }
                 ]
               })(
                 <Input
+                  disabled={this.state.isEdit}
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onFormChange({
@@ -303,7 +399,11 @@ class ClinicForm extends React.Component<any, any> {
             <FormItem label="Prescriber Name">
               {getFieldDecorator('clinicsName', {
                 rules: [
-                  { required: true, message: 'Please input Prescriber name!' }
+                  { required: true, message: 'Please input Prescriber name!' },
+                  {
+                    max: 255,
+                    message: 'Prescriber name exceed the maximum length!'
+                  }
                 ]
               })(
                 <Input
@@ -323,7 +423,8 @@ class ClinicForm extends React.Component<any, any> {
                   {
                     required: true,
                     message: 'Please input Prescriber phone number!'
-                  }
+                  },
+                  { validator: this.comparePhone }
                 ]
               })(
                 <Input
@@ -363,7 +464,8 @@ class ClinicForm extends React.Component<any, any> {
             <FormItem label="Prescriber Zip">
               {getFieldDecorator('primaryZip', {
                 rules: [
-                  { required: true, message: 'Please input Prescriber zip!' }
+                  { required: true, message: 'Please input Prescriber zip!' },
+                  { validator: this.compareZip }
                 ]
               })(
                 <Input
@@ -404,7 +506,10 @@ class ClinicForm extends React.Component<any, any> {
             </FormItem>
             <FormItem label="Longitude">
               {getFieldDecorator('longitude', {
-                rules: [{ required: true, message: 'Please input Longitude!' }]
+                rules: [
+                  { required: true, message: 'Please input Longitude!' },
+                  { validator: this.compareLongitude }
+                ]
               })(
                 <Input
                   onChange={(e) => {
@@ -419,7 +524,10 @@ class ClinicForm extends React.Component<any, any> {
             </FormItem>
             <FormItem label="Latitude">
               {getFieldDecorator('latitude', {
-                rules: [{ required: true, message: 'Please input Latitude!' }]
+                rules: [
+                  { required: true, message: 'Please input Latitude!' },
+                  { validator: this.compareLatitude }
+                ]
               })(
                 <Input
                   onChange={(e) => {
@@ -447,165 +555,196 @@ class ClinicForm extends React.Component<any, any> {
             </FormItem>
             <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
               {this.props.pageType === 'edit' ? (
-                <Button type="primary" htmlType="submit">
-                  Update
-                </Button>
+                <div style={{ display: 'inline' }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={() => this.stay()}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    htmlType="submit"
+                    onClick={() => this.goToReward()}
+                    style={{ marginLeft: '20px' }}
+                  >
+                    Update And Next
+                  </Button>
+                </div>
               ) : (
-                <Button type="primary" htmlType="submit">
-                  Create
-                </Button>
+                <div style={{ display: 'inline' }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={() => this.stay()}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    htmlType="submit"
+                    onClick={() => this.goToReward()}
+                    style={{ marginLeft: '20px' }}
+                  >
+                    Create And Next
+                  </Button>
+                </div>
               )}
               <Button style={{ marginLeft: '20px' }}>
-                <Link to="/clinic">Back List</Link>
+                <Link to="/clinic">Back To List</Link>
               </Button>
             </FormItem>
           </Form>
         </TabPane>
         <TabPane tab="Reward Rate" key="reward">
-          {/*区间价价table*/}
-          <span
-            style={{
-              color: 'red',
-              fontFamily: 'SimSun',
-              marginRight: '4px',
-              fontSize: '12px'
-            }}
-          >
-            *
-          </span>
-          <label style={{ minWidth: '200px', marginRight: '10px' }}>
-            Time Zome:
-          </label>
-          Every
-          <Select
-            value={this.state.timeZone}
-            onChange={(value) => this.selectTimeZone(value)}
-            style={{ minWidth: '200px', marginLeft: '10px' }}
-          >
-            <Option value="Year" key="year">
-              Year
-            </Option>
-            <Option value="Month" key="month">
-              Month
-            </Option>
-            <Option value="Week" key="week">
-              Week
-            </Option>
-          </Select>
-          <Table
-            style={{ paddingTop: '10px' }}
-            pagination={false}
-            rowKey="intervalPriceId"
-            dataSource={this.state.sectionList}
-            footer={() => (
-              <Button onClick={() => this.addSection()}>+ Add section</Button>
-            )}
-          >
-            <Column
-              title={
+          <Row>
+            <Col span={24}>
+              <span
+                style={{
+                  color: 'red',
+                  fontFamily: 'SimSun',
+                  marginRight: '4px',
+                  fontSize: '12px'
+                }}
+              >
+                *
+              </span>
+              <label
+                style={{
+                  minWidth: '200px',
+                  marginRight: '10px',
+                  fontSize: '16px',
+                  fontWeight: 500
+                }}
+              >
+                Period:
+              </label>
+              Every
+              <Select
+                value={this.state.timeZone}
+                onChange={(value) => this.selectTimeZone(value)}
+                style={{ minWidth: '200px', marginLeft: '10px' }}
+              >
+                <Option value="Year" key="year">
+                  Year
+                </Option>
+                <Option value="Month" key="month">
+                  Month
+                </Option>
+                <Option value="Week" key="week">
+                  Week
+                </Option>
+              </Select>
+            </Col>
+            <Col span={24} style={{ marginTop: '20px' }}>
+              <span
+                style={{
+                  color: 'red',
+                  fontFamily: 'SimSun',
+                  marginRight: '4px',
+                  fontSize: '12px'
+                }}
+              >
+                *
+              </span>
+              <label
+                style={{
+                  minWidth: '200px',
+                  marginRight: '10px',
+                  fontSize: '16px',
+                  fontWeight: 500
+                }}
+              >
+                Reward mode:
+              </label>
+              <div style={{ marginTop: '20px' }}>
+                <Radio.Group
+                  onChange={this.onChange}
+                  value={this.state.rewardMode}
+                >
+                  <Radio value={true} style={{ marginRight: '50px' }}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p style={{ fontSize: '20px' }}>
+                        Customer-oriented reward
+                      </p>
+                      <span style={{ fontSize: '12px' }}>
+                        (order types subject to a unique custome)
+                      </span>
+                    </div>
+                  </Radio>
+                  <Radio value={false}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p style={{ fontSize: '20px' }}>No reward rule</p>
+                    </div>
+                  </Radio>
+                </Radio.Group>
+              </div>
+              <Divider type="horizontal" />
+              {this.state.rewardMode ? (
                 <div>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
+                  <Table
+                    style={{ paddingTop: '10px' }}
+                    pagination={false}
+                    rowKey="intervalPriceId"
+                    dataSource={this.state.sectionList}
                   >
-                    *
-                  </span>
-                  Order Amount
+                    <Column
+                      title="Unique customer order type"
+                      key="orderType"
+                      width={180}
+                      render={(rowInfo) => {
+                        return rowInfo.orderType;
+                      }}
+                    />
+                    <Column
+                      title="Reward Rate"
+                      key="rewardRate"
+                      width={180}
+                      render={(rowInfo) => {
+                        return (
+                          <Row>
+                            <Col span={10}>
+                              <FormItem style={{ marginBottom: 0 }}>
+                                <Input
+                                  value={rowInfo.rewardRate}
+                                  type="number"
+                                  onChange={(e) => {
+                                    const value = (e.target as any).value;
+                                    const id = rowInfo.id;
+                                    this.onDataChange({
+                                      id: id,
+                                      field: 'rewardRate',
+                                      value
+                                    });
+                                  }}
+                                  addonAfter="%"
+                                />
+                              </FormItem>
+                            </Col>
+                          </Row>
+                        );
+                      }}
+                    />
+                  </Table>
                 </div>
-              }
-              key="orderAmount"
-              width={180}
-              render={(rowInfo, _i, index) => {
-                return (
-                  <Row>
-                    <Col span={10}>
-                      <FormItem style={{ marginBottom: 0 }}>
-                        <Input
-                          value={rowInfo.orderAmount}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            const id = rowInfo.id ? rowInfo.id : rowInfo.tempId;
-                            this.onDataChange({
-                              id,
-                              field: 'orderAmount',
-                              value
-                            });
-                          }}
-                          addonBefore=" ≥ "
-                        />
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
-            <Column
-              title={
-                <div>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span>
-                  Reward Rate
-                </div>
-              }
-              key="rewardRate"
-              width={180}
-              render={(rowInfo) => {
-                return (
-                  <Row>
-                    <Col span={10}>
-                      <FormItem style={{ marginBottom: 0 }}>
-                        <Input
-                          value={rowInfo.rewardRate}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            const id = rowInfo.id ? rowInfo.id : rowInfo.tempId;
-                            this.onDataChange({
-                              id: id,
-                              field: 'rewardRate',
-                              value
-                            });
-                          }}
-                          addonAfter="%"
-                        />
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
-            <Column
-              title={<FormattedMessage id="operation" />}
-              key="opt"
-              width={80}
-              render={(rowInfo, _x, i) => {
-                return (
-                  <div>
-                    <Button
-                      style={{ marginRight: '10px' }}
-                      onClick={() => this.saveRewardRate(rowInfo)}
-                    >
-                      Save
-                    </Button>
-                    <Button onClick={() => this.deleteRewardRate(rowInfo)}>
-                      Delete
-                    </Button>
-                  </div>
-                );
-              }}
-            />
-          </Table>
+              ) : (
+                <h2>
+                  No reward rules set,please choose other modes to change rules
+                </h2>
+              )}
+            </Col>
+            <Col span={24} style={{ marginTop: '20px' }}>
+              <Button
+                type="primary"
+                onClick={() => this.saveReward()}
+                style={{ marginRight: '20px' }}
+              >
+                Save
+              </Button>
+              <Button onClick={() => this.clearAndSave()}>
+                Clear rules and Save
+              </Button>
+            </Col>
+          </Row>
         </TabPane>
       </Tabs>
     );

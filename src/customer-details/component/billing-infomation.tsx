@@ -112,7 +112,7 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success(res.message || 'successful');
+          message.success(res.message || 'Successful');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -195,7 +195,7 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'successful');
+          message.success(res.message || 'Successful');
         } else {
           message.error(res.message || 'Delete failed');
         }
@@ -267,7 +267,7 @@ class BillingInfomation extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -333,11 +333,7 @@ class BillingInfomation extends React.Component<any, any> {
                       this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
-                  <FormItem
-                    label="Consumer Account"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Consumer Account">
                     {getFieldDecorator('customerAccount', {
                       rules: [
                         { required: true, message: 'Please input First Name!' }
@@ -389,11 +385,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="First Name"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="First Name">
                     {getFieldDecorator('firstName', {
                       rules: [
                         { required: true, message: 'Please input First Name!' }
@@ -412,11 +404,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Last Name"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Last Name">
                     {getFieldDecorator('lastName', {
                       rules: [
                         { required: true, message: 'Please input Last Name!' }
@@ -435,11 +423,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Phone Number"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Phone Number">
                     {getFieldDecorator('consigneeNumber', {
                       rules: [
                         {
@@ -461,11 +445,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Post Code"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Post Code">
                     {getFieldDecorator('postCode', {
                       rules: [
                         { required: true, message: 'Please input Post Code!' }
@@ -484,11 +464,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Country"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Country">
                     {getFieldDecorator('countryId', {
                       rules: [
                         { required: true, message: 'Please input Country!' }
@@ -513,7 +489,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="City" hasFeedback validateStatus="success">
+                  <FormItem label="City">
                     {getFieldDecorator('cityId', {
                       rules: [{ required: true, message: 'Please input City!' }]
                     })(
@@ -536,11 +512,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Address 1"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Address 1">
                     {getFieldDecorator('address1', {
                       rules: [
                         { required: true, message: 'Please input Address 1!' }
@@ -559,11 +531,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Address 2"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Address 2">
                     {getFieldDecorator(
                       'address2',
                       {}
@@ -581,11 +549,7 @@ class BillingInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Reference"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Reference">
                     {getFieldDecorator(
                       'rfc',
                       {}

@@ -106,3 +106,29 @@ export function delClinicsReward(filterParams = {}) {
     })
   });
 }
+
+//
+// 清理并保存
+export function clearRulesAndSave(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/clearRulesAndSave', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+// 保存奖励信息
+export function saveReward(filterParams = {}) {
+  return Fetch<TResult>('/clinicsReward/save', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getClinicsReward(id = '') {
+  return Fetch<TResult>('/clinicsReward/' + id, {
+    method: 'GET'
+  });
+}

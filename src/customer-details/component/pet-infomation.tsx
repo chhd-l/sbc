@@ -248,7 +248,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'successful');
+          message.success(res.message || 'Successful');
         } else {
           message.error(res.message || 'Update data failed');
         }
@@ -306,7 +306,7 @@ class PetInfomation extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -346,11 +346,7 @@ class PetInfomation extends React.Component<any, any> {
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <FormItem
-                    label="Pet Category"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Pet Category">
                     {getFieldDecorator('petsType', {
                       rules: [
                         {
@@ -378,11 +374,7 @@ class PetInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Pet Name"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Pet Name">
                     {getFieldDecorator('petName', {
                       rules: [
                         { required: true, message: 'Please input Pet Name!' }
@@ -400,7 +392,7 @@ class PetInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="Gender" hasFeedback validateStatus="success">
+                  <FormItem label="Gender">
                     {getFieldDecorator('petsSex', {
                       rules: [
                         { required: true, message: 'Please selected Gender!' }
@@ -426,11 +418,7 @@ class PetInfomation extends React.Component<any, any> {
                 </Col>
                 {petForm.petsType === 'dog' ? (
                   <Col span={12}>
-                    <FormItem
-                      label="Breed"
-                      hasFeedback
-                      validateStatus="success"
-                    >
+                    <FormItem label="Breed">
                       {getFieldDecorator('petsBreed', {
                         rules: [
                           { required: true, message: 'Please selected Breed!' }
@@ -456,11 +444,7 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                 ) : (
                   <Col span={12}>
-                    <FormItem
-                      label="Breed"
-                      hasFeedback
-                      validateStatus="success"
-                    >
+                    <FormItem label="Breed">
                       {getFieldDecorator('petsBreed', {
                         rules: [
                           { required: true, message: 'Please selected Breed!' }
@@ -492,7 +476,7 @@ class PetInfomation extends React.Component<any, any> {
                     display: petForm.petsType === 'cat' ? 'none' : 'block'
                   }}
                 >
-                  <FormItem label="Weight" hasFeedback validateStatus="success">
+                  <FormItem label="Weight">
                     {getFieldDecorator('petsSizeValueName', {
                       // rules: [
                       //   { required: true, message: 'Please input Weight!' }
@@ -534,11 +518,7 @@ class PetInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Birthday"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Birthday">
                     {getFieldDecorator('birthOfPets', {
                       rules: [
                         { required: true, message: 'Please input Birth Date!' }

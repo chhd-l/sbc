@@ -154,6 +154,9 @@ export default class OrderReceive extends React.Component<any, any> {
     const id = detail.get('id');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
 
+    //交易状态
+    const tradeState = detail.get('tradeState');
+
     return (
       <div style={styles.container}>
         <div style={styles.addReceive}>
@@ -178,27 +181,28 @@ export default class OrderReceive extends React.Component<any, any> {
         </div>
 
         <Row>
-          <Col span={8}>
+          <Col span={16}>
             <p style={styles.inforItem}>
               {<FormattedMessage id="paymentNumber" />}:{' '}
-              {/* {paymentInfo.get('')} */}
+              {paymentInfo.get('chargeId')}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="paymentTime" />}:{' '}
-              {/* {consignee.areaId} */}
+              {tradeState.get('createTime')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="name" />}: {/* {consignee.areaId} */}
+              {<FormattedMessage id="name" />}: {paymentInfo.get('accountName')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="email" />}: {/* {consignee.areaId} */}
+              {<FormattedMessage id="email" />}: {paymentInfo.get('email')}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="phoneNumber" />}:{' '}
-              {/* {consignee.areaId} */}
+              {paymentInfo.get('phone')}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="cardNumber" />}: {/* {consignee.areaId} */}
+              {<FormattedMessage id="cardNumber" />}:{' '}
+              {paymentInfo.get('last4Digits')}
             </p>
           </Col>
         </Row>

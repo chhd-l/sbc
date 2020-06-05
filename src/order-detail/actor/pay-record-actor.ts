@@ -1,5 +1,5 @@
 import { Actor, Action, IMap } from 'plume2';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 /**
  * 收款记录actor
@@ -20,7 +20,7 @@ export default class ReceiveRecordActor extends Actor {
 
   @Action('receive-record-actor:initPaymentInfo')
   initPaymentInfo(state: IMap, res: Object) {
-    return state.set('paymentInfo', List(res));
+    return state.set('paymentInfo', Map(res));
   }
 
   @Action('receive-record-actor:setReceiveVisible')

@@ -26,7 +26,6 @@ export default class OrderReceive extends React.Component<any, any> {
     relaxProps?: {
       detail: IMap;
       payRecord: IList;
-      paymentInfo: IMap;
       onSavePayOrder: Function;
       destroyOrder: Function;
       fetchOffLineAccounts: Function;
@@ -50,7 +49,6 @@ export default class OrderReceive extends React.Component<any, any> {
   static relaxProps = {
     detail: 'detail',
     payRecord: 'payRecord',
-    paymentInfo: 'paymentInfo',
     onSavePayOrder: noop,
     destroyOrder: noop,
     fetchOffLineAccounts: noop,
@@ -150,7 +148,7 @@ export default class OrderReceive extends React.Component<any, any> {
   ];
 
   render() {
-    const { detail, payRecord, paymentInfo } = this.props.relaxProps;
+    const { detail, payRecord } = this.props.relaxProps;
     const id = detail.get('id');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
 

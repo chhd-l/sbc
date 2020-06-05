@@ -415,6 +415,7 @@ export default {
   'refusedToRefund': 'Refused to refund',
   'refundFailed': 'Refund failed',
   'refund': 'Refund',
+  'realRefund': 'Real refund',
   'refundDetails': 'Refund details',
   'applicationTime': 'Application time',
   'chargeback': 'Chargeback',

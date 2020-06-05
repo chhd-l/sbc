@@ -12,7 +12,8 @@ import {
   Radio,
   Menu,
   Card,
-  Checkbox
+  Checkbox,
+  Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -35,6 +36,8 @@ class DeliveryInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      customerAccount: '',
+      clinicsVOS: [],
       deliveryForm: {
         firstName: '',
         lastName: '',
@@ -44,19 +47,23 @@ class DeliveryInfomation extends React.Component<any, any> {
         countryId: '',
         address1: '',
         address2: '',
-        rfc: ''
+        rfc: '',
+        deliveryAddressId: ''
       },
       title: '',
       countryArr: [],
       cityArr: [],
       // customerId:this.props.match.params.id ? this.props.match.params.id : '',
       addressList: [],
-      isDefault: false
+      isDefault: false,
+      clinicList: [],
+      currentId: ''
     };
   }
   componentDidMount() {
     this.getDict();
     this.getAddressList();
+    this.getClinicList();
   }
 
   getDict = () => {
@@ -77,7 +84,7 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
 
   saveDeliveryAddress = () => {
-    const { deliveryForm } = this.state;
+    const { deliveryForm, clinicsVOS } = this.state;
     let params = {
       address1: deliveryForm.address1,
       address2: deliveryForm.address2,
@@ -95,14 +102,16 @@ class DeliveryInfomation extends React.Component<any, any> {
       postCode: deliveryForm.postCode,
       provinceId: deliveryForm.provinceId,
       rfc: deliveryForm.rfc,
-      type: deliveryForm.type
+      type: deliveryForm.type,
+      clinicsVOS: clinicsVOS
     };
     webapi
       .updateAddress(params)
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Update success');
+          this.getAddressList();
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -111,6 +120,15 @@ class DeliveryInfomation extends React.Component<any, any> {
         message.error('Update failed');
       });
   };
+  getSelectedClinic = (array) => {
+    let clinics = [];
+    if (array && array.length > 0) {
+      for (let index = 0; index < array.length; index++) {
+        clinics.push(array[index].clinicsId);
+      }
+    }
+    return clinics;
+  };
 
   getAddressList = () => {
     webapi
@@ -118,26 +136,39 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let addressList = res.context;
-          if (addressList.length > 0) {
-            let deliveryForm = addressList[0];
+          let addressList = res.context.customerDeliveryAddressVOList;
 
+          if (addressList.length > 0) {
+            let deliveryForm = this.state.deliveryForm;
+            if (this.state.currentId) {
+              deliveryForm = addressList.find((item) => {
+                return item.deliveryAddressId === this.state.currentId;
+              });
+            } else {
+              deliveryForm = addressList[0];
+            }
+
+            let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
             this.props.form.setFieldsValue({
-              firstName: addressList[0].firstName,
-              lastName: addressList[0].lastName,
-              consigneeNumber: addressList[0].consigneeNumber,
-              postCode: addressList[0].postCode,
-              cityId: addressList[0].cityId,
-              countryId: addressList[0].countryId,
-              address1: addressList[0].address1,
-              address2: addressList[0].address2,
-              rfc: addressList[0].rfc
+              customerAccount: res.context.customerAccount,
+              clinicsVOS: clinicsVOS,
+              firstName: deliveryForm.firstName,
+              lastName: deliveryForm.lastName,
+              consigneeNumber: deliveryForm.consigneeNumber,
+              postCode: deliveryForm.postCode,
+              cityId: deliveryForm.cityId,
+              countryId: deliveryForm.countryId,
+              address1: deliveryForm.address1,
+              address2: deliveryForm.address2,
+              rfc: deliveryForm.rfc
             });
             this.setState({
+              currentId: deliveryForm.deliveryAddressId,
+              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               addressList: addressList,
               deliveryForm: deliveryForm,
-              title: addressList[0].consigneeName,
-              isDefault: addressList[0].isDefaltAddress === 1 ? true : false
+              title: deliveryForm.consigneeName,
+              isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
             });
           }
         } else {
@@ -163,7 +194,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Delete success');
+          message.success(res.message || 'successful');
         } else {
           message.error(res.message || 'Delete failed');
         }
@@ -179,6 +210,56 @@ class DeliveryInfomation extends React.Component<any, any> {
     });
   };
 
+  getClinicList = () => {
+    webapi
+      .fetchClinicList({
+        pageNum: 0,
+        pageSize: 1000
+      })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.setState({
+            clinicList: res.context.content
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch((err) => {
+        message.error('Get data failed');
+      });
+  };
+  onClinicChange = (clinics) => {
+    this.setState({
+      clinicsVOS: clinics
+    });
+  };
+  switchAddress = (id) => {
+    const { addressList } = this.state;
+    let deliveryForm = addressList.find((item) => {
+      return item.deliveryAddressId === id;
+    });
+
+    this.props.form.setFieldsValue({
+      firstName: deliveryForm.firstName,
+      lastName: deliveryForm.lastName,
+      consigneeNumber: deliveryForm.consigneeNumber,
+      postCode: deliveryForm.postCode,
+      cityId: deliveryForm.cityId,
+      countryId: deliveryForm.countryId,
+      address1: deliveryForm.address1,
+      address2: deliveryForm.address2,
+      rfc: deliveryForm.rfc
+    });
+    this.setState({
+      currentId: id,
+      deliveryForm: deliveryForm,
+      title: deliveryForm.consigneeName,
+      isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
+    });
+  };
+
   render() {
     const formItemLayout = {
       labelCol: {
@@ -190,21 +271,39 @@ class DeliveryInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-    const { countryArr, cityArr } = this.state;
+    const { countryArr, cityArr, clinicList } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
         <Col span={3}>
-          <h3>All Address {this.state.addressList.length}</h3>
+          <h3>All Address( {this.state.addressList.length} )</h3>
           <ul>
             {this.state.addressList.map((item) => (
-              <li key={item.id}>{item.consigneeName}</li>
+              <li
+                key={item.deliveryAddressId}
+                onClick={() => this.switchAddress(item.deliveryAddressId)}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.deliveryAddressId === this.state.currentId
+                      ? '#e2001a'
+                      : ''
+                }}
+              >
+                {item.consigneeName}
+              </li>
             ))}
           </ul>
         </Col>
         <Col span={20}>
+          {this.state.addressList.length === 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : null}
           <Card
             title={this.state.title}
+            style={{
+              display: this.state.addressList.length === 0 ? 'none' : 'block'
+            }}
             extra={
               <div>
                 <Checkbox
@@ -225,6 +324,68 @@ class DeliveryInfomation extends React.Component<any, any> {
           >
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Row gutter={16}>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem
+                    label="Consumer Account"
+                    hasFeedback
+                    validateStatus="success"
+                  >
+                    {getFieldDecorator('customerAccount', {
+                      rules: [
+                        { required: true, message: 'Please input First Name!' }
+                      ]
+                    })(<Input disabled={true} />)}
+                  </FormItem>
+                </Col>
+                <Col
+                  span={12}
+                  style={{
+                    display:
+                      this.props.customerType !== 'Guest' ? 'none' : 'block'
+                  }}
+                >
+                  <FormItem label="Selected clinics">
+                    {getFieldDecorator('clinicsVOS', {
+                      rules: [
+                        { required: true, message: 'Please Select clinics!' }
+                      ]
+                    })(
+                      <Select
+                        mode="tags"
+                        placeholder="Please select"
+                        style={{ width: '100%' }}
+                        onChange={(value, Option) => {
+                          let clinics = [];
+                          for (let i = 0; i < Option.length; i++) {
+                            let clinic = {
+                              clinicsId: Option[i].key,
+                              clinicsName: Option[i].props.value
+                            };
+                            clinics.push(clinic);
+                          }
+
+                          this.onClinicChange(clinics);
+                        }}
+                      >
+                        {/* {
+                        clinicList.map((item) => (
+                          <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                        ))} */}
+                        {clinicList.map((item) => (
+                          <Option value={item.clinicsId} key={item.clinicsId}>
+                            {item.clinicsName}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
                 <Col span={12}>
                   <FormItem
                     label="First Name"
@@ -419,12 +580,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <FormItem
-                    label="rfcerence"
+                    label="Reference"
                     hasFeedback
                     validateStatus="success"
                   >
                     {getFieldDecorator(
-                      'address2',
+                      'rfc',
                       {}
                     )(
                       <Input
@@ -447,7 +608,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                     </Button>
 
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/costomer-list">Cancle</Link>
+                      <Link to="/customer-list">Cancle</Link>
                     </Button>
                   </FormItem>
                 </Col>

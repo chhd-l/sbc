@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -11,45 +12,45 @@ const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return '未发货';
+    return <FormattedMessage id="order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return '全部发货';
+    return <FormattedMessage id="order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return '部分发货';
+    return <FormattedMessage id="order.partialShipment" />;
   } else if (status == 'VOID') {
-    return '作废';
+    return <FormattedMessage id="order.invalid" />;
   } else {
-    return '未知';
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return '未付款';
+    return <FormattedMessage id="order.unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return '待确认';
+    return <FormattedMessage id="order.toBeConfirmed" />;
   } else if (status == 'PAID') {
-    return '已付款';
+    return <FormattedMessage id="order.paid" />;
   } else {
-    return '未知';
+    return <FormattedMessage id="order.unknown" />;
   }
 };
 
 const flowState = (status) => {
   if (status == 'INIT') {
-    return '待审核';
+    return <FormattedMessage id="order.pendingReview" />;
   } else if (status == 'GROUPON') {
-    return '待成团';
+    return <FormattedMessage id="order.toBeFormed" />;
   } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return '待发货';
+    return <FormattedMessage id="order.toBeDelivered" />;
   } else if (status == 'DELIVERED') {
-    return '待收货';
+    return <FormattedMessage id="order.toBeReceived" />;
   } else if (status == 'CONFIRMED') {
-    return '已收货';
+    return <FormattedMessage id="order.received" />;
   } else if (status == 'COMPLETED') {
-    return '已完成';
+    return <FormattedMessage id="order.completed" />;
   } else if (status == 'VOID') {
-    return '已作废';
+    return <FormattedMessage id="order.outOfDate" />;
   }
 };
 
@@ -64,14 +65,21 @@ class RejectForm extends React.Component<any, any> {
         <FormItem>
           {getFieldDecorator('comment', {
             rules: [
-              { required: true, message: '请输入驳回原因' },
+              {
+                required: true,
+                message: <FormattedMessage id="order.rejectionReasonTip" />
+              },
               { validator: this.checkComment }
             ]
           })(
-            <Input.TextArea
-              placeholder="请输入驳回原因"
-              autosize={{ minRows: 4, maxRows: 4 }}
-            />
+            <FormattedMessage id="order.rejectionReasonTip">
+              {(txt) => (
+                <Input.TextArea
+                  placeholder={txt.toString()}
+                  autosize={{ minRows: 4, maxRows: 4 }}
+                />
+              )}
+            </FormattedMessage>
           )}
         </FormItem>
       </Form>
@@ -85,7 +93,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Please fill in less than 100 characters'));
       return;
     }
     callback();
@@ -186,18 +194,30 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '300' }}>商品</th>
-                      <th style={{ width: '10%' }}>客户名称</th>
-                      <th style={{ width: '15%' }}>收件人</th>
-                      {/* <th style={{ width: '10%' }}>
-                        金额<br />数量
-                      </th> */}
-                      {/* <th style={{ width: '10%' }}>postCode</th>
-                      <th style={{ width: '10%' }}>rfc</th> */}
-                      <th style={{ width: '10%' }}>发货状态</th>
-                      <th style={{ width: '10%' }}>订单状态</th>
-                      <th className="operation-th" style={{ width: '10%' }}>
-                        付款状态
+                      <th>
+                        <FormattedMessage id="productFirstLetterUpperCase" />
+                      </th>
+                      <th style={{ width: '14%' }}>
+                        <FormattedMessage id="consumerName" />
+                      </th>
+                      <th style={{ width: '17%' }}>
+                        <FormattedMessage id="recipient" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        {/* <FormattedMessage id="amount" /> */}
+                        {/* <br /> */}
+                        <FormattedMessage id="quantity" />
+                      </th>
+                      {/* <th style={{ width: '5%' }}>postCode</th> */}
+                      {/* <th style={{ width: '5%' }}>rfc</th> */}
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="order.shippingStatus" />
+                      </th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="order.orderStatus" />
+                      </th>
+                      <th className="operation-th" style={{ width: '12%' }}>
+                        <FormattedMessage id="order.paymentStatus" />
                       </th>
                     </tr>
                   </thead>
@@ -212,7 +232,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    暂无数据
+                    <FormattedMessage id="noData" />
                   </span>
                 </div>
               ) : null}
@@ -231,9 +251,9 @@ export default class ListView extends React.Component<any, any> {
 
           <Modal
             maskClosable={false}
-            title="请输入驳回原因"
+            title={<FormattedMessage id="order.rejectionReasonTip" />}
             visible={orderRejectModalVisible}
-            okText="保存"
+            okText={<FormattedMessage id="save" />}
             onOk={() => this._handleOK()}
             onCancel={() => this._handleCancel()}
           >
@@ -281,13 +301,13 @@ export default class ListView extends React.Component<any, any> {
         const orderSource = v.get('orderSource');
         let orderType = '';
         if (orderSource == 'WECHAT') {
-          orderType = 'H5订单';
+          orderType = 'H5 order';
         } else if (orderSource == 'APP') {
-          orderType = 'APP订单';
+          orderType = 'APP order';
         } else if (orderSource == 'PC') {
-          orderType = 'PC订单';
+          orderType = 'PC order';
         } else if (orderSource == 'LITTLEPROGRAM') {
-          orderType = '小程序订单';
+          orderType = 'Mini Program order';
         }
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
@@ -320,24 +340,152 @@ export default class ListView extends React.Component<any, any> {
                           <span style={{ marginLeft: 20, color: '#000' }}>
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
-                              <span style={styles.platform}>代客下单</span>
+                              <span style={styles.platform}>
+                                <FormattedMessage id="order.valetOrder" />
+                              </span>
                             )}
                             {orderType != '' && (
                               <span style={styles.platform}>{orderType}</span>
                             )}
                             {v.get('grouponFlag') && (
-                              <span style={styles.platform}>拼团</span>
+                              <span style={styles.platform}>
+                                <FormattedMessage id="order.fightTogether" />
+                              </span>
                             )}
                           </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          下单时间：
+                          <FormattedMessage id="orderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
                                 .toString()
                             : ''}
+                        </span>
+                        <span style={{ marginRight: 0, float: 'right' }}>
+                          {/*只有未审核状态才显示修改*/}
+                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
+                            v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
+                            v.getIn(['tradeState', 'payState']) ===
+                              'NOT_PAID' &&
+                            v.get('tradeItems') &&
+                            !v
+                              .get('tradeItems')
+                              .get(0)
+                              .get('isFlashSaleGoods') && (
+                              <AuthWrapper functionName="edit_order_f_001">
+                                <a
+                                  style={{ marginLeft: 20 }}
+                                  onClick={() => {
+                                    verify(id, buyerId);
+                                  }}
+                                >
+                                  <FormattedMessage id="edit" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
+                            v.getIn(['tradeState', 'auditState']) ===
+                              'NON_CHECKED' && (
+                              <AuthWrapper functionName="fOrderList002">
+                                <a
+                                  onClick={() => {
+                                    onAudit(id, 'CHECKED');
+                                  }}
+                                  href="javascript:void(0)"
+                                  style={{ marginLeft: 20 }}
+                                >
+                                  <FormattedMessage id="order.audit" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
+                            v.getIn(['tradeState', 'auditState']) ===
+                              'NON_CHECKED' &&
+                            v.getIn(['tradeState', 'payState']) != 'PAID' && (
+                              <AuthWrapper functionName="fOrderList002">
+                                <a
+                                  onClick={() => this._showRejectedConfirm(id)}
+                                  href="javascript:void(0)"
+                                  style={{ marginLeft: 20 }}
+                                >
+                                  <FormattedMessage id="order.turnDown" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {/*待发货状态显示*/}
+                          {needAudit &&
+                            v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                            v.getIn(['tradeState', 'deliverStatus']) ===
+                              'NOT_YET_SHIPPED' &&
+                            v.getIn(['tradeState', 'payState']) ===
+                              'NOT_PAID' && (
+                              <AuthWrapper functionName="fOrderList002">
+                                <a
+                                  style={{ marginLeft: 20 }}
+                                  onClick={() => {
+                                    this._showRetrialConfirm(id);
+                                  }}
+                                  href="javascript:void(0)"
+                                >
+                                  <FormattedMessage id="order.review" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                            v.getIn(['tradeState', 'deliverStatus']) ===
+                              'NOT_YET_SHIPPED' &&
+                            !(
+                              v.get('paymentOrder') == 'PAY_FIRST' &&
+                              v.getIn(['tradeState', 'payState']) != 'PAID'
+                            ) && (
+                              <AuthWrapper functionName="fOrderDetail002">
+                                <a
+                                  onClick={() => this._toDeliveryForm(id)}
+                                  style={{ marginLeft: 20 }}
+                                >
+                                  <FormattedMessage id="order.ship" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {/*部分发货状态显示*/}
+                          {v.getIn(['tradeState', 'flowState']) ===
+                            'DELIVERED_PART' &&
+                            v.getIn(['tradeState', 'deliverStatus']) ===
+                              'PART_SHIPPED' &&
+                            !(
+                              v.get('paymentOrder') == 'PAY_FIRST' &&
+                              v.getIn(['tradeState', 'payState']) != 'PAID'
+                            ) && (
+                              <AuthWrapper functionName="fOrderDetail002">
+                                <a onClick={() => this._toDeliveryForm(id)}>
+                                  <FormattedMessage id="order.ship" />
+                                </a>
+                              </AuthWrapper>
+                            )}
+                          {/*待收货状态显示*/}
+                          {v.getIn(['tradeState', 'flowState']) ===
+                            'DELIVERED' && (
+                            <AuthWrapper functionName="fOrderList003">
+                              <a
+                                onClick={() => {
+                                  this._showConfirm(id);
+                                }}
+                                href="javascript:void(0)"
+                              >
+                                <FormattedMessage id="order.confirmReceipt" />
+                              </a>
+                            </AuthWrapper>
+                          )}
+                          <AuthWrapper functionName="fOrderDetail001">
+                            <Link
+                              style={{ marginLeft: 20, marginRight: 20 }}
+                              to={`/order-detail-limited/${id}`}
+                            >
+                              <FormattedMessage id="order.seeDetails" />
+                            </Link>
+                          </AuthWrapper>
                         </span>
                       </div>
                     </td>
@@ -352,7 +500,7 @@ export default class ListView extends React.Component<any, any> {
                         display: 'flex',
                         alignItems: 'flex-end',
                         padding: '16px 0',
-                        width: '300'
+                        width: '100'
                       }}
                     >
                       {/*商品图片*/}
@@ -369,71 +517,70 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              共{v.get('tradeItems').concat(gifts).size}件
-                            </div>
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
+                          //@ts-ignore
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="total" />
+                            {v.get('tradeItems').concat(gifts).size}{' '}
+                            <FormattedMessage id="piece" />
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*客户名称*/}
                       {v.getIn(['buyer', 'name'])}
                     </td>
-                    <td style={{ width: '15%' }}>
+                    <td style={{ width: '17%' }}>
                       {/*收件人姓名*/}
-                      收件人：{v.getIn(['consignee', 'name'])}
-                      <br />
+                      {/* <FormattedMessage id="recipient" />： */}
+                      {v.getIn(['consignee', 'name'])}
+                      {/* <br /> */}
                       {/*收件人手机号码*/}
-                      {v.getIn(['consignee', 'phone'])}
-                    </td>
-                    {/* <td style={{ width: '10%' }}>
-                      ￥{tradePrice.toFixed(2)}
-                      <br />
-                      （{num}件)
-                    </td> */}
-                    {/* <td style={{ width: '10%' }}>
-                      1
-                      {v.getIn(['invoice', 'postCode'])}
+                      {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
-                      1
-                      {v.getIn(['invoice', 'rfc'])}
-                    </td> */}
+                      {/* ${tradePrice.toFixed(2)}
+                      <br />（{num} <FormattedMessage id="piece" />) */}
+                      {num} <FormattedMessage id="piece" />
+                    </td>
+                    {/* <td style={{ width: '5%' }}> */}
+                    {/* 1{v.getIn(['invoice', 'postCode'])} */}
+                    {/* </td> */}
+                    {/* <td style={{ width: '5%' }}> */}
+                    {/* 1{v.getIn(['invoice', 'rfc'])} */}
+                    {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '12%' }}>
                       {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
                     </td>
                     {/*订单状态*/}
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '12%' }}>
                       {flowState(v.getIn(['tradeState', 'flowState']))}
                     </td>
                     {/*支付状态*/}
                     <td
-                      style={{ width: '10%', paddingRight: 22 }}
+                      style={{ width: '12%', paddingRight: 22 }}
                       className="operation-td"
                     >
                       {payStatus(v.getIn(['tradeState', 'payState']))}
@@ -467,8 +614,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '回审',
-      content: '确认将选中的订单退回重新审核?',
+      title: <FormattedMessage id="order.review" />,
+      content: <FormattedMessage id="order.confirmReview" />,
       onOk() {
         onRetrial(tdId);
       },
@@ -496,8 +643,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: <FormattedMessage id="order.confirmReceipt" />,
+      content: <FormattedMessage id="order.confirmReceivedAllProducts" />,
       onOk() {
         onConfirm(tdId);
       },

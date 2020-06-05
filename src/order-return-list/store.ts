@@ -144,7 +144,21 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
+  };
+
+  onRealRefund = (rid: string) => {
+    return webapi
+      .realRefund(rid)
+      .then(({ res }) => {
+        if (res.code == Const.SUCCESS_CODE) {
+          message.success('操作成功');
+          this.init();
+        } else {
+          message.error(res.message);
+        }
+      })
+      .catch(() => {});
   };
 
   onBatchAudit = (ids: string[]) => {
@@ -158,7 +172,7 @@ export default class AppStore extends Store {
           message.error(res.message || res.code);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onReject = (rid: string, reason: string) => {
@@ -172,7 +186,7 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onDeliver = (rid: string, values) => {
@@ -186,7 +200,7 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onReceive = (rid: string) => {
@@ -200,7 +214,7 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onBatchReceive = (ids: string[]) => {
@@ -214,7 +228,7 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onRejectReceive = (rid: string, reason: string) => {

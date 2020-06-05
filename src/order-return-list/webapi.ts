@@ -25,13 +25,22 @@ export const fetchOrderReturnList = (filter = {}) => {
  * @param rids
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const batchAudit = rids => {
+export const batchAudit = (rids) => {
   return Fetch<TResult>('/return/audit', {
     method: 'POST',
     body: JSON.stringify({
       rids
     })
   });
+};
+
+/**
+ * real refund
+ * @param rid
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export const realRefund = (rid: string) => {
+  return Fetch<TResult>(`/return/refund/${rid}/online`, { method: 'POST' });
 };
 
 /**
@@ -87,8 +96,8 @@ export const receive = (rid: string) => {
  * @param ids
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const batchReceive = rids => {
-  return Fetch<TResult>(`/return/receive/`, {
+export const batchReceive = (rids) => {
+  return Fetch<TResult>('/return/receive/', {
     method: 'POST',
     body: JSON.stringify({ rids })
   });

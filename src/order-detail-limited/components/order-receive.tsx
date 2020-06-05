@@ -26,7 +26,6 @@ export default class OrderReceive extends React.Component<any, any> {
     relaxProps?: {
       detail: IMap;
       payRecord: IList;
-      paymentInfo: IMap;
       onSavePayOrder: Function;
       destroyOrder: Function;
       fetchOffLineAccounts: Function;
@@ -50,7 +49,6 @@ export default class OrderReceive extends React.Component<any, any> {
   static relaxProps = {
     detail: 'detail',
     payRecord: 'payRecord',
-    paymentInfo: 'paymentInfo',
     onSavePayOrder: noop,
     destroyOrder: noop,
     fetchOffLineAccounts: noop,
@@ -150,12 +148,9 @@ export default class OrderReceive extends React.Component<any, any> {
   ];
 
   render() {
-    const { detail, payRecord, paymentInfo } = this.props.relaxProps;
+    const { detail, payRecord } = this.props.relaxProps;
     const id = detail.get('id');
     const totalPayCash = detail.getIn(['tradePrice', 'totalPrice']) || 0;
-
-    //交易状态
-    const tradeState = detail.get('tradeState');
 
     return (
       <div style={styles.container}>
@@ -181,28 +176,27 @@ export default class OrderReceive extends React.Component<any, any> {
         </div>
 
         <Row>
-          <Col span={16}>
+          <Col span={8}>
             <p style={styles.inforItem}>
               {<FormattedMessage id="paymentNumber" />}:{' '}
-              {paymentInfo.get('chargeId')}
+              {/* {paymentInfo.get('')} */}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="paymentTime" />}:{' '}
-              {tradeState.get('createTime')}
+              {/* {consignee.areaId} */}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="name" />}: {paymentInfo.get('accountName')}
+              {<FormattedMessage id="name" />}: {/* {consignee.areaId} */}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="email" />}: {paymentInfo.get('email')}
+              {<FormattedMessage id="email" />}: {/* {consignee.areaId} */}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="phoneNumber" />}:{' '}
-              {paymentInfo.get('phone')}
+              {/* {consignee.areaId} */}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="cardNumber" />}:{' '}
-              {paymentInfo.get('last4Digits')}
+              {<FormattedMessage id="cardNumber" />}: {/* {consignee.areaId} */}
             </p>
           </Col>
         </Row>

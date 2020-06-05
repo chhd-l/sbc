@@ -61,7 +61,9 @@ export default class Customer extends React.Component<any, any> {
                     ? record.customerLevelName
                     : 'Visitor') +
                   '/' +
-                  record.customerId
+                  record.customerId +
+                  '/' +
+                  record.customerAccount
                 }
               >
                 Details

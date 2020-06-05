@@ -8,7 +8,8 @@ import {
   message,
   Table,
   Row,
-  Col
+  Col,
+  Breadcrumb
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -38,7 +39,10 @@ class CustomerDetails extends React.Component<any, any> {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
       customerType: this.props.match.params.type
         ? this.props.match.params.type
-        : 'Vistor'
+        : 'Guest',
+      customerAccount: this.props.match.params.account
+        ? this.props.match.params.account
+        : ''
     };
   }
   componentDidMount() {
@@ -61,15 +65,20 @@ class CustomerDetails extends React.Component<any, any> {
       message.error(res.message);
     }
   };
+  clickTabs = (key) => {
+    console.log(key);
+  };
 
   render() {
     return (
       <div>
-        <BreadCrumb />
+        <BreadCrumb thirdLevel={true}>
+          <Breadcrumb.Item>Consumer Details</Breadcrumb.Item>
+        </BreadCrumb>
         {/*导航面包屑*/}
         <div className="container">
-          {this.state.customerType === 'Member' ? (
-            <Tabs defaultActiveKey="basic">
+          {this.state.customerType !== 'Guest' ? (
+            <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
               <TabPane tab="Basic infomation" key="basic">
                 <BasicInfomation
                   customerId={this.state.customerId}
@@ -78,6 +87,7 @@ class CustomerDetails extends React.Component<any, any> {
               <TabPane tab="Pet infomation" key="pet">
                 <PetInfomation
                   customerId={this.state.customerId}
+                  customerAccount={this.state.customerAccount}
                 ></PetInfomation>
               </TabPane>
               <TabPane tab="Delivery infomation" key="delivery">
@@ -92,15 +102,17 @@ class CustomerDetails extends React.Component<any, any> {
               </TabPane>
             </Tabs>
           ) : (
-            <Tabs defaultActiveKey="delivery">
+            <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
               <TabPane tab="Delivery infomation" key="vistor-delivery">
                 <DeliveryInformation
                   customerId={this.state.customerId}
+                  customerType="Guest"
                 ></DeliveryInformation>
               </TabPane>
               <TabPane tab="Billing infomation" key="vistor-billing">
                 <BillingInfomation
                   customerId={this.state.customerId}
+                  customerType="Guest"
                 ></BillingInfomation>
               </TabPane>
             </Tabs>

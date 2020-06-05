@@ -65,11 +65,13 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
+      clinicSelect: 'clinicsName',
       buyerOptions: 'buyerName',
       id: '',
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
+      clinicSelectValue: '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -281,6 +283,17 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
 
             <FormItem>
+              <Input
+                addonBefore={this._renderClinicSelect()}
+                onChange={(e) => {
+                  this.setState({
+                    clinicSelectValue: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
               <RangePicker
                 getCalendarContainer={() =>
                   document.getElementById('page-content')
@@ -307,10 +320,12 @@ export default class SearchHead extends Component<any, any> {
                     buyerOptions,
                     goodsOptions,
                     receiverSelect,
+                    clinicSelect,
                     id,
                     buyerOptionsValue,
                     goodsOptionsValue,
                     receiverSelectValue,
+                    clinicSelectValue,
                     tradeState,
                     beginTime,
                     endTime
@@ -335,6 +350,7 @@ export default class SearchHead extends Component<any, any> {
                     tradeState: ts,
                     [goodsOptions]: goodsOptionsValue,
                     [receiverSelect]: receiverSelectValue,
+                    [clinicSelect]: clinicSelectValue,
                     beginTime,
                     endTime
                   };
@@ -436,6 +452,28 @@ export default class SearchHead extends Component<any, any> {
         </Option>
         <Option value="consigneePhone">
           <FormattedMessage id="recipientPhone" />
+        </Option>
+      </Select>
+    );
+  };
+
+  _renderClinicSelect = () => {
+    return (
+      <Select
+        getPopupContainer={() => document.getElementById('page-content')}
+        onChange={(val) =>
+          this.setState({
+            clinicSelect: val
+          })
+        }
+        value={this.state.clinicSelect}
+        style={{ width: 100 }}
+      >
+        <Option value="clinicsName">
+          <FormattedMessage id="clinicName" />
+        </Option>
+        <Option value="clinicsId">
+          <FormattedMessage id="clinicID" />
         </Option>
       </Select>
     );

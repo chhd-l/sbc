@@ -35,21 +35,21 @@ const columns = [
     dataIndex: 'specDetails',
     key: 'specDetails'
   },
-  {
-    title: 'Price',
-    dataIndex: 'levelPrice',
-    key: 'levelPrice',
-    render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
-  },
+  // {
+  //   title: 'Price',
+  //   dataIndex: 'levelPrice',
+  //   key: 'levelPrice',
+  //   render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
+  // },
   {
     title: 'Quantity',
     dataIndex: 'num',
     key: 'num'
-  },
-  {
-    title: 'Subtotal',
-    render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
   }
+  // {
+  //   title: 'Subtotal',
+  //   render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
+  // }
 ];
 
 const invoiceContent = (invoice) => {
@@ -197,6 +197,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
+
     let orderSource = detail.get('orderSource');
     let orderType = '';
     if (orderSource == 'WECHAT') {
@@ -210,6 +211,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     } else {
       orderType = '代客下单';
     }
+
     const tradeItems = detail.get('tradeItems').toJS();
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
@@ -316,13 +318,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="orderTime" />}:{' '}
                 {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
-              </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}:{' '}
-                {detail.get('clinicsName')}
-              </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
@@ -359,76 +354,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
             pagination={false}
             bordered
           />
-
-          <div style={styles.detailBox as any}>
-            <div style={styles.inputBox as any} />
-
-            <div style={styles.priceBox}>
-              <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="productAmount" />}:
-                </span>
-                <strong>${(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
-              </label>
-              {/* <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="pointsDeduction" />}:
-                </span>
-                <strong>-${(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
-              </label> */}
-              {/* {reduction && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>满减优惠: </span>
-                  <strong>-${reduction.discounts.toFixed(2)}</strong>
-                </label>
-              )} */}
-
-              {discount && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {<FormattedMessage id="promotionAmount" />}:
-                  </span>
-                  <strong>-${discount.discounts.toFixed(2)}</strong>
-                </label>
-              )}
-
-              {/* {tradePrice.couponPrice ? (
-                <div>
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>优惠券: </span>
-                    <strong>
-                      -${(tradePrice.couponPrice || 0).toFixed(2)}
-                    </strong>
-                  </label>
-                </div>
-              ) : null}
-
-              {tradePrice.special ? (
-                <div>
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>订单改价: </span>
-                    <strong>
-                      ${(tradePrice.privilegePrice || 0).toFixed(2)}
-                    </strong>
-                  </label>
-                </div>
-              ) : null} */}
-
-              <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="shippingFees" />}:{' '}
-                </span>
-                <strong>${(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
-              </label>
-
-              <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="total" />}:{' '}
-                </span>
-                <strong>${(tradePrice.totalPrice || 0).toFixed(2)}</strong>
-              </label>
-            </div>
-          </div>
         </div>
 
         <Row>
@@ -461,107 +386,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {detail.get('buyerRemark') || 'none'}
             </p>
           </Col>
-          <Col span={8}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress1" />}:{' '}
-              {invoice.address}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress2" />}:{' '}
-              {/* {address2} 后端暂时没有此字段 */}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentMethod" />}:{' '}
-              {detail.getIn(['payInfo', 'desc']) || 'none'}
-            </p>
-          </Col>
         </Row>
 
-        {/* <div
-          style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              paddingTop: 10,
-              marginLeft: 20
-            }}
-          >
-            {<FormattedMessage id="sellerNotes" />}:
-            {sellerRemarkVisible == true && (
-              <a onClick={() => setSellerRemarkVisible(false)}>
-                <Icon type="edit" />
-                {detail.get('sellerRemark') || 'none'}
-              </a>
-            )}
-            {sellerRemarkVisible == false && (
-              <div
-                style={{ width: 400, display: 'flex', flexDirection: 'row' }}
-              >
-                <Input
-                  style={{ width: 300, marginRight: 20 }}
-                  onChange={(e) => {
-                    setSellerRemark((e.target as any).value);
-                  }}
-                  placeholder={detail.get('sellerRemark')}
-                  size="small"
-                  defaultValue={detail.get('sellerRemark')}
-                />
-
-                <a style={styles.pr20} onClick={() => remedySellerRemark()}>
-                  {<FormattedMessage id="confirm" />}
-                </a>
-                <a onClick={() => setSellerRemarkVisible(true)}>
-                  {<FormattedMessage id="cancel" />}
-                </a>
-              </div>
-            )}
-          </div>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="buyerNotes" />}:{' '}
-            {detail.get('buyerRemark') || 'none'}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="orderAttachment" />}:{' '}
-            {this._renderEncloses(enclo)}
-          </label>
-
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="paymentMethod" />}:{' '}
-            {detail.getIn(['payInfo', 'desc']) || 'none'}
-          </label>
-          {
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceInformation" />}:{' '}
-              {invoice ? invoiceContent(invoice) || '' : 'none'}
-            </label>
-          }
-          {invoice.address && (
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceReceivingAddress" />}:{' '}
-              {invoice && invoice.type == -1
-                ? 'none'
-                : `${invoice.contacts} ${invoice.phone}
-                ${invoice.address || 'none'}`}
-            </label>
-          )}
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryMethod" />}:{' '}
-            {<FormattedMessage id="expressDelivery" />}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryInformation" />}:{consignee.name}{' '}
-            {consignee.phone} {consignee.detailAddress}
-          </label>
-
-          {tradeState.get('obsoleteReason') && (
-            <label style={styles.inforItem}>
-              驳回原因：{tradeState.get('obsoleteReason')}
-            </label>
-          )}
-        </div>
-         */}
         <Modal
           maskClosable={false}
           title="请输入驳回原因"

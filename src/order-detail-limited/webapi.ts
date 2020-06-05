@@ -199,7 +199,3 @@ export function queryDictionary(filterParams = {}) {
     })
   });
 }
-
-export function getPaymentInfo(tid: string) {
-  return Fetch(`/trade/record/${tid}`);
-}

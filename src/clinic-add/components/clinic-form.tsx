@@ -43,7 +43,8 @@ class ClinicForm extends React.Component<any, any> {
         clinicsType: '',
         longitude: '',
         latitude: '',
-        location: ''
+        location: '',
+        enabled: true
       },
       cityArr: [],
       typeArr: [],

@@ -102,30 +102,27 @@ class ClinicForm extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'get data faild');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('get data faild');
+        message.error('Unsuccessful');
       });
   };
 
-  saveReward = () => {
+  saveReward = (id?) => {
     const { sectionList, rewardForm } = this.state;
 
-    if (!this.props.clinicId) {
+    if (!id) {
       message.error('Prescriber ID does not exist');
       return;
     }
-    if (!this.state.timeZone) {
-      message.error('Time Zone can not be empty');
-      return;
-    }
+
     let params = {
-      clinicsId: this.props.clinicId,
+      clinicsId: id,
       id: rewardForm.id,
-      rewardRateFirst: this.state.rewardMode ? sectionList[0].rewardRate : 0,
-      rewardRateMore: this.state.rewardMode ? sectionList[1].rewardRate : 0,
+      rewardRateFirst: sectionList[0].rewardRate,
+      rewardRateMore: sectionList[1].rewardRate,
       rewardRule: this.state.rewardMode,
       storeId: rewardForm.storeId,
       timeZone: this.state.timeZone
@@ -136,40 +133,41 @@ class ClinicForm extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           message.success(res.message || 'Successful');
+          this.getClinicsReward(id);
         } else {
-          message.error(res.message || 'save failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Save failed');
+        message.error('Unsuccessful');
       });
   };
-  clearAndSave = () => {
-    const { rewardForm } = this.state;
-    let params = {
-      clinicsId: this.props.clinicId,
-      id: rewardForm.id,
-      rewardRateFirst: 0,
-      rewardRateMore: 0,
-      rewardRule: false,
-      storeId: rewardForm.storeId,
-      timeZone: ''
-    };
-    webapi
-      .clearRulesAndSave(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          this.getClinicsReward(this.props.clinicId);
-          message.success(res.message || 'Successful');
-        } else {
-          message.error(res.message || 'save failed');
-        }
-      })
-      .catch((err) => {
-        message.error('Save failed');
-      });
-  };
+  // clearAndSave = () => {
+  //   const { rewardForm } = this.state;
+  //   let params = {
+  //     clinicsId: this.props.clinicId,
+  //     id: rewardForm.id,
+  //     rewardRateFirst: 0,
+  //     rewardRateMore: 0,
+  //     rewardRule: false,
+  //     storeId: rewardForm.storeId,
+  //     timeZone: ''
+  //   };
+  //   webapi
+  //     .clearRulesAndSave(params)
+  //     .then((data) => {
+  //       const res = data.res;
+  //       if (res.code === 'K-000000') {
+  //         this.getClinicsReward(this.props.clinicId);
+  //         message.success(res.message || 'Successful');
+  //       } else {
+  //         message.error('Unsuccessful');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       message.error('Unsuccessful');
+  //     });
+  // };
 
   selectTimeZone = (value) => {
     this.setState({
@@ -181,6 +179,8 @@ class ClinicForm extends React.Component<any, any> {
     let findData = data.find((item) => {
       return item.id === id || item.tempId === id;
     });
+    console.log(value);
+
     if (findData) {
       findData[field] = value;
       this.setState({
@@ -209,7 +209,7 @@ class ClinicForm extends React.Component<any, any> {
         clinicsType: res.context.clinicsType
       });
     } else {
-      message.error(res.message || 'get data faild');
+      message.error('Unsuccessful');
     }
   };
   queryClinicsDictionary = async (type: String) => {
@@ -228,7 +228,7 @@ class ClinicForm extends React.Component<any, any> {
         });
       }
     } else {
-      message.error(res.message);
+      message.error('Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -238,52 +238,77 @@ class ClinicForm extends React.Component<any, any> {
       clinicForm: data
     });
   };
-  onCreate = async () => {
+  onCreate = () => {
     const clinicForm = this.state.clinicForm;
-    const { res } = await webapi.addClinic({
-      ...clinicForm
-    });
-    if (res.code === 'K-000000') {
-      message.success(res.message || 'Successful');
-      if (this.state.isJump) {
-        this.setState({
-          isJump: false,
-          activeKey: 'reward'
-        });
-      }
-    } else {
-      message.error(res.message || 'create faild');
-    }
+    webapi
+      .addClinic({ ...clinicForm })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          if (clinicForm.clinicsId) {
+            this.setState({
+              isEdit: true
+            });
+            this.saveReward(clinicForm.clinicsId);
+          } else {
+            message.error('Prescriber ID does not exist');
+          }
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
   };
-  onUpdate = async () => {
-    let clinicForm = this.state.clinicForm;
-    clinicForm.clinicsId = this.props.clinicId;
-    const { res } = await webapi.updateClinic({
-      ...clinicForm
-    });
-    if (res.code === 'K-000000') {
-      message.success(res.message || 'Successful');
-      if (this.state.isJump) {
-        this.setState({
-          isJump: false,
-          activeKey: 'reward'
-        });
-      }
-    } else {
-      message.error(res.message || 'update faild');
-    }
+  onUpdate = () => {
+    const clinicForm = this.state.clinicForm;
+    webapi
+      .updateClinic({ ...clinicForm })
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          if (clinicForm.clinicsId) {
+            this.setState({
+              isEdit: true
+            });
+            this.saveReward(clinicForm.clinicsId);
+          } else {
+            message.error('Prescriber ID does not exist');
+          }
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        if (this.props.pageType === 'create') {
+        this.switchTab('reward');
+      } else {
+        message.error(
+          'Prescriber basic infomation is not verified. Please modify!'
+        );
+      }
+    });
+  };
+  handleVerify = () => {
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        if (this.state.isEdit) {
+          this.onUpdate();
+        } else {
           this.onCreate();
         }
-        if (this.props.pageType === 'edit') {
-          this.onUpdate();
-        }
+      } else {
+        message.error(
+          'Prescriber basic infomation is not verified. Please modify!'
+        );
       }
     });
   };
@@ -349,21 +374,38 @@ class ClinicForm extends React.Component<any, any> {
       callback();
     }
   };
-  goToReward = () => {
-    this.setState({
-      isJump: true
-    });
-  };
-  stay = () => {
-    this.setState({
-      isJump: false
-    });
-  };
+  // goToReward = () => {
+  //   this.setState({
+  //     isJump: true
+  //   });
+  // };
+  // stay = () => {
+  //   this.setState({
+  //     isJump: false
+  //   });
+  // };
 
   switchTab = (key) => {
     this.setState({
       activeKey: key
     });
+  };
+
+  savePrescriber = () => {
+    const { sectionList } = this.state;
+    if (!this.state.timeZone) {
+      message.error('Period can not be empty!');
+      return;
+    }
+    if (!(sectionList[0].rewardRate || sectionList[0].rewardRate === 0)) {
+      message.error('Reward Rate can not be empty!');
+      return;
+    }
+    if (!(sectionList[1].rewardRate || sectionList[1].rewardRate === 0)) {
+      message.error('Reward Rate can not be empty!');
+      return;
+    }
+    this.handleVerify();
   };
 
   render() {
@@ -554,41 +596,10 @@ class ClinicForm extends React.Component<any, any> {
               )}
             </FormItem>
             <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-              {this.props.pageType === 'edit' ? (
-                <div style={{ display: 'inline' }}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => this.stay()}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    htmlType="submit"
-                    onClick={() => this.goToReward()}
-                    style={{ marginLeft: '20px' }}
-                  >
-                    Update And Next
-                  </Button>
-                </div>
-              ) : (
-                <div style={{ display: 'inline' }}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => this.stay()}
-                  >
-                    Create
-                  </Button>
-                  <Button
-                    htmlType="submit"
-                    onClick={() => this.goToReward()}
-                    style={{ marginLeft: '20px' }}
-                  >
-                    Create And Next
-                  </Button>
-                </div>
-              )}
+              <Button type="primary" htmlType="submit">
+                Proceed to set reward rules
+              </Button>
+
               <Button style={{ marginLeft: '20px' }}>
                 <Link to="/clinic">Back To List</Link>
               </Button>
@@ -656,7 +667,7 @@ class ClinicForm extends React.Component<any, any> {
               >
                 Reward mode:
               </label>
-              <div style={{ marginTop: '20px' }}>
+              {/* <div style={{ marginTop: '20px' }}>
                 <Radio.Group
                   onChange={this.onChange}
                   value={this.state.rewardMode}
@@ -678,71 +689,91 @@ class ClinicForm extends React.Component<any, any> {
                   </Radio>
                 </Radio.Group>
               </div>
-              <Divider type="horizontal" />
-              {this.state.rewardMode ? (
-                <div>
-                  <Table
-                    style={{ paddingTop: '10px' }}
-                    pagination={false}
-                    rowKey="intervalPriceId"
-                    dataSource={this.state.sectionList}
-                  >
-                    <Column
-                      title="Unique customer order type"
-                      key="orderType"
-                      width={180}
-                      render={(rowInfo) => {
-                        return rowInfo.orderType;
-                      }}
-                    />
-                    <Column
-                      title="Reward Rate"
-                      key="rewardRate"
-                      width={180}
-                      render={(rowInfo) => {
-                        return (
-                          <Row>
-                            <Col span={10}>
-                              <FormItem style={{ marginBottom: 0 }}>
-                                <Input
-                                  value={rowInfo.rewardRate}
-                                  type="number"
-                                  onChange={(e) => {
-                                    const value = (e.target as any).value;
-                                    const id = rowInfo.id;
-                                    this.onDataChange({
-                                      id: id,
-                                      field: 'rewardRate',
-                                      value
-                                    });
-                                  }}
-                                  addonAfter="%"
-                                />
-                              </FormItem>
-                            </Col>
-                          </Row>
-                        );
-                      }}
-                    />
-                  </Table>
-                </div>
-              ) : (
-                <h2>
-                  No reward rules set,please choose other modes to change rules
-                </h2>
-              )}
+              <Divider type="horizontal" /> */}
+              <Table
+                style={{ paddingTop: '10px' }}
+                pagination={false}
+                rowKey="intervalPriceId"
+                dataSource={this.state.sectionList}
+              >
+                <Column
+                  title="Unique customer order type"
+                  key="orderType"
+                  width={180}
+                  render={(rowInfo) => {
+                    return rowInfo.orderType;
+                  }}
+                />
+                <Column
+                  title={
+                    <div>
+                      <span
+                        style={{
+                          color: 'red',
+                          fontFamily: 'SimSun',
+                          marginRight: '4px',
+                          fontSize: '12px'
+                        }}
+                      >
+                        *
+                      </span>
+                      Reward Rate
+                    </div>
+                  }
+                  key="rewardRate"
+                  width={180}
+                  render={(rowInfo) => {
+                    return (
+                      <Row>
+                        <Col span={10}>
+                          <FormItem style={{ marginBottom: 0 }}>
+                            <InputNumber
+                              value={rowInfo.rewardRate}
+                              min={0}
+                              max={100}
+                              formatter={(value) => `${value}%`}
+                              parser={(value) => value.replace('%', '')}
+                              onChange={(value) => {
+                                const id = rowInfo.id;
+                                this.onDataChange({
+                                  id: id,
+                                  field: 'rewardRate',
+                                  value
+                                });
+                              }}
+                            />
+                            {/* <Input
+                              value={rowInfo.rewardRate}
+                              type="number"
+                              onChange={(e) => {
+                                const value = (e.target as any).value;
+                                const id = rowInfo.id;
+                                this.onDataChange({
+                                  id: id,
+                                  field: 'rewardRate',
+                                  value
+                                });
+                              }}
+                              addonAfter="%"
+                            /> */}
+                          </FormItem>
+                        </Col>
+                      </Row>
+                    );
+                  }}
+                />
+              </Table>
             </Col>
             <Col span={24} style={{ marginTop: '20px' }}>
-              <Button
-                type="primary"
-                onClick={() => this.saveReward()}
-                style={{ marginRight: '20px' }}
-              >
+              <Button type="primary" onClick={() => this.savePrescriber()}>
                 Save
               </Button>
-              <Button onClick={() => this.clearAndSave()}>
-                Clear rules and Save
+              <Button style={{ marginLeft: '20px' }}>
+                <Link to="/clinic">Back To List</Link>
               </Button>
+              {/* <Button onClick={() => this.clearAndSave()}>
+                Clear rules and Save
+              </Button> */}
             </Col>
           </Row>
         </TabPane>

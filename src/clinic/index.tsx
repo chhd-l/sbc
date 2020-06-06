@@ -15,56 +15,79 @@ export default class ClinicList extends Component<any, any> {
         {
           title: 'Prescriber ID',
           dataIndex: 'clinicsId',
-          key: 'clinicID'
+          key: 'clinicID',
+          width: 140
         },
         {
           title: 'Prescriber Name',
           dataIndex: 'clinicsName',
-          key: 'clinicName'
+          key: 'clinicName',
+          width: 180
         },
         {
           title: 'Prescriber Phone',
           dataIndex: 'phone',
-          key: 'clinicPhone'
+          key: 'clinicPhone',
+          width: 140
         },
         {
           title: 'Prescriber City',
           dataIndex: 'primaryCity',
-          key: 'clinicCity'
+          key: 'clinicCity',
+          width: 140
         },
         {
           title: 'Prescriber Zip',
           dataIndex: 'primaryZip',
-          key: 'clinicZip'
+          key: 'clinicZip',
+          width: 140
         },
         {
           title: 'Longitude',
           dataIndex: 'longitude',
-          key: 'longitude'
+          key: 'longitude',
+          width: 120
         },
         {
           title: 'Latitude',
           dataIndex: 'latitude',
-          key: 'latitude'
+          key: 'latitude',
+          width: 120
         },
         {
           title: 'Prescriber Type',
           dataIndex: 'clinicsType',
-          key: 'clinicsType'
+          key: 'clinicsType',
+          width: 140
         },
         {
-          title: 'Reward Type',
+          title: 'Reward Period',
           dataIndex: 'rewardType',
-          key: 'rewardRate'
+          key: 'rewardRate',
+          width: 140
         },
         {
           title: 'Action',
           key: 'action',
+          fixed: 'right',
+          width: 240,
           render: (text, record) => (
             <span>
               <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a>
+              <Button
+                type="link"
+                onClick={() => this.ableClinic(record.clinicsId)}
+              >
+                Disable
+              </Button>
+              <Divider type="vertical" />
+              <Button
+                type="link"
+                onClick={() => this.delClinic(record.clinicsId)}
+              >
+                Delete
+              </Button>
             </span>
           )
         }
@@ -128,7 +151,7 @@ export default class ClinicList extends Component<any, any> {
         });
       }
     } else {
-      message.error(res.message);
+      message.error('Unsuccessful');
     }
   };
   delClinic = async (id) => {
@@ -136,11 +159,22 @@ export default class ClinicList extends Component<any, any> {
       clinicsId: id
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'delete success');
+      message.success(res.message || 'Successful');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
-      message.error(res.message || 'delete faild');
+      message.error('Unsuccessful');
     }
+  };
+  ableClinic = async (id) => {
+    message.info('API under development');
+    // const { res } = await webapi.deleteClinic({
+    //   clinicsId: id
+    // });
+    // if (res.code === 'K-000000') {
+    //   message.success(res.message || 'Successful');
+    // } else {
+    //   message.error('Unsuccessful');
+    // }
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -292,6 +326,7 @@ export default class ClinicList extends Component<any, any> {
             dataSource={this.state.clinicList}
             pagination={this.state.pagination}
             loading={this.state.loading}
+            scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />
         </div>

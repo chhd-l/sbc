@@ -42,3 +42,13 @@ export function queryClinicsDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * delete Clinic
+ * @param filterParams
+ */
+export function enableAndDisable(id = '') {
+  return Fetch<TResult>('/clinics/enableAndDisable?clinicsId=' + id, {
+    method: 'POST'
+  });
+}

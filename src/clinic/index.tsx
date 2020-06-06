@@ -67,6 +67,15 @@ export default class ClinicList extends Component<any, any> {
           width: 140
         },
         {
+          title: 'Prescriber Status',
+          dataIndex: 'enabled',
+          key: 'enabled',
+          width: 140,
+          render: (text, record) => (
+            <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+          )
+        },
+        {
           title: 'Action',
           key: 'action',
           fixed: 'right',
@@ -77,9 +86,9 @@ export default class ClinicList extends Component<any, any> {
               <Divider type="vertical" />
               <Button
                 type="link"
-                onClick={() => this.ableClinic(record.clinicsId)}
+                onClick={() => this.enableAndDisable(record.clinicsId)}
               >
-                Disable
+                {record.enabled ? 'Disable' : 'Enable'}
               </Button>
               <Divider type="vertical" />
               <Button
@@ -104,7 +113,8 @@ export default class ClinicList extends Component<any, any> {
         phone: '',
         primaryCity: '',
         primaryZip: '',
-        clinicsType: ''
+        clinicsType: '',
+        enabled: ''
       },
       cityArr: [],
       typeArr: [],
@@ -119,6 +129,12 @@ export default class ClinicList extends Component<any, any> {
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     const query = this.state.searchForm;
+    query.enabled =
+      query.enabled === 'true'
+        ? true
+        : query.enabled === 'false'
+        ? false
+        : null;
     pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
@@ -165,16 +181,15 @@ export default class ClinicList extends Component<any, any> {
       message.error('Unsuccessful');
     }
   };
-  ableClinic = async (id) => {
-    message.info('API under development');
-    // const { res } = await webapi.deleteClinic({
-    //   clinicsId: id
-    // });
-    // if (res.code === 'K-000000') {
-    //   message.success(res.message || 'Successful');
-    // } else {
-    //   message.error('Unsuccessful');
-    // }
+  enableAndDisable = async (id) => {
+    // message.info('API under development');
+    const { res } = await webapi.enableAndDisable(id);
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'Successful');
+      this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
+    } else {
+      message.error('Unsuccessful');
+    }
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -300,6 +315,29 @@ export default class ClinicList extends Component<any, any> {
                     {item.name}
                   </Option>
                 ))}
+              </SelectGroup>
+            </FormItem>
+
+            <FormItem>
+              <SelectGroup
+                label="Prescriber Status"
+                style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'enabled',
+                    value
+                  });
+                }}
+              >
+                <Option value="">All</Option>
+
+                <Option value="true" key="enabled">
+                  Enabled
+                </Option>
+                <Option value="false" key="disabled">
+                  Disabled
+                </Option>
               </SelectGroup>
             </FormItem>
 

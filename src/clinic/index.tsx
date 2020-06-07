@@ -114,7 +114,7 @@ export default class ClinicList extends Component<any, any> {
         primaryCity: '',
         primaryZip: '',
         clinicsType: '',
-        enabled: ''
+        enabled: true
       },
       cityArr: [],
       typeArr: [],
@@ -215,7 +215,7 @@ export default class ClinicList extends Component<any, any> {
   }
 
   render() {
-    const { columns, cityArr, typeArr } = this.state;
+    const { columns, cityArr, typeArr, searchForm } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -265,6 +265,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
+                defaultValue=""
                 label="Prescriber City"
                 style={{ width: 80 }}
                 onChange={(value) => {
@@ -299,6 +300,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
+                defaultValue=""
                 label="Prescriber Type"
                 style={{ width: 80 }}
                 onChange={(value) => {
@@ -320,6 +322,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
+                defaultValue="true"
                 label="Prescriber Status"
                 style={{ width: 80 }}
                 onChange={(value) => {
@@ -331,7 +334,6 @@ export default class ClinicList extends Component<any, any> {
                 }}
               >
                 <Option value="">All</Option>
-
                 <Option value="true" key="enabled">
                   Enabled
                 </Option>

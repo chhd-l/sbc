@@ -6,6 +6,20 @@ type TResult = {
   context: any;
 };
 
-export function fetchStoreInfo() {
-  return Fetch<TResult>('/store/storeInfo');
+/**
+ * 获取Payment Setting
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function getPaymentSetting() {
+  return Fetch<TResult>('/store/storePaymentSetting');
 }
+/**
+ * 保存Payment Setting
+ * @param info
+ */
+export const savePaymentSetting = (info) => {
+  return Fetch<TResult>('/store/storePaymentSetting', {
+    method: 'PUT',
+    body: JSON.stringify(info)
+  });
+};

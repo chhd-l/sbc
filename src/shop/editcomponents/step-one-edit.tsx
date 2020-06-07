@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 
-import { Form, Input, Button, Col, Row, Select } from 'antd';
+import { Form, Input, Button, Col, Row, Select, InputNumber } from 'antd';
 import { noop, ValidConst, AreaSelect, QMMethod } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -108,13 +108,6 @@ export default class StepOneEdit extends React.Component<any, any> {
     const languageData = dictionary.get('language').toJS();
     const currencyData = dictionary.get('currency').toJS();
     const timeZoneData = dictionary.get('timeZone').toJS();
-    const area = storeInfo.get('provinceId')
-      ? [
-          storeInfo.get('provinceId').toString(),
-          storeInfo.get('cityId') ? storeInfo.get('cityId').toString() : null,
-          storeInfo.get('areaId') ? storeInfo.get('areaId').toString() : null
-        ]
-      : [];
 
     return (
       <div>
@@ -179,166 +172,200 @@ export default class StepOneEdit extends React.Component<any, any> {
             ) : null}
           </Row>
         </GreyBg>
-        <div style={{ width: 520 }}>
+        <div>
           <Form>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="storeLanguage" />}
-            >
-              {getFieldDecorator('languageId', {
-                initialValue: storeInfo.get('languageId'),
-                rules: [{ required: true, message: 'Please select Language!' }]
-              })(
-                // <Input
-                //   placeholder="商家名称不得超过20字符"
-                //   onChange={(e: any) =>
-                //     onChange({
-                //       field: 'supplierName',
-                //       value: e.target.value
-                //     })
-                //   }
-                // />
-                <Select
-                  onChange={(value) =>
-                    onChange({
-                      field: 'languageId',
-                      value: value
-                    })
-                  }
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="storeLanguage" />}
                 >
-                  {languageData.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.valueEn}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="timeZone" />}
-            >
-              {getFieldDecorator('timezoneId', {
-                initialValue: storeInfo.get('timezoneId'),
-                rules: [{ required: false, message: 'Please select TimeZone!' }]
-              })(
-                <Select
-                  onChange={(value) =>
-                    onChange({
-                      field: 'timezoneId',
-                      value: value
-                    })
-                  }
+                  {getFieldDecorator('languageId', {
+                    initialValue: storeInfo.get('languageId'),
+                    rules: [
+                      { required: false, message: 'Please select Language!' }
+                    ]
+                  })(
+                    // <Input
+                    //   placeholder="商家名称不得超过20字符"
+                    //   onChange={(e: any) =>
+                    //     onChange({
+                    //       field: 'supplierName',
+                    //       value: e.target.value
+                    //     })
+                    //   }
+                    // />
+                    <Select
+                      onChange={(value) =>
+                        onChange({
+                          field: 'languageId',
+                          value: value
+                        })
+                      }
+                    >
+                      {languageData.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.valueEn}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="timeZone" />}
                 >
-                  {timeZoneData.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.valueEn}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="targetCountry" />}
-            >
-              {getFieldDecorator('countryId', {
-                initialValue: storeInfo.get('countryId'),
-                rules: [{ required: true, message: 'Please select Country!' }]
-              })(
-                <Select
-                  onChange={(value) => {
-                    onChange({
-                      field: 'countryId',
-                      value: value
-                    });
-                  }}
+                  {getFieldDecorator('timeZoneId', {
+                    initialValue: storeInfo.get('timeZoneId'),
+                    rules: [
+                      { required: false, message: 'Please select TimeZone!' }
+                    ]
+                  })(
+                    <Select
+                      onChange={(value) =>
+                        onChange({
+                          field: 'timeZoneId',
+                          value: value
+                        })
+                      }
+                    >
+                      {timeZoneData.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.valueEn}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="targetCountry" />}
                 >
-                  {countryData.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.valueEn}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="targetCity" />}
-            >
-              {getFieldDecorator('cityId', {
-                initialValue: storeInfo.get('cityId'),
-                rules: [{ required: true, message: 'Please select City!' }]
-              })(
-                <Select
-                  onChange={(value) =>
-                    onChange({
-                      field: 'cityId',
-                      value: value
-                    })
-                  }
+                  {getFieldDecorator('countryId', {
+                    initialValue: storeInfo.get('countryId'),
+                    rules: [
+                      { required: false, message: 'Please select Country!' }
+                    ]
+                  })(
+                    <Select
+                      onChange={(value) => {
+                        onChange({
+                          field: 'countryId',
+                          value: value
+                        });
+                      }}
+                    >
+                      {countryData.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.valueEn}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="targetCity" />}
                 >
-                  {cityData.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.valueEn}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="currency" />}
-            >
-              {getFieldDecorator('currencyId', {
-                initialValue: storeInfo.get('currencyId'),
-                rules: [{ required: true, message: 'Please select Currency!' }]
-              })(
-                <Select
-                  onChange={(value) =>
-                    onChange({
-                      field: 'currencyId',
-                      value: value
-                    })
-                  }
+                  {getFieldDecorator('cityId', {
+                    initialValue: storeInfo.get('cityId'),
+                    rules: [{ required: false, message: 'Please select City!' }]
+                  })(
+                    <Select
+                      onChange={(value) =>
+                        onChange({
+                          field: 'cityId',
+                          value: value
+                        })
+                      }
+                    >
+                      {cityData.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.valueEn}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="currency" />}
                 >
-                  {currencyData.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.valueEn}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="taxRate" />}
-            >
-              {getFieldDecorator('taxRate', {
-                initialValue: storeInfo.get('taxRate'),
-                rules: [{ required: true, message: 'Please input taxRate!' }]
-              })(
-                <Input
-                  onChange={(e: any) =>
-                    onChange({
-                      field: 'taxRate',
-                      value: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-            <FormItem {...tailFormItemLayout}>
-              <Button type="primary" onClick={this._onSave}>
-                <FormattedMessage id="save" />
-              </Button>
-            </FormItem>
+                  {getFieldDecorator('currencyId', {
+                    initialValue: storeInfo.get('currencyId'),
+                    rules: [
+                      { required: false, message: 'Please select Currency!' }
+                    ]
+                  })(
+                    <Select
+                      onChange={(value) =>
+                        onChange({
+                          field: 'currencyId',
+                          value: value
+                        })
+                      }
+                    >
+                      {currencyData.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.valueEn}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="taxRate" />}
+                >
+                  {getFieldDecorator('taxRate', {
+                    initialValue: parseInt(storeInfo.get('taxRate')),
+                    rules: [
+                      { required: false, message: 'Please input taxRate!' }
+                    ]
+                  })(
+                    <InputNumber
+                      min={0}
+                      onChange={(value) =>
+                        onChange({
+                          field: 'taxRate',
+                          value: value + ''
+                        })
+                      }
+                    />
+                  )}{' '}
+                  %
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem {...tailFormItemLayout}>
+                  <Button type="primary" onClick={this._onSave}>
+                    <FormattedMessage id="save" />
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
         </div>
       </div>
@@ -354,7 +381,8 @@ export default class StepOneEdit extends React.Component<any, any> {
     form.validateFields(null, (errs) => {
       //如果校验通过
       if (!errs) {
-        onEditStoreInfo(company.get('storeInfo'));
+        let storeInfo = company.get('storeInfo');
+        onEditStoreInfo(storeInfo);
       } else {
         this.setState({});
       }

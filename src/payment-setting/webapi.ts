@@ -6,6 +6,10 @@ type TResult = {
   context: any;
 };
 
-export function fetchStoreInfo() {
-  return Fetch<TResult>('/store/storeInfo');
+/**
+ * 获取Payment Setting
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function getPaymentSetting() {
+  return Fetch<TResult>('/store/storePaymentSetting');
 }

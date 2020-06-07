@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Row, Col, Form, Modal, message } from 'antd';
+import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history } from 'qmkit';
+import { Row, Col, Form, Modal, message, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './webapi';
@@ -22,16 +22,16 @@ export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      store: {}
+      paymentSetting: {}
     };
-    this.getContentInformation();
+    this.getPaymentSetting();
   }
 
-  getContentInformation = async () => {
-    const { res } = await webapi.fetchStoreInfo();
+  getPaymentSetting = async () => {
+    const { res } = await webapi.getPaymentSetting();
     if (res.code === 'K-000000') {
       this.setState({
-        store: res.context
+        paymentSetting: res.context
       });
     } else {
       message.error(res.message);
@@ -44,19 +44,19 @@ export default class PaymentSetting extends React.Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title={<FormattedMessage id="none" />} />
+          <Headline title={<FormattedMessage id="paymentSetting" />} />
           <div style={{ padding: '20px 0 40px 0' }}>
             <Form>
               <Row>
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="FAQ" />}
+                    required={false}
+                    label={<FormattedMessage id="enviroment" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.enviroment ? (
+                        this.state.paymentSetting.enviroment
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -66,12 +66,12 @@ export default class PaymentSetting extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="confirmationEmail" />}
+                    required={false}
+                    label={<FormattedMessage id="URL" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.url ? (
+                        this.state.paymentSetting.url
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -81,12 +81,12 @@ export default class PaymentSetting extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="privacyPolicy" />}
+                    required={false}
+                    label={<FormattedMessage id="appID" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.appId ? (
+                        this.state.paymentSetting.appId
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -96,12 +96,12 @@ export default class PaymentSetting extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="termsOfUse" />}
+                    required={false}
+                    label={<FormattedMessage id="apiVersion" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.apiVersion ? (
+                        this.state.paymentSetting.apiVersion
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -111,12 +111,12 @@ export default class PaymentSetting extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="cookies" />}
+                    required={false}
+                    label={<FormattedMessage id="privateKey" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.privateKey ? (
+                        this.state.paymentSetting.privateKey
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -126,42 +126,12 @@ export default class PaymentSetting extends React.Component<any, any> {
                 <Col span={12}>
                   <FormItem
                     {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="storeContactPhoneNumber" />}
+                    required={false}
+                    label={<FormattedMessage id="publicKey" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="storeContactEmail" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={true}
-                    label={<FormattedMessage id="contactTimePeriod" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.store.taxRate ? (
-                        this.state.store.taxRate
+                      {this.state.paymentSetting.publicKey ? (
+                        this.state.paymentSetting.publicKey
                       ) : (
                         <FormattedMessage id="none" />
                       )}
@@ -171,8 +141,18 @@ export default class PaymentSetting extends React.Component<any, any> {
               </Row>
             </Form>
           </div>
+          <AuthWrapper functionName="f_storeInfoEdit_0">
+            <div className="bar-button">
+              <Button type="primary" onClick={() => this._edit()}>
+                <FormattedMessage id="edit" />
+              </Button>
+            </div>
+          </AuthWrapper>
         </div>
       </div>
     );
   }
+  _edit = () => {
+    history.push('/payment-setting-edit');
+  };
 }

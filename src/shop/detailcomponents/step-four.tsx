@@ -5,6 +5,7 @@ import { Row, Col, Form, Modal, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './../webapi';
+import moment from 'moment';
 
 const formItemLayout = {
   labelCol: {
@@ -23,16 +24,16 @@ export default class StepFour extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      store: {}
+      contentInformation: {}
     };
     this.getContentInformation();
   }
 
   getContentInformation = async () => {
-    const { res } = await webapi.fetchStoreInfo();
+    const { res } = await webapi.getStoreContentInfo();
     if (res.code === 'K-000000') {
       this.setState({
-        store: res.context
+        contentInformation: res.context
       });
     } else {
       message.error(res.message);
@@ -41,18 +42,18 @@ export default class StepFour extends React.Component<any, any> {
 
   render() {
     return (
-      <div style={{ padding: '20px 0 40px 0' }}>
+      <div>
         <Form>
           <Row>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="FAQ" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.faqUrl ? (
+                    this.state.contentInformation.faqUrl
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -62,12 +63,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="confirmationEmail" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.confirmationEmail ? (
+                    this.state.contentInformation.confirmationEmail
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -77,12 +78,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="privacyPolicy" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.privacyPolicyUrl ? (
+                    this.state.contentInformation.privacyPolicyUrl
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -92,12 +93,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="termsOfUse" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.termsOfUse ? (
+                    this.state.contentInformation.termsOfUse
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -107,12 +108,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="cookies" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.cookiesUrl ? (
+                    this.state.contentInformation.cookiesUrl
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -122,12 +123,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="storeContactPhoneNumber" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.storeContactPhoneNumber ? (
+                    this.state.contentInformation.storeContactPhoneNumber
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -137,12 +138,12 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="storeContactEmail" />}
               >
                 <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                  {this.state.contentInformation.storeContactEmail ? (
+                    this.state.contentInformation.storeContactEmail
                   ) : (
                     <FormattedMessage id="none" />
                   )}
@@ -152,16 +153,28 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="contactTimePeriod" />}
               >
-                <p style={{ color: '#333' }}>
-                  {this.state.store.taxRate ? (
-                    this.state.store.taxRate
+                <span style={{ color: '#333' }}>
+                  {this.state.contentInformation.contactTimePeriodFrom ? (
+                    moment(
+                      this.state.contentInformation.contactTimePeriodFrom
+                    ).format('YYYY-MM-DD hh:ss')
                   ) : (
                     <FormattedMessage id="none" />
                   )}
-                </p>
+                </span>
+                <span>-</span>
+                <span style={{ color: '#333' }}>
+                  {this.state.contentInformation.contactTimePeriodTo ? (
+                    moment(
+                      this.state.contentInformation.contactTimePeriodTo
+                    ).format('YYYY-MM-DD hh:ss')
+                  ) : (
+                    <FormattedMessage id="none" />
+                  )}
+                </span>
               </FormItem>
             </Col>
           </Row>

@@ -161,60 +161,90 @@ export default class StepOneEdit extends React.Component<any, any> {
             ) : null}
           </Row>
         </GreyBg>
-        <div style={{ width: 520 }}>
+        <div>
           <Form>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="storeLanguage" />}
-            >
-              <p style={{ color: '#333' }}>
-                {this.getVuleByData(languageData, storeInfo.get('languageId'))}
-              </p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="timeZone" />}
-            >
-              <p style={{ color: '#333' }}>
-                {this.getVuleByData(timeZoneData, storeInfo.get('timezoneId'))}
-              </p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="targetCountry" />}
-            >
-              <p style={{ color: '#333' }}>
-                {this.getVuleByData(countryData, storeInfo.get('countryId'))}
-              </p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="targetCity" />}
-            >
-              <p style={{ color: '#333' }}>
-                {this.getVuleByData(cityData, storeInfo.get('cityId'))}
-              </p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="currency" />}
-            >
-              <p style={{ color: '#333' }}>
-                {this.getVuleByData(currencyData, storeInfo.get('currencyId'))}
-              </p>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label={<FormattedMessage id="taxRate" />}
-            >
-              <p style={{ color: '#333' }}>{storeInfo.get('taxRate')}</p>
-            </FormItem>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="storeLanguage" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.getVuleByData(
+                      languageData,
+                      storeInfo.get('languageId')
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="timeZone" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.getVuleByData(
+                      timeZoneData,
+                      storeInfo.get('timeZoneId')
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="targetCountry" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.getVuleByData(
+                      countryData,
+                      storeInfo.get('countryId')
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="targetCity" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.getVuleByData(cityData, storeInfo.get('cityId'))}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="currency" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.getVuleByData(
+                      currencyData,
+                      storeInfo.get('currencyId')
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="taxRate" />}
+                >
+                  <p style={{ color: '#333' }}>{storeInfo.get('taxRate')}%</p>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
         </div>
       </div>

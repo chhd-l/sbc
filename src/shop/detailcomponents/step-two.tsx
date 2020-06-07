@@ -1,221 +1,174 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { Row, Col, Form, Modal } from 'antd';
+import { Row, Col, Form, Modal, message } from 'antd';
 import styled from 'styled-components';
 
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
+import * as webapi from './../webapi';
 
 const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 12 }
+    sm: { span: 6 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 12 }
+    sm: { span: 14 }
   }
 };
-
-const formItemPhoto = {
-  labelCol: {
-    span: 2,
-    xs: { span: 24 },
-    sm: { span: 12 }
-  },
-  wrapperCol: {
-    span: 24,
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
-
-const PicBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justifycontent: flex-start;
-  width: 430px;
-  img {
-    width: 60px;
-    height: 60px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-`;
 
 @Relax
 export default class StepTwo extends React.Component<any, any> {
-  props: {
-    form: any;
-    relaxProps?: {
-      company: IMap;
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      sso: {}
     };
-  };
-
-  static relaxProps = {
-    company: 'company'
-  };
-
-  componentWillMount() {
-    this.setState({
-      showImg: false,
-      imgUrl: ''
-    });
+    this.getContentInformation();
   }
 
+  getContentInformation = async () => {
+    const { res } = await webapi.getStoreSooSetting();
+    if (res.code === 'K-000000') {
+      this.setState({
+        sso: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
   render() {
-    const { company } = this.props.relaxProps;
-    const info = company ? company.get('info') : {};
-    const businessLicence = info.get('businessLicence')
-      ? JSON.parse(info.get('businessLicence'))
-      : [];
-    const backIDCard = info.get('backIDCard')
-      ? JSON.parse(info.get('backIDCard'))
-      : [];
-    const frontIDCard = info.get('frontIDCard')
-      ? JSON.parse(info.get('frontIDCard'))
-      : [];
-
-    let IDImages = new Array();
-
-    if (backIDCard.length > 0) {
-      backIDCard.map((v) => {
-        IDImages.push(v);
-      });
-    }
-
-    if (frontIDCard.length > 0) {
-      frontIDCard.map((v) => {
-        IDImages.push(v);
-      });
-    }
-
     return (
-      <div style={{ padding: '20px 0 40px 0' }}>
+      <div>
         <Form>
           <Row>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="logIn" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('socialCreditCode') ? (
-                    info.get('socialCreditCode')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="UserinfoURL" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('companyName') ? (
-                    info.get('companyName')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="clientID" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('address') ? (
-                    info.get('address')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="issuer" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('legalRepresentative') ? (
-                    info.get('legalRepresentative')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="pedirectURL" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('registeredCapital') ? (
-                    info.get('registeredCapital') + '万元'
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registration" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('foundDate') ? (
-                    moment(info.get('foundDate')).format('YYYY年MM月DD日')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registerPrefix" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('businessTermStart') ? (
-                    moment(info.get('businessTermStart')).format(
-                      'YYYY年MM月DD日'
-                    )
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registerCallback" />}
-              >
-                <p style={{ color: '#333' }}>
-                  {company && info.get('businessTermEnd') ? (
-                    moment(info.get('businessTermEnd')).format('YYYY年MM月DD日')
-                  ) : (
-                    <FormattedMessage id="none" />
-                  )}
-                </p>
-              </FormItem>
-            </Col>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="logIn" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.logIn ? (
+                      this.state.sso.logIn
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="UserinfoURL" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.userInfoUrl ? (
+                      this.state.sso.userInfoUrl
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="clientID" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.clientId ? (
+                      this.state.sso.clientId
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="issuer" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.issuer ? (
+                      this.state.sso.issuer
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="pedirectURL" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.redirectUrl ? (
+                      this.state.sso.redirectUrl
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="registration" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.registration ? (
+                      this.state.sso.registration
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="registerPrefix" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.registerPrefix ? (
+                      this.state.sso.registerPrefix
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label={<FormattedMessage id="registerCallback" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.sso.registerCallback ? (
+                      this.state.sso.registerCallback
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
           </Row>
         </Form>
       </div>

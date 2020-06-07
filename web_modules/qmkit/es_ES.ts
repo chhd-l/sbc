@@ -129,7 +129,7 @@ export default {
 
   'ssoSetting': 'SSO Setting',
   'logIn': 'Log in',
-  'UserinfoURL': 'Userinfo URL',
+  'userinfoURL': 'Userinfo URL',
   'clientID': 'Client ID',
   'issuer': 'Issuer',
   'pedirectURL': 'Pedirect URL',
@@ -140,7 +140,7 @@ export default {
   'storeInformationEdit': 'Store Information Edit',
   'contentInformation': 'Content information',
   'confirmationEmail': 'Confirmation email',
-  'FAQ': 'FAQ(URL)',
+  'faqUrl': 'FAQ(URL)',
   'privacyPolicy': 'Privacy policy',
   'termsOfUse': 'Terms of use',
   'cookies': 'Cookies',
@@ -159,13 +159,13 @@ export default {
   'contactDetails': 'Contact details',
   'contactEmail': 'Contact email',
 
-  'payment': 'Payment',
+  'paymentSetting': 'Payment Setting',
   'enviroment': 'Enviroment',
   'URL': 'URL',
   'appID': 'APP ID',
   'privateKey': 'Private key',
   'publicKey': 'Public key',
-  'apiVersion': 'API Version',
+  'apiVersion': 'API version',
 
   'partnerAccount': 'Partner account',
   'employeeList': 'Employee list',

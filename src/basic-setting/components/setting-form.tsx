@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon, Button, Input, Form } from 'antd';
-import { Const, Tips, QMUpload, cache } from 'qmkit';
+import { Const, Tips, QMUpload, cache, QMMethod } from 'qmkit';
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { message } from 'antd';
@@ -197,25 +197,11 @@ export default class settingForm extends React.Component<any, any> {
             <FormItem
               {...inputItemLayout}
               required={false}
-              label={<FormattedMessage id="merchantNumber" />}
-            >
-              {getFieldDecorator('supplierCode', {
-                initialValue: supplierCode
-              })(<Input />)}
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={24}>
-            <FormItem
-              {...inputItemLayout}
-              required={false}
               label={<FormattedMessage id="merchantAccount" />}
             >
               {getFieldDecorator('accountName', {
                 initialValue: accountName
-              })(<Input />)}
+              })(<Input disabled={true} />)}
             </FormItem>
           </Col>
         </Row>
@@ -256,7 +242,21 @@ export default class settingForm extends React.Component<any, any> {
               label={<FormattedMessage id="phoneNumber" />}
             >
               {getFieldDecorator('contactMobile', {
-                initialValue: contactMobile
+                initialValue: contactMobile,
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorTrimMinAndMax(
+                        rule,
+                        value,
+                        callback,
+                        'Phone Number',
+                        1,
+                        11
+                      );
+                    }
+                  }
+                ]
               })(<Input />)}
             </FormItem>
           </Col>

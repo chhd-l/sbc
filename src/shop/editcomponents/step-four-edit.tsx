@@ -39,17 +39,16 @@ export default class StepFour extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      store: {},
       contentForm: {}
     };
     this.getContentInformation();
   }
 
   getContentInformation = async () => {
-    const { res } = await webapi.fetchStoreInfo();
+    const { res } = await webapi.getStoreContentInfo();
     if (res.code === 'K-000000') {
       this.setState({
-        store: res.context
+        contentForm: res.context
       });
     } else {
       message.error(res.message);
@@ -57,7 +56,16 @@ export default class StepFour extends React.Component<any, any> {
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.contentForm;
-    data[field] = value;
+    if (field === 'contactTimePeriod') {
+      data['contactTimePeriodFrom'] = moment(value[0]).format(
+        'YYYY-MM-DD hh:mm:ss'
+      );
+      data['contactTimePeriodTo'] = moment(value[1]).format(
+        'YYYY-MM-DD hh:mm:ss'
+      );
+    } else {
+      data[field] = value;
+    }
     this.setState({
       contentForm: data
     });
@@ -68,7 +76,7 @@ export default class StepFour extends React.Component<any, any> {
     const { MonthPicker, RangePicker } = DatePicker;
 
     return (
-      <div style={{ padding: '20px 0 40px 0' }}>
+      <div>
         <Form>
           <Row>
             <Col span={12}>
@@ -77,14 +85,14 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="FAQ" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('faqUrl', {
+                  initialValue: this.state.contentForm.faqUrl,
+                  rules: [{ required: false, message: 'Please input FAQ Url!' }]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'faqUrl',
                         value: e.target.value
                       })
                     }
@@ -98,14 +106,19 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="confirmationEmail" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('confirmationEmail', {
+                  initialValue: this.state.contentForm.confirmationEmail,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Confirmation Email!'
+                    }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'confirmationEmail',
                         value: e.target.value
                       })
                     }
@@ -119,14 +132,19 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="privacyPolicy" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('privacyPolicyUrl', {
+                  initialValue: this.state.contentForm.privacyPolicyUrl,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Privacy Policy Url!'
+                    }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'privacyPolicyUrl',
                         value: e.target.value
                       })
                     }
@@ -140,14 +158,16 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="termsOfUse" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('termsOfUse', {
+                  initialValue: this.state.contentForm.termsOfUse,
+                  rules: [
+                    { required: false, message: 'Please input Terms Of Use!' }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'termsOfUse',
                         value: e.target.value
                       })
                     }
@@ -161,14 +181,16 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="cookies" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('cookiesUrl', {
+                  initialValue: this.state.contentForm.cookiesUrl,
+                  rules: [
+                    { required: false, message: 'Please input Cookies Url!' }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'cookiesUrl',
                         value: e.target.value
                       })
                     }
@@ -182,14 +204,19 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="storeContactPhoneNumber" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('storeContactPhoneNumber', {
+                  initialValue: this.state.contentForm.storeContactPhoneNumber,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Store Contact Phone Number!'
+                    }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'storeContactPhoneNumber',
                         value: e.target.value
                       })
                     }
@@ -203,14 +230,19 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="storeContactEmail" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('storeContactEmail', {
+                  initialValue: this.state.contentForm.storeContactEmail,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Store Contact Email!'
+                    }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'storeContactEmail',
                         value: e.target.value
                       })
                     }
@@ -224,8 +256,25 @@ export default class StepFour extends React.Component<any, any> {
                 required={true}
                 label={<FormattedMessage id="contactTimePeriod" />}
               >
-                {
+                {getFieldDecorator('contactTimePeriod', {
+                  initialValue: [
+                    moment(this.state.contentForm.contactTimePeriodFrom),
+                    moment(this.state.contentForm.contactTimePeriodTo)
+                  ],
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Store Contact Time Period!'
+                    }
+                  ]
+                })(
                   <RangePicker
+                    onChange={(dateRange) =>
+                      this.onFormChange({
+                        field: 'contactTimePeriod',
+                        value: dateRange
+                      })
+                    }
                     showTime={{
                       hideDisabledOptions: true,
                       defaultValue: [
@@ -235,7 +284,7 @@ export default class StepFour extends React.Component<any, any> {
                     }}
                     format="YYYY-MM-DD HH:mm:ss"
                   />
-                }
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -252,4 +301,25 @@ export default class StepFour extends React.Component<any, any> {
       </div>
     );
   }
+
+  _next = () => {
+    const form = this.props.form;
+    form.validateFields(null, (errs) => {
+      if (!errs) {
+        this.onSave();
+      }
+    });
+  };
+
+  onSave = async () => {
+    const contentForm = this.state.contentForm;
+    const { res } = await webapi.saveStoreContentInfo({
+      ...contentForm
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'save success');
+    } else {
+      message.error(res.message || 'save faild');
+    }
+  };
 }

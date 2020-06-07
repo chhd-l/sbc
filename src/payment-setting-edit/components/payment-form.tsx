@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Relax, IMap } from 'plume2';
-import { Row, Col, Form, Button, message, Input, DatePicker } from 'antd';
-import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { Row, Col, Form, Button, message, Input } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
@@ -35,37 +35,35 @@ const tailFormItemLayout = {
   }
 };
 
-export default class PaymentForm extends React.Component<any, any> {
+class PaymentForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      store: {},
-      contentForm: {}
+      paymentForm: {}
     };
-    this.getContentInformation();
+    this.getPaymentSetting();
   }
 
-  getContentInformation = async () => {
-    const { res } = await webapi.fetchStoreInfo();
+  getPaymentSetting = async () => {
+    const { res } = await webapi.getPaymentSetting();
     if (res.code === 'K-000000') {
       this.setState({
-        store: res.context
+        paymentForm: res.context
       });
     } else {
       message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
-    let data = this.state.contentForm;
+    let data = this.state.paymentForm;
     data[field] = value;
     this.setState({
-      contentForm: data
+      paymentForm: data
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { MonthPicker, RangePicker } = DatePicker;
 
     return (
       <div style={{ padding: '20px 0 40px 0' }}>
@@ -74,17 +72,17 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="FAQ" />}
+                required={false}
+                label={<FormattedMessage id="enviroment" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('enviroment', {
+                  initialValue: this.state.paymentForm.enviroment,
+                  rules: [{ required: false, message: 'Please input taxRate!' }]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'enviroment',
                         value: e.target.value
                       })
                     }
@@ -95,17 +93,17 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="confirmationEmail" />}
+                required={false}
+                label={<FormattedMessage id="URL" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('url', {
+                  initialValue: this.state.paymentForm.url,
+                  rules: [{ required: false, message: 'Please input taxRate!' }]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'url',
                         value: e.target.value
                       })
                     }
@@ -116,17 +114,17 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="privacyPolicy" />}
+                required={false}
+                label={<FormattedMessage id="appID" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('appId', {
+                  initialValue: this.state.paymentForm.appId,
+                  rules: [{ required: false, message: 'Please input taxRate!' }]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'appId',
                         value: e.target.value
                       })
                     }
@@ -137,17 +135,19 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="termsOfUse" />}
+                required={false}
+                label={<FormattedMessage id="apiVersion" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('apiVersion', {
+                  initialValue: this.state.paymentForm.apiVersion,
+                  rules: [
+                    { required: false, message: 'Please input Api Version!' }
+                  ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'apiVersion',
                         value: e.target.value
                       })
                     }
@@ -158,17 +158,19 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="cookies" />}
+                required={false}
+                label={<FormattedMessage id="privateKey" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('privateKey', {
+                  initialValue: this.state.paymentForm.privateKey,
+                  rules: [
+                    { required: false, message: 'Please input Private Key!' }
+                  ]
                 })(
-                  <Input
+                  <Input.TextArea
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'privateKey',
                         value: e.target.value
                       })
                     }
@@ -179,63 +181,24 @@ export default class PaymentForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="storeContactPhoneNumber" />}
+                required={false}
+                label={<FormattedMessage id="publicKey" />}
               >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
+                {getFieldDecorator('publicKey', {
+                  initialValue: this.state.paymentForm.publicKey,
+                  rules: [
+                    { required: false, message: 'Please input Public Key!' }
+                  ]
                 })(
-                  <Input
+                  <Input.TextArea
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'taxRate',
+                        field: 'publicKey',
                         value: e.target.value
                       })
                     }
                   />
                 )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="storeContactEmail" />}
-              >
-                {getFieldDecorator('taxRate', {
-                  initialValue: this.state.store.taxRate,
-                  rules: [{ required: true, message: 'Please input taxRate!' }]
-                })(
-                  <Input
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'taxRate',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={true}
-                label={<FormattedMessage id="contactTimePeriod" />}
-              >
-                {
-                  <RangePicker
-                    showTime={{
-                      hideDisabledOptions: true,
-                      defaultValue: [
-                        moment('00:00:00', 'HH:mm:ss'),
-                        moment('11:59:59', 'HH:mm:ss')
-                      ]
-                    }}
-                    format="YYYY-MM-DD HH:mm:ss"
-                  />
-                }
               </FormItem>
             </Col>
           </Row>
@@ -252,4 +215,28 @@ export default class PaymentForm extends React.Component<any, any> {
       </div>
     );
   }
+  /**
+   * 保存
+   */
+  _next = () => {
+    const form = this.props.form;
+    form.validateFields(null, (errs) => {
+      if (!errs) {
+        this.onSave();
+      }
+    });
+  };
+
+  onSave = async () => {
+    const paymentForm = this.state.paymentForm;
+    const { res } = await webapi.savePaymentSetting({
+      ...paymentForm
+    });
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'save success');
+    } else {
+      message.error(res.message || 'save faild');
+    }
+  };
 }
+export default Form.create()(PaymentForm);

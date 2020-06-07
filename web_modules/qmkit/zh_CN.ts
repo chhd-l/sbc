@@ -332,7 +332,7 @@ export default {
 'storeInformationEdit': '店铺信息编辑',
 'ssoSetting': 'SSO设置',
 'logIn': '登录',
-'UserinfoURL': '用户信息地址',
+'userinfoURL': '用户信息地址',
 'clientID': '客户ID',
 'issuer': '发布人',
 'pedirectURL': '跳转地址',
@@ -342,7 +342,7 @@ export default {
 
 'contentInformation': '内容信息',
 'confirmationEmail': '确认邮件',
-'FAQ': 'FAQ(地址)',
+'faqUrl': 'FAQ(地址)',
 'privacyPolicy': '隐私政策',
 'termsOfUse': '使用条款',
 'cookies': '缓存',

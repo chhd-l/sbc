@@ -191,3 +191,39 @@ export function getDictionaryByType(dictionaryType: String) {
     body: JSON.stringify(params)
   });
 }
+
+/**
+ * 获取SOO Setting
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function getStoreSooSetting() {
+  return Fetch<TResult>('/store/storeSSOSetting');
+}
+/**
+ * 保存SOO Setting
+ * @param info
+ */
+export const saveStoreCSooSetting = (info) => {
+  return Fetch<TResult>('/store/storeSSOSetting', {
+    method: 'PUT',
+    body: JSON.stringify(info)
+  });
+};
+
+/**
+ * 获取SOO Setting
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function getStoreContentInfo() {
+  return Fetch<TResult>('/store/storeContentInfo');
+}
+/**
+ * 保存SOO Setting
+ * @param info
+ */
+export const saveStoreContentInfo = (info) => {
+  return Fetch<TResult>('/store/storeContentInfo', {
+    method: 'PUT',
+    body: JSON.stringify(info)
+  });
+};

@@ -28,8 +28,8 @@ const { TabPane } = Tabs;
 const { Column } = Table;
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  labelCol: { span: 12 },
+  wrapperCol: { span: 12 }
 };
 
 class DeliveryInfomation extends React.Component<any, any> {
@@ -111,7 +111,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success(res.message || 'successful');
+          message.success(res.message || 'Successful');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -124,7 +124,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     let clinics = [];
     if (array && array.length > 0) {
       for (let index = 0; index < array.length; index++) {
-        clinics.push(array[index].clinicsId);
+        clinics.push(array[index].clinicsId.toString());
       }
     }
     return clinics;
@@ -194,7 +194,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'successful');
+          message.success(res.message || 'Successful');
         } else {
           message.error(res.message || 'Delete failed');
         }
@@ -264,7 +264,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -331,11 +331,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                       this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
-                  <FormItem
-                    label="Consumer Account"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Consumer Account">
                     {getFieldDecorator('customerAccount', {
                       rules: [
                         { required: true, message: 'Please input First Name!' }
@@ -378,7 +374,10 @@ class DeliveryInfomation extends React.Component<any, any> {
                           <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                         ))} */}
                         {clinicList.map((item) => (
-                          <Option value={item.clinicsId} key={item.clinicsId}>
+                          <Option
+                            value={item.clinicsId.toString()}
+                            key={item.clinicsId}
+                          >
                             {item.clinicsName}
                           </Option>
                         ))}
@@ -387,11 +386,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="First Name"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="First Name">
                     {getFieldDecorator('firstName', {
                       rules: [
                         { required: true, message: 'Please input First Name!' }
@@ -410,11 +405,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Last Name"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Last Name">
                     {getFieldDecorator('lastName', {
                       rules: [
                         { required: true, message: 'Please input Last Name!' }
@@ -433,11 +424,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Phone Number"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Phone Number">
                     {getFieldDecorator('consigneeNumber', {
                       rules: [
                         {
@@ -459,11 +446,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Post Code"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Post Code">
                     {getFieldDecorator('postCode', {
                       rules: [
                         { required: true, message: 'Please input Post Code!' }
@@ -482,11 +465,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Country"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Country">
                     {getFieldDecorator('countryId', {
                       rules: [
                         { required: true, message: 'Please input Country!' }
@@ -511,7 +490,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="City" hasFeedback validateStatus="success">
+                  <FormItem label="City">
                     {getFieldDecorator('cityId', {
                       rules: [{ required: true, message: 'Please input City!' }]
                     })(
@@ -534,11 +513,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Address 1"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Address 1">
                     {getFieldDecorator('address1', {
                       rules: [
                         { required: true, message: 'Please input Address 1!' }
@@ -557,11 +532,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Address 2"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Address 2">
                     {getFieldDecorator(
                       'address2',
                       {}
@@ -579,11 +550,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem
-                    label="Reference"
-                    hasFeedback
-                    validateStatus="success"
-                  >
+                  <FormItem label="Reference">
                     {getFieldDecorator(
                       'rfc',
                       {}

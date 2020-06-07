@@ -15,56 +15,88 @@ export default class ClinicList extends Component<any, any> {
         {
           title: 'Prescriber ID',
           dataIndex: 'clinicsId',
-          key: 'clinicID'
+          key: 'clinicID',
+          width: 140
         },
         {
           title: 'Prescriber Name',
           dataIndex: 'clinicsName',
-          key: 'clinicName'
+          key: 'clinicName',
+          width: 180
         },
         {
           title: 'Prescriber Phone',
           dataIndex: 'phone',
-          key: 'clinicPhone'
+          key: 'clinicPhone',
+          width: 140
         },
         {
           title: 'Prescriber City',
           dataIndex: 'primaryCity',
-          key: 'clinicCity'
+          key: 'clinicCity',
+          width: 140
         },
         {
           title: 'Prescriber Zip',
           dataIndex: 'primaryZip',
-          key: 'clinicZip'
+          key: 'clinicZip',
+          width: 140
         },
         {
           title: 'Longitude',
           dataIndex: 'longitude',
-          key: 'longitude'
+          key: 'longitude',
+          width: 120
         },
         {
           title: 'Latitude',
           dataIndex: 'latitude',
-          key: 'latitude'
+          key: 'latitude',
+          width: 120
         },
         {
           title: 'Prescriber Type',
           dataIndex: 'clinicsType',
-          key: 'clinicsType'
+          key: 'clinicsType',
+          width: 140
         },
         {
-          title: 'Reward Type',
+          title: 'Reward Period',
           dataIndex: 'rewardType',
-          key: 'rewardRate'
+          key: 'rewardRate',
+          width: 140
+        },
+        {
+          title: 'Prescriber Status',
+          dataIndex: 'enabled',
+          key: 'enabled',
+          width: 140,
+          render: (text, record) => (
+            <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+          )
         },
         {
           title: 'Action',
           key: 'action',
+          fixed: 'right',
+          width: 240,
           render: (text, record) => (
             <span>
               <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a>
+              <Button
+                type="link"
+                onClick={() => this.enableAndDisable(record.clinicsId)}
+              >
+                {record.enabled ? 'Disable' : 'Enable'}
+              </Button>
+              <Divider type="vertical" />
+              <Button
+                type="link"
+                onClick={() => this.delClinic(record.clinicsId)}
+              >
+                Delete
+              </Button>
             </span>
           )
         }
@@ -81,7 +113,8 @@ export default class ClinicList extends Component<any, any> {
         phone: '',
         primaryCity: '',
         primaryZip: '',
-        clinicsType: ''
+        clinicsType: '',
+        enabled: true
       },
       cityArr: [],
       typeArr: [],
@@ -96,6 +129,12 @@ export default class ClinicList extends Component<any, any> {
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     const query = this.state.searchForm;
+    query.enabled =
+      query.enabled === 'true'
+        ? true
+        : query.enabled === 'false'
+        ? false
+        : null;
     pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
@@ -128,7 +167,7 @@ export default class ClinicList extends Component<any, any> {
         });
       }
     } else {
-      message.error(res.message);
+      message.error('Unsuccessful');
     }
   };
   delClinic = async (id) => {
@@ -136,10 +175,20 @@ export default class ClinicList extends Component<any, any> {
       clinicsId: id
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'delete success');
+      message.success(res.message || 'Successful');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
-      message.error(res.message || 'delete faild');
+      message.error('Unsuccessful');
+    }
+  };
+  enableAndDisable = async (id) => {
+    // message.info('API under development');
+    const { res } = await webapi.enableAndDisable(id);
+    if (res.code === 'K-000000') {
+      message.success(res.message || 'Successful');
+      this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
+    } else {
+      message.error('Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -166,7 +215,7 @@ export default class ClinicList extends Component<any, any> {
   }
 
   render() {
-    const { columns, cityArr, typeArr } = this.state;
+    const { columns, cityArr, typeArr, searchForm } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -216,6 +265,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
+                defaultValue=""
                 label="Prescriber City"
                 style={{ width: 80 }}
                 onChange={(value) => {
@@ -250,6 +300,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <SelectGroup
+                defaultValue=""
                 label="Prescriber Type"
                 style={{ width: 80 }}
                 onChange={(value) => {
@@ -266,6 +317,29 @@ export default class ClinicList extends Component<any, any> {
                     {item.name}
                   </Option>
                 ))}
+              </SelectGroup>
+            </FormItem>
+
+            <FormItem>
+              <SelectGroup
+                defaultValue="true"
+                label="Prescriber Status"
+                style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'enabled',
+                    value
+                  });
+                }}
+              >
+                <Option value="">All</Option>
+                <Option value="true" key="enabled">
+                  Enabled
+                </Option>
+                <Option value="false" key="disabled">
+                  Disabled
+                </Option>
               </SelectGroup>
             </FormItem>
 
@@ -292,6 +366,7 @@ export default class ClinicList extends Component<any, any> {
             dataSource={this.state.clinicList}
             pagination={this.state.pagination}
             loading={this.state.loading}
+            scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />
         </div>

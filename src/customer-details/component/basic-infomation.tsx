@@ -75,7 +75,7 @@ class BasicInfomation extends React.Component<any, any> {
     let clinics = [];
     if (array && array.length > 0) {
       for (let index = 0; index < array.length; index++) {
-        clinics.push(array[index].clinicsId);
+        clinics.push(array[index].clinicsId.toString());
       }
     }
     return clinics;
@@ -85,7 +85,6 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        debugger;
         if (res.code && res.code !== 'K-000000') {
           message.error(res.message || 'Get data failed');
         } else {
@@ -209,7 +208,7 @@ class BasicInfomation extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -222,7 +221,7 @@ class BasicInfomation extends React.Component<any, any> {
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
           <Row gutter={16}>
             <Col span={12}>
-              <FormItem label="First Name" hasFeedback validateStatus="success">
+              <FormItem label="First Name">
                 {getFieldDecorator('firstName', {
                   rules: [
                     { required: true, message: 'Please input First Name!' }
@@ -241,7 +240,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Last Name" hasFeedback validateStatus="success">
+              <FormItem label="Last Name">
                 {getFieldDecorator('lastName', {
                   rules: [
                     { required: true, message: 'Please input Last Name!' }
@@ -260,7 +259,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Birth Date" hasFeedback validateStatus="success">
+              <FormItem label="Birth Date">
                 {getFieldDecorator('birthDay', {
                   rules: [
                     { required: true, message: 'Please input Birth Date!' }
@@ -280,7 +279,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Email" hasFeedback validateStatus="success">
+              <FormItem label="Email">
                 {getFieldDecorator('email', {
                   rules: [{ required: true, message: 'Please input Email!' }]
                 })(
@@ -297,11 +296,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                label="Phone Number"
-                hasFeedback
-                validateStatus="success"
-              >
+              <FormItem label="Phone Number">
                 {getFieldDecorator('contactPhone', {
                   rules: [
                     { required: true, message: 'Please input Phone Number!' }
@@ -320,7 +315,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Post Code" hasFeedback validateStatus="success">
+              <FormItem label="Post Code">
                 {getFieldDecorator('postCode', {
                   rules: [
                     { required: true, message: 'Please input Post Code!' }
@@ -340,7 +335,7 @@ class BasicInfomation extends React.Component<any, any> {
             </Col>
 
             <Col span={12}>
-              <FormItem label="Country" hasFeedback validateStatus="success">
+              <FormItem label="Country">
                 {getFieldDecorator('country', {
                   rules: [{ required: true, message: 'Please input Country!' }]
                 })(
@@ -363,7 +358,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="City" hasFeedback validateStatus="success">
+              <FormItem label="City">
                 {getFieldDecorator('city', {
                   rules: [{ required: true, message: 'Please input City!' }]
                 })(
@@ -386,7 +381,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Address 1" hasFeedback validateStatus="success">
+              <FormItem label="Address 1">
                 {getFieldDecorator('address1', {
                   rules: [
                     { required: true, message: 'Please input Address 1!' }
@@ -405,7 +400,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Address 2" hasFeedback validateStatus="success">
+              <FormItem label="Address 2">
                 {getFieldDecorator(
                   'address2',
                   {}
@@ -474,7 +469,7 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Reference" hasFeedback validateStatus="success">
+              <FormItem label="Reference">
                 {getFieldDecorator(
                   'reference',
                   {}
@@ -521,7 +516,10 @@ class BasicInfomation extends React.Component<any, any> {
                       <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                     ))} */}
                     {clinicList.map((item) => (
-                      <Option value={item.clinicsId} key={item.clinicsId}>
+                      <Option
+                        value={item.clinicsId.toString()}
+                        key={item.clinicsId}
+                      >
                         {item.clinicsName}
                       </Option>
                     ))}

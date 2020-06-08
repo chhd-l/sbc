@@ -21,6 +21,8 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addressList } from '@/order-add-old/webapi';
 
+const { TextArea } = Input;
+
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -348,10 +350,10 @@ class BillingInfomation extends React.Component<any, any> {
                       this.props.customerType !== 'Guest' ? 'none' : 'block'
                   }}
                 >
-                  <FormItem label="Selected clinics">
+                  <FormItem label="Selected Prescriber">
                     {getFieldDecorator('clinicsVOS', {
                       rules: [
-                        { required: true, message: 'Please Select clinics!' }
+                        { required: true, message: 'Please Select Prescriber!' }
                       ]
                     })(
                       <Select
@@ -362,8 +364,8 @@ class BillingInfomation extends React.Component<any, any> {
                           let clinics = [];
                           for (let i = 0; i < Option.length; i++) {
                             let clinic = {
-                              clinicsId: Option[i].key,
-                              clinicsName: Option[i].props.value
+                              clinicsId: Option[i].props.value,
+                              clinicsName: Option[i].props.children
                             };
                             clinics.push(clinic);
                           }
@@ -376,8 +378,11 @@ class BillingInfomation extends React.Component<any, any> {
                           <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                         ))} */}
                         {clinicList.map((item) => (
-                          <Option value={item.clinicsId} key={item.clinicsId}>
-                            {item.clinicsName}
+                          <Option
+                            value={item.clinicsId.toString()}
+                            key={item.clinicsId}
+                          >
+                            {item.clinicsId + ',' + item.clinicsName}
                           </Option>
                         ))}
                       </Select>
@@ -518,7 +523,8 @@ class BillingInfomation extends React.Component<any, any> {
                         { required: true, message: 'Please input Address 1!' }
                       ]
                     })(
-                      <Input
+                      <TextArea
+                        autoSize={{ minRows: 3, maxRows: 3 }}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
@@ -536,7 +542,8 @@ class BillingInfomation extends React.Component<any, any> {
                       'address2',
                       {}
                     )(
-                      <Input
+                      <TextArea
+                        autoSize={{ minRows: 3, maxRows: 3 }}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
@@ -574,7 +581,7 @@ class BillingInfomation extends React.Component<any, any> {
                     </Button>
 
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/customer-list">Cancle</Link>
+                      <Link to="/customer-list">Cancel</Link>
                     </Button>
                   </FormItem>
                 </Col>

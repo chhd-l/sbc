@@ -207,7 +207,6 @@ class PetInfomation extends React.Component<any, any> {
   };
   editPets = () => {
     const { petForm } = this.state;
-    debugger;
     let petsPropRelations = [];
     let propId = 100;
     for (let i = 0; i < petForm.petsPropRelations.length; i++) {
@@ -231,8 +230,9 @@ class PetInfomation extends React.Component<any, any> {
       petsId: petForm.petsId,
       petsName: petForm.petsName,
       petsSex: petForm.petsSex,
-      petsSizeValueId: '10086',
-      petsSizeValueName: petForm.petsSizeValueName,
+      petsSizeValueId: '0',
+      petsSizeValueName:
+        petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
       petsType: petForm.petsType,
       sterilized: petForm.sterilized,
       storeId: 0
@@ -271,15 +271,27 @@ class PetInfomation extends React.Component<any, any> {
           let petsPropRelations = this.getSpecialNeeds(
             currentPet.petsPropRelations
           );
-          this.props.form.setFieldsValue({
-            petsType: currentPet.petsType,
-            petName: currentPet.petsName,
-            petsSex: currentPet.petsSex,
-            petsBreed: currentPet.petsBreed,
-            petsSizeValueName: currentPet.petsSizeValueName,
-            sterilized: currentPet.sterilized,
-            petsPropRelations: petsPropRelations
-          });
+          if (currentPet.petsType === 'cat') {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              sterilized: currentPet.sterilized,
+              petsPropRelations: petsPropRelations
+            });
+          } else {
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              petsSizeValueName: currentPet.petsSizeValueName,
+              sterilized: currentPet.sterilized,
+              petsPropRelations: petsPropRelations
+            });
+          }
+
           this.setState({
             petForm: currentPet,
             currentBirthDay: currentPet.birthOfPets
@@ -469,37 +481,39 @@ class PetInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                 )}
+                {petForm.petsType === 'dog' ? (
+                  <Col
+                    span={12}
+                    style={{
+                      display: petForm.petsType === 'cat' ? 'none' : 'block'
+                    }}
+                  >
+                    <FormItem label="Weight">
+                      {getFieldDecorator('petsSizeValueName', {
+                        rules: [
+                          { required: true, message: 'Please input Weight!' }
+                        ]
+                      })(
+                        <Select
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'breeweightd',
+                              value
+                            });
+                          }}
+                        >
+                          {sizeArr.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                ) : null}
 
-                <Col
-                  span={12}
-                  style={{
-                    display: petForm.petsType === 'cat' ? 'none' : 'block'
-                  }}
-                >
-                  <FormItem label="Weight">
-                    {getFieldDecorator('petsSizeValueName', {
-                      // rules: [
-                      //   { required: true, message: 'Please input Weight!' }
-                      // ]
-                    })(
-                      <Select
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onFormChange({
-                            field: 'breeweightd',
-                            value
-                          });
-                        }}
-                      >
-                        {sizeArr.map((item) => (
-                          <Option value={item} key={item}>
-                            {item}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
                 <Col span={12}>
                   <FormItem label="Sterilized status">
                     {getFieldDecorator('sterilized', {
@@ -525,10 +539,15 @@ class PetInfomation extends React.Component<any, any> {
                       ],
                       initialValue: moment(
                         new Date(this.state.currentBirthDay),
-                        'YYYY-MM-DD'
+                        'DD/MM/YYYY'
                       )
                     })(
                       <DatePicker
+                        style={{ width: '100%' }}
+                        format="DD/MM/YYYY"
+                        disabledDate={(current) => {
+                          return current && current > moment().endOf('day');
+                        }}
                         onChange={(date, dateString) => {
                           const value = dateString;
                           this.onFormChange({
@@ -576,7 +595,7 @@ class PetInfomation extends React.Component<any, any> {
                     </Button>
 
                     <Button style={{ marginLeft: '20px' }}>
-                      <Link to="/customer-list">Cancle</Link>
+                      <Link to="/customer-list">Cancel</Link>
                     </Button>
                   </FormItem>
                 </Col>

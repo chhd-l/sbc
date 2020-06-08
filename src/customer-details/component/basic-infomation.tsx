@@ -19,6 +19,8 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
+const { TextArea } = Input;
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
@@ -228,6 +230,7 @@ class BasicInfomation extends React.Component<any, any> {
                   ]
                 })(
                   <Input
+                    style={{ width: '100%' }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -264,9 +267,17 @@ class BasicInfomation extends React.Component<any, any> {
                   rules: [
                     { required: true, message: 'Please input Birth Date!' }
                   ],
-                  initialValue: moment(this.state.currentBirthDay, 'YYYY-MM-DD')
+                  initialValue: moment(
+                    new Date(this.state.currentBirthDay),
+                    'DD/MM/YYYY'
+                  )
                 })(
                   <DatePicker
+                    style={{ width: '100%' }}
+                    format="DD/MM/YYYY"
+                    disabledDate={(current) => {
+                      return current && current > moment().endOf('day');
+                    }}
                     onChange={(date, dateString) => {
                       const value = dateString;
                       this.onFormChange({
@@ -387,7 +398,8 @@ class BasicInfomation extends React.Component<any, any> {
                     { required: true, message: 'Please input Address 1!' }
                   ]
                 })(
-                  <Input
+                  <TextArea
+                    autoSize={{ minRows: 3, maxRows: 3 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -405,7 +417,8 @@ class BasicInfomation extends React.Component<any, any> {
                   'address2',
                   {}
                 )(
-                  <Input
+                  <TextArea
+                    autoSize={{ minRows: 3, maxRows: 3 }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -487,9 +500,11 @@ class BasicInfomation extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Selected clinics">
+              <FormItem label="Selected Prescriber">
                 {getFieldDecorator('selectedClinics', {
-                  rules: [{ required: true, message: 'Please Select clinics!' }]
+                  rules: [
+                    { required: true, message: 'Please Select Prescriber!' }
+                  ]
                 })(
                   <Select
                     mode="tags"
@@ -499,8 +514,8 @@ class BasicInfomation extends React.Component<any, any> {
                       let clinics = [];
                       for (let i = 0; i < Option.length; i++) {
                         let clinic = {
-                          clinicsId: Option[i].key,
-                          clinicsName: Option[i].props.value
+                          clinicsId: Option[i].props.value,
+                          clinicsName: Option[i].props.children
                         };
                         clinics.push(clinic);
                       }
@@ -520,7 +535,7 @@ class BasicInfomation extends React.Component<any, any> {
                         value={item.clinicsId.toString()}
                         key={item.clinicsId}
                       >
-                        {item.clinicsName}
+                        {item.clinicsId + ',' + item.clinicsName}
                       </Option>
                     ))}
                   </Select>
@@ -534,7 +549,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </Button>
 
                 <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/customer-list">Cancle</Link>
+                  <Link to="/customer-list">Cancel</Link>
                 </Button>
               </FormItem>
             </Col>

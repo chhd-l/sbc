@@ -216,7 +216,7 @@ class PetInfomation extends React.Component<any, any> {
         indexFlag: 0,
         petsId: this.state.currentPetId,
         propId: propId,
-        propName: petForm.petsPropRelations[i],
+        propName: petForm.petsPropRelations[i].propName,
         relationId: '10086',
         sort: 0
       };

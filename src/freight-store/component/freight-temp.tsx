@@ -23,6 +23,7 @@ const FormDiv = styled.div`
       margin-bottom: 0;
       #satisfyFreight,
       #fixedFreight,
+      #minimumDeliveryFee,
       #satisfyPrice {
         width: 100px;
         text-align: center;
@@ -81,6 +82,8 @@ export default class FreightTemp extends React.Component<any, any> {
       satisfyFreight: number;
       // 固定运费
       fixedFreight: number;
+      // 最低运费
+      minimumDeliveryFee: number;
       // 已经被选中的地区Id
       selectedAreas: IList;
       // 是否默认 1默认 0非默认
@@ -105,6 +108,7 @@ export default class FreightTemp extends React.Component<any, any> {
     satisfyPrice: 'satisfyPrice',
     satisfyFreight: 'satisfyFreight',
     fixedFreight: 'fixedFreight',
+    minimumDeliveryFee: 'minimumDeliveryFee',
     selectedAreas: 'selectedAreas',
     defaultFlag: 'defaultFlag',
     destinationAreaName: 'destinationAreaName',
@@ -122,6 +126,7 @@ export default class FreightTemp extends React.Component<any, any> {
       satisfyPrice,
       satisfyFreight,
       fixedFreight,
+      minimumDeliveryFee,
       storeFreightFieldsValue,
       selectedAreas,
       destinationAreaName,
@@ -273,6 +278,26 @@ export default class FreightTemp extends React.Component<any, any> {
                 </FormItem>
                 <span style={{ paddingLeft: 10 }}>元</span>
               </div>
+              <div className="radio-item">
+                <span style={{ paddingLeft: 23, paddingRight: 17 }}>
+                  最低运费
+                </span>
+                <FormItem>
+                  {getFieldDecorator('minimumDeliveryFee', {
+                    initialValue: minimumDeliveryFee
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        storeFreightFieldsValue({
+                          field: 'minimumDeliveryFee',
+                          value: e.target.value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <span style={{ paddingLeft: 10 }}>元</span>
+              </div>
             </RadioGroup>
           </FormItem>
           <div className="bar-button">
@@ -363,7 +388,7 @@ export default class FreightTemp extends React.Component<any, any> {
         type: 'number',
         max: 99999999.99,
         message: '最大值为99999999.99',
-        transform: function (value) {
+        transform: function(value) {
           return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
         }
       }

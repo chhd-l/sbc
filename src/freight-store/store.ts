@@ -22,7 +22,7 @@ export default class AppStore extends Store {
   /**
    * 初始化模板信息
    */
-  init = async freightId => {
+  init = async (freightId) => {
     const { res } = (await webapi.fetchFreightStore(freightId)) as any;
     const {
       freightTempName,
@@ -32,6 +32,7 @@ export default class AppStore extends Store {
       satisfyPrice,
       satisfyFreight,
       fixedFreight,
+      minimumDeliveryFee,
       defaultFlag,
       selectedAreas
     } = res.context;
@@ -44,6 +45,7 @@ export default class AppStore extends Store {
       satisfyPrice,
       satisfyFreight,
       fixedFreight,
+      minimumDeliveryFee,
       defaultFlag,
       selectedAreas: fromJS(selectedAreas),
       freightTempId: freightId

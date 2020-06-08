@@ -115,47 +115,6 @@ export default class settingForm extends React.Component<any, any> {
         <Row>
           <Col span={24}>
             <FormItem
-              required={false}
-              {...formItemLayout}
-              label={<FormattedMessage id="storeLogo" />}
-            >
-              <Row>
-                <Col span={6}>
-                  <div className="clearfix logoImg">
-                    <QMUpload
-                      style={styles.box}
-                      action={
-                        Const.HOST +
-                        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`
-                      }
-                      listType="picture-card"
-                      name="uploadFile"
-                      onChange={this._editStoreLogo}
-                      fileList={this.state.storeLogoImage}
-                      accept={'.jpg,.jpeg,.png,.gif'}
-                      beforeUpload={this._checkUploadFile.bind(this, 1)}
-                    >
-                      {this.state.storeLogoImage.length >= 1 ? null : (
-                        <div>
-                          <Icon type="plus" style={styles.plus} />
-                        </div>
-                      )}
-                    </QMUpload>
-                    {getFieldDecorator('storeLogo', {
-                      initialValue: this.state.storeLogo
-                    })(<Input type="hidden" />)}
-                  </div>
-                </Col>
-                <Col span={18}>
-                  <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
-                </Col>
-              </Row>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <FormItem
               {...formItemLayout}
               required={false}
               label={<FormattedMessage id="merchantLogo" />}

@@ -1,11 +1,23 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
+import PropTypes from 'prop-types';
 
-import { Form, Input, Button, Col, Row, Select, InputNumber } from 'antd';
-import { noop, ValidConst, AreaSelect, QMMethod } from 'qmkit';
+import {
+  Form,
+  Input,
+  Button,
+  Col,
+  Row,
+  Select,
+  InputNumber,
+  message,
+  Icon
+} from 'antd';
+import { noop, Const, QMUpload, Tips, cache } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
-import * as webapi from './../webapi';
+import { Store } from 'plume2';
+import { fetchStoreInfo } from './../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -83,6 +95,17 @@ const ACCOUNT_STATE = {
 
 @Relax
 export default class StepOneEdit extends React.Component<any, any> {
+  constructor(props, ctx) {
+    super(props);
+    this.state = {
+      //用于storeLogo图片展示
+      storeLogoImage: [],
+      //用于storeLogo图片校验
+      storeLogo: ''
+    };
+
+    this.getStoreLog();
+  }
   props: {
     form: any;
     relaxProps?: {
@@ -99,6 +122,31 @@ export default class StepOneEdit extends React.Component<any, any> {
     onChange: noop,
     onEditStoreInfo: noop
   };
+
+  getStoreLog = async () => {
+    const { res } = await fetchStoreInfo();
+    if (res.code === 'K-000000') {
+      debugger;
+      this.setState({
+        storeLogo: res.context.storeLogo,
+        storeLogoImage:
+          res.context.storeLogo && res.context.storeLogo
+            ? [
+                {
+                  uid: 'store-logo-1',
+                  name: res.context.storeLogo,
+                  size: 1,
+                  status: 'done',
+                  url: res.context.storeLogo
+                }
+              ]
+            : []
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
   render() {
     const { company, onChange, dictionary } = this.props.relaxProps;
     const storeInfo = company.get('storeInfo');
@@ -109,8 +157,54 @@ export default class StepOneEdit extends React.Component<any, any> {
     const currencyData = dictionary.get('currency').toJS();
     const timeZoneData = dictionary.get('timeZone').toJS();
 
+    const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    const companyInfoId = companyInfo.companyInfoId;
+
     return (
       <div>
+        <Form>
+          <Row>
+            <Col span={12}>
+              <FormItem
+                required={false}
+                {...formItemLayout}
+                label={<FormattedMessage id="storeLogo" />}
+              >
+                <Row>
+                  <Col span={3}>
+                    <div className="clearfix logoImg">
+                      <QMUpload
+                        style={styles.box}
+                        action={
+                          Const.HOST +
+                          `/store/uploadStoreResource?storeId=${storeInfo.storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`
+                        }
+                        listType="picture-card"
+                        name="uploadFile"
+                        onChange={this._editStoreLogo}
+                        fileList={this.state.storeLogoImage}
+                        accept={'.jpg,.jpeg,.png,.gif'}
+                        beforeUpload={this._checkUploadFile.bind(this, 1)}
+                      >
+                        {this.state.storeLogoImage.length >= 1 ? null : (
+                          <div>
+                            <Icon type="plus" style={styles.plus} />
+                          </div>
+                        )}
+                      </QMUpload>
+                      {getFieldDecorator('storeLogo', {
+                        initialValue: this.state.storeLogo
+                      })(<Input type="hidden" />)}
+                    </div>
+                  </Col>
+                  {/* <Col span={21}>
+                    <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
+                  </Col> */}
+                </Row>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
         <GreyBg>
           <Row>
             <Col span={8}>
@@ -388,4 +482,89 @@ export default class StepOneEdit extends React.Component<any, any> {
       }
     });
   };
+  /**
+   * 编辑店铺logo
+   * @param file
+   * @param fileList
+   * @private
+   */
+  _editStoreLogo = ({ file, fileList }) => {
+    this.setState({ storeLogoImage: fileList });
+    const { onChange } = this.props.relaxProps;
+
+    //当所有图片都被删除时
+    if (fileList.length == 0) {
+      this.setState({ storeLogo: '' });
+      this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
+      onChange({
+        field: 'storeLogo',
+        value: this.state.storeLogo
+      });
+      return;
+    }
+
+    if (file.status == 'error') {
+      message.error('上传失败');
+      return;
+    }
+
+    //当上传完成的时候设置
+    fileList = this._buildFileList(fileList);
+    if (fileList && fileList.length > 0) {
+      this.setState({ storeLogo: fileList[0].url });
+      this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
+      onChange({
+        field: 'storeLogo',
+        value: this.state.storeLogo
+      });
+    }
+  };
+
+  /**
+   * 检查文件格式以及大小
+   */
+  _checkUploadFile = (size: number, file) => {
+    let fileName = file.name.toLowerCase();
+    // 支持的图片格式：jpg、jpeg、png、gif
+    if (
+      fileName.endsWith('.jpg') ||
+      fileName.endsWith('.jpeg') ||
+      fileName.endsWith('.png') ||
+      fileName.endsWith('.gif')
+    ) {
+      if (file.size <= size * 1024 * 1024) {
+        return true;
+      } else {
+        message.error('文件大小不能超过' + size + 'M');
+        return false;
+      }
+    } else {
+      message.error('文件格式错误');
+      return false;
+    }
+  };
+
+  _buildFileList = (fileList: Array<any>): Array<any> => {
+    return fileList
+      .filter((file) => file.status === 'done')
+      .map((file) => {
+        return {
+          uid: file.uid,
+          status: file.status,
+          url: file.response ? file.response[0] : file.url
+        };
+      });
+  };
 }
+
+const styles = {
+  box: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  } as any,
+  plus: {
+    color: '#999',
+    fontSize: '28px'
+  }
+};

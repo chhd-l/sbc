@@ -284,7 +284,8 @@ export default class FreightTemp extends React.Component<any, any> {
                 </span>
                 <FormItem>
                   {getFieldDecorator('minimumDeliveryFee', {
-                    initialValue: minimumDeliveryFee
+                    initialValue: minimumDeliveryFee,
+                    rules: this._validMoney(freightType, 1)
                   })(
                     <Input
                       onChange={(e) => {

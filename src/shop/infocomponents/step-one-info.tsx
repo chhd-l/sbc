@@ -100,6 +100,20 @@ export default class StepOneEdit extends React.Component<any, any> {
     //拼接地址
     return (
       <div>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              {...formItemLayout}
+              required={false}
+              label={<FormattedMessage id="storeLogo" />}
+            >
+              <img
+                src={storeInfo.get('storeLogo')}
+                style={{ width: '100px' }}
+              ></img>
+            </FormItem>
+          </Col>
+        </Row>
         <GreyBg>
           <Row>
             <Col span={8}>

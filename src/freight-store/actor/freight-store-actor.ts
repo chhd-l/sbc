@@ -53,6 +53,7 @@ export default class FreightStoreActor extends Actor {
       freightType,
       satisfyPrice,
       satisfyFreight,
+      minimumDeliveryFee,
       fixedFreight,
       selectedAreas,
       destinationAreaName,
@@ -67,6 +68,7 @@ export default class FreightStoreActor extends Actor {
       .set('satisfyPrice', satisfyPrice)
       .set('satisfyFreight', satisfyFreight)
       .set('fixedFreight', fixedFreight)
+      .set('minimumDeliveryFee', minimumDeliveryFee)
       .set('destinationAreaName', destinationAreaName)
       .set('selectedAreas', selectedAreas)
       .set('freightTempId', freightTempId)

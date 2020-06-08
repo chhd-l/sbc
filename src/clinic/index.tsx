@@ -43,17 +43,18 @@ export default class ClinicList extends Component<any, any> {
           width: 140
         },
         {
-          title: 'Longitude',
-          dataIndex: 'longitude',
-          key: 'longitude',
-          width: 120
-        },
-        {
           title: 'Latitude',
           dataIndex: 'latitude',
           key: 'latitude',
           width: 120
         },
+        {
+          title: 'Longitude',
+          dataIndex: 'longitude',
+          key: 'longitude',
+          width: 120
+        },
+
         {
           title: 'Prescriber Type',
           dataIndex: 'clinicsType',

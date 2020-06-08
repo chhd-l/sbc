@@ -512,6 +512,29 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
+                <FormItem label="Default Prescriber">
+                  {getFieldDecorator(
+                    'defaultClinics',
+                    {}
+                  )(
+                    <Select
+                      showSearch
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                    >
+                      {clinicList.map((item) => (
+                        <Option
+                          value={item.clinicsId.toString()}
+                          key={item.clinicsId}
+                        >
+                          {item.clinicsId + ',' + item.clinicsName}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
                 <FormItem label="Selected Prescriber">
                   {getFieldDecorator('selectedClinics', {
                     rules: [

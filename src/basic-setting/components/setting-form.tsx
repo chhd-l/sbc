@@ -100,6 +100,9 @@ export default class settingForm extends React.Component<any, any> {
     const contactEmail = this._store
       .state()
       .getIn(['settings', 'contactEmail']);
+    const addressDetail = this._store
+      .state()
+      .getIn(['settings', 'addressDetail']);
 
     const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     const companyInfoId = companyInfo.companyInfoId; //从缓存中获取商家标识
@@ -271,6 +274,20 @@ export default class settingForm extends React.Component<any, any> {
             >
               {getFieldDecorator('contactEmail', {
                 initialValue: contactEmail
+              })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24}>
+            <FormItem
+              {...inputItemLayout}
+              required={false}
+              label={<FormattedMessage id="address" />}
+            >
+              {getFieldDecorator('addressDetail', {
+                initialValue: addressDetail
               })(<Input />)}
             </FormItem>
           </Col>

@@ -11,7 +11,8 @@ import {
   Col,
   Radio,
   DatePicker,
-  Empty
+  Empty,
+  Spin
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -55,7 +56,8 @@ class BasicInfomation extends React.Component<any, any> {
       cityArr: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
-      currentForm: {}
+      currentForm: {},
+      loading: true
     };
   }
   componentDidMount() {
@@ -194,13 +196,20 @@ class BasicInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.setState({
+            loading: false,
             clinicList: res.context.content
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error('Get data failed');
       });
   };
@@ -220,341 +229,345 @@ class BasicInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <FormItem label="First Name">
-                {getFieldDecorator('firstName', {
-                  rules: [
-                    { required: true, message: 'Please input First Name!' }
-                  ]
-                })(
-                  <Input
-                    style={{ width: '100%' }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'firstName',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Last Name">
-                {getFieldDecorator('lastName', {
-                  rules: [
-                    { required: true, message: 'Please input Last Name!' }
-                  ]
-                })(
-                  <Input
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'lastName',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Birth Date">
-                {getFieldDecorator('birthDay', {
-                  rules: [
-                    { required: true, message: 'Please input Birth Date!' }
-                  ],
-                  initialValue: moment(
-                    new Date(this.state.currentBirthDay),
-                    'DD/MM/YYYY'
-                  )
-                })(
-                  <DatePicker
-                    style={{ width: '100%' }}
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > moment().endOf('day');
-                    }}
-                    onChange={(date, dateString) => {
-                      const value = dateString;
-                      this.onFormChange({
-                        field: 'birthDay',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Email">
-                {getFieldDecorator('email', {
-                  rules: [{ required: true, message: 'Please input Email!' }]
-                })(
-                  <Input
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'email',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Phone Number">
-                {getFieldDecorator('contactPhone', {
-                  rules: [
-                    { required: true, message: 'Please input Phone Number!' }
-                  ]
-                })(
-                  <Input
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'contactPhone',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Post Code">
-                {getFieldDecorator('postCode', {
-                  rules: [
-                    { required: true, message: 'Please input Post Code!' }
-                  ]
-                })(
-                  <Input
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'postCode',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
+        <Spin spinning={this.state.loading}>
+          <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <FormItem label="First Name">
+                  {getFieldDecorator('firstName', {
+                    rules: [
+                      { required: true, message: 'Please input First Name!' }
+                    ]
+                  })(
+                    <Input
+                      style={{ width: '100%' }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'firstName',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Last Name">
+                  {getFieldDecorator('lastName', {
+                    rules: [
+                      { required: true, message: 'Please input Last Name!' }
+                    ]
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'lastName',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Birth Date">
+                  {getFieldDecorator('birthDay', {
+                    rules: [
+                      { required: true, message: 'Please input Birth Date!' }
+                    ],
+                    initialValue: moment(
+                      new Date(this.state.currentBirthDay),
+                      'DD/MM/YYYY'
+                    )
+                  })(
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format="DD/MM/YYYY"
+                      disabledDate={(current) => {
+                        return current && current > moment().endOf('day');
+                      }}
+                      onChange={(date, dateString) => {
+                        const value = dateString;
+                        this.onFormChange({
+                          field: 'birthDay',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Email">
+                  {getFieldDecorator('email', {
+                    rules: [{ required: true, message: 'Please input Email!' }]
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'email',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Phone Number">
+                  {getFieldDecorator('contactPhone', {
+                    rules: [
+                      { required: true, message: 'Please input Phone Number!' }
+                    ]
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'contactPhone',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Post Code">
+                  {getFieldDecorator('postCode', {
+                    rules: [
+                      { required: true, message: 'Please input Post Code!' }
+                    ]
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'postCode',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
 
-            <Col span={12}>
-              <FormItem label="Country">
-                {getFieldDecorator('country', {
-                  rules: [{ required: true, message: 'Please input Country!' }]
-                })(
-                  <Select
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'country',
-                        value
-                      });
-                    }}
-                  >
-                    {countryArr.map((item) => (
-                      <Option value={item.valueEn} key={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="City">
-                {getFieldDecorator('city', {
-                  rules: [{ required: true, message: 'Please input City!' }]
-                })(
-                  <Select
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'city',
-                        value
-                      });
-                    }}
-                  >
-                    {cityArr.map((item) => (
-                      <Option value={item.valueEn} key={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Address 1">
-                {getFieldDecorator('address1', {
-                  rules: [
-                    { required: true, message: 'Please input Address 1!' }
-                  ]
-                })(
-                  <TextArea
-                    autoSize={{ minRows: 3, maxRows: 3 }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'address1',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Address 2">
-                {getFieldDecorator(
-                  'address2',
-                  {}
-                )(
-                  <TextArea
-                    autoSize={{ minRows: 3, maxRows: 3 }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'address2',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
+              <Col span={12}>
+                <FormItem label="Country">
+                  {getFieldDecorator('country', {
+                    rules: [
+                      { required: true, message: 'Please input Country!' }
+                    ]
+                  })(
+                    <Select
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'country',
+                          value
+                        });
+                      }}
+                    >
+                      {countryArr.map((item) => (
+                        <Option value={item.valueEn} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="City">
+                  {getFieldDecorator('city', {
+                    rules: [{ required: true, message: 'Please input City!' }]
+                  })(
+                    <Select
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'city',
+                          value
+                        });
+                      }}
+                    >
+                      {cityArr.map((item) => (
+                        <Option value={item.valueEn} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Address 1">
+                  {getFieldDecorator('address1', {
+                    rules: [
+                      { required: true, message: 'Please input Address 1!' }
+                    ]
+                  })(
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'address1',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Address 2">
+                  {getFieldDecorator(
+                    'address2',
+                    {}
+                  )(
+                    <TextArea
+                      autoSize={{ minRows: 3, maxRows: 3 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'address2',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
 
-            <Col span={12}>
-              <FormItem
-                labelCol={{
-                  span: 0
-                }}
-                wrapperCol={{
-                  span: 24
-                }}
-              >
-                <div style={{ display: 'inline-block', height: '40px' }}>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span>
-                  <label style={{ minWidth: '200px', marginRight: '10px' }}>
-                    Preferred methods of communication:
-                  </label>
-                </div>
+              <Col span={12}>
+                <FormItem
+                  labelCol={{
+                    span: 0
+                  }}
+                  wrapperCol={{
+                    span: 24
+                  }}
+                >
+                  <div style={{ display: 'inline-block', height: '40px' }}>
+                    <span
+                      style={{
+                        color: 'red',
+                        fontFamily: 'SimSun',
+                        marginRight: '4px',
+                        fontSize: '12px'
+                      }}
+                    >
+                      *
+                    </span>
+                    <label style={{ minWidth: '200px', marginRight: '10px' }}>
+                      Preferred methods of communication:
+                    </label>
+                  </div>
 
-                {getFieldDecorator('preferredMethods', {
-                  rules: [
-                    {
-                      required: true,
-                      message:
-                        'Please Select Preferred methods of communication!'
-                    }
-                  ]
-                })(
-                  <Radio.Group
-                    style={{ display: 'inline', height: '40px' }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'preferredMethods',
-                        value
-                      });
-                    }}
-                  >
-                    <Radio value="phone">Phone</Radio>
-                    <Radio value="email">Email</Radio>
-                  </Radio.Group>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Reference">
-                {getFieldDecorator(
-                  'reference',
-                  {}
-                )(
-                  <Input
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'reference',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Selected Prescriber">
-                {getFieldDecorator('selectedClinics', {
-                  rules: [
-                    { required: true, message: 'Please Select Prescriber!' }
-                  ]
-                })(
-                  <Select
-                    mode="tags"
-                    placeholder="Please select"
-                    style={{ width: '100%' }}
-                    onChange={(value, Option) => {
-                      let clinics = [];
-                      for (let i = 0; i < Option.length; i++) {
-                        let clinic = {
-                          clinicsId: Option[i].props.value,
-                          clinicsName: Option[i].props.children
-                        };
-                        clinics.push(clinic);
+                  {getFieldDecorator('preferredMethods', {
+                    rules: [
+                      {
+                        required: true,
+                        message:
+                          'Please Select Preferred methods of communication!'
                       }
+                    ]
+                  })(
+                    <Radio.Group
+                      style={{ display: 'inline', height: '40px' }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'preferredMethods',
+                          value
+                        });
+                      }}
+                    >
+                      <Radio value="phone">Phone</Radio>
+                      <Radio value="email">Email</Radio>
+                    </Radio.Group>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Reference">
+                  {getFieldDecorator(
+                    'reference',
+                    {}
+                  )(
+                    <Input
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'reference',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Selected Prescriber">
+                  {getFieldDecorator('selectedClinics', {
+                    rules: [
+                      { required: true, message: 'Please Select Prescriber!' }
+                    ]
+                  })(
+                    <Select
+                      mode="tags"
+                      placeholder="Please select"
+                      style={{ width: '100%' }}
+                      onChange={(value, Option) => {
+                        let clinics = [];
+                        for (let i = 0; i < Option.length; i++) {
+                          let clinic = {
+                            clinicsId: Option[i].props.value,
+                            clinicsName: Option[i].props.children
+                          };
+                          clinics.push(clinic);
+                        }
 
-                      this.onFormChange({
-                        field: 'selectedClinics',
-                        value: clinics
-                      });
-                    }}
-                  >
-                    {/* {
-                    clinicList.map((item) => (
-                      <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
-                    ))} */}
-                    {clinicList.map((item) => (
-                      <Option
-                        value={item.clinicsId.toString()}
-                        key={item.clinicsId}
-                      >
-                        {item.clinicsId + ',' + item.clinicsName}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem>
-                <Button type="primary" htmlType="submit">
-                  Save
-                </Button>
+                        this.onFormChange({
+                          field: 'selectedClinics',
+                          value: clinics
+                        });
+                      }}
+                    >
+                      {/* {
+                      clinicList.map((item) => (
+                        <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                      ))} */}
+                      {clinicList.map((item) => (
+                        <Option
+                          value={item.clinicsId.toString()}
+                          key={item.clinicsId}
+                        >
+                          {item.clinicsId + ',' + item.clinicsName}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">
+                    Save
+                  </Button>
 
-                <Button style={{ marginLeft: '20px' }}>
-                  <Link to="/customer-list">Cancel</Link>
-                </Button>
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+                  <Button style={{ marginLeft: '20px' }}>
+                    <Link to="/customer-list">Cancel</Link>
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
+        </Spin>
       </div>
     );
   }

@@ -52,11 +52,11 @@ export default class PaymentSetting extends React.Component<any, any> {
                   <FormItem
                     {...formItemLayout}
                     required={false}
-                    label={<FormattedMessage id="enviroment" />}
+                    label={<FormattedMessage id="environment" />}
                   >
                     <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.enviroment ? (
-                        this.state.paymentSetting.enviroment
+                      {this.state.paymentSetting.environment ? (
+                        this.state.paymentSetting.environment
                       ) : (
                         <FormattedMessage id="none" />
                       )}

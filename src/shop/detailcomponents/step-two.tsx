@@ -21,7 +21,6 @@ const formItemLayout = {
   }
 };
 
-@Relax
 export default class StepTwo extends React.Component<any, any> {
   constructor(props: any) {
     super(props);

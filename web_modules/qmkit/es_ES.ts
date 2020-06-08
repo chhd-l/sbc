@@ -144,7 +144,7 @@ export default {
   'privacyPolicy': 'Privacy policy',
   'termsOfUse': 'Terms of use',
   'cookies': 'Cookies',
-  'storeContactPhoneNumber': 'Store contact phone number',
+  'storeContactPhoneNumber': 'Store contact phone',
   'storeContactEmail': 'Store contact email',
   'contactTimePeriod': 'Contact time period',
 
@@ -160,7 +160,7 @@ export default {
   'contactEmail': 'Contact email',
 
   'paymentSetting': 'Payment Setting',
-  'enviroment': 'Enviroment',
+  'environment': 'Environment',
   'URL': 'URL',
   'appID': 'APP ID',
   'privateKey': 'Private key',

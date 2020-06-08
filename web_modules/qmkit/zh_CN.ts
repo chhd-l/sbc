@@ -351,7 +351,7 @@ export default {
 'contactTimePeriod': '联系间隔',
 
 'payment': '支付',
-'enviroment': '环境',
+'environment': '环境',
 'URL': '地址',
 'appID': 'APP ID',
 'privateKey': '密钥',

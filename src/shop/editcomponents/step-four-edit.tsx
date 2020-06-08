@@ -82,7 +82,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="FAQ" />}
               >
                 {getFieldDecorator('faqUrl', {
@@ -103,7 +103,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="confirmationEmail" />}
               >
                 {getFieldDecorator('confirmationEmail', {
@@ -129,7 +129,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="privacyPolicy" />}
               >
                 {getFieldDecorator('privacyPolicyUrl', {
@@ -155,7 +155,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="termsOfUse" />}
               >
                 {getFieldDecorator('termsOfUse', {
@@ -178,7 +178,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="cookies" />}
               >
                 {getFieldDecorator('cookiesUrl', {
@@ -201,7 +201,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="storeContactPhoneNumber" />}
               >
                 {getFieldDecorator('storeContactPhoneNumber', {
@@ -227,7 +227,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="storeContactEmail" />}
               >
                 {getFieldDecorator('storeContactEmail', {
@@ -253,7 +253,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="contactTimePeriod" />}
               >
                 {getFieldDecorator('contactTimePeriod', {

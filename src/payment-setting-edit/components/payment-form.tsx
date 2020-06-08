@@ -66,23 +66,23 @@ class PaymentForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div style={{ padding: '20px 0 40px 0' }}>
+      <div>
         <Form>
           <Row>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="enviroment" />}
+                label={<FormattedMessage id="environment" />}
               >
-                {getFieldDecorator('enviroment', {
-                  initialValue: this.state.paymentForm.enviroment,
+                {getFieldDecorator('environment', {
+                  initialValue: this.state.paymentForm.environment,
                   rules: [{ required: false, message: 'Please input taxRate!' }]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'enviroment',
+                        field: 'environment',
                         value: e.target.value
                       })
                     }

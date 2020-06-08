@@ -50,6 +50,11 @@ export default class Customer extends React.Component<any, any> {
           key: 'phoneNumber'
         },
         {
+          title: 'Selected Prescriber ID',
+          dataIndex: 'selectedPrescriber',
+          key: 'selectedPrescriber'
+        },
+        {
           title: 'Operation',
           key: 'operation',
           render: (text, record) => (
@@ -93,7 +98,9 @@ export default class Customer extends React.Component<any, any> {
         //邮箱
         email: '',
         //手机号
-        phoneNumber: ''
+        phoneNumber: '',
+        //选中的诊所
+        selectedPrescriberId: ''
       },
       customerTypeArr: [
         {
@@ -296,6 +303,19 @@ export default class Customer extends React.Component<any, any> {
                     const value = (e.target as any).value;
                     this.onFormChange({
                       field: 'phoneNumber',
+                      value
+                    });
+                  }}
+                />
+              </FormItem>
+
+              <FormItem>
+                <Input
+                  addonBefore={<FormattedMessage id="selectedPrescriberId" />}
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'selectedPrescriberId',
                       value
                     });
                   }}

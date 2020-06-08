@@ -568,7 +568,8 @@ export default {
   'deliveryComment': 'Delivery comment',
   'deliveryInvoiceAddress1': 'Delivery Invoice address1',
   'deliveryInvoiceAddress2': 'Delivery Invoice address2',
-  'cardNumber': 'Card number'
+  'cardNumber': 'Card number',
+  'selectedPrescriberId':'Selected Prescriber ID'
 };
 
 

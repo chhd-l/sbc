@@ -80,24 +80,16 @@ export default class ClinicList extends Component<any, any> {
           title: 'Action',
           key: 'action',
           fixed: 'right',
-          width: 240,
+          width: 200,
           render: (text, record) => (
             <span>
               <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
               <Divider type="vertical" />
-              <Button
-                type="link"
-                onClick={() => this.enableAndDisable(record.clinicsId)}
-              >
+              <a onClick={() => this.enableAndDisable(record.clinicsId)}>
                 {record.enabled ? 'Disable' : 'Enable'}
-              </Button>
+              </a>
               <Divider type="vertical" />
-              <Button
-                type="link"
-                onClick={() => this.delClinic(record.clinicsId)}
-              >
-                Delete
-              </Button>
+              <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a>
             </span>
           )
         }
@@ -115,7 +107,7 @@ export default class ClinicList extends Component<any, any> {
         primaryCity: '',
         primaryZip: '',
         clinicsType: '',
-        enabled: true
+        enabled: 'true'
       },
       cityArr: [],
       typeArr: [],
@@ -124,7 +116,7 @@ export default class ClinicList extends Component<any, any> {
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
-    this.queryClinicsDictionary('city');
+    this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
     this.init();
   }
@@ -157,16 +149,21 @@ export default class ClinicList extends Component<any, any> {
       type: type
     });
     if (res.code === 'K-000000') {
-      if (type === 'city') {
-        this.setState({
-          cityArr: res.context
-        });
-      }
-      if (type === 'clinicType') {
-        this.setState({
-          typeArr: res.context
-        });
-      }
+      this.setState({
+        typeArr: res.context
+      });
+    } else {
+      message.error('Unsuccessful');
+    }
+  };
+  querySysDictionary = async (type: String) => {
+    const { res } = await webapi.querySysDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        cityArr: res.context.sysDictionaryVOS
+      });
     } else {
       message.error('Unsuccessful');
     }

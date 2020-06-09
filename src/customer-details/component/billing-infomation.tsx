@@ -95,7 +95,7 @@ class BillingInfomation extends React.Component<any, any> {
       address1: billingForm.address1,
       address2: billingForm.address2,
       cityId: billingForm.cityId,
-      consigneeName: billingForm.firstName + billingForm.lastName,
+      consigneeName: billingForm.firstName + ' ' + billingForm.lastName,
       consigneeNumber: billingForm.consigneeNumber,
       countryId: billingForm.countryId,
       customerId: billingForm.customerId,
@@ -319,13 +319,12 @@ class BillingInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
               extra={
-                <div>
-                  <Checkbox
-                    checked={this.state.isDefault}
-                    onChange={() => this.clickDefault()}
-                  >
-                    Set default billing address
-                  </Checkbox>
+                <div
+                  style={{
+                    display:
+                      this.props.customerType === 'Guest' ? 'none' : 'block'
+                  }}
+                >
                   <Button
                     type="danger"
                     icon="close"
@@ -374,6 +373,7 @@ class BillingInfomation extends React.Component<any, any> {
                       })(
                         <Select
                           mode="tags"
+                          disabled={this.props.customerType === 'Guest'}
                           placeholder="Please select"
                           style={{ width: '100%' }}
                           onChange={(value, Option) => {
@@ -416,6 +416,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -435,6 +436,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -457,6 +459,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -476,6 +479,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -495,6 +499,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -520,6 +525,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -545,6 +551,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TextArea
+                          disabled={this.props.customerType === 'Guest'}
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -564,6 +571,7 @@ class BillingInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <TextArea
+                          disabled={this.props.customerType === 'Guest'}
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -583,6 +591,7 @@ class BillingInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -597,11 +606,21 @@ class BillingInfomation extends React.Component<any, any> {
 
                   <Col span={24}>
                     <FormItem>
-                      <Button type="primary" htmlType="submit">
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          marginRight: '20px',
+                          display:
+                            this.props.customerType === 'Guest'
+                              ? 'none'
+                              : 'block'
+                        }}
+                      >
                         Save
                       </Button>
 
-                      <Button style={{ marginLeft: '20px' }}>
+                      <Button>
                         <Link to="/customer-list">Cancel</Link>
                       </Button>
                     </FormItem>

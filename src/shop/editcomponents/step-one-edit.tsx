@@ -126,7 +126,6 @@ export default class StepOneEdit extends React.Component<any, any> {
   getStoreLog = async () => {
     const { res } = await fetchStoreInfo();
     if (res.code === 'K-000000') {
-      debugger;
       this.setState({
         storeLogo: res.context.storeLogo,
         storeLogoImage:
@@ -171,7 +170,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                 label={<FormattedMessage id="storeLogo" />}
               >
                 <Row>
-                  <Col span={3}>
+                  <Col span={6}>
                     <div className="clearfix logoImg">
                       <QMUpload
                         style={styles.box}
@@ -197,11 +196,11 @@ export default class StepOneEdit extends React.Component<any, any> {
                       })(<Input type="hidden" />)}
                     </div>
                   </Col>
-                  {/* <Col span={21}>
-                    <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
-                  </Col> */}
                 </Row>
               </FormItem>
+            </Col>
+            <Col span={12}>
+              <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
             </Col>
           </Row>
         </Form>

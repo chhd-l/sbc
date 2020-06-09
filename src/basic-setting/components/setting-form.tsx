@@ -50,20 +50,6 @@ export default class settingForm extends React.Component<any, any> {
     let storeSign = this._store.state().getIn(['settings', 'storeSign']); //店铺店招
 
     this.state = {
-      //用于storeLogo图片展示
-      storeLogoImage:
-        storeLogo && storeLogo
-          ? [
-              {
-                uid: 'store-logo-1',
-                name: storeLogo,
-                size: 1,
-                status: 'done',
-                url: storeLogo
-              }
-            ]
-          : [],
-      //用于storeLogo图片校验
       storeLogo: storeLogo,
       //用于storeSign图片展示
       storeSignImage:
@@ -156,6 +142,15 @@ export default class settingForm extends React.Component<any, any> {
 
         <Row>
           <Col span={24}>
+            <FormItem>
+              {getFieldDecorator('storeLogo', {
+                initialValue: this.state.storeLogo
+              })(<Input type="hidden" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
             <FormItem
               {...inputItemLayout}
               required={false}
@@ -167,7 +162,6 @@ export default class settingForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-
         <Row>
           <Col span={24}>
             <FormItem
@@ -269,35 +263,6 @@ export default class settingForm extends React.Component<any, any> {
         (this._store as any).editSetting(values);
       }
     });
-  };
-
-  /**
-   * 编辑店铺logo
-   * @param file
-   * @param fileList
-   * @private
-   */
-  _editStoreLogo = ({ file, fileList }) => {
-    this.setState({ storeLogoImage: fileList });
-
-    //当所有图片都被删除时
-    if (fileList.length == 0) {
-      this.setState({ storeLogo: '' });
-      this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
-      return;
-    }
-
-    if (file.status == 'error') {
-      message.error('上传失败');
-      return;
-    }
-
-    //当上传完成的时候设置
-    fileList = this._buildFileList(fileList);
-    if (fileList && fileList.length > 0) {
-      this.setState({ storeLogo: fileList[0].url });
-      this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
-    }
   };
 
   /**

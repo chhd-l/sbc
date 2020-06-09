@@ -331,7 +331,7 @@ class ClinicForm extends React.Component<any, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^[0-9+-]{6,20}$/;
+    let reg = /^[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('phone'))) {
       callback('Please enter the correct phone');
     } else {
@@ -547,24 +547,7 @@ class ClinicForm extends React.Component<any, any> {
                 </Select>
               )}
             </FormItem>
-            <FormItem label="Longitude">
-              {getFieldDecorator('longitude', {
-                rules: [
-                  { required: true, message: 'Please input Longitude!' },
-                  { validator: this.compareLongitude }
-                ]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'longitude',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
+
             <FormItem label="Latitude">
               {getFieldDecorator('latitude', {
                 rules: [
@@ -583,6 +566,26 @@ class ClinicForm extends React.Component<any, any> {
                 />
               )}
             </FormItem>
+
+            <FormItem label="Longitude">
+              {getFieldDecorator('longitude', {
+                rules: [
+                  { required: true, message: 'Please input Longitude!' },
+                  { validator: this.compareLongitude }
+                ]
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'longitude',
+                      value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+
             <FormItem label="Prescriber Address">
               {getFieldDecorator('location')(
                 <Input.TextArea

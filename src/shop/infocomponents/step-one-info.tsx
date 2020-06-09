@@ -101,7 +101,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     return (
       <div>
         <Row>
-          <Col span={12}>
+          <Col span={8}>
             <FormItem
               {...formItemLayout}
               required={false}

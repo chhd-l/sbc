@@ -45,14 +45,14 @@ export function deleteEmployeeByIds(employeeIds: string[]) {
 
 /**
  * 批量设为离职
- * @param employeeIds 
+ * @param employeeIds
  */
 export function batchDimissionEmployees(employeeIds: string[]) {
   return Fetch<TResult>('/customer/employee/batch/dimission', {
     method: 'POST',
     body: JSON.stringify({
       employeeIds: employeeIds,
-      accountState:2
+      accountState: 2
     })
   });
 }
@@ -148,61 +148,65 @@ export function updateEmployee(employee) {
  * 根据姓名模糊查询5条业务员记录
  * @param params
  */
-export function searchEmployees(params={}){
-  return Fetch<TResult>('/customer/employee/name',{
-    method:'POST',
-    body:JSON.stringify({...params})
+export function searchEmployees(params = {}) {
+  return Fetch<TResult>('/customer/employee/name', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
   });
-};
+}
 
-export function getDepartTree(){
+export function getDepartTree() {
   return Fetch<TResult>('/department/get-department-tree', {
     method: 'POST',
-    body:JSON.stringify({})
+    body: JSON.stringify({})
   });
 }
 
 /**
  * 批量调整部门
- * @param params 
+ * @param params
  */
-export function adjustDepartment(params){
+export function adjustDepartment(params) {
   return Fetch<TResult>('/customer/employee/adjustDepartment', {
     method: 'POST',
     body: JSON.stringify({
       ...params
     })
   });
-};
+}
 
 /**
  * 业务员交接
  */
-export function connectEmployee(params){
+export function connectEmployee(params) {
   return Fetch<TResult>('/customer/employee/handoverEmployee', {
     method: 'POST',
     body: JSON.stringify({
       ...params
     })
   });
-};
+}
 
 /**
  * 业务员激活
- * @param params 
+ * @param params
  */
-export function activateAccount(params){
+export function activateAccount(params) {
   return Fetch<TResult>('/customer/activateAccount', {
     method: 'POST',
     body: JSON.stringify({
       ...params
     })
   });
-};
+}
 
-export function countNum(){
+export function countNum() {
   return Fetch<TResult>('/customer/employee/countNum');
 }
 
-
-
+export function getClinicsLites() {
+  return Fetch<TResult>('/clinics/queryPrescriptionIdAndName', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}

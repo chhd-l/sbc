@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import { Store } from 'plume2';
 import { fetchStoreInfo } from './../webapi';
+import './style.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -162,8 +163,8 @@ export default class StepOneEdit extends React.Component<any, any> {
     return (
       <div>
         <Form>
-          <Row>
-            <Col span={12}>
+          <Row className="logoUpdate">
+            <Col span={8}>
               <FormItem
                 required={false}
                 {...formItemLayout}
@@ -199,7 +200,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </Row>
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={16}>
               <Tips title={<FormattedMessage id="storeSettingInfo1" />} />
             </Col>
           </Row>

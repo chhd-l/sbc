@@ -6,6 +6,7 @@ import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { message } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import './style.less';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -98,7 +99,7 @@ export default class settingForm extends React.Component<any, any> {
         style={{ paddingBottom: 50, maxWidth: 900 }}
         onSubmit={this._handleSubmit}
       >
-        <Row>
+        <Row className="logoUpdate">
           <Col span={24}>
             <FormItem
               {...formItemLayout}

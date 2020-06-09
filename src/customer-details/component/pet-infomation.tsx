@@ -41,7 +41,7 @@ class PetInfomation extends React.Component<any, any> {
       petForm: {
         petsId: '',
         petsType: '',
-        petName: '',
+        petsName: '',
         petsSex: '',
         petsBreed: '',
         petsSizeValueName: '',
@@ -184,15 +184,26 @@ class PetInfomation extends React.Component<any, any> {
               currentPet.petsPropRelations
             );
 
-            this.props.form.setFieldsValue({
-              petsType: currentPet.petsType,
-              petName: currentPet.petsName,
-              petsSex: currentPet.petsSex,
-              petsBreed: currentPet.petsBreed,
-              petsSizeValueName: currentPet.petsSizeValueName,
-              sterilized: currentPet.sterilized,
-              petsPropRelations: currentPet.petsPropRelations
-            });
+            if (currentPet.petsType === 'cat') {
+              this.props.form.setFieldsValue({
+                petsType: currentPet.petsType,
+                petsName: currentPet.petsName,
+                petsSex: currentPet.petsSex,
+                petsBreed: currentPet.petsBreed,
+                sterilized: currentPet.sterilized,
+                petsPropRelations: currentPet.petsPropRelations
+              });
+            } else {
+              this.props.form.setFieldsValue({
+                petsType: currentPet.petsType,
+                petsName: currentPet.petsName,
+                petsSex: currentPet.petsSex,
+                petsBreed: currentPet.petsBreed,
+                petsSizeValueName: currentPet.petsSizeValueName,
+                sterilized: currentPet.sterilized,
+                petsPropRelations: currentPet.petsPropRelations
+              });
+            }
             this.setState({
               loading: false,
               petList: petList,
@@ -225,7 +236,7 @@ class PetInfomation extends React.Component<any, any> {
         indexFlag: 0,
         petsId: this.state.currentPetId,
         propId: propId,
-        propName: petForm.petsPropRelations[i].propName,
+        propName: petForm.petsPropRelations[i],
         relationId: '10086',
         sort: 0
       };
@@ -258,6 +269,7 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           message.success(res.message || 'Successful');
+          this.petsByConsumer();
         } else {
           message.error(res.message || 'Update data failed');
         }
@@ -277,27 +289,27 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          let petsPropRelations = this.getSpecialNeeds(
+          currentPet.petsPropRelations = this.getSpecialNeeds(
             currentPet.petsPropRelations
           );
           if (currentPet.petsType === 'cat') {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
-              petName: currentPet.petsName,
+              petsName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
               sterilized: currentPet.sterilized,
-              petsPropRelations: petsPropRelations
+              petsPropRelations: currentPet.petsPropRelations
             });
           } else {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
-              petName: currentPet.petsName,
+              petsName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
               petsSizeValueName: currentPet.petsSizeValueName,
               sterilized: currentPet.sterilized,
-              petsPropRelations: petsPropRelations
+              petsPropRelations: currentPet.petsPropRelations
             });
           }
 
@@ -397,15 +409,16 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem label="Pet Name">
-                      {getFieldDecorator('petName', {
+                      {getFieldDecorator('petsName', {
                         rules: [
                           { required: true, message: 'Please input Pet Name!' }
                         ]
                       })(
                         <Input
-                          onChange={(value) => {
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
                             this.onFormChange({
-                              field: 'petName',
+                              field: 'petsName',
                               value
                             });
                           }}

@@ -42,20 +42,50 @@ export default class ClinicList extends Component<any, any> {
       },
       loading: false
     };
-    this.getTypeList('clinicType');
   }
-  getTypeList = async (type) => {
-    const { res } = await webapi.getClinicsDictionaryList({
-      type: type
-    });
-    if (res.code === 'K-000000') {
-      this.setState({
-        typeList: res.context
+  componentDidMount() {
+    const { pagination } = this.state;
+    let params = {
+      type: 'clinicType',
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    };
+    this.getTypeList(params);
+  }
+  getTypeList = (params) => {
+    const { pagination } = this.state;
+
+    webapi
+      .getClinicsDictionaryListPage(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let typeList = res.context.clinicsDictionaryVOList;
+
+          if (typeList.length > 0) {
+            pagination.total = res.context.total;
+            pagination.current = res.context.currentPage + 1;
+            this.setState({
+              pagination: pagination,
+              typeList: typeList
+            });
+          }
+          if (typeList.length === 0 && pagination.total > 0) {
+            pagination.current = res.context.currentPage;
+            let params = {
+              type: 'clinicType',
+              pageNum: res.context.currentPage - 1,
+              pageSize: pagination.pageSize
+            };
+            this.getTypeList(params);
+          }
+        } else {
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
       });
-    } else {
-      message.error(res.message || 'get data faild');
-    }
-    console.log(this.state.typeList);
   };
   delClinicType = async (id) => {
     const { res } = await webapi.delClinicsDictionary({
@@ -63,15 +93,27 @@ export default class ClinicList extends Component<any, any> {
     });
     if (res.code === 'K-000000') {
       message.success(res.message || 'delete data success');
-      this.getTypeList('clinicType');
+      const { pagination } = this.state;
+      let params = {
+        type: 'clinicType',
+        pageNum: pagination.current - 1,
+        pageSize: pagination.pageSize
+      };
+      this.getTypeList(params);
     } else {
       message.error(res.message || 'delete data faild');
     }
     console.log(this.state.typeList);
   };
-  handleTableChange(pagination: any) {
-    console.log(pagination);
-  }
+  handleTableChange = (pagination: any) => {
+    let params = {
+      type: 'clinicType',
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    };
+
+    this.getTypeList(params);
+  };
 
   render() {
     const { columns } = this.state;

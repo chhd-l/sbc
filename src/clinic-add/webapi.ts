@@ -44,11 +44,24 @@ export function getClinicById(filterParams = {}) {
 }
 
 /**
- * get City
+ * get Clinic Dict
  * @param filterParams
  */
 export function queryClinicsDictionary(filterParams = {}) {
   return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * get System Dict
+ * @param filterParams
+ */
+export function querySysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -31,11 +31,24 @@ export function deleteClinic(filterParams = {}) {
 }
 
 /**
- * get City
+ * get prescriber type
  * @param filterParams
  */
 export function queryClinicsDictionary(filterParams = {}) {
   return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * get City
+ * @param filterParams
+ */
+export function querySysDictionary(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

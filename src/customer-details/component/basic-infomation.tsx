@@ -159,6 +159,8 @@ class BasicInfomation extends React.Component<any, any> {
 
     (currentForm.firstName = basicForm.firstName),
       (currentForm.lastName = basicForm.lastName),
+      (currentForm.consigneeName =
+        basicForm.firstName + ' ' + basicForm.lastName),
       (currentForm.birthDay = basicForm.birthDay),
       (currentForm.email = basicForm.email),
       (currentForm.contactPhone = basicForm.contactPhone),
@@ -170,6 +172,7 @@ class BasicInfomation extends React.Component<any, any> {
       (currentForm.contactMethod = basicForm.preferredMethods),
       (currentForm.reference = basicForm.reference),
       (currentForm.clinicsVOS = basicForm.selectedClinics),
+      (currentForm.customerId = basicForm.customerId),
       (currentForm.customerId = basicForm.customerId),
       webapi
         .basicDetailsUpdate(currentForm)

@@ -51,8 +51,8 @@ export default class Customer extends React.Component<any, any> {
         },
         {
           title: 'Selected Prescriber ID',
-          dataIndex: 'selectedPrescriber',
-          key: 'selectedPrescriber'
+          dataIndex: 'clinicsIds',
+          key: 'clinicsIds'
         },
         {
           title: 'Operation',
@@ -64,7 +64,7 @@ export default class Customer extends React.Component<any, any> {
                   '/customer-details/' +
                   (record.customerLevelName
                     ? record.customerLevelName
-                    : 'Visitor') +
+                    : 'Guest') +
                   '/' +
                   record.customerId +
                   '/' +
@@ -106,12 +106,12 @@ export default class Customer extends React.Component<any, any> {
         {
           value: 'Member',
           name: 'Member',
-          id: 1
+          id: 234
         },
         {
-          value: 'Visitor',
-          name: 'Visitor',
-          id: 2
+          value: 'Guest',
+          name: 'Guest',
+          id: 233
         }
       ],
       loading: false
@@ -150,7 +150,8 @@ export default class Customer extends React.Component<any, any> {
       customerAccount: query.customerAccount,
       customerLevelId: query.customerTypeId,
       customerName: query.customerName,
-      email: query.email
+      email: query.email,
+      clinicsId: query.selectedPrescriberId
     };
     pageNum = pageNum - 1;
     await webapi
@@ -170,7 +171,7 @@ export default class Customer extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(data.res.message || 'get data filed');
+          message.error(data.res.message || 'get data failed');
           this.setState({
             loading: false
           });
@@ -265,6 +266,7 @@ export default class Customer extends React.Component<any, any> {
               </FormItem>
               <FormItem>
                 <SelectGroup
+                  defaultValue=""
                   label="Customer Type"
                   style={{ width: 80 }}
                   onChange={(value) => {

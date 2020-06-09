@@ -93,7 +93,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       address1: deliveryForm.address1,
       address2: deliveryForm.address2,
       cityId: deliveryForm.cityId,
-      consigneeName: deliveryForm.firstName + deliveryForm.lastName,
+      consigneeName: deliveryForm.firstName + ' ' + deliveryForm.lastName,
       consigneeNumber: deliveryForm.consigneeNumber,
       countryId: deliveryForm.countryId,
       customerId: deliveryForm.customerId,
@@ -317,7 +317,12 @@ class DeliveryInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
               extra={
-                <div>
+                <div
+                  style={{
+                    display:
+                      this.props.customerType === 'Guest' ? 'none' : 'block'
+                  }}
+                >
                   <Checkbox
                     checked={this.state.isDefault}
                     onChange={() => this.clickDefault()}
@@ -372,6 +377,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                       })(
                         <Select
                           mode="tags"
+                          disabled={this.props.customerType === 'Guest'}
                           placeholder="Please select"
                           style={{ width: '100%' }}
                           onChange={(value, Option) => {
@@ -414,6 +420,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -433,6 +440,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -455,6 +463,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -474,6 +483,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -493,6 +503,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -518,6 +529,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -543,6 +555,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TextArea
+                          disabled={this.props.customerType === 'Guest'}
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -562,6 +575,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <TextArea
+                          disabled={this.props.customerType === 'Guest'}
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -581,6 +595,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <Input
+                          disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -595,11 +610,21 @@ class DeliveryInfomation extends React.Component<any, any> {
 
                   <Col span={24}>
                     <FormItem>
-                      <Button type="primary" htmlType="submit">
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          marginRight: '20px',
+                          display:
+                            this.props.customerType === 'Guest'
+                              ? 'none'
+                              : 'block'
+                        }}
+                      >
                         Save
                       </Button>
 
-                      <Button style={{ marginLeft: '20px' }}>
+                      <Button>
                         <Link to="/customer-list">Cancel</Link>
                       </Button>
                     </FormItem>

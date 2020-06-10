@@ -211,6 +211,35 @@ export default class ClinicList extends Component<any, any> {
     });
     this.init({ pageNum: pagination.current, pageSize: 10 });
   }
+  onExport = () => {
+    const query = this.state.searchForm;
+    query.enabled =
+      query.enabled === 'true'
+        ? true
+        : query.enabled === 'false'
+        ? false
+        : null;
+    webapi.exportPrescriber(query).then((data) => {
+      this.download(data);
+    });
+  };
+  download(response) {
+    const data = response.data;
+    if (!response) {
+      return;
+    }
+    debugger;
+    // const fileName = response.headers['content-disposition'].split(';')[1].split('=')[1]
+    const fileName = 'test.xls';
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = url;
+    link.setAttribute('download', fileName);
+
+    document.body.appendChild(link);
+    link.click();
+  }
 
   render() {
     const { columns, cityArr, typeArr, searchForm } = this.state;
@@ -352,6 +381,16 @@ export default class ClinicList extends Component<any, any> {
                 }}
               >
                 Search
+              </Button>
+
+              <Button
+                icon="search"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onExport();
+                }}
+              >
+                Export
               </Button>
             </FormItem>
           </Form>

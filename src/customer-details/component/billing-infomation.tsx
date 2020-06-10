@@ -612,9 +612,7 @@ class BillingInfomation extends React.Component<any, any> {
                         style={{
                           marginRight: '20px',
                           display:
-                            this.props.customerType === 'Guest'
-                              ? 'none'
-                              : 'block'
+                            this.props.customerType === 'Guest' ? 'none' : null
                         }}
                       >
                         Save

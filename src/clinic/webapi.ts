@@ -65,3 +65,17 @@ export function enableAndDisable(id = '') {
     method: 'POST'
   });
 }
+
+/**
+ * 导出Prescriber
+ * @param filterParams
+ */
+
+export function exportPrescriber(filterParams = {}) {
+  return Fetch<TResult>('/clinics/exportPrescriber', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

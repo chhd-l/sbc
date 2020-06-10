@@ -41,6 +41,7 @@ export default class TodoItemsActor extends Actor {
    */
   @Action('home-actor:setEmployee')
   setEmployee(state: IMap, res) {
+    sessionStorage.setItem('s2b-supplier@employee', JSON.stringify(res));
     return state.set('employee', fromJS(res));
   }
 }

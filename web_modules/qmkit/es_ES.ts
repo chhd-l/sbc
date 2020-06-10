@@ -248,6 +248,7 @@ export default {
 
   'product': 'Product',
   'consumerList': 'Consumer List',
+  'consumerClinicList': 'Consumer clinic list',
   'consumerName': 'Consumer Name',
   'area': 'Area',
   'targetCountry':'Target Country',

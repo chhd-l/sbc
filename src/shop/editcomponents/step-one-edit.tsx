@@ -163,7 +163,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     return (
       <div>
         <Form>
-          <Row className="logoUpdate">
+          <Row className="storeLogoUpdate">
             <Col span={8}>
               <FormItem
                 required={false}

@@ -8,7 +8,8 @@ import {
   Radio,
   Switch,
   DatePicker,
-  TreeSelect
+  TreeSelect,
+  message
 } from 'antd';
 import { List } from 'immutable';
 import { Const } from 'qmkit';
@@ -17,6 +18,7 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 import { QMMethod, ValidConst } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import { getClinicsLites } from './../webapi';
 
 const RadioGroup = Radio.Group;
 const { TreeNode } = TreeSelect;
@@ -37,11 +39,6 @@ const formItemLayout = {
 };
 
 export default class EditForm extends React.Component<any, any> {
-  state = {
-    changePassword: false,
-    value: undefined
-  };
-
   _store: Store;
 
   accountPassword;
@@ -56,7 +53,39 @@ export default class EditForm extends React.Component<any, any> {
 
   constructor(props, ctx) {
     super(props);
+    this.state = {
+      changePassword: false,
+      value: undefined,
+      clinicsLites: [],
+      selectRoleIds: ''
+    };
     this._store = ctx['_plume$Store'];
+    this.getClinicsLites();
+  }
+
+  getClinicsLites = async () => {
+    const { res } = await getClinicsLites();
+    if (res.code === 'K-000000') {
+      this.setState({
+        clinicsLites: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  componentWillMount() {
+    const _state = this._store.state();
+    const employeeForm = _state.get('employeeForm');
+    if (_state.get('edit')) {
+      this.setState({
+        selectRoleIds: employeeForm.get('roleIds')
+      });
+    } else {
+      this.setState({
+        selectRoleIds: ''
+      });
+    }
   }
 
   render() {
@@ -88,6 +117,7 @@ export default class EditForm extends React.Component<any, any> {
 
     let roleIdList = {};
     let isEmployee = {};
+    let clinicsId = {};
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
 
@@ -152,6 +182,9 @@ export default class EditForm extends React.Component<any, any> {
                 return pre;
               }, [])
           : []
+      };
+      clinicsId = {
+        initialValue: employeeForm.get('clinicsId')
       };
     }
 
@@ -355,6 +388,7 @@ export default class EditForm extends React.Component<any, any> {
               disabled={editDisable}
               mode="multiple"
               showSearch
+              onChange={this.roleChange}
               filterOption={(input, option: { props }) =>
                 option.props.children
                   .toLowerCase()
@@ -370,6 +404,35 @@ export default class EditForm extends React.Component<any, any> {
             </Select>
           )}
         </FormItem>
+
+        {this.state.selectRoleIds.indexOf('168') > -1 ? (
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="clinics" />}
+            hasFeedback
+          >
+            {getFieldDecorator('clinicsId', {
+              ...clinicsId,
+              rules: [{ required: true, message: 'Please Select Clinics!' }]
+            })(
+              <Select
+                placeholder="Please Select Clinics"
+                disabled={editDisable}
+                showSearch
+                filterOption={(input, option: { props }) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {this._renderClinicsOption()}
+              </Select>
+            )}
+          </FormItem>
+        ) : (
+          ''
+        )}
+
         {/* {this.state.roleIds.includes('addRole') ? (
           <FormItem {...formItemLayout} label="员工角色" hasFeedback>
             {getFieldDecorator('roleName', {
@@ -517,6 +580,28 @@ export default class EditForm extends React.Component<any, any> {
       );
     });
   }
+
+  /**
+   * 医院
+   * @param roles
+   * @returns {Iterable<number, any>}
+   * @private
+   */
+  _renderClinicsOption() {
+    return this.state.clinicsLites.map((option) => {
+      return (
+        <Option value={option.clinicsId} key={option.clinicsId}>
+          {option.clinicsName}
+        </Option>
+      );
+    });
+  }
+  roleChange = (value) => {
+    let roleStringIds = value.join(',');
+    this.setState({
+      selectRoleIds: roleStringIds
+    });
+  };
 
   checkConfirmPassword = (_rule, value, callback) => {
     if (value != this.props.form.getFieldValue('accountPassword')) {

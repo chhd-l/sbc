@@ -81,7 +81,7 @@ class ClinicForm extends React.Component<any, any> {
       this.getDetail(this.props.clinicId);
       this.getClinicsReward(this.props.clinicId);
     }
-    this.queryClinicsDictionary('city');
+    this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
   }
   getClinicsReward = (id) => {
@@ -218,16 +218,21 @@ class ClinicForm extends React.Component<any, any> {
       type: type
     });
     if (res.code === 'K-000000') {
-      if (type === 'city') {
-        this.setState({
-          cityArr: res.context
-        });
-      }
-      if (type === 'clinicType') {
-        this.setState({
-          typeArr: res.context
-        });
-      }
+      this.setState({
+        typeArr: res.context
+      });
+    } else {
+      message.error('Unsuccessful');
+    }
+  };
+  querySysDictionary = async (type: String) => {
+    const { res } = await webapi.querySysDictionary({
+      type: type
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        cityArr: res.context.sysDictionaryVOS
+      });
     } else {
       message.error('Unsuccessful');
     }
@@ -331,7 +336,7 @@ class ClinicForm extends React.Component<any, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^[0-9+-]{6,20}$/;
+    let reg = /^[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('phone'))) {
       callback('Please enter the correct phone');
     } else {
@@ -547,24 +552,7 @@ class ClinicForm extends React.Component<any, any> {
                 </Select>
               )}
             </FormItem>
-            <FormItem label="Longitude">
-              {getFieldDecorator('longitude', {
-                rules: [
-                  { required: true, message: 'Please input Longitude!' },
-                  { validator: this.compareLongitude }
-                ]
-              })(
-                <Input
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'longitude',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
+
             <FormItem label="Latitude">
               {getFieldDecorator('latitude', {
                 rules: [
@@ -583,6 +571,26 @@ class ClinicForm extends React.Component<any, any> {
                 />
               )}
             </FormItem>
+
+            <FormItem label="Longitude">
+              {getFieldDecorator('longitude', {
+                rules: [
+                  { required: true, message: 'Please input Longitude!' },
+                  { validator: this.compareLongitude }
+                ]
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'longitude',
+                      value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+
             <FormItem label="Prescriber Address">
               {getFieldDecorator('location')(
                 <Input.TextArea

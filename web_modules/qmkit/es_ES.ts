@@ -179,6 +179,7 @@ export default {
   'add': 'Add',
   'position': 'Position',
   'systemRole': 'System role',
+  'clinics': 'Clinics',
   'hideLeavingEmployees': 'Hide leaving employees',
   'attributionDepartment': 'Attribution Department',
   'allDepartment': 'All Department',

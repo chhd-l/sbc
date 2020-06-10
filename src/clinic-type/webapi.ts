@@ -31,3 +31,13 @@ export function delClinicsDictionary(filterParams = {}) {
     })
   });
 }
+
+//分页查询
+export function getClinicsDictionaryListPage(filterParams = {}) {
+  return Fetch<TResult>('/clinicsDictionary/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

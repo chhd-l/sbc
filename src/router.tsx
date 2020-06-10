@@ -12,6 +12,12 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-list-limited')
   },
+  // prescriber
+  {
+    path: '/order-list-prescriber',
+    exact: true,
+    asyncComponent: () => import('./order-list-prescriber')
+  },
   {
     path: '/order-return-list-limited',
     exact: true,
@@ -45,6 +51,12 @@ const routes = [
     path: '/order-detail-limited/:tid',
     exact: true,
     asyncComponent: () => import('./order-detail-limited')
+  },
+  //订单-详情prescriber
+  {
+    path: '/order-detail-prescriber/:tid',
+    exact: true,
+    asyncComponent: () => import('./order-detail-prescriber')
   },
   //订单-退单列表
   {

@@ -46,20 +46,26 @@ class CustomerDetails extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    this.queryClinicsDictionary('country');
-    this.queryClinicsDictionary('city');
+    this.querySysDictionary('country');
+    this.querySysDictionary('city');
   }
 
-  queryClinicsDictionary = async (type: String) => {
-    const { res } = await webapi.queryClinicsDictionary({
+  querySysDictionary = async (type: String) => {
+    const { res } = await webapi.querySysDictionary({
       type: type
     });
     if (res.code === 'K-000000') {
       if (type === 'city') {
-        sessionStorage.setItem('dict-city', JSON.stringify(res.context));
+        sessionStorage.setItem(
+          'dict-city',
+          JSON.stringify(res.context.sysDictionaryVOS)
+        );
       }
       if (type === 'country') {
-        sessionStorage.setItem('dict-country', JSON.stringify(res.context));
+        sessionStorage.setItem(
+          'dict-country',
+          JSON.stringify(res.context.sysDictionaryVOS)
+        );
       }
     } else {
       message.error(res.message);

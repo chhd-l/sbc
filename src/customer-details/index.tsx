@@ -68,7 +68,7 @@ class CustomerDetails extends React.Component<any, any> {
         );
       }
     } else {
-      message.error(res.message);
+      message.error('Unsuccessful');
     }
   };
   clickTabs = (key) => {

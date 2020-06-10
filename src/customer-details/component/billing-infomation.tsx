@@ -116,13 +116,13 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success(res.message || 'Successful');
+          message.success('Successful');
         } else {
-          message.error(res.message || 'Update failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Update failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -177,11 +177,11 @@ class BillingInfomation extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -199,13 +199,13 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Successful');
+          message.success('Successful');
         } else {
-          message.error(res.message || 'Delete failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Delete failed');
+        message.error('Unsuccessful');
       });
   };
   clickDefault = () => {
@@ -231,14 +231,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 

@@ -96,7 +96,7 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         let res = data.res;
         if (res.code && res.code !== 'K-000000') {
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         } else {
           let res2 = JSON.stringify(data.res);
 
@@ -159,7 +159,7 @@ class BasicInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -227,13 +227,13 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Update data success');
+          message.success('Successful');
         } else {
-          message.error(res.message || 'Update data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Update data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -254,14 +254,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 

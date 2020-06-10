@@ -207,6 +207,16 @@ const routes = [
     path: '/customer-level',
     asyncComponent: () => import('./customer-level')
   },
+  // clinic客户列表
+  {
+    path: '/customer-clinic-list',
+    asyncComponent: () => import('./customer-clinic-list')
+  },
+  // clinic客户详情
+  {
+    path: '/customer-clinic-details/:type/:id/:account',
+    asyncComponent: () => import('./customer-clinic-details')
+  },
   // 基本设置
   {
     path: '/basic-setting',

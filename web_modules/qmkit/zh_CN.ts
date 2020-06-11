@@ -315,10 +315,10 @@ export default {
 'Edit':'编辑'	,
 'Delete':'删除'	,
 
-'merchantLogo': '商标',
-'merchantNumber': '商家编号',
-'merchantAccount': '商家账号',
-'merchantName':'商家名称',
+'shopLogo': '商标',
+'shopNumber': '商家编号',
+'shopAccount': '商家账号',
+'shopName':'商家名称',
 'Contact':'联系人',
 'phoneNumber': '联系方式',
 'contactEmails': '联系邮箱',
@@ -327,6 +327,7 @@ export default {
 'storeLanguage':'语言',
 'timeZone': '时区',
 'currency': '货币',
+'domainName': '域名',
 'taxRate':'税率',
 
 'storeInformationEdit': '店铺信息编辑',
@@ -358,5 +359,4 @@ export default {
 'publicKey': '公钥',
 'apiVersion': 'API版本',
 'clinics': '医院'
-
 };

@@ -168,7 +168,7 @@ export default class StepOneEdit extends React.Component<any, any> {
               <FormItem
                 required={false}
                 {...formItemLayout}
-                label={<FormattedMessage id="storeLogo" />}
+                label={<FormattedMessage id="shopLogo" />}
               >
                 <Row>
                   <Col span={6}>
@@ -434,7 +434,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                   {getFieldDecorator('taxRate', {
                     initialValue: parseInt(storeInfo.get('taxRate')),
                     rules: [
-                      { required: false, message: 'Please input taxRate!' }
+                      { required: false, message: 'Please input Tax Rate!' }
                     ]
                   })(
                     <InputNumber
@@ -448,6 +448,31 @@ export default class StepOneEdit extends React.Component<any, any> {
                     />
                   )}{' '}
                   %
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="domainName" />}
+                >
+                  {getFieldDecorator('domainName', {
+                    initialValue: storeInfo.get('domainName'),
+                    rules: [
+                      { required: false, message: 'Please input Domain Name!' }
+                    ]
+                  })(
+                    <Input
+                      onChange={(e: any) =>
+                        onChange({
+                          field: 'domainName',
+                          value: e.target.value
+                        })
+                      }
+                    />
+                  )}
                 </FormItem>
               </Col>
             </Row>

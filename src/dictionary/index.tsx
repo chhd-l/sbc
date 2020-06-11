@@ -59,7 +59,7 @@ export default class DitionaryList extends Component<any, any> {
         total: 0
       },
       searchForm: {
-        keyword: '',
+        keywords: '',
         type: ''
       },
       loading: false
@@ -147,7 +147,7 @@ export default class DitionaryList extends Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
-                    field: 'keyword',
+                    field: 'keywords',
                     value
                   });
                 }}

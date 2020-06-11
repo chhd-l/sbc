@@ -64,3 +64,15 @@ export function resetPassword(
     body: JSON.stringify({})
   });
 }
+
+/**
+ * 修改员工
+ * @param employee
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function updateEmployee(employee) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'PUT',
+    body: JSON.stringify(employee)
+  });
+}

@@ -63,8 +63,7 @@ export default class EmployeeList extends React.Component<any, any> {
                     <DepartTree />
                   )}
               </Col>
-              <Col span={1}></Col>
-              <Col span={20}>
+              <Col span={21}>
                 <List />
               </Col>
             </Row>

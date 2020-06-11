@@ -125,6 +125,8 @@ export const saveStoreInfo = (info) => {
  * @param info
  */
 export const editStoreInfo = (info) => {
+  debugger;
+  let test = JSON.stringify(info);
   return Fetch<TResult>('/store/storeInfo', {
     method: 'PUT',
     body: JSON.stringify(info)

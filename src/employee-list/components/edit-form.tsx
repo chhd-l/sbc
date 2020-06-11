@@ -413,7 +413,8 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          {this.state.selectRoleIds.indexOf('168') > -1 ? (
+          {this.state.selectRoleIds &&
+          this.state.selectRoleIds.indexOf('168') > -1 ? (
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="clinics" />}

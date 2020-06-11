@@ -152,10 +152,9 @@ export default {
   'signedInformation': 'Signed information',
   'financialInformation': 'Financial Information',
   'reviewStatus': 'Review status',
-  'storeStatus': 'Store status',
+  'storeStatus': 'Shop status',
   'partnerNumber': 'Partner number',
   'partnerName': 'Partner name',
-  'storeName': 'Store name',
   'contact': 'Contact',
   'contactDetails': 'Contact details',
   'contactEmail': 'Contact email',
@@ -578,7 +577,10 @@ export default {
   'prescriberName':'Prescriber Name',
   'prescriberPhone':'Prescriber Phone',
   'prescriberZip':'Prescriber Zip',
-  'Savelogin': 'Save & Login'
+  'Savelogin': 'Save & Login',
+  'oldPassword': 'Old Password',
+  'newPassword': 'New Password',
+  'confirmPassword':'Confirm Password'
 };
 
 

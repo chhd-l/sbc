@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ValidConst, history } from 'qmkit';
+import { ValidConst, history, util } from 'qmkit';
 import { Row, Form, Input, message, Col, Button } from 'antd';
-import { updateEmployee } from './../webapi';
+import { updatePassword } from './../webapi';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -44,11 +44,11 @@ class RestPassword extends Component<any, any> {
       <Form>
         <FormItem
           {...formItemLayout}
-          label="Password"
+          label={<FormattedMessage id="oldPassword" />}
           hasFeedback
           required={true}
         >
-          {getFieldDecorator('accountPassword', {
+          {getFieldDecorator('oldEncodePwd', {
             rules: [
               { required: true, message: '请输入密码' },
               {
@@ -61,7 +61,24 @@ class RestPassword extends Component<any, any> {
 
         <FormItem
           {...formItemLayout}
-          label="Confirm Password"
+          label={<FormattedMessage id="newPassword" />}
+          hasFeedback
+          required={true}
+        >
+          {getFieldDecorator('newEncodePwd', {
+            rules: [
+              { required: true, message: '请输入密码' },
+              {
+                pattern: ValidConst.password,
+                message: '密码为6-16位字母或数字密码'
+              }
+            ]
+          })(<Input type="password" />)}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label={<FormattedMessage id="confirmPassword" />}
           hasFeedback
           required={true}
         >
@@ -90,7 +107,7 @@ class RestPassword extends Component<any, any> {
   }
 
   checkConfirmPassword = (_rule, value, callback) => {
-    if (value != this.props.form.getFieldValue('accountPassword')) {
+    if (value != this.props.form.getFieldValue('newEncodePwd')) {
       callback(new Error('重复密码不一致'));
       return;
     }
@@ -109,8 +126,16 @@ class RestPassword extends Component<any, any> {
 
   onSave = async (values) => {
     const employeeId = sessionStorage.getItem('employeeId');
+    let base64 = new util.Base64();
+    if (values.newEncodePwd) {
+      values.newEncodePwd = base64.urlEncode(values.newEncodePwd);
+      values.accountPasswordConfirm = base64.urlEncode(
+        values.accountPasswordConfirm
+      );
+      values.oldEncodePwd = base64.urlEncode(values.oldEncodePwd);
+    }
     const data = { employeeId: employeeId, ...values };
-    const { res } = await updateEmployee({
+    const { res } = await updatePassword({
       ...data
     });
     if (res.code === 'K-000000') {

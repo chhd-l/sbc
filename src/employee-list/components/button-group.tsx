@@ -80,7 +80,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           )}
         </div>
 
-        <div style={styles.box}>
+        {/* <div style={styles.box}>
           <Checkbox
             id="hide-employee"
             checked={searchForm.get('isHiddenDimission')}
@@ -94,7 +94,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           >
             <FormattedMessage id="hideLeavingEmployees" />
           </Checkbox>
-        </div>
+        </div> */}
       </div>
     );
   }

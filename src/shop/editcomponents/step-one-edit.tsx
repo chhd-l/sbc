@@ -168,7 +168,7 @@ export default class StepOneEdit extends React.Component<any, any> {
               <FormItem
                 required={false}
                 {...formItemLayout}
-                label={<FormattedMessage id="storeLogo" />}
+                label={<FormattedMessage id="shopLogo" />}
               >
                 <Row>
                   <Col span={6}>

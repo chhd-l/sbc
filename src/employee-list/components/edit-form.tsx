@@ -55,6 +55,7 @@ export default class EditForm extends React.Component<any, any> {
   constructor(props, ctx) {
     super(props);
     this.state = {
+      changePassword: false,
       value: undefined,
       clinicsLites: [],
       selectRoleIds: ''
@@ -121,7 +122,7 @@ export default class EditForm extends React.Component<any, any> {
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
     //如果是编辑状态
-    if (_state.get('edit') || _state.get('setPassword')) {
+    if (_state.get('edit')) {
       employeeName = {
         initialValue: employeeForm.get('employeeName')
       };
@@ -187,10 +188,8 @@ export default class EditForm extends React.Component<any, any> {
       };
     }
     return (
-      // !_state.get('setPassword')
-      // ?
       <Form>
-        <Row style={{ display: _state.get('setPassword') ? 'none' : 'block' }}>
+        <Row>
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="employeeName" />}
@@ -227,20 +226,10 @@ export default class EditForm extends React.Component<any, any> {
 
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="employeePhone" />}
-            hasFeedback
+            label={<FormattedMessage id="email" />}
             required={true}
+            hasFeedback
           >
-            {getFieldDecorator('employeeMobile', {
-              ...employeeMobile,
-              rules: [
-                { required: true, message: '员工手机不能为空' },
-                { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
-              ]
-            })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
-          </FormItem>
-
-          <FormItem {...formItemLayout} label={<FormattedMessage id="email" />}>
             {getFieldDecorator('email', {
               ...email,
               rules: [
@@ -259,6 +248,21 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input disabled={editDisable} placeholder="仅限0-50位字符" />)}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="employeePhone" />}
+            hasFeedback
+            required={true}
+          >
+            {getFieldDecorator('employeeMobile', {
+              ...employeeMobile,
+              rules: [
+                { required: true, message: '员工手机不能为空' },
+                { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
           </FormItem>
 
           <FormItem
@@ -284,7 +288,7 @@ export default class EditForm extends React.Component<any, any> {
             })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
           </FormItem>
 
-          <FormItem
+          {/* <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="position" />}
           >
@@ -305,7 +309,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
-          </FormItem>
+          </FormItem> */}
 
           <FormItem
             {...formItemLayout}
@@ -458,7 +462,7 @@ export default class EditForm extends React.Component<any, any> {
                 })(<Input />)}
               </FormItem>
             ) : null} */}
-          <FormItem
+          {/* <FormItem
             {...formItemLayout}
             label={
               <span>
@@ -475,7 +479,7 @@ export default class EditForm extends React.Component<any, any> {
                 <Radio value={1}>否</Radio>
               </RadioGroup>
             )}
-          </FormItem>
+          </FormItem> */}
 
           {/* <FormItem
               {...formItemLayout}
@@ -503,57 +507,57 @@ export default class EditForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem> */}
 
-          {/* {_state.get('edit') ? (
-              <FormItem {...formItemLayout} label="是否重置密码">
-                <Switch
-                  onChange={(e) => this.setState({ changePassword: e.valueOf() })}
-                />
-              </FormItem>
-            ) : null} */}
+          {_state.get('edit') ? (
+            <FormItem {...formItemLayout} label="Reset Password">
+              <Switch
+                onChange={(e) => this.setState({ changePassword: e.valueOf() })}
+              />
+            </FormItem>
+          ) : null}
 
-          {/* {this.state.changePassword || !_state.get('edit') ? (
-              <div>
-                <FormItem
-                  {...formItemLayout}
-                  label="密码"
-                  hasFeedback
-                  required={true}
-                >
-                  {getFieldDecorator('accountPassword', {
-                    rules: [
-                      { required: true, message: '请输入密码' },
-                      {
-                        pattern: ValidConst.password,
-                        message: '密码为6-16位字母或数字密码'
-                      }
-                    ]
-                  })(<Input type="password" />)}
-                </FormItem>
-                
-                <FormItem
-                  {...formItemLayout}
-                  label="确认密码"
-                  hasFeedback
-                  required={true}
-                >
-                  {getFieldDecorator('accountPasswordConfirm', {
-                    rules: [
-                      { required: true, message: '请输入确认密码' },
-                      { validator: this.checkConfirmPassword }
-                    ]
-                  })(<Input type="password" />)}
-                </FormItem>
-                <FormItem {...formItemLayout} colon={false} label=" ">
+          {this.state.changePassword || !_state.get('edit') ? (
+            <div>
+              <FormItem
+                {...formItemLayout}
+                label="Password"
+                hasFeedback
+                required={true}
+              >
+                {getFieldDecorator('accountPassword', {
+                  rules: [
+                    { required: true, message: '请输入密码' },
+                    {
+                      pattern: ValidConst.password,
+                      message: '密码为6-16位字母或数字密码'
+                    }
+                  ]
+                })(<Input type="password" />)}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="Confirm Password"
+                hasFeedback
+                required={true}
+              >
+                {getFieldDecorator('accountPasswordConfirm', {
+                  rules: [
+                    { required: true, message: '请输入确认密码' },
+                    { validator: this.checkConfirmPassword }
+                  ]
+                })(<Input type="password" />)}
+              </FormItem>
+              {/* <FormItem {...formItemLayout} colon={false} label=" ">
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     {getFieldDecorator('isSendPassword')(
                       <Checkbox>发送账号到员工手机</Checkbox>
                     )}
                   </div>
-                </FormItem>
-              </div>
-            ) : null} */}
+                </FormItem> */}
+            </div>
+          ) : null}
 
-          {_state.get('edit') ? null : (
+          {/* {_state.get('edit') ? null : (
             <FormItem {...formItemLayout} colon={false} label=" ">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 {getFieldDecorator('isSendPassword')(
@@ -561,42 +565,7 @@ export default class EditForm extends React.Component<any, any> {
                 )}
               </div>
             </FormItem>
-          )}
-        </Row>
-        <Row style={{ display: _state.get('setPassword') ? 'block' : 'none' }}>
-          <FormItem
-            {...formItemLayout}
-            label="密码"
-            hasFeedback
-            required={true}
-          >
-            {getFieldDecorator('accountPassword', {
-              rules: [
-                { required: _state.get('setPassword'), message: '请输入密码' },
-                {
-                  pattern: ValidConst.password,
-                  message: '密码为6-16位字母或数字密码'
-                }
-              ]
-            })(<Input type="password" />)}
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
-            label="确认密码"
-            hasFeedback
-            required={true}
-          >
-            {getFieldDecorator('accountPasswordConfirm', {
-              rules: [
-                {
-                  required: _state.get('setPassword'),
-                  message: '请输入确认密码'
-                },
-                { validator: this.checkConfirmPassword }
-              ]
-            })(<Input type="password" />)}
-          </FormItem>
+          )} */}
         </Row>
       </Form>
     );

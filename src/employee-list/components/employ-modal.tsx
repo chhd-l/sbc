@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Modal, Form } from 'antd';
-import { noop } from 'qmkit';
+import { noop, util } from 'qmkit';
 import EditForm from './edit-form';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 const WrapperForm = Form.create()(EditForm as any);
@@ -17,7 +17,6 @@ export default class EmployeeModal extends React.Component<any, any> {
       onCancel: Function;
       onSave: Function;
       editDisable: boolean;
-      setPassword: boolean;
     };
   };
 
@@ -27,18 +26,11 @@ export default class EmployeeModal extends React.Component<any, any> {
     customerLevel: 'customerLevel',
     onCancel: noop,
     onSave: noop,
-    editDisable: 'editDisable',
-    setPassword: 'setPassword'
+    editDisable: 'editDisable'
   };
 
   render() {
-    const {
-      onCancel,
-      visible,
-      edit,
-      editDisable,
-      setPassword
-    } = this.props.relaxProps;
+    const { onCancel, visible, edit, editDisable } = this.props.relaxProps;
 
     if (!visible) {
       return null;
@@ -48,13 +40,7 @@ export default class EmployeeModal extends React.Component<any, any> {
       <Modal
         maskClosable={false}
         title={
-          editDisable
-            ? '查看员工信息'
-            : edit
-            ? '编辑员工信息'
-            : setPassword
-            ? '设置密码'
-            : '新增员工信息'
+          editDisable ? '查看员工信息' : edit ? '编辑员工信息' : '新增员工信息'
         }
         visible={visible}
         onOk={() => this._handleOK()}
@@ -67,9 +53,16 @@ export default class EmployeeModal extends React.Component<any, any> {
 
   _handleOK = () => {
     const form = this._form as WrappedFormUtils;
+    let base64 = new util.Base64();
     form.validateFields(null, (errs, values) => {
       //如果校验通过
       if (!errs) {
+        if (values.accountPassword) {
+          values.accountPassword = base64.urlEncode(values.accountPassword);
+          values.accountPasswordConfirm = base64.urlEncode(
+            values.accountPasswordConfirm
+          );
+        }
         this.props.relaxProps.onSave(values);
       }
     });

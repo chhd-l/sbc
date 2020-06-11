@@ -21,7 +21,6 @@ export default class EmployeeList extends React.Component<any, any> {
       onSelect: Function;
       onDelete: Function;
       onEdit: Function;
-      setPassword: Function;
       init: Function;
       roles: any;
       onEnable: Function;
@@ -39,7 +38,6 @@ export default class EmployeeList extends React.Component<any, any> {
     dataList: 'dataList',
     onDelete: noop,
     onEdit: noop,
-    setPassword: noop,
     onSelect: noop,
     init: noop,
     roles: 'roles',
@@ -185,13 +183,7 @@ export default class EmployeeList extends React.Component<any, any> {
   }
 
   _renderMenu = (rowInfo: object) => {
-    const {
-      onEdit,
-      onDelete,
-      onEnable,
-      switchModal,
-      setPassword
-    } = this.props.relaxProps;
+    const { onEdit, onDelete, onEnable, switchModal } = this.props.relaxProps;
     const { employeeId, accountState } = rowInfo as any;
     return (
       <div className="operation-box">
@@ -231,17 +223,6 @@ export default class EmployeeList extends React.Component<any, any> {
                 <FormattedMessage id="enable" />
               </a>
             )}
-          </AuthWrapper>
-        )}
-        <br />
-        {accountState != 2 && (
-          <AuthWrapper functionName={'updateEmployee'}>
-            <a
-              href="javascript:void(0);"
-              onClick={() => setPassword(employeeId)}
-            >
-              <FormattedMessage id="setPassword" />
-            </a>
           </AuthWrapper>
         )}
 

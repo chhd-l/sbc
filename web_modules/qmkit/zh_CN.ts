@@ -358,6 +358,5 @@ export default {
 'privateKey': '密钥',
 'publicKey': '公钥',
 'apiVersion': 'API版本',
-'clinics': '医院',
-'setPassword': '设置密码'
+'clinics': '医院'
 };

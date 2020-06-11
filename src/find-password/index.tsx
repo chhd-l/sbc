@@ -5,6 +5,7 @@ import ProcessBar from './components/process-bar';
 import InputNumber from './components/input-number';
 import VerifyIdentity from './components/verify-identity';
 import SettingPassword from './components/setting-password';
+import RestPassword from './components/rest-password';
 import AppStore from './store';
 import './style.css';
 
@@ -39,10 +40,11 @@ export default class FindPassword extends React.Component<any, any> {
         </Header>
         <Content>
           <div style={styles.content}>
-            <ProcessBar />
+            {/* <ProcessBar />
             {_current === 0 ? <InputNumber /> : null}
             {_current === 1 ? <VerifyIdentity /> : null}
-            {_current === 2 ? <SettingPassword /> : null}
+            {_current === 2 ? <SettingPassword /> : null} */}
+            <RestPassword />
           </div>
         </Content>
       </Layout>

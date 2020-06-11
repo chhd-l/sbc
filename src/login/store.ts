@@ -47,7 +47,6 @@ export default class AppStore extends Store {
     const password = form.password;
     const isRemember = form.isRemember;
     let base64 = new util.Base64();
-    debugger;
     const { res } = await webapi.login(
       base64.urlEncode(account),
       base64.urlEncode(password)
@@ -59,6 +58,7 @@ export default class AppStore extends Store {
       window.token = res.context.token;
       window.companyType = res.context.companyType;
       sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
+      sessionStorage.setItem('employeeId', res.context.employeeId);
 
       // 获取登录人拥有的菜单
       const menusRes = (await webapi.fetchMenus()) as any;

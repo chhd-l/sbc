@@ -52,11 +52,6 @@ export default class EditActor extends Actor {
     return state.set('edit', isEdit);
   }
 
-  @Action('setPassword')
-  setPassword(state: IMap, isSetPassword) {
-    return state.set('setPassword', isSetPassword);
-  }
-
   @Action('edit:editDisable')
   editDisable(state, value) {
     return state.set('editDisable', value);

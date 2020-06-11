@@ -113,12 +113,12 @@ export default {
   'newProduct': 'New product',
   'email': 'Email',
   'basicSetting': 'Basic setting',
-  'shopSetting': 'Shop setting',
-  'storeLogo': 'Shop logo',
+  'storeSetting': 'Store setting',
+  'storeLogo': 'Store logo',
   'shopLogo': 'Shop logo',
-  'shopNumber': 'Shop number',
-  'shopAccount': 'Shop account',
-  'shopName':'Shop name',
+  'storeNumber': 'Store number',
+  'storeAccount': 'Store account',
+  'storeName':'Store name',
   'Contact':'Contact',
   'phoneNumber': 'Phone number',
   'contactEmails': 'Contact emails',
@@ -574,7 +574,7 @@ export default {
   'deliveryInvoiceAddress2': 'Delivery Invoice address2',
   'cardNumber': 'Card number',
   'selectedPrescriberId':'Selected Prescriber ID',
-  'setPassword': 'Set Passwrod'
+  'Savelogin': 'Save & Login'
 };
 
 

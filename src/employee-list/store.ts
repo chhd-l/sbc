@@ -334,22 +334,11 @@ export default class AppStore extends Store {
     }
     this.transaction(() => {
       this.dispatch('edit', true);
-      this.dispatch('setPassword', false);
       //离职员工，弹框里的表单控件均不可编辑
       this.dispatch('edit:editDisable', employee.get('accountState') == 2);
       this.dispatch('edit:init', employee);
       this.dispatch('modal:show');
     });
-  };
-
-  setPassword = (id: string) => {
-    const employee = this.state()
-      .get('dataList')
-      .find((employee) => employee.get('employeeId') == id);
-    this.dispatch('setPassword', true);
-    this.dispatch('edit', false);
-    this.dispatch('edit:init', employee);
-    this.dispatch('modal:show');
   };
 
   onSave = async (employeeForm) => {
@@ -362,7 +351,7 @@ export default class AppStore extends Store {
       employeeForm.birthday = employeeForm.birthday.format(Const.DAY_FORMAT);
     }
 
-    if (this.state().get('edit') || this.state().get('setPassword')) {
+    if (this.state().get('edit')) {
       //如果非主账号，部门ID,需要拼接
       if (this.state().get('isMaster') == 0) {
         employeeForm.departmentIdList = employeeForm.departmentIdList.concat(

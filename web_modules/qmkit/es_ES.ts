@@ -571,7 +571,11 @@ export default {
   'deliveryInvoiceAddress1': 'Delivery Invoice address1',
   'deliveryInvoiceAddress2': 'Delivery Invoice address2',
   'cardNumber': 'Card number',
-  'selectedPrescriberId':'Selected Prescriber ID'
+  'selectedPrescriberId':'Selected Prescriber ID',
+  'prescriberId':'Prescriber ID',
+  'prescriberName':'Prescriber Name',
+  'prescriberPhone':'Prescriber Phone',
+  'prescriberZip':'Prescriber Zip',
 };
 
 

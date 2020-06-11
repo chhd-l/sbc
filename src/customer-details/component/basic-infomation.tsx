@@ -51,11 +51,12 @@ class BasicInfomation extends React.Component<any, any> {
         preferredMethods: '',
         reference: '',
         selectedClinics: [],
-        defaultClinicsId: '',
+        defaultClinicsString: '',
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
-        }
+        },
+        cityObj: {}
       },
       countryArr: [],
       cityArr: [],
@@ -95,32 +96,20 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         let res = data.res;
         if (res.code && res.code !== 'K-000000') {
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         } else {
           let res2 = JSON.stringify(data.res);
 
           let resObj = JSON.parse(res2);
           let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
-          let defaultClinicsId = '';
+          let defaultClinicsString = '';
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
-            defaultClinicsId = resObj.defaultClinics.clinicsId;
+            defaultClinicsString =
+              resObj.defaultClinics.clinicsId +
+              ',' +
+              resObj.defaultClinics.clinicsName;
           }
-          this.props.form.setFieldsValue({
-            firstName: resObj.firstName,
-            lastName: resObj.lastName,
-            // birthDay: resObj.birthDay,
-            email: resObj.email,
-            contactPhone: resObj.contactPhone,
-            postCode: resObj.postCode,
-            city: resObj.city,
-            country: resObj.country,
-            address1: resObj.house,
-            address2: resObj.housing,
-            preferredMethods: resObj.contactMethod,
-            reference: resObj.reference,
-            selectedClinics: clinicsVOS,
-            defaultClinicsId: defaultClinicsId
-          });
+
           let basicForm = {
             firstName: resObj.firstName,
             lastName: resObj.lastName,
@@ -135,7 +124,7 @@ class BasicInfomation extends React.Component<any, any> {
             preferredMethods: resObj.contactMethod,
             reference: resObj.reference,
             selectedClinics: resObj.clinicsVOS,
-            defaultClinicsId: defaultClinicsId,
+            defaultClinicsString: defaultClinicsString,
             defaultClinics: resObj.defaultClinics
           };
           this.setState({
@@ -143,10 +132,34 @@ class BasicInfomation extends React.Component<any, any> {
             basicForm: basicForm,
             currentForm: resObj
           });
+          setTimeout(() => {
+            this.props.form.setFieldsValue({
+              firstName: resObj.firstName,
+              lastName: resObj.lastName,
+              // birthDay: resObj.birthDay,
+              email: resObj.email,
+              contactPhone: resObj.contactPhone,
+              postCode: resObj.postCode,
+              city: resObj.city,
+              country: resObj.country,
+              address1: resObj.house,
+              address2: resObj.housing,
+              preferredMethods: resObj.contactMethod,
+              reference: resObj.reference,
+              selectedClinics: clinicsVOS,
+              defaultClinicsString: defaultClinicsString
+            });
+            this.setState({
+              loading: false
+            });
+          }, 1000);
         }
       })
       .catch((err) => {
-        message.error('Get data failed');
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
       });
   };
 
@@ -193,6 +206,7 @@ class BasicInfomation extends React.Component<any, any> {
     let params = {
       birthDay: basicForm.birthDay,
       city: basicForm.city,
+      cityId: 0,
       clinicsVOS: basicForm.selectedClinics,
       contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
@@ -213,13 +227,13 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Update data success');
+          message.success('Successful');
         } else {
-          message.error(res.message || 'Update data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Update data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -240,14 +254,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -551,7 +565,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Default Prescriber">
                   {getFieldDecorator(
-                    'defaultClinicsId',
+                    'defaultClinicsString',
                     {}
                   )(
                     <Select
@@ -559,11 +573,10 @@ class BasicInfomation extends React.Component<any, any> {
                       placeholder="Please select"
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
-                        debugger;
-
+                        let tempArr = Option.props.children.split(',');
                         let clinic = {
-                          clinicsId: Option.props.value,
-                          clinicsName: Option.props.children
+                          clinicsId: tempArr[0],
+                          clinicsName: tempArr[1]
                         };
 
                         this.onFormChange({
@@ -577,7 +590,7 @@ class BasicInfomation extends React.Component<any, any> {
                           value={item.clinicsId.toString()}
                           key={item.clinicsId}
                         >
-                          {item.clinicsName}
+                          {item.clinicsId + ',' + item.clinicsName}
                         </Option>
                       ))}
                     </Select>
@@ -598,9 +611,10 @@ class BasicInfomation extends React.Component<any, any> {
                       onChange={(value, Option) => {
                         let clinics = [];
                         for (let i = 0; i < Option.length; i++) {
+                          let tempArr = Option[i].props.children.split(',');
                           let clinic = {
-                            clinicsId: Option[i].props.value,
-                            clinicsName: Option[i].props.children
+                            clinicsId: tempArr[0],
+                            clinicsName: tempArr[1]
                           };
                           clinics.push(clinic);
                         }

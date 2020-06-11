@@ -104,7 +104,7 @@ export default class settingForm extends React.Component<any, any> {
             <FormItem
               {...formItemLayout}
               required={false}
-              label={<FormattedMessage id="merchantLogo" />}
+              label={<FormattedMessage id="storeLogo" />}
             >
               <Row>
                 <Col span={6}>
@@ -155,7 +155,7 @@ export default class settingForm extends React.Component<any, any> {
             <FormItem
               {...inputItemLayout}
               required={false}
-              label={<FormattedMessage id="merchantAccount" />}
+              label={<FormattedMessage id="storeAccount" />}
             >
               {getFieldDecorator('accountName', {
                 initialValue: accountName
@@ -168,7 +168,7 @@ export default class settingForm extends React.Component<any, any> {
             <FormItem
               {...inputItemLayout}
               required={false}
-              label={<FormattedMessage id="merchantName" />}
+              label={<FormattedMessage id="storeName" />}
             >
               {getFieldDecorator('storeName', {
                 initialValue: storeName

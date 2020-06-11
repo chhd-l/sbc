@@ -58,6 +58,7 @@ export default class AppStore extends Store {
       window.token = res.context.token;
       window.companyType = res.context.companyType;
       sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
+      sessionStorage.setItem('employeeId', res.context.employeeId);
 
       // 获取登录人拥有的菜单
       const menusRes = (await webapi.fetchMenus()) as any;

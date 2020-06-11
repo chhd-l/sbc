@@ -124,6 +124,7 @@ export default class AppStore extends Store {
       return;
     }
     let smsVerifyCode = localStorage.getItem('forgetpassword-validcode');
+    debugger;
     const { res } = await webapi.resetPassword(
       phone,
       password.trim(),

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Modal, Form } from 'antd';
-import { noop } from 'qmkit';
+import { noop, util } from 'qmkit';
 import EditForm from './edit-form';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-
 const WrapperForm = Form.create()(EditForm as any);
 
 @Relax
@@ -17,7 +16,7 @@ export default class EmployeeModal extends React.Component<any, any> {
       edit: boolean;
       onCancel: Function;
       onSave: Function;
-      editDisable:boolean
+      editDisable: boolean;
     };
   };
 
@@ -27,7 +26,7 @@ export default class EmployeeModal extends React.Component<any, any> {
     customerLevel: 'customerLevel',
     onCancel: noop,
     onSave: noop,
-    editDisable:'editDisable'
+    editDisable: 'editDisable'
   };
 
   render() {
@@ -38,8 +37,11 @@ export default class EmployeeModal extends React.Component<any, any> {
     }
 
     return (
-       <Modal  maskClosable={false}
-        title={editDisable ? '查看员工信息' : edit? '编辑员工信息':'新增员工信息'}
+      <Modal
+        maskClosable={false}
+        title={
+          editDisable ? '查看员工信息' : edit ? '编辑员工信息' : '新增员工信息'
+        }
         visible={visible}
         onOk={() => this._handleOK()}
         onCancel={() => onCancel()}
@@ -50,10 +52,17 @@ export default class EmployeeModal extends React.Component<any, any> {
   }
 
   _handleOK = () => {
-    const form = this._form as WrappedFormUtils;    
-    form.validateFields(null, (errs, values) => {      
+    const form = this._form as WrappedFormUtils;
+    let base64 = new util.Base64();
+    form.validateFields(null, (errs, values) => {
       //如果校验通过
-      if (!errs) {        
+      if (!errs) {
+        if (values.accountPassword) {
+          values.accountPassword = base64.urlEncode(values.accountPassword);
+          values.accountPasswordConfirm = base64.urlEncode(
+            values.accountPasswordConfirm
+          );
+        }
         this.props.relaxProps.onSave(values);
       }
     });

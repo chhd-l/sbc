@@ -46,7 +46,7 @@ class ClinicForm extends React.Component<any, any> {
         clinicTypeDesc: res.context.description
       });
     } else {
-      message.error(res.message || 'get data faild');
+      message.error('Unsuccessful');
     }
     console.log(this.state.clinicTypeForm);
   };
@@ -72,9 +72,9 @@ class ClinicForm extends React.Component<any, any> {
 
     const { res } = await webapi.addClinicsDictionary(params);
     if (res.code === 'K-000000') {
-      message.success(res.message || 'create success');
+      message.success('Successful');
     } else {
-      message.error(res.message || 'create faild');
+      message.error('Unsuccessful');
     }
   };
   onUpdate = async () => {
@@ -94,9 +94,9 @@ class ClinicForm extends React.Component<any, any> {
 
     const { res } = await webapi.updateClinicsDictionary(params);
     if (res.code === 'K-000000') {
-      message.success(res.message || 'update success');
+      message.success('Successful');
     } else {
-      message.error(res.message || 'update faild');
+      message.error('Unsuccessful');
     }
   };
 
@@ -165,7 +165,7 @@ class ClinicForm extends React.Component<any, any> {
             </Button>
           )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="/clinic-type">Back List</Link>
+            <Link to="/clinic-type">Back To List</Link>
           </Button>
         </FormItem>
       </Form>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
 import {
+  Row,
   Form,
   Input,
   Select,
@@ -120,7 +121,6 @@ export default class EditForm extends React.Component<any, any> {
     let clinicsId = {};
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
-
     //如果是编辑状态
     if (_state.get('edit')) {
       employeeName = {
@@ -187,377 +187,386 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('clinicsId')
       };
     }
-
     return (
       <Form>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="employeeName" />}
-          hasFeedback
-        >
-          {getFieldDecorator('employeeName', {
-            ...employeeName,
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: '请填写员工姓名'
-              },
-              {
-                min: 1,
-                max: 20,
-                message: '1-20个字符'
-              }
-              // {
-              //   validator: (rule, value, callback) => {
-              //     QMMethod.validatorTrimMinAndMax(
-              //       rule,
-              //       value,
-              //       callback,
-              //       '员工姓名',
-              //       1,
-              //       20
-              //     );
-              //   }
-              // }
-            ]
-          })(<Input disabled={editDisable} placeholder="仅限1-20位字符" />)}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="employeePhone" />}
-          hasFeedback
-          required={true}
-        >
-          {getFieldDecorator('employeeMobile', {
-            ...employeeMobile,
-            rules: [
-              { required: true, message: '员工手机不能为空' },
-              { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
-            ]
-          })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
-        </FormItem>
-
-        <FormItem {...formItemLayout} label={<FormattedMessage id="email" />}>
-          {getFieldDecorator('email', {
-            ...email,
-            rules: [
-              { pattern: ValidConst.email, message: '请输入正确的邮箱' },
-              {
-                validator: (rule, value, callback) => {
-                  QMMethod.validatorMinAndMax(
-                    rule,
-                    value,
-                    callback,
-                    '邮箱',
-                    0,
-                    50
-                  );
-                }
-              }
-            ]
-          })(<Input disabled={editDisable} placeholder="仅限0-50位字符" />)}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="employeeNo" />}
-        >
-          {getFieldDecorator('jobNo', {
-            ...jobNo,
-            rules: [
-              {
-                validator: (rule, value, callback) => {
-                  QMMethod.validatorMinAndMax(
-                    rule,
-                    value,
-                    callback,
-                    '工号',
-                    0,
-                    20
-                  );
-                }
-              }
-            ]
-          })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="position" />}
-        >
-          {getFieldDecorator('position', {
-            ...position,
-            rules: [
-              {
-                validator: (rule, value, callback) => {
-                  QMMethod.validatorMinAndMax(
-                    rule,
-                    value,
-                    callback,
-                    '岗位',
-                    0,
-                    20
-                  );
-                }
-              }
-            ]
-          })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="birthday" />}
-        >
-          {getFieldDecorator('birthday', {
-            ...birthday
-          })(
-            <DatePicker
-              disabled={editDisable}
-              getCalendarContainer={() =>
-                document.getElementById('page-content')
-              }
-              allowClear={true}
-              format={Const.DAY_FORMAT}
-              placeholder={'生日'}
-            />
-          )}
-        </FormItem>
-
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Gender" />}>
-          {getFieldDecorator('sex', {
-            ...sex
-          })(
-            <RadioGroup
-              disabled={editDisable}
-              value={employeeForm.get('sex')}
-              //onChange={(e) => console.log(e.target.value)}
-            >
-              <Radio value={0}>
-                <span style={styles.darkColor}>保密</span>
-              </Radio>
-              <Radio value={1}>
-                <span style={styles.darkColor}>男</span>
-              </Radio>
-              <Radio value={2}>
-                <span style={styles.darkColor}>女</span>
-              </Radio>
-            </RadioGroup>
-          )}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="attributionDepartment" />}
-        >
-          {getFieldDecorator('departmentIdList', {
-            ...departmentIdList
-          })(
-            <TreeSelect
-              disabled={
-                editDisable ||
-                (isMaster == 0 && manageDepartmentIdList.size == 0)
-              }
-              // treeData = {treeData.toJS()}
-              showSearch={false}
-              style={{ width: '100%' }}
-              value={departmentIdList}
-              dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
-              placeholder="请选择，可多选"
-              allowClear
-              multiple
-              treeDefaultExpandAll
-              onChange={this.onChange}
-            >
-              {this._loop(departTree)}
-            </TreeSelect>
-          )}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="systemRole" />}
-          hasFeedback
-        >
-          {getFieldDecorator('roleIdList', {
-            ...roleIdList
-          })(
-            <Select
-              placeholder="请选择，可多选"
-              disabled={editDisable}
-              mode="multiple"
-              showSearch
-              onChange={this.roleChange}
-              filterOption={(input, option: { props }) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {this._renderOption(roles)}
-              {/* {
-                <Option value={'addRole'} key={'xxx'}>
-                  {'+其它员工角色'}
-                </Option>
-              } */}
-            </Select>
-          )}
-        </FormItem>
-
-        {this.state.selectRoleIds.indexOf('168') > -1 ? (
+        <Row>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="clinics" />}
+            label={<FormattedMessage id="employeeName" />}
             hasFeedback
           >
-            {getFieldDecorator('clinicsId', {
-              ...clinicsId,
-              rules: [{ required: true, message: 'Please Select Clinics!' }]
+            {getFieldDecorator('employeeName', {
+              ...employeeName,
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请填写员工姓名'
+                },
+                {
+                  min: 1,
+                  max: 20,
+                  message: '1-20个字符'
+                }
+                // {
+                //   validator: (rule, value, callback) => {
+                //     QMMethod.validatorTrimMinAndMax(
+                //       rule,
+                //       value,
+                //       callback,
+                //       '员工姓名',
+                //       1,
+                //       20
+                //     );
+                //   }
+                // }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限1-20位字符" />)}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="email" />}
+            required={true}
+            hasFeedback
+          >
+            {getFieldDecorator('email', {
+              ...email,
+              rules: [
+                { pattern: ValidConst.email, message: '请输入正确的邮箱' },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorMinAndMax(
+                      rule,
+                      value,
+                      callback,
+                      '邮箱',
+                      0,
+                      50
+                    );
+                  }
+                }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限0-50位字符" />)}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="employeePhone" />}
+            hasFeedback
+            required={true}
+          >
+            {getFieldDecorator('employeeMobile', {
+              ...employeeMobile,
+              rules: [
+                { required: true, message: '员工手机不能为空' },
+                { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="employeeNo" />}
+          >
+            {getFieldDecorator('jobNo', {
+              ...jobNo,
+              rules: [
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorMinAndMax(
+                      rule,
+                      value,
+                      callback,
+                      '工号',
+                      0,
+                      20
+                    );
+                  }
+                }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
+          </FormItem>
+
+          {/* <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="position" />}
+          >
+            {getFieldDecorator('position', {
+              ...position,
+              rules: [
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorMinAndMax(
+                      rule,
+                      value,
+                      callback,
+                      '岗位',
+                      0,
+                      20
+                    );
+                  }
+                }
+              ]
+            })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
+          </FormItem> */}
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="birthday" />}
+          >
+            {getFieldDecorator('birthday', {
+              ...birthday
+            })(
+              <DatePicker
+                disabled={editDisable}
+                getCalendarContainer={() =>
+                  document.getElementById('page-content')
+                }
+                allowClear={true}
+                format={Const.DAY_FORMAT}
+                placeholder={'生日'}
+              />
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="Gender" />}
+          >
+            {getFieldDecorator('sex', {
+              ...sex
+            })(
+              <RadioGroup
+                disabled={editDisable}
+                value={employeeForm.get('sex')}
+                //onChange={(e) => console.log(e.target.value)}
+              >
+                <Radio value={0}>
+                  <span style={styles.darkColor}>保密</span>
+                </Radio>
+                <Radio value={1}>
+                  <span style={styles.darkColor}>男</span>
+                </Radio>
+                <Radio value={2}>
+                  <span style={styles.darkColor}>女</span>
+                </Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="attributionDepartment" />}
+          >
+            {getFieldDecorator('departmentIdList', {
+              ...departmentIdList
+            })(
+              <TreeSelect
+                disabled={
+                  editDisable ||
+                  (isMaster == 0 && manageDepartmentIdList.size == 0)
+                }
+                // treeData = {treeData.toJS()}
+                showSearch={false}
+                style={{ width: '100%' }}
+                value={departmentIdList}
+                dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
+                placeholder="请选择，可多选"
+                allowClear
+                multiple
+                treeDefaultExpandAll
+                onChange={this.onChange}
+              >
+                {this._loop(departTree)}
+              </TreeSelect>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="systemRole" />}
+            hasFeedback
+          >
+            {getFieldDecorator('roleIdList', {
+              ...roleIdList
             })(
               <Select
-                placeholder="Please Select Clinics"
+                placeholder="请选择，可多选"
                 disabled={editDisable}
+                mode="multiple"
                 showSearch
+                onChange={this.roleChange}
                 filterOption={(input, option: { props }) =>
                   option.props.children
                     .toLowerCase()
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {this._renderClinicsOption()}
+                {this._renderOption(roles)}
+                {/* {
+                    <Option value={'addRole'} key={'xxx'}>
+                      {'+其它员工角色'}
+                    </Option>
+                  } */}
               </Select>
             )}
           </FormItem>
-        ) : (
-          ''
-        )}
 
-        {/* {this.state.roleIds.includes('addRole') ? (
-          <FormItem {...formItemLayout} label="员工角色" hasFeedback>
-            {getFieldDecorator('roleName', {
-              ...roleName,
-              rules: [
-                {
-                  validator: (rule, value, callback) => {
-                    QMMethod.validatorTrimMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      '角色名称',
-                      1,
-                      10
-                    );
+          {this.state.selectRoleIds.indexOf('168') > -1 ? (
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="clinics" />}
+              hasFeedback
+            >
+              {getFieldDecorator('clinicsId', {
+                ...clinicsId,
+                rules: [{ required: true, message: 'Please Select Clinics!' }]
+              })(
+                <Select
+                  placeholder="Please Select Clinics"
+                  disabled={editDisable}
+                  showSearch
+                  filterOption={(input, option: { props }) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
                   }
-                }
-              ]
-            })(<Input />)}
-          </FormItem>
-        ) : null} */}
-        <FormItem
-          {...formItemLayout}
-          label={
-            <span>
-              <FormattedMessage id="assistant" />
-            </span>
-          }
-        >
-          {getFieldDecorator('isEmployee', {
-            ...isEmployee,
-            rules: [{ required: true, message: '请选择是否是业务员' }]
-          })(
-            <RadioGroup disabled={editDisable}>
-              <Radio value={0}>是</Radio>
-              <Radio value={1}>否</Radio>
-            </RadioGroup>
+                >
+                  {this._renderClinicsOption()}
+                </Select>
+              )}
+            </FormItem>
+          ) : (
+            ''
           )}
-        </FormItem>
 
-        {/* <FormItem
-          {...formItemLayout}
-          label="账户名"
-          hasFeedback
-          required={true}
-        >
-          {getFieldDecorator('accountName', {
-            ...accountName,
-            rules: [
-              { required: true, message: '请输入账户名' },
-              {
-                validator: (rule, value, callback) => {
-                  QMMethod.validatorTrimMinAndMax(
-                    rule,
-                    value,
-                    callback,
-                    '账户名',
-                    1,
-                    20
-                  );
-                }
-              }
-            ]
-          })(<Input />)}
-        </FormItem> */}
+          {/* {this.state.roleIds.includes('addRole') ? (
+              <FormItem {...formItemLayout} label="员工角色" hasFeedback>
+                {getFieldDecorator('roleName', {
+                  ...roleName,
+                  rules: [
+                    {
+                      validator: (rule, value, callback) => {
+                        QMMethod.validatorTrimMinAndMax(
+                          rule,
+                          value,
+                          callback,
+                          '角色名称',
+                          1,
+                          10
+                        );
+                      }
+                    }
+                  ]
+                })(<Input />)}
+              </FormItem>
+            ) : null} */}
+          {/* <FormItem
+            {...formItemLayout}
+            label={
+              <span>
+                <FormattedMessage id="assistant" />
+              </span>
+            }
+          >
+            {getFieldDecorator('isEmployee', {
+              ...isEmployee,
+              rules: [{ required: true, message: '请选择是否是业务员' }]
+            })(
+              <RadioGroup disabled={editDisable}>
+                <Radio value={0}>是</Radio>
+                <Radio value={1}>否</Radio>
+              </RadioGroup>
+            )}
+          </FormItem> */}
 
-        {/* {_state.get('edit') ? (
-          <FormItem {...formItemLayout} label="是否重置密码">
-            <Switch
-              onChange={(e) => this.setState({ changePassword: e.valueOf() })}
-            />
-          </FormItem>
-        ) : null} */}
-
-        {/* {this.state.changePassword || !_state.get('edit') ? (
-          <div>
-            <FormItem
+          {/* <FormItem
               {...formItemLayout}
-              label="密码"
+              label="账户名"
               hasFeedback
               required={true}
             >
-              {getFieldDecorator('accountPassword', {
+              {getFieldDecorator('accountName', {
+                ...accountName,
                 rules: [
-                  { required: true, message: '请输入密码' },
+                  { required: true, message: '请输入账户名' },
                   {
-                    pattern: ValidConst.password,
-                    message: '密码为6-16位字母或数字密码'
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorTrimMinAndMax(
+                        rule,
+                        value,
+                        callback,
+                        '账户名',
+                        1,
+                        20
+                      );
+                    }
                   }
                 ]
-              })(<Input type="password" />)}
+              })(<Input />)}
+            </FormItem> */}
+
+          {_state.get('edit') ? (
+            <FormItem {...formItemLayout} label="Reset Password">
+              <Switch
+                onChange={(e) => this.setState({ changePassword: e.valueOf() })}
+              />
             </FormItem>
-            
-            <FormItem
-              {...formItemLayout}
-              label="确认密码"
-              hasFeedback
-              required={true}
-            >
-              {getFieldDecorator('accountPasswordConfirm', {
-                rules: [
-                  { required: true, message: '请输入确认密码' },
-                  { validator: this.checkConfirmPassword }
-                ]
-              })(<Input type="password" />)}
-            </FormItem>
+          ) : null}
+
+          {this.state.changePassword || !_state.get('edit') ? (
+            <div>
+              <FormItem
+                {...formItemLayout}
+                label="Password"
+                hasFeedback
+                required={true}
+              >
+                {getFieldDecorator('accountPassword', {
+                  rules: [
+                    { required: true, message: '请输入密码' },
+                    {
+                      pattern: ValidConst.password,
+                      message: '密码为6-16位字母或数字密码'
+                    }
+                  ]
+                })(<Input type="password" />)}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="Confirm Password"
+                hasFeedback
+                required={true}
+              >
+                {getFieldDecorator('accountPasswordConfirm', {
+                  rules: [
+                    { required: true, message: '请输入确认密码' },
+                    { validator: this.checkConfirmPassword }
+                  ]
+                })(<Input type="password" />)}
+              </FormItem>
+              {/* <FormItem {...formItemLayout} colon={false} label=" ">
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {getFieldDecorator('isSendPassword')(
+                      <Checkbox>发送账号到员工手机</Checkbox>
+                    )}
+                  </div>
+                </FormItem> */}
+            </div>
+          ) : null}
+
+          {/* {_state.get('edit') ? null : (
             <FormItem {...formItemLayout} colon={false} label=" ">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 {getFieldDecorator('isSendPassword')(
-                  <Checkbox>发送账号到员工手机</Checkbox>
+                  <Checkbox>短信通知员工</Checkbox>
                 )}
               </div>
             </FormItem>
-          </div>
-        ) : null} */}
-
-        {_state.get('edit') ? null : (
-          <FormItem {...formItemLayout} colon={false} label=" ">
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {getFieldDecorator('isSendPassword')(
-                <Checkbox>短信通知员工</Checkbox>
-              )}
-            </div>
-          </FormItem>
-        )}
+          )} */}
+        </Row>
       </Form>
     );
   }

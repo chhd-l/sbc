@@ -10,6 +10,7 @@ import { message } from 'antd';
 export interface IAsyncResult<T> {
   res: T;
   err: Error;
+  data?: Object
 }
 
 /**
@@ -55,7 +56,15 @@ export default async function Fetch<T>(
     url = url.replace(/([^:])\/\//, '$1/');
 
     const res = await fetch(url, merge);
-
+    
+    if(url.indexOf('/clinics/exportPrescriber') !== -1){
+      const resBlob =await res.blob();
+      return {
+        res: null,
+        data:resBlob,
+        err: null
+      };
+    }
     const resJSON = await res.json();
     if (resJSON.code === 'K-999996') {
       message.error(resJSON.message);

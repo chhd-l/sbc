@@ -151,11 +151,11 @@ class PetInfomation extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
   getSpecialNeeds = (array) => {
@@ -215,11 +215,11 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
   editPets = () => {
@@ -268,14 +268,14 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Successful');
+          message.success('Successful');
           this.petsByConsumer();
         } else {
-          message.error(res.message || 'Update data failed');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Update data failed');
+        message.error('Unsuccessful');
       });
   };
 
@@ -318,11 +318,11 @@ class PetInfomation extends React.Component<any, any> {
             currentBirthDay: currentPet.birthOfPets
           });
         } else {
-          message.error(res.message || 'Get data failed');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Get data failed');
+        message.error('Unsuccessful');
       });
   };
 

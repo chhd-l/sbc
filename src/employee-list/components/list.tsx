@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { AuthWrapper, DataGrid, noop } from 'qmkit';
 import { List } from 'immutable';
-import { Popconfirm, Tooltip } from 'antd';
+import { Popconfirm, Tooltip, Divider } from 'antd';
 import { checkMenu } from '../../../web_modules/qmkit/checkAuth';
 import { FormattedMessage } from 'react-intl';
 
@@ -88,8 +88,8 @@ export default class EmployeeList extends React.Component<any, any> {
           render={(rowInfo) => (
             <div style={{ display: 'flex' }}>
               <span>{rowInfo.employeeName}</span>
-              {rowInfo.isLeader == 1 && <div style={styles.tag}>主管</div>}
-              {rowInfo.isEmployee == 0 && <div style={styles.tag}>业务员</div>}
+              {/* {rowInfo.isLeader == 1 && <div style={styles.tag}>主管</div>}
+              {rowInfo.isEmployee == 0 && <div style={styles.tag}>业务员</div>} */}
             </div>
           )}
         />
@@ -194,7 +194,6 @@ export default class EmployeeList extends React.Component<any, any> {
             </a>
           </AuthWrapper>
         )}
-
         <AuthWrapper functionName={'deleteEmployee'}>
           <Popconfirm
             title="确认要删除这为员工和他的账号吗？删除后他将无法登录。"

@@ -77,12 +77,16 @@ export default class AppStore extends Store {
       //存储未经处理的一维数组结构
       this.dispatch('employee:departList', departmentVOS);
       //当前用户管理的部门id集合
-      this.dispatch('employee:manageDepartmentIdList', { ids: manageDepartmentIdList, isMaster: isMaster });
-      const parentId = departmentVOList.get(0) ?
-        departmentVOList
-          .get(0)
-          .get('departmentId')
-          .toString() : '';
+      this.dispatch('employee:manageDepartmentIdList', {
+        ids: manageDepartmentIdList,
+        isMaster: isMaster
+      });
+      const parentId = departmentVOList.get(0)
+        ? departmentVOList
+            .get(0)
+            .get('departmentId')
+            .toString()
+        : '';
       //默认展开第一个父部门极其下面的子部门
       if (parentId) {
         const defaultExpandedKeys = this._findParentAndChildrenIds(
@@ -101,7 +105,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('employee:countNum', res.context.num);
     }
-  }
+  };
 
   //传入父部门ID，返回父+子的all部门ID集合
   _findParentAndChildrenIds = (parentId, list) => {
@@ -127,7 +131,10 @@ export default class AppStore extends Store {
   onFormChange = async (searchParam) => {
     this.dispatch('change:searchForm', searchParam);
     //如果是选中部门的，直接出发搜索
-    if (searchParam.field == 'departmentIds' || searchParam.field == 'isHiddenDimission') {
+    if (
+      searchParam.field == 'departmentIds' ||
+      searchParam.field == 'isHiddenDimission'
+    ) {
       this.onSearch();
     }
   };
@@ -312,19 +319,37 @@ export default class AppStore extends Store {
     const employee = this.state()
       .get('dataList')
       .find((employee) => employee.get('employeeId') == id);
-    const manageDepartmentIdList = this.state().get('manageDepartmentIdList').toJS();
+    const manageDepartmentIdList = this.state()
+      .get('manageDepartmentIdList')
+      .toJS();
     if (employee.get('departmentIds')) {
       //非当前用户能看到及操作的部门ID结合
-      this.dispatch('edit:restDepartmentIds',
-        employee.get('departmentIds').split(',').filter(v => !manageDepartmentIdList.includes(v)));
+      this.dispatch(
+        'edit:restDepartmentIds',
+        employee
+          .get('departmentIds')
+          .split(',')
+          .filter((v) => !manageDepartmentIdList.includes(v))
+      );
     }
     this.transaction(() => {
       this.dispatch('edit', true);
+      this.dispatch('setPassword', false);
       //离职员工，弹框里的表单控件均不可编辑
       this.dispatch('edit:editDisable', employee.get('accountState') == 2);
       this.dispatch('edit:init', employee);
       this.dispatch('modal:show');
     });
+  };
+
+  setPassword = (id: string) => {
+    const employee = this.state()
+      .get('dataList')
+      .find((employee) => employee.get('employeeId') == id);
+    this.dispatch('setPassword', true);
+    this.dispatch('edit', false);
+    this.dispatch('edit:init', employee);
+    this.dispatch('modal:show');
   };
 
   onSave = async (employeeForm) => {
@@ -337,10 +362,12 @@ export default class AppStore extends Store {
       employeeForm.birthday = employeeForm.birthday.format(Const.DAY_FORMAT);
     }
 
-    if (this.state().get('edit')) {
+    if (this.state().get('edit') || this.state().get('setPassword')) {
       //如果非主账号，部门ID,需要拼接
       if (this.state().get('isMaster') == 0) {
-        employeeForm.departmentIdList = employeeForm.departmentIdList.concat(this.state().get('restDepartmentIds'))
+        employeeForm.departmentIdList = employeeForm.departmentIdList.concat(
+          this.state().get('restDepartmentIds')
+        );
       }
       employeeForm.employeeId = this.state().getIn([
         'employeeForm',
@@ -445,8 +472,8 @@ export default class AppStore extends Store {
   //切换离职员工的隐藏显示
   toggleHide = (value) => {
     //this.dispatch('employee:toggleHide')
-    localStorage.setItem(cache.HIDE_EMPLOYEE_SETTING, value)
-  }
+    localStorage.setItem(cache.HIDE_EMPLOYEE_SETTING, value);
+  };
 
   //业务员交接
   connectEmployee = async () => {
@@ -484,7 +511,7 @@ export default class AppStore extends Store {
     }
     //交接
     const { res } = await webapi.activateAccount({
-      employeeIds: selected,
+      employeeIds: selected
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
@@ -497,10 +524,10 @@ export default class AppStore extends Store {
   };
 
   lastDepartmentIds = (ids) => {
-    this.dispatch('employee:lastDepartmentIds', ids)
-  }
+    this.dispatch('employee:lastDepartmentIds', ids);
+  };
 
   toggleClick = () => {
-    this.dispatch('employee:toggleClick')
-  }
+    this.dispatch('employee:toggleClick');
+  };
 }

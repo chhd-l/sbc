@@ -97,7 +97,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem> */}
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             label={<FormattedMessage id="roles" />}
             mode="multiple"
@@ -113,7 +113,7 @@ export default class SearchForm extends React.Component<any, any> {
           >
             {this._renderOption(roles)}
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
@@ -136,7 +136,7 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem>
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="supervisor" />}
@@ -153,7 +153,7 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="1">是</Option>
             <Option value="0">否</Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
 
         {/* <FormItem>
           <SelectGroup

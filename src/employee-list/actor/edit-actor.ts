@@ -22,19 +22,19 @@ export default class EditActor extends Actor {
         //工号
         jobNo: '',
         //职位
-        position:null,
+        position: null,
         //性别，默认0，保密
-        sex:0,
+        sex: 0,
         //归属部门，逗号分隔
-        departmentIds:'',
+        departmentIds: '',
         //生日
-        birthday:null
+        birthday: null
       },
       edit: false,
       //编辑弹框各项控件是否禁用
-      editDisable:false,
+      editDisable: false,
       //非当前用户能看到及操作的部门ID结合
-      restDepartmentIds:[]
+      restDepartmentIds: []
     };
   }
 
@@ -52,13 +52,18 @@ export default class EditActor extends Actor {
     return state.set('edit', isEdit);
   }
 
+  @Action('setPassword')
+  setPassword(state: IMap, isSetPassword) {
+    return state.set('setPassword', isSetPassword);
+  }
+
   @Action('edit:editDisable')
-  editDisable(state,value){
-    return state.set('editDisable',value)
+  editDisable(state, value) {
+    return state.set('editDisable', value);
   }
 
   @Action('edit:restDepartmentIds')
-  restDepartmentIds(state,ids){
-    return state.set('restDepartmentIds',ids)
+  restDepartmentIds(state, ids) {
+    return state.set('restDepartmentIds', ids);
   }
 }

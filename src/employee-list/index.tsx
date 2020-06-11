@@ -63,8 +63,7 @@ export default class EmployeeList extends React.Component<any, any> {
                     <DepartTree />
                   )}
               </Col>
-              <Col span={1}></Col>
-              <Col span={20}>
+              <Col span={21}>
                 <List />
               </Col>
             </Row>
@@ -101,7 +100,10 @@ export default class EmployeeList extends React.Component<any, any> {
         this.store.toggleClick();
         if (this.state.click) {
           this.store.lastDepartmentIds(
-            this.store.state().get('searchForm').get('departmentIds')
+            this.store
+              .state()
+              .get('searchForm')
+              .get('departmentIds')
           );
           this.store.onFormChange({
             field: 'departmentIds',

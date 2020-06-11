@@ -47,6 +47,7 @@ export default class AppStore extends Store {
     const password = form.password;
     const isRemember = form.isRemember;
     let base64 = new util.Base64();
+    debugger;
     const { res } = await webapi.login(
       base64.urlEncode(account),
       base64.urlEncode(password)

@@ -184,13 +184,14 @@ class PetInfomation extends React.Component<any, any> {
               currentPet.petsPropRelations
             );
 
-            if (currentPet.petsType === 'cat') {
+            if (currentPet.petsType === 'dog') {
               this.props.form.setFieldsValue({
                 petsType: currentPet.petsType,
                 petsName: currentPet.petsName,
                 petsSex: currentPet.petsSex,
                 petsBreed: currentPet.petsBreed,
                 sterilized: currentPet.sterilized,
+                petsSizeValueName: currentPet.petsSizeValueName,
                 petsPropRelations: currentPet.petsPropRelations
               });
             } else {
@@ -199,7 +200,7 @@ class PetInfomation extends React.Component<any, any> {
                 petsName: currentPet.petsName,
                 petsSex: currentPet.petsSex,
                 petsBreed: currentPet.petsBreed,
-                petsSizeValueName: currentPet.petsSizeValueName,
+
                 sterilized: currentPet.sterilized,
                 petsPropRelations: currentPet.petsPropRelations
               });
@@ -292,13 +293,14 @@ class PetInfomation extends React.Component<any, any> {
           currentPet.petsPropRelations = this.getSpecialNeeds(
             currentPet.petsPropRelations
           );
-          if (currentPet.petsType === 'cat') {
+          if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
               petsName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
               sterilized: currentPet.sterilized,
+              petsSizeValueName: currentPet.petsSizeValueName,
               petsPropRelations: currentPet.petsPropRelations
             });
           } else {
@@ -307,7 +309,7 @@ class PetInfomation extends React.Component<any, any> {
               petsName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
-              petsSizeValueName: currentPet.petsSizeValueName,
+
               sterilized: currentPet.sterilized,
               petsPropRelations: currentPet.petsPropRelations
             });
@@ -521,13 +523,14 @@ class PetInfomation extends React.Component<any, any> {
                         {getFieldDecorator('petsSizeValueName', {
                           rules: [
                             { required: true, message: 'Please input Weight!' }
-                          ]
+                          ],
+                          initialValue: petForm.petsSizeValueName
                         })(
                           <Select
                             onChange={(value) => {
                               value = value === '' ? null : value;
                               this.onFormChange({
-                                field: 'breeweightd',
+                                field: 'petsSizeValueName',
                                 value
                               });
                             }}

@@ -176,14 +176,21 @@ export default class Customer extends React.Component<any, any> {
               pagination: pagination,
               searchList: searchList
             });
-          }
-          if (searchList.length === 0 && pagination.total > 0) {
+          } else if (searchList.length === 0 && res.context.total > 0) {
             pagination.current = res.context.currentPage;
             let params = {
               pageNum: res.context.currentPage,
               pageSize: pagination.pageSize
             };
             this.init(params);
+          } else {
+            pagination.total = res.context.total;
+            pagination.current = res.context.currentPage + 1;
+            this.setState({
+              loading: false,
+              pagination: pagination,
+              searchList: searchList
+            });
           }
         } else {
           message.error('Unsuccessful');

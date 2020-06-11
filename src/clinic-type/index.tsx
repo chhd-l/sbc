@@ -71,8 +71,7 @@ export default class ClinicList extends Component<any, any> {
               pagination: pagination,
               typeList: typeList
             });
-          }
-          if (typeList.length === 0 && pagination.total > 0) {
+          } else if (typeList.length === 0 && res.context.total > 0) {
             pagination.current = res.context.currentPage;
             let params = {
               type: 'clinicType',
@@ -80,6 +79,13 @@ export default class ClinicList extends Component<any, any> {
               pageSize: pagination.pageSize
             };
             this.getTypeList(params);
+          } else {
+            pagination.total = res.context.total;
+            pagination.current = res.context.currentPage + 1;
+            this.setState({
+              pagination: pagination,
+              typeList: typeList
+            });
           }
         } else {
           message.error('Unsuccessful');

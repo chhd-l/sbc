@@ -8,15 +8,13 @@ import {
   Divider,
   Select,
   Spin,
-  message,
-  Modal
+  message
 } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 
-const { confirm } = Modal;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -25,40 +23,37 @@ export default class Customer extends React.Component<any, any> {
     super(props);
     this.state = {
       columns: [
-        {
-          title: 'Consumer Account',
-          dataIndex: 'customerAccount',
-          key: 'consumerAccount'
-        },
+        // {
+        //   title: 'Consumer Account',
+        //   dataIndex: 'customerAccount',
+        //   key: 'consumerAccount'
+        // },
         {
           title: 'Consumer Name',
           dataIndex: 'customerName',
-          key: 'consumerName',
-          render: (text, record) => (
-            <p>{record.customerLevelName !== 'Guest' ? text : ''}</p>
-          )
+          key: 'consumerName'
         },
         {
           title: 'Consumer Type',
           dataIndex: 'customerLevelName',
           key: 'consumerType'
         },
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email'
-        },
+        // {
+        //   title: 'Email',
+        //   dataIndex: 'email',
+        //   key: 'email'
+        // },
 
-        {
-          title: 'Phone Number',
-          dataIndex: 'contactPhone',
-          key: 'phoneNumber'
-        },
-        {
-          title: 'Selected Prescriber ID',
-          dataIndex: 'clinicsIds',
-          key: 'clinicsIds'
-        },
+        // {
+        //   title: 'Phone Number',
+        //   dataIndex: 'contactPhone',
+        //   key: 'phoneNumber'
+        // },
+        // {
+        //   title: 'Selected Prescriber ID',
+        //   dataIndex: 'selectedPrescriber',
+        //   key: 'selectedPrescriber'
+        // },
         {
           title: 'Operation',
           key: 'operation',
@@ -66,10 +61,10 @@ export default class Customer extends React.Component<any, any> {
             <span>
               <Link
                 to={
-                  '/customer-details/' +
+                  '/customer-clinic-details/' +
                   (record.customerLevelName
                     ? record.customerLevelName
-                    : 'Guest') +
+                    : 'Visitor') +
                   '/' +
                   record.customerId +
                   '/' +
@@ -78,8 +73,6 @@ export default class Customer extends React.Component<any, any> {
               >
                 Details
               </Link>
-              <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.customerId)}>Delete</a>
             </span>
           )
         }
@@ -109,12 +102,12 @@ export default class Customer extends React.Component<any, any> {
         {
           value: 'Member',
           name: 'Member',
-          id: 234
+          id: 1
         },
         {
-          value: 'Guest',
-          name: 'Guest',
-          id: 233
+          value: 'Visitor',
+          name: 'Visitor',
+          id: 2
         }
       ],
       loading: false
@@ -142,7 +135,7 @@ export default class Customer extends React.Component<any, any> {
     this.init({ pageNum: pagination.current, pageSize: 10 });
   }
 
-  init = ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
+  init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     this.setState({
       loading: true
     });
@@ -153,47 +146,34 @@ export default class Customer extends React.Component<any, any> {
       customerAccount: query.customerAccount,
       customerLevelId: query.customerTypeId,
       customerName: query.customerName,
-      email: query.email,
-      clinicsId: query.selectedPrescriberId
+      email: query.email
     };
     pageNum = pageNum - 1;
-    webapi
+    await webapi
       .getCustomerList({
         ...params,
         pageNum,
         pageSize
       })
       .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
+        if (data.res.code === 'K-000000') {
           let pagination = this.state.pagination;
-          let searchList = res.context.detailResponseList;
-          if (searchList.length > 0) {
-            pagination.total = res.context.total;
-            pagination.current = res.context.currentPage + 1;
-            this.setState({
-              loading: false,
-              pagination: pagination,
-              searchList: searchList
-            });
-          }
-          if (searchList.length === 0 && pagination.total > 0) {
-            pagination.current = res.context.currentPage;
-            let params = {
-              pageNum: res.context.currentPage,
-              pageSize: pagination.pageSize
-            };
-            this.init(params);
-          }
+          let searchList = data.res.context.detailResponseList;
+          pagination.total = data.res.context.total;
+          this.setState({
+            pagination: pagination,
+            searchList: searchList,
+            loading: false
+          });
         } else {
-          message.error('Unsuccessful');
+          message.error(data.res.message || 'get data filed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('get data filed');
 
         this.setState({
           loading: false
@@ -222,33 +202,22 @@ export default class Customer extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === 'K-000000') {
-          message.success('Successful');
+          message.success(data.res.message || 'Delete success');
           this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
         } else {
-          message.error('Unsuccessful');
+          message.error(data.res.message || 'Delete failed');
           this.setState({
             loading: true
           });
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Delete failed');
         this.setState({
           loading: true
         });
       });
   };
-
-  showConfirm(id) {
-    const that = this;
-    confirm({
-      title: 'Are you sure to delete this item?',
-      onOk() {
-        return that.removeConsumer(id);
-      },
-      onCancel() {}
-    });
-  }
 
   render() {
     const { customerTypeArr, columns } = this.state;
@@ -263,9 +232,9 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container customer">
-            <Headline title={<FormattedMessage id="consumerList" />} />
+            <Headline title={<FormattedMessage id="consumerClinicList" />} />
             <Form className="filter-content" layout="inline">
-              <FormItem>
+              {/* <FormItem>
                 <Input
                   addonBefore={<FormattedMessage id="customerAccount" />}
                   onChange={(e) => {
@@ -276,7 +245,7 @@ export default class Customer extends React.Component<any, any> {
                     });
                   }}
                 />
-              </FormItem>
+              </FormItem> */}
 
               <FormItem>
                 <Input
@@ -292,7 +261,6 @@ export default class Customer extends React.Component<any, any> {
               </FormItem>
               <FormItem>
                 <SelectGroup
-                  defaultValue=""
                   label="Customer Type"
                   style={{ width: 80 }}
                   onChange={(value) => {
@@ -311,7 +279,7 @@ export default class Customer extends React.Component<any, any> {
                   ))}
                 </SelectGroup>
               </FormItem>
-              <FormItem>
+              {/* <FormItem>
                 <Input
                   addonBefore={<FormattedMessage id="email" />}
                   onChange={(e) => {
@@ -348,7 +316,7 @@ export default class Customer extends React.Component<any, any> {
                     });
                   }}
                 />
-              </FormItem>
+              </FormItem> */}
 
               <FormItem>
                 <Button

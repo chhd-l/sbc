@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { addressList } from '@/order-add-old/webapi';
 
 const { TextArea } = Input;
 
@@ -31,17 +32,18 @@ const { TabPane } = Tabs;
 const { Column } = Table;
 
 const layout = {
-  labelCol: { span: 12 },
-  wrapperCol: { span: 12 }
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 }
 };
 
-class DeliveryInfomation extends React.Component<any, any> {
+class BillingInfomation extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       customerAccount: '',
       clinicsVOS: [],
-      deliveryForm: {
+
+      billingForm: {
         firstName: '',
         lastName: '',
         consigneeNumber: '',
@@ -88,26 +90,25 @@ class DeliveryInfomation extends React.Component<any, any> {
   };
 
   saveDeliveryAddress = () => {
-    const { deliveryForm, clinicsVOS } = this.state;
+    const { billingForm } = this.state;
     let params = {
-      address1: deliveryForm.address1,
-      address2: deliveryForm.address2,
-      cityId: deliveryForm.cityId,
-      consigneeName: deliveryForm.firstName + ' ' + deliveryForm.lastName,
-      consigneeNumber: deliveryForm.consigneeNumber,
-      countryId: deliveryForm.countryId,
-      customerId: deliveryForm.customerId,
-      deliveryAddress: deliveryForm.address1 + deliveryForm.address2,
-      deliveryAddressId: deliveryForm.deliveryAddressId,
-      employeeId: deliveryForm.employeeId,
-      firstName: deliveryForm.firstName,
+      address1: billingForm.address1,
+      address2: billingForm.address2,
+      cityId: billingForm.cityId,
+      consigneeName: billingForm.firstName + billingForm.lastName,
+      consigneeNumber: billingForm.consigneeNumber,
+      countryId: billingForm.countryId,
+      customerId: billingForm.customerId,
+      deliveryAddress: billingForm.address1 + billingForm.address2,
+      deliveryAddressId: billingForm.deliveryAddressId,
+      employeeId: billingForm.employeeId,
+      firstName: billingForm.firstName,
       isDefaltAddress: this.state.isDefault ? 1 : 0,
-      lastName: deliveryForm.lastName,
-      postCode: deliveryForm.postCode,
-      provinceId: deliveryForm.provinceId,
-      rfc: deliveryForm.rfc,
-      type: deliveryForm.type,
-      clinicsVOS: clinicsVOS
+      lastName: billingForm.lastName,
+      postCode: billingForm.postCode,
+      provinceId: billingForm.provinceId,
+      rfc: billingForm.rfc,
+      type: billingForm.type
     };
     webapi
       .updateAddress(params)
@@ -115,20 +116,21 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success('Successful');
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Update failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Update failed');
       });
   };
+
   getSelectedClinic = (array) => {
     let clinics = [];
     if (array && array.length > 0) {
       for (let index = 0; index < array.length; index++) {
-        clinics.push(array[index].clinicsId.toString());
+        clinics.push(array[index].clinicsId);
       }
     }
     return clinics;
@@ -136,56 +138,55 @@ class DeliveryInfomation extends React.Component<any, any> {
 
   getAddressList = () => {
     webapi
-      .getAddressListByType(this.props.customerId, 'delivery')
+      .getAddressListByType(this.props.customerId, 'billing')
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
           let addressList = res.context.customerDeliveryAddressVOList;
-
           if (addressList.length > 0) {
-            let deliveryForm = this.state.deliveryForm;
+            let billingForm = this.state.billingForm;
             if (this.state.currentId) {
-              deliveryForm = addressList.find((item) => {
+              billingForm = addressList.find((item) => {
                 return item.deliveryAddressId === this.state.currentId;
               });
             } else {
-              deliveryForm = addressList[0];
+              billingForm = addressList[0];
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
             this.props.form.setFieldsValue({
               customerAccount: res.context.customerAccount,
               clinicsVOS: clinicsVOS,
-              firstName: deliveryForm.firstName,
-              lastName: deliveryForm.lastName,
-              consigneeNumber: deliveryForm.consigneeNumber,
-              postCode: deliveryForm.postCode,
-              cityId: deliveryForm.cityId,
-              countryId: deliveryForm.countryId,
-              address1: deliveryForm.address1,
-              address2: deliveryForm.address2,
-              rfc: deliveryForm.rfc
+              firstName: billingForm.firstName,
+              lastName: billingForm.lastName,
+              consigneeNumber: billingForm.consigneeNumber,
+              postCode: billingForm.postCode,
+              cityId: billingForm.cityId,
+              countryId: billingForm.countryId,
+              address1: billingForm.address1,
+              address2: billingForm.address2,
+              rfc: billingForm.rfc
             });
             this.setState({
-              currentId: deliveryForm.deliveryAddressId,
+              currentId: billingForm.deliveryAddressId,
               clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
               addressList: addressList,
-              deliveryForm: deliveryForm,
-              title: deliveryForm.consigneeName,
-              isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
+              billingForm: billingForm,
+              title: billingForm.consigneeName,
+              isDefault: billingForm.isDefaltAddress === 1 ? true : false
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
 
   onFormChange = ({ field, value }) => {
-    let data = this.state.deliveryForm;
+    let data = this.state.billingForm;
     data[field] = value;
     this.setState({
       basicForm: data
@@ -194,17 +195,17 @@ class DeliveryInfomation extends React.Component<any, any> {
 
   delAddress = () => {
     webapi
-      .delAddress(this.state.deliveryForm.deliveryAddressId)
+      .delAddress(this.state.billingForm.deliveryAddressId)
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Delete failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Delete failed');
       });
   };
   clickDefault = () => {
@@ -213,7 +214,6 @@ class DeliveryInfomation extends React.Component<any, any> {
       isDefault: isDefault
     });
   };
-
   getClinicList = () => {
     webapi
       .fetchClinicList({
@@ -231,47 +231,50 @@ class DeliveryInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
+
   onClinicChange = (clinics) => {
     this.setState({
       clinicsVOS: clinics
     });
   };
+
   switchAddress = (id) => {
     const { addressList } = this.state;
-    let deliveryForm = addressList.find((item) => {
-      return item.deliveryAddressId === id;
+    let billingForm = addressList.find((item) => {
+      return item.id === id;
     });
 
     this.props.form.setFieldsValue({
-      firstName: deliveryForm.firstName,
-      lastName: deliveryForm.lastName,
-      consigneeNumber: deliveryForm.consigneeNumber,
-      postCode: deliveryForm.postCode,
-      cityId: deliveryForm.cityId,
-      countryId: deliveryForm.countryId,
-      address1: deliveryForm.address1,
-      address2: deliveryForm.address2,
-      rfc: deliveryForm.rfc
+      firstName: billingForm.firstName,
+      lastName: billingForm.lastName,
+      consigneeNumber: billingForm.consigneeNumber,
+      postCode: billingForm.postCode,
+      cityId: billingForm.cityId,
+      countryId: billingForm.countryId,
+      address1: billingForm.address1,
+      address2: billingForm.address2,
+      rfc: billingForm.rfc
     });
     this.setState({
       currentId: id,
-      deliveryForm: deliveryForm,
-      title: deliveryForm.consigneeName,
-      isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
+      billingForm: billingForm,
+      title: billingForm.consigneeName,
+      isDefault: billingForm.isDefaltAddress === 1 ? true : false
     });
   };
 
   render() {
+    const { countryArr, cityArr, clinicList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -282,7 +285,6 @@ class DeliveryInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-    const { countryArr, cityArr, clinicList } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
@@ -292,8 +294,7 @@ class DeliveryInfomation extends React.Component<any, any> {
             <ul>
               {this.state.addressList.map((item) => (
                 <li
-                  key={item.deliveryAddressId}
-                  onClick={() => this.switchAddress(item.deliveryAddressId)}
+                  key={item.id}
                   style={{
                     cursor: 'pointer',
                     color:
@@ -301,6 +302,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ? '#e2001a'
                         : ''
                   }}
+                  onClick={() => this.switchAddress(item.id)}
                 >
                   {item.consigneeName}
                 </li>
@@ -317,25 +319,21 @@ class DeliveryInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
               extra={
-                <div
-                  style={{
-                    display:
-                      this.props.customerType === 'Guest' ? 'none' : 'block'
-                  }}
-                >
+                <div>
                   <Checkbox
+                    disabled
                     checked={this.state.isDefault}
                     onChange={() => this.clickDefault()}
                   >
-                    Set default delivery address
+                    Set default billing address
                   </Checkbox>
-                  <Button
+                  {/* <Button
                     type="danger"
                     icon="close"
                     onClick={() => this.delAddress()}
                   >
                     Delete
-                  </Button>
+                  </Button> */}
                 </div>
               }
             >
@@ -376,8 +374,8 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
+                          disabled
                           mode="tags"
-                          disabled={this.props.customerType === 'Guest'}
                           placeholder="Please select"
                           style={{ width: '100%' }}
                           onChange={(value, Option) => {
@@ -394,9 +392,9 @@ class DeliveryInfomation extends React.Component<any, any> {
                           }}
                         >
                           {/* {
-                        clinicList.map((item) => (
-                          <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
-                        ))} */}
+                          clinicList.map((item) => (
+                            <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
+                          ))} */}
                           {clinicList.map((item) => (
                             <Option
                               value={item.clinicsId.toString()}
@@ -420,7 +418,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -440,7 +438,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -463,7 +461,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -483,7 +481,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -503,7 +501,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -529,7 +527,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -555,7 +553,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TextArea
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -575,7 +573,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <TextArea
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -595,7 +593,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -610,20 +608,12 @@ class DeliveryInfomation extends React.Component<any, any> {
 
                   <Col span={24}>
                     <FormItem>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginRight: '20px',
-                          display:
-                            this.props.customerType === 'Guest' ? 'none' : null
-                        }}
-                      >
+                      {/* <Button type="primary" htmlType="submit">
                         Save
-                      </Button>
+                      </Button> */}
 
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
+                      <Button style={{ marginLeft: '20px' }}>
+                        <Link to="/customer-clinic-list">Cancel</Link>
                       </Button>
                     </FormItem>
                   </Col>
@@ -636,4 +626,4 @@ class DeliveryInfomation extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(DeliveryInfomation);
+export default Form.create()(BillingInfomation);

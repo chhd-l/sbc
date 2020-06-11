@@ -397,19 +397,22 @@ export default class SearchList extends React.Component<any, any> {
                           </AuthWrapper>
                         )}
 
-                        {/*已收货状态 或者 退款单的已审核状态*/}
-                        {enableReturn && (
+                        {returnType == 'REFUND' && returnFlowState == 'AUDIT' && (
                           <AuthWrapper functionName="rolf005">
                             <a
                               href="javascript:void(0)"
                               style={{ marginLeft: 20 }}
                               onClick={() => {
-                                onRealRefund(rid);
+                                this._showRealRefund(onRealRefund, rid);
                               }}
                             >
                               <FormattedMessage id="realRefund" />
                             </a>
+                          </AuthWrapper>
+                        )}
 
+                        {enableReturn && (
+                          <AuthWrapper functionName="rolf005">
                             <a
                               href="javascript:void(0)"
                               style={{ marginLeft: 20 }}
@@ -437,6 +440,7 @@ export default class SearchList extends React.Component<any, any> {
                             </a>
                           </AuthWrapper>
                         )}
+
                         {/*已收货状态 或者 退款单的已审核状态*/}
                         {enableReturn && (
                           <AuthWrapper functionName="rolf005">
@@ -570,6 +574,17 @@ export default class SearchList extends React.Component<any, any> {
           </td>
         </tr>
       );
+    });
+  }
+
+  async _showRealRefund(onRealRefund: Function, rid: string) {
+    confirm({
+      title: '确认退款',
+      content: '是否确认退款？',
+      onOk() {
+        return onRealRefund(rid);
+      },
+      onCancel() {}
     });
   }
 

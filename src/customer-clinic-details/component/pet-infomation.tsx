@@ -41,7 +41,7 @@ class PetInfomation extends React.Component<any, any> {
       petForm: {
         petsId: '',
         petsType: '',
-        petsName: '',
+        petName: '',
         petsSex: '',
         petsBreed: '',
         petsSizeValueName: '',
@@ -151,11 +151,11 @@ class PetInfomation extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
   getSpecialNeeds = (array) => {
@@ -184,26 +184,15 @@ class PetInfomation extends React.Component<any, any> {
               currentPet.petsPropRelations
             );
 
-            if (currentPet.petsType === 'cat') {
-              this.props.form.setFieldsValue({
-                petsType: currentPet.petsType,
-                petsName: currentPet.petsName,
-                petsSex: currentPet.petsSex,
-                petsBreed: currentPet.petsBreed,
-                sterilized: currentPet.sterilized,
-                petsPropRelations: currentPet.petsPropRelations
-              });
-            } else {
-              this.props.form.setFieldsValue({
-                petsType: currentPet.petsType,
-                petsName: currentPet.petsName,
-                petsSex: currentPet.petsSex,
-                petsBreed: currentPet.petsBreed,
-                petsSizeValueName: currentPet.petsSizeValueName,
-                sterilized: currentPet.sterilized,
-                petsPropRelations: currentPet.petsPropRelations
-              });
-            }
+            this.props.form.setFieldsValue({
+              petsType: currentPet.petsType,
+              petName: currentPet.petsName,
+              petsSex: currentPet.petsSex,
+              petsBreed: currentPet.petsBreed,
+              petsSizeValueName: currentPet.petsSizeValueName,
+              sterilized: currentPet.sterilized,
+              petsPropRelations: currentPet.petsPropRelations
+            });
             this.setState({
               loading: false,
               petList: petList,
@@ -215,11 +204,11 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
   editPets = () => {
@@ -236,7 +225,7 @@ class PetInfomation extends React.Component<any, any> {
         indexFlag: 0,
         petsId: this.state.currentPetId,
         propId: propId,
-        propName: petForm.petsPropRelations[i],
+        propName: petForm.petsPropRelations[i].propName,
         relationId: '10086',
         sort: 0
       };
@@ -268,14 +257,13 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
-          this.petsByConsumer();
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Update data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Update data failed');
       });
   };
 
@@ -289,27 +277,27 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          currentPet.petsPropRelations = this.getSpecialNeeds(
+          let petsPropRelations = this.getSpecialNeeds(
             currentPet.petsPropRelations
           );
           if (currentPet.petsType === 'cat') {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
-              petsName: currentPet.petsName,
+              petName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
               sterilized: currentPet.sterilized,
-              petsPropRelations: currentPet.petsPropRelations
+              petsPropRelations: petsPropRelations
             });
           } else {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
-              petsName: currentPet.petsName,
+              petName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
               petsSizeValueName: currentPet.petsSizeValueName,
               sterilized: currentPet.sterilized,
-              petsPropRelations: currentPet.petsPropRelations
+              petsPropRelations: petsPropRelations
             });
           }
 
@@ -318,11 +306,11 @@ class PetInfomation extends React.Component<any, any> {
             currentBirthDay: currentPet.birthOfPets
           });
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
 
@@ -409,16 +397,15 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem label="Pet Name">
-                      {getFieldDecorator('petsName', {
+                      {getFieldDecorator('petName', {
                         rules: [
                           { required: true, message: 'Please input Pet Name!' }
                         ]
                       })(
                         <Input
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
+                          onChange={(value) => {
                             this.onFormChange({
-                              field: 'petsName',
+                              field: 'petName',
                               value
                             });
                           }}

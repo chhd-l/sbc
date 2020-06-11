@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Table, Button, Divider, message } from 'antd';
+import { Table, Button, Divider, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
+
+const { confirm } = Modal;
 
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
@@ -29,7 +31,7 @@ export default class ClinicList extends Component<any, any> {
             <span>
               <Link to={'/clinic-type-edit/' + record.id}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.delClinicType(record.id)}>Delete</a>
+              <a onClick={() => this.showConfirm(record.id)}>Delete</a>
             </span>
           )
         }
@@ -80,7 +82,7 @@ export default class ClinicList extends Component<any, any> {
             this.getTypeList(params);
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -92,7 +94,7 @@ export default class ClinicList extends Component<any, any> {
       id: id
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'delete data success');
+      message.success('Successful');
       const { pagination } = this.state;
       let params = {
         type: 'clinicType',
@@ -101,7 +103,7 @@ export default class ClinicList extends Component<any, any> {
       };
       this.getTypeList(params);
     } else {
-      message.error(res.message || 'delete data faild');
+      message.error('Unsuccessful');
     }
     console.log(this.state.typeList);
   };
@@ -114,6 +116,16 @@ export default class ClinicList extends Component<any, any> {
 
     this.getTypeList(params);
   };
+  showConfirm(id) {
+    const that = this;
+    confirm({
+      title: 'Are you sure to delete this item?',
+      onOk() {
+        return that.delClinicType(id);
+      },
+      onCancel() {}
+    });
+  }
 
   render() {
     const { columns } = this.state;

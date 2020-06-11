@@ -46,29 +46,23 @@ class CustomerDetails extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    this.querySysDictionary('country');
-    this.querySysDictionary('city');
+    this.queryClinicsDictionary('country');
+    this.queryClinicsDictionary('city');
   }
 
-  querySysDictionary = async (type: String) => {
-    const { res } = await webapi.querySysDictionary({
+  queryClinicsDictionary = async (type: String) => {
+    const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
     if (res.code === 'K-000000') {
       if (type === 'city') {
-        sessionStorage.setItem(
-          'dict-city',
-          JSON.stringify(res.context.sysDictionaryVOS)
-        );
+        sessionStorage.setItem('dict-city', JSON.stringify(res.context));
       }
       if (type === 'country') {
-        sessionStorage.setItem(
-          'dict-country',
-          JSON.stringify(res.context.sysDictionaryVOS)
-        );
+        sessionStorage.setItem('dict-country', JSON.stringify(res.context));
       }
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message);
     }
   };
   clickTabs = (key) => {

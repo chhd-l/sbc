@@ -93,7 +93,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       address1: deliveryForm.address1,
       address2: deliveryForm.address2,
       cityId: deliveryForm.cityId,
-      consigneeName: deliveryForm.firstName + ' ' + deliveryForm.lastName,
+      consigneeName: deliveryForm.firstName + deliveryForm.lastName,
       consigneeNumber: deliveryForm.consigneeNumber,
       countryId: deliveryForm.countryId,
       customerId: deliveryForm.customerId,
@@ -115,13 +115,13 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success('Successful');
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Update failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Update failed');
       });
   };
   getSelectedClinic = (array) => {
@@ -176,11 +176,11 @@ class DeliveryInfomation extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
 
@@ -198,13 +198,13 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success(res.message || 'Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Delete failed');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error('Delete failed');
       });
   };
   clickDefault = () => {
@@ -231,14 +231,14 @@ class DeliveryInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
   onClinicChange = (clinics) => {
@@ -317,25 +317,21 @@ class DeliveryInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
               extra={
-                <div
-                  style={{
-                    display:
-                      this.props.customerType === 'Guest' ? 'none' : 'block'
-                  }}
-                >
+                <div>
                   <Checkbox
+                    disabled
                     checked={this.state.isDefault}
                     onChange={() => this.clickDefault()}
                   >
                     Set default delivery address
                   </Checkbox>
-                  <Button
+                  {/* <Button
                     type="danger"
                     icon="close"
                     onClick={() => this.delAddress()}
                   >
                     Delete
-                  </Button>
+                  </Button> */}
                 </div>
               }
             >
@@ -377,9 +373,9 @@ class DeliveryInfomation extends React.Component<any, any> {
                       })(
                         <Select
                           mode="tags"
-                          disabled={this.props.customerType === 'Guest'}
                           placeholder="Please select"
                           style={{ width: '100%' }}
+                          disabled
                           onChange={(value, Option) => {
                             let clinics = [];
                             for (let i = 0; i < Option.length; i++) {
@@ -420,7 +416,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -440,7 +436,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -463,7 +459,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -483,7 +479,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -503,7 +499,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -529,7 +525,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Select
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
@@ -555,7 +551,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <TextArea
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -575,7 +571,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <TextArea
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           autoSize={{ minRows: 3, maxRows: 3 }}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -595,7 +591,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         {}
                       )(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -610,20 +606,12 @@ class DeliveryInfomation extends React.Component<any, any> {
 
                   <Col span={24}>
                     <FormItem>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        style={{
-                          marginRight: '20px',
-                          display:
-                            this.props.customerType === 'Guest' ? 'none' : null
-                        }}
-                      >
+                      {/* <Button type="primary" htmlType="submit">
                         Save
-                      </Button>
+                      </Button> */}
 
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
+                      <Button style={{ marginLeft: '20px' }}>
+                        <Link to="/customer-clinic-list">Cancel</Link>
                       </Button>
                     </FormItem>
                   </Col>

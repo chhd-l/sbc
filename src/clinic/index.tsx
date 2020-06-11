@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
+import { Headline, SelectGroup, BreadCrumb, util, Const } from 'qmkit';
+import {
+  Form,
+  Select,
+  Input,
+  Button,
+  Table,
+  Divider,
+  message,
+  Modal
+} from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 
+const { confirm } = Modal;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -89,7 +99,7 @@ export default class ClinicList extends Component<any, any> {
                 {record.enabled ? 'Disable' : 'Enable'}
               </a>
               <Divider type="vertical" />
-              <a onClick={() => this.delClinic(record.clinicsId)}>Delete</a>
+              <a onClick={() => this.showConfirm(record.clinicsId)}>Delete</a>
             </span>
           )
         }
@@ -137,11 +147,22 @@ export default class ClinicList extends Component<any, any> {
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
       let clinicList = res.context.content;
-      pagination.total = res.context.total;
-      this.setState({
-        pagination: pagination,
-        clinicList: clinicList
-      });
+      if (clinicList.length > 0) {
+        pagination.total = res.context.total;
+        pagination.current = res.context.number + 1;
+        this.setState({
+          pagination: pagination,
+          clinicList: clinicList
+        });
+      }
+      if (clinicList.length === 0 && pagination.total > 0) {
+        pagination.current = res.context.number;
+        let params = {
+          pageNum: res.context.number,
+          pageSize: pagination.pageSize
+        };
+        this.init(params);
+      }
     }
   };
   queryClinicsDictionary = async (type: String) => {
@@ -210,6 +231,70 @@ export default class ClinicList extends Component<any, any> {
       pagination: pagination
     });
     this.init({ pageNum: pagination.current, pageSize: 10 });
+  }
+  // onExport = () => {
+  //   const query = this.state.searchForm;
+  //   query.enabled =
+  //     query.enabled === 'true'
+  //       ? true
+  //       : query.enabled === 'false'
+  //       ? false
+  //       : null;
+  //   webapi.exportPrescriber(query).then((data) => {
+  //     this.download(data);
+  //   });
+  // };
+  // download(response) {
+  //   const data = response.data;
+  //   if (!response) {
+  //     return;
+  //   }
+  //   debugger;
+  //   // const fileName = response.headers['content-disposition'].split(';')[1].split('=')[1]
+  //   const fileName = 'test.xls';
+  //   const url = window.URL.createObjectURL(new Blob([data]));
+  //   const link = document.createElement('a');
+  //   link.style.display = 'none';
+  //   link.href = url;
+  //   link.setAttribute('download', fileName);
+
+  //   document.body.appendChild(link);
+  //   link.click();
+  // }
+
+  onExport = () => {
+    const params = this.state.searchForm;
+    params.enabled = true;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref =
+            Const.HOST + `/clinics/exportPrescriber/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+
+        resolve();
+      }, 500);
+    });
+  };
+
+  showConfirm(id) {
+    const that = this;
+    confirm({
+      title: 'Are you sure to delete this item?',
+      onOk() {
+        return that.delClinic(id);
+      },
+      onCancel() {}
+    });
   }
 
   render() {
@@ -352,6 +437,17 @@ export default class ClinicList extends Component<any, any> {
                 }}
               >
                 Search
+              </Button>
+
+              <Button
+                style={{ marginLeft: '20px' }}
+                icon="download"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onExport();
+                }}
+              >
+                Export
               </Button>
             </FormItem>
           </Form>

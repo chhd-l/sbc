@@ -50,13 +50,7 @@ class BasicInfomation extends React.Component<any, any> {
         address2: '',
         preferredMethods: '',
         reference: '',
-        selectedClinics: [],
-        defaultClinicsString: '',
-        defaultClinics: {
-          clinicsId: 0,
-          clinicsName: ''
-        },
-        cityObj: {}
+        selectedClinics: []
       },
       countryArr: [],
       cityArr: [],
@@ -96,20 +90,27 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         let res = data.res;
         if (res.code && res.code !== 'K-000000') {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         } else {
           let res2 = JSON.stringify(data.res);
 
           let resObj = JSON.parse(res2);
           let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
-          let defaultClinicsString = '';
-          if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
-            defaultClinicsString =
-              resObj.defaultClinics.clinicsId +
-              ',' +
-              resObj.defaultClinics.clinicsName;
-          }
-
+          this.props.form.setFieldsValue({
+            firstName: resObj.firstName,
+            lastName: resObj.lastName,
+            // birthDay: resObj.birthDay,
+            email: resObj.email,
+            contactPhone: resObj.contactPhone,
+            postCode: resObj.postCode,
+            city: resObj.city,
+            country: resObj.country,
+            address1: resObj.house,
+            address2: resObj.housing,
+            preferredMethods: resObj.contactMethod,
+            reference: resObj.reference,
+            selectedClinics: clinicsVOS
+          });
           let basicForm = {
             firstName: resObj.firstName,
             lastName: resObj.lastName,
@@ -123,43 +124,17 @@ class BasicInfomation extends React.Component<any, any> {
             address2: resObj.housing,
             preferredMethods: resObj.contactMethod,
             reference: resObj.reference,
-            selectedClinics: resObj.clinicsVOS,
-            defaultClinicsString: defaultClinicsString,
-            defaultClinics: resObj.defaultClinics
+            selectedClinics: resObj.clinicsVOS
           };
           this.setState({
             currentBirthDay: resObj.birthDay,
             basicForm: basicForm,
             currentForm: resObj
           });
-          setTimeout(() => {
-            this.props.form.setFieldsValue({
-              firstName: resObj.firstName,
-              lastName: resObj.lastName,
-              // birthDay: resObj.birthDay,
-              email: resObj.email,
-              contactPhone: resObj.contactPhone,
-              postCode: resObj.postCode,
-              city: resObj.city,
-              country: resObj.country,
-              address1: resObj.house,
-              address2: resObj.housing,
-              preferredMethods: resObj.contactMethod,
-              reference: resObj.reference,
-              selectedClinics: clinicsVOS,
-              defaultClinicsString: defaultClinicsString
-            });
-            this.setState({
-              loading: false
-            });
-          }, 1000);
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
 
@@ -182,59 +157,33 @@ class BasicInfomation extends React.Component<any, any> {
   saveBasicInfomation = () => {
     const { basicForm, currentForm } = this.state;
 
-    // (currentForm.firstName = basicForm.firstName),
-    //   (currentForm.lastName = basicForm.lastName),
-    //   (currentForm.consigneeName =
-    //     basicForm.firstName + ' ' + basicForm.lastName),
-    //   (currentForm.customerName =
-    //     basicForm.firstName + ' ' + basicForm.lastName),
-
-    //   (currentForm.birthDay = basicForm.birthDay),
-    //   (currentForm.email = basicForm.email),
-    //   (currentForm.contactPhone = basicForm.contactPhone),
-    //   (currentForm.postCode = basicForm.postCode),
-    //   (currentForm.city = basicForm.city),
-    //   (currentForm.country = basicForm.country),
-    //   (currentForm.house = basicForm.address1),
-    //   (currentForm.housing = basicForm.address2),
-    //   (currentForm.contactMethod = basicForm.preferredMethods),
-    //   (currentForm.reference = basicForm.reference),
-    //   (currentForm.clinicsVOS = basicForm.selectedClinics),
-    //   (currentForm.customerId = basicForm.customerId),
-    //   (currentForm.defaultClinics = basicForm.defaultClinics)
-
-    let params = {
-      birthDay: basicForm.birthDay,
-      city: basicForm.city,
-      cityId: 0,
-      clinicsVOS: basicForm.selectedClinics,
-      contactMethod: basicForm.preferredMethods,
-      contactPhone: basicForm.contactPhone,
-      country: basicForm.country,
-      customerDetailId: currentForm.customerDetailId,
-      defaultClinics: basicForm.defaultClinics,
-      email: basicForm.email,
-      firstName: basicForm.firstName,
-      house: basicForm.address1,
-      housing: basicForm.address2,
-      lastName: basicForm.lastName,
-      postCode: basicForm.postCode,
-      reference: basicForm.reference
-    };
-
-    webapi
-      .basicDetailsUpdate(params)
-      .then((data) => {
-        const res = data.res;
-        if (res.code === 'K-000000') {
-          message.success('Successful');
-        } else {
-          message.error('Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error('Unsuccessful');
-      });
+    (currentForm.firstName = basicForm.firstName),
+      (currentForm.lastName = basicForm.lastName),
+      (currentForm.birthDay = basicForm.birthDay),
+      (currentForm.email = basicForm.email),
+      (currentForm.contactPhone = basicForm.contactPhone),
+      (currentForm.postCode = basicForm.postCode),
+      (currentForm.city = basicForm.city),
+      (currentForm.country = basicForm.country),
+      (currentForm.house = basicForm.address1),
+      (currentForm.housing = basicForm.address2),
+      (currentForm.contactMethod = basicForm.preferredMethods),
+      (currentForm.reference = basicForm.reference),
+      (currentForm.clinicsVOS = basicForm.selectedClinics),
+      (currentForm.customerId = basicForm.customerId),
+      webapi
+        .basicDetailsUpdate(currentForm)
+        .then((data) => {
+          const res = data.res;
+          if (res.code === 'K-000000') {
+            message.success(res.message || 'Update data success');
+          } else {
+            message.error(res.message || 'Update data failed');
+          }
+        })
+        .catch((err) => {
+          message.error('Update data failed');
+        });
   };
 
   getClinicList = () => {
@@ -254,14 +203,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error('Get data failed');
       });
   };
 
@@ -565,27 +514,15 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Default Prescriber">
                   {getFieldDecorator(
-                    'defaultClinicsString',
+                    'defaultClinics',
                     {}
                   )(
                     <Select
                       showSearch
                       placeholder="Please select"
                       style={{ width: '100%' }}
-                      onChange={(value, Option) => {
-                        let tempArr = Option.props.children.split(',');
-                        let clinic = {
-                          clinicsId: tempArr[0],
-                          clinicsName: tempArr[1]
-                        };
-
-                        this.onFormChange({
-                          field: 'defaultClinics',
-                          value: clinic
-                        });
-                      }}
                     >
-                      {this.state.basicForm.selectedClinics.map((item) => (
+                      {clinicList.map((item) => (
                         <Option
                           value={item.clinicsId.toString()}
                           key={item.clinicsId}
@@ -611,10 +548,9 @@ class BasicInfomation extends React.Component<any, any> {
                       onChange={(value, Option) => {
                         let clinics = [];
                         for (let i = 0; i < Option.length; i++) {
-                          let tempArr = Option[i].props.children.split(',');
                           let clinic = {
-                            clinicsId: tempArr[0],
-                            clinicsName: tempArr[1]
+                            clinicsId: Option[i].props.value,
+                            clinicsName: Option[i].props.children
                           };
                           clinics.push(clinic);
                         }

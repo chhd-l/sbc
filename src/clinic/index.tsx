@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -154,14 +155,20 @@ export default class ClinicList extends Component<any, any> {
           pagination: pagination,
           clinicList: clinicList
         });
-      }
-      if (clinicList.length === 0 && pagination.total > 0) {
+      } else if (clinicList.length === 0 && res.context.total > 0) {
         pagination.current = res.context.number;
         let params = {
           pageNum: res.context.number,
           pageSize: pagination.pageSize
         };
         this.init(params);
+      } else {
+        pagination.total = res.context.total;
+        pagination.current = res.context.number + 1;
+        this.setState({
+          pagination: pagination,
+          clinicList: clinicList
+        });
       }
     }
   };
@@ -309,7 +316,7 @@ export default class ClinicList extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="Prescriber ID"
+                addonBefore={<FormattedMessage id="prescriberId" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -322,7 +329,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Prescriber Name"
+                addonBefore={<FormattedMessage id="prescriberName" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -335,7 +342,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Prescriber Phone"
+                addonBefore={<FormattedMessage id="prescriberPhone" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -359,7 +366,9 @@ export default class ClinicList extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
+                <Option value="">
+                  <FormattedMessage id="all" />
+                </Option>
                 {cityArr.map((item) => (
                   <Option value={item.valueEn} key={item.id}>
                     {item.name}
@@ -370,7 +379,7 @@ export default class ClinicList extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Prescriber Zip"
+                addonBefore={<FormattedMessage id="prescriberZip" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -394,7 +403,9 @@ export default class ClinicList extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
+                <Option value="">
+                  <FormattedMessage id="all" />
+                </Option>
                 {typeArr.map((item) => (
                   <Option value={item.valueEn} key={item.id}>
                     {item.name}
@@ -416,12 +427,14 @@ export default class ClinicList extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
+                <Option value="">
+                  <FormattedMessage id="all" />{' '}
+                </Option>
                 <Option value="true" key="enabled">
-                  Enabled
+                  <FormattedMessage id="enabled" />
                 </Option>
                 <Option value="false" key="disabled">
-                  Disabled
+                  <FormattedMessage id="disabled" />
                 </Option>
               </SelectGroup>
             </FormItem>
@@ -436,7 +449,7 @@ export default class ClinicList extends Component<any, any> {
                   this.onSearch();
                 }}
               >
-                Search
+                <FormattedMessage id="search" />
               </Button>
 
               <Button
@@ -447,12 +460,14 @@ export default class ClinicList extends Component<any, any> {
                   this.onExport();
                 }}
               >
-                Export
+                <FormattedMessage id="export" />
               </Button>
             </FormItem>
           </Form>
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
-            <Link to="/clinic-add">Add</Link>
+            <Link to="/clinic-add">
+              <FormattedMessage id="add" />
+            </Link>
           </Button>
           <Table
             columns={columns}

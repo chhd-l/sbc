@@ -152,10 +152,9 @@ export default {
   'signedInformation': 'Signed information',
   'financialInformation': 'Financial Information',
   'reviewStatus': 'Review status',
-  'storeStatus': 'Store status',
+  'storeStatus': 'Shop status',
   'partnerNumber': 'Partner number',
   'partnerName': 'Partner name',
-  'storeName': 'Store name',
   'contact': 'Contact',
   'contactDetails': 'Contact details',
   'contactEmail': 'Contact email',
@@ -179,7 +178,7 @@ export default {
   'whetherToActivateTheMemberAccount': 'Whether to activate the member account',
   'add': 'Add',
   'position': 'Position',
-  'systemRole': 'System role',
+  'systemRole': 'System Role',
   'clinics': 'Clinics',
   'hideLeavingEmployees': 'Hide leaving Users',
   'attributionDepartment': 'Attribution Department',
@@ -574,7 +573,14 @@ export default {
   'deliveryInvoiceAddress2': 'Delivery Invoice address2',
   'cardNumber': 'Card number',
   'selectedPrescriberId':'Selected Prescriber ID',
-  'Savelogin': 'Save & Login'
+  'prescriberId':'Prescriber ID',
+  'prescriberName':'Prescriber Name',
+  'prescriberPhone':'Prescriber Phone',
+  'prescriberZip':'Prescriber Zip',
+  'Savelogin': 'Save & Login',
+  'oldPassword': 'Old Password',
+  'newPassword': 'New Password',
+  'confirmPassword':'Confirm Password'
 };
 
 

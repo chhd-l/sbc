@@ -330,12 +330,12 @@ class BasicInfomation extends React.Component<any, any> {
                     ],
                     initialValue: moment(
                       new Date(this.state.currentBirthDay),
-                      'DD/MM/YYYY'
+                      'YYYY-MM-DD'
                     )
                   })(
                     <DatePicker
                       style={{ width: '100%' }}
-                      format="DD/MM/YYYY"
+                      format="YYYY-MM-DD"
                       disabledDate={(current) => {
                         return current && current > moment().endOf('day');
                       }}

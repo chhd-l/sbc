@@ -35,9 +35,7 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
     this.dispatch('loading:start');
     const { res } = await webapi.fetchEmployList({
       ...param,
@@ -82,10 +80,7 @@ export default class AppStore extends Store {
         isMaster: isMaster
       });
       const parentId = departmentVOList.get(0)
-        ? departmentVOList
-            .get(0)
-            .get('departmentId')
-            .toString()
+        ? departmentVOList.get(0).get('departmentId').toString()
         : '';
       //默认展开第一个父部门极其下面的子部门
       if (parentId) {
@@ -113,10 +108,7 @@ export default class AppStore extends Store {
     ids.push(parentId);
     //筛选出目标的子部门
     const target = list.filter((vo) =>
-      vo
-        .get('parentDepartmentIds')
-        .split('|')
-        .includes(parentId)
+      vo.get('parentDepartmentIds').split('|').includes(parentId)
     );
     if (target.size > 0) {
       return target.reduce((pre, current) => {

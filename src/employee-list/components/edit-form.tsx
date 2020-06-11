@@ -233,7 +233,11 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('email', {
               ...email,
               rules: [
-                { pattern: ValidConst.email, message: '请输入正确的邮箱' },
+                { required: true, message: '员工邮箱不能为空' },
+                {
+                  pattern: ValidConst.email,
+                  message: '请输入正确的邮箱'
+                },
                 {
                   validator: (rule, value, callback) => {
                     QMMethod.validatorMinAndMax(

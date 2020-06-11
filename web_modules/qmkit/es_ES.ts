@@ -179,7 +179,7 @@ export default {
   'whetherToActivateTheMemberAccount': 'Whether to activate the member account',
   'add': 'Add',
   'position': 'Position',
-  'systemRole': 'System role',
+  'systemRole': 'System Role',
   'clinics': 'Clinics',
   'hideLeavingEmployees': 'Hide leaving Users',
   'attributionDepartment': 'Attribution Department',

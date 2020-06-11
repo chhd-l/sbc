@@ -14,7 +14,8 @@ import {
   Card,
   Checkbox,
   Empty,
-  Spin
+  Spin,
+  DatePicker
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -22,8 +23,10 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addressList } from '@/order-add-old/webapi';
 import axios from 'axios';
+import moment from 'moment';
 
 const { TextArea } = Input;
+const { MonthPicker } = DatePicker;
 
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
@@ -63,7 +66,9 @@ class BillingInfomation extends React.Component<any, any> {
       clinicList: [],
       carrentCardNumber: '',
       loading: false,
-      cardList: []
+      cardList: [],
+      // currentCardNumber: '',
+      currentCardCvv: ''
     };
   }
   componentDidMount() {
@@ -75,11 +80,12 @@ class BillingInfomation extends React.Component<any, any> {
       .then((res) => {
         console.log(res);
         let data = res.res.context;
-        let cardForm = data[0];
+        let sortData = data.sort((a, b) => b.isDefault - a.isDefault);
+        let cardForm = sortData[0];
         this.props.form.setFieldsValue({
           cardNumber: cardForm.cardNumber,
           cardType: cardForm.cardType,
-          cardMmyy: cardForm.cardMmyy,
+          cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
           cardCvv: cardForm.cardCvv,
           cardOwner: cardForm.cardOwner,
           email: cardForm.email,
@@ -87,11 +93,11 @@ class BillingInfomation extends React.Component<any, any> {
           phoneNumber: cardForm.phoneNumber
         });
         this.setState({
-          carrentCardNumber: data[0]['cardNumber'],
-          cardList: data,
+          carrentCardNumber: sortData[0]['cardNumber'],
+          cardList: sortData,
           cardForm: cardForm,
-          title: data[0]['cardNumber'],
-          isDefault: data[0].isDefault === 1 ? true : false
+          title: sortData[0]['cardNumber'],
+          isDefault: sortData[0].isDefault === 1 ? true : false
         });
       })
       .catch((err) => {
@@ -199,6 +205,7 @@ class BillingInfomation extends React.Component<any, any> {
   onFormChange = ({ field, value }) => {
     let data = this.state.cardForm;
     data[field] = value;
+    console.log(data);
     this.setState({
       cardForm: data
     });
@@ -263,7 +270,7 @@ class BillingInfomation extends React.Component<any, any> {
     this.props.form.setFieldsValue({
       cardNumber: cardForm.cardNumber,
       cardType: cardForm.cardType,
-      cardMmyy: cardForm.cardMmyy,
+      cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
       cardCvv: cardForm.cardCvv,
       cardOwner: cardForm.cardOwner,
       email: cardForm.email,
@@ -366,6 +373,19 @@ class BillingInfomation extends React.Component<any, any> {
                           }
                         ],
                         getValueFromEvent: (event) => {
+                          // let filterValue = event.target.value.replace(/\s+/g, '')
+                          // let sliceValue = filterValue.slice(4,8)
+                          // let finalValue = filterValue.slice(0, 4)
+                          // if(sliceValue.length > 0 && sliceValue.length < 4) {
+                          //   for(let i = 0; i < sliceValue.length; i++) {
+                          //     finalValue = finalValue + '*'
+                          //   }
+                          // }else if(sliceValue.length >= 4){
+                          //   finalValue = finalValue + '****' + filterValue.slice(8)
+                          // }else {
+                          //   filterValue = filterValue
+                          // }
+                          // return finalValue
                           return event.target.value.replace(/\s+/g, '');
                         }
                       })(
@@ -395,53 +415,33 @@ class BillingInfomation extends React.Component<any, any> {
                             message: 'your card expiration_date is invalid!'
                           }
                         ],
-                        getValueFromEvent: (event) => {
-                          console.log(event);
-                          let value = event.target.value;
-                          let beforeValue = value.substr(0, value.length - 1);
-                          let inputValue = value.substr(value.length - 1, 1);
-                          let data = this.state.cardForm;
-                          console.log(beforeValue, inputValue, data);
-                          if (
-                            data['cardMmyy'] !== beforeValue &&
-                            data['cardMmyy'].substr(
-                              0,
-                              data['cardMmyy'].length - 1
-                            ) !== value
-                          )
-                            return value;
-                          if (
-                            isNaN(parseInt(inputValue)) &&
-                            value.length > data['cardMmyy'].length
-                          )
-                            return value;
-                          if (
-                            data['cardMmyy'].length == 2 &&
-                            value.length == 3
-                          ) {
-                            data['cardMmyy'] =
-                              value.slice(0, 2) + '/' + value.slice(2);
-                          } else if (
-                            data['cardMmyy'].length == 4 &&
-                            value.length == 3
-                          ) {
-                            data['cardMmyy'] = data['cardMmyy'].slice(0, 2);
-                          } else {
-                            data['cardMmyy'] = value;
-                          }
-                          return data['cardMmyy'];
-                        }
+                        initialValue: moment(new Date(), 'MM/YY')
                       })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
+                        <MonthPicker
+                          style={{ width: '100%' }}
+                          format="MM/YY"
+                          disabledDate={(current) => {
+                            console.log(current);
+                            return current && current > moment().endOf('day');
+                          }}
+                          onChange={(date, dateString) => {
+                            const value = dateString;
                             this.onFormChange({
                               field: 'cardMmyy',
                               value
                             });
                           }}
                         />
+                        // <Input
+                        //   disabled={this.props.customerType === 'Guest'}
+                        //   onChange={(e) => {
+                        //     const value = (e.target as any).value;
+                        //     this.onFormChange({
+                        //       field: 'cardMmyy',
+                        //       value
+                        //     });
+                        //   }}
+                        // />
                       )}
                     </FormItem>
                   </Col>
@@ -609,7 +609,7 @@ class BillingInfomation extends React.Component<any, any> {
                           display:
                             this.props.customerType === 'Guest'
                               ? 'none'
-                              : 'block'
+                              : 'inline'
                         }}
                       >
                         Save

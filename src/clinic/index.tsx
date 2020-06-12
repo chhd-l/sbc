@@ -121,7 +121,7 @@ export default class ClinicList extends Component<any, any> {
       },
       cityArr: [],
       typeArr: [],
-      loading: false
+      loading: true
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -131,9 +131,12 @@ export default class ClinicList extends Component<any, any> {
     this.init();
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
+    this.setState({
+      loading: true
+    });
     const query = this.state.searchForm;
     query.enabled =
-      query.enabled === 'true'
+      query.enabled.toString() === 'true'
         ? true
         : query.enabled === 'false'
         ? false
@@ -152,13 +155,15 @@ export default class ClinicList extends Component<any, any> {
         pagination.current = res.context.number + 1;
         this.setState({
           pagination: pagination,
-          clinicList: clinicList
+          clinicList: clinicList,
+          loading: false
         });
       } else if (clinicList.length === 0 && res.context.total > 0) {
         pagination.current = res.context.number;
         let params = {
           pageNum: res.context.number,
-          pageSize: pagination.pageSize
+          pageSize: pagination.pageSize,
+          loading: false
         };
         this.init(params);
       } else {
@@ -166,7 +171,8 @@ export default class ClinicList extends Component<any, any> {
         pagination.current = res.context.number + 1;
         this.setState({
           pagination: pagination,
-          clinicList: clinicList
+          clinicList: clinicList,
+          loading: false
         });
       }
     }

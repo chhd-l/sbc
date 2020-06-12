@@ -585,14 +585,16 @@ class BasicInfomation extends React.Component<any, any> {
                         });
                       }}
                     >
-                      {this.state.basicForm.selectedClinics.map((item) => (
-                        <Option
-                          value={item.clinicsId.toString()}
-                          key={item.clinicsId}
-                        >
-                          {item.clinicsId + ',' + item.clinicsName}
-                        </Option>
-                      ))}
+                      {this.state.basicForm.selectedClinics
+                        ? this.state.basicForm.selectedClinics.map((item) => (
+                            <Option
+                              value={item.clinicsId.toString()}
+                              key={item.clinicsId}
+                            >
+                              {item.clinicsId + ',' + item.clinicsName}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
                   )}
                 </FormItem>

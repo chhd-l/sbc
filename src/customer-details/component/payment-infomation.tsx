@@ -51,7 +51,7 @@ class BillingInfomation extends React.Component<any, any> {
         cardNumber: '4772910000000008',
         cardType: 'CREDIT',
         cardMmyy: '12/23',
-        cardCvv: '123',
+        cardCvv: '***',
         cardOwner: '12 12',
         email: '',
         vendor: 'VISA',
@@ -83,10 +83,13 @@ class BillingInfomation extends React.Component<any, any> {
         let sortData = data.sort((a, b) => b.isDefault - a.isDefault);
         let cardForm = sortData[0];
         this.props.form.setFieldsValue({
-          cardNumber: cardForm.cardNumber,
+          cardNumber:
+            cardForm.cardNumber.slice(0, 4) +
+            '****' +
+            cardForm.cardNumber.slice(8),
           cardType: cardForm.cardType,
           cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
-          cardCvv: cardForm.cardCvv,
+          cardCvv: '***',
           cardOwner: cardForm.cardOwner,
           email: cardForm.email,
           vendor: cardForm.vendor,
@@ -224,10 +227,11 @@ class BillingInfomation extends React.Component<any, any> {
       isDefault: 0
     };
     this.props.form.setFieldsValue({
-      cardNumber: cardForm.cardNumber,
+      cardNumber:
+        cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
       cardType: cardForm.cardType,
       cardMmyy: cardForm.cardMmyy,
-      cardCvv: cardForm.cardCvv,
+      cardCvv: '***',
       cardOwner: cardForm.cardOwner,
       email: cardForm.email,
       vendor: cardForm.vendor,
@@ -268,10 +272,11 @@ class BillingInfomation extends React.Component<any, any> {
       return item.id === id;
     });
     this.props.form.setFieldsValue({
-      cardNumber: cardForm.cardNumber,
+      cardNumber:
+        cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
       cardType: cardForm.cardType,
       cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
-      cardCvv: cardForm.cardCvv,
+      cardCvv: '***',
       cardOwner: cardForm.cardOwner,
       email: cardForm.email,
       vendor: cardForm.vendor,
@@ -321,9 +326,9 @@ class BillingInfomation extends React.Component<any, any> {
                 </li>
               ))}
             </ul>
-            <Button type="danger" onClick={() => this.addCard()}>
+            {/* <Button type="danger" onClick={() => this.addCard()}>
               Add
-            </Button>
+            </Button> */}
           </Col>
           <Col span={20}>
             {this.state.cardList.length === 0 ? (
@@ -390,7 +395,7 @@ class BillingInfomation extends React.Component<any, any> {
                         }
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value.replace(
                               /\s*/g,
@@ -418,6 +423,7 @@ class BillingInfomation extends React.Component<any, any> {
                         initialValue: moment(new Date(), 'MM/YY')
                       })(
                         <MonthPicker
+                          disabled
                           style={{ width: '100%' }}
                           format="MM/YY"
                           disabledDate={(current) => {
@@ -457,7 +463,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -480,7 +486,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -500,11 +506,34 @@ class BillingInfomation extends React.Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.props.customerType === 'Guest'}
+                          disabled
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
                               field: 'email',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
+                    <FormItem label="phoneNumber">
+                      {getFieldDecorator('phoneNumber', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input phoneNumber!'
+                          }
+                        ]
+                      })(
+                        <Input
+                          disabled
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'phoneNumber',
                               value
                             });
                           }}
@@ -601,7 +630,7 @@ class BillingInfomation extends React.Component<any, any> {
 
                   <Col span={24}>
                     <FormItem>
-                      <Button
+                      {/* <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -613,7 +642,7 @@ class BillingInfomation extends React.Component<any, any> {
                         }}
                       >
                         Save
-                      </Button>
+                      </Button> */}
 
                       <Button>
                         <Link to="/customer-list">Cancel</Link>

@@ -66,13 +66,13 @@ export function resetPassword(
 }
 
 /**
- * 修改员工
+ * 修改密码
  * @param employee
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export function updateEmployee(employee) {
-  return Fetch<TResult>('/customer/employee', {
-    method: 'PUT',
+export function updatePassword(employee) {
+  return Fetch<TResult>('/password/user/reset', {
+    method: 'POST',
     body: JSON.stringify(employee)
   });
 }

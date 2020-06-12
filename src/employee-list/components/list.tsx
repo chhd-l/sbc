@@ -102,9 +102,6 @@ export default class EmployeeList extends React.Component<any, any> {
           title={<FormattedMessage id="email" />}
           key="email"
           dataIndex="email"
-          render={(rowInfo) => (
-            <span>{rowInfo && rowInfo.email ? rowInfo.email : '-'}</span>
-          )}
         />
         <Column
           title={<FormattedMessage id="employeeNo" />}

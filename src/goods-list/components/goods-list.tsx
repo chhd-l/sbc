@@ -9,6 +9,7 @@ const { Column } = DataGrid;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
 import { FormattedMessage } from 'react-intl';
+import './goods-list.css';
 
 @withRouter
 @Relax
@@ -117,7 +118,7 @@ export default class CateList extends React.Component<any, any> {
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
-          width={200}
+          width={160}
         />
         <Column
           title={<FormattedMessage id="product.SPU" />}
@@ -164,7 +165,7 @@ export default class CateList extends React.Component<any, any> {
           title={<FormattedMessage id="product.storeCategory" />}
           dataIndex="storeCateIds"
           key="storeCateIds"
-          width={150}
+          width={100}
           render={this._renderStoreCateList}
         />
         <Column
@@ -256,7 +257,7 @@ export default class CateList extends React.Component<any, any> {
             <FormattedMessage id="edit" />
           </a>
         </AuthWrapper>
-        <AuthWrapper functionName="f_goods_sku_edit_3">
+        {/* <AuthWrapper functionName="f_goods_sku_edit_3">
           <a
             href="javascript:;"
             onClick={() =>
@@ -268,7 +269,7 @@ export default class CateList extends React.Component<any, any> {
           >
             <FormattedMessage id="product.setPrice" />
           </a>
-        </AuthWrapper>
+        </AuthWrapper> */}
         {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
             <a
@@ -458,7 +459,7 @@ const styles = {
   },
   cell: {
     color: '#999',
-    width: 200,
+    width: 180,
     textAlign: 'left',
     display: 'flex',
     flexDirection: 'row',
@@ -479,7 +480,7 @@ const styles = {
     background: '#fff'
   },
   textCon: {
-    width: 120,
+    width: 100,
     maxHeight: 62,
     overflow: 'hidden',
     textOverflow: 'ellipsis',

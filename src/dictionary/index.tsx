@@ -14,34 +14,34 @@ export default class DitionaryList extends Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'name',
+          title: 'Name',
           dataIndex: 'name',
           key: 'name'
         },
         {
-          title: 'type',
+          title: 'Type',
           dataIndex: 'type',
           key: 'type'
         },
         {
-          title: 'value',
+          title: 'Value',
           dataIndex: 'valueEn',
           key: 'value'
         },
         {
-          title: 'discription',
+          title: 'Discription',
           dataIndex: 'description',
           key: 'discription'
         },
         {
-          title: 'priority',
+          title: 'Priority',
           dataIndex: 'priority',
           key: 'priority'
         },
         {
-          title: 'Option',
-          dataIndex: 'option',
-          key: 'option',
+          title: 'Operation',
+          dataIndex: 'operation',
+          key: 'operation',
           render: (text, record) => (
             <span>
               <Link to={'/dictionary-edit/' + record.id}>Edit</Link>

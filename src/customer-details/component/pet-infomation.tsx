@@ -617,7 +617,9 @@ class PetInfomation extends React.Component<any, any> {
                           }}
                         >
                           {petsPropRelations.map((item) => (
-                            <Option key={item}>{item}</Option>
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
                           ))}
                         </Select>
                       )}

@@ -55,6 +55,16 @@ export default class Customer extends React.Component<any, any> {
           key: 'phoneNumber'
         },
         {
+          title: 'Default Prescriber Name',
+          dataIndex: 'defaultClinics',
+          key: 'defaultClinics',
+          render: (text, record) => (
+            <p>
+              {record.defaultClinics ? record.defaultClinics.clinicsName : ''}
+            </p>
+          )
+        },
+        {
           title: 'Selected Prescriber ID',
           dataIndex: 'clinicsIds',
           key: 'clinicsIds'
@@ -103,7 +113,8 @@ export default class Customer extends React.Component<any, any> {
         //手机号
         phoneNumber: '',
         //选中的诊所
-        selectedPrescriberId: ''
+        selectedPrescriberId: '',
+        defaultPrescriberName: ''
       },
       customerTypeArr: [
         {
@@ -155,6 +166,7 @@ export default class Customer extends React.Component<any, any> {
       customerName: query.customerName,
       email: query.email,
       clinicsId: query.selectedPrescriberId
+      // defaultPrescriberName:query.defaultPrescriberName
     };
     pageNum = pageNum - 1;
     webapi

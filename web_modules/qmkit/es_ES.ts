@@ -580,7 +580,8 @@ export default {
   'Savelogin': 'Save & Login',
   'oldPassword': 'Old Password',
   'newPassword': 'New Password',
-  'confirmPassword':'Confirm Password'
+  'confirmPassword':'Confirm Password',
+  'defaultPrescriberName':'default Prescriber Name',
 };
 
 

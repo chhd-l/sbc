@@ -73,7 +73,9 @@ class ClinicForm extends React.Component<any, any> {
         timeZone: 'Year'
       },
       activeKey: 'basic',
-      isJump: false
+      isJump: false,
+      qrCodeLink: '',
+      url: ''
     };
     this.getDetail = this.getDetail.bind(this);
 
@@ -195,7 +197,11 @@ class ClinicForm extends React.Component<any, any> {
       clinicsId: id
     });
     if (res.code === 'K-000000') {
+      let qrCodeLink = res.context.qrCodeLink;
+      let url = res.context.url;
       this.setState({
+        qrCodeLink: qrCodeLink,
+        url: url,
         clinicForm: res.context
       });
       this.props.form.setFieldsValue({
@@ -633,16 +639,20 @@ class ClinicForm extends React.Component<any, any> {
               style={{ display: !this.state.isEdit ? 'none' : null }}
             >
               <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <img src={QrCode} alt="" />
-                <div>
-                  <a
-                    href="https://shopuat.466920.com/?clinic=123"
-                    style={{ fontSize: '25px' }}
-                    target="_blank"
-                  >
-                    Go To Shop
-                  </a>
-                </div>
+                {this.state.qrCodeLink ? (
+                  <img src={this.state.qrCodeLink} alt="" />
+                ) : null}
+                {this.state.url ? (
+                  <div>
+                    <a
+                      href={this.state.url}
+                      style={{ fontSize: '25px' }}
+                      target="_blank"
+                    >
+                      Go To Shop
+                    </a>
+                  </div>
+                ) : null}
               </div>
             </Col>
           </Row>

@@ -273,6 +273,7 @@ export default {
   'platformConsumers': 'Platform Consumers',
   'enable': 'Enable',
   'disabled': 'Disabled',
+  'enabled': 'Enabled',
   'consumerLevel': 'Consumer Level',
   'levelName': 'Level Name',
   'levelBadge': 'Level Badge',

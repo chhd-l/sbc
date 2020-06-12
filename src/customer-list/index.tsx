@@ -385,7 +385,7 @@ export default class Customer extends React.Component<any, any> {
             </Form>
             <Table
               columns={columns}
-              rowKey={(record) => record.id}
+              rowKey={(record) => record.customerDetailId}
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
               loading={this.state.loading}

@@ -230,6 +230,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       areaId: string;
       cityId: number;
       address: string;
+      detailAddress1: string;
+      detailAddress2: string;
       rfc: string;
       postCode: string;
     };
@@ -244,6 +246,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
           generalInvoice: IMap; //普通发票
           specialInvoice: IMap; //增值税专用发票
           address: string;
+          address1: string;
+          address2: string;
           contacts: string; //联系人
           phone: string; //联系方式
           provinceId: number;
@@ -440,15 +444,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryCity" />}:{' '}
-              {countryDict.find((c) => c.id == consignee.cityId) &&
-                countryDict.find((c) => c.id == consignee.cityId).name}
+              {cityDict.find((c) => c.id == consignee.cityId) &&
+                cityDict.find((c) => c.id == consignee.cityId).name}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress1" />}: {consignee.address}
+              {<FormattedMessage id="deliveryAddress1" />}:{' '}
+              {consignee.detailAddress1}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress2" />}:{' '}
-              {/* todo {address2} 后端暂时没有此字段 */}
+              {consignee.detailAddress2}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="postalCode" />}: {consignee.postCode}
@@ -464,11 +469,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Col span={8}>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryInvoiceAddress1" />}:{' '}
-              {invoice.address}
+              {invoice.address1}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryInvoiceAddress2" />}:{' '}
-              {/* {address2} 后端暂时没有此字段 */}
+              {invoice.address2}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="paymentMethod" />}:{' '}

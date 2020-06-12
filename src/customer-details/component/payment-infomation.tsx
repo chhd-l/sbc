@@ -335,7 +335,11 @@ class BillingInfomation extends React.Component<any, any> {
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             ) : null}
             <Card
-              title={this.state.title}
+              title={
+                this.state.title.slice(0, 4) +
+                '****' +
+                this.state.title.slice(8)
+              }
               style={{
                 display: this.state.cardList.length === 0 ? 'none' : 'block'
               }}

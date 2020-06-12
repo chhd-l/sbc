@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import QrCode from './../QR_code_test.png';
+import copy from 'copy-to-clipboard';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -396,6 +396,11 @@ class ClinicForm extends React.Component<any, any> {
   //     isJump: false
   //   });
   // };
+  handleCopy = (value) => {
+    if (copy(value)) {
+      message.success('Successful');
+    } else message.error('Unsuccessful');
+  };
 
   switchTab = (key) => {
     this.setState({
@@ -644,13 +649,14 @@ class ClinicForm extends React.Component<any, any> {
                 ) : null}
                 {this.state.url ? (
                   <div>
-                    <a
-                      href={this.state.url}
-                      style={{ fontSize: '25px' }}
-                      target="_blank"
+                    {this.state.url}
+                    <Button
+                      style={{ marginLeft: '10px' }}
+                      onClick={() => this.handleCopy(this.state.url)}
+                      size="small"
                     >
-                      Go To Shop
-                    </a>
+                      copy
+                    </Button>
                   </div>
                 ) : null}
               </div>

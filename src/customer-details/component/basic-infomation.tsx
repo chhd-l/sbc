@@ -495,30 +495,7 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem
-                  labelCol={{
-                    span: 0
-                  }}
-                  wrapperCol={{
-                    span: 24
-                  }}
-                >
-                  <div style={{ display: 'inline-block', height: '40px' }}>
-                    <span
-                      style={{
-                        color: 'red',
-                        fontFamily: 'SimSun',
-                        marginRight: '4px',
-                        fontSize: '12px'
-                      }}
-                    >
-                      *
-                    </span>
-                    <label style={{ minWidth: '200px', marginRight: '10px' }}>
-                      Preferred methods of communication:
-                    </label>
-                  </div>
-
+                <FormItem label="Prefer channel">
                   {getFieldDecorator('preferredMethods', {
                     rules: [
                       {

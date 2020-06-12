@@ -28,36 +28,42 @@ export default class Customer extends React.Component<any, any> {
         {
           title: 'Consumer Account',
           dataIndex: 'customerAccount',
-          key: 'consumerAccount'
+          key: 'consumerAccount',
+          width: 160
         },
         {
           title: 'Consumer Name',
           dataIndex: 'customerName',
           key: 'consumerName',
-          render: (text, record) => (
-            <p>{record.customerLevelName !== 'Guest' ? text : ''}</p>
-          )
+          width: 200
+          // render: (text, record) => (
+          //   <p>{record.customerLevelName !== 'Guest' ? text : ''}</p>
+          // )
         },
         {
           title: 'Consumer Type',
           dataIndex: 'customerLevelName',
-          key: 'consumerType'
+          key: 'consumerType',
+          width: 120
         },
         {
           title: 'Email',
           dataIndex: 'email',
-          key: 'email'
+          key: 'email',
+          width: 160
         },
 
         {
           title: 'Phone Number',
           dataIndex: 'contactPhone',
-          key: 'phoneNumber'
+          key: 'phoneNumber',
+          width: 160
         },
         {
           title: 'Default Prescriber Name',
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
+          width: 160,
           render: (text, record) => (
             <p>
               {record.defaultClinics ? record.defaultClinics.clinicsName : ''}
@@ -67,11 +73,13 @@ export default class Customer extends React.Component<any, any> {
         {
           title: 'Selected Prescriber ID',
           dataIndex: 'clinicsIds',
-          key: 'clinicsIds'
+          key: 'clinicsIds',
+          width: 200
         },
         {
           title: 'Operation',
           key: 'operation',
+          width: 200,
           render: (text, record) => (
             <span>
               <Link
@@ -389,6 +397,7 @@ export default class Customer extends React.Component<any, any> {
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
               loading={this.state.loading}
+              scroll={{ x: '100%' }}
               onChange={this.handleTableChange}
             />
           </div>

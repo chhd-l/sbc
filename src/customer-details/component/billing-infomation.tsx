@@ -251,7 +251,7 @@ class BillingInfomation extends React.Component<any, any> {
   switchAddress = (id) => {
     const { addressList } = this.state;
     let billingForm = addressList.find((item) => {
-      return item.id === id;
+      return item.deliveryAddressId === id;
     });
 
     this.props.form.setFieldsValue({
@@ -294,7 +294,7 @@ class BillingInfomation extends React.Component<any, any> {
             <ul>
               {this.state.addressList.map((item) => (
                 <li
-                  key={item.id}
+                  key={item.deliveryAddressId}
                   style={{
                     cursor: 'pointer',
                     color:
@@ -302,7 +302,7 @@ class BillingInfomation extends React.Component<any, any> {
                         ? '#e2001a'
                         : ''
                   }}
-                  onClick={() => this.switchAddress(item.id)}
+                  onClick={() => this.switchAddress(item.deliveryAddressId)}
                 >
                   {item.consigneeName}
                 </li>

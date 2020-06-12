@@ -23,11 +23,11 @@ export default class Customer extends React.Component<any, any> {
     super(props);
     this.state = {
       columns: [
-        // {
-        //   title: 'Consumer Account',
-        //   dataIndex: 'customerAccount',
-        //   key: 'consumerAccount'
-        // },
+        {
+          title: 'Consumer Account',
+          dataIndex: 'customerAccount',
+          key: 'consumerAccount'
+        },
         {
           title: 'Consumer Name',
           dataIndex: 'customerName',
@@ -38,11 +38,11 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerLevelName',
           key: 'consumerType'
         },
-        // {
-        //   title: 'Email',
-        //   dataIndex: 'email',
-        //   key: 'email'
-        // },
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email'
+        },
 
         // {
         //   title: 'Phone Number',

@@ -143,7 +143,7 @@ export default class AppStore extends Store {
       );
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('保存成功!');
+      message.success('save success!');
       this.setCurrentStep(2);
     } else {
       message.error(res.message);
@@ -681,7 +681,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch(
           'dictionary: country',
-          res.context.sysDictionaryPage.content
+          res.context.sysDictionaryVOS
         );
       });
     }
@@ -693,7 +693,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch(
           'dictionary: city',
-          res.context.sysDictionaryPage.content
+          res.context.sysDictionaryVOS
         );
       });
     }
@@ -705,7 +705,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch(
           'dictionary: language',
-          res.context.sysDictionaryPage.content
+          res.context.sysDictionaryVOS
         );
       });
     }
@@ -717,7 +717,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch(
           'dictionary: currency',
-          res.context.sysDictionaryPage.content
+          res.context.sysDictionaryVOS
         );
       });
     }
@@ -729,7 +729,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch(
           'dictionary: timeZone',
-          res.context.sysDictionaryPage.content
+          res.context.sysDictionaryVOS
         );
       });
     }
@@ -803,7 +803,7 @@ export default class AppStore extends Store {
     if (storeId != null) {
       const { res } = await webApi.editStoreInfo(storeInfo);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('保存成功!');
+        message.success('save success!');
         this.setCurrentStep(1);
       } else {
         message.error(res.message);
@@ -811,7 +811,7 @@ export default class AppStore extends Store {
     } else {
       const { res } = await webApi.saveStoreInfo(storeInfo);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('保存成功!');
+        message.success('save success!');
         this.setCurrentStep(1);
       } else {
         message.error(res.message);
@@ -827,7 +827,7 @@ export default class AppStore extends Store {
   onEditStoreInfo = async (storeInfo) => {
     const { res } = await webApi.editStoreInfo(storeInfo);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('保存成功!');
+      message.success('save success!');
     } else {
       message.error(res.message);
     }
@@ -867,7 +867,7 @@ export default class AppStore extends Store {
       );
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('保存成功!');
+      message.success('save success!');
     } else {
       message.error(res.message);
     }
@@ -1078,7 +1078,7 @@ export default class AppStore extends Store {
     } else if (brandList.length + otherBrands.length < 1) {
       message.error('请至少选择一种签约品牌');
     } else {
-      message.success('保存成功！');
+      message.success('save success！');
     }
   };
 

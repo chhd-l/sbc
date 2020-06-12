@@ -431,6 +431,7 @@ export default class EditForm extends React.Component<any, any> {
                 <Select
                   placeholder="Please Select Clinics"
                   disabled={editDisable}
+                  // onChange={this.clinicChange}
                   showSearch
                   filterOption={(input, option: { props }) =>
                     option.props.children
@@ -616,6 +617,15 @@ export default class EditForm extends React.Component<any, any> {
       selectRoleIds: roleStringIds
     });
   };
+
+  // clinicChange = (value) => {
+  //   var clinic = this.state.clinicsLites.find((x) => x.clinicsId === value);
+  //   if (clinic) {
+  //     this.props.form.setFieldsValue({
+  //       employeeName: clinic.clinicsName
+  //     });
+  //   }
+  // };
 
   checkConfirmPassword = (_rule, value, callback) => {
     if (value != this.props.form.getFieldValue('accountPassword')) {

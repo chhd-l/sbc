@@ -32,7 +32,7 @@ export default class LoginForm extends React.Component<any, any> {
           <div style={styles.header}>
             <img style={styles.logo} src={loginLogo ? loginLogo : logo} />
           </div>
-          <strong style={styles.title}>商家后台</strong>
+          <strong style={styles.title}>Store potal</strong>
         </FormItem>
         <FormItem>
           {getFieldDecorator('account', {

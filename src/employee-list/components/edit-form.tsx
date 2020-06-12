@@ -263,8 +263,8 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('employeeMobile', {
               ...employeeMobile,
               rules: [
-                { required: true, message: '员工手机不能为空' },
-                { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+                { required: true, message: '员工手机不能为空' }
+                // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
               ]
             })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
           </FormItem>

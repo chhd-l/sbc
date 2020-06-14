@@ -60,13 +60,13 @@ export default class Customer extends React.Component<any, any> {
           width: 160
         },
         {
-          title: 'Default Prescriber Name',
+          title: 'Default Prescriber ID',
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
           width: 160,
           render: (text, record) => (
             <p>
-              {record.defaultClinics ? record.defaultClinics.clinicsName : ''}
+              {record.defaultClinics ? record.defaultClinics.clinicsId : ''}
             </p>
           )
         },
@@ -294,7 +294,7 @@ export default class Customer extends React.Component<any, any> {
             <Form className="filter-content" layout="inline">
               <FormItem>
                 <Input
-                  addonBefore={<FormattedMessage id="customerAccount" />}
+                  addonBefore={<FormattedMessage id="consumerAccount" />}
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onFormChange({

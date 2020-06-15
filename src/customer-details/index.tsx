@@ -28,12 +28,7 @@ const { TabPane } = Tabs;
 
 const { Column } = Table;
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-};
-
-class CustomerDetails extends React.Component<any, any> {
+export default class CustomerDetails extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -132,4 +127,3 @@ class CustomerDetails extends React.Component<any, any> {
     );
   }
 }
-export default Form.create()(CustomerDetails);

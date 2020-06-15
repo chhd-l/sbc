@@ -47,7 +47,7 @@ class PetInfomation extends React.Component<any, any> {
         petsSizeValueName: '',
         sterilized: null,
         birthOfPets: '',
-        petsPropRelations: []
+        customerPetsPropRelations: []
       },
       petList: [],
       petsType: [
@@ -71,7 +71,7 @@ class PetInfomation extends React.Component<any, any> {
         }
       ],
       sizeArr: ['Xsmall', 'Mini', 'Medium', 'Maxi', 'Giant'],
-      petsPropRelations: [
+      customerPetsPropRelations: [
         'Age support',
         'Cardiac support',
         'Diabetes support',
@@ -180,8 +180,8 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
-            currentPet.petsPropRelations = this.getSpecialNeeds(
-              currentPet.petsPropRelations
+            currentPet.customerPetsPropRelations = this.getSpecialNeeds(
+              currentPet.customerPetsPropRelations
             );
 
             if (currentPet.petsType === 'dog') {
@@ -192,7 +192,7 @@ class PetInfomation extends React.Component<any, any> {
                 petsBreed: currentPet.petsBreed,
                 sterilized: currentPet.sterilized,
                 petsSizeValueName: currentPet.petsSizeValueName,
-                petsPropRelations: currentPet.petsPropRelations
+                customerPetsPropRelations: currentPet.customerPetsPropRelations
               });
             } else {
               this.props.form.setFieldsValue({
@@ -202,7 +202,7 @@ class PetInfomation extends React.Component<any, any> {
                 petsBreed: currentPet.petsBreed,
 
                 sterilized: currentPet.sterilized,
-                petsPropRelations: currentPet.petsPropRelations
+                customerPetsPropRelations: currentPet.customerPetsPropRelations
               });
             }
             this.setState({
@@ -228,20 +228,20 @@ class PetInfomation extends React.Component<any, any> {
       loading: false
     });
     const { petForm } = this.state;
-    let petsPropRelations = [];
+    let customerPetsPropRelations = [];
     let propId = 100;
-    for (let i = 0; i < petForm.petsPropRelations.length; i++) {
+    for (let i = 0; i < petForm.customerPetsPropRelations.length; i++) {
       let prop = {
         delFlag: 0,
         detailId: 0,
         indexFlag: 0,
         petsId: this.state.currentPetId,
         propId: propId,
-        propName: petForm.petsPropRelations[i],
+        propName: petForm.customerPetsPropRelations[i],
         relationId: '10086',
         sort: 0
       };
-      petsPropRelations.push(prop);
+      customerPetsPropRelations.push(prop);
       propId += 1;
     }
 
@@ -259,8 +259,8 @@ class PetInfomation extends React.Component<any, any> {
       storeId: 0
     };
     let params = {
-      pets: pets,
-      petsPropRelations: petsPropRelations,
+      customerPets: pets,
+      customerPetsPropRelations: customerPetsPropRelations,
       storeId: 10086,
       userId: this.props.customerAccount
     };
@@ -290,8 +290,8 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          currentPet.petsPropRelations = this.getSpecialNeeds(
-            currentPet.petsPropRelations
+          currentPet.customerPetsPropRelations = this.getSpecialNeeds(
+            currentPet.customerPetsPropRelations
           );
           if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
@@ -301,7 +301,7 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
               sterilized: currentPet.sterilized,
               petsSizeValueName: currentPet.petsSizeValueName,
-              petsPropRelations: currentPet.petsPropRelations
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
             });
           } else {
             this.props.form.setFieldsValue({
@@ -311,7 +311,7 @@ class PetInfomation extends React.Component<any, any> {
               petsBreed: currentPet.petsBreed,
 
               sterilized: currentPet.sterilized,
-              petsPropRelations: currentPet.petsPropRelations
+              customerPetsPropRelations: currentPet.customerPetsPropRelations
             });
           }
 
@@ -333,7 +333,7 @@ class PetInfomation extends React.Component<any, any> {
       petsType,
       petGender,
       sizeArr,
-      petsPropRelations,
+      customerPetsPropRelations,
       catBreed,
       dogBreed,
       petForm
@@ -596,7 +596,7 @@ class PetInfomation extends React.Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem label="Special needs">
-                      {getFieldDecorator('petsPropRelations', {
+                      {getFieldDecorator('customerPetsPropRelations', {
                         rules: [
                           {
                             required: true,
@@ -611,12 +611,12 @@ class PetInfomation extends React.Component<any, any> {
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onFormChange({
-                              field: 'petsPropRelations',
+                              field: 'customerPetsPropRelations',
                               value
                             });
                           }}
                         >
-                          {petsPropRelations.map((item) => (
+                          {customerPetsPropRelations.map((item) => (
                             <Option value={item} key={item}>
                               {item}
                             </Option>

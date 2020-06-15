@@ -71,10 +71,7 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'receiveTime',
       key: 'receiveTime',
       render: (receiveTime) =>
-        receiveTime &&
-        moment(receiveTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: 'Amount Received',

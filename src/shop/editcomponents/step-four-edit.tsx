@@ -90,6 +90,7 @@ export default class StepFour extends React.Component<any, any> {
                   rules: [{ required: false, message: 'Please input FAQ Url!' }]
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'faqUrl',
@@ -142,6 +143,7 @@ export default class StepFour extends React.Component<any, any> {
                   ]
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'privacyPolicyUrl',
@@ -165,6 +167,7 @@ export default class StepFour extends React.Component<any, any> {
                   ]
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'termsOfUse',

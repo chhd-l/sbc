@@ -86,6 +86,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.logIn
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'logIn',
@@ -106,6 +107,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.userInfoUrl
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'userInfoUrl',
@@ -127,6 +129,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.clientId
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'clientId',
@@ -146,6 +149,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.issuer
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'issuer',
@@ -167,6 +171,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.redirectUrl
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'redirectUrl',
@@ -186,6 +191,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.registration
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'registration',
@@ -207,6 +213,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.registerPrefix
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'registerPrefix',
@@ -226,6 +233,7 @@ export default class StepTwo extends React.Component<any, any> {
                   initialValue: this.state.ssoForm.registerCallback
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'registerCallback',

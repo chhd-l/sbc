@@ -134,7 +134,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           </AuthWrapper>
         </Menu.Item>
 
-        <Menu.Item key={4}>
+        {/* <Menu.Item key={4}>
           <AuthWrapper functionName={'f_batch_set_employee'}>
             <a href="javascript:;" onClick={() => this._batchSetEmployee()}>
               批量设为业务员
@@ -176,7 +176,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           >
             批量导入
           </a>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
     );
   };

@@ -147,6 +147,14 @@ export default class StepOneEdit extends React.Component<any, any> {
     }
   };
 
+  getSelectIdList = (idString: String) => {
+    if (!idString) {
+      return []
+    }
+    var result = idString.toString().split(',');
+    return result;
+  };
+
   render() {
     const { company, onChange, dictionary } = this.props.relaxProps;
     const storeInfo = company.get('storeInfo');
@@ -276,7 +284,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="storeLanguage" />}
                 >
                   {getFieldDecorator('languageId', {
-                    initialValue: storeInfo.get('languageId'),
+                    initialValue: this.getSelectIdList(storeInfo.get('languageId')),
                     rules: [
                       { required: false, message: 'Please select Language!' }
                     ]
@@ -291,6 +299,13 @@ export default class StepOneEdit extends React.Component<any, any> {
                     //   }
                     // />
                     <Select
+                      mode="multiple"
+                      showSearch
+                      filterOption={(input, option: { props }) =>
+                        option.props.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(value) =>
                         onChange({
                           field: 'languageId',
@@ -299,7 +314,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {languageData.map((item) => (
-                        <Option value={item.id} key={item.id}>
+                        <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.valueEn}
                         </Option>
                       ))}
@@ -374,10 +389,17 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="targetCity" />}
                 >
                   {getFieldDecorator('cityId', {
-                    initialValue: storeInfo.get('cityId'),
+                    initialValue:  this.getSelectIdList(storeInfo.get('cityId')),
                     rules: [{ required: false, message: 'Please select City!' }]
                   })(
                     <Select
+                      mode="multiple"
+                      showSearch
+                      filterOption={(input, option: { props }) =>
+                        option.props.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(value) =>
                         onChange({
                           field: 'cityId',
@@ -386,7 +408,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {cityData.map((item) => (
-                        <Option value={item.id} key={item.id}>
+                        <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.valueEn}
                         </Option>
                       ))}
@@ -465,6 +487,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                     ]
                   })(
                     <Input
+                      addonBefore="URL"
                       onChange={(e: any) =>
                         onChange({
                           field: 'domainName',
@@ -490,7 +513,6 @@ export default class StepOneEdit extends React.Component<any, any> {
       </div>
     );
   }
-
   /**
    * 保存商家基本信息
    */

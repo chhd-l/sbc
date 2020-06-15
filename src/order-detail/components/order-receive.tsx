@@ -71,10 +71,7 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'receiveTime',
       key: 'receiveTime',
       render: (receiveTime) =>
-        receiveTime &&
-        moment(receiveTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: 'Amount Received',
@@ -82,13 +79,6 @@ export default class OrderReceive extends React.Component<any, any> {
       key: 'payOrderPrice',
       render: (text, record) =>
         record.payOrderStatus == 1 ? '' : '$' + (text || 0).toFixed(2)
-    },
-    {
-      title: 'Payment Method',
-      dataIndex: 'payType',
-      key: 'payType',
-      // render: (payType) => payTypeDic[payType]
-      render: () => 'PayU'
     },
     {
       title: 'Accounts Receivable',
@@ -115,7 +105,7 @@ export default class OrderReceive extends React.Component<any, any> {
             </a>
           </Popover>
         ) : (
-          'none'
+          '-'
         )
     },
     {
@@ -136,7 +126,7 @@ export default class OrderReceive extends React.Component<any, any> {
               <a href="javascript:void(0);">{<FormattedMessage id="view" />}</a>
             </Tooltip>
           ) : (
-            'none'
+            '-'
           )}
         </span>
       )
@@ -183,7 +173,7 @@ export default class OrderReceive extends React.Component<any, any> {
         <Row>
           <Col span={16}>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentNumber" />}:{' '}
+              {<FormattedMessage id="paymentId" />}:{' '}
               {paymentInfo.get('chargeId')}
             </p>
             <p style={styles.inforItem}>
@@ -203,6 +193,10 @@ export default class OrderReceive extends React.Component<any, any> {
             <p style={styles.inforItem}>
               {<FormattedMessage id="cardNumber" />}:{' '}
               {paymentInfo.get('last4Digits')}
+            </p>
+            <p style={styles.inforItem}>
+              {<FormattedMessage id="paymentMethod" />}:{' '}
+              {paymentInfo.get('vendor')}
             </p>
           </Col>
         </Row>

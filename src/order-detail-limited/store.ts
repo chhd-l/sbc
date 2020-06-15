@@ -52,8 +52,12 @@ export default class AppStore extends Store {
       const payRecordResult = (await payRecord(tid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
       const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
-      const { res: cityDictRes } = (await queryDictionary('city')) as any;
-      const { res: countryDictRes } = (await queryDictionary('country')) as any;
+      const { res: cityDictRes } = (await queryDictionary({
+        type: 'city'
+      })) as any;
+      const { res: countryDictRes } = (await queryDictionary({
+        type: 'country'
+      })) as any;
 
       this.transaction(() => {
         this.dispatch('loading:end');
@@ -65,8 +69,11 @@ export default class AppStore extends Store {
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
-        this.dispatch('dict:initCity', cityDictRes.context);
-        this.dispatch('dict:initCountry', countryDictRes.context);
+        this.dispatch('dict:initCity', cityDictRes.context.sysDictionaryVOS);
+        this.dispatch(
+          'dict:initCountry',
+          countryDictRes.context.sysDictionaryVOS
+        );
       });
     } else {
       message.error(errorInfo);

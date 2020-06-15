@@ -126,8 +126,6 @@ export function batchDisableEmployee(
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function saveEmployee(employee) {
-  debugger;
-  let test = JSON.stringify(employee);
   return Fetch<TResult>('/customer/employee', {
     method: 'POST',
     body: JSON.stringify(employee)
@@ -140,8 +138,6 @@ export function saveEmployee(employee) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function updateEmployee(employee) {
-  debugger;
-  let test = JSON.stringify(employee);
   return Fetch<TResult>('/customer/employee', {
     method: 'PUT',
     body: JSON.stringify(employee)

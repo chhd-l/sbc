@@ -184,11 +184,9 @@ export function getBusinessEnter() {
  */
 export function getDictionaryByType(dictionaryType: String) {
   let params = {
-    type: dictionaryType,
-    pageNum: 0,
-    pageSize: 1000
+    type: dictionaryType
   };
-  return Fetch<TResult>('/sysdict/pageView', {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify(params)
   });

@@ -192,7 +192,7 @@ export function payConfirm(payOrderIds: string[]) {
  * @param filterParams
  */
 export function queryDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

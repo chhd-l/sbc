@@ -61,7 +61,7 @@ export default class SelfListView extends React.Component<any, any> {
           dataIndex="growthValue"
         /> */}
 
-        <Column
+        {/* <Column
           title={<FormattedMessage id="operation" />}
           render={(rowInfo) => {
             const { customerLevelId } = rowInfo;
@@ -77,7 +77,7 @@ export default class SelfListView extends React.Component<any, any> {
               </div>
             );
           }}
-        />
+        /> */}
       </DataGrid>
     );
   }

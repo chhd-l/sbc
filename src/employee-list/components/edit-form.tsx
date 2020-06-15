@@ -263,8 +263,8 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('employeeMobile', {
               ...employeeMobile,
               rules: [
-                { required: true, message: '员工手机不能为空' },
-                { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+                { required: true, message: '员工手机不能为空' }
+                // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
               ]
             })(<Input disabled={editDisable} placeholder="仅限11位数字" />)}
           </FormItem>
@@ -431,6 +431,7 @@ export default class EditForm extends React.Component<any, any> {
                 <Select
                   placeholder="Please Select Clinics"
                   disabled={editDisable}
+                  // onChange={this.clinicChange}
                   showSearch
                   filterOption={(input, option: { props }) =>
                     option.props.children
@@ -616,6 +617,15 @@ export default class EditForm extends React.Component<any, any> {
       selectRoleIds: roleStringIds
     });
   };
+
+  // clinicChange = (value) => {
+  //   var clinic = this.state.clinicsLites.find((x) => x.clinicsId === value);
+  //   if (clinic) {
+  //     this.props.form.setFieldsValue({
+  //       employeeName: clinic.clinicsName
+  //     });
+  //   }
+  // };
 
   checkConfirmPassword = (_rule, value, callback) => {
     if (value != this.props.form.getFieldValue('accountPassword')) {

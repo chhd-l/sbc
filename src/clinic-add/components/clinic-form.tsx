@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import QrCode from './../QR_code_test.png';
+import copy from 'copy-to-clipboard';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -73,7 +73,9 @@ class ClinicForm extends React.Component<any, any> {
         timeZone: 'Year'
       },
       activeKey: 'basic',
-      isJump: false
+      isJump: false,
+      qrCodeLink: '',
+      url: ''
     };
     this.getDetail = this.getDetail.bind(this);
 
@@ -195,7 +197,11 @@ class ClinicForm extends React.Component<any, any> {
       clinicsId: id
     });
     if (res.code === 'K-000000') {
+      let qrCodeLink = res.context.qrCodeLink;
+      let url = res.context.url;
       this.setState({
+        qrCodeLink: qrCodeLink,
+        url: url,
         clinicForm: res.context
       });
       this.props.form.setFieldsValue({
@@ -390,6 +396,11 @@ class ClinicForm extends React.Component<any, any> {
   //     isJump: false
   //   });
   // };
+  handleCopy = (value) => {
+    if (copy(value)) {
+      message.success('Successful');
+    } else message.error('Unsuccessful');
+  };
 
   switchTab = (key) => {
     this.setState({
@@ -633,16 +644,21 @@ class ClinicForm extends React.Component<any, any> {
               style={{ display: !this.state.isEdit ? 'none' : null }}
             >
               <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <img src={QrCode} alt="" />
-                <div>
-                  <a
-                    href="https://shopuat.466920.com/?clinic=123"
-                    style={{ fontSize: '25px' }}
-                    target="_blank"
-                  >
-                    Go To Shop
-                  </a>
-                </div>
+                {this.state.qrCodeLink ? (
+                  <img src={this.state.qrCodeLink} alt="" />
+                ) : null}
+                {this.state.url ? (
+                  <div>
+                    {this.state.url}
+                    <Button
+                      style={{ marginLeft: '10px' }}
+                      onClick={() => this.handleCopy(this.state.url)}
+                      size="small"
+                    >
+                      copy
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </Col>
           </Row>

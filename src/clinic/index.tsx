@@ -276,7 +276,6 @@ export default class ClinicList extends Component<any, any> {
 
   onExport = () => {
     const params = this.state.searchForm;
-    params.enabled = true;
     return new Promise((resolve) => {
       setTimeout(() => {
         let base64 = new util.Base64();

@@ -422,11 +422,13 @@ class BasicInfomation extends React.Component<any, any> {
                         });
                       }}
                     >
-                      {countryArr.map((item) => (
-                        <Option value={item.valueEn} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
+                      {countryArr
+                        ? countryArr.map((item) => (
+                            <Option value={item.valueEn} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
                   )}
                 </FormItem>
@@ -445,11 +447,13 @@ class BasicInfomation extends React.Component<any, any> {
                         });
                       }}
                     >
-                      {cityArr.map((item) => (
-                        <Option value={item.valueEn} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
+                      {cityArr
+                        ? cityArr.map((item) => (
+                            <Option value={item.valueEn} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
                   )}
                 </FormItem>
@@ -608,14 +612,16 @@ class BasicInfomation extends React.Component<any, any> {
                       clinicList.map((item) => (
                         <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                       ))} */}
-                      {clinicList.map((item) => (
-                        <Option
-                          value={item.clinicsId.toString()}
-                          key={item.clinicsId}
-                        >
-                          {item.clinicsId + ',' + item.clinicsName}
-                        </Option>
-                      ))}
+                      {clinicList
+                        ? clinicList.map((item) => (
+                            <Option
+                              value={item.clinicsId.toString()}
+                              key={item.clinicsId}
+                            >
+                              {item.clinicsId + ',' + item.clinicsName}
+                            </Option>
+                          ))
+                        : null}
                     </Select>
                   )}
                 </FormItem>

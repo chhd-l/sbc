@@ -560,8 +560,8 @@ export default {
   'Delete': 'Delete',
 
   'customerAccount': 'Customer Account',
-  'clinicName': 'Clinic name',
-  'clinicID': 'Clinic ID',
+  'clinicName': 'Prescriber name',
+  'clinicID': 'Prescriber ID',
 
   'deliveryCountry': 'Delivery Country',
   'deliveryCity': 'Delivery City',

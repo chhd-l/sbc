@@ -4,27 +4,27 @@ import { Link } from 'react-router-dom';
 
 const columns = [
   {
-    title: 'Clinic ID',
+    title: 'Prescriber ID',
     dataIndex: 'clinicID',
     key: 'clinicID'
   },
   {
-    title: 'Clinic Name',
+    title: 'Prescriber Name',
     dataIndex: 'clinicName',
     key: 'clinicName'
   },
   {
-    title: 'Clinic Phone',
+    title: 'Prescriber Phone',
     dataIndex: 'clinicPhone',
     key: 'clinicPhone'
   },
   {
-    title: 'Clinic City',
+    title: 'Prescriber City',
     dataIndex: 'clinicCity',
     key: 'clinicCity'
   },
   {
-    title: 'Clinic Zip',
+    title: 'Prescriber Zip',
     dataIndex: 'clinicZip',
     key: 'clinicZip'
   },

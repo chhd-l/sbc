@@ -292,7 +292,6 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   render() {
-    const { countryArr, cityArr, clinicList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -350,12 +349,12 @@ class BillingInfomation extends React.Component<any, any> {
                       this.props.customerType === 'Guest' ? 'none' : 'block'
                   }}
                 >
-                  <Checkbox
+                  {/* <Checkbox
                     checked={this.state.isDefault}
                     onChange={() => this.clickDefault()}
                   >
                     Set default payment method
-                  </Checkbox>
+                  </Checkbox> */}
                   <Button
                     type="danger"
                     icon="close"
@@ -503,7 +502,7 @@ class BillingInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="email">
+                    <FormItem label="Email">
                       {getFieldDecorator('email', {
                         rules: [
                           { required: true, message: 'Please input email!' }
@@ -523,12 +522,12 @@ class BillingInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="phoneNumber">
+                    <FormItem label="Phone number">
                       {getFieldDecorator('phoneNumber', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input phoneNumber!'
+                            message: 'Please input Phone number!'
                           }
                         ]
                       })(

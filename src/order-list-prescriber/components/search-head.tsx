@@ -112,7 +112,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExpert" />
+              <FormattedMessage id="order.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>

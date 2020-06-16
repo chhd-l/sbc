@@ -105,21 +105,19 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="confirmationEmail" />}
+                label={<FormattedMessage id="cookies" />}
               >
-                {getFieldDecorator('confirmationEmail', {
-                  initialValue: this.state.contentForm.confirmationEmail,
+                {getFieldDecorator('cookiesUrl', {
+                  initialValue: this.state.contentForm.cookiesUrl,
                   rules: [
-                    {
-                      required: false,
-                      message: 'Please input Confirmation Email!'
-                    }
+                    { required: false, message: 'Please input Cookies Url!' }
                   ]
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'confirmationEmail',
+                        field: 'cookiesUrl',
                         value: e.target.value
                       })
                     }
@@ -182,18 +180,21 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="cookies" />}
+                label={<FormattedMessage id="confirmationEmail" />}
               >
-                {getFieldDecorator('cookiesUrl', {
-                  initialValue: this.state.contentForm.cookiesUrl,
+                {getFieldDecorator('confirmationEmail', {
+                  initialValue: this.state.contentForm.confirmationEmail,
                   rules: [
-                    { required: false, message: 'Please input Cookies Url!' }
+                    {
+                      required: false,
+                      message: 'Please input Confirmation Email!'
+                    }
                   ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'cookiesUrl',
+                        field: 'confirmationEmail',
                         value: e.target.value
                       })
                     }

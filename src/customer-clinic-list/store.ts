@@ -41,7 +41,9 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state().get('form').toJS();
+    const query = this.state()
+      .get('form')
+      .toJS();
     if (query.customerType === '-1') {
       query.customerType = null;
     }
@@ -110,7 +112,9 @@ export default class AppStore extends Store {
     { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
   ) => {
     this.dispatch('loading:start');
-    const query = this.state().get('selfForm').toJS();
+    const query = this.state()
+      .get('selfForm')
+      .toJS();
     if (query.checkState === '-1') {
       query.checkState = '';
     }
@@ -215,7 +219,7 @@ export default class AppStore extends Store {
       //保存
       const { res } = await webapi.saveCustomer(customerForm);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.dispatch('modal:hide');
         this.init();
       } else {
@@ -228,7 +232,7 @@ export default class AppStore extends Store {
   deleteRelated = async (customerId) => {
     const { res } = await webapi.deletePlatformCustomerRelated(customerId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }
@@ -241,7 +245,7 @@ export default class AppStore extends Store {
       customerLevelId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.onShowAddRelatedModal(false);
       this.init();
       modalClose();
@@ -261,7 +265,7 @@ export default class AppStore extends Store {
       employeeId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.onShowUpdateRelatedModal(false, null);
     } else {
       message.error(res.message);

@@ -108,7 +108,7 @@ export default class AppStore extends Store {
       result = await addCate(formData);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       // 刷新
       this.refresh();
     } else {
@@ -161,7 +161,9 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   cateSort = async (catePath, dragIndex, hoverIndex) => {
-    let cates = this.state().get('dataList').toJS();
+    let cates = this.state()
+      .get('dataList')
+      .toJS();
     //cateIds: 0|245|246|
     let cateIds = catePath.split('|');
     //拖拽排序后的列表
@@ -203,7 +205,7 @@ export default class AppStore extends Store {
     }
     const { res } = (await dragSort(paramList)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -350,7 +352,9 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseImgs',
-            fromJS(imageList.res.context).get('content').slice(0, successCount)
+            fromJS(imageList.res.context)
+              .get('content')
+              .slice(0, successCount)
           );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));

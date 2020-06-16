@@ -13,7 +13,7 @@ import {
   Radio,
   Row
 } from 'antd';
-import {Const, history, QMMethod, util} from 'qmkit';
+import { Const, history, QMMethod, util } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
 import DiscountLevels from '../full-discount/components/discount-levels';
@@ -203,7 +203,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
         {isFullCount != null && (
           <FormItem {...formItemLayout} label="设置规则" required={true}>
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
-              getFieldDecorator('rules', {})(
+              getFieldDecorator(
+                'rules',
+                {}
+              )(
                 <GiftLevels
                   form={this.props.form}
                   selectedRows={this.makeSelectedRows(null)}
@@ -216,7 +219,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 />
               )}
             {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
-              getFieldDecorator('rules', {})(
+              getFieldDecorator(
+                'rules',
+                {}
+              )(
                 <DiscountLevels
                   form={this.props.form}
                   fullDiscountLevelList={
@@ -228,7 +234,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 />
               )}
             {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION &&
-              getFieldDecorator('rules', {})(
+              getFieldDecorator(
+                'rules',
+                {}
+              )(
                 <ReductionLevels
                   form={this.props.form}
                   fullReductionLevelList={
@@ -242,11 +251,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
           </FormItem>
         )}
         <FormItem {...formItemLayout} label="选择商品" required={true}>
-          {getFieldDecorator('goods', {})(
+          {getFieldDecorator(
+            'goods',
+            {}
+          )(
             <div>
               <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
                 添加商品
-              </Button>&nbsp;&nbsp;
+              </Button>
+              &nbsp;&nbsp;
               <SelectedGoodsGrid
                 selectedRows={selectedRows}
                 skuExists={skuExists}
@@ -293,7 +306,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
           <Col span={10}>
             <Button type="primary" htmlType="submit" loading={saveLoading}>
               保存
-            </Button>&nbsp;&nbsp;
+            </Button>
+            &nbsp;&nbsp;
             <Button onClick={() => history.push('/marketing-center')}>
               返回
             </Button>
@@ -324,7 +338,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
@@ -810,7 +824,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   deleteSelectedSku = (skuId) => {
     const { selectedRows, selectedSkuIds } = this.state;
-    selectedSkuIds.splice(selectedSkuIds.findIndex((item) => item == skuId), 1);
+    selectedSkuIds.splice(
+      selectedSkuIds.findIndex((item) => item == skuId),
+      1
+    );
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows.delete(
@@ -826,7 +843,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   _responseThen = (response) => {
     if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       history.push('/marketing-list');
     } else {
       message.error(response.res.message);

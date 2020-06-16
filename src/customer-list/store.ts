@@ -12,8 +12,8 @@ import EditActor from './actor/edit-actor';
 import CustomerLevelActor from './actor/customer-level-actor';
 import VisibleActor from './actor/visible-actor';
 import RelaterActor from './actor/related-actor';
-import SelfListActor from "./actor/self-list-actor";
-import SelfFormActor from "./actor/self-form-actor";
+import SelfListActor from './actor/self-list-actor';
+import SelfFormActor from './actor/self-form-actor';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -62,7 +62,10 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
         this.dispatch('listActor:init', res.context);
         this.dispatch('list:currentPage', pageNum && pageNum + 1);
-        this.dispatch('customerLevel:init', fromJS(levelResult.res.context.storeLevelVOList));
+        this.dispatch(
+          'customerLevel:init',
+          fromJS(levelResult.res.context.storeLevelVOList)
+        );
         this.dispatch('select:init', []);
         this.dispatch('employee:init', fromJS(resEmployee));
       });
@@ -105,7 +108,9 @@ export default class AppStore extends Store {
     this.init({ pageNum: 0, pageSize: 10 });
   };
 
-  initForSelf = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+  initForSelf = async (
+    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
+  ) => {
     this.dispatch('loading:start');
     const query = this.state()
       .get('selfForm')
@@ -128,7 +133,10 @@ export default class AppStore extends Store {
         this.dispatch('self-list:init', res.context);
         this.dispatch('self-list:currentPage', pageNum && pageNum + 1);
         this.dispatch('employee:init', fromJS(resEmployee));
-        this.dispatch('customerLevel:init', fromJS(levelResult.res.context.customerLevelVOList));
+        this.dispatch(
+          'customerLevel:init',
+          fromJS(levelResult.res.context.customerLevelVOList)
+        );
       });
     } else {
       this.dispatch('loading:end');
@@ -211,7 +219,7 @@ export default class AppStore extends Store {
       //保存
       const { res } = await webapi.saveCustomer(customerForm);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.dispatch('modal:hide');
         this.init();
       } else {
@@ -224,7 +232,7 @@ export default class AppStore extends Store {
   deleteRelated = async (customerId) => {
     const { res } = await webapi.deletePlatformCustomerRelated(customerId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }
@@ -237,7 +245,7 @@ export default class AppStore extends Store {
       customerLevelId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.onShowAddRelatedModal(false);
       this.init();
       modalClose();
@@ -257,7 +265,7 @@ export default class AppStore extends Store {
       employeeId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.onShowUpdateRelatedModal(false, null);
     } else {
       message.error(res.message);

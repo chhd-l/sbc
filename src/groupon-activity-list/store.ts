@@ -66,7 +66,7 @@ export default class AppStore extends Store {
   onDelete = async (grouponActivityId) => {
     const { res } = (await del(grouponActivityId)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
       message.error(res.message);

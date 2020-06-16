@@ -199,7 +199,7 @@ export default class AppStore extends Store {
             const userList = this.state().get('userList');
             let userPriceMap = OrderedMap();
             let goodsCustomerPrices = goodsDetail.get('goodsCustomerPrices');
-            if(goodsCustomerPrices){
+            if (goodsCustomerPrices) {
               goodsCustomerPrices.forEach((item) => {
                 const user = userList.find(
                   (userItem) =>
@@ -463,7 +463,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       return true;
     } else {
       message.error(result.res.message);
@@ -590,7 +590,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       history.goBack();
     } else {
       message.error(result.res.message);
@@ -608,10 +608,10 @@ export default class AppStore extends Store {
         .filter((user) => user.get('customerName').indexOf(customerName) > -1);
       this.dispatch('userActor: setUserList', userList);
     } else {
-      if(customerName){
+      if (customerName) {
         const userList: any = await getBossUserListByName(customerName);
         this.dispatch('userActor: setUserList', fromJS(userList.res.context));
-      }else{
+      } else {
         const userList: any = await getBossUserList();
         this.dispatch('userActor: setUserList', fromJS(userList.res.context));
       }

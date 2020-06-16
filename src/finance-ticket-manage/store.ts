@@ -75,7 +75,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.editFinaceTicket(params);
 
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.dispatch('edit', false);
         this.dispatch('modal:hide');
         //修改分页留在当前
@@ -88,7 +88,7 @@ export default class AppStore extends Store {
 
     const { res: addFinance } = await webapi.addFinaceTicket(params);
     if (addFinance.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.dispatch('modal:hide');
       this.init({ pageNum: this.state().get('current') - 1 });
     } else {
@@ -100,7 +100,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.deleteFinaceTicket(id);
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init({ pageNum: this.state().get('current') - 1 });
     } else {
       message.error(res.message);

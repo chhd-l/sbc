@@ -141,7 +141,7 @@ export default class AppStore extends Store {
     }
 
     if (res.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       history.push('/groupon-activity-list');
     } else if (res.res.code === 'K-080019') {
       if (state.isEdit) {

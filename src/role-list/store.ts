@@ -98,7 +98,7 @@ export default class AppStore extends Store {
     }
     const { res } = (await dragSort({ rightsIdList: rightsIdList })) as any;
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.refresh();
     } else {
       message.error(res.message);
@@ -125,7 +125,7 @@ export default class AppStore extends Store {
       result = await modifyEquities(params);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       // 刷新
       this.refresh();
       this.modal(false);
@@ -140,7 +140,7 @@ export default class AppStore extends Store {
   deleteEquities = async (roleInfoId) => {
     let result: any = await deleteEquities(roleInfoId);
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       // 刷新
       this.refresh();
     } else {

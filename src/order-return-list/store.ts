@@ -138,7 +138,7 @@ export default class AppStore extends Store {
       .audit(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -152,7 +152,7 @@ export default class AppStore extends Store {
       .realRefund(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -166,7 +166,7 @@ export default class AppStore extends Store {
       .batchAudit(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('批量审核操作成功');
+          message.success('批量审核save successful');
           this.init();
         } else {
           message.error(res.message || res.code);
@@ -180,7 +180,7 @@ export default class AppStore extends Store {
       .reject(rid, reason)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -194,7 +194,7 @@ export default class AppStore extends Store {
       .deliver(rid, values)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -208,7 +208,7 @@ export default class AppStore extends Store {
       .receive(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -222,7 +222,7 @@ export default class AppStore extends Store {
       .batchReceive(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('操作成功');
+          message.success('save successful');
           this.init();
         } else {
           message.error(res.message);
@@ -234,7 +234,7 @@ export default class AppStore extends Store {
   onRejectReceive = (rid: string, reason: string) => {
     return webapi.rejectReceive(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.init();
       } else {
         message.error(res.message);
@@ -245,7 +245,7 @@ export default class AppStore extends Store {
   onRejectRefund = (rid: string, reason: string) => {
     return webapi.rejectRefund(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.init();
       } else {
         message.error(res.message);
@@ -268,7 +268,7 @@ export default class AppStore extends Store {
         message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.success('操作成功');
+        message.success('save successful');
       }
 
       setTimeout(this.init, 3000);
@@ -288,7 +288,7 @@ export default class AppStore extends Store {
           throw Error('K-040017');
         }
       } else {
-        message.success('操作成功');
+        message.success('save successful');
         this.init();
       }
     });

@@ -74,7 +74,7 @@ export default class AppStore extends Store {
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
@@ -139,7 +139,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('操作成功');
+    message.success('save successful');
     this.dispatch('activity: pause', id);
   };
 
@@ -152,7 +152,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('操作成功');
+    message.success('save successful');
     this.dispatch('activity: start', id);
   };
 }

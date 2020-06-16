@@ -120,7 +120,11 @@ export default class AppStore extends Store {
       this.onFormFieldChange({ key: 'pageNum', value: pageNum });
       this.onFormFieldChange({ key: 'pageSize', value: pageSize });
     }
-    if(res.context.standardGoodsPage.content.length == 0 && res.context.standardGoodsPage.content.totalElements && res.context.standardGoodsPage.content.totalElements != 0){
+    if (
+      res.context.standardGoodsPage.content.length == 0 &&
+      res.context.standardGoodsPage.content.totalElements &&
+      res.context.standardGoodsPage.content.totalElements != 0
+    ) {
       this.onSearch();
     }
   };
@@ -154,7 +158,7 @@ export default class AppStore extends Store {
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(data.res.code);
     }

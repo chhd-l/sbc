@@ -277,7 +277,7 @@ export default class StepTwo extends React.Component<any, any> {
       ...ssoForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'save success');
+      message.success(res.message || 'save successful');
     } else {
       message.error(res.message || 'save faild');
     }

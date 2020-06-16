@@ -130,7 +130,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -161,7 +161,7 @@ export default class AppStore extends Store {
             throw Error('K-040017');
           }
         } else {
-          message.success('操作成功');
+          message.success('save successful');
         }
 
         this.dispatch('modal:hide');

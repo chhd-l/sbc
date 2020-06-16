@@ -7,7 +7,7 @@ import LevelActor from './actor/level-actor';
 import VisibleActor from './actor/visible-actor';
 import EditActor from './actor/edit-actor';
 import { Const } from 'qmkit';
-import SelfLevelActor from "./actor/self-level-actor";
+import SelfLevelActor from './actor/self-level-actor';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -27,13 +27,17 @@ export default class AppStore extends Store {
     ];
   }
 
-
   init = () => {
     this.dispatch('loading:start');
     webapi.fetchCustomerLevel().then(({ res }) => {
       if (res.code === Const.SUCCESS_CODE) {
         if (res.context.storeLevelVOList.length > 0) {
-          this.dispatch('edit: lastData', res.context.storeLevelVOList[res.context.storeLevelVOList.length - 1].storeLevelId);
+          this.dispatch(
+            'edit: lastData',
+            res.context.storeLevelVOList[
+              res.context.storeLevelVOList.length - 1
+            ].storeLevelId
+          );
         }
         this.transaction(() => {
           this.dispatch('loading:end');
@@ -81,10 +85,10 @@ export default class AppStore extends Store {
    * 添加
    */
   onCreate = () => {
-    let data = this.state().get("dataList");
+    let data = this.state().get('dataList');
     if (data.size >= 10) {
-      message.error("最多添加10个客户等级!")
-      return
+      message.error('最多添加10个客户等级!');
+      return;
     }
     this.dispatch('modal:show');
   };
@@ -105,12 +109,15 @@ export default class AppStore extends Store {
   onSave = async (params) => {
     //更新
     if (this.state().get('edit')) {
-      let storeLevelId = this.state().getIn(['customerLevel', 'storeLevelId'])
-      const { res } = await webapi.updateCustomerLevel({ ...params, storeLevelId });
+      let storeLevelId = this.state().getIn(['customerLevel', 'storeLevelId']);
+      const { res } = await webapi.updateCustomerLevel({
+        ...params,
+        storeLevelId
+      });
       if (res.code === Const.SUCCESS_CODE) {
         //取消编辑状态
         this.dispatch('edit', false);
-        message.success("操作成功!");
+        message.success('save successful!');
         this.dispatch('modal:hide');
         this.init();
       } else {
@@ -121,7 +128,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.saveCustomerLevel(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success("操作成功!");
+      message.success('save successful!');
       this.dispatch('modal:hide');
       this.init();
     } else {
@@ -155,13 +162,11 @@ export default class AppStore extends Store {
   onDelete = async (customerLevelId: string) => {
     const { res } = await webapi.deleteCustomerLevel(customerLevelId);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success("操作成功!");
+      message.success('save successful!');
       this.dispatch('modal:hide');
       this.init();
     } else {
       message.error(res.message);
     }
   };
-
-
 }

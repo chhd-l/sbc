@@ -71,7 +71,7 @@ export default class AppStore extends Store {
   onDelete = async (id) => {
     const { res: delRes } = await webApi.deleteById(id);
     if (delRes.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       await this.queryPage();
     } else {
       message.error(delRes.message);
@@ -115,7 +115,7 @@ export default class AppStore extends Store {
     let result;
     result = await webApi.modify(formData);
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.closeModal();
       this.dispatch('info:setFormData', fromJS({}));
       await this.init({ activityDate, activityTime });

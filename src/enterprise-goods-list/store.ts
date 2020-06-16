@@ -232,7 +232,7 @@ export default class AppStore extends Store {
       goodsInfoNo
     )) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
       message.error(res.message);
@@ -270,7 +270,7 @@ export default class AppStore extends Store {
       enterPrisePrice: enterPrisePrice
     })) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.switchShowModal(false);
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
@@ -389,7 +389,7 @@ export default class AppStore extends Store {
     });
     const { res } = (await addDistributionGoods(params)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.onCancelChoseSkuFun();
       this.init({ pageNum: 0, pageSize: 10 });
     } else if (res.code == 'K-030702') {

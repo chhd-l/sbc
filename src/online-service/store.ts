@@ -156,7 +156,7 @@ export default class AppStore extends Store {
         qqOnlineServerItemRopList
       );
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.smsCancel();
         this.init();
       } else {

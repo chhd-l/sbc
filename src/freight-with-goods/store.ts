@@ -107,7 +107,7 @@ export default class AppStore extends Store {
     };
     const { res, err } = (await webapi.updateFreight(param)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       const params = {
         pageNum: 0,
         pageSize: 10,
@@ -143,7 +143,7 @@ export default class AppStore extends Store {
     };
     const { res, err } = (await webapi.updateFreight(param)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       const params = {
         pageNum: 0,
         pageSize: 10,

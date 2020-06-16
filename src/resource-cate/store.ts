@@ -79,7 +79,7 @@ export default class AppStore extends Store {
 
     let result: any;
 
-    let msgStr = '操作成功!';
+    let msgStr = 'save successful!';
     if (formData.get('cateId')) {
       result = await editCate(formData);
       msgStr = '编辑成功!';

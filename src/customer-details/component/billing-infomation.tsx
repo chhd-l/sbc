@@ -292,21 +292,23 @@ class BillingInfomation extends React.Component<any, any> {
           <Col span={3}>
             <h3>All Address( {this.state.addressList.length} )</h3>
             <ul>
-              {this.state.addressList.map((item) => (
-                <li
-                  key={item.deliveryAddressId}
-                  style={{
-                    cursor: 'pointer',
-                    color:
-                      item.deliveryAddressId === this.state.currentId
-                        ? '#e2001a'
-                        : ''
-                  }}
-                  onClick={() => this.switchAddress(item.deliveryAddressId)}
-                >
-                  {item.consigneeName}
-                </li>
-              ))}
+              {this.state.addressList
+                ? this.state.addressList.map((item) => (
+                    <li
+                      key={item.deliveryAddressId}
+                      style={{
+                        cursor: 'pointer',
+                        color:
+                          item.deliveryAddressId === this.state.currentId
+                            ? '#e2001a'
+                            : ''
+                      }}
+                      onClick={() => this.switchAddress(item.deliveryAddressId)}
+                    >
+                      {item.consigneeName}
+                    </li>
+                  ))
+                : null}
             </ul>
           </Col>
           <Col span={20}>
@@ -318,22 +320,6 @@ class BillingInfomation extends React.Component<any, any> {
               style={{
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
-              extra={
-                <div
-                  style={{
-                    display:
-                      this.props.customerType === 'Guest' ? 'none' : 'block'
-                  }}
-                >
-                  <Button
-                    type="danger"
-                    icon="close"
-                    onClick={() => this.delAddress()}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              }
             >
               <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                 <Row gutter={16}>
@@ -393,14 +379,18 @@ class BillingInfomation extends React.Component<any, any> {
                           clinicList.map((item) => (
                             <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                           ))} */}
-                          {clinicList.map((item) => (
-                            <Option
-                              value={item.prescriberId.toString()}
-                              key={item.prescriberId}
-                            >
-                              {item.prescriberId + ',' + item.prescriberName}
-                            </Option>
-                          ))}
+                          {clinicList
+                            ? clinicList.map((item) => (
+                                <Option
+                                  value={item.prescriberId.toString()}
+                                  key={item.prescriberId}
+                                >
+                                  {item.prescriberId +
+                                    ',' +
+                                    item.prescriberName}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>
@@ -508,11 +498,13 @@ class BillingInfomation extends React.Component<any, any> {
                             });
                           }}
                         >
-                          {countryArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.name}
-                            </Option>
-                          ))}
+                          {countryArr
+                            ? countryArr.map((item) => (
+                                <Option value={item.id} key={item.id}>
+                                  {item.name}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>
@@ -534,11 +526,13 @@ class BillingInfomation extends React.Component<any, any> {
                             });
                           }}
                         >
-                          {cityArr.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.name}
-                            </Option>
-                          ))}
+                          {cityArr
+                            ? cityArr.map((item) => (
+                                <Option value={item.id} key={item.id}>
+                                  {item.name}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>
@@ -616,6 +610,17 @@ class BillingInfomation extends React.Component<any, any> {
                         }}
                       >
                         Save
+                      </Button>
+
+                      <Button
+                        style={{
+                          marginRight: '20px',
+                          display:
+                            this.props.customerType === 'Guest' ? 'none' : null
+                        }}
+                        onClick={() => this.delAddress()}
+                      >
+                        Delete
                       </Button>
 
                       <Button>

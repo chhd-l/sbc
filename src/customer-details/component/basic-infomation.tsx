@@ -240,15 +240,15 @@ class BasicInfomation extends React.Component<any, any> {
   getClinicList = () => {
     webapi
       .fetchClinicList({
-        pageNum: 0,
-        pageSize: 1000
+        enabled: true,
+        storeId: 123456858
       })
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.setState({
             loading: false,
-            clinicList: res.context.content
+            clinicList: res.context
           });
         } else {
           this.setState({

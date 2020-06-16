@@ -29,7 +29,7 @@ export default class ClinicList extends Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
-              <Link to={'/clinic-type-edit/' + record.id}>Edit</Link>
+              <Link to={'/prescriber-type-edit/' + record.id}>Edit</Link>
               <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.id)}>Delete</a>
             </span>
@@ -62,7 +62,7 @@ export default class ClinicList extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let typeList = res.context.clinicsDictionaryVOList;
+          let typeList = res.context.prescriberDictionaryVOList;
 
           if (typeList.length > 0) {
             pagination.total = res.context.total;

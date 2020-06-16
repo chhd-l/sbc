@@ -10,7 +10,7 @@ type TResult = {
  * @param filterParams
  */
 export function getDictionaryTypes(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionaryType', {
+  return Fetch<TResult>('/prescriberDictionary/listPrescriberDictionaryType', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

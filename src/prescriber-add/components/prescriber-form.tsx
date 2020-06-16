@@ -13,7 +13,7 @@ import {
   Divider
 } from 'antd';
 import { Link } from 'react-router-dom';
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import copy from 'copy-to-clipboard';
@@ -33,14 +33,14 @@ class ClinicForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      clinicForm: {
-        clinicsId: '',
-        clinicsOwner: 'john',
-        clinicsName: '',
+      prescriberForm: {
+        prescriberId: '',
+        prescriberOwner: 'john',
+        prescriberName: '',
         phone: '',
         primaryCity: '',
         primaryZip: '',
-        clinicsType: '',
+        prescriberType: '',
         longitude: '',
         latitude: '',
         location: '',
@@ -60,11 +60,11 @@ class ClinicForm extends React.Component<any, any> {
           rewardRate: 0
         }
       ],
-      isEdit: this.props.clinicId ? true : false,
+      isEdit: this.props.prescriberId ? true : false,
       rewardMode: false,
       timeZone: '',
       rewardForm: {
-        clinicsId: '',
+        prescriberId: '',
         id: '',
         rewardRateFirst: 0,
         rewardRateMore: 0,
@@ -79,9 +79,9 @@ class ClinicForm extends React.Component<any, any> {
     };
     this.getDetail = this.getDetail.bind(this);
 
-    if (this.props.clinicId) {
-      this.getDetail(this.props.clinicId);
-      this.getClinicsReward(this.props.clinicId);
+    if (this.props.prescriberId) {
+      this.getDetail(this.props.prescriberId);
+      this.getClinicsReward(this.props.prescriberId);
     }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
@@ -122,7 +122,7 @@ class ClinicForm extends React.Component<any, any> {
     }
 
     let params = {
-      clinicsId: id,
+      prescriberId: id,
       id: rewardForm.id,
       rewardRateFirst: sectionList[0].rewardRate,
       rewardRateMore: sectionList[1].rewardRate,
@@ -148,7 +148,7 @@ class ClinicForm extends React.Component<any, any> {
   // clearAndSave = () => {
   //   const { rewardForm } = this.state;
   //   let params = {
-  //     clinicsId: this.props.clinicId,
+  //     prescriberId: this.props.prescriberId,
   //     id: rewardForm.id,
   //     rewardRateFirst: 0,
   //     rewardRateMore: 0,
@@ -161,7 +161,7 @@ class ClinicForm extends React.Component<any, any> {
   //     .then((data) => {
   //       const res = data.res;
   //       if (res.code === 'K-000000') {
-  //         this.getClinicsReward(this.props.clinicId);
+  //         this.getClinicsReward(this.props.prescriberId);
   //         message.success(res.message || 'Successful');
   //       } else {
   //         message.error('Unsuccessful');
@@ -194,7 +194,7 @@ class ClinicForm extends React.Component<any, any> {
 
   getDetail = async (id) => {
     const { res } = await webapi.getClinicById({
-      clinicsId: id
+      prescriberId: id
     });
     if (res.code === 'K-000000') {
       let qrCodeLink = res.context.qrCodeLink;
@@ -202,18 +202,18 @@ class ClinicForm extends React.Component<any, any> {
       this.setState({
         qrCodeLink: qrCodeLink,
         url: url,
-        clinicForm: res.context
+        prescriberForm: res.context
       });
       this.props.form.setFieldsValue({
-        clinicsId: res.context.clinicsId,
-        clinicsName: res.context.clinicsName,
+        prescriberId: res.context.prescriberId,
+        prescriberName: res.context.prescriberName,
         phone: res.context.phone,
         primaryCity: res.context.primaryCity,
         primaryZip: res.context.primaryZip,
         longitude: res.context.longitude,
         latitude: res.context.latitude,
         location: res.context.location,
-        clinicsType: res.context.clinicsType
+        prescriberType: res.context.prescriberType
       });
     } else {
       message.error('Unsuccessful');
@@ -244,24 +244,24 @@ class ClinicForm extends React.Component<any, any> {
     }
   };
   onFormChange = ({ field, value }) => {
-    let data = this.state.clinicForm;
+    let data = this.state.prescriberForm;
     data[field] = value;
     this.setState({
-      clinicForm: data
+      prescriberForm: data
     });
   };
   onCreate = () => {
-    const clinicForm = this.state.clinicForm;
+    const prescriberForm = this.state.prescriberForm;
     webapi
-      .addClinic({ ...clinicForm })
+      .addClinic({ ...prescriberForm })
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          if (clinicForm.clinicsId) {
+          if (prescriberForm.prescriberId) {
             this.setState({
               isEdit: true
             });
-            this.saveReward(clinicForm.clinicsId);
+            this.saveReward(prescriberForm.prescriberId);
           } else {
             message.error('Prescriber ID does not exist');
           }
@@ -274,17 +274,17 @@ class ClinicForm extends React.Component<any, any> {
       });
   };
   onUpdate = () => {
-    const clinicForm = this.state.clinicForm;
+    const prescriberForm = this.state.prescriberForm;
     webapi
-      .updateClinic({ ...clinicForm })
+      .updateClinic({ ...prescriberForm })
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          if (clinicForm.clinicsId) {
+          if (prescriberForm.prescriberId) {
             this.setState({
               isEdit: true
             });
-            this.saveReward(clinicForm.clinicsId);
+            this.saveReward(prescriberForm.prescriberId);
           } else {
             message.error('Prescriber ID does not exist');
           }
@@ -333,7 +333,7 @@ class ClinicForm extends React.Component<any, any> {
   compareID = (rule, value, callback) => {
     const { form } = this.props;
     let reg = /^[1-9][0-9]{2,12}$/;
-    if (!reg.test(form.getFieldValue('clinicsId'))) {
+    if (!reg.test(form.getFieldValue('prescriberId'))) {
       callback('Please enter the correct Prescriber ID');
     } else {
       callback();
@@ -435,7 +435,7 @@ class ClinicForm extends React.Component<any, any> {
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
                 <FormItem label="Prescriber ID">
-                  {getFieldDecorator('clinicsId', {
+                  {getFieldDecorator('prescriberId', {
                     rules: [
                       {
                         required: true,
@@ -449,7 +449,7 @@ class ClinicForm extends React.Component<any, any> {
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
-                          field: 'clinicsId',
+                          field: 'prescriberId',
                           value
                         });
                       }}
@@ -457,7 +457,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <FormItem label="Prescriber Name">
-                  {getFieldDecorator('clinicsName', {
+                  {getFieldDecorator('prescriberName', {
                     rules: [
                       {
                         required: true,
@@ -473,7 +473,7 @@ class ClinicForm extends React.Component<any, any> {
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
-                          field: 'clinicsName',
+                          field: 'prescriberName',
                           value
                         });
                       }}
@@ -549,7 +549,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <FormItem label="Prescriber Type">
-                  {getFieldDecorator('clinicsType', {
+                  {getFieldDecorator('prescriberType', {
                     rules: [
                       {
                         required: true,
@@ -561,7 +561,7 @@ class ClinicForm extends React.Component<any, any> {
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
-                          field: 'clinicsType',
+                          field: 'prescriberType',
                           value
                         });
                       }}
@@ -634,7 +634,7 @@ class ClinicForm extends React.Component<any, any> {
                   </Button>
 
                   <Button style={{ marginLeft: '20px' }}>
-                    <Link to="/clinic">Back To List</Link>
+                    <Link to="/prescriber">Back To List</Link>
                   </Button>
                 </FormItem>
               </Form>
@@ -826,7 +826,7 @@ class ClinicForm extends React.Component<any, any> {
                 Save
               </Button>
               <Button style={{ marginLeft: '20px' }}>
-                <Link to="/clinic">Back To List</Link>
+                <Link to="/prescriber">Back To List</Link>
               </Button>
               {/* <Button onClick={() => this.clearAndSave()}>
                 Clear rules and Save

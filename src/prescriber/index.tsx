@@ -25,32 +25,32 @@ export default class ClinicList extends Component<any, any> {
       columns: [
         {
           title: 'Prescriber ID',
-          dataIndex: 'clinicsId',
-          key: 'clinicID',
+          dataIndex: 'prescriberId',
+          key: 'prescriberID',
           width: 140
         },
         {
           title: 'Prescriber Name',
-          dataIndex: 'clinicsName',
-          key: 'clinicName',
+          dataIndex: 'prescriberName',
+          key: 'prescriberName',
           width: 180
         },
         {
           title: 'Prescriber Phone',
           dataIndex: 'phone',
-          key: 'clinicPhone',
+          key: 'prescriberPhone',
           width: 140
         },
         {
           title: 'Prescriber City',
           dataIndex: 'primaryCity',
-          key: 'clinicCity',
+          key: 'prescriberCity',
           width: 140
         },
         // {
         //   title: 'Prescriber Zip',
         //   dataIndex: 'primaryZip',
-        //   key: 'clinicZip',
+        //   key: 'prescriberZip',
         //   width: 140
         // },
         // {
@@ -68,8 +68,8 @@ export default class ClinicList extends Component<any, any> {
 
         {
           title: 'Prescriber Type',
-          dataIndex: 'clinicsType',
-          key: 'clinicsType',
+          dataIndex: 'prescriberType',
+          key: 'prescriberType',
           width: 140
         },
         {
@@ -93,30 +93,30 @@ export default class ClinicList extends Component<any, any> {
           width: 200,
           render: (text, record) => (
             <span>
-              <Link to={'/clinic-edit/' + record.clinicsId}>Edit</Link>
+              <Link to={'/prescriber-edit/' + record.prescriberId}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.enableAndDisable(record.clinicsId)}>
+              <a onClick={() => this.enableAndDisable(record.prescriberId)}>
                 {record.enabled ? 'Disable' : 'Enable'}
               </a>
               {/* <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.clinicsId)}>Delete</a> */}
+              <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
             </span>
           )
         }
       ],
-      clinicList: [],
+      prescriberList: [],
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
       searchForm: {
-        clinicsId: '',
-        clinicsName: '',
+        prescriberId: '',
+        prescriberName: '',
         phone: '',
         primaryCity: '',
         primaryZip: '',
-        clinicsType: '',
+        prescriberType: '',
         enabled: 'true'
       },
       cityArr: [],
@@ -149,16 +149,16 @@ export default class ClinicList extends Component<any, any> {
     });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
-      let clinicList = res.context.content;
-      if (clinicList.length > 0) {
+      let prescriberList = res.context.content;
+      if (prescriberList.length > 0) {
         pagination.total = res.context.total;
         pagination.current = res.context.number + 1;
         this.setState({
           pagination: pagination,
-          clinicList: clinicList,
+          prescriberList: prescriberList,
           loading: false
         });
-      } else if (clinicList.length === 0 && res.context.total > 0) {
+      } else if (prescriberList.length === 0 && res.context.total > 0) {
         pagination.current = res.context.number;
         let params = {
           pageNum: res.context.number,
@@ -171,7 +171,7 @@ export default class ClinicList extends Component<any, any> {
         pagination.current = res.context.number + 1;
         this.setState({
           pagination: pagination,
-          clinicList: clinicList,
+          prescriberList: prescriberList,
           loading: false
         });
       }
@@ -203,7 +203,7 @@ export default class ClinicList extends Component<any, any> {
   };
   delClinic = async (id) => {
     const { res } = await webapi.deleteClinic({
-      clinicsId: id
+      prescriberId: id
     });
     if (res.code === 'K-000000') {
       message.success(res.message || 'Successful');
@@ -286,7 +286,7 @@ export default class ClinicList extends Component<any, any> {
 
           // 新窗口下载
           const exportHref =
-            Const.HOST + `/clinics/exportPrescriber/${encrypted}`;
+            Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('Unsuccessful');
@@ -324,7 +324,7 @@ export default class ClinicList extends Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
-                    field: 'clinicsId',
+                    field: 'prescriberId',
                     value
                   });
                 }}
@@ -337,7 +337,7 @@ export default class ClinicList extends Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
-                    field: 'clinicsName',
+                    field: 'prescriberName',
                     value
                   });
                 }}
@@ -402,7 +402,7 @@ export default class ClinicList extends Component<any, any> {
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   this.onFormChange({
-                    field: 'clinicsType',
+                    field: 'prescriberType',
                     value
                   });
                 }}
@@ -469,14 +469,14 @@ export default class ClinicList extends Component<any, any> {
             </FormItem>
           </Form>
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
-            <Link to="/clinic-add">
+            <Link to="/prescriber-add">
               <FormattedMessage id="add" />
             </Link>
           </Button>
           <Table
             columns={columns}
-            rowKey={(record) => record.clinicsId}
-            dataSource={this.state.clinicList}
+            rowKey={(record) => record.prescriberId}
+            dataSource={this.state.prescriberList}
             pagination={this.state.pagination}
             loading={this.state.loading}
             scroll={{ x: '100%' }}

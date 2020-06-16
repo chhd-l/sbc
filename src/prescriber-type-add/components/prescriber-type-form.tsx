@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -11,7 +11,7 @@ const layout = {
   wrapperCol: { span: 16 }
 };
 
-class ClinicForm extends React.Component<any, any> {
+class PrescriberTypeForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -78,7 +78,6 @@ class ClinicForm extends React.Component<any, any> {
     }
   };
   onUpdate = async () => {
-    debugger;
     const clinicTypeForm = this.state.clinicTypeForm;
     let params = {
       id: clinicTypeForm.clinicTypeId,
@@ -88,9 +87,8 @@ class ClinicForm extends React.Component<any, any> {
       value: clinicTypeForm.clinicTypeName,
       valueEn: clinicTypeForm.clinicTypeName,
       priority: 0,
-      storeId: 0
+      storeId: 123456858
     };
-    console.log(params);
 
     const { res } = await webapi.updateClinicsDictionary(params);
     if (res.code === 'K-000000') {
@@ -165,11 +163,11 @@ class ClinicForm extends React.Component<any, any> {
             </Button>
           )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="/clinic-type">Back To List</Link>
+            <Link to="/prescriber-type">Back To List</Link>
           </Button>
         </FormItem>
       </Form>
     );
   }
 }
-export default Form.create()(ClinicForm);
+export default Form.create()(PrescriberTypeForm);

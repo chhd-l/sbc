@@ -622,13 +622,13 @@ class BasicInfomation extends React.Component<any, any> {
                         });
                       }}
                     >
-                      {this.state.basicForm.selectedClinics
-                        ? this.state.basicForm.selectedClinics.map((item) => (
+                      {clinicList
+                        ? clinicList.map((item) => (
                             <Option
-                              value={item.clinicsId.toString()}
-                              key={item.clinicsId}
+                              value={item.prescriberId.toString()}
+                              key={item.prescriberId}
                             >
-                              {item.clinicsId + ',' + item.clinicsName}
+                              {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
                         : null}

@@ -89,17 +89,17 @@ export default class StepOneEdit extends React.Component<any, any> {
     return '';
   }
   getVaulesByData(data, ids) {
-    var idlist = ids ? ids.toJS() : []
-    var valueList = []
+    let idlist = ids ? ids.toJS() : [];
+    let valueList = [];
 
     idlist.map(function(item, value) {
       let result = data.find((x) => x.id.toString() === item);
-      debugger
+      debugger;
       if (result) {
-        valueList.push(result.valueEn)
+        valueList.push(result.valueEn);
       }
-    })
-    return valueList.join(',')
+    });
+    return valueList.join(',');
   }
   render() {
     const { company } = this.props.relaxProps;
@@ -242,7 +242,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="targetCity" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.getVaulesByData(cityData, storeInfo.get('cityId'))}
+                    {this.getVaulesByData(cityData, storeInfo.get('cityIds'))}
                   </p>
                 </FormItem>
               </Col>

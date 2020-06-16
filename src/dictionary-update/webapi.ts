@@ -5,18 +5,6 @@ type TResult = {
   message: string;
   context: any;
 };
-/**
- * Get Dictionary Type
- * @param filterParams
- */
-export function getDictionaryTypes(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionaryType', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
 
 /**
  * Get Dictionary details

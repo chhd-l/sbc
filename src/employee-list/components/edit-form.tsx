@@ -184,7 +184,7 @@ export default class EditForm extends React.Component<any, any> {
           : []
       };
       clinicsId = {
-        initialValue: employeeForm.get('clinicsId')
+        initialValue: employeeForm.get('clinicsId').toString()
       };
     }
     return (
@@ -421,7 +421,7 @@ export default class EditForm extends React.Component<any, any> {
           this.state.selectRoleIds.indexOf('168') > -1 ? (
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="clinics" />}
+              label={<FormattedMessage id="Prescriber" />}
               hasFeedback
             >
               {getFieldDecorator('clinicsId', {
@@ -605,8 +605,8 @@ export default class EditForm extends React.Component<any, any> {
   _renderClinicsOption() {
     return this.state.clinicsLites.map((option) => {
       return (
-        <Option value={option.clinicsId} key={option.clinicsId}>
-          {option.clinicsName}
+        <Option value={option.prescriberId} key={option.prescriberId}>
+          {option.prescriberName}
         </Option>
       );
     });

@@ -180,6 +180,7 @@ export default {
   'position': 'Position',
   'systemRole': 'System Role',
   'clinics': 'Clinics',
+  'Prescriber': 'Prescriber',
   'hideLeavingEmployees': 'Hide leaving Users',
   'attributionDepartment': 'Attribution Group',
   'allDepartment': 'All Group',

@@ -623,6 +623,11 @@ const routes = [
   {
     path: '/clinic-type-edit/:id',
     asyncComponent: () => import('./clinic-type-add')
+  },
+  //商品评价
+  {
+    path: '/nps-list',
+    asyncComponent: () => import('./nps-list')
   }
 ];
 

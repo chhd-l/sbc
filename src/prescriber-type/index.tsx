@@ -143,7 +143,7 @@ export default class ClinicList extends Component<any, any> {
           <Headline title="Prescriber Type" />
           {/*搜索条件*/}
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
-            <Link to="/clinic-type-add">Add</Link>
+            <Link to="/prescriber-type-add">Add</Link>
           </Button>
           <Table
             columns={columns}

@@ -126,6 +126,8 @@ export default class ClinicList extends Component<any, any> {
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
+  }
+  componentDidMount() {
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
     this.init();
@@ -138,9 +140,9 @@ export default class ClinicList extends Component<any, any> {
     query.enabled =
       query.enabled.toString() === 'true'
         ? true
-        : query.enabled === 'false'
+        : query.enabled.toString() === 'false'
         ? false
-        : null;
+        : '';
     pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
@@ -424,7 +426,7 @@ export default class ClinicList extends Component<any, any> {
                 label="Prescriber Status"
                 style={{ width: 80 }}
                 onChange={(value) => {
-                  value = value === '' ? null : value;
+                  value = value === '' ? '' : value;
                   this.onFormChange({
                     field: 'enabled',
                     value

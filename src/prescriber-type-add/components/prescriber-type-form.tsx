@@ -67,7 +67,8 @@ class PrescriberTypeForm extends React.Component<any, any> {
       value: clinicTypeForm.clinicTypeName,
       valueEn: clinicTypeForm.clinicTypeName,
       priority: 0,
-      storeId: 0
+      storeId: 123456858,
+      delFlag: 0
     };
 
     const { res } = await webapi.addClinicsDictionary(params);
@@ -87,7 +88,8 @@ class PrescriberTypeForm extends React.Component<any, any> {
       value: clinicTypeForm.clinicTypeName,
       valueEn: clinicTypeForm.clinicTypeName,
       priority: 0,
-      storeId: 123456858
+      storeId: 123456858,
+      delFlag: 0
     };
 
     const { res } = await webapi.updateClinicsDictionary(params);

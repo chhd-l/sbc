@@ -44,7 +44,8 @@ class ClinicForm extends React.Component<any, any> {
         longitude: '',
         latitude: '',
         location: '',
-        enabled: true
+        enabled: true,
+        delFlag: 0
       },
       cityArr: [],
       typeArr: [],
@@ -128,7 +129,8 @@ class ClinicForm extends React.Component<any, any> {
       rewardRateMore: sectionList[1].rewardRate,
       rewardRule: this.state.rewardMode,
       storeId: rewardForm.storeId,
-      timeZone: this.state.timeZone
+      timeZone: this.state.timeZone,
+      delFlag: 0
     };
     webapi
       .saveReward(params)

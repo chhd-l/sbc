@@ -507,6 +507,7 @@ export default {
   'paymentTime': 'Payment Time',
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
+  'paymentId': 'Payment Id',
 
   'financialSettlement': 'Financial Settlement',
   'settlementTips1': 'Your settlement date is',

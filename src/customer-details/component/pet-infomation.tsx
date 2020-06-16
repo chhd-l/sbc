@@ -256,7 +256,7 @@ class PetInfomation extends React.Component<any, any> {
         petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
       petsType: petForm.petsType,
       sterilized: petForm.sterilized,
-      storeId: 0
+      storeId: 123456858
     };
     let params = {
       customerPets: pets,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Select, Input, Button } from 'antd';
 import { SelectGroup, AreaSelect, noop } from 'qmkit';
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

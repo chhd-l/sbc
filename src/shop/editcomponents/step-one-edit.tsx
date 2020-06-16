@@ -147,14 +147,6 @@ export default class StepOneEdit extends React.Component<any, any> {
     }
   };
 
-  getSelectIdList = (idString: String) => {
-    if (!idString) {
-      return []
-    }
-    var result = idString.toString().split(',');
-    return result;
-  };
-
   render() {
     const { company, onChange, dictionary } = this.props.relaxProps;
     const storeInfo = company.get('storeInfo');
@@ -284,7 +276,11 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="storeLanguage" />}
                 >
                   {getFieldDecorator('languageId', {
-                    initialValue: this.getSelectIdList(storeInfo.get('languageId')),
+                    initialValue: Array.isArray(storeInfo.get('languageId'))
+                      ? storeInfo.get('languageId')
+                      : storeInfo.get('languageId')
+                      ? storeInfo.get('languageId').toJS()
+                      : [],
                     rules: [
                       { required: false, message: 'Please select Language!' }
                     ]
@@ -314,7 +310,10 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {languageData.map((item) => (
-                        <Option value={item.id.toString()} key={item.id.toString()}>
+                        <Option
+                          value={item.id.toString()}
+                          key={item.id.toString()}
+                        >
                           {item.valueEn}
                         </Option>
                       ))}
@@ -389,7 +388,11 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="targetCity" />}
                 >
                   {getFieldDecorator('cityId', {
-                    initialValue:  this.getSelectIdList(storeInfo.get('cityId')),
+                    initialValue: Array.isArray(storeInfo.get('cityId'))
+                      ? storeInfo.get('cityId')
+                      : storeInfo.get('cityId')
+                      ? storeInfo.get('cityId').toJS()
+                      : [],
                     rules: [{ required: false, message: 'Please select City!' }]
                   })(
                     <Select
@@ -408,7 +411,10 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {cityData.map((item) => (
-                        <Option value={item.id.toString()} key={item.id.toString()}>
+                        <Option
+                          value={item.id.toString()}
+                          key={item.id.toString()}
+                        >
                           {item.valueEn}
                         </Option>
                       ))}

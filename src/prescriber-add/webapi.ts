@@ -10,7 +10,7 @@ type TResult = {
  * @param filterParams
  */
 export function addClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/addPrescription', {
+  return Fetch<TResult>('/prescriber/addPrescriber', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -23,7 +23,7 @@ export function addClinic(filterParams = {}) {
  * @param filterParams
  */
 export function updateClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/upDatePrescription', {
+  return Fetch<TResult>('/prescriber/modifyPrescriber', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -35,7 +35,7 @@ export function updateClinic(filterParams = {}) {
  * @param filterParams
  */
 export function getClinicById(filterParams = {}) {
-  return Fetch<TResult>('/clinics/prescriptionById', {
+  return Fetch<TResult>('/prescriber/getPrescriberById', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -48,7 +48,7 @@ export function getClinicById(filterParams = {}) {
  * @param filterParams
  */
 export function queryClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -74,7 +74,7 @@ export function querySysDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function queryClinicsReward(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/queryClinicsReward', {
+  return Fetch<TResult>('/prescriberReward/queryClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -87,7 +87,7 @@ export function queryClinicsReward(filterParams = {}) {
  * @param filterParams
  */
 export function addClinicsReward(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/addClinicsReward', {
+  return Fetch<TResult>('/prescriberReward/addClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -100,7 +100,7 @@ export function addClinicsReward(filterParams = {}) {
  * @param filterParams
  */
 export function updateClinicsReward(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/upDateClinicsReward', {
+  return Fetch<TResult>('/prescriberReward/upDateClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -112,7 +112,7 @@ export function updateClinicsReward(filterParams = {}) {
  * @param filterParams
  */
 export function delClinicsReward(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/delClinicsReward', {
+  return Fetch<TResult>('/prescriberReward/delClinicsReward', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -123,7 +123,7 @@ export function delClinicsReward(filterParams = {}) {
 //
 // 清理并保存
 export function clearRulesAndSave(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/clearRulesAndSave', {
+  return Fetch<TResult>('/prescriberReward/clearRulesAndSave', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -132,7 +132,7 @@ export function clearRulesAndSave(filterParams = {}) {
 }
 // 保存奖励信息
 export function saveReward(filterParams = {}) {
-  return Fetch<TResult>('/clinicsReward/save', {
+  return Fetch<TResult>('/prescriberReward/save', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -141,7 +141,7 @@ export function saveReward(filterParams = {}) {
 }
 
 export function getClinicsReward(id = '') {
-  return Fetch<TResult>('/clinicsReward/' + id, {
+  return Fetch<TResult>('/prescriberReward/' + id, {
     method: 'GET'
   });
 }

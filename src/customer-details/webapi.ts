@@ -7,7 +7,7 @@ type TResult = {
 };
 
 export function queryClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -48,7 +48,7 @@ export function basicDetailsUpdate(filterParams = {}) {
  * @param filterParams
  */
 export function fetchClinicList(filterParams = {}) {
-  return Fetch<TResult>('/clinics/queryPrescription', {
+  return Fetch<TResult>('/prescriber/listPage', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

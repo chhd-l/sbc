@@ -11,7 +11,7 @@ type TResult = {
  * @param filterParams
  */
 export function getClinicsDictionaryList(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -24,7 +24,7 @@ export function getClinicsDictionaryList(filterParams = {}) {
  * @param filterParams
  */
 export function addClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/addClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/addPrescriberDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -37,7 +37,7 @@ export function addClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function delClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/delClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/deletePrescriberDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -50,7 +50,7 @@ export function delClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function clinicsDictionaryDetails(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionaryById', {
+  return Fetch<TResult>('/prescriberDictionary/getPrescriberDictionaryById', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -63,7 +63,7 @@ export function clinicsDictionaryDetails(filterParams = {}) {
  * @param filterParams
  */
 export function updateClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/upDateClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/modifyPrescriberDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

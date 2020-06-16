@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb } from 'qmkit';
-import ClinicForm from './components/clinic-form';
+import PrescriberTypeForm from './components/prescriber-type-form';
 import { Breadcrumb } from 'antd';
 
 export default class ClinicList extends Component<any, any> {
@@ -30,20 +30,22 @@ export default class ClinicList extends Component<any, any> {
       <div>
         {this.props.match.params.id ? (
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>Edit Prescriber</Breadcrumb.Item>
+            <Breadcrumb.Item>Edit Prescriber Type</Breadcrumb.Item>
           </BreadCrumb>
         ) : (
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>New Prescriber</Breadcrumb.Item>
+            <Breadcrumb.Item>New Prescriber type</Breadcrumb.Item>
           </BreadCrumb>
         )}
         <div className="container">
-          {/* <Headline
+          <Headline
             title={
-              this.props.match.params.id ? 'Edit Prescriber' : 'New Prescriber'
+              this.props.match.params.id
+                ? 'Edit Prescriber Type'
+                : 'New Prescriber Type'
             }
-          /> */}
-          <ClinicForm
+          />
+          <PrescriberTypeForm
             pageType={this.state.pageType}
             clinicId={this.state.clinicId}
           />

@@ -424,7 +424,12 @@ class PetInfomation extends React.Component<any, any> {
                     <FormItem label="Pet Name">
                       {getFieldDecorator('petsName', {
                         rules: [
-                          { required: true, message: 'Please input Pet Name!' }
+                          { required: true, message: 'Please input Pet Name!' },
+
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
+                          }
                         ]
                       })(
                         <Input

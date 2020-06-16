@@ -120,7 +120,11 @@ class PrescriberTypeForm extends React.Component<any, any> {
         <FormItem label="Prescriber Type Name">
           {getFieldDecorator('clinicTypeName', {
             rules: [
-              { required: true, message: 'Please input Prescriber Type Name!' }
+              { required: true, message: 'Please input Prescriber Type Name!' },
+              {
+                max: 50,
+                message: 'Exceed maximum length!'
+              }
             ]
           })(
             <Input
@@ -140,6 +144,10 @@ class PrescriberTypeForm extends React.Component<any, any> {
               {
                 required: true,
                 message: 'Please input Prescriber Type Description!'
+              },
+              {
+                max: 200,
+                message: 'Exceed maximum length!'
               }
             ]
           })(

@@ -270,6 +270,26 @@ class DeliveryInfomation extends React.Component<any, any> {
       isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
     });
   };
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9+-\s]{6,20}$/;
+    if (!reg.test(form.getFieldValue('consigneeNumber'))) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9]{3,10}$/;
+    if (!reg.test(form.getFieldValue('postCode'))) {
+      callback('Please enter the correct Post Code');
+    } else {
+      callback();
+    }
+  };
 
   render() {
     const formItemLayout = {
@@ -415,6 +435,11 @@ class DeliveryInfomation extends React.Component<any, any> {
                           {
                             required: true,
                             message: 'Please input First Name!'
+                          },
+
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
                           }
                         ]
                       })(
@@ -435,7 +460,14 @@ class DeliveryInfomation extends React.Component<any, any> {
                     <FormItem label="Last Name">
                       {getFieldDecorator('lastName', {
                         rules: [
-                          { required: true, message: 'Please input Last Name!' }
+                          {
+                            required: true,
+                            message: 'Please input Last Name!'
+                          },
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
+                          }
                         ]
                       })(
                         <Input
@@ -458,7 +490,8 @@ class DeliveryInfomation extends React.Component<any, any> {
                           {
                             required: true,
                             message: 'Please input Phone Number!'
-                          }
+                          },
+                          { validator: this.comparePhone }
                         ]
                       })(
                         <Input
@@ -478,7 +511,11 @@ class DeliveryInfomation extends React.Component<any, any> {
                     <FormItem label="Post Code">
                       {getFieldDecorator('postCode', {
                         rules: [
-                          { required: true, message: 'Please input Post Code!' }
+                          {
+                            required: true,
+                            message: 'Please input Post Code!'
+                          },
+                          { validator: this.compareZip }
                         ]
                       })(
                         <Input
@@ -554,7 +591,14 @@ class DeliveryInfomation extends React.Component<any, any> {
                     <FormItem label="Address 1">
                       {getFieldDecorator('address1', {
                         rules: [
-                          { required: true, message: 'Please input Address 1!' }
+                          {
+                            required: true,
+                            message: 'Please input Address 1!'
+                          },
+                          {
+                            max: 200,
+                            message: 'Exceed maximum length!'
+                          }
                         ]
                       })(
                         <TextArea
@@ -573,10 +617,14 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem label="Address 2">
-                      {getFieldDecorator(
-                        'address2',
-                        {}
-                      )(
+                      {getFieldDecorator('address2', {
+                        rules: [
+                          {
+                            max: 200,
+                            message: 'Exceed maximum length!'
+                          }
+                        ]
+                      })(
                         <TextArea
                           disabled={this.props.customerType === 'Guest'}
                           autoSize={{ minRows: 3, maxRows: 3 }}
@@ -593,10 +641,14 @@ class DeliveryInfomation extends React.Component<any, any> {
                   </Col>
                   <Col span={12}>
                     <FormItem label="Reference">
-                      {getFieldDecorator(
-                        'rfc',
-                        {}
-                      )(
+                      {getFieldDecorator('rfc', {
+                        rules: [
+                          {
+                            max: 200,
+                            message: 'Exceed maximum length!'
+                          }
+                        ]
+                      })(
                         <Input
                           disabled={this.props.customerType === 'Guest'}
                           onChange={(e) => {

@@ -620,10 +620,6 @@ const routes = [
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
   },
-  {
-    path: '/clinic-type-edit/:id',
-    asyncComponent: () => import('./clinic-type-add')
-  },
   //商品评价
   {
     path: '/nps-list',

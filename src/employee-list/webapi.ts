@@ -205,7 +205,7 @@ export function countNum() {
 }
 
 export function getClinicsLites() {
-  return Fetch<TResult>('/clinics/queryPrescriptionIdAndName', {
+  return Fetch<TResult>('/prescriber/queryPrescriberIdAndName', {
     method: 'POST',
     body: JSON.stringify({})
   });

@@ -387,12 +387,12 @@ export default class StepOneEdit extends React.Component<any, any> {
                   required={false}
                   label={<FormattedMessage id="targetCity" />}
                 >
-                  {getFieldDecorator('cityId', {
-                    initialValue: Array.isArray(storeInfo.get('cityId'))
-                    ? storeInfo.get('cityId')
-                    : storeInfo.get('cityId')
-                    ? storeInfo.get('cityId').toJS()
-                    : [],
+                  {getFieldDecorator('cityIds', {
+                    initialValue: Array.isArray(storeInfo.get('cityIds'))
+                      ? storeInfo.get('cityIds')
+                      : storeInfo.get('cityIds')
+                      ? storeInfo.get('cityIds').toJS()
+                      : [],
                     rules: [{ required: false, message: 'Please select City!' }]
                   })(
                     <Select
@@ -405,7 +405,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                       onChange={(value) =>
                         onChange({
-                          field: 'cityId',
+                          field: 'cityIds',
                           value: value
                         })
                       }

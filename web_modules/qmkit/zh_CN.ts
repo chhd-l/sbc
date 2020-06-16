@@ -351,15 +351,16 @@ export default {
   'storeContactEmail': '商店联系人邮件',
   'contactTimePeriod': '联系间隔',
 
-  'payment': '支付',
-  'environment': '环境',
-  'URL': '地址',
-  'appID': 'APP ID',
-  'privateKey': '密钥',
-  'publicKey': '公钥',
-  'apiVersion': 'API版本',
-  'clinics': '医院',
-  'oldPassword': '旧密码',
-  'newPassword': '新密码',
-  'confirmPassword': '确认密码'
+'payment': '支付',
+'environment': '环境',
+'URL': '地址',
+'appID': 'APP ID',
+'privateKey': '密钥',
+'publicKey': '公钥',
+'apiVersion': 'API版本',
+'clinics': '医院',
+'Prescriber': '医院',
+'oldPassword': '旧密码',
+'newPassword': '新密码',
+'confirmPassword':'确认密码'
 };

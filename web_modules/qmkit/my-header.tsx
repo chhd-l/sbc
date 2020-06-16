@@ -16,7 +16,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
       return null;
     }
 
-    const accountName = loginInfo && loginInfo.accountName;
+    const accountName = loginInfo && loginInfo.employeeName;
     const isMasterAccount = loginInfo && loginInfo.isMasterAccount;
     const mobile = loginInfo && loginInfo.mobile;
 
@@ -181,7 +181,9 @@ export default class MyHeader extends React.PureComponent<any, any> {
           <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               {/* <Icon type="user" /> */}
-              <img src={userImg} alt="" /><span style={styles.dropdownText}>{accountName}</span><Icon type="down" />
+              <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
+                  ? sessionStorage.getItem(cache.SITE_LOGO)
+                  : util.requireLocalSrc('sys/02.jpg')} alt="" /><span style={styles.dropdownText}>{accountName}</span><Icon type="down" />
             </a>
           </Dropdown>
         </div>

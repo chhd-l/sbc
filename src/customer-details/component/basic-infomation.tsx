@@ -615,10 +615,10 @@ class BasicInfomation extends React.Component<any, any> {
                       {clinicList
                         ? clinicList.map((item) => (
                             <Option
-                              value={item.clinicsId.toString()}
-                              key={item.clinicsId}
+                              value={item.prescriberId.toString()}
+                              key={item.prescriberId}
                             >
-                              {item.clinicsId + ',' + item.clinicsName}
+                              {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
                         : null}

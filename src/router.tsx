@@ -594,35 +594,40 @@ const routes = [
     path: '/payment-setting-edit',
     asyncComponent: () => import('./payment-setting-edit')
   },
-  // clinic
+  // prescriber
   {
-    path: '/clinic',
-    asyncComponent: () => import('./clinic')
+    path: '/prescriber',
+    asyncComponent: () => import('./prescriber')
   },
-  //clinic-add
+  //prescriber-add
   {
-    path: '/clinic-add',
-    asyncComponent: () => import('./clinic-add')
-  },
-  {
-    path: '/clinic-edit/:id',
-    asyncComponent: () => import('./clinic-add')
+    path: '/prescriber-add',
+    asyncComponent: () => import('./prescriber-add')
   },
   {
-    path: '/clinic-type',
-    asyncComponent: () => import('./clinic-type')
+    path: '/prescriber-edit/:id',
+    asyncComponent: () => import('./prescriber-add')
   },
   {
-    path: '/clinic-reward-rate',
-    asyncComponent: () => import('./clinic-reward-rate')
+    path: '/prescriber-type',
+    asyncComponent: () => import('./prescriber-type')
   },
   {
-    path: '/clinic-type-add',
-    asyncComponent: () => import('./clinic-type-add')
+    path: '/prescriber-reward-rate',
+    asyncComponent: () => import('./prescriber-reward-rate')
   },
   {
-    path: '/clinic-type-edit/:id',
-    asyncComponent: () => import('./clinic-type-add')
+    path: '/prescriber-type-add',
+    asyncComponent: () => import('./prescriber-type-add')
+  },
+  //商品评价
+  {
+    path: '/nps-list',
+    asyncComponent: () => import('./nps-list')
+  },
+  {
+    path: '/prescriber-type-edit/:id',
+    asyncComponent: () => import('./prescriber-type-add')
   }
 ];
 

@@ -11,7 +11,7 @@ type TResult = {
  * @param filterParams
  */
 export function getClinicsDictionaryList(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -24,7 +24,7 @@ export function getClinicsDictionaryList(filterParams = {}) {
  * @param filterParams
  */
 export function delClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/delClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/deletePrescriberDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -34,7 +34,7 @@ export function delClinicsDictionary(filterParams = {}) {
 
 //分页查询
 export function getClinicsDictionaryListPage(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/page', {
+  return Fetch<TResult>('/prescriberDictionary/listPage', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

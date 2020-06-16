@@ -10,7 +10,7 @@ type TResult = {
  * @param filterParams
  */
 export function fetchClinicList(filterParams = {}) {
-  return Fetch<TResult>('/clinics/queryPrescription', {
+  return Fetch<TResult>('/prescriber/listPage', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -22,7 +22,7 @@ export function fetchClinicList(filterParams = {}) {
  * @param filterParams
  */
 export function deleteClinic(filterParams = {}) {
-  return Fetch<TResult>('/clinics/delPrescription', {
+  return Fetch<TResult>('/prescriber/deletePrescriber', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -35,7 +35,7 @@ export function deleteClinic(filterParams = {}) {
  * @param filterParams
  */
 export function queryClinicsDictionary(filterParams = {}) {
-  return Fetch<TResult>('/clinicsDictionary/queryClinicsDictionary', {
+  return Fetch<TResult>('/prescriberDictionary/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -61,7 +61,7 @@ export function querySysDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function enableAndDisable(id = '') {
-  return Fetch<TResult>('/clinics/enableAndDisable?clinicsId=' + id, {
+  return Fetch<TResult>('/prescriber/enableAndDisable?prescriberId=' + id, {
     method: 'POST'
   });
 }
@@ -72,7 +72,7 @@ export function enableAndDisable(id = '') {
  */
 
 export function exportPrescriber(filterParams = {}) {
-  return Fetch<TResult>('/clinics/exportPrescriber', {
+  return Fetch<TResult>('/prescriber/exportPrescriber', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

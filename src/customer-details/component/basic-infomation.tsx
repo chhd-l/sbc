@@ -264,6 +264,36 @@ class BasicInfomation extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9+-\s]{6,20}$/;
+    if (!reg.test(form.getFieldValue('contactPhone'))) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9]{3,10}$/;
+    if (!reg.test(form.getFieldValue('postCode'))) {
+      callback('Please enter the correct Post Code');
+    } else {
+      callback();
+    }
+  };
+
+  compareEmail = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+    if (!reg.test(form.getFieldValue('email'))) {
+      callback('Please enter the correct email');
+    } else {
+      callback();
+    }
+  };
 
   render() {
     const { countryArr, cityArr, clinicList } = this.state;
@@ -287,7 +317,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="First Name">
                   {getFieldDecorator('firstName', {
                     rules: [
-                      { required: true, message: 'Please input First Name!' }
+                      { required: true, message: 'Please input First Name!' },
+                      {
+                        max: 50,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <Input
@@ -307,7 +341,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Last Name">
                   {getFieldDecorator('lastName', {
                     rules: [
-                      { required: true, message: 'Please input Last Name!' }
+                      { required: true, message: 'Please input Last Name!' },
+                      {
+                        max: 50,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <Input
@@ -353,7 +391,11 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Email">
                   {getFieldDecorator('email', {
-                    rules: [{ required: true, message: 'Please input Email!' }]
+                    rules: [
+                      { required: true, message: 'Please input Email!' },
+                      { validator: this.compareEmail },
+                      { max: 50, message: 'Exceed maximum length!' }
+                    ]
                   })(
                     <Input
                       onChange={(e) => {
@@ -371,7 +413,8 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
                     rules: [
-                      { required: true, message: 'Please input Phone Number!' }
+                      { required: true, message: 'Please input Phone Number!' },
+                      { validator: this.comparePhone }
                     ]
                   })(
                     <Input
@@ -390,7 +433,8 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Post Code">
                   {getFieldDecorator('postCode', {
                     rules: [
-                      { required: true, message: 'Please input Post Code!' }
+                      { required: true, message: 'Please input Post Code!' },
+                      { validator: this.compareZip }
                     ]
                   })(
                     <Input
@@ -462,7 +506,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Address 1">
                   {getFieldDecorator('address1', {
                     rules: [
-                      { required: true, message: 'Please input Address 1!' }
+                      { required: true, message: 'Please input Address 1!' },
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <TextArea
@@ -480,10 +528,14 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
               <Col span={12}>
                 <FormItem label="Address 2">
-                  {getFieldDecorator(
-                    'address2',
-                    {}
-                  )(
+                  {getFieldDecorator('address2', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
+                  })(
                     <TextArea
                       autoSize={{ minRows: 3, maxRows: 3 }}
                       onChange={(e) => {
@@ -527,10 +579,14 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
               <Col span={12}>
                 <FormItem label="Reference">
-                  {getFieldDecorator(
-                    'reference',
-                    {}
-                  )(
+                  {getFieldDecorator('reference', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
+                  })(
                     <Input
                       onChange={(e) => {
                         const value = (e.target as any).value;

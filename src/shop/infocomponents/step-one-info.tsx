@@ -92,7 +92,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     let idlist = ids ? ids.toJS() : [];
     let valueList = [];
 
-    idlist.map(function (item, value) {
+    idlist.map(function(item, value) {
       let result = data.find((x) => x.id.toString() === item);
       debugger;
       if (result) {
@@ -242,7 +242,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="targetCity" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.getVaulesByData(cityData, storeInfo.get('cityId'))}
+                    {this.getVaulesByData(cityData, storeInfo.get('cityIds'))}
                   </p>
                 </FormItem>
               </Col>

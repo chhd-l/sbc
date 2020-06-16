@@ -27,7 +27,9 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state().get('form').toJS();
+    const query = this.state()
+      .get('form')
+      .toJS();
 
     // 是否已回复
     const tabIndex = this.state().get('tabIndex');

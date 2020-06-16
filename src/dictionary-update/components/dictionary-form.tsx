@@ -35,15 +35,13 @@ class DictionaryForm extends Component<any, any> {
         valueEn: '',
         enabled: 0,
         priority: 0
-      },
-      dictionaryTypes: []
+      }
     };
     this.getDetail = this.getDetail.bind(this);
 
     if (this.props.id) {
       this.getDetail(this.props.id);
     }
-    this.queryClinicsDictionary();
   }
   componentDidMount() {
     if (!this.props.id) {
@@ -81,16 +79,6 @@ class DictionaryForm extends Component<any, any> {
       });
     } else {
       message.error(res.message || 'get data faild');
-    }
-  };
-  queryClinicsDictionary = async () => {
-    const { res } = await webapi.getDictionaryTypes();
-    if (res.code === 'K-000000') {
-      this.setState({
-        dictionaryTypes: res.context.typeList
-      });
-    } else {
-      message.error(res.message);
     }
   };
   handleSubmit = (e) => {
@@ -168,21 +156,6 @@ class DictionaryForm extends Component<any, any> {
               { required: true, message: 'Please select Dictionary Type' }
             ]
           })(
-            // <Select
-            //   onChange={(value) => {
-            //     value = value === '' ? null : value;
-            //     this.onFormChange({
-            //       field: 'type',
-            //       value
-            //     });
-            //   }}
-            // >
-            //   {dictionaryTypes.map((item) => (
-            //     <Option value={item} key={item}>
-            //       {item}
-            //     </Option>
-            //   ))}
-            // </Select>
             <Input
               onChange={(e) => {
                 const value = (e.target as any).value;

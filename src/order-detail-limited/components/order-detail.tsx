@@ -385,7 +385,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryComment" />}:{' '}
-              {detail.get('buyerRemark') || 'none'}
+              {detail.get('buyerRemark')}
             </p>
           </Col>
         </Row>

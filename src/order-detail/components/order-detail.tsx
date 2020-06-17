@@ -477,10 +477,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {<FormattedMessage id="deliveryInvoiceAddress2" />}:{' '}
               {invoice.address2}
             </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentMethod" />}:{' '}
-              {detail.getIn(['payInfo', 'desc']) || 'none'}
-            </p>
           </Col>
         </Row>
 

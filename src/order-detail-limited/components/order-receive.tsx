@@ -113,7 +113,7 @@ export default class OrderReceive extends React.Component<any, any> {
             </a>
           </Popover>
         ) : (
-          'none'
+          ''
         )
     },
     {
@@ -134,7 +134,7 @@ export default class OrderReceive extends React.Component<any, any> {
               <a href="javascript:void(0);">{<FormattedMessage id="view" />}</a>
             </Tooltip>
           ) : (
-            'none'
+            ''
           )}
         </span>
       )

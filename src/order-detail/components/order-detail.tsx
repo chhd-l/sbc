@@ -347,7 +347,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </p>
               )}
               <p style={styles.darkText}>
-                {<FormattedMessage id="phoneNumber" />}: {consignee.phone}
+                {<FormattedMessage id="phoneNumber" />}:{' '}
+                {detail.getIn(['buyer', 'phone'])}
               </p>
             </Col>
           </Row>

@@ -243,7 +243,7 @@ export default class SearchHead extends Component<any, any> {
               </FormattedMessage>
             </FormItem>
 
-            <FormItem>
+            {/* <FormItem>
               <FormattedMessage id="order.orderSource">
                 {(txt) => (
                   <SelectGroup
@@ -280,7 +280,7 @@ export default class SearchHead extends Component<any, any> {
                   </SelectGroup>
                 )}
               </FormattedMessage>
-            </FormItem>
+            </FormItem> */}
 
             <FormItem>
               <Input

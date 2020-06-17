@@ -499,6 +499,7 @@ export default class ListView extends React.Component<any, any> {
                         textAlign: 'left',
                         display: 'flex',
                         alignItems: 'flex-end',
+                        flexWrap: 'wrap',
                         padding: '16px 0',
                         width: '100'
                       }}
@@ -682,12 +683,13 @@ const styles = {
     height: 300
   },
   imgItem: {
-    width: 60,
-    height: 60,
+    width: '25%',
+    height: 'auto',
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 10,
+    marginRight: 5,
+    marginBottom: 5,
     background: '#fff',
     borderRadius: 3
   },

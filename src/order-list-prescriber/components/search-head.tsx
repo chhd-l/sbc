@@ -346,6 +346,23 @@ export default class SearchHead extends Component<any, any> {
               </Button>
             </FormItem>
           </Form>
+
+          {hasMenu && (
+            <div className="handle-bar">
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+              >
+                <Button>
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </div>
+          )}
         </div>
 
         <ExportModal

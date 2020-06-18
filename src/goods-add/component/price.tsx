@@ -31,18 +31,26 @@ export default class Price extends React.Component<any, any> {
   render() {
     const { priceOpt, saleType } = this.props.relaxProps;
     return (
-      <div >
+      <div>
         <Alert
           message={
             <div>
-              <p>请注意</p>
+              <p>
+                Please note that please select the price setting mode for this
+                product first. Under the same SPU, all SKUs use the same price
+                setting mode. Carry out batch setting of SPU, and the setting
+                scheme will cover all SKUS (except skUS that open and keep
+                independent setting). Please operate carefully. For separate
+                pricing for SKU, you can go to the SKU pricing page.
+              </p>
+              {/* <p>请注意</p>
               <p>
                 请先选择该商品使用的设价方式，同一SPU下所有SKU都使用同一种设价方式；
               </p>
               <p>
                 进行SPU批量设价，设价方案将会覆盖所有SKU（开启保持独立设价的SKU除外），请谨慎操作；
               </p>
-              <p>如需针对SKU单独设价，您可前往SKU的设价页；</p>
+              <p>如需针对SKU单独设价，您可前往SKU的设价页；</p> */}
             </div>
           }
           type="info"
@@ -59,8 +67,8 @@ export default class Price extends React.Component<any, any> {
           }}
         >
           <RadioGroup onChange={this._editPriceSetting} value={priceOpt}>
-            <Radio value={2}>以市场价销售&nbsp;&nbsp;</Radio>
-            <Radio value={0}>按客户设价&nbsp;&nbsp;</Radio>
+            <Radio value={2}>Sell at market price&nbsp;&nbsp;</Radio>
+            <Radio value={0}>Sell at consumer price&nbsp;&nbsp;</Radio>
             {saleType === 0 && (
               <Radio value={1}>按订货量设价&nbsp;&nbsp;</Radio>
             )}

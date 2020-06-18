@@ -62,7 +62,7 @@ export default class Foot extends React.Component<any, any> {
               style={{ marginRight: 10 }}
               loading={saveLoading}
             >
-              保存
+              Save
             </Button>
           </AuthWrapper>
         )}

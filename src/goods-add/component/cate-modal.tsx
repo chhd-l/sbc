@@ -274,7 +274,7 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form">
-        <FormItem {...formItemLayout} label="分类名称" hasFeedback>
+        <FormItem {...formItemLayout} label="Classification name" hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               { required: true, whitespace: true, message: '请输入分类名称' },
@@ -287,23 +287,23 @@ class CateModalForm extends React.Component<any, any> {
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="上级分类">
+        <FormItem {...formItemLayout} label="Superior classification">
           {getFieldDecorator('cateParentId', {
             rules: [
               {
                 required: true,
-                message: '请选择上级分类'
+                message: 'please select superior classification'
               }
             ]
           })(
             <TreeSelect
               getPopupContainer={() => document.getElementById('root')}
-              placeholder="请选择上级分类"
+              placeholder="please select superior classification"
               notFoundContent="暂无分类"
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               treeDefaultExpandAll
             >
-              <TreeNode key="0" value="0" title="顶级分类">
+              <TreeNode key="0" value="0" title="Top level classification">
                 {loop(storeCateList)}
               </TreeNode>
             </TreeSelect>
@@ -394,7 +394,7 @@ class CateModalForm extends React.Component<any, any> {
           })(<TextArea rows={4} placeholder="请填商品描述" />)}
         </FormItem>
         <Errorbox>
-          <FormItem {...formItemLayout} label="排序" hasFeedback>
+          <FormItem {...formItemLayout} label="Sort" hasFeedback>
             {getFieldDecorator('sort', {
               rules: [
                 { required: true, message: '请填写排序' },
@@ -405,7 +405,7 @@ class CateModalForm extends React.Component<any, any> {
               ],
               initialValue: 0
             })(<Input style={{ width: '30%' }} placeholder="请填写排序" />)}
-            <Tips title="数值越小越靠前" />
+            <Tips title="The smaller the value, the higher" />
           </FormItem>
         </Errorbox>
       </Form>

@@ -14,7 +14,7 @@ const Common = {
     0: '待审核',
     1: '已审核',
     2: '审核未通过',
-    3: '禁售中'
+    3: 'No sale'
   },
 
   // 退货状态
@@ -54,7 +54,7 @@ const Common = {
   priceType: {
     0: '按客户设价',
     1: '按订货量设价',
-    2: '以市场价销售'
+    2: 'Sell at market prices'
   },
   // 平台类型
   platform: {

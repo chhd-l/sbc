@@ -83,7 +83,7 @@ export default class CateModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={formData.get('storeCateId') ? '编辑' : '新增'}
+        title={formData.get('storeCateId') ? 'Edit' : 'Add'}
         visible={modalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}

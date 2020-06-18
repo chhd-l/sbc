@@ -88,7 +88,6 @@ export default class TodoItems extends React.Component<any, any> {
       todoVisible,
       settlement
     } = this.props.relaxProps;
-    debugger;
     const phone = employee.get('phone') || '无';
     let total = 0;
     let settled = 0;

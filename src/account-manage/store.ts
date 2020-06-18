@@ -123,7 +123,7 @@ export default class AppStore extends Store {
 
   messageByResult(res, _handle: Function) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       _handle();
       this.init();
     } else {

@@ -6,7 +6,7 @@ import ListActor from './actor/list-actor';
 import LoadingActor from './actor/loading-actor';
 import FormActor from './actor/form-actor';
 import CustomerLevelActor from './actor/customer-level-actor';
-import {Const, util} from 'qmkit';
+import { Const, util } from 'qmkit';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -44,7 +44,7 @@ export default class AppStore extends Store {
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
@@ -93,7 +93,7 @@ export default class AppStore extends Store {
   onDelete = async (marketingId) => {
     const { res } = await webapi.deleteMarketing(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }
@@ -103,7 +103,7 @@ export default class AppStore extends Store {
   onPause = async (marketingId) => {
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }
@@ -113,7 +113,7 @@ export default class AppStore extends Store {
   onStart = async (marketingId) => {
     const { res } = await webapi.start(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }

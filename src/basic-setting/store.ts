@@ -39,7 +39,7 @@ export default class AppStore extends Store {
       settings.storeId = this.state().getIn(['settings', 'storeId']);
       const { res } = await webapi.editSetting(settings);
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('修改成功!');
+        message.success('save successful!');
         this.init();
       } else {
         message.error(res.message);

@@ -276,7 +276,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       //登录失败原因
       message.error(res.message);

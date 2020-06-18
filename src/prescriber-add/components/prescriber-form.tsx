@@ -466,7 +466,7 @@ class ClinicForm extends React.Component<any, any> {
                         message: 'Please input Prescriber name!'
                       },
                       {
-                        max: 255,
+                        max: 200,
                         message: 'Prescriber name exceed the maximum length!'
                       }
                     ]

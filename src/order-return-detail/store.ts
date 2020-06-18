@@ -100,7 +100,7 @@ export default class AppStore extends Store {
       .then(() => {
         this.init(rid);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onReject = (rid: string, reason: string) => {
@@ -109,7 +109,7 @@ export default class AppStore extends Store {
       .then(() => {
         this.init(rid);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onDeliver = (rid: string, values) => {
@@ -118,7 +118,7 @@ export default class AppStore extends Store {
       .then(() => {
         this.init(rid);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onReceive = (rid: string) => {
@@ -127,7 +127,7 @@ export default class AppStore extends Store {
       .then(() => {
         this.init(rid);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   onRejectReceive = (rid: string, reason: string) => {
@@ -153,7 +153,7 @@ export default class AppStore extends Store {
         message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.success('操作成功');
+        message.success('save successful');
       }
 
       setTimeout(() => this.init(rid), 3000);
@@ -175,7 +175,7 @@ export default class AppStore extends Store {
             throw Error('K-040017');
           }
         } else {
-          message.success('操作成功');
+          message.success('save successful');
         }
         this.init(rid);
       });

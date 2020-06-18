@@ -56,7 +56,8 @@ class BasicInfomation extends React.Component<any, any> {
           clinicsId: 0,
           clinicsName: ''
         },
-        cityObj: {}
+        cityObj: {},
+        countryObj: {}
       },
       countryArr: [],
       cityArr: [],
@@ -117,8 +118,8 @@ class BasicInfomation extends React.Component<any, any> {
             email: resObj.email,
             contactPhone: resObj.contactPhone,
             postCode: resObj.postCode,
-            city: resObj.city,
-            country: resObj.country,
+            city: resObj.Id,
+            country: resObj.countryId,
             address1: resObj.house,
             address2: resObj.housing,
             preferredMethods: resObj.contactMethod,
@@ -140,8 +141,8 @@ class BasicInfomation extends React.Component<any, any> {
               email: resObj.email,
               contactPhone: resObj.contactPhone,
               postCode: resObj.postCode,
-              city: resObj.city,
-              country: resObj.country,
+              city: resObj.cityId,
+              country: resObj.countryId,
               address1: resObj.house,
               address2: resObj.housing,
               preferredMethods: resObj.contactMethod,
@@ -202,15 +203,15 @@ class BasicInfomation extends React.Component<any, any> {
     //   (currentForm.clinicsVOS = basicForm.selectedClinics),
     //   (currentForm.customerId = basicForm.customerId),
     //   (currentForm.defaultClinics = basicForm.defaultClinics)
-
     let params = {
       birthDay: basicForm.birthDay,
-      city: basicForm.city,
-      cityId: 0,
+      city: basicForm.cityObj.cityName,
+      cityId: basicForm.cityObj.cityId,
       clinicsVOS: basicForm.selectedClinics,
       contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
-      country: basicForm.country,
+      country: basicForm.countryObj.countryName,
+      countryId: basicForm.countryObj.countryId,
       customerDetailId: currentForm.customerDetailId,
       defaultClinics: basicForm.defaultClinics,
       email: basicForm.email,
@@ -240,15 +241,15 @@ class BasicInfomation extends React.Component<any, any> {
   getClinicList = () => {
     webapi
       .fetchClinicList({
-        pageNum: 0,
-        pageSize: 1000
+        enabled: true,
+        storeId: 123456858
       })
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.setState({
             loading: false,
-            clinicList: res.context.content
+            clinicList: res.context
           });
         } else {
           this.setState({
@@ -263,6 +264,36 @@ class BasicInfomation extends React.Component<any, any> {
         });
         message.error('Unsuccessful');
       });
+  };
+  //手机校验
+  comparePhone = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9+-\s]{6,20}$/;
+    if (!reg.test(form.getFieldValue('contactPhone'))) {
+      callback('Please enter the correct phone');
+    } else {
+      callback();
+    }
+  };
+
+  compareZip = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[0-9]{3,10}$/;
+    if (!reg.test(form.getFieldValue('postCode'))) {
+      callback('Please enter the correct Post Code');
+    } else {
+      callback();
+    }
+  };
+
+  compareEmail = (rule, value, callback) => {
+    const { form } = this.props;
+    let reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+    if (!reg.test(form.getFieldValue('email'))) {
+      callback('Please enter the correct email');
+    } else {
+      callback();
+    }
   };
 
   render() {
@@ -287,7 +318,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="First Name">
                   {getFieldDecorator('firstName', {
                     rules: [
-                      { required: true, message: 'Please input First Name!' }
+                      { required: true, message: 'Please input First Name!' },
+                      {
+                        max: 50,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <Input
@@ -307,7 +342,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Last Name">
                   {getFieldDecorator('lastName', {
                     rules: [
-                      { required: true, message: 'Please input Last Name!' }
+                      { required: true, message: 'Please input Last Name!' },
+                      {
+                        max: 50,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <Input
@@ -353,7 +392,11 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Email">
                   {getFieldDecorator('email', {
-                    rules: [{ required: true, message: 'Please input Email!' }]
+                    rules: [
+                      { required: true, message: 'Please input Email!' },
+                      { validator: this.compareEmail },
+                      { max: 50, message: 'Exceed maximum length!' }
+                    ]
                   })(
                     <Input
                       onChange={(e) => {
@@ -371,7 +414,8 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
                     rules: [
-                      { required: true, message: 'Please input Phone Number!' }
+                      { required: true, message: 'Please input Phone Number!' },
+                      { validator: this.comparePhone }
                     ]
                   })(
                     <Input
@@ -390,7 +434,8 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Post Code">
                   {getFieldDecorator('postCode', {
                     rules: [
-                      { required: true, message: 'Please input Post Code!' }
+                      { required: true, message: 'Please input Post Code!' },
+                      { validator: this.compareZip }
                     ]
                   })(
                     <Input
@@ -414,17 +459,21 @@ class BasicInfomation extends React.Component<any, any> {
                     ]
                   })(
                     <Select
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
+                      onChange={(value, Option) => {
+                        let countryObj = {
+                          countryId: Option.props.value,
+                          counteyName: Option.props.children
+                        };
+
                         this.onFormChange({
-                          field: 'country',
-                          value
+                          field: 'countryObj',
+                          value: countryObj
                         });
                       }}
                     >
                       {countryArr
                         ? countryArr.map((item) => (
-                            <Option value={item.valueEn} key={item.id}>
+                            <Option value={item.id} key={item.id}>
                               {item.name}
                             </Option>
                           ))
@@ -439,17 +488,29 @@ class BasicInfomation extends React.Component<any, any> {
                     rules: [{ required: true, message: 'Please input City!' }]
                   })(
                     <Select
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
+                      onChange={(value, Option) => {
+                        let cityObj = {
+                          cityId: Option.props.value,
+                          cityName: Option.props.children
+                        };
+
                         this.onFormChange({
-                          field: 'city',
-                          value
+                          field: 'cityObj',
+                          value: cityObj
                         });
                       }}
+                      // onChange={(value) => {
+                      //   value = value === '' ? null : value;
+
+                      //   this.onFormChange({
+                      //     field: 'city',
+                      //     value
+                      //   });
+                      // }}
                     >
                       {cityArr
                         ? cityArr.map((item) => (
-                            <Option value={item.valueEn} key={item.id}>
+                            <Option value={item.id} key={item.id}>
                               {item.name}
                             </Option>
                           ))
@@ -462,7 +523,11 @@ class BasicInfomation extends React.Component<any, any> {
                 <FormItem label="Address 1">
                   {getFieldDecorator('address1', {
                     rules: [
-                      { required: true, message: 'Please input Address 1!' }
+                      { required: true, message: 'Please input Address 1!' },
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
                     ]
                   })(
                     <TextArea
@@ -480,10 +545,14 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
               <Col span={12}>
                 <FormItem label="Address 2">
-                  {getFieldDecorator(
-                    'address2',
-                    {}
-                  )(
+                  {getFieldDecorator('address2', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
+                  })(
                     <TextArea
                       autoSize={{ minRows: 3, maxRows: 3 }}
                       onChange={(e) => {
@@ -527,10 +596,14 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
               <Col span={12}>
                 <FormItem label="Reference">
-                  {getFieldDecorator(
-                    'reference',
-                    {}
-                  )(
+                  {getFieldDecorator('reference', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
+                  })(
                     <Input
                       onChange={(e) => {
                         const value = (e.target as any).value;
@@ -566,13 +639,13 @@ class BasicInfomation extends React.Component<any, any> {
                         });
                       }}
                     >
-                      {this.state.basicForm.selectedClinics
-                        ? this.state.basicForm.selectedClinics.map((item) => (
+                      {clinicList
+                        ? clinicList.map((item) => (
                             <Option
-                              value={item.clinicsId.toString()}
-                              key={item.clinicsId}
+                              value={item.prescriberId.toString()}
+                              key={item.prescriberId}
                             >
-                              {item.clinicsId + ',' + item.clinicsName}
+                              {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
                         : null}

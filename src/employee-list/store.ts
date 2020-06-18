@@ -35,7 +35,9 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const param = this.state().get('searchForm').toJS();
+    const param = this.state()
+      .get('searchForm')
+      .toJS();
     this.dispatch('loading:start');
     const { res } = await webapi.fetchEmployList({
       ...param,
@@ -80,7 +82,10 @@ export default class AppStore extends Store {
         isMaster: isMaster
       });
       const parentId = departmentVOList.get(0)
-        ? departmentVOList.get(0).get('departmentId').toString()
+        ? departmentVOList
+            .get(0)
+            .get('departmentId')
+            .toString()
         : '';
       //默认展开第一个父部门极其下面的子部门
       if (parentId) {
@@ -108,7 +113,10 @@ export default class AppStore extends Store {
     ids.push(parentId);
     //筛选出目标的子部门
     const target = list.filter((vo) =>
-      vo.get('parentDepartmentIds').split('|').includes(parentId)
+      vo
+        .get('parentDepartmentIds')
+        .split('|')
+        .includes(parentId)
     );
     if (target.size > 0) {
       return target.reduce((pre, current) => {
@@ -161,7 +169,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.batchDimissionEmployees(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -179,7 +187,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.batchSetEmployee(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -199,7 +207,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.deleteEmployeeByIds(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -214,7 +222,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.enableEmployee(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -226,7 +234,7 @@ export default class AppStore extends Store {
     ids.push(id);
     const { res } = await webapi.enableEmployee(ids);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init();
     } else {
       message.error(res.message);
@@ -261,7 +269,7 @@ export default class AppStore extends Store {
       accountState
     );
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.switchModal('');
       this.init();
     } else {
@@ -283,7 +291,7 @@ export default class AppStore extends Store {
       accountState
     );
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.switchModal('');
       this.init();
     } else {
@@ -358,7 +366,7 @@ export default class AppStore extends Store {
       //取消编辑状态
 
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('操作成功');
+        message.success('save successful');
         this.transaction(() => {
           this.dispatch('edit', false);
           this.dispatch('modal:hide');
@@ -373,7 +381,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.saveEmployee(employeeForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.dispatch('modal:hide');
       this.init();
     } else {
@@ -442,7 +450,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('操作成功！');
+      message.success('save successful！');
       this.toggleAdjustModal();
       this.init();
     } else {
@@ -475,7 +483,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('操作成功！');
+      message.success('save successful！');
       this.toggleConnectModal();
       this.init();
     } else {
@@ -496,7 +504,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('操作成功！');
+      message.success('save successful！');
       //this.toggleConnectModal();
       this.init();
     } else {

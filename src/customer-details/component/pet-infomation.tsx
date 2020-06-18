@@ -211,6 +211,10 @@ class PetInfomation extends React.Component<any, any> {
               petForm: currentPet,
               currentBirthDay: currentPet.birthOfPets
             });
+          } else {
+            this.setState({
+              loading: false
+            });
           }
         } else {
           this.setState({
@@ -220,6 +224,9 @@ class PetInfomation extends React.Component<any, any> {
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -261,7 +268,7 @@ class PetInfomation extends React.Component<any, any> {
     let params = {
       customerPets: pets,
       customerPetsPropRelations: customerPetsPropRelations,
-      storeId: 10086,
+      storeId: 123456858,
       userId: this.props.customerAccount
     };
     webapi
@@ -355,18 +362,20 @@ class PetInfomation extends React.Component<any, any> {
           <Col span={3}>
             <h3>All Pets( {this.state.petList.length} )</h3>
             <ul>
-              {this.state.petList.map((item) => (
-                <li
-                  key={item.petsId}
-                  style={{
-                    cursor: 'pointer',
-                    color: item.petsId === petForm.petsId ? '#e2001a' : ''
-                  }}
-                  onClick={() => this.petsById(item.petsId)}
-                >
-                  {item.petsName}
-                </li>
-              ))}
+              {this.state.petList
+                ? this.state.petList.map((item) => (
+                    <li
+                      key={item.petsId}
+                      style={{
+                        cursor: 'pointer',
+                        color: item.petsId === petForm.petsId ? '#e2001a' : ''
+                      }}
+                      onClick={() => this.petsById(item.petsId)}
+                    >
+                      {item.petsName}
+                    </li>
+                  ))
+                : null}
             </ul>
           </Col>
           <Col span={20}>
@@ -400,11 +409,13 @@ class PetInfomation extends React.Component<any, any> {
                             });
                           }}
                         >
-                          {petsType.map((item) => (
-                            <Option value={item.value} key={item.id}>
-                              {item.value}
-                            </Option>
-                          ))}
+                          {petsType
+                            ? petsType.map((item) => (
+                                <Option value={item.value} key={item.id}>
+                                  {item.value}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>
@@ -413,7 +424,12 @@ class PetInfomation extends React.Component<any, any> {
                     <FormItem label="Pet Name">
                       {getFieldDecorator('petsName', {
                         rules: [
-                          { required: true, message: 'Please input Pet Name!' }
+                          { required: true, message: 'Please input Pet Name!' },
+
+                          {
+                            max: 50,
+                            message: 'Exceed maximum length!'
+                          }
                         ]
                       })(
                         <Input
@@ -444,11 +460,13 @@ class PetInfomation extends React.Component<any, any> {
                             });
                           }}
                         >
-                          {petGender.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.value}
-                            </Option>
-                          ))}
+                          {petGender
+                            ? petGender.map((item) => (
+                                <Option value={item.id} key={item.id}>
+                                  {item.value}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>
@@ -465,6 +483,7 @@ class PetInfomation extends React.Component<any, any> {
                           ]
                         })(
                           <Select
+                            showSearch
                             onChange={(value) => {
                               value = value === '' ? null : value;
                               this.onFormChange({
@@ -473,11 +492,13 @@ class PetInfomation extends React.Component<any, any> {
                               });
                             }}
                           >
-                            {dogBreed.map((item) => (
-                              <Option value={item.name} key={item.id}>
-                                {item.name}
-                              </Option>
-                            ))}
+                            {dogBreed
+                              ? dogBreed.map((item) => (
+                                  <Option value={item.name} key={item.id}>
+                                    {item.name}
+                                  </Option>
+                                ))
+                              : null}
                           </Select>
                         )}
                       </FormItem>
@@ -494,6 +515,7 @@ class PetInfomation extends React.Component<any, any> {
                           ]
                         })(
                           <Select
+                            showSearch
                             onChange={(value) => {
                               value = value === '' ? null : value;
                               this.onFormChange({
@@ -502,11 +524,13 @@ class PetInfomation extends React.Component<any, any> {
                               });
                             }}
                           >
-                            {catBreed.map((item) => (
-                              <Option value={item.name} key={item.id}>
-                                {item.name}
-                              </Option>
-                            ))}
+                            {catBreed
+                              ? catBreed.map((item) => (
+                                  <Option value={item.name} key={item.id}>
+                                    {item.name}
+                                  </Option>
+                                ))
+                              : null}
                           </Select>
                         )}
                       </FormItem>
@@ -535,11 +559,13 @@ class PetInfomation extends React.Component<any, any> {
                               });
                             }}
                           >
-                            {sizeArr.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
+                            {sizeArr
+                              ? sizeArr.map((item) => (
+                                  <Option value={item} key={item}>
+                                    {item}
+                                  </Option>
+                                ))
+                              : null}
                           </Select>
                         )}
                       </FormItem>
@@ -616,11 +642,13 @@ class PetInfomation extends React.Component<any, any> {
                             });
                           }}
                         >
-                          {customerPetsPropRelations.map((item) => (
-                            <Option value={item} key={item}>
-                              {item}
-                            </Option>
-                          ))}
+                          {customerPetsPropRelations
+                            ? customerPetsPropRelations.map((item) => (
+                                <Option value={item} key={item}>
+                                  {item}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       )}
                     </FormItem>

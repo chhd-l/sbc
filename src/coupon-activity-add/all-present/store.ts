@@ -2,7 +2,7 @@ import { Store } from 'plume2';
 import AllPresentActor from './actor/all-present-actor';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import {Const, history, util} from 'qmkit';
+import { Const, history, util } from 'qmkit';
 import { message, Modal } from 'antd';
 import * as webapi from './webapi';
 const info = Modal.info;
@@ -63,7 +63,7 @@ export default class AppStore extends Store {
       }
       levelList = levRes.res.context.storeLevelVOList;
       // 店铺等级转成平台等级格式,方便后面的业务逻辑公用
-      levelList.forEach(level => {
+      levelList.forEach((level) => {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
@@ -164,16 +164,14 @@ export default class AppStore extends Store {
     }
     res = res.res;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(activity.activityId ? '修改成功' : '保存成功');
+      message.success(activity.activityId ? 'save successful' : '保存成功');
       history.push({
         pathname: '/coupon-activity-list'
       });
     } else if (res.code == 'K-080106') {
       this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       info({
-        content: `${
-          res.errorData.length
-        }张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
+        content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
         okText: '好的'
       });
     } else if (res.code == 'K-080104') {

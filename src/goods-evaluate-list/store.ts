@@ -96,7 +96,10 @@ export default class AppStore extends Store {
    */
   onSelectOptionChange = (fieldOld, fieldNew) => {
     this.transaction(() => {
-      this.dispatch('form:field', { field: fieldNew, value: this.state().getIn(['form', fieldOld]) });
+      this.dispatch('form:field', {
+        field: fieldNew,
+        value: this.state().getIn(['form', fieldOld])
+      });
       this.dispatch('form:field', { field: fieldOld, value: null });
     });
   };
@@ -207,7 +210,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('cate: modal', false);
       this.init({ pageNum: 0, pageSize: 10 });
-      message.success('操作成功');
+      message.success('save successful');
     } else {
       message.error(res.message);
     }

@@ -96,8 +96,8 @@ export default class Customer extends React.Component<any, any> {
               >
                 Details
               </Link>
-              <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.customerId)}>Delete</a>
+              {/* <Divider type="vertical" />
+              <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>
           )
         }
@@ -235,47 +235,47 @@ export default class Customer extends React.Component<any, any> {
     });
     this.init({ pageNum: 1, pageSize: 10 });
   };
-  removeConsumer = (constomerId) => {
-    this.setState({
-      loading: true
-    });
-    let customerIds = [];
-    customerIds.push(constomerId);
-    let params = {
-      customerIds: customerIds,
-      userId: '10086'
-    };
-    webapi
-      .delCustomer(params)
-      .then((data) => {
-        if (data.res.code === 'K-000000') {
-          message.success('Successful');
-          this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
-        } else {
-          message.error('Unsuccessful');
-          this.setState({
-            loading: true
-          });
-        }
-      })
-      .catch((err) => {
-        message.error('Unsuccessful');
-        this.setState({
-          loading: true
-        });
-      });
-  };
+  // removeConsumer = (constomerId) => {
+  //   this.setState({
+  //     loading: true
+  //   });
+  //   let customerIds = [];
+  //   customerIds.push(constomerId);
+  //   let params = {
+  //     customerIds: customerIds,
+  //     userId: '10086'
+  //   };
+  //   webapi
+  //     .delCustomer(params)
+  //     .then((data) => {
+  //       if (data.res.code === 'K-000000') {
+  //         message.success('Successful');
+  //         this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
+  //       } else {
+  //         message.error('Unsuccessful');
+  //         this.setState({
+  //           loading: true
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       message.error('Unsuccessful');
+  //       this.setState({
+  //         loading: true
+  //       });
+  //     });
+  // };
 
-  showConfirm(id) {
-    const that = this;
-    confirm({
-      title: 'Are you sure to delete this item?',
-      onOk() {
-        return that.removeConsumer(id);
-      },
-      onCancel() {}
-    });
-  }
+  // showConfirm(id) {
+  //   const that = this;
+  //   confirm({
+  //     title: 'Are you sure to delete this item?',
+  //     onOk() {
+  //       return that.removeConsumer(id);
+  //     },
+  //     onCancel() {}
+  //   });
+  // }
 
   render() {
     const { customerTypeArr, columns } = this.state;

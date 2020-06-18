@@ -87,7 +87,6 @@ export default class SearchHead extends Component<any, any> {
       exportModalData,
       onExportModalHide
     } = this.props.relaxProps;
-
     let hasMenu = false;
     if (
       (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
@@ -243,7 +242,7 @@ export default class SearchHead extends Component<any, any> {
               </FormattedMessage>
             </FormItem>
 
-            <FormItem>
+            {/* <FormItem>
               <FormattedMessage id="order.orderSource">
                 {(txt) => (
                   <SelectGroup
@@ -280,7 +279,7 @@ export default class SearchHead extends Component<any, any> {
                   </SelectGroup>
                 )}
               </FormattedMessage>
-            </FormItem>
+            </FormItem> */}
 
             <FormItem>
               <Input
@@ -510,8 +509,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: <FormattedMessage id="order.exportFilterOrder" />,
-      byIdsTitle: <FormattedMessage id="order.exportSelectedOrder" />,
+      byParamsTitle: 'Export filtered orders',
+      byIdsTitle: 'Export selected order',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

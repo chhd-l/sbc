@@ -48,7 +48,7 @@ export function basicDetailsUpdate(filterParams = {}) {
  * @param filterParams
  */
 export function fetchClinicList(filterParams = {}) {
-  return Fetch<TResult>('/prescriber/listPage', {
+  return Fetch<TResult>('/prescriber/listAll', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -178,6 +178,17 @@ export function addOrUpdatePaymentMethod(param) {
     })
   });
 }
+//删除Customer
+
+export function delCustomer(filterParams = {}) {
+  return Fetch<TResult>('/customer', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'
 

@@ -397,7 +397,10 @@ export default class SearchList extends React.Component<any, any> {
                           </AuthWrapper>
                         )}
 
-                        {returnType == 'REFUND' && returnFlowState == 'AUDIT' && (
+                        {((returnType == 'REFUND' &&
+                          returnFlowState == 'AUDIT') ||
+                          (returnType == 'RETURN' &&
+                            returnFlowState == 'RECEIVED')) && (
                           <AuthWrapper functionName="rolf005">
                             <a
                               href="javascript:void(0)"

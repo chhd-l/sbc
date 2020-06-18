@@ -201,7 +201,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
       message.error(res.message);
@@ -230,10 +230,10 @@ export default class AppStore extends Store {
   };
 
   /**
-   * 操作成功提示
+   * save successful提示
    */
   successMsgThenInit = () => {
-    message.success('操作成功');
+    message.success('save successful');
     this.init({ pageNum: 0, pageSize: 10 });
   };
 }

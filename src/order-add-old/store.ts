@@ -443,8 +443,8 @@ export default class AppStore extends Store {
       } else {
         const herePrice =
           Math.round(
-            Math.floor(tradeItem.get('splitPrice') / total * 1000000) /
-              1000000 *
+            (Math.floor((tradeItem.get('splitPrice') / total) * 1000000) /
+              1000000) *
               newTotal *
               100
           ) / 100;
@@ -842,7 +842,7 @@ export default class AppStore extends Store {
   addCustomer = async (customer) => {
     const { res } = await webapi.addCustomer(customer);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('操作成功');
+      message.success('save successful');
       this.switchCustomerFormVisible(false);
     } else {
       message.error(res.message);

@@ -342,28 +342,28 @@ class BillingInfomation extends React.Component<any, any> {
               style={{
                 display: this.state.cardList.length === 0 ? 'none' : 'block'
               }}
-              extra={
-                <div
-                  style={{
-                    display:
-                      this.props.customerType === 'Guest' ? 'none' : 'block'
-                  }}
-                >
-                  {/* <Checkbox
-                    checked={this.state.isDefault}
-                    onChange={() => this.clickDefault()}
-                  >
-                    Set default payment method
-                  </Checkbox> */}
-                  <Button
-                    type="danger"
-                    icon="close"
-                    onClick={() => this.delCard()}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              }
+              // extra={
+              //   <div
+              //     style={{
+              //       display:
+              //         this.props.customerType === 'Guest' ? 'none' : 'block'
+              //     }}
+              //   >
+              //     {/* <Checkbox
+              //       checked={this.state.isDefault}
+              //       onChange={() => this.clickDefault()}
+              //     >
+              //       Set default payment method
+              //     </Checkbox> */}
+              //     <Button
+              //       type="danger"
+              //       icon="close"
+              //       onClick={() => this.delCard()}
+              //     >
+              //       Delete
+              //     </Button>
+              //   </div>
+              // }
             >
               <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                 <Row gutter={16}>
@@ -646,6 +646,17 @@ class BillingInfomation extends React.Component<any, any> {
                       >
                         Save
                       </Button> */}
+
+                      <Button
+                        style={{
+                          marginRight: '20px',
+                          display:
+                            this.props.customerType === 'Guest' ? 'none' : null
+                        }}
+                        onClick={() => this.delCard()}
+                      >
+                        Delete
+                      </Button>
 
                       <Button>
                         <Link to="/customer-list">Cancel</Link>

@@ -104,16 +104,16 @@ export default class TodoItems extends React.Component<any, any> {
         {/* 配置主页 */}
         <a href="javascript:;" className="configHome" onClick={this.showModal}>
           <Icon type="bars" style={{ fontSize: 16, color: '#F56C1D' }} />
-          <p className="configName">配置主页</p>
+          <p className="configName">Configure home</p>
         </a>
         <Modal
           maskClosable={true}
           style={{ position: 'fixed', right: 0, top: 64 }}
           title={
             <div>
-              <p>配置主页控制面板</p>
+              <p>Configure home control panel</p>
               <p style={{ color: '#666', fontSize: 12, marginTop: 10 }}>
-                数据看板
+                Data Kanban
               </p>
             </div>
           }
@@ -166,14 +166,14 @@ export default class TodoItems extends React.Component<any, any> {
 
           {todoVisible ? (
             <div className="homeItem pending">
-              <h3>待处理事项</h3>
+              <h3>Pending matters</h3>
               <div>
                 {fOrderList002 ? (
                   <a
                     onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
                     className="dataItem"
                   >
-                    <label>待审核订单</label>
+                    <label>Pending approval orders</label>
                     <strong>{tradeTodo.get('waitAudit')}</strong>
                   </a>
                 ) : null}
@@ -182,7 +182,7 @@ export default class TodoItems extends React.Component<any, any> {
                     onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                     className="dataItem"
                   >
-                    <label>待付款订单</label>
+                    <label>Pending payment orders</label>
                     <strong>{tradeTodo.get('waitPay')}</strong>
                   </a>
                 ) : null}
@@ -193,7 +193,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待发货订单</label>
+                    <label>Pending delivery orders</label>
                     <strong>{tradeTodo.get('waitDeliver')}</strong>
                   </a>
                 ) : null}
@@ -204,7 +204,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待收货订单</label>
+                    <label>Pending receive orders</label>
                     <strong>{tradeTodo.get('waitReceiving')}</strong>
                   </a>
                 ) : null}
@@ -215,7 +215,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待审核退单</label>
+                    <label>Pending Refund Orders</label>
                     <strong>{returnTodo.get('waitAudit')}</strong>
                   </a>
                 ) : null}
@@ -226,7 +226,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待填写物流退单</label>
+                    <label>Pending fill logistics return</label>
                     <strong>{returnTodo.get('waitFillLogistics')}</strong>
                   </a>
                 ) : null}
@@ -237,7 +237,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待收货退单</label>
+                    <label>Pending receive chargeback</label>
                     <strong>{returnTodo.get('waitReceiving')}</strong>
                   </a>
                 ) : null}
@@ -248,7 +248,7 @@ export default class TodoItems extends React.Component<any, any> {
                     }
                     className="dataItem"
                   >
-                    <label>待退款退单</label>
+                    <label>Pending refund chargeback</label>
                     <strong>{returnTodo.get('waitRefund')}</strong>
                   </a>
                 ) : null}
@@ -257,7 +257,7 @@ export default class TodoItems extends React.Component<any, any> {
                     onClick={() => this._toCustomerList({ invoiceState: '0' })}
                     className="dataItem"
                   >
-                    <label>待开票订单</label>
+                    <label>Pending Invoice Orders</label>
                     <strong>{goodsTodo.get('waitInvoice')}</strong>
                   </a>
                 ) : null}
@@ -266,7 +266,7 @@ export default class TodoItems extends React.Component<any, any> {
                     onClick={() => this._toFinanceTax({ key: '2' })}
                     className="dataItem"
                   >
-                    <label>待审核商品</label>
+                    <label>Pending approval products</label>
                     <strong>{goodsTodo.get('waitGoods')}</strong>
                   </a>
                 ) : null}
@@ -275,7 +275,7 @@ export default class TodoItems extends React.Component<any, any> {
                     onClick={() => this._toOrderTicket({ invoiceState: '0' })}
                     className="dataItem"
                   >
-                    <label>待结算账单</label>
+                    <label>Pending Settlement bill</label>
                     <strong>{goodsTodo.get('waitSettle')}</strong>
                   </a>
                 ) : null}
@@ -295,22 +295,22 @@ export default class TodoItems extends React.Component<any, any> {
           )}
 
           <div className="homeItem peopleInfo">
-            <h3>员工信息</h3>
+            <h3>Customer Information</h3>
             <div className="proPeople">
               <div className="peopleDetails">
-                <label>员工账号</label>
+                <label>Customer Account</label>
                 <strong>{employee.get('accountName')}</strong>
               </div>
               <div className="peopleDetails">
-                <label>员工姓名</label>
+                <label>Customer name</label>
                 <strong>{employee.get('employeeName')}</strong>
               </div>
               <div className="peopleDetails">
-                <label>手机号</label>
+                <label>Phone number</label>
                 <strong>{phone}</strong>
               </div>
               <div className="peopleDetails">
-                <label>员工角色</label>
+                <label>Customer Role</label>
                 <strong>
                   {employee.get('isMasterAccount') == 1
                     ? '系统管理员'

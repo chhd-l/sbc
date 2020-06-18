@@ -7,11 +7,11 @@ import { Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 enum operatorDic {
-  BOSS = '平台',
-  CUSTOMER = '客户',
-  THIRD = '第三方',
-  SUPPLIER = '商家',
-  PLATFORM = '平台'
+  BOSS = 'Boss',
+  PLATFORM = 'Platform',
+  CUSTOMER = 'Customer',
+  THIRD = 'Third',
+  SUPPLIER = 'Supplier'
 }
 
 const columns = [

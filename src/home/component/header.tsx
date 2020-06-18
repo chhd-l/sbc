@@ -32,14 +32,14 @@ export default class Header extends React.Component<any, any> {
           <div>{header.get('text')}</div>
         </div>
         <Link to={'/goods-evaluate-list'}>
-          <div className="store-mess">
-            <div className="store-score">店铺评分</div>
+          <div className="store-mess" style={{ height: '120px' }}>
+            <div className="store-score">Store score</div>
             <div className="store-number">
               {storeEvaluateSum.sumCompositeScore
                 ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
                 : '-'}
             </div>
-            <div className="store-date">近180日</div>
+            <div className="store-date">Nearly 180 days</div>
           </div>
         </Link>
       </div>

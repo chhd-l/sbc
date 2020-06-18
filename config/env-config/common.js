@@ -23,7 +23,7 @@ const Common = {
     AUDIT: '待填写物流信息',
     DELIVERED: '待商家收货',
     RECEIVED: '待退款',
-    COMPLETED: '已完成',
+    COMPLETED: 'Finished',
     REJECT_RECEIVE: '拒绝收货',
     REJECT_REFUND: '拒绝退款',
     VOID: '已作废',
@@ -43,7 +43,7 @@ const Common = {
     0: '待退款',
     3: '待退款',
     1: '拒绝退款',
-    2: '已退款'
+    2: 'Refund'
   },
   // 支付方式
   payType: {

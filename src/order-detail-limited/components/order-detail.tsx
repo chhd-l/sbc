@@ -463,7 +463,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   verify(tid);
                 }}
               >
-                修改
+                Modify
               </a>
             </AuthWrapper>
           )}
@@ -555,7 +555,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               href="javascript:void(0)"
               style={styles.pr20}
             >
-              确认收货
+              Confirm Receipt
             </a>
           </AuthWrapper>
         </div>

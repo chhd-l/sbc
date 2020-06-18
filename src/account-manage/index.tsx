@@ -25,10 +25,10 @@ export default class AccountManage extends React.Component<any, any> {
       <div className="container">
         <Headline title="账号管理" />
         <Tabs>
-          <Tabs.TabPane tab="账号信息" key="1">
+          <Tabs.TabPane tab="Account information" key="1">
             <AccountInfoForm />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="安全中心" key="2">
+          <Tabs.TabPane tab="security center" key="2">
             <SecurityCenter />
           </Tabs.TabPane>
         </Tabs>

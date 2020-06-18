@@ -9,12 +9,12 @@ import { Table } from 'antd';
 
 const skuSalesColumns = [
   {
-    title: '序号',
+    title: 'serial number',
     dataIndex: 'serialNumber',
     key: 'serialNumber'
   },
   {
-    title: '商品信息',
+    title: 'Product information',
     dataIndex: 'skuName',
     key: 'skuName',
     width: 400,
@@ -26,23 +26,23 @@ const skuSalesColumns = [
     )
   },
   {
-    title: 'SKU编码',
+    title: 'SKU coding',
     dataIndex: 'skuNo',
     key: 'skuNo'
   },
   {
-    title: '下单笔数',
+    title: 'Order number',
     dataIndex: 'skuOrderCount',
     key: 'skuOrderCount'
   },
   {
-    title: '下单金额',
+    title: 'Order amount',
     dataIndex: 'skuOrderAmt',
     key: 'skuOrderAmt',
     render: (_text, record) => '￥' + (record.skuOrderAmt || 0).toFixed(2)
   },
   {
-    title: '下单件数',
+    title: 'The quantity of order',
     dataIndex: 'skuOrderNum',
     key: 'skuOrderNum'
   }
@@ -50,22 +50,22 @@ const skuSalesColumns = [
 
 const customerOrderColumns = [
   {
-    title: '序号',
+    title: 'serial number',
     dataIndex: 'serialNumber',
     key: 'serialNumber'
   },
   {
-    title: '客户名称',
+    title: 'Customer name',
     dataIndex: 'customerName',
     key: 'customerName'
   },
   {
-    title: '下单笔数',
+    title: 'Order number',
     dataIndex: 'tradeNum',
     key: 'tradeNum'
   },
   {
-    title: '下单金额',
+    title: 'Order amount',
     dataIndex: 'tradeAmount',
     key: 'tradeAmount',
     render: (_text, record) => '￥' + (record.tradeAmount || 0).toFixed(2)
@@ -145,7 +145,7 @@ export default class Ranking extends React.Component<any, any> {
           <AuthWrapper functionName="f_goods_watch_1">
             <div className="flowBox">
               <div className="homeItem" style={{ flex: 1 }}>
-                <h3>商品销售排行Top10</h3>
+                <h3>Top10 products by sales</h3>
                 <Table
                   dataSource={skuRanking ? skuRanking : null}
                   columns={skuSalesColumns}
@@ -160,7 +160,7 @@ export default class Ranking extends React.Component<any, any> {
           {customerOrderRanking ? (
             <AuthWrapper functionName="f_customer_watch_1">
               <div className="homeItem" style={{ flex: 1 }}>
-                <h3>客户订货排行Top10</h3>
+                <h3>Customer order Top10</h3>
                 <Table
                   dataSource={customerRanking.toJS()}
                   columns={customerOrderColumns}

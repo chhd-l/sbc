@@ -1,9 +1,9 @@
-import {IOptions, Store} from 'plume2';
-import {fromJS} from 'immutable';
-import {message, Modal} from 'antd';
+import { IOptions, Store } from 'plume2';
+import { fromJS } from 'immutable';
+import { message, Modal } from 'antd';
 
 import moment from 'moment';
-import {cache, checkAuth, Const} from 'qmkit';
+import { cache, checkAuth, Const } from 'qmkit';
 import * as webapi from './webapi';
 import TodoItemsActor from './actor/todo-items-actor';
 import DataBoardActor from './actor/data-board';
@@ -23,36 +23,51 @@ const SUCCESS = Modal.success;
 const dataBoardUi = {
   f_trade_watch_1: [
     {
-      label: '交易概况',
+      label: 'Transaction Profile',
       dataKey: 'tradeOview',
       priority: 2,
       onOff: true,
       isOview: true
     },
-    { label: '交易报表', dataKey: 'tradeReport', priority: 6, onOff: true },
-    { label: '交易趋势', dataKey: 'tradeTrends', priority: 9, onOff: true }
+    {
+      label: 'Transaction Reports',
+      dataKey: 'tradeReport',
+      priority: 6,
+      onOff: true
+    },
+    { label: 'Trading trend', dataKey: 'tradeTrends', priority: 9, onOff: true }
   ],
   f_flow_watch_1: [
     {
-      label: '流量概况',
+      label: 'Flow profile',
       dataKey: 'trafficOview',
       priority: 1,
       onOff: true,
       isOview: true
     },
-    { label: '流量报表', dataKey: 'trafficReport', priority: 5, onOff: true },
-    { label: '流量趋势', dataKey: 'trafficTrends', priority: 8, onOff: true }
+    {
+      label: 'Flow Reports',
+      dataKey: 'trafficReport',
+      priority: 5,
+      onOff: true
+    },
+    {
+      label: 'Traffic trend',
+      dataKey: 'trafficTrends',
+      priority: 8,
+      onOff: true
+    }
   ],
   f_goods_watch_1: [
     {
-      label: '商品概况',
+      label: 'Commodity Profile',
       dataKey: 'skuOview',
       priority: 3,
       onOff: true,
       isOview: true
     },
     {
-      label: '商品销量排行',
+      label: 'Product sales ranking',
       dataKey: 'skuSaleRanking',
       priority: 11,
       onOff: true
@@ -60,26 +75,26 @@ const dataBoardUi = {
   ],
   f_customer_watch_1: [
     {
-      label: '客户概况',
+      label: 'Customer Profile',
       dataKey: 'customerOview',
       priority: 4,
       onOff: true,
       isOview: true
     },
     {
-      label: '客户增长报表',
+      label: 'Customer growth report',
       dataKey: 'customerGrowthReport',
       priority: 7,
       onOff: true
     },
     {
-      label: '客户增长趋势',
+      label: 'Customer growth trend',
       dataKey: 'customerGrowthTrends',
       priority: 10,
       onOff: true
     },
     {
-      label: '客户订单排行',
+      label: 'Customer order ranking',
       dataKey: 'customerOrderRanking',
       priority: 12,
       onOff: true
@@ -114,7 +129,7 @@ export default class AppStore extends Store {
       new HomeAuthActor(),
       new HeaderActor(),
       new SettlementActor(),
-      new EvaluateSumActor(),
+      new EvaluateSumActor()
     ];
   }
 
@@ -124,7 +139,7 @@ export default class AppStore extends Store {
   init = async () => {
     //主页面头部展示
     const noop = new Promise((resolve) => resolve());
-    const param = {} as any ;
+    const param = {} as any;
     param.scoreCycle = 2;
     const results = (await Promise.all([
       webapi.queryStoreState(),
@@ -147,7 +162,7 @@ export default class AppStore extends Store {
       checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop,
       checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop,
       webapi.queryToTalSettlement(),
-      webapi.fetchStoreEvaluateSum(param),
+      webapi.fetchStoreEvaluateSum(param)
     ])) as any;
     if (
       results[0] &&
@@ -165,7 +180,7 @@ export default class AppStore extends Store {
         postTxt: '',
         midErr: '',
         lastTxt: '',
-        text: `店铺有效期至 ${moment(result.contractEndDate).format(
+        text: `Store valid until ${moment(result.contractEndDate).format(
           Const.TIME_FORMAT
         )}`
       };
@@ -174,7 +189,7 @@ export default class AppStore extends Store {
         case 0:
           //开店，未过期，则正常营业
           if (overDueDay >= 9) {
-            header.preTxt = '店铺营业中';
+            header.preTxt = 'Store Business';
           } else {
             if (overDueDay >= 0) {
               header.preTxt = '店铺还有';
@@ -198,7 +213,6 @@ export default class AppStore extends Store {
           break;
       }
     }
-
 
     //员工信息
     this.dispatch('home-actor:setEmployee', results[1].res);
@@ -488,17 +502,18 @@ export default class AppStore extends Store {
       this.dispatch('settlement: set', settlement);
     }
 
-      if (
-          results[20] &&
-          results[20].res &&
-          results[20].res.code === Const.SUCCESS_CODE
-      ) {
-          this.dispatch('storeEvaluateSum:init', results[20].res.context.storeEvaluateSumVO || {});
-      }
+    if (
+      results[20] &&
+      results[20].res &&
+      results[20].res.code === Const.SUCCESS_CODE
+    ) {
+      this.dispatch(
+        'storeEvaluateSum:init',
+        results[20].res.context.storeEvaluateSumVO || {}
+      );
+    }
     this.freshDataBoard();
   };
-
-
 
   /**
    * 刷新主页控制看板

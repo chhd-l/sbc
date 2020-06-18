@@ -75,10 +75,7 @@ export default class OrderDelivery extends React.Component<any, any> {
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
-            dataSource={detail
-              .get('tradeItems')
-              .concat(gifts)
-              .toJS()}
+            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
             pagination={false}
             bordered
           />
@@ -127,9 +124,10 @@ export default class OrderDelivery extends React.Component<any, any> {
                     <div style={styles.stateBox}>
                       {logistic ? (
                         <label style={styles.information}>
-                          【物流信息】发货日期：{deliverTime}
-                          物流公司：{logistic.get('logisticCompanyName')}{' '}
-                          物流单号：{logistic.get('logisticNo')}
+                          【Logistics information】delivery date：{deliverTime}
+                          Logistics company：
+                          {logistic.get('logisticCompanyName')} Logistics single
+                          number：{logistic.get('logisticNo')}
                           <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
@@ -163,9 +161,9 @@ export default class OrderDelivery extends React.Component<any, any> {
           </div>
         </div>
 
-        <Modal  maskClosable={false}
+        <Modal
+          maskClosable={false}
           title="发货"
-           
           visible={modalVisible}
           onCancel={this._hideDeliveryModal}
           onOk={() => {

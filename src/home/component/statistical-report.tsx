@@ -181,7 +181,7 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <strong>{trafficNum.get('totalPv') || 0}</strong>
                 </div>
               </div>
-              <div className="dateBg">
+              {/* <div className="dateBg">
                 <div className="dataItem">
                   <label>商品访客数</label>
                   <strong>{trafficNum.get('skuTotalUv') || 0}</strong>
@@ -190,7 +190,7 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>商品浏览量</label>
                   <strong>{trafficNum.get('skuTotalPv') || 0}</strong>
                 </div>
-              </div>
+              </div> */}
             </div>
           </AuthWrapper>
         ) : null}
@@ -208,7 +208,8 @@ export default class StatisticalReport extends React.Component<any, any> {
                 <div className="dataItem">
                   <label>下单金额</label>
                   <strong>
-                    ￥{tradeNum
+                    ￥
+                    {tradeNum
                       ? (tradeNum.get('orderAmt') || 0).toFixed(2)
                       : 0.0}
                   </strong>
@@ -224,10 +225,28 @@ export default class StatisticalReport extends React.Component<any, any> {
                 <div className="dataItem">
                   <label>付款金额</label>
                   <strong>
-                    ￥{tradeNum
+                    ￥
+                    {tradeNum
                       ? (tradeNum.get('payOrderAmt') || 0).toFixed(2)
                       : 0.0}
                   </strong>
+                </div>
+              </div>
+            </div>
+          </AuthWrapper>
+        ) : null}
+        {customerOview ? (
+          <AuthWrapper functionName="f_customer_watch_1">
+            <div className="homeItem todayData">
+              <h3>客户概况&nbsp;今日</h3>
+              <div className="dateBg">
+                <div className="dataItem">
+                  <label>客户总数</label>
+                  <strong>{customerNum.get('cusAllCount') || 0}</strong>
+                </div>
+                <div className="dataItem">
+                  <label>新增客户数</label>
+                  <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
                 </div>
               </div>
             </div>
@@ -247,7 +266,7 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
                 </div>
               </div>
-              <div className="dateBg">
+              {/* <div className="dateBg">
                 <div className="dataItem">
                   <label>已审核商品SKU</label>
                   <strong>{skuNum && (skuNum.get('checkedTotal') || 0)}</strong>
@@ -256,27 +275,7 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>销售中商品SKU</label>
                   <strong>{skuNum && (skuNum.get('saleTotal') || 0)}</strong>
                 </div>
-              </div>
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {customerOview ? (
-          <AuthWrapper functionName="f_customer_watch_1">
-            <div className="homeItem todayData">
-              <h3>客户概况&nbsp;今日</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>客户总数</label>
-                  <strong>{customerNum.get('cusAllCount') || 0}</strong>
-                </div>
-                <div className="dataItem" />
-              </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>新增客户数</label>
-                  <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
-                </div>
-              </div>
+              </div> */}
             </div>
           </AuthWrapper>
         ) : null}

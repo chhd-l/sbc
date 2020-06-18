@@ -858,8 +858,9 @@ html {
   }
 }
 
-.pending {
-  width       : calc(75% - 10px);
+.pending,
+.peopleInfo {
+  width       : calc(65% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
@@ -895,7 +896,7 @@ html {
 }
 
 .peopleInfo {
-  width       : calc(25% - 10px);
+  width       : calc(35% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
@@ -1009,6 +1010,24 @@ html {
       font-size : 16px;
       margin-top: 5px;
     }
+  }
+}
+
+.prescriberInfo {
+  padding: 10px 10px 10px 10px !important;
+  .prescriberLog {
+    width: 100%;
+    margin-top: 20px;
+  }
+  .prescriberWord {
+    margin-top: 30px;
+    .prescriberLable {
+      color: #666;
+      font-size: 12px;
+    }
+  }
+  .ant-divider, .ant-divider-vertical {
+    height: 11em
   }
 }
 

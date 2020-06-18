@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 
 import { history, noop } from 'qmkit';
 import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 @Relax
 export default class TodoItems extends React.Component<any, any> {
   state = { visible: false };
@@ -88,7 +89,6 @@ export default class TodoItems extends React.Component<any, any> {
       todoVisible,
       settlement
     } = this.props.relaxProps;
-    debugger;
     const phone = employee.get('phone') || '无';
     let total = 0;
     let settled = 0;
@@ -169,7 +169,7 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="homeItem pending">
               <h3>待处理事项</h3>
               <div>
-                {fOrderList002 ? (
+                {/* {fOrderList002 ? (
                   <a
                     onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
                     className="dataItem"
@@ -177,11 +177,12 @@ export default class TodoItems extends React.Component<any, any> {
                     <label>待审核订单</label>
                     <strong>{tradeTodo.get('waitAudit')}</strong>
                   </a>
-                ) : null}
+                ) : null} */}
                 {fOrderList001 ? (
                   <a
                     onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>待付款订单</label>
                     <strong>{tradeTodo.get('waitPay')}</strong>
@@ -193,6 +194,7 @@ export default class TodoItems extends React.Component<any, any> {
                       this._toOrderList({ key: 'flowState-AUDIT' })
                     }
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>待发货订单</label>
                     <strong>{tradeTodo.get('waitDeliver')}</strong>
@@ -204,12 +206,13 @@ export default class TodoItems extends React.Component<any, any> {
                       this._toOrderList({ key: 'flowState-DELIVERED' })
                     }
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>待收货订单</label>
                     <strong>{tradeTodo.get('waitReceiving')}</strong>
                   </a>
                 ) : null}
-                {rolf002 ? (
+                {/* {rolf002 ? (
                   <a
                     onClick={() =>
                       this._toReturnList({ key: 'flowState-INIT' })
@@ -279,7 +282,7 @@ export default class TodoItems extends React.Component<any, any> {
                     <label>待结算账单</label>
                     <strong>{goodsTodo.get('waitSettle')}</strong>
                   </a>
-                ) : null}
+                ) : null} */}
               </div>
             </div>
           ) : (
@@ -295,7 +298,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           )}
 
-          <div className="homeItem peopleInfo">
+          {/* <div className="homeItem peopleInfo">
             <h3>员工信息</h3>
             <div className="proPeople">
               <div className="peopleDetails">
@@ -318,6 +321,22 @@ export default class TodoItems extends React.Component<any, any> {
                     : employee.get('roleName')}
                 </strong>
               </div>
+            </div>
+          </div> */}
+          <div className="homeItem peopleInfo">
+            <h3>Prescriber概况</h3>
+            <div>
+              <a className="dataItem" style={{ width: '50%' }}>
+                <label>总计</label>
+                <strong>{tradeTodo.get('waitPay')}</strong>
+              </a>
+              <a className="dataItem" style={{ width: '50%' }}>
+                <label>
+                  总计活跃(
+                  <FormattedMessage id="last180" />)
+                </label>
+                <strong>{tradeTodo.get('waitPay')}</strong>
+              </a>
             </div>
           </div>
         </div>

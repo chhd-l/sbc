@@ -1,9 +1,9 @@
-import {IOptions, Store} from 'plume2';
-import {fromJS} from 'immutable';
-import {message, Modal} from 'antd';
+import { IOptions, Store } from 'plume2';
+import { fromJS } from 'immutable';
+import { message, Modal } from 'antd';
 
 import moment from 'moment';
-import {cache, checkAuth, Const} from 'qmkit';
+import { cache, checkAuth, Const } from 'qmkit';
 import * as webapi from './webapi';
 import TodoItemsActor from './actor/todo-items-actor';
 import DataBoardActor from './actor/data-board';
@@ -114,7 +114,7 @@ export default class AppStore extends Store {
       new HomeAuthActor(),
       new HeaderActor(),
       new SettlementActor(),
-      new EvaluateSumActor(),
+      new EvaluateSumActor()
     ];
   }
 
@@ -124,7 +124,7 @@ export default class AppStore extends Store {
   init = async () => {
     //主页面头部展示
     const noop = new Promise((resolve) => resolve());
-    const param = {} as any ;
+    const param = {} as any;
     param.scoreCycle = 2;
     const results = (await Promise.all([
       webapi.queryStoreState(),
@@ -147,7 +147,7 @@ export default class AppStore extends Store {
       checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop,
       checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop,
       webapi.queryToTalSettlement(),
-      webapi.fetchStoreEvaluateSum(param),
+      webapi.fetchStoreEvaluateSum(param)
     ])) as any;
     if (
       results[0] &&
@@ -199,9 +199,9 @@ export default class AppStore extends Store {
       }
     }
 
-
     //员工信息
     this.dispatch('home-actor:setEmployee', results[1].res);
+    sessionStorage.setItem('PrescriberId', results[1].res.clinicsId); // home 二维码
     //订单todo
     if (
       results[2] &&
@@ -322,10 +322,10 @@ export default class AppStore extends Store {
       results[11].res &&
       results[11].res.code === Const.SUCCESS_CODE
     ) {
-      let flowList = results[11].res.context.flowList;
+      let flowList = results[11].res.context.flowList.reverse();
       const length = flowList.length;
       let flowTrendData = flowList
-        .slice(length - 10, length)
+        .slice(length >= 10 ? length - 10 : 0, length)
         .map((flow, index) => {
           return {
             key: index,
@@ -338,7 +338,7 @@ export default class AppStore extends Store {
         });
       this.dispatch(
         'trend-actor:mergeTrend',
-        fromJS({ flowTrendData: flowTrendData })
+        fromJS({ flowTrendData: flowTrendData.reverse() })
       );
     }
     //交易报表 近10日
@@ -369,10 +369,10 @@ export default class AppStore extends Store {
       results[13].res &&
       results[13].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[13].res.context;
+      let context = results[13].res.context.reverse();
       const length = context.length;
       let tradeTrendData = context
-        .slice(length - 10, length)
+        .slice(length >= 10 ? length - 10 : 0, length)
         .map((order, index) => {
           return {
             key: index,
@@ -385,7 +385,7 @@ export default class AppStore extends Store {
         });
       this.dispatch(
         'trend-actor:mergeTrend',
-        fromJS({ tradeTrendData: tradeTrendData })
+        fromJS({ tradeTrendData: tradeTrendData.reverse() })
       );
     }
     //客户增长报表
@@ -488,17 +488,18 @@ export default class AppStore extends Store {
       this.dispatch('settlement: set', settlement);
     }
 
-      if (
-          results[20] &&
-          results[20].res &&
-          results[20].res.code === Const.SUCCESS_CODE
-      ) {
-          this.dispatch('storeEvaluateSum:init', results[20].res.context.storeEvaluateSumVO || {});
-      }
+    if (
+      results[20] &&
+      results[20].res &&
+      results[20].res.code === Const.SUCCESS_CODE
+    ) {
+      this.dispatch(
+        'storeEvaluateSum:init',
+        results[20].res.context.storeEvaluateSumVO || {}
+      );
+    }
     this.freshDataBoard();
   };
-
-
 
   /**
    * 刷新主页控制看板

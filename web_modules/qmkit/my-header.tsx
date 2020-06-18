@@ -1,13 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Dropdown, Icon, message } from 'antd';
+import { Layout, Menu, Dropdown, Icon, message, Button } from 'antd';
 const { Header } = Layout;
 import { history, cache, util } from 'qmkit';
 import QRCode from 'qrcode';
+import copy from 'copy-to-clipboard';
 
 export default class MyHeader extends React.PureComponent<any, any> {
   constructor(props) {
     super(props);
+    this.state = {
+      isPrescriber : false,
+      qrCodeLink: '',
+      url: ''
+    }
   }
 
   render() {
@@ -97,6 +103,29 @@ export default class MyHeader extends React.PureComponent<any, any> {
       }
     }
 
+    let qrCodeLinkPreview =   
+    <Menu className="menuPreview">
+          <Menu.Item key="0">
+          <div style={{ textAlign: 'center' }}>
+                {this.state.qrCodeLink ? (
+                  <img src={this.state.qrCodeLink} alt="" style={{ width:'50%' }}/>
+                ) : null}
+                {this.state.url ? (
+                  <div>
+                    {this.state.url}
+                    <Button
+                      style={{ marginLeft: '10px' }}
+                      onClick={() => this.handleCopy(this.state.url)}
+                      size="small"
+                    >
+                      copy
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+          </Menu.Item>
+    </Menu>
+
     let menuPreview = null;
     if (pcDom || h5Dom || miniProgramDom) {
       menuPreview = (
@@ -164,17 +193,17 @@ export default class MyHeader extends React.PureComponent<any, any> {
               }
             />
           </a>
-          {baseConfig && (
+          {baseConfig &&(this.state.isPrescriber ?  
             <a className="ant-dropdown-link" href="https://shopuat.466920.com/" target="_blank">
               <Icon type="eye-o" /><span style={styles.dropdownText}>Preview</span>
               {/* <Icon type="down" /> */}
             </a>
-
-            // <Dropdown overlay={menuPreview} trigger={['click']}>
-            //   <a className="ant-dropdown-link" href="#">
-            //     <Icon type="eye-o" /><span style={styles.dropdownText}>Preview</span><Icon type="down" />
-            //   </a>
-            // </Dropdown>
+          : 
+            <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
+              <a className="ant-dropdown-link" href="#" onClick={() => this._handlePreview()}>
+                <Icon type="eye-o" /><span style={styles.dropdownText}>Preview</span><Icon type="down" />
+              </a>
+            </Dropdown>
           )}
         </div>
         <div>
@@ -196,6 +225,23 @@ export default class MyHeader extends React.PureComponent<any, any> {
    */
   _handleLogout = () => {
     util.logout();
+  };
+
+  _handlePreview = async () => {
+    var prescriber = JSON.parse(sessionStorage.getItem(cache.PRESCRIBER_DATA)); 
+    if(prescriber) {
+      this.setState({
+        // isPrescriber : true,
+        qrCodeLink: prescriber.qrCodeLink,
+        url: prescriber.url,
+      });
+    }
+  }
+
+  handleCopy = (value) => {
+    if (copy(value)) {
+      message.success('Successful');
+    } else message.error('Unsuccessful');
   };
 }
 

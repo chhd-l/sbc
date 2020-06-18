@@ -163,13 +163,12 @@ export default class OrderDelivery extends React.Component<any, any> {
           </div>
         </div>
 
-        <Modal  maskClosable={false}
+        <Modal
+          maskClosable={false}
           title="发货"
-           
           visible={modalVisible}
           onCancel={this._hideDeliveryModal}
           onOk={() => {
-            debugger;
             this['_receiveAdd'].validateFields(null, (errs, values) => {
               //如果校验通过
               if (!errs) {

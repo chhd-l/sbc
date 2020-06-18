@@ -282,7 +282,8 @@ export default class AppStore extends Store {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref = Const.HOST + `/trade/export/params/${encrypted}`;
+          const exportHref =
+            Const.HOST + `/trade/exportPrescriber/params/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

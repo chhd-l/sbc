@@ -70,14 +70,14 @@ export default class SearchForm extends React.Component<any, any> {
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'customerTypeId',
+                field: 'consumerType',
                 value
               });
             }}
           >
             <Option value="">All</Option>
             {customerTypeArr.map((item) => (
-              <Option value={item.id} key={item.id}>
+              <Option value={item.value} key={item.id}>
                 {item.name}
               </Option>
             ))}
@@ -97,21 +97,21 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <SelectGroup
+            defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="ratingWithComment" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'isUpload',
+                field: 'commentStatus',
                 value
               });
             }}
-            value={form.get('isUpload')}
           >
-            <Option value="-1">All</Option>
-            <Option value="1">Y</Option>
-            <Option value="0">N</Option>
+            <Option value="">All</Option>
+            <Option value="Y">Y</Option>
+            <Option value="N">N</Option>
           </SelectGroup>
         </FormItem>
         <FormItem>
@@ -122,11 +122,11 @@ export default class SearchForm extends React.Component<any, any> {
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'evaluateScore',
+                field: 'goodsScore',
                 value
               });
             }}
-            value={form.get('evaluateScore')}
+            value={form.get('goodsScore')}
           >
             <Option value="-1">All</Option>
             <Option value="5">5 star</Option>
@@ -167,12 +167,12 @@ export default class SearchForm extends React.Component<any, any> {
                 endTime = e[1].format(Const.DAY_FORMAT);
               }
               onFormChange({
-                field: 'beginTime',
-                value: beginTime
+                field: 'createTimeBegin',
+                value: beginTime + ' 00:00:00'
               });
               onFormChange({
-                field: 'endTime',
-                value: endTime
+                field: 'createTimeEnd',
+                value: endTime + ' 23:59:59'
               });
             }}
           />

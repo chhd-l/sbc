@@ -56,7 +56,8 @@ class BasicInfomation extends React.Component<any, any> {
           clinicsId: 0,
           clinicsName: ''
         },
-        cityObj: {}
+        cityObj: {},
+        countryObj: {}
       },
       countryArr: [],
       cityArr: [],
@@ -117,8 +118,8 @@ class BasicInfomation extends React.Component<any, any> {
             email: resObj.email,
             contactPhone: resObj.contactPhone,
             postCode: resObj.postCode,
-            city: resObj.city,
-            country: resObj.country,
+            city: resObj.Id,
+            country: resObj.countryId,
             address1: resObj.house,
             address2: resObj.housing,
             preferredMethods: resObj.contactMethod,
@@ -140,8 +141,8 @@ class BasicInfomation extends React.Component<any, any> {
               email: resObj.email,
               contactPhone: resObj.contactPhone,
               postCode: resObj.postCode,
-              city: resObj.city,
-              country: resObj.country,
+              city: resObj.cityId,
+              country: resObj.countryId,
               address1: resObj.house,
               address2: resObj.housing,
               preferredMethods: resObj.contactMethod,
@@ -202,15 +203,15 @@ class BasicInfomation extends React.Component<any, any> {
     //   (currentForm.clinicsVOS = basicForm.selectedClinics),
     //   (currentForm.customerId = basicForm.customerId),
     //   (currentForm.defaultClinics = basicForm.defaultClinics)
-
     let params = {
       birthDay: basicForm.birthDay,
-      city: basicForm.city,
-      cityId: 0,
+      city: basicForm.cityObj.cityName,
+      cityId: basicForm.cityObj.cityId,
       clinicsVOS: basicForm.selectedClinics,
       contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
-      country: basicForm.country,
+      country: basicForm.countryObj.countryName,
+      countryId: basicForm.countryObj.countryId,
       customerDetailId: currentForm.customerDetailId,
       defaultClinics: basicForm.defaultClinics,
       email: basicForm.email,
@@ -458,17 +459,21 @@ class BasicInfomation extends React.Component<any, any> {
                     ]
                   })(
                     <Select
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
+                      onChange={(value, Option) => {
+                        let countryObj = {
+                          countryId: Option.props.value,
+                          counteyName: Option.props.children
+                        };
+
                         this.onFormChange({
-                          field: 'country',
-                          value
+                          field: 'countryObj',
+                          value: countryObj
                         });
                       }}
                     >
                       {countryArr
                         ? countryArr.map((item) => (
-                            <Option value={item.valueEn} key={item.id}>
+                            <Option value={item.id} key={item.id}>
                               {item.name}
                             </Option>
                           ))
@@ -483,17 +488,29 @@ class BasicInfomation extends React.Component<any, any> {
                     rules: [{ required: true, message: 'Please input City!' }]
                   })(
                     <Select
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
+                      onChange={(value, Option) => {
+                        let cityObj = {
+                          cityId: Option.props.value,
+                          cityName: Option.props.children
+                        };
+
                         this.onFormChange({
-                          field: 'city',
-                          value
+                          field: 'cityObj',
+                          value: cityObj
                         });
                       }}
+                      // onChange={(value) => {
+                      //   value = value === '' ? null : value;
+
+                      //   this.onFormChange({
+                      //     field: 'city',
+                      //     value
+                      //   });
+                      // }}
                     >
                       {cityArr
                         ? cityArr.map((item) => (
-                            <Option value={item.valueEn} key={item.id}>
+                            <Option value={item.id} key={item.id}>
                               {item.name}
                             </Option>
                           ))

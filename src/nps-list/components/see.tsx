@@ -6,6 +6,7 @@ import moment from 'moment';
 import { message } from 'antd';
 import GoodsImage from '../../goods-detail/components/image';
 const defaultImg = require('../img/none.png');
+import './see.css';
 
 const { TextArea } = Input;
 
@@ -54,22 +55,24 @@ export default class See extends React.Component<any, any> {
     if (!modalVisible) {
       return null;
     }
-    const goodsImg = goodsEvaluate.goodsImg;
+    console.log(goodsEvaluate, 'haha');
+    // const goodsImg = goodsEvaluate.goodsImg;
     return (
       <Modal
         maskClosable={false}
-        title={'Consumer Comment Detail'}
+        title={`Order number: ${goodsEvaluate.orderNo}`}
         visible={modalVisible}
         width={920}
         onCancel={this._handleModelCancel}
         onOk={
-          goodsEvaluate.evaluateAnswer
-            ? this._handleModelCancel
-            : this._handleSubmit
+          this._handleModelCancel
+          // goodsEvaluate.evaluateAnswer
+          //   ? this._handleModelCancel
+          //   : this._handleSubmit
         }
       >
         <div className="comment-Detail-box">
-          <div className="left-container">
+          {/* <div className="left-container">
             <div className="product">
               {goodsImg ? (
                 <img className="img" src={goodsImg} />
@@ -77,10 +80,58 @@ export default class See extends React.Component<any, any> {
                 <img src={defaultImg} className="img" />
               )}
             </div>
-          </div>
-          <div className="right-container">
-            <label className="title">{goodsEvaluate.goodsInfoName}</label>
-            {goodsEvaluate.isEdit == 1 ? (
+          </div> */}
+          <div>
+            <div className="compuctor-detail">
+              <div className="detail">
+                <span className="evaluate">Product name</span>
+                <span className="text">
+                  {goodsEvaluate.tradeVO &&
+                    goodsEvaluate.tradeVO.tradeItems.map((el) => (
+                      <div>{el.spuName}</div>
+                    ))}
+                </span>
+              </div>
+              <div className="detail">
+                <span className="evaluate">Consumer</span>
+                <span className="text">
+                  Consumer name：{goodsEvaluate.customerName}
+                </span>
+                <span className="text mar-lr">
+                  Consumer type：{goodsEvaluate.consumerType}
+                </span>
+              </div>
+              <div className="detail">
+                <span className="evaluate">Rating</span>
+                <span className="text">
+                  Shopping rating：{goodsEvaluate.goodsScore} star
+                </span>
+                <span className="text mar-lr">
+                  Survey time：
+                  {moment(goodsEvaluate.createTime).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                </span>
+              </div>
+
+              <div className="detail">
+                <span className="evaluate">Comment</span>
+              </div>
+              <div className="compuctor-content">
+                <TextArea
+                  disabled
+                  rows={4}
+                  placeholder="Up to 500 words"
+                  maxLength={500}
+                  defaultValue={goodsEvaluate.consumerComment}
+                  onChange={(e) =>
+                    onFormFieldChange('evaluateAnswer', e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            {/* <label className="title">{goodsEvaluate.goodsInfoName}</label> */}
+            {/* {goodsEvaluate.isEdit == 1 ? (
               <div className="compuctor-detail">
                 <img
                   className={arrowVisible ? 'up-arrow' : 'down-arrow'}
@@ -98,9 +149,6 @@ export default class See extends React.Component<any, any> {
                       <span className="text mar-lr">
                         Time：{goodsEvaluate.historyEvaluateTime}
                       </span>
-                      {/* <span className="text">
-                        {goodsEvaluate.historyEvaluateScore}星
-                      </span> */}
                     </div>
                     <div className="compuctor-content">
                       Product rating：{goodsEvaluate.historyEvaluateScore}
@@ -153,14 +201,12 @@ export default class See extends React.Component<any, any> {
                       'YYYY-MM-DD HH:mm:ss'
                     )}
                   </span>
-                  {/* <span className="text">{goodsEvaluate.evaluateScore}星</span> */}
                 </div>
                 <div className="compuctor-content">
                   Product rating：{goodsEvaluate.evaluateScore} star
                 </div>
                 <div className="detail">
                   <span className="evaluate">Comment</span>
-                  {/*<div className="reply-text">回复</div>*/}
                 </div>
                 <div className="compuctor-content">
                   <TextArea
@@ -203,7 +249,7 @@ export default class See extends React.Component<any, any> {
                   </ul>
                 }
               </div>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       </Modal>

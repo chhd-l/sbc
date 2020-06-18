@@ -41,12 +41,12 @@ export default class SearchList extends React.Component<any, any> {
           >
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={<FormattedMessage id="order.toBeFormed" />}
             key="flowState-GROUPON"
           >
             <List />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
 
           <Tabs.TabPane
             tab={<FormattedMessage id="order.toBeDelivered" />}
@@ -62,12 +62,12 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={<FormattedMessage id="order.received" />}
             key="flowState-CONFIRMED"
           >
             <List />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
 
           <Tabs.TabPane
             tab={<FormattedMessage id="order.completed" />}

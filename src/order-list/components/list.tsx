@@ -208,7 +208,9 @@ export default class ListView extends React.Component<any, any> {
                         <br />
                         <FormattedMessage id="quantity" />
                       </th>
-                      {/* <th style={{ width: '5%' }}>postCode</th> */}
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="clinicName" />
+                      </th>
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
                       <th style={{ width: '12%' }}>
                         <FormattedMessage id="order.shippingStatus" />
@@ -271,7 +273,7 @@ export default class ListView extends React.Component<any, any> {
   _renderLoading() {
     return (
       <tr style={styles.loading}>
-        <td colSpan={8}>
+        <td colSpan={9}>
           <Spin />
         </td>
       </tr>
@@ -311,14 +313,14 @@ export default class ListView extends React.Component<any, any> {
         }
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-            <td colSpan={8} style={{ padding: 0 }}>
+            <td colSpan={9} style={{ padding: 0 }}>
               <table
                 className="ant-table-self"
                 style={{ border: '1px solid #ddd' }}
               >
                 <thead>
                   <tr>
-                    <td colSpan={8} style={{ padding: 0, color: '#999' }}>
+                    <td colSpan={9} style={{ padding: 0, color: '#999' }}>
                       <div
                         style={{
                           marginTop: 12,
@@ -499,6 +501,7 @@ export default class ListView extends React.Component<any, any> {
                         textAlign: 'left',
                         display: 'flex',
                         alignItems: 'flex-end',
+                        flexWrap: 'wrap',
                         padding: '16px 0',
                         width: '100'
                       }}
@@ -563,9 +566,7 @@ export default class ListView extends React.Component<any, any> {
                       ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    {/* <td style={{ width: '5%' }}> */}
-                    {/* 1{v.getIn(['invoice', 'postCode'])} */}
-                    {/* </td> */}
+                    <td style={{ width: '10%' }}>{v.get('clinicsName')}</td>
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
@@ -681,12 +682,13 @@ const styles = {
     height: 300
   },
   imgItem: {
-    width: 60,
-    height: 60,
+    width: '40%',
+    height: 'auto',
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 10,
+    marginRight: 5,
+    marginBottom: 5,
     background: '#fff',
     borderRadius: 3
   },

@@ -92,7 +92,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     customerIds.push(constomerId);
     let params = {
       customerIds: customerIds,
-      userId: '10086'
+      userId: sessionStorage.getItem('employeeId')
+        ? sessionStorage.getItem('employeeId')
+        : ''
     };
     webapi
       .delCustomer(params)

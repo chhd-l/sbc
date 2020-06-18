@@ -347,7 +347,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </p>
               )}
               <p style={styles.darkText}>
-                {<FormattedMessage id="phoneNumber" />}: {consignee.phone}
+                {<FormattedMessage id="phoneNumber" />}:{' '}
+                {detail.getIn(['buyer', 'phone'])}
               </p>
             </Col>
           </Row>
@@ -464,7 +465,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryComment" />}:{' '}
-              {detail.get('buyerRemark') || 'none'}
+              {detail.get('buyerRemark')}
             </p>
           </Col>
           <Col span={8}>
@@ -475,10 +476,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryInvoiceAddress2" />}:{' '}
               {invoice.address2}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="paymentMethod" />}:{' '}
-              {detail.getIn(['payInfo', 'desc']) || 'none'}
             </p>
           </Col>
         </Row>

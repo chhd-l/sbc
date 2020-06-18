@@ -14,5 +14,6 @@ export default {
   MINI_QRCODE: 's2b-supplier-miniProgram-code', //店铺主页小程序码
   PENDING_AND_REFUSED: 'pending-or-refused-useInfo', //审核中或者审核未通过的用户信息
   VALUE_ADDED_SERVICES: 'value-added-service', // 增值服务
-  HIDE_EMPLOYEE_SETTING: 'HIDE_EMPLOYEE_SETTING'
+  HIDE_EMPLOYEE_SETTING: 'HIDE_EMPLOYEE_SETTING',
+  PRESCRIBER_DATA: 's2b-prescriber@data'
 };

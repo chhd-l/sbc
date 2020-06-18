@@ -1,6 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Header extends React.Component<any, any> {
@@ -20,8 +21,8 @@ export default class Header extends React.Component<any, any> {
     const { header, storeEvaluateSum } = this.props.relaxProps as any;
 
     return (
-      <div className="shopHeader">
-        <div className="two-text">
+      <div className="shopHeader" style={{ justifyContent: 'left' }}>
+        {/* <div className="two-text">
           <div style={{ marginBottom: 5 }}>
             {header.get('preTxt')}
             <span>{header.get('errTxt')}</span>
@@ -30,16 +31,35 @@ export default class Header extends React.Component<any, any> {
             {header.get('lastTxt')}
           </div>
           <div>{header.get('text')}</div>
-        </div>
+        </div> */}
         <Link to={'/goods-evaluate-list'}>
-          <div className="store-mess" style={{ height: '120px' }}>
-            <div className="store-score">Store score</div>
+          <div className="store-mess">
+            <div className="store-score">
+              <FormattedMessage id="overall" />
+            </div>
             <div className="store-number">
               {storeEvaluateSum.sumCompositeScore
                 ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
                 : '-'}
             </div>
-            <div className="store-date">Nearly 180 days</div>
+            <div className="store-date">
+              <FormattedMessage id="last180" />
+            </div>
+          </div>
+        </Link>
+        <Link to={'/goods-evaluate-list'}>
+          <div className="store-mess">
+            <div className="store-score">
+              <FormattedMessage id="shopping" />
+            </div>
+            <div className="store-number">
+              {storeEvaluateSum.sumCompositeScore
+                ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
+                : '-'}
+            </div>
+            <div className="store-date">
+              <FormattedMessage id="last180" />
+            </div>
           </div>
         </Link>
       </div>

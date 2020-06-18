@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 
 import { history, noop } from 'qmkit';
 import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 @Relax
 export default class TodoItems extends React.Component<any, any> {
   state = { visible: false };
@@ -168,7 +169,7 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="homeItem pending">
               <h3>Pending matters</h3>
               <div>
-                {fOrderList002 ? (
+                {/* {fOrderList002 ? (
                   <a
                     onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
                     className="dataItem"
@@ -176,11 +177,12 @@ export default class TodoItems extends React.Component<any, any> {
                     <label>Pending approval orders</label>
                     <strong>{tradeTodo.get('waitAudit')}</strong>
                   </a>
-                ) : null}
+                ) : null} */}
                 {fOrderList001 ? (
                   <a
                     onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>Pending payment orders</label>
                     <strong>{tradeTodo.get('waitPay')}</strong>
@@ -192,6 +194,7 @@ export default class TodoItems extends React.Component<any, any> {
                       this._toOrderList({ key: 'flowState-AUDIT' })
                     }
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>Pending delivery orders</label>
                     <strong>{tradeTodo.get('waitDeliver')}</strong>
@@ -203,12 +206,13 @@ export default class TodoItems extends React.Component<any, any> {
                       this._toOrderList({ key: 'flowState-DELIVERED' })
                     }
                     className="dataItem"
+                    style={{ width: '33%' }}
                   >
                     <label>Pending receive orders</label>
                     <strong>{tradeTodo.get('waitReceiving')}</strong>
                   </a>
                 ) : null}
-                {rolf002 ? (
+                {/* {rolf002 ? (
                   <a
                     onClick={() =>
                       this._toReturnList({ key: 'flowState-INIT' })
@@ -278,7 +282,7 @@ export default class TodoItems extends React.Component<any, any> {
                     <label>Pending Settlement bill</label>
                     <strong>{goodsTodo.get('waitSettle')}</strong>
                   </a>
-                ) : null}
+                ) : null} */}
               </div>
             </div>
           ) : (
@@ -294,8 +298,8 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           )}
 
-          <div className="homeItem peopleInfo">
-            <h3>Customer Information</h3>
+          {/* <div className="homeItem peopleInfo">
+            <h3>员工信息</h3>
             <div className="proPeople">
               <div className="peopleDetails">
                 <label>Customer Account</label>
@@ -317,6 +321,22 @@ export default class TodoItems extends React.Component<any, any> {
                     : employee.get('roleName')}
                 </strong>
               </div>
+            </div>
+          </div> */}
+          <div className="homeItem peopleInfo">
+            <h3>Prescriber概况</h3>
+            <div>
+              <a className="dataItem" style={{ width: '50%' }}>
+                <label>总计</label>
+                <strong>{tradeTodo.get('waitPay')}</strong>
+              </a>
+              <a className="dataItem" style={{ width: '50%' }}>
+                <label>
+                  总计活跃(
+                  <FormattedMessage id="last180" />)
+                </label>
+                <strong>{tradeTodo.get('waitPay')}</strong>
+              </a>
             </div>
           </div>
         </div>

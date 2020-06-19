@@ -176,6 +176,8 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>visitor number UV</label>
                   <strong>{trafficNum.get('totalUv') || 0}</strong>
                 </div>
+              </div>
+              <div className="dateBg">
                 <div className="dataItem">
                   <label>page view PV</label>
                   <strong>{trafficNum.get('totalPv') || 0}</strong>
@@ -244,6 +246,8 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>客户总数</label>
                   <strong>{customerNum.get('cusAllCount') || 0}</strong>
                 </div>
+              </div>
+              <div className="dateBg">
                 <div className="dataItem">
                   <label>新增客户数</label>
                   <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
@@ -261,6 +265,8 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>Products total number SKU</label>
                   <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
                 </div>
+              </div>
+              <div className="dateBg">
                 <div className="dataItem">
                   <label>Number of products on shelves</label>
                   <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
@@ -324,7 +330,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {customerGrowthReport ? (
           <AuthWrapper functionName="f_customer_watch_1">
             <div className="homeItem lastTenData">
-              <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
+              <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
               <Table
                 dataSource={customerData.size > 0 ? customerData.toJS() : null}
                 columns={customerColumns}

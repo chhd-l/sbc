@@ -8,28 +8,28 @@ const prescriberLog = require('./../images/Prescriber.png');
 
 const tradeColumns = [
   {
-    title: '日期',
+    title: 'date',
     dataIndex: 'title',
     key: 'title'
   },
   {
-    title: '下单笔数',
+    title: 'Order number',
     dataIndex: 'orderCount',
     key: 'orderCount'
   },
   {
-    title: '下单金额',
+    title: 'Order amount',
     dataIndex: 'orderAmt',
     render: (_text, record) => '￥' + (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
-    title: '付款订单数',
+    title: 'Number of payment orders',
     dataIndex: 'payOrderCount',
     key: 'payOrderCount'
   },
   {
-    title: '付款金额',
+    title: 'Payment amount',
     dataIndex: 'payOrderAmt',
     render: (_text, record) => '￥' + (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
@@ -38,17 +38,17 @@ const tradeColumns = [
 
 const customerColumns = [
   {
-    title: '日期',
+    title: 'date',
     dataIndex: 'baseDate',
     key: 'baseDate'
   },
   {
-    title: '客户总数',
+    title: 'Customer total number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: '新增客户数',
+    title: 'New customer number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -179,7 +179,7 @@ export default class homePrescriber extends Component<any, any> {
           </div>
         </div>
         <div className="homeItem lastTenData">
-          <h3>交易报表&nbsp;近10日</h3>
+          <h3>Flow Reports&nbsp;Nearly 10 days</h3>
           <Table
             dataSource={this.state.tradeData}
             columns={tradeColumns}
@@ -189,16 +189,16 @@ export default class homePrescriber extends Component<any, any> {
         </div>
 
         <div className="homeItem lastTenData">
-          <h3>交易趋势&nbsp;近10日</h3>
+          <h3>Traffic trend&nbsp;Nearly 10 days</h3>
           <WMChart
             title=""
             startTime={new Date()}
             endTime={new Date()}
             dataDesc={[
-              { title: '访客数UV', key: 'totalUv' },
-              { title: '浏览量PV', key: 'totalPv' },
-              { title: '商品访客数', key: 'skuTotalUv' },
-              { title: '商品浏览量', key: 'skuTotalPv' }
+              { title: 'visitor number UV', key: 'totalUv' },
+              { title: 'page view PV', key: 'totalPv' },
+              { title: 'Product visitor number', key: 'skuTotalUv' },
+              { title: 'Products page view', key: 'skuTotalPv' }
             ]}
             radioClickBack={() => {}}
             content={this.state.flowTrendData}
@@ -207,7 +207,7 @@ export default class homePrescriber extends Component<any, any> {
         </div>
 
         <div className="homeItem lastTenData">
-          <h3>客户增长报表&nbsp;近10日</h3>
+          <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
           <Table
             dataSource={this.state.customerData}
             columns={customerColumns}
@@ -216,15 +216,18 @@ export default class homePrescriber extends Component<any, any> {
           />
         </div>
         <div className="homeItem lastTenData">
-          <h3>客户增长趋势&nbsp;近10日</h3>
+          <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
           <WMChart
             title=""
             startTime={new Date()}
             endTime={new Date()}
             dataDesc={[
-              { title: '客户总数', key: 'cusAllCount' },
-              { title: '新增客户数', key: 'cusDayGrowthCount' },
-              { title: '注册客户数', key: 'cusDayRegisterCount' }
+              { title: 'Customer total number', key: 'cusAllCount' },
+              { title: 'New customer number', key: 'cusDayGrowthCount' },
+              {
+                title: 'Registered customers number',
+                key: 'cusDayRegisterCount'
+              }
             ]}
             radioClickBack={() => {}}
             content={this.state.customerGrowTrendData}

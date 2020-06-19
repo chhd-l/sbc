@@ -88,23 +88,23 @@ export default class AppStore extends Store {
         // );
         // }
         // 主页菜单不在权限中配置，写死第一个
-        dataList = dataList.insert(
-          0,
-          fromJS({
-            id: 'menu_a',
-            pid: 'menu_0',
-            realId: -1,
-            title: 'Home',
-            grade: 1,
-            icon: '1505551659667.jpg',
-            authNm: '',
-            url: '/',
-            reqType: '',
-            authRemark: '',
-            isMenuUrl: null,
-            sort: 0
-          })
-        );
+        // dataList = dataList.insert(
+        //   0,
+        //   fromJS({
+        //     id: 'menu_a',
+        //     pid: 'menu_0',
+        //     realId: -1,
+        //     title: 'Home',
+        //     grade: 1,
+        //     icon: '1505551659667.jpg',
+        //     authNm: '',
+        //     url: '/',
+        //     reqType: '',
+        //     authRemark: '',
+        //     isMenuUrl: null,
+        //     sort: 0
+        //   })
+        // );
 
         let allGradeMenus = this._getChildren(
           dataList.filter((item) => item.get('grade') === 1),

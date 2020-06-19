@@ -184,7 +184,9 @@ export default class EditForm extends React.Component<any, any> {
           : []
       };
       clinicsId = {
-        initialValue: employeeForm.get('clinicsId').toString()
+        initialValue: employeeForm.get('clinicsId')
+          ? employeeForm.get('clinicsId').toString()
+          : ''
       };
     }
     return (

@@ -51,7 +51,7 @@ class BasicInfomation extends React.Component<any, any> {
         preferredMethods: '',
         reference: '',
         selectedClinics: [],
-        defaultClinicsString: '',
+        defaultClinicsId: '',
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
@@ -103,12 +103,9 @@ class BasicInfomation extends React.Component<any, any> {
 
           let resObj = JSON.parse(res2);
           let clinicsVOS = this.getSelectedClinic(resObj.clinicsVOS);
-          let defaultClinicsString = '';
+          let defaultClinicsId = '';
           if (resObj.defaultClinics && resObj.defaultClinics.clinicsId) {
-            defaultClinicsString =
-              resObj.defaultClinics.clinicsId +
-              ',' +
-              resObj.defaultClinics.clinicsName;
+            defaultClinicsId = resObj.defaultClinics.clinicsId;
           }
 
           let basicForm = {
@@ -125,7 +122,7 @@ class BasicInfomation extends React.Component<any, any> {
             preferredMethods: resObj.contactMethod,
             reference: resObj.reference,
             selectedClinics: resObj.clinicsVOS,
-            defaultClinicsString: defaultClinicsString,
+            defaultClinicsId: defaultClinicsId,
             defaultClinics: resObj.defaultClinics
           };
           this.setState({
@@ -148,7 +145,7 @@ class BasicInfomation extends React.Component<any, any> {
               preferredMethods: resObj.contactMethod,
               reference: resObj.reference,
               selectedClinics: clinicsVOS,
-              defaultClinicsString: defaultClinicsString
+              defaultClinicsId: defaultClinicsId
             });
             this.setState({
               loading: false
@@ -205,13 +202,17 @@ class BasicInfomation extends React.Component<any, any> {
     //   (currentForm.defaultClinics = basicForm.defaultClinics)
     let params = {
       birthDay: basicForm.birthDay,
-      city: basicForm.cityObj.cityName,
-      cityId: basicForm.cityObj.cityId,
+      city: basicForm.cityObj ? basicForm.cityObj.cityName : currentForm.city,
+      cityId: basicForm.cityObj ? basicForm.cityObj.cityId : currentForm.cityId,
       clinicsVOS: basicForm.selectedClinics,
       contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
-      country: basicForm.countryObj.countryName,
-      countryId: basicForm.countryObj.countryId,
+      country: basicForm.countryObj
+        ? basicForm.countryObj.countryName
+        : currentForm.country,
+      countryId: basicForm.countryObj
+        ? basicForm.countryObj.countryId
+        : currentForm.countryId,
       customerDetailId: currentForm.customerDetailId,
       defaultClinics: basicForm.defaultClinics,
       email: basicForm.email,
@@ -462,7 +463,7 @@ class BasicInfomation extends React.Component<any, any> {
                       onChange={(value, Option) => {
                         let countryObj = {
                           countryId: Option.props.value,
-                          counteyName: Option.props.children
+                          countryName: Option.props.children
                         };
 
                         this.onFormChange({
@@ -619,7 +620,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Default Prescriber">
                   {getFieldDecorator(
-                    'defaultClinicsString',
+                    'defaultClinicsId',
                     {}
                   )(
                     <Select

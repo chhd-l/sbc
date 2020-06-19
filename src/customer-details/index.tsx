@@ -10,7 +10,8 @@ import {
   Row,
   Col,
   Breadcrumb,
-  Modal
+  Modal,
+  Popconfirm
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -133,12 +134,17 @@ export default class CustomerDetails extends React.Component<any, any> {
                 defaultActiveKey="basic"
                 onChange={this.clickTabs}
                 tabBarExtraContent={
-                  <Button
-                    type="primary"
-                    onClick={() => this.showConfirm(this.state.customerId)}
+                  <Popconfirm
+                    placement="topRight"
+                    title="Are you sure to remove this item?"
+                    onConfirm={() => this.removeConsumer(this.state.customerId)}
+                    okText="Confirm"
+                    cancelText="Cancel"
                   >
-                    <FormattedMessage id="consumer.removeConsumer" />
-                  </Button>
+                    <Button type="link">
+                      <FormattedMessage id="consumer.removeConsumer" />
+                    </Button>
+                  </Popconfirm>
                 }
               >
                 <TabPane tab="Basic infomation" key="basic">

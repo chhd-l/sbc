@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Table, Button, Divider, message, Modal } from 'antd';
+import { Table, Button, Divider, message, Modal, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -15,13 +16,15 @@ export default class ClinicList extends Component<any, any> {
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
-          width: '30%'
+          width: '30%',
+          ellipsis: true
         },
         {
           title: 'Description',
           dataIndex: 'description',
           key: 'description',
-          width: '60%'
+          width: '60%',
+          ellipsis: true
         },
         {
           title: 'Action',
@@ -31,7 +34,19 @@ export default class ClinicList extends Component<any, any> {
             <span>
               <Link to={'/prescriber-type-edit/' + record.id}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.id)}>Delete</a>
+
+              <Popconfirm
+                placement="topLeft"
+                title="Are you sure to delete this item?"
+                onConfirm={() => this.delClinicType(this.state.customerId)}
+                okText="Confirm"
+                cancelText="Cancel"
+              >
+                <Button type="link">
+                  <FormattedMessage id="delete" />
+                </Button>
+              </Popconfirm>
+              {/* <a onClick={() => this.showConfirm(record.id)}>Delete</a> */}
             </span>
           )
         }

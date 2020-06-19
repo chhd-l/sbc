@@ -300,7 +300,7 @@ export default class SearchList extends React.Component<any, any> {
                       <span style={{ marginLeft: 20, color: '#000' }}>
                         {rid}{' '}
                         {v.get('platform') != 'CUSTOMER' && (
-                          <span style={styles.platform}>代退单</span>
+                          <span style={styles.platform}>Chargeback</span>
                         )}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>

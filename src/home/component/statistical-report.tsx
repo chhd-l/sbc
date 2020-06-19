@@ -197,7 +197,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {tradeOview ? (
           <AuthWrapper functionName="f_trade_watch_1">
             <div className="homeItem todayData">
-              <h3>Flow profile&nbsp;Today</h3>
+              <h3>Transaction overview&nbsp;Today</h3>
               <div className="dateBg">
                 <div className="dataItem">
                   <label>Order number</label>
@@ -238,14 +238,14 @@ export default class StatisticalReport extends React.Component<any, any> {
         {customerOview ? (
           <AuthWrapper functionName="f_customer_watch_1">
             <div className="homeItem todayData">
-              <h3>客户概况&nbsp;今日</h3>
+              <h3>Customer profile&nbsp;Today</h3>
               <div className="dateBg">
                 <div className="dataItem">
-                  <label>客户总数</label>
+                  <label>Customer total number</label>
                   <strong>{customerNum.get('cusAllCount') || 0}</strong>
                 </div>
                 <div className="dataItem">
-                  <label>新增客户数</label>
+                  <label>New customer number</label>
                   <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
                 </div>
               </div>

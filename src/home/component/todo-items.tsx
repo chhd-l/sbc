@@ -324,15 +324,15 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div> */}
           <div className="homeItem peopleInfo">
-            <h3>Prescriber概况</h3>
+            <h3>Prescriber profile</h3>
             <div>
               <a className="dataItem" style={{ width: '50%' }}>
-                <label>总计</label>
+                <label>Total</label>
                 <strong>{tradeTodo.get('waitPay')}</strong>
               </a>
               <a className="dataItem" style={{ width: '50%' }}>
                 <label>
-                  总计活跃(
+                  Total active(
                   <FormattedMessage id="last180" />)
                 </label>
                 <strong>{tradeTodo.get('waitPay')}</strong>

@@ -169,7 +169,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
                 : message.error('请先绑定手机号')
             }
           >
-            <Icon type="lock" /> Change the password
+            <Icon type="lock" /> Modify password
           </a>
         </Menu.Item>
         <Menu.Item key="2">

@@ -27,25 +27,29 @@ export default class ClinicList extends Component<any, any> {
           title: 'Prescriber ID',
           dataIndex: 'prescriberId',
           key: 'prescriberID',
-          width: 140
+          width: '10%',
+          ellipsis: true
         },
         {
           title: 'Prescriber Name',
           dataIndex: 'prescriberName',
           key: 'prescriberName',
-          width: 180
+          width: '15%',
+          ellipsis: true
         },
         {
           title: 'Prescriber Phone',
           dataIndex: 'phone',
           key: 'prescriberPhone',
-          width: 140
+          width: '10%',
+          ellipsis: true
         },
         {
           title: 'Prescriber City',
           dataIndex: 'primaryCity',
           key: 'prescriberCity',
-          width: 140
+          width: '10%',
+          ellipsis: true
         },
         // {
         //   title: 'Prescriber Zip',
@@ -70,19 +74,22 @@ export default class ClinicList extends Component<any, any> {
           title: 'Prescriber Type',
           dataIndex: 'prescriberType',
           key: 'prescriberType',
-          width: 140
+          width: '10%',
+          ellipsis: true
         },
         {
           title: 'Reward Period',
           dataIndex: 'rewardType',
           key: 'rewardRate',
-          width: 140
+          width: '10%',
+          ellipsis: true
         },
         {
           title: 'Prescriber Status',
           dataIndex: 'enabled',
           key: 'enabled',
-          width: 140,
+          width: '10%',
+          ellipsis: true,
           render: (text, record) => (
             <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
           )
@@ -90,7 +97,7 @@ export default class ClinicList extends Component<any, any> {
         {
           title: 'Action',
           key: 'action',
-          width: 200,
+          width: '10%',
           render: (text, record) => (
             <span>
               <Link to={'/prescriber-edit/' + record.prescriberId}>Edit</Link>

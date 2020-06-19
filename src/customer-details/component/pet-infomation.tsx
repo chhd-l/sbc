@@ -14,7 +14,8 @@ import {
   Card,
   DatePicker,
   Empty,
-  Spin
+  Spin,
+  Popconfirm
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -333,6 +334,40 @@ class PetInfomation extends React.Component<any, any> {
       .catch((err) => {
         message.error('Unsuccessful');
       });
+  };
+
+  delPets = (id) => {
+    debugger;
+    let params = {
+      petsIds: [id]
+    };
+    this.setState({
+      loading: true
+    });
+    webapi
+      .delPets(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          message.success('Successful');
+          this.petsByConsumer();
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
+    // const res = await delPets(params)
+    // if (res.code === 'K-000000') {
+    //   this.getPetList()
+    // }
   };
 
   render() {
@@ -658,6 +693,26 @@ class PetInfomation extends React.Component<any, any> {
                       <Button type="primary" htmlType="submit">
                         Save
                       </Button>
+
+                      <Popconfirm
+                        placement="topRight"
+                        title="Are you sure to delete this item?"
+                        onConfirm={() => this.delPets(petForm.petsId)}
+                        okText="Confirm"
+                        cancelText="Cancel"
+                      >
+                        <Button
+                          style={{
+                            marginLeft: '20px',
+                            display:
+                              this.props.customerType === 'Guest'
+                                ? 'none'
+                                : null
+                          }}
+                        >
+                          <FormattedMessage id="delete" />
+                        </Button>
+                      </Popconfirm>
 
                       <Button style={{ marginLeft: '20px' }}>
                         <Link to="/customer-list">Cancel</Link>

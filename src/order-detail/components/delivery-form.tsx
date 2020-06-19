@@ -31,7 +31,7 @@ export default class DeliveryForm extends React.Component<any, any> {
       labelCol: {
         span: 2,
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         span: 24,

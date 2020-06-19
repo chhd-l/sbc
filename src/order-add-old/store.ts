@@ -46,11 +46,7 @@ export default class AppStore extends Store {
    * 计算运费
    */
   _calcFreight = () => {
-    if (
-      this.state()
-        .get('goodsList')
-        .get('isEnableDeliverFee')
-    ) {
+    if (this.state().get('goodsList').get('isEnableDeliverFee')) {
       this.calcPayTotal();
       return false;
     }
@@ -122,15 +118,11 @@ export default class AppStore extends Store {
 
     const tradeParams = {
       consignee,
-      deliverWay: this.state()
-        .get('extra')
-        .get('deliverWay'),
+      deliverWay: this.state().get('extra').get('deliverWay'),
       tradePrice: {
         totalPrice: QMFloat.accSubtr(
           QMFloat.accSubtr(
-            this.state()
-              .get('goodsList')
-              .get('totalMoney'),
+            this.state().get('goodsList').get('totalMoney'),
             this.state().get('discountPrice')
           ),
           this.state().get('reductionPrice')
@@ -490,7 +482,7 @@ export default class AppStore extends Store {
     //买家当前信息
     const { res: newBuyer } = await webapi.fetchSingleCustomer(buyer.get('id'));
     if (!newBuyer || !fromJS(newBuyer).get('customerId')) {
-      message.error('客户已被删除，不能修改订单！');
+      message.error('The customer has been deleted and cannot be modified！');
       history.push('/order-list');
       return;
     }

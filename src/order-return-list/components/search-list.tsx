@@ -366,7 +366,7 @@ export default class SearchList extends React.Component<any, any> {
                               style={{ marginLeft: 20 }}
                               onClick={() => this._showDeliver(onDeliver, rid)}
                             >
-                              填写物流
+                              Fill in logistics
                             </a>
                           </AuthWrapper>
                         )}
@@ -450,13 +450,14 @@ export default class SearchList extends React.Component<any, any> {
                             <a
                               href="javascript:void(0)"
                               style={{ marginLeft: 20 }}
-                              onClick={() =>
+                              onClick={() => {
+                                console.log(onRejectRefund, 'onRejectRefund');
                                 this._showRejectRefund(
                                   onRejectRefund,
                                   rid,
                                   0 == payType
-                                )
-                              }
+                                );
+                              }}
                             >
                               <FormattedMessage id="refusedToRefund" />
                             </a>
@@ -716,7 +717,7 @@ export default class SearchList extends React.Component<any, any> {
 
       this.props.relaxProps.onRejectModalChange({
         visible: true,
-        type: '拒绝退款',
+        type: 'refusing refund',
         onOk: onRejectRefund,
         rid: rid
       });

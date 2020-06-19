@@ -112,7 +112,7 @@ export default class OperateLog extends React.Component<any, any> {
               history.back();
             }}
           >
-            返回
+            Back
           </Button>
         </div>
       </div>

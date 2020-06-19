@@ -346,7 +346,7 @@ export default class SearchList extends React.Component<any, any> {
                               style={{ marginLeft: 20 }}
                               onClick={() => this._showDeliver(onDeliver, rid)}
                             >
-                              填写物流
+                              Fill in logistics
                             </a>
                           </AuthWrapper>
                         )}

@@ -48,7 +48,7 @@ const columns = [
   },
   {
     title: '金额小计',
-    render: (row) => <span>{(row.num * row.points)}</span>
+    render: (row) => <span>{row.num * row.points}</span>
   }
 ];
 
@@ -147,9 +147,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <Col span={8}>
               <p style={styles.darkText}>订单号：{detail.get('id')} </p>
               <p style={styles.darkText}>
-                下单时间：{moment(tradeState.get('createTime')).format(
-                  Const.TIME_FORMAT
-                )}
+                下单时间：
+                {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
             </Col>
             <Col span={8}>
@@ -356,8 +355,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: 'Confirm receipt',
+      content: 'Confirm receipt of all items?',
       onOk() {
         confirm(tdId);
       },

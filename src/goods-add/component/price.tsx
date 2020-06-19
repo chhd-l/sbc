@@ -70,7 +70,7 @@ export default class Price extends React.Component<any, any> {
             <Radio value={2}>Sell at market price&nbsp;&nbsp;</Radio>
             <Radio value={0}>Sell at consumer price&nbsp;&nbsp;</Radio>
             {saleType === 0 && (
-              <Radio value={1}>按订货量设价&nbsp;&nbsp;</Radio>
+              <Radio value={1}>Set price for order quantity&nbsp;&nbsp;</Radio>
             )}
           </RadioGroup>
         </div>

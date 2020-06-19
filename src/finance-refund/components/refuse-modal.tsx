@@ -34,14 +34,15 @@ export default class RefuseModal extends React.Component<any, any> {
       saveRefuse
     } = this.props.relaxProps;
     return (
-      <Modal  maskClosable={false}
-        title="请填写拒绝退款的原因"
+      <Modal
+        maskClosable={false}
+        title="Please fill in the reason for refusing refund"
         visible={refuseVisible}
         onOk={() => saveRefuse()}
         onCancel={() => onCancelRefuse()}
       >
         <Input.TextArea
-          onChange={e => onChangeReason((e.target as any).value)}
+          onChange={(e) => onChangeReason((e.target as any).value)}
         />
       </Modal>
     );

@@ -27,12 +27,12 @@ export default class OnlineRefundModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title="退款"
+        title="Refund"
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            取消
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -41,7 +41,7 @@ export default class OnlineRefundModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk(handleOk)}
           >
-            保存
+            Save
           </Button>
         ]}
       >
@@ -130,14 +130,17 @@ class OnlineRefundModalForm extends React.Component<any, any> {
           style={{ marginBottom: 10 }}
           message={
             <div>
-              <p>点击保存后，平台将按照确认的金额将款项返还给客户，对应积分同时进行返还。</p>
-              <p>修改退款金额请将修改原因填写至退款备注。</p>
+              <p>
+                After clicking save, the platform will return the money to the customer according to the confirmed amount, and the corresponding points will be returned at the same time. Please fill in the reason for modifying the refund amount to the refund remark.
+              </p>
+              {/* <p>点击保存后，平台将按照确认的金额将款项返还给客户，对应积分同时进行返还。</p>
+              <p>修改退款金额请将修改原因填写至退款备注。</p> */}
             </div>
           }
           type="info"
         />
         <Form>
-          <FormItem {...formItemLayout} label="退款金额">
+          <FormItem {...formItemLayout} label="Refund amount">
             {getFieldDecorator('actualReturnPrice', {
               initialValue: data.get('refundAmount'),
               rules: [
@@ -190,10 +193,10 @@ class OnlineRefundModalForm extends React.Component<any, any> {
                 });
               }}
             >
-              {this.state.editRefund ? '放弃修改' : '修改'}
+              {this.state.editRefund ? '放弃修改' : 'Edit'}
             </Button>
           </FormItem>
-          <FormItem {...formItemLayout} label="退款积分">
+          <FormItem {...formItemLayout} label="Refund points">
             {getFieldDecorator('actualReturnPoints', {
               initialValue: this.state.applyPoints ,
             })(<Input type="hidden"/>)}
@@ -203,10 +206,10 @@ class OnlineRefundModalForm extends React.Component<any, any> {
               Number(0)}
             </label>
           </FormItem>
-          <FormItem {...formItemLayout} label="退款备注" hasFeedback>
+          <FormItem {...formItemLayout} label="Refund remark" hasFeedback>
             {getFieldDecorator('refundComment', {
               rules: commentRules
-            })(<Input.TextArea placeholder="请输入退款备注" />)}
+            })(<Input.TextArea placeholder="Please input refund remark" />)}
           </FormItem>
         </Form>
       </div>

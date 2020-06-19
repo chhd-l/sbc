@@ -78,7 +78,7 @@ const GreyBg = styled.div`
 // 审核状态 0、待审核 1、已审核 2、审核未通过
 const AUDIT_STATE = {
   0: '待审核',
-  1: '已审核',
+  1: 'Audited',
   2: '审核未通过'
 };
 

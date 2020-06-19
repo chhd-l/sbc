@@ -638,7 +638,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   verify(tid);
                 }}
               >
-                修改
+                Modify
               </a>
             </AuthWrapper>
           )}
@@ -792,8 +792,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: 'Confirm receipt',
+      content: 'Confirm receipt of all items?',
       onOk() {
         confirm(tdId);
       },

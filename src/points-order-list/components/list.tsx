@@ -152,7 +152,8 @@ export default class ListView extends React.Component<any, any> {
               {!loading && total == 0 ? (
                 <div className="ant-table-placeholder">
                   <span>
-                    <i className="anticon anticon-frown-o" />暂无数据
+                    <i className="anticon anticon-frown-o" />
+                    暂无数据
                   </span>
                 </div>
               ) : null}
@@ -230,7 +231,8 @@ export default class ListView extends React.Component<any, any> {
                         </span>
                         <span style={{ marginLeft: 20 }}>订单号：{id} </span>
                         <span style={{ marginLeft: 60 }}>
-                          下单时间：{v.getIn(['tradeState', 'createTime'])
+                          下单时间：
+                          {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
                                 .toString()
@@ -311,43 +313,44 @@ export default class ListView extends React.Component<any, any> {
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map(
-                          (v, k) =>
-                            k < 3 ? (
-                              <img
-                                src={v.get('pic') ? v.get('pic') : defaultImg}
-                                style={styles.imgItem}
-                                key={k}
-                              />
-                            ) : null
+                        .map((v, k) =>
+                          k < 3 ? (
+                            <img
+                              src={v.get('pic') ? v.get('pic') : defaultImg}
+                              style={styles.imgItem}
+                              key={k}
+                            />
+                          ) : null
                         )}
-                      {/*第4张特殊处理*/
-                      //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
+                      {
+                        /*第4张特殊处理*/
+                        //@ts-ignore
+                        v.get('tradeItems').concat(gifts).size > 3 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={
+                                v
+                                  .get('tradeItems')
+                                  .concat(gifts)
+                                  .get(3)
+                                  .get('pic')
+                                  ? v
+                                      .get('tradeItems')
+                                      .concat(gifts)
+                                      .get(3)
+                                      .get('pic')
+                                  : defaultImg
+                              }
+                              style={styles.imgFourth}
+                            />
                             //@ts-ignore
-                            src={
-                              v
-                                .get('tradeItems')
-                                .concat(gifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('tradeItems')
-                                    .concat(gifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
-                            style={styles.imgFourth}
-                          />
-                          //@ts-ignore
-                          <div style={styles.imgNum}>
-                            共{v.get('tradeItems').concat(gifts).size}件
+                            <div style={styles.imgNum}>
+                              共{v.get('tradeItems').concat(gifts).size}件
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
                     <td style={{ width: '10%' }}>
                       {/*客户名称*/}
@@ -362,8 +365,7 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '10%' }}>
                       {tradePoints}
-                      <br />
-                      （{num}件)
+                      <br />（{num}件)
                     </td>
                     {/*发货状态*/}
                     <td style={{ width: '10%' }}>
@@ -413,8 +415,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: 'Confirm receipt',
+      content: 'Confirm receipt of all items?',
       onOk() {
         onConfirm(tdId);
       },

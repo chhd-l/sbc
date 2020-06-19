@@ -216,6 +216,8 @@ export default class AppStore extends Store {
           JSON.stringify(employee.res)
         );
 
+        debugger;
+
         if (qrcode.code == Const.SUCCESS_CODE) {
           //获取小程序码的地址，保存到本地
           localStorage.setItem(cache.MINI_QRCODE, qrcode.context);

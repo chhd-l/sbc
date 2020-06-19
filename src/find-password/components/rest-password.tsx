@@ -139,7 +139,7 @@ class RestPassword extends Component<any, any> {
       ...data
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'save successful');
+      message.success('save successful');
       setTimeout(() => history.push('/login'), 1000);
     } else {
       message.error(res.message || 'save faild');

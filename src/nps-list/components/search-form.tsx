@@ -116,6 +116,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <SelectGroup
+            defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="rating" />}
             style={{ width: 80 }}
@@ -126,7 +127,7 @@ export default class SearchForm extends React.Component<any, any> {
                 value
               });
             }}
-            value={form.get('goodsScore')}
+            // value={form.get('goodsScore')}
           >
             <Option value="">All</Option>
             <Option value="5">5 star</Option>

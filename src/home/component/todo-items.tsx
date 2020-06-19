@@ -183,7 +183,7 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null} */}
                 {fOrderList001 ? (
                   <a
-                    onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
+                    // onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -193,9 +193,9 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null}
                 {fOrderDetail002 ? (
                   <a
-                    onClick={() =>
-                      this._toOrderList({ key: 'flowState-AUDIT' })
-                    }
+                    // onClick={() =>
+                    //   this._toOrderList({ key: 'flowState-AUDIT' })
+                    // }
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -205,9 +205,9 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null}
                 {fOrderList003 ? (
                   <a
-                    onClick={() =>
-                      this._toOrderList({ key: 'flowState-DELIVERED' })
-                    }
+                    // onClick={() =>
+                    //   this._toOrderList({ key: 'flowState-DELIVERED' })
+                    // }
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -332,9 +332,9 @@ export default class TodoItems extends React.Component<any, any> {
               <a
                 className="dataItem"
                 style={{ width: '50%' }}
-                onClick={() =>
-                  this._toPrescriber({ key: 'flowState-DELIVERED' })
-                }
+                // onClick={() =>
+                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
+                // }
               >
                 <label>Total</label>
                 <strong>{prescribersTotal.get('aggregate')}</strong>
@@ -342,9 +342,9 @@ export default class TodoItems extends React.Component<any, any> {
               <a
                 className="dataItem"
                 style={{ width: '50%' }}
-                onClick={() =>
-                  this._toPrescriber({ key: 'flowState-DELIVERED' })
-                }
+                // onClick={() =>
+                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
+                // }
               >
                 <label>
                   Total active(

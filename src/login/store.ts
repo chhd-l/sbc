@@ -267,13 +267,13 @@ export default class AppStore extends Store {
     if (!allGradeMenus) {
       message.error('No Menus');
     }
-    debugger;
     let menus = allGradeMenus.title ? allGradeMenus : allGradeMenus.toJS();
-    if (menus.url) {
-      return menus.url;
+    let firstMenus = menus.length > 0 ? menus[0] : menus;
+    if (firstMenus.url) {
+      return firstMenus.url;
     } else {
-      let menus = menus[0] ? menus[0] : menus;
-      return this._getUrl(menus.children[0]);
+      let currentMenus = menus[0] ? menus[0] : menus;
+      return this._getUrl(currentMenus.children[0]);
     }
   };
 

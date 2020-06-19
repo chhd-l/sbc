@@ -22,7 +22,7 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
       <div>
         <AuthWrapper functionName="f_goods_import_2">
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>商品库导入</Breadcrumb.Item>
+            <Breadcrumb.Item>Commodity library import</Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>商品</Breadcrumb.Item>

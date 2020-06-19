@@ -249,7 +249,7 @@ export default {
 
   'product': 'Product',
   'consumerList': 'Consumer List',
-  'consumerClinicList': 'Consumer clinic list',
+  'consumerClinicList': 'Consumer list(Presciber)',
   'consumerName': 'Consumer Name',
   'area': 'Area',
   'targetCountry': 'Target Country',

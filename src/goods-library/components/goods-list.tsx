@@ -144,9 +144,9 @@ export default class GoodsList extends React.Component<any, any> {
           key="addStatus"
           render={(addStatus) => {
             if (addStatus) {
-              return '已导入';
+              return 'Imported';
             }
-            return '未导入';
+            return 'Not imported';
           }}
         />
         <Column

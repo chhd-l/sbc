@@ -48,18 +48,20 @@ export default class Detail extends React.Component<any, any> {
       reftabDetailEditor,
       chooseImgs,
       imgType,
-      goodsTabs,
-      goodsDetailTab
+      goodsTabs
     } = this.props.relaxProps;
+    let { goodsDetailTab } = this.props.relaxProps;
+    let goodsDetailTabCopy = goodsDetailTab.sort(
+      (a, b) => a.get('priority') - b.get('priority')
+    );
     let goodsDetailTabContent: any = {};
     let goodsDetailContent;
     if (goods.get('goodsDetail')) {
       goodsDetailContent = goods.get('goodsDetail');
-      console.log(goodsDetailContent, 'goods------------');
       try {
         goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
       } catch {
-        goodsDetailTab.map((item) => {
+        goodsDetailTabCopy.map((item) => {
           goodsDetailTabContent[item.get('name')] = '';
         });
       }
@@ -67,13 +69,9 @@ export default class Detail extends React.Component<any, any> {
     return (
       <div>
         <Tabs defaultActiveKey="main1" animated={false}>
-          {goodsDetailTab.map((item, i) => {
+          {goodsDetailTabCopy.map((item, i) => {
             return (
-              <Tabs.TabPane
-                // tab={<FormattedMessage id="product.productDetail" />}
-                tab={item.get('name')}
-                key={'main' + i}
-              >
+              <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
                 <UEditor
                   ref={(UEditor) => {
                     refDetailEditor({

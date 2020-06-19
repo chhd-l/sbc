@@ -21,11 +21,15 @@ export default class SearchForm extends React.Component<any, any> {
     storeEvaluateSum: 'storeEvaluateSum'
   };
   async componentDidMount() {
-    let res = await webapi.getCompositeScore({ scoreCycle: 0, numType: 1 });
-    let data = res.res.context;
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let res = await webapi.getCompositeScore({
+      scoreCycle: 2,
+      storeId: loginInfo.storeId
+    });
+    let data = res.res.context.storeEvaluateSumVO;
     this.setState({
-      evaluateCount: data.evaluateCount,
-      compositeScore: data.compositeScore
+      evaluateCount: data.orderNum,
+      compositeScore: data.sumGoodsScore
     });
   }
   render() {

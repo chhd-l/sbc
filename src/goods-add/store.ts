@@ -940,6 +940,8 @@ export default class AppStore extends Store {
     let goods = data.get('goods');
 
     let goodsDetailTab = data.get('goodsDetailTab');
+    console.log(goods.toJS(), goodsDetailTab.toJS());
+
     // const detailEditor1 = data.get('detailEditor1') || {};
     // const detailEditor2 = data.get('detailEditor2') || {};
     // const detailEditor3 = data.get('detailEditor3') || {};
@@ -947,22 +949,25 @@ export default class AppStore extends Store {
     // // console.log(detailEditor.getContent(), 'detailEditor1')
     // console.log(detailEditor1, detailEditor2, detailEditor3, data.get('detailEditor0'))
 
-    // let goodsDetailTabTemplate = {};
-    // // if(goods.get('goodsDetail')) {
-    // //   goodsDetailContent = goods.get('goodsDetail')
-    // //   console.log(goodsDetailContent, 'goods------------')
-    // //   goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'))
-    // // }
-    // goodsDetailTab.map((item, i) => {
-    //   // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
-    //   if(i < 3) {
-    //     console.log(data.get('detailEditor_' + (i + 1)), 'detailEditor_' + (i + 1))
-    //     goodsDetailTabTemplate[item.get('name')] = data
-    //     .get('detailEditor_' + (i + 1))
-    //     .getContent();
-    //   }
-    // });
-    // goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    let goodsDetailTabTemplate = {};
+    // if(goods.get('goodsDetail')) {
+    //   goodsDetailContent = goods.get('goodsDetail')
+    //   console.log(goodsDetailContent, 'goods------------')
+    //   goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'))
+    // }
+    goodsDetailTab = goodsDetailTab.sort(
+      (a, b) => a.get('priority') - b.get('priority')
+    );
+    goodsDetailTab.map((item, i) => {
+      // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
+      if (i < 3) {
+        console.log(data.get('detailEditor_' + i), 'detailEditor_' + i);
+        goodsDetailTabTemplate[item.get('name')] = data
+          .get('detailEditor_' + i)
+          .getContent();
+      }
+    });
+    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
 
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
@@ -1278,11 +1283,13 @@ export default class AppStore extends Store {
     goods = goods.set('moreSpecFlag', data.get('specSingleFlag') ? 0 : 1);
     // 详情
     const detailEditor = data.get('detailEditor') || {};
+
     goods = goods.set(
       'goodsDetail',
       detailEditor.getContent ? detailEditor.getContent() : ''
     );
-
+    console.log(goods.toJS(), 'goods111');
+    return;
     const tabs = [];
     if (
       data.get('detailEditor_0') &&

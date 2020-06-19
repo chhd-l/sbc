@@ -86,13 +86,11 @@ export function saveGoodsEvaluateAnswer(param = {}) {
 }
 
 export function getCompositeScore(param = {}) {
-  return Fetch<TResult>(
-    '/store/evaluate/num/storeEvaluateNumByStoreIdAndScoreCycle',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        ...param
-      })
-    }
-  );
+  // return Fetch<TResult>('/store/evaluate/num/storeEvaluateNumByStoreIdAndScoreCycle', {
+  return Fetch<TResult>('/store/evaluate/getByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
 }

@@ -153,10 +153,12 @@ export default class PicModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div style={styles.title}>
-            <h4>图片库</h4>
+            <h4>Picture library</h4>
             <span style={styles.grey}>
-              已选<strong style={styles.dark}>{clickImgsCount}</strong>张
-              最多可选<strong style={styles.dark}>{choosedImgCount}</strong>张
+              <strong style={styles.dark}>{clickImgsCount}</strong> has been
+              selected and up to{' '}
+              <strong style={styles.dark}>{choosedImgCount}</strong> can be
+              selected
             </span>
           </div>
         }
@@ -167,7 +169,7 @@ export default class PicModal extends React.Component<any, any> {
       >
         <div>
           <Row style={styles.header}>
-            <Col span={3}>
+            <Col span={4}>
               <QMUpload
                 name="uploadFile"
                 onChange={this._editImages}
@@ -186,7 +188,7 @@ export default class PicModal extends React.Component<any, any> {
                 fileList={this.state.fileList}
               >
                 <Button size="large" onClick={() => this._handleUploadClick()}>
-                  本地上传
+                  Local upload
                 </Button>
               </QMUpload>
             </Col>
@@ -209,7 +211,7 @@ export default class PicModal extends React.Component<any, any> {
                     icon="search"
                     htmlType="submit"
                   >
-                    搜索
+                    Search
                   </Button>
                 </FormItem>
               </Form>

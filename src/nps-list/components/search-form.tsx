@@ -128,7 +128,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
             value={form.get('goodsScore')}
           >
-            <Option value="-1">All</Option>
+            <Option value="">All</Option>
             <Option value="5">5 star</Option>
             <Option value="4">4 star</Option>
             <Option value="3">3 star</Option>

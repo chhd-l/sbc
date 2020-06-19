@@ -586,7 +586,8 @@ export default {
   'confirmPassword': 'Confirm Password',
   'surveyManage': 'Survey Management',
   'overview': 'Overview',
-  'productRating': 'Product rating',
+  'overallRating': 'Overall rating',
+  'productRating': 'Shopping rating',
   'npsDesc1': 'Description: Survey overview shows the summary of service survey data in the past 180 days',
   'ratingWithComment': 'Rating with comment',
   'rating': 'Rating',
@@ -596,6 +597,9 @@ export default {
   'consumer.consumerDetails':'Consumer Details',
   'consumer.removeConsumer':'Remove Consumer',
 
+  'shopping': 'Shopping',
+  "last180": 'Last 180',
+  'overall': 'Overall'
 };
 
 

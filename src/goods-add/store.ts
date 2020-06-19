@@ -153,7 +153,7 @@ export default class AppStore extends Store {
 
     const userLevel = {
       customerLevelId: 0,
-      customerLevelName: '全平台客户',
+      customerLevelName: 'Platform wide customers',
       customerLevelDiscount: 1
     };
     newLevelList.unshift(userLevel);
@@ -1975,7 +1975,7 @@ export default class AppStore extends Store {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
             fromJS({
               detailId: '0',
-              detailName: '其他',
+              detailName: 'Other',
               select: 'select'
             })
           );

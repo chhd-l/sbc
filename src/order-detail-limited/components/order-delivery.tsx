@@ -130,9 +130,10 @@ export default class OrderDelivery extends React.Component<any, any> {
                     <div style={styles.stateBox}>
                       {logistic ? (
                         <label style={styles.information}>
-                          【物流信息】发货日期：{deliverTime}
-                          物流公司：{logistic.get('logisticCompanyName')}{' '}
-                          物流单号：{logistic.get('logisticNo')}
+                          【Logistics information】delivery date：{deliverTime}
+                          Logistics company：
+                          {logistic.get('logisticCompanyName')} Logistics single
+                          number：{logistic.get('logisticNo')}
                           <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
@@ -153,7 +154,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                             this._showCancelConfirm(v.get('deliverId'))
                           }
                         >
-                          作废
+                          Invalid
                         </a>
                       </AuthWrapper>
                     )}
@@ -174,7 +175,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                     this._showConfirm();
                   }}
                 >
-                  确认收货
+                  Confirm Receipt
                 </Button>
               </AuthWrapper>
             ) : null}
@@ -183,7 +184,7 @@ export default class OrderDelivery extends React.Component<any, any> {
 
         <Modal
           maskClosable={false}
-          title="发货"
+          title="Deliver goods"
           visible={modalVisible}
           onCancel={this._hideDeliveryModal}
           onOk={() => {
@@ -316,8 +317,8 @@ export default class OrderDelivery extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '提示',
-      content: '是否确认作废这条发货记录',
+      title: 'Prompt',
+      content: 'Whether to invalidate this delivery record',
       onOk() {
         obsoleteDeliver(tdId);
       },

@@ -7,11 +7,11 @@ import { Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 enum operatorDic {
-  BOSS = '平台',
-  PLATFORM = '平台',
-  CUSTOMER = '客户',
-  THIRD = '第三方',
-  SUPPLIER = '商家'
+  BOSS = 'Boss',
+  PLATFORM = 'Platform',
+  CUSTOMER = 'Customer',
+  THIRD = 'Third',
+  SUPPLIER = 'Supplier'
 }
 
 const columns = [
@@ -30,7 +30,11 @@ const columns = [
     title: 'Time',
     dataIndex: 'eventTime',
     key: 'eventTime',
-    render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
+    render: (time) =>
+      time &&
+      moment(time)
+        .format(Const.TIME_FORMAT)
+        .toString()
   },
   {
     title: 'Operation Category',
@@ -61,7 +65,7 @@ export default class OperateLog extends React.Component<any, any> {
   render() {
     const { log } = this.props.relaxProps;
     const Panel = Collapse.Panel;
-
+    console.log(log.toJS(), 'log');
     return (
       <div>
         <div style={styles.backItem}>

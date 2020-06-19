@@ -292,7 +292,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.obsoleteDeliver(tid, params);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('作废发货记录成功!');
+      message.success('Void shipment record succeeded!');
       this.init(tid);
     } else {
       message.error(res.message);

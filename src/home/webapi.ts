@@ -303,10 +303,19 @@ export const queryToTalSettlement = () => {
  * @param filterParams
  */
 export function fetchStoreEvaluateSum(param = {}) {
-    return Fetch<TResult>('/store/evaluate/sum/getByStoreId', {
-        method: 'POST',
-        body: JSON.stringify({
-            ...param
-        })
-    });
+  return Fetch<TResult>('/store/evaluate/sum/getByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
+}
+
+/**
+ * 获取首页Prescribers总计数据
+ */
+export function getPrescribersTotal() {
+  return Fetch<TResult>('/home-prescribers/overview', {
+    method: 'GET'
+  });
 }

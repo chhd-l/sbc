@@ -48,3 +48,11 @@ export const getSiteInfo = () => {
 export const fetchMiniProgramQrcode = (storeId) => {
   return Fetch(`/store/getS2bSupplierQrcode/${storeId}`, { method: 'POST' });
 };
+
+/**
+ * 员工信息
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const employee = () => {
+  return Fetch('/customer/employee/info');
+};

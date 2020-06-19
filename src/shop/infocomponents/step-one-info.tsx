@@ -94,7 +94,6 @@ export default class StepOneEdit extends React.Component<any, any> {
 
     idlist.map(function(item, value) {
       let result = data.find((x) => x.id.toString() === item);
-      debugger;
       if (result) {
         valueList.push(result.valueEn);
       }

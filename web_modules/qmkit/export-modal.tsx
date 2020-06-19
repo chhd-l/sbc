@@ -56,12 +56,12 @@ export default class ExportModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={'批量导出'}
+        title={'Batch Export'}
         visible={visible}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            取消
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -70,7 +70,7 @@ export default class ExportModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk()}
           >
-            导出
+            Export
           </Button>
         ]}
       >

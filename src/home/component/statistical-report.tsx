@@ -11,27 +11,27 @@ import CustomerGrowTrendsCharts from './cus-trends';
 
 const trafficColumns = [
   {
-    title: '日期',
+    title: 'date',
     dataIndex: 'date',
     key: 'date'
   },
   {
-    title: '访客数UV',
+    title: 'visitor number',
     dataIndex: 'totalUv',
     key: 'totalUv'
   },
   {
-    title: '浏览量PV',
+    title: 'page view',
     dataIndex: 'totalPv',
     key: 'totalPv'
   },
   {
-    title: '商品访客数',
+    title: 'Product visitor number',
     dataIndex: 'skuTotalUv',
     key: 'skuTotalUv'
   },
   {
-    title: '商品浏览量',
+    title: 'Products page view',
     dataIndex: 'skuTotalPv',
     key: 'skuTotalPv'
   }
@@ -39,28 +39,28 @@ const trafficColumns = [
 
 const tradeColumns = [
   {
-    title: '日期',
+    title: 'date',
     dataIndex: 'title',
     key: 'title'
   },
   {
-    title: '下单笔数',
+    title: 'Order number',
     dataIndex: 'orderCount',
     key: 'orderCount'
   },
   {
-    title: '下单金额',
+    title: 'Order amount',
     dataIndex: 'orderAmt',
     render: (_text, record) => '￥' + (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
-    title: '付款订单数',
+    title: 'Number of payment orders',
     dataIndex: 'payOrderCount',
     key: 'payOrderCount'
   },
   {
-    title: '付款金额',
+    title: 'Payment amount',
     dataIndex: 'payOrderAmt',
     render: (_text, record) => '￥' + (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
@@ -69,17 +69,17 @@ const tradeColumns = [
 
 const customerColumns = [
   {
-    title: '日期',
+    title: 'date',
     dataIndex: 'baseDate',
     key: 'baseDate'
   },
   {
-    title: '客户总数',
+    title: 'Customer total number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: '新增客户数',
+    title: 'New customer number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -170,45 +170,46 @@ export default class StatisticalReport extends React.Component<any, any> {
         {trafficOview ? (
           <AuthWrapper functionName="f_flow_watch_1">
             <div className="homeItem todayData">
-              <h3>流量概况&nbsp;今日</h3>
+              <h3>Flow profile&nbsp;Today</h3>
               <div className="dateBg">
                 <div className="dataItem">
-                  <label>访客数UV</label>
+                  <label>visitor number UV</label>
                   <strong>{trafficNum.get('totalUv') || 0}</strong>
                 </div>
                 <div className="dataItem">
-                  <label>浏览器PV</label>
+                  <label>page view PV</label>
                   <strong>{trafficNum.get('totalPv') || 0}</strong>
                 </div>
               </div>
-              <div className="dateBg">
+              {/* <div className="dateBg">
                 <div className="dataItem">
-                  <label>商品访客数</label>
+                  <label>Product visitor number</label>
                   <strong>{trafficNum.get('skuTotalUv') || 0}</strong>
                 </div>
                 <div className="dataItem">
-                  <label>商品浏览量</label>
+                  <label>Products page view</label>
                   <strong>{trafficNum.get('skuTotalPv') || 0}</strong>
                 </div>
-              </div>
+              </div> */}
             </div>
           </AuthWrapper>
         ) : null}
         {tradeOview ? (
           <AuthWrapper functionName="f_trade_watch_1">
             <div className="homeItem todayData">
-              <h3>交易概况&nbsp;今日</h3>
+              <h3>Flow profile&nbsp;Today</h3>
               <div className="dateBg">
                 <div className="dataItem">
-                  <label>下单笔数</label>
+                  <label>Order number</label>
                   <strong>
                     {tradeNum && (tradeNum.get('orderCount') || 0)}
                   </strong>
                 </div>
                 <div className="dataItem">
-                  <label>下单金额</label>
+                  <label>Order amount</label>
                   <strong>
-                    ￥{tradeNum
+                    ￥
+                    {tradeNum
                       ? (tradeNum.get('orderAmt') || 0).toFixed(2)
                       : 0.0}
                   </strong>
@@ -216,45 +217,19 @@ export default class StatisticalReport extends React.Component<any, any> {
               </div>
               <div className="dateBg">
                 <div className="dataItem">
-                  <label>付款订单数</label>
+                  <label>Number of payment orders</label>
                   <strong>
                     {tradeNum && (tradeNum.get('payOrderCount') || 0)}
                   </strong>
                 </div>
                 <div className="dataItem">
-                  <label>付款金额</label>
+                  <label>Payment amount</label>
                   <strong>
-                    ￥{tradeNum
+                    ￥
+                    {tradeNum
                       ? (tradeNum.get('payOrderAmt') || 0).toFixed(2)
                       : 0.0}
                   </strong>
-                </div>
-              </div>
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {skuOview ? (
-          <AuthWrapper functionName="f_goods_watch_1">
-            <div className="homeItem todayData">
-              <h3>商品概况&nbsp;今日</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>商品总数SKU</label>
-                  <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
-                </div>
-                <div className="dataItem">
-                  <label>上架商品数</label>
-                  <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
-                </div>
-              </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>已审核商品SKU</label>
-                  <strong>{skuNum && (skuNum.get('checkedTotal') || 0)}</strong>
-                </div>
-                <div className="dataItem">
-                  <label>销售中商品SKU</label>
-                  <strong>{skuNum && (skuNum.get('saleTotal') || 0)}</strong>
                 </div>
               </div>
             </div>
@@ -269,9 +244,6 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>客户总数</label>
                   <strong>{customerNum.get('cusAllCount') || 0}</strong>
                 </div>
-                <div className="dataItem" />
-              </div>
-              <div className="dateBg">
                 <div className="dataItem">
                   <label>新增客户数</label>
                   <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
@@ -280,10 +252,37 @@ export default class StatisticalReport extends React.Component<any, any> {
             </div>
           </AuthWrapper>
         ) : null}
+        {skuOview ? (
+          <AuthWrapper functionName="f_goods_watch_1">
+            <div className="homeItem todayData">
+              <h3>Product overview&nbsp;Today</h3>
+              <div className="dateBg">
+                <div className="dataItem">
+                  <label>Products total number SKU</label>
+                  <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
+                </div>
+                <div className="dataItem">
+                  <label>Number of products on shelves</label>
+                  <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
+                </div>
+              </div>
+              {/* <div className="dateBg">
+                <div className="dataItem">
+                  <label>Audited products SKU</label>
+                  <strong>{skuNum && (skuNum.get('checkedTotal') || 0)}</strong>
+                </div>
+                <div className="dataItem">
+                  <label>Products in sale SKU</label>
+                  <strong>{skuNum && (skuNum.get('saleTotal') || 0)}</strong>
+                </div>
+              </div> */}
+            </div>
+          </AuthWrapper>
+        ) : null}
         {trafficReport ? (
           <AuthWrapper functionName="f_flow_watch_1">
             <div className="homeItem lastTenData">
-              <h3>流量报表&nbsp;近10日</h3>
+              <h3>Flow Reports&nbsp;Nearly 10 days</h3>
               <Table
                 dataSource={flowData.size > 0 ? flowData.toJS() : null}
                 columns={trafficColumns}
@@ -296,7 +295,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {trafficTrends ? (
           <AuthWrapper functionName="f_flow_watch_1">
             <div className="homeItem lastTenData">
-              <h3>流量趋势&nbsp;近10日</h3>
+              <h3>Traffic trend&nbsp;Nearly 10 days</h3>
               <FlowTrendsCharts />
             </div>
           </AuthWrapper>
@@ -304,7 +303,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {tradeReport ? (
           <AuthWrapper functionName="f_trade_watch_1">
             <div className="homeItem lastTenData">
-              <h3>交易报表&nbsp;近10日</h3>
+              <h3>Transaction Reports&nbsp;Nearly 10 days</h3>
               <Table
                 dataSource={tradeData.size > 0 ? tradeData.toJS() : null}
                 columns={tradeColumns}
@@ -317,7 +316,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {tradeTrends ? (
           <AuthWrapper functionName="f_trade_watch_1">
             <div className="homeItem lastTenData">
-              <h3>交易趋势&nbsp;近10日</h3>
+              <h3>Trading trend&nbsp;Nearly 10 days</h3>
               <TradeTrendsCharts />
             </div>
           </AuthWrapper>
@@ -325,7 +324,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {customerGrowthReport ? (
           <AuthWrapper functionName="f_customer_watch_1">
             <div className="homeItem lastTenData">
-              <h3>客户增长报表&nbsp;近10日</h3>
+              <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
               <Table
                 dataSource={customerData.size > 0 ? customerData.toJS() : null}
                 columns={customerColumns}
@@ -338,7 +337,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {customerGrowthTrends ? (
           <AuthWrapper functionName="f_customer_watch_1">
             <div className="homeItem lastTenData">
-              <h3>客户增长趋势&nbsp;近10日</h3>
+              <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
               <CustomerGrowTrendsCharts />
             </div>
           </AuthWrapper>

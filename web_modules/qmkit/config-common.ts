@@ -14,7 +14,7 @@ const Common = {
     0: '待审核',
     1: '已审核',
     2: '审核未通过',
-    3: '禁售中'
+    3: 'No sale'
   },
 
   // 退货状态
@@ -23,7 +23,7 @@ const Common = {
     AUDIT: '待填写物流信息',
     DELIVERED: '待商家收货',
     RECEIVED: '待退款',
-    COMPLETED: '已完成',
+    COMPLETED: 'Finished',
     REJECT_RECEIVE: '拒绝收货',
     REJECT_REFUND: '拒绝退款',
     VOID: '已作废',
@@ -43,18 +43,18 @@ const Common = {
     0: '待退款',
     3: '待退款',
     1: '拒绝退款',
-    2: '已退款'
+    2: 'Refund'
   },
   // 支付方式
   payType: {
-    0: '在线支付',
+    0: 'Online payment',
     1: '转账汇款'
   },
   // 设价方式
   priceType: {
     0: '按客户设价',
     1: '按订货量设价',
-    2: '以市场价销售'
+    2: 'Sell at market prices'
   },
   // 平台类型
   platform: {
@@ -66,7 +66,7 @@ const Common = {
 
   // 发货状态
   deliverStatus: {
-    NOT_YET_SHIPPED: '未发货',
+    NOT_YET_SHIPPED: 'Not shipped',
     SHIPPED: '已发货',
     PART_SHIPPED: '部分发货',
     VOID: '作废'
@@ -76,7 +76,7 @@ const Common = {
   payState: {
     NOT_PAID: '未支付',
     PARTIAL_PAID: '部分支付',
-    PAID: '已付款'
+    PAID: 'Paid'
   },
 
   // 订单状态
@@ -84,8 +84,8 @@ const Common = {
     INIT: '待审核',
     REMEDY: '修改订单',
     REFUND: '退款',
-    AUDIT: '待发货',
-    DELIVERED_PART: '待发货',
+    AUDIT: 'To be delivered',
+    DELIVERED_PART: 'To be delivered',
     DELIVERED: '待收货',
     CONFIRMED: '已收货',
     COMPLETED: '已完成',

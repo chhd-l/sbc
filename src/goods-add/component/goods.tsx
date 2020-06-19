@@ -417,7 +417,7 @@ class GoodsForm extends React.Component<any, any> {
               onClick={showCateModal}
               style={{ marginLeft: 10, lineHeight: '40px' }}
             >
-              新增店铺分类
+              Add store classification
             </a>
           </Col>
         </Row>
@@ -502,7 +502,9 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="请填商品副标题，不超过225字" />)}
+              })(
+                <Input placeholder="Please select the item subtitle, no more than 225 words" />
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -529,7 +531,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'linePrice'),
                 initialValue: goods.get('linePrice')
-              })(<Input placeholder="请填写商品划线价" />)}
+              })(<Input placeholder="Please fill in the underlined price" />)}
             </FormItem>
           </Col>
         </Row>
@@ -564,7 +566,12 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsDescription'),
                 initialValue: goods.get('goodsDescription')
-              })(<TextArea rows={4} placeholder="请填商品描述" />)}
+              })(
+                <TextArea
+                  rows={4}
+                  placeholder="Please fill in the description of the item"
+                />
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -896,7 +903,7 @@ class GoodsForm extends React.Component<any, any> {
       <Select
         showSearch
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="请选择品牌"
+        placeholder="please select brand"
         notFoundContent="暂无品牌"
         allowClear={true}
         optionFilterProp="children"

@@ -111,7 +111,7 @@ class LevelPriceForm extends React.Component<any, any> {
         <div style={styles.bar}>
           <Form className="login-form" layout="inline">
             <CustomerSPU>
-              <FormItem label="SPU统一市场价">
+              <FormItem label="SPU unified market price">
                 {getFieldDecorator('marketPrice', {
                   rules: [
                     {
@@ -153,7 +153,7 @@ class LevelPriceForm extends React.Component<any, any> {
                 checked={openUserPrice}
                 style={{ marginTop: 8 }}
               >
-                按客户单独定价
+                Price separately by customer
               </Checkbox>
             </CustomerSPU>
             {/*级别价table*/}
@@ -165,7 +165,7 @@ class LevelPriceForm extends React.Component<any, any> {
               scroll={{ y: 240 }}
             >
               <Column
-                title="级别"
+                title="Level"
                 key="customerLevelName"
                 dataIndex="customerLevelName"
                 width="15%"
@@ -173,7 +173,8 @@ class LevelPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    默认折扣价&nbsp;<Tooltip
+                    Default discount price&nbsp;
+                    <Tooltip
                       placement="top"
                       title={
                         '如不填写自定义订货价，该级别售价默认使用折扣价，折扣价=市场价×等级折扣率'
@@ -190,7 +191,8 @@ class LevelPriceForm extends React.Component<any, any> {
                 render={(rowInfo) => (
                   <div>
                     <div>
-                      ¥{(
+                      ¥
+                      {(
                         (marketPrice ? marketPrice : 0) *
                         rowInfo.customerLevelDiscount
                       ).toFixed(2)}
@@ -204,7 +206,8 @@ class LevelPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    自定义订货价&nbsp;<Tooltip
+                    Custom order price&nbsp;
+                    <Tooltip
                       placement="top"
                       title={
                         '填写后该级别销售价不会跟随市场价以及等级折扣率变化'
@@ -255,12 +258,13 @@ class LevelPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    起订量<br />{' '}
+                    Quantity
+                    <br />{' '}
                     <Checkbox
                       checked={levelCountChecked}
                       onChange={this._synchLevelCount}
                     >
-                      全部相同
+                      All the same
                     </Checkbox>
                   </div>
                 }
@@ -331,12 +335,13 @@ class LevelPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    限订量<br />{' '}
+                    Limited order
+                    <br />{' '}
                     <Checkbox
                       checked={levelMaxCountChecked}
                       onChange={this._synchLevelMaxCount}
                     >
-                      全部相同
+                      All the same
                     </Checkbox>
                   </div>
                 }

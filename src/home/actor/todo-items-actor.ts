@@ -11,7 +11,8 @@ export default class TodoItemsActor extends Actor {
       tradeTodo: {}, //订单待处理事项
       returnTodo: {}, //退单待处理事项
       goodsTodo: {}, //会员待处理事项
-      employee: {} //员工信息
+      employee: {}, //员工信息
+      prescribersTotal: {}
     };
   }
 
@@ -21,6 +22,14 @@ export default class TodoItemsActor extends Actor {
   @Action('home-todo-actor:setTradeTodo')
   setTradeTodo(state: IMap, res) {
     return state.set('tradeTodo', fromJS(res));
+  }
+
+  /**
+   * 设置
+   */
+  @Action('home-todo-actor:prescribers')
+  setPrescribersTotal(state: IMap, res) {
+    return state.set('prescribersTotal', fromJS(res));
   }
   /**
    * 设置退单待处理事项

@@ -46,39 +46,41 @@ export default class AccountInfo extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="登录账号">
+        <FormItem {...formItemLayout} label="Login account">
           {account && account.get('accountName')}
         </FormItem>
-        <FormItem {...formItemLayout} label="员工姓名" required={true}>
+        <FormItem {...formItemLayout} label="Customer name" required={true}>
           {getFieldDecorator('employeeName', {
             ...employeeName,
-            rules: [{
-              validator: (rule, value, callback) => {
-                QMMethod.validatorTrimMinAndMax(
-                  rule,
-                  value,
-                  callback,
-                  '员工姓名',
-                  1,
-                  20
-                );
+            rules: [
+              {
+                validator: (rule, value, callback) => {
+                  QMMethod.validatorTrimMinAndMax(
+                    rule,
+                    value,
+                    callback,
+                    '员工姓名',
+                    1,
+                    20
+                  );
+                }
               }
-            }]
+            ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="绑定手机号">
+        <FormItem {...formItemLayout} label="Bind phone number">
           <Row>
             <Col span={4}>{(account && account.get('phone')) || '未绑定'}</Col>
             <Col span={20}>
-              <Tips title="您可通过绑定手机号重置密码，请尽快绑定" />
+              <Tips title="You can reset the password by binding the phone number. Please do so as soon as possible" />
             </Col>
           </Row>
         </FormItem>
-        <FormItem {...formItemLayout} label="角色">
+        <FormItem {...formItemLayout} label="Role">
           <Row>
-            <Col span={4}>{'系统管理员'}</Col>
+            <Col span={4}>{'system admin'}</Col>
             <Col span={20}>
-              <Tips title="重置密码与绑定手机 请前往安全中心" />
+              <Tips title="Reset password and bind mobile phone please go to security center" />
             </Col>
           </Row>
         </FormItem>
@@ -87,14 +89,14 @@ export default class AccountInfo extends React.Component<any, any> {
           <Col span={6}>&nbsp;</Col>
           <Col span={8}>
             <Button type="primary" onClick={() => this._handleSave()}>
-              保存
+              Save
             </Button>
             &nbsp;&nbsp;
-            <Button onClick={() => this.onCancel()}>取消</Button>
+            <Button onClick={() => this.onCancel()}>Cancel</Button>
           </Col>
         </Row>
         <div style={{ marginTop: 20 }}>
-          <h3>登录日志</h3>
+          <h3>Login Log</h3>
           <ul>{this._renderLog()}</ul>
         </div>
       </Form>

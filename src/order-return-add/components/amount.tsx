@@ -104,7 +104,7 @@ export default class Amount extends React.Component<any, any> {
           <div style={styles.applyPrice} />
           <div style={styles.priceBox}>
             <label style={styles.priceItem as any}>
-              <span style={styles.name}>应退金额: </span>
+              <span style={styles.name}>Refundable amount: </span>
               <strong>
                 $
                 {applyStatus
@@ -113,7 +113,7 @@ export default class Amount extends React.Component<any, any> {
               </strong>
             </label>
             <label style={styles.priceItem as any}>
-              <span style={styles.name}>应退积分: </span>
+              <span style={styles.name}>Retractable integral: </span>
               <strong>{applyStatus ? applyIntegral : shouldIntegral}</strong>
             </label>
           </div>

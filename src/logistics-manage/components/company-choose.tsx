@@ -26,7 +26,7 @@ export default class CompanyChoose extends React.Component<any, any> {
         <Row type="flex" justify="start" style={styles.box}>
           {this.props.relaxProps.allExpressList.toJS().map((v, i) => {
             return (
-              <Col span={3} key={v.expressCompanyId}>
+              <Col span={4} key={v.expressCompanyId}>
                 <Checkbox
                   style={styles.item}
                   checked={v.isChecked}
@@ -66,7 +66,7 @@ const styles = {
     paddingRight: 20,
     display: 'flex',
     alignItems: 'center',
-    color: '#333',
+    color: '#333'
   } as any,
   box: {
     padding: 20

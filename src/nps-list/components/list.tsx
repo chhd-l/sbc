@@ -74,7 +74,7 @@ export default class CustomerList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column
+        {/* <Column
           title={<FormattedMessage id="productName" />}
           key="goodsInfoName"
           dataIndex="goodsInfoName"
@@ -82,7 +82,6 @@ export default class CustomerList extends React.Component<any, any> {
           render={(goodsInfoName, rowData: any) => {
             return (
               <div style={styles.goodsName}>
-                {/*/!*商品图片*!/*/}
                 {rowData.goodsImg ? (
                   <img
                     src={rowData.goodsImg ? rowData.goodsImg : defaultImg}
@@ -95,11 +94,11 @@ export default class CustomerList extends React.Component<any, any> {
               </div>
             );
           }}
-        />
+        /> */}
         <Column
           title={<FormattedMessage id="orderNumber" />}
           key="orderNo"
-          width={150}
+          // width={250}
           dataIndex="orderNo"
           render={(orderNo) => (orderNo ? orderNo : '-')}
         />
@@ -107,46 +106,46 @@ export default class CustomerList extends React.Component<any, any> {
           title={<FormattedMessage id="consumerName" />}
           key="customerName,"
           dataIndex="customerName"
-          width={120}
+          // width={180}
           render={(customerName, rowData) => {
             return (
               <div>
                 {customerName}
-                <br />
-                {rowData['customerAccount']}
+                {/* <br />
+                {rowData['customerAccount']} */}
               </div>
             );
           }}
         />
         <Column
           title={<FormattedMessage id="consumerType" />}
-          key="customerName,"
-          dataIndex="customerName"
-          width={120}
-          render={(customerName, rowData) => {
+          key="consumerType,"
+          dataIndex="consumerType"
+          // width={120}
+          render={(consumerType, rowData) => {
             return (
               <div>
-                {customerName}
-                <br />
-                {rowData['customerAccount']}
+                {consumerType}
+                {/* <br />
+                {rowData['customerAccount']} */}
               </div>
             );
           }}
         />
         <Column
           title={<FormattedMessage id="ratingWithComment" />}
-          key="evaluateScore"
-          dataIndex="evaluateScore"
+          key="commentStatus"
+          dataIndex="commentStatus"
           // width={50}
-          render={(evaluateScore) => 'Y'}
+          render={(commentStatus) => commentStatus}
         />
         <Column
           title={<FormattedMessage id="productRating" />}
-          key="evaluateScore"
-          dataIndex="evaluateScore"
+          key="goodsScore"
+          dataIndex="goodsScore"
           width={150}
           render={(evaluateScore) =>
-            evaluateScore ? evaluateScore + '星' : '-'
+            evaluateScore ? evaluateScore + ' star' : '-'
           }
         />
         {/* <Column
@@ -175,8 +174,8 @@ export default class CustomerList extends React.Component<any, any> {
 
         <Column
           title={<FormattedMessage id="surveyTime" />}
-          key="evaluateTime"
-          dataIndex="evaluateTime"
+          key="createTime"
+          dataIndex="createTime"
           width={102}
           render={(evaluateTime) =>
             evaluateTime
@@ -192,13 +191,13 @@ export default class CustomerList extends React.Component<any, any> {
           key="evaluateId"
           dataIndex="evaluateId"
           className="operation-th"
-          render={(evaluateId) => {
+          render={(evaluateId, rowData) => {
             return (
               <div className="operation-th">
                 <AuthWrapper functionName={'f_coupon_detail'}>
                   <span
                     style={styles.see}
-                    onClick={() => goodsEvaluateDetail(evaluateId, true)}
+                    onClick={() => goodsEvaluateDetail(rowData)}
                   >
                     View
                   </span>

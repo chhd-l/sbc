@@ -96,7 +96,8 @@ class SpecForm extends React.Component<any, any> {
               <Row>
                 <Col offset={5}>
                   <p style={{ color: '#999', marginBottom: 5 }}>
-                    可使用键盘“回车键”快速添加多个规格值
+                    You can quickly add multiple specifications using the
+                    keyboard enter key
                   </p>
                 </Col>
               </Row>
@@ -391,7 +392,11 @@ class SpecForm extends React.Component<any, any> {
    *  获取整数随机数
    */
   _getRandom = () => {
-    return parseInt(Math.random().toString().substring(2, 18));
+    return parseInt(
+      Math.random()
+        .toString()
+        .substring(2, 18)
+    );
   };
   r;
 }

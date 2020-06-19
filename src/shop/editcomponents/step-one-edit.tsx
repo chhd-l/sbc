@@ -334,6 +334,12 @@ export default class StepOneEdit extends React.Component<any, any> {
                     ]
                   })(
                     <Select
+                      showSearch
+                      filterOption={(input, option: { props }) =>
+                        option.props.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(value) =>
                         onChange({
                           field: 'timeZoneId',

@@ -34,27 +34,27 @@ export default class HomeBody extends React.Component<any, any> {
       <div style={styles.container}>
         <div className="flowBox">
           <div className="homeItem pending">
-            <h3>待处理事项</h3>
+            <h3>Pending matters</h3>
             <div className="dateBg">
               <a
                 onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
                 className="dataItem"
               >
-                <label>待审核订单</label>
+                <label>Pending approval orders</label>
                 <strong>{tradeTodo.get('waitAudit')}</strong>
               </a>
               <a
                 onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                 className="dataItem"
               >
-                <label>待付款订单</label>
+                <label>Pending payment orders</label>
                 <strong>{tradeTodo.get('waitPay')}</strong>
               </a>
               <a
                 onClick={() => this._toOrderList({ key: 'flowState-AUDIT' })}
                 className="dataItem"
               >
-                <label>待发货订单</label>
+                <label>Pending delivery orders</label>
                 <strong>{tradeTodo.get('waitDeliver')}</strong>
               </a>
               <a
@@ -63,7 +63,7 @@ export default class HomeBody extends React.Component<any, any> {
                 }
                 className="dataItem"
               >
-                <label>待收货订单</label>
+                <label>Pending receive orders</label>
                 <strong>{tradeTodo.get('waitReceiving')}</strong>
               </a>
             </div>
@@ -73,14 +73,14 @@ export default class HomeBody extends React.Component<any, any> {
                 onClick={() => this._toReturnList({ key: 'flowState-INIT' })}
                 className="dataItem"
               >
-                <label>待审核退单</label>
+                <label>Pending Refund Orders</label>
                 <strong>{returnTodo.get('waitAudit')}</strong>
               </a>
               <a
                 onClick={() => this._toReturnList({ key: 'flowState-AUDIT' })}
                 className="dataItem"
               >
-                <label>待填写物流退单</label>
+                <label>Pending fill logistics return</label>
                 <strong>{returnTodo.get('waitFillLogistics')}</strong>
               </a>
               <a
@@ -89,7 +89,7 @@ export default class HomeBody extends React.Component<any, any> {
                 }
                 className="dataItem"
               >
-                <label>待收货退单</label>
+                <label>Pending receive chargeback</label>
                 <strong>{returnTodo.get('waitReceiving')}</strong>
               </a>
               <a
@@ -98,7 +98,7 @@ export default class HomeBody extends React.Component<any, any> {
                 }
                 className="dataItem"
               >
-                <label>待退款退单</label>
+                <label>Pending refund chargeback</label>
                 <strong>{returnTodo.get('waitRefund')}</strong>
               </a>
             </div>
@@ -122,7 +122,7 @@ export default class HomeBody extends React.Component<any, any> {
                 onClick={() => this._toOrderTicket({ invoiceState: '0' })}
                 className="dataItem"
               >
-                <label>待开票订单</label>
+                <label>Pending Invoice Orders</label>
                 <strong>{customerTodo.get('waitAuditOrderInvoice')}</strong>
               </a>
               <a className="dataItem" />
@@ -161,7 +161,7 @@ export default class HomeBody extends React.Component<any, any> {
   /**
    * route 订单列表
    */
-  _toOrderList = state => {
+  _toOrderList = (state) => {
     history.push({
       pathname: '/order-list',
       state: state
@@ -171,7 +171,7 @@ export default class HomeBody extends React.Component<any, any> {
   /**
    * route 退单列表
    */
-  _toReturnList = state => {
+  _toReturnList = (state) => {
     history.push({
       pathname: '/order-return-list',
       state: state
@@ -181,7 +181,7 @@ export default class HomeBody extends React.Component<any, any> {
   /**
    * route 会员列表
    */
-  _toCustomerList = state => {
+  _toCustomerList = (state) => {
     history.push({
       pathname: '/customer-list',
       state: state
@@ -191,7 +191,7 @@ export default class HomeBody extends React.Component<any, any> {
   /**
    * route 增票资质
    */
-  _toFinanceTax = state => {
+  _toFinanceTax = (state) => {
     history.push({
       pathname: '/finance-val-added-tax',
       state: state
@@ -201,7 +201,7 @@ export default class HomeBody extends React.Component<any, any> {
   /**
    * route 开票订单
    */
-  _toOrderTicket = state => {
+  _toOrderTicket = (state) => {
     history.push({
       pathname: '/finance-order-ticket',
       state: state

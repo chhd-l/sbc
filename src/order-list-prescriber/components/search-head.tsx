@@ -346,6 +346,23 @@ export default class SearchHead extends Component<any, any> {
               </Button>
             </FormItem>
           </Form>
+
+          {hasMenu && (
+            <div className="handle-bar">
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+              >
+                <Button>
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </div>
+          )}
         </div>
 
         <ExportModal
@@ -455,8 +472,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: <FormattedMessage id="order.exportFilterOrder" />,
-      byIdsTitle: <FormattedMessage id="order.exportSelectedOrder" />,
+      byParamsTitle: 'Export filtered orders',
+      byIdsTitle: 'Export selected order',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

@@ -5,7 +5,7 @@ import { Fetch } from 'qmkit';
  * @param filterParams
  */
 export function fetchGoodsEvaluateList(filterParams = {}) {
-  return Fetch<TResult>('/goods/evaluate/page', {
+  return Fetch<TResult>('/evaluate/pageOrder', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -83,4 +83,16 @@ export function saveGoodsEvaluateAnswer(param = {}) {
       ...param
     })
   });
+}
+
+export function getCompositeScore(param = {}) {
+  return Fetch<TResult>(
+    '/store/evaluate/num/storeEvaluateNumByStoreIdAndScoreCycle',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        ...param
+      })
+    }
+  );
 }

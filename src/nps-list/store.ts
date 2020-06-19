@@ -61,7 +61,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('loading:end');
-        this.dispatch('listActor:init', res.context.goodsEvaluateVOPage);
+        this.dispatch('listActor:init', res.context);
         this.dispatch('list:currentPage', pageNum && pageNum + 1);
       });
     } else {
@@ -164,24 +164,24 @@ export default class AppStore extends Store {
     }
   };
 
-  goodsEvaluateDetail = async (evaluateId, isShow) => {
-    const { res } = await webapi.fetchGoodsEvaluateDetail({
-      evaluateId: evaluateId
-    });
-    if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('goodsEvaluate: init', res.context.goodsEvaluateVO);
-      this.dispatch('cate: modal', isShow);
-      // this.dispatch('evaluate: field', { 'isShow', true });
-      this.onFormFieldChange('isShow', res.context.goodsEvaluateVO.isShow);
-      this.onFormFieldChange('isAnswer', res.context.goodsEvaluateVO.isAnswer);
-      this.onFormFieldChange('evaluateId', evaluateId);
-      this.onFormFieldChange(
-        'evaluateAnswer',
-        res.context.goodsEvaluateVO.evaluateAnswer
-      );
-    } else {
-      message.error(res.message);
-    }
+  goodsEvaluateDetail = async (rowData) => {
+    // const { res } = await webapi.fetchGoodsEvaluateDetail({
+    //   evaluateId: evaluateId
+    // });
+    // if (res.code === Const.SUCCESS_CODE) {
+    this.dispatch('goodsEvaluate: init', rowData);
+    this.dispatch('cate: modal', true);
+    // this.dispatch('evaluate: field', { 'isShow', true });
+    //   this.onFormFieldChange('isShow', res.context.goodsEvaluateVO.isShow);
+    //   this.onFormFieldChange('isAnswer', res.context.goodsEvaluateVO.isAnswer);
+    //   this.onFormFieldChange('evaluateId', evaluateId);
+    //   this.onFormFieldChange(
+    //     'evaluateAnswer',
+    //     res.context.goodsEvaluateVO.evaluateAnswer
+    //   );
+    // } else {
+    //   message.error(res.message);
+    // }
   };
 
   onFormFieldChange = (key, value) => {

@@ -113,7 +113,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              批量导出
+              Bulk export
             </a>
           </AuthWrapper>
         </Menu.Item>

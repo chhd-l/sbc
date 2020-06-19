@@ -125,9 +125,10 @@ export default class OrderDelivery extends React.Component<any, any> {
                       {logistic ? (
                         <label style={styles.information}>
                           【Logistics information】delivery date：{deliverTime}
-                          Logistics company：
-                          {logistic.get('logisticCompanyName')} Logistics single
-                          number：{logistic.get('logisticNo')}
+                          &nbsp;&nbsp; Logistics company：
+                          {logistic.get('logisticCompanyName')}{' '}
+                          &nbsp;&nbsp;Logistics single number：
+                          {logistic.get('logisticNo')}&nbsp;&nbsp;
                           <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
@@ -315,8 +316,8 @@ export default class OrderDelivery extends React.Component<any, any> {
     const tid = detail.get('id');
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: '确认收货',
-      content: '确认已收到全部货品?',
+      title: 'Confirm receipt',
+      content: 'Confirm receipt of all items?',
       onOk() {
         confirm(tid);
       },

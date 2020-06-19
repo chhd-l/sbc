@@ -320,7 +320,7 @@ export default class SearchList extends React.Component<any, any> {
                       <span style={{ marginLeft: 20, color: '#000' }}>
                         {rid}{' '}
                         {v.get('platform') != 'CUSTOMER' && (
-                          <span style={styles.platform}>代退单</span>
+                          <span style={styles.platform}>Chargeback</span>
                         )}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>
@@ -330,7 +330,7 @@ export default class SearchList extends React.Component<any, any> {
                               style={{ marginLeft: 20 }}
                               to={`/order-return-edit/${rid}`}
                             >
-                              修改
+                              Modify
                             </Link>
                           </AuthWrapper>
                         )}
@@ -366,7 +366,7 @@ export default class SearchList extends React.Component<any, any> {
                               style={{ marginLeft: 20 }}
                               onClick={() => this._showDeliver(onDeliver, rid)}
                             >
-                              填写物流
+                              Fill in logistics
                             </a>
                           </AuthWrapper>
                         )}
@@ -450,13 +450,14 @@ export default class SearchList extends React.Component<any, any> {
                             <a
                               href="javascript:void(0)"
                               style={{ marginLeft: 20 }}
-                              onClick={() =>
+                              onClick={() => {
+                                console.log(onRejectRefund, 'onRejectRefund');
                                 this._showRejectRefund(
                                   onRejectRefund,
                                   rid,
                                   0 == payType
-                                )
-                              }
+                                );
+                              }}
                             >
                               <FormattedMessage id="refusedToRefund" />
                             </a>
@@ -495,33 +496,35 @@ export default class SearchList extends React.Component<any, any> {
                         ) : null;
                       })}
 
-                    {/*第4张特殊处理*/
-                    //@ts-ignore
-                    v.get('returnItems').concat(returnGifts).size > 3 ? (
-                      <div style={styles.imgBg}>
-                        <img
+                    {
+                      /*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('returnItems').concat(returnGifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={
+                              v
+                                .get('returnItems')
+                                .concat(returnGifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('returnItems')
+                                    .concat(returnGifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
                           //@ts-ignore
-                          src={
-                            v
-                              .get('returnItems')
-                              .concat(returnGifts)
-                              .get(3)
-                              .get('pic')
-                              ? v
-                                  .get('returnItems')
-                                  .concat(returnGifts)
-                                  .get(3)
-                                  .get('pic')
-                              : defaultImg
-                          }
-                          style={styles.imgFourth}
-                        />
-                        //@ts-ignore
-                        <div style={styles.imgNum}>
-                          共{v.get('returnItems').concat(returnGifts).size}件
+                          <div style={styles.imgNum}>
+                            共{v.get('returnItems').concat(returnGifts).size}件
+                          </div>
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null
+                    }
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*订单编号*/}
@@ -714,7 +717,7 @@ export default class SearchList extends React.Component<any, any> {
 
       this.props.relaxProps.onRejectModalChange({
         visible: true,
-        type: '拒绝退款',
+        type: 'refusing refund',
         onOk: onRejectRefund,
         rid: rid
       });

@@ -96,7 +96,7 @@ export default class AppStore extends Store {
         (val) => !ValidConst.noZeroNumber.test(val.get('itemNum'))
       )
     ) {
-      message.error('请填写发货数量');
+      message.error('Please fill in the delivery quantity');
     } else {
       this.showDeliveryModal();
     }
@@ -251,7 +251,7 @@ export default class AppStore extends Store {
     const buyerId = this.state().getIn(['detail', 'buyer', 'id']);
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('客户已被删除，不能修改订单！');
+      message.error('The customer has been deleted and cannot be modified！');
       return;
     } else {
       history.push('/order-edit/' + tid);

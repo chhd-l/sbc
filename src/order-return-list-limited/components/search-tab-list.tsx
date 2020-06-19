@@ -38,7 +38,10 @@ export default class SearchTabList extends React.Component<any, any> {
             {tab.get('key') === 'flowState-INIT' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待填写物流信息" key="flowState-AUDIT">
+          <Tabs.TabPane
+            tab="Logistics information to be filled in"
+            key="flowState-AUDIT"
+          >
             {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
           </Tabs.TabPane>
 
@@ -46,7 +49,7 @@ export default class SearchTabList extends React.Component<any, any> {
             {tab.get('key') === 'flowState-DELIVERED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="待退款" key="flowState-RECEIVED">
+          <Tabs.TabPane tab="Pending refund" key="flowState-RECEIVED">
             {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
@@ -62,7 +65,7 @@ export default class SearchTabList extends React.Component<any, any> {
             {tab.get('key') === 'flowState-REJECT_REFUND' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="已作废" key="flowState-VOID">
+          <Tabs.TabPane tab="Invalid" key="flowState-VOID">
             {tab.get('key') === 'flowState-VOID' ? <List /> : null}
           </Tabs.TabPane>
 

@@ -12,7 +12,7 @@ const Common = {
   // 商品审核状态
   goodsState: {
     0: '待审核',
-    1: '已审核',
+    1: 'Audited',
     2: '审核未通过',
     3: 'No sale'
   },
@@ -20,28 +20,28 @@ const Common = {
   // 退货状态
   returnGoodsState: {
     INIT: '待审核',
-    AUDIT: '待填写物流信息',
+    AUDIT: 'Logistics information to be filled in',
     DELIVERED: '待商家收货',
-    RECEIVED: '待退款',
+    RECEIVED: 'Pending refund',
     COMPLETED: 'Finished',
     REJECT_RECEIVE: '拒绝收货',
     REJECT_REFUND: '拒绝退款',
-    VOID: '已作废',
+    VOID: 'Invalid',
     REFUND_FAILED: '退款失败'
   },
   // 退款状态
   returnMoneyState: {
     INIT: '待审核',
-    AUDIT: '待退款',
-    COMPLETED: '已完成',
+    AUDIT: 'Pending refund',
+    COMPLETED: 'Finished',
     REJECT_REFUND: '拒绝退款',
-    VOID: '已作废',
+    VOID: 'Invalid',
     REFUND_FAILED: '退款失败'
   },
   // 退款单状态
   refundStatus: {
-    0: '待退款',
-    3: '待退款',
+    0: 'Pending refund',
+    3: 'Pending refund',
     1: '拒绝退款',
     2: 'Refund'
   },
@@ -53,7 +53,7 @@ const Common = {
   // 设价方式
   priceType: {
     0: '按客户设价',
-    1: '按订货量设价',
+    1: 'Set price for order quantity',
     2: 'Sell at market prices'
   },
   // 平台类型
@@ -88,8 +88,8 @@ const Common = {
     DELIVERED_PART: 'To be delivered',
     DELIVERED: '待收货',
     CONFIRMED: '已收货',
-    COMPLETED: '已完成',
-    VOID: '已作废',
+    COMPLETED: 'Finished',
+    VOID: 'Invalid',
     REFUND_FAILED: '退款失败'
   },
   // 优惠券使用范围

@@ -38,12 +38,12 @@ const formItemLayoutOne = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 5 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 20,
     xs: { span: 24 },
-    sm: { span: 18 }
+    sm: { span: 16 }
   }
 };
 

@@ -385,7 +385,7 @@ export default class SearchHead extends Component<any, any> {
           });
         }}
         value={this.state.buyerOptions}
-        style={{ width: 100 }}
+        // style={{ width: 100 }}
       >
         <Option value="buyerName">
           <FormattedMessage id="consumerName" />
@@ -407,7 +407,7 @@ export default class SearchHead extends Component<any, any> {
           });
         }}
         value={this.state.goodsOptions}
-        style={{ width: 100 }}
+        // style={{ width: 100 }}
       >
         <Option value="skuName">
           <FormattedMessage id="productName" />
@@ -429,7 +429,7 @@ export default class SearchHead extends Component<any, any> {
           })
         }
         value={this.state.receiverSelect}
-        style={{ width: 100 }}
+        // style={{ width: 100 }}
       >
         <Option value="consigneeName">
           <FormattedMessage id="recipient" />

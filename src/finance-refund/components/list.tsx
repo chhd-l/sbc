@@ -18,7 +18,7 @@ type TList = List<any>;
 const { Column } = DataGrid;
 
 const refundOrderStatusDic = {
-  0: '待退款',
+  0: 'Pending refund',
   1: '拒绝退款',
   2: '已退款'
 };
@@ -111,9 +111,7 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="createTime"
           render={(createTime) => (
             <span>
-              {momnet(createTime)
-                .format(Const.TIME_FORMAT)
-                .toString()}
+              {momnet(createTime).format(Const.TIME_FORMAT).toString()}
             </span>
           )}
         />

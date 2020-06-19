@@ -34,12 +34,12 @@ export default class DeliverModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title="填写物流信息"
+        title="Fill in logistics information"
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            取消
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -48,7 +48,7 @@ export default class DeliverModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk(handleOk)}
           >
-            确定
+            Confirm
           </Button>
         ]}
       >
@@ -105,7 +105,7 @@ class DeliverForm extends React.Component<any, any> {
       labelCol: {
         span: 2,
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         span: 24,
@@ -116,7 +116,7 @@ class DeliverForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="物流公司" hasFeedback>
+        <FormItem {...formItemLayout} label="Logistics company" hasFeedback>
           {getFieldDecorator('logisticCompanyCode', {
             rules: [
               {
@@ -139,7 +139,7 @@ class DeliverForm extends React.Component<any, any> {
             </Select>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="物流单号" hasFeedback>
+        <FormItem {...formItemLayout} label="Logistics order" hasFeedback>
           {getFieldDecorator('logisticNo', {
             rules: [
               {
@@ -149,7 +149,7 @@ class DeliverForm extends React.Component<any, any> {
             ]
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="退货日期" hasFeedback>
+        <FormItem {...formItemLayout} label="Refund date" hasFeedback>
           {getFieldDecorator('date', {
             rules: [
               {

@@ -52,16 +52,16 @@ export default class LogisticPopover extends React.Component<
             >
               <ul className="pull-left">
                 <li>
-                  物流公司：{companyInfo.get('logisticCompanyName')
+                  Logistics company：{companyInfo.get('logisticCompanyName')
                     ? companyInfo.get('logisticCompanyName')
                     : '无'}
                 </li>
                 <li>
-                  物流单号：{companyInfo.get('logisticNo')
+                  Logistics number：{companyInfo.get('logisticNo')
                     ? companyInfo.get('logisticNo')
                     : '无'}
                 </li>
-                <li>发货时间：{deliveryTime ? deliveryTime : '无'}</li>
+                <li>delivery date：{deliveryTime ? deliveryTime : '无'}</li>
               </ul>
             </div>
             {this.state.logistics && this.state.logistics.length > 0 ? (
@@ -102,7 +102,7 @@ export default class LogisticPopover extends React.Component<
                       })}
               </Timeline>
             ) : (
-              <div style={{ textAlign: 'center' }}>暂无物流信息</div>
+              <div style={{ textAlign: 'center' }}>No logistics information at present</div>
             )}
           </div>
         }

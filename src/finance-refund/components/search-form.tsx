@@ -108,7 +108,7 @@ export default class SearchForm extends React.Component<any, any> {
               defaultValue={null}
             >
               <Option value={null}>全部</Option>
-              <Option value={'0'}>待退款</Option>
+              <Option value={'0'}>Pending refund</Option>
               <Option value={'1'}>拒绝退款</Option>
               <Option value={'2'}>已退款</Option>
             </SelectGroup>

@@ -643,8 +643,8 @@ export default class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: <FormattedMessage id="order.confirmReceipt" />,
-      content: <FormattedMessage id="order.confirmReceivedAllProducts" />,
+      title: 'Confirm receipt',
+      content: 'Confirm that all products have been received?',
       onOk() {
         onConfirm(tdId);
       },

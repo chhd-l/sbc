@@ -9,7 +9,7 @@ type TList = List<any>;
 const { Column } = DataGrid;
 
 const refundOrderStatusDic = {
-  0: '待退款',
+  0: 'Pending refund',
   1: '拒绝退款',
   2: '已退款'
 };
@@ -72,7 +72,7 @@ export default class RefundList extends React.Component<any, any> {
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
-          onChange: selectedRowKeys => {
+          onChange: (selectedRowKeys) => {
             onSelect(selectedRowKeys);
           }
         }}
@@ -89,7 +89,7 @@ export default class RefundList extends React.Component<any, any> {
           title="退款流水号"
           key="refundBillCode"
           dataIndex="refundBillCode"
-          render={refundBillCode => (
+          render={(refundBillCode) => (
             <span>{refundBillCode ? refundBillCode : '-'}</span>
           )}
         />
@@ -97,11 +97,9 @@ export default class RefundList extends React.Component<any, any> {
           title="退款时间"
           key="refundBillTime"
           dataIndex="refundBillTime"
-          render={refundBillTime => (
+          render={(refundBillTime) => (
             <span>
-              {momnet(refundBillTime)
-                .format(Const.TIME_FORMAT)
-                .toString()}
+              {momnet(refundBillTime).format(Const.TIME_FORMAT).toString()}
             </span>
           )}
         />
@@ -116,7 +114,7 @@ export default class RefundList extends React.Component<any, any> {
           title="应退金额"
           key="returnPrice"
           dataIndex="returnPrice"
-          render={returnPrice => (
+          render={(returnPrice) => (
             <span>{returnPrice ? `￥${returnPrice.toFixed(2)}` : '-'}</span>
           )}
         />
@@ -124,7 +122,7 @@ export default class RefundList extends React.Component<any, any> {
           title="实退金额"
           key="actualReturnPrice"
           dataIndex="actualReturnPrice"
-          render={actualReturnPrice => (
+          render={(actualReturnPrice) => (
             <span>
               {actualReturnPrice ? `￥${actualReturnPrice.toFixed(2)}` : '-'}
             </span>
@@ -135,27 +133,29 @@ export default class RefundList extends React.Component<any, any> {
           title="退款方式"
           key="payType"
           dataIndex="payType"
-          render={payType => <span>{payTypeDic[payType]}</span>}
+          render={(payType) => <span>{payTypeDic[payType]}</span>}
         />
         <Column
           title="退款支付渠道"
           key="payChannel"
           dataIndex="payChannel"
-          render={payChannel => <span>{payChannel || '-'}</span>}
+          render={(payChannel) => <span>{payChannel || '-'}</span>}
         />
         <Column
           width="10%"
           title="退款账户"
           key="returnAccountName"
           dataIndex="returnAccountName"
-          render={returnAccountName => <span>{returnAccountName || '-'}</span>}
+          render={(returnAccountName) => (
+            <span>{returnAccountName || '-'}</span>
+          )}
         />
         <Column
           width="80"
           title="状态"
           key="refundStatus"
           dataIndex="refundStatus"
-          render={refundStatus => (
+          render={(refundStatus) => (
             <span>{refundOrderStatusDic[refundStatus]}</span>
           )}
         />
@@ -164,7 +164,7 @@ export default class RefundList extends React.Component<any, any> {
           title="备注"
           key="comment"
           dataIndex="comment"
-          render={comment => (
+          render={(comment) => (
             <span>
               {comment ? (
                 <Tooltip title={this._renderComment(comment)} placement="top">
@@ -250,7 +250,9 @@ export default class RefundList extends React.Component<any, any> {
   _renderAccountName(returnAccount) {
     const { offlineAccounts } = this.props.relaxProps;
     return offlineAccounts
-      .find(offlineAccount => offlineAccount.get('accountId') == returnAccount)
+      .find(
+        (offlineAccount) => offlineAccount.get('accountId') == returnAccount
+      )
       .get('bankNo');
   }
 }

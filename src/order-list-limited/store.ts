@@ -36,9 +36,7 @@ export default class AppStore extends Store {
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
     //获取form数据
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
@@ -143,7 +141,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.audit(tid, audit, reason);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success(audit == 'CHECKED' ? '审核成功' : '驳回成功');
+        message.success(audit == 'CHECKED' ? 'Audit successfully' : '驳回成功');
         this.init();
       } else {
         message.error(
@@ -242,9 +240,7 @@ export default class AppStore extends Store {
    */
   onExportByParams = () => {
     // 搜索条件
-    let params = this.state()
-      .get('form')
-      .toJS();
+    let params = this.state().get('form').toJS();
     // tab
     const key = this.state().getIn(['tab', 'key']);
     if (key != '0') {
@@ -293,7 +289,7 @@ export default class AppStore extends Store {
   verify = async (tid: string, buyerId: string) => {
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('客户已被删除，不能修改订单！');
+      message.error('The customer has been deleted and cannot be modified！');
       return;
     } else {
       history.push('/order-edit/' + tid);

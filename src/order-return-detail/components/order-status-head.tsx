@@ -187,7 +187,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                     href="javascript:;"
                     onClick={() => this._showDeliver(onDeliver, rid)}
                   >
-                    填写物流
+                    Fill in logistics
                   </a>
                 </AuthWrapper>
               )}

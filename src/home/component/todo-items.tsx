@@ -106,10 +106,10 @@ export default class TodoItems extends React.Component<any, any> {
     return (
       <div>
         {/* 配置主页 */}
-        <a href="javascript:;" className="configHome" onClick={this.showModal}>
+        {/* <a href="javascript:;" className="configHome" onClick={this.showModal}>
           <Icon type="bars" style={{ fontSize: 16, color: '#F56C1D' }} />
           <p className="configName">Configure home</p>
-        </a>
+        </a> */}
         <Modal
           maskClosable={true}
           style={{ position: 'fixed', right: 0, top: 64 }}

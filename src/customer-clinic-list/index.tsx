@@ -224,7 +224,7 @@ export default class Customer extends React.Component<any, any> {
   render() {
     const { customerTypeArr, columns } = this.state;
     return (
-      <AuthWrapper functionName="f_customer_0">
+      <AuthWrapper functionName="f_customer_0_prescriber">
         <div>
           <BreadCrumb />
           {/*导航面包屑*/}

@@ -374,7 +374,7 @@ export default class ListView extends React.Component<any, any> {
                               .get('tradeItems')
                               .get(0)
                               .get('isFlashSaleGoods') && (
-                              <AuthWrapper functionName="edit_order_f_001">
+                              <AuthWrapper functionName="edit_order_f_001_prescriber">
                                 <a
                                   style={{ marginLeft: 20 }}
                                   onClick={() => {
@@ -388,7 +388,7 @@ export default class ListView extends React.Component<any, any> {
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
                             v.getIn(['tradeState', 'auditState']) ===
                               'NON_CHECKED' && (
-                              <AuthWrapper functionName="fOrderList002">
+                              <AuthWrapper functionName="fOrderList002_prescriber">
                                 <a
                                   onClick={() => {
                                     onAudit(id, 'CHECKED');
@@ -404,7 +404,7 @@ export default class ListView extends React.Component<any, any> {
                             v.getIn(['tradeState', 'auditState']) ===
                               'NON_CHECKED' &&
                             v.getIn(['tradeState', 'payState']) != 'PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
+                              <AuthWrapper functionName="fOrderList002_prescriber">
                                 <a
                                   onClick={() => this._showRejectedConfirm(id)}
                                   href="javascript:void(0)"
@@ -421,7 +421,7 @@ export default class ListView extends React.Component<any, any> {
                               'NOT_YET_SHIPPED' &&
                             v.getIn(['tradeState', 'payState']) ===
                               'NOT_PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
+                              <AuthWrapper functionName="fOrderList002_prescriber">
                                 <a
                                   style={{ marginLeft: 20 }}
                                   onClick={() => {
@@ -467,7 +467,7 @@ export default class ListView extends React.Component<any, any> {
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) ===
                             'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003">
+                            <AuthWrapper functionName="fOrderList003_prescriber">
                               <a
                                 onClick={() => {
                                   this._showConfirm(id);
@@ -478,7 +478,7 @@ export default class ListView extends React.Component<any, any> {
                               </a>
                             </AuthWrapper>
                           )}
-                          <AuthWrapper functionName="fOrderDetail001">
+                          <AuthWrapper functionName="fOrderDetail001_prescriber">
                             <Link
                               style={{ marginLeft: 20, marginRight: 20 }}
                               to={`/order-detail-prescriber/${id}`}

@@ -114,7 +114,7 @@ export default class Tool extends React.Component<any, any> {
   _setFeight = () => {
     const { selectedSpuKeys, setFeightVisible } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     } else {
       setFeightVisible(true);
@@ -124,7 +124,7 @@ export default class Tool extends React.Component<any, any> {
   _spuOnSale = () => {
     const { spuOnSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     }
     confirm({
@@ -139,7 +139,7 @@ export default class Tool extends React.Component<any, any> {
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     }
     confirm({
@@ -154,7 +154,7 @@ export default class Tool extends React.Component<any, any> {
   _delGoods = () => {
     const { spuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     }
     confirm({

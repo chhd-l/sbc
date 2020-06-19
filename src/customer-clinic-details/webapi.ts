@@ -20,7 +20,7 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/encryption/detail/' + id, {
+  return Fetch<TResult>('/customer/detail/encryption/' + id, {
     method: 'Get'
   });
 }
@@ -48,7 +48,7 @@ export function basicDetailsUpdate(filterParams = {}) {
  * @param filterParams
  */
 export function fetchClinicList(filterParams = {}) {
-  return Fetch<TResult>('/clinics/queryPrescription', {
+  return Fetch<TResult>('/prescriber/listPage', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

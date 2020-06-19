@@ -43,16 +43,16 @@ export default class Foot extends React.Component<any, any> {
               >
                 <FormattedMessage id="product.saveDirectly" />
               </Button>
-            </AuthWrapper>,
-            <AuthWrapper key="002" functionName={this.props.priceFuncName}>
-              <Button
-                onClick={this._next}
-                style={{ marginLeft: 10 }}
-                loading={saveLoading}
-              >
-                <FormattedMessage id="product.next" />
-              </Button>
             </AuthWrapper>
+            // <AuthWrapper key="002" functionName={this.props.priceFuncName}>
+            //   <Button
+            //     onClick={this._next}
+            //     style={{ marginLeft: 10 }}
+            //     loading={saveLoading}
+            //   >
+            //     <FormattedMessage id="product.next" />
+            //   </Button>
+            // </AuthWrapper>
           ]
         ) : (
           <AuthWrapper functionName={this.props.priceFuncName}>

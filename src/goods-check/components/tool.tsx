@@ -45,7 +45,7 @@ export default class Tool extends React.Component<any, any> {
   _spuCheckedFunc = () => {
     const { onSpuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     }
     confirm({

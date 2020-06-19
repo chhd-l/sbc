@@ -143,7 +143,7 @@ export default class CustomerList extends React.Component<any, any> {
           title={<FormattedMessage id="productRating" />}
           key="goodsScore"
           dataIndex="goodsScore"
-          width={150}
+          // width={150}
           render={(evaluateScore) =>
             evaluateScore ? evaluateScore + ' star' : '-'
           }
@@ -179,9 +179,7 @@ export default class CustomerList extends React.Component<any, any> {
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime)
-                  .format(Const.TIME_FORMAT)
-                  .toString()
+              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
               : ''
           }
         />

@@ -162,28 +162,25 @@ export default class StatisticalReport extends React.Component<any, any> {
     } = this.props.relaxProps;
 
     return (
-      <div
-        className={oviewUi[oViewNum]}
-        style={{ marginLeft: -5, marginRight: -5 }}
-      >
+      <div className={oviewUi[4]} style={{ marginLeft: -5, marginRight: -5 }}>
         {/* 流量统计报表查看 */}
-        {trafficOview ? (
-          <AuthWrapper functionName="f_flow_watch_1">
-            <div className="homeItem todayData">
-              <h3>Flow profile&nbsp;Today</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>visitor number UV</label>
-                  <strong>{trafficNum.get('totalUv') || 0}</strong>
-                </div>
+        {
+          // <AuthWrapper functionName="f_flow_watch_1">
+          <div className="homeItem todayData">
+            <h3>Flow profile&nbsp;Today</h3>
+            <div className="dateBg">
+              <div className="dataItem">
+                <label>visitor number UV</label>
+                <strong>{trafficNum.get('totalUv') || 0}</strong>
               </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>page view PV</label>
-                  <strong>{trafficNum.get('totalPv') || 0}</strong>
-                </div>
+            </div>
+            <div className="dateBg">
+              <div className="dataItem">
+                <label>page view PV</label>
+                <strong>{trafficNum.get('totalPv') || 0}</strong>
               </div>
-              {/* <div className="dateBg">
+            </div>
+            {/* <div className="dateBg">
                 <div className="dataItem">
                   <label>Product visitor number</label>
                   <strong>{trafficNum.get('skuTotalUv') || 0}</strong>
@@ -193,86 +190,79 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <strong>{trafficNum.get('skuTotalPv') || 0}</strong>
                 </div>
               </div> */}
+          </div>
+          // </AuthWrapper>}
+        }
+        {/* {tradeOview ? (
+          <AuthWrapper functionName="f_trade_watch_1"> */}
+        <div className="homeItem todayData">
+          <h3>Transaction overview&nbsp;Today</h3>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Order number</label>
+              <strong>{tradeNum && (tradeNum.get('orderCount') || 0)}</strong>
             </div>
-          </AuthWrapper>
-        ) : null}
-        {tradeOview ? (
-          <AuthWrapper functionName="f_trade_watch_1">
-            <div className="homeItem todayData">
-              <h3>Transaction overview&nbsp;Today</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>Order number</label>
-                  <strong>
-                    {tradeNum && (tradeNum.get('orderCount') || 0)}
-                  </strong>
-                </div>
-                <div className="dataItem">
-                  <label>Order amount</label>
-                  <strong>
-                    ￥
-                    {tradeNum
-                      ? (tradeNum.get('orderAmt') || 0).toFixed(2)
-                      : 0.0}
-                  </strong>
-                </div>
-              </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>Number of payment orders</label>
-                  <strong>
-                    {tradeNum && (tradeNum.get('payOrderCount') || 0)}
-                  </strong>
-                </div>
-                <div className="dataItem">
-                  <label>Payment amount</label>
-                  <strong>
-                    ￥
-                    {tradeNum
-                      ? (tradeNum.get('payOrderAmt') || 0).toFixed(2)
-                      : 0.0}
-                  </strong>
-                </div>
-              </div>
+            <div className="dataItem">
+              <label>Order amount</label>
+              <strong>
+                ￥{tradeNum ? (tradeNum.get('orderAmt') || 0).toFixed(2) : 0.0}
+              </strong>
             </div>
-          </AuthWrapper>
-        ) : null}
-        {customerOview ? (
-          <AuthWrapper functionName="f_customer_watch_1">
-            <div className="homeItem todayData">
-              <h3>Customer profile&nbsp;Today</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>Customer total number</label>
-                  <strong>{customerNum.get('cusAllCount') || 0}</strong>
-                </div>
-              </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>New customer number</label>
-                  <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
-                </div>
-              </div>
+          </div>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Number of payment orders</label>
+              <strong>
+                {tradeNum && (tradeNum.get('payOrderCount') || 0)}
+              </strong>
             </div>
-          </AuthWrapper>
-        ) : null}
-        {skuOview ? (
-          <AuthWrapper functionName="f_goods_watch_1">
-            <div className="homeItem todayData">
-              <h3>Product overview&nbsp;Today</h3>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>Products total number SKU</label>
-                  <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
-                </div>
-              </div>
-              <div className="dateBg">
-                <div className="dataItem">
-                  <label>Number of products on shelves</label>
-                  <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
-                </div>
-              </div>
-              {/* <div className="dateBg">
+            <div className="dataItem">
+              <label>Payment amount</label>
+              <strong>
+                ￥
+                {tradeNum ? (tradeNum.get('payOrderAmt') || 0).toFixed(2) : 0.0}
+              </strong>
+            </div>
+          </div>
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {customerOview ? (
+          <AuthWrapper functionName="f_customer_watch_1"> */}
+        <div className="homeItem todayData">
+          <h3>Customer profile&nbsp;Today</h3>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Customer total number</label>
+              <strong>{customerNum.get('cusAllCount') || 0}</strong>
+            </div>
+          </div>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>New customer number</label>
+              <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
+            </div>
+          </div>
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {skuOview ? (
+          <AuthWrapper functionName="f_goods_watch_1"> */}
+        <div className="homeItem todayData">
+          <h3>Product overview&nbsp;Today</h3>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Products total number SKU</label>
+              <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
+            </div>
+          </div>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Number of products on shelves</label>
+              <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
+            </div>
+          </div>
+          {/* <div className="dateBg">
                 <div className="dataItem">
                   <label>Audited products SKU</label>
                   <strong>{skuNum && (skuNum.get('checkedTotal') || 0)}</strong>
@@ -282,72 +272,72 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <strong>{skuNum && (skuNum.get('saleTotal') || 0)}</strong>
                 </div>
               </div> */}
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {trafficReport ? (
-          <AuthWrapper functionName="f_flow_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Flow Reports&nbsp;Nearly 10 days</h3>
-              <Table
-                dataSource={flowData.size > 0 ? flowData.toJS() : null}
-                columns={trafficColumns}
-                size="middle"
-                pagination={false}
-              />
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {trafficTrends ? (
-          <AuthWrapper functionName="f_flow_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Traffic trend&nbsp;Nearly 10 days</h3>
-              <FlowTrendsCharts />
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {tradeReport ? (
-          <AuthWrapper functionName="f_trade_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Transaction Reports&nbsp;Nearly 10 days</h3>
-              <Table
-                dataSource={tradeData.size > 0 ? tradeData.toJS() : null}
-                columns={tradeColumns}
-                size="middle"
-                pagination={false}
-              />
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {tradeTrends ? (
-          <AuthWrapper functionName="f_trade_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Trading trend&nbsp;Nearly 10 days</h3>
-              <TradeTrendsCharts />
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {customerGrowthReport ? (
-          <AuthWrapper functionName="f_customer_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
-              <Table
-                dataSource={customerData.size > 0 ? customerData.toJS() : null}
-                columns={customerColumns}
-                size="middle"
-                pagination={false}
-              />
-            </div>
-          </AuthWrapper>
-        ) : null}
-        {customerGrowthTrends ? (
-          <AuthWrapper functionName="f_customer_watch_1">
-            <div className="homeItem lastTenData">
-              <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
-              <CustomerGrowTrendsCharts />
-            </div>
-          </AuthWrapper>
-        ) : null}
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {trafficReport ? (
+          <AuthWrapper functionName="f_flow_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Flow Reports&nbsp;Nearly 10 days</h3>
+          <Table
+            dataSource={flowData.size > 0 ? flowData.toJS() : null}
+            columns={trafficColumns}
+            size="middle"
+            pagination={false}
+          />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {trafficTrends ? (
+          <AuthWrapper functionName="f_flow_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Traffic trend&nbsp;Nearly 10 days</h3>
+          <FlowTrendsCharts />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {tradeReport ? (
+          <AuthWrapper functionName="f_trade_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Transaction Reports&nbsp;Nearly 10 days</h3>
+          <Table
+            dataSource={tradeData.size > 0 ? tradeData.toJS() : null}
+            columns={tradeColumns}
+            size="middle"
+            pagination={false}
+          />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {tradeTrends ? (
+          <AuthWrapper functionName="f_trade_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Trading trend&nbsp;Nearly 10 days</h3>
+          <TradeTrendsCharts />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {customerGrowthReport ? (
+          <AuthWrapper functionName="f_customer_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
+          <Table
+            dataSource={customerData.size > 0 ? customerData.toJS() : null}
+            columns={customerColumns}
+            size="middle"
+            pagination={false}
+          />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
+        {/* {customerGrowthTrends ? (
+          <AuthWrapper functionName="f_customer_watch_1"> */}
+        <div className="homeItem lastTenData">
+          <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
+          <CustomerGrowTrendsCharts />
+        </div>
+        {/* </AuthWrapper>
+        ) : null} */}
       </div>
     );
   }

@@ -7,6 +7,7 @@ import TodoItems from './component/todo-items';
 import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';
+import { cache } from 'qmkit';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class HelloApp extends React.Component<any, any> {
@@ -21,12 +22,10 @@ export default class HelloApp extends React.Component<any, any> {
   }
 
   render() {
-    let employee = this.store.state().get('employee');
-    let roleName = employee.get('roleName') ? employee.get('roleName') : '';
-    let isPrescriber =
-      employee.get('clientId') || roleName.indexOf('Prescriber') > -1;
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId = employee ? employee.clinicsId : null;
 
-    return !isPrescriber ? (
+    return !prescriberId ? (
       <div style={styles.container}>
         <Header />
         <TodoItems />

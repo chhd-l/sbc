@@ -209,6 +209,15 @@ export default class AppStore extends Store {
         const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
           storeId
         )) as any;
+
+        const employee = (await webapi.employee()) as any;
+
+        debugger;
+        sessionStorage.setItem(
+          cache.EMPLOYEE_DATA,
+          JSON.stringify(employee.res)
+        );
+
         if (qrcode.code == Const.SUCCESS_CODE) {
           //获取小程序码的地址，保存到本地
           localStorage.setItem(cache.MINI_QRCODE, qrcode.context);

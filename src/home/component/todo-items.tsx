@@ -23,6 +23,7 @@ export default class TodoItems extends React.Component<any, any> {
   props: {
     relaxProps?: {
       tradeTodo: IMap;
+      prescribersTotal: IMap;
       returnTodo: IMap;
       goodsTodo: IMap;
       employee: IMap;
@@ -46,6 +47,7 @@ export default class TodoItems extends React.Component<any, any> {
   };
   static relaxProps = {
     tradeTodo: 'tradeTodo',
+    prescribersTotal: 'prescribersTotal',
     returnTodo: 'returnTodo',
     goodsTodo: 'goodsTodo',
     employee: 'employee',
@@ -70,6 +72,7 @@ export default class TodoItems extends React.Component<any, any> {
   render() {
     const {
       tradeTodo,
+      prescribersTotal,
       returnTodo,
       goodsTodo,
       employee,
@@ -326,16 +329,28 @@ export default class TodoItems extends React.Component<any, any> {
           <div className="homeItem peopleInfo">
             <h3>Prescriber概况</h3>
             <div>
-              <a className="dataItem" style={{ width: '50%' }}>
+              <a
+                className="dataItem"
+                style={{ width: '50%' }}
+                onClick={() =>
+                  this._toPrescriber({ key: 'flowState-DELIVERED' })
+                }
+              >
                 <label>总计</label>
-                <strong>{tradeTodo.get('waitPay')}</strong>
+                <strong>{prescribersTotal.get('aggregate')}</strong>
               </a>
-              <a className="dataItem" style={{ width: '50%' }}>
+              <a
+                className="dataItem"
+                style={{ width: '50%' }}
+                onClick={() =>
+                  this._toPrescriber({ key: 'flowState-DELIVERED' })
+                }
+              >
                 <label>
                   总计活跃(
                   <FormattedMessage id="last180" />)
                 </label>
-                <strong>{tradeTodo.get('waitPay')}</strong>
+                <strong>{prescribersTotal.get('activeAggregate')}</strong>
               </a>
             </div>
           </div>
@@ -387,6 +402,12 @@ export default class TodoItems extends React.Component<any, any> {
     history.push({
       pathname: '/finance-manage-settle',
       state: state
+    });
+  };
+
+  _toPrescriber = (state) => {
+    history.push({
+      pathname: '/prescriber'
     });
   };
 }

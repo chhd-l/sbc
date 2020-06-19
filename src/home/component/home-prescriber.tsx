@@ -99,14 +99,14 @@ export default class homePrescriber extends Component<any, any> {
           className="homeItem todayData"
           style={{ width: 'calc(50% - 10px)' }}
         >
-          <h3>交易概况&nbsp;今日</h3>
+          <h3>Flow profile&nbsp;Today</h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>付款订单数</label>
+              <label>Order number</label>
               <strong>{this.state.tradeInfo.orderCount || 0}</strong>
             </div>
             <div className="dataItem">
-              <label>付款金额</label>
+              <label>Order amount</label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderCount
@@ -115,11 +115,11 @@ export default class homePrescriber extends Component<any, any> {
               </strong>
             </div>
             <div className="dataItem">
-              <label>下单笔数</label>
+              <label>Number of payment orders</label>
               <strong>{this.state.tradeInfo.orderCount || 0}</strong>
             </div>
             <div className="dataItem">
-              <label>下单金额</label>
+              <label>Payment amount</label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderCount

@@ -179,9 +179,7 @@ export default class CustomerList extends React.Component<any, any> {
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime)
-                  .format(Const.TIME_FORMAT)
-                  .toString()
+              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
               : ''
           }
         />

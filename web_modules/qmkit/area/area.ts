@@ -106,5 +106,5 @@ export function addressInfo(provinceCode, cityCode, areaCode) {
     }
   }
 
-  return '请选择所在地区';
+  return ' please select your region ';
 }

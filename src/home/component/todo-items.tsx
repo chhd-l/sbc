@@ -327,7 +327,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div> */}
           <div className="homeItem peopleInfo">
-            <h3>Prescriber概况</h3>
+            <h3>Prescriber profile</h3>
             <div>
               <a
                 className="dataItem"
@@ -336,7 +336,7 @@ export default class TodoItems extends React.Component<any, any> {
                   this._toPrescriber({ key: 'flowState-DELIVERED' })
                 }
               >
-                <label>总计</label>
+                <label>Total</label>
                 <strong>{prescribersTotal.get('aggregate')}</strong>
               </a>
               <a
@@ -347,7 +347,7 @@ export default class TodoItems extends React.Component<any, any> {
                 }
               >
                 <label>
-                  总计活跃(
+                  Total active(
                   <FormattedMessage id="last180" />)
                 </label>
                 <strong>{prescribersTotal.get('activeAggregate')}</strong>

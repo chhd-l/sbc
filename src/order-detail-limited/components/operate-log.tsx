@@ -30,11 +30,7 @@ const columns = [
     title: 'Time',
     dataIndex: 'eventTime',
     key: 'eventTime',
-    render: (time) =>
-      time &&
-      moment(time)
-        .format(Const.TIME_FORMAT)
-        .toString()
+    render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
   },
   {
     title: 'Operation Category',

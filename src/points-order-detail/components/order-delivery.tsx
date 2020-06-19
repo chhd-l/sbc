@@ -75,10 +75,7 @@ export default class OrderDelivery extends React.Component<any, any> {
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
-            dataSource={detail
-              .get('tradeItems')
-              .concat(gifts)
-              .toJS()}
+            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
             pagination={false}
             bordered
           />
@@ -128,9 +125,10 @@ export default class OrderDelivery extends React.Component<any, any> {
                       {logistic ? (
                         <label style={styles.information}>
                           【Logistics information】delivery date：{deliverTime}
-                          Logistics company：
-                          {logistic.get('logisticCompanyName')} Logistics single
-                          number：{logistic.get('logisticNo')}
+                          &nbsp;&nbsp; Logistics company：
+                          {logistic.get('logisticCompanyName')}{' '}
+                          &nbsp;&nbsp;Logistics single number：
+                          {logistic.get('logisticNo')}&nbsp;&nbsp;
                           <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}

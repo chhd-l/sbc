@@ -202,15 +202,17 @@ export default class GoodsList extends React.Component<any, any> {
             <FormattedMessage id="chargebackAttachment" />:{' '}
             {detail.get('description')}
           </label>
-          {/**退货才有退货方式**/
-          returnType == 'RETURN' ? (
-            <label style={styles.inforItem}>
-              Return method:{' '}
-              {Object.getOwnPropertyNames(returnWay).map(
-                (key) => returnWay[key]
-              )}
-            </label>
-          ) : null}
+          {
+            /**退货才有退货方式**/
+            returnType == 'RETURN' ? (
+              <label style={styles.inforItem}>
+                Return method:{' '}
+                {Object.getOwnPropertyNames(returnWay).map(
+                  (key) => returnWay[key]
+                )}
+              </label>
+            ) : null
+          }
           <div style={styles.inforItem}>
             <label>
               <FormattedMessage id="returnInstructions" />:{' '}

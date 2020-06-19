@@ -429,7 +429,7 @@ export default class SearchHead extends Component<any, any> {
           })
         }
         value={this.state.receiverSelect}
-        // style={{ width: 100 }}
+        style={{ width: 150 }}
       >
         <Option value="consigneeName">
           <FormattedMessage id="recipient" />

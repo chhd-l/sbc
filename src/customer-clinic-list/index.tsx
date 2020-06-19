@@ -102,12 +102,12 @@ export default class Customer extends React.Component<any, any> {
         {
           value: 'Member',
           name: 'Member',
-          id: 1
+          id: 234
         },
         {
-          value: 'Visitor',
-          name: 'Visitor',
-          id: 2
+          value: 'Guest',
+          name: 'Guest',
+          id: 233
         }
       ],
       loading: false

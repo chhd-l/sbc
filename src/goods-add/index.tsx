@@ -120,16 +120,15 @@ export default class GoodsAdd extends React.Component<any, any> {
               </Tabs.TabPane>
             )}
 
-            {checkAuth(priceFuncName) && (
+            {/* {checkAuth(priceFuncName) && (
               <Tabs.TabPane
                 tab={<FormattedMessage id="product.priceAndOrderAmount" />}
                 key="price"
                 disabled={!this.store.state().getIn(['goods', 'goodsId'])}
               >
-                {/*价格及订货量*/}
                 <Price />
               </Tabs.TabPane>
-            )}
+            )} */}
           </Tabs>
 
           {/*页脚*/}

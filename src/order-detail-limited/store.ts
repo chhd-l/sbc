@@ -253,7 +253,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.deliver(tid, tradeDelivery);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('保存发货成功!');
+      message.success('Save deliver successfully!');
       //刷新
       this.init(tid);
     } else {

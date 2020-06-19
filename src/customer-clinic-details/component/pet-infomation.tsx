@@ -176,6 +176,9 @@ class PetInfomation extends React.Component<any, any> {
       .petsByConsumer(params)
       .then((data) => {
         const res = data.res;
+        this.setState({
+          loading: false
+        });
         if (res.code === 'K-000000') {
           let petList = res.context.context;
           if (petList.length > 0) {

@@ -272,7 +272,7 @@ class CateModalForm extends React.Component<any, any> {
                 formData.get('children')
               }
               getPopupContainer={() => document.getElementById('page-content')}
-              placeholder="请选择分类"
+              placeholder="Please select category"
               notFoundContent="暂无分类"
               // disabled={cateDisabled}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -314,7 +314,12 @@ class CateModalForm extends React.Component<any, any> {
             ],
             onChange: this._editGoods.bind(this, 'cateDescription'),
             initialValue: goodsDescription
-          })(<TextArea rows={4} placeholder="请填商品描述" />)}
+          })(
+            <TextArea
+              rows={4}
+              placeholder="Please fill in the product description"
+            />
+          )}
         </FormItem>
       </Form>
     );

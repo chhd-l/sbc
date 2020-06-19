@@ -289,7 +289,9 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsName'),
                 initialValue: goods.get('goodsName')
-              })(<Input placeholder="请填写商品名称，不超过225字" />)}
+              })(
+                <Input placeholder="Please input product name，no more than 225 words" />
+              )}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -366,7 +368,7 @@ class GoodsForm extends React.Component<any, any> {
                   getPopupContainer={() =>
                     document.getElementById('page-content')
                   }
-                  placeholder="请选择分类"
+                  placeholder="Please select category"
                   notFoundContent="暂无分类"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -386,7 +388,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请选择店铺分类'
+                    message: 'Please select store category'
                   }
                 ],
                 onChange: this.storeCateChange,
@@ -399,7 +401,7 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckable={true}
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
-                  placeholder="请选择店铺分类"
+                  placeholder="Please select store category"
                   notFoundContent="暂无分类"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
@@ -462,7 +464,9 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsUnit'),
                 initialValue: goods.get('goodsUnit')
-              })(<Input placeholder="请填写计量单位，不超过10字" />)}
+              })(
+                <Input placeholder="Please fill in the unit of measurement，no more than 10 words" />
+              )}
             </FormItem>
           </Col>
         </Row>

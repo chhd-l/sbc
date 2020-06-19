@@ -598,7 +598,7 @@ export default {
   'consumer.removeConsumer':'Remove Consumer',
 
   'shopping': 'Shopping',
-  "last180": 'Last 180',
+  "last180": 'Last 180 days',
   'overall': 'Overall'
 };
 

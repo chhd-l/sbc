@@ -43,12 +43,12 @@ const customerColumns = [
     key: 'baseDate'
   },
   {
-    title: 'Customer total number',
+    title: 'Consumer total number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: 'New customer number',
+    title: 'New consumer  number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -207,7 +207,7 @@ export default class homePrescriber extends Component<any, any> {
         </div>
 
         <div className="homeItem lastTenData">
-          <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
+          <h3>Consumer growth reports&nbsp;Nearly 10 days</h3>
           <Table
             dataSource={this.state.customerData}
             columns={customerColumns}
@@ -216,16 +216,16 @@ export default class homePrescriber extends Component<any, any> {
           />
         </div>
         <div className="homeItem lastTenData">
-          <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
+          <h3>Consumer growth trend&nbsp;Nearly 10 days</h3>
           <WMChart
             title=""
             startTime={new Date()}
             endTime={new Date()}
             dataDesc={[
-              { title: 'Customer total number', key: 'cusAllCount' },
-              { title: 'New customer number', key: 'cusDayGrowthCount' },
+              { title: 'Consumer  total number', key: 'cusAllCount' },
+              { title: 'New consumer  number', key: 'cusDayGrowthCount' },
               {
-                title: 'Registered customers number',
+                title: 'Registered consumers number',
                 key: 'cusDayRegisterCount'
               }
             ]}

@@ -74,12 +74,12 @@ const customerColumns = [
     key: 'baseDate'
   },
   {
-    title: 'Customer total number',
+    title: 'Consumer  total number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: 'New customer number',
+    title: 'New consumer number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -230,16 +230,16 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerOview ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem todayData">
-          <h3>Customer profile&nbsp;Today</h3>
+          <h3>Consumer profile&nbsp;Today</h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Customer total number</label>
+              <label>Consumer total number</label>
               <strong>{customerNum.get('cusAllCount') || 0}</strong>
             </div>
           </div>
           <div className="dateBg">
             <div className="dataItem">
-              <label>New customer number</label>
+              <label>New consumer number</label>
               <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
             </div>
           </div>
@@ -320,7 +320,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerGrowthReport ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Customer growth reports&nbsp;Nearly 10 days</h3>
+          <h3>Consumer growth reports&nbsp;Nearly 10 days</h3>
           <Table
             dataSource={customerData.size > 0 ? customerData.toJS() : null}
             columns={customerColumns}
@@ -333,7 +333,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerGrowthTrends ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Customer growth trend&nbsp;Nearly 10 days</h3>
+          <h3>Consumer growth trend&nbsp;Nearly 10 days</h3>
           <CustomerGrowTrendsCharts />
         </div>
         {/* </AuthWrapper>

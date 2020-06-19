@@ -5,6 +5,7 @@ import { cache, Const, history, util } from 'qmkit';
 import * as webapi from './webapi';
 import FormActor from './actor/form-actor';
 import Item from 'antd/lib/list/Item';
+import { array } from 'prop-types';
 
 export default class AppStore extends Store {
   bindActor() {
@@ -197,7 +198,6 @@ export default class AppStore extends Store {
           cache.LOGIN_MENUS,
           JSON.stringify(allGradeMenus)
         );
-
         const functionsRes = (await webapi.fetchFunctions()) as any;
         sessionStorage.setItem(
           cache.LOGIN_FUNCTIONS,
@@ -239,7 +239,13 @@ export default class AppStore extends Store {
               cache.SYSTEM_BASE_CONFIG,
               JSON.stringify(config.res.context)
             );
-            history.push('/');
+            let hasHomeFunction = functionsRes.res.context.includes('f_home');
+            if (hasHomeFunction) {
+              history.push('/');
+            } else {
+              let url = this._getUrl(allGradeMenus);
+              history.push(url);
+            }
             break;
           /**审核未通过*/
           case 2:
@@ -254,6 +260,20 @@ export default class AppStore extends Store {
       }
     } else {
       message.error(res.message);
+    }
+  };
+
+  _getUrl = (allGradeMenus) => {
+    if (!allGradeMenus) {
+      message.error('No Menus');
+    }
+    let menus = allGradeMenus.title ? allGradeMenus : allGradeMenus.toJS();
+    let firstMenus = menus.length > 0 ? menus[0] : menus;
+    if (firstMenus.url) {
+      return firstMenus.url;
+    } else {
+      let currentMenus = menus[0] ? menus[0] : menus;
+      return this._getUrl(currentMenus.children[0]);
     }
   };
 

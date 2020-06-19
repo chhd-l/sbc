@@ -25,18 +25,26 @@ export default class HelloApp extends React.Component<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee ? employee.clinicsId : null;
 
-    return !prescriberId ? (
-      <div style={styles.container}>
-        <Header />
-        <TodoItems />
-        <StatisticalReport />
-        {/* <Ranking /> */}
-      </div>
-    ) : (
-      <div style={styles.container}>
-        <HomePrescriber />
-      </div>
+    let allFunctions = JSON.parse(
+      sessionStorage.getItem(cache.LOGIN_FUNCTIONS)
     );
+
+    if (allFunctions.includes('f_home')) {
+      return !prescriberId ? (
+        <div style={styles.container}>
+          <Header />
+          <TodoItems />
+          <StatisticalReport />
+          {/* <Ranking /> */}
+        </div>
+      ) : (
+        <div style={styles.container}>
+          <HomePrescriber />
+        </div>
+      );
+    } else {
+      return <div style={styles.container}></div>;
+    }
   }
 }
 

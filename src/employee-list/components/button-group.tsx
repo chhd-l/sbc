@@ -105,7 +105,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <Menu.Item key={0}>
           <AuthWrapper functionName={'enableDisableEmployee'}>
             <a href="javascript:;" onClick={() => this._batchEnable()}>
-              批量启用
+              Batch enabled
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -113,7 +113,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <Menu.Item key={1}>
           <AuthWrapper functionName={'enableDisableEmployee'}>
             <a href="javascript:;" onClick={() => this._batchDisable()}>
-              批量停用
+              Batch disable
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -121,7 +121,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <Menu.Item key={2}>
           <AuthWrapper functionName={'deleteEmployee'}>
             <a href="javascript:;" onClick={() => this._batchDelete()}>
-              批量删除
+              Batch delete
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -129,7 +129,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         <Menu.Item key={3}>
           <AuthWrapper functionName={'f_batch_ajust_department'}>
             <a href="javascript:;" onClick={() => this._batchAdjust()}>
-              调整部门
+              Adjust group
             </a>
           </AuthWrapper>
         </Menu.Item>

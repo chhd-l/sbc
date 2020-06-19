@@ -14,7 +14,8 @@ import {
   Card,
   Checkbox,
   Empty,
-  Spin
+  Spin,
+  Popconfirm
 } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
@@ -200,6 +201,7 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           message.success('Successful');
+          this.getAddressList();
         } else {
           message.error('Unsuccessful');
         }
@@ -664,7 +666,7 @@ class BillingInfomation extends React.Component<any, any> {
                         Save
                       </Button>
 
-                      <Button
+                      {/* <Button
                         style={{
                           marginRight: '20px',
                           display:
@@ -673,7 +675,27 @@ class BillingInfomation extends React.Component<any, any> {
                         onClick={() => this.delAddress()}
                       >
                         Delete
-                      </Button>
+                      </Button> */}
+
+                      <Popconfirm
+                        placement="topRight"
+                        title="Are you sure to delete this item?"
+                        onConfirm={() => this.delAddress()}
+                        okText="Confirm"
+                        cancelText="Cancel"
+                      >
+                        <Button
+                          style={{
+                            marginRight: '20px',
+                            display:
+                              this.props.customerType === 'Guest'
+                                ? 'none'
+                                : null
+                          }}
+                        >
+                          <FormattedMessage id="delete" />
+                        </Button>
+                      </Popconfirm>
 
                       <Button>
                         <Link to="/customer-list">Cancel</Link>

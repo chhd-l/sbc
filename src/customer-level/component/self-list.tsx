@@ -28,6 +28,7 @@ export default class SelfListView extends React.Component<any, any> {
 
     return (
       <DataGrid
+        isScroll={false}
         loading={loading}
         rowKey="customerLevelId"
         pagination={false}

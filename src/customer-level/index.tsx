@@ -42,20 +42,20 @@ export default class CustomerLevel extends React.Component<any, any> {
           </Breadcrumb> */}
           <div className="container">
             <Headline title={<FormattedMessage id="consumerLevel" />} />
-            {util.isThirdStore() ? (
+            {/* {util.isThirdStore() ? (
               <div>
                 <Tips />
                 <Tool />
                 <ListView />
                 <LevelModal />
               </div>
-            ) : (
-              <div>
-                {/* <SelfTips /> */}
-                <SelfListView />
-                <SelfLevelViewModal />
-              </div>
-            )}
+            ) : ( */}
+            <div>
+              {/* <SelfTips /> */}
+              <SelfListView />
+              <SelfLevelViewModal />
+            </div>
+            {/* )} */}
           </div>
         </div>
       </AuthWrapper>

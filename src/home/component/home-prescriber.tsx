@@ -99,7 +99,7 @@ export default class homePrescriber extends Component<any, any> {
           className="homeItem todayData"
           style={{ width: 'calc(50% - 10px)' }}
         >
-          <h3>Flow profile&nbsp;Today</h3>
+          <h3>Transaction overview &nbsp;Today</h3>
           <div className="dateBg">
             <div className="dataItem">
               <label>Order number</label>

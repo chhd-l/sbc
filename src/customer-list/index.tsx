@@ -29,13 +29,15 @@ export default class Customer extends React.Component<any, any> {
           title: 'Consumer Account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
-          width: 160
+          width: '15%',
+          ellipsis: true
         },
         {
           title: 'Consumer Name',
           dataIndex: 'customerName',
           key: 'consumerName',
-          width: 200
+          width: '15%',
+          ellipsis: true
           // render: (text, record) => (
           //   <p>{record.customerLevelName !== 'Guest' ? text : ''}</p>
           // )
@@ -44,42 +46,45 @@ export default class Customer extends React.Component<any, any> {
           title: 'Consumer Type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
-          width: 120
+          width: '10%',
+          ellipsis: true
         },
         {
           title: 'Email',
           dataIndex: 'email',
           key: 'email',
-          width: 160
+          width: '15%',
+          ellipsis: true
         },
 
         {
           title: 'Phone Number',
           dataIndex: 'contactPhone',
           key: 'phoneNumber',
-          width: 160
+          width: '15%'
         },
         {
-          title: 'Default Prescriber ID',
+          title: 'Default Prescriber Name',
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
-          width: 160,
+          width: '15%',
+          ellipsis: true,
           render: (text, record) => (
             <p>
-              {record.defaultClinics ? record.defaultClinics.clinicsId : ''}
+              {record.defaultClinics ? record.defaultClinics.clinicsName : ''}
             </p>
           )
         },
-        {
-          title: 'Selected Prescriber ID',
-          dataIndex: 'clinicsIds',
-          key: 'clinicsIds',
-          width: 200
-        },
+        // {
+        //   title: 'Selected Prescriber ID',
+        //   dataIndex: 'clinicsIds',
+        //   key: 'clinicsIds',
+        //   width: 200
+        // },
         {
           title: 'Operation',
           key: 'operation',
-          width: 200,
+          width: '8%',
           render: (text, record) => (
             <span>
               <Link
@@ -364,7 +369,7 @@ export default class Customer extends React.Component<any, any> {
                 />
               </FormItem>
 
-              <FormItem>
+              {/* <FormItem>
                 <Input
                   addonBefore={<FormattedMessage id="selectedPrescriberId" />}
                   onChange={(e) => {
@@ -375,7 +380,7 @@ export default class Customer extends React.Component<any, any> {
                     });
                   }}
                 />
-              </FormItem>
+              </FormItem> */}
 
               <FormItem>
                 <Button

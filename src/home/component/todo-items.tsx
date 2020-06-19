@@ -106,10 +106,10 @@ export default class TodoItems extends React.Component<any, any> {
     return (
       <div>
         {/* 配置主页 */}
-        <a href="javascript:;" className="configHome" onClick={this.showModal}>
+        {/* <a href="javascript:;" className="configHome" onClick={this.showModal}>
           <Icon type="bars" style={{ fontSize: 16, color: '#F56C1D' }} />
           <p className="configName">Configure home</p>
-        </a>
+        </a> */}
         <Modal
           maskClosable={true}
           style={{ position: 'fixed', right: 0, top: 64 }}
@@ -170,7 +170,7 @@ export default class TodoItems extends React.Component<any, any> {
 
           {todoVisible ? (
             <div className="homeItem pending">
-              <h3>Pending matters</h3>
+              <h3>To do list</h3>
               <div>
                 {/* {fOrderList002 ? (
                   <a
@@ -183,7 +183,7 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null} */}
                 {fOrderList001 ? (
                   <a
-                    onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
+                    // onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -193,9 +193,9 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null}
                 {fOrderDetail002 ? (
                   <a
-                    onClick={() =>
-                      this._toOrderList({ key: 'flowState-AUDIT' })
-                    }
+                    // onClick={() =>
+                    //   this._toOrderList({ key: 'flowState-AUDIT' })
+                    // }
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -205,9 +205,9 @@ export default class TodoItems extends React.Component<any, any> {
                 ) : null}
                 {fOrderList003 ? (
                   <a
-                    onClick={() =>
-                      this._toOrderList({ key: 'flowState-DELIVERED' })
-                    }
+                    // onClick={() =>
+                    //   this._toOrderList({ key: 'flowState-DELIVERED' })
+                    // }
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
@@ -327,14 +327,14 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div> */}
           <div className="homeItem peopleInfo">
-            <h3>Prescriber profile</h3>
+            <h3>Prescriber overview</h3>
             <div>
               <a
                 className="dataItem"
                 style={{ width: '50%' }}
-                onClick={() =>
-                  this._toPrescriber({ key: 'flowState-DELIVERED' })
-                }
+                // onClick={() =>
+                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
+                // }
               >
                 <label>Total</label>
                 <strong>{prescribersTotal.get('aggregate')}</strong>
@@ -342,9 +342,9 @@ export default class TodoItems extends React.Component<any, any> {
               <a
                 className="dataItem"
                 style={{ width: '50%' }}
-                onClick={() =>
-                  this._toPrescriber({ key: 'flowState-DELIVERED' })
-                }
+                // onClick={() =>
+                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
+                // }
               >
                 <label>
                   Total active(

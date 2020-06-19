@@ -321,7 +321,7 @@ export default class StepFour extends React.Component<any, any> {
       ...contentForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'save successful');
+      message.success('save successful');
     } else {
       message.error(res.message || 'save faild');
     }

@@ -150,6 +150,15 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+// 根据ID删除Pet
+export function delPets(filterParams = {}) {
+  return Fetch<TResult>('/pets/delPets', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 export function getPaymentMethods(param) {
   return Fetch<TResult>('/payment-method/query-by-customer-id', {

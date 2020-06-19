@@ -179,7 +179,9 @@ export default class CustomerList extends React.Component<any, any> {
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
+              ? Moment(evaluateTime)
+                  .format(Const.TIME_FORMAT)
+                  .toString()
               : ''
           }
         />
@@ -192,7 +194,7 @@ export default class CustomerList extends React.Component<any, any> {
           render={(evaluateId, rowData) => {
             return (
               <div className="operation-th">
-                <AuthWrapper functionName={'f_coupon_detail'}>
+                <AuthWrapper functionName={'query_nps'}>
                   <span
                     style={styles.see}
                     onClick={() => goodsEvaluateDetail(rowData)}

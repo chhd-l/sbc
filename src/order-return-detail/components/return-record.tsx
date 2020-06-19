@@ -32,7 +32,7 @@ export default class ReturnRecord extends React.Component<any, any> {
 
   columns = [
     {
-      title: '退款流水号',
+      title: 'Refund serial number',
       dataIndex: 'refundBillCode',
       key: 'refundBillCode',
       render: (text) => {
@@ -41,7 +41,7 @@ export default class ReturnRecord extends React.Component<any, any> {
       }
     },
     {
-      title: '退款时间',
+      title: 'Refund time',
       dataIndex: 'refundBillTime',
       key: 'refundBillTime',
       render: (refundBillTime, rowData) =>
@@ -52,38 +52,38 @@ export default class ReturnRecord extends React.Component<any, any> {
           : '-'
     },
     {
-      title: '应退积分',
+      title: 'Refund point',
       dataIndex: 'returnPoints',
       key: 'returnPoints',
       render: (returnPoints) => <div>{returnPoints}</div>
     },
     {
-      title: '应退金额',
+      title: 'Refund amount',
       dataIndex: 'returnPrice',
       key: 'returnPrice',
       render: (returnPrice) => <div>${returnPrice.toFixed(2)}</div>
     },
     {
-      title: '退单改价',
+      title: 'Chargeback price change',
       dataIndex: 'actualReturnPrice',
       key: 'actualReturnPrice',
       render: (price) => <div>${price.toFixed(2)}</div>
     },
     {
-      title: '退款方式',
+      title: 'Refund method',
       dataIndex: 'payType',
       key: 'payType',
       render: (payType) => Const.payType[payType]
     },
     {
-      title: '退款账户',
+      title: 'Refund account',
       dataIndex: 'returnAccountName',
       key: 'returnAccountName',
       render: (returnAccountName) =>
         returnAccountName ? this._desensitizeAccount(returnAccountName) : '-'
     },
     {
-      title: '客户收款账户',
+      title: 'Customer collection account',
       dataIndex: 'customerAccount',
       key: 'customerAccount',
       render: (_) => {
@@ -102,16 +102,16 @@ export default class ReturnRecord extends React.Component<any, any> {
       }
     },
     {
-      title: '退款状态',
+      title: 'Refund status',
       dataIndex: 'refundStatus',
       key: 'refundStatus',
       render: (refundStatus) => Const.refundStatus[refundStatus]
     },
     {
-      title: '备注',
+      title: 'Remark',
       dataIndex: 'comment',
       key: 'comment',
-      render: (comment) => (comment ? comment : '无')
+      render: (comment) => (comment ? comment : 'None')
     }
   ];
 

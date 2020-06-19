@@ -27,9 +27,9 @@ export default class CustomerGrowTrendsCharts extends React.Component<
         startTime={new Date()}
         endTime={new Date()}
         dataDesc={[
-          { title: '客户总数', key: 'cusAllCount' },
-          { title: '新增客户数', key: 'cusDayGrowthCount' },
-          { title: '注册客户数', key: 'cusDayRegisterCount' }
+          { title: 'Customer total number', key: 'cusAllCount' },
+          { title: 'New customer number', key: 'cusDayGrowthCount' },
+          { title: 'Registered customers number', key: 'cusDayRegisterCount' }
         ]}
         radioClickBack={() => {}}
         content={customerGrowTrendData.toJS()}

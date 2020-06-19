@@ -40,7 +40,7 @@ export default class LoginForm extends React.Component<any, any> {
           })(
             <Input
               prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-              placeholder="请输入您的登录账号"
+              placeholder="Please input your login account"
             />
           )}
         </FormItem>
@@ -51,7 +51,7 @@ export default class LoginForm extends React.Component<any, any> {
             <Input
               prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
               type="password"
-              placeholder="密码"
+              placeholder="Password"
             />
           )}
         </FormItem>
@@ -70,7 +70,7 @@ export default class LoginForm extends React.Component<any, any> {
             style={{ float: 'right' }}
             onClick={() => history.push('/find-password')}
           >
-            忘记密码
+            Forgot your password
           </a>
         </FormItem>
         <FormItem>
@@ -80,7 +80,7 @@ export default class LoginForm extends React.Component<any, any> {
             style={styles.loginBtn}
             onClick={(e) => this._handleLogin(e)}
           >
-            登录
+            Login
           </Button>
         </FormItem>
         <FormItem style={{ marginBottom: 0 }}>

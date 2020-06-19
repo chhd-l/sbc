@@ -41,7 +41,7 @@ export default class SecurityCenter extends React.Component<any, any> {
     const mobile = loginInfo && loginInfo.mobile;
     return (
       <Form>
-        <FormItem {...formItemLayout} label="登录密码">
+        <FormItem {...formItemLayout} label="Login password">
           <Row>
             <Col span={8}>******</Col>
             <Col span={8}>
@@ -58,23 +58,23 @@ export default class SecurityCenter extends React.Component<any, any> {
                     : message.error('请先绑定手机号')
                 }
               >
-                修改
+                Modify
               </a>
             </Col>
           </Row>
         </FormItem>
-        <FormItem {...formItemLayout} label="绑定手机">
+        <FormItem {...formItemLayout} label="Bind phone number">
           <Row>
             <Col span={8}>{(account && account.get('phone')) || '未绑定'}</Col>
             <Col span={8}>
               <a href="javascript:;" onClick={() => onShow()}>
-                {account && account.get('phone') ? '修改' : '绑定'}
+                {account && account.get('phone') ? 'Modify' : 'Bind'}
               </a>
             </Col>
           </Row>
         </FormItem>
         <div style={{ marginTop: 20 }}>
-          <h3>登录日志</h3>
+          <h3>Login Log</h3>
           <ul>{this._renderLog()}</ul>
         </div>
       </Form>

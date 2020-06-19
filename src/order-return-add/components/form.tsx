@@ -13,10 +13,10 @@ import RefundAmount from './refund-amount';
 
 const formItemLayout = {
   labelCol: {
-    sm: { span: 2 }
+    sm: { span: 4 }
   } as any,
   wrapperCol: {
-    sm: { span: 8 }
+    sm: { span: 6 }
   } as any
 };
 
@@ -92,15 +92,15 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     let images = this.props.relaxProps.images.toJS();
     return (
       <div style={styles.container}>
-        <h3 style={styles.title}>退单信息</h3>
+        <h3 style={styles.title}>Chargeback information</h3>
         <Form>
-          <FormItem {...formItemLayout} label="退单原因" hasFeedback>
+          <FormItem {...formItemLayout} label="Chargeback reason" hasFeedback>
             {getFieldDecorator('returnReason', {
               initialValue: selectedReturnReason,
               rules: [
                 {
                   required: true,
-                  message: '请选择退单原因'
+                  message: 'Please select chargeback reason'
                 }
               ]
             })(this._getReturnReasonSelect())}
@@ -119,7 +119,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             </FormItem>
           ) : null}
 
-          <FormItem {...formItemLayout} label="退货说明" hasFeedback>
+          <FormItem {...formItemLayout} label="Return description" hasFeedback>
             {getFieldDecorator('description', {
               initialValue: description,
               rules: [
@@ -146,7 +146,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="附件信息">
+          <FormItem {...formItemLayout} label="Attachment information">
             <QMUpload
               name="uploadFile"
               style={styles.box}
@@ -163,7 +163,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
                 <Icon type="plus" style={styles.plus} />
               ) : null}
             </QMUpload>
-            <Tips title="请将您的退货凭据添加到附件,支持的图片格式：jpg、jpeg、png、gif，文件大小不超过5M,最多上传10张" />
+            <Tips title="Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10" />
           </FormItem>
 
           {isReturn ? (
@@ -196,7 +196,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               });
             }}
           >
-            保存
+            Save
           </Button>
           &nbsp;&nbsp;
           <Button
@@ -205,7 +205,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               history.go(-1);
             }}
           >
-            取消
+            Cancel
           </Button>
         </div>
       </div>
@@ -220,12 +220,12 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="请选择退货原因"
+        placeholder="Please select chargeback reason"
         notFoundContent="暂无退货原因"
         onChange={this._editInfo.bind(this, 'selectedReturnReason')}
       >
         <Option key={'key'} value={''}>
-          请选择退单原因
+          Please select chargeback reason
         </Option>
         {returnReasonList.map((item) => {
           const map: IMap = item.toMap();

@@ -48,7 +48,7 @@ export default class DeliveryForm extends React.Component<any, any> {
     const options =
       fromJS(logistics) &&
       fromJS(logistics)
-        .map(v => (
+        .map((v) => (
           <Option
             key={v.get('expressCompanyId')}
             value={v.get('expressCompanyId') + ''}
@@ -61,7 +61,11 @@ export default class DeliveryForm extends React.Component<any, any> {
     return (
       <div>
         <Form className="login-form">
-          <FormItem {...formItemLayout} required={true} label="物流公司">
+          <FormItem
+            {...formItemLayout}
+            required={true}
+            label="Logistics company"
+          >
             {getFieldDecorator('deliverId', {
               rules: [
                 {
@@ -78,7 +82,7 @@ export default class DeliveryForm extends React.Component<any, any> {
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} required={true} label="物流单号">
+          <FormItem {...formItemLayout} required={true} label="Logistics order">
             {getFieldDecorator('deliverNo', {
               rules: [
                 { required: true, message: '请输入物流单号' },
@@ -95,7 +99,7 @@ export default class DeliveryForm extends React.Component<any, any> {
               ]
             })(<Input placeholder="" />)}
           </FormItem>
-          <FormItem {...formItemLayout} required={true} label="发货日期">
+          <FormItem {...formItemLayout} required={true} label="Deliver Date">
             {getFieldDecorator('deliverTime', {
               rules: [
                 {

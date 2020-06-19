@@ -143,7 +143,7 @@ export default class SearchForm extends React.Component<any, any> {
                 onFormFieldChange({ key: 'storeCateId', value });
               }}
             >
-              <TreeNode key="-1" value="-1" title="全部">
+              <TreeNode key="-1" value="-1" title="All">
                 {loop(cateList)}
               </TreeNode>
             </TreeSelectGroup>
@@ -155,7 +155,7 @@ export default class SearchForm extends React.Component<any, any> {
                   document.getElementById('page-content')
                 }
                 label={<FormattedMessage id="product.brand" />}
-                defaultValue="全部"
+                defaultValue="All"
                 showSearch
                 optionFilterProp="children"
                 onChange={(value) => {

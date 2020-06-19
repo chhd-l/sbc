@@ -289,7 +289,7 @@ export default class CateList extends React.Component<any, any> {
     } else if (auditStatus == 2) {
       auditStatusStr = '审核未通过';
     } else if (auditStatus == 3) {
-      auditStatusStr = '禁售中';
+      auditStatusStr = 'No sale';
     }
     return (
       <div>

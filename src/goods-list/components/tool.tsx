@@ -67,7 +67,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOnSale();
               }}
             >
-              批量上架
+              Batch shelves
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -79,7 +79,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOffSale();
               }}
             >
-              批量下架
+              Batch off shelves
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -91,7 +91,7 @@ export default class Tool extends React.Component<any, any> {
                 this._delGoods();
               }}
             >
-              批量删除
+              Batch delete
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -103,7 +103,7 @@ export default class Tool extends React.Component<any, any> {
                 this._setFeight();
               }}
             >
-              设置运费模板
+              Set the freight template
             </a>
           </AuthWrapper>
         </Menu.Item>

@@ -149,7 +149,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
         {isMasterAccount == '1' ? (
           <Menu.Item key="0">
             <Link to={'/account-manage'}>
-              <Icon type="user" /> 账户管理
+              <Icon type="user" /> Account management
             </Link>
           </Menu.Item>
         ) : null}
@@ -168,12 +168,12 @@ export default class MyHeader extends React.PureComponent<any, any> {
                 : message.error('请先绑定手机号')
             }
           >
-            <Icon type="lock" /> 修改密码
+            <Icon type="lock" /> Change the password
           </a>
         </Menu.Item>
         <Menu.Item key="2">
           <a href="javascript:;" onClick={() => this._handleLogout()}>
-            <Icon type="logout" /> 退出
+            <Icon type="logout" /> Exit
           </a>
         </Menu.Item>
       </Menu>
@@ -212,9 +212,10 @@ export default class MyHeader extends React.PureComponent<any, any> {
           <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               {/* <Icon type="user" /> */}
-              <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
+              {/* <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
                   ? sessionStorage.getItem(cache.SITE_LOGO)
-                  : util.requireLocalSrc('sys/02.jpg')} alt="" /><span style={styles.dropdownText}>{accountName}</span><Icon type="down" />
+                  : util.requireLocalSrc('sys/02.jpg')} alt="" /> */}
+                  <span style={styles.dropdownText}>{accountName}</span><Icon type="down" />
             </a>
           </Dropdown>
         </div>

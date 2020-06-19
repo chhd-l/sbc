@@ -25,10 +25,10 @@ export default class TradeTrendsCharts extends React.Component<any, any> {
         startTime={new Date('2017/10/00')}
         endTime={new Date('2017/10/10')}
         dataDesc={[
-          { title: '下单笔数', key: 'orderCount' },
-          { title: '下单金额', key: 'orderAmt' },
-          { title: '付款订单数', key: 'payOrderCount' },
-          { title: '付款金额', key: 'payOrderAmt' }
+          { title: 'Order number', key: 'orderCount' },
+          { title: 'Order amount', key: 'orderAmt' },
+          { title: 'Number of payment orders', key: 'payOrderCount' },
+          { title: 'Payment amount', key: 'payOrderAmt' }
         ]}
         radioClickBack={() => {}}
         content={tradeTrendData.size > 0 ? tradeTrendData.toJS() : null}

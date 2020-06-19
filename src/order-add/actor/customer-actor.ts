@@ -48,7 +48,7 @@ export default class CustomerActor extends Actor {
     if (state.get('selectedCustomerId')) {
       if (isPaperInvoice) {
         invoiceOptions = invoiceOptions.push(
-          fromJS({ val: '0', label: '普通发票' })
+          fromJS({ val: '0', label: 'General invoice' })
         );
       }
       if (isValueAddedTaxInvoice && flag) {

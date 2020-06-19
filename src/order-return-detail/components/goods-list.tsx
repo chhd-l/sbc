@@ -206,7 +206,7 @@ export default class GoodsList extends React.Component<any, any> {
             /**退货才有退货方式**/
             returnType == 'RETURN' ? (
               <label style={styles.inforItem}>
-                退货方式:{' '}
+                Return method:{' '}
                 {Object.getOwnPropertyNames(returnWay).map(
                   (key) => returnWay[key]
                 )}

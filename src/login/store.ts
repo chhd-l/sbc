@@ -232,7 +232,7 @@ export default class AppStore extends Store {
             break;
           /**审核通过，成功登录*/
           case 1:
-            message.success('登录成功');
+            message.success('login successful');
             //登录成功之后，塞入baseConfig
             const config = (await webapi.getSiteInfo()) as any;
             sessionStorage.setItem(

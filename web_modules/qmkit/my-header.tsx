@@ -10,7 +10,6 @@ export default class MyHeader extends React.PureComponent<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      isPrescriber : false,
       qrCodeLink: '',
       url: ''
     }
@@ -178,8 +177,11 @@ export default class MyHeader extends React.PureComponent<any, any> {
           </a>
         </Menu.Item>
       </Menu>
-    );
+    );   
     const userImg = 'data:image/png;base64,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';
+
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId = employee ? employee.clinicsId : null
     return (
       <Header className="header" style={{ paddingLeft: '0' }}>
         <div style={styles.headerLeft}>
@@ -193,7 +195,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
               }
             />
           </a>
-          {baseConfig &&(this.state.isPrescriber ?  
+          {baseConfig &&(!prescriberId ?  
             <a className="ant-dropdown-link" href="https://shopuat.466920.com/" target="_blank">
               <Icon type="eye-o" /><span style={styles.dropdownText}>Preview</span>
               {/* <Icon type="down" /> */}

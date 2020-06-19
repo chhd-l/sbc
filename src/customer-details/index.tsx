@@ -121,7 +121,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Consumer Details</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="consumer.consumerDetails" />
+          </Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
         <Spin spinning={this.state.loading}>
@@ -135,7 +137,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     type="primary"
                     onClick={() => this.showConfirm(this.state.customerId)}
                   >
-                    Remove Consumer
+                    <FormattedMessage id="consumer.removeConsumer" />
                   </Button>
                 }
               >

@@ -70,10 +70,10 @@ export default class homePrescriber extends Component<any, any> {
   }
 
   getPrescriberDetail = async () => {
-    let prescriberId = sessionStorage.getItem('PrescriberId');
-    if (prescriberId) {
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    if (employee.clinicsId) {
       const { res } = await getClinicById({
-        prescriberId: prescriberId
+        prescriberId: employee.clinicsId
       });
       if (res.code === 'K-000000') {
         this.setState({
@@ -84,6 +84,8 @@ export default class homePrescriber extends Component<any, any> {
           JSON.stringify(res.context)
         );
       }
+    } else {
+      sessionStorage.removeItem(cache.PRESCRIBER_DATA);
     }
   };
 

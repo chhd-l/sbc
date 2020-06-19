@@ -594,6 +594,9 @@ export default {
   'allSurvey': 'All Survey',
   'surveyTime': 'Survey time',
   'defaultPrescriberName': 'default Prescriber Name',
+  'consumer.consumerDetails':'Consumer Details',
+  'consumer.removeConsumer':'Remove Consumer',
+
   'shopping': 'Shopping',
   "last180": 'Last 180',
   'overall': 'Overall'

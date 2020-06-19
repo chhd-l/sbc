@@ -143,7 +143,7 @@ export default class AppStore extends Store {
     param.scoreCycle = 2;
     const results = (await Promise.all([
       webapi.queryStoreState(),
-      webapi.employee(),
+      noop,
       webapi.todoTrade(),
       webapi.todoReturn(),
       webapi.todoGoods(),
@@ -162,7 +162,8 @@ export default class AppStore extends Store {
       checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop,
       checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop,
       webapi.queryToTalSettlement(),
-      webapi.fetchStoreEvaluateSum(param)
+      webapi.fetchStoreEvaluateSum(param),
+      webapi.getPrescribersTotal()
     ])) as any;
     if (
       results[0] &&
@@ -215,8 +216,10 @@ export default class AppStore extends Store {
     }
 
     //员工信息
-    this.dispatch('home-actor:setEmployee', results[1].res);
-    sessionStorage.setItem('PrescriberId', results[1].res.clinicsId); // home 二维码
+    this.dispatch(
+      'home-actor:setEmployee',
+      JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
+    );
     //订单todo
     if (
       results[2] &&
@@ -511,6 +514,17 @@ export default class AppStore extends Store {
       this.dispatch(
         'storeEvaluateSum:init',
         results[20].res.context.storeEvaluateSumVO || {}
+      );
+    }
+
+    if (
+      results[21] &&
+      results[21].res &&
+      results[21].res.code === Const.SUCCESS_CODE
+    ) {
+      this.dispatch(
+        'home-todo-actor:prescribers',
+        results[21].res.context || {}
       );
     }
     this.freshDataBoard();

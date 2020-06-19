@@ -120,7 +120,8 @@ const styles = {
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 30,
-    marginTop: -50
+    marginTop: -50,
+    marginLeft: -550
   },
   loginBtn: {
     width: '100%'

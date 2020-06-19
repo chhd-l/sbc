@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'antd';
 import { StoreProvider } from 'plume2';
 import LoginForm from './components/login-form';
-const bg = require('./img/bg.jpg');
+const bg = require('./img/bg-1.png');
 import AppStore from './store';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Login extends React.Component<any, any> {
@@ -17,9 +17,7 @@ export default class Login extends React.Component<any, any> {
 
     return (
       <div style={styles.container}>
-        {
-          this.store.state().get('refresh') && <LoginFormDetail />
-        }
+        {this.store.state().get('refresh') && <LoginFormDetail />}
       </div>
     );
   }
@@ -31,6 +29,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundImage: 'url(' + bg + ')'
+    backgroundImage: 'url(' + bg + ')',
+    backgroundSize: '100% 100%'
   } as any
 };

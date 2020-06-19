@@ -170,7 +170,7 @@ export default class TodoItems extends React.Component<any, any> {
 
           {todoVisible ? (
             <div className="homeItem pending">
-              <h3>Pending matters</h3>
+              <h3>To do list</h3>
               <div>
                 {/* {fOrderList002 ? (
                   <a
@@ -327,7 +327,7 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div> */}
           <div className="homeItem peopleInfo">
-            <h3>Prescriber profile</h3>
+            <h3>Prescriber overview</h3>
             <div>
               <a
                 className="dataItem"

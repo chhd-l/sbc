@@ -182,7 +182,6 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee ? employee.clinicsId : null
-    debugger
     return (
       <Header className="header" style={{ paddingLeft: '0' }}>
         <div style={styles.headerLeft}>

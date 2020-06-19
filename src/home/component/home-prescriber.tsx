@@ -71,7 +71,6 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescriberDetail = async () => {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    debugger;
     if (employee.clinicsId) {
       const { res } = await getClinicById({
         prescriberId: employee.clinicsId

@@ -211,8 +211,6 @@ export default class AppStore extends Store {
         )) as any;
 
         const employee = (await webapi.employee()) as any;
-
-        debugger;
         sessionStorage.setItem(
           cache.EMPLOYEE_DATA,
           JSON.stringify(employee.res)

@@ -499,7 +499,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </AuthWrapper>
               )}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
-                <AuthWrapper functionName="fOrderDetail002">
+                <AuthWrapper functionName="fOrderDetail002_3pl">
                   <a
                     href="javascript:void(0);"
                     style={styles.pr20}
@@ -531,7 +531,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     } else if (flowState === 'DELIVERED_PART') {
       return (
         <div>
-          <AuthWrapper functionName="fOrderDetail002">
+          <AuthWrapper functionName="fOrderDetail002_3pl">
             <a
               href="javascript:void(0);"
               style={styles.pr20}

@@ -319,3 +319,16 @@ export function getPrescribersTotal() {
     method: 'GET'
   });
 }
+
+/**
+ * 获取首页Prescribers贸易数据
+ * @param filterParams
+ */
+export function getPrescribersData(param = {}) {
+  return Fetch<TResult>('/tradeReport/overview', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
+}

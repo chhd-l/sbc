@@ -3,6 +3,7 @@ import { Table, Divider, Row, Col } from 'antd';
 import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
 import { cache } from 'qmkit';
+import * as webapi from './../webapi';
 
 const prescriberLog = require('./../images/Prescriber.png');
 
@@ -66,7 +67,9 @@ export default class homePrescriber extends Component<any, any> {
       customerGrowTrendData: []
     };
     this.getPrescriberDetail = this.getPrescriberDetail.bind(this);
+    this.getPrescribersData = this.getPrescribersData.bind(this);
     this.getPrescriberDetail();
+    this.getPrescribersData();
   }
 
   getPrescriberDetail = async () => {
@@ -86,6 +89,18 @@ export default class homePrescriber extends Component<any, any> {
       }
     } else {
       sessionStorage.removeItem(cache.PRESCRIBER_DATA);
+    }
+  };
+
+  getPrescribersData = async () => {
+    const { res } = await webapi.getPrescribersData({
+      selectType: 0,
+      isPrescriber: true
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        tradeInfo: res.context
+      });
     }
   };
 
@@ -109,21 +124,21 @@ export default class homePrescriber extends Component<any, any> {
               <label>Order amount</label>
               <strong>
                 ￥
-                {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                {this.state.tradeInfo.orderAmt
+                  ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>
-            <div className="dataItem">
+            <div className="dataItem" style={{ flex: 'inherit' }}>
               <label>Number of payment orders</label>
-              <strong>{this.state.tradeInfo.orderCount || 0}</strong>
+              <strong>{this.state.tradeInfo.payOrderCount || 0}</strong>
             </div>
             <div className="dataItem">
               <label>Payment amount</label>
               <strong>
                 ￥
-                {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                {this.state.tradeInfo.payOrderAmt
+                  ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>
@@ -138,14 +153,14 @@ export default class homePrescriber extends Component<any, any> {
           <div className="dateBg">
             <div className="dataItem">
               <label>Reward rate</label>
-              <strong>{this.state.tradeInfo.orderCount || 0}%</strong>
+              <strong>{this.state.tradeInfo.rewardRate || 0}%</strong>
             </div>
             <div className="dataItem">
               <label>Reward amount</label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                  ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>

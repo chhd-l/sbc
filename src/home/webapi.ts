@@ -332,3 +332,58 @@ export function getPrescribersData(param = {}) {
     })
   });
 }
+
+/**
+ * 首页Prescribers交易报表
+ */
+export const prescribersTradeView = () => {
+  return Fetch<TResult>('/tradeReport/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      selectType: 0,
+      isPrescriber: true
+    })
+  });
+};
+
+/**
+ * 首页Prescribers交易趋势 近10日
+ */
+export const prescribersTradeReport = () => {
+  return Fetch<TResult>('/tradeReport/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      selectType: 3,
+      isPrescriber: true
+    })
+  });
+};
+
+/**
+ * 首页Prescribers客户增长报表
+ */
+export const prescribersCustomerGrowReport = () => {
+  return Fetch<TResult>('/customer_grow/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      dateCycle: 4,
+      pageNum: 1,
+      pageSize: 10,
+      isPrescriber: true
+    })
+  });
+};
+
+/**
+ * 首页Prescribers客户增长趋势图
+ */
+export const prescribersCustomerGrowTrend = () => {
+  return Fetch<TResult>('/customer_grow/trend', {
+    method: 'POST',
+    body: JSON.stringify({
+      queryDateCycle: 4,
+      weekly: false,
+      isPrescriber: true
+    })
+  });
+};

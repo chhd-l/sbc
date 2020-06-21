@@ -68,8 +68,16 @@ export default class homePrescriber extends Component<any, any> {
     };
     this.getPrescriberDetail = this.getPrescriberDetail.bind(this);
     this.getPrescribersData = this.getPrescribersData.bind(this);
+    this.getTradeData = this.getTradeData.bind(this);
+    this.getFlowTrendData = this.getFlowTrendData.bind(this);
+    this.getCustomerData = this.getPrescriberDetail.bind(this);
+    this.getCustomerGrowTrendData = this.getCustomerGrowTrendData.bind(this);
     this.getPrescriberDetail();
     this.getPrescribersData();
+    this.getTradeData();
+    this.getFlowTrendData();
+    this.getCustomerData();
+    this.getCustomerGrowTrendData();
   }
 
   getPrescriberDetail = async () => {
@@ -102,6 +110,71 @@ export default class homePrescriber extends Component<any, any> {
         tradeInfo: res.context
       });
     }
+  };
+
+  getTradeData = async () => {
+    const { res } = await webapi.prescribersTradeView();
+
+    if (res.code === 'K-000000') {
+      this.setState({
+        tradeData: this.turnToOrderData(res.context.context)
+      });
+    }
+  };
+
+  getFlowTrendData = async () => {
+    const { res } = await webapi.prescribersTradeReport();
+    if (res.code === 'K-000000') {
+      this.setState({
+        flowTrendData: this.turnToOrderData(res.context)
+      });
+    }
+  };
+
+  getCustomerData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowReport();
+    if (res.code === 'K-000000') {
+      this.setState({
+        customerData: this.turnToCustomerData(res.context)
+      });
+    }
+  };
+
+  getCustomerGrowTrendData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowTrend();
+    if (res.code === 'K-000000') {
+      debugger;
+      this.setState({
+        customerGrowTrendData: this.turnToCustomerData(res.context)
+      });
+    }
+  };
+
+  turnToOrderData = (data) => {
+    let tradeData = data.map((order, index) => {
+      return {
+        key: index,
+        orderCount: order.orderCount,
+        orderAmt: order.orderAmt,
+        payOrderCount: order.PayOrderCount,
+        payOrderAmt: order.payOrderAmt,
+        title: order.title
+      };
+    });
+    return tradeData;
+  };
+
+  turnToCustomerData = (data) => {
+    let customerData = data.map((cus, index) => {
+      return {
+        key: index,
+        title: cus.xValue,
+        cusAllCount: cus.customerAllCount,
+        cusDayGrowthCount: cus.customerDayGrowthCount,
+        cusDayRegisterCount: cus.customerDayRegisterCount
+      };
+    });
+    return customerData;
   };
 
   render() {

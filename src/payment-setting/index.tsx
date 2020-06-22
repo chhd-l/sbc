@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history } from 'qmkit';
-import { Row, Col, Form, Modal, message, Button } from 'antd';
+import { Row, Col, Form, Modal, message, Button, Card } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './webapi';
+import styled from 'styled-components';
+import PaymentModel from './components/payment-modal';
 
 const formItemLayout = {
   labelCol: {
@@ -18,25 +20,46 @@ const formItemLayout = {
   }
 };
 
+const ContainerDiv = styled.div`
+  .methodItem {
+    width: 100%;
+    border: 1px solid #f5f5f5;
+    text-align: center;
+    padding: 20px 0;
+    img {
+      width: 86px;
+      height: 86px;
+    }
+    h4 {
+      font-size: 14px;
+      color: #333;
+      margin-top: 5px;
+    }
+  }
+  .bar {
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 8px 0;
+    .status {
+      font-size: 12px;
+      color: #666;
+    }
+    .links {
+      font-size: 12px;
+      margin-left: 15px;
+    }
+  }
+`;
+
 export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      paymentSetting: {}
+      paymentVisible: false
     };
-    this.getPaymentSetting();
   }
-
-  getPaymentSetting = async () => {
-    const { res } = await webapi.getPaymentSetting();
-    if (res.code === 'K-000000') {
-      this.setState({
-        paymentSetting: res.context
-      });
-    } else {
-      message.error(res.message);
-    }
-  };
 
   render() {
     return (
@@ -44,115 +67,37 @@ export default class PaymentSetting extends React.Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title={<FormattedMessage id="paymentSetting" />} />
-          <div style={{ padding: '20px 0 40px 0' }}>
-            <Form>
-              <Row>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="environment" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.environment ? (
-                        this.state.paymentSetting.environment
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="URL" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.url ? (
-                        this.state.paymentSetting.url
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="appID" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.appId ? (
-                        this.state.paymentSetting.appId
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="apiVersion" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.apiVersion ? (
-                        this.state.paymentSetting.apiVersion
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="privateKey" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.privateKey ? (
-                        this.state.paymentSetting.privateKey
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="publicKey" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.paymentSetting.publicKey ? (
-                        this.state.paymentSetting.publicKey
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-          <AuthWrapper functionName="f_storeInfoEdit_0">
-            <div className="bar-button">
-              <Button type="primary" onClick={() => this._edit()}>
-                <FormattedMessage id="edit" />
-              </Button>
-            </div>
-          </AuthWrapper>
+          <ContainerDiv>
+            <Headline title={<FormattedMessage id="paymentSetting" />} />
+            <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+              <div className="methodItem">
+                <img
+                  src={require('./img/payu.jpg')}
+                  style={{ width: '200px', height: '100%' }}
+                />
+              </div>
+              <div className="bar">
+                <div className="status"></div>
+                <div>
+                  <a onClick={() => this._edit()} className="links">
+                    <FormattedMessage id="edit" />
+                  </a>
+                </div>
+              </div>
+            </Card>
+            <PaymentModel visible={this.state.paymentVisible} />
+          </ContainerDiv>
         </div>
       </div>
     );
   }
+
   _edit = () => {
-    history.push('/payment-setting-edit');
+    debugger;
+    this.setState({
+      paymentVisible: true
+    });
+
+    console.log(this.state.paymentVisible);
   };
 }

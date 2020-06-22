@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Relax, IMap } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Row, Col, Form, Button, message, Input } from 'antd';
+import { Row, Col, Form, Button, message, Input, Modal } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const formItemLayout = {
   labelCol: {
@@ -35,11 +35,12 @@ const tailFormItemLayout = {
   }
 };
 
-class PaymentForm extends React.Component<any, any> {
-  constructor(props: any) {
+class PaymentModal extends React.Component<any, any> {
+  constructor(props) {
     super(props);
     this.state = {
-      paymentForm: {}
+      paymentForm: {},
+      visible: props.visible
     };
     this.getPaymentSetting();
   }
@@ -66,7 +67,14 @@ class PaymentForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div>
+      <Modal
+        maskClosable={false}
+        title="Edit Payment Setting"
+        visible={this.state.visible}
+        onOk={this._next}
+        onCancel={() => this.cancel()}
+        width="600px"
+      >
         <Form>
           <Row>
             <Col span={12}>
@@ -202,17 +210,8 @@ class PaymentForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           </Row>
-          <Row>
-            <Col span={12}>
-              <FormItem {...tailFormItemLayout}>
-                <Button type="primary" onClick={this._next}>
-                  <FormattedMessage id="save" />
-                </Button>
-              </FormItem>
-            </Col>
-          </Row>
         </Form>
-      </div>
+      </Modal>
     );
   }
   /**
@@ -227,6 +226,12 @@ class PaymentForm extends React.Component<any, any> {
     });
   };
 
+  cancel = () => {
+    this.setState({
+      visible: false
+    });
+  };
+
   onSave = async () => {
     const paymentForm = this.state.paymentForm;
     const { res } = await webapi.savePaymentSetting({
@@ -234,9 +239,10 @@ class PaymentForm extends React.Component<any, any> {
     });
     if (res.code === 'K-000000') {
       message.success('save successful');
+      this.cancel();
     } else {
       message.error(res.message || 'save faild');
     }
   };
 }
-export default Form.create()(PaymentForm);
+export default Form.create()(PaymentModal);

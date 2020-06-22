@@ -314,7 +314,7 @@ export default class PayOrderList extends React.Component<any, any> {
             href="javascript:void(0);"
             onClick={() => this._onlineRefund(returnOrderCode)}
           >
-            确认退款
+            Confirm Refund
           </a>
         </Menu.Item>
 

@@ -20,7 +20,7 @@ const flowState = (status) => {
 
 const columns = [
   {
-    title: 'SKU编码',
+    title: 'SKU code',
     dataIndex: 'skuNo',
     key: 'skuNo',
     render: (text) => text

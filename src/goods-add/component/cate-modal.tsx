@@ -17,12 +17,12 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 12 }
   }
 };
 

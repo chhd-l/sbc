@@ -36,7 +36,7 @@ export default class LoginForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           {getFieldDecorator('account', {
-            rules: [{ required: true, message: '账号不能为空' }]
+            rules: [{ required: true, message: 'Account cannot be empty' }]
           })(
             <Input
               prefix={<Icon type="user" style={{ fontSize: 13 }} />}
@@ -46,7 +46,7 @@ export default class LoginForm extends React.Component<any, any> {
         </FormItem>
         <FormItem style={{ marginBottom: 0 }}>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: '密码不能为空' }]
+            rules: [{ required: true, message: 'Password cannot be empty' }]
           })(
             <Input
               prefix={<Icon type="lock" style={{ fontSize: 13 }} />}

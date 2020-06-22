@@ -76,7 +76,7 @@ export default class InfoList extends React.Component<any, any> {
     {
       key: 'goods',
       dataIndex: 'goodsInfo.goodsInfoNo',
-      title: 'SKU编码'
+      title: 'SKU code'
     },
     {
       key: 'specText',

@@ -98,7 +98,11 @@ export default class BasicInfo extends React.Component<any, any> {
                 );
               })
               .toList()}
-            <Column title="SKU编码" dataIndex="goodsInfoNo" key="goodsInfoNo" />
+            <Column
+              title="SKU code"
+              dataIndex="goodsInfoNo"
+              key="goodsInfoNo"
+            />
             <Column title="库存" dataIndex="stock" key="stock" />
             <Column
               align="center"

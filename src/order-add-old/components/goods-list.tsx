@@ -258,7 +258,7 @@ export default class GoodsList extends React.Component<any, any> {
           />
 
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             width="140px"
             key="goodsInfoNo"

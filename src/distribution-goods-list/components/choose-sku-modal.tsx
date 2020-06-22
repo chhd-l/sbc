@@ -62,9 +62,9 @@ export default class ChooseSkuModal extends React.Component<any, any> {
           <div>
             添加分销商品&nbsp;
             <small>
-              已选<span style={{ color: '#F56C1D' }}>
-                {selectedSkuRows.size}
-              </span>款商品，每次最多可选50款111
+              已选
+              <span style={{ color: '#F56C1D' }}>{selectedSkuRows.size}</span>
+              款商品，每次最多可选50款111
             </small>
           </div>
         }
@@ -142,7 +142,7 @@ class EditChoseSkuModalForm extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
@@ -181,7 +181,8 @@ class EditChoseSkuModalForm extends React.Component<any, any> {
                   }}
                 >
                   *
-                </span>佣金比例
+                </span>
+                佣金比例
               </div>
             }
             key="commissionRate"

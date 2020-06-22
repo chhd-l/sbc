@@ -318,7 +318,7 @@ export default class SearchForm extends React.Component<any, any> {
         }}
       >
         <Option value="0">商品名称</Option>
-        <Option value="1">SKU编码</Option>
+        <Option value="1">SKU code</Option>
       </Select>
     );
   };

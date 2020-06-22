@@ -39,7 +39,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           pagination={false}
         >
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"

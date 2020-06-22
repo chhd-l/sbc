@@ -39,7 +39,7 @@ export default class RejectModal extends React.Component<any, any> {
 
     return (
       <Modal  maskClosable={false}
-        title={'请填写' + data.get('type') + '原因'}
+        title={'Please fill out the ' + data.get('type') + ' reason'}
         visible={data.get('visible')}
         onCancel={() => onHide()}
         footer={[

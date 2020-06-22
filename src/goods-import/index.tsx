@@ -79,7 +79,7 @@ export default class GoodsImport extends React.Component<any, any> {
         <div className="container">
           <Headline title={<FormattedMessage id="productImport" />} />
           <Alert
-            message="操作说明："
+            message="Operation Description："
             description={
               <ul>
                 <li>1、{<FormattedMessage id="product.importInfo1" />}</li>

@@ -116,8 +116,8 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
           <FormItem>
             <Input
-              addonBefore="SKU编码"
-              placeholder="SKU编码"
+              addonBefore="SKU code"
+              placeholder="SKU code"
               value={searchParams.likeGoodsInfoNo}
               onChange={(e) =>
                 this.paramsOnChange('likeGoodsInfoNo', e.target.value)

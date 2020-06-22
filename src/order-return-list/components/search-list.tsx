@@ -585,8 +585,8 @@ export default class SearchList extends React.Component<any, any> {
 
   async _showRealRefund(onRealRefund: Function, rid: string) {
     confirm({
-      title: '确认退款',
-      content: '是否确认退款？',
+      title: 'Confirm Refund',
+      content: 'Do you confirm the refund?',
       onOk() {
         return onRealRefund(rid);
       },

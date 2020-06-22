@@ -37,10 +37,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         <DataGrid
           scroll={{ y: 500 }}
           size="small"
-          rowKey={record => record.goodsInfoId}
+          rowKey={(record) => record.goodsInfoId}
           dataSource={selectedRows ? selectedRows.toJS() : []}
           pagination={false}
-          rowClassName={record => {
+          rowClassName={(record) => {
             if (fromJS(skuExists).includes(record.goodsInfoId)) {
               return 'red';
             } else {
@@ -49,7 +49,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
@@ -67,7 +67,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             dataIndex="specText"
             key="specText"
             width="20%"
-            render={value => {
+            render={(value) => {
               if (value) {
                 return value;
               } else {
@@ -88,7 +88,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             key="brandName"
             dataIndex="brandName"
             width="10%"
-            render={value => {
+            render={(value) => {
               if (value) {
                 return value;
               } else {
@@ -102,7 +102,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             key="marketPrice"
             dataIndex="marketPrice"
             width="10%"
-            render={data => {
+            render={(data) => {
               return `¥${data}`;
             }}
           />
@@ -111,7 +111,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             title="操作"
             key="operate"
             width="10%"
-            render={row => {
+            render={(row) => {
               return (
                 <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>
               );

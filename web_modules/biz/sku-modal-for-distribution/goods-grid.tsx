@@ -100,7 +100,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"

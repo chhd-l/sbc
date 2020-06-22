@@ -310,7 +310,7 @@ export default class SearchHead extends Component<any, any> {
         style={{ width: 100 }}
       >
         <Option value="skuName">商品名称</Option>
-        <Option value="skuNo">SKU编码</Option>
+        <Option value="skuNo">SKU code</Option>
       </Select>
     );
   };

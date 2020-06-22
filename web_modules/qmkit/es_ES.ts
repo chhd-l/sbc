@@ -599,7 +599,33 @@ export default {
 
   'shopping': 'Shopping',
   "last180": 'Last 180 days',
-  'overall': 'Overall'
+  'overall': 'Overall',
+
+  'toBePaidOrders': 'To be paid orders',
+  'toBeDeliveredOrders': 'To be delivered orders',
+  'toBeReceivedOrders': 'To be received orders',
+  'totalNumber': 'Total number',
+  'activeNumber': 'Active number',
+  'visitsToday': 'Visits today',
+  'transactionToday': 'Transaction today',
+  'consumerToday': 'Consumer today',
+  'productToday': 'Product today',
+  'visitsReportNearly10Days': 'Visits report nearly 10 days',
+  'visitsTrendNearly10Days': 'Visits trend nearly 10 days',
+  'transactionReportNearly10Days': 'Transaction report nearly 10 days',
+  'transactionTrendNearly10Days': 'Transaction trend nearly 10 days',
+  'consumerReportNearly10Days': 'Consumer report nearly 10 days',
+  'consumerTrendNearly10Days': 'Consumer trend nearly 10 days',
+  'totalcConsumerNumber': 'Total consumer number',
+  'newConsumerNumber': 'New consumer number',
+  'totalSKU': 'Total SKU',
+  'productsOnShelvesNumber': 'Products on shelves number',
+  'member number': 'memberNumber',
+  'uv':'UV',
+  'pv': 'PV',
+  'numberOfPaymentOrders': 'Number of payment orders',
+  'rewardSummary': 'Reward summary',
+  'rewardAmount': 'Reward amount'
 };
 
 

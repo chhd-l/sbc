@@ -187,7 +187,9 @@ export default class TodoItems extends React.Component<any, any> {
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
-                    <label>Pending payment orders</label>
+                    <label>
+                      <FormattedMessage id="toBePaidOrders" />
+                    </label>
                     <strong>{tradeTodo.get('waitPay')}</strong>
                   </a>
                 ) : null}
@@ -199,7 +201,9 @@ export default class TodoItems extends React.Component<any, any> {
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
-                    <label>Pending delivery orders</label>
+                    <label>
+                      <FormattedMessage id="toBeDeliveredOrders" />
+                    </label>
                     <strong>{tradeTodo.get('waitDeliver')}</strong>
                   </a>
                 ) : null}
@@ -211,7 +215,9 @@ export default class TodoItems extends React.Component<any, any> {
                     className="dataItem"
                     style={{ width: '33%' }}
                   >
-                    <label>Pending receive orders</label>
+                    <label>
+                      <FormattedMessage id="toBeReceivedOrders" />
+                    </label>
                     <strong>{tradeTodo.get('waitReceiving')}</strong>
                   </a>
                 ) : null}
@@ -290,13 +296,15 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           ) : (
             <div className="homeItem pending">
-              <h3>待处理事项</h3>
+              <h3>To do list</h3>
               <div className="empty">
                 <img
                   src="http://kstoreimages.b0.upaiyun.com/1506413955650.jpg"
                   alt=""
                 />
-                <p style={{ marginTop: 20 }}>您还没有添加待处理事项</p>
+                <p style={{ marginTop: 20 }}>
+                  You haven't added to do items yet
+                </p>
               </div>
             </div>
           )}
@@ -331,23 +339,25 @@ export default class TodoItems extends React.Component<any, any> {
             <div>
               <a
                 className="dataItem"
-                style={{ width: '50%' }}
-                // onClick={() =>
-                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
-                // }
-              >
-                <label>Total</label>
-                <strong>{prescribersTotal.get('aggregate')}</strong>
-              </a>
-              <a
-                className="dataItem"
-                style={{ width: '50%' }}
+                style={{ width: '40%' }}
                 // onClick={() =>
                 //   this._toPrescriber({ key: 'flowState-DELIVERED' })
                 // }
               >
                 <label>
-                  Total active(
+                  <FormattedMessage id="totalNumber" />
+                </label>
+                <strong>{prescribersTotal.get('aggregate')}</strong>
+              </a>
+              <a
+                className="dataItem"
+                style={{ width: '60%' }}
+                // onClick={() =>
+                //   this._toPrescriber({ key: 'flowState-DELIVERED' })
+                // }
+              >
+                <label>
+                  <FormattedMessage id="activeNumber" />(
                   <FormattedMessage id="last180" />)
                 </label>
                 <strong>{prescribersTotal.get('activeAggregate')}</strong>

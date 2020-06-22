@@ -57,7 +57,7 @@ export default class RejectModal extends React.Component<any, any> {
           </Button>
         ]}
       >
-        <WrapperForm
+        <WrapperForm   
           ref={form => (this['_form'] = form)}
           {...{ formType: data.get('type') }}
         />

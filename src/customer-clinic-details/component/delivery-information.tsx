@@ -136,7 +136,7 @@ class DeliveryInfomation extends React.Component<any, any> {
 
   getAddressList = () => {
     webapi
-      .getAddressListByType(this.props.customerId, 'delivery')
+      .getAddressListByType(this.props.customerId, 'DELIVERY')
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {

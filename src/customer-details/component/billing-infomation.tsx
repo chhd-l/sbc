@@ -139,7 +139,7 @@ class BillingInfomation extends React.Component<any, any> {
 
   getAddressList = () => {
     webapi
-      .getAddressListByType(this.props.customerId, 'billing')
+      .getAddressListByType(this.props.customerId, 'BILLING')
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {

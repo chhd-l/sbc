@@ -37,10 +37,10 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          ellipsis: true
-          // render: (text, record) => (
-          //   <p>{record.customerLevelName !== 'Guest' ? text : ''}</p>
-          // )
+          ellipsis: true,
+          render: (text, record) => (
+            <p>{record.firstName + ' ' + record.lastName}</p>
+          )
         },
         {
           title: 'Consumer Type',

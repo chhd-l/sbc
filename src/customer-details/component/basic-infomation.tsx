@@ -43,11 +43,11 @@ class BasicInfomation extends React.Component<any, any> {
         birthDay: '',
         email: '',
         contactPhone: '',
-        postCode: '',
-        city: '',
+        // postCode: '',
+        // city: '',
         country: '',
-        address1: '',
-        address2: '',
+        // address1: '',
+        // address2: '',
         preferredMethods: '',
         reference: '',
         selectedClinics: [],
@@ -56,7 +56,7 @@ class BasicInfomation extends React.Component<any, any> {
           clinicsId: 0,
           clinicsName: ''
         },
-        cityObj: {},
+        // cityObj: {},
         countryObj: {}
       },
       countryArr: [],
@@ -114,11 +114,11 @@ class BasicInfomation extends React.Component<any, any> {
             birthDay: resObj.birthDay,
             email: resObj.email,
             contactPhone: resObj.contactPhone,
-            postCode: resObj.postCode,
-            city: resObj.Id,
+            // postCode: resObj.postCode,
+            // city: resObj.Id,
             country: resObj.countryId,
-            address1: resObj.house,
-            address2: resObj.housing,
+            // address1: resObj.house,
+            // address2: resObj.housing,
             preferredMethods: resObj.contactMethod,
             reference: resObj.reference,
             selectedClinics: resObj.clinicsVOS,
@@ -137,11 +137,11 @@ class BasicInfomation extends React.Component<any, any> {
               // birthDay: resObj.birthDay,
               email: resObj.email,
               contactPhone: resObj.contactPhone,
-              postCode: resObj.postCode,
-              city: resObj.cityId,
+              // postCode: resObj.postCode,
+              // city: resObj.cityId,
               country: resObj.countryId,
-              address1: resObj.house,
-              address2: resObj.housing,
+              // address1: resObj.house,
+              // address2: resObj.housing,
               preferredMethods: resObj.contactMethod,
               reference: resObj.reference,
               selectedClinics: clinicsVOS,
@@ -202,8 +202,8 @@ class BasicInfomation extends React.Component<any, any> {
     //   (currentForm.defaultClinics = basicForm.defaultClinics)
     let params = {
       birthDay: basicForm.birthDay,
-      city: basicForm.cityObj ? basicForm.cityObj.cityName : currentForm.city,
-      cityId: basicForm.cityObj ? basicForm.cityObj.cityId : currentForm.cityId,
+      // city: basicForm.cityObj ? basicForm.cityObj.cityName : currentForm.city,
+      // cityId: basicForm.cityObj ? basicForm.cityObj.cityId : currentForm.cityId,
       clinicsVOS: basicForm.selectedClinics,
       contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
@@ -217,10 +217,10 @@ class BasicInfomation extends React.Component<any, any> {
       defaultClinics: basicForm.defaultClinics,
       email: basicForm.email,
       firstName: basicForm.firstName,
-      house: basicForm.address1,
-      housing: basicForm.address2,
+      // house: basicForm.address1,
+      // housing: basicForm.address2,
       lastName: basicForm.lastName,
-      postCode: basicForm.postCode,
+      // postCode: basicForm.postCode,
       reference: basicForm.reference
     };
 
@@ -431,7 +431,8 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12}>
+
+              {/* <Col span={12}>
                 <FormItem label="Post Code">
                   {getFieldDecorator('postCode', {
                     rules: [
@@ -450,7 +451,7 @@ class BasicInfomation extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
 
               <Col span={12}>
                 <FormItem label="Country">
@@ -483,7 +484,8 @@ class BasicInfomation extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12}>
+
+              {/* <Col span={12}>
                 <FormItem label="City">
                   {getFieldDecorator('city', {
                     rules: [{ required: true, message: 'Please input City!' }]
@@ -566,7 +568,7 @@ class BasicInfomation extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
 
               <Col span={12}>
                 <FormItem label="Prefer channel">

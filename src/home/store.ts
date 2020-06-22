@@ -340,10 +340,10 @@ export default class AppStore extends Store {
       results[11].res &&
       results[11].res.code === Const.SUCCESS_CODE
     ) {
-      let flowList = results[11].res.context.flowList.reverse();
+      let flowList = results[11].res.context.flowList;
       const length = flowList.length;
       let flowTrendData = flowList
-        .slice(length >= 10 ? length - 10 : 0, length)
+        // .slice(length >= 10 ? length - 10 : 0, length)
         .map((flow, index) => {
           return {
             key: index,
@@ -356,7 +356,7 @@ export default class AppStore extends Store {
         });
       this.dispatch(
         'trend-actor:mergeTrend',
-        fromJS({ flowTrendData: flowTrendData.reverse() })
+        fromJS({ flowTrendData: flowTrendData })
       );
     }
     //交易报表 近10日
@@ -387,10 +387,10 @@ export default class AppStore extends Store {
       results[13].res &&
       results[13].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[13].res.context.reverse();
+      let context = results[13].res.context;
       const length = context.length;
       let tradeTrendData = context
-        .slice(length >= 10 ? length - 10 : 0, length)
+        // .slice(length >= 10 ? length - 10 : 0, length)
         .map((order, index) => {
           return {
             key: index,
@@ -403,7 +403,7 @@ export default class AppStore extends Store {
         });
       this.dispatch(
         'trend-actor:mergeTrend',
-        fromJS({ tradeTrendData: tradeTrendData.reverse() })
+        fromJS({ tradeTrendData: tradeTrendData })
       );
     }
     //客户增长报表

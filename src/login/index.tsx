@@ -30,6 +30,8 @@ const styles = {
     justifyContent: 'center',
     height: '100vh',
     backgroundImage: 'url(' + bg + ')',
-    backgroundSize: '100% 100%'
+    backgroundSize: '100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
   } as any
 };

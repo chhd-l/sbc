@@ -24,10 +24,8 @@ export default class FlowTrendsCharts extends React.Component<any, any> {
         startTime={new Date()}
         endTime={new Date()}
         dataDesc={[
-          { title: 'visitor number UV', key: 'totalUv' },
-          { title: 'page view PV', key: 'totalPv' },
-          { title: 'Product visitor number', key: 'skuTotalUv' },
-          { title: 'Products page view', key: 'skuTotalPv' }
+          { title: 'UV', key: 'totalUv' },
+          { title: 'PV', key: 'totalPv' }
         ]}
         radioClickBack={() => {}}
         content={flowTrendData.toJS()}

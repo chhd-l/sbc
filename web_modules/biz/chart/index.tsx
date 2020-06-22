@@ -282,12 +282,6 @@ export default class WMChart extends React.Component<WMChartProps, any> {
           }
         }
       },
-      toolbox: {
-        feature: {
-          saveAsImage: { title: '保存报表' }
-        },
-        right: '30px'
-      },
       legend: {
         data: legend
       },

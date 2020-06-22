@@ -144,7 +144,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
       setGoodsFreight
     } = this.props.relaxProps;
     if (selectedRowKeys.toJS().length < 1) {
-      message.error('至少选择一件商品');
+      message.error('Select at least one item');
       return;
     } else {
       setFreightTempId(freightTemp.get('freightTempId'));

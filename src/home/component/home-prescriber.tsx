@@ -4,12 +4,13 @@ import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
 import { cache } from 'qmkit';
 import * as webapi from './../webapi';
+import { FormattedMessage } from 'react-intl';
 
 const prescriberLog = require('./../images/Prescriber.png');
 
 const tradeColumns = [
   {
-    title: 'date',
+    title: 'Date',
     dataIndex: 'title',
     key: 'title'
   },
@@ -39,12 +40,12 @@ const tradeColumns = [
 
 const customerColumns = [
   {
-    title: 'date',
+    title: 'Date',
     dataIndex: 'baseDate',
     key: 'baseDate'
   },
   {
-    title: 'Consumer total number',
+    title: 'Total consumer number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
@@ -70,8 +71,9 @@ export default class homePrescriber extends Component<any, any> {
     this.getPrescribersData = this.getPrescribersData.bind(this);
     this.getTradeData = this.getTradeData.bind(this);
     this.getFlowTrendData = this.getFlowTrendData.bind(this);
-    this.getCustomerData = this.getPrescriberDetail.bind(this);
+    this.getCustomerData = this.getCustomerData.bind(this);
     this.getCustomerGrowTrendData = this.getCustomerGrowTrendData.bind(this);
+
     this.getPrescriberDetail();
     this.getPrescribersData();
     this.getTradeData();
@@ -114,44 +116,7 @@ export default class homePrescriber extends Component<any, any> {
 
   getTradeData = async () => {
     const { res } = await webapi.prescribersTradeView();
-
-    if (res.code === 'K-000000') {
-      this.setState({
-        tradeData: this.turnToOrderData(res.context.context)
-      });
-    }
-  };
-
-  getFlowTrendData = async () => {
-    const { res } = await webapi.prescribersTradeReport();
-    if (res.code === 'K-000000') {
-      this.setState({
-        flowTrendData: this.turnToOrderData(res.context)
-      });
-    }
-  };
-
-  getCustomerData = async () => {
-    const { res } = await webapi.prescribersCustomerGrowReport();
-    if (res.code === 'K-000000') {
-      this.setState({
-        customerData: this.turnToCustomerData(res.context)
-      });
-    }
-  };
-
-  getCustomerGrowTrendData = async () => {
-    const { res } = await webapi.prescribersCustomerGrowTrend();
-    if (res.code === 'K-000000') {
-      debugger;
-      this.setState({
-        customerGrowTrendData: this.turnToCustomerData(res.context)
-      });
-    }
-  };
-
-  turnToOrderData = (data) => {
-    let tradeData = data.map((order, index) => {
+    let tradeData = res.context.content.map((order, index) => {
       return {
         key: index,
         orderCount: order.orderCount,
@@ -161,11 +126,54 @@ export default class homePrescriber extends Component<any, any> {
         title: order.title
       };
     });
-    return tradeData;
+    if (res.code === 'K-000000') {
+      this.setState({
+        tradeData: tradeData
+      });
+    }
   };
 
-  turnToCustomerData = (data) => {
-    let customerData = data.map((cus, index) => {
+  getFlowTrendData = async () => {
+    const { res } = await webapi.prescribersTradeReport();
+    let tradeFlowData = res.context.map((order, index) => {
+      return {
+        key: index,
+        orderCount: order.orderCount,
+        orderAmt: order.orderAmt,
+        payOrderCount: order.PayOrderCount,
+        payOrderAmt: order.payOrderAmt,
+        title: order.title
+      };
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        flowTrendData: tradeFlowData
+      });
+    }
+  };
+
+  getCustomerData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowReport();
+    let customerData = res.context.data.map((cus, index) => {
+      return {
+        key: index,
+        cusAllCount: cus.customerAllCount,
+        cusDayGrowthCount: cus.customerDayGrowthCount,
+        cusDayRegisterCount: cus.customerDayRegisterCount,
+        baseDate: cus.baseDate
+      };
+    });
+
+    if (res.code === 'K-000000') {
+      this.setState({
+        customerData: customerData
+      });
+    }
+  };
+
+  getCustomerGrowTrendData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowTrend();
+    let customerFlowData = res.context.map((cus, index) => {
       return {
         key: index,
         title: cus.xValue,
@@ -174,7 +182,11 @@ export default class homePrescriber extends Component<any, any> {
         cusDayRegisterCount: cus.customerDayRegisterCount
       };
     });
-    return customerData;
+    if (res.code === 'K-000000') {
+      this.setState({
+        customerGrowTrendData: customerFlowData
+      });
+    }
   };
 
   render() {
@@ -187,14 +199,20 @@ export default class homePrescriber extends Component<any, any> {
           className="homeItem todayData"
           style={{ width: 'calc(50% - 10px)' }}
         >
-          <h3>Transaction overview &nbsp;Today</h3>
+          <h3>
+            <FormattedMessage id="transactionToday" />
+          </h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Order number</label>
+              <label>
+                <FormattedMessage id="orderNumber" />
+              </label>
               <strong>{this.state.tradeInfo.orderCount || 0}</strong>
             </div>
             <div className="dataItem">
-              <label>Order amount</label>
+              <label>
+                <FormattedMessage id="orderAmount" />
+              </label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderAmt
@@ -203,11 +221,15 @@ export default class homePrescriber extends Component<any, any> {
               </strong>
             </div>
             <div className="dataItem" style={{ flex: 'inherit' }}>
-              <label>Number of payment orders</label>
+              <label>
+                <FormattedMessage id="numberOfPaymentOrders" />
+              </label>
               <strong>{this.state.tradeInfo.payOrderCount || 0}</strong>
             </div>
             <div className="dataItem">
-              <label>Payment amount</label>
+              <label>
+                <FormattedMessage id="paymentAmount" />
+              </label>
               <strong>
                 ￥
                 {this.state.tradeInfo.payOrderAmt
@@ -222,14 +244,20 @@ export default class homePrescriber extends Component<any, any> {
           className="homeItem todayData"
           style={{ width: 'calc(27% - 10px)' }}
         >
-          <h3>Reward summary</h3>
+          <h3>
+            <FormattedMessage id="rewardSummary" />
+          </h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Reward rate</label>
+              <label>
+                <FormattedMessage id="rewardSummary" />
+              </label>
               <strong>{this.state.tradeInfo.rewardRate || 0}%</strong>
             </div>
             <div className="dataItem">
-              <label>Reward amount</label>
+              <label>
+                <FormattedMessage id="rewardAmount" />
+              </label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderCount
@@ -267,7 +295,9 @@ export default class homePrescriber extends Component<any, any> {
           </div>
         </div>
         <div className="homeItem lastTenData">
-          <h3>Flow Reports&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="transactionReportNearly10Days" />
+          </h3>
           <Table
             dataSource={this.state.tradeData}
             columns={tradeColumns}
@@ -277,16 +307,18 @@ export default class homePrescriber extends Component<any, any> {
         </div>
 
         <div className="homeItem lastTenData">
-          <h3>Traffic trend&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="transactionTrendNearly10Days" />
+          </h3>
           <WMChart
             title=""
             startTime={new Date()}
             endTime={new Date()}
             dataDesc={[
-              { title: 'visitor number UV', key: 'totalUv' },
-              { title: 'page view PV', key: 'totalPv' },
-              { title: 'Product visitor number', key: 'skuTotalUv' },
-              { title: 'Products page view', key: 'skuTotalPv' }
+              { title: 'Order number', key: 'orderCount' },
+              { title: 'Order amount', key: 'orderAmt' },
+              { title: 'Number of payment orders', key: 'payOrderCount' },
+              { title: 'Payment amount', key: 'payOrderAmt' }
             ]}
             radioClickBack={() => {}}
             content={this.state.flowTrendData}
@@ -295,7 +327,9 @@ export default class homePrescriber extends Component<any, any> {
         </div>
 
         <div className="homeItem lastTenData">
-          <h3>Consumer growth reports&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="consumerReportNearly10Days" />
+          </h3>
           <Table
             dataSource={this.state.customerData}
             columns={customerColumns}
@@ -304,13 +338,15 @@ export default class homePrescriber extends Component<any, any> {
           />
         </div>
         <div className="homeItem lastTenData">
-          <h3>Consumer growth trend&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="consumerTrendNearly10Days" />
+          </h3>
           <WMChart
             title=""
             startTime={new Date()}
             endTime={new Date()}
             dataDesc={[
-              { title: 'Consumer  total number', key: 'cusAllCount' },
+              { title: 'Total consumer number', key: 'cusAllCount' },
               { title: 'New consumer  number', key: 'cusDayGrowthCount' },
               {
                 title: 'Registered consumers number',

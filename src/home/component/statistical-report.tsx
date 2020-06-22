@@ -8,38 +8,29 @@ import TradeTrendsCharts from './trade-trends';
 import { IList } from 'typings/globalType';
 import FlowTrendsCharts from './flow-trends';
 import CustomerGrowTrendsCharts from './cus-trends';
+import { FormattedMessage } from 'react-intl';
 
 const trafficColumns = [
   {
-    title: 'date',
+    title: 'Date',
     dataIndex: 'date',
     key: 'date'
   },
   {
-    title: 'visitor number',
+    title: 'UV',
     dataIndex: 'totalUv',
     key: 'totalUv'
   },
   {
-    title: 'page view',
+    title: 'PV',
     dataIndex: 'totalPv',
     key: 'totalPv'
-  },
-  {
-    title: 'Product visitor number',
-    dataIndex: 'skuTotalUv',
-    key: 'skuTotalUv'
-  },
-  {
-    title: 'Products page view',
-    dataIndex: 'skuTotalPv',
-    key: 'skuTotalPv'
   }
 ];
 
 const tradeColumns = [
   {
-    title: 'date',
+    title: 'Date',
     dataIndex: 'title',
     key: 'title'
   },
@@ -69,12 +60,12 @@ const tradeColumns = [
 
 const customerColumns = [
   {
-    title: 'date',
+    title: 'Date',
     dataIndex: 'baseDate',
     key: 'baseDate'
   },
   {
-    title: 'Consumer  total number',
+    title: 'Total consumer number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
@@ -167,16 +158,22 @@ export default class StatisticalReport extends React.Component<any, any> {
         {
           // <AuthWrapper functionName="f_flow_watch_1">
           <div className="homeItem todayData">
-            <h3>Flow profile&nbsp;Today</h3>
+            <h3>
+              <FormattedMessage id="visitsToday" />
+            </h3>
             <div className="dateBg">
               <div className="dataItem">
-                <label>visitor number UV</label>
+                <label>
+                  <FormattedMessage id="uv" />
+                </label>
                 <strong>{trafficNum.get('totalUv') || 0}</strong>
               </div>
             </div>
             <div className="dateBg">
               <div className="dataItem">
-                <label>page view PV</label>
+                <label>
+                  <FormattedMessage id="pv" />
+                </label>
                 <strong>{trafficNum.get('totalPv') || 0}</strong>
               </div>
             </div>
@@ -196,14 +193,20 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {tradeOview ? (
           <AuthWrapper functionName="f_trade_watch_1"> */}
         <div className="homeItem todayData">
-          <h3>Transaction overview&nbsp;Today</h3>
+          <h3>
+            <FormattedMessage id="transactionToday" />
+          </h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Order number</label>
+              <label>
+                <FormattedMessage id="orderNumber" />
+              </label>
               <strong>{tradeNum && (tradeNum.get('orderCount') || 0)}</strong>
             </div>
             <div className="dataItem">
-              <label>Order amount</label>
+              <label>
+                <FormattedMessage id="orderAmount" />
+              </label>
               <strong>
                 ￥{tradeNum ? (tradeNum.get('orderAmt') || 0).toFixed(2) : 0.0}
               </strong>
@@ -211,13 +214,17 @@ export default class StatisticalReport extends React.Component<any, any> {
           </div>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Number of payment orders</label>
+              <label>
+                <FormattedMessage id="numberOfPaymentOrders" />
+              </label>
               <strong>
                 {tradeNum && (tradeNum.get('payOrderCount') || 0)}
               </strong>
             </div>
             <div className="dataItem">
-              <label>Payment amount</label>
+              <label>
+                <FormattedMessage id="paymentAmount" />
+              </label>
               <strong>
                 ￥
                 {tradeNum ? (tradeNum.get('payOrderAmt') || 0).toFixed(2) : 0.0}
@@ -230,16 +237,22 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerOview ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem todayData">
-          <h3>Consumer profile&nbsp;Today</h3>
+          <h3>
+            <FormattedMessage id="consumerToday" />
+          </h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Consumer total number</label>
+              <label>
+                <FormattedMessage id="totalcConsumerNumber" />
+              </label>
               <strong>{customerNum.get('cusAllCount') || 0}</strong>
             </div>
           </div>
           <div className="dateBg">
             <div className="dataItem">
-              <label>New consumer number</label>
+              <label>
+                <FormattedMessage id="newConsumerNumber" />
+              </label>
               <strong>{customerNum.get('cusDayGrowthCount') || 0}</strong>
             </div>
           </div>
@@ -249,16 +262,22 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {skuOview ? (
           <AuthWrapper functionName="f_goods_watch_1"> */}
         <div className="homeItem todayData">
-          <h3>Product overview&nbsp;Today</h3>
+          <h3>
+            <FormattedMessage id="productToday" />
+          </h3>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Products total number SKU</label>
+              <label>
+                <FormattedMessage id="totalSKU" />
+              </label>
               <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
             </div>
           </div>
           <div className="dateBg">
             <div className="dataItem">
-              <label>Number of products on shelves</label>
+              <label>
+                <FormattedMessage id="productsOnShelvesNumber" />
+              </label>
               <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
             </div>
           </div>
@@ -278,7 +297,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {trafficReport ? (
           <AuthWrapper functionName="f_flow_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Flow Reports&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="visitsReportNearly10Days" />
+          </h3>
           <Table
             dataSource={flowData.size > 0 ? flowData.toJS() : null}
             columns={trafficColumns}
@@ -291,7 +312,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {trafficTrends ? (
           <AuthWrapper functionName="f_flow_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Traffic trend&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="visitsTrendNearly10Days" />
+          </h3>
           <FlowTrendsCharts />
         </div>
         {/* </AuthWrapper>
@@ -299,7 +322,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {tradeReport ? (
           <AuthWrapper functionName="f_trade_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Transaction Reports&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="transactionReportNearly10Days" />
+          </h3>
           <Table
             dataSource={tradeData.size > 0 ? tradeData.toJS() : null}
             columns={tradeColumns}
@@ -312,7 +337,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {tradeTrends ? (
           <AuthWrapper functionName="f_trade_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Trading trend&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="transactionTrendNearly10Days" />
+          </h3>
           <TradeTrendsCharts />
         </div>
         {/* </AuthWrapper>
@@ -320,7 +347,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerGrowthReport ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Consumer growth reports&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="consumerReportNearly10Days" />
+          </h3>
           <Table
             dataSource={customerData.size > 0 ? customerData.toJS() : null}
             columns={customerColumns}
@@ -333,7 +362,9 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* {customerGrowthTrends ? (
           <AuthWrapper functionName="f_customer_watch_1"> */}
         <div className="homeItem lastTenData">
-          <h3>Consumer growth trend&nbsp;Nearly 10 days</h3>
+          <h3>
+            <FormattedMessage id="consumerTrendNearly10Days" />
+          </h3>
           <CustomerGrowTrendsCharts />
         </div>
         {/* </AuthWrapper>

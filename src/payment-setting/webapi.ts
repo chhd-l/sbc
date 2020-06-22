@@ -13,3 +13,13 @@ type TResult = {
 export function getPaymentSetting() {
   return Fetch<TResult>('/store/storePaymentSetting');
 }
+/**
+ * 保存Payment Setting
+ * @param info
+ */
+export const savePaymentSetting = (info) => {
+  return Fetch<TResult>('/store/storePaymentSetting', {
+    method: 'PUT',
+    body: JSON.stringify(info)
+  });
+};

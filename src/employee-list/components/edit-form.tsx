@@ -118,7 +118,7 @@ export default class EditForm extends React.Component<any, any> {
 
     let roleIdList = {};
     let isEmployee = {};
-    let clinicsId = {};
+    let prescriberIds = {};
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
     //如果是编辑状态
@@ -183,10 +183,13 @@ export default class EditForm extends React.Component<any, any> {
               }, [])
           : []
       };
-      clinicsId = {
-        initialValue: employeeForm.get('clinicsId')
-          ? employeeForm.get('clinicsId').toString()
-          : ''
+
+      prescriberIds = {
+        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
+          ? employeeForm.get('prescriberIds')
+          : employeeForm.get('prescriberIds')
+          ? employeeForm.get('prescriberIds').toJS()
+          : []
       };
     }
     return (
@@ -426,12 +429,15 @@ export default class EditForm extends React.Component<any, any> {
               label={<FormattedMessage id="Prescriber" />}
               hasFeedback
             >
-              {getFieldDecorator('clinicsId', {
-                ...clinicsId,
-                rules: [{ required: true, message: 'Please Select Clinics!' }]
+              {getFieldDecorator('prescriberIds', {
+                ...prescriberIds,
+                rules: [
+                  { required: true, message: 'Please Select Prescribers!' }
+                ]
               })(
                 <Select
-                  placeholder="Please Select Clinics"
+                  mode="multiple"
+                  placeholder="Please Select Prescribers"
                   disabled={editDisable}
                   // onChange={this.clinicChange}
                   showSearch
@@ -441,7 +447,7 @@ export default class EditForm extends React.Component<any, any> {
                       .indexOf(input.toLowerCase()) >= 0
                   }
                 >
-                  {this._renderClinicsOption()}
+                  {this._renderPerscirbersOption()}
                 </Select>
               )}
             </FormItem>
@@ -604,7 +610,7 @@ export default class EditForm extends React.Component<any, any> {
    * @returns {Iterable<number, any>}
    * @private
    */
-  _renderClinicsOption() {
+  _renderPerscirbersOption() {
     return this.state.clinicsLites.map((option) => {
       return (
         <Option value={option.prescriberId} key={option.prescriberId}>

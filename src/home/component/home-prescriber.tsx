@@ -3,6 +3,7 @@ import { Table, Divider, Row, Col } from 'antd';
 import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
 import { cache } from 'qmkit';
+import * as webapi from './../webapi';
 
 const prescriberLog = require('./../images/Prescriber.png');
 
@@ -66,7 +67,17 @@ export default class homePrescriber extends Component<any, any> {
       customerGrowTrendData: []
     };
     this.getPrescriberDetail = this.getPrescriberDetail.bind(this);
+    this.getPrescribersData = this.getPrescribersData.bind(this);
+    this.getTradeData = this.getTradeData.bind(this);
+    this.getFlowTrendData = this.getFlowTrendData.bind(this);
+    this.getCustomerData = this.getPrescriberDetail.bind(this);
+    this.getCustomerGrowTrendData = this.getCustomerGrowTrendData.bind(this);
     this.getPrescriberDetail();
+    this.getPrescribersData();
+    this.getTradeData();
+    this.getFlowTrendData();
+    this.getCustomerData();
+    this.getCustomerGrowTrendData();
   }
 
   getPrescriberDetail = async () => {
@@ -89,6 +100,83 @@ export default class homePrescriber extends Component<any, any> {
     }
   };
 
+  getPrescribersData = async () => {
+    const { res } = await webapi.getPrescribersData({
+      selectType: 0,
+      isPrescriber: true
+    });
+    if (res.code === 'K-000000') {
+      this.setState({
+        tradeInfo: res.context
+      });
+    }
+  };
+
+  getTradeData = async () => {
+    const { res } = await webapi.prescribersTradeView();
+
+    if (res.code === 'K-000000') {
+      this.setState({
+        tradeData: this.turnToOrderData(res.context.context)
+      });
+    }
+  };
+
+  getFlowTrendData = async () => {
+    const { res } = await webapi.prescribersTradeReport();
+    if (res.code === 'K-000000') {
+      this.setState({
+        flowTrendData: this.turnToOrderData(res.context)
+      });
+    }
+  };
+
+  getCustomerData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowReport();
+    if (res.code === 'K-000000') {
+      this.setState({
+        customerData: this.turnToCustomerData(res.context)
+      });
+    }
+  };
+
+  getCustomerGrowTrendData = async () => {
+    const { res } = await webapi.prescribersCustomerGrowTrend();
+    if (res.code === 'K-000000') {
+      debugger;
+      this.setState({
+        customerGrowTrendData: this.turnToCustomerData(res.context)
+      });
+    }
+  };
+
+  turnToOrderData = (data) => {
+    let tradeData = data.map((order, index) => {
+      return {
+        key: index,
+        orderCount: order.orderCount,
+        orderAmt: order.orderAmt,
+        payOrderCount: order.PayOrderCount,
+        payOrderAmt: order.payOrderAmt,
+        title: order.title
+      };
+    });
+    return tradeData;
+  };
+
+  turnToCustomerData = (data) => {
+    let customerData = data.map((cus, index) => {
+      return {
+        key: index,
+        title: cus.xValue,
+        cusAllCount: cus.customerAllCount,
+        cusDayGrowthCount: cus.customerDayGrowthCount,
+        cusDayRegisterCount: cus.customerDayRegisterCount
+      };
+    });
+    return customerData;
+  };
+
   render() {
     return (
       <div
@@ -109,21 +197,21 @@ export default class homePrescriber extends Component<any, any> {
               <label>Order amount</label>
               <strong>
                 ￥
-                {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                {this.state.tradeInfo.orderAmt
+                  ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>
-            <div className="dataItem">
+            <div className="dataItem" style={{ flex: 'inherit' }}>
               <label>Number of payment orders</label>
-              <strong>{this.state.tradeInfo.orderCount || 0}</strong>
+              <strong>{this.state.tradeInfo.payOrderCount || 0}</strong>
             </div>
             <div className="dataItem">
               <label>Payment amount</label>
               <strong>
                 ￥
-                {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                {this.state.tradeInfo.payOrderAmt
+                  ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>
@@ -138,14 +226,14 @@ export default class homePrescriber extends Component<any, any> {
           <div className="dateBg">
             <div className="dataItem">
               <label>Reward rate</label>
-              <strong>{this.state.tradeInfo.orderCount || 0}%</strong>
+              <strong>{this.state.tradeInfo.rewardRate || 0}%</strong>
             </div>
             <div className="dataItem">
               <label>Reward amount</label>
               <strong>
                 ￥
                 {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.orderCount || 0).toFixed(2)
+                  ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
                   : 0.0}
               </strong>
             </div>

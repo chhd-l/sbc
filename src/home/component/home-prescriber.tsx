@@ -103,6 +103,8 @@ export default class homePrescriber extends Component<any, any> {
           cache.PRESCRIBER_DATA,
           JSON.stringify(res.context)
         );
+      } else {
+        sessionStorage.removeItem(cache.PRESCRIBER_DATA);
       }
     } else {
       sessionStorage.removeItem(cache.PRESCRIBER_DATA);
@@ -134,7 +136,6 @@ export default class homePrescriber extends Component<any, any> {
           title: order.title
         };
       });
-      debugger;
       this.setState({
         tradeData: tradeData
       });

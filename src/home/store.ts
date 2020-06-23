@@ -142,28 +142,28 @@ export default class AppStore extends Store {
     const param = {} as any;
     param.scoreCycle = 2;
     const results = (await Promise.all([
-      webapi.queryStoreState(),
-      noop,
-      webapi.todoTrade(),
-      webapi.todoReturn(),
-      webapi.todoGoods(),
-      webapi.todoAuth(),
-      checkAuth('f_flow_watch_1') ? webapi.flowOview() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeOView() : noop,
-      checkAuth('f_goods_watch_1') ? webapi.skuOView() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerOView() : noop,
-      checkAuth('f_flow_watch_1') ? webapi.flowReport() : noop,
-      checkAuth('f_flow_watch_1') ? webapi.flowTrend() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeReport() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeTrend() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerGrowReport() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerGrowTrend() : noop,
-      checkAuth('f_goods_watch_1') ? webapi.skuRanking() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop,
-      checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop,
-      webapi.queryToTalSettlement(),
-      webapi.fetchStoreEvaluateSum(param),
-      webapi.getPrescribersTotal()
+      webapi.queryStoreState(), //0
+      noop, //1
+      webapi.todoTrade(), //2
+      webapi.todoReturn(), //3
+      webapi.todoGoods(), //4
+      webapi.todoAuth(), //5
+      checkAuth('f_flow_watch_1') ? webapi.flowOview() : noop, //6
+      checkAuth('f_trade_watch_1') ? webapi.tradeOView() : noop, //7
+      checkAuth('f_goods_watch_1') ? webapi.skuOView() : noop, //8
+      checkAuth('f_customer_watch_1') ? webapi.customerOView() : noop, //9
+      checkAuth('f_flow_watch_1') ? webapi.flowReport() : noop, //10
+      checkAuth('f_flow_watch_1') ? webapi.flowTrend() : noop, //11
+      checkAuth('f_trade_watch_1') ? webapi.tradeReport() : noop, //12
+      checkAuth('f_trade_watch_1') ? webapi.tradeTrend() : noop, //13
+      checkAuth('f_customer_watch_1') ? webapi.customerGrowReport() : noop, //14
+      checkAuth('f_customer_watch_1') ? webapi.customerGrowTrend() : noop, //15
+      checkAuth('f_goods_watch_1') ? webapi.skuRanking() : noop, //16
+      checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop, //17
+      checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop, //18
+      webapi.queryToTalSettlement(), //19
+      webapi.fetchStoreEvaluateSum(param), //20
+      webapi.getPrescribersTotal() //21
     ])) as any;
     if (
       results[0] &&
@@ -259,7 +259,9 @@ export default class AppStore extends Store {
       results[6].res &&
       results[6].res.code === Const.SUCCESS_CODE
     ) {
-      let flow = results[6].res.context.content[0];
+      let flow = results[6].res.context.content
+        ? results[6].res.context.content[0]
+        : [];
       if (flow) {
         let flowOview = {
           trafficNum: {

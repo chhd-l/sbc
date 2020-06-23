@@ -138,15 +138,15 @@ export default {
   'registerPrefix': 'Register prefix',
   'registerCallback': 'Register callback',
 
-  'storeInformationEdit': 'Store Information Edit',
+  'storeInformationEdit': 'Shop Information Edit',
   'contentInformation': 'Content information',
   'confirmationEmail': 'Confirmation email',
   'faqUrl': 'FAQ(URL)',
   'privacyPolicy': 'Privacy policy',
   'termsOfUse': 'Terms of use',
   'cookies': 'Cookies',
-  'storeContactPhoneNumber': 'Store contact phone',
-  'storeContactEmail': 'Store contact email',
+  'storeContactPhoneNumber': 'Shop contact phone',
+  'storeContactEmail': 'Shop contact email',
   'contactTimePeriod': 'Contact time period',
 
   'signedInformation': 'Signed information',

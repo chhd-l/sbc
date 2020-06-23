@@ -41,7 +41,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       <div>
         <Button type="primary" icon="plus" onClick={() => this.onAdd()}>
           添加商品
-        </Button>&nbsp;&nbsp;
+        </Button>
+        &nbsp;&nbsp;
         <TableRow>
           <DataGrid
             scroll={{ y: 500 }}
@@ -51,7 +52,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             pagination={false}
           >
             <Column
-              title="SKU编码"
+              title="SKU code"
               dataIndex="goodsInfoNo"
               key="goodsInfoNo"
               width="15%"

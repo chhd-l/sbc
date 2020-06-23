@@ -117,13 +117,13 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label="退货方式" hasFeedback>
+            <FormItem {...formItemLayout} label="Return method" hasFeedback>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [
                   {
                     required: true,
-                    message: '请选择退货方式'
+                    message: 'Please select return method'
                   }
                 ]
               })(this._getReturnWaySelect())}
@@ -259,7 +259,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     const { returnWayList } = this.props.relaxProps;
     return (
       <Select
-        placeholder="请选择退货方式"
+        placeholder="Please select return method"
         notFoundContent="暂无退货方式"
         onChange={this._editInfo.bind(this, 'selectedReturnWay')}
       >

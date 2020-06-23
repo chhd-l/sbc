@@ -45,7 +45,7 @@ const formItemLayout = {
 
 const columns = [
   {
-    title: 'SKU编码',
+    title: 'SKU code',
     dataIndex: 'goodsInfoNo',
     key: 'goodsInfoNo',
     width: '20%'
@@ -124,7 +124,9 @@ export default class CouponBasicInfo extends Component<any, any> {
           </FormItem>
           <FormItem {...formItemLayout} label="优惠券分类">
             <div className="bubbleBox">
-              {couponCates.map((cate) => <span key={cate}>{cate}</span>)}
+              {couponCates.map((cate) => (
+                <span key={cate}>{cate}</span>
+              ))}
             </div>
           </FormItem>
           <FormItem {...formItemLayout} label="起止时间">
@@ -163,13 +165,9 @@ export default class CouponBasicInfo extends Component<any, any> {
   _buildRangeDayType = (rangeDayType, beginTime, endTime, effectiveDays) => {
     if (rangeDayType === 0) {
       return (
-        moment(beginTime)
-          .format(Const.TIME_FORMAT)
-          .toString() +
+        moment(beginTime).format(Const.TIME_FORMAT).toString() +
         ' ~ ' +
-        moment(endTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        moment(endTime).format(Const.TIME_FORMAT).toString()
       );
     } else if (rangeDayType === 1) {
       return `领取当天开始${effectiveDays}天内有效`;

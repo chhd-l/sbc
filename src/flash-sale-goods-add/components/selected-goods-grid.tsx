@@ -64,7 +64,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       <TableSet className="resetTable">
         <Button type="primary" icon="plus" onClick={() => this.onAdd()}>
           添加商品
-        </Button>&nbsp;&nbsp;
+        </Button>
+        &nbsp;&nbsp;
         <Table
           rowKey={(record: any) => record.goodsInfoId}
           dataSource={goodsRows ? goodsRows.toJS() : []}
@@ -84,7 +85,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             width={100}
           />
           <Column
-            title="SKU编码"
+            title="SKU code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width={100}
@@ -181,7 +182,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
                             type: 'number',
                             max: 9999999.99,
                             message: '最大值为9999999.99',
-                            transform: function(value) {
+                            transform: function (value) {
                               return isNaN(parseFloat(value))
                                 ? 0
                                 : parseFloat(value);

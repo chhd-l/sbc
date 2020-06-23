@@ -84,8 +84,8 @@ export default class GiftList extends React.Component<any, any> {
             <GreyBg>
               <Row>
                 <Col span={24}>
-                  <span>规则：</span>
-                  满{level.fullAmount ? level.fullAmount : level.fullCount}
+                  <span>规则：</span>满
+                  {level.fullAmount ? level.fullAmount : level.fullCount}
                   {subType == '4' ? '元' : '件'}{' '}
                   {level.giftType == '1' ? '可选一种' : '默认全赠'}
                 </Col>
@@ -99,7 +99,7 @@ export default class GiftList extends React.Component<any, any> {
             >
               <Column
                 width="10%"
-                title="SKU编码"
+                title="SKU code"
                 key="goodsInfoNo"
                 render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>}
               />

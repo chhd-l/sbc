@@ -40,7 +40,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
           <FormItem>
             <Input
-              addonBefore={'SKU编码'}
+              addonBefore={'SKU code'}
               onChange={(e) => {
                 this.setState({
                   goodsInfoNo: e.target.value

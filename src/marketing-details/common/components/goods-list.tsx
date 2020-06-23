@@ -92,7 +92,7 @@ export default class GoodsList extends React.Component<any, any> {
         >
           <Column
             width="15%"
-            title="SKU编码"
+            title="SKU code"
             key="goodsInfoNo"
             dataIndex="goodsInfoNo"
           />

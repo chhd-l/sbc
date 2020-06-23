@@ -35,7 +35,7 @@ export default class GoodsList extends React.Component<any, any> {
 
     return (
       <div>
-        <h3 style={styles.title}>选择退货商品</h3>
+        <h3 style={styles.title}>Select return products</h3>
         <Table
           bordered
           dataSource={dataSource}
@@ -86,26 +86,26 @@ export default class GoodsList extends React.Component<any, any> {
 
     return [
       {
-        title: 'SKU编码',
+        title: 'SKU code',
         dataIndex: 'skuNo',
         key: 'skuNo',
         width: 150
       },
       {
-        title: '商品名称',
+        title: 'Product name',
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
         render: (text) => `${itemType == 1 ? '【赠品】' : ''}${text}`
       },
       {
-        title: '规格',
+        title: 'Specification',
         dataIndex: 'specDetails',
         key: 'specDetails',
         width: 150
       },
       {
-        title: '退货单价',
+        title: 'Return unit price',
         key: 'price',
         width: 100,
         render: (rowInfo) => {
@@ -117,7 +117,7 @@ export default class GoodsList extends React.Component<any, any> {
         }
       },
       {
-        title: '退货数量',
+        title: 'Return quantity',
         key: 'num',
         width: 100,
         className: 'centerItem',
@@ -157,13 +157,13 @@ export default class GoodsList extends React.Component<any, any> {
                   onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
                 />
               )}
-              <p>{`可退量${rowInfo.canReturnNum}`}</p>
+              <p>{`eturnable number ${rowInfo.canReturnNum}`}</p>
             </FormItem>
           );
         }
       },
       {
-        title: '退货金额小计',
+        title: 'Subtotal of return amount',
         key: 'total',
         width: 100,
         render: (rowInfo) => {

@@ -101,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
           <FormItem>
             <Input
-              addonBefore="SKU编码"
+              addonBefore="SKU code"
               value={form.get('likeGoodsInfoNo')}
               onChange={(e: any) => {
                 onFormFieldChange({

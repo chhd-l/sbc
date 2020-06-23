@@ -171,7 +171,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('确认收货成功!');
+      message.success('Confirm successful receipt!');
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {

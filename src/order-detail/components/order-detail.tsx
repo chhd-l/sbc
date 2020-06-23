@@ -310,7 +310,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="orderNumber" />}: {detail.get('id')}{' '}
                 {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
-                <span style={styles.platform}>{orderType}</span>
+                {/* <span style={styles.platform}>{orderType}</span> */}
                 {detail.get('grouponFlag') && (
                   <span style={styles.platform}>拼团</span>
                 )}
@@ -730,7 +730,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               href="javascript:void(0)"
               style={styles.pr20}
             >
-              确认收货
+              Confirm receipt
             </a>
           </AuthWrapper>
         </div>

@@ -197,7 +197,7 @@ export default class OrderDelivery extends React.Component<any, any> {
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU编码',
+        title: 'SKU code',
         dataIndex: 'skuNo',
         key: 'skuNo'
       },
@@ -249,7 +249,7 @@ export default class OrderDelivery extends React.Component<any, any> {
         render: (_text, _row, index) => index + 1
       },
       {
-        title: 'SKU编码',
+        title: 'SKU code',
         dataIndex: 'skuNo',
         key: 'skuNo'
       },

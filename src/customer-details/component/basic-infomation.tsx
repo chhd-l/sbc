@@ -111,7 +111,9 @@ class BasicInfomation extends React.Component<any, any> {
           let basicForm = {
             firstName: resObj.firstName,
             lastName: resObj.lastName,
-            birthDay: resObj.birthDay,
+            birthDay: resObj.birthDay
+              ? resObj.birthDay
+              : this.state.currentBirthDay,
             email: resObj.email,
             contactPhone: resObj.contactPhone,
             // postCode: resObj.postCode,
@@ -126,7 +128,9 @@ class BasicInfomation extends React.Component<any, any> {
             defaultClinics: resObj.defaultClinics
           };
           this.setState({
-            currentBirthDay: resObj.birthDay,
+            currentBirthDay: resObj.birthDay
+              ? resObj.birthDay
+              : this.state.currentBirthDay,
             basicForm: basicForm,
             currentForm: resObj
           });
@@ -201,7 +205,9 @@ class BasicInfomation extends React.Component<any, any> {
     //   (currentForm.customerId = basicForm.customerId),
     //   (currentForm.defaultClinics = basicForm.defaultClinics)
     let params = {
-      birthDay: basicForm.birthDay,
+      birthDay: basicForm.birthDay
+        ? basicForm.birthDay
+        : this.state.currentBirthDay,
       // city: basicForm.cityObj ? basicForm.cityObj.cityName : currentForm.city,
       // cityId: basicForm.cityObj ? basicForm.cityObj.cityId : currentForm.cityId,
       clinicsVOS: basicForm.selectedClinics,

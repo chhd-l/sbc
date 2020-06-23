@@ -210,7 +210,9 @@ export default class AppStore extends Store {
           storeId
         )) as any;
 
+        //Perscriber used
         const employee = (await webapi.employee()) as any;
+        debugger;
         sessionStorage.setItem(
           cache.EMPLOYEE_DATA,
           JSON.stringify(employee.res)

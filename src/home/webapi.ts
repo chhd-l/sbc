@@ -324,11 +324,13 @@ export function getPrescribersTotal() {
  * 获取首页Prescribers贸易数据
  * @param filterParams
  */
-export function getPrescribersData(param = {}) {
+export function getPrescribersData(id) {
   return Fetch<TResult>('/tradeReport/overview', {
     method: 'POST',
     body: JSON.stringify({
-      ...param
+      selectType: 0,
+      isPrescriber: true,
+      prescriberId: id
     })
   });
 }
@@ -336,12 +338,13 @@ export function getPrescribersData(param = {}) {
 /**
  * 首页Prescribers交易报表
  */
-export const prescribersTradeView = () => {
+export const prescribersTradeView = (id) => {
   return Fetch<TResult>('/tradeReport/page', {
     method: 'POST',
     body: JSON.stringify({
       selectType: 0,
-      isPrescriber: true
+      isPrescriber: true,
+      prescriberId: id
     })
   });
 };
@@ -349,12 +352,13 @@ export const prescribersTradeView = () => {
 /**
  * 首页Prescribers交易趋势 近10日
  */
-export const prescribersTradeReport = () => {
+export const prescribersTradeReport = (id) => {
   return Fetch<TResult>('/tradeReport/list', {
     method: 'POST',
     body: JSON.stringify({
       selectType: 3,
-      isPrescriber: true
+      isPrescriber: true,
+      prescriberId: id
     })
   });
 };
@@ -362,14 +366,15 @@ export const prescribersTradeReport = () => {
 /**
  * 首页Prescribers客户增长报表
  */
-export const prescribersCustomerGrowReport = () => {
+export const prescribersCustomerGrowReport = (id) => {
   return Fetch<TResult>('/customer_grow/page', {
     method: 'POST',
     body: JSON.stringify({
       dateCycle: 4,
       pageNum: 1,
       pageSize: 10,
-      isPrescriber: true
+      isPrescriber: true,
+      prescriberId: id
     })
   });
 };
@@ -377,13 +382,14 @@ export const prescribersCustomerGrowReport = () => {
 /**
  * 首页Prescribers客户增长趋势图
  */
-export const prescribersCustomerGrowTrend = () => {
+export const prescribersCustomerGrowTrend = (id) => {
   return Fetch<TResult>('/customer_grow/trend', {
     method: 'POST',
     body: JSON.stringify({
       queryDateCycle: 4,
       weekly: false,
-      isPrescriber: true
+      isPrescriber: true,
+      prescriberId: id
     })
   });
 };

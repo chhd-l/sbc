@@ -304,7 +304,9 @@ export default class AppStore extends Store {
       results[9].res &&
       results[9].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[9].res.context.data[0];
+      let data = results[9].res.context.data
+        ? results[9].res.context.data[0]
+        : [];
       if (data) {
         this.dispatch('overview-board-actor:mergeBoards', {
           customerNum: {
@@ -321,7 +323,9 @@ export default class AppStore extends Store {
       results[10].res &&
       results[10].res.code === Const.SUCCESS_CODE
     ) {
-      let content = results[10].res.context.content;
+      let content = results[10].res.context.content
+        ? results[10].res.context.content
+        : [];
       let flowData = content.map((flow, index) => {
         return {
           key: index,
@@ -340,7 +344,9 @@ export default class AppStore extends Store {
       results[11].res &&
       results[11].res.code === Const.SUCCESS_CODE
     ) {
-      let flowList = results[11].res.context.flowList;
+      let flowList = results[11].res.context.flowList
+        ? results[11].res.context.flowList
+        : [];
       const length = flowList.length;
       let flowTrendData = flowList
         // .slice(length >= 10 ? length - 10 : 0, length)
@@ -365,17 +371,21 @@ export default class AppStore extends Store {
       results[12].res &&
       results[12].res.code === Const.SUCCESS_CODE
     ) {
-      let content = results[12].res.context.content;
-      let tradeData = content.map((order, index) => {
-        return {
-          key: index,
-          orderCount: order.orderCount,
-          orderAmt: order.orderAmt,
-          payOrderCount: order.PayOrderCount,
-          payOrderAmt: order.payOrderAmt,
-          title: order.title
-        };
-      });
+      let content = results[12].res.context.content
+        ? results[12].res.context.content
+        : [];
+      let tradeData = content
+        ? content.map((order, index) => {
+            return {
+              key: index,
+              orderCount: order.orderCount,
+              orderAmt: order.orderAmt,
+              payOrderCount: order.PayOrderCount,
+              payOrderAmt: order.payOrderAmt,
+              title: order.title
+            };
+          })
+        : [];
       this.dispatch(
         'report-actor:mergeReport',
         fromJS({ tradeData: tradeData })
@@ -387,7 +397,7 @@ export default class AppStore extends Store {
       results[13].res &&
       results[13].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[13].res.context;
+      let context = results[13].res.context ? results[13].res.context : [];
       const length = context.length;
       let tradeTrendData = context
         // .slice(length >= 10 ? length - 10 : 0, length)
@@ -412,7 +422,9 @@ export default class AppStore extends Store {
       results[14].res &&
       results[14].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[14].res.context.data;
+      let data = results[14].res.context.data
+        ? results[14].res.context.data
+        : [];
       let customerData = data.map((cus, index) => {
         return {
           key: index,
@@ -433,7 +445,7 @@ export default class AppStore extends Store {
       results[15].res &&
       results[15].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[15].res.context;
+      let context = results[15].res.context ? results[15].res.context : [];
       let customerTrendData = context.map((cus, index) => {
         return {
           key: index,
@@ -465,7 +477,9 @@ export default class AppStore extends Store {
       results[17].res &&
       results[17].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[17].res.context.data;
+      let data = results[17].res.context.data
+        ? results[17].res.context.data
+        : [];
       let customerRanking = data.map((cus, index) => {
         return {
           key: index,
@@ -483,7 +497,9 @@ export default class AppStore extends Store {
       results[18].res &&
       results[18].res.code === Const.SUCCESS_CODE
     ) {
-      let viewList = results[18].res.context.viewList;
+      let viewList = results[18].res.context.viewList
+        ? results[18].res.context.viewList
+        : [];
       viewList = viewList.map((employee, index) => {
         return {
           key: index,

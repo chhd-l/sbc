@@ -89,7 +89,7 @@ export default class SearchHead extends Component<any, any> {
     let hasMenu = false;
     if (
       (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
-      checkAuth('fOrderList004')
+      checkAuth('fOrderList004_prescriber')
     ) {
       hasMenu = true;
     }
@@ -110,7 +110,7 @@ export default class SearchHead extends Component<any, any> {
           </Menu.Item>
         )}
         <Menu.Item>
-          <AuthWrapper functionName="fOrderList004">
+          <AuthWrapper functionName="fOrderList004_prescriber">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
               <FormattedMessage id="order.batchExport" />
             </a>

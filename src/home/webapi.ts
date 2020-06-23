@@ -342,7 +342,7 @@ export const prescribersTradeView = (id) => {
   return Fetch<TResult>('/tradeReport/page', {
     method: 'POST',
     body: JSON.stringify({
-      selectType: 0,
+      selectType: 3,
       isPrescriber: true,
       prescriberId: id
     })

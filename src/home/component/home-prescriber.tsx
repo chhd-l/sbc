@@ -134,6 +134,7 @@ export default class homePrescriber extends Component<any, any> {
           title: order.title
         };
       });
+      debugger;
       this.setState({
         tradeData: tradeData
       });
@@ -205,7 +206,6 @@ export default class homePrescriber extends Component<any, any> {
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
-    debugger;
     return (
       <div>
         <div

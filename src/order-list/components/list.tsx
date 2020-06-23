@@ -348,9 +348,9 @@ export default class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="order.valetOrder" />
                               </span>
                             )}
-                            {orderType != '' && (
+                            {/* {orderType != '' && (
                               <span style={styles.platform}>{orderType}</span>
-                            )}
+                            )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.fightTogether" />

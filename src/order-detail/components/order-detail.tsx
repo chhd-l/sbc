@@ -730,7 +730,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               href="javascript:void(0)"
               style={styles.pr20}
             >
-              确认收货
+              Confirm receipt
             </a>
           </AuthWrapper>
         </div>

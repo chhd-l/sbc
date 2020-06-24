@@ -193,12 +193,12 @@ export default class EmployeeList extends React.Component<any, any> {
         )}
         <AuthWrapper functionName={'deleteEmployee'}>
           <Popconfirm
-            title="确认要删除这为员工和他的账号吗？删除后他将无法登录。"
+            title="Are you sure to delete the user?"
             onConfirm={() => {
               onDelete(employeeId);
             }}
-            okText="确定"
-            cancelText="取消"
+            okText="OK"
+            cancelText="Cancel"
           >
             <a href="javascript:void(0);">
               <FormattedMessage id="delete" />

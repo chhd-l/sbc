@@ -142,28 +142,28 @@ export default class AppStore extends Store {
     const param = {} as any;
     param.scoreCycle = 2;
     const results = (await Promise.all([
-      webapi.queryStoreState(),
-      noop,
-      webapi.todoTrade(),
-      webapi.todoReturn(),
-      webapi.todoGoods(),
-      webapi.todoAuth(),
-      checkAuth('f_flow_watch_1') ? webapi.flowOview() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeOView() : noop,
-      checkAuth('f_goods_watch_1') ? webapi.skuOView() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerOView() : noop,
-      checkAuth('f_flow_watch_1') ? webapi.flowReport() : noop,
-      checkAuth('f_flow_watch_1') ? webapi.flowTrend() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeReport() : noop,
-      checkAuth('f_trade_watch_1') ? webapi.tradeTrend() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerGrowReport() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerGrowTrend() : noop,
-      checkAuth('f_goods_watch_1') ? webapi.skuRanking() : noop,
-      checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop,
-      checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop,
-      webapi.queryToTalSettlement(),
-      webapi.fetchStoreEvaluateSum(param),
-      webapi.getPrescribersTotal()
+      webapi.queryStoreState(), //0
+      noop, //1
+      webapi.todoTrade(), //2
+      webapi.todoReturn(), //3
+      webapi.todoGoods(), //4
+      webapi.todoAuth(), //5
+      checkAuth('f_flow_watch_1') ? webapi.flowOview() : noop, //6
+      checkAuth('f_trade_watch_1') ? webapi.tradeOView() : noop, //7
+      checkAuth('f_goods_watch_1') ? webapi.skuOView() : noop, //8
+      checkAuth('f_customer_watch_1') ? webapi.customerOView() : noop, //9
+      checkAuth('f_flow_watch_1') ? webapi.flowReport() : noop, //10
+      checkAuth('f_flow_watch_1') ? webapi.flowTrend() : noop, //11
+      checkAuth('f_trade_watch_1') ? webapi.tradeReport() : noop, //12
+      checkAuth('f_trade_watch_1') ? webapi.tradeTrend() : noop, //13
+      checkAuth('f_customer_watch_1') ? webapi.customerGrowReport() : noop, //14
+      checkAuth('f_customer_watch_1') ? webapi.customerGrowTrend() : noop, //15
+      checkAuth('f_goods_watch_1') ? webapi.skuRanking() : noop, //16
+      checkAuth('f_customer_watch_1') ? webapi.customerTop10() : noop, //17
+      checkAuth('f_employee_watch_1') ? webapi.employeeTop10() : noop, //18
+      webapi.queryToTalSettlement(), //19
+      webapi.fetchStoreEvaluateSum(param), //20
+      webapi.getPrescribersTotal() //21
     ])) as any;
     if (
       results[0] &&
@@ -259,7 +259,9 @@ export default class AppStore extends Store {
       results[6].res &&
       results[6].res.code === Const.SUCCESS_CODE
     ) {
-      let flow = results[6].res.context.content[0];
+      let flow = results[6].res.context.content
+        ? results[6].res.context.content[0]
+        : [];
       if (flow) {
         let flowOview = {
           trafficNum: {
@@ -304,7 +306,9 @@ export default class AppStore extends Store {
       results[9].res &&
       results[9].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[9].res.context.data[0];
+      let data = results[9].res.context.data
+        ? results[9].res.context.data[0]
+        : [];
       if (data) {
         this.dispatch('overview-board-actor:mergeBoards', {
           customerNum: {
@@ -321,7 +325,9 @@ export default class AppStore extends Store {
       results[10].res &&
       results[10].res.code === Const.SUCCESS_CODE
     ) {
-      let content = results[10].res.context.content;
+      let content = results[10].res.context.content
+        ? results[10].res.context.content
+        : [];
       let flowData = content.map((flow, index) => {
         return {
           key: index,
@@ -340,7 +346,9 @@ export default class AppStore extends Store {
       results[11].res &&
       results[11].res.code === Const.SUCCESS_CODE
     ) {
-      let flowList = results[11].res.context.flowList;
+      let flowList = results[11].res.context.flowList
+        ? results[11].res.context.flowList
+        : [];
       const length = flowList.length;
       let flowTrendData = flowList
         // .slice(length >= 10 ? length - 10 : 0, length)
@@ -365,17 +373,21 @@ export default class AppStore extends Store {
       results[12].res &&
       results[12].res.code === Const.SUCCESS_CODE
     ) {
-      let content = results[12].res.context.content;
-      let tradeData = content.map((order, index) => {
-        return {
-          key: index,
-          orderCount: order.orderCount,
-          orderAmt: order.orderAmt,
-          payOrderCount: order.PayOrderCount,
-          payOrderAmt: order.payOrderAmt,
-          title: order.title
-        };
-      });
+      let content = results[12].res.context.content
+        ? results[12].res.context.content
+        : [];
+      let tradeData = content
+        ? content.map((order, index) => {
+            return {
+              key: index,
+              orderCount: order.orderCount,
+              orderAmt: order.orderAmt,
+              payOrderCount: order.PayOrderCount,
+              payOrderAmt: order.payOrderAmt,
+              title: order.title
+            };
+          })
+        : [];
       this.dispatch(
         'report-actor:mergeReport',
         fromJS({ tradeData: tradeData })
@@ -387,7 +399,7 @@ export default class AppStore extends Store {
       results[13].res &&
       results[13].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[13].res.context;
+      let context = results[13].res.context ? results[13].res.context : [];
       const length = context.length;
       let tradeTrendData = context
         // .slice(length >= 10 ? length - 10 : 0, length)
@@ -412,7 +424,9 @@ export default class AppStore extends Store {
       results[14].res &&
       results[14].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[14].res.context.data;
+      let data = results[14].res.context.data
+        ? results[14].res.context.data
+        : [];
       let customerData = data.map((cus, index) => {
         return {
           key: index,
@@ -433,7 +447,7 @@ export default class AppStore extends Store {
       results[15].res &&
       results[15].res.code === Const.SUCCESS_CODE
     ) {
-      let context = results[15].res.context;
+      let context = results[15].res.context ? results[15].res.context : [];
       let customerTrendData = context.map((cus, index) => {
         return {
           key: index,
@@ -465,7 +479,9 @@ export default class AppStore extends Store {
       results[17].res &&
       results[17].res.code === Const.SUCCESS_CODE
     ) {
-      let data = results[17].res.context.data;
+      let data = results[17].res.context.data
+        ? results[17].res.context.data
+        : [];
       let customerRanking = data.map((cus, index) => {
         return {
           key: index,
@@ -483,7 +499,9 @@ export default class AppStore extends Store {
       results[18].res &&
       results[18].res.code === Const.SUCCESS_CODE
     ) {
-      let viewList = results[18].res.context.viewList;
+      let viewList = results[18].res.context.viewList
+        ? results[18].res.context.viewList
+        : [];
       viewList = viewList.map((employee, index) => {
         return {
           key: index,

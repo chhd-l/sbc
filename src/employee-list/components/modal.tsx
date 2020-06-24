@@ -54,9 +54,9 @@ export default class OperateModal extends React.Component<any, any> {
       return null;
     }
     return (
-       <Modal  maskClosable={false}
-        title="请填写停用原因"
-         
+      <Modal
+        maskClosable={false}
+        title="Please fill in the reason for suspension"
         visible={modalVisible}
         onCancel={() => switchModal('')}
         onOk={this._handleOk}
@@ -66,14 +66,17 @@ export default class OperateModal extends React.Component<any, any> {
             {getFieldDecorator('reason', {
               initialValue: reason,
               rules: [
-                { required: true, message: '请填写停用原因' },
+                {
+                  required: true,
+                  message: 'Please fill in the reason for suspension'
+                },
                 {
                   validator: (rule, value, callback) => {
                     QMMethod.validatorTrimMinAndMax(
                       rule,
                       value,
                       callback,
-                      '禁用原因',
+                      'Reason for disabling',
                       1,
                       100
                     );
@@ -82,7 +85,7 @@ export default class OperateModal extends React.Component<any, any> {
               ]
             })(
               <Input.TextArea
-                placeholder="请输入禁用原因"
+                placeholder="Please enter a reason for disabling"
                 onChange={(e: any) => enterReason(e.target.value)}
               />
             )}

@@ -65,11 +65,11 @@ export default class StepFour extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="confirmationEmail" />}
+                  label={<FormattedMessage id="cookies" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.confirmationEmail ? (
-                      this.state.contentInformation.confirmationEmail
+                    {this.state.contentInformation.cookiesUrl ? (
+                      this.state.contentInformation.cookiesUrl
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -114,11 +114,11 @@ export default class StepFour extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="cookies" />}
+                  label={<FormattedMessage id="confirmationEmail" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.cookiesUrl ? (
-                      this.state.contentInformation.cookiesUrl
+                    {this.state.contentInformation.confirmationEmail ? (
+                      this.state.contentInformation.confirmationEmail
                     ) : (
                       <FormattedMessage id="none" />
                     )}

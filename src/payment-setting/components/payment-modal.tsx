@@ -39,8 +39,7 @@ class PaymentModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      paymentForm: {},
-      visible: props.visible
+      paymentForm: {}
     };
     this.getPaymentSetting();
   }
@@ -70,14 +69,13 @@ class PaymentModal extends React.Component<any, any> {
       <Modal
         maskClosable={false}
         title="Edit Payment Setting"
-        visible={this.state.visible}
+        visible={this.props.visible}
         onOk={this._next}
         onCancel={() => this.cancel()}
-        width="600px"
       >
         <Form>
           <Row>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -98,7 +96,7 @@ class PaymentModal extends React.Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -119,7 +117,7 @@ class PaymentModal extends React.Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -140,7 +138,7 @@ class PaymentModal extends React.Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -163,7 +161,7 @@ class PaymentModal extends React.Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -186,7 +184,7 @@ class PaymentModal extends React.Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -227,9 +225,7 @@ class PaymentModal extends React.Component<any, any> {
   };
 
   cancel = () => {
-    this.setState({
-      visible: false
-    });
+    this.props.parent.closeModel();
   };
 
   onSave = async () => {

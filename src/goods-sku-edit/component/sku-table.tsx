@@ -100,7 +100,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: '请填写市场价'
+                      message: 'Please input market price'
                     },
                     {
                       pattern: ValidConst.zeroPrice,
@@ -231,7 +231,7 @@ class SkuForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: '请填写SKU编码'
+                      message: 'Please input SKU code'
                     },
                     {
                       min: 1,

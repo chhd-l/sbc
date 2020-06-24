@@ -118,12 +118,22 @@ class LogisticsForm extends React.Component<any, any> {
                   'freightTempId',
                   freightExists
                     ? {
-                        rules: [{ required: true, message: '请选择运费模板' }],
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please select shipping template'
+                          }
+                        ],
                         onChange: this._editGoods.bind(this, 'freightTempId'),
                         initialValue: goods.get('freightTempId').toString()
                       }
                     : {
-                        rules: [{ required: true, message: '请选择运费模板' }],
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please select shipping template'
+                          }
+                        ],
                         onChange: this._editGoods.bind(this, 'freightTempId')
                       }
                 )(this._getFreightSelect())}
@@ -170,7 +180,7 @@ class LogisticsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写物流重量'
+                    message: 'Please input logistics weight'
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
@@ -218,7 +228,7 @@ class LogisticsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写物流体积'
+                    message: 'Please input logistics volume'
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,

@@ -203,7 +203,7 @@ export default class GoodsSpecActor extends Actor {
     const spec = fromJS({
       specId: this._getRandom(),
       isMock: true,
-      specName: '规格' + (goodsSpecs.count() + 1),
+      specName: 'specification' + (goodsSpecs.count() + 1),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

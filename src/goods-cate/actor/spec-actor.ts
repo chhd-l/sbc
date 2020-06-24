@@ -14,7 +14,7 @@ export default class GoodsSpecActor extends Actor {
         {
           specId: this._getRandom(),
           isMock: true,
-          specName: '规格1',
+          specName: 'specification1',
           specValues: []
         }
       ],
@@ -90,7 +90,7 @@ export default class GoodsSpecActor extends Actor {
           {
             specId: this._getRandom(),
             isMock: true,
-            specName: '规格1',
+            specName: 'specification1',
             specValues: []
           }
         ])

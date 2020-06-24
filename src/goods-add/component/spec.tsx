@@ -280,8 +280,8 @@ class SpecForm extends React.Component<any, any> {
                                   document.getElementById('specSelect')
                                 }
                                 style={{ width: '90%' }}
-                                placeholder="请输入规格值"
-                                notFoundContent="暂无规格值"
+                                placeholder="Please input specification Value"
+                                notFoundContent="No specification value"
                                 tokenSeparators={[',']}
                               >
                                 {this._getChildren(item.get('specValues'))}

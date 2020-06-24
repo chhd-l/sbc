@@ -40,7 +40,11 @@ export default class EmployeeModal extends React.Component<any, any> {
       <Modal
         maskClosable={false}
         title={
-          editDisable ? '查看员工信息' : edit ? '编辑员工信息' : '新增员工信息'
+          editDisable
+            ? '查看员工信息'
+            : edit
+            ? 'Edit user information'
+            : 'Add user information'
         }
         visible={visible}
         onOk={() => this._handleOK()}

@@ -357,7 +357,8 @@ export default class CouponInfoForm extends Component<any, any> {
                         validator: (_rule, value, callback) => {
                           if (
                             !ValidConst.noZeroNumber.test(value) ||
-                            (value < 1 || value > 99999)
+                            value < 1 ||
+                            value > 99999
                           ) {
                             callback('只允许输入1-99999间的整数');
                             return;
@@ -409,7 +410,8 @@ export default class CouponInfoForm extends Component<any, any> {
                             if (fullBuyType == 1 && (value || value === 0)) {
                               if (
                                 !ValidConst.noZeroNumber.test(value) ||
-                                (value < 1 || value > 99999)
+                                value < 1 ||
+                                value > 99999
                               ) {
                                 callback('只允许输入1-99999间的整数');
                                 return;
@@ -542,7 +544,7 @@ export default class CouponInfoForm extends Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder="请选择品牌"
-        notFoundContent="暂无品牌"
+        notFoundContent="No brand"
         mode="multiple"
         optionFilterProp="children"
         filterOption={(input, option: any) => {
@@ -666,11 +668,8 @@ export default class CouponInfoForm extends Component<any, any> {
       //强制校验创建时间
       if (
         rangeDayType == 0 &&
-        moment(new Date())
-          .hour(0)
-          .minute(0)
-          .second(0)
-          .unix() > moment(startTime).unix()
+        moment(new Date()).hour(0).minute(0).second(0).unix() >
+          moment(startTime).unix()
       ) {
         this.props.form.setFields({
           rangeDay: {

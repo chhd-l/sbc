@@ -226,7 +226,12 @@ export default class EditForm extends React.Component<any, any> {
                 //   }
                 // }
               ]
-            })(<Input disabled={editDisable} placeholder="仅限1-20位字符" />)}
+            })(
+              <Input
+                disabled={editDisable}
+                placeholder="Only 1-20 characters"
+              />
+            )}
           </FormItem>
 
           <FormItem
@@ -334,7 +339,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
                 allowClear={true}
                 format={Const.DAY_FORMAT}
-                placeholder={'生日'}
+                placeholder={'birthday'}
               />
             )}
           </FormItem>
@@ -355,10 +360,10 @@ export default class EditForm extends React.Component<any, any> {
                   <span style={styles.darkColor}>保密</span>
                 </Radio>
                 <Radio value={1}>
-                  <span style={styles.darkColor}>男</span>
+                  <span style={styles.darkColor}>Male</span>
                 </Radio>
                 <Radio value={2}>
-                  <span style={styles.darkColor}>女</span>
+                  <span style={styles.darkColor}>Female</span>
                 </Radio>
               </RadioGroup>
             )}
@@ -381,7 +386,7 @@ export default class EditForm extends React.Component<any, any> {
                 style={{ width: '100%' }}
                 value={departmentIdList}
                 dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
-                placeholder="请选择，可多选"
+                placeholder="Please select, Multiple choice"
                 allowClear
                 multiple
                 treeDefaultExpandAll

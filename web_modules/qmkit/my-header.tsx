@@ -151,15 +151,15 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
     const menu = (
       <Menu>
-        {isMasterAccount == '1' ? (
+        {/* {isMasterAccount == '1' ? (
           <Menu.Item key="0">
             <Link to={'/account-manage'}>
               <Icon type="user" /> Account management
             </Link>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
 
-        {/* <Menu.Item key="1">
+        <Menu.Item key="1">
           <a
             href="javascript:;"
             onClick={() =>
@@ -171,9 +171,9 @@ export default class MyHeader extends React.PureComponent<any, any> {
               })
             }
           >
-            <Icon type="lock" /> Modify password
+            <Icon type="lock" /> Find My Password
           </a>
-        </Menu.Item> */}
+        </Menu.Item>
         <Menu.Item key="2">
           <a href="javascript:;" onClick={() => this._handleLogout()}>
             <Icon type="logout" /> Exit

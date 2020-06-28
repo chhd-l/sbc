@@ -58,7 +58,8 @@ export default class EditForm extends React.Component<any, any> {
       changePassword: false,
       value: undefined,
       clinicsLites: [],
-      selectRoleIds: ''
+      selectRoleIds: '',
+      prescriberIds: {}
     };
     this._store = ctx['_plume$Store'];
     this.getClinicsLites();
@@ -87,6 +88,15 @@ export default class EditForm extends React.Component<any, any> {
         selectRoleIds: ''
       });
     }
+    this.setState({
+      prescriberIds: {
+        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
+          ? employeeForm.get('prescriberIds')
+          : employeeForm.get('prescriberIds')
+          ? employeeForm.get('prescriberIds').toJS()
+          : []
+      }
+    });
   }
 
   render() {
@@ -118,7 +128,6 @@ export default class EditForm extends React.Component<any, any> {
 
     let roleIdList = {};
     let isEmployee = {};
-    let prescriberIds = {};
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
     //如果是编辑状态
@@ -171,25 +180,6 @@ export default class EditForm extends React.Component<any, any> {
       //取最新的roleIds集合与该员工下面挂的roleIds的交集，防止有的角色已经删除仍然显示的情况
       roleIdList = {
         initialValue: employeeForm.get('roleIds')
-          ? employeeForm
-              .get('roleIds')
-              .split(',')
-              .reduce((pre, cur) => {
-                let current = Number(cur);
-                if (roleIds.toJS().includes(current)) {
-                  pre.push(cur);
-                }
-                return pre;
-              }, [])
-          : []
-      };
-
-      prescriberIds = {
-        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
-          ? employeeForm.get('prescriberIds')
-          : employeeForm.get('prescriberIds')
-          ? employeeForm.get('prescriberIds').toJS()
-          : []
       };
     }
     return (
@@ -409,7 +399,7 @@ export default class EditForm extends React.Component<any, any> {
               <Select
                 placeholder="Please choose"
                 disabled={editDisable}
-                mode="multiple"
+                // mode="multiple"
                 showSearch
                 onChange={this.roleChange}
                 filterOption={(input, option: { props }) =>
@@ -436,7 +426,7 @@ export default class EditForm extends React.Component<any, any> {
               hasFeedback
             >
               {getFieldDecorator('prescriberIds', {
-                ...prescriberIds,
+                ...this.state.prescriberIds,
                 rules: [
                   { required: true, message: 'Please Select Prescribers!' }
                 ]
@@ -629,9 +619,12 @@ export default class EditForm extends React.Component<any, any> {
     });
   }
   roleChange = (value) => {
-    let roleStringIds = value.join(',');
+    // let roleStringIds = value.join(',');
     this.setState({
-      selectRoleIds: roleStringIds
+      selectRoleIds: value,
+      prescriberIds: {
+        initialValue: []
+      }
     });
   };
 

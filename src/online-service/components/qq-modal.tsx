@@ -136,7 +136,8 @@ export default class QQModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal  maskClosable={false}
+      <Modal
+        maskClosable={false}
         title="编辑QQ客服"
         visible={smsVisible}
         onOk={this._handleOK}
@@ -207,7 +208,7 @@ export default class QQModal extends React.Component<any, any> {
                         rules: [{ validator: this.checkCustomerAccountName }]
                       })(
                         <Input
-                          placeholder="最多10个字符"
+                          placeholder="No more than 10 characters"
                           onChange={(e) =>
                             onSetOnlineServer({
                               index: k,

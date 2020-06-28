@@ -267,7 +267,7 @@ export default class PicModal extends React.Component<any, any> {
                 >
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    暂无数据
+                    No Data
                   </span>
                 </div>
               )}

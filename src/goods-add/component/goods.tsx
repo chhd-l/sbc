@@ -269,7 +269,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     required: true,
                     whitespace: true,
-                    message: '请填写商品名称'
+                    message: 'Please input product name'
                   },
                   {
                     min: 1,
@@ -333,7 +333,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请选择平台商品类目'
+                    message: 'Please select platform product category'
                   },
                   {
                     validator: (_rule, value, callback) => {
@@ -455,7 +455,7 @@ class GoodsForm extends React.Component<any, any> {
                     required: true,
                     min: 1,
                     max: 10,
-                    message: '1-10字符'
+                    message: '1-10 character'
                   },
                   {
                     pattern: ValidConst.noNumber,

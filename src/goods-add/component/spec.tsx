@@ -133,12 +133,12 @@ class SpecForm extends React.Component<any, any> {
                                 {
                                   required: true,
                                   whitespace: true,
-                                  message: '请填写规格'
+                                  message: 'Please input specification'
                                 },
                                 {
                                   min: 1,
                                   max: 10,
-                                  message: '最多10个字符'
+                                  message: 'No more than 10 characters'
                                 },
                                 {
                                   // 重复校验,
@@ -166,7 +166,7 @@ class SpecForm extends React.Component<any, any> {
                               initialValue: item.get('specName')
                             })(
                               <Input
-                                placeholder="请输入规格"
+                                placeholder="Please input specification"
                                 style={{ width: '90%' }}
                               />
                             )}
@@ -201,7 +201,7 @@ class SpecForm extends React.Component<any, any> {
                                 rules: [
                                   {
                                     required: true,
-                                    message: '请填写规格值'
+                                    message: 'Please input specification Value'
                                   },
                                   {
                                     validator: (_rule, value, callback) => {

@@ -376,35 +376,35 @@ export default class CateList extends React.Component<any, any> {
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>规格：</label>
+                <label style={styles.label}>Specification：</label>
                 <span className="specification" style={styles.textCon}>
                   {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
                 </span>
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>SKU编码：</label>
+                <label style={styles.label}>SKU code：</label>
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>市场价：</label>
+                <label style={styles.label}>Market price：</label>
                 {goods.get('marketPrice') || goods.get('marketPrice') === 0
                   ? goods.get('marketPrice').toFixed(2)
                   : 0}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>上下架：</label>
+                <label style={styles.label}>On/Off shelve：</label>
                 {goods.get('addedFlag') == 0 ? '下架' : '上架'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>条形码：</label>
+                <label style={styles.label}>Bar code：</label>
                 {goods.get('goodsInfoBarcode')
                   ? goods.get('goodsInfoBarcode')
                   : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>库存：</label>
+                <label style={styles.label}>In stock：</label>
                 {goods.get('stock')}
               </div>
             </div>

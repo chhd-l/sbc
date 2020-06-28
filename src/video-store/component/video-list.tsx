@@ -115,7 +115,7 @@ export default class VideoList extends React.Component<any, any> {
           <div className="ant-table-placeholder">
             <span>
               <i className="anticon anticon-frown-o" />
-              暂无数据
+              No Data
             </span>
           </div>
         ) : (

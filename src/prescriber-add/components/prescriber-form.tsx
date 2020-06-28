@@ -618,7 +618,14 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
 
                 <FormItem label="Prescriber Address">
-                  {getFieldDecorator('location')(
+                  {getFieldDecorator('location', {
+                    rules: [
+                      {
+                        max: 200,
+                        message: 'Prescriber Address exceed the maximum length!'
+                      }
+                    ]
+                  })(
                     <Input.TextArea
                       onChange={(e) => {
                         const value = (e.target as any).value;

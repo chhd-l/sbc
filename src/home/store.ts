@@ -448,15 +448,18 @@ export default class AppStore extends Store {
       results[15].res.code === Const.SUCCESS_CODE
     ) {
       let context = results[15].res.context ? results[15].res.context : [];
-      let customerTrendData = context.map((cus, index) => {
-        return {
-          key: index,
-          title: cus.xValue,
-          cusAllCount: cus.customerAllCount,
-          cusDayGrowthCount: cus.customerDayGrowthCount,
-          cusDayRegisterCount: cus.customerDayRegisterCount
-        };
-      });
+      const length = context.length;
+      let customerTrendData = context
+        .slice(length >= 10 ? length - 10 : 0, length)
+        .map((cus, index) => {
+          return {
+            key: index,
+            title: cus.xValue,
+            cusAllCount: cus.customerAllCount,
+            cusDayGrowthCount: cus.customerDayGrowthCount,
+            cusDayRegisterCount: cus.customerDayRegisterCount
+          };
+        });
       this.dispatch(
         'trend-actor:mergeTrend',
         fromJS({ customerGrowTrendData: customerTrendData })

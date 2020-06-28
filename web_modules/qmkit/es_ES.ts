@@ -580,7 +580,6 @@ export default {
   'prescriberName': 'Prescriber Name',
   'prescriberPhone': 'Prescriber Phone',
   'prescriberZip': 'Prescriber Zip',
-  'Savelogin': 'Save & Login',
   'oldPassword': 'Old Password',
   'newPassword': 'New Password',
   'confirmPassword': 'Confirm Password',

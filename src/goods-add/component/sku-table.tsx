@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: '请填写SKU编码'
+                      message: 'Please input SKU code'
                     },
                     {
                       min: 1,
@@ -264,7 +264,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写市场价'
+                    message: 'Please input market price'
                   },
                   {
                     pattern: ValidConst.zeroPrice,
@@ -274,7 +274,7 @@ class SkuForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: '最大值为9999999.99',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }

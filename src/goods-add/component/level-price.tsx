@@ -116,7 +116,7 @@ class LevelPriceForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: '请填写市场价'
+                      message: 'Please input market price'
                     },
                     {
                       pattern: ValidConst.zeroPrice,

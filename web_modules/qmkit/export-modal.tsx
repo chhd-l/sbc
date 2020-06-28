@@ -122,7 +122,7 @@ class ExportForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: '请选择导出方式'
+                message: 'Please select an export method'
               }
             ]
           })(

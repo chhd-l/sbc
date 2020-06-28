@@ -908,7 +908,7 @@ class GoodsForm extends React.Component<any, any> {
         showSearch
         getPopupContainer={() => document.getElementById('page-content')}
         placeholder="please select brand"
-        notFoundContent="暂无品牌"
+        notFoundContent="No brand"
         allowClear={true}
         optionFilterProp="children"
         filterOption={(input, option: any) => {

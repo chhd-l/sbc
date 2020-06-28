@@ -44,7 +44,9 @@ export default class FreightForm extends React.Component<any, any> {
               initialValue: freightTempId
                 ? freightTempId.toString()
                 : freightTempId,
-              rules: [{ required: true, message: '请选择运费模板' }],
+              rules: [
+                { required: true, message: 'Please select shipping template' }
+              ],
               onChange: this._editFreightTemp.bind(this, 'freightTempId')
             })(this._getFreightSelect())}
           </div>
@@ -58,7 +60,8 @@ export default class FreightForm extends React.Component<any, any> {
                         <li>快递配送</li>
                       ) : null}
                       <li>
-                        默认运费：{express}&nbsp;&nbsp;&nbsp;&nbsp;<a
+                        默认运费：{express}&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a
                           style={{ textDecoration: 'none' }}
                           href={`/goods-freight-edit/${freightTempId}`}
                           target="view_window"

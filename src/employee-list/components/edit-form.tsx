@@ -226,7 +226,12 @@ export default class EditForm extends React.Component<any, any> {
                 //   }
                 // }
               ]
-            })(<Input disabled={editDisable} placeholder="1-20 characters" />)}
+            })(
+              <Input
+                disabled={editDisable}
+                placeholder="Only 1-20 characters"
+              />
+            )}
           </FormItem>
 
           <FormItem
@@ -382,7 +387,7 @@ export default class EditForm extends React.Component<any, any> {
                 style={{ width: '100%' }}
                 value={departmentIdList}
                 dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
-                placeholder="Please choose"
+                placeholder="Please select, Multiple choice"
                 allowClear
                 multiple
                 treeDefaultExpandAll

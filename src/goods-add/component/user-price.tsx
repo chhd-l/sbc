@@ -128,10 +128,7 @@ class UserPriceForm extends React.Component<any, any> {
       userMaxCountChecked,
       userMaxCountDisable
     } = this.props.relaxProps;
-    const userPriceData = userPrice
-      .valueSeq()
-      .toList()
-      .toJS();
+    const userPriceData = userPrice.valueSeq().toList().toJS();
     return (
       <Row>
         <Col span={4}>
@@ -222,7 +219,8 @@ class UserPriceForm extends React.Component<any, any> {
                       }}
                     >
                       *
-                    </span>订货价
+                    </span>
+                    订货价
                   </div>
                 }
                 key="price"
@@ -237,13 +235,14 @@ class UserPriceForm extends React.Component<any, any> {
                         },
                         {
                           pattern: ValidConst.zeroPrice,
-                          message: '请填写两位小数的合法金额'
+                          message:
+                            'Please fill in the legal amount with two decimal places'
                         },
                         {
                           type: 'number',
                           max: 9999999.99,
                           message: '最大值为9999999.99',
-                          transform: function(value) {
+                          transform: function (value) {
                             return isNaN(parseFloat(value))
                               ? 0
                               : parseFloat(value);
@@ -263,7 +262,8 @@ class UserPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    起订量<br />{' '}
+                    起订量
+                    <br />{' '}
                     <Checkbox
                       checked={userCountChecked}
                       onChange={this._synchUserCount}
@@ -280,7 +280,7 @@ class UserPriceForm extends React.Component<any, any> {
                       rules: [
                         {
                           pattern: ValidConst.number,
-                          message: '0或正整数'
+                          message: '0 or positive integer'
                         },
                         {
                           customer: rowInfo.customerId,
@@ -332,7 +332,8 @@ class UserPriceForm extends React.Component<any, any> {
               <Column
                 title={
                   <div>
-                    限订量<br />{' '}
+                    限订量
+                    <br />{' '}
                     <Checkbox
                       checked={userMaxCountChecked}
                       onChange={this._synchUserMaxCount}

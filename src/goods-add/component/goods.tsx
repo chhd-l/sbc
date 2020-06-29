@@ -413,7 +413,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={8}>
+          {/* <Col span={8}>
             <a
               href="javascript:;"
               onClick={showCateModal}
@@ -421,7 +421,7 @@ class GoodsForm extends React.Component<any, any> {
             >
               Add store classification
             </a>
-          </Col>
+          </Col> */}
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>

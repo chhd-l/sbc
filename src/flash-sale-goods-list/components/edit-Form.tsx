@@ -62,9 +62,10 @@ export default class EditForm extends React.Component<any, any> {
           {formData.get('goodsInfo').get('storeName')}
         </FormItem>
         <FormItem {...formItemLayout} label="市场价格">
-          {'￥' + (formData.get('goodsInfo').get('marketPrice') == null
-            ? 0
-            : formData.get('goodsInfo').get('marketPrice'))}
+          {'￥' +
+            (formData.get('goodsInfo').get('marketPrice') == null
+              ? 0
+              : formData.get('goodsInfo').get('marketPrice'))}
         </FormItem>
         <FormItem {...formItemLayout} label="现有库存">
           {formData.get('goodsInfo').get('stock')}
@@ -78,13 +79,14 @@ export default class EditForm extends React.Component<any, any> {
               },
               {
                 pattern: ValidConst.price,
-                message: '请填写两位小数的合法金额'
+                message:
+                  'Please fill in the legal amount with two decimal places'
               },
               {
                 type: 'number',
                 max: 9999999.99,
                 message: '最大值为9999999.99',
-                transform: function(value) {
+                transform: function (value) {
                   return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                 }
               }

@@ -225,7 +225,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('请选择要导出的订单');
+      message.error('Please select the order to be exported');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

@@ -523,7 +523,7 @@ export default class ListView extends React.Component<any, any> {
                       {
                         /*第4张特殊处理*/
                         //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 3 ? (
+                        v.get('tradeItems').concat(gifts).size > 4 ? (
                           <div style={styles.imgBg}>
                             <img
                               //@ts-ignore
@@ -546,7 +546,7 @@ export default class ListView extends React.Component<any, any> {
                             <div style={styles.imgNum}>
                               <FormattedMessage id="total" />
                               {v.get('tradeItems').concat(gifts).size}{' '}
-                              <FormattedMessage id="piece" />
+                              <FormattedMessage id="items" />
                             </div>
                           </div>
                         ) : null

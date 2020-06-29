@@ -164,7 +164,11 @@ class SpecForm extends React.Component<any, any> {
                                     goodsSpecs.forEach((value, i) => {
                                       if (i != index) {
                                         value.get('specName') == specsName
-                                          ? callback(new Error('规格名称重复'))
+                                          ? callback(
+                                              new Error(
+                                                'Specification name duplicate'
+                                              )
+                                            )
                                           : callback();
                                       }
                                     });
@@ -253,25 +257,33 @@ class SpecForm extends React.Component<any, any> {
 
                                         if (whitespace) {
                                           callback(
-                                            new Error('规格值不能为空格字符')
+                                            new Error(
+                                              'The specification value cannot be a space character'
+                                            )
                                           );
                                           return;
                                         }
                                         if (overLen) {
                                           callback(
-                                            new Error('每项值最多支持20个字符')
+                                            new Error(
+                                              'Each value supports up to 20 characters'
+                                            )
                                           );
                                           return;
                                         }
                                         if (duplicated) {
-                                          callback(new Error('规格值重复'));
+                                          callback(
+                                            new Error('Repeated specifications')
+                                          );
                                           return;
                                         }
                                       }
 
                                       if (value.length > 20) {
                                         callback(
-                                          new Error('最多支持20个规格值')
+                                          new Error(
+                                            'Support up to 20 specifications'
+                                          )
                                         );
                                         return;
                                       }
@@ -384,7 +396,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error('最多添加5个规格项');
+      message.error('Add up to 5 specifications');
       return;
     }
     updateSpecForm(this.props.form);
@@ -394,7 +406,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error('至少保留1个规格项');
+      message.error('Keep at least 1 specification item');
       return;
     }
     updateSpecForm(this.props.form);

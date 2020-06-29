@@ -625,7 +625,8 @@ export default {
   'pv': 'PV',
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
-  'rewardAmount': 'Reward amount'
+  'rewardAmount': 'Reward amount',
+  'items':'Items'
 };
 
 

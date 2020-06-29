@@ -86,13 +86,14 @@ class SpecForm extends React.Component<any, any> {
           <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
             <FormattedMessage id="product.specificationSetting" />
           </div>
-          <div style={styles.box}>
+          {/* <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
               <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
             </Checkbox>
-          </div>
+          </div> */}
           <div style={styles.bg}>
-            {specSingleFlag ? null : (
+            {
+              // specSingleFlag ? null :
               <Row>
                 <Col offset={5}>
                   <p style={{ color: '#999', marginBottom: 5 }}>
@@ -101,205 +102,201 @@ class SpecForm extends React.Component<any, any> {
                   </p>
                 </Col>
               </Row>
-            )}
-            {specSingleFlag
-              ? null
-              : goodsSpecs.map((item, index) => {
-                  const specValues =
-                    item.get('specValues').count() > 0
-                      ? item
-                          .get('specValues')
-                          .map((item) => item.get('detailName'))
-                          .toJS()
-                      : [];
-                  return (
-                    <div key={item.get('specId')} style={{ marginBottom: 20 }}>
-                      <Row type="flex" justify="start" align="top">
-                        <Col span={3}>
-                          <span
-                            style={{
-                              color: 'red',
-                              fontFamily: 'SimSun',
-                              marginRight: '4px',
-                              fontSize: '12px',
-                              float: 'left'
-                            }}
-                          >
-                            *
-                          </span>
-                          <FormItem>
-                            {getFieldDecorator('spec_' + item.get('specId'), {
-                              rules: [
-                                {
-                                  required: true,
-                                  whitespace: true,
-                                  message: 'Please input specification'
-                                },
-                                {
-                                  min: 1,
-                                  max: 10,
-                                  message: 'No more than 10 characters'
-                                },
-                                {
-                                  // 重复校验,
-                                  validator: (_rule, specsName, callback) => {
-                                    if (!specsName) {
-                                      callback();
-                                      return;
+            }
+            {
+              // specSingleFlag? null:
+              goodsSpecs.map((item, index) => {
+                const specValues =
+                  item.get('specValues').count() > 0
+                    ? item
+                        .get('specValues')
+                        .map((item) => item.get('detailName'))
+                        .toJS()
+                    : [];
+                return (
+                  <div key={item.get('specId')} style={{ marginBottom: 20 }}>
+                    <Row type="flex" justify="start" align="top">
+                      <Col span={3}>
+                        <span
+                          style={{
+                            color: 'red',
+                            fontFamily: 'SimSun',
+                            marginRight: '4px',
+                            fontSize: '12px',
+                            float: 'left'
+                          }}
+                        >
+                          *
+                        </span>
+                        <FormItem>
+                          {getFieldDecorator('spec_' + item.get('specId'), {
+                            rules: [
+                              {
+                                required: true,
+                                whitespace: true,
+                                message: 'Please input specification'
+                              },
+                              {
+                                min: 1,
+                                max: 10,
+                                message: 'No more than 10 characters'
+                              },
+                              {
+                                // 重复校验,
+                                validator: (_rule, specsName, callback) => {
+                                  if (!specsName) {
+                                    callback();
+                                    return;
+                                  }
+                                  //   获得表单其他列的规格名称，
+                                  goodsSpecs.forEach((value, i) => {
+                                    if (i != index) {
+                                      value.get('specName') == specsName
+                                        ? callback(new Error('规格名称重复'))
+                                        : callback();
                                     }
-                                    //   获得表单其他列的规格名称，
-                                    goodsSpecs.forEach((value, i) => {
-                                      if (i != index) {
-                                        value.get('specName') == specsName
-                                          ? callback(new Error('规格名称重复'))
-                                          : callback();
+                                  });
+                                  callback();
+                                }
+                              }
+                            ],
+                            onChange: this._editSpecName.bind(
+                              this,
+                              item.get('specId')
+                            ),
+                            initialValue: item.get('specName')
+                          })(
+                            <Input
+                              placeholder="Please input specification"
+                              style={{ width: '90%' }}
+                            />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col
+                        span={2}
+                        style={{ marginTop: 2, textAlign: 'center' }}
+                      >
+                        <Button
+                          onClick={() => this._deleteSpec(item.get('specId'))}
+                        >
+                          <FormattedMessage id="delete" />
+                        </Button>
+                      </Col>
+                      <Col span={10}>
+                        <span
+                          style={{
+                            color: 'red',
+                            fontFamily: 'SimSun',
+                            marginRight: '4px',
+                            fontSize: '12px',
+                            float: 'left'
+                          }}
+                        >
+                          *
+                        </span>
+                        <FormItem>
+                          {getFieldDecorator('specval_' + item.get('specId'), {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Please input specification Value'
+                              },
+                              {
+                                validator: (_rule, value, callback) => {
+                                  if (!value) {
+                                    callback();
+                                    return;
+                                  }
+
+                                  if (value.length > 0) {
+                                    const valueList = fromJS(value);
+                                    let overLen = false;
+                                    let whitespace = false;
+                                    let duplicated = false;
+
+                                    valueList.forEach((v, k) => {
+                                      const trimValue = v.trim();
+                                      if (!trimValue) {
+                                        whitespace = true;
+                                        return false;
+                                      }
+                                      if (v.length > 20) {
+                                        overLen = true;
+                                        return false;
+                                      }
+
+                                      // 重复校验
+                                      const duplicatedIndex = valueList.findIndex(
+                                        (v1, index1) =>
+                                          index1 != k && v1.trim() === trimValue
+                                      );
+                                      if (duplicatedIndex > -1) {
+                                        duplicated = true;
                                       }
                                     });
-                                    callback();
-                                  }
-                                }
-                              ],
-                              onChange: this._editSpecName.bind(
-                                this,
-                                item.get('specId')
-                              ),
-                              initialValue: item.get('specName')
-                            })(
-                              <Input
-                                placeholder="Please input specification"
-                                style={{ width: '90%' }}
-                              />
-                            )}
-                          </FormItem>
-                        </Col>
-                        <Col
-                          span={2}
-                          style={{ marginTop: 2, textAlign: 'center' }}
-                        >
-                          <Button
-                            onClick={() => this._deleteSpec(item.get('specId'))}
-                          >
-                            <FormattedMessage id="delete" />
-                          </Button>
-                        </Col>
-                        <Col span={10}>
-                          <span
-                            style={{
-                              color: 'red',
-                              fontFamily: 'SimSun',
-                              marginRight: '4px',
-                              fontSize: '12px',
-                              float: 'left'
-                            }}
-                          >
-                            *
-                          </span>
-                          <FormItem>
-                            {getFieldDecorator(
-                              'specval_' + item.get('specId'),
-                              {
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Please input specification Value'
-                                  },
-                                  {
-                                    validator: (_rule, value, callback) => {
-                                      if (!value) {
-                                        callback();
-                                        return;
-                                      }
 
-                                      if (value.length > 0) {
-                                        const valueList = fromJS(value);
-                                        let overLen = false;
-                                        let whitespace = false;
-                                        let duplicated = false;
-
-                                        valueList.forEach((v, k) => {
-                                          const trimValue = v.trim();
-                                          if (!trimValue) {
-                                            whitespace = true;
-                                            return false;
-                                          }
-                                          if (v.length > 20) {
-                                            overLen = true;
-                                            return false;
-                                          }
-
-                                          // 重复校验
-                                          const duplicatedIndex = valueList.findIndex(
-                                            (v1, index1) =>
-                                              index1 != k &&
-                                              v1.trim() === trimValue
-                                          );
-                                          if (duplicatedIndex > -1) {
-                                            duplicated = true;
-                                          }
-                                        });
-
-                                        if (whitespace) {
-                                          callback(
-                                            new Error('规格值不能为空格字符')
-                                          );
-                                          return;
-                                        }
-                                        if (overLen) {
-                                          callback(
-                                            new Error('每项值最多支持20个字符')
-                                          );
-                                          return;
-                                        }
-                                        if (duplicated) {
-                                          callback(new Error('规格值重复'));
-                                          return;
-                                        }
-                                      }
-
-                                      if (value.length > 20) {
-                                        callback(
-                                          new Error('最多支持20个规格值')
-                                        );
-                                        return;
-                                      }
-
-                                      callback();
+                                    if (whitespace) {
+                                      callback(
+                                        new Error('规格值不能为空格字符')
+                                      );
+                                      return;
+                                    }
+                                    if (overLen) {
+                                      callback(
+                                        new Error('每项值最多支持20个字符')
+                                      );
+                                      return;
+                                    }
+                                    if (duplicated) {
+                                      callback(new Error('规格值重复'));
+                                      return;
                                     }
                                   }
-                                ],
-                                onChange: this._editSpecValue.bind(
-                                  this,
-                                  item.get('specId')
-                                ),
-                                initialValue: specValues
-                              }
-                            )(
-                              <Select
-                                mode="tags"
-                                getPopupContainer={() =>
-                                  document.getElementById('specSelect')
-                                }
-                                style={{ width: '90%' }}
-                                placeholder="Please input specification Value"
-                                notFoundContent="No specification value"
-                                tokenSeparators={[',']}
-                              >
-                                {this._getChildren(item.get('specValues'))}
-                              </Select>
-                            )}
-                          </FormItem>
-                        </Col>
-                      </Row>
-                    </div>
-                  );
-                })}
 
-            {specSingleFlag ? null : (
+                                  if (value.length > 20) {
+                                    callback(new Error('最多支持20个规格值'));
+                                    return;
+                                  }
+
+                                  callback();
+                                }
+                              }
+                            ],
+                            onChange: this._editSpecValue.bind(
+                              this,
+                              item.get('specId')
+                            ),
+                            initialValue: specValues
+                          })(
+                            <Select
+                              mode="tags"
+                              getPopupContainer={() =>
+                                document.getElementById('specSelect')
+                              }
+                              style={{ width: '90%' }}
+                              placeholder="Please input specification Value"
+                              notFoundContent="No specification value"
+                              tokenSeparators={[',']}
+                            >
+                              {this._getChildren(item.get('specValues'))}
+                            </Select>
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
+                  </div>
+                );
+              })
+            }
+
+            {
+              // specSingleFlag ? null :
               <Button onClick={this._addSpec}>
                 <Icon type="plus" />
                 <FormattedMessage id="product.addSpecifications" />
               </Button>
-            )}
+            }
           </div>
         </Form>
       </div>

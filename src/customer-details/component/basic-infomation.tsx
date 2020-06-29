@@ -406,6 +406,7 @@ class BasicInfomation extends React.Component<any, any> {
                     ]
                   })(
                     <Input
+                      disabled
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({

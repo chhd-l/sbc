@@ -104,7 +104,8 @@ class SkuForm extends React.Component<any, any> {
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: '请填写两位小数的合法金额'
+                      message:
+                        'Please fill in the legal amount with two decimal places'
                     },
                     {
                       type: 'number',
@@ -264,7 +265,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: '0或正整数'
+                    message: '0 or positive integer'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),

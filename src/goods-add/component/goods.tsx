@@ -274,7 +274,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     min: 1,
                     max: 225,
-                    message: '1-225字符'
+                    message: '1-225 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -282,7 +282,7 @@ class GoodsForm extends React.Component<any, any> {
                         rule,
                         value,
                         callback,
-                        '商品名称'
+                        'product name'
                       );
                     }
                   }
@@ -304,16 +304,21 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     required: true,
                     whitespace: true,
-                    message: '请填写SPU编码'
+                    message: 'Please fill in the SPU code'
                   },
                   {
                     min: 1,
                     max: 20,
-                    message: '1-20字符'
+                    message: '1-20 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(rule, value, callback, 'SPU编码');
+                      QMMethod.validatorEmoji(
+                        rule,
+                        value,
+                        callback,
+                        'SPU encoding'
+                      );
                     }
                   }
                 ],
@@ -350,7 +355,7 @@ class GoodsForm extends React.Component<any, any> {
                       });
 
                       if (overLen) {
-                        callback(new Error('请选择最末级的分类'));
+                        callback(new Error('Please select the last category'));
                         return;
                       }
 
@@ -369,7 +374,7 @@ class GoodsForm extends React.Component<any, any> {
                     document.getElementById('page-content')
                   }
                   placeholder="Please select category"
-                  notFoundContent="暂无分类"
+                  notFoundContent="No classification"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
@@ -402,7 +407,7 @@ class GoodsForm extends React.Component<any, any> {
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
                   placeholder="Please select store category"
-                  notFoundContent="暂无分类"
+                  notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
@@ -459,7 +464,7 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     pattern: ValidConst.noNumber,
-                    message: '只能输入中文或英文'
+                    message: 'Can only enter Chinese or English'
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsUnit'),
@@ -491,7 +496,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     min: 1,
                     max: 225,
-                    message: '1-225字符'
+                    message: '1-225 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -499,7 +504,7 @@ class GoodsForm extends React.Component<any, any> {
                         rule,
                         value,
                         callback,
-                        '商品副标题'
+                        'Product Subtitle'
                       );
                     }
                   }
@@ -522,13 +527,14 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
+                    message:
+                      'Please fill in the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
                     max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function (value) {
+                    message: 'The maximum value is 9999999.99',
+                    transform: function(value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -563,7 +569,7 @@ class GoodsForm extends React.Component<any, any> {
                         rule,
                         value,
                         callback,
-                        '商品描述'
+                        'product description'
                       );
                     }
                   }
@@ -660,7 +666,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请选择上下架状态'
+                    message: 'Please select the status'
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'addedFlag'),
@@ -769,13 +775,17 @@ class GoodsForm extends React.Component<any, any> {
 
     if (key === 'saleType' && e == 0) {
       if (!flashsaleGoods.isEmpty()) {
-        message.error('该商品正在参加秒杀活动，不可更改销售类型！', 3, () => {
-          let goods = Map({
-            [key]: fromJS(1)
-          });
-          editGoods(goods);
-          setFieldsValue({ saleType: 1 });
-        });
+        message.error(
+          'This product is participating in a spike event, and the sales type cannot be changed!',
+          3,
+          () => {
+            let goods = Map({
+              [key]: fromJS(1)
+            });
+            editGoods(goods);
+            setFieldsValue({ saleType: 1 });
+          }
+        );
       } else {
         let message = '';
         //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
@@ -783,16 +793,16 @@ class GoodsForm extends React.Component<any, any> {
           if (enterpriseFlag) {
             //分销商品和企业购商品
             message =
-              '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
+              'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?';
           } else {
             //分销商品
             message =
-              '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
+              'The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?';
           }
         } else {
           if (enterpriseFlag) {
             message =
-              '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
+              'The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?';
           }
         }
         if (message != '') {
@@ -812,8 +822,8 @@ class GoodsForm extends React.Component<any, any> {
               editGoods(goods);
               setFieldsValue({ saleType: 1 });
             },
-            okText: '确定',
-            cancelText: '取消'
+            okText: 'OK',
+            cancelText: 'Cancel'
           });
         } else {
           let goods = Map({
@@ -945,11 +955,11 @@ class GoodsForm extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过2M');
+        message.error('File size cannot exceed 2M');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error');
       return false;
     }
   };

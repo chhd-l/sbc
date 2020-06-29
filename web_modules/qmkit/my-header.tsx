@@ -171,7 +171,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
               })
             }
           >
-            <Icon type="lock" /> Find My Password
+            <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item>
         <Menu.Item key="2">

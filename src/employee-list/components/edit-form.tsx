@@ -525,7 +525,7 @@ export default class EditForm extends React.Component<any, any> {
             </FormItem>
           ) : null}
 
-          {this.state.changePassword || !_state.get('edit') ? (
+          {this.state.changePassword ? (
             <div>
               <FormItem
                 {...formItemLayout}

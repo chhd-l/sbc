@@ -171,6 +171,7 @@ export default {
   'employeeList': 'User list',
   'employeeName': 'User name',
   'employeePhone': 'User phone',
+  'employeeEmail': 'User email',
   'employeeNo': 'User No.',
   'roles': 'Roles',
   'supervisor': 'Supervisor',
@@ -624,7 +625,8 @@ export default {
   'pv': 'PV',
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
-  'rewardAmount': 'Reward amount'
+  'rewardAmount': 'Reward amount',
+  'items':'Items'
 };
 
 

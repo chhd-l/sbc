@@ -81,17 +81,17 @@ export default class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
-        expandedRowRender={this._expandedRowRender}
-        expandedRowKeys={expandedRowKeys.toJS()}
-        onExpand={(expanded, record) => {
-          let keys = fromJS([]);
-          if (expanded) {
-            keys = expandedRowKeys.push(record.goodsId);
-          } else {
-            keys = expandedRowKeys.filter((key) => key != record.goodsId);
-          }
-          onShowSku(keys);
-        }}
+        // expandedRowRender={this._expandedRowRender}
+        // expandedRowKeys={expandedRowKeys.toJS()}
+        // onExpand={(expanded, record) => {
+        //   let keys = fromJS([]);
+        //   if (expanded) {
+        //     keys = expandedRowKeys.push(record.goodsId);
+        //   } else {
+        //     keys = expandedRowKeys.filter((key) => key != record.goodsId);
+        //   }
+        //   onShowSku(keys);
+        // }}
         rowSelection={{
           selectedRowKeys: selectedSpuKeys.toJS(),
           onChange: (selectedRowKeys) => {
@@ -393,7 +393,7 @@ export default class CateList extends React.Component<any, any> {
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>On/Off shelve：</label>
-                {goods.get('addedFlag') == 0 ? '下架' : '上架'}
+                {goods.get('addedFlag') == 0 ? 'Off shelf' : 'On shelf'}
               </div>
             </div>
             <div>
@@ -439,8 +439,8 @@ export default class CateList extends React.Component<any, any> {
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
     confirm({
-      title: '提示',
-      content: '您确认要删除这个商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this product?',
       onOk() {
         spuDelete([goodsId]);
       }

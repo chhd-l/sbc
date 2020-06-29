@@ -148,12 +148,12 @@ export default class EmployeeList extends React.Component<any, any> {
                   placement="top"
                   title={rowData['accountDisableReason']}
                 >
-                  <a href="javascript:void(0);">原因</a>
+                  <a href="javascript:void(0);">Reason</a>
                 </Tooltip>
               </div>
             ) : (
               <div>
-                <span>离职</span>
+                <span>Resignation</span>
               </div>
             )
           }

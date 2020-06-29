@@ -269,8 +269,8 @@ export default class CateList extends React.Component<any, any> {
   _delete = (goodsId: string) => {
     const { onSpuDelete } = this.props.relaxProps;
     confirm({
-      title: '提示',
-      content: '您确认要删除这个商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this product?',
       onOk() {
         onSpuDelete([goodsId]);
       }

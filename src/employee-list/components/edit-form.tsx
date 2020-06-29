@@ -392,12 +392,19 @@ export default class EditForm extends React.Component<any, any> {
             {...formItemLayout}
             label={<FormattedMessage id="systemRole" />}
             hasFeedback
+            required={true}
           >
             {getFieldDecorator('roleIdList', {
-              ...roleIdList
+              ...roleIdList,
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please select Role'
+                }
+              ]
             })(
               <Select
-                allowClear
                 placeholder="Please choose"
                 disabled={editDisable}
                 // mode="multiple"

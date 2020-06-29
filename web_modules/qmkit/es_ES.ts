@@ -171,6 +171,7 @@ export default {
   'employeeList': 'User list',
   'employeeName': 'User name',
   'employeePhone': 'User phone',
+  'employeeEmail': 'User email',
   'employeeNo': 'User No.',
   'roles': 'Roles',
   'supervisor': 'Supervisor',

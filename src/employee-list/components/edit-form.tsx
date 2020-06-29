@@ -397,6 +397,7 @@ export default class EditForm extends React.Component<any, any> {
               ...roleIdList
             })(
               <Select
+                allowClear
                 placeholder="Please choose"
                 disabled={editDisable}
                 // mode="multiple"

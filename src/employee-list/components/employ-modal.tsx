@@ -61,7 +61,7 @@ export default class EmployeeModal extends React.Component<any, any> {
             values.accountPasswordConfirm
           );
         }
-        values.roleIdList = [values.roleIdList];
+        values.roleIdList = values.roleIdList ? [values.roleIdList] : null;
         this.props.relaxProps.onSave(values);
       }
     });

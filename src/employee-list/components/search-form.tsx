@@ -47,11 +47,11 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="employeePhone" />}
+            addonBefore={<FormattedMessage id="employeeEmail" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
-                field: 'userPhone',
+                field: 'email',
                 value
               });
             }}

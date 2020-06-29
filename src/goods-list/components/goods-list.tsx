@@ -81,17 +81,17 @@ export default class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
-        expandedRowRender={this._expandedRowRender}
-        expandedRowKeys={expandedRowKeys.toJS()}
-        onExpand={(expanded, record) => {
-          let keys = fromJS([]);
-          if (expanded) {
-            keys = expandedRowKeys.push(record.goodsId);
-          } else {
-            keys = expandedRowKeys.filter((key) => key != record.goodsId);
-          }
-          onShowSku(keys);
-        }}
+        // expandedRowRender={this._expandedRowRender}
+        // expandedRowKeys={expandedRowKeys.toJS()}
+        // onExpand={(expanded, record) => {
+        //   let keys = fromJS([]);
+        //   if (expanded) {
+        //     keys = expandedRowKeys.push(record.goodsId);
+        //   } else {
+        //     keys = expandedRowKeys.filter((key) => key != record.goodsId);
+        //   }
+        //   onShowSku(keys);
+        // }}
         rowSelection={{
           selectedRowKeys: selectedSpuKeys.toJS(),
           onChange: (selectedRowKeys) => {

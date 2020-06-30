@@ -67,7 +67,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOnSale();
               }}
             >
-              Batch shelves
+              Batch on shelves
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -129,7 +129,7 @@ export default class Tool extends React.Component<any, any> {
     }
     confirm({
       title: 'Prompt',
-      content: 'Are you sure you want to list these products?',
+      content: 'Are you sure you want to put these products on shelves?',
       onOk() {
         spuOnSale();
       }
@@ -144,7 +144,7 @@ export default class Tool extends React.Component<any, any> {
     }
     confirm({
       title: 'Prompt',
-      content: 'Are you sure you want to remove these products?',
+      content: 'Are you sure you want to put these products off shelves?',
       onOk() {
         spuOffSale();
       }

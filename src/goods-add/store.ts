@@ -1089,7 +1089,6 @@ export default class AppStore extends Store {
       message.error('You must fill in the compulsory fileds');
       return;
     }
-    return;
     data.get('goodsSpecs').forEach((item) => {
       item.get('specValues').forEach((specValueItem) => {
         goodsSpecDetails = goodsSpecDetails.push(

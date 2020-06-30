@@ -621,7 +621,7 @@ export default class EditForm extends React.Component<any, any> {
     return this.state.clinicsLites.map((option) => {
       return (
         <Option value={option.prescriberId} key={option.prescriberId}>
-          {option.prescriberName}
+          {option.prescriberId}-{option.prescriberName}
         </Option>
       );
     });

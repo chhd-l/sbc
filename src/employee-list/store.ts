@@ -164,7 +164,7 @@ export default class AppStore extends Store {
   onBatchDissmiss = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.batchDimissionEmployees(selected.toJS());
@@ -182,7 +182,7 @@ export default class AppStore extends Store {
   onBatchSetEmployee = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.batchSetEmployee(selected.toJS());
@@ -202,7 +202,7 @@ export default class AppStore extends Store {
   onBatchDelete = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.warn('请选择要操作的行');
+      message.warn('Please select the row to operate');
       return;
     }
     const { res } = await webapi.deleteEmployeeByIds(selected.toJS());
@@ -217,7 +217,7 @@ export default class AppStore extends Store {
   onBatchEnable = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.enableEmployee(selected.toJS());
@@ -280,7 +280,7 @@ export default class AppStore extends Store {
   onBatchDisable = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     let accountDisableReason = this.state().get('reason');
@@ -437,7 +437,7 @@ export default class AppStore extends Store {
     const selected = this.state().get('selected');
     const departmentIds = this.state().get('departmentIds');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     if (departmentIds.length == 0) {
@@ -469,7 +469,7 @@ export default class AppStore extends Store {
     const selected = this.state().get('selected');
     const targetEmployeeId = this.state().get('targetEmployeeId');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     if (targetEmployeeId.length == 0) {
@@ -495,7 +495,7 @@ export default class AppStore extends Store {
   onBatchActivateAccount = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     //交接

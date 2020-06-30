@@ -50,21 +50,21 @@ const GreyBg = styled.div`
 
 // 审核状态 0、待审核 1、已审核 2、审核未通过
 const AUDIT_STATE = {
-  0: '待审核',
+  0: 'Pending review',
   1: 'Audited',
-  2: '审核未通过'
+  2: 'Review failed'
 };
 
 // 店铺状态 0、开启 1、关店
 const STORE_STATE = {
-  0: '开启',
-  1: '关店'
+  0: 'Open',
+  1: 'Close shop'
 };
 
 // 账户状态  0：启用   1：禁用
 const ACCOUNT_STATE = {
-  0: '启用',
-  1: '禁用'
+  0: 'Enable',
+  1: 'Disable'
 };
 
 @Relax
@@ -92,7 +92,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     let idlist = ids ? ids.toJS() : [];
     let valueList = [];
 
-    idlist.map(function (item, value) {
+    idlist.map(function(item, value) {
       let result = data.find((x) => x.id.toString() === item);
       if (result) {
         valueList.push(result.valueEn);
@@ -156,7 +156,7 @@ export default class StepOneEdit extends React.Component<any, any> {
             storeInfo.get('auditState') == 2 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>审核驳回原因：</span>
+                  <span>Reasons for review rejection:</span>
                   {storeInfo.get('auditReason')
                     ? storeInfo.get('auditReason')
                     : '-'}
@@ -167,7 +167,7 @@ export default class StepOneEdit extends React.Component<any, any> {
             storeInfo.get('accountState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>账号禁用原因：</span>
+                  <span>Reasons for disabling the account:</span>
                   {storeInfo.get('accountDisableReason')
                     ? storeInfo.get('accountDisableReason')
                     : '-'}
@@ -178,7 +178,7 @@ export default class StepOneEdit extends React.Component<any, any> {
             storeInfo.get('storeState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
-                  <span>店铺关闭原因：</span>
+                  <span>Reasons for store closure:</span>
                   {storeInfo.get('storeClosedReason')
                     ? storeInfo.get('storeClosedReason')
                     : '-'}

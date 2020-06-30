@@ -223,7 +223,7 @@ export default class AppStore extends Store {
   onExport = async () => {
     const selectedIds = this.state().get('selected');
     if (selectedIds.count() < 1) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
     }
     await webapi.exportOrderInvoice(selectedIds.toJS());
   };
@@ -364,7 +364,7 @@ export default class AppStore extends Store {
   onExportByIds = () => {
     let selected = this.state().get('selected');
     if (selected.count() === 0) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

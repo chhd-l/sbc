@@ -193,7 +193,11 @@ export default class DitionaryList extends Component<any, any> {
               </Button>
             </Form.Item>
           </Form>
-          <Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ marginBottom: '10px' }}
+          >
             <Link to="/dictionary-add">Add</Link>
           </Button>
           <Table

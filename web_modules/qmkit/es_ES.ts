@@ -109,7 +109,7 @@ export default {
   'status': 'Status',
   'import': 'Import',
   'batchImport': 'Batch Import',
-  'addSpecifications': 'Add specifications',
+  'addSpecifications': 'Specification setting',
   'newProduct': 'New product',
   'email': 'Email',
   'basicSetting': 'Basic setting',

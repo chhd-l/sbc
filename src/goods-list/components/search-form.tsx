@@ -163,7 +163,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <Option key="-1" value="-1">
-                  <FormattedMessage id="product.all" />
+                  <FormattedMessage id="all" />
                 </Option>
                 {brandList.map((v, i) => {
                   return (

@@ -322,7 +322,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Button onClick={this._addSpec}>
                 <Icon type="plus" />
-                <FormattedMessage id="product.addSpecifications" />
+                <FormattedMessage id="addSpecifications" />
               </Button>
             )}
           </div>

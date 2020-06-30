@@ -46,12 +46,12 @@ const customerColumns = [
     key: 'baseDate'
   },
   {
-    title: 'Total consumer number',
+    title: 'Total active consumer number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: 'New consumer  number',
+    title: 'New active consumer  number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -377,10 +377,13 @@ export default class homePrescriber extends Component<any, any> {
               startTime={new Date()}
               endTime={new Date()}
               dataDesc={[
-                { title: 'Total consumer number', key: 'cusAllCount' },
-                { title: 'New consumer  number', key: 'cusDayGrowthCount' },
+                { title: 'Total active consumer number', key: 'cusAllCount' },
                 {
-                  title: 'Registered consumers number',
+                  title: 'New active consumer  number',
+                  key: 'cusDayGrowthCount'
+                },
+                {
+                  title: 'Registered active consumers number',
                   key: 'cusDayRegisterCount'
                 }
               ]}

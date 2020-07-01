@@ -34,21 +34,25 @@ export default class LoginForm extends React.Component<any, any> {
           </div>
           <strong style={styles.title}>Store portal</strong>
         </FormItem>
-        <FormItem>
+        <label style={styles.label}>Login Account</label>
+        <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('account', {
             rules: [{ required: true, message: 'Account cannot be empty' }]
           })(
             <Input
+              size="large"
               prefix={<Icon type="user" style={{ fontSize: 13 }} />}
               placeholder="Please input your login account"
             />
           )}
         </FormItem>
-        <FormItem style={{ marginBottom: 0 }}>
+        <label style={styles.label}>Password</label>
+        <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Password cannot be empty' }]
           })(
             <Input
+              size="large"
               prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
               type="password"
               placeholder="Password"
@@ -76,6 +80,7 @@ export default class LoginForm extends React.Component<any, any> {
         <FormItem>
           <Button
             type="primary"
+            size="large"
             htmlType="submit"
             style={styles.loginBtn}
             onClick={(e) => this._handleLogin(e)}
@@ -115,13 +120,18 @@ export default class LoginForm extends React.Component<any, any> {
 
 const styles = {
   loginForm: {
-    width: 370,
-    minHeight: 325,
+    // width: 370,
+    // minHeight: 325,
+    width: 480,
+    minHeight: 550,
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 30,
-    marginTop: -50,
-    marginLeft: -550
+    // marginTop: -50,
+    // marginLeft: -550
+    marginTop: 0,
+    marginLeft: 500,
+    boxShadow: '0 2px 60px 0 rgba(167,167,167,0.28)'
   },
   loginBtn: {
     width: '100%'
@@ -136,13 +146,23 @@ const styles = {
   logo: {
     display: 'block',
     width: 'auto',
-    height: 42
+    // height: 42
+    height: 60
   },
   title: {
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize: 25,
     color: '#333',
     lineHeight: 1,
     textAlign: 'center',
-    display: 'block'
+    display: 'block',
+
+    marginBottom: 30
+  },
+  label: {
+    fontFamily: 'DINPro-Medium',
+    fontSize: '19px',
+    color: '#B6B6B6',
+    letterSpacing: 0
   }
 } as any;

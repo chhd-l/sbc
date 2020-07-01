@@ -18,7 +18,7 @@ export default class CustomerModel extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.visible == nextProps.visible) {
       return;
     }

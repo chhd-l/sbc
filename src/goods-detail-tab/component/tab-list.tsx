@@ -106,7 +106,7 @@ class TabList extends React.Component<any, any> {
                       doDelete(rowInfo.get('tabId'));
                     }}
                   >
-                    <a href="javascript:;">删除</a>
+                    <a href="#!">删除</a>
                   </Popconfirm>
                 )
               ]

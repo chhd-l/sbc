@@ -192,7 +192,7 @@ export default class FreightItem extends React.Component<any, any> {
               {((checkAuth('f_store_temp_edit') && isStore) ||
                 (checkAuth('f_goods_temp_edit') && !isStore)) && (
                 <a
-                  href="javascript:;"
+                  href="#!"
                   onClick={() => this._edit(freightId, isStore)}
                 >
                   编辑
@@ -201,7 +201,7 @@ export default class FreightItem extends React.Component<any, any> {
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_rela_list">
                   <a
-                    href="javascript:;"
+                    href="#!"
                     onClick={() =>
                       history.push(`/freight-with-goods/${freightId}`)
                     }
@@ -214,7 +214,7 @@ export default class FreightItem extends React.Component<any, any> {
                 (((checkAuth('f_store_temp_del') && isStore) ||
                   (checkAuth('f_goods_temp_del') && !isStore)) && (
                   <a
-                    href="javascript:;"
+                    href="#!"
                     onClick={() => this._del(freightId, isStore)}
                   >
                     删除

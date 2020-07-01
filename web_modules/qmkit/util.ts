@@ -331,7 +331,7 @@ export function requireLocalSrc(srcPath) {
   try {
     icon = require(`./images/${srcPath}`);
   } catch (err) {
-    console.warn('本地图片加载失败 ----> ', err);
+    //console.warn('本地图片加载失败 ----> ', err);
   }
   return icon;
 }

@@ -17,7 +17,7 @@ const FreightTempRelax = Relax(FreightTempForm);
 export default class StoreFreight extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { freightId } = (this.props.match && this.props.match.params) || {
       freightId: 0
     };

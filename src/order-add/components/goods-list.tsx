@@ -155,7 +155,7 @@ export default class GoodsList extends React.Component<any, any> {
     this.setState({});
   }
 
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     // 如果customerId被清空,则清空下面的值
     if (
       !nextProps.selectedCustomerId ||
@@ -496,7 +496,7 @@ export default class GoodsList extends React.Component<any, any> {
               width="61px"
               render={(_text, record: any) => (
                 <a
-                  href="javascript:;"
+                  href="#!"
                   onClick={() => {
                     if (record.gift) {
                       this._delGift(fromJS(record).get('goodsInfoId'));

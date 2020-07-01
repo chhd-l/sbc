@@ -10,7 +10,7 @@ import ActivityTab from './components/activity-tab';
 export default class FlashSale extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

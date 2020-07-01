@@ -235,7 +235,7 @@ export default class TaxList extends React.Component<any, any> {
           </div>
         }
       >
-        <a href="javascript:;">查看</a>
+        <a href="#!">查看</a>
       </Popover>
     );
   };

@@ -26,7 +26,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.matchedPath != nextProps.matchedPath) {
       // 如果链接改变,恢复为第一次加载
       this.setState({ firstInitFlag: true });
@@ -43,7 +43,6 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     if (!loginInfo) {
       return null;
     }
-
     // 账户管理特殊处理左侧菜单的显示
     if (path == '/account-manage') {
       return (
@@ -122,7 +121,9 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     // 选中的三级菜单key
     const level3SelectKeys = [secondActive + '_' + thirdActive];
     // 选中的一级菜单详情
+
     const currFirstMenu = this.state.allGradeMenus.get(firstActive);
+    //console.log( this.state.allGradeMenus,'++++++++++++++++');
 
     if (
       currFirstMenu.get('children') &&
@@ -193,7 +194,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
           path={v.url}
           children={() => (
             <a
-              href="javascript:;"
+              href="#!"
               onClick={() => this._goThirdMenu(v.url, index, i)}
             >
               {v.title}

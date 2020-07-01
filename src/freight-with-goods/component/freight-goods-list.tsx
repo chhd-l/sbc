@@ -104,7 +104,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
       render: (_value, row) => (
         <AuthWrapper functionName="f_goods_rela_edit">
           <span>
-            <a href="javascript:;" onClick={() => this._setFeight(row)}>
+            <a href="#!" onClick={() => this._setFeight(row)}>
               更换运费模板
             </a>
           </span>

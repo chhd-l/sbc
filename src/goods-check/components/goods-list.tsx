@@ -225,7 +225,7 @@ export default class CateList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() =>
               history.push({
                 pathname: `/goods-check-edit/${rowInfo.goodsId}`,
@@ -238,7 +238,7 @@ export default class CateList extends React.Component<any, any> {
         </AuthWrapper>
         <AuthWrapper functionName="f_goods_sku_price">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() =>
               history.push({
                 pathname: `/goods-check-edit/${rowInfo.goodsId}`,
@@ -251,7 +251,7 @@ export default class CateList extends React.Component<any, any> {
         </AuthWrapper>
         <AuthWrapper functionName="f_goods_del">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() => {
               this._delete(rowInfo.goodsId);
             }}
@@ -296,7 +296,7 @@ export default class CateList extends React.Component<any, any> {
         <p>{auditStatusStr}</p>
         {(auditStatus == 2 || auditStatus == 3) && (
           <Tooltip placement="top" title={record.auditReason}>
-            <a href="javascript:;">
+            <a href="#!">
               <FormattedMessage id="reason" />
             </a>
           </Tooltip>
@@ -340,7 +340,7 @@ export default class CateList extends React.Component<any, any> {
                 <div>
                   <AuthWrapper functionName="f_goods_sku_edit">
                     <a
-                      href="javascript:;"
+                      href="#!"
                       style={{
                         marginTop: 5,
                         marginRight: 5,
@@ -363,7 +363,7 @@ export default class CateList extends React.Component<any, any> {
                     record.priceType == 1 &&
                     record.allowPriceSet == 0 ? null : (
                       <a
-                        href="javascript:;"
+                        href="#!"
                         style={{ marginTop: 5, display: 'inline-block' }}
                         onClick={() =>
                           history.push({

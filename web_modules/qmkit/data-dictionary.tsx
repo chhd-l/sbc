@@ -20,7 +20,7 @@ export default class DataModal extends React.Component<any, any> {
     return (
       <div>
         <a
-          href="javascript:;"
+          href="#!"
           onClick={this.showModal}
           className="configHome"
           style={{ top: 200 }}
@@ -212,7 +212,7 @@ export default class DataModal extends React.Component<any, any> {
           <a
             className="close-data"
             onClick={this.hideModal}
-            href="javascript:;"
+            href="#!"
           >
             <Icon type="double-right" />
             收起

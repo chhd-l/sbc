@@ -91,7 +91,7 @@ export default class SearchHead extends Component<any, any> {
           <AuthWrapper functionName="f_points_order_list_003">
             <a
               target="_blank"
-              href="javascript:;"
+              href="#!"
               onClick={() => this._handleBatchExport()}
             >
               批量导出

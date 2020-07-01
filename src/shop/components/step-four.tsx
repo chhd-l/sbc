@@ -280,7 +280,7 @@ export default class StepFour extends React.Component<any, any> {
                     <div>
                       {offlineAccount.toJS().length == 1 ? null : (
                         <a
-                          href="javascript:;"
+                          href="#!"
                           onClick={() => deleteAccount(index)}
                         >
                           <Icon

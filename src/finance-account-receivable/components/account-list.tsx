@@ -33,7 +33,7 @@ export default class AccountList extends React.Component<any, any> {
     initOffLineAccounts: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { initOffLineAccounts } = this.props.relaxProps;
 
     initOffLineAccounts();
@@ -71,13 +71,13 @@ export default class AccountList extends React.Component<any, any> {
     const menu = (
       <Menu>
         <Menu.Item key="0">
-          <a href="javascript:;" onClick={() => onEdit(rowInfo.accountId)}>
+          <a href="#!" onClick={() => onEdit(rowInfo.accountId)}>
             编辑
           </a>
         </Menu.Item>
         <Menu.Item key="1">
           {rowInfo.bankStatus ? (
-            <a href="javascript:;" onClick={() => onEnable(rowInfo.accountId)}>
+            <a href="#!" onClick={() => onEnable(rowInfo.accountId)}>
               启用
             </a>
           ) : (
@@ -95,7 +95,7 @@ export default class AccountList extends React.Component<any, any> {
         </Menu.Item>
         <Menu.Item key="3">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() => this._handleDelete(rowInfo.accountId)}
           >
             删除
@@ -110,7 +110,7 @@ export default class AccountList extends React.Component<any, any> {
         overlay={menu}
         trigger={['click']}
       >
-        <a className="ant-dropdown-link" href="javascript:;">
+        <a className="ant-dropdown-link" href="#!">
           操作&nbsp;<Icon type="down" />
         </a>
       </Dropdown>

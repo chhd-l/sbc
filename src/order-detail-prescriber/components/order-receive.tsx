@@ -100,7 +100,7 @@ export default class OrderReceive extends React.Component<any, any> {
             trigger="click"
             content={<img style={styles.attachmentView} src={encloses} />}
           >
-            <a href="javascript:;">
+            <a href="#!">
               <img style={styles.attachment} src={encloses} />
             </a>
           </Popover>

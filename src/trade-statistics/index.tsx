@@ -46,7 +46,7 @@ const popContent = [
 export default class TradeStatistics extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     //初始化当天的交易情况
     this.store.init();
   }

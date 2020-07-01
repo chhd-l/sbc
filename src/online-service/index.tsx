@@ -48,7 +48,7 @@ export default class OnlineService extends React.Component<any, any> {
     super(props);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

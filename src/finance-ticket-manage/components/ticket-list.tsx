@@ -74,13 +74,13 @@ export default class TicketList extends React.Component<any, any> {
     const menu = (
       <Menu>
         <Menu.Item key="0">
-          <a href="javascript:;" onClick={() => onEdit(rowInfo.projectId)}>
+          <a href="#!" onClick={() => onEdit(rowInfo.projectId)}>
             编辑
           </a>
         </Menu.Item>
         <Menu.Item key="1">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() => this._handleDelete(rowInfo.projectId)}
           >
             删除
@@ -98,7 +98,7 @@ export default class TicketList extends React.Component<any, any> {
           overlay={menu}
           trigger={['click']}
         >
-          <a className="ant-dropdown-link" href="javascript:;">
+          <a className="ant-dropdown-link" href="#!">
             操作&nbsp;<Icon type="down" />
           </a>
         </Dropdown>

@@ -46,7 +46,7 @@ export default class BrandTable extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.dateFlag !== this.props.relaxProps.dateFlag ||
       nextProps.relaxProps.brandSortCol != this.props.relaxProps.brandSortCol ||

@@ -147,7 +147,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                       <AuthWrapper functionName="fOrderDetail002">
                         <a
                           style={{ color: 'blue' }}
-                          href="javascript:;"
+                          href="#!"
                           onClick={() =>
                             this._showCancelConfirm(v.get('deliverId'))
                           }

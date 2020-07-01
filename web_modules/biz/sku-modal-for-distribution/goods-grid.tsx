@@ -33,7 +33,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     this.init({});
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.props.visible && nextProps.visible) {
       this.init({});
     }

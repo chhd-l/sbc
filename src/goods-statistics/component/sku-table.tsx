@@ -43,7 +43,7 @@ export default class SkuTable extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.dateFlag !== this.props.relaxProps.dateFlag ||
       nextProps.relaxProps.skuSortCol != this.props.relaxProps.skuSortCol ||

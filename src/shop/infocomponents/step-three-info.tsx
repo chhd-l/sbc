@@ -72,7 +72,7 @@ export default class StepThree extends React.Component<any, any> {
     checkInfo: 'checkInfo'
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       showImg: false,
       imgUrl: ''

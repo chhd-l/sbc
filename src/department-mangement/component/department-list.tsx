@@ -150,7 +150,7 @@ class DepartmentList extends React.Component<any, any> {
               rowInfo.get('departmentGrade')
             )}
           >
-            添加子部门
+            Add subdivisions
           </a>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>
@@ -230,9 +230,10 @@ class DepartmentList extends React.Component<any, any> {
       showLeaderModal(department);
     } else {
       Modal.warning({
-        title: '提示',
-        content: '当前部门及子部门内未有员工，不可设置主管。',
-        okText: '关闭'
+        title: 'Prompt',
+        content:
+          'If there is no employee in the current department or sub-department, no supervisor can be appointed.',
+        okText: 'Shut Down'
       });
     }
   };
@@ -271,9 +272,10 @@ class DepartmentList extends React.Component<any, any> {
   _delete = async (departmentId: number, employeeNum: number) => {
     if (employeeNum > 0) {
       Modal.warning({
-        title: '提示',
-        content: '当前部门及子部门内已有员工，不可删除。',
-        okText: '关闭'
+        title: 'Prompt',
+        content:
+          'The existing staff in the current department and sub-department cannot be deleted.',
+        okText: 'Shut Down'
       });
     } else {
       this._confirm(departmentId);
@@ -287,10 +289,11 @@ class DepartmentList extends React.Component<any, any> {
     const { doDelete } = this.props.relaxProps;
 
     confirm({
-      title: '提示',
-      content: '删除当前部门，该部门下所有子部门也会删除，确定要删除？',
-      okText: '确定',
-      cancelText: '取消',
+      title: 'Prompt',
+      content:
+        'Delete the current department, and all subdepartments under that department will also be deleted. Are you sure you want to delete?',
+      okText: 'Confirm',
+      cancelText: 'Close',
       iconType: 'exclamation-circle',
       onOk() {
         doDelete(departmentId);

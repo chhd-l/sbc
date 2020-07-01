@@ -31,7 +31,6 @@ const styles = {
     justifyContent: 'center',
     height: '100vh',
     background: 'url(' + bg_login + ')',
-    backgroundColor: 'red',
     backgroundSize: '100%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'

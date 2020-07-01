@@ -322,7 +322,7 @@ export default class AppStore extends Store {
     let selected = this.state().get('selected');
 
     if (selected.count() === 0) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

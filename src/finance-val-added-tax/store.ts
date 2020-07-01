@@ -131,7 +131,7 @@ export default class AppStore extends Store {
   batchConfirm = async () => {
     const selected = this.state().get('selected') as TList;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.bathCheck(1, selected.toJS());

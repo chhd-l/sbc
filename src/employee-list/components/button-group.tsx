@@ -184,7 +184,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchEnable = () => {
     const { onBatchEnable, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     this.showConfirm('批量启用', '是否确认启用已选员工?', onBatchEnable);
@@ -193,7 +193,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchDisable = () => {
     const { switchModal, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     switchModal('');
@@ -202,7 +202,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchDelete = () => {
     const { onBatchDelete, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     this.showConfirm(
@@ -215,7 +215,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchAdjust = () => {
     const { toggleAdjustModal, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     } else {
       toggleAdjustModal();
@@ -225,7 +225,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchConnect = () => {
     const { toggleConnectModal, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     } else {
       toggleConnectModal();
@@ -235,7 +235,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchSetEmployee = () => {
     const { onBatchSetEmployee, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     this.showConfirm(
@@ -248,7 +248,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchSetLeave = () => {
     const { onBatchDissmiss, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     this.showConfirm(
@@ -261,7 +261,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   _batchActive = () => {
     const { onBatchActivateAccount, selected } = this.props.relaxProps;
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     this.showConfirm(

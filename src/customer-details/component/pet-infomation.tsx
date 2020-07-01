@@ -337,7 +337,6 @@ class PetInfomation extends React.Component<any, any> {
   };
 
   delPets = (id) => {
-    debugger;
     let params = {
       petsIds: [id]
     };

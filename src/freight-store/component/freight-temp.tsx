@@ -6,7 +6,7 @@ import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 const FormDiv = styled.div`
   .ant-form-item-label {
-    width: 100px;
+    width: 130px;
   }
   #freightTempName {
     width: 350px;
@@ -52,7 +52,7 @@ const FormDiv = styled.div`
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
-    span: 2
+    span: 4
   },
   wrapperCol: {
     span: 20
@@ -140,7 +140,9 @@ export default class FreightTemp extends React.Component<any, any> {
       treeCheckable: true,
       showCheckedStrategy: SHOW_PARENT,
       searchPlaceholder:
-        defaultFlag == 1 ? destinationAreaName.toJS().toString() : '请选择地区',
+        defaultFlag == 1
+          ? destinationAreaName.toJS().toString()
+          : 'Please select the region',
       dropdownStyle: { maxHeight: 400, overflow: 'auto' },
       disabled: defaultFlag == 1,
       style: {
@@ -152,7 +154,7 @@ export default class FreightTemp extends React.Component<any, any> {
     return (
       <FormDiv>
         <Form>
-          <FormItem {...formItemLayout} label="模板名称" required={true}>
+          <FormItem {...formItemLayout} label="Template name" required={true}>
             {getFieldDecorator('freightTempName', {
               initialValue: freightTempName,
               rules: [
@@ -162,7 +164,7 @@ export default class FreightTemp extends React.Component<any, any> {
                       rule,
                       value,
                       callback,
-                      '模板名称',
+                      'Template name',
                       2,
                       20
                     );
@@ -172,7 +174,7 @@ export default class FreightTemp extends React.Component<any, any> {
             })(
               <Input
                 disabled={defaultFlag == 1}
-                placeholder="模板名称限制2-20个字符"
+                placeholder="Template name is limited to 2-20 characters"
                 onChange={(e) =>
                   storeFreightFieldsValue({
                     field: 'freightTempName',
@@ -182,17 +184,19 @@ export default class FreightTemp extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="运送方式" required={true}>
-            <Radio defaultChecked>快递配送</Radio>
-            <label style={{ color: '#b5b5b5' }}>请为快递配送设置运费模板</label>
+          <FormItem {...formItemLayout} label="Shipping method" required={true}>
+            <Radio defaultChecked>Express delivery</Radio>
+            <label style={{ color: '#b5b5b5' }}>
+              Please set shipping template for express delivery
+            </label>
           </FormItem>
-          <FormItem {...formItemLayout} label="地区设置" required={true}>
+          <FormItem {...formItemLayout} label="Locale" required={true}>
             {getFieldDecorator('destinationArea', {
               initialValue: destinationArea.toJS(),
               rules: [
                 {
                   required: true,
-                  message: '请选择地区'
+                  message: 'Please select the region'
                 }
               ]
             })(
@@ -206,14 +210,14 @@ export default class FreightTemp extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="计费规则" required={true}>
+          <FormItem {...formItemLayout} label="Billing rules" required={true}>
             <RadioGroup
               defaultValue={freightType}
               value={freightType}
               onChange={(e) => this._changeFreightType(e.target.value)}
             >
               <div className="radio-item">
-                <Radio value={0}>订单不满</Radio>
+                <Radio value={0}>Dissatisfied order</Radio>
                 <FormItem>
                   {getFieldDecorator('satisfyPrice', {
                     initialValue: satisfyPrice,
@@ -233,10 +237,12 @@ export default class FreightTemp extends React.Component<any, any> {
                 <span
                   style={{
                     paddingLeft: 10,
-                    paddingRight: 10
+                    paddingRight: 10,
+                    marginTop: '10px',
+                    display: 'inline-block'
                   }}
                 >
-                  元，运费
+                  Freight
                 </span>
                 <FormItem>
                   {getFieldDecorator('satisfyFreight', {
@@ -255,11 +261,13 @@ export default class FreightTemp extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <span style={{ paddingLeft: 10 }}>
-                  元，满足条件后包邮，订单按照排除了优惠活动后的金额判断是否满足包邮条件
+                  After the conditions are met, the package will be shipped, and
+                  the order will be judged according to the amount after
+                  excluding the preferential activities
                 </span>
               </div>
               <div className="radio-item">
-                <Radio value={1}>固定运费</Radio>
+                <Radio value={1}>Fixed freight</Radio>
                 <FormItem>
                   {getFieldDecorator('fixedFreight', {
                     initialValue: fixedFreight,
@@ -276,11 +284,26 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>元</span>
+                <span
+                  style={{
+                    paddingLeft: 10,
+                    marginTop: '10px',
+                    display: 'inline-block'
+                  }}
+                >
+                  dollar
+                </span>
               </div>
               <div className="radio-item">
-                <span style={{ paddingLeft: 23, paddingRight: 17 }}>
-                  最低运费
+                <span
+                  style={{
+                    paddingLeft: 23,
+                    paddingRight: 17,
+                    marginTop: '10px',
+                    display: 'inline-block'
+                  }}
+                >
+                  Minimum shipping
                 </span>
                 <FormItem>
                   {getFieldDecorator('minimumDeliveryFee', {
@@ -297,7 +320,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>元</span>
+                <span style={{ paddingLeft: 10 }}>dollar</span>
               </div>
             </RadioGroup>
           </FormItem>
@@ -307,9 +330,9 @@ export default class FreightTemp extends React.Component<any, any> {
               type="primary"
               style={{ marginRight: 20, marginLeft: 22 }}
             >
-              保存
+              Save
             </Button>
-            <Button onClick={() => history.goBack()}>取消</Button>
+            <Button onClick={() => history.goBack()}>Cancel</Button>
           </div>
         </Form>
       </FormDiv>
@@ -380,15 +403,15 @@ export default class FreightTemp extends React.Component<any, any> {
    */
   _validMoney = (_freightType, _flag) => {
     return [
-      { required: true, message: '请输入金额' },
+      { required: true, message: 'Please enter the amount' },
       {
         pattern: ValidConst.zeroPrice,
-        message: '请填写两位小数的合法金额'
+        message: 'Please input the legal amount with two decimal places'
       },
       {
         type: 'number',
         max: 99999999.99,
-        message: '最大值为99999999.99',
+        message: 'The maximum value is 99999999.99',
         transform: function(value) {
           return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
         }

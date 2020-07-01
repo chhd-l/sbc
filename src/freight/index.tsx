@@ -20,7 +20,7 @@ const TitleBox = styled.div`
   align-items: center;
   justify-content: space-between;
   .ant-radio-group {
-    width: calc(100% - 230px);
+    width: calc(100% - 400px);
     margin-left: 20px;
     .ant-radio-wrapper:last-child {
       margin-left: 40px;
@@ -61,16 +61,19 @@ export default class FreightTemplate extends React.Component<any, any> {
       //   <Breadcrumb.Item>运费模板</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title="运费模板" />
+        <Headline title="Freight Template" />
         <Alert
           message={
             <div>
-              请先设置运费计算模式，选择单品运费时订单运费使用每件商品的运费叠加{' '}
+              Please set the freight calculation mode first, and when selecting
+              the single item freight, the order freight uses the freight
+              overlay of each product{' '}
               <a onClick={() => history.push('/freight-instruction')}>
-                查看计算公式
+                View calculation formula
               </a>{' '}
-              ，
-              选择店铺运费则商品选择的单品运费模板不生效，按照订单金额收取统一运费；
+              ， If you choose the store freight, the single product freight
+              template of the product selection will not take effect, and a
+              uniform freight will be charged according to the order amount.；
             </div>
           }
           type="info"
@@ -78,18 +81,18 @@ export default class FreightTemplate extends React.Component<any, any> {
         />
         <AuthWrapper functionName="f_freight_type_set">
           <TitleBox>
-            设置运费计算模式:
+            Set freight calculation mode:
             <RadioGroup
               onChange={(e: any) =>
                 this.store.fieldSave({ field: 'fMode', value: e.target.value })
               }
               value={fMode}
             >
-              <Radio value={0}>店铺运费</Radio>
-              <Radio value={1}>单品运费</Radio>
+              <Radio value={0}>Store Freight</Radio>
+              <Radio value={1}>Single Product Freight</Radio>
             </RadioGroup>
             <Button type="primary" onClick={() => this._save()}>
-              保存设置
+              Save Settings
             </Button>
           </TitleBox>
         </AuthWrapper>
@@ -101,12 +104,12 @@ export default class FreightTemplate extends React.Component<any, any> {
             tabBarStyle={{ marginTop: 16 }}
           >
             {checkAuth('f_store_temp_list') && (
-              <Tabs.TabPane tab="店铺运费" key={0}>
+              <Tabs.TabPane tab="Store Freight" key={0}>
                 <StoreSetting />
               </Tabs.TabPane>
             )}
             {checkAuth('f_goods_temp_list') && (
-              <Tabs.TabPane tab="单品运费" key={1}>
+              <Tabs.TabPane tab="Single Product Freight" key={1}>
                 <GoodsSetting />
               </Tabs.TabPane>
             )}

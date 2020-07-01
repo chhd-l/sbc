@@ -49,6 +49,6 @@ export default class RoleInfo extends React.Component<any, any> {
     //   (role) => role.get('roleInfoId') == selectedRoleId
     // );
     // const flag = roleCount >= 20;
-    return <div>角色：{roleName}</div>;
+    return <div>Role: {roleName}</div>;
   }
 }

@@ -63,9 +63,9 @@ export default class CateModal extends React.Component<any, any> {
     }
     const WrapperForm = this.WrapperForm;
     return (
-      <Modal  maskClosable={false}
-        title="新增分类"
-         
+      <Modal
+        maskClosable={false}
+        title="Add Category"
         visible={visible}
         onCancel={this._handleCancel}
         onOk={this._handleOk}
@@ -128,40 +128,48 @@ class PicCateForm extends React.Component<any, any> {
 
     //处理分类的树形图结构数据，由于默认分类和第三级分类下不能新增分类，故不展示
     const loop = (cateList) =>
-      cateList.filter((item) => item.get('isDefault') == 0).map((item) => {
-        if (item.get('children') && item.get('children').count()) {
+      cateList
+        .filter((item) => item.get('isDefault') == 0)
+        .map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode
+                key={item.get('cateId')}
+                value={item.get('cateId').toString()}
+                title={item.get('cateName')}
+              >
+                {item.get('children').map((item) => {
+                  return (
+                    <TreeNode
+                      key={item.get('cateId')}
+                      value={item.get('cateId').toString()}
+                      title={item.get('cateName')}
+                    />
+                  );
+                })}
+              </TreeNode>
+            );
+          }
           return (
             <TreeNode
               key={item.get('cateId')}
               value={item.get('cateId').toString()}
               title={item.get('cateName')}
-            >
-              {item.get('children').map((item) => {
-                return (
-                  <TreeNode
-                    key={item.get('cateId')}
-                    value={item.get('cateId').toString()}
-                    title={item.get('cateName')}
-                  />
-                );
-              })}
-            </TreeNode>
+            />
           );
-        }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName')}
-          />
-        );
-      });
+        });
 
     return (
       <Form>
-        <FormItem className={'c-tree-select'} {...formItemLayout} label="选择上级分类" hasFeedback>
+        <FormItem
+          style={{ marginBottom: '50px' }}
+          className={'c-tree-select'}
+          {...formItemLayout}
+          label="Parent category"
+          hasFeedback
+        >
           {getFieldDecorator('cateParentId', {
-            rules: [{ required: true, message: '请选择上级分类' }]
+            rules: [{ required: true, message: 'Select parent category' }]
           })(
             <TreeSelect
               showSearch
@@ -172,8 +180,8 @@ class PicCateForm extends React.Component<any, any> {
               }
               style={{ width: 300 }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择分类"
-              notFoundContent="暂无分类"
+              placeholder="Please select a category"
+              notFoundContent="No Categories"
               treeDefaultExpandAll
               onChange={this._onChange}
             >
@@ -182,14 +190,14 @@ class PicCateForm extends React.Component<any, any> {
           )}
           <Tips
             style={{ position: 'absolute' }}
-            title="新增分类请先选择上级分类"
+            title="To add a new category, please select the parent category first"
           />
         </FormItem>
-        <FormItem {...formItemLayout} label="新分类名称" hasFeedback>
+        <FormItem {...formItemLayout} label="Category name" hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
-              { required: true, message: '请填写分类名称' },
-              { max: 10, message: '最多10字符' }
+              { required: true, message: 'Please input the category name' },
+              { max: 10, message: 'Up to 10 characters' }
             ]
           })(<Input onChange={this._changeCateName} />)}
         </FormItem>

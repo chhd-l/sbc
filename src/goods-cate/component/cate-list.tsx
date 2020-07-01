@@ -210,15 +210,16 @@ class CateList extends React.Component<any, any> {
     if (goodsFlag) {
       //该分类下有商品
       confirm({
-        title: '提示',
-        content: '当前分类已关联了商品，建议修改后再删除。',
+        title: 'Prompt',
+        content:
+          'The current classification has been associated with the product, it is recommended to delete it after modification.',
         onOk() {
           if (childFlag) {
             //有子分类
             confirm({
-              title: '提示',
+              title: 'Prompt',
               content:
-                '删除当前分类，该分类下的所有分类也会删除，您确认删除这个分类吗？',
+                'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
               onOk() {
                 doDelete(storeCateId);
               }
@@ -227,15 +228,15 @@ class CateList extends React.Component<any, any> {
             doDelete(storeCateId);
           }
         },
-        okText: '继续删除',
-        cancelText: '取消'
+        okText: 'Continue to delete',
+        cancelText: 'Cancel'
       });
     } else if (childFlag) {
       //有子分类
       confirm({
-        title: '提示',
+        title: 'Prompt',
         content:
-          '删除当前分类，该分类下的所有分类也会删除，您确认删除这个分类吗？',
+          'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
         onOk() {
           doDelete(storeCateId);
         }
@@ -243,8 +244,8 @@ class CateList extends React.Component<any, any> {
     } else {
       //没有子分类
       confirm({
-        title: '提示',
-        content: '您确认要删除这个分类吗？',
+        title: 'Prompt',
+        content: 'Are you sure you want to delete this category?',
         onOk() {
           doDelete(storeCateId);
         }

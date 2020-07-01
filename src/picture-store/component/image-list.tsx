@@ -129,12 +129,12 @@ export default class ImageList extends React.Component<any, any> {
   _delete = () => {
     const { imageList, doDelete } = this.props.relaxProps;
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('请先选择要删除的图片');
+      message.error('Please select the picture to delete first');
       return;
     }
     confirm({
-      title: '提示',
-      content: '您确认要删除选择的图片吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete the selected picture?',
       onOk() {
         doDelete();
       }
@@ -148,7 +148,7 @@ export default class ImageList extends React.Component<any, any> {
   _showModal = () => {
     const { imageList, showMoveImageModal } = this.props.relaxProps;
     if (imageList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('请先选择要移动的图片');
+      message.error('Please select an image to move first');
       return;
     }
     showMoveImageModal(true);
@@ -163,7 +163,7 @@ export default class ImageList extends React.Component<any, any> {
     //修改了图片名称才真正的请求接口进行修改
     if (e.target.value != oldVal) {
       if (!e.target.value.trim()) {
-        message.error('请输入文件名');
+        message.error('Please input a file name');
         return false;
       }
 
@@ -172,12 +172,12 @@ export default class ImageList extends React.Component<any, any> {
           e.target.value
         )
       ) {
-        message.error('请输入正确格式的文件名');
+        message.error('Please enter the file name in the correct format');
         return false;
       }
 
       if (e.target.value.length > 40) {
-        message.error('文件名过长');
+        message.error('File name is too long');
         return false;
       }
 

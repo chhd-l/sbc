@@ -108,11 +108,13 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约类目</H2>
+            <H2>Signing Categories</H2>
             <GreyText>
-              已签约{cateList.length}个类目 最多可签约200个类目
+              Signed {cateList.length} Categories, Can sign up to 200 categories
             </GreyText>
-            <Button onClick={this._showSortsModal}>编辑签约类目</Button>
+            <Button onClick={this._showSortsModal}>
+              Edit Contract Category
+            </Button>
           </div>
           <TableBox>
             <DataGrid
@@ -121,19 +123,19 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="类目"
+                title="Category"
                 dataIndex="cateName"
                 key="cateName"
                 width="15%"
               />
               <Column
-                title="上级类目"
+                title="Superior Category"
                 dataIndex="parentGoodCateNames"
                 key="parentGoodCateNames"
                 width="20%"
               />
               <Column
-                title="类目扣率"
+                title="Category Deduction Rate"
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -147,7 +149,7 @@ export default class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title="经营资质"
+                title="Business Qualification"
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"
@@ -179,9 +181,11 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约品牌</H2>
-            <GreyText>已签约{totalBrand}个品牌 最多可签约50个品牌</GreyText>
-            <Button onClick={this._showModal}>编辑签约品牌</Button>
+            <H2>Signed Brand</H2>
+            <GreyText>
+              Signed {totalBrand} brand, Up to 50 brands can be signed
+            </GreyText>
+            <Button onClick={this._showModal}>Edit Contracted Brand</Button>
           </div>
           <TableBox>
             <DataGrid
@@ -190,13 +194,13 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="品牌名称"
+                title="Brand Name"
                 dataIndex="brandName"
                 key="brandName"
                 width="15%"
               />
               <Column
-                title="品牌别名"
+                title="Brand Alias"
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -205,7 +209,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="品牌logo"
+                title="Brand Logo"
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -227,7 +231,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="授权文件"
+                title="Authorization Document"
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -260,7 +264,7 @@ export default class StepThree extends React.Component<any, any> {
                 pagination={false}
               >
                 <Column
-                  title="商家自增"
+                  title="Shop increase"
                   dataIndex="name"
                   key="name"
                   width="15%"
@@ -319,8 +323,8 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>签约有效期</H2>
-            <GreyText>商家店铺有效期</GreyText>
+            <H2>Signing Period</H2>
+            <GreyText>Merchant store validity</GreyText>
           </div>
           <RangePicker
             value={[
@@ -334,16 +338,16 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>商家类型</H2>
+            <H2>shop Type</H2>
           </div>
           <RadioGroup value={storeInfo.get('companyType')}>
             {storeInfo.get('companyType') == 0 ? (
               <Radio value={0} checked={true} disabled>
-                自营商家
+                Self-employed Shop
               </Radio>
             ) : (
               <Radio value={1} checked={true} disabled>
-                第三方商家
+                Third-party Shop
               </Radio>
             )}
           </RadioGroup>
@@ -351,7 +355,7 @@ export default class StepThree extends React.Component<any, any> {
         {!storeInfo.get('storeId') && (
           <Content>
             <Button type="primary" onClick={this._next}>
-              保存
+              Save
             </Button>
           </Content>
         )}
@@ -412,7 +416,7 @@ export default class StepThree extends React.Component<any, any> {
     if (count == 0) {
       storeRenewAll();
     } else {
-      message.error('自定义品牌与平台品牌重复！');
+      message.error('Custom brand repeats with platform brand!');
     }
   };
 

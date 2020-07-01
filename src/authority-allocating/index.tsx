@@ -33,27 +33,29 @@ export default class AuthorityAllocating extends React.Component<any, any> {
         <BreadCrumb />
 
         <div className="container" style={{ paddingBottom: 50 }}>
-          <Headline title="编辑角色权限" />
+          <Headline title="Edit Role Permissions" />
           <Alert
             message=""
             description={
               <div>
                 <p>
-                  修改角色权限后，所有赋予此角色的员工账号对应权限均将修改；
+                  After modifying the role permissions, the corresponding
+                  permissions of all employee accounts assigned to this role
+                  will be modified;
                 </p>
               </div>
             }
             type="info"
           />
 
-          <div>角色：{roleName}</div>
+          <div>Role: {roleName}</div>
 
           <AuthorityManager />
         </div>
         <AuthWrapper functionName="updateBossMenus">
           <div className="bar-button">
             <Button type="primary" onClick={() => this.store.onSave()}>
-              保存
+              Save
             </Button>
           </div>
         </AuthWrapper>

@@ -131,7 +131,7 @@ class OnlineRefundModalForm extends React.Component<any, any> {
           message={
             <div>
               <p>
-                After clicking save, the platform will return the money to the customer according to the confirmed amount, and the corresponding points will be returned at the same time. Please fill in the reason for modifying the refund amount to the refund remark.
+                After clicking save, the platform will return the money to the customer according to the confirmed amount, and the corresponding points will be returned at the same time. Please input the reason for modifying the refund amount to the refund remark.
               </p>
               {/* <p>点击保存后，平台将按照确认的金额将款项返还给客户，对应积分同时进行返还。</p>
               <p>修改退款金额请将修改原因填写至退款备注。</p> */}

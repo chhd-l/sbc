@@ -27,9 +27,9 @@ const TableDiv = styled.div`
 `;
 
 const operateWay = {
-  0: { label: '件', unit: '件' },
-  1: { label: '重', unit: 'kg' },
-  2: { label: '体积', unit: 'm³' }
+  0: { label: 'piece', unit: 'piece' },
+  1: { label: 'weight', unit: 'kg' },
+  2: { label: 'volume', unit: 'm³' }
 };
 const confirm = Modal.confirm;
 
@@ -98,15 +98,15 @@ export default class FreightItem extends React.Component<any, any> {
     } = this.props;
     let columns = [
       {
-        title: '快递方式',
+        title: 'Courier',
         width: typeFlag ? '20%' : '30%',
         dataIndex: 'deliverWay',
         render: (text) => {
-          return text == 1 ? '快递' : '';
+          return text == 1 ? 'Express Delivery' : '';
         }
       } as any,
       {
-        title: '运送至',
+        title: 'Ship To',
         width: typeFlag ? '20%' : '35%',
         dataIndex: 'destinationAreaName',
         render: (text) => {
@@ -118,26 +118,22 @@ export default class FreightItem extends React.Component<any, any> {
     if (typeFlag) {
       columns = columns.concat([
         {
-          title: `首${operateWay[valuationType].label}(${
-            operateWay[valuationType].unit
-          })`,
+          title: `First ${operateWay[valuationType].label}(${operateWay[valuationType].unit})`,
           dataIndex: 'freightStartNum',
           width: '15%'
         },
         {
-          title: '首费(元)',
+          title: 'Down Payment(dollar)',
           dataIndex: 'freightStartPrice',
           width: '15%'
         },
         {
-          title: `续${operateWay[valuationType].label}(${
-            operateWay[valuationType].unit
-          })`,
+          title: `Continued ${operateWay[valuationType].label}(${operateWay[valuationType].unit})`,
           dataIndex: 'freightPlusNum',
           width: '15%'
         },
         {
-          title: '续费(元)',
+          title: 'Renewal(dollar)',
           dataIndex: 'freightPlusPrice',
           width: '15%'
         }
@@ -146,21 +142,23 @@ export default class FreightItem extends React.Component<any, any> {
       // 店铺
       columns = columns.concat([
         {
-          title: '计费规则',
+          title: 'Billing Rules',
           width: '35%',
           dataIndex: 'freightType',
           render: (text, record) => {
             if (text == 0) {
               return (
                 <div>
-                  订单不满{QMFloat.addZero(record.satisfyPrice)}元, 运费{QMFloat.addZero(
-                    record.satisfyFreight
-                  )}元
+                  Order less than {QMFloat.addZero(record.satisfyPrice)} dollar,
+                  Shipping fee is {QMFloat.addZero(record.satisfyFreight)}{' '}
+                  dollar
                 </div>
               );
             } else {
               return (
-                <div>固定运费{QMFloat.addZero(record.fixedFreight)}元</div>
+                <div>
+                  Fixed freight {QMFloat.addZero(record.fixedFreight)} dollar
+                </div>
               );
             }
           }
@@ -177,7 +175,9 @@ export default class FreightItem extends React.Component<any, any> {
         return (
           <div className="table-title-box">
             {title}
-            {!isStore && isDefault && '（未设置运费模板的商品均使用默认模板）'}
+            {!isStore &&
+              isDefault &&
+              '(The default template is used for products without freight template)'}
             <div className="operat-box">
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_temp_copy">
@@ -185,7 +185,7 @@ export default class FreightItem extends React.Component<any, any> {
                     href="javascript:void(0);"
                     onClick={() => this._copy(freightId)}
                   >
-                    复制
+                    Copy
                   </a>
                 </AuthWrapper>
               )}
@@ -195,7 +195,7 @@ export default class FreightItem extends React.Component<any, any> {
                   href="javascript:;"
                   onClick={() => this._edit(freightId, isStore)}
                 >
-                  编辑
+                  Edit
                 </a>
               )}
               {typeFlag && (
@@ -206,20 +206,20 @@ export default class FreightItem extends React.Component<any, any> {
                       history.push(`/freight-with-goods/${freightId}`)
                     }
                   >
-                    关联
+                    Related
                   </a>
                 </AuthWrapper>
               )}
               {!isDefault &&
-                (((checkAuth('f_store_temp_del') && isStore) ||
+                ((checkAuth('f_store_temp_del') && isStore) ||
                   (checkAuth('f_goods_temp_del') && !isStore)) && (
                   <a
                     href="javascript:;"
                     onClick={() => this._del(freightId, isStore)}
                   >
-                    删除
+                    Delete
                   </a>
-                ))}
+                )}
             </div>
           </div>
         );
@@ -243,7 +243,7 @@ export default class FreightItem extends React.Component<any, any> {
     if (goodsFreights.count() < 20) {
       copy(freightId);
     } else {
-      message.error('最多只能添加20个运费模板');
+      message.error('You can only add up to 20 shipping templates');
     }
   };
 
@@ -264,7 +264,7 @@ export default class FreightItem extends React.Component<any, any> {
   _del = (freightId, isStore) => {
     const { del } = this.props.relaxProps;
     confirm({
-      content: '确定要删除该模板吗？',
+      content: 'Are you sure you want to delete this template?',
       iconType: 'exclamation-circle',
       onOk() {
         del(freightId, isStore);

@@ -12,7 +12,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -97,13 +97,13 @@ export default class uploadVideoModal extends React.Component<any, any> {
       accept: '.mp4',
       beforeUpload(file) {
         if (!cateIdCurr) {
-          message.error('请先选择分类!');
+          message.error('Please select category first!');
           return false;
         }
         let fileName = file.name.toLowerCase();
 
         if (!fileName.trim()) {
-          message.error('请输入文件名');
+          message.error('Please input a file name');
           return false;
         }
 
@@ -112,12 +112,12 @@ export default class uploadVideoModal extends React.Component<any, any> {
             fileName
           )
         ) {
-          message.error('请输入正确格式的文件名');
+          message.error('Please enter the file name in the correct format');
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error('文件名过长');
+          message.error('File name is too long');
           return false;
         }
 
@@ -126,11 +126,11 @@ export default class uploadVideoModal extends React.Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error('文件大小不能超过50M');
+            message.error('File size cannot exceed 50M');
             return false;
           }
         } else {
-          message.error('文件格式错误');
+          message.error('File format error');
           return false;
         }
       },
@@ -144,13 +144,13 @@ export default class uploadVideoModal extends React.Component<any, any> {
             info.file.response.code &&
             info.file.response.code !== Const.SUCCESS_CODE
           ) {
-            message.error(`${info.file.name} 上传失败！`);
+            message.error(`${info.file.name} upload failed!`);
           } else {
-            message.success(`${info.file.name} 上传成功！`);
+            message.success(`${info.file.name} Uploaded successfully!`);
             setCateDisabled();
           }
         } else if (status === 'error') {
-          message.error(`${info.file.name} 上传失败！`);
+          message.error(`${info.file.name} upload failed!`);
         }
 
         //仅展示上传中和上传成功的文件列表
@@ -166,18 +166,18 @@ export default class uploadVideoModal extends React.Component<any, any> {
     };
 
     return (
-      <Modal  maskClosable={false}
-        title="上传视频"
-         
+      <Modal
+        maskClosable={false}
+        title="Upload Video"
         visible={uploadVisible}
-        cancelText="关闭"
+        cancelText="Close"
         onCancel={this._handleCancel}
         onOk={this._handleOk}
       >
         <Form>
           <FormItem
             {...formItemLayout}
-            label="选择分类"
+            label="Choose Category"
             required={true}
             hasFeedback
           >
@@ -192,8 +192,8 @@ export default class uploadVideoModal extends React.Component<any, any> {
               style={{ width: 300 }}
               value={this.state.cateId}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择分类"
-              notFoundContent="暂无分类"
+              placeholder="Please select a category"
+              notFoundContent="No Categories"
               allowClear
               treeDefaultExpandAll
               onChange={this._onChange}
@@ -201,16 +201,18 @@ export default class uploadVideoModal extends React.Component<any, any> {
               {loop(cateList)}
             </TreeSelect>
           </FormItem>
-          <FormItem {...formItemLayout} label="选择视频" required={true}>
+          <FormItem {...formItemLayout} label="Select Video" required={true}>
             <div>
               <Upload {...props} fileList={this.state.fileList}>
                 <Button>
-                  <Icon type="upload" /> 点击上传视频
+                  <Icon type="upload" /> Click to upload video
                 </Button>
               </Upload>
             </div>
             <p style={{ lineHeight: '2em', marginTop: '15px', color: '#999' }}>
-              商品视频大小推荐30M，最大限制50M，支持文件类型：mp4，推荐时长小于等于90s，大于等于6s，推荐视频比例7：9
+              Commodity video size recommended 30M, maximum limit 50M, support
+              file type: mp4, recommended duration is less than or equal to 90s,
+              greater than or equal to 6s, recommended video ratio of 7:9
             </p>
           </FormItem>
         </Form>
@@ -268,13 +270,13 @@ export default class uploadVideoModal extends React.Component<any, any> {
    */
   _handleOk = () => {
     if (this.state.cateId == '') {
-      message.error('请选择分类!');
+      message.error('Please select a category!');
       return;
     }
     if (
       this.state.fileList.filter((file) => file.status === 'done').length <= 0
     ) {
-      message.error('请选择上传视频!');
+      message.error('Please choose to upload a video!');
       return;
     }
 

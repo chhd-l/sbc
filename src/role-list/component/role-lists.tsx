@@ -133,10 +133,10 @@ class CateList extends React.Component<any, any> {
   _delete = async (roleInfoId) => {
     const { deleteEquities } = this.props.relaxProps;
     confirm({
-      title: '提示',
-      content: '确定删除该角色？',
-      okText: '确定',
-      cancelText: '取消',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this role?',
+      okText: 'OK',
+      cancelText: 'Cancel',
       iconType: 'exclamation-circle',
       onOk() {
         deleteEquities(roleInfoId);

@@ -54,7 +54,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
               disabled={total == 0}
               onClick={() => this._setBatchFeight()}
             >
-              批量更换运费模板
+              Bulk replacement shipping templates
             </Button>
           </div>
         </AuthWrapper>
@@ -71,7 +71,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: '图片',
+      title: 'Image',
       dataIndex: 'goodsImg',
       key: 'goodsImg',
       render: (value) => {
@@ -83,12 +83,12 @@ export default class FreightGoodsList extends React.Component<any, any> {
       }
     },
     {
-      title: '商品名称',
+      title: 'Product Name',
       dataIndex: 'goodsName',
       key: 'goodsName'
     },
     {
-      title: '重量/单位',
+      title: 'Weight/Unit',
       dataIndex: 'goodsWeight',
       key: 'goodsWeight',
       render: (value, row) => {
@@ -99,13 +99,13 @@ export default class FreightGoodsList extends React.Component<any, any> {
       }
     },
     {
-      title: '操作',
+      title: 'Operating',
       key: 'action',
       render: (_value, row) => (
         <AuthWrapper functionName="f_goods_rela_edit">
           <span>
             <a href="javascript:;" onClick={() => this._setFeight(row)}>
-              更换运费模板
+              Replace shipping template
             </a>
           </span>
         </AuthWrapper>

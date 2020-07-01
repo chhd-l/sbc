@@ -59,7 +59,7 @@ export default class Tool extends React.Component<any, any> {
           <Form layout="inline">
             <FormItem>
               <Input
-                placeholder="输入视频名称"
+                placeholder="Enter video name"
                 value={this.props.relaxProps.videoName}
                 onChange={this._editSearchData}
               />
@@ -117,7 +117,7 @@ export default class Tool extends React.Component<any, any> {
   _showMoveModal = () => {
     const { videoList, showMoveVideoModal } = this.props.relaxProps;
     if (videoList.filter((item) => item.get('checked') == true).size < 1) {
-      message.error('请先选择要移动的视频');
+      message.error('Please select the video to move first');
       return;
     }
     showMoveVideoModal(true);

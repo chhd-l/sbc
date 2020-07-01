@@ -80,7 +80,7 @@ export default class PaymentSetting extends React.Component<any, any> {
               <div className="methodItem">
                 <img
                   src={require('./img/payu.jpg')}
-                  style={{ width: '200px', height: '100%' }}
+                  style={{ width: '150px', height: '100%', marginTop: '10px' }}
                 />
               </div>
               <div className="bar">

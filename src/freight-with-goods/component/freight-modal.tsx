@@ -47,14 +47,15 @@ export default class FreightModal extends React.Component<any, any> {
     return (
       <div>
         {feightVisible ? (
-          <Modal  maskClosable={false}
-            title="设置运费模板"
+          <Modal
+            maskClosable={false}
+            title="Set shipping template"
             visible={feightVisible}
             onOk={() => this._handleOK()}
             onCancel={() => this._onCancel()}
           >
             <WrapperForm
-              ref={form => (this._form = form)}
+              ref={(form) => (this._form = form)}
               {...{ relaxProps: this.props.relaxProps }}
             />
           </Modal>

@@ -59,9 +59,9 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal  maskClosable={false}
-        title={editFlag ? '编辑' : '新增'}
-         
+      <Modal
+        maskClosable={false}
+        title={editFlag ? 'Edit' : 'Add'}
         visible={modalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
@@ -124,18 +124,22 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form">
-        <FormItem {...formItemLayout} label="分类名称" hasFeedback>
+        <FormItem {...formItemLayout} label="Category Name" hasFeedback>
           {getFieldDecorator('cateName', {
             initialValue: cateName,
             rules: [
-              { required: true, whitespace: true, message: '请输入分类名称' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please input the category name'
+              },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorMinAndMax(
                     rule,
                     value,
                     callback,
-                    '分类名称',
+                    'Category Name',
                     1,
                     10
                   );
@@ -145,7 +149,7 @@ class CateModalForm extends React.Component<any, any> {
           })(<Input onChange={this._changeCateName} value={cateName} />)}
         </FormItem>
         {formData.get('cateParentName') && (
-          <FormItem {...formItemLayout} label="上级分类">
+          <FormItem {...formItemLayout} label="Parent Category">
             {formData.get('cateParentName')}
           </FormItem>
         )}

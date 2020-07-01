@@ -35,7 +35,7 @@ export default class EditRoleModal extends React.Component<any, any> {
       return null;
     }
 
-    const title = edit ? '编辑角色' : '新增角色';
+    const title = edit ? 'Edit Role' : 'Add Role';
 
     return (
       <Modal

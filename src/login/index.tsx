@@ -30,8 +30,8 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    background: 'url(' + bg_login + ')',
-    backgroundSize: '100%',
+    backgroundImage: 'url(' + bg_login + ')',
+    backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
   } as any

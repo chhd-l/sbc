@@ -50,10 +50,10 @@ class RestPassword extends Component<any, any> {
         >
           {getFieldDecorator('oldEncodePwd', {
             rules: [
-              { required: true, message: '请输入密码' },
+              { required: true, message: 'Please enter the old password' },
               {
                 pattern: ValidConst.password,
-                message: '密码为6-16位字母或数字密码'
+                message: 'Password is 6-16 alphanumeric password'
               }
             ]
           })(<Input type="password" />)}
@@ -67,10 +67,10 @@ class RestPassword extends Component<any, any> {
         >
           {getFieldDecorator('newEncodePwd', {
             rules: [
-              { required: true, message: '请输入密码' },
+              { required: true, message: 'Please enter the new password' },
               {
                 pattern: ValidConst.password,
-                message: '密码为6-16位字母或数字密码'
+                message: 'Password is 6-16 alphanumeric password'
               }
             ]
           })(<Input type="password" />)}
@@ -84,7 +84,10 @@ class RestPassword extends Component<any, any> {
         >
           {getFieldDecorator('accountPasswordConfirm', {
             rules: [
-              { required: true, message: '请输入确认密码' },
+              {
+                required: true,
+                message: 'Please enter the confirmation password'
+              },
               { validator: this.checkConfirmPassword }
             ]
           })(<Input type="password" />)}
@@ -93,7 +96,7 @@ class RestPassword extends Component<any, any> {
           <Col span={14}>&nbsp;</Col>
           <Col span={3} style={{ textAlign: 'right' }}>
             <Button type="primary" onClick={this.resetPassword}>
-              <FormattedMessage id="Savelogin" />
+              <FormattedMessage id="save" />
             </Button>
           </Col>
           <Col span={3} style={{ textAlign: 'right' }}>
@@ -108,7 +111,7 @@ class RestPassword extends Component<any, any> {
 
   checkConfirmPassword = (_rule, value, callback) => {
     if (value != this.props.form.getFieldValue('newEncodePwd')) {
-      callback(new Error('重复密码不一致'));
+      callback(new Error('Repeated passwords are inconsistent'));
       return;
     }
 
@@ -140,7 +143,7 @@ class RestPassword extends Component<any, any> {
     });
     if (res.code === 'K-000000') {
       message.success('save successful');
-      setTimeout(() => history.push('/login'), 1000);
+      setTimeout(() => history.push('/'), 1000);
     } else {
       message.error(res.message || 'save faild');
     }

@@ -88,7 +88,20 @@ class SpecForm extends React.Component<any, any> {
           </div>
           <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
-              <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
+              <span>
+                <span
+                  style={{
+                    color: 'red',
+                    fontFamily: 'SimSun',
+                    marginRight: '4px',
+                    fontSize: '12px'
+                    // float: 'left'
+                  }}
+                >
+                  *
+                </span>
+                <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
+              </span>
             </Checkbox>
           </div>
           <div style={styles.bg}>
@@ -133,12 +146,12 @@ class SpecForm extends React.Component<any, any> {
                                 {
                                   required: true,
                                   whitespace: true,
-                                  message: '请填写规格'
+                                  message: 'Please input specification'
                                 },
                                 {
                                   min: 1,
                                   max: 10,
-                                  message: '最多10个字符'
+                                  message: 'No more than 10 characters'
                                 },
                                 {
                                   // 重复校验,
@@ -151,7 +164,11 @@ class SpecForm extends React.Component<any, any> {
                                     goodsSpecs.forEach((value, i) => {
                                       if (i != index) {
                                         value.get('specName') == specsName
-                                          ? callback(new Error('规格名称重复'))
+                                          ? callback(
+                                              new Error(
+                                                'Specification name duplicate'
+                                              )
+                                            )
                                           : callback();
                                       }
                                     });
@@ -166,7 +183,7 @@ class SpecForm extends React.Component<any, any> {
                               initialValue: item.get('specName')
                             })(
                               <Input
-                                placeholder="请输入规格"
+                                placeholder="Please input specification"
                                 style={{ width: '90%' }}
                               />
                             )}
@@ -201,7 +218,7 @@ class SpecForm extends React.Component<any, any> {
                                 rules: [
                                   {
                                     required: true,
-                                    message: '请填写规格值'
+                                    message: 'Please input specification Value'
                                   },
                                   {
                                     validator: (_rule, value, callback) => {
@@ -240,25 +257,33 @@ class SpecForm extends React.Component<any, any> {
 
                                         if (whitespace) {
                                           callback(
-                                            new Error('规格值不能为空格字符')
+                                            new Error(
+                                              'The specification value cannot be a space character'
+                                            )
                                           );
                                           return;
                                         }
                                         if (overLen) {
                                           callback(
-                                            new Error('每项值最多支持20个字符')
+                                            new Error(
+                                              'Each value supports up to 20 characters'
+                                            )
                                           );
                                           return;
                                         }
                                         if (duplicated) {
-                                          callback(new Error('规格值重复'));
+                                          callback(
+                                            new Error('Repeated specifications')
+                                          );
                                           return;
                                         }
                                       }
 
                                       if (value.length > 20) {
                                         callback(
-                                          new Error('最多支持20个规格值')
+                                          new Error(
+                                            'Support up to 20 specifications'
+                                          )
                                         );
                                         return;
                                       }
@@ -280,8 +305,8 @@ class SpecForm extends React.Component<any, any> {
                                   document.getElementById('specSelect')
                                 }
                                 style={{ width: '90%' }}
-                                placeholder="请输入规格值"
-                                notFoundContent="暂无规格值"
+                                placeholder="Please input specification Value"
+                                notFoundContent="No specification value"
                                 tokenSeparators={[',']}
                               >
                                 {this._getChildren(item.get('specValues'))}
@@ -297,7 +322,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Button onClick={this._addSpec}>
                 <Icon type="plus" />
-                <FormattedMessage id="product.addSpecifications" />
+                <FormattedMessage id="addSpecifications" />
               </Button>
             )}
           </div>
@@ -371,7 +396,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error('最多添加5个规格项');
+      message.error('Add up to 5 specifications');
       return;
     }
     updateSpecForm(this.props.form);
@@ -381,7 +406,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error('至少保留1个规格项');
+      message.error('Keep at least 1 specification item');
       return;
     }
     updateSpecForm(this.props.form);

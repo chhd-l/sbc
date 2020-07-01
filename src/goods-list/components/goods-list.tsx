@@ -81,17 +81,17 @@ export default class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
-        expandedRowRender={this._expandedRowRender}
-        expandedRowKeys={expandedRowKeys.toJS()}
-        onExpand={(expanded, record) => {
-          let keys = fromJS([]);
-          if (expanded) {
-            keys = expandedRowKeys.push(record.goodsId);
-          } else {
-            keys = expandedRowKeys.filter((key) => key != record.goodsId);
-          }
-          onShowSku(keys);
-        }}
+        // expandedRowRender={this._expandedRowRender}
+        // expandedRowKeys={expandedRowKeys.toJS()}
+        // onExpand={(expanded, record) => {
+        //   let keys = fromJS([]);
+        //   if (expanded) {
+        //     keys = expandedRowKeys.push(record.goodsId);
+        //   } else {
+        //     keys = expandedRowKeys.filter((key) => key != record.goodsId);
+        //   }
+        //   onShowSku(keys);
+        // }}
         rowSelection={{
           selectedRowKeys: selectedSpuKeys.toJS(),
           onChange: (selectedRowKeys) => {
@@ -376,35 +376,35 @@ export default class CateList extends React.Component<any, any> {
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>规格：</label>
+                <label style={styles.label}>Specification：</label>
                 <span className="specification" style={styles.textCon}>
                   {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
                 </span>
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>SKU编码：</label>
+                <label style={styles.label}>SKU code：</label>
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>市场价：</label>
+                <label style={styles.label}>Market price：</label>
                 {goods.get('marketPrice') || goods.get('marketPrice') === 0
                   ? goods.get('marketPrice').toFixed(2)
                   : 0}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>上下架：</label>
-                {goods.get('addedFlag') == 0 ? '下架' : '上架'}
+                <label style={styles.label}>On/Off shelve：</label>
+                {goods.get('addedFlag') == 0 ? 'Off shelf' : 'On shelf'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>条形码：</label>
+                <label style={styles.label}>Bar code：</label>
                 {goods.get('goodsInfoBarcode')
                   ? goods.get('goodsInfoBarcode')
                   : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>库存：</label>
+                <label style={styles.label}>In stock：</label>
                 {goods.get('stock')}
               </div>
             </div>
@@ -439,8 +439,8 @@ export default class CateList extends React.Component<any, any> {
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
     confirm({
-      title: '提示',
-      content: '您确认要删除这个商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this product?',
       onOk() {
         spuDelete([goodsId]);
       }

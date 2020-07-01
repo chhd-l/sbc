@@ -14,7 +14,7 @@ export default class GoodsSpecActor extends Actor {
         {
           specId: this._getRandom(),
           isMock: true,
-          specName: '规格1',
+          specName: 'specification1',
           specValues: []
         }
       ],
@@ -41,13 +41,8 @@ export default class GoodsSpecActor extends Actor {
   _randomGoodsInfoNo() {
     const skuNo =
       '8' +
-      new Date()
-        .getTime()
-        .toString()
-        .slice(4, 10) +
-      Math.random()
-        .toString()
-        .slice(2, 5);
+      new Date().getTime().toString().slice(4, 10) +
+      Math.random().toString().slice(2, 5);
 
     // 如果已经生成过，重新生成
     if (this.generatedNo.get(skuNo)) {
@@ -83,9 +78,7 @@ export default class GoodsSpecActor extends Actor {
         'goodsList',
         fromJS([
           {
-            id: Math.random()
-              .toString()
-              .substring(2),
+            id: Math.random().toString().substring(2),
             index: 1,
             goodsInfoNo: this._randomGoodsInfoNo()
           }
@@ -97,7 +90,7 @@ export default class GoodsSpecActor extends Actor {
           {
             specId: this._getRandom(),
             isMock: true,
-            specName: '规格1',
+            specName: 'specification1',
             specValues: []
           }
         ])
@@ -210,7 +203,7 @@ export default class GoodsSpecActor extends Actor {
     const spec = fromJS({
       specId: this._getRandom(),
       isMock: true,
-      specName: '规格' + (goodsSpecs.count() + 1),
+      specName: 'specification' + (goodsSpecs.count() + 1),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));
@@ -364,10 +357,6 @@ export default class GoodsSpecActor extends Actor {
    *  获取整数随机数
    */
   _getRandom = () => {
-    return parseInt(
-      Math.random()
-        .toString()
-        .substring(2, 18)
-    );
+    return parseInt(Math.random().toString().substring(2, 18));
   };
 }

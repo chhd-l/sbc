@@ -198,7 +198,7 @@ export default class PicModal extends React.Component<any, any> {
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    placeholder="请输入内容"
+                    placeholder="Please enter the content"
                     value={imageName}
                     onChange={(e) => this._editSearchData(e)}
                   />
@@ -267,7 +267,7 @@ export default class PicModal extends React.Component<any, any> {
                 >
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    暂无数据
+                    No Data
                   </span>
                 </div>
               )}

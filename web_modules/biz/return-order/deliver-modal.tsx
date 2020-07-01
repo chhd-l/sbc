@@ -97,7 +97,7 @@ class DeliverForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: '请填写物流公司'
+                message: 'Please input logistics weight'
               }
             ]
           })(<Input />)}
@@ -107,7 +107,7 @@ class DeliverForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: '请填写物流单号'
+                message: 'Please input logistics volume'
               }
             ]
           })(<Input />)}

@@ -324,10 +324,11 @@ export default class VideoModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div style={styles.title}>
-            <h4>视频库</h4>
+            <h4>Video library</h4>
             <span style={styles.grey}>
-              已选<strong style={styles.dark}>{clickVideosCount}</strong>条
-              最多可选<strong style={styles.dark}>1</strong>条
+              <strong style={styles.dark}>{clickVideosCount}</strong> has been
+              selected and up to <strong style={styles.dark}>1</strong> can be
+              selected
             </span>
           </div>
         }
@@ -338,7 +339,7 @@ export default class VideoModal extends React.Component<any, any> {
       >
         <div>
           <Row style={styles.header}>
-            <Col span={3}>
+            <Col span={4}>
               <QMUpload
                 name="uploadFile"
                 onChange={this._editImages}
@@ -357,7 +358,7 @@ export default class VideoModal extends React.Component<any, any> {
                 fileList={this.state.fileList}
               >
                 <Button size="large" onClick={() => this._handleUploadClick()}>
-                  本地上传
+                  Local Upload
                 </Button>
               </QMUpload>
             </Col>
@@ -365,7 +366,7 @@ export default class VideoModal extends React.Component<any, any> {
               <Form layout="inline">
                 <FormItem>
                   <Input
-                    placeholder="请输入内容"
+                    placeholder="Please enter the content"
                     value={videoName}
                     onChange={(e) => this._editSearchData(e)}
                   />
@@ -380,7 +381,7 @@ export default class VideoModal extends React.Component<any, any> {
                     htmlType="submit"
                     icon="search"
                   >
-                    搜索
+                    Search
                   </Button>
                 </FormItem>
               </Form>
@@ -405,8 +406,8 @@ export default class VideoModal extends React.Component<any, any> {
               <div>
                 <div style={styles.greyHeader}>
                   <span style={styles.videoItemSmall} />
-                  <span style={styles.videoItemMid}>视频名称</span>
-                  <span style={styles.videoItemLarge}>视频链接</span>
+                  <span style={styles.videoItemMid}>video name</span>
+                  <span style={styles.videoItemLarge}>video link</span>
                 </div>
                 <div>
                   {(videoList || fromJS([])).map((item) => {
@@ -450,7 +451,8 @@ export default class VideoModal extends React.Component<any, any> {
                   }}
                 >
                   <span>
-                    <i className="anticon anticon-frown-o" />暂无数据
+                    <i className="anticon anticon-frown-o" />
+                    No Data
                   </span>
                 </div>
               )}

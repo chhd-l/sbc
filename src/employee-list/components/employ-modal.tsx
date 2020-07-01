@@ -39,9 +39,7 @@ export default class EmployeeModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={
-          editDisable ? '查看员工信息' : edit ? '编辑员工信息' : '新增员工信息'
-        }
+        title={editDisable ? 'User Detail' : edit ? 'Edit User' : 'Add User'}
         visible={visible}
         onOk={() => this._handleOK()}
         onCancel={() => onCancel()}
@@ -63,6 +61,7 @@ export default class EmployeeModal extends React.Component<any, any> {
             values.accountPasswordConfirm
           );
         }
+        values.roleIdList = values.roleIdList ? [values.roleIdList] : null;
         this.props.relaxProps.onSave(values);
       }
     });

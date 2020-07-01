@@ -67,7 +67,7 @@ export default class Tool extends React.Component<any, any> {
                 this._spuOnSale();
               }}
             >
-              Batch shelves
+              Batch on shelves
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -95,7 +95,7 @@ export default class Tool extends React.Component<any, any> {
             </a>
           </AuthWrapper>
         </Menu.Item>
-        <Menu.Item>
+        {/* <Menu.Item>
           <AuthWrapper functionName="f_goods_temp_set">
             <a
               href="#!"
@@ -106,7 +106,7 @@ export default class Tool extends React.Component<any, any> {
               Set the freight template
             </a>
           </AuthWrapper>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
     );
   };
@@ -128,8 +128,8 @@ export default class Tool extends React.Component<any, any> {
       return;
     }
     confirm({
-      title: '提示',
-      content: '您确认要上架这些商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to put these products on shelves?',
       onOk() {
         spuOnSale();
       }
@@ -143,8 +143,8 @@ export default class Tool extends React.Component<any, any> {
       return;
     }
     confirm({
-      title: '提示',
-      content: '您确认要下架这些商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to put these products off shelves?',
       onOk() {
         spuOffSale();
       }
@@ -158,8 +158,8 @@ export default class Tool extends React.Component<any, any> {
       return;
     }
     confirm({
-      title: '提示',
-      content: '您确认要删除这些商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete these products?',
       onOk() {
         spuDelete();
       }

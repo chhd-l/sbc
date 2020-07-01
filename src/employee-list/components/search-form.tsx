@@ -47,11 +47,11 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="employeePhone" />}
+            addonBefore={<FormattedMessage id="employeeEmail" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
-                field: 'userPhone',
+                field: 'email',
                 value
               });
             }}
@@ -128,11 +128,11 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           >
             <Option value={null} key={null}>
-              {'全部'}
+              {'All'}
             </Option>
-            <Option value={'0'}>正常</Option>
-            <Option value={'1'}>停用</Option>
-            <Option value={'2'}>离职</Option>
+            <Option value={'0'}>Normal</Option>
+            <Option value={'1'}>Deactivate</Option>
+            <Option value={'2'}>Resignation</Option>
           </SelectGroup>
         </FormItem>
 

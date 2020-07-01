@@ -65,12 +65,12 @@ const customerColumns = [
     key: 'baseDate'
   },
   {
-    title: 'Total consumer number',
+    title: 'Total active consumer number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: 'New consumer number',
+    title: 'New active consumer number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }

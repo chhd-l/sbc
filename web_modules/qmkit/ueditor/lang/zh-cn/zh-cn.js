@@ -47,7 +47,7 @@ UE.I18N['zh-cn'] = {
         'dash' :'— 破折号',
         'dot':' 。 小圆圈'
     },
-    'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
+    'paragraph':{'p':'Format paragrap', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
         'songti':'宋体',
         'kaiti':'楷体',
@@ -85,7 +85,8 @@ UE.I18N['zh-cn'] = {
     },
     'elementPathTip':"Element path",
     'wordCountTip':"Field statistics",
-    'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',
+    'wordCountMsg': 'Currently {#count} characters have been entered, you can also enter {#leave} characters.',
+    // 'wordCountMsg':'当前已输入个字符, 您还可以输入个字符。 ',
     'wordOverFlowMsg':'<span style="color:red;">字数超出最大允许值，服务器可能拒绝保存！</span>',
     'ok':"确认",
     'cancel':"取消",

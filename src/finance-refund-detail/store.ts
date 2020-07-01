@@ -67,9 +67,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onSearch = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
 
     const { res } = await webapi.fetchRefundOrderList({
       ...param,
@@ -158,7 +156,7 @@ export default class AppStore extends Store {
   onExportByIds = () => {
     let selected = this.state().get('selected');
     if (selected.count() === 0) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -172,9 +170,7 @@ export default class AppStore extends Store {
    * @returns {Promise<IAsyncResult<TResult>>}
    */
   onExportByParams = () => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
     // param.startTime = momnet(param.dateRange[0]).format('yyyy-MM-dd HH:mm').toString()
     // param.endTime = momnet(param.dateRange[1]).format('yyyy-MM-dd HH:mm').toString()
     return this._onExport(param);

@@ -179,7 +179,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('确认收货成功!');
+      message.success('Confirm successful receipt!');
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
@@ -233,7 +233,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('请选择要导出的订单');
+      message.error('Please select the order to be exported');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

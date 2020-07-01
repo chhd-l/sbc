@@ -43,12 +43,7 @@ export default class AppStore extends Store {
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async (param?: any) => {
     this.dispatch('loading:start');
-    param = Object.assign(
-      this.state()
-        .get('searchForm')
-        .toJS(),
-      param
-    );
+    param = Object.assign(this.state().get('searchForm').toJS(), param);
     //查询已退款的
 
     const { res } = await webapi.fetchOrderInovices(param);
@@ -73,9 +68,7 @@ export default class AppStore extends Store {
   };
 
   onSearch = async () => {
-    let param = this.state()
-      .get('searchForm')
-      .toJS();
+    let param = this.state().get('searchForm').toJS();
     if (param && param.endTime) {
       param.endTime = moment(param.endTime)
         .add(1, 'day')
@@ -223,7 +216,7 @@ export default class AppStore extends Store {
   onExport = async () => {
     const selectedIds = this.state().get('selected');
     if (selectedIds.count() < 1) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
     }
     await webapi.exportOrderInvoice(selectedIds.toJS());
   };
@@ -342,9 +335,7 @@ export default class AppStore extends Store {
    * @returns {Promise<IAsyncResult<TResult>>}
    */
   onExportByParams = () => {
-    let param = this.state()
-      .get('searchForm')
-      .toJS();
+    let param = this.state().get('searchForm').toJS();
     if (param.invoiceState == 0) {
       param.invoiceState = 'WAIT';
     }
@@ -364,7 +355,7 @@ export default class AppStore extends Store {
   onExportByIds = () => {
     let selected = this.state().get('selected');
     if (selected.count() === 0) {
-      message.error('请选择要导出的数据');
+      message.error('Please select data to export');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

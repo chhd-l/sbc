@@ -59,7 +59,14 @@ export default class PaymentSetting extends React.Component<any, any> {
     this.state = {
       paymentVisible: false
     };
+    this.closeModel = this.closeModel.bind(this);
   }
+
+  closeModel = () => {
+    this.setState({
+      paymentVisible: false
+    });
+  };
 
   render() {
     return (
@@ -79,25 +86,23 @@ export default class PaymentSetting extends React.Component<any, any> {
               <div className="bar">
                 <div className="status"></div>
                 <div>
-                  <a onClick={() => this._edit()} className="links">
+                  <a
+                    onClick={() => {
+                      this.setState({
+                        paymentVisible: true
+                      });
+                    }}
+                    className="links"
+                  >
                     <FormattedMessage id="edit" />
                   </a>
                 </div>
               </div>
             </Card>
-            <PaymentModel visible={this.state.paymentVisible} />
+            <PaymentModel visible={this.state.paymentVisible} parent={this} />
           </ContainerDiv>
         </div>
       </div>
     );
   }
-
-  _edit = () => {
-    debugger;
-    this.setState({
-      paymentVisible: true
-    });
-
-    console.log(this.state.paymentVisible);
-  };
 }

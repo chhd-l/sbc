@@ -203,12 +203,12 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: '请填写SKU编码'
+                      message: 'Please input SKU code'
                     },
                     {
                       min: 1,
                       max: 20,
-                      message: '1-20字符'
+                      message: '1-20 characters'
                     }
                   ],
                   onChange: this._editGoodsItem.bind(
@@ -247,7 +247,10 @@ class SkuForm extends React.Component<any, any> {
           >
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip placement="top" title={'勾选后所有SKU都使用相同的市场价'}>
+            <Tooltip
+              placement="top"
+              title={'After checking, all SKUs use the same market price'}
+            >
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -264,17 +267,18 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写市场价'
+                    message: 'Please input market price'
                   },
                   {
                     pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
+                    message:
+                      'Please fill in the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
                     max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function(value) {
+                    message: 'The maximum value is 9999999.99',
+                    transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -320,7 +324,10 @@ class SkuForm extends React.Component<any, any> {
           >
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip placement="top" title={'勾选后所有SKU都使用相同的库存'}>
+            <Tooltip
+              placement="top"
+              title={'After checking, all SKUs use the same inventory'}
+            >
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -337,7 +344,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: '0或正整数'
+                    message: '0 or positive integer'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
@@ -417,11 +424,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小必须小于2M');
+        message.error('The file size must be less than 2M');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error');
       return false;
     }
   };

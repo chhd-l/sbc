@@ -108,17 +108,18 @@ class LevelPriceForm extends React.Component<any, any> {
                   rules: [
                     {
                       required: true,
-                      message: '请填写市场价'
+                      message: 'Please input market price'
                     },
                     {
                       pattern: ValidConst.zeroPrice,
-                      message: '请填写两位小数的合法金额'
+                      message:
+                        'Please fill in the legal amount with two decimal places'
                     },
                     {
                       type: 'number',
                       max: 9999999.99,
                       message: '最大值为9999999.99',
-                      transform: function(value) {
+                      transform: function (value) {
                         return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                       }
                     }
@@ -167,7 +168,8 @@ class LevelPriceForm extends React.Component<any, any> {
             key="customerLevelDiscount"
             title={
               <div>
-                默认折扣价&nbsp;<Tooltip
+                默认折扣价&nbsp;
+                <Tooltip
                   placement="top"
                   title={
                     '如不填写自定义订货价，该级别售价默认使用折扣价，折扣价=市场价×等级折扣率'
@@ -193,7 +195,8 @@ class LevelPriceForm extends React.Component<any, any> {
           <Column
             title={
               <div>
-                自定义订货价&nbsp;<Tooltip
+                自定义订货价&nbsp;
+                <Tooltip
                   placement="top"
                   title={'填写后该级别销售价不会跟随市场价以及等级折扣率变化'}
                 >
@@ -219,7 +222,7 @@ class LevelPriceForm extends React.Component<any, any> {
                         type: 'number',
                         max: 9999999.99,
                         message: '最大值为9999999.99',
-                        transform: function(value) {
+                        transform: function (value) {
                           return isNaN(parseFloat(value))
                             ? 0
                             : parseFloat(value);
@@ -238,7 +241,8 @@ class LevelPriceForm extends React.Component<any, any> {
           <Column
             title={
               <div>
-                起订量<br />{' '}
+                起订量
+                <br />{' '}
                 <Checkbox
                   checked={levelCountChecked}
                   onChange={this._synchLevelCount}
@@ -257,7 +261,7 @@ class LevelPriceForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0或正整数'
+                        message: '0 or positive integer'
                       },
                       {
                         level: levelId,
@@ -307,7 +311,8 @@ class LevelPriceForm extends React.Component<any, any> {
           <Column
             title={
               <div>
-                限订量<br />{' '}
+                限订量
+                <br />{' '}
                 <Checkbox
                   checked={levelMaxCountChecked}
                   onChange={this._synchLevelMaxCount}

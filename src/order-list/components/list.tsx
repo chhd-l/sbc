@@ -348,9 +348,9 @@ export default class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="order.valetOrder" />
                               </span>
                             )}
-                            {orderType != '' && (
+                            {/* {orderType != '' && (
                               <span style={styles.platform}>{orderType}</span>
-                            )}
+                            )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.fightTogether" />
@@ -522,44 +522,57 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {/*第4张特殊处理*/
-                      //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
+                      {
+                        /*最后一张特殊处理*/
+                        //@ts-ignore
+                        v.get('tradeItems').concat(gifts).size > 4 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={
+                                v
+                                  .get('tradeItems')
+                                  .concat(gifts)
+                                  .get(3)
+                                  .get('pic')
+                                  ? v
+                                      .get('tradeItems')
+                                      .concat(gifts)
+                                      .get(3)
+                                      .get('pic')
+                                  : defaultImg
+                              }
+                              style={styles.imgFourth}
+                            />
                             //@ts-ignore
-                            src={
-                              v
-                                .get('tradeItems')
-                                .concat(gifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('tradeItems')
-                                    .concat(gifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
-                            style={styles.imgFourth}
-                          />
-                          //@ts-ignore
-                          <div style={styles.imgNum}>
-                            <FormattedMessage id="total" />
-                            {v.get('tradeItems').concat(gifts).size}{' '}
-                            <FormattedMessage id="piece" />
+                            <div style={styles.imgNum}>
+                              <FormattedMessage id="total" />{' '}
+                              {v.get('tradeItems').concat(gifts).size}
+                              <FormattedMessage id="items" />
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
                     <td style={{ width: '14%' }}>
                       {/*客户名称*/}
-                      {v.getIn(['buyer', 'name'])}
+                      <p
+                        title={v.getIn(['buyer', 'name'])}
+                        className="line-ellipse"
+                      >
+                        {v.getIn(['buyer', 'name'])}
+                      </p>
                     </td>
                     <td style={{ width: '17%' }}>
                       {/*收件人姓名*/}
                       {/* <FormattedMessage id="recipient" />： */}
-                      {v.getIn(['consignee', 'name'])}
+                      <p
+                        title={v.getIn(['consignee', 'name'])}
+                        className="line-ellipse"
+                      >
+                        {v.getIn(['consignee', 'name'])}
+                      </p>
+
                       {/* <br /> */}
                       {/*收件人手机号码*/}
                       {/* {v.getIn(['consignee', 'phone'])} */}
@@ -568,7 +581,14 @@ export default class ListView extends React.Component<any, any> {
                       ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    <td style={{ width: '10%' }}>{v.get('clinicsName')}</td>
+                    <td style={{ width: '10%' }}>
+                      <p
+                        title={v.getIn(['clinicsName', 'name'])}
+                        className="line-ellipse"
+                      >
+                        {v.get('clinicsName')}
+                      </p>
+                    </td>
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}

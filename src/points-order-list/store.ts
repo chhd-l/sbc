@@ -36,9 +36,7 @@ export default class AppStore extends Store {
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
     //获取form数据
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
@@ -117,7 +115,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('确认收货成功!');
+      message.success('Confirm successful receipt!');
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
@@ -154,7 +152,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('请选择要导出的订单');
+      message.error('Please select the order to be exported');
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -169,9 +167,7 @@ export default class AppStore extends Store {
    */
   onExportByParams = () => {
     // 搜索条件
-    let params = this.state()
-      .get('form')
-      .toJS();
+    let params = this.state().get('form').toJS();
     // tab
     const key = this.state().getIn(['tab', 'key']);
     if (key != '0') {
@@ -201,7 +197,8 @@ export default class AppStore extends Store {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref = Const.HOST + `/points/trade/export/params/${encrypted}`;
+          const exportHref =
+            Const.HOST + `/points/trade/export/params/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

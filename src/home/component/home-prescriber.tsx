@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Table, Divider, Row, Col } from 'antd';
+import { Table, Divider, Row, Col, Select } from 'antd';
 import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
 import { cache } from 'qmkit';
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
+const Option = Select.Option;
 
 const prescriberLog = require('./../images/Prescriber.png');
 
@@ -45,12 +46,12 @@ const customerColumns = [
     key: 'baseDate'
   },
   {
-    title: 'Total consumer number',
+    title: 'Total active consumer number',
     dataIndex: 'cusAllCount',
     key: 'cusAllCount'
   },
   {
-    title: 'New consumer  number',
+    title: 'New active consumer  number',
     dataIndex: 'cusDayGrowthCount',
     key: 'cusDayGrowthCount'
   }
@@ -61,7 +62,10 @@ export default class homePrescriber extends Component<any, any> {
     super(props);
     this.state = {
       tradeInfo: {},
-      prescriber: {},
+      prescriber: {
+        prescriberId: '',
+        prescriberType: ''
+      },
       tradeData: [],
       flowTrendData: [],
       customerData: [],
@@ -74,19 +78,22 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerData = this.getCustomerData.bind(this);
     this.getCustomerGrowTrendData = this.getCustomerGrowTrendData.bind(this);
 
-    this.getPrescriberDetail();
-    this.getPrescribersData();
-    this.getTradeData();
-    this.getFlowTrendData();
-    this.getCustomerData();
-    this.getCustomerGrowTrendData();
+    this.allBind(this.props.prescriberId);
   }
 
-  getPrescriberDetail = async () => {
-    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    if (employee.clinicsId) {
+  allBind = (id) => {
+    this.getPrescriberDetail(id);
+    this.getPrescribersData(id);
+    this.getTradeData(id);
+    this.getFlowTrendData(id);
+    this.getCustomerData(id);
+    this.getCustomerGrowTrendData(id);
+  };
+
+  getPrescriberDetail = async (id) => {
+    if (id) {
       const { res } = await getClinicById({
-        prescriberId: employee.clinicsId
+        prescriberId: id
       });
       if (res.code === 'K-000000') {
         this.setState({
@@ -96,17 +103,16 @@ export default class homePrescriber extends Component<any, any> {
           cache.PRESCRIBER_DATA,
           JSON.stringify(res.context)
         );
+      } else {
+        sessionStorage.removeItem(cache.PRESCRIBER_DATA);
       }
     } else {
       sessionStorage.removeItem(cache.PRESCRIBER_DATA);
     }
   };
 
-  getPrescribersData = async () => {
-    const { res } = await webapi.getPrescribersData({
-      selectType: 0,
-      isPrescriber: true
-    });
+  getPrescribersData = async (id) => {
+    const { res } = await webapi.getPrescribersData(id);
     if (res.code === 'K-000000') {
       this.setState({
         tradeInfo: res.context
@@ -114,249 +120,278 @@ export default class homePrescriber extends Component<any, any> {
     }
   };
 
-  getTradeData = async () => {
-    const { res } = await webapi.prescribersTradeView();
-    let tradeData = res.context.content.map((order, index) => {
-      return {
-        key: index,
-        orderCount: order.orderCount,
-        orderAmt: order.orderAmt,
-        payOrderCount: order.PayOrderCount,
-        payOrderAmt: order.payOrderAmt,
-        title: order.title
-      };
-    });
+  getTradeData = async (id) => {
+    const { res } = await webapi.prescribersTradeView(id);
     if (res.code === 'K-000000') {
+      if (!res.context.content) {
+        return [];
+      }
+      let tradeData = res.context.content.map((order, index) => {
+        return {
+          key: index,
+          orderCount: order.orderCount,
+          orderAmt: order.orderAmt,
+          payOrderCount: order.PayOrderCount,
+          payOrderAmt: order.payOrderAmt,
+          title: order.title
+        };
+      });
       this.setState({
         tradeData: tradeData
       });
     }
   };
 
-  getFlowTrendData = async () => {
-    const { res } = await webapi.prescribersTradeReport();
-    let tradeFlowData = res.context.map((order, index) => {
-      return {
-        key: index,
-        orderCount: order.orderCount,
-        orderAmt: order.orderAmt,
-        payOrderCount: order.PayOrderCount,
-        payOrderAmt: order.payOrderAmt,
-        title: order.title
-      };
-    });
+  getFlowTrendData = async (id) => {
+    const { res } = await webapi.prescribersTradeReport(id);
     if (res.code === 'K-000000') {
+      let tradeFlowData = res.context.map((order, index) => {
+        return {
+          key: index,
+          orderCount: order.orderCount,
+          orderAmt: order.orderAmt,
+          payOrderCount: order.PayOrderCount,
+          payOrderAmt: order.payOrderAmt,
+          title: order.title
+        };
+      });
       this.setState({
         flowTrendData: tradeFlowData
       });
     }
   };
 
-  getCustomerData = async () => {
-    const { res } = await webapi.prescribersCustomerGrowReport();
-    let customerData = res.context.data.map((cus, index) => {
-      return {
-        key: index,
-        cusAllCount: cus.customerAllCount,
-        cusDayGrowthCount: cus.customerDayGrowthCount,
-        cusDayRegisterCount: cus.customerDayRegisterCount,
-        baseDate: cus.baseDate
-      };
-    });
-
+  getCustomerData = async (id) => {
+    const { res } = await webapi.prescribersCustomerGrowReport(id);
     if (res.code === 'K-000000') {
+      let customerData = res.context.data.map((cus, index) => {
+        return {
+          key: index,
+          cusAllCount: cus.customerAllCount,
+          cusDayGrowthCount: cus.customerDayGrowthCount,
+          cusDayRegisterCount: cus.customerDayRegisterCount,
+          baseDate: cus.baseDate
+        };
+      });
       this.setState({
         customerData: customerData
       });
     }
   };
 
-  getCustomerGrowTrendData = async () => {
-    const { res } = await webapi.prescribersCustomerGrowTrend();
-    let customerFlowData = res.context.map((cus, index) => {
-      return {
-        key: index,
-        title: cus.xValue,
-        cusAllCount: cus.customerAllCount,
-        cusDayGrowthCount: cus.customerDayGrowthCount,
-        cusDayRegisterCount: cus.customerDayRegisterCount
-      };
-    });
+  getCustomerGrowTrendData = async (id) => {
+    const { res } = await webapi.prescribersCustomerGrowTrend(id);
     if (res.code === 'K-000000') {
+      let customerFlowData = res.context.map((cus, index) => {
+        return {
+          key: index,
+          title: cus.xValue,
+          cusAllCount: cus.customerAllCount,
+          cusDayGrowthCount: cus.customerDayGrowthCount,
+          cusDayRegisterCount: cus.customerDayRegisterCount
+        };
+      });
       this.setState({
         customerGrowTrendData: customerFlowData
       });
     }
   };
 
+  _prescriberChange = (value) => {
+    this.allBind(value);
+  };
+
   render() {
+    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const allPrescribers =
+      employee && employee.prescribers && employee.prescribers.length > 0
+        ? employee.prescribers
+        : [];
     return (
-      <div
-        className="flowBox todayDataFour"
-        style={{ marginLeft: -5, marginRight: -5 }}
-      >
+      <div>
         <div
-          className="homeItem todayData"
-          style={{ width: 'calc(50% - 10px)' }}
+          className="flowBox todayDataFour"
+          style={{ marginLeft: -5, marginRight: -5 }}
         >
-          <h3>
-            <FormattedMessage id="transactionToday" />
-          </h3>
-          <div className="dateBg">
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="orderNumber" />
-              </label>
-              <strong>{this.state.tradeInfo.orderCount || 0}</strong>
-            </div>
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="orderAmount" />
-              </label>
-              <strong>
-                ￥
-                {this.state.tradeInfo.orderAmt
-                  ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
-                  : 0.0}
-              </strong>
-            </div>
-            <div className="dataItem" style={{ flex: 'inherit' }}>
-              <label>
-                <FormattedMessage id="numberOfPaymentOrders" />
-              </label>
-              <strong>{this.state.tradeInfo.payOrderCount || 0}</strong>
-            </div>
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="paymentAmount" />
-              </label>
-              <strong>
-                ￥
-                {this.state.tradeInfo.payOrderAmt
-                  ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
-                  : 0.0}
-              </strong>
+          <div
+            className="homeItem todayData"
+            style={{ width: 'calc(50% - 10px)' }}
+          >
+            <h3>
+              <FormattedMessage id="transactionToday" />
+            </h3>
+            <div className="dateBg">
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="orderNumber" />
+                </label>
+                <strong>{this.state.tradeInfo.orderCount || 0}</strong>
+              </div>
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="orderAmount" />
+                </label>
+                <strong>
+                  ￥
+                  {this.state.tradeInfo.orderAmt
+                    ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
+                    : 0.0}
+                </strong>
+              </div>
+              <div className="dataItem" style={{ flex: 'inherit' }}>
+                <label>
+                  <FormattedMessage id="numberOfPaymentOrders" />
+                </label>
+                <strong>{this.state.tradeInfo.payOrderCount || 0}</strong>
+              </div>
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="paymentAmount" />
+                </label>
+                <strong>
+                  ￥
+                  {this.state.tradeInfo.payOrderAmt
+                    ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
+                    : 0.0}
+                </strong>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div
-          className="homeItem todayData"
-          style={{ width: 'calc(27% - 10px)' }}
-        >
-          <h3>
-            <FormattedMessage id="rewardSummary" />
-          </h3>
-          <div className="dateBg">
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="rewardSummary" />
-              </label>
-              <strong>{this.state.tradeInfo.rewardRate || 0}%</strong>
-            </div>
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="rewardAmount" />
-              </label>
-              <strong>
-                ￥
-                {this.state.tradeInfo.orderCount
-                  ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
-                  : 0.0}
-              </strong>
+          <div
+            className="homeItem todayData"
+            style={{ width: 'calc(27% - 10px)' }}
+          >
+            <h3>
+              <FormattedMessage id="rewardSummary" />
+            </h3>
+            <div className="dateBg">
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="rewardSummary" />
+                </label>
+                <strong>{this.state.tradeInfo.rewardRate || 0}%</strong>
+              </div>
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="rewardAmount" />
+                </label>
+                <strong>
+                  ￥
+                  {this.state.tradeInfo.orderCount
+                    ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
+                    : 0.0}
+                </strong>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div
-          className="homeItem todayData prescriberInfo"
-          style={{ width: 'calc(23% - 10px)', paddingLeft: '0px' }}
-        >
-          <div>
-            <Row>
-              <Col span={10}>
-                <img src={prescriberLog} alt="" className="prescriberLog" />
-              </Col>
-              <Col span={2}>
-                <Divider type="vertical" />
-              </Col>
-              <Col span={12}>
-                <div className="prescriberWord">
-                  <h3>{this.state.prescriber.prescriberName}</h3>
-                  <div className="prescriberLable">
-                    Prescriber ID: {this.state.prescriber.prescriberId}
+          <div
+            className="homeItem todayData prescriberInfo"
+            style={{ width: 'calc(23% - 10px)', paddingLeft: '0px' }}
+          >
+            <div>
+              <Row>
+                <Col span={10}>
+                  <img src={prescriberLog} alt="" className="prescriberLog" />
+                </Col>
+                <Col span={2}>
+                  <Divider type="vertical" />
+                </Col>
+                <Col span={12}>
+                  <div className="prescriberWord">
+                    <Select
+                      onChange={(value) => this._prescriberChange(value)}
+                      defaultValue={this.props.prescriberId}
+                      style={{ width: '140px', marginBottom: '10px' }}
+                    >
+                      {allPrescribers.map((item) => (
+                        <Option
+                          value={item.prescriberId}
+                          key={item.prescriberId}
+                        >
+                          {item.prescriberName}
+                        </Option>
+                      ))}
+                    </Select>
+                    <div className="prescriberLable">
+                      Prescriber ID: {this.state.prescriber.prescriberId}
+                    </div>
+                    <div className="prescriberLable">
+                      Prescriber Type: {this.state.prescriber.prescriberType}
+                    </div>
                   </div>
-                  <div className="prescriberLable">
-                    Prescriber Type: {this.state.prescriber.prescriberType}
-                  </div>
-                </div>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </div>
           </div>
-        </div>
-        <div className="homeItem lastTenData">
-          <h3>
-            <FormattedMessage id="transactionReportNearly10Days" />
-          </h3>
-          <Table
-            dataSource={this.state.tradeData}
-            columns={tradeColumns}
-            size="middle"
-            pagination={false}
-          />
-        </div>
+          <div className="homeItem lastTenData">
+            <h3>
+              <FormattedMessage id="transactionReportNearly10Days" />
+            </h3>
+            <Table
+              dataSource={this.state.tradeData}
+              columns={tradeColumns}
+              size="middle"
+              pagination={false}
+            />
+          </div>
 
-        <div className="homeItem lastTenData">
-          <h3>
-            <FormattedMessage id="transactionTrendNearly10Days" />
-          </h3>
-          <WMChart
-            title=""
-            startTime={new Date()}
-            endTime={new Date()}
-            dataDesc={[
-              { title: 'Order number', key: 'orderCount' },
-              { title: 'Order amount', key: 'orderAmt' },
-              { title: 'Number of payment orders', key: 'payOrderCount' },
-              { title: 'Payment amount', key: 'payOrderAmt' }
-            ]}
-            radioClickBack={() => {}}
-            content={this.state.flowTrendData}
-            rangeVisible={false}
-          />
-        </div>
+          <div className="homeItem lastTenData">
+            <h3>
+              <FormattedMessage id="transactionTrendNearly10Days" />
+            </h3>
+            <WMChart
+              title=""
+              startTime={new Date()}
+              endTime={new Date()}
+              dataDesc={[
+                { title: 'Order number', key: 'orderCount' },
+                { title: 'Order amount', key: 'orderAmt' },
+                { title: 'Number of payment orders', key: 'payOrderCount' },
+                { title: 'Payment amount', key: 'payOrderAmt' }
+              ]}
+              radioClickBack={() => {}}
+              content={this.state.flowTrendData}
+              rangeVisible={false}
+            />
+          </div>
 
-        <div className="homeItem lastTenData">
-          <h3>
-            <FormattedMessage id="consumerReportNearly10Days" />
-          </h3>
-          <Table
-            dataSource={this.state.customerData}
-            columns={customerColumns}
-            size="middle"
-            pagination={false}
-          />
-        </div>
-        <div className="homeItem lastTenData">
-          <h3>
-            <FormattedMessage id="consumerTrendNearly10Days" />
-          </h3>
-          <WMChart
-            title=""
-            startTime={new Date()}
-            endTime={new Date()}
-            dataDesc={[
-              { title: 'Total consumer number', key: 'cusAllCount' },
-              { title: 'New consumer  number', key: 'cusDayGrowthCount' },
-              {
-                title: 'Registered consumers number',
-                key: 'cusDayRegisterCount'
-              }
-            ]}
-            radioClickBack={() => {}}
-            content={this.state.customerGrowTrendData}
-            rangeVisible={false}
-          />
+          <div className="homeItem lastTenData">
+            <h3>
+              <FormattedMessage id="consumerReportNearly10Days" />
+            </h3>
+            <Table
+              dataSource={this.state.customerData}
+              columns={customerColumns}
+              size="middle"
+              pagination={false}
+            />
+          </div>
+          <div className="homeItem lastTenData">
+            <h3>
+              <FormattedMessage id="consumerTrendNearly10Days" />
+            </h3>
+            <WMChart
+              title=""
+              startTime={new Date()}
+              endTime={new Date()}
+              dataDesc={[
+                { title: 'Total active consumer number', key: 'cusAllCount' },
+                {
+                  title: 'New active consumer  number',
+                  key: 'cusDayGrowthCount'
+                },
+                {
+                  title: 'Registered active consumers number',
+                  key: 'cusDayRegisterCount'
+                }
+              ]}
+              radioClickBack={() => {}}
+              content={this.state.customerGrowTrendData}
+              rangeVisible={false}
+            />
+          </div>
         </div>
       </div>
     );

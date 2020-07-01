@@ -35,9 +35,7 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
     this.dispatch('loading:start');
     const { res } = await webapi.fetchEmployList({
       ...param,
@@ -82,10 +80,7 @@ export default class AppStore extends Store {
         isMaster: isMaster
       });
       const parentId = departmentVOList.get(0)
-        ? departmentVOList
-            .get(0)
-            .get('departmentId')
-            .toString()
+        ? departmentVOList.get(0).get('departmentId').toString()
         : '';
       //默认展开第一个父部门极其下面的子部门
       if (parentId) {
@@ -113,10 +108,7 @@ export default class AppStore extends Store {
     ids.push(parentId);
     //筛选出目标的子部门
     const target = list.filter((vo) =>
-      vo
-        .get('parentDepartmentIds')
-        .split('|')
-        .includes(parentId)
+      vo.get('parentDepartmentIds').split('|').includes(parentId)
     );
     if (target.size > 0) {
       return target.reduce((pre, current) => {
@@ -164,7 +156,7 @@ export default class AppStore extends Store {
   onBatchDissmiss = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.batchDimissionEmployees(selected.toJS());
@@ -182,7 +174,7 @@ export default class AppStore extends Store {
   onBatchSetEmployee = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.batchSetEmployee(selected.toJS());
@@ -202,7 +194,7 @@ export default class AppStore extends Store {
   onBatchDelete = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.warn('请选择要操作的行');
+      message.warn('Please select the row to operate');
       return;
     }
     const { res } = await webapi.deleteEmployeeByIds(selected.toJS());
@@ -217,7 +209,7 @@ export default class AppStore extends Store {
   onBatchEnable = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     const { res } = await webapi.enableEmployee(selected.toJS());
@@ -280,7 +272,7 @@ export default class AppStore extends Store {
   onBatchDisable = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     let accountDisableReason = this.state().get('reason');
@@ -437,11 +429,11 @@ export default class AppStore extends Store {
     const selected = this.state().get('selected');
     const departmentIds = this.state().get('departmentIds');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     if (departmentIds.length == 0) {
-      message.error('请选择部门');
+      message.error('Please select a department');
       return;
     }
     const { res } = await webapi.adjustDepartment({
@@ -469,7 +461,7 @@ export default class AppStore extends Store {
     const selected = this.state().get('selected');
     const targetEmployeeId = this.state().get('targetEmployeeId');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     if (targetEmployeeId.length == 0) {
@@ -495,7 +487,7 @@ export default class AppStore extends Store {
   onBatchActivateAccount = async () => {
     const selected = this.state().get('selected');
     if (selected.isEmpty()) {
-      message.error('请选择要操作的行');
+      message.error('Please select the row to operate');
       return;
     }
     //交接

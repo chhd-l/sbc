@@ -269,8 +269,8 @@ export default class CateList extends React.Component<any, any> {
   _delete = (goodsId: string) => {
     const { onSpuDelete } = this.props.relaxProps;
     confirm({
-      title: '提示',
-      content: '您确认要删除这个商品吗？',
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this product?',
       onOk() {
         onSpuDelete([goodsId]);
       }
@@ -394,7 +394,7 @@ export default class CateList extends React.Component<any, any> {
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>规格：</label>
+                <label style={styles.label}>Specification：</label>
                 <span style={styles.textCon}>
                   {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
                 </span>
@@ -406,25 +406,25 @@ export default class CateList extends React.Component<any, any> {
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>市场价：</label>
+                <label style={styles.label}>Market price：</label>
                 {goods.get('marketPrice')
                   ? goods.get('marketPrice').toFixed(2)
                   : '0.0'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>上下架：</label>
+                <label style={styles.label}>On/Off shelve：</label>
                 {goods.get('addedFlag') == 0 ? '下架' : '上架'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>条形码：</label>
+                <label style={styles.label}>Bar code：</label>
                 {goods.get('goodsInfoBarcode')
                   ? goods.get('goodsInfoBarcode')
                   : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>库存：</label>
+                <label style={styles.label}>In stock：</label>
                 {goods.get('stock')}
               </div>
             </div>

@@ -58,7 +58,8 @@ export default class EditForm extends React.Component<any, any> {
       changePassword: false,
       value: undefined,
       clinicsLites: [],
-      selectRoleIds: ''
+      selectRoleIds: '',
+      prescriberIds: {}
     };
     this._store = ctx['_plume$Store'];
     this.getClinicsLites();
@@ -87,6 +88,15 @@ export default class EditForm extends React.Component<any, any> {
         selectRoleIds: ''
       });
     }
+    this.setState({
+      prescriberIds: {
+        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
+          ? employeeForm.get('prescriberIds')
+          : employeeForm.get('prescriberIds')
+          ? employeeForm.get('prescriberIds').toJS()
+          : []
+      }
+    });
   }
 
   render() {
@@ -118,7 +128,6 @@ export default class EditForm extends React.Component<any, any> {
 
     let roleIdList = {};
     let isEmployee = {};
-    let prescriberIds = {};
     //表单控件是否禁用
     const editDisable = _state.get('editDisable') && _state.get('edit');
     //如果是编辑状态
@@ -171,25 +180,6 @@ export default class EditForm extends React.Component<any, any> {
       //取最新的roleIds集合与该员工下面挂的roleIds的交集，防止有的角色已经删除仍然显示的情况
       roleIdList = {
         initialValue: employeeForm.get('roleIds')
-          ? employeeForm
-              .get('roleIds')
-              .split(',')
-              .reduce((pre, cur) => {
-                let current = Number(cur);
-                if (roleIds.toJS().includes(current)) {
-                  pre.push(cur);
-                }
-                return pre;
-              }, [])
-          : []
-      };
-
-      prescriberIds = {
-        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
-          ? employeeForm.get('prescriberIds')
-          : employeeForm.get('prescriberIds')
-          ? employeeForm.get('prescriberIds').toJS()
-          : []
       };
     }
     return (
@@ -206,12 +196,12 @@ export default class EditForm extends React.Component<any, any> {
                 {
                   required: true,
                   whitespace: true,
-                  message: '请填写员工姓名'
+                  message: 'Please input user name'
                 },
                 {
                   min: 1,
                   max: 20,
-                  message: '1-20个字符'
+                  message: '1-20 characters'
                 }
                 // {
                 //   validator: (rule, value, callback) => {
@@ -226,7 +216,12 @@ export default class EditForm extends React.Component<any, any> {
                 //   }
                 // }
               ]
-            })(<Input disabled={editDisable} placeholder="仅限1-20位字符" />)}
+            })(
+              <Input
+                disabled={editDisable}
+                placeholder="Only 1-20 characters"
+              />
+            )}
           </FormItem>
 
           <FormItem
@@ -238,10 +233,10 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('email', {
               ...email,
               rules: [
-                { required: true, message: '员工邮箱不能为空' },
+                { required: true, message: 'Email is required' },
                 {
                   pattern: ValidConst.email,
-                  message: '请输入正确的邮箱'
+                  message: 'Please enter your vaild email'
                 },
                 {
                   validator: (rule, value, callback) => {
@@ -249,14 +244,14 @@ export default class EditForm extends React.Component<any, any> {
                       rule,
                       value,
                       callback,
-                      '邮箱',
+                      'Email',
                       0,
                       50
                     );
                   }
                 }
               ]
-            })(<Input disabled={editDisable} placeholder="仅限0-50位字符" />)}
+            })(<Input disabled={editDisable} placeholder="0-50 characters" />)}
           </FormItem>
 
           <FormItem
@@ -268,7 +263,7 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('employeeMobile', {
               ...employeeMobile,
               rules: [
-                { required: false, message: '员工手机不能为空' }
+                // { required: false, message: 'employee Phone' }
                 // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
               ]
             })(<Input disabled={editDisable} />)}
@@ -287,14 +282,14 @@ export default class EditForm extends React.Component<any, any> {
                       rule,
                       value,
                       callback,
-                      '工号',
+                      'User No',
                       0,
                       20
                     );
                   }
                 }
               ]
-            })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
+            })(<Input disabled={editDisable} placeholder="0-20 characters" />)}
           </FormItem>
 
           {/* <FormItem
@@ -334,7 +329,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
                 allowClear={true}
                 format={Const.DAY_FORMAT}
-                placeholder={'生日'}
+                placeholder={'birthday'}
               />
             )}
           </FormItem>
@@ -352,13 +347,14 @@ export default class EditForm extends React.Component<any, any> {
                 //onChange={(e) => console.log(e.target.value)}
               >
                 <Radio value={0}>
-                  <span style={styles.darkColor}>保密</span>
+                  <span style={styles.darkColor}>Secret</span>
                 </Radio>
+                <br />
                 <Radio value={1}>
-                  <span style={styles.darkColor}>男</span>
+                  <span style={styles.darkColor}>Male</span>
                 </Radio>
                 <Radio value={2}>
-                  <span style={styles.darkColor}>女</span>
+                  <span style={styles.darkColor}>Female</span>
                 </Radio>
               </RadioGroup>
             )}
@@ -381,7 +377,7 @@ export default class EditForm extends React.Component<any, any> {
                 style={{ width: '100%' }}
                 value={departmentIdList}
                 dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
-                placeholder="请选择，可多选"
+                placeholder="Please select, Multiple choice"
                 allowClear
                 multiple
                 treeDefaultExpandAll
@@ -396,14 +392,22 @@ export default class EditForm extends React.Component<any, any> {
             {...formItemLayout}
             label={<FormattedMessage id="systemRole" />}
             hasFeedback
+            required={true}
           >
             {getFieldDecorator('roleIdList', {
-              ...roleIdList
+              ...roleIdList,
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please select Role'
+                }
+              ]
             })(
               <Select
-                placeholder="请选择，可多选"
+                placeholder="Please choose"
                 disabled={editDisable}
-                mode="multiple"
+                // mode="multiple"
                 showSearch
                 onChange={this.roleChange}
                 filterOption={(input, option: { props }) =>
@@ -430,7 +434,7 @@ export default class EditForm extends React.Component<any, any> {
               hasFeedback
             >
               {getFieldDecorator('prescriberIds', {
-                ...prescriberIds,
+                ...this.state.prescriberIds,
                 rules: [
                   { required: true, message: 'Please Select Prescribers!' }
                 ]
@@ -529,7 +533,7 @@ export default class EditForm extends React.Component<any, any> {
             </FormItem>
           ) : null}
 
-          {this.state.changePassword || !_state.get('edit') ? (
+          {this.state.changePassword ? (
             <div>
               <FormItem
                 {...formItemLayout}
@@ -539,10 +543,10 @@ export default class EditForm extends React.Component<any, any> {
               >
                 {getFieldDecorator('accountPassword', {
                   rules: [
-                    { required: true, message: '请输入密码' },
+                    { required: true, message: 'Please enter the password' },
                     {
                       pattern: ValidConst.password,
-                      message: '密码为6-16位字母或数字密码'
+                      message: 'Password is 6-16 alphanumeric password'
                     }
                   ]
                 })(<Input type="password" />)}
@@ -556,7 +560,10 @@ export default class EditForm extends React.Component<any, any> {
               >
                 {getFieldDecorator('accountPasswordConfirm', {
                   rules: [
-                    { required: true, message: '请输入确认密码' },
+                    {
+                      required: true,
+                      message: 'Please enter the confirmation password'
+                    },
                     { validator: this.checkConfirmPassword }
                   ]
                 })(<Input type="password" />)}
@@ -614,15 +621,18 @@ export default class EditForm extends React.Component<any, any> {
     return this.state.clinicsLites.map((option) => {
       return (
         <Option value={option.prescriberId} key={option.prescriberId}>
-          {option.prescriberName}
+          {option.prescriberId}-{option.prescriberName}
         </Option>
       );
     });
   }
   roleChange = (value) => {
-    let roleStringIds = value.join(',');
+    // let roleStringIds = value.join(',');
     this.setState({
-      selectRoleIds: roleStringIds
+      selectRoleIds: value,
+      prescriberIds: {
+        initialValue: []
+      }
     });
   };
 
@@ -637,7 +647,7 @@ export default class EditForm extends React.Component<any, any> {
 
   checkConfirmPassword = (_rule, value, callback) => {
     if (value != this.props.form.getFieldValue('accountPassword')) {
-      callback(new Error('重复密码不一致'));
+      callback(new Error('Repeated passwords are inconsistent'));
       return;
     }
 

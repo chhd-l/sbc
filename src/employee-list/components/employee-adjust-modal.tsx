@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 
-import { Modal, Form, Input,Alert,TreeSelect } from 'antd';
+import { Modal, Form, Input, Alert, TreeSelect } from 'antd';
 import { noop, QMMethod } from 'qmkit';
 import { IList } from 'typings/globalType';
 
@@ -21,14 +21,13 @@ const formItemLayout = {
   }
 };
 
-
 @Relax
 export default class EmployeeAdjustModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
-    this.state={
-      value:undefined
-    }
+    this.state = {
+      value: undefined
+    };
   }
 
   props: {
@@ -43,11 +42,11 @@ export default class EmployeeAdjustModal extends React.Component<any, any> {
       onDisable: Function;
       //批量禁用
       onBatchDisable: Function;
-      toggleAdjustModal:Function;
-      departTree:IList;
-      setTargetDeparts:Function;
-      departmentIds:any;
-      ajustDepart:Function
+      toggleAdjustModal: Function;
+      departTree: IList;
+      setTargetDeparts: Function;
+      departmentIds: any;
+      ajustDepart: Function;
     };
   };
 
@@ -64,11 +63,11 @@ export default class EmployeeAdjustModal extends React.Component<any, any> {
     onDisable: noop,
     //批量禁用
     onBatchDisable: noop,
-    toggleAdjustModal:noop,
-    departTree:'departTree',
-    setTargetDeparts:noop,
-    departmentIds:'departmentIds',
-    ajustDepart:noop
+    toggleAdjustModal: noop,
+    departTree: 'departTree',
+    setTargetDeparts: noop,
+    departmentIds: 'departmentIds',
+    ajustDepart: noop
   };
 
   render() {
@@ -87,82 +86,88 @@ export default class EmployeeAdjustModal extends React.Component<any, any> {
       return null;
     }
     return (
-       <Modal  maskClosable={false}
-        title="调整部门"         
+      <Modal
+        maskClosable={false}
+        title="Adjustment department"
         visible={adjustmodalVisible}
         onCancel={() => toggleAdjustModal()}
         onOk={this._handleOk}
       >
-        <Alert message="所属员工将归属于您设置的部门" 
-        type="info"/>
-        <Form>         
-          <FormItem label="归属部门" required={true} style={{marginTop:16}} {...formItemLayout}>          
+        <Alert
+          message="The employees will belong to the department you set up"
+          type="info"
+        />
+        <Form>
+          <FormItem
+            label="Attribution Department"
+            required={true}
+            style={{ marginTop: 16 }}
+            {...formItemLayout}
+          >
             {getFieldDecorator('connectEmployee', {
               initialValue: connectEmployee,
-              rules: [
-                { required: true, message: '请选择部门' },            
-              ]
-            })(     
+              rules: [{ required: true, message: 'Please select a department' }]
+            })(
               <TreeSelect
-              showSearch={false}
-              style={{ width: '100%' }}
-            
-              value={this.state.value}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择部门"
-              allowClear
-              multiple
-              treeDefaultExpandAll
-              onChange={this.onChange}
-            >
-              {this._loop(departTree)}                 
-            </TreeSelect>         
-            )}            
+                showSearch={false}
+                style={{ width: '100%' }}
+                value={this.state.value}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="Please select a department"
+                allowClear
+                multiple
+                treeDefaultExpandAll
+                onChange={this.onChange}
+              >
+                {this._loop(departTree)}
+              </TreeSelect>
+            )}
           </FormItem>
         </Form>
       </Modal>
     );
   }
 
-  _loop=(allDeparts)=>{     
-    return allDeparts.map(dep=>{
+  _loop = (allDeparts) => {
+    return allDeparts.map((dep) => {
       //子部门
-      if(dep.get('children') && dep.get('children').size >0 ){
+      if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-           <TreeNode value={dep.get('departmentId')}              
-               title={dep.get('departmentName')}
-            >             
-              {this._loop(childDeparts)}
-           </TreeNode>
-        )
+          <TreeNode
+            value={dep.get('departmentId')}
+            title={dep.get('departmentName')}
+          >
+            {this._loop(childDeparts)}
+          </TreeNode>
+        );
       }
       return (
-        <TreeNode          
-          value={dep.get('departmentId')}        
+        <TreeNode
+          value={dep.get('departmentId')}
           title={dep.get('departmentName')}
         />
       );
-    })
-   }
+    });
+  };
 
-   onChange=(ids,value)=>{          
-     this.setState({value:value})
-     //存放目标部门IDlist
-     const { setTargetDeparts } = this.props.relaxProps;
-     setTargetDeparts(ids)
-   }
+  onChange = (ids, value) => {
+    this.setState({ value: value });
+    //存放目标部门IDlist
+    const { setTargetDeparts } = this.props.relaxProps;
+    setTargetDeparts(ids);
+  };
 
-   _handleOk=()=>{
-     const { departmentIds,ajustDepart } = this.props.relaxProps;
-     if(departmentIds.length==0 || departmentIds.size==0){
-        this.props.form.setFieldsValue({
-          connectEmployee: {
-            errors: [new Error('请选择部门')]
-          }
-        });        
-     }else{
+  _handleOk = () => {
+    const { departmentIds, ajustDepart } = this.props.relaxProps;
+    if (departmentIds.length == 0 || departmentIds.size == 0) {
+      this.props.form.setFieldsValue({
+        connectEmployee: {
+          errors: [new Error('Please select a department')]
+        }
+      });
+    } else {
       ajustDepart();
-     }
-   }
+    }
+  };
 }

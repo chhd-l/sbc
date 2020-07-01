@@ -441,7 +441,7 @@ export default class AppStore extends Store {
       return;
     }
     if (departmentIds.length == 0) {
-      message.error('请选择部门');
+      message.error('Please select a department');
       return;
     }
     const { res } = await webapi.adjustDepartment({

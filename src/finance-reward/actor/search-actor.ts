@@ -8,10 +8,12 @@ export default class SearchActor extends Actor {
     return {
       searchForm: {
         customerName: '',
-        orderNo: '',
+        prescriberID: '',
+        prescriberName: '',
         payOrderStatus: null,
         invoiceState: null
-      }
+      },
+      searchList: ''
     };
   }
 
@@ -25,5 +27,9 @@ export default class SearchActor extends Actor {
   @Action('change:searchForm')
   searchForm(state: IMap, { field, value }) {
     return state.setIn(['searchForm', field], value);
+  }
+  @Action('search:searchList')
+  searchList(state: IMap, { field, value }) {
+    return state.setIn(['searchList', field], value);
   }
 }

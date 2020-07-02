@@ -7,12 +7,24 @@ type TResult = {
 };
 
 /**
+ * reward
+ * @param param
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function fetchReward(param = {}) {
+  return Fetch<TResult>('/finance/settlement/page', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+/**
  * 分页查询订单开票
  * @param param
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchOrderInovices(param = {}) {
-  return Fetch<TResult>(`./account/orderInvoices`, {
+  return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -42,7 +54,7 @@ export function fetchOrderInvoiceDetail(orderNo: string) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function createOrderInvoice(orderInvoiceForm: {}) {
-  return Fetch(`/account/orderInvoice`, {
+  return Fetch('/account/orderInvoice', {
     method: 'POST',
     body: JSON.stringify(orderInvoiceForm)
   });
@@ -54,7 +66,7 @@ export function createOrderInvoice(orderInvoiceForm: {}) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function openOrderInvocies(orderInvoiceIds: string[]) {
-  return Fetch(`/account/orderInvoiceState`, {
+  return Fetch('/account/orderInvoiceState', {
     method: 'POST',
     body: JSON.stringify({
       orderInvoiceIds: orderInvoiceIds
@@ -75,7 +87,7 @@ export function destoryOrderInvoice(invoiceId: string) {
 }
 
 export function exportOrderInvoice(orderInvoiceIds: string[]) {
-  return Fetch(`/account/orderInvoices/export`, {
+  return Fetch('/account/orderInvoices/export', {
     method: 'POST',
     body: JSON.stringify({
       orderInvoiceIds: orderInvoiceIds
@@ -117,5 +129,5 @@ export const fetchInvoiceView = (invoiceId: string) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const invoiceConfig = () => {
-  return Fetch(`/customer/invoiceConfig`);
+  return Fetch('/customer/invoiceConfig');
 };

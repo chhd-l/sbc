@@ -536,6 +536,7 @@ export default {
   'freight': 'Freight',
   //财务
   //Finance Reward
+  'Reward': 'Reward',
   'orderInvoice': 'Order Invoice',
   'PrescriberID': 'Prescriber ID',
   'PrescriberName': 'Prescriber Name',

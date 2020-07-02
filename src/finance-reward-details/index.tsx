@@ -40,19 +40,19 @@ export default class BillingDetails extends React.Component<any, any> {
         style={{
           overflowY: 'auto',
           height: 'calc(100vh - 64px)',
-          margin: -10,
-          padding: 10,
+          /*margin: -10,
+          padding: 10,*/
           position: 'relative'
         }}
       >
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            {<FormattedMessage id="rewardDetails"/>}
+            {<FormattedMessage id="rewardDetails" />}
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title={<FormattedMessage id="rewardDetails"/>}/>
+          <Headline title={<FormattedMessage id="rewardDetails" />} />
           <OptionDiv>
             <Tooltip
               overlayStyle={{
@@ -63,19 +63,26 @@ export default class BillingDetails extends React.Component<any, any> {
               title={this._renderTitle}
             >
               <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o"/>
-                &nbsp;&nbsp;{<FormattedMessage id="RewardRules"/>}
+                <Icon type="question-circle-o" />
+                &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
               </a>
             </Tooltip>
           </OptionDiv>
-          <Detail/>
-          <SearchForm/>
+          <Detail />
+          <SearchForm />
           <div className="chart space-between">
             <div className="chartDetails1">
               <div className="chartDetailsList flex-content">
-                <div className="btn">Reward amount <br/> $ 4000</div>
-                <div className="btn">Order amount <br/> $ 4000</div>
-                <div className="btn">Order quantity<br/> 12000</div>
+                <div className="btn">
+                  Reward amount <br /> $ 4000
+                </div>
+                <div className="btn">
+                  Order amount <br /> $ 4000
+                </div>
+                <div className="btn">
+                  Order quantity
+                  <br /> 12000
+                </div>
               </div>
             </div>
             <div className="chartDetails2">
@@ -89,8 +96,7 @@ export default class BillingDetails extends React.Component<any, any> {
                   { title: 'Number of payment orders', key: 'payOrderCount' },
                   { title: 'Payment amount', key: 'payOrderAmt' }
                 ]}
-                radioClickBack={() => {
-                }}
+                radioClickBack={() => {}}
                 content={this.state.flowTrendData}
                 rangeVisible={false}
               />
@@ -107,16 +113,15 @@ export default class BillingDetails extends React.Component<any, any> {
                   { title: 'Number of payment orders', key: 'payOrderCount' },
                   { title: 'Payment amount', key: 'payOrderAmt' }
                 ]}
-                radioClickBack={() => {
-                }}
+                radioClickBack={() => {}}
                 content={this.state.flowTrendData}
                 rangeVisible={false}
               />
             </div>
           </div>
 
-          <List settleId={this.props.match.params.settleId}/>
-          <Bottom/>
+          <List settleId={this.props.match.params.settleId} />
+          <Bottom />
         </div>
       </div>
     );
@@ -126,10 +131,10 @@ export default class BillingDetails extends React.Component<any, any> {
     return (
       <div>
         <div>
-          <p style={{ textAlign: 'center', fontSize: '18px' }}>
+          <div style={{ textAlign: 'center', fontSize: '18px' }}>
             Reward rules
-          </p>
-          <br/>
+          </div>
+          <br />
           <p></p>
         </div>
       </div>

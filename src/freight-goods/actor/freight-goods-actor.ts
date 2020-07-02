@@ -34,7 +34,10 @@ export default class FreightGoodsActor extends Actor {
           // 配送地id(逗号分隔)
           destinationArea: [],
           // 配送地名称(逗号分隔)
-          destinationAreaName: ['未被划分的配送地区自动归于默认运费'],
+          //destinationAreaName: ['未被划分的配送地区自动归于默认运费'],
+          destinationAreaName: [
+            'Las áreas de distribución que no están divididas se asignan automáticamente a la tarifa de envío predeterminada'
+          ],
           // 首件/重/体积
           freightStartNum: '',
           // 对应于首件/重/体积的起步价

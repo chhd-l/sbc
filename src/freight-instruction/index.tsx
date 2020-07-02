@@ -25,70 +25,121 @@ export default class FreightInstruction extends React.Component<any, any> {
   render() {
     return (
       <Containerp>
-        <h1>运费算法</h1>
+        <h1>Freight algorithm</h1>
         <p>
-          订单改价不影响运费计算<br />
-          单品运费包邮条件的判断、基于商品所有营销之后的金额判断<br />
-          店铺运费包邮条件的判断，基于商品所有营销之后的金额判断<br />
-          一笔订单中使用相同单品运费模板的所有商品件数、重量、体积叠加后再计算
+          Order price change does not affect freight calculation
+          <br />
+          Judgment of shipping conditions for single product shipping, based on
+          the amount of all merchandise after marketing
+          <br />
+          Judgment of the shipping and shipping conditions of the store, based
+          on the amount of all merchandise after marketing
+          <br />
+          The number, weight, and volume of all products using the same single
+          product shipping template in one order are calculated after
+          superposition
         </p>
 
-        <h3>当以单品运费生效时</h3>
+        <h3>When the single item freight is effective</h3>
         <p>
-          订单包含多种运费模板时，取所有商品中，首件/首重/首体积金额最大的运费模板，计算使用该模板的所有商品运费，使用其他模板的商品都按照各自模板的续件/续重/续体积金额来计算，再求和。
+          When the order contains multiple shipping templates, take the shipping
+          template with the largest amount of the first item/first weight/first
+          volume of all products, calculate the shipping cost of all products
+          using the template, and use the other templates for the products
+          according to the continuation/continuation of the respective template
+          The amount of re/continuous volume is calculated and then summed.
           <br />
-          注意：
+          note:
         </p>
         <p className="ml28">
-          计算时要排除包邮商品 <br />
-          计算续费时，续件/续重/续体积数量需要向上取整
+          To exclude the shipping product when calculating <br />
+          When calculating the renewal, the number of renewal/renewing/renewing
+          volume needs to be rounded up
         </p>
 
         <p>
-          例：<br />
-          一笔订单中包含：
+          例：
+          <br />
+          An order contains:
         </p>
         <p className="ml28">
-          商品A10件（重量0.5KG、体积0.6m³）关联运费模板1（按重量、默认地区）：首重0.5KG,10元，续重1Kg
-          ,5元（不足1kg，按1kg计算）
+          A10 pieces of goods (weight 0.5KG, volume 0.6m³) associated freight
+          template 1 (by weight, default region) : first weight 0.5KG, 10 yuan,
+          continued weight 1Kg, 5 yuan (less than 1kg, calculated by 1kg)
           <br />
-          商品B10件（重量0.5KG、体积0.6m³）关联运费模板2（按体积、默认地区）：首体积0.5m³,12元，续体积0.5m³
-          ,6元（不足0.5m³，按0.5m³计算）
+          Commodity B10 pieces (weight 0.5KG, volume 0.6m³) associated freight
+          template 2 (by volume, default area) : first volume 0.5m³, 12 yuan,
+          continued volume 0.5m³, 6 yuan (less than 0.5m³, calculated by 0.5m³)
           <br />
-          商品C10件（重量0.5KG、体积0.6m³）关联运费模板3 ( 按件数、默认地区 )
-          ：首件1件，5元，续件1件，4元
+          Commodity C10 pieces (weight 0.5KG, volume 0.6m³) associated freight
+          template 3 (by number of pieces, default region) : 1 for the first
+          piece, 5 yuan, 1 for the continuation, 4 yuan
           <br />
-          商品D10件（重量0.5KG、体积0.6m³）关联运费模板4（按件数、默认地区）：首件1件，4元，续件1件，4元，江浙沪地区，购买满1件包邮
+          Product D10 pieces (weight 0.5KG, volume 0.6m³) associated freight
+          template 4 (by number of pieces, default region) : 1 for the first
+          item, 4 yuan, 1 for the continuation, 4 yuan, Jiangsu, Zhejiang and
+          Shanghai area, purchase of 1 free shipping
         </p>
 
-        <p>计算过程为：</p>
+        <p>The calculation process is：</p>
         <p className="ml28">
-          1、对比收货地址，获取当前商品使用的运费模板相关地区的运费设置、包邮条件设置
+          1、Compare the shipping address and get the shipping cost setting and
+          shipping condition setting in the relevant shipping template of the
+          current product
           <br />
-          2、排除符合包邮条件的商品D，比较得知商品B首价较高
+          2、Exclude the product D that meets the shipping conditions, and find
+          out that the first price of product B is higher
           <br />
-          3、商品B运费=12+（0.6×10-0.5)÷0.5（向上取整）×6=78
+          3、Item B freight=12+（0.6×10-0.5)÷0.5（Rounded up）×6=78
           <br />
-          商品A运费=（0.5×10）÷1（向上取整）×5=25<br /> 商品C运费=10×4=40<br />商品D运费=0<br />总运费=78+25+40=143
+          Goods A freight=（0.5×10）÷1（Rounded up）×5=25
+          <br /> Goods C freight=10×4=40
+          <br />
+          Goods D freight=0
+          <br />
+          Total freight=78+25+40=143
         </p>
 
         <p>
-          如何判断商品是否包邮<br />
-          例如：商品A设置的基础运费是10元，每增加一件，运费加2元，满3件包邮
+          How to judge whether the product is free shipping
           <br />
-          若：一笔订单中仅有商品A，A满3件则不参与计算运费，不满3件需参与计算
+          For example: the basic freight set for commodity A is 10 yuan, and for
+          each additional piece, the freight is 2 yuan, and the free shipping is
+          over 3 pieces
           <br />
-          若：一笔订单中商品B与A使用的运费模板一致，A\B各买2件，共4件，满足包邮条件。
+          If: There is only product A in an order. If A is over 3 items, it will
+          not be included in the freight calculation.
+          <br />
+          If: The freight template used for goods B and A in an order is the
+          same, A\B buys 2 pieces each, a total of 4 pieces, which meets the
+          shipping conditions.
         </p>
 
-        <h3>当以店铺运费生效时</h3>
+        <h3>When the shipping fee is effective</h3>
         <p>
-          订单只能使用一个运费模板，收取固定运费or判断是否满足包邮条件<br />例：<br />一笔订单包含：<br />商品ABCDEFGHI，实付198.00元<br />收货地址为江苏省南京市雨花台区
+          Only one shipping template can be used for the order, and a fixed
+          shipping fee is charged or to determine whether the shipping
+          conditions are met
           <br />
-          若：南京市生效的店铺运费为每笔订单不满150元，运费10元，则该笔订单运费为0元
+          example:
           <br />
-          若：南京市生效的店铺运费为每笔订单不满200元，运费10元，则该笔订单运费为10元
-          <br />若：南京市生效的店铺运费为固定运费10元，则该笔订单运费为10元
+          An order contains:
+          <br />
+          Commodity ABCDEFGHI, paid 198.00 yuan
+          <br />
+          The delivery address is Yuhuatai District, Nanjing City, Jiangsu
+          Province
+          <br />
+          If: The shipping cost of the shop in Nanjing is less than 150 yuan per
+          order and the shipping cost is 10 yuan, then the shipping cost for
+          this order is 0 yuan
+          <br />
+          If: The shipping cost of the shop in Nanjing is less than 200 yuan per
+          order and the shipping cost is 10 yuan, then the shipping cost for
+          this order is 10 yuan
+          <br />
+          If: The shipping fee of the store in Nanjing is fixed freight of 10
+          yuan, then the freight of this order is 10 yuan
         </p>
       </Containerp>
     );

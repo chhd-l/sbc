@@ -83,13 +83,16 @@ export default class DiscountLevels extends React.Component<any, any> {
           return (
             <div key={level.key ? level.key : level.discountLevelId}>
               <FormItem key={index}>
-                {getFieldDecorator(`level_${index}`, {})(
+                {getFieldDecorator(
+                  `level_${index}`,
+                  {}
+                )(
                   <HasError>
-                    <span>满&nbsp;</span>
+                    <span>Full&nbsp;</span>
                     <FormItem>
                       {getFieldDecorator(`level_rule_value_${index}`, {
                         rules: [
-                          { required: true, message: '必须输入规则' },
+                          { required: true, message: 'Must enter rules' },
                           {
                             validator: (_rule, value, callback) => {
                               if (value) {
@@ -98,14 +101,14 @@ export default class DiscountLevels extends React.Component<any, any> {
                                     !ValidConst.price.test(value) ||
                                     !(value < 100000000 && value > 0)
                                   ) {
-                                    callback('请输入0.01-99999999.99间的数字');
+                                    callback('0.01-99999999.99');
                                   }
                                 } else {
                                   if (
                                     !ValidConst.noZeroNumber.test(value) ||
                                     !(value < 10000 && value > 0)
                                   ) {
-                                    callback('请输入1-9999间的整数');
+                                    callback('1-9999');
                                   }
                                 }
                               }
@@ -120,9 +123,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                         <Input
                           style={{ width: 200 }}
                           placeholder={
-                            !isFullCount
-                              ? '0.01-99999999.99间的数字'
-                              : '1-9999间的数字'
+                            !isFullCount ? '0.01-99999999.99' : '1-9999'
                           }
                           onChange={(e) => {
                             this.ruleValueChange(index, e.target.value);
@@ -131,17 +132,23 @@ export default class DiscountLevels extends React.Component<any, any> {
                       )}
                     </FormItem>
                     <span>
-                      &nbsp;{!isFullCount ? '元' : '件'}，&nbsp;&nbsp;&nbsp;&nbsp;打&nbsp;&nbsp;
+                      &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                      ，&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;&nbsp;
                     </span>
                     <FormItem>
                       {getFieldDecorator(`level_rule_discount_${index}`, {
                         rules: [
-                          { required: true, message: '必须输入折扣' },
+                          {
+                            required: true,
+                            message: 'Discount must be entered'
+                          },
                           {
                             validator: (_rule, value, callback) => {
                               if (value) {
                                 if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                  callback('请输入0.1-9.9间的数字支持1位小数');
+                                  callback(
+                                    'The number between 0.1-9.9 supports one decimal'
+                                  );
                                 }
                               }
                               callback();
@@ -152,16 +159,18 @@ export default class DiscountLevels extends React.Component<any, any> {
                       })(
                         <Input
                           style={{ width: 200 }}
-                          placeholder={'0.1-9.9间的数字支持1位小数'}
+                          placeholder={
+                            'The number between 0.1-9.9 supports one decimal'
+                          }
                           onChange={(e) => {
                             this.onChange(index, 'discount', e.target.value);
                           }}
                         />
                       )}
                     </FormItem>
-                    <span>&nbsp;折&nbsp;&nbsp;</span>
+                    <span>&nbsp;discount&nbsp;&nbsp;</span>
                     {index > 0 && (
-                      <a onClick={() => this.deleteLevels(index)}>删除</a>
+                      <a onClick={() => this.deleteLevels(index)}>Delete</a>
                     )}
                   </HasError>
                 )}
@@ -173,9 +182,9 @@ export default class DiscountLevels extends React.Component<any, any> {
           onClick={this.addLevels}
           disabled={fullDiscountLevelList.length >= 5}
         >
-          添加多级促销
+          Add multi-level promotions
         </Button>
-        &nbsp;&nbsp;最多可设置5级
+        &nbsp;&nbsp;up to 5 levels can be set
       </div>
     );
   }

@@ -13,21 +13,21 @@ const { Column } = DataGrid;
 
 //默认每页展示的数量
 const SUB_TYPE = {
-  0: '满金额减',
-  1: '满数量减',
-  2: '满金额折',
-  3: '满数量折',
-  4: '满金额赠',
-  5: '满数量赠'
+  0: 'Full amount minus',
+  1: 'Full quantity minus',
+  2: 'Full amount discount',
+  3: 'Full quantity discount'
+  // 4: '满金额赠',
+  // 5: '满数量赠'
 };
 
 //默认每页展示的数量
 const MARKETING_STATUS = {
-  0: '全部',
-  1: '进行中',
-  2: '暂停中',
-  3: '未开始',
-  4: '已结束'
+  0: 'All',
+  1: 'In process',
+  2: 'Pause',
+  3: 'No start',
+  4: 'End'
 };
 
 @withRouter
@@ -92,11 +92,11 @@ export default class MarketingList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title="活动名称"
+          title="Activity Name"
           width="20%"
           key="marketingName"
           dataIndex="marketingName"
-          render={marketingName => {
+          render={(marketingName) => {
             return marketingName ? (
               <div className="line-two">{marketingName}</div>
             ) : (
@@ -106,19 +106,25 @@ export default class MarketingList extends React.Component<any, any> {
         />
 
         <Column
-          title="活动类型"
+          title="Activity Type"
           key="subType"
           width="10%"
           dataIndex="subType"
-          render={subType => {
+          render={(subType) => {
             return SUB_TYPE[subType];
           }}
         />
 
         <Column
-          title={<p>开始<br/>结束时间</p>}
+          title={
+            <p>
+              Start
+              <br />
+              End Time
+            </p>
+          }
           width="20%"
-          render={rowData => {
+          render={(rowData) => {
             return (
               <div>
                 {moment(rowData['beginTime'])
@@ -134,37 +140,37 @@ export default class MarketingList extends React.Component<any, any> {
         />
 
         <Column
-          title="目标客户"
+          title="Target consumer"
           width="25%"
           key="joinLevel"
           dataIndex="joinLevel"
-          render={joinLevel => {
+          render={(joinLevel) => {
             if (joinLevel == '-1') {
-              return '全平台客户';
+              return 'Full platform consumer';
             } else if (joinLevel == '0') {
-              return '全部等级';
+              return 'All Leave';
             } else if (joinLevel != '') {
               return (
                 <Tooltip
                   title={joinLevel
                     .split(',')
-                    .map(info =>
+                    .map((info) =>
                       customerLevels
-                        .filter(v => v.get('customerLevelId') == info)
+                        .filter((v) => v.get('customerLevelId') == info)
                         .getIn([0, 'customerLevelName'])
                     )
-                    .filter(v => v)
+                    .filter((v) => v)
                     .join('，')}
                 >
                   <div className="line-two">
                     {joinLevel
                       .split(',')
-                      .map(info =>
+                      .map((info) =>
                         customerLevels
-                          .filter(v => v.get('customerLevelId') == info)
+                          .filter((v) => v.get('customerLevelId') == info)
                           .getIn([0, 'customerLevelName'])
                       )
-                      .filter(v => v)
+                      .filter((v) => v)
                       .join('，')}
                   </div>
                 </Tooltip>
@@ -174,20 +180,20 @@ export default class MarketingList extends React.Component<any, any> {
         />
 
         <Column
-          title="活动状态"
+          title="Activity Status"
           width="10%"
           key="marketingStatus"
           dataIndex="marketingStatus"
-          render={marketingStatus => {
+          render={(marketingStatus) => {
             return <span>{MARKETING_STATUS[marketingStatus]}</span>;
           }}
         />
 
         <Column
-          title="操作"
+          title="Operation"
           width="15%"
           className={'operation-th'}
-          render={rowInfo => {
+          render={(rowInfo) => {
             let url = '';
             if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1) {
               url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
@@ -208,7 +214,7 @@ export default class MarketingList extends React.Component<any, any> {
                       })
                     }
                   >
-                    查看
+                    View
                   </a>
                 </AuthWrapper>
                 <AuthWrapper functionName="f_marketing_operate">
@@ -221,7 +227,7 @@ export default class MarketingList extends React.Component<any, any> {
                         })
                       }
                     >
-                      编辑
+                      Edit
                     </a>
                   )}
                   {rowInfo['marketingStatus'] == 2 && (
@@ -229,7 +235,7 @@ export default class MarketingList extends React.Component<any, any> {
                       href="javascript:void(0);"
                       onClick={() => onStart(rowInfo['marketingId'])}
                     >
-                      开启
+                      Open
                     </a>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
@@ -237,17 +243,17 @@ export default class MarketingList extends React.Component<any, any> {
                       href="javascript:void(0);"
                       onClick={() => onPause(rowInfo['marketingId'])}
                     >
-                      暂停
+                      Stop
                     </a>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
                     <Popconfirm
-                      title="确定删除该活动？"
+                      title="Are you sure to delete the activity?"
                       onConfirm={() => onDelete(rowInfo['marketingId'])}
-                      okText="确定"
-                      cancelText="取消"
+                      okText="Confirm"
+                      cancelText="Cancel"
                     >
-                      <a href="javascript:void(0);">删除</a>
+                      <a href="javascript:void(0);">Delete</a>
                     </Popconfirm>
                   )}
                 </AuthWrapper>

@@ -151,9 +151,10 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约品牌</H2>
+            <H2>Signed Brand</H2>
             <GreyText>
-              已签约{brandList ? brandList.length : 0}个品牌 最多可签约50个品牌
+              Signed {brandList ? brandList.length : 0} brands, Up to 50 brands
+              can be signed
             </GreyText>
           </div>
           <TableBox>
@@ -164,13 +165,13 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="品牌名称"
+                title="Brand Name"
                 dataIndex="brandName"
                 key="brandName"
                 width="15%"
               />
               <Column
-                title="品牌别名"
+                title="Brand Alias"
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -179,7 +180,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="品牌logo"
+                title="Brand Logo"
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -201,7 +202,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="授权文件"
+                title="Authorization Document"
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -277,8 +278,8 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>签约有效期</H2>
-            <GreyText>商家店铺有效期</GreyText>
+            <H2>Signing period</H2>
+            <GreyText>Merchant store validity</GreyText>
           </div>
           <RangePicker
             value={[
@@ -293,16 +294,16 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>商家类型</H2>
+            <H2>Merchant Type</H2>
           </div>
           <RadioGroup value={storeInfo.get('companyType')}>
             {storeInfo.get('companyType') == 0 ? (
               <Radio value={0} disabled>
-                自营商家
+                Self-employed
               </Radio>
             ) : (
               <Radio value={1} disabled>
-                第三方商家
+                Third-party Merchants
               </Radio>
             )}
           </RadioGroup>

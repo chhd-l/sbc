@@ -146,7 +146,7 @@ export default class AppStore extends Store {
           }
         }
         if (repeatNo.length > 0) {
-          message.error('客服账号 ' + repeatNo + ' 已存在');
+          message.error('Customer Service Account ' + repeatNo + ' Exsit');
           return;
         }
       }
@@ -163,7 +163,7 @@ export default class AppStore extends Store {
         message.error(res.message);
       }
     } else {
-      message.error('暂无操作权限');
+      message.error('No operation authority');
     }
   };
 }

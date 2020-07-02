@@ -124,10 +124,11 @@ export default class BrandModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            编辑签约品牌
+            Edit Contracted Brand
             <GreyText>
-              已签约{totalBrand}
-              个品牌，最多可签约50个品牌，上传授权文件申请通过率更高噢
+              Signed {totalBrand}
+              Brand，Up to 50 brands can be signed, and the approval rate for
+              uploading authorization documents is higher.
             </GreyText>
           </div>
         }
@@ -139,10 +140,10 @@ export default class BrandModal extends React.Component<any, any> {
         <Form layout="inline">
           <Row>
             <Col span={6} style={styles.selectBrand}>
-              <h3 style={{ marginBottom: 5 }}>选择平台品牌</h3>
+              <h3 style={{ marginBottom: 5 }}>Choose Platform Brand</h3>
               <div style={{ paddingRight: 10 }}>
                 <Search
-                  placeholder=" 请输入品牌名称"
+                  placeholder=" Please enter the brand name"
                   onChange={(e) => filterBrandName(e.target.value)}
                 />
                 <div
@@ -190,7 +191,7 @@ export default class BrandModal extends React.Component<any, any> {
                   <Column
                     title={
                       <div>
-                        <RedPoint>*</RedPoint>品牌名称
+                        <RedPoint>*</RedPoint>Brand Name
                       </div>
                     }
                     dataIndex="brandName"
@@ -200,8 +201,8 @@ export default class BrandModal extends React.Component<any, any> {
                   <Column
                     title={
                       <div>
-                        <p>品牌别名</p>
-                        <GreyText>别名或者英文名</GreyText>
+                        <p>Brand Alias</p>
+                        <GreyText>Alias or English name</GreyText>
                       </div>
                     }
                     dataIndex="nickName"
@@ -214,8 +215,8 @@ export default class BrandModal extends React.Component<any, any> {
                   <Column
                     title={
                       <div>
-                        <RedPoint>*</RedPoint>品牌Logo
-                        <Tooltip title="尺寸120px*50px,支持jpg、jpeg、png、gif，不超过50kb">
+                        <RedPoint>*</RedPoint>Brand Logo
+                        <Tooltip title="Size 120px*50px, support jpg, jpeg, png, gif, no more than 50kb">
                           &nbsp;
                           <Icon
                             type="question-circle-o"
@@ -239,8 +240,8 @@ export default class BrandModal extends React.Component<any, any> {
                     title={
                       <div>
                         <p>
-                          <RedPoint>*</RedPoint>授权文件
-                          <Tooltip title="支持jpg、jpeg、png、gif，单张不超过2M，最多上传2张">
+                          <RedPoint>*</RedPoint>Authorization Document
+                          <Tooltip title="Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 2 sheets">
                             &nbsp;
                             <Icon
                               type="question-circle-o"
@@ -248,7 +249,10 @@ export default class BrandModal extends React.Component<any, any> {
                             />
                           </Tooltip>
                         </p>
-                        <GreyText>商标注册证/受理书/品牌授权书</GreyText>
+                        <GreyText>
+                          Trademark registration certificate / acceptance letter
+                          / brand authorization letter
+                        </GreyText>
                       </div>
                     }
                     dataIndex="authorizePic"
@@ -295,7 +299,7 @@ export default class BrandModal extends React.Component<any, any> {
                     }}
                   />
                   <Column
-                    title="操作"
+                    title="Operating"
                     dataIndex="operation"
                     key="operation"
                     width="13%"
@@ -310,7 +314,7 @@ export default class BrandModal extends React.Component<any, any> {
                             )
                           }
                         >
-                          删除
+                          Delete
                         </a>
                       );
                     }}
@@ -330,10 +334,10 @@ export default class BrandModal extends React.Component<any, any> {
                     <Column
                       title={
                         <div>
-                          自定义品牌
+                          Custom Brand
                           {otherBrands.toJS().length == 0 ? (
                             <Button onClick={() => addNewOtherBrand()}>
-                              添加自定义品牌
+                              Add custom brand
                             </Button>
                           ) : null}
                         </div>
@@ -354,7 +358,8 @@ export default class BrandModal extends React.Component<any, any> {
                                   rules: [
                                     {
                                       pattern: ValidConst.noChar,
-                                      message: '不允许特殊字符'
+                                      message:
+                                        'Special characters are not allowed'
                                     },
                                     {
                                       validator: (rule, value, callback) =>
@@ -407,7 +412,7 @@ export default class BrandModal extends React.Component<any, any> {
                                           rule,
                                           value,
                                           callback,
-                                          '品牌别名',
+                                          'Brand alias',
                                           1,
                                           30
                                         );
@@ -560,7 +565,7 @@ export default class BrandModal extends React.Component<any, any> {
                                 )
                               }
                             >
-                              删除
+                              Delete
                             </a>
                           </div>
                         );
@@ -597,7 +602,7 @@ export default class BrandModal extends React.Component<any, any> {
   _editLogos = (info, contractId, brandId) => {
     const { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error('上传失败');
+      message.error('Upload Failed');
       return;
     }
     const { changeLogoImg } = this.props.relaxProps;
@@ -619,7 +624,7 @@ export default class BrandModal extends React.Component<any, any> {
   _editImages = (info, contractId, brandId, value) => {
     let { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error('上传失败');
+      message.error('Upload Failed');
       return;
     }
     const { changeBrandImg, changeOtherBrandImg } = this.props.relaxProps;
@@ -657,11 +662,11 @@ export default class BrandModal extends React.Component<any, any> {
       if (file.size <= 50 * 1024) {
         return true;
       } else {
-        message.error('文件大小不能超过50kb');
+        message.error('File size cannot exceed 50kb');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error');
       return false;
     }
   };
@@ -681,11 +686,11 @@ export default class BrandModal extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过2M');
+        message.error('File size cannot exceed 2M');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error');
       return false;
     }
   };
@@ -704,7 +709,7 @@ export default class BrandModal extends React.Component<any, any> {
       1
     ) {
       //非空自定义品牌和选中的平台品牌加起来小于1时
-      message.error('请至少添加一种签约品牌');
+      message.error('Please add at least one contracted brand');
     } else {
       //对非空的进行校验
       form.validateFields(null, (errs) => {
@@ -721,13 +726,13 @@ export default class BrandModal extends React.Component<any, any> {
   //检查授权文件
   checkAuthImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error('请上传品牌授权文件'));
+      callback(new Error('Please upload the brand authorization file'));
       return;
     }
     if (!value[0] || !value[0].url) {
       if (!value.fileList || value.fileList.length == 0) {
         if (!value.length) {
-          callback(new Error('请上传品牌授权文件'));
+          callback(new Error('Please upload the brand authorization file'));
           return;
         }
       }
@@ -738,7 +743,7 @@ export default class BrandModal extends React.Component<any, any> {
   //检查logo文件
   checkLogoImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error('请上传品牌Logo'));
+      callback(new Error('Please upload the brand logo'));
       return;
     }
     if (!value[0] || !value[0].url) {
@@ -747,7 +752,7 @@ export default class BrandModal extends React.Component<any, any> {
         return;
       }
       if (!value.fileList || value.fileList.length == 0) {
-        callback(new Error('请上传品牌Logo'));
+        callback(new Error('Please upload the brand logo'));
         return;
       }
     }
@@ -763,11 +768,11 @@ export default class BrandModal extends React.Component<any, any> {
    */
   _checkBrandName = (_rule, value, callback, record) => {
     if (!value) {
-      callback(new Error('请填写品牌名称'));
+      callback(new Error('Please input the brand name'));
       return;
     } else {
       if (value.length > 30 || value.length < 1) {
-        callback(new Error('品牌长度为1-30个字符之间'));
+        callback(new Error('Brand length is between 1-30 characters'));
         return;
       } else {
         const { allBrands, otherBrands } = this.props.relaxProps;
@@ -788,11 +793,15 @@ export default class BrandModal extends React.Component<any, any> {
           //无重复的
         } else {
           if (repeatPlatForm.length > 0) {
-            callback(new Error('品牌名称与平台已有品牌名称重复'));
+            callback(
+              new Error(
+                'Brand name duplicates existing brand name on the platform'
+              )
+            );
             return;
           }
           if (repeatOther.length > 0) {
-            callback(new Error('自定义品牌名称重复'));
+            callback(new Error('Duplicate custom brand name'));
             return;
           }
         }

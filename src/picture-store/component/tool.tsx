@@ -50,7 +50,7 @@ export default class Tool extends React.Component<any, any> {
           <Form layout="inline">
             <FormItem>
               <Input
-                placeholder="输入图片名称"
+                placeholder="Enter image name"
                 value={this.props.relaxProps.imageName}
                 onChange={this._editSearchData}
               />

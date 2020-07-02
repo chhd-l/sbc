@@ -76,7 +76,10 @@ export default class OrderDelivery extends React.Component<any, any> {
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
-            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
+            dataSource={detail
+              .get('tradeItems')
+              .concat(gifts)
+              .toJS()}
             pagination={false}
             bordered
           />
@@ -141,7 +144,8 @@ export default class OrderDelivery extends React.Component<any, any> {
                         'none'
                       )}
                     </div>
-                    {flowState === 'CONFIRMED' ||
+                    {/* 作废shipping */}
+                    {/* {flowState === 'CONFIRMED' ||
                     flowState === 'COMPLETED' ||
                     flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
@@ -155,7 +159,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                           Invalid
                         </a>
                       </AuthWrapper>
-                    )}
+                    )} */}
                   </div>
                 </div>
               );

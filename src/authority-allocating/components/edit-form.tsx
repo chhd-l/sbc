@@ -47,7 +47,7 @@ export default class EditForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="角色名称" hasFeedback>
+        <FormItem {...formItemLayout} label="Role Name" hasFeedback>
           {getFieldDecorator('roleName', {
             ...roleName,
             rules: [
@@ -58,7 +58,7 @@ export default class EditForm extends React.Component<any, any> {
                     rule,
                     value,
                     callback,
-                    '角色名称',
+                    'Role Name',
                     1,
                     10
                   );

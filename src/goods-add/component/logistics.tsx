@@ -185,13 +185,13 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
                     message:
-                      'Please fill in the legal number with three decimal places'
+                      'Please input the legal number with three decimal places'
                   },
                   {
                     type: 'number',
                     min: 0.001,
                     message: 'The minimum value is 0.001',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value))
                         ? 0.001
                         : parseFloat(value);
@@ -201,7 +201,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999.999,
                     message: 'The maximum value is 9999.999',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value))
                         ? 0.001
                         : parseFloat(value);
@@ -234,13 +234,13 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,
                     message:
-                      'Please fill in the legal number of six decimal places'
+                      'Please input the legal number of six decimal places'
                   },
                   {
                     type: 'number',
                     min: 0.000001,
                     message: 'The minimum value is 0.000001',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value))
                         ? 0.000001
                         : parseFloat(value);
@@ -250,7 +250,7 @@ class LogisticsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 999.999999,
                     message: 'The maximum value is 999.999999',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value))
                         ? 0.000001
                         : parseFloat(value);

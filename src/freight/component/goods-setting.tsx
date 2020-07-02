@@ -31,16 +31,15 @@ export default class GoodsSetting extends React.Component<any, any> {
   render() {
     const { goodsFreights } = this.props.relaxProps;
     return [
-      goodsFreights.count() < 20 &&
-        checkAuth('f_goods_temp_edit') && (
-          <Button
-            type="primary"
-            onClick={() => history.push('/goods-freight')}
-            key="button"
-          >
-            新增单品运费模板
-          </Button>
-        ),
+      goodsFreights.count() < 20 && checkAuth('f_goods_temp_edit') && (
+        <Button
+          type="primary"
+          onClick={() => history.push('/goods-freight')}
+          key="button"
+        >
+          New single product shipping template
+        </Button>
+      ),
       <FreightList
         key="feightList"
         data={goodsFreights.toJS()}

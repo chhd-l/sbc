@@ -148,10 +148,10 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约品牌</H2>
+            <H2>Signed Brand</H2>
             <GreyText>
-              已签约{brandList ? brandList.length + checkBrand.length : 0}个品牌
-              最多可签约50个品牌
+              Signed {brandList ? brandList.length + checkBrand.length : 0}{' '}
+              brands Up to 50 brands can be signed
             </GreyText>
           </div>
           <TableBox>
@@ -162,13 +162,13 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="品牌名称"
+                title="Brand Name"
                 dataIndex="brandName"
                 key="brandName"
                 width="15%"
               />
               <Column
-                title="品牌别名"
+                title="Brand Alias"
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -177,7 +177,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="品牌logo"
+                title="Brand Logo"
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -199,7 +199,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="授权文件"
+                title="Authorization Document"
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -233,7 +233,7 @@ export default class StepThree extends React.Component<any, any> {
                   pagination={false}
                 >
                   <Column
-                    title="商家自增"
+                    title="Shop Increase"
                     dataIndex="name"
                     key="name"
                     width="15%"

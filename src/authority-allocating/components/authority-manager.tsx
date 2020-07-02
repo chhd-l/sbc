@@ -48,7 +48,7 @@ export default class AuthorityManager extends React.Component<any, any> {
       <div className="cardGery">
         <br />
         <h3 style={{ paddingBottom: 10, fontSize: 18, color: '#333' }}>
-          角色权限管理
+          Role Management
         </h3>
         <Tree
           checkable={true}

@@ -90,7 +90,7 @@ export default class AppStore extends Store {
   copy = async (freightId) => {
     const { res } = (await webapi.copyFreightGoods(freightId)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('复制成功');
+      message.success('Copy successful');
       this.init({ tab: 1 } as any);
     } else if (res.code == 'K-110701' || res.code == 'K-110702') {
       confirm({
@@ -122,7 +122,7 @@ export default class AppStore extends Store {
     }
     const { res } = result;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('删除成功');
+      message.success('Delete Successful');
       const { size, number } = this.state()
         .get('storeFreight')
         .toJS();

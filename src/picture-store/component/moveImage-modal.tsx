@@ -13,7 +13,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -54,14 +54,14 @@ export default class MoveImageModal extends React.Component<any, any> {
     }
     const WrapperForm = this.WrapperForm;
     return (
-      <Modal  maskClosable={false}
-        title="移动图片"
-         
+      <Modal
+        maskClosable={false}
+        title="Moving Picture"
         visible={moveVisible}
         onCancel={this._handleCancel}
         onOk={this._handleOk}
       >
-        <WrapperForm ref={form => (this._form = form)} />
+        <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );
   }
@@ -116,8 +116,8 @@ class MoveImageForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const cateList = this._store.state().get('cateList');
     //处理分类的树形图结构数据
-    const loop = cateList =>
-      cateList.map(item => {
+    const loop = (cateList) =>
+      cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
             <TreeNode
@@ -142,12 +142,12 @@ class MoveImageForm extends React.Component<any, any> {
       <Form>
         <FormItem
           {...formItemLayout}
-          label="选择分类"
+          label="Choose Category"
           required={true}
           hasFeedback
         >
           {getFieldDecorator('cateId', {
-            rules: [{ required: true, message: '请选择分类' }]
+            rules: [{ required: true, message: 'Please select a type' }]
           })(
             <TreeSelect
               showSearch
@@ -158,8 +158,8 @@ class MoveImageForm extends React.Component<any, any> {
               }
               style={{ width: 300 }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择分类"
-              notFoundContent="暂无分类"
+              placeholder="Please select a type"
+              notFoundContent="No categories"
               allowClear
               treeDefaultExpandAll
             >

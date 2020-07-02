@@ -104,7 +104,7 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: 'Please fill in the reason for ' + this.props.formType
+                message: 'Please input the reason for ' + this.props.formType
               },
               {
                 min: 1,

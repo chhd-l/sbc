@@ -272,13 +272,13 @@ class SkuForm extends React.Component<any, any> {
                   {
                     pattern: ValidConst.zeroPrice,
                     message:
-                      'Please fill in the legal amount with two decimal places'
+                      'Please input the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
                     max: 9999999.99,
                     message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }

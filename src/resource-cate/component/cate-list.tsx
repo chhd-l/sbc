@@ -156,21 +156,21 @@ export default class CateList extends React.Component<any, any> {
     if (childFlag) {
       //有子分类
       confirm({
-        title: '提示',
+        title: 'Prompt',
         content:
-          '删除当前分类，该分类下的所有分类也会删除，您确认删除这个分类吗？',
+          'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
         onOk() {
           if (resourceFlag) {
             //该分类下有素材
             confirm({
-              title: '提示',
+              title: 'Prompt',
               content:
-                '当前分类已关联了素材，建议修改后再删除，点击继续删除 ，相关素材将会归类到默认分类!',
+                'The current classification has associated materials, it is recommended to delete after modification, click to continue to delete, related materials will be classified into the default classification!',
               onOk() {
                 doDelete(cateId);
               },
-              okText: '继续删除',
-              cancelText: '取消'
+              okText: 'Continue to delete',
+              cancelText: 'Cancel'
             });
           } else {
             doDelete(cateId);
@@ -180,20 +180,20 @@ export default class CateList extends React.Component<any, any> {
     } else if (resourceFlag) {
       //该分类下有素材
       confirm({
-        title: '提示',
+        title: 'Prompt',
         content:
-          '当前分类已关联了素材，建议修改后再删除，点击继续删除 ，相关素材将会归类到默认分类!',
+          'The current classification has associated materials, it is recommended to delete after modification, click to continue to delete, related materials will be classified into the default classification!',
         onOk() {
           doDelete(cateId);
         },
-        okText: '继续删除',
-        cancelText: '取消'
+        okText: 'Continue to delete',
+        cancelText: 'Cancel'
       });
     } else {
       //没有子分类
       confirm({
-        title: '提示',
-        content: '您确认要删除这个分类吗？',
+        title: 'Prompt',
+        content: 'Are you sure you want to delete this category?',
         onOk() {
           doDelete(cateId);
         }

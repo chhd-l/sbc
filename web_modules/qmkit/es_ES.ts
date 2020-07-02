@@ -382,7 +382,7 @@ export default {
   'order.valetOrder': 'Valet order',
   'order.fightTogether': 'Fight together',
   'order.audit': 'Audit',
-  'order.turnDown': 'Turn down',
+  'order.turnDown': 'Reject',
   'order.review': 'Review',
   'order.confirmReceivedAllProducts': 'Confirm that all products have been received?',
   'order.confirmReview': 'Are you sure you want to return the selected order for reconsideration?',
@@ -595,8 +595,8 @@ export default {
   'allSurvey': 'All Survey',
   'surveyTime': 'Survey time',
   'defaultPrescriberName': 'default Prescriber Name',
-  'consumer.consumerDetails':'Consumer Details',
-  'consumer.removeConsumer':'Remove Consumer',
+  'consumer.consumerDetails': 'Consumer Details',
+  'consumer.removeConsumer': 'Remove Consumer',
 
   'shopping': 'Shopping',
   "last180": 'Last 180 days',
@@ -622,12 +622,12 @@ export default {
   'totalSKU': 'Total SKU',
   'productsOnShelvesNumber': 'Products on shelves number',
   'member number': 'memberNumber',
-  'uv':'UV',
+  'uv': 'UV',
   'pv': 'PV',
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
-  
+
   'subscription.subList': 'Subscription List',
   'subscription.orderNumber': 'Order number',
   'subscription.consumerName': 'Consumer name',
@@ -637,9 +637,9 @@ export default {
   'subscription.receiver': 'Receiver',
   'subscription.orderData': 'Subscription order date',
   'subscription.quantity': 'Quantity',
-  'subscription.notYet' : 'Not Yet Shipped',
-  'subscription.nextOrder' : 'Next Order',
-  'subscription.order' : 'Order',
+  'subscription.notYet': 'Not Yet Shipped',
+  'subscription.nextOrder': 'Next Order',
+  'subscription.order': 'Order',
   'subscription.total': 'Total',
   'subscription.totalInclu': 'Total(Inclu IVA)',
   'subscription.saveDiscount': 'Subscription Save Discount',
@@ -654,8 +654,15 @@ export default {
   'subscription.date': 'Subscription date',
   'subscription.nextDeliveryDate': 'Next delivery date',
   'subscription.detail': 'Subscription detail',
-  'subscription.sub': 'Sub-'，
-  'items':'Items'
+  'subscription.sub': 'Sub-',
+  'items': 'Items',
+  'petCategory': 'Pet Category',
+  'petName': 'Pet Name',
+  'gender': 'Gender',
+  'breed': 'Breed',
+  'birthday': 'Birthday',
+  'specialNeeds': 'Special needs',
+  'sterilizedStatus': 'Sterilized status'
 };
 
 

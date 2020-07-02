@@ -20,7 +20,7 @@ export default class ReceiveAdd extends React.Component<any, any> {
         </div>
 
         <label style={styles.record}>收款记录</label>
-        <ReceiveFormDetail ref={_form => (this['_form'] = _form)} />
+        <ReceiveFormDetail ref={(_form) => (this['_form'] = _form)} />
       </div>
     );
   }
@@ -70,7 +70,7 @@ class ReceiveForm extends React.Component<any, any> {
             ]
           })(
             <Select>
-              {this.state.account.map(v => (
+              {this.state.account.map((v) => (
                 <Option key={v.bankNo} value={v.accountId + ''}>
                   {v.bankName}-{v.bankNo}
                 </Option>
@@ -111,7 +111,7 @@ class ReceiveForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Enter up to 100 characters'));
       return;
     }
     callback();

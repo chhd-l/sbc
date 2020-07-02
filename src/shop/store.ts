@@ -229,12 +229,7 @@ export default class AppStore extends Store {
         return info;
       })
       .filter((f) => filterIds.every((i) => i != f.get('cateId')));
-    this.dispatch(
-      'modal: cates',
-      this.state()
-        .get('cates')
-        .concat(infos)
-    );
+    this.dispatch('modal: cates', this.state().get('cates').concat(infos));
   };
 
   /**
@@ -343,20 +338,14 @@ export default class AppStore extends Store {
    * @param brand
    */
   addBrand = async (param: any) => {
-    const oldBrandList = this.state()
-      .get('company')
-      .toJS().brandList;
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const oldBrandList = this.state().get('company').toJS().brandList;
+    const otherBrands = this.state().get('otherBrands').toJS();
     if (oldBrandList.length + otherBrands.length >= 50) {
       message.error('您最多只能签约50个品牌');
       return;
     } else {
       //不存在，则push
-      const brandArray = this.state()
-        .get('company')
-        .toJS().brandList;
+      const brandArray = this.state().get('company').toJS().brandList;
       let count = 0;
       brandArray.map((v) => {
         if (v.brandId == param.brandId) {
@@ -379,14 +368,9 @@ export default class AppStore extends Store {
    * 新增自定义品牌
    */
   addNewOtherBrand = () => {
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
     const num = this.state().get('num');
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
     if (otherBrands.length + brandList.length >= 50) {
       message.error('最多只能添加50个品牌');
     } else {
@@ -409,16 +393,9 @@ export default class AppStore extends Store {
    */
   deleteOtherBrand = (contractId: number, id: number) => {
     //已删除的id集合
-    let deleteBrandIdArray = this.state()
-      .get('delBrandIds')
-      .toJS();
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
+    let deleteBrandIdArray = this.state().get('delBrandIds').toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
     if (otherBrands.length + brandList.length <= 1) {
       message.error('请至少签约一种品牌');
     } else {
@@ -434,9 +411,7 @@ export default class AppStore extends Store {
           this.dispatch('detail:addNewBrand', fromJS(newOtherBrands));
         });
       } else {
-        const otherBrands = this.state()
-          .get('otherBrands')
-          .toJS();
+        const otherBrands = this.state().get('otherBrands').toJS();
         const newOtherBrands = otherBrands.filter(
           (v) => (v.key && v.key != id) || v.contractBrandId
         );
@@ -449,9 +424,7 @@ export default class AppStore extends Store {
    * 添加自定义品牌输入框事件
    */
   onBrandInputChange = ({ ...params }) => {
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
     let newOtherBrands = new Array();
     otherBrands.map((v) => {
       if (v.key && v.key == params.id) {
@@ -574,10 +547,7 @@ export default class AppStore extends Store {
    * 删除选中的平台品牌
    */
   deleteBrand = async (contractId: string, brandId: string) => {
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
     const otherBrands = this.state()
       .get('otherBrands')
       .filter((v) => v.name != '')
@@ -586,9 +556,7 @@ export default class AppStore extends Store {
       message.error('签约品牌不能为空');
     } else {
       //已删除的id集合
-      let deleteBrandIdArray = this.state()
-        .get('delBrandIds')
-        .toJS();
+      let deleteBrandIdArray = this.state().get('delBrandIds').toJS();
       if (contractId) {
         //当删除了已签约品牌时，所做的删除要存放
         deleteBrandIdArray.push(contractId);
@@ -605,18 +573,11 @@ export default class AppStore extends Store {
    */
   saveBrandEdit = async () => {
     const storeId = this.state().get('storeId');
-    const delBrandIds = this.state()
-      .get('delBrandIds')
-      .toJS();
+    const delBrandIds = this.state().get('delBrandIds').toJS();
     let brandSaveRequests = new Array();
     //选中的平台品牌
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
 
     brandList.map((v) => {
       let brandUrl = new Array();
@@ -810,6 +771,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onEditStoreInfo = async (storeInfo) => {
+    debugger;
     const { res } = await webApi.editStoreInfo(storeInfo);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('save successful!');
@@ -881,9 +843,7 @@ export default class AppStore extends Store {
           bankBranch: value.bankBranch,
           isReceived: value.isReceived,
           isDefaultAccount: value.isDefaultAccount,
-          key: Math.random()
-            .toString()
-            .substring(2)
+          key: Math.random().toString().substring(2)
         });
       });
     } else {
@@ -895,9 +855,7 @@ export default class AppStore extends Store {
         accountName: '',
         bankNo: '',
         bankBranch: '',
-        key: Math.random()
-          .toString()
-          .substring(2)
+        key: Math.random().toString().substring(2)
       });
     }
     this.transaction(() => {
@@ -925,9 +883,7 @@ export default class AppStore extends Store {
       accountName: '',
       bankNo: '',
       bankBranch: '',
-      key: Math.random()
-        .toString()
-        .substring(2)
+      key: Math.random().toString().substring(2)
     });
 
     this.dispatch('company:account', newAccounts);
@@ -987,9 +943,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   saveNewAccount = async () => {
-    const deleteIds = this.state()
-      .getIn(['company', 'delAccountIds'])
-      .toJS();
+    const deleteIds = this.state().getIn(['company', 'delAccountIds']).toJS();
     const offlineAccounts = this.state()
       .getIn(['company', 'offlineAccount'])
       .toJS();
@@ -1021,17 +975,10 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   renewAll = async () => {
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
 
-    const cateList = this.state()
-      .get('company')
-      .get('cateList');
+    const cateList = this.state().get('company').get('cateList');
     if (cateList.toJS().length < 1) {
       message.error('请至少选择一种签约类目');
     } else if (brandList.length + otherBrands.length < 1) {
@@ -1047,17 +994,10 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   storeRenewAll = async () => {
-    const brandList = this.state()
-      .get('company')
-      .get('brandList')
-      .toJS();
-    const otherBrands = this.state()
-      .get('otherBrands')
-      .toJS();
+    const brandList = this.state().get('company').get('brandList').toJS();
+    const otherBrands = this.state().get('otherBrands').toJS();
 
-    const cateList = this.state()
-      .get('company')
-      .get('cateList');
+    const cateList = this.state().get('company').get('cateList');
     if (cateList.toJS().length < 1) {
       message.error('请至少选择一种签约类目');
     } else if (brandList.length + otherBrands.length < 1) {

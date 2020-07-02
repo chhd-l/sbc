@@ -12,6 +12,18 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-list-limited')
   },
+  // subscription
+
+  {
+    path: '/subscription-list',
+    exact: true,
+    asyncComponent: () => import('./subscription')
+  },
+  {
+    path: '/subscription-detail/:subId',
+    exact: true,
+    asyncComponent: () => import('./subscription-detail')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',

@@ -183,7 +183,7 @@ export default class List extends React.Component<any, any> {
           </Row> */}
 
           <h3>
-            提高客单<span>更高销售和利润</span>
+            Improve consumer bill<span>Higher sales and profits</span>
           </h3>
           <Row>
             <AuthWrapper functionName="f_marketing_reduction_add">
@@ -203,8 +203,10 @@ export default class List extends React.Component<any, any> {
                     <img src={images.full_01} />
                   </span>
                   <div className="info">
-                    <h5>满减</h5>
-                    <p>满足指定条件享受减价</p>
+                    <h5>Full minus</h5>
+                    <p>
+                      Meet the specified conditions to enjoy the price reduction
+                    </p>
                   </div>
                 </a>
               </Col>
@@ -227,8 +229,8 @@ export default class List extends React.Component<any, any> {
                     <img src={images.full_02} />
                   </span>
                   <div className="info">
-                    <h5>满折</h5>
-                    <p>满足指定条件享受折扣</p>
+                    <h5>Full discount</h5>
+                    <p>Full discount at specified conditions</p>
                   </div>
                 </a>
               </Col>

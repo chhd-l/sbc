@@ -56,14 +56,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="商品名称"
+            title="Product Name"
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
           />
 
           <Column
-            title="规格"
+            title="Specification"
             dataIndex="specText"
             key="specText"
             width="20%"
@@ -77,14 +77,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="分类"
+            title="Category"
             key="cateName"
             dataIndex="cateName"
             width="10%"
           />
 
           <Column
-            title="品牌"
+            title="Brand"
             key="brandName"
             dataIndex="brandName"
             width="10%"
@@ -98,7 +98,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="单价"
+            title="Price"
             key="marketPrice"
             dataIndex="marketPrice"
             width="10%"
@@ -108,12 +108,12 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="操作"
+            title="Operation"
             key="operate"
             width="10%"
             render={(row) => {
               return (
-                <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>
+                <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>Delete</a>
               );
             }}
           />

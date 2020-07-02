@@ -24,9 +24,9 @@ export default class List extends React.Component<any, any> {
   render() {
     return (
       <div className="container">
-        <Headline title="营销中心" />
+        <Headline title="Marketing Center" />
         <div className="appsMain">
-          <h3>
+          {/* <h3>
             获客拉新<span>全渠道新用户</span>
           </h3>
           <Row>
@@ -180,7 +180,7 @@ export default class List extends React.Component<any, any> {
                 </div>
               </a>
             </Col>
-          </Row>
+          </Row> */}
 
           <h3>
             提高客单<span>更高销售和利润</span>
@@ -234,7 +234,7 @@ export default class List extends React.Component<any, any> {
               </Col>
             </AuthWrapper>
 
-            <AuthWrapper functionName="f_marketing_gift_add">
+            {/* <AuthWrapper functionName="f_marketing_gift_add">
               <Col span={6}>
                 <a
                   className="createMarket"
@@ -257,9 +257,10 @@ export default class List extends React.Component<any, any> {
                 </a>
               </Col>
             </AuthWrapper>
+           */}
           </Row>
 
-          <h3>
+          {/* <h3>
             留存复购<span>维护老客不流失</span>
           </h3>
           <Row>
@@ -295,6 +296,7 @@ export default class List extends React.Component<any, any> {
             </Col>
 
           </Row>
+         */}
         </div>
       </div>
     );

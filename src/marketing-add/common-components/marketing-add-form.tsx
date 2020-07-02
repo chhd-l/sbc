@@ -81,13 +81,32 @@ export default class MarketingAddForm extends React.Component<any, any> {
       isFullCount: null,
       //已经存在于其他同类型的营销活动的skuId
       skuExists: [],
-      saveLoading: false
+      saveLoading: false,
+      promotionCode: ''
     };
   }
 
   componentDidMount() {
     this.init();
   }
+  getPromotionCode = () => {
+    if (!this.state.promotionCode) {
+      let randomNumber = (
+        '0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)
+      ).slice(-8);
+      let timeStamp = new Date()
+        .getTime()
+        .toString()
+        .slice(-10);
+      let promotionCode = randomNumber + timeStamp;
+      this.setState({
+        promotionCode: promotionCode
+      });
+      return promotionCode;
+    } else {
+      return this.state.promotionCode;
+    }
+  };
 
   render() {
     const { marketingType, form } = this.props;
@@ -106,14 +125,42 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...smallformItemLayout} label="促销名称">
+        <FormItem {...smallformItemLayout} label="Promotion Code">
+          {getFieldDecorator('promotionCode', {
+            initialValue: marketingBean.get('promotionCode')
+              ? marketingBean.get('promotionCode')
+              : this.getPromotionCode()
+          })(<Input disabled style={{ width: 160 }} />)}
+
+          <Checkbox
+            style={{ marginLeft: 20 }}
+            onChange={(e) => {
+              this.onBeanChange({
+                publicStatus: e.target.checked ? '1' : '0'
+              });
+            }}
+          >
+            Public
+          </Checkbox>
+        </FormItem>
+
+        <FormItem {...smallformItemLayout} label="Promotion Name">
           {getFieldDecorator('marketingName', {
             rules: [
-              { required: true, whitespace: true, message: '请填写促销名称' },
-              { min: 1, max: 40, message: '1-40字符' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please input Promotion Name'
+              },
+              { min: 1, max: 40, message: '1-40 words' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '促销名称');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Promotion Name'
+                  );
                 }
               }
             ],
@@ -122,15 +169,18 @@ export default class MarketingAddForm extends React.Component<any, any> {
             initialValue: marketingBean.get('marketingName')
           })(
             <Input
-              placeholder="请填写促销名称，不超过40字"
+              placeholder="Please input promotion name ,no  more than 40 words."
               style={{ width: 360 }}
             />
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="起止时间">
+        <FormItem {...formItemLayout} label="Start and end time">
           {getFieldDecorator('time', {
             rules: [
-              { required: true, message: '请选择起止时间' },
+              {
+                required: true,
+                message: 'Please select Starting and end time'
+              },
               {
                 validator: (_rule, value, callback) => {
                   if (
@@ -141,7 +191,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       .second(0)
                       .unix() > value[0].unix()
                   ) {
-                    callback('开始时间不能早于现在');
+                    callback("You can't start earlier than now");
                   } else {
                     callback();
                   }
@@ -168,7 +218,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
               allowClear={false}
               format={Const.DATE_FORMAT}
-              placeholder={['起始时间', '结束时间']}
+              placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
             />
           )}
@@ -176,13 +226,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
         {isFullCount != null && (
           <FormItem
             {...formItemLayout}
-            label={`满${Enum.GET_MARKETING_STRING(marketingType)}类型`}
+            label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`}
           >
             {getFieldDecorator('subType', {
               rules: [
                 {
                   required: true,
-                  message: `满${Enum.GET_MARKETING_STRING(marketingType)}类型`
+                  message: `full ${Enum.GET_MARKETING_STRING(
+                    marketingType
+                  )} type`
                 }
               ],
               initialValue: isFullCount
@@ -191,17 +243,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 onChange={(e) => this.subTypeChange(marketingType, e)}
               >
                 <Radio value={0}>
-                  满金额{Enum.GET_MARKETING_STRING(marketingType)}
+                  Full amount {Enum.GET_MARKETING_STRING(marketingType)}
                 </Radio>
                 <Radio value={1}>
-                  满数量{Enum.GET_MARKETING_STRING(marketingType)}
+                  Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
                 </Radio>
               </RadioGroup>
             )}
           </FormItem>
         )}
         {isFullCount != null && (
-          <FormItem {...formItemLayout} label="设置规则" required={true}>
+          <FormItem {...formItemLayout} label="setting rules" required={true}>
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
               getFieldDecorator(
                 'rules',
@@ -250,14 +302,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
               )}
           </FormItem>
         )}
-        <FormItem {...formItemLayout} label="选择商品" required={true}>
+        <FormItem {...formItemLayout} label="Select products" required={true}>
           {getFieldDecorator(
             'goods',
             {}
           )(
             <div>
               <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
-                添加商品
+                Add products
               </Button>
               &nbsp;&nbsp;
               <SelectedGoodsGrid
@@ -268,7 +320,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             </div>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="目标客户" required={true}>
+        <FormItem {...formItemLayout} label="Target consumer" required={true}>
           {getFieldDecorator('targetCustomer', {
             // rules: [{required: true, message: '请选择目标客户'}],
           })(
@@ -279,8 +331,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 }}
                 value={level._allCustomer ? -1 : 0}
               >
-                <Radio value={-1}>全平台客户</Radio>
-                {util.isThirdStore() && <Radio value={0}>店铺内客户</Radio>}
+                <Radio value={-1}>Full platform consumer</Radio>
+                {util.isThirdStore() && (
+                  <Radio value={0}>In-store customer</Radio>
+                )}
               </RadioGroup>
               {level._levelPropsShow && (
                 <div>
@@ -289,7 +343,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                     onChange={(e) => this.allLevelChecked(e.target.checked)}
                     checked={level._checkAll}
                   >
-                    全部等级
+                    All Leave
                   </Checkbox>
                   <CheckboxGroup
                     options={this.renderCheckboxOptions(customerLevel)}
@@ -305,11 +359,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
           <Col span={3} />
           <Col span={10}>
             <Button type="primary" htmlType="submit" loading={saveLoading}>
-              保存
+              Save
             </Button>
             &nbsp;&nbsp;
             <Button onClick={() => history.push('/marketing-center')}>
-              返回
+              Cancle
             </Button>
           </Col>
         </Row>
@@ -440,7 +494,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (!levelList || levelList.isEmpty()) {
       errorObject['rules'] = {
         value: null,
-        errors: [new Error('请设置规则')]
+        errors: [new Error('Please setting rules')]
       };
     } else {
       let ruleArray = List();
@@ -456,10 +510,18 @@ export default class MarketingAddForm extends React.Component<any, any> {
           );
           if (!isFullCount && +level.fullAmount <= +level.reduction) {
             errorObject[`level_rule_value_${index}`] = {
-              errors: [new Error('条件金额必须大于减免金额')]
+              errors: [
+                new Error(
+                  'The conditional amount must be greater than the deductible amount'
+                )
+              ]
             };
             errorObject[`level_rule_reduction_${index}`] = {
-              errors: [new Error('减免金额必须小于条件金额')]
+              errors: [
+                new Error(
+                  'The deductible amount must be less than the conditional amount'
+                )
+              ]
             };
           }
         });
@@ -490,7 +552,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           ) {
             errorObject[`level_${index}`] = {
               value: null,
-              errors: [new Error('满赠赠品不能为空')]
+              errors: [new Error('A full gift cannot be empty')]
             };
           }
         });
@@ -502,7 +564,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
         .forEach((item) => {
           item.forEach((level) => {
             errorObject[`level_rule_value_${(level as any).get('index')}`] = {
-              errors: [new Error('多级促销条件不可相同')]
+              errors: [
+                new Error('Multi-level promotion conditions are not the same')
+              ]
             };
           });
         });
@@ -522,7 +586,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
           );
         } else {
           errorObject['targetCustomer'] = {
-            errors: [new Error('请选择目标客户')]
+            errors: [new Error('Please select target customers')]
           };
         }
       }
@@ -534,7 +598,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       errorObject['goods'] = {
         value: null,
-        errors: [new Error('请选择参加营销的商品')]
+        errors: [new Error('Please select the product to be marketed')]
       };
     }
 
@@ -565,7 +629,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   if (res.context.length > 0) {
                     this.setState({ skuExists: res.context });
                     message.error(
-                      `${res.context.length}款商品活动时间冲突，请删除后再保存`
+                      `${res.context.length} items are in conflict with each other. Please delete them before saving them`
                     );
                     this.setState({ saveLoading: false });
                   } else {
@@ -620,8 +684,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
     if (levelType == '' || !marketingBean.get(levelType)) return;
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
-        title: '切换类型',
-        content: '切换类型会清空已经设置的规则，是否继续？',
+        title: 'Switch type',
+        content:
+          'Switching types will clear the set rules. Do you want to continue?',
         onOk() {
           for (let i = 0; i < marketingBean.get(levelType).size; i++) {
             _thisRef.props.form.resetFields(`level_${i}`);
@@ -722,6 +787,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   onBeanChange = (params) => {
     this.setState({ marketingBean: this.state.marketingBean.merge(params) });
+    console.log(this.state.marketingBean);
   };
 
   /**

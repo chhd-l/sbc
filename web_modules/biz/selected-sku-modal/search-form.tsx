@@ -98,7 +98,7 @@ export default class SearchForm extends React.Component<any, any> {
 
           <FormItem>
             <Input
-              addonBefore="商品名称"
+              addonBefore="Product Name"
               value={searchParams.likeGoodsName}
               onChange={(e) =>
                 this.paramsOnChange('likeGoodsName', e.target.value)
@@ -109,7 +109,7 @@ export default class SearchForm extends React.Component<any, any> {
           <FormItem>
             <TreeSelectGroup
               getPopupContainer={() => document.getElementById('modal-head')}
-              label="分类"
+              label="Category"
               dropdownStyle={{ zIndex: 1053 }}
               onChange={(value) => this.paramsOnChange('cateId', value)}
               value={searchParams.cateId.toString()}
@@ -123,13 +123,13 @@ export default class SearchForm extends React.Component<any, any> {
           <FormItem>
             <SelectGroup
               getPopupContainer={() => document.getElementById('modal-head')}
-              label="品牌"
+              label="Brand"
               dropdownStyle={{ zIndex: 1053 }}
               onChange={(val) => this.paramsOnChange('brandId', val)}
               value={searchParams.brandId.toString()}
             >
               <Option key="0" value="0">
-                全部
+                All
               </Option>
               {brands.map((v) => (
                 <Option key={v.brandId} value={v.brandId + ''}>
@@ -148,7 +148,7 @@ export default class SearchForm extends React.Component<any, any> {
               this.searchBackFun();
             }}
           >
-            搜索
+            Search
           </Button>
         </Form>
       </div>
@@ -193,8 +193,8 @@ export default class SearchForm extends React.Component<any, any> {
       }}
       getPopupContainer={() => document.getElementById('modal-head')}
     >
-      <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU编码</Option>
-      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU编码</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU Code</Option>
     </Select>
   );
 }

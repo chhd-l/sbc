@@ -10,8 +10,8 @@ import * as Enum from '../common-components/marketing-enum';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class MarketingFullReductionAdd extends React.Component<
-any,
-any
+  any,
+  any
 > {
   store: AppStore;
   _form;
@@ -40,7 +40,7 @@ any
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
             <Breadcrumb.Item>
-              {marketingId ? '编辑' : '创建'}满减活动
+              {marketingId ? 'Edit' : 'Create'} full discount activity
             </Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
@@ -55,9 +55,15 @@ any
           </Breadcrumb> */}
 
           <div className="container">
-            <Headline title={marketingId ? '编辑满减活动' : '创建满减活动'} />
+            <Headline
+              title={
+                marketingId
+                  ? 'Edit full discount activity'
+                  : 'Create full discount activity'
+              }
+            />
             <Alert
-              message="同一商品同一时间可参加不同类型的促销活动，但只可参加一个满减活动；"
+              message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity;"
               type="info"
               showIcon
             />

@@ -99,11 +99,11 @@ export default class GiftLevels extends React.Component<any, any> {
           return (
             <div key={level.key ? level.key : level.giftLevelId}>
               <HasError>
-                <span>满&nbsp;</span>
+                <span>Full&nbsp;</span>
                 <FormItem>
                   {getFieldDecorator(`level_rule_value_${index}`, {
                     rules: [
-                      { required: true, message: '必须输入规则' },
+                      { required: true, message: 'Must enter rules' },
                       {
                         validator: (_rule, value, callback) => {
                           if (value) {
@@ -112,14 +112,14 @@ export default class GiftLevels extends React.Component<any, any> {
                                 !ValidConst.price.test(value) ||
                                 !(value < 100000000 && value > 0)
                               ) {
-                                callback('请输入0.01-99999999.99间的数字');
+                                callback('0.01-99999999.99');
                               }
                             } else {
                               if (
                                 !ValidConst.noZeroNumber.test(value) ||
                                 !(value < 10000 && value > 0)
                               ) {
-                                callback('请输入1-9999间的整数');
+                                callback('1-9999');
                               }
                             }
                           }
@@ -133,11 +133,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   })(
                     <Input
                       style={{ width: 200 }}
-                      placeholder={
-                        !isFullCount
-                          ? '0.01-99999999.99间的数字'
-                          : '1-9999间的数字'
-                      }
+                      placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
                       onChange={(e) => {
                         this.ruleValueChange(index, e.target.value);
                       }}
@@ -145,7 +141,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <span>
-                  &nbsp;{!isFullCount ? '元' : '件'}
+                  &nbsp;{!isFullCount ? 'yuan' : 'items'}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 <Button
@@ -154,7 +150,7 @@ export default class GiftLevels extends React.Component<any, any> {
                   onClick={() => this.openGoodsModal(index)}
                   style={{ marginTop: 3.5 }}
                 >
-                  添加赠品
+                  Add a free gift
                 </Button>
                 &nbsp;&nbsp;
                 <Select
@@ -165,12 +161,12 @@ export default class GiftLevels extends React.Component<any, any> {
                   }}
                   getPopupContainer={(triggerNode) => triggerNode.parentElement}
                 >
-                  <Option value={1}>可选一种</Option>
-                  <Option value={0}>默认全赠</Option>
+                  <Option value={1}>An optional one</Option>
+                  <Option value={0}>The default all give</Option>
                 </Select>
                 &nbsp;&nbsp;&nbsp;
                 {index > 0 && (
-                  <a onClick={() => this.deleteLevels(index)}>删除</a>
+                  <a onClick={() => this.deleteLevels(index)}>Delete</a>
                 )}
               </HasError>
 
@@ -195,7 +191,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="商品名称"
+                  title="Product Name"
                   dataIndex="goodsInfoName"
                   key="goodsInfoName"
                   width="20%"
@@ -205,7 +201,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="规格"
+                  title="Specification"
                   dataIndex="specText"
                   key="specText"
                   width="8%"
@@ -219,14 +215,14 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="分类"
+                  title="Category"
                   key="cateName"
                   dataIndex="cateName"
                   width="8%"
                 />
 
                 <Column
-                  title="品牌"
+                  title="Brand"
                   key="brandName"
                   dataIndex="brandName"
                   width="8%"
@@ -240,7 +236,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="单价"
+                  title="Price"
                   key="marketPrice"
                   dataIndex="marketPrice"
                   width="10%"
@@ -250,7 +246,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="库存"
+                  title="Inventory"
                   key="stock"
                   dataIndex="stock"
                   width="10%"
@@ -259,7 +255,9 @@ export default class GiftLevels extends React.Component<any, any> {
                       return (
                         <div className="has-error">
                           <p>{stock}</p>
-                          <div className="ant-form-explain">库存过低</div>
+                          <div className="ant-form-explain">
+                            Inventory is too low
+                          </div>
                         </div>
                       );
                     } else {
@@ -269,7 +267,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="赠送数量"
+                  title="Give the number"
                   className="centerItem"
                   key="count"
                   width="20%"
@@ -320,7 +318,7 @@ export default class GiftLevels extends React.Component<any, any> {
                 />
 
                 <Column
-                  title="操作"
+                  title="Operation"
                   key="operate"
                   width="12%"
                   render={(row) => {
@@ -328,7 +326,7 @@ export default class GiftLevels extends React.Component<any, any> {
                       <a
                         onClick={() => this.deleteRows(index, row.goodsInfoId)}
                       >
-                        删除
+                        Delete
                       </a>
                     );
                   }}
@@ -344,9 +342,9 @@ export default class GiftLevels extends React.Component<any, any> {
           onClick={this.addLevels}
           disabled={fullGiftLevelList.length >= 5}
         >
-          添加多级促销
+          Add multi-level promotions
         </Button>
-        &nbsp;&nbsp;最多可设置5级
+        &nbsp;&nbsp;up to 5 levels can be set
         {fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}

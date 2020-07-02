@@ -7,7 +7,7 @@ export default class  DataGrid<T> extends React.Component<StoreTable<T>> {
   }
   render(){
     const isScroll = this.props.isScroll === undefined ;
-    return <Table {...this.props} scroll={isScroll ?{x:'max-content'}:{}} />
+    return <Table {...this.props} scroll={isScroll ?{x:'100%'}:{}} />
   }
 }
 

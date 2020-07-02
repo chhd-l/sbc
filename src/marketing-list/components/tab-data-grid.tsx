@@ -23,24 +23,24 @@ export default class TabDataGrid extends React.Component<any, any> {
     const key = form.get('queryTab');
 
     return (
-      <Tabs onChange={key => onTabChange(key)} activeKey={key}>
-        <Tabs.TabPane tab="全部" key="0">
+      <Tabs onChange={(key) => onTabChange(key)} activeKey={key}>
+        <Tabs.TabPane tab="All" key="0">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="进行中" key="1">
+        <Tabs.TabPane tab="In process" key="1">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="暂停中" key="2">
+        <Tabs.TabPane tab="Pause" key="2">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="未开始" key="3">
+        <Tabs.TabPane tab="No start" key="3">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="已结束" key="4">
+        <Tabs.TabPane tab="End" key="4">
           <MarketingList />
         </Tabs.TabPane>
       </Tabs>

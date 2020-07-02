@@ -58,9 +58,9 @@ export default class GoodsModal extends React.Component<any, any> {
       <Modal  maskClosable={false}
         title={
           <div>
-            选择商品&nbsp;
+            Choose goods&nbsp;
             <small>
-              已选<span style={{ color: 'red' }}>{selectedSkuIds.length}</span>款商品
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
             </small>
           </div>
         }
@@ -70,7 +70,7 @@ export default class GoodsModal extends React.Component<any, any> {
           if (application === 'saleType') {
             onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
           } else if (skuLimit && selectedSkuIds.length > skuLimit) {
-            message.error('最多选择20种赠品');
+            message.error('Choose up to 20 items');
           } else {
             onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
           }
@@ -78,14 +78,15 @@ export default class GoodsModal extends React.Component<any, any> {
         onCancel={() => {
           onCancelBackFun();
         }}
-        okText="确认"
-        cancelText="取消"
+        okText="Confirm"
+        cancelText="Cancel"
       >
         {
           <GoodsGrid
             visible={visible}
             showValidGood={showValidGood}
             skuLimit={skuLimit}
+            isScroll={false}
             selectedSkuIds={selectedSkuIds}
             selectedRows={selectedRows}
             rowChangeBackFun={this.rowChangeBackFun}

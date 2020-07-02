@@ -84,10 +84,12 @@ export default class GiftList extends React.Component<any, any> {
             <GreyBg>
               <Row>
                 <Col span={24}>
-                  <span>规则：</span>满
+                  <span>Rules:</span>Full
                   {level.fullAmount ? level.fullAmount : level.fullCount}
-                  {subType == '4' ? '元' : '件'}{' '}
-                  {level.giftType == '1' ? '可选一种' : '默认全赠'}
+                  {subType == '4' ? 'Yuan' : 'Items'}{' '}
+                  {level.giftType == '1'
+                    ? 'An optional one'
+                    : 'The default all give'}
                 </Col>
               </Row>
             </GreyBg>
@@ -99,19 +101,19 @@ export default class GiftList extends React.Component<any, any> {
             >
               <Column
                 width="10%"
-                title="SKU code"
+                title="SKU Code"
                 key="goodsInfoNo"
                 render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>}
               />
               <Column
                 width="25%"
-                title="商品名称"
+                title="Product Name"
                 key="goodsInfoName"
                 render={(rowInfo) => <div>{rowInfo.sku.goodsInfoName}</div>}
               />
               <Column
                 width="10%"
-                title="规格"
+                title="Specification"
                 key="specText"
                 render={(rowInfo) => (
                   <div>{rowInfo.sku.specText ? rowInfo.sku.specText : '-'}</div>
@@ -119,7 +121,7 @@ export default class GiftList extends React.Component<any, any> {
               />
               <Column
                 width="12%"
-                title="类目"
+                title="Category"
                 key="cateName"
                 render={(rowInfo) => (
                   <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>
@@ -127,7 +129,7 @@ export default class GiftList extends React.Component<any, any> {
               />
               <Column
                 width="10%"
-                title="品牌"
+                title="Brand"
                 key="brandName"
                 render={(rowInfo) => (
                   <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>
@@ -136,18 +138,18 @@ export default class GiftList extends React.Component<any, any> {
               <Column
                 width="12%"
                 key="priceType"
-                title={'单价'}
+                title={'Price'}
                 render={(rowInfo) => <div>{rowInfo.sku.salePrice}</div>}
               />
               <Column
                 width="8%"
-                title="库存"
+                title="Inventory"
                 key="stock"
                 render={(rowInfo) => <div>{rowInfo.sku.stock}</div>}
               />
               <Column
                 width="15%"
-                title="赠送数量"
+                title="Give the number"
                 key="productNum"
                 dataIndex="productNum"
               />

@@ -187,7 +187,11 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm('批量启用', '是否确认启用已选员工?', onBatchEnable);
+    this.showConfirm(
+      'Batch Activation',
+      'Are you sure to activate the selected employee?',
+      onBatchEnable
+    );
   };
 
   _batchDisable = () => {
@@ -206,8 +210,8 @@ export default class ButtonGroup extends React.Component<any, any> {
       return;
     }
     this.showConfirm(
-      '批量删除',
-      '是否确认删除已选员工和他的账号？删除后将无法登录。',
+      'Batch Deletion',
+      'Are you sure to delete the selected employee and his account? Cannot log in after deleting。',
       onBatchDelete
     );
   };
@@ -239,8 +243,8 @@ export default class ButtonGroup extends React.Component<any, any> {
       return;
     }
     this.showConfirm(
-      '批量设为业务员',
-      '业务员可绑定会员，并只能查看自己会员相关的数据，确定设为业务员？',
+      'Set as salesperson in batch',
+      'Salespersons can bind members, and can only view the data related to their members to determine as salespersons?',
       onBatchSetEmployee
     );
   };
@@ -252,8 +256,8 @@ export default class ButtonGroup extends React.Component<any, any> {
       return;
     }
     this.showConfirm(
-      '批量设为离职',
-      '设为离职后，员工只能查看和删除，如需交接，请提前操作',
+      'Bulk set to leave',
+      'After set to leave, employees can only view and delete, if you need to hand over, please operate in advance',
       onBatchDissmiss
     );
   };
@@ -265,8 +269,8 @@ export default class ButtonGroup extends React.Component<any, any> {
       return;
     }
     this.showConfirm(
-      '会员账户激活',
-      '激活会员账户将会以员工手机号为准给所选员工创建商城账户，并发送一条短信通知，确定要激活？',
+      'Member account activation',
+      'Activating a member account will create a mall account for the selected employee based on the employee’s mobile phone number, and send a text message to confirm activation?',
       onBatchActivateAccount
     );
   };

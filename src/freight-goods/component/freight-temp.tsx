@@ -129,9 +129,12 @@ const Option = Select.Option;
 const Confirm = Modal.confirm;
 
 const FREIGHT_TEMP = {
-  0: { unit: '件', label: '件', options: '件数' },
-  1: { unit: 'kg', label: '重', options: '重量' },
-  2: { unit: 'm³', label: '体积', options: '体积' }
+  //0: { unit: '件', label: '件', options: '件数' },
+  //1: { unit: 'kg', label: '重', options: '重量' },
+  //2: { unit: 'm³', label: '体积', options: '体积' }
+  0: { unit: 'Piece', label: 'Piece', options: 'number' },
+  1: { unit: 'kg', label: 'weight', options: 'weight' },
+  2: { unit: 'm³', label: 'volume', options: 'volume' }
 };
 
 const PLACE_HOLDER = {
@@ -266,7 +269,8 @@ export default class FreightTemp extends React.Component<any, any> {
     const tProps = {
       treeCheckable: true,
       showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder: '请选择地区',
+      //searchPlaceholder: '请选择地区',
+      searchPlaceholder: 'please select the region',
       dropdownStyle: { maxHeight: 400, overflow: 'auto' }
       // style: {
       //   width: 300
@@ -278,7 +282,7 @@ export default class FreightTemp extends React.Component<any, any> {
     return (
       <FormDiv>
         <Form>
-          <FormItem {...formItemLayout} label="模板名称" required={true}>
+          <FormItem {...formItemLayout} label="Template name" required={true}>
             {getFieldDecorator('freightTempName', {
               initialValue: freightTempName,
               rules: [
@@ -288,7 +292,7 @@ export default class FreightTemp extends React.Component<any, any> {
                       rule,
                       value,
                       callback,
-                      '模板名称',
+                      'Template name',
                       2,
                       20
                     );
@@ -299,7 +303,8 @@ export default class FreightTemp extends React.Component<any, any> {
               <Input
                 style={{ width: 350 }}
                 disabled={defaultFlag == 1}
-                placeholder="模板名称限制2-20个字符"
+                //placeholder="模板名称限制2-20个字符"
+                placeholder="The template name is limited to 2-20 characters"
                 onChange={(e) =>
                   changeFieldValue({
                     field: 'freightTempName',
@@ -310,13 +315,23 @@ export default class FreightTemp extends React.Component<any, any> {
             )}
           </FormItem>
           <div className="areaBox">
-            <FormItem {...formItemLayout} required={true} label="发货地址">
+            <FormItem
+              {...formItemLayout}
+              required={true}
+              label="delivery address"
+            >
               {getFieldDecorator('area', {
                 initialValue: aIds,
-                rules: [{ required: true, message: '请选择发货地址' }]
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select the shipping address'
+                  }
+                ]
               })(
                 <AreaSelect
-                  placeholder="请选择发货地址"
+                  // placeholder="请选择发货地址"
+                  placeholder="Please select the shipping address"
                   getPopupContainer={() =>
                     document.getElementById('page-content')
                   }
@@ -326,17 +341,21 @@ export default class FreightTemp extends React.Component<any, any> {
             </FormItem>
           </div>
 
-          <FormItem {...formItemLayout} label="是否包邮" required={true}>
+          <FormItem
+            {...formItemLayout}
+            label="Whether free shipping"
+            required={true}
+          >
             <RadioGroup
               onChange={(e: any) => this._changeFreightFreeFlag(e.target.value)}
               value={freightFreeFlag}
             >
-              <Radio value={0}>买家承担运费</Radio>
-              <Radio value={1}>卖家承担运费</Radio>
+              <Radio value={0}>The buyer bears the freight</Radio>
+              <Radio value={1}>Seller bears freight</Radio>
             </RadioGroup>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="计价方式" required={true}>
+          <FormItem {...formItemLayout} label="Pricing method" required={true}>
             <RadioGroup
               disabled={freightFreeFlag == 1}
               value={valuationType}
@@ -348,16 +367,18 @@ export default class FreightTemp extends React.Component<any, any> {
             </RadioGroup>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="运送方式" required={true}>
-            <Radio defaultChecked>快递配送</Radio>
-            <label style={{ color: '#b5b5b5' }}>请为快递配送设置运费模板</label>
+          <FormItem {...formItemLayout} label="Shipping method" required={true}>
+            <Radio defaultChecked>Express delivery</Radio>
+            <label style={{ color: '#b5b5b5' }}>
+              Please set shipping template for express delivery
+            </label>
             <Table
               rowKey="id"
               bordered={true}
               pagination={false}
               columns={[
                 {
-                  title: '配送地区',
+                  title: 'Delivery area',
                   dataIndex: 'destinationArea',
                   key: 'destinationArea',
                   width: '32%',
@@ -366,7 +387,8 @@ export default class FreightTemp extends React.Component<any, any> {
                       <div>
                         默认
                         <span style={{ color: '#b5b5b5' }}>
-                          除指定地区外，其余地区的运费采用“默认运费”
+                          Except for the designated regions, the freight rates
+                          in the rest of the regions are "default freight rates"
                         </span>
                       </div>
                     ) : (
@@ -377,7 +399,7 @@ export default class FreightTemp extends React.Component<any, any> {
                             rules: [
                               {
                                 required: true,
-                                message: '请选择地区'
+                                message: 'please select the region'
                               }
                             ]
                           })(
@@ -400,9 +422,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: `首${FREIGHT_TEMP[valuationType].label}(${
-                    FREIGHT_TEMP[valuationType].unit
-                  })`,
+                  title: `first${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
                   dataIndex: 'freightStartNum',
                   key: 'freightStartNum',
                   width: '15%',
@@ -413,7 +433,7 @@ export default class FreightTemp extends React.Component<any, any> {
                           `freightStartNum${record.id}${freightFreeFlag}`,
                           {
                             initialValue: text,
-                            rules: this._rules(valuationType, '首', false)
+                            rules: this._rules(valuationType, 'first', false)
                           }
                         )(
                           <Input
@@ -433,7 +453,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: '首费(元)',
+                  title: 'Down payment (yuan)',
                   dataIndex: 'freightStartPrice',
                   key: 'freightStartPrice',
                   width: '15%',
@@ -464,9 +484,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: `续${FREIGHT_TEMP[valuationType].label}(${
-                    FREIGHT_TEMP[valuationType].unit
-                  })`,
+                  title: `Renewal${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
                   dataIndex: 'freightPlusNum',
                   key: 'freightPlusNum',
                   width: '15%',
@@ -477,7 +495,7 @@ export default class FreightTemp extends React.Component<any, any> {
                           `freightPlusNum${record.id}${freightFreeFlag}`,
                           {
                             initialValue: text,
-                            rules: this._rules(valuationType, '续', false)
+                            rules: this._rules(valuationType, 'Renewal', false)
                           }
                         )(
                           <Input
@@ -497,7 +515,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: '续费(元)',
+                  title: 'Renewal fee (yuan)',
                   dataIndex: 'freightPlusPrice',
                   key: 'freightPlusPrice',
                   width: '15%',
@@ -528,7 +546,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: '操作',
+                  title: 'operation',
                   dataIndex: 'operation',
                   key: 'operation',
                   width: '8%',
@@ -570,7 +588,7 @@ export default class FreightTemp extends React.Component<any, any> {
               pagination={false}
               columns={[
                 {
-                  title: '配送地区',
+                  title: 'Delivery area',
                   dataIndex: 'destinationArea',
                   key: 'destinationArea',
                   width: '20%',
@@ -583,7 +601,7 @@ export default class FreightTemp extends React.Component<any, any> {
                             rules: [
                               {
                                 required: true,
-                                message: '请选择地区'
+                                message: 'please select the region'
                               }
                             ]
                           })(
@@ -606,20 +624,20 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: '运送方式',
+                  title: 'Shipping method',
                   dataIndex: 'deliverWay',
                   key: 'deliverWay',
                   width: '20%',
                   render: () => {
                     return (
                       <Select defaultValue="1">
-                        <Option value="1">快递配送</Option>
+                        <Option value="1">Express delivery</Option>
                       </Select>
                     );
                   }
                 },
                 {
-                  title: '设置包邮条件',
+                  title: 'Set shipping conditions',
                   dataIndex: 'conditionType',
                   key: 'conditionType',
                   width: '52%',
@@ -637,9 +655,9 @@ export default class FreightTemp extends React.Component<any, any> {
                           <Option value="0">
                             {FREIGHT_TEMP[valuationType].options}
                           </Option>
-                          <Option value="1">金额</Option>
+                          <Option value="1">Amount</Option>
                           <Option value="2">
-                            {FREIGHT_TEMP[valuationType].options}+金额
+                            {FREIGHT_TEMP[valuationType].options}+Amount
                           </Option>
                         </Select>
                         {this._freeConditions(valuationType, record)}
@@ -648,7 +666,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: '操作',
+                  title: 'operation',
                   dataIndex: 'operation',
                   key: 'operation',
                   width: '8%',
@@ -678,9 +696,9 @@ export default class FreightTemp extends React.Component<any, any> {
               type="primary"
               style={{ marginRight: 10, marginLeft: 22 }}
             >
-              保存
+              Save
             </Button>
-            <Button onClick={() => history.push('/freight')}>取消</Button>
+            <Button onClick={() => history.push('/freight')}>Cancle</Button>
           </div>
         </Form>
       </FormDiv>
@@ -713,7 +731,7 @@ export default class FreightTemp extends React.Component<any, any> {
         return (
           <FormItem>
             <InlineBDiv>
-              <span className="pl3 pr3">满</span>
+              <span className="pl3 pr3">Full</span>
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
@@ -730,7 +748,7 @@ export default class FreightTemp extends React.Component<any, any> {
                 />
               )}
               <span className="pl3">
-                {FREIGHT_TEMP[valuationType].unit} 包邮
+                {FREIGHT_TEMP[valuationType].unit} Free shipping
               </span>
             </InlineBDiv>
           </FormItem>
@@ -739,7 +757,7 @@ export default class FreightTemp extends React.Component<any, any> {
         return (
           <FormItem>
             <InlineBDiv>
-              <span className="pl3 pr3">满</span>
+              <span className="pl3 pr3">Full</span>
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
@@ -755,14 +773,14 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span className="pl3">元 包邮</span>
+              <span className="pl3">yuan Free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
       } else {
         return (
           <div className="moreForeItem">
-            <span className="pl3 pr3">满</span>
+            <span className="pl3 pr3">Full</span>
             <FormItem>
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
@@ -781,7 +799,7 @@ export default class FreightTemp extends React.Component<any, any> {
               )}
             </FormItem>
             <span className="pl3 pr3">
-              {FREIGHT_TEMP[valuationType].unit}, 且满
+              {FREIGHT_TEMP[valuationType].unit}, And full
             </span>
             <FormItem>
               {getFieldDecorator(`conditionTwo${record.id}`, {
@@ -799,7 +817,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span className="pl3 pr3">元以上 包邮</span>
+              <span className="pl3 pr3">More than Yuan Free shipping</span>
             </FormItem>
           </div>
         );
@@ -810,7 +828,7 @@ export default class FreightTemp extends React.Component<any, any> {
         return (
           <FormItem>
             <InlineBDiv>
-              <span className="pl3 pr3">在</span>
+              <span className="pl3 pr3">IN</span>
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
@@ -827,7 +845,7 @@ export default class FreightTemp extends React.Component<any, any> {
                 />
               )}
               <span className="pl3">
-                {FREIGHT_TEMP[valuationType].unit}内 包邮
+                {FREIGHT_TEMP[valuationType].unit}Within free shipping
               </span>
             </InlineBDiv>
           </FormItem>
@@ -836,7 +854,7 @@ export default class FreightTemp extends React.Component<any, any> {
         return (
           <FormItem>
             <InlineBDiv>
-              <span className="pl3 pr3">满</span>
+              <span className="pl3 pr3">Full</span>
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
@@ -852,14 +870,14 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span>元 包邮</span>
+              <span>yuan free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
       } else {
         return (
           <div className="moreForeItem">
-            <span className="pl3 pr3">在</span>
+            <span className="pl3 pr3">in</span>
             <FormItem>
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
@@ -878,7 +896,7 @@ export default class FreightTemp extends React.Component<any, any> {
               )}
             </FormItem>
             <span className="pl3 pr3">
-              {FREIGHT_TEMP[valuationType].unit} 以内, 且满
+              {FREIGHT_TEMP[valuationType].unit} Within and full
             </span>
             <FormItem>
               {getFieldDecorator(`conditionTwo${record.id}`, {
@@ -897,7 +915,7 @@ export default class FreightTemp extends React.Component<any, any> {
                 />
               )}
             </FormItem>
-            <span className="pl3">元以上 包邮</span>
+            <span className="pl3"> more than yuan free shipping</span>
           </div>
         );
       }
@@ -916,13 +934,15 @@ export default class FreightTemp extends React.Component<any, any> {
             validator: (_rule, value, callback) => {
               if (value || value == '0') {
                 if (!ValidConst.zeroPrice.test(value)) {
-                  callback('请填写两位小数的合法金额');
+                  callback(
+                    'Please fill in the legal amount with two decimal places'
+                  );
                 }
                 if (!(value < 10000 && value >= 0)) {
-                  callback('最大值为9999.99');
+                  callback('The maximum value is 9999.99');
                 }
               } else {
-                callback('请输入金额');
+                callback('Please input the amount');
               }
               callback();
             }
@@ -932,7 +952,7 @@ export default class FreightTemp extends React.Component<any, any> {
         rules = fromJS([
           {
             required: true,
-            message: `请输入${text}${FREIGHT_TEMP[valuationType].label}`
+            message: `Please input ${text}${FREIGHT_TEMP[valuationType].label}`
           }
         ]);
         if (valuationType == 0) {
@@ -942,10 +962,10 @@ export default class FreightTemp extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (value) {
                     if (!ValidConst.noZeroNumber.test(value)) {
-                      callback('请填写合法的数字');
+                      callback('Please fill in the legal number');
                     }
                     if (!(value <= 9999 && value >= 1)) {
-                      callback('请输入1-9999之间的整数');
+                      callback('Please enter an integer between 1-9999');
                     }
                   }
                   callback();
@@ -959,10 +979,10 @@ export default class FreightTemp extends React.Component<any, any> {
               validator: (_rule, value, callback) => {
                 if (value) {
                   if (!ValidConst.singleDecimal.test(value)) {
-                    callback('请输入合法的一位小数');
+                    callback('Please input a valid decimal');
                   }
                   if (!(value < 10000 && value > 0)) {
-                    callback('请输入0.1-9999.9之间的小数');
+                    callback('Please input a decimal between 0.1-9999.9');
                   }
                 }
                 callback();
@@ -975,10 +995,10 @@ export default class FreightTemp extends React.Component<any, any> {
               validator: (_rule, value, callback) => {
                 if (value) {
                   if (!ValidConst.singleDecimal.test(value)) {
-                    callback('请输入合法的一位小数');
+                    callback('Please input a valid decimal');
                   }
                   if (!(value < 1000 && value > 0)) {
-                    callback('请输入0.1-9999.9之间的小数');
+                    callback('Please input a decimal between 0.1-9999.9');
                   }
                 }
                 callback();
@@ -1004,13 +1024,13 @@ export default class FreightTemp extends React.Component<any, any> {
             validator: (_rule, value, callback) => {
               if (value) {
                 if (!ValidConst.price.test(value)) {
-                  callback('请输入合法的金额');
+                  callback('Please enter a legal amount');
                 }
                 if (!(value < 10000000000 && value > 0)) {
-                  callback('请输入0.01-9999999999.99之间的金额');
+                  callback('Please enter an amount between 0.01-9999999999.99');
                 }
               } else {
-                callback('请输入金额');
+                callback('Please enter the amount');
               }
               callback();
             }
@@ -1020,7 +1040,7 @@ export default class FreightTemp extends React.Component<any, any> {
         rules = fromJS([
           {
             required: true,
-            message: `请输入${FREIGHT_TEMP[valuationType].options}`
+            message: `Please input${FREIGHT_TEMP[valuationType].options}`
           }
         ]);
         if (valuationType == 0) {
@@ -1030,10 +1050,10 @@ export default class FreightTemp extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (value) {
                     if (!ValidConst.noZeroNumber.test(value)) {
-                      callback('请输入合法的整数');
+                      callback('Please enter a valid integer');
                     }
                     if (!(value <= 9999 && value >= 1)) {
-                      callback('请输入1-9999之间的整数');
+                      callback('Please enter an integer between 1-9999');
                     }
                   }
                   callback();
@@ -1049,10 +1069,10 @@ export default class FreightTemp extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (value) {
                     if (!ValidConst.singleDecimal.test(value)) {
-                      callback('请输入合法的一位小数');
+                      callback('Please enter a valid decimal');
                     }
                     if (!(value < 10000 && value > 0)) {
-                      callback('请输入0.1-9999.9之间的数值');
+                      callback('Please enter a value between 0.1-9999.9');
                     }
                   }
                   callback();
@@ -1067,10 +1087,10 @@ export default class FreightTemp extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (value) {
                     if (!ValidConst.singleDecimal.test(value)) {
-                      callback('请输入合法的一位小数');
+                      callback('Please enter a valid decimal');
                     }
                     if (!(value < 1000 && value > 0)) {
-                      callback('请输入0.1-999.9之间的数值');
+                      callback('Please enter a value between 0.1-999.9');
                     }
                   }
                   callback();
@@ -1091,8 +1111,9 @@ export default class FreightTemp extends React.Component<any, any> {
     const self = this;
     const { goodsExpressForm } = this.props.relaxProps;
     Confirm({
-      title: '提示',
-      content: '切换计价方式，原运费设置无法恢复，确定继续么？',
+      title: 'prompt',
+      content:
+        'Switching the pricing method, the original freight setting cannot be restored, are you sure to continue?',
       iconType: 'exclamation-circle',
       onOk() {
         self.props.relaxProps.changeValuationType(value);
@@ -1126,9 +1147,9 @@ export default class FreightTemp extends React.Component<any, any> {
     } = this.props.relaxProps;
     if (value == 1) {
       Confirm({
-        title: '提示',
+        title: 'prompt',
         content:
-          '切换卖家承担运费，所有区域的运费将设置为0元且原运费设置无法恢复，确定继续么？',
+          'Switch the seller to bear the freight. The freight in all areas will be set to 0 yuan and the original freight setting cannot be restored. Are you sure to continue?',
         iconType: 'exclamation-circle',
         onOk() {
           changeFieldValue({ field: 'freightFreeFlag', value });

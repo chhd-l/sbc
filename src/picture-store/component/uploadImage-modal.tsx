@@ -12,7 +12,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -97,13 +97,13 @@ export default class uploadImageModal extends React.Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif',
       beforeUpload(file) {
         if (!cateIdCurr) {
-          message.error('请先选择分类!');
+          message.error('Please select category first!');
           return false;
         }
         let fileName = file.name.toLowerCase();
 
         if (!fileName.trim()) {
-          message.error('请输入文件名');
+          message.error('Please input a file name');
           return false;
         }
 
@@ -112,12 +112,12 @@ export default class uploadImageModal extends React.Component<any, any> {
             fileName
           )
         ) {
-          message.error('请输入正确格式的文件名');
+          message.error('Please enter the file name in the correct format');
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error('文件名过长');
+          message.error('File name is too long');
           return false;
         }
 
@@ -131,11 +131,11 @@ export default class uploadImageModal extends React.Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error('文件大小不能超过2M');
+            message.error('File size cannot exceed 2M');
             return false;
           }
         } else {
-          message.error('文件格式错误');
+          message.error('File format error');
           return false;
         }
       },
@@ -148,13 +148,13 @@ export default class uploadImageModal extends React.Component<any, any> {
             info.file.response.code &&
             info.file.response.code !== Const.SUCCESS_CODE
           ) {
-            message.error(`${info.file.name} 上传失败！`);
+            message.error(`${info.file.name} upload failed!`);
           } else {
-            message.success(`${info.file.name} 上传成功！`);
+            message.success(`${info.file.name} uploaded successfully!`);
             setCateDisabled();
           }
         } else if (status === 'error') {
-          message.error(`${info.file.name} 上传失败！`);
+          message.error(`${info.file.name} upload failed!`);
         }
         //仅展示上传中和上传成功的文件列表
         fileList = fileList.filter(
@@ -168,18 +168,18 @@ export default class uploadImageModal extends React.Component<any, any> {
     };
 
     return (
-      <Modal  maskClosable={false}
-        title="上传图片"
-         
+      <Modal
+        maskClosable={false}
+        title="Upload Image"
         visible={uploadVisible}
-        cancelText="关闭"
+        cancelText="Close"
         onCancel={this._handleCancel}
         onOk={this._handleOk}
       >
         <Form>
           <FormItem
             {...formItemLayout}
-            label="选择分类"
+            label="Choose Category"
             required={true}
             hasFeedback
           >
@@ -194,8 +194,8 @@ export default class uploadImageModal extends React.Component<any, any> {
               style={{ width: 300 }}
               value={this.state.cateId}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择分类"
-              notFoundContent="暂无分类"
+              placeholder="Please select a Category"
+              notFoundContent="No categories"
               allowClear
               treeDefaultExpandAll
               onChange={this._onChange}
@@ -203,14 +203,18 @@ export default class uploadImageModal extends React.Component<any, any> {
               {loop(cateList)}
             </TreeSelect>
           </FormItem>
-          <FormItem {...formItemLayout} label="选择图片" required={true}>
+          <FormItem {...formItemLayout} label="Select Image" required={true}>
             <div style={{ marginTop: 16 }}>
               <Dragger {...props} fileList={this.state.fileList}>
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
                 </p>
-                <p className="ant-upload-text">点击或拖拽图片以上传</p>
-                <p className="ant-upload-hint">支持一张或多张图片上传</p>
+                <p className="ant-upload-text">
+                  Click or drag images to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Support one or more pictures upload
+                </p>
               </Dragger>
             </div>
           </FormItem>
@@ -269,13 +273,13 @@ export default class uploadImageModal extends React.Component<any, any> {
    */
   _handleOk = () => {
     if (this.state.cateId == '') {
-      message.error('请选择分类!');
+      message.error('Please select a category!');
       return;
     }
     if (
       this.state.fileList.filter((file) => file.status === 'done').length <= 0
     ) {
-      message.error('请选择上传图片!');
+      message.error('Please choose to upload pictures!');
       return;
     }
 

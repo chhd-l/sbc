@@ -48,7 +48,7 @@ export default class AuthorityManager extends React.Component<any, any> {
       <div className="cardGery">
         <br />
         <h3 style={{ paddingBottom: 10, fontSize: 18, color: '#333' }}>
-          角色权限管理
+          Role Management
         </h3>
         <Tree
           checkable={true}
@@ -177,12 +177,7 @@ export default class AuthorityManager extends React.Component<any, any> {
           ) as List<any>;
           if (siblingMenus && siblingMenus.size > 0) {
             let anyChecked;
-            if (
-              siblingMenus
-                .first()
-                .get('id')
-                .indexOf('menu_') > -1
-            ) {
+            if (siblingMenus.first().get('id').indexOf('menu_') > -1) {
               //菜单
               anyChecked = siblingMenus.some((menu) =>
                 menuIdList.includes(menu.get('id').substring(5))

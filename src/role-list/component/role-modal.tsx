@@ -169,17 +169,21 @@ class CateModalForm extends React.Component<any, any> {
         >
           {getFieldDecorator('roleName', {
             rules: [
-              { required: true, whitespace: true, message: '请输入角色名称' },
-              { max: 10, message: '最多10字符' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please input a role name'
+              },
+              { max: 10, message: 'Up to 10 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '角色名称');
+                  QMMethod.validatorEmoji(rule, value, callback, 'Role Name');
                 }
               }
             ],
             initialValue: roleName,
             onChange: (e) => editFormData(Map({ roleName: e.target.value }))
-          })(<Input placeholder="请输入角色名称" />)}
+          })(<Input placeholder="Please input a role name" />)}
         </FormItem>
       </Form>
     );

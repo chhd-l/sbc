@@ -38,7 +38,7 @@ export default class FreightForm extends React.Component<any, any> {
     const express = this._freightExpress();
     return (
       <Form>
-        <FormItem {...formItemLayout} label="运费模板">
+        <FormItem {...formItemLayout} label="Freight template">
           <div>
             {getFieldDecorator('freightTempId', {
               initialValue: freightTempId
@@ -57,19 +57,19 @@ export default class FreightForm extends React.Component<any, any> {
                   message={
                     <ul>
                       {(selectTemp.get('deliverWay') as number) == 1 ? (
-                        <li>快递配送</li>
+                        <li>Express delivery</li>
                       ) : null}
                       <li>
-                        默认运费：{express}&nbsp;&nbsp;&nbsp;&nbsp;
+                        Default shipping cost:{express}&nbsp;&nbsp;&nbsp;&nbsp;
                         <a
                           style={{ textDecoration: 'none' }}
                           href={`/goods-freight-edit/${freightTempId}`}
                           target="view_window"
                         >
-                          查看详情
+                          See details
                         </a>
                       </li>
-                      <li>发货地：{deliveryAddress}</li>
+                      <li>Delivery place:{deliveryAddress}</li>
                     </ul>
                   }
                 />
@@ -106,37 +106,40 @@ export default class FreightForm extends React.Component<any, any> {
     let express = '';
     if ((valuationType as number) == 0) {
       express =
-        freightStartNum +
-        '件内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        '件，加' +
-        freightPlusPrice +
-        '元';
+        // freightStartNum +
+        // '件内' +
+        // freightStartPrice +
+        // '元，' +
+        // '每增加' +
+        // freightPlusNum +
+        // '件，加' +
+        // freightPlusPrice +
+        // '元';
+        `${freightStartPrice} dollar within ${freightStartNum} pieces, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} pieces`;
     } else if ((valuationType as number) == 1) {
       express =
-        freightStartNum +
-        'kg内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        'kg，加' +
-        freightPlusPrice +
-        '元';
+        // freightStartNum +
+        // 'kg内' +
+        // freightStartPrice +
+        // '元，' +
+        // '每增加' +
+        // freightPlusNum +
+        // 'kg，加' +
+        // freightPlusPrice +
+        // '元';
+        `${freightStartPrice} dollar within ${freightStartNum} kg, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} kg`;
     } else if ((valuationType as number) == 2) {
       express =
-        freightStartNum +
-        'm³内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        'm³，加' +
-        freightPlusPrice +
-        '元';
+        // freightStartNum +
+        // 'm³内' +
+        // freightStartPrice +
+        // '元，' +
+        // '每增加' +
+        // freightPlusNum +
+        // 'm³，加' +
+        // freightPlusPrice +
+        // '元';
+        `${freightStartPrice} dollar within ${freightStartNum} m³, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} m³`;
     }
     return express;
   };
@@ -148,8 +151,8 @@ export default class FreightForm extends React.Component<any, any> {
     return (
       <Select
         showSearch
-        placeholder="请选择一个运费模板"
-        notFoundContent="暂无运费模板"
+        placeholder="Please select a shipping template"
+        notFoundContent="No shipping template"
       >
         {freightList.map((item) => {
           return (

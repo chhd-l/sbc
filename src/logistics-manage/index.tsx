@@ -3,7 +3,7 @@ import React from 'react';
 import { Breadcrumb, Alert } from 'antd';
 import { StoreProvider } from 'plume2';
 
-import { Headline, AuthWrapper,BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 import CompanyChoose from './components/company-choose';
@@ -24,17 +24,16 @@ export default class LogisticsManage extends React.Component<any, any> {
     return (
       <AuthWrapper functionName="f_expressManage_1">
         <div>
-          <BreadCrumb/>,
+          <BreadCrumb />,
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>设置</Breadcrumb.Item>
             <Breadcrumb.Item>物流设置</Breadcrumb.Item>
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
-
           <div className="container">
-            <Headline title="物流公司设置" />
+            <Headline title="Logistics company settings" />
             <Alert
-              message="管理您常用的物流公司，订单发货时方便选择，最多可设置20个物流公司。"
+              message="Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up."
               type="info"
               showIcon
             />

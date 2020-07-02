@@ -22,11 +22,11 @@ const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 4 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 20 }
+    sm: { span: 16 }
   }
 };
 const ServiceDiv = styled.div`
@@ -59,7 +59,7 @@ const ServiceDiv = styled.div`
 const plainOptions = [
   { label: 'PC', value: 'pc' },
   { label: 'APP', value: 'app' },
-  { label: '移动端', value: 'mobile' }
+  { label: 'Mobile', value: 'mobile' }
 ];
 
 @Relax
@@ -138,27 +138,32 @@ export default class QQModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="编辑QQ客服"
+        title="Edit QQ customer service"
         visible={smsVisible}
         onOk={this._handleOK}
         onCancel={() => smsCancel()}
         width="600px"
       >
         <Form className="login-form">
-          <FormItem {...formItemLayout} label="启用开关">
+          <FormItem {...formItemLayout} label="Enable Switch">
             <RadioGroup
               value={onlineServer.get('serverStatus')}
               onChange={this._handleChange}
             >
-              <Radio value={1}>启用</Radio>
-              <Radio value={0}>禁用</Radio>
+              <Radio value={1}>Enable</Radio>
+              <Radio value={0}>Disable</Radio>
             </RadioGroup>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="生效终端">
+          <FormItem {...formItemLayout} label="Effective Terminal">
             {getFieldDecorator('effectTerminal', {
               initialValue: initTerminal,
-              rules: [{ required: checkFlag, message: '启用时请选择生效终端' }]
+              rules: [
+                {
+                  required: checkFlag,
+                  message: 'Please select valid terminal when enabling'
+                }
+              ]
             })(
               <CheckboxGroup
                 options={plainOptions}
@@ -167,11 +172,14 @@ export default class QQModal extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="客服列表">
+          <FormItem {...formItemLayout} label="Customer Service List">
             {getFieldDecorator('setOneFlag', {
               initialValue: setOneFlag,
               rules: [
-                { required: checkFlag, message: '启用时至少设置一个客服' }
+                {
+                  required: checkFlag,
+                  message: 'Set up at least one customer service when enabled'
+                }
               ]
             })(
               <div>
@@ -179,7 +187,7 @@ export default class QQModal extends React.Component<any, any> {
                   disabled={onlineServerList && onlineServerList.size > 9}
                   onClick={this._onAddOnlineServer}
                 >
-                  添加客服
+                  Add customer service
                 </Button>
                 <Tooltip
                   placement="right"
@@ -200,7 +208,7 @@ export default class QQModal extends React.Component<any, any> {
                   <div className="service-list" key={v.key}>
                     <FormItem
                       {...formItemLayout}
-                      label="客服昵称"
+                      label="Nickname"
                       required={true}
                     >
                       {getFieldDecorator(`${v.key}_customerServiceName`, {
@@ -222,7 +230,7 @@ export default class QQModal extends React.Component<any, any> {
 
                     <FormItem
                       {...formItemLayout}
-                      label="客服账号"
+                      label="Account"
                       required={true}
                     >
                       {getFieldDecorator(`${v.key}_customerServiceAccount`, {
@@ -230,7 +238,7 @@ export default class QQModal extends React.Component<any, any> {
                         rules: [{ validator: this.checkCustomerAccount }]
                       })(
                         <Input
-                          placeholder="请输入5-11位数字"
+                          placeholder="Please enter 5-11 digits"
                           onChange={(e) =>
                             onSetOnlineServer({
                               index: k,
@@ -242,7 +250,7 @@ export default class QQModal extends React.Component<any, any> {
                       )}
                     </FormItem>
                     <a onClick={() => onDelOnlineServer(k)} className="del">
-                      删除
+                      Delete
                     </a>
                   </div>
                 );
@@ -313,7 +321,9 @@ export default class QQModal extends React.Component<any, any> {
         this.props.form.setFields({
           setOneFlag: {
             value: '',
-            errors: [new Error('启用时至少设置一个客服')]
+            errors: [
+              new Error('Set up at least one customer service when enabled')
+            ]
           }
         });
       }
@@ -327,7 +337,7 @@ export default class QQModal extends React.Component<any, any> {
           this.props.form.setFields({
             effectTerminal: {
               value: [],
-              errors: [new Error('启用时请选择生效终端')]
+              errors: [new Error('Please select valid terminal when enabling')]
             }
           });
         }
@@ -350,8 +360,11 @@ export default class QQModal extends React.Component<any, any> {
   _renderListTitle = () => {
     return (
       <div style={{ fontSize: 12, color: '#666' }}>
-        <p>1.最多添加10个客服</p>
-        <p>2.添加的客服QQ，需要开启QQ推广功能</p>
+        <p>1.Add up to 10 customer service</p>
+        <p>
+          2.The added customer service QQ needs to open the QQ promotion
+          function
+        </p>
       </div>
     );
   };
@@ -364,12 +377,12 @@ export default class QQModal extends React.Component<any, any> {
    */
   checkCustomerAccount = (_rule, value, callback) => {
     if (!value.trim()) {
-      callback('客服账号不能为空');
+      callback('Customer service account cannot be empty');
       return;
     } else {
       const regex = /^\d{5,11}$/;
       if (!regex.test(value)) {
-        callback('请输入5-11位数字');
+        callback('Please enter 5-11 digits');
       } else {
         callback();
       }
@@ -384,16 +397,18 @@ export default class QQModal extends React.Component<any, any> {
    */
   checkCustomerAccountName = (_rule, value, callback) => {
     if (!value.trim()) {
-      callback('客服昵称不能为空');
+      callback('Customer service nickname cannot be empty');
       return;
     } else {
       if (!ValidConst.noChar.test(value)) {
-        callback('客服昵称只允许中英文和数字');
+        callback(
+          'Customer service nicknames only allow Chinese and English numbers'
+        );
         return;
       }
 
       if (value.trim().length > 10) {
-        callback('客服昵称不可超过10个字符');
+        callback('Customer service nickname cannot exceed 10 characters');
         return;
       }
     }

@@ -105,7 +105,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       pattern: ValidConst.zeroPrice,
                       message:
-                        'Please fill in the legal amount with two decimal places'
+                        'Please input the legal amount with two decimal places'
                     },
                     {
                       type: 'number',

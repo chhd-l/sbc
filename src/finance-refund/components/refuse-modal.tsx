@@ -36,7 +36,7 @@ export default class RefuseModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="Please fill in the reason for refusing refund"
+        title="Please input the reason for refusing refund"
         visible={refuseVisible}
         onOk={() => saveRefuse()}
         onCancel={() => onCancelRefuse()}

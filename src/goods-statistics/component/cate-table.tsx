@@ -93,7 +93,7 @@ export default class CateTable extends React.Component<any, any> {
         <Column title="分类名称" key="name" dataIndex="name" />
         <Column title="上级分类" key="parentNames" dataIndex="parentNames" />
         {cateColumns.length > 0
-          ? cateColumns.map(v => {
+          ? cateColumns.map((v) => {
               return (
                 <Column
                   title={v.title}
@@ -110,16 +110,18 @@ export default class CateTable extends React.Component<any, any> {
   }
 
   _changeOrder = (pagination, filters, sorter) => {
-    debugger
     const sortedInfoData = this.state.sortedInfo;
-    if(sorter.columnKey&&sorter.order){
-      this.setState({sortedInfo: sorter});
+    if (sorter.columnKey && sorter.order) {
+      this.setState({ sortedInfo: sorter });
     } else {
       this.setState({
-        sortedInfo: { columnKey: sortedInfoData.columnKey, order: sortedInfoData.order == 'descend' ? "ascend" : "descend"}
+        sortedInfo: {
+          columnKey: sortedInfoData.columnKey,
+          order: sortedInfoData.order == 'descend' ? 'ascend' : 'descend'
+        }
       });
       sorter.field = sortedInfoData.columnKey;
-      sorter.order = sortedInfoData.order == 'descend' ? "ascend" : "descend";
+      sorter.order = sortedInfoData.order == 'descend' ? 'ascend' : 'descend';
     }
     const { changeOrder } = this.props.relaxProps;
     const { sortedInfo } = this.state;

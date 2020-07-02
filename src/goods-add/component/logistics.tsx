@@ -185,7 +185,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
                     message:
-                      'Please fill in the legal number with three decimal places'
+                      'Please input the legal number with three decimal places'
                   },
                   {
                     type: 'number',
@@ -234,7 +234,7 @@ class LogisticsForm extends React.Component<any, any> {
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,
                     message:
-                      'Please fill in the legal number of six decimal places'
+                      'Please input the legal number of six decimal places'
                   },
                   {
                     type: 'number',

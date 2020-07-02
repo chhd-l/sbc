@@ -12,12 +12,12 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 13 }
   }
 };
 
@@ -72,7 +72,7 @@ export default class LeaderModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="设置主管"
+        title="Set supervisor"
         visible={leaderModalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
@@ -98,7 +98,7 @@ export default class LeaderModal extends React.Component<any, any> {
         if (newEmployeeId) {
           modifyLeader();
         } else {
-          message.error('请选择主管！');
+          message.error('Please choose the supervisor!');
         }
       } else {
         this.setState({});
@@ -151,15 +151,15 @@ class LeaderModalForm extends React.Component<any, any> {
     return (
       <Form className="login-form">
         {formData.get('departmentParentName') ? (
-          <FormItem {...formItemLayout} label="部门">
+          <FormItem {...formItemLayout} label="Department">
             {formData.get('departmentParentName')}
           </FormItem>
         ) : null}
 
-        <FormItem {...formItemLayout} label="选择主管" hasFeedback>
+        <FormItem {...formItemLayout} label="Select supervisor" hasFeedback>
           {getFieldDecorator('employeeId', {
             initialValue: oldEmployeeName,
-            rules: [{ required: true, message: '请选择主管' }]
+            rules: [{ required: true, message: 'Please select supervisor' }]
           })(
             <AutoComplete
               dataSource={[]}

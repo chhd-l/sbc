@@ -45,14 +45,14 @@ export default class AppStore extends Store {
     const checkedRelation = this.state().get('checkedRelation');
     if (checked) {
       if (checkedRelation.size >= 20) {
-        message.error('最多可设置20个物流公司');
+        message.error('Up to 20 logistics companies can be set up');
       } else {
         const { res } = await webapi.addExpress(expressCompanyId);
         if (res.code == Const.SUCCESS_CODE) {
           this.dispatch('exp:afterChecked', res.context);
           this.dispatch('exp:checked', { index, checked });
         } else if (res.code == 'K-090903') {
-          message.error('选择的物流公司不存在！');
+          message.error('The selected logistics company does not exist!');
           this.init();
         } else {
           message.error(res.message);

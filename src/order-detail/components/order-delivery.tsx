@@ -141,7 +141,8 @@ export default class OrderDelivery extends React.Component<any, any> {
                         'none'
                       )}
                     </div>
-                    {flowState === 'CONFIRMED' ||
+                    {/* 作废shipping */}
+                    {/* {flowState === 'CONFIRMED' ||
                     flowState === 'COMPLETED' ||
                     flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
@@ -155,7 +156,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                           Invalid
                         </a>
                       </AuthWrapper>
-                    )}
+                    )} */}
                   </div>
                 </div>
               );

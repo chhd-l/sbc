@@ -11,12 +11,12 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
     xs: { span: 24 },
-    sm: { span: 14 }
+    sm: { span: 13 }
   }
 };
 
@@ -65,7 +65,7 @@ export default class DepartmentModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={isAdd ? '新增部门' : '编辑部门'}
+        title={isAdd ? 'New department' : 'Edit department'}
         visible={modalVisible}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
@@ -128,25 +128,34 @@ class CateModalForm extends React.Component<any, any> {
     return (
       <Form className="login-form">
         {formData && formData.get('departmentParentName') ? (
-          <FormItem {...formItemLayout} label="上级部门">
+          <FormItem {...formItemLayout} label="Superior departments">
             {formData.get('departmentParentName')}
           </FormItem>
         ) : null}
 
-        <FormItem {...formItemLayout} label="部门名称" hasFeedback>
+        <FormItem {...formItemLayout} label="Department name" hasFeedback>
           {getFieldDecorator('departmentName', {
             rules: [
-              { required: true, whitespace: true, message: '请输入部门名称' },
-              { max: 20, message: '最多20字符' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please enter the department name'
+              },
+              { max: 20, message: 'Maximum 20 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '部门名称');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Department name'
+                  );
                 }
               }
             ],
             initialValue: departmentName,
             onChange: this._changeDepartmentName
-          })(<Input placeholder="请输入部门名称" />)}
+          })(<Input placeholder="Please enter the department name" />)}
         </FormItem>
       </Form>
     );

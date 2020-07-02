@@ -108,7 +108,9 @@ export default class StepThree extends React.Component<any, any> {
             <GreyText>
               {cateList.length} <FormattedMessage id="signedCategoryInfo" />
             </GreyText>
-            <Button onClick={this._showSortsModal}>编辑签约类目</Button>
+            <Button onClick={this._showSortsModal}>
+              Edit Contract Category
+            </Button>
           </div>
           <TableBox>
             <DataGrid
@@ -176,7 +178,7 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>签约品牌</H2>
+            <H2>Signed Brand</H2>
             <GreyText>已签约{totalBrand}个品牌 最多可签约50个品牌</GreyText>
             <Button onClick={this._showModal}>编辑签约品牌</Button>
           </div>

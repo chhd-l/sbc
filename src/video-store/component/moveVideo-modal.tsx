@@ -13,7 +13,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -54,9 +54,9 @@ export default class MoveVideoModal extends React.Component<any, any> {
     }
     const WrapperForm = this.WrapperForm;
     return (
-      <Modal  maskClosable={false}
-        title="移动视频"
-         
+      <Modal
+        maskClosable={false}
+        title="Mobile Video"
         visible={moveVisible}
         onCancel={this._handleCancel}
         onOk={this._handleOk}
@@ -142,12 +142,12 @@ class MoveVideoForm extends React.Component<any, any> {
       <Form>
         <FormItem
           {...formItemLayout}
-          label="选择分类"
+          label="Choose Category"
           required={true}
           hasFeedback
         >
           {getFieldDecorator('cateId', {
-            rules: [{ required: true, message: '请选择分类' }]
+            rules: [{ required: true, message: 'Please select a category' }]
           })(
             <TreeSelect
               showSearch
@@ -158,8 +158,8 @@ class MoveVideoForm extends React.Component<any, any> {
               }
               style={{ width: 300 }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请选择分类"
-              notFoundContent="暂无分类"
+              placeholder="Please select a category"
+              notFoundContent="No Categories"
               allowClear
               treeDefaultExpandAll
             >

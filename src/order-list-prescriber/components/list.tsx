@@ -95,7 +95,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('Please fill in less than 100 characters'));
+      callback(new Error('Please input less than 100 characters'));
       return;
     }
     callback();

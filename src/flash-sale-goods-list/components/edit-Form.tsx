@@ -79,8 +79,7 @@ export default class EditForm extends React.Component<any, any> {
               },
               {
                 pattern: ValidConst.price,
-                message:
-                  'Please fill in the legal amount with two decimal places'
+                message: 'Please input the legal amount with two decimal places'
               },
               {
                 type: 'number',

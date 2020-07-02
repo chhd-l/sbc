@@ -22,7 +22,7 @@ export default class CompanyChoose extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <div style={styles.title}>选择物流公司</div>
+        <div style={styles.title}>Choose a logistics company</div>
         <Row type="flex" justify="start" style={styles.box}>
           {this.props.relaxProps.allExpressList.toJS().map((v, i) => {
             return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Card, Form } from 'antd';
-import { Headline,BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb } from 'qmkit';
 import styled from 'styled-components';
 import QQModal from './components/qq-modal';
 import { StoreProvider } from 'plume2';
@@ -56,7 +56,7 @@ export default class OnlineService extends React.Component<any, any> {
     const enableFlag = this.store.state().get('enableFlag');
     return (
       <div>
-        <BreadCrumb/>
+        <BreadCrumb />
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>设置</Breadcrumb.Item>
           <Breadcrumb.Item>客服设置</Breadcrumb.Item>
@@ -64,20 +64,22 @@ export default class OnlineService extends React.Component<any, any> {
         </Breadcrumb> */}
         <div className="container">
           <ContainerDiv>
-            <Headline title="在线客服" />
+            <Headline title="Online Service" />
             <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
               <div className="methodItem">
                 <img src={require('./img/qq.png')} />
-                <h4>QQ客服</h4>
+                <h4>QQ Customer Service</h4>
               </div>
               <div className="bar">
-                <div className="status">{enableFlag ? '已启用' : '未启用'}</div>
+                <div className="status">
+                  {enableFlag ? 'Activated' : 'Not Activated'}
+                </div>
                 <div>
                   <a
                     onClick={() => this.store.onEditServer()}
                     className="links"
                   >
-                    编辑
+                    Edit
                   </a>
                 </div>
               </div>

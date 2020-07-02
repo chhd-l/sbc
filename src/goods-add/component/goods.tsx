@@ -304,7 +304,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please fill in the SPU code'
+                    message: 'Please input the SPU code'
                   },
                   {
                     min: 1,
@@ -374,7 +374,7 @@ class GoodsForm extends React.Component<any, any> {
                     document.getElementById('page-content')
                   }
                   placeholder="Please select category"
-                  notFoundContent="No classification"
+                  notFoundContent="No categories"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
@@ -407,7 +407,7 @@ class GoodsForm extends React.Component<any, any> {
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
                   placeholder="Please select store category"
-                  notFoundContent="No classification"
+                  notFoundContent="No categories"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
@@ -470,7 +470,7 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'goodsUnit'),
                 initialValue: goods.get('goodsUnit')
               })(
-                <Input placeholder="Please fill in the unit of measurement，no more than 10 words" />
+                <Input placeholder="Please input the unit of measurement，no more than 10 words" />
               )}
             </FormItem>
           </Col>
@@ -528,7 +528,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     pattern: ValidConst.zeroPrice,
                     message:
-                      'Please fill in the legal amount with two decimal places'
+                      'Please input the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
@@ -541,7 +541,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'linePrice'),
                 initialValue: goods.get('linePrice')
-              })(<Input placeholder="Please fill in the underlined price" />)}
+              })(<Input placeholder="Please input the underlined price" />)}
             </FormItem>
           </Col>
         </Row>
@@ -579,7 +579,7 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TextArea
                   rows={4}
-                  placeholder="Please fill in the description of the item"
+                  placeholder="Please input the description of the item"
                 />
               )}
             </FormItem>

@@ -99,11 +99,11 @@ export default class SortModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            编辑签约类目<GreyText>
-              请选择末级类目签约，已签约<strong>{cateSize}</strong>个类目，最多可签约<strong
-              >
-                200
-              </strong>个类目
+            Edit Contract Category{' '}
+            <GreyText>
+              lease select the last level category to sign the contract, already
+              signed <strong>{cateSize}</strong> categories，Can sign up{' '}
+              <strong>200</strong> categories
             </GreyText>
           </div>
         }
@@ -136,19 +136,19 @@ export default class SortModal extends React.Component<any, any> {
                 rowKey={(record) => record.cateId}
               >
                 <Column
-                  title="类目"
+                  title="Category"
                   dataIndex="cateName"
                   key="cateName"
                   width="12%"
                 />
                 <Column
-                  title="上级类目"
+                  title="Superior Category"
                   dataIndex="parentGoodCateNames"
                   key="parentGoodCateNames"
                   width="20%"
                 />
                 <Column
-                  title="类目扣率"
+                  title="Category Deduction Rate"
                   dataIndex="cateRate"
                   key="cateRate"
                   width="20%"
@@ -156,22 +156,25 @@ export default class SortModal extends React.Component<any, any> {
                     (text
                       ? text
                       : record.platformCateRate
-                        ? record.platformCateRate
-                        : 0) + '%'
+                      ? record.platformCateRate
+                      : 0) + '%'
                   }
                 />
                 <Column
                   title={
                     <div>
                       <p>
-                        经营资质&nbsp;<Tooltip title="支持jpg、jpeg、png、gif，单张不超过2M，最多上传10张">
+                        Business Qualification&nbsp;
+                        <Tooltip title="Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 10 sheets">
                           <Icon
                             style={{ color: '#F56C1D' }}
                             type="question-circle-o"
                           />
                         </Tooltip>
                       </p>
-                      <GreyText>签约类目相关的行业经营许可证</GreyText>
+                      <GreyText>
+                        Sign business licenses related to the category
+                      </GreyText>
                     </div>
                   }
                   dataIndex="qualificationPics"
@@ -202,16 +205,13 @@ export default class SortModal extends React.Component<any, any> {
                   }}
                 />
                 <Column
-                  title="操作"
+                  title="Operating"
                   dataIndex="operation"
                   key="operation"
                   width="13%"
                   render={(_text, record: any) => (
-                    <a
-                      href="#!"
-                      onClick={() => delCate(record.cateId)}
-                    >
-                      删除
+                    <a href="#!" onClick={() => delCate(record.cateId)}>
+                      Delete
                     </a>
                   )}
                 />
@@ -302,7 +302,7 @@ export default class SortModal extends React.Component<any, any> {
   _editImages = (info, cateId) => {
     const { file, fileList } = info;
     if (fileList.length > 10) {
-      message.error('最多只能上传10张图片');
+      message.error('You can only upload up to 10 pictures');
       return;
     }
     const { changeImg } = this.props.relaxProps;
@@ -313,9 +313,9 @@ export default class SortModal extends React.Component<any, any> {
     ) {
       const status = file.status;
       if (status === 'done') {
-        message.success(`${file.name} 上传成功！`);
+        message.success(`${file.name} Uploaded successfully!`);
       } else if (status === 'error') {
-        message.error(`${file.name} 上传失败！`);
+        message.error(`${file.name} Uploaded failed!`);
       }
       changeImg({ cateId, imgs: JSON.stringify(fileList) });
     }
@@ -336,11 +336,11 @@ export default class SortModal extends React.Component<any, any> {
       if (file.size <= Const.fileSize.TWO) {
         return true;
       } else {
-        message.error('文件大小不能超过2M');
+        message.error('File size cannot exceed 2M');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error');
       return false;
     }
   };

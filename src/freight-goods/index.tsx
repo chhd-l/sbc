@@ -33,25 +33,32 @@ export default class GoodsFreight extends React.Component<any, any> {
   }
 
   render() {
-    let typeTxt = '新增';
+    let typeTxt = 'Add';
     if (this.store.state().get('freightTempId')) {
-      typeTxt = '编辑';
+      typeTxt = 'Edit';
     }
     return [
       // <AuthWrapper functionName="f_freight_1">
       <BreadCrumb thirdLevel={true}>
-        <Breadcrumb.Item>{typeTxt}单品运费模板</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          {typeTxt}Single product shipping template
+        </Breadcrumb.Item>
       </BreadCrumb>,
       <div className="container" key="container">
-        <Headline title={`${typeTxt}单品运费模板`} />
+        <Headline title={`${typeTxt}Single product shipping template`} />
         <Alert
           message={
             <div>
               <div>
-                在设置运费模板时建议考虑分批发货可能产生的溢出成本，适当调高基数
+                When setting the freight template, it is recommended to consider
+                the possible overflow costs of sub-wholesale goods, and
+                appropriately increase the base.
               </div>
               <div>
-                若要设置包邮，请选择卖家承担运费，若要设置部分地区包邮，请选择买家承担运费，另外再指定条件包邮
+                If you want to set up shipping, please choose the seller to bear
+                the shipping cost, if you want to set up shipping in some
+                regions, please choose the buyer to bear the shipping cost, and
+                then specify the conditions of shipping
               </div>
             </div>
           }

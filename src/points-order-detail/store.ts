@@ -96,7 +96,7 @@ export default class AppStore extends Store {
         (val) => !ValidConst.noZeroNumber.test(val.get('itemNum'))
       )
     ) {
-      message.error('Please fill in the delivery quantity');
+      message.error('Please input the delivery quantity');
     } else {
       this.showDeliveryModal();
     }

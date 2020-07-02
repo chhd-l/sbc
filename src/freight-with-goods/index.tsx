@@ -33,16 +33,14 @@ export default class FreightWithGoods extends React.Component<any, any> {
   render() {
     return [
       <BreadCrumb thirdLevel={true}>
-        <Breadcrumb.Item>关联商品</Breadcrumb.Item>
+        <Breadcrumb.Item>Related products</Breadcrumb.Item>
       </BreadCrumb>,
 
       <div className="container" key="container">
-        <Headline title="关联商品" />
+        <Headline title="Related products" />
         <div style={{ marginBottom: 10 }}>
-          当前运费模板：{this.store
-            .state()
-            .get('freightTemp')
-            .get('freightTempName')}
+          Current shipping template:
+          {this.store.state().get('freightTemp').get('freightTempName')}
         </div>
         <FreightGoodsList />
         {/*批量设置运费模板Modal*/}

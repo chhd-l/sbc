@@ -56,7 +56,7 @@ export default class OperateModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="Please fill in the reason for suspension"
+        title="Please input the reason for suspension"
         visible={modalVisible}
         onCancel={() => switchModal('')}
         onOk={this._handleOk}
@@ -68,7 +68,7 @@ export default class OperateModal extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please fill in the reason for suspension'
+                  message: 'Please input the reason for suspension'
                 },
                 {
                   validator: (rule, value, callback) => {
@@ -85,7 +85,7 @@ export default class OperateModal extends React.Component<any, any> {
               ]
             })(
               <Input.TextArea
-                placeholder="Please enter a reason for disabling"
+                placeholder="Please input a reason for disabling"
                 onChange={(e: any) => enterReason(e.target.value)}
               />
             )}

@@ -1086,7 +1086,7 @@ export default class AppStore extends Store {
     // -----商品规格值列表-------
     let goodsSpecDetails = List();
     if (data.get('specSingleFlag')) {
-      message.error('You must fill in the compulsory fileds');
+      message.error('You must input the compulsory fileds');
       return;
     }
     data.get('goodsSpecs').forEach((item) => {

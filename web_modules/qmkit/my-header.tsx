@@ -82,7 +82,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           url = `${baseConfig['mobileWebsite']}/store-main/${loginInfo.storeId}`;
         }
         let qrCodeUrl = null;
-        QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function(
+        QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function (
           _err,
           url
         ) {
@@ -207,7 +207,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
             (!prescriberId ? (
               <a
                 className="ant-dropdown-link"
-                href="https://shopuat.466920.com/"
+                href={`${baseConfig.pcWebsite}`}
                 target="_blank"
               >
                 <Icon type="eye-o" />
@@ -215,18 +215,18 @@ export default class MyHeader extends React.PureComponent<any, any> {
                 {/* <Icon type="down" /> */}
               </a>
             ) : (
-              <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
-                <a
-                  className="ant-dropdown-link"
-                  href="#"
-                  onClick={() => this._handlePreview()}
-                >
-                  <Icon type="eye-o" />
-                  <span style={styles.dropdownText}>Preview</span>
-                  <Icon type="down" />
-                </a>
-              </Dropdown>
-            ))}
+                <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
+                  <a
+                    className="ant-dropdown-link"
+                    href="#"
+                    onClick={() => this._handlePreview()}
+                  >
+                    <Icon type="eye-o" />
+                    <span style={styles.dropdownText}>Preview</span>
+                    <Icon type="down" />
+                  </a>
+                </Dropdown>
+              ))}
         </div>
         <div>
           <Dropdown overlay={menu} trigger={['click']}>

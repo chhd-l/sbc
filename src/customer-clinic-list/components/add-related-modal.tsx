@@ -37,7 +37,7 @@ class AddRelaterForm extends React.Component<any, any> {
     this._store = ctx['_plume$Store'];
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       customers: fromJS([])
     });

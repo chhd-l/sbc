@@ -254,7 +254,7 @@ export default class List extends React.Component<any, any> {
                     <div>
                       {newAccounts.toJS().length == 1 ? null : (
                         <a
-                          href="javascript:;"
+                          href="#!"
                           onClick={() => deleteAccount(rowData.key)}
                         >
                           <Icon

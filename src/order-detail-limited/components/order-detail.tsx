@@ -28,7 +28,8 @@ const columns = [
   {
     title: 'Product Name',
     dataIndex: 'skuName',
-    key: 'skuName'
+    key: 'skuName',
+    width: '50%'
   },
   {
     title: 'Weight',
@@ -346,7 +347,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
         </div>
 
         <div
-          style={{ display: 'flex', marginTop: 20, flexDirection: 'column' }}
+          style={{
+            display: 'flex',
+            marginTop: 20,
+            flexDirection: 'column',
+            wordBreak: 'break-word'
+          }}
         >
           <Table
             rowKey={(_record, index) => index.toString()}
@@ -429,7 +435,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             />
           }
         >
-          <a href="javascript:;">
+          <a href="#!">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
         </Popover>

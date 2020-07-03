@@ -229,7 +229,7 @@ export default class GoodsAdd extends React.Component<any, any> {
     this._store = ctx['_plume$Store'];
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       selectedRows: nextProps.selectedRows,
       selectedRowKeys: nextProps.selectedKeys.toJS()

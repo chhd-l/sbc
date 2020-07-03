@@ -88,7 +88,7 @@ export default class StepThree extends React.Component<any, any> {
     allBrands: 'allBrands'
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       showImg: false,
       imgUrl: ''

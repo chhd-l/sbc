@@ -7,7 +7,7 @@ import moment from 'moment';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
-const { Column } = DataGrid;
+const  Column  = DataGrid;
 
 @Relax
 export default class List extends React.Component<any, any> {

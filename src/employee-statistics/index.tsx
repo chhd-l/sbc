@@ -13,7 +13,7 @@ import { DataModal,BreadCrumb } from 'qmkit';
 export default class EmployeeStatistics extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

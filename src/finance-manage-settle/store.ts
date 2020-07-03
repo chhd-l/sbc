@@ -8,6 +8,7 @@ import SettleActor from './actor/settle-actor';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
+    console.log(__DEV__,'---------------------')
     if (__DEV__) {
       (window as any)._store = this;
     }

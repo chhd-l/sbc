@@ -169,12 +169,14 @@ export default class BrandModal extends React.Component<any, any> {
                         onClick={() => this._addBrand(v)}
                       >
                         <div>{v.brandName}</div>
-                        {//判断是否要显示勾号
-                        brandIdArray.indexOf(v.brandId) == -1 ? null : (
-                          <div style={{ marginRight: '10px' }}>
-                            <i className="anticon anticon-check" />
-                          </div>
-                        )}
+                        {
+                          //判断是否要显示勾号
+                          brandIdArray.indexOf(v.brandId) == -1 ? null : (
+                            <div style={{ marginRight: '10px' }}>
+                              <i className="anticon anticon-check" />
+                            </div>
+                          )
+                        }
                       </li>
                     ))}
                   </ul>
@@ -306,7 +308,7 @@ export default class BrandModal extends React.Component<any, any> {
                     render={(_text, record: any) => {
                       return (
                         <a
-                          href="javascript:;"
+                          href="#!"
                           onClick={() =>
                             this._deleteBrand(
                               record.contractBrandId,
@@ -550,14 +552,14 @@ export default class BrandModal extends React.Component<any, any> {
                         return (
                           <div>
                             <a
-                              href="javascript:;"
+                              href="#!"
                               style={{ marginRight: '5px' }}
                               onClick={() => addNewOtherBrand()}
                             >
                               新增
                             </a>
                             <a
-                              href="javascript:;"
+                              href="#!"
                               onClick={() =>
                                 deleteOtherBrand(
                                   record.contractBrandId,

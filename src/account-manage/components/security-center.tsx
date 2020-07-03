@@ -46,7 +46,7 @@ export default class SecurityCenter extends React.Component<any, any> {
             <Col span={8}>******</Col>
             <Col span={8}>
               <a
-                href="javascript:;"
+                href="#!"
                 onClick={() =>
                   mobile && mobile != null
                     ? history.push({
@@ -67,7 +67,7 @@ export default class SecurityCenter extends React.Component<any, any> {
           <Row>
             <Col span={8}>{(account && account.get('phone')) || '未绑定'}</Col>
             <Col span={8}>
-              <a href="javascript:;" onClick={() => onShow()}>
+              <a href="#!" onClick={() => onShow()}>
                 {account && account.get('phone') ? 'Modify' : 'Bind'}
               </a>
             </Col>

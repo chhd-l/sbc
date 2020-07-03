@@ -219,7 +219,7 @@ export default class GoodsList extends React.Component<any, any> {
                       placement="topLeft"
                       title={enterPriseGoodsAuditReason}
                     >
-                      <a href="javascript:;">原因</a>
+                      <a href="#!">原因</a>
                     </Tooltip>
                   )}
                 </div>

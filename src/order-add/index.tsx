@@ -98,7 +98,7 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
   store: AppStore;
   _form: any;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { tid } = this.props.match.params;
     this.store.initInvoiceSwitch();
     if (tid) {

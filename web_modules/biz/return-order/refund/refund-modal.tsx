@@ -24,7 +24,7 @@ export default class RefundModal extends React.Component<any, any> {
     visible: false
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const visible = nextProps.data.get('visible');
     if (visible != this.state.visible) {
       if (visible) {

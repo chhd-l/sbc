@@ -127,7 +127,7 @@ class LevelPriceForm extends React.Component<any, any> {
                       type: 'number',
                       max: 9999999.99,
                       message: '最大值为9999999.99',
-                      transform: function(value) {
+                      transform: function (value) {
                         return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                       }
                     }
@@ -236,7 +236,7 @@ class LevelPriceForm extends React.Component<any, any> {
                             type: 'number',
                             max: 9999999.99,
                             message: '最大值为9999999.99',
-                            transform: function(value) {
+                            transform: function (value) {
                               return isNaN(parseFloat(value))
                                 ? 0
                                 : parseFloat(value);

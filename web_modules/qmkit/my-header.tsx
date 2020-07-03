@@ -41,7 +41,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
     if (miniProgramUrl) {
       miniProgramDom = (
         <Menu.Item key="2">
-          <a href="javascript:;" className="previewCode">
+          <a href="#!" className="previewCode">
             <img src={miniProgramUrl} alt="二维码" width="80" height="80" />
             <p>小程序</p>
             <div className="previewImg">
@@ -161,7 +161,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
         <Menu.Item key="1">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() =>
               history.push({
                 pathname: '/find-password',
@@ -175,7 +175,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           </a>
         </Menu.Item>
         <Menu.Item key="2">
-          <a href="javascript:;" onClick={() => this._handleLogout()}>
+          <a href="#!" onClick={() => this._handleLogout()}>
             <Icon type="logout" /> Exit
           </a>
         </Menu.Item>

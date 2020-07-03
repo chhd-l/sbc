@@ -48,7 +48,7 @@ export default class GetCustomerStatistics extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { dateType } = nextProps.relaxProps;
     if (
       nextProps.relaxProps.dateType !== this.props.relaxProps.dateType ||

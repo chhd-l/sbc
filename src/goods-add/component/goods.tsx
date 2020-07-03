@@ -190,7 +190,7 @@ class GoodsForm extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
@@ -420,7 +420,7 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
           {/* <Col span={8}>
             <a
-              href="javascript:;"
+              href="#!"
               onClick={showCateModal}
               style={{ marginLeft: 10, lineHeight: '40px' }}
             >
@@ -534,7 +534,7 @@ class GoodsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: 'The maximum value is 9999999.99',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }

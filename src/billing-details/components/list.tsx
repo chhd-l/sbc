@@ -43,7 +43,7 @@ export default class List extends React.Component<any, any> {
     exportSettlementDetailList: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({ expandedRows: [] });
   }
 

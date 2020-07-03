@@ -40,10 +40,7 @@ export default class FreightWithGoods extends React.Component<any, any> {
         <Headline title="Related products" />
         <div style={{ marginBottom: 10 }}>
           Current shipping template:
-          {this.store
-            .state()
-            .get('freightTemp')
-            .get('freightTempName')}
+          {this.store.state().get('freightTemp').get('freightTempName')}
         </div>
         <FreightGoodsList />
         {/*批量设置运费模板Modal*/}

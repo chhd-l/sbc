@@ -210,10 +210,7 @@ export default class SortModal extends React.Component<any, any> {
                   key="operation"
                   width="13%"
                   render={(_text, record: any) => (
-                    <a
-                      href="javascript:;"
-                      onClick={() => delCate(record.cateId)}
-                    >
+                    <a href="#!" onClick={() => delCate(record.cateId)}>
                       Delete
                     </a>
                   )}

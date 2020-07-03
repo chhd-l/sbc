@@ -494,7 +494,7 @@ export default {
   'deleteAccount': 'Delete account',
   'setMainAccount': 'Set the main account',
 
-  'financialReconciliation': 'Financial Reconciliation',
+  'financialReconciliation': 'Finance Reconciliation',
   'bulkExport': 'Bulk Export',
   'revenueReconciliation': 'Revenue Reconciliation',
   'refundReconciliation': 'Refund Reconciliation',
@@ -512,7 +512,7 @@ export default {
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
 
-  'financialSettlement': 'Financial Settlement',
+  'financialSettlement': 'Finance Settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
@@ -535,8 +535,32 @@ export default {
   'category': 'Category',
   'productPrice': 'Product Price',
   'freight': 'Freight',
-
+  //财务
+  //Finance Reward
+  'Reward': 'Reward',
   'orderInvoice': 'Order Invoice',
+  'PrescriberID': 'Prescriber ID',
+  'PrescriberName': 'Prescriber Name',
+  'BulkExport': 'Bulk Export',
+  'Refresh': 'Refresh',
+  'PrescriberType': 'Prescriber Type',
+  'OrderQuantity': 'Order Quantity',
+  'OrderAmount': 'Order Amount',
+  'RewardType': 'Reward Type',
+  'RewardAmount': 'Reward Amount',
+  'Operation': 'Operation',
+
+  //Finance Reward-Details
+  'rewardDetails': 'Reward Details',
+  'RewardRules': 'Reward Rules',
+  'OrderNumber': 'Order Number',
+  'OrderTime': 'Order Time',
+  'RewardRate': 'Reward Rate',
+  'RewardRemark': 'Reward Remark',
+
+
+
+
 
   'invoiceStatus': 'Invoice Status',
 
@@ -553,6 +577,7 @@ export default {
   'toBeInvoiced': 'To be invoiced',
   'viewBilling': 'View Billing',
   'billingItems': 'Billing Items',
+  'FinanceReward': 'Finance Reward',
 
   'supportedBillingTypes': 'Supported billing types',
   'doesNotSupportInvoicing': 'Does not support invoicing',

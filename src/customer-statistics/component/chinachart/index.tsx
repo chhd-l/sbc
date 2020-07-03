@@ -145,7 +145,7 @@ export default class ChinaMap extends React.Component<ChinaMapProps, IState> {
     ]);
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this._drewCharts();
   }
 

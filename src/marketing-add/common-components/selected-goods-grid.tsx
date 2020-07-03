@@ -24,7 +24,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({ skuExists: nextProps.skuExists });
   }
 

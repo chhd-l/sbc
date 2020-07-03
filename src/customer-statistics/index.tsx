@@ -38,7 +38,7 @@ export default class CustomerStatistics extends React.Component<any, any> {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

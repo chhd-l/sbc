@@ -112,17 +112,17 @@ export default class List extends React.Component<any, any> {
     return record.isReceived == 1 ? (
       <div className="operation-box">
         <AuthWrapper functionName="f_vendor_new_accounts">
-          <a href="javascript:;" onClick={() => this._showAccountModal(record)}>
+          <a href="#!" onClick={() => this._showAccountModal(record)}>
             {<FormattedMessage id="changeAccount" />}
           </a>
         </AuthWrapper>
         <AuthWrapper functionName="f_acc_del">
-          <a href="javascript:;" onClick={() => deleteAccount(record)}>
+          <a href="#!" onClick={() => deleteAccount(record)}>
             {<FormattedMessage id="deleteAccount" />}
           </a>
         </AuthWrapper>
         <AuthWrapper functionName="master_account_setting">
-          <a href="javascript:;" onClick={() => this._setMainAccount(record)}>
+          <a href="#!" onClick={() => this._setMainAccount(record)}>
             {<FormattedMessage id="setMainAccount" />}
           </a>
         </AuthWrapper>
@@ -131,13 +131,13 @@ export default class List extends React.Component<any, any> {
       <div className="operation-box">
         {record.remitPrice && (
           <AuthWrapper functionName="f_acc_rec_confirm">
-            <a href="javascript:;" onClick={() => this._showMoneyModal(record)}>
+            <a href="#!" onClick={() => this._showMoneyModal(record)}>
               {<FormattedMessage id="receivePayment" />}
             </a>
           </AuthWrapper>
         )}
         <AuthWrapper functionName="f_acc_del">
-          <a href="javascript:;" onClick={() => deleteAccount(record)}>
+          <a href="#!" onClick={() => deleteAccount(record)}>
             {<FormattedMessage id="deleteAccount" />}
           </a>
         </AuthWrapper>

@@ -14,7 +14,7 @@ import { FormattedMessage } from 'react-intl';
 export default class GoodsCate extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

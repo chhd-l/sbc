@@ -77,7 +77,7 @@ export default class CustomerList extends React.Component<any, any> {
     setForbidModalVisible: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       tooltipVisible: {},
       rejectDomVisible: false

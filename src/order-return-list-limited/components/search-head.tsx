@@ -94,7 +94,7 @@ export default class SearchHead extends Component<any, any> {
         {tabKey == 'flowState-INIT' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf002">
-              <a href="javascript:;" onClick={() => this._handleBatchAudit()}>
+              <a href="#!" onClick={() => this._handleBatchAudit()}>
                 批量审核
               </a>
             </AuthWrapper>
@@ -103,7 +103,7 @@ export default class SearchHead extends Component<any, any> {
         {tabKey == 'flowState-DELIVERED' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf004">
-              <a href="javascript:;" onClick={() => this._handleBatchReceive()}>
+              <a href="#!" onClick={() => this._handleBatchReceive()}>
                 批量收货
               </a>
             </AuthWrapper>
@@ -111,7 +111,7 @@ export default class SearchHead extends Component<any, any> {
         ) : null}
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
+            <a href="#!" onClick={() => this._handleBatchExport()}>
               批量导出
             </a>
           </AuthWrapper>

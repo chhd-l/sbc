@@ -307,9 +307,19 @@ const routes = [
     asyncComponent: () => import('./vendor-new-accounts')
   },
   //开票管理-开票项目
-  {
+ /* {
     path: '/finance-ticket-new',
     asyncComponent: () => import('./finance-ticket-new')
+  },*/
+  //Reward
+  {
+    path: '/finance-ticket-new',
+    asyncComponent: () => import('./finance-reward')
+  },
+  //Reward-detail
+  {
+    path: '/finance-reward-details',
+    asyncComponent: () => import('./finance-reward-details')
   },
   //发布商品
   {

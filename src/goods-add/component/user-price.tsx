@@ -128,10 +128,7 @@ class UserPriceForm extends React.Component<any, any> {
       userMaxCountChecked,
       userMaxCountDisable
     } = this.props.relaxProps;
-    const userPriceData = userPrice
-      .valueSeq()
-      .toList()
-      .toJS();
+    const userPriceData = userPrice.valueSeq().toList().toJS();
     return (
       <Row>
         <Col span={4}>
@@ -245,7 +242,7 @@ class UserPriceForm extends React.Component<any, any> {
                           type: 'number',
                           max: 9999999.99,
                           message: '最大值为9999999.99',
-                          transform: function(value) {
+                          transform: function (value) {
                             return isNaN(parseFloat(value))
                               ? 0
                               : parseFloat(value);

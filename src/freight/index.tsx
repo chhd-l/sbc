@@ -36,7 +36,7 @@ const RadioGroup = Radio.Group;
 export default class FreightTemplate extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let { tab } = (this.props &&
       this.props.location &&
       this.props.location.state) || {

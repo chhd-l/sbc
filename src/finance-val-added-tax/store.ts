@@ -63,9 +63,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onSearch = async () => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
     if (param.checkState == '99') {
       param.checkState = null;
     }
@@ -208,11 +206,7 @@ export default class AppStore extends Store {
     }
     if (ValidConst.number.test(value)) {
       await this.fetch(value);
-      if (
-        this.state()
-          .get('customers')
-          .count() === 0
-      ) {
+      if (this.state().get('customers').count() === 0) {
         message.error('客户不存在');
       }
     }

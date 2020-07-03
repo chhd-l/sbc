@@ -53,7 +53,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
         };
     }
 
-    componentWillReceiveProps() {
+    UNSAFE_componentWillReceiveProps() {
         //等级初始化
         const store = this._store as any;
         const joinLevel = store.state().getIn(['activity', 'joinLevel']) + '';

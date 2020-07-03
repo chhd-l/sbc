@@ -3,8 +3,9 @@ import { Modal, Input } from 'antd';
 import { Relax, IMap } from 'plume2';
 import { noop } from 'qmkit';
 import moment from 'moment';
-import { message } from 'antd';
+import { message, Rate } from 'antd';
 import GoodsImage from '../../goods-detail/components/image';
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../img/none.png');
 
 const { TextArea } = Input;
@@ -55,10 +56,19 @@ export default class See extends React.Component<any, any> {
       return null;
     }
     const goodsImg = goodsEvaluate.goodsImg;
+    const styles = {
+      redStar: {
+        color: 'red',
+        fontSize: 16,
+        marginLeft: 10,
+        top: -5,
+        position: 'relative'
+      }
+    };
     return (
-      <Modal  maskClosable={false}
-        title={'评论详情'}
-         
+      <Modal
+        maskClosable={false}
+        title={<FormattedMessage id="reviewDetail" />}
         visible={modalVisible}
         width={920}
         onCancel={this._handleModelCancel}
@@ -91,77 +101,120 @@ export default class See extends React.Component<any, any> {
                 {arrowVisible && (
                   <div>
                     <div className="detail">
-                      <span className="evaluate">评价</span>
+                      {/*<span className="evaluate">评价</span>*/}
                       <span className="text">
-                        发表人：{goodsEvaluate.customerName}
-                      </span>
-                      <span className="text mar-lr">
-                        时间：{goodsEvaluate.historyEvaluateTime}
-                      </span>
-                      <span className="text">
-                        {goodsEvaluate.historyEvaluateScore}星
+                        <FormattedMessage id="consumerName" />：
+                        {goodsEvaluate.customerName}
                       </span>
                     </div>
-                    <div className="compuctor-content">
-                      内容：{goodsEvaluate.historyEvaluateContent}
+                    <div>
+                      <span className="text">
+                        <FormattedMessage id="reviewTime" />：
+                        {moment(goodsEvaluate.evaluateTime).format(
+                          'YYYY-MM-DD HH:mm:ss'
+                        )}
+                      </span>
                     </div>
+                    <div>
+                      <span className="text">
+                        <FormattedMessage id="productRatings" />：
+                      </span>
+                      <Rate
+                        value={goodsEvaluate.evaluateScore}
+                        disabled={true}
+                        style={styles.redStar}
+                      />
+                    </div>
+                    {/*<div className="compuctor-content">*/}
+                    {/*  <FormattedMessage id="content"/>：{goodsEvaluate.historyEvaluateContent}*/}
+                    {/*</div>*/}
                     <div className="compuctor-content">
-                      回复：{goodsEvaluate.historyEvaluateAnswer}
+                      <FormattedMessage id="comments" />：
+                      {goodsEvaluate.historyEvaluateAnswer}
                     </div>
                   </div>
                 )}
               </div>
             ) : null}
             {goodsEvaluate.evaluateAnswer ? (
-              <div className="compuctor-detail border-b">
+              <div className="compuctor-detail">
                 <div className="detail">
-                  <span className="evaluate">评价</span>
+                  {/*<span className="evaluate">评价</span>*/}
                   <span className="text">
-                    发表人：{goodsEvaluate.customerName}
+                    <FormattedMessage id="consumerName" />：
+                    {goodsEvaluate.customerName}
                   </span>
-                  <span className="text mar-lr">
-                    时间：{moment(goodsEvaluate.evaluateTime).format(
+                </div>
+                <div>
+                  <span className="text">
+                    <FormattedMessage id="reviewTime" />：
+                    {moment(goodsEvaluate.evaluateTime).format(
                       'YYYY-MM-DD HH:mm:ss'
                     )}
                   </span>
-                  <span className="text">{goodsEvaluate.evaluateScore}星</span>
                 </div>
-                <div className="compuctor-content">
-                  内容：{goodsEvaluate.evaluateContent}
+                <div>
+                  <span className="text">
+                    <FormattedMessage id="productRating" />：
+                  </span>
+                  <Rate
+                    value={goodsEvaluate.evaluateScore}
+                    disabled={true}
+                    style={styles.redStar}
+                  />
                 </div>
+                {/*<div className="compuctor-content">*/}
+                {/*  <FormattedMessage id="content"/>：{goodsEvaluate.evaluateContent}*/}
+                {/*</div>*/}
                 {goodsEvaluate.evaluateAnswer ? (
                   <div className="compuctor-content">
-                    回复：{goodsEvaluate.evaluateAnswer}
+                    <FormattedMessage id="comments" />：
+                    {goodsEvaluate.evaluateAnswer}
                   </div>
                 ) : null}
               </div>
             ) : (
               <div className="compuctor-detail border-b">
                 <div className="detail">
-                  <span className="evaluate">评价</span>
+                  {/*<span className="evaluate">评价</span>*/}
                   <span className="text">
-                    发表人：{goodsEvaluate.customerName}
+                    <FormattedMessage id="consumerName" />：
+                    {goodsEvaluate.customerName}
                   </span>
-                  <span className="text mar-lr">
-                    时间：{moment(goodsEvaluate.evaluateTime).format(
+                </div>
+                <div className="detail">
+                  <span className="text">
+                    <FormattedMessage id="reviewTime" />：
+                    {moment(goodsEvaluate.evaluateTime).format(
                       'YYYY-MM-DD HH:mm:ss'
                     )}
                   </span>
-                  <span className="text">{goodsEvaluate.evaluateScore}星</span>
-                </div>
-                <div className="compuctor-content">
-                  内容：{goodsEvaluate.evaluateContent}
                 </div>
                 <div className="detail">
-                  <span className="evaluate">回复</span>
-                  {/*<div className="reply-text">回复</div>*/}
+                  <span className="text">
+                    <FormattedMessage id="productRating" />：
+                  </span>
+                  <Rate
+                    value={goodsEvaluate.evaluateScore}
+                    disabled={true}
+                    style={styles.redStar}
+                  />
                 </div>
-                <div className="compuctor-content">
+                {/*<div className="compuctor-content">*/}
+                {/*  <FormattedMessage id="content"/>：{goodsEvaluate.evaluateContent}*/}
+                {/*</div>*/}
+                <div className="detail">
+                  <span className="text">
+                    <FormattedMessage id="comments" />
+                  </span>
+                </div>
+                <div className="compuctor-content2">
                   <TextArea
                     rows={4}
-                    placeholder="最多可输入500个字"
+                    placeholder="Enter up to 500 characters"
                     maxLength={500}
                     defaultValue=""
+                    disabled={true}
                     onChange={(e) =>
                       onFormFieldChange('evaluateAnswer', e.target.value)
                     }
@@ -177,23 +230,21 @@ export default class See extends React.Component<any, any> {
                   <ul className="drying-list">
                     <li className="dry-name">晒单</li>
                     <li className="dry-imgs">
-                      {goodsEvaluate.evaluateImageList.map(
-                        (v, k) =>
-                          k < 5 ? (
-                            <div key={k}>
-                              <GoodsImage url={v.artworkUrl} />
-                            </div>
-                          ) : null
+                      {goodsEvaluate.evaluateImageList.map((v, k) =>
+                        k < 5 ? (
+                          <div key={k}>
+                            <GoodsImage url={v.artworkUrl} />
+                          </div>
+                        ) : null
                       )}
                     </li>
                     <li className="dry-imgs">
-                      {goodsEvaluate.evaluateImageList.map(
-                        (v, k) =>
-                          k >= 5 ? (
-                            <div key={k}>
-                              <GoodsImage url={v.artworkUrl} />
-                            </div>
-                          ) : null
+                      {goodsEvaluate.evaluateImageList.map((v, k) =>
+                        k >= 5 ? (
+                          <div key={k}>
+                            <GoodsImage url={v.artworkUrl} />
+                          </div>
+                        ) : null
                       )}
                     </li>
                   </ul>

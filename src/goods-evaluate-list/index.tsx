@@ -8,6 +8,7 @@ import Tab from './components/tab';
 import EvaluateSum from './components/store-evaluate-sum';
 import SeeRecord from './components/see-record';
 import See from './components/see';
+import { FormattedMessage } from 'react-intl';
 // import { Link } from 'react-router-dom';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -38,18 +39,18 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>评价管理</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container customer">
-            <Headline title="评价管理" />
+            <Headline title={<FormattedMessage id="reviewManagement" />} />
             <EvaluateSum />
             <br />
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Tips title="说明：评价概况展示近180天内服务评价数据汇总，评分根据各数据加权平均计算，" />
+              <Tips title={<FormattedMessage id="reviewTip" />} />
               {/*权限*/}
               <AuthWrapper functionName="f_goods_detail_1">
                 <span
                   style={{ color: '#F56C1D', cursor: 'pointer' }}
                   onClick={this._showCateModal}
                 >
-                  查看服务评价记录
+                  <FormattedMessage id="ratingRule" />
                 </span>
               </AuthWrapper>
             </div>

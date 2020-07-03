@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
 const defaultImg = require('../img/none.png');
 import Moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 const { Column } = DataGrid;
@@ -74,7 +75,7 @@ export default class CustomerList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title="商品名称"
+          title={<FormattedMessage id="productName" />}
           key="goodsInfoName"
           dataIndex="goodsInfoName"
           width={150}
@@ -96,14 +97,14 @@ export default class CustomerList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="订单号"
+          title={<FormattedMessage id="orderNumber" />}
           key="orderNo"
           width={150}
           dataIndex="orderNo"
           render={(orderNo) => (orderNo ? orderNo : '-')}
         />
         <Column
-          title="发表人"
+          title={<FormattedMessage id="consumerName" />}
           key="customerName,"
           dataIndex="customerName"
           width={120}
@@ -118,7 +119,7 @@ export default class CustomerList extends React.Component<any, any> {
           }}
         />
         <Column
-          title="商品评分"
+          title={<FormattedMessage id="productRatings" />}
           key="evaluateScore"
           dataIndex="evaluateScore"
           width={50}
@@ -126,81 +127,79 @@ export default class CustomerList extends React.Component<any, any> {
             evaluateScore ? evaluateScore + '星' : '-'
           }
         />
-        <Column
-          title="评价内容"
-          key="evaluateContent"
-          dataIndex="evaluateContent"
-          width={150}
-          render={(evaluateContent) => {
-            if (evaluateContent) {
-              if (evaluateContent.length > 20) {
-                return (
-                  <span style={{ wordBreak: 'break-word' }}>
-                    {evaluateContent.substring(0, 20) + '...'}
-                  </span>
-                );
-              }
-              return (
-                <span style={{ wordBreak: 'break-word' }}>
-                  {evaluateContent}
-                </span>
-              );
-            }
-            return '-';
-          }}
-        />
-        <Column
-          title="晒单"
-          key="evaluateImageList"
-          dataIndex="evaluateImageList"
-          width={252}
-          render={(evaluateImageList) => {
-            let countFlag = false;
-            return (
-              <div style={styles.goodsImg}>
-                {/*/!*商品图片*!/*/}
-                {evaluateImageList
-                  ? evaluateImageList.map(
-                      (v, k) =>
-                        k < 3 ? (
-                          <img
-                            src={v.artworkUrl ? v.artworkUrl : defaultImg}
-                            key={k}
-                            style={styles.imgItem}
-                          />
-                        ) : (
-                          (countFlag = true)
-                        )
-                    )
-                  : '-'}
+        {/*<Column*/}
+        {/*  title="评价内容"*/}
+        {/*  key="evaluateContent"*/}
+        {/*  dataIndex="evaluateContent"*/}
+        {/*  width={150}*/}
+        {/*  render={(evaluateContent) => {*/}
+        {/*    if (evaluateContent) {*/}
+        {/*      if (evaluateContent.length > 20) {*/}
+        {/*        return (*/}
+        {/*          <span style={{ wordBreak: 'break-word' }}>*/}
+        {/*            {evaluateContent.substring(0, 20) + '...'}*/}
+        {/*          </span>*/}
+        {/*        );*/}
+        {/*      }*/}
+        {/*      return (*/}
+        {/*        <span style={{ wordBreak: 'break-word' }}>*/}
+        {/*          {evaluateContent}*/}
+        {/*        </span>*/}
+        {/*      );*/}
+        {/*    }*/}
+        {/*    return '-';*/}
+        {/*  }}*/}
+        {/*/>*/}
+        {/*<Column*/}
+        {/*  title="晒单"*/}
+        {/*  key="evaluateImageList"*/}
+        {/*  dataIndex="evaluateImageList"*/}
+        {/*  width={252}*/}
+        {/*  render={(evaluateImageList) => {*/}
+        {/*    let countFlag = false;*/}
+        {/*    return (*/}
+        {/*      <div style={styles.goodsImg}>*/}
+        {/*        */}
+        {/*        {evaluateImageList*/}
+        {/*          ? evaluateImageList.map(*/}
+        {/*              (v, k) =>*/}
+        {/*                k < 3 ? (*/}
+        {/*                  <img*/}
+        {/*                    src={v.artworkUrl ? v.artworkUrl : defaultImg}*/}
+        {/*                    key={k}*/}
+        {/*                    style={styles.imgItem}*/}
+        {/*                  />*/}
+        {/*                ) : (*/}
+        {/*                  (countFlag = true)*/}
+        {/*                )*/}
+        {/*            )*/}
+        {/*          : '-'}*/}
 
-                {countFlag && '...'}
-              </div>
-            );
-          }}
-        />
+        {/*        {countFlag && '...'}*/}
+        {/*      </div>*/}
+        {/*    );*/}
+        {/*  }}*/}
+        {/*/>*/}
         <Column
-          title="展示"
+          title={<FormattedMessage id="displayStatus" />}
           key="isShow"
           dataIndex="isShow"
           render={(isShow) => (isShow ? isShowFunction(isShow) : '否')}
         />
         <Column
-          title="发表时间"
+          title={<FormattedMessage id="reviewTime" />}
           key="evaluateTime"
           dataIndex="evaluateTime"
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime)
-                  .format(Const.TIME_FORMAT)
-                  .toString()
+              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
               : ''
           }
         />
 
         <DataGrid.Column
-          title="操作"
+          title={<FormattedMessage id="operation" />}
           key="evaluateId"
           dataIndex="evaluateId"
           className="operation-th"
@@ -212,7 +211,13 @@ export default class CustomerList extends React.Component<any, any> {
                     style={styles.see}
                     onClick={() => goodsEvaluateDetail(evaluateId, true)}
                   >
-                    查看
+                    <FormattedMessage id="view" />
+                  </span>
+                  <span
+                    style={styles.see}
+                    onClick={() => deleteEvaluate(evaluateId)}
+                  >
+                    <FormattedMessage id="delete" />
                   </span>
                 </AuthWrapper>
               </div>
@@ -231,6 +236,10 @@ export default class CustomerList extends React.Component<any, any> {
   //   //查询
   //   modal(true);
   // };
+
+  deleteEvaluate(evaluateId) {
+    console.log('delete: ' + evaluateId);
+  }
 }
 
 const styles = {
@@ -255,6 +264,7 @@ const styles = {
   },
   see: {
     color: '#F56C1D',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    marginRight: 20
   }
 } as any;

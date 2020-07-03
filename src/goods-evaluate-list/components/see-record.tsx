@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Modal} from 'antd';
-import {IMap, Relax} from 'plume2';
+import { Modal } from 'antd';
+import { IMap, Relax } from 'plume2';
 import moment from 'moment';
 import { Const, DataGrid, noop } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 const { Column } = DataGrid;
 
 @Relax
@@ -61,10 +61,24 @@ export default class SeeRecord extends React.Component<any, any> {
     if (!serviceModalVisible) {
       return null;
     }
+    const styles = {
+      tdWidth: {
+        minWidth: 220
+      }
+    };
     return (
-      <Modal  maskClosable={false}
-        title={<div><div style={{width: '12%',float: 'left'}}>店铺评分详情</div><div style={{fontSize:'13px',color:'grey'}}>店铺评价数据次日进行统计更新</div></div>}
-         
+      <Modal
+        maskClosable={false}
+        title={
+          <div>
+            <div style={{ width: '22%', float: 'left' }}>
+              <FormattedMessage id="shopRatingDetail" />
+            </div>
+            <div style={{ fontSize: '13px', color: 'grey' }}>
+              <FormattedMessage id="evaluationNextDay" />
+            </div>
+          </div>
+        }
         visible={serviceModalVisible}
         width={920}
         onCancel={this._handleModelCancel}
@@ -72,42 +86,60 @@ export default class SeeRecord extends React.Component<any, any> {
       >
         <div className="see-service-record">
           <div className="up-content">
-            <div className="personal">人数：{storeEvaluateSum.orderNum}</div>
-            <div className="score">
-              综合评分：{storeEvaluateSum.sumCompositeScore ? storeEvaluateSum.sumCompositeScore.toFixed(2) : '-'}
+            <div className="personal">
+              <FormattedMessage id="consumerNumber" />：
+              {storeEvaluateSum.orderNum}
             </div>
-            <div className="score">时间范围：近180天</div>
+            <div className="score">
+              <FormattedMessage id="overallRating" />：
+              {storeEvaluateSum.sumCompositeScore
+                ? storeEvaluateSum.sumCompositeScore.toFixed(2)
+                : '-'}
+            </div>
+            <div className="score">
+              <FormattedMessage id="reviewTime" />：
+              <FormattedMessage id="lastest180" />
+            </div>
           </div>
           <div className="center-table">
             <DataGrid dataSource={storeEvaluateNumList} pagination={false}>
               <Column
-                title="评价详情"
+                title={<FormattedMessage id="reviewDetail" />}
                 key="numType"
                 dataIndex="numType"
                 render={(value) => {
                   if (value == 0) {
-                    return '商品评分';
+                    return <FormattedMessage id="productRatings" />;
                   } else if (value == 1) {
-                    return '服务评分';
+                    return <FormattedMessage id="experienceRating" />;
                   } else {
-                    return '物流评分';
+                    return <FormattedMessage id="logisticRating" />;
                   }
                 }}
               />
-
               <Column
-                title="4-5分"
+                title={
+                  <FormattedMessage id="detailScore" values={{ name: '4-5' }} />
+                }
                 dataIndex="excellentNum"
                 key="excellentNum"
               />
-              <Column title="3分" dataIndex="mediumNum" key="mediumNum" />
               <Column
-                title="1-2分"
+                title={
+                  <FormattedMessage id="detailScore" values={{ name: '3' }} />
+                }
+                dataIndex="mediumNum"
+                key="mediumNum"
+              />
+              <Column
+                title={
+                  <FormattedMessage id="detailScore" values={{ name: '1-2' }} />
+                }
                 dataIndex="differenceNum"
                 key="differenceNum"
               />
               <Column
-                title="均分"
+                title={<FormattedMessage id="averageScore" />}
                 dataIndex="sumCompositeScore"
                 key="sumCompositeScore"
                 render={(text) => parseFloat(text).toFixed(2)}
@@ -115,7 +147,9 @@ export default class SeeRecord extends React.Component<any, any> {
             </DataGrid>
           </div>
           <div className="down-table">
-            <label className="evalu-title">评价历史记录（{storeTotal}）</label>
+            <label className="evalu-title">
+              <FormattedMessage id="evaluationHistory" />（{storeTotal}）
+            </label>
             <DataGrid
               dataSource={storeDataList}
               pagination={{
@@ -128,34 +162,40 @@ export default class SeeRecord extends React.Component<any, any> {
               }}
             >
               <Column
-                title="会员名称"
+                title={<FormattedMessage id="consumerName" />}
                 dataIndex="customerName"
                 key="customerName"
               />
-              <Column title="订单号" dataIndex="orderNo" key="orderNo" />
               <Column
-                title="评价时间"
+                title={<FormattedMessage id="orderNumber" />}
+                dataIndex="orderNo"
+                key="orderNo"
+              />
+              <Column
+                title={<FormattedMessage id="reviewTime" />}
                 dataIndex="createTime"
                 key="createTime"
                 render={(text) => moment(text).format(Const.TIME_FORMAT)}
               />
               <Column
-                title="商品评价"
+                title={<FormattedMessage id="productRatings" />}
                 dataIndex="goodsScore"
+                style={styles.tdWidth}
                 key="goodsScore"
               />
               <Column
-                title="服务评价"
+                title={<FormattedMessage id="experienceRating" />}
+                style={styles.tdWidth}
                 dataIndex="serverScore"
                 key="serverScore"
               />
               <Column
-                title="物流评价"
+                title={<FormattedMessage id="logisticRating" />}
                 dataIndex="logisticsScore"
                 key="logisticsScore"
               />
               <Column
-                title="综合"
+                title={<FormattedMessage id="overallRating" />}
                 dataIndex="compositeScore"
                 key="compositeScore"
                 render={(text) => parseFloat(text).toFixed(2)}

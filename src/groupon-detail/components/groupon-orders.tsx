@@ -4,12 +4,14 @@ import { DataGrid, noop, util, Const } from 'qmkit';
 import { Input, Button } from 'antd';
 import moment from 'moment';
 
-const { Column } = DataGrid;
-const GROUPON_ORDER_STATUS  = {
-    0: '待成团',
-    1: '待成团',
-    2: '已成团',
-    3: '拼团失败'
+import { Table } from 'antd';
+
+const Column = Table.Column;
+const GROUPON_ORDER_STATUS = {
+  0: '待成团',
+  1: '待成团',
+  2: '已成团',
+  3: '拼团失败'
 };
 
 const PAY_STATUS = {
@@ -62,7 +64,11 @@ export default class GrouponOrders extends React.Component<any, any> {
           <Input
             style={{ width: 250, marginRight: 10 }}
             addonBefore="订单编号"
-            onKeyDown={(e) => {if (e.keyCode == 13){orderPage()}}}
+            onKeyDown={(e) => {
+              if (e.keyCode == 13) {
+                orderPage();
+              }
+            }}
             onChange={(e) => {
               setOrderNo((e.target as any).value);
             }}
@@ -97,9 +103,11 @@ export default class GrouponOrders extends React.Component<any, any> {
             dataIndex="grouponSuccessTime"
             key="grouponSuccessTime"
             render={(value) => {
-                return value ? moment(value)
+              return value
+                ? moment(value)
                     .format(Const.TIME_FORMAT)
-                    .toString():"-";
+                    .toString()
+                : '-';
             }}
           />
           <Column
@@ -133,8 +141,8 @@ export default class GrouponOrders extends React.Component<any, any> {
           <Column
             title="拼团状态"
             render={(row) => {
-              if (row.payState == 'PAID'){
-                return  GROUPON_ORDER_STATUS[row.grouponOrderStatus];
+              if (row.payState == 'PAID') {
+                return GROUPON_ORDER_STATUS[row.grouponOrderStatus];
               }
               return '-';
             }}

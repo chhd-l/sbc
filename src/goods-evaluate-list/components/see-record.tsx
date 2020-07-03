@@ -4,7 +4,9 @@ import { IMap, Relax } from 'plume2';
 import moment from 'moment';
 import { Const, DataGrid, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class SeeRecord extends React.Component<any, any> {

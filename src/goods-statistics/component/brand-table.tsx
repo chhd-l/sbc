@@ -2,7 +2,9 @@ import React from 'react';
 import { DataGrid, noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class BrandTable extends React.Component<any, any> {
@@ -92,7 +94,7 @@ export default class BrandTable extends React.Component<any, any> {
         <Column title="序号" key="index" dataIndex="index" />
         <Column title="品牌名称" key="name" dataIndex="name" />
         {brandColumns.length > 0
-          ? brandColumns.map(v => {
+          ? brandColumns.map((v) => {
               return (
                 <Column
                   title={v.title}
@@ -110,14 +112,17 @@ export default class BrandTable extends React.Component<any, any> {
 
   _changeOrder = (pagination, filters, sorter) => {
     const sortedInfoData = this.state.sortedInfo;
-    if(sorter.columnKey&&sorter.order){
-      this.setState({sortedInfo: sorter});
+    if (sorter.columnKey && sorter.order) {
+      this.setState({ sortedInfo: sorter });
     } else {
       this.setState({
-        sortedInfo: { columnKey: sortedInfoData.columnKey, order: sortedInfoData.order == 'descend' ? "ascend" : "descend"}
+        sortedInfo: {
+          columnKey: sortedInfoData.columnKey,
+          order: sortedInfoData.order == 'descend' ? 'ascend' : 'descend'
+        }
       });
       sorter.field = sortedInfoData.columnKey;
-      sorter.order = sortedInfoData.order == 'descend' ? "ascend" : "descend";
+      sorter.order = sortedInfoData.order == 'descend' ? 'ascend' : 'descend';
     }
     const { changeOrder } = this.props.relaxProps;
     const { sortedInfo } = this.state;

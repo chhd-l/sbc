@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { DataGrid } from 'qmkit';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 import styled from 'styled-components';
 import { Relax } from 'plume2';

@@ -8,7 +8,9 @@ import { Relax, IMap } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const { RangePicker } = DatePicker;
 const RadioGroup = Radio.Group;
 

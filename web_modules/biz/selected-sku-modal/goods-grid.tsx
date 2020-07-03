@@ -5,8 +5,10 @@ import { Const, DataGrid } from 'qmkit';
 
 import SearchForm from './search-form';
 import * as webapi from './webapi';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+
+const Column = Table.Column;
 
 /**
  * 商品添加
@@ -66,6 +68,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           loading={loading}
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
+          isScroll={false}
           pagination={{
             total: goodsInfoPage.totalElements,
             current: goodsInfoPage.number + 1,
@@ -110,24 +113,26 @@ export default class GoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU code"
+            title="SKU Code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
           />
 
           <Column
-            title="商品名称"
+            title="Product Name"
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
+            ellipsis
           />
 
           <Column
-            title="规格"
+            title="Specification"
             dataIndex="specText"
             key="specText"
             width="20%"
+            ellipsis
             render={(value) => {
               if (value) {
                 return value;
@@ -137,10 +142,10 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="分类" key="goodsCate" dataIndex="cateName" />
+          <Column title="Category" key="goodsCate" dataIndex="cateName" />
 
           <Column
-            title="品牌"
+            title="Brand"
             key="goodsBrand"
             dataIndex="brandName"
             render={(value) => {
@@ -153,7 +158,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="单价"
+            title="Price"
             key="marketPrice"
             dataIndex="marketPrice"
             render={(data) => {

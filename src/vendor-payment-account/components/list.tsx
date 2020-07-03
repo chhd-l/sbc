@@ -4,7 +4,9 @@ import { Menu, Dropdown, Icon, message } from 'antd';
 import { noop, DataGrid, AuthWrapper, checkAuth } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class List extends React.Component<any, any> {

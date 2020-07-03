@@ -7,7 +7,9 @@ import { DataGrid, noop, Const } from 'qmkit';
 import { List } from 'immutable';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @withRouter
 @Relax

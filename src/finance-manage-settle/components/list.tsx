@@ -7,7 +7,9 @@ import moment from 'moment';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class List extends React.Component<any, any> {
@@ -53,7 +55,9 @@ export default class List extends React.Component<any, any> {
             key="settleTime"
             dataIndex="settleTime"
             render={(value) => {
-              return moment(value).format(Const.DAY_FORMAT).toString();
+              return moment(value)
+                .format(Const.DAY_FORMAT)
+                .toString();
             }}
           />
         )}
@@ -63,7 +67,9 @@ export default class List extends React.Component<any, any> {
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
-            return moment(value).format(Const.DAY_FORMAT).toString();
+            return moment(value)
+              .format(Const.DAY_FORMAT)
+              .toString();
           }}
         />
 

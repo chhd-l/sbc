@@ -14,8 +14,6 @@ const TableRow = styled.div`
   }
 `;
 
-const { Column } = DataGrid;
-
 /**
  * 选择客户组件
  */

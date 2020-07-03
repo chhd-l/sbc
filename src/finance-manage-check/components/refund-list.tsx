@@ -2,7 +2,9 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, history, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class RefundList extends React.Component<any, any> {

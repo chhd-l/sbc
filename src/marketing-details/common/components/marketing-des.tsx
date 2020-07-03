@@ -13,27 +13,27 @@ const GreyBg = styled.div`
   color: #333333;
   margin-left: -28px;
   span {
-    width: 100px;
+    width: 200px;
     text-align: right;
     color: #666666;
     display: inline-block;
-    margin: 5px 0;
+    margin: 5px 20px 0 0;
   }
 `;
 
 const MAK_TYPE = {
-  0: '满减',
-  1: '满折',
-  2: '满赠'
+  0: 'Full reduction',
+  1: 'Full discount'
+  // 2: '满赠'
 };
 
 const SUB_TYPE = {
-  0: '满金额减',
-  1: '满数量减',
-  2: '满金额折',
-  3: '满数量折',
-  4: '满金额赠',
-  5: '满数量赠'
+  0: 'Full amount minus',
+  1: 'Full quantity minus',
+  2: 'Full amount discount',
+  3: 'Full quantity discount'
+  // 4: '满金额赠',
+  // 5: '满数量赠'
 };
 
 @withRouter
@@ -46,6 +46,7 @@ export default class MarketingDes extends React.Component<any, any> {
       endTime: any;
       marketingType: any;
       subType: any;
+      promotionCode: any;
     };
   };
 
@@ -54,7 +55,8 @@ export default class MarketingDes extends React.Component<any, any> {
     beginTime: 'beginTime',
     endTime: 'endTime',
     marketingType: 'marketingType',
-    subType: 'subType'
+    subType: 'subType',
+    promotionCode: 'promotionCode'
   };
 
   render() {
@@ -63,19 +65,26 @@ export default class MarketingDes extends React.Component<any, any> {
       beginTime,
       endTime,
       marketingType,
-      subType
+      subType,
+      promotionCode
     } = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
           <Col span={24}>
-            <span>促销名称：</span>
+            <span>Promotion Name:</span>
             {marketingName}
           </Col>
         </Row>
         <Row>
           <Col span={24}>
-            <span>起止时间：</span>
+            <span>Promotion Code:</span>
+            {promotionCode}
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <span>Start and end Time:</span>
             {moment(beginTime)
               .format(Const.TIME_FORMAT)
               .toString()}{' '}
@@ -87,7 +96,7 @@ export default class MarketingDes extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={24}>
-            <span>{MAK_TYPE[marketingType]}类型：</span>
+            <span>{MAK_TYPE[marketingType]}Type:</span>
             {SUB_TYPE[subType]}
           </Col>
         </Row>

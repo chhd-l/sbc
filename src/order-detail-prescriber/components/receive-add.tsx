@@ -111,7 +111,7 @@ class ReceiveForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Enter up to 100 characters'));
       return;
     }
     callback();

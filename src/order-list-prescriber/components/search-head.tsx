@@ -88,7 +88,8 @@ export default class SearchHead extends Component<any, any> {
 
     let hasMenu = false;
     if (
-      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
+      (tab.get('key') == 'flowState-INIT' &&
+        checkAuth('fOrderList002_prescriber')) ||
       checkAuth('fOrderList004_prescriber')
     ) {
       hasMenu = true;
@@ -98,7 +99,7 @@ export default class SearchHead extends Component<any, any> {
       <Menu>
         {tab.get('key') == 'flowState-INIT' && (
           <Menu.Item>
-            <AuthWrapper functionName="fOrderList002">
+            <AuthWrapper functionName="fOrderList002_prescriber">
               <a
                 target="_blank"
                 href="javascript:;"

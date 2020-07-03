@@ -13,11 +13,11 @@ const GreyBg = styled.div`
   color: #333333;
   margin-left: -28px;
   span {
-    width: 100px;
+    width: 200px;
     text-align: right;
     color: #666666;
     display: inline-block;
-    margin: 5px 0;
+    margin: 5px 20px 0 0;
   }
 `;
 
@@ -80,7 +80,7 @@ export default class GoodsList extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={24}>
-              <span>已选商品：</span>
+              <span>Selected goods:</span>
             </Col>
           </Row>
         </GreyBg>
@@ -98,32 +98,32 @@ export default class GoodsList extends React.Component<any, any> {
           />
           <Column
             width="30%"
-            title="商品名称"
+            title="Product Name"
             key="goodsInfoName"
             dataIndex="goodsInfoName"
           />
           <Column
             width="15%"
-            title="规格"
+            title="Specification"
             key="specText"
             dataIndex="specText"
           />
           <Column
             width="15%"
-            title="类目"
+            title="Category"
             key="cateName"
             dataIndex="cateName"
           />
           <Column
             width="15%"
-            title="品牌"
+            title="Brand"
             key="brandName"
             dataIndex="brandName"
           />
           <Column
             width="20%"
             key="priceType"
-            title={'单价'}
+            title={'Price'}
             render={(rowInfo) => <div>{rowInfo.salePrice}</div>}
           />
         </Table>

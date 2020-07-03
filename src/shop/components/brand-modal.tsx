@@ -9,7 +9,9 @@ import Button from 'antd/lib/button/button';
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const Search = Input.Search;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 interface TableBoxProps {

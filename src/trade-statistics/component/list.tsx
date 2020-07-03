@@ -1,7 +1,9 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class TradeStatisticsList extends React.Component<any, any> {
@@ -94,7 +96,7 @@ export default class TradeStatisticsList extends React.Component<any, any> {
           sorter={true}
           sortOrder={sortedInfo.columnKey === 'title' && sortedInfo.order}
         />
-        {tableColumns.map(v => {
+        {tableColumns.map((v) => {
           return (
             <Column
               title={v.title}
@@ -121,7 +123,7 @@ export default class TradeStatisticsList extends React.Component<any, any> {
     //普通换页还是排序,当前的排序名称不变，则为页切换，变化的话则为排序，从第一页开始
     const { sortedInfo } = this.state;
     if (sortedInfo) {
-      if(sorter.field&&sorter.order){
+      if (sorter.field && sorter.order) {
         //sortName
         const field = sorter.field == 'title' ? 'date' : sorter.field;
         //sortOrder
@@ -136,8 +138,13 @@ export default class TradeStatisticsList extends React.Component<any, any> {
         }
       } else {
         sorter.field = sortedInfo.columnKey;
-        sorter.order = sortedInfo.order == 'descend' ?  'ASC' : 'DESC';
-        onPagination(1, pagination.pageSize, sortedInfo.columnKey  == 'title' ? 'date' : sorter.field, sortedInfo.order == 'descend' ?  'ASC' : 'DESC');
+        sorter.order = sortedInfo.order == 'descend' ? 'ASC' : 'DESC';
+        onPagination(
+          1,
+          pagination.pageSize,
+          sortedInfo.columnKey == 'title' ? 'date' : sorter.field,
+          sortedInfo.order == 'descend' ? 'ASC' : 'DESC'
+        );
       }
     }
     this.setState({

@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Const, DataGrid, noop,AuthWrapper } from 'qmkit';
+import { Const, DataGrid, noop, AuthWrapper } from 'qmkit';
 import { List } from 'immutable';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Popconfirm } from 'antd';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const AUDIT_STATUS = {
   0: '即将开始',
@@ -67,11 +69,11 @@ export default class GrouponActivityList extends React.Component<any, any> {
         }}
       >
         <Column title="商品名称" dataIndex="goodsName" key="goodsName" />
-          <Column
-              title="拼团分类"
-              key="grouponCateName"
-              dataIndex="grouponCateName"
-          />
+        <Column
+          title="拼团分类"
+          key="grouponCateName"
+          dataIndex="grouponCateName"
+        />
         <Column title="拼团人数" dataIndex="grouponNum" key="grouponNum" />
         <Column title="拼团价" dataIndex="grouponPrice" key="grouponPrice" />
 
@@ -121,24 +123,22 @@ export default class GrouponActivityList extends React.Component<any, any> {
           render={(rowInfo) => {
             return (
               <div>
-                  <AuthWrapper functionName="f_groupon-activity-detail">
-                <Link to={`/groupon-detail/${rowInfo.grouponActivityId}`}>
-                  查看
-                </Link>
-                  </AuthWrapper>
-                  &nbsp;
-                {tabType != '1' &&
-                  tabType != '2' && (
-                    <AuthWrapper functionName="f_groupon-activity-edit">
+                <AuthWrapper functionName="f_groupon-activity-detail">
+                  <Link to={`/groupon-detail/${rowInfo.grouponActivityId}`}>
+                    查看
+                  </Link>
+                </AuthWrapper>
+                &nbsp;
+                {tabType != '1' && tabType != '2' && (
+                  <AuthWrapper functionName="f_groupon-activity-edit">
                     <Link to={`/groupon-edit/${rowInfo.grouponActivityId}`}>
                       编辑
                     </Link>
-                    </AuthWrapper>
-                  )}
-                  &nbsp;
-                {tabType != '1' &&
-                  tabType != '2' && (
-                    <AuthWrapper functionName="f_groupon-activity-del">
+                  </AuthWrapper>
+                )}
+                &nbsp;
+                {tabType != '1' && tabType != '2' && (
+                  <AuthWrapper functionName="f_groupon-activity-del">
                     <Popconfirm
                       title="确定删除？"
                       onConfirm={() => onDelete(rowInfo.grouponActivityId)}
@@ -147,8 +147,8 @@ export default class GrouponActivityList extends React.Component<any, any> {
                     >
                       <a href="javascript:void(0);">删除</a>
                     </Popconfirm>
-                    </AuthWrapper>
-                  )}
+                  </AuthWrapper>
+                )}
               </div>
             );
           }}

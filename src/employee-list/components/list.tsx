@@ -7,7 +7,9 @@ import { checkMenu } from '../../../web_modules/qmkit/checkAuth';
 import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class EmployeeList extends React.Component<any, any> {

@@ -1,7 +1,9 @@
 import React from 'react';
 import { DataGrid, noop } from 'qmkit';
 import { Relax } from 'plume2';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 @Relax
 export default class AchieveStatistics extends React.Component<any, any> {
   props: {
@@ -86,7 +88,7 @@ export default class AchieveStatistics extends React.Component<any, any> {
         <Column title="序号" key="index" dataIndex="index" />
         <Column title="业务员" key="employeeName" dataIndex="employeeName" />
         {achieveColumns.length > 0
-          ? achieveColumns.map(v => {
+          ? achieveColumns.map((v) => {
               return (
                 <Column
                   title={v.title}

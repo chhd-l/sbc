@@ -8,7 +8,9 @@ import moment from 'moment';
 import { IList } from 'typings/globalType';
 
 const RadioGroup = Radio.Group;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const { RangePicker } = DatePicker;
 
 const Content = styled.div`

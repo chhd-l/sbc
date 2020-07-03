@@ -39,7 +39,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="活动名称"
+            addonBefore="Activity Name"
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -53,7 +53,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="活动类型"
+            label="Activity Type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? '-1' : value;
@@ -63,13 +63,13 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="-1">全部</Option>
-            <Option value="0">满金额减</Option>
-            <Option value="1">满数量减</Option>
-            <Option value="2">满金额折</Option>
-            <Option value="3">满数量折</Option>
-            <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option>
+            <Option value="-1">All</Option>
+            <Option value="0">Full amount minus</Option>
+            <Option value="1">Full quantity minus</Option>
+            <Option value="2">Full amount discount</Option>
+            <Option value="3">Full quantity discount</Option>
+            {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
           </SelectGroup>
         </FormItem>
 
@@ -80,7 +80,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={startValue}
-            placeholder="开始时间"
+            placeholder="Start Time"
             onChange={this.onStartChange}
             showToday={false}
           />
@@ -92,7 +92,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={endValue}
-            placeholder="结束时间"
+            placeholder="End Time"
             onChange={this.onEndChange}
             showToday={false}
           />
@@ -101,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="目标客户"
+            label="Target consumer"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -111,9 +111,9 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
-            <Option value="-1">全平台客户</Option>
-            {util.isThirdStore() && <Option value="0">全部等级</Option>}
+            <Option value="">All</Option>
+            <Option value="-1">Full platform consumer</Option>
+            {util.isThirdStore() && <Option value="0">All Leave</Option>}
             {customerLevels.map((v) => (
               <Option
                 key={v.get('customerLevelId').toString()}
@@ -135,7 +135,7 @@ export default class SearchForm extends React.Component<any, any> {
               onSearch();
             }}
           >
-            搜索
+            Search
           </Button>
         </FormItem>
       </Form>

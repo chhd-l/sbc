@@ -28,9 +28,9 @@ export enum SUB_TYPE {
 }
 
 export const TYPE_STRING = {
-  [MARKETING_TYPE.FULL_DISCOUNT]: '折',
-  [MARKETING_TYPE.FULL_GIFT]: '赠',
-  [MARKETING_TYPE.FULL_REDUCTION]: '减'
+  [MARKETING_TYPE.FULL_DISCOUNT]: 'discount',
+  [MARKETING_TYPE.FULL_GIFT]: 'gift',
+  [MARKETING_TYPE.FULL_REDUCTION]: 'reduction'
 };
 
 export function GET_MARKETING_STRING(type) {

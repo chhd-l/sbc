@@ -6,7 +6,9 @@ import { Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const confirm = Modal.confirm;
 
 const styles = {

@@ -4,7 +4,9 @@ import { IMap, Relax } from 'plume2';
 
 import { DataGrid, noop } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class FlowStatisticsList extends React.Component<any, any> {
@@ -100,7 +102,7 @@ export default class FlowStatisticsList extends React.Component<any, any> {
     const { pageSize } = this.state;
     const sortedInfo = this.props.relaxProps.sortedInfo.toJS();
     if (sortedInfo) {
-      if(sorter.columnKey&&sorter.order){
+      if (sorter.columnKey && sorter.order) {
         if (
           sorter.columnKey != sortedInfo.columnKey ||
           sorter.order != sortedInfo.order
@@ -109,11 +111,11 @@ export default class FlowStatisticsList extends React.Component<any, any> {
         }
       } else {
         sorter.columnKey = sortedInfo.columnKey;
-        if(sortedInfo.order == "ascend"){
-          sorter.order = "descend";
+        if (sortedInfo.order == 'ascend') {
+          sorter.order = 'descend';
         }
-        if(sortedInfo.order == "descend"){
-          sorter.order = "ascend";
+        if (sortedInfo.order == 'descend') {
+          sorter.order = 'ascend';
         }
         pageCurrent = 1;
       }

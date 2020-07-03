@@ -74,14 +74,10 @@ class RejectForm extends React.Component<any, any> {
               { validator: this.checkComment }
             ]
           })(
-            <FormattedMessage id="order.rejectionReasonTip">
-              {(txt) => (
-                <Input.TextArea
-                  placeholder={txt.toString()}
-                  autosize={{ minRows: 4, maxRows: 4 }}
-                />
-              )}
-            </FormattedMessage>
+            <Input.TextArea
+              placeholder="comment"
+              autosize={{ minRows: 4, maxRows: 4 }}
+            />
           )}
         </FormItem>
       </Form>
@@ -393,7 +389,8 @@ export default class ListView extends React.Component<any, any> {
                               <AuthWrapper functionName="fOrderList002_prescriber">
                                 <a
                                   onClick={() => {
-                                    onAudit(id, 'CHECKED');
+                                    // onAudit(id, 'CHECKED');
+                                    this._showAuditConfirm(id);
                                   }}
                                   href="javascript:void(0)"
                                   style={{ marginLeft: 20 }}
@@ -644,6 +641,24 @@ export default class ListView extends React.Component<any, any> {
   _toDeliveryForm = (tdId: string) => {
     const { onCheckReturn } = this.props.relaxProps;
     onCheckReturn(tdId);
+  };
+
+  /**
+   * 确认审核提示
+   * @param tid
+   */
+  _showAuditConfirm = (tid: string) => {
+    const { onAudit } = this.props.relaxProps;
+
+    const confirmModal = Modal.confirm;
+    confirmModal({
+      title: 'Confirm audit',
+      content: 'Confirm audit?',
+      onOk() {
+        onAudit(tid, 'CHECKED');
+      },
+      onCancel() {}
+    });
   };
 
   /**

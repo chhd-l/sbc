@@ -3,8 +3,9 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 
 import { DataGrid, noop } from 'qmkit';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 @Relax
 export default class CustomerStatisticsList extends React.Component<any, any> {
@@ -97,7 +98,7 @@ export default class CustomerStatisticsList extends React.Component<any, any> {
     let pageCurrent = pagination.current;
     const { pageSize } = this.state;
     if (sortedInfo) {
-      if(sorter.columnKey&&sorter.order){
+      if (sorter.columnKey && sorter.order) {
         if (
           sorter.columnKey != sortedInfo.columnKey ||
           sorter.order != sortedInfo.order
@@ -106,11 +107,11 @@ export default class CustomerStatisticsList extends React.Component<any, any> {
         }
       } else {
         sorter.columnKey = sortedInfo.columnKey;
-        if(sortedInfo.order == "ascend"){
-          sorter.order = "descend";
+        if (sortedInfo.order == 'ascend') {
+          sorter.order = 'descend';
         }
-        if(sortedInfo.order == "descend"){
-          sorter.order = "ascend";
+        if (sortedInfo.order == 'descend') {
+          sorter.order = 'ascend';
         }
         pageCurrent = 1;
       }

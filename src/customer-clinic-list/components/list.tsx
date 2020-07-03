@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { fromJS, List } from 'immutable';
-import { Popconfirm, Tooltip } from 'antd';
+import { Popconfirm, Tooltip, Table } from 'antd';
 import { withRouter } from 'react-router';
 import { DataGrid, noop, FindArea, AuthWrapper } from 'qmkit';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 //默认每页展示的数量
 const CUSTOMER_STATUS = {

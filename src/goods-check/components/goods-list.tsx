@@ -6,7 +6,9 @@ import { Menu, Modal, Dropdown, Icon, Tooltip } from 'antd';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { IList } from 'typings/globalType';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
 import { FormattedMessage } from 'react-intl';

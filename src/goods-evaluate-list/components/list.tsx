@@ -7,7 +7,9 @@ const defaultImg = require('../img/none.png');
 import Moment from 'moment';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const isShowFunction = (status) => {
   if (status == '0') {
@@ -160,17 +162,16 @@ export default class CustomerList extends React.Component<any, any> {
               <div style={styles.goodsImg}>
                 {/*/!*商品图片*!/*/}
                 {evaluateImageList
-                  ? evaluateImageList.map(
-                      (v, k) =>
-                        k < 3 ? (
-                          <img
-                            src={v.artworkUrl ? v.artworkUrl : defaultImg}
-                            key={k}
-                            style={styles.imgItem}
-                          />
-                        ) : (
-                          (countFlag = true)
-                        )
+                  ? evaluateImageList.map((v, k) =>
+                      k < 3 ? (
+                        <img
+                          src={v.artworkUrl ? v.artworkUrl : defaultImg}
+                          key={k}
+                          style={styles.imgItem}
+                        />
+                      ) : (
+                        (countFlag = true)
+                      )
                     )
                   : '-'}
 

@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { IMap, Relax } from 'plume2';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Table } from 'antd';
 import { IList } from 'typings/globalType';
 
 import { DataGrid, noop, AreaSelect, SelectGroup, FindArea } from 'qmkit';
 
 import { IndicatorPopver, DownloadModal } from 'biz';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -279,8 +279,8 @@ export default class CustomerStatisticsMultiList extends React.Component<
                   queryType == CURRENT_QUERY_TABLE.CUSTOMER
                     ? 6
                     : queryType == CURRENT_QUERY_TABLE.CUSTOMER_LEVEL
-                      ? 7
-                      : 8
+                    ? 7
+                    : 8
                 }
               />
             </FormItem>

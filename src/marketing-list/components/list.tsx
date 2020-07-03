@@ -6,10 +6,11 @@ import moment from 'moment';
 import { withRouter } from 'react-router';
 import { DataGrid, noop, history, AuthWrapper, Const } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
+import { Table } from 'antd';
 
 type TList = List<IMap>;
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 //默认每页展示的数量
 const SUB_TYPE = {

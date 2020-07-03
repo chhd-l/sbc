@@ -9,7 +9,9 @@ import GoodsImage from './image';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const formItemLayout = {
   labelCol: {

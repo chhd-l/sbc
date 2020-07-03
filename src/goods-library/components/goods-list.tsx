@@ -5,7 +5,9 @@ import { List } from 'immutable';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const defaultImg = require('../img/none.png');
 import { FormattedMessage } from 'react-intl';
 

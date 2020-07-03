@@ -2,8 +2,9 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { DataGrid } from 'qmkit';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 import styled from 'styled-components';
 const TableRow = styled.div`

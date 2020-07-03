@@ -464,6 +464,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     const { marketingType, form } = this.props;
     form.resetFields();
+    console.log(this.state.promotionCode);
 
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
@@ -600,6 +601,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
         value: null,
         errors: [new Error('Please select the product to be marketed')]
       };
+    }
+    if (this.state.promotionCode) {
+      marketingBean = marketingBean.set(
+        'promotionCode',
+        this.state.promotionCode
+      );
+    }
+    if (!marketingBean.get('publicStatus')) {
+      marketingBean = marketingBean.set('publicStatus', '0');
     }
 
     form.validateFieldsAndScroll((err) => {

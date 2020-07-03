@@ -5,7 +5,9 @@ import { List, Map, fromJS } from 'immutable';
 import { Modal } from 'antd';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const confirm = Modal.confirm;
 
 const styles = {

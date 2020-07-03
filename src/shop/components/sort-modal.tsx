@@ -7,7 +7,9 @@ import { noop, DataGrid, QMUpload, Const } from 'qmkit';
 import { IList } from 'typings/globalType';
 
 const TreeNode = Tree.TreeNode;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const GreyText = styled.span`
   color: #999999;
   font-size: 12px;

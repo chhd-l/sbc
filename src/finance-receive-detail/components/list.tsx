@@ -6,7 +6,9 @@ import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const payOrderStatusDic = {
   0: '已付款',
@@ -66,7 +68,7 @@ export default class PayOrderList extends React.Component<any, any> {
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
-          onChange: selectedRowKeys => {
+          onChange: (selectedRowKeys) => {
             onSelect(selectedRowKeys);
           }
         }}
@@ -85,7 +87,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="收款流水号"
           key="receivableNo"
           dataIndex="receivableNo"
-          render={receivableNo => (
+          render={(receivableNo) => (
             <span>{receivableNo ? receivableNo : '-'}</span>
           )}
         />
@@ -93,7 +95,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="收款时间"
           key="receiveTime"
           dataIndex="receiveTime"
-          render={receiveTime => (
+          render={(receiveTime) => (
             <span>
               {receiveTime
                 ? momnet(receiveTime)
@@ -110,7 +112,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="应收金额"
           key="payOrderPrice"
           dataIndex="payOrderPrice"
-          render={payOrderPrice => (
+          render={(payOrderPrice) => (
             <span>
               {`￥${
                 payOrderPrice ? payOrderPrice.toFixed(2) : (0.0).toFixed(2)
@@ -122,7 +124,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="支付方式"
           key="payType"
           dataIndex="payType"
-          render={payType => (
+          render={(payType) => (
             <span>{payType == 0 ? '线上支付' : '线下支付'}</span>
           )}
         />
@@ -130,19 +132,21 @@ export default class PayOrderList extends React.Component<any, any> {
           title="支付渠道"
           key="payChannel"
           dataIndex="payChannel"
-          render={payChannel => <span>{payChannel || '-'}</span>}
+          render={(payChannel) => <span>{payChannel || '-'}</span>}
         />
         <Column
           title="收款账户"
           key="receivableAccount"
           dataIndex="receivableAccount"
-          render={receivableAccount => <span>{receivableAccount || '-'}</span>}
+          render={(receivableAccount) => (
+            <span>{receivableAccount || '-'}</span>
+          )}
         />
         <Column
           title="付款状态"
           key="payOrderStatus"
           dataIndex="payOrderStatus"
-          render={payOrderStatus => (
+          render={(payOrderStatus) => (
             <span>{payOrderStatusDic[payOrderStatus]}</span>
           )}
         />
@@ -150,7 +154,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="备注"
           key="comment"
           dataIndex="comment"
-          render={comment => (
+          render={(comment) => (
             <span>
               {comment ? (
                 <Tooltip title={this._renderComment(comment)} placement="top">

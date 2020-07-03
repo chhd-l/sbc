@@ -4,8 +4,9 @@ import { Tooltip, Popconfirm } from 'antd';
 import { AuthWrapper, DataGrid, noop } from 'qmkit';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 const defaultImg = require('../img/none.png');
 
 /**

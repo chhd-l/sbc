@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {Modal} from 'antd';
-import {IMap, Relax} from 'plume2';
+import { Modal } from 'antd';
+import { IMap, Relax } from 'plume2';
 import moment from 'moment';
 import { Const, DataGrid, noop } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class SeeRecord extends React.Component<any, any> {
@@ -62,9 +64,16 @@ export default class SeeRecord extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal  maskClosable={false}
-        title={<div><div style={{width: '12%',float: 'left'}}>店铺评分详情</div><div style={{fontSize:'13px',color:'grey'}}>店铺评价数据次日进行统计更新</div></div>}
-         
+      <Modal
+        maskClosable={false}
+        title={
+          <div>
+            <div style={{ width: '12%', float: 'left' }}>店铺评分详情</div>
+            <div style={{ fontSize: '13px', color: 'grey' }}>
+              店铺评价数据次日进行统计更新
+            </div>
+          </div>
+        }
         visible={serviceModalVisible}
         width={920}
         onCancel={this._handleModelCancel}
@@ -74,7 +83,10 @@ export default class SeeRecord extends React.Component<any, any> {
           <div className="up-content">
             <div className="personal">人数：{storeEvaluateSum.orderNum}</div>
             <div className="score">
-              综合评分：{storeEvaluateSum.sumCompositeScore ? storeEvaluateSum.sumCompositeScore.toFixed(2) : '-'}
+              综合评分：
+              {storeEvaluateSum.sumCompositeScore
+                ? storeEvaluateSum.sumCompositeScore.toFixed(2)
+                : '-'}
             </div>
             <div className="score">时间范围：近180天</div>
           </div>

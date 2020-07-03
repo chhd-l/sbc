@@ -7,7 +7,9 @@ import { DataGrid, ValidConst } from 'qmkit';
 import { GoodsModal } from 'biz';
 
 const Option = Select.Option;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 import styled from 'styled-components';

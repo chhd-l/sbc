@@ -5,8 +5,10 @@ import { Const, DataGrid } from 'qmkit';
 
 import SearchForm from './search-form';
 import * as webapi from './webapi';
+import { Table } from 'antd';
 
-const { Column } = DataGrid;
+
+const Column = Table.Column;
 
 /**
  * 商品添加

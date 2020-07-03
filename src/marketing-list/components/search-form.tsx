@@ -53,7 +53,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="Activity Status"
+            label="Activity Type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? '-1' : value;

@@ -3,7 +3,9 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
 import moment from 'moment';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class RevenueList extends React.Component<any, any> {
@@ -40,7 +42,7 @@ export default class RevenueList extends React.Component<any, any> {
       <div>
         <DataGrid
           dataSource={incomeDetail.toJS().length > 0 ? incomeDetail.toJS() : []}
-          rowKey={record => record.index}
+          rowKey={(record) => record.index}
           pagination={{
             pageSize,
             total,

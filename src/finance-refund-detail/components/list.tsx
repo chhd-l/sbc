@@ -6,7 +6,9 @@ import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const refundOrderStatusDic = {
   0: 'Pending refund',
@@ -99,7 +101,9 @@ export default class RefundList extends React.Component<any, any> {
           dataIndex="refundBillTime"
           render={(refundBillTime) => (
             <span>
-              {momnet(refundBillTime).format(Const.TIME_FORMAT).toString()}
+              {momnet(refundBillTime)
+                .format(Const.TIME_FORMAT)
+                .toString()}
             </span>
           )}
         />

@@ -82,6 +82,7 @@ export default class MarketingList extends React.Component<any, any> {
       <DataGrid
         loading={loading}
         rowKey="marketingId"
+        isScroll={false}
         pagination={{
           current: currentPage,
           pageSize,
@@ -94,9 +95,10 @@ export default class MarketingList extends React.Component<any, any> {
       >
         <Column
           title="Activity Name"
-          width="20%"
+          width="15%"
           key="marketingName"
           dataIndex="marketingName"
+          ellipsis
           render={(marketingName) => {
             return marketingName ? (
               <div className="line-two">{marketingName}</div>
@@ -124,7 +126,7 @@ export default class MarketingList extends React.Component<any, any> {
               End Time
             </p>
           }
-          width="20%"
+          width="15%"
           render={(rowData) => {
             return (
               <div>
@@ -142,7 +144,7 @@ export default class MarketingList extends React.Component<any, any> {
 
         <Column
           title="Target consumer"
-          width="25%"
+          width="15%"
           key="joinLevel"
           dataIndex="joinLevel"
           render={(joinLevel) => {
@@ -191,6 +193,13 @@ export default class MarketingList extends React.Component<any, any> {
         />
 
         <Column
+          title="Promotion Code"
+          key="promotionCode"
+          width="10%"
+          dataIndex="promotionCode"
+        />
+
+        <Column
           title="Operation"
           width="15%"
           className={'operation-th'}
@@ -208,6 +217,7 @@ export default class MarketingList extends React.Component<any, any> {
               <div className="operation-box">
                 <AuthWrapper functionName="f_marketing_view">
                   <a
+                    style={{ marginRight: 5 }}
                     href="javascript:void(0)"
                     onClick={() =>
                       history.push({
@@ -222,6 +232,7 @@ export default class MarketingList extends React.Component<any, any> {
                   {rowInfo['marketingStatus'] == 3 && (
                     <a
                       href="javascript:void(0)"
+                      style={{ marginRight: 5 }}
                       onClick={() =>
                         history.push({
                           pathname: url
@@ -234,6 +245,7 @@ export default class MarketingList extends React.Component<any, any> {
                   {rowInfo['marketingStatus'] == 2 && (
                     <a
                       href="javascript:void(0);"
+                      style={{ marginRight: 5 }}
                       onClick={() => onStart(rowInfo['marketingId'])}
                     >
                       Open
@@ -242,6 +254,7 @@ export default class MarketingList extends React.Component<any, any> {
                   {rowInfo['marketingStatus'] == 1 && (
                     <a
                       href="javascript:void(0);"
+                      style={{ marginRight: 5 }}
                       onClick={() => onPause(rowInfo['marketingId'])}
                     >
                       Stop
@@ -254,7 +267,9 @@ export default class MarketingList extends React.Component<any, any> {
                       okText="Confirm"
                       cancelText="Cancel"
                     >
-                      <a href="javascript:void(0);">Delete</a>
+                      <a href="javascript:void(0);" style={{ marginRight: 5 }}>
+                        Delete
+                      </a>
                     </Popconfirm>
                   )}
                 </AuthWrapper>

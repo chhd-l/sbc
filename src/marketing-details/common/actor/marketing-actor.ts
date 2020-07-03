@@ -10,6 +10,8 @@ export default class MarketingActor extends Actor {
       beginTime: '',
       endTime: '',
       marketingType: '',
+      promotionCode: '',
+      publicStatus: '',
       subType: '',
       joinLevel: '',
       customerLevels: [],

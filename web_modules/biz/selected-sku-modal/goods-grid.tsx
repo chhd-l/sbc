@@ -68,6 +68,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           loading={loading}
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
+          isScroll={false}
           pagination={{
             total: goodsInfoPage.totalElements,
             current: goodsInfoPage.number + 1,
@@ -123,6 +124,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
+            ellipsis
           />
 
           <Column
@@ -130,6 +132,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             dataIndex="specText"
             key="specText"
             width="20%"
+            ellipsis
             render={(value) => {
               if (value) {
                 return value;

@@ -46,6 +46,7 @@ export default class MarketingDes extends React.Component<any, any> {
       endTime: any;
       marketingType: any;
       subType: any;
+      promotionCode: any;
     };
   };
 
@@ -54,7 +55,8 @@ export default class MarketingDes extends React.Component<any, any> {
     beginTime: 'beginTime',
     endTime: 'endTime',
     marketingType: 'marketingType',
-    subType: 'subType'
+    subType: 'subType',
+    promotionCode: 'promotionCode'
   };
 
   render() {
@@ -63,7 +65,8 @@ export default class MarketingDes extends React.Component<any, any> {
       beginTime,
       endTime,
       marketingType,
-      subType
+      subType,
+      promotionCode
     } = this.props.relaxProps;
     return (
       <GreyBg>
@@ -71,6 +74,12 @@ export default class MarketingDes extends React.Component<any, any> {
           <Col span={24}>
             <span>Promotion Name:</span>
             {marketingName}
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <span>Promotion Code:</span>
+            {promotionCode}
           </Col>
         </Row>
         <Row>

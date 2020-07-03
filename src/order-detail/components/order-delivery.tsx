@@ -72,7 +72,13 @@ export default class OrderDelivery extends React.Component<any, any> {
     const DeliveryFormDetail = Form.create({})(DeliveryForm);
     return (
       <div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            wordBreak: 'break-word'
+          }}
+        >
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
@@ -225,7 +231,8 @@ export default class OrderDelivery extends React.Component<any, any> {
       {
         title: 'Product Name',
         dataIndex: 'skuName',
-        key: 'skuName'
+        key: 'skuName',
+        width: '50%'
       },
       {
         title: 'Weight',

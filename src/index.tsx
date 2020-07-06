@@ -8,7 +8,7 @@ import 'regenerator-runtime/runtime';
 import store from './redux/store';
 import './index.less';
 import Main from './main';
-import { ConfigProvider } from 'antd'; //LocaleProvider
+import { LocaleProvider } from 'antd'; //LocaleProvider
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment';
@@ -20,7 +20,7 @@ moment.locale('zh-cn');
 
 const B2BBoss = () => (
   <IntlProvider locale="es" messages={es_ES}>
-    <ConfigProvider locale={enUS}>
+    <LocaleProvider locale={enUS}>
       <Provider store={store}>
         <Router history={history}>
           <div className="father">
@@ -31,7 +31,7 @@ const B2BBoss = () => (
           </div>
         </Router>
       </Provider>
-    </ConfigProvider>
+    </LocaleProvider>
   </IntlProvider>
 );
 

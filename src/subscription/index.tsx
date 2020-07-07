@@ -59,8 +59,40 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm } = this.state;
-    console.log(searchForm);
+    const { searchForm, activeKey } = this.state;
+    let params = {
+      pageSize: 10,
+      pageNum: 0,
+      orderNumber:
+        searchForm.subscriptionOption === 'Order Number'
+          ? searchForm.number
+          : '',
+      subscriptionNumber:
+        searchForm.subscriptionOption === 'Subscription Number'
+          ? searchForm.number
+          : '',
+      consumerName:
+        searchForm.consumerOption === 'Consumer Name'
+          ? searchForm.consumer
+          : '',
+      consumerAccount:
+        searchForm.consumerOption === 'Consumer Account'
+          ? searchForm.consumer
+          : '',
+      productName:
+        searchForm.productOption === 'Product Name' ? searchForm.product : '',
+      skuCode:
+        searchForm.productOption === 'SKU Code' ? searchForm.product : '',
+      recipient:
+        searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
+      recipientPhone:
+        searchForm.recipientOption === 'Recipient Phone'
+          ? searchForm.recipient
+          : '',
+      frequency: searchForm.frequency,
+      status: activeKey
+    };
+    console.log(params);
   };
   //查询frequency
   querySysDictionary = (type: String) => {
@@ -130,7 +162,7 @@ export default class SubscriptionList extends Component<any, any> {
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
-                          field: 'number',
+                          field: 'subscriptionOption',
                           value
                         });
                       }}

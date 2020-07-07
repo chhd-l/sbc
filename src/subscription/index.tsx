@@ -3,9 +3,10 @@ import { StoreProvider } from 'plume2';
 import AppStore from './store';
 import { Breadcrumb } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline } from 'qmkit';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-tab-list';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SubscriptionList extends Component<any, any> {
@@ -41,6 +42,7 @@ export default class SubscriptionList extends Component<any, any> {
             <Breadcrumb.Item>订单列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container">
+            <Headline title={<FormattedMessage id="order.orderList" />} />
             <SearchHead />
             <SearchList />
           </div>

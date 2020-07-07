@@ -8,7 +8,7 @@ export default class ListView extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      allChecked: '',
+      allChecked: false,
       loading: false,
       dataList: [],
       pagination: {
@@ -43,7 +43,7 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%' }}>
+                      <th style={{ width: '5%', borderSpacing: 'initial' }}>
                         <Checkbox
                           checked={allChecked}
                           onChange={(e) => {
@@ -140,7 +140,6 @@ export default class ListView extends React.Component<any, any> {
                       >
                         <span style={{ marginLeft: '1%' }}>
                           <Checkbox
-                            checked={v.get('checked')}
                             onChange={(e) => {
                               const checked = (e.target as any).checked;
                               this.onChecked(index, checked);

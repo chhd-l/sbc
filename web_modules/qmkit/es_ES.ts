@@ -289,7 +289,7 @@ export default {
   'collectionRecords': 'Payment Records',
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
-  'orderNumber': "Order number",
+  'orderNumber': "Order Number",
   'consumer': "Consumer",
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",
@@ -655,6 +655,8 @@ export default {
   'subscription.nextDeliveryDate': 'Next delivery date',
   'subscription.detail': 'Subscription detail',
   'subscription.sub': 'Sub-',
+  'subscription.operation': 'Operation',
+  'subscription.subscriptionDate':'Subscription Date',
   'items': 'Items',
   'petCategory': 'Pet Category',
   'petName': 'Pet Name',
@@ -695,7 +697,9 @@ export default {
   'lastest180': 'lastest 180 day',
   'detailScore': '{name} score',
   'averageScore': 'Average score',
-  'evaluationHistory': 'Evaluation history'
+  'evaluationHistory': 'Evaluation history',
+
+  'subscriptionList':'Subscription List'
 
 
 

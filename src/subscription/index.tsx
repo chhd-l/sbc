@@ -85,6 +85,9 @@ export default class SubscriptionList extends Component<any, any> {
     console.log('coding');
   };
   onTabChange = (key) => {
+    this.setState({
+      activeKey: key
+    });
     console.log(key);
   };
 
@@ -302,7 +305,6 @@ export default class SubscriptionList extends Component<any, any> {
               onChange={(key) => {
                 this.onTabChange(key);
               }}
-              defaultActiveKey={activeKey}
               activeKey={activeKey}
             >
               <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">

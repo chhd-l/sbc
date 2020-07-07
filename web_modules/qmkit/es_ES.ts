@@ -689,6 +689,7 @@ export default {
   // 'view': 'View',
   // 'delete': 'Delete',
   'comments': 'Comments',
+  'replyComments': 'Reply comments',
   'enter500': 'Enter up to 500 characters',
   'shopRatingDetail': 'Shop evaluation details',
   'evaluationNextDay': 'The store evaluation data will be updated the next day',

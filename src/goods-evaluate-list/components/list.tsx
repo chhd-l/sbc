@@ -5,10 +5,11 @@ import { withRouter } from 'react-router';
 import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
 const defaultImg = require('../img/none.png');
 import Moment from 'moment';
+import { deleteGoodsById } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-import { Table } from 'antd';
+import { message, Table } from 'antd';
 
 const Column = Table.Column;
 
@@ -49,6 +50,19 @@ export default class CustomerList extends React.Component<any, any> {
     modal: noop,
     goodsEvaluateDetail: noop
   };
+  async deleteEvaluate(evaluateId) {
+    console.log('delete: ' + evaluateId);
+    let params = {
+      evaluateId: evaluateId
+    };
+    let { res } = await deleteGoodsById(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success('delete successful.');
+    } else {
+      console.log(res.message);
+      message.error('delete error.');
+    }
+  }
 
   render() {
     const {
@@ -217,7 +231,7 @@ export default class CustomerList extends React.Component<any, any> {
                   </span>
                   <span
                     style={styles.see}
-                    onClick={() => deleteEvaluate(evaluateId)}
+                    onClick={() => this.deleteEvaluate(evaluateId)}
                   >
                     <FormattedMessage id="delete" />
                   </span>
@@ -238,10 +252,6 @@ export default class CustomerList extends React.Component<any, any> {
   //   //查询
   //   modal(true);
   // };
-
-  deleteEvaluate(evaluateId) {
-    console.log('delete: ' + evaluateId);
-  }
 }
 
 const styles = {

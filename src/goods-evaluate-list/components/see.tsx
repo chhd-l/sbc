@@ -72,11 +72,7 @@ export default class See extends React.Component<any, any> {
         visible={modalVisible}
         width={920}
         onCancel={this._handleModelCancel}
-        onOk={
-          goodsEvaluate.evaluateAnswer
-            ? this._handleModelCancel
-            : this._handleSubmit
-        }
+        onOk={this._handleSubmit}
       >
         <div className="comment-Detail-box">
           <div className="left-container">
@@ -132,97 +128,90 @@ export default class See extends React.Component<any, any> {
                       <FormattedMessage id="comments" />：
                       {goodsEvaluate.historyEvaluateAnswer}
                     </div>
+                    <div className="detail">
+                      <span className="text">
+                        <FormattedMessage id="replyComments" />
+                      </span>
+                    </div>
+                    <div className="compuctor-content2">
+                      <TextArea
+                        rows={2}
+                        placeholder="Enter up to 500 characters"
+                        maxLength={500}
+                        defaultValue=""
+                        onChange={(e) =>
+                          onFormFieldChange('replyComments', e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
                 )}
               </div>
             ) : null}
-            {goodsEvaluate.evaluateAnswer ? (
-              <div className="compuctor-detail">
-                <div className="detail">
-                  {/*<span className="evaluate">评价</span>*/}
-                  <span className="text">
-                    <FormattedMessage id="consumerName" />：
-                    {goodsEvaluate.customerName}
-                  </span>
-                </div>
-                <div>
-                  <span className="text">
-                    <FormattedMessage id="reviewTime" />：
-                    {moment(goodsEvaluate.evaluateTime).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )}
-                  </span>
-                </div>
-                <div>
-                  <span className="text">
-                    <FormattedMessage id="productRating" />：
-                  </span>
-                  <Rate
-                    value={goodsEvaluate.evaluateScore}
-                    disabled={true}
-                    style={styles.redStar}
-                  />
-                </div>
-                {/*<div className="compuctor-content">*/}
-                {/*  <FormattedMessage id="content"/>：{goodsEvaluate.evaluateContent}*/}
-                {/*</div>*/}
-                {goodsEvaluate.evaluateAnswer ? (
-                  <div className="compuctor-content">
-                    <FormattedMessage id="comments" />：
-                    {goodsEvaluate.evaluateAnswer}
-                  </div>
-                ) : null}
+            <div className="compuctor-detail border-b">
+              <div className="detail">
+                {/*<span className="evaluate">评价</span>*/}
+                <span className="text">
+                  <FormattedMessage id="consumerName" />：
+                  {goodsEvaluate.customerName}
+                </span>
               </div>
-            ) : (
-              <div className="compuctor-detail border-b">
-                <div className="detail">
-                  {/*<span className="evaluate">评价</span>*/}
-                  <span className="text">
-                    <FormattedMessage id="consumerName" />：
-                    {goodsEvaluate.customerName}
-                  </span>
-                </div>
-                <div className="detail">
-                  <span className="text">
-                    <FormattedMessage id="reviewTime" />：
-                    {moment(goodsEvaluate.evaluateTime).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )}
-                  </span>
-                </div>
-                <div className="detail">
-                  <span className="text">
-                    <FormattedMessage id="productRating" />：
-                  </span>
-                  <Rate
-                    value={goodsEvaluate.evaluateScore}
-                    disabled={true}
-                    style={styles.redStar}
-                  />
-                </div>
-                {/*<div className="compuctor-content">*/}
-                {/*  <FormattedMessage id="content"/>：{goodsEvaluate.evaluateContent}*/}
-                {/*</div>*/}
-                <div className="detail">
-                  <span className="text">
-                    <FormattedMessage id="comments" />
-                  </span>
-                </div>
-                <div className="compuctor-content2">
-                  <TextArea
-                    rows={4}
-                    placeholder="Enter up to 500 characters"
-                    maxLength={500}
-                    defaultValue=""
-                    disabled={true}
-                    onChange={(e) =>
-                      onFormFieldChange('evaluateAnswer', e.target.value)
-                    }
-                  />
-                </div>
+              <div className="detail">
+                <span className="text">
+                  <FormattedMessage id="reviewTime" />：
+                  {moment(goodsEvaluate.evaluateTime).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                </span>
               </div>
-            )}
-
+              <div className="detail">
+                <span className="text">
+                  <FormattedMessage id="productRating" />：
+                </span>
+                <Rate
+                  value={goodsEvaluate.evaluateScore}
+                  disabled={true}
+                  style={styles.redStar}
+                />
+              </div>
+              {/*<div className="compuctor-content">*/}
+              {/*  <FormattedMessage id="content"/>：{goodsEvaluate.evaluateContent}*/}
+              {/*</div>*/}
+              <div className="detail">
+                <span className="text">
+                  <FormattedMessage id="comments" />
+                </span>
+              </div>
+              <div className="compuctor-content2">
+                <TextArea
+                  rows={2}
+                  placeholder="Enter up to 500 characters"
+                  maxLength={500}
+                  defaultValue=""
+                  value={goodsEvaluate.evaluateContent}
+                  disabled={true}
+                  onChange={(e) =>
+                    onFormFieldChange('evaluateContent', e.target.value)
+                  }
+                />
+              </div>
+              <div className="detail">
+                <span className="text">
+                  <FormattedMessage id="replyComments" />
+                </span>
+              </div>
+              <div className="compuctor-content2">
+                <TextArea
+                  rows={2}
+                  placeholder="Enter up to 500 characters"
+                  maxLength={500}
+                  defaultValue={goodsEvaluate.evaluateAnswer}
+                  onChange={(e) =>
+                    onFormFieldChange('evaluateAnswer', e.target.value)
+                  }
+                />
+              </div>
+            </div>
             {goodsEvaluate.evaluateImageList &&
             goodsEvaluate.evaluateImageList.length ? (
               <div className="compuctor-detail mar-top-22">
@@ -262,18 +251,21 @@ export default class See extends React.Component<any, any> {
    */
   _handleSubmit = () => {
     const { saveAnswer, goodsEditEvaluate } = this.props.relaxProps;
+    debugger;
     if (
       !goodsEditEvaluate.get('evaluateAnswer') ||
       !goodsEditEvaluate.get('evaluateAnswer').trim()
     ) {
-      message.error('请输入评价回复！');
-      return;
+      this._handleModelCancel();
+    } else {
+      console.log(goodsEditEvaluate.toJS(), 'goodsEditEvaluate-----------');
+      saveAnswer(
+        goodsEditEvaluate.get('evaluateId'),
+        goodsEditEvaluate.get('evaluateContent'),
+        goodsEditEvaluate.get('evaluateAnswer'),
+        goodsEditEvaluate.get('isShow')
+      );
     }
-    saveAnswer(
-      goodsEditEvaluate.get('evaluateId'),
-      goodsEditEvaluate.get('evaluateAnswer'),
-      goodsEditEvaluate.get('isShow')
-    );
   };
 
   _clickArrow = () => {
@@ -285,6 +277,7 @@ export default class See extends React.Component<any, any> {
    * 关闭弹框
    */
   _handleModelCancel = () => {
+    debugger;
     const { modal } = this.props.relaxProps;
     modal(false);
   };

@@ -18,15 +18,16 @@ export default class ListActor extends Actor {
       //当前页
       currentPage: 1,
       //查看服务评价
-	    serviceModalVisible: false,
+      serviceModalVisible: false,
       // 弹框是否显示
       modalVisible: false,
       arrowVisible: false,
-      goodsEvaluate:{},
-      goodsEditEvaluate:{
-        isShow:1,
-	      evaluateAnswer:'',
-	      evaluateId:''
+      goodsEvaluate: {},
+      goodsEditEvaluate: {
+        isShow: 1,
+        evaluateAnswer: '', // 商家回复
+        evaluateId: '',
+        evaluateContent: '' // 客户评论
       },
       tabIndex: '1'
     };
@@ -70,15 +71,15 @@ export default class ListActor extends Actor {
     return state.set('arrowVisible', visible);
   }
 
-	@Action('goodsEvaluate: init')
-	setGoodsEvaluate(state: IMap, content) {
-		return state.set('goodsEvaluate', content);
-	}
+  @Action('goodsEvaluate: init')
+  setGoodsEvaluate(state: IMap, content) {
+    return state.set('goodsEvaluate', content);
+  }
 
-	@Action('evaluate: field')
-	goodsEvaluateFiledChange(state, { key, value }) {
-		return state.setIn(['goodsEditEvaluate', key], value);
-	}
+  @Action('evaluate: field')
+  goodsEvaluateFiledChange(state, { key, value }) {
+    return state.setIn(['goodsEditEvaluate', key], value);
+  }
 
   @Action('evaluate:setTabIndex')
   setTabIndex(state, value) {

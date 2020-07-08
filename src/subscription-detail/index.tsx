@@ -12,10 +12,11 @@ import {
   Input,
   Select,
   message,
-  DatePicker
+  DatePicker,
+  Table,
+  InputNumber
 } from 'antd';
 import { StoreProvider } from 'plume2';
-import AppStore from './store';
 
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -53,7 +54,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           orderNumber: 'O123456234'
         }
       ],
-      frequencyList: []
+      frequencyList: [],
+      subscriptionData: []
     };
   }
 
@@ -85,7 +87,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       orderInfo,
       recentOrderList,
       subscriptionInfo,
-      frequencyList
+      frequencyList,
+      subscriptionData
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
@@ -113,6 +116,50 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Dropdown>
       </div>
     );
+    const columns = [
+      {
+        title: 'Product',
+        dataIndex: 'Product',
+        key: 'Product',
+        render: (text, record) => (
+          <div>
+            <img src={record.img} alt="" />
+            <span>{text}</span>
+          </div>
+        )
+      },
+      {
+        title: 'Price',
+        dataIndex: 'Price',
+        key: 'Price',
+        render: (text, record) => (
+          <div>
+            <span style={{ textDecoration: 'line-through' }}>{text}</span>
+            <span>{text}</span>
+          </div>
+        )
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'Quantity',
+        key: 'Quantity',
+        render: (text, record) => (
+          <div>
+            <InputNumber min={1} max={100} defaultValue={3} />
+          </div>
+        )
+      },
+      {
+        title: 'Total',
+        dataIndex: 'Total',
+        key: 'Total',
+        render: (text, record) => (
+          <div>
+            <span>${text}</span>
+          </div>
+        )
+      }
+    ];
 
     return (
       <div>
@@ -203,6 +250,41 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <DatePicker style={{ width: '50%' }} />
               </InputGroup>
             </Col>
+          </Row>
+          {/* subscription 和 total */}
+          <Row style={{ marginTop: 20 }}>
+            <Col span={16}>
+              <Table columns={columns} dataSource={subscriptionData}></Table>
+            </Col>
+            <Col span={8}>
+              <Card title="Order Summary">
+                <div className="order-summary-content">
+                  <div className="flex-between">
+                    <span>Total</span>
+                    <span>$123</span>
+                  </div>
+                  <div className="flex-between">
+                    <span>Subscription Save Discount</span>
+                    <span>-$12</span>
+                  </div>
+                  <div className="flex-between">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                  </div>
+                </div>
+                <div className="order-summary-total flex-between">
+                  <span>Total (Inclu IVA):</span>
+                  <span>$0</span>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+
+          <Row className="consumer-info">
+            <Col span={12}></Col>
+            <Col span={12}></Col>
+            <Col span={12}></Col>
+            <Col span={12}></Col>
           </Row>
         </Card>
       </div>

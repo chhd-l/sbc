@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Button, Form, InputNumber } from 'antd';
+import { Button, Form, InputNumber, Table } from 'antd';
 import { AuthWrapper, DataGrid, ValidConst } from 'qmkit';
 import CouponsModal from './coupons-modal';
 
 import styled from 'styled-components';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 const TableRow = styled.div`
@@ -113,7 +113,7 @@ export default class ChooseCoupons extends React.Component<any, any> {
                       'couponId_' + (rowData as any).couponId,
                       {
                         rules: [
-                          {required: true, message: '请输入优惠券的的数量'},
+                          { required: true, message: '请输入优惠券的的数量' },
                           {
                             pattern: ValidConst.noZeroNineNumber,
                             message: message

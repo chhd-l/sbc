@@ -15,7 +15,9 @@ import momnet from 'moment';
 const confirm = Modal.confirm;
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const refundOrderStatusDic = {
   0: 'Pending refund',
@@ -111,7 +113,9 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="createTime"
           render={(createTime) => (
             <span>
-              {momnet(createTime).format(Const.TIME_FORMAT).toString()}
+              {momnet(createTime)
+                .format(Const.TIME_FORMAT)
+                .toString()}
             </span>
           )}
         />

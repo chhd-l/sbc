@@ -3,7 +3,9 @@ import { InputNumber, Input, Form } from 'antd';
 
 import { DataGrid, ValidConst } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 import styled from 'styled-components';

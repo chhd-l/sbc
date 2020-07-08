@@ -6,7 +6,9 @@ import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const payOrderStatusDic = {
   0: '已付款',
@@ -71,7 +73,7 @@ export default class PayOrderList extends React.Component<any, any> {
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
-          onChange: selectedRowKeys => {
+          onChange: (selectedRowKeys) => {
             onSelect(selectedRowKeys);
           }
         }}
@@ -90,7 +92,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="收款流水号"
           key="receivableNo"
           dataIndex="receivableNo"
-          render={receivableNo => (
+          render={(receivableNo) => (
             <span>{receivableNo ? receivableNo : '-'}</span>
           )}
         />
@@ -99,7 +101,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="下单时间"
           key="createTime"
           dataIndex="createTime"
-          render={createTime => (
+          render={(createTime) => (
             <span>
               {momnet(createTime)
                 .format(Const.TIME_FORMAT)
@@ -113,7 +115,7 @@ export default class PayOrderList extends React.Component<any, any> {
           key="payType"
           render={(rowInfo) => (
             <span>
-              { rowInfo.payOrderPrice == null && rowInfo.payOrderPoints != null
+              {rowInfo.payOrderPrice == null && rowInfo.payOrderPoints != null
                 ? '积分兑换'
                 : payTypeDic[rowInfo.payType]}
             </span>
@@ -125,7 +127,9 @@ export default class PayOrderList extends React.Component<any, any> {
           title="收款账户"
           key="receivableAccount"
           dataIndex="receivableAccount"
-          render={receivableAccount => <span>{receivableAccount || '-'}</span>}
+          render={(receivableAccount) => (
+            <span>{receivableAccount || '-'}</span>
+          )}
         />
         <Column
           title="应收金额"
@@ -135,9 +139,9 @@ export default class PayOrderList extends React.Component<any, any> {
               {rowInfo.payOrderPoints != null
                 ? rowInfo.payOrderPoints + '积分'
                 : `￥${
-                  rowInfo.payOrderPrice
-                    ? rowInfo.payOrderPrice.toFixed(2)
-                    : (0.0).toFixed(2)
+                    rowInfo.payOrderPrice
+                      ? rowInfo.payOrderPrice.toFixed(2)
+                      : (0.0).toFixed(2)
                   }`}
             </span>
           )}
@@ -148,7 +152,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="付款状态"
           key="payOrderStatus"
           dataIndex="payOrderStatus"
-          render={payOrderStatus => (
+          render={(payOrderStatus) => (
             <span>{payOrderStatusDic[payOrderStatus]}</span>
           )}
         />
@@ -157,7 +161,7 @@ export default class PayOrderList extends React.Component<any, any> {
           title="备注"
           key="comment"
           dataIndex="comment"
-          render={comment => (
+          render={(comment) => (
             <span>
               {comment ? (
                 <Tooltip title={this._renderComment(comment)} placement="top">
@@ -169,7 +173,10 @@ export default class PayOrderList extends React.Component<any, any> {
             </span>
           )}
         />
-        <Column title="操作" render={rowInfo => this._renderOperate(rowInfo)} />
+        <Column
+          title="操作"
+          render={(rowInfo) => this._renderOperate(rowInfo)}
+        />
       </DataGrid>
     );
   }

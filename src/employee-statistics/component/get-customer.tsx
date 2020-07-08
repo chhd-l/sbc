@@ -2,7 +2,9 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class GetCustomerStatistics extends React.Component<any, any> {
@@ -128,11 +130,11 @@ export default class GetCustomerStatistics extends React.Component<any, any> {
       sortedInfo: sorter.field
         ? sorter
         : dateType == 0 || dateType == 1
-          ? { columnKey: 'total', order: 'descend' }
-          : {
-              columnKey: 'newlyNum',
-              order: 'descend'
-            }
+        ? { columnKey: 'total', order: 'descend' }
+        : {
+            columnKey: 'newlyNum',
+            order: 'descend'
+          }
     });
     const { onClientPagination } = this.props.relaxProps;
     let sort = '';
@@ -159,7 +161,7 @@ export default class GetCustomerStatistics extends React.Component<any, any> {
    * @param clientSort
    * @private
    */
-  _renderSortCol = clientSort => {
+  _renderSortCol = (clientSort) => {
     //对形如"TOTAL_DESC"这样的排序进行分割
     let sortName = '';
     if (clientSort.split('_')[0] == 'NEWLY') {
@@ -175,7 +177,7 @@ export default class GetCustomerStatistics extends React.Component<any, any> {
    * @param clientSort
    * @private
    */
-  _renderSortType = clientSort => {
+  _renderSortType = (clientSort) => {
     //对形如"TOTAL_DESC"这样的排序进行分割
     let sortType = clientSort.split('_')[1] == 'ASC' ? 'ascend' : 'descend';
     return sortType;

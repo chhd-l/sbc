@@ -107,12 +107,15 @@ class RejectForm extends React.Component<any, any> {
         <FormItem>
           {getFieldDecorator('comment', {
             rules: [
-              { required: true, message: '请填写驳回原因' },
+              {
+                required: true,
+                message: <FormattedMessage id="order.rejectionReasonTip" />
+              },
               { validator: this.checkComment }
             ]
           })(
             <Input.TextArea
-              placeholder="请输入驳回原因"
+              placeholder="comment"
               autosize={{ minRows: 4, maxRows: 4 }}
             />
           )}
@@ -128,7 +131,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Enter up to 100 characters'));
       return;
     }
     callback();
@@ -233,6 +236,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       countryId: string;
       cityId: number;
       address: string;
+      detailAddress1: string;
+      detailAddress2: string;
       rfc: string;
       postCode: string;
     };
@@ -373,15 +378,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryCity" />}:{' '}
-              {countryDict.find((c) => c.id == consignee.cityId) &&
-                countryDict.find((c) => c.id == consignee.cityId).name}
+              {cityDict.find((c) => c.id == consignee.cityId) &&
+                cityDict.find((c) => c.id == consignee.cityId).name}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress1" />}: {consignee.address}
+              {<FormattedMessage id="deliveryAddress1" />}:{' '}
+              {consignee.detailAddress1}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress2" />}:{' '}
-              {/* todo {address2} 后端暂时没有此字段 */}
+              {consignee.detailAddress2}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="postalCode" />}: {consignee.postCode}
@@ -398,9 +404,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
         <Modal
           maskClosable={false}
-          title="请输入驳回原因"
+          title={<FormattedMessage id="order.rejectionReasonTip" />}
           visible={orderRejectModalVisible}
-          okText="保存"
+          okText={<FormattedMessage id="save" />}
           onOk={() => this._handleOK(tid)}
           onCancel={() => this._handleCancel()}
         >
@@ -482,7 +488,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     href="javascript:void(0)"
                     style={styles.pr20}
                   >
-                    驳回
+                    <FormattedMessage id="order.turnDown" />
                   </a>
                 </AuthWrapper>
               )}

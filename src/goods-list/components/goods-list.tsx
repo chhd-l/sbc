@@ -5,7 +5,9 @@ import { List, fromJS } from 'immutable';
 import { Menu, Dropdown, Icon, Modal, Tooltip } from 'antd';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
 import { FormattedMessage } from 'react-intl';

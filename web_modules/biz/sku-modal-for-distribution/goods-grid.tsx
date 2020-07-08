@@ -6,7 +6,9 @@ import { DataGrid, Const } from 'qmkit';
 import SearchForm from './search-form';
 import * as webapi from './webapi';
 
-const { Column } = DataGrid;
+import { Table } from 'antd'
+
+const Column  = Table.Column;
 
 /**
  * 商品添加

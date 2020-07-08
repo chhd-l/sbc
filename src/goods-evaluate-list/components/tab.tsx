@@ -4,9 +4,8 @@ import { Tabs } from 'antd';
 import { noop } from 'qmkit';
 
 import EvaluateList from './list';
-
+import { FormattedMessage } from 'react-intl';
 const TabPane = Tabs.TabPane;
-
 
 @Relax
 export default class Tab extends React.Component<any, any> {
@@ -25,13 +24,16 @@ export default class Tab extends React.Component<any, any> {
   render() {
     const { tabIndex, onStateTabChange } = this.props.relaxProps;
     return (
-      <Tabs activeKey={tabIndex} onChange={tabInd => onStateTabChange(tabInd)}>
-        <TabPane tab="全部评价" key="1">
+      <Tabs
+        activeKey={tabIndex}
+        onChange={(tabInd) => onStateTabChange(tabInd)}
+      >
+        <TabPane tab={<FormattedMessage id="reviewList" />} key="1">
           <EvaluateList />
         </TabPane>
-        <TabPane tab="未回复" key="2">
-          <EvaluateList />
-        </TabPane>
+        {/*<TabPane tab="未回复" key="2">*/}
+        {/*  <EvaluateList />*/}
+        {/*</TabPane>*/}
       </Tabs>
     );
   }

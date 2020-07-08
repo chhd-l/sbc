@@ -2,7 +2,9 @@ import React from 'react';
 import { DataGrid, noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class CateTable extends React.Component<any, any> {

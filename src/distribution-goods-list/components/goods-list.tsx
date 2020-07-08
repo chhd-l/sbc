@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Tooltip, Popconfirm, Pagination } from 'antd';
+import { Tooltip, Popconfirm, Pagination, Table } from 'antd';
 import { AuthWrapper, DataGrid, history, noop, QMFloat } from 'qmkit';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 const defaultImg = require('../img/none.png');
 
 /**

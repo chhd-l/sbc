@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { Button, DatePicker, Form, Input, message, Modal, Select } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Select,
+  Table
+} from 'antd';
 import { AuthWrapper, Const, DataGrid, SelectGroup } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -8,7 +17,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 
 /**
  * 优惠券选择弹窗

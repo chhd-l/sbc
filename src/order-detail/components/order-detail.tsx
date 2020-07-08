@@ -107,12 +107,15 @@ class RejectForm extends React.Component<any, any> {
         <FormItem>
           {getFieldDecorator('comment', {
             rules: [
-              { required: true, message: '请填写驳回原因' },
+              {
+                required: true,
+                message: <FormattedMessage id="order.rejectionReasonTip" />
+              },
               { validator: this.checkComment }
             ]
           })(
             <Input.TextArea
-              placeholder="请输入驳回原因"
+              placeholder="comment"
               autosize={{ minRows: 4, maxRows: 4 }}
             />
           )}
@@ -128,7 +131,7 @@ class RejectForm extends React.Component<any, any> {
     }
 
     if (value.length > 100) {
-      callback(new Error('备注请填写小于100字符'));
+      callback(new Error('Enter up to 100 characters'));
       return;
     }
     callback();
@@ -573,9 +576,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
          */}
         <Modal
           maskClosable={false}
-          title="请输入驳回原因"
+          title={<FormattedMessage id="order.rejectionReasonTip" />}
           visible={orderRejectModalVisible}
-          okText="保存"
+          okText={<FormattedMessage id="save" />}
           onOk={() => this._handleOK(tid)}
           onCancel={() => this._handleCancel()}
         >
@@ -657,7 +660,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     href="javascript:void(0)"
                     style={styles.pr20}
                   >
-                    驳回
+                    <FormattedMessage id="order.turnDown" />
                   </a>
                 </AuthWrapper>
               )}

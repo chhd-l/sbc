@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom';
 import { AuthWrapper, Const, DataGrid, FindBusiness, noop } from 'qmkit';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 //默认每页展示的数量
 const CUSTOMER_STATUS = {

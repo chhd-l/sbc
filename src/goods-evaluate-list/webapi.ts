@@ -13,18 +13,17 @@ export function fetchGoodsEvaluateList(filterParams = {}) {
   });
 }
 
-
 /**
  * 获取店铺180天评价统计信息
  * @param filterParams
  */
 export function fetchStoreEvaluateSum(param = {}) {
-    return Fetch<TResult>('/store/evaluate/sum/getByStoreId', {
-        method: 'POST',
-        body: JSON.stringify({
-            ...param
-        })
-    });
+  return Fetch<TResult>('/store/evaluate/sum/getByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
 }
 
 /**
@@ -33,12 +32,15 @@ export function fetchStoreEvaluateSum(param = {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchStoreEvaluateNum(param = {}) {
-	return Fetch<TResult>('/store/evaluate/num/storeEvaluateNumByStoreIdAndScoreCycle', {
-		method: 'POST',
-		body: JSON.stringify({
-			...param
-		})
-	});
+  return Fetch<TResult>(
+    '/store/evaluate/num/storeEvaluateNumByStoreIdAndScoreCycle',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        ...param
+      })
+    }
+  );
 }
 
 /**
@@ -47,12 +49,12 @@ export function fetchStoreEvaluateNum(param = {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchStoreEvaluateList(filterParams = {}) {
-	return Fetch<TResult>('/store/evaluate/num/page', {
-		method: 'POST',
-		body: JSON.stringify({
-			...filterParams
-		})
-	});
+  return Fetch<TResult>('/store/evaluate/num/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
 }
 
 /**
@@ -61,12 +63,12 @@ export function fetchStoreEvaluateList(filterParams = {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchGoodsEvaluateDetail(param = {}) {
-	return Fetch<TResult>('/goods/evaluate/detail', {
-		method: 'POST',
-		body: JSON.stringify({
-			...param
-		})
-	});
+  return Fetch<TResult>('/goods/evaluate/detail', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
 }
 
 /**
@@ -75,10 +77,24 @@ export function fetchGoodsEvaluateDetail(param = {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function saveGoodsEvaluateAnswer(param = {}) {
-	return Fetch<TResult>('/goods/evaluate/answer', {
-		method: 'POST',
-		body: JSON.stringify({
-			...param
-		})
-	});
+  return Fetch<TResult>('/goods/evaluate/answer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
+}
+
+/**
+ * 删除订单
+ * @param {{}} param
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export function deleteGoodsById(param = {}) {
+  return Fetch<TResult>('/goods/evaluate/delete', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...param
+    })
+  });
 }

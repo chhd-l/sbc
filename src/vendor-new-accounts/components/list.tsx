@@ -4,7 +4,9 @@ import { Icon, Button, Input, Form, Select } from 'antd';
 import { DataGrid, history, noop, QMMethod, ValidConst } from 'qmkit';
 import styled from 'styled-components';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -272,7 +274,8 @@ export default class List extends React.Component<any, any> {
         </NoBorder>
         <ButtonBox>
           <Button type="dashed" onClick={() => addNewAccounts()}>
-            <Icon type="plus" />增加
+            <Icon type="plus" />
+            增加
           </Button>
         </ButtonBox>
         <div className="bar-button">

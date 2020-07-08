@@ -27,9 +27,7 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state()
-      .get('form')
-      .toJS();
+    const query = this.state().get('form').toJS();
 
     // 是否已回复
     const tabIndex = this.state().get('tabIndex');
@@ -200,9 +198,10 @@ export default class AppStore extends Store {
    * 保存评价回复
    * @returns {Promise<void>}
    */
-  saveAnswer = async (evaluateId, evaluateAnswer, isShow) => {
+  saveAnswer = async (evaluateId, evaluateContent, evaluateAnswer, isShow) => {
     const { res } = await webapi.saveGoodsEvaluateAnswer({
       evaluateId: evaluateId,
+      evaluateContent: evaluateContent,
       evaluateAnswer: evaluateAnswer,
       isShow: isShow,
       isAnswer: 1

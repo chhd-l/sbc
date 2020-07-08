@@ -3,7 +3,9 @@ import { Relax } from 'plume2';
 import { DataGrid, util } from 'qmkit';
 import { QMFloat } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 import styled from 'styled-components';
 const TableRow = styled.div`

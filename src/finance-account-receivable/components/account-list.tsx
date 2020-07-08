@@ -5,7 +5,9 @@ import { DataGrid, noop } from 'qmkit';
 import { List } from 'immutable';
 
 declare type IList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const confirm = Modal.confirm;
 
 @Relax
@@ -33,7 +35,7 @@ export default class AccountList extends React.Component<any, any> {
     initOffLineAccounts: noop
   };
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     const { initOffLineAccounts } = this.props.relaxProps;
 
     initOffLineAccounts();
@@ -54,12 +56,12 @@ export default class AccountList extends React.Component<any, any> {
         <Column
           title="状态"
           dataIndex="bankStatus"
-          render={status => (status ? '禁用' : '启用')}
+          render={(status) => (status ? '禁用' : '启用')}
         />
         <Column
           title="操作"
           key="action"
-          render={rowInfo => this._renderOperate(rowInfo)}
+          render={(rowInfo) => this._renderOperate(rowInfo)}
         />
       </DataGrid>
     );
@@ -71,13 +73,13 @@ export default class AccountList extends React.Component<any, any> {
     const menu = (
       <Menu>
         <Menu.Item key="0">
-          <a href="#!" onClick={() => onEdit(rowInfo.accountId)}>
+          <a href="javascript:;" onClick={() => onEdit(rowInfo.accountId)}>
             编辑
           </a>
         </Menu.Item>
         <Menu.Item key="1">
           {rowInfo.bankStatus ? (
-            <a href="#!" onClick={() => onEnable(rowInfo.accountId)}>
+            <a href="javascript:;" onClick={() => onEnable(rowInfo.accountId)}>
               启用
             </a>
           ) : (
@@ -95,7 +97,7 @@ export default class AccountList extends React.Component<any, any> {
         </Menu.Item>
         <Menu.Item key="3">
           <a
-            href="#!"
+            href="javascript:;"
             onClick={() => this._handleDelete(rowInfo.accountId)}
           >
             删除
@@ -110,8 +112,9 @@ export default class AccountList extends React.Component<any, any> {
         overlay={menu}
         trigger={['click']}
       >
-        <a className="ant-dropdown-link" href="#!">
-          操作&nbsp;<Icon type="down" />
+        <a className="ant-dropdown-link" href="javascript:;">
+          操作&nbsp;
+          <Icon type="down" />
         </a>
       </Dropdown>
     );

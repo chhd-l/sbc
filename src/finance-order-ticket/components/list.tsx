@@ -7,7 +7,9 @@ import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const invoiceStateDic = {
   0: 'To be invoiced',
@@ -99,7 +101,9 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           render={(invoiceTime) => (
             <span>
               {invoiceTime
-                ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString()
+                ? momnet(invoiceTime)
+                    .format(Const.TIME_FORMAT)
+                    .toString()
                 : '-'}
             </span>
           )}

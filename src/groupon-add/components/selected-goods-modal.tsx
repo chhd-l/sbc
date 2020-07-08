@@ -9,7 +9,9 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const TreeNode = Tree.TreeNode;
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 const SelectBox = styled.div`
   .ant-select-dropdown-menu-item,
@@ -64,7 +66,8 @@ export default class SelectedGoodsModal extends React.Component<any, any> {
 
   render() {
     return (
-      <Modal  maskClosable={false}
+      <Modal
+        maskClosable={false}
         visible={true}
         title={
           <div>

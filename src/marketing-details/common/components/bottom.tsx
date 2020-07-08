@@ -12,11 +12,11 @@ const GreyBg = styled.div`
   color: #333333;
   margin-left: -28px;
   span {
-    width: 100px;
+    width: 200px;
     text-align: right;
     color: #666666;
     display: inline-block;
-    margin: 5px 0;
+    margin: 5px 20px 0 0;
   }
 `;
 @withRouter
@@ -38,18 +38,18 @@ export default class Bottom extends React.Component<any, any> {
     const { joinLevel, customerLevels } = this.props.relaxProps;
     let levelName = '';
     if (joinLevel == '-1') {
-      levelName = '全平台客户';
+      levelName = 'Full platform consumer';
     } else if (joinLevel == '0') {
-      levelName = '全部等级';
+      levelName = 'All Leave';
     } else if (joinLevel != '') {
       levelName = joinLevel
         .split(',')
-        .map(info =>
+        .map((info) =>
           customerLevels
-            .filter(v => v.get('customerLevelId') == info)
+            .filter((v) => v.get('customerLevelId') == info)
             .getIn([0, 'customerLevelName'])
         )
-        .filter(v => v)
+        .filter((v) => v)
         .join('，');
     }
 
@@ -58,7 +58,7 @@ export default class Bottom extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={24}>
-              <span>目标客户：</span>
+              <span>Target consumer:</span>
               {levelName}
             </Col>
           </Row>

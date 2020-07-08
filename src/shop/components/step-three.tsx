@@ -5,7 +5,9 @@ import { Button, Modal, message } from 'antd';
 import styled from 'styled-components';
 import { noop, DataGrid } from 'qmkit';
 import { IList } from 'typings/globalType';
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 import { FormattedMessage } from 'react-intl';
 
 const Content = styled.div`

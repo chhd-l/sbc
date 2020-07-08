@@ -72,13 +72,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     const DeliveryFormDetail = Form.create({})(DeliveryForm);
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            wordBreak: 'break-word'
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
@@ -150,13 +144,14 @@ export default class OrderDelivery extends React.Component<any, any> {
                         'none'
                       )}
                     </div>
+                    {/* 作废shipping */}
                     {flowState === 'CONFIRMED' ||
                     flowState === 'COMPLETED' ||
                     flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
                         <a
                           style={{ color: 'blue' }}
-                          href="#!"
+                          href="javascript:;"
                           onClick={() =>
                             this._showCancelConfirm(v.get('deliverId'))
                           }
@@ -231,8 +226,7 @@ export default class OrderDelivery extends React.Component<any, any> {
       {
         title: 'Product Name',
         dataIndex: 'skuName',
-        key: 'skuName',
-        width: '50%'
+        key: 'skuName'
       },
       {
         title: 'Weight',

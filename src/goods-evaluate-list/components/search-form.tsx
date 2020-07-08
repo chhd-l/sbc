@@ -2,6 +2,7 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Select, Input, Button, DatePicker } from 'antd';
 import { SelectGroup, noop, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +40,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="订单号"
+            addonBefore={<FormattedMessage id="orderNumber" />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -66,7 +67,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="是否展示"
+            label={<FormattedMessage id="displayStatus" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -77,34 +78,40 @@ export default class SearchForm extends React.Component<any, any> {
             }}
             value={form.get('isShow')}
           >
-            <Option value="-1">全部</Option>
-            <Option value="1">是</Option>
-            <Option value="0">否</Option>
+            <Option value="-1">
+              <FormattedMessage id="all" />
+            </Option>
+            <Option value="1">
+              <FormattedMessage id="yes" />
+            </Option>
+            <Option value="0">
+              <FormattedMessage id="no" />
+            </Option>
           </SelectGroup>
         </FormItem>
+        {/*<FormItem>*/}
+        {/*  <SelectGroup*/}
+        {/*    getPopupContainer={() => document.getElementById('page-content')}*/}
+        {/*    label="是否晒单"*/}
+        {/*    style={{ width: 80 }}*/}
+        {/*    onChange={(value) => {*/}
+        {/*      value = value === '' ? null : value;*/}
+        {/*      onFormChange({*/}
+        {/*        field: 'isUpload',*/}
+        {/*        value*/}
+        {/*      });*/}
+        {/*    }}*/}
+        {/*    value={form.get('isUpload')}*/}
+        {/*  >*/}
+        {/*    <Option value="-1">全部</Option>*/}
+        {/*    <Option value="1">是</Option>*/}
+        {/*    <Option value="0">否</Option>*/}
+        {/*  </SelectGroup>*/}
+        {/*</FormItem>*/}
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="是否晒单"
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'isUpload',
-                value
-              });
-            }}
-            value={form.get('isUpload')}
-          >
-            <Option value="-1">全部</Option>
-            <Option value="1">是</Option>
-            <Option value="0">否</Option>
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label="评分"
+            label={<FormattedMessage id="productRatings" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -115,12 +122,24 @@ export default class SearchForm extends React.Component<any, any> {
             }}
             value={form.get('evaluateScore')}
           >
-            <Option value="-1">全部</Option>
-            <Option value="5">5星</Option>
-            <Option value="4">4星</Option>
-            <Option value="3">3星</Option>
-            <Option value="2">2星</Option>
-            <Option value="1">1星</Option>
+            <Option value="-1">
+              <FormattedMessage id="all" />
+            </Option>
+            <Option value="5">
+              5 <FormattedMessage id="star" />
+            </Option>
+            <Option value="4">
+              4 <FormattedMessage id="star" />
+            </Option>
+            <Option value="3">
+              3 <FormattedMessage id="star" />
+            </Option>
+            <Option value="2">
+              2 <FormattedMessage id="star" />
+            </Option>
+            <Option value="1">
+              1 <FormattedMessage id="star" />
+            </Option>
           </SelectGroup>
         </FormItem>
         {/*本迭代未做,暂时注释,留到下个迭代*/}
@@ -175,7 +194,7 @@ export default class SearchForm extends React.Component<any, any> {
               onSearch();
             }}
           >
-            搜索
+            <FormattedMessage id="search" />
           </Button>
         </FormItem>
       </Form>
@@ -198,8 +217,12 @@ export default class SearchForm extends React.Component<any, any> {
         value={this.state.customerOptions}
         style={{ width: 100 }}
       >
-        <Option value="customerName">会员名称</Option>
-        <Option value="customerAccount">会员账号</Option>
+        <Option value="customerName">
+          <FormattedMessage id="consumerName" />
+        </Option>
+        <Option value="customerAccount">
+          <FormattedMessage id="consumerAccount" />
+        </Option>
       </Select>
     );
   };

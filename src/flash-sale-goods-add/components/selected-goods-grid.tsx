@@ -5,7 +5,6 @@ import { Relax } from 'plume2';
 import { IList, IMap } from '../../../typings/globalType';
 import noop from '../../../web_modules/qmkit/noop';
 import { Button, Form, Input, InputNumber } from 'antd';
-import Table from 'antd/es/table/Table';
 import Select from 'antd/lib/select';
 
 const TableSet = styled.div`
@@ -25,7 +24,9 @@ const TableSet = styled.div`
     }
   }
 `;
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 const Option = Select.Option;
 /**
@@ -182,7 +183,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
                             type: 'number',
                             max: 9999999.99,
                             message: '最大值为9999999.99',
-                            transform: function (value) {
+                            transform: function(value) {
                               return isNaN(parseFloat(value))
                                 ? 0
                                 : parseFloat(value);

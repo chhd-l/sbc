@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Form, Modal, Input, Button, message } from 'antd';
+import { Form, Modal, Input, Button, message, Table } from 'antd';
 import { noop, DataGrid, ValidConst } from 'qmkit';
 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { IList } from 'typings/globalType';
 
-const { Column } = DataGrid;
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 @Relax

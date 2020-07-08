@@ -387,7 +387,7 @@ export default class ListView extends React.Component<any, any> {
                                 </a>
                               </AuthWrapper>
                             )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
+                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
                             v.getIn(['tradeState', 'auditState']) ===
                               'NON_CHECKED' && (
                               <AuthWrapper functionName="fOrderList002_3pl">
@@ -401,10 +401,10 @@ export default class ListView extends React.Component<any, any> {
                                   <FormattedMessage id="order.audit" />
                                 </a>
                               </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
+                            )} */}
+                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
                             v.getIn(['tradeState', 'auditState']) ===
-                              'NON_CHECKED' &&
+                            'NON_CHECKED' &&
                             v.getIn(['tradeState', 'payState']) != 'PAID' && (
                               <AuthWrapper functionName="fOrderList002_3pl">
                                 <a
@@ -415,7 +415,7 @@ export default class ListView extends React.Component<any, any> {
                                   <FormattedMessage id="order.turnDown" />
                                 </a>
                               </AuthWrapper>
-                            )}
+                            )} */}
                           {/*待发货状态显示*/}
                           {needAudit &&
                             v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, noop } from 'qmkit';
-const { Column } = DataGrid;
+import { Table } from 'antd';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+
+const Column = Table.Column;
 
 type TList = List<any>;
 

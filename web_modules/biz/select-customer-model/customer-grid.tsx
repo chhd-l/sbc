@@ -8,7 +8,9 @@ import * as webApi from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { Column } = DataGrid;
+import { Table } from 'antd'
+
+const Column  = Table.Column;
 
 const OPTION_TYPE = {
   0: 'customerName',

@@ -7,7 +7,9 @@ import { Form, Input, Button, Select, Icon } from 'antd';
 import styled from 'styled-components';
 import { noop, DataGrid, QMMethod, ValidConst } from 'qmkit';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -90,7 +92,8 @@ export default class StepFour extends React.Component<any, any> {
             <Red>*</Red>
             <H2>结算银行账户 </H2>
             <GreyText>
-              已添加{offlineAccount ? offlineAccount.count() : 0}个结算账户，最多可添加5个结算账户，如需修改结算账户请在财务模块操作
+              已添加{offlineAccount ? offlineAccount.count() : 0}
+              个结算账户，最多可添加5个结算账户，如需修改结算账户请在财务模块操作
             </GreyText>
           </div>
         </Content>
@@ -122,7 +125,7 @@ export default class StepFour extends React.Component<any, any> {
                       <FormItem>
                         {getFieldDecorator(`${rowData.key}_bankCode`, {
                           initialValue: text,
-                          rules: [{ required: true, message: `请选择开户银行` }]
+                          rules: [{ required: true, message: '请选择开户银行' }]
                         })(
                           <Select
                             showSearch
@@ -130,7 +133,7 @@ export default class StepFour extends React.Component<any, any> {
                             style={{ width: 180 }}
                             placeholder="选择或输入银行名称"
                             optionFilterProp="children"
-                            onChange={v =>
+                            onChange={(v) =>
                               onBankNameChange({ id: index, value: v })
                             }
                             filterOption={(inputValue, option) =>
@@ -297,7 +300,8 @@ export default class StepFour extends React.Component<any, any> {
           </NoBorder>
           <ButtonBox>
             <Button type="dashed" onClick={() => addNewAccounts()}>
-              <Icon type="plus" />增加
+              <Icon type="plus" />
+              增加
             </Button>
           </ButtonBox>
         </Content>
@@ -320,7 +324,7 @@ export default class StepFour extends React.Component<any, any> {
    */
   _renderOption = () => {
     const { company } = this.props.relaxProps;
-    return (company.get('bankList') || fromJS([])).toJS().map(v => {
+    return (company.get('bankList') || fromJS([])).toJS().map((v) => {
       return (
         <Option value={v.bankCode} key={v.bankCode}>
           {v.bankName}
@@ -336,7 +340,7 @@ export default class StepFour extends React.Component<any, any> {
     const form = this.props.form;
     const { saveNewAccount } = this.props.relaxProps;
     //对非空的进行校验
-    form.validateFields(null, errs => {
+    form.validateFields(null, (errs) => {
       //如果校验通过
       if (!errs) {
         saveNewAccount();

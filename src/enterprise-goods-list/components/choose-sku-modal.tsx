@@ -6,7 +6,9 @@ import { noop, DataGrid, ValidConst } from 'qmkit';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { IList, IMap } from 'typings/globalType';
 
-const { Column } = DataGrid;
+import { Table } from 'antd';
+
+const Column = Table.Column;
 const FormItem = Form.Item;
 
 @Relax

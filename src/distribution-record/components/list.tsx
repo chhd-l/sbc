@@ -6,7 +6,10 @@ import Moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
 import { QMFloat } from 'qmkit';
 declare type IList = List<any>;
-const { Column } = DataGrid;
+
+import { Table } from 'antd';
+
+const Column = Table.Column;
 
 @Relax
 export default class ListView extends React.Component<any, any> {
@@ -126,7 +129,9 @@ export default class ListView extends React.Component<any, any> {
         <Column
           title={
             <p>
-              客户名称<br />账号
+              客户名称
+              <br />
+              账号
             </p>
           }
           render={(rowData) => {
@@ -160,7 +165,9 @@ export default class ListView extends React.Component<any, any> {
         <Column
           title={
             <p>
-              分销员名称<br />账号
+              分销员名称
+              <br />
+              账号
             </p>
           }
           render={(rowData) => {
@@ -242,7 +249,9 @@ export default class ListView extends React.Component<any, any> {
         <Column
           title={
             <p>
-              金额<br />数量
+              金额
+              <br />
+              数量
             </p>
           }
           render={(rowData) => {
@@ -263,7 +272,9 @@ export default class ListView extends React.Component<any, any> {
         <Column
           title={
             <p>
-              佣金<br />比例
+              佣金
+              <br />
+              比例
             </p>
           }
           render={(rowData) => {

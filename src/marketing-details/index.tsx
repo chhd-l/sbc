@@ -12,9 +12,9 @@ import GiftList from './gift-details/components/gift-list';
 import MarketingRule from './common/components/marketing-rule';
 
 const MAK_TYPE = {
-  0: '满减',
-  1: '满折',
-  2: '满赠'
+  0: 'Full reduction',
+  1: 'Full discount'
+  // 2: '满赠'
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -28,7 +28,7 @@ export default class MarketingDetails extends React.Component<any, any> {
 
   render() {
     const marketingType = this.store.state().get('marketingType');
-    const title = MAK_TYPE[marketingType] + '活动详情';
+    const title = MAK_TYPE[marketingType] + 'Activity details';
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -44,8 +44,8 @@ export default class MarketingDetails extends React.Component<any, any> {
           ) : marketingType === 2 ? (
             <GiftList />
           ) : (
-                <MarketingRule />
-              )}
+            <MarketingRule />
+          )}
           {/*商品列表*/}
           <GoodsList />
 

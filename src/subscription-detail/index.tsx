@@ -277,6 +277,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <span>$0</span>
                 </div>
               </Card>
+              <Row>
+                <Col span={16}>
+                  <Input placeholder="Promotional code" />
+                </Col>
+                <Col span={8}>
+                  <Button type="primary">Apply</Button>
+                </Col>
+              </Row>
             </Col>
           </Row>
 

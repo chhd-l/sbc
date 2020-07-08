@@ -262,6 +262,28 @@ export default class List extends React.Component<any, any> {
            */}
           </Row>
 
+          <h3>
+            Increase Repeat purchase<span>Improve consumer loyalty</span>
+          </h3>
+          <Row>
+            <AuthWrapper functionName="f_subscription_promotion">
+              <Col span={6}>
+                <a
+                  className="createMarket"
+                  onClick={() => history.push('/customer-level')}
+                >
+                  <span className="left">
+                    <img src={images.order_02} />
+                  </span>
+                  <div className="info">
+                    <h5>Subscription Promotion</h5>
+                    <p>Enjoy easy repeat deliveries and saving on each order</p>
+                  </div>
+                </a>
+              </Col>
+            </AuthWrapper>
+          </Row>
+
           {/* <h3>
             留存复购<span>维护老客不流失</span>
           </h3>

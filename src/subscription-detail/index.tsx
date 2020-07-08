@@ -1,38 +1,29 @@
 import React from 'react';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Tabs, Card } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 
-import OperateLog from './components/operate-log';
-import SubscriptionDetailTab from './components/sub-detail';
-import OrderDetailTab from './components/order-detail';
-import OrderDelivery from './components/order-delivery';
-import OrderReceive from './components/order-receive';
-
 import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import './components/detail.less';
+import './index.less';
 /**
  * 订单详情
  */
-@StoreProvider(AppStore, { debug: __DEV__ })
 export default class SubscriptionDetail extends React.Component<any, any> {
-  store: AppStore;
-
-  componentDidMount() {
-    const { subId } = this.props.match.params;
-    if (this.props.location.state != undefined) {
-      this.store.onTabsChange(this.props.location.state.tab);
-    }
-    this.store.init(subId);
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
 
-  render() {
-    const { subId } = this.props.match.params;
+  componentDidMount() {}
 
-    if (this.state.loading) {
-      return <div>loading...</div>;
-    }
+  render() {
+    const cartTitle = (
+      <div className="cart-title">
+        <span>Subscription</span>
+        <span>#1</span>
+      </div>
+    );
 
     return (
       <div>
@@ -41,30 +32,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {<FormattedMessage id="subscription.detail" />}
           </Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container">
-          <div className="display-flex">
-            <Headline title={<FormattedMessage id="subscription.sub" />} />
-            <Headline title={subId} />
-          </div>
-
-          <SubscriptionDetailTab />
-          {/*<Tabs*/}
-          {/*  onChange={(key) => this.store.onTabsChange(key)}*/}
-          {/*  activeKey={this.store.state().get('tab')}*/}
-          {/*>*/}
-          {/*  <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">*/}
-          {/*    <OrderDetailTab />*/}
-          {/*  </Tabs.TabPane>*/}
-          {/*  <Tabs.TabPane*/}
-          {/*    tab={<FormattedMessage id="deliveryRecord" />}*/}
-          {/*    key="2"*/}
-          {/*  >*/}
-          {/*    <OrderDelivery />*/}
-          {/*  </Tabs.TabPane>*/}
-          {/*</Tabs>*/}
-
-          {/*<OperateLog />*/}
-        </div>
+        <Card title={cartTitle} bordered={false} style={{ margin: 20 }}>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../../goods-list/img/none.png');
 
@@ -218,7 +218,9 @@ export default class ListView extends React.Component<any, any> {
                       style={{ width: '12%', paddingRight: 22 }}
                       className="operation-td"
                     >
-                      {v.consumerName}
+                      <Link to={'/subscription-detail/' + v.id}>Details</Link>
+                      <Link to={'/subscription-edit/' + v.id}>Edit</Link>
+                      <Button type="link">Cancel All</Button>
                     </td>
                   </tr>
                 </tbody>

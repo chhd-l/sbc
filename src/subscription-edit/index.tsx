@@ -111,11 +111,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         ))}
       </Menu>
     );
-    const cartExtra = (
-      <Button type="link" className="underline-button" style={{ fontSize: 16 }}>
-        Skip Next Dilivery
-      </Button>
-    );
+    // const cartExtra = (
+    //   <Button type="link" className="underline-button" style={{fontSize:16,}}>Skip Next Dilivery</Button>
+    // );
     const columns = [
       {
         title: (
@@ -181,7 +179,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <Card
           title={cartTitle}
           bordered={false}
-          extra={cartExtra}
+          // extra={cartExtra}
           style={{ margin: 20 }}
         >
           {/* subscription 基本信息 */}
@@ -229,6 +227,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Previous Orders</p>
+
                 <Dropdown overlay={menu} trigger={['click']}>
                   <a
                     className="ant-dropdown-link"
@@ -243,19 +242,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Frequency</p>
-                <Select style={{ width: '50%' }}>
-                  {frequencyList.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
+                <p>4 Weeks</p>
               </div>
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Next order date</p>
-                <DatePicker format={'MMMM Do YY'} style={{ width: '50%' }} />
+                <p>June, 23rd</p>
               </div>
             </Col>
           </Row>

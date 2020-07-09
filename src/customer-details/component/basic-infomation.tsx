@@ -339,7 +339,7 @@ class BasicInfomation extends React.Component<any, any> {
 
   compareEmail = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+    let reg = /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/;
     if (!reg.test(form.getFieldValue('email'))) {
       callback('Please enter the correct email');
     } else {

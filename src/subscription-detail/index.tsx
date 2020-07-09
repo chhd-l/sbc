@@ -118,7 +118,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
     const columns = [
       {
-        title: 'Product',
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>
+        ),
         dataIndex: 'Product',
         key: 'Product',
         render: (text, record) => (
@@ -129,7 +131,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: 'Price',
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Price</span>,
         dataIndex: 'Price',
         key: 'Price',
         render: (text, record) => (
@@ -140,7 +142,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: 'Quantity',
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>
+        ),
         dataIndex: 'Quantity',
         key: 'Quantity',
         render: (text, record) => (
@@ -150,7 +154,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: 'Total',
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Total</span>,
         dataIndex: 'Total',
         key: 'Total',
         render: (text, record) => (
@@ -160,6 +164,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
+    const totalCartTitleStyle = {
+      background: '#fafafa',
+      borderBottom: '2px solid #D7D7D7',
+      color: '#8E8E8E',
+      fontWeight: 500
+    };
 
     return (
       <div>
@@ -252,12 +262,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
           </Row>
           {/* subscription 和 total */}
-          <Row style={{ marginTop: 20 }}>
+          <Row style={{ marginTop: 20 }} gutter={16}>
             <Col span={16}>
               <Table columns={columns} dataSource={subscriptionData}></Table>
             </Col>
             <Col span={8}>
-              <Card title="Order Summary">
+              <Card
+                title="Order Summary"
+                style={{ border: '1px solid #D7D7D7' }}
+                headStyle={totalCartTitleStyle}
+                bodyStyle={{ background: '#fafafa' }}
+              >
                 <div className="order-summary-content">
                   <div className="flex-between">
                     <span>Total</span>

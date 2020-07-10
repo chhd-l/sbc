@@ -1,8 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Button } from 'antd';
+import {
+  Checkbox,
+  Spin,
+  Pagination,
+  Modal,
+  Form,
+  Input,
+  Button,
+  Popconfirm,
+  message
+} from 'antd';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../../goods-list/img/none.png');
+
+import subscriptionData from './../subscriptionData';
 
 export default class ListView extends React.Component<any, any> {
   constructor(props) {
@@ -10,14 +22,30 @@ export default class ListView extends React.Component<any, any> {
     this.state = {
       allChecked: false,
       loading: false,
-      dataList: [],
+      dataList: subscriptionData.context.subscriptionResponses,
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 0
+        total: 4
       }
     };
   }
+  componentDidMount() {
+    // this.getSubscriptionList()
+  }
+  getSubscriptionList = () => {
+    // webapi
+    //   .getSubscriptionList({pageSize:10,pageNum:0}).then(data=>{
+    //     console.log(data);
+    //   })
+    let res = subscriptionData;
+    if (res === 'K-000000') {
+      this.setState(() => {
+        return { dataList: res.context.subscriptionResponses };
+      });
+    }
+  };
+
   onCheckedAll = (checked) => {
     this.setState({
       allChecked: checked
@@ -28,6 +56,17 @@ export default class ListView extends React.Component<any, any> {
   };
   onChecked = (index, checked) => {
     console.log(index, checked);
+  };
+
+  goodsSum = (array) => {
+    let sum = 0;
+    for (let index = 0; index < array.length; index++) {
+      sum += array[index].subscribeNum;
+    }
+    return sum;
+  };
+  cancelAll = (id) => {
+    message.success(id);
   };
 
   render() {
@@ -43,7 +82,7 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%', borderSpacing: 'initial' }}>
+                      <th style={{ width: '3%', borderSpacing: 'initial' }}>
                         <Checkbox
                           checked={allChecked}
                           onChange={(e) => {
@@ -52,25 +91,21 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="subscription.orderNumber" />
-                      </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="subscription.orderData" />
-                      </th>
-                      <th style={{ width: '17%' }}>
+                      <th style={{ width: '20%' }}>Product</th>
+                      <th style={{ width: '10%' }}>Subscription Status</th>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="subscription.receiver" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '14%' }}>
                         <FormattedMessage id="subscription.frequency" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.quantity" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '16%' }}>
                         <FormattedMessage id="subscription.operation" />
                       </th>
                     </tr>
@@ -122,7 +157,10 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={v.id}>
+          <tr
+            className="ant-table-row  ant-table-row-level-0"
+            key={v.subscribeId}
+          >
             <td colSpan={8} style={{ padding: 0 }}>
               <table
                 className="ant-table-self"
@@ -149,13 +187,13 @@ export default class ListView extends React.Component<any, any> {
 
                         <div style={{ width: 310, display: 'inline-block' }}>
                           <span style={{ marginLeft: 20, color: '#000' }}>
-                            {v.id}{' '}
+                            {v.subscribeId}{' '}
                           </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="subscription.subscriptionDate" />
-                          :{v.subscriptionDate ? v.subscriptionDate : ''}
+                          :{v.createTime ? v.createTime : ''}
                         </span>
                       </div>
                     </td>
@@ -165,20 +203,12 @@ export default class ListView extends React.Component<any, any> {
                   <tr>
                     {/* product */}
                     <td style={{ width: '3%' }} />
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        padding: '16px 0',
-                        width: '100'
-                      }}
-                    >
+                    <td style={{ width: '20%' }}>
                       {/*商品图片*/}
-                      {v.productImgList.map((v, k) =>
+                      {v.goodsInfo.map((item, k) =>
                         k < 4 ? (
                           <img
-                            src={v.get('pic') ? v.get('pic') : defaultImg}
+                            src={item.goodsPic ? item.goodsPic : defaultImg}
                             style={styles.imgItem}
                             key={k}
                           />
@@ -187,40 +217,68 @@ export default class ListView extends React.Component<any, any> {
 
                       {/*第4张特殊处理*/
                       //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                      v.goodsInfo.size > 3 ? (
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('pic') ? v.get('pic') : defaultImg}
+                            src={item.goodsPic ? item.goodsPic : defaultImg}
                             style={styles.imgFourth}
                           />
                           <div style={styles.imgNum}>
                             <FormattedMessage id="total" />
-                            {v.get('tradeItems').size}{' '}
-                            <FormattedMessage id="piece" />
+                            {v.goodsInfo.size} <FormattedMessage id="piece" />
                           </div>
                         </div>
                       ) : null}
                     </td>
-                    <td style={{ width: '14%' }}>
-                      {v.getIn(['buyer', 'name'])}
-                    </td>
+
                     {/*subscription status*/}
-                    <td style={{ width: '17%' }}>{v.status}</td>
+                    <td style={{ width: '10%' }}>
+                      {v.subscribeStatus === '0' ? 'Active' : 'InAction'}
+                    </td>
                     {/* consumerName */}
-                    <td style={{ width: '10%' }}>{v.consumerName}</td>
+                    <td style={{ width: '12%' }}>
+                      {v.customerName ? v.customerName : ''}
+                    </td>
                     {/* Recipient */}
-                    <td style={{ width: '12%' }}>{v.consumerName}</td>
+                    <td style={{ width: '12%' }}>
+                      {v.consignee ? v.consignee.consigneeName : ''}
+                    </td>
                     {/*Frequency*/}
-                    <td style={{ width: '12%' }}>{v.consumerName}</td>
+                    <td style={{ width: '14%' }}>
+                      {v.frequency ? v.frequency : ''}
+                    </td>
+                    {/* Quantity */}
+                    <td style={{ width: '10%' }}>
+                      {this.goodsSum(v.goodsInfo)}
+                    </td>
                     {/*Operation*/}
-                    <td
-                      style={{ width: '12%', paddingRight: 22 }}
-                      className="operation-td"
-                    >
-                      <Link to={'/subscription-detail/' + v.id}>Details</Link>
-                      <Link to={'/subscription-edit/' + v.id}>Edit</Link>
-                      <Button type="link">Cancel All</Button>
+                    <td style={{ width: '16%' }} className="operation-td">
+                      <Button type="link">
+                        <Link to={'/subscription-detail/' + v.subscribeId}>
+                          Details
+                        </Link>
+                      </Button>
+                      <Button type="link">
+                        <Link to={'/subscription-edit/' + v.subscribeId}>
+                          Edit
+                        </Link>
+                      </Button>
+                      <Popconfirm
+                        placement="topRight"
+                        title="Are you sure cancel the subscription?"
+                        onConfirm={() => this.cancelAll(v.subscribeId)}
+                        okText="Confirm"
+                        cancelText="Cancel"
+                      >
+                        <Button
+                          type="link"
+                          className="underline-button"
+                          style={{ fontSize: 16 }}
+                        >
+                          Cancel All
+                        </Button>
+                      </Popconfirm>
                     </td>
                   </tr>
                 </tbody>

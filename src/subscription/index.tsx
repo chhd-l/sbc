@@ -18,6 +18,8 @@ import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
+import subscriptionData from './subscriptionData';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -42,12 +44,15 @@ export default class SubscriptionList extends Component<any, any> {
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Recipient', 'Recipient Phone'],
       frequencyList: [],
-      activeKey: 'all'
+      activeKey: 'all',
+      subscriptionList: []
     };
   }
 
   componentDidMount() {
     this.querySysDictionary('Frequency');
+
+    this.getSubscriptionList();
   }
 
   onFormChange = ({ field, value }) => {
@@ -121,6 +126,18 @@ export default class SubscriptionList extends Component<any, any> {
       activeKey: key
     });
     console.log(key);
+  };
+  getSubscriptionList = () => {
+    // webapi
+    //   .getSubscriptionList({pageSize:10,pageNum:0}).then(data=>{
+    //     console.log(data);
+    //   })
+    let res = subscriptionData;
+    if (res === 'K-000000') {
+      this.setState(() => {
+        return { subscriptionList: res.context.subscriptionResponses };
+      });
+    }
   };
 
   render() {

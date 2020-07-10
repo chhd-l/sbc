@@ -14,9 +14,12 @@ import {
   message,
   DatePicker,
   Table,
-  InputNumber
+  InputNumber,
+  Modal,
+  Popconfirm
 } from 'antd';
 import { StoreProvider } from 'plume2';
+import { Link } from 'react-router-dom';
 
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -25,6 +28,7 @@ import * as webapi from './webapi';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
+const { confirm } = Modal;
 /**
  * 订单详情
  */
@@ -62,7 +66,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         petName: 'Rita',
         petType: 'cat',
         petBirthday: '2018/12/12'
-      }
+      },
+      visibleShipping: false,
+      visibleBilling: false,
+      visiblePetInfo: false
     };
   }
 
@@ -88,6 +95,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
+  skipNextDelivery = (id) => {
+    message.success('Successful');
+  };
 
   render() {
     const {
@@ -112,9 +122,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     const cartExtra = (
-      <Button type="link" className="underline-button" style={{ fontSize: 16 }}>
-        Skip Next Dilivery
-      </Button>
+      <Popconfirm
+        placement="topRight"
+        title="Are you sure skip next dilivery?"
+        onConfirm={() =>
+          this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
+        }
+        okText="Confirm"
+        cancelText="Cancel"
+      >
+        <Button
+          type="link"
+          className="underline-button"
+          style={{ fontSize: 16 }}
+        >
+          Skip Next Dilivery
+        </Button>
+      </Popconfirm>
     );
     const columns = [
       {
@@ -310,7 +334,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Pet Infomation</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
+                  <Button
+                    type="link"
+                    className="underline-button"
+                    onClick={() => {
+                      this.setState({
+                        visiblePetInfo: true
+                      });
+                    }}
+                  >
                     Change
                   </Button>
                 </Col>
@@ -356,7 +388,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Shipping Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
+                  <Button
+                    type="link"
+                    className="underline-button"
+                    onClick={() => {
+                      this.setState({
+                        visibleShipping: true
+                      });
+                    }}
+                  >
                     Change
                   </Button>
                 </Col>
@@ -384,7 +424,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
+                  <Button
+                    type="link"
+                    className="underline-button"
+                    onClick={() => {
+                      this.setState({
+                        visibleBilling: true
+                      });
+                    }}
+                  >
                     Change
                   </Button>
                 </Col>
@@ -407,7 +455,69 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Row>
             </Col>
           </Row>
+          <Row style={{ marginTop: 20 }} className="subscription-btn">
+            <Button>
+              <Link to="/subscription-list">Cancel</Link>
+            </Button>
+          </Row>
         </Card>
+
+        <Modal
+          title="Choose From Saved Shipping Address"
+          visible={this.state.visibleShipping}
+          onOk={() => {
+            this.setState({
+              visibleShipping: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visibleShipping: false
+            });
+          }}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+
+        <Modal
+          title="Choose From Saved Billing Address"
+          visible={this.state.visibleBilling}
+          onOk={() => {
+            this.setState({
+              visibleBilling: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visibleBilling: false
+            });
+          }}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+
+        <Modal
+          title="Choose From Saved Shipping Address"
+          visible={this.state.visiblePetInfo}
+          onOk={() => {
+            this.setState({
+              visiblePetInfo: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visiblePetInfo: false
+            });
+          }}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
       </div>
     );
   }

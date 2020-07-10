@@ -19,6 +19,7 @@ import {
 import { StoreProvider } from 'plume2';
 
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
@@ -399,6 +400,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
               </Row>
             </Col>
+          </Row>
+          <Row style={{ marginTop: 20 }} className="subscription-btn">
+            <Button type="primary" style={{ marginRight: 20 }}>
+              Save
+            </Button>
+
+            <Button>
+              <Link to="/subscription-list">Cancel</Link>
+            </Button>
           </Row>
         </Card>
       </div>

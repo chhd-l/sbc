@@ -2,7 +2,7 @@ import { Actor, Action, IMap } from 'plume2';
 import { fromJS } from 'immutable';
 
 interface IOrderInvoiceResponse {
-  data: Array<any>;
+  content: Array<any>;
   pageSize: number;
   total: number;
 }
@@ -29,13 +29,12 @@ export default class ListActor extends Actor {
    */
   @Action('list:init')
   init(state: IMap, res: IOrderInvoiceResponse) {
-    const { data, pageSize, total } = res;
-
-    return state.withMutations(state => {
+    const { content, pageSize, total } = res;
+    return state.withMutations((state) => {
       state
         .set('total', total)
         .set('pageSize', pageSize)
-        .set('dataList', fromJS(data));
+        .set('dataList', fromJS(content));
     });
   }
 

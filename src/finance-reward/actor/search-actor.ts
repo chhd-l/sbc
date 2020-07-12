@@ -7,11 +7,12 @@ export default class SearchActor extends Actor {
   defaultState() {
     return {
       searchForm: {
-        customerName: '',
+        period: 60,
         prescriberID: '',
         prescriberName: '',
-        payOrderStatus: null,
-        invoiceState: null
+        //auditStatus: -1,
+        pageNum: 0,
+        pageSize: 10
       },
       searchList: ''
     };

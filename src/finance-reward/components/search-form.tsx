@@ -32,7 +32,7 @@ export default class SearchForm extends React.Component<any, any> {
     this.state = {
       listData: {
         lastDay: '',
-        PrescriberID: '',
+        PrescriberID: Number,
         PrescriberName: ''
       }
     };
@@ -58,7 +58,7 @@ export default class SearchForm extends React.Component<any, any> {
                 value: e
               });
             }}
-            defaultValue={''}
+            defaultValue={'2'}
           >
             <Option value={null}></Option>
             <Option value="0">Last 180 days</Option>
@@ -73,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
               const value = (e.target as any).value;
               onFormChange({
                 field: 'prescriberID',
-                value
+                value: Number(value)
               });
             }}
             value={searchForm.get('prescriberID')}

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Relax } from 'plume2';
-import { Const, DataGrid, noop, AuthWrapper, checkAuth } from 'qmkit';
+import { Action, IMap, Relax, Store } from 'plume2';
+import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
 import { List } from 'immutable';
+import { Link } from 'react-router-dom';
 import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
 import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
@@ -30,19 +31,22 @@ const payOrderStatusDic = {
  */
 @Relax
 export default class OrderInvoiceList extends React.Component<any, any> {
+  _store: Store;
   props: {
     relaxProps?: {
       loading: boolean;
       selected: TList;
+      ccccccc: 'String';
       total: number;
       pageSize: number;
       dataList: TList;
-      onSelect: Function;
+      onSelect: any;
       onDestory: Function;
       onConfirm: Function;
       init: Function;
       onSearchByInvoiceId: Function;
       current: number;
+      getPrescriberId: Function;
     };
   };
 
@@ -52,12 +56,15 @@ export default class OrderInvoiceList extends React.Component<any, any> {
     selected: 'selected',
     pageSize: 'pageSize',
     dataList: 'dataList',
+    ccccccc: 'ccccccc',
     onDestory: noop,
     onSelect: noop,
     init: noop,
     onConfirm: noop,
     onSearchByInvoiceId: noop,
-    current: 'current'
+    getPrescriberId: noop,
+    current: 'current',
+    searchForm: 'searchForm'
   };
 
   render() {
@@ -71,102 +78,144 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       init,
       current
     } = this.props.relaxProps;
+    //console.log(this.props.relaxProps.searchForm.toJS(),'--------===');
+
     return (
       <DataGrid
         loading={loading}
-        rowSelection={{
+        /*rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
           onChange: (selectedRowKeys) => {
             onSelect(selectedRowKeys);
           }
-        }}
+        }}*/
         rowKey="orderInvoiceId"
         pagination={{
           pageSize,
           total,
+          fitColumns: true,
           current: current,
           onChange: (pageNum, pageSize) => {
             init({ pageNum: pageNum - 1, pageSize });
           }
         }}
         dataSource={dataList.toJS()}
+        /*dataSource = {[
+          { id: '1', firstName: 'John', lastName: 'Bobson'},
+          { id: '2', firstName: 'Bob', lastName: 'Mclaren'}
+        ]}*/
       >
         <Column
           title={<FormattedMessage id="PrescriberType" />}
-          key="invoiceTime"
-          dataIndex="invoiceTime"
-          render={(invoiceTime) => (
+          key="prescriberType"
+          width="12%"
+          dataIndex="prescriberType"
+          /*render={(invoiceTime) => (
             <span>
               {invoiceTime
                 ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString()
                 : '-'}
             </span>
-          )}
+          )}*/
         />
         <Column
           title={<FormattedMessage id="PrescriberID" />}
-          key="orderNo"
-          dataIndex="orderNo"
+          key="prescriberId"
+          dataIndex="prescriberId"
+          width="11%"
         />
         <Column
           title={<FormattedMessage id="PrescriberName" />}
-          key="customerName"
-          dataIndex="customerName"
+          key="prescriberName"
+          dataIndex="prescriberName"
+          width="22%"
         />
         <Column
           title={<FormattedMessage id="OrderQuantity" />}
-          key="orderPrice"
-          dataIndex="orderPrice"
+          key="orderQuantity"
+          dataIndex="orderQuantity"
+          width="11%"
           render={(orderPrice) => (
             <span>
-              {orderPrice != null ? `￥${orderPrice.toFixed(2)}` : '-'}
+              {orderPrice != null ? `$${orderPrice.toFixed(2)}` : '-'}
             </span>
           )}
         />
         <Column
           title={<FormattedMessage id="OrderAmount" />}
-          dataIndex="payOrderStatus"
-          key="payOrderStatus"
-          render={(payOrderStatus) => (
+          dataIndex="orderAmount"
+          width="11%"
+          key="orderAmount"
+          /* render={(payOrderStatus) => (
             <span> {payOrderStatusDic[payOrderStatus]} </span>
-          )}
+          )}*/
         />
 
         <Column
           title={<FormattedMessage id="RewardType" />}
-          dataIndex="invoiceType"
-          key="invoiceType"
-          render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
+          dataIndex="rewardType"
+          key="rewardType"
+          width="11%"
+          //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
-
+        <Column
+          title={<FormattedMessage id="RewardAmount" />}
+          dataIndex="rewardAmount"
+          key="rewardAmount"
+          width="11%"
+          render={(rewardAmount) => (
+            <span>
+              {rewardAmount != null ? `$${rewardAmount.toFixed(2)}` : '-'}
+            </span>
+          )}
+        />
 
         <Column
           title={<FormattedMessage id="operation" />}
-          render={(rowInfo) => this._renderOperate(rowInfo)}
-        />
-        {/*<Column
-          title="操作"
-          dataIndex="operation"
-          key="operation"
+          width="8%"
           render={(text, record: any, i) => {
             return (
-              <a href="javascript:void(0)" onClick={() => onSearchByInvoiceId(record.orderInvoiceId)} >查看</a>
-            )
+              <a
+                href="javascript:void(0)"
+                onClick={() => this._renderOperate(text)}
+              >
+                Details
+              </a>
+            );
           }}
-        />*/}
+          // render={(rowInfo) => this._renderOperate(rowInfo)}
+        />
       </DataGrid>
     );
   }
 
   _renderOperate(rowInfo) {
-    const { invoiceState, orderInvoiceId } = rowInfo;
+    const { getPrescriberId } = this.props.relaxProps;
+
+    getPrescriberId({ prescriberId: rowInfo });
+    //console.log(this.props.relaxProps.ccccccc);
+    history.push({
+      pathname: '/finance-reward-details',
+      params: {
+        prescriberId: rowInfo.prescriberId,
+        prescriberName: rowInfo.prescriberName
+      }
+    });
+
+    /*setTimeout(()=>{
+      console.log(this.props.relaxProps.ccccccc);
+
+    },300)*/
+    //return (<Link to={{pathname :'/finance-reward-details', state : { name : rowInfo }}}>Details</Link>)
+
+    /*const { invoiceState, orderInvoiceId } = rowInfo;
 
     //待确认
     return checkAuth('fetchOrderInovices') ||
       checkAuth('destoryOpenOrderInvoice')
       ? this._renderMenu(orderInvoiceId, invoiceState)
-      : '-';
+      : '-';*/
   }
 
   _renderMenu = (id: string, invoiceState: number) => {

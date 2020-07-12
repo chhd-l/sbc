@@ -8,6 +8,7 @@ import { Headline, BreadCrumb } from 'qmkit';
 
 import Detail from './components/detail';
 import List from './components/list';
+import Chart from './components/chart';
 import Bottom from './components/bottom';
 import AppStore from './store';
 import './style.css';
@@ -32,6 +33,7 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
+    //console.log(this.props.location.params.prescriberId,1111)
   }
 
   render() {
@@ -52,74 +54,30 @@ export default class BillingDetails extends React.Component<any, any> {
         </BreadCrumb>
 
         <div className="container">
-          <Headline title={<FormattedMessage id="rewardDetails" />} />
-          <OptionDiv>
-            <Tooltip
-              overlayStyle={{
-                overflowY: 'auto',
-                height: 'calc(100vh - 64px)'
-              }}
-              placement="bottomLeft"
-              title={this._renderTitle}
-            >
-              <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />
-                &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
-              </a>
-            </Tooltip>
-          </OptionDiv>
-          <Detail />
-          <SearchForm />
-          <div className="chart space-between">
-            <div className="chartDetails1">
-              <div className="chartDetailsList flex-content">
-                <div className="btn">
-                  Reward amount <br /> $ 4000
-                </div>
-                <div className="btn">
-                  Order amount <br /> $ 4000
-                </div>
-                <div className="btn">
-                  Order quantity
-                  <br /> 12000
-                </div>
-              </div>
+          <div className="space-between">
+            <div style={{ width: '60%' }}>
+              <Headline title={<FormattedMessage id="rewardDetails" />} />
             </div>
-            <div className="chartDetails2">
-              <WMChart
-                title=""
-                startTime={new Date()}
-                endTime={new Date()}
-                dataDesc={[
-                  { title: 'Order number', key: 'orderCount' },
-                  { title: 'Order amount', key: 'orderAmt' },
-                  { title: 'Number of payment orders', key: 'payOrderCount' },
-                  { title: 'Payment amount', key: 'payOrderAmt' }
-                ]}
-                radioClickBack={() => {}}
-                content={this.state.flowTrendData}
-                rangeVisible={false}
-              />
-            </div>
-
-            <div className="chartDetails2">
-              <WMChart
-                title=""
-                startTime={new Date()}
-                endTime={new Date()}
-                dataDesc={[
-                  { title: 'Order number', key: 'orderCount' },
-                  { title: 'Order amount', key: 'orderAmt' },
-                  { title: 'Number of payment orders', key: 'payOrderCount' },
-                  { title: 'Payment amount', key: 'payOrderAmt' }
-                ]}
-                radioClickBack={() => {}}
-                content={this.state.flowTrendData}
-                rangeVisible={false}
-              />
-            </div>
+            <OptionDiv style={{ width: '30%' }}>
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                  //height: 100
+                }}
+                placement="bottomLeft"
+                title={this._renderTitle}
+              >
+                <a style={{ fontSize: 14 }}>
+                  <Icon type="question-circle-o" />
+                  &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
+                </a>
+              </Tooltip>
+            </OptionDiv>
           </div>
 
+          <Detail />
+          <SearchForm />
+          <Chart />
           <List settleId={this.props.match.params.settleId} />
           <Bottom />
         </div>
@@ -135,7 +93,11 @@ export default class BillingDetails extends React.Component<any, any> {
             Reward rules
           </div>
           <br />
-          <p></p>
+          <div>
+            <p>1. 2020/06/06-Now:</p>
+            <p>First order: 12%</p>
+            <p>Repeat order:10%</p>
+          </div>
         </div>
       </div>
     );

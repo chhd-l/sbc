@@ -54,6 +54,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.fetchOrderInovices(param);
 
     if (res.code === Const.SUCCESS_CODE) {
+      console.log(res.context);
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('list:init', res.context);
@@ -404,4 +405,8 @@ export default class AppStore extends Store {
       message.error(res.message);
     }
   }
+
+  getPrescriberId = (res) => {
+    this.dispatch('aaa', res);
+  };
 }

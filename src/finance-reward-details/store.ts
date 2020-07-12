@@ -18,15 +18,69 @@ export default class AppStore extends Store {
     return [new SettleDetailActor()];
   }
 
-  init = async (settleId) => {
-    this.fetchSettleDetailList(settleId);
+  init = async (param?: any) => {
+    //console.log(history.location.params.prescriberId,222222222222222);
+
+    this.dispatch('loading:start');
+    if (history.location.params) {
+      sessionStorage.setItem(
+        'prescriberId',
+        history.location.params.prescriberId
+      );
+      sessionStorage.setItem(
+        'prescriberName',
+        history.location.params.prescriberName
+      );
+    } else {
+      sessionStorage.getItem('prescriberId');
+    }
+    // sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriberId:sessionStorage.getItem('prescriberId'));
+    let prescriberId = sessionStorage.getItem('prescriberId');
+
+    //sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriber.prescriberId:sessionStorage.getItem('prescriberId'));
+    param = Object.assign(
+      this.state().get('searchForm').merge({ prescriberId }).toJS(),
+      param
+    );
+
+    const res1 = await webapi.fetchFinanceRewardDetails(param);
+    const res2 = await webapi.fetchEverydayAmountTotal(param);
+    const PeriodAmountTotal = await webapi.fetchPeriodAmountTotal(param);
+    const findListByPrescriberId = await webapi.fetchFindListByPrescriberId(
+      param
+    );
+
+    if (res1.res.code === Const.SUCCESS_CODE) {
+      this.dispatch('list:init', res1.res.context.content);
+      this.dispatch('list:echarts', res2.res.context);
+      this.dispatch('list:PeriodAmountTotal', PeriodAmountTotal.res.context);
+      this.dispatch(
+        'list:fetchFindListByPrescriber',
+        findListByPrescriberId.res.context
+      );
+      this.dispatch('list:setName', prescriberId);
+
+      /*this.transaction(() => {
+        this.dispatch('list:init', res1.res.context.content);
+        this.dispatch('list:echarts', res2.res.context);
+        /!*this.dispatch('loading:end');
+        this.dispatch('list:init', res.context);
+        this.dispatch('current', param && param.pageNum + 1);
+        this.dispatch('select:init', []);*!/
+      });*/
+    } else {
+      message.error(res1.res.message);
+      if (res1.res.code === 'K-110001') {
+        this.dispatch('loading:end');
+      }
+    }
   };
 
   /**
    * 查询结算单明细列表
    * @returns {Promise<void>}
    */
-  fetchSettleDetailList = async (settleId) => {
+  fetchSettlementDetailList = async (settleId) => {
     const settleDetailList = await webapi.fetchSettlementDetailList(settleId);
     const settlement = await webapi.getSettlementById(settleId);
     this.transaction(() => {

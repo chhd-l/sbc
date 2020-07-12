@@ -341,20 +341,6 @@ export default class homePrescriber extends Component<any, any> {
             <h3>
               <FormattedMessage id="transactionTrendNearly10Days" />
             </h3>
-            <WMChart
-              title=""
-              startTime={new Date()}
-              endTime={new Date()}
-              dataDesc={[
-                { title: 'Order number', key: 'orderCount' },
-                { title: 'Order amount', key: 'orderAmt' },
-                { title: 'Number of payment orders', key: 'payOrderCount' },
-                { title: 'Payment amount', key: 'payOrderAmt' }
-              ]}
-              radioClickBack={() => {}}
-              content={this.state.flowTrendData}
-              rangeVisible={false}
-            />
           </div>
 
           <div className="homeItem lastTenData">

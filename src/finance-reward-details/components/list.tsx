@@ -33,28 +33,45 @@ export default class List extends React.Component<any, any> {
   props: {
     relaxProps?: {
       settleList: IList;
+      dataList: IList;
+      setlist: any;
       exportSettlementDetailList: Function;
     };
     settleId: number;
   };
 
+  constructor(props) {
+    super(props);
+  }
+
   static relaxProps = {
     settleList: 'settleList',
-    exportSettlementDetailList: noop
+    exportSettlementDetailList: noop,
+    loading: 'loading',
+    total: 'total',
+    selected: 'selected',
+    pageSize: 'pageSize',
+    setlist: 'setlist',
+    dataList: 'dataList',
+    init: noop,
+    current: 'current'
   };
 
   UNSAFE_componentWillMount() {
+    //const state = this.props.location.state;
+
+    //console.log(state,11111111111111111111111);
     this.setState({ expandedRows: [] });
   }
 
   render() {
-    const settleList = this.props.relaxProps.settleList
-      ? this.props.relaxProps.settleList.toJS()
+    const settleList = this.props.relaxProps.setlist
+      ? this.props.relaxProps.setlist
       : [];
     const { exportSettlementDetailList } = this.props.relaxProps;
     return (
       <div>
-       {/* <AuthWrapper functionName="f_sett_det_exp">
+        {/* <AuthWrapper functionName="f_sett_det_exp">
           <Button
             style={{ marginBottom: 20 }}
             disabled={settleList.length == 0}
@@ -98,95 +115,106 @@ export default class List extends React.Component<any, any> {
         width: 80
       },*/
       {
-        title: <FormattedMessage id="OrderTime" />,
-        dataIndex: 'finalTime',
-        key: 'finalTime',
-        render: (value, row) => {
-          return this._handleRowSpan(row, value);
-        },
+        title: '',
+        dataIndex: [],
+        key: 'orderSource',
+        width: 20
       },
       {
-        title:  <FormattedMessage id="OrderNumber" />,
-        dataIndex: 'tradeCode',
-        key: 'tradeCode',
+        title: <FormattedMessage id="OrderTime" />,
+        dataIndex: 'tradeState.createTime',
+        key: 'createTime',
         render: (value, row) => {
-          return this._handleRowSpan(row, value);
-        },
+          let newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+          return newDate;
+        }
+      },
+      {
+        title: <FormattedMessage id="OrderNumber" />,
+        dataIndex: 'id',
+        key: 'id'
       },
       {
         title: <FormattedMessage id="OrderAmount" />,
-        dataIndex: 'orderType',
-        key: 'orderType',
+        dataIndex: 'tradePrice.totalPrice',
+        key: 'totalPrice'
       },
-      /*{
-        title: 'Product code/name/weight',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
-        width: 220,
-        render: (value, row) => {
-          return (
-            <div style={{ maxWidth: 200 }}>
-              <span
-                style={{
-                  display: 'block',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                {row.skuNo}
-              </span>
-              <span
-                style={{
-                  display: 'block',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                {value}
-              </span>
-              <span
-                style={{
-                  display: 'block',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                {row.specDetails}
-              </span>
-            </div>
-          );
-        }
-      },*/
+
       {
         title: <FormattedMessage id="RewardRate" />,
-        dataIndex: 'cateName',
-        key: 'cateName',
-      },
-      {
-        title: 'Product Price',
-        dataIndex: 'goodsPrice',
-        key: 'goodsPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value.toFixed(2));
-        },
+        dataIndex: 'orderRewardRate',
+        key: 'orderRewardRate',
+        render: (value, row) => {
+          return value ? value : '--' + '%';
+        }
       },
       {
         title: <FormattedMessage id="RewardRemark" />,
-        dataIndex: 'num',
-        key: 'num',
+        dataIndex: 'firstOrderFlag',
+        key: 'firstOrderFlag',
+        render: (value, row) => {
+          let v = value == 0 ? 'First' : 'Repeat';
+
+          return value ? v : '--';
+        }
       },
 
       {
         title: <FormattedMessage id="RewardAmount" />,
-        dataIndex: 'deliveryPrice',
-        key: 'deliveryPrice',
+        dataIndex: 'orderRewardAmount',
+        key: 'orderRewardAmount',
         render: (value, row) => {
-          return this._handleRowSpan(row, util.FORMAT_YUAN(value));
-        },
+          return value ? value : '--';
+        }
+      },
+      {
+        title: '',
+        dataIndex: [],
+        key: 'clinicsId',
+        width: 10
       }
+      /*{
+      title: 'Product code/name/weight',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
+      width: 220,
+      render: (value, row) => {
+        return (
+          <div style={{ maxWidth: 200 }}>
+            <span
+              style={{
+                display: 'block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {row.skuNo}
+            </span>
+            <span
+              style={{
+                display: 'block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {value}
+            </span>
+            <span
+              style={{
+                display: 'block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {row.specDetails}
+            </span>
+          </div>
+        );
+      }
+    },*/
       // {
       //   title: '店铺应收金额',
       //   key: 'storePrice',

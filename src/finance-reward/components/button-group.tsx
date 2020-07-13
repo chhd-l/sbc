@@ -42,11 +42,11 @@ export default class ButtonGroup extends React.Component<any, any> {
             {<FormattedMessage id="BulkExport" />}
           </Button>
         </AuthWrapper>
-        <AuthWrapper functionName="editOrderInvoices">
+        {/* <AuthWrapper functionName="editOrderInvoices">
           <Button type="primary" onClick={() => onShow()}>
             {<FormattedMessage id="Refresh" />}
           </Button>
-        </AuthWrapper>
+        </AuthWrapper>*/}
       </div>
     );
   }

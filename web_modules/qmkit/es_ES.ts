@@ -549,7 +549,6 @@ export default {
   'RewardType': 'Reward Type',
   'RewardAmount': 'Reward Amount',
   'Operation': 'Operation',
-
   //Finance Reward-Details
   'rewardDetails': 'Reward Details',
   'RewardRules': 'Reward Rules',

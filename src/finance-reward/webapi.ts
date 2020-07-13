@@ -12,7 +12,7 @@ type TResult = {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchReward(param = {}) {
-  return Fetch<TResult>('/finance/settlement/page', {
+  return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -24,7 +24,7 @@ export function fetchReward(param = {}) {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchOrderInovices(param = {}) {
-  return Fetch<TResult>('/account/orderInvoices', {
+  return Fetch<TResult>('/finance/reward/page', {
     method: 'POST',
     body: JSON.stringify(param)
   });

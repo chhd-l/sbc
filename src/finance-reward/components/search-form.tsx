@@ -58,7 +58,7 @@ export default class SearchForm extends React.Component<any, any> {
                 value: e
               });
             }}
-            defaultValue={''}
+            defaultValue={'2'}
           >
             <Option value={null}></Option>
             <Option value="0">Last 180 days</Option>

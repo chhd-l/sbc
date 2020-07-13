@@ -7,6 +7,39 @@ type TResult = {
 };
 
 /**
+ * 详情列表
+ * @param param
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function fetchFinanceRewardDetails(param = {}) {
+  return Fetch<TResult>('/trade/prescriber/page', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function fetchEverydayAmountTotal(param = {}) {
+  return Fetch<TResult>('/trade/prescriber/everydayAmountTotal', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function fetchPeriodAmountTotal(param = {}) {
+  return Fetch<TResult>('/trade/prescriber/periodAmountTotal', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function fetchFindListByPrescriberId(param = {}) {
+  return Fetch<TResult>('/prescriberReward/findListByPrescriberId', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+/**
  * 获取结算明细列表
  * @param settleId
  * @return {Promise<IAsyncResult<TResult>>}

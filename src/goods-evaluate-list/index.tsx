@@ -26,7 +26,9 @@ export default class Customer extends React.Component<any, any> {
     this.store.serviceModal(true);
     this.store.initStoreEvaluate();
   };
-
+  initData() {
+    this.store.init();
+  }
   render() {
     return (
       <AuthWrapper functionName="f_customer_0">

@@ -19,6 +19,12 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./subscription')
   },
+
+  {
+    path: '/set-banner',
+    exact: true,
+    asyncComponent: () => import('./set-banner')
+  },
   {
     path: '/subscription-detail/:subId',
     exact: true,

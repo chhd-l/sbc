@@ -6,6 +6,7 @@ import LoadingActor from './actor/loading-actor';
 import FormActor from './actor/form-actor';
 import EvaluateSumActor from './actor/evaluate-sum-actor';
 import { message } from 'antd';
+import { IList } from '../../typings/globalType';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -49,13 +50,14 @@ export default class AppStore extends Store {
     if (isEdit == '-1') {
       query.isEdit = null;
     }
-
+    query.delFlag = 0;
     const { res } = await webapi.fetchGoodsEvaluateList({
       ...query,
       pageNum,
       pageSize
     });
 
+    debugger;
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('loading:end');
@@ -213,5 +215,10 @@ export default class AppStore extends Store {
     } else {
       message.error(res.message);
     }
+  };
+
+  evaluateDelete = async (params = {}) => {
+    await webapi.deleteGoodsById(params);
+    this.init();
   };
 }

@@ -2,37 +2,58 @@ import React from 'react';
 
 import { Table, Button } from 'antd';
 import { Relax } from 'plume2';
-import { IList } from 'typings/globalType';
+import { IList, IMap } from 'typings/globalType';
 import { AuthWrapper, noop, util } from 'qmkit';
+import { List } from 'immutable';
 import '../style.css';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import { WMChart } from 'biz';
-
+import AppStore from '../store';
+const chartData = [
+  /*{
+      key: 0,
+      skuTotalPv: 0,
+      skuTotalUv: 0,
+      title: '2020/06/15Mon',
+      totalPv: 2,
+      totalUv: 1
+    }*/
+];
 @Relax
-export default class List extends React.Component<any, any> {
+export default class ListChart extends React.Component<any, any> {
+  store: AppStore;
+
   props: {
     relaxProps?: {
-      echarts: any;
+      getEcharts: Function;
       PeriodAmountTotal: any;
+      echartsData: IList;
     };
     settleId: number;
   };
 
   constructor(props) {
     super(props);
+    this.state = {
+      chartData: []
+    };
   }
 
   static relaxProps = {
     settleList: 'settleList',
     exportSettlementDetailList: noop,
+    getEcharts: noop,
     loading: 'loading',
     total: 'total',
     selected: 'selected',
     pageSize: 'pageSize',
-    echarts: 'echarts',
+    echartsData: 'echartsData',
     PeriodAmountTotal: 'PeriodAmountTotal'
   };
+  componentDidMount() {
+    this.setState({ chartData: chartData });
+  }
 
   UNSAFE_componentWillMount() {
     //const state = this.props.location.state;
@@ -42,12 +63,32 @@ export default class List extends React.Component<any, any> {
   }
 
   render() {
-    const getEcharts = this.props.relaxProps.echarts
-      ? this.props.relaxProps.echarts
+    const echartsData = this.props.relaxProps.echartsData
+      ? this.props.relaxProps.echartsData
       : [];
     const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal
       ? this.props.relaxProps.PeriodAmountTotal
       : [];
+
+    let echartsVal = [];
+
+    setTimeout(() => {
+      echartsData.forEach((v, i) => {
+        chartData.push({
+          key: i,
+          skuTotalPv: v.orderMount,
+          skuTotalUv: v.orderQuantiry,
+          title: v.date,
+          totalPv: 2,
+          totalUv: 1
+        });
+      });
+      /*this.setState({
+        chartData:echartsVal,
+      });*/
+    });
+    console.log(this.state.chartData);
+
     return (
       <div className="chart space-between">
         <div className="chartDetails1">
@@ -70,21 +111,9 @@ export default class List extends React.Component<any, any> {
             startTime={new Date()}
             endTime={new Date()}
             height="260"
-            dataDesc={[
-              { title: 'order Mount', key: 'orderMount' },
-              { title: 'order Quantiry', key: 'orderQuantiry' }
-            ]}
+            dataDesc={this.state.chartData}
             radioClickBack={() => {}}
-            content={[
-              {
-                key: 0,
-                skuTotalPv: 0,
-                skuTotalUv: 0,
-                title: '2020/06/15Mon',
-                totalPv: 2,
-                totalUv: 1
-              }
-            ]}
+            content={this.state.chartData}
             rangeVisible={false}
           />
         </div>

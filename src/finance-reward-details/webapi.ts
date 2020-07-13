@@ -18,7 +18,7 @@ export function fetchFinanceRewardDetails(param = {}) {
   });
 }
 
-export function fetchEverydayAmountTotal(param = {}) {
+export function fetchEverydayAmountTotal(param) {
   return Fetch<TResult>('/trade/prescriber/everydayAmountTotal', {
     method: 'POST',
     body: JSON.stringify(param)

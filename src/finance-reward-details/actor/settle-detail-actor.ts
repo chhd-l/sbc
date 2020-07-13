@@ -32,6 +32,7 @@ export default class SettleDetailActor extends Actor {
         pageNum: 0,
         pageSize: 10
       },
+      echartsData: {},
       setName: {},
       dateRange: {
         beginTime: moment(new Date()).format('YYYY-MM-DD').toString(),
@@ -75,8 +76,8 @@ export default class SettleDetailActor extends Actor {
   }*/
 
   @Action('list:echarts')
-  echartsData(state: IMap, echarts) {
-    return state.set('echarts', echarts);
+  getEcharts(state: IMap, res) {
+    return state.set('echartsData', res);
   }
 
   @Action('list:PeriodAmountTotal')

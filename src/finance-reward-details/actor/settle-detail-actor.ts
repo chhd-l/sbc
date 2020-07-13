@@ -1,6 +1,7 @@
 import { Actor, Action, IMap } from 'plume2';
 import { fromJS } from 'immutable';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+import { history } from 'qmkit';
 
 import moment from 'moment';
 interface IOrderInvoiceResponse {
@@ -9,18 +10,19 @@ interface IOrderInvoiceResponse {
   total: number;
 }
 export default class SettleDetailActor extends Actor {
+  Link;
   //数据源
   defaultState() {
     return {
-      settleList: [],
       settlement: {},
       searchForm: {
-        prescriberId: 992,
+        prescriberId: '',
         beginTime: '2020-06-01',
         endTime: '2020-07-08',
         pageNum: 0,
         pageSize: 10
       },
+      setName: {},
       dateRange: {
         beginTime: moment(new Date()).format('YYYY-MM-DD').toString(),
         endTime: moment(new Date()).format('YYYY-MM-DD').toString()
@@ -31,8 +33,10 @@ export default class SettleDetailActor extends Actor {
     };
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    //console.log(history.location.params.prescriberId,222222222222222222222);
   }
   @Action('list:init')
   init(state: IMap, init) {
@@ -70,6 +74,11 @@ export default class SettleDetailActor extends Actor {
   @Action('settleDetail:list')
   list(state: IMap, settleList) {
     return state.set('settleList', fromJS(settleList));
+  }
+
+  @Action('list:setName')
+  setName(state: IMap, setName) {
+    return state.set('setName', fromJS(setName));
   }
 
   /**

@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Row, Col } from 'antd';
 import { Relax } from 'plume2';
-import { IMap } from 'typings/globalType';
+import { IMap, IList } from 'typings/globalType';
+
 import moment from 'moment';
 
 import { Const, util } from 'qmkit';
@@ -13,31 +14,31 @@ export default class BillingDetails extends React.Component<any, any> {
   props: {
     relaxProps?: {
       settlement: IMap;
+      setName: IList;
     };
   };
 
   static relaxProps = {
-    settlement: 'settlement'
+    settlement: 'settlement',
+    setName: 'setName'
   };
 
   render() {
-    const { settlement } = this.props.relaxProps;
+    const setName = this.props.relaxProps;
+    console.log(setName, '----------------');
     return (
       <div>
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 2 }}>
             <span style={styles.space}>
-              {<FormattedMessage id="PrescriberID" />}:
-              02334
+              {<FormattedMessage id="PrescriberID" />}：
+              {sessionStorage.getItem('prescriberId')}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="PrescriberName" />}:
-              Test12334
+              {<FormattedMessage id="PrescriberName" />}：
+              {sessionStorage.getItem('prescriberName')}
             </span>
-
           </p>
-
-
         </div>
       </div>
     );

@@ -33,6 +33,7 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
+    //console.log(this.props.location.params.prescriberId,1111)
   }
 
   render() {

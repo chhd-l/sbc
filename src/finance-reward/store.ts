@@ -405,4 +405,8 @@ export default class AppStore extends Store {
       message.error(res.message);
     }
   }
+
+  getPrescriberId = (res) => {
+    this.dispatch('aaa', res);
+  };
 }

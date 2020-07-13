@@ -1,6 +1,6 @@
 import React from 'react';
-import { Relax } from 'plume2';
-import { Const, DataGrid, noop, AuthWrapper, checkAuth } from 'qmkit';
+import { Action, IMap, Relax, Store } from 'plume2';
+import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
 import { List } from 'immutable';
 import { Link } from 'react-router-dom';
 import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
@@ -31,19 +31,22 @@ const payOrderStatusDic = {
  */
 @Relax
 export default class OrderInvoiceList extends React.Component<any, any> {
+  _store: Store;
   props: {
     relaxProps?: {
       loading: boolean;
       selected: TList;
+      ccccccc: 'String';
       total: number;
       pageSize: number;
       dataList: TList;
-      onSelect: Function;
+      onSelect: any;
       onDestory: Function;
       onConfirm: Function;
       init: Function;
       onSearchByInvoiceId: Function;
       current: number;
+      getPrescriberId: Function;
     };
   };
 
@@ -53,12 +56,15 @@ export default class OrderInvoiceList extends React.Component<any, any> {
     selected: 'selected',
     pageSize: 'pageSize',
     dataList: 'dataList',
+    ccccccc: 'ccccccc',
     onDestory: noop,
     onSelect: noop,
     init: noop,
     onConfirm: noop,
     onSearchByInvoiceId: noop,
-    current: 'current'
+    getPrescriberId: noop,
+    current: 'current',
+    searchForm: 'searchForm'
   };
 
   render() {
@@ -72,6 +78,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       init,
       current
     } = this.props.relaxProps;
+    //console.log(this.props.relaxProps.searchForm.toJS(),'--------===');
 
     return (
       <DataGrid
@@ -167,30 +174,40 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         <Column
           title={<FormattedMessage id="operation" />}
           width="8%"
-          render={(rowInfo) => this._renderOperate(rowInfo)}
-        />
-        {/*<Column
-          title="操作"
-          dataIndex="operation"
-          key="operation"
           render={(text, record: any, i) => {
             return (
-              <a href="javascript:void(0)" onClick={() => onSearchByInvoiceId(record.orderInvoiceId)} >查看</a>
-            )
+              <a
+                href="javascript:void(0)"
+                onClick={() => this._renderOperate(text)}
+              >
+                Details
+              </a>
+            );
           }}
-        />*/}
+          // render={(rowInfo) => this._renderOperate(rowInfo)}
+        />
       </DataGrid>
     );
   }
 
   _renderOperate(rowInfo) {
-    return (
-      <Link
-        to={{ pathname: '/finance-reward-details', state: { name: 'sunny' } }}
-      >
-        Details
-      </Link>
-    );
+    const { getPrescriberId } = this.props.relaxProps;
+
+    getPrescriberId({ prescriberId: rowInfo });
+    //console.log(this.props.relaxProps.ccccccc);
+    history.push({
+      pathname: '/finance-reward-details',
+      params: {
+        prescriberId: rowInfo.prescriberId,
+        prescriberName: rowInfo.prescriberName
+      }
+    });
+
+    /*setTimeout(()=>{
+      console.log(this.props.relaxProps.ccccccc);
+
+    },300)*/
+    //return (<Link to={{pathname :'/finance-reward-details', state : { name : rowInfo }}}>Details</Link>)
 
     /*const { invoiceState, orderInvoiceId } = rowInfo;
 

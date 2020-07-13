@@ -19,8 +19,29 @@ export default class AppStore extends Store {
   }
 
   init = async (param?: any) => {
+    //console.log(history.location.params.prescriberId,222222222222222);
+
     this.dispatch('loading:start');
-    param = Object.assign(this.state().get('searchForm').toJS(), param);
+    if (history.location.params) {
+      sessionStorage.setItem(
+        'prescriberId',
+        history.location.params.prescriberId
+      );
+      sessionStorage.setItem(
+        'prescriberName',
+        history.location.params.prescriberName
+      );
+    } else {
+      sessionStorage.getItem('prescriberId');
+    }
+    // sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriberId:sessionStorage.getItem('prescriberId'));
+    let prescriberId = sessionStorage.getItem('prescriberId');
+
+    //sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriber.prescriberId:sessionStorage.getItem('prescriberId'));
+    param = Object.assign(
+      this.state().get('searchForm').merge({ prescriberId }).toJS(),
+      param
+    );
 
     const res1 = await webapi.fetchFinanceRewardDetails(param);
     const res2 = await webapi.fetchEverydayAmountTotal(param);
@@ -37,6 +58,7 @@ export default class AppStore extends Store {
         'list:fetchFindListByPrescriber',
         findListByPrescriberId.res.context
       );
+      this.dispatch('list:setName', prescriberId);
 
       /*this.transaction(() => {
         this.dispatch('list:init', res1.res.context.content);

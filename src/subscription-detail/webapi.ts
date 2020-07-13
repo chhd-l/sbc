@@ -18,3 +18,13 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * get Details
+ * @param filterParams
+ */
+export function getSubscriptionDetail(id: String) {
+  return Fetch<TResult>('/sub/getSubscriptionDetail/' + id, {
+    method: 'POST'
+  });
+}

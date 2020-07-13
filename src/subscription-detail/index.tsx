@@ -16,7 +16,8 @@ import {
   Table,
   InputNumber,
   Modal,
-  Popconfirm
+  Popconfirm,
+  Radio
 } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
@@ -28,7 +29,6 @@ import * as webapi from './webapi';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
-const { confirm } = Modal;
 /**
  * 订单详情
  */
@@ -36,13 +36,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Edit',
+      pageType: 'Details',
+      subscriptionId: this.props.match.params.subId,
+      loading: true,
       orderInfo: {
         orderTimes: 1,
         recentOrder: 'O123456234',
         orderStatus: 'Not Yet Shipped'
       },
       subscriptionInfo: {
+        deliveryTimes: '',
         subscriptionStatus: 'Active',
         subscriptionNumber: 'S202007071782774',
         subscriptionTime: '2020-07-07 17:56:25',
@@ -75,6 +78,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   componentDidMount() {
     this.querySysDictionary('Frequency');
+    this.getSubscriptionDetail(this.state.subscriptionId);
   }
 
   //查询frequency
@@ -95,7 +99,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
-  skipNextDelivery = (id) => {
+
+  getSubscriptionDetail = (id: String) => {
+    webapi.getSubscriptionDetail(id).then((data) => {
+      console.log(data);
+    });
+  };
+  skipNextDelivery = (id: String) => {
     message.success('Successful');
   };
 
@@ -111,7 +121,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription</span>
-        <span className="order-time">{'#' + orderInfo.orderTimes}</span>
+        <span className="order-time">
+          {'#' + subscriptionInfo.deliveryTimes}
+        </span>
       </div>
     );
     const menu = (
@@ -131,11 +143,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        <Button
-          type="link"
-          className="underline-button"
-          style={{ fontSize: 16 }}
-        >
+        <Button type="link" style={{ fontSize: 16 }}>
           Skip Next Dilivery
         </Button>
       </Popconfirm>
@@ -336,7 +344,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <Button
                     type="link"
-                    className="underline-button"
                     onClick={() => {
                       this.setState({
                         visiblePetInfo: true
@@ -390,7 +397,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <Button
                     type="link"
-                    className="underline-button"
                     onClick={() => {
                       this.setState({
                         visibleShipping: true
@@ -426,7 +432,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <Button
                     type="link"
-                    className="underline-button"
                     onClick={() => {
                       this.setState({
                         visibleBilling: true
@@ -463,6 +468,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Card>
 
         <Modal
+          style={{ width: '500px' }}
           title="Choose From Saved Shipping Address"
           visible={this.state.visibleShipping}
           onOk={() => {
@@ -476,9 +482,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
         </Modal>
 
         <Modal
@@ -495,9 +516,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
         </Modal>
 
         <Modal
@@ -514,9 +550,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
         </Modal>
       </div>
     );

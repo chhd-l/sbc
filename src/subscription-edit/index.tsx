@@ -113,7 +113,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     // const cartExtra = (
-    //   <Button type="link" className="underline-button" style={{fontSize:16,}}>Skip Next Dilivery</Button>
+    //   <Button type="link"  style={{fontSize:16,}}>Skip Next Dilivery</Button>
     // );
     const columns = [
       {
@@ -304,9 +304,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Pet Infomation</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Name: </p>
@@ -350,9 +348,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Shipping Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
@@ -378,9 +374,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link" className="underline-button">
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>

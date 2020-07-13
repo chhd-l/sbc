@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Headline, BreadCrumb } from 'qmkit';
 
 import Detail from './components/detail';
-import List from './components/list';
+import OrderInvoiceList from './components/list';
 import Chart from './components/chart';
 import Bottom from './components/bottom';
 import AppStore from './store';
@@ -41,7 +41,7 @@ export default class BillingDetails extends React.Component<any, any> {
       <div
         style={{
           overflowY: 'auto',
-          height: 'calc(100vh - 64px)',
+          // height: 'calc(100vh - 64px)',
           /*margin: -10,
           padding: 10,*/
           position: 'relative'
@@ -78,7 +78,7 @@ export default class BillingDetails extends React.Component<any, any> {
           <Detail />
           <SearchForm />
           <Chart />
-          <List settleId={this.props.match.params.settleId} />
+          <OrderInvoiceList settleId={this.props.match.params.settleId} />
           <Bottom />
         </div>
       </div>

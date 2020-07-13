@@ -32,7 +32,7 @@ export default class SearchForm extends React.Component<any, any> {
     this.state = {
       listData: {
         lastDay: '',
-        PrescriberID: Number,
+        prescriberId: Number,
         PrescriberName: ''
       }
     };
@@ -72,11 +72,11 @@ export default class SearchForm extends React.Component<any, any> {
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
-                field: 'prescriberID',
+                field: 'prescriberId',
                 value: Number(value)
               });
             }}
-            value={searchForm.get('prescriberID')}
+            value={searchForm.get('prescriberId')}
           />
         </FormItem>
         <FormItem>

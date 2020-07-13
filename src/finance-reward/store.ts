@@ -54,7 +54,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.fetchOrderInovices(param);
 
     if (res.code === Const.SUCCESS_CODE) {
-      console.log(res.context);
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('list:init', res.context);
@@ -67,6 +66,16 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       }
     }
+  };
+
+  onRewardExport = async (param?: any) => {
+    // this.dispatch('loading:start');
+    param = Object.assign(this.state().get('searchForm').toJS(), param);
+
+    webapi.fetchRewardExport(param);
+    // const { res } = await webapi.fetchRewardExport(param);
+
+    // this.dispatch('ticket:onRewardExport', res);
   };
 
   onFormChange = (searchParam) => {

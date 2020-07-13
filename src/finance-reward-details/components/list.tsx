@@ -1,255 +1,241 @@
 import React from 'react';
-
-import { Table, Button } from 'antd';
-import { Relax } from 'plume2';
-import { IList } from 'typings/globalType';
-import { AuthWrapper, noop, util } from 'qmkit';
-
-import styled from 'styled-components';
+import { Action, IMap, Relax, Store } from 'plume2';
+import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
+import { List } from 'immutable';
+import { Link } from 'react-router-dom';
+import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
+import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
 
-const DateTable = styled.div`
-  .ant-table-thead > tr.ant-table-row-hover > td,
-  .ant-table-tbody > tr.ant-table-row-hover > td,
-  .ant-table-thead > tr:hover > td,
-  .ant-table-tbody > tr:hover > td {
-    background-color: #ffffff;
-  }
-  .tableRowCss {
-    height: 80px !important;
-    word-wrap: break-word;
-    word-break: break-word;
-  }
-  .ant-table-thead {
-    th {
-      height: 38px;
-      padding: 0;
-    }
-  }
-`;
+type TList = List<any>;
+const Column = DataGrid;
 
+const invoiceStateDic = {
+  0: 'To be invoiced',
+  1: '已开票'
+};
+
+const invoiceTypeDic = {
+  0: 'Ordinary Invoice',
+  1: 'Vat Special Invoice'
+};
+const payOrderStatusDic = {
+  0: '已付款',
+  1: '未付款',
+  2: '待确认',
+  null: '未付款'
+};
+
+/**
+ * 订单收款单列表
+ */
 @Relax
-export default class List extends React.Component<any, any> {
+export default class OrderInvoiceList extends React.Component<any, any> {
+  _store: Store;
   props: {
     relaxProps?: {
-      settleList: IList;
-      dataList: IList;
-      setlist: any;
-      exportSettlementDetailList: Function;
+      loading: boolean;
+      selected: TList;
+      total: number;
+      pageSize: number;
+      dataList: TList;
+      onSelect: any;
+      onDestory: Function;
+      onConfirm: Function;
+      init: Function;
+      onSearchByInvoiceId: Function;
+      current: number;
+      getPrescriberId: Function;
     };
-    settleId: number;
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   static relaxProps = {
-    settleList: 'settleList',
-    exportSettlementDetailList: noop,
     loading: 'loading',
     total: 'total',
     selected: 'selected',
     pageSize: 'pageSize',
-    setlist: 'setlist',
     dataList: 'dataList',
+    onDestory: noop,
+    onSelect: noop,
     init: noop,
-    current: 'current'
+    onConfirm: noop,
+    onSearchByInvoiceId: noop,
+    getPrescriberId: noop,
+    current: 'current',
+    searchForm: 'searchForm'
   };
-
-  UNSAFE_componentWillMount() {
-    //const state = this.props.location.state;
-
-    //console.log(state,11111111111111111111111);
-    this.setState({ expandedRows: [] });
-  }
-
+  componentDidMount() {}
   render() {
-    const settleList = this.props.relaxProps.setlist
-      ? this.props.relaxProps.setlist
-      : [];
-    const { exportSettlementDetailList } = this.props.relaxProps;
+    const {
+      loading,
+      total,
+      pageSize,
+      selected,
+      dataList,
+      onSelect,
+      init,
+      current
+    } = this.props.relaxProps;
+
     return (
-      <div>
-        {/* <AuthWrapper functionName="f_sett_det_exp">
-          <Button
-            style={{ marginBottom: 20 }}
-            disabled={settleList.length == 0}
-            onClick={() => exportSettlementDetailList(this.props.settleId)}
-          >
-            {<FormattedMessage id="exportDetails" />}
-          </Button>
-        </AuthWrapper>*/}
-        <DateTable>
-          <Table
-            size="small"
-            columns={this._renderColumns()}
-            dataSource={settleList}
-            pagination={false}
-            onExpandedRowsChange={(expandedRows) => {
-              this._onExpandedRowsChange(expandedRows);
-            }}
-            scroll={{ y: 600 }}
-            rowClassName={() => {
-              return 'tableRowCss';
-            }}
-          />
-        </DateTable>
-      </div>
+      <DataGrid
+        loading={loading}
+        /*rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys: selected.toJS(),
+          onChange: (selectedRowKeys) => {
+            onSelect(selectedRowKeys);
+          }
+        }}*/
+        rowKey="orderInvoiceId"
+        pagination={{
+          pageSize,
+          total,
+          fitColumns: true,
+          current: current,
+          onChange: (pageNum, pageSize) => {
+            init({ pageNum: pageNum - 1, pageSize });
+          }
+        }}
+        dataSource={dataList}
+        /*dataSource = {[
+          { id: '1', firstName: 'John', lastName: 'Bobson'},
+          { id: '2', firstName: 'Bob', lastName: 'Mclaren'}
+        ]}*/
+      >
+        <Column
+          title={<FormattedMessage id="OrderTime" />}
+          key="tradeState"
+          width="12%"
+          dataIndex="tradeState.createTime"
+          render={(v, i) => <span>{this._newDate(v)}</span>}
+        />
+        <Column
+          title={<FormattedMessage id="OrderNumber" />}
+          key="id"
+          dataIndex="id"
+          width="18%"
+        />
+        <Column
+          title={<FormattedMessage id="OrderAmount" />}
+          key="tradePrice"
+          dataIndex="tradePrice.totalPrice"
+          width="11%"
+        />
+        <Column
+          title={<FormattedMessage id="RewardRate" />}
+          key="orderRewardRate"
+          dataIndex="orderRewardRate"
+          width="11%"
+          render={(orderRewardRate) => (
+            <span>
+              {orderRewardRate != null
+                ? `$${orderRewardRate.toFixed(2)}%`
+                : '-'}
+            </span>
+          )}
+        />
+        <Column
+          title={<FormattedMessage id="RewardRemark" />}
+          dataIndex="firstOrderFlag"
+          width="11%"
+          key="firstOrderFlag"
+          render={(firstOrderFlag) => (
+            <span>{firstOrderFlag == 0 ? 'First' : 'Repeat'}</span>
+          )}
+        />
+
+        <Column
+          title={<FormattedMessage id="RewardAmount" />}
+          dataIndex="orderRewardAmount"
+          key="orderRewardAmount"
+          width="11%"
+          render={(orderRewardRate) => (
+            <span>{orderRewardRate != null ? orderRewardRate : '-'}</span>
+          )}
+          //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
+        />
+        <Column
+          title=""
+          dataIndex=""
+          key=""
+          width="1%"
+
+          //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
+        />
+        {/*<Column
+          title={<FormattedMessage id="RewardAmount" />}
+          dataIndex="rewardAmount"
+          key="rewardAmount"
+          width="11%"
+          render={(rewardAmount) => (
+            <span>
+              {rewardAmount != null ? `$${rewardAmount.toFixed(2)}` : '-'}
+            </span>
+          )}
+        />*/}
+      </DataGrid>
     );
   }
 
-  _onExpandedRowsChange = (expandedRows) => {
-    this.setState({ expandedRows: expandedRows });
-  };
+  _newDate(value) {
+    return /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+  }
 
-  _renderColumns = (): any[] => {
-    return [
-      /*{
-        title: 'Serial Number',
-        key: 'index',
-        dataIndex: 'index',
-        render: (value, row) => {
-          return this._handleRowSpan(row, value);
-        },
-        width: 80
-      },*/
-      {
-        title: '',
-        dataIndex: [],
-        key: 'orderSource',
-        width: 20
-      },
-      {
-        title: <FormattedMessage id="OrderTime" />,
-        dataIndex: 'tradeState.createTime',
-        key: 'createTime',
-        render: (value, row) => {
-          let newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-          return newDate;
-        }
-      },
-      {
-        title: <FormattedMessage id="OrderNumber" />,
-        dataIndex: 'id',
-        key: 'id'
-      },
-      {
-        title: <FormattedMessage id="OrderAmount" />,
-        dataIndex: 'tradePrice.totalPrice',
-        key: 'totalPrice'
-      },
+  _renderOperate(rowInfo) {
+    const { getPrescriberId } = this.props.relaxProps;
 
-      {
-        title: <FormattedMessage id="RewardRate" />,
-        dataIndex: 'orderRewardRate',
-        key: 'orderRewardRate',
-        render: (value, row) => {
-          return value ? value : '--' + '%';
-        }
-      },
-      {
-        title: <FormattedMessage id="RewardRemark" />,
-        dataIndex: 'firstOrderFlag',
-        key: 'firstOrderFlag',
-        render: (value, row) => {
-          let v = value == 0 ? 'First' : 'Repeat';
-
-          return value ? v : '--';
-        }
-      },
-
-      {
-        title: <FormattedMessage id="RewardAmount" />,
-        dataIndex: 'orderRewardAmount',
-        key: 'orderRewardAmount',
-        render: (value, row) => {
-          return value ? value : '--';
-        }
-      },
-      {
-        title: '',
-        dataIndex: [],
-        key: 'clinicsId',
-        width: 10
+    getPrescriberId({ prescriberId: rowInfo });
+    //console.log(this.props.relaxProps.ccccccc);
+    history.push({
+      pathname: '/finance-reward-details',
+      params: {
+        prescriberId: rowInfo.prescriberId,
+        prescriberName: rowInfo.prescriberName
       }
-      /*{
-      title: 'Product code/name/weight',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
-      width: 220,
-      render: (value, row) => {
-        return (
-          <div style={{ maxWidth: 200 }}>
-            <span
-              style={{
-                display: 'block',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
-            >
-              {row.skuNo}
-            </span>
-            <span
-              style={{
-                display: 'block',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
-            >
-              {value}
-            </span>
-            <span
-              style={{
-                display: 'block',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
-            >
-              {row.specDetails}
-            </span>
-          </div>
-        );
-      }
-    },*/
-      // {
-      //   title: '店铺应收金额',
-      //   key: 'storePrice',
-      //   dataIndex: 'storePrice',
-      //   fixed: 'right',
-      //   render: (value, row) => {
-      //     return this._handleRowSpan(row, util.FORMAT_YUAN(value));
-      //   },
-      //   width: 140
-      // }
-    ];
-  };
+    });
 
-  _handleRowSpan = (row, value) => {
-    const { expandedRows } = this.state;
-    if (expandedRows.length != 0) {
-      if (row.key.startsWith('p_') && expandedRows.indexOf(row.key) != -1) {
-        return {
-          children: value,
-          props: { rowSpan: row.children ? row.children.length + 1 : 1 }
-        };
-      } else if (row.key.startsWith('c_')) {
-        let isChild = false;
-        expandedRows.forEach((rowKey) => {
-          if (rowKey.split('_')[1] == rowKey.split('_')[1]) {
-            isChild = true;
-          }
-        });
-        if (isChild) {
-          return {
-            props: { rowSpan: 0 }
-          };
-        }
-      }
-    }
-    return value;
+    /*setTimeout(()=>{
+      console.log(this.props.relaxProps.ccccccc);
+
+    },300)*/
+    //return (<Link to={{pathname :'/finance-reward-details', state : { name : rowInfo }}}>Details</Link>)
+
+    /*const { invoiceState, orderInvoiceId } = rowInfo;
+
+    //待确认
+    return checkAuth('fetchOrderInovices') ||
+      checkAuth('destoryOpenOrderInvoice')
+      ? this._renderMenu(orderInvoiceId, invoiceState)
+      : '-';*/
+  }
+
+  _renderMenu = (id: string, invoiceState: number) => {
+    const { onDestory, onConfirm, onSearchByInvoiceId } = this.props.relaxProps;
+
+    return (
+      <div className="operation-box">
+        <AuthWrapper functionName="fetchOrderInovices">
+          <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
+            {<FormattedMessage id="view" />}
+          </a>
+        </AuthWrapper>
+
+        <AuthWrapper functionName="destoryOpenOrderInvoice">
+          <Popconfirm
+            title={invoiceState == 0 ? '确定已开票？' : '确定作废开票记录？'}
+            onConfirm={() => {
+              invoiceState == 0 ? onConfirm(id) : onDestory(id);
+            }}
+            okText="Confirm"
+            cancelText="Cancel"
+          >
+            <a href="javascript:void(0);">
+              {invoiceState == 0 ? 'Billing' : 'Cancellation'}
+            </a>
+          </Popconfirm>
+        </AuthWrapper>
+      </div>
+    );
   };
 }

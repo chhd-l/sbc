@@ -51,14 +51,19 @@ export default class AppStore extends Store {
     );
 
     if (res1.res.code === Const.SUCCESS_CODE) {
-      this.dispatch('list:init', res1.res.context.content);
-      this.dispatch('list:echarts', res2.res.context);
-      this.dispatch('list:PeriodAmountTotal', PeriodAmountTotal.res.context);
-      this.dispatch(
-        'list:fetchFindListByPrescriber',
-        findListByPrescriberId.res.context
-      );
-      this.dispatch('list:setName', prescriberId);
+      this.transaction(() => {
+        // this.dispatch('loading:end');
+        this.dispatch('list:init', res1.res.context.content);
+        //this.dispatch('list:init', [111,222,333]);
+        this.dispatch('list:echarts', res2.res.context);
+        this.dispatch('current', param && param.pageNum + 1);
+        this.dispatch('list:PeriodAmountTotal', PeriodAmountTotal.res.context);
+        this.dispatch(
+          'list:fetchFindListByPrescriber',
+          findListByPrescriberId.res.context
+        );
+        this.dispatch('list:setName', prescriberId);
+      });
 
       /*this.transaction(() => {
         this.dispatch('list:init', res1.res.context.content);

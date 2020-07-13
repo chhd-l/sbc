@@ -7,7 +7,7 @@ type TResult = {
 };
 
 /**
- * reward
+ * Reward
  * @param param
  * @returns {Promise<IAsyncResult<T>>}
  */
@@ -18,6 +18,17 @@ export function fetchReward(param = {}) {
   });
 }
 
+/**
+ * Reward Export
+ * @param param
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function fetchRewardExport(param = {}) {
+  return Fetch<TResult>('/finance/reward/export/rewardList', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
 /**
  * 分页查询订单开票
  * @param param

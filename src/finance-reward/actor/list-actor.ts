@@ -16,7 +16,6 @@ export default class ListActor extends Actor {
       pageSize: 10,
       //当前的客户列表
       dataList: [],
-
       current: 1
     };
   }

@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { history } from 'qmkit';
 
 import moment from 'moment';
-interface IOrderInvoiceResponse {
+interface ISettleInvoiceResponse {
   content: Array<any>;
   pageSize: number;
   total: number;
@@ -14,7 +14,17 @@ export default class SettleDetailActor extends Actor {
   //数据源
   defaultState() {
     return {
-      settlement: {},
+      //当前的数据总数
+      total: 0,
+      //当前的分页条数
+      pageSize: 10,
+      // 当前页数，从1开始
+      currentPage: 1,
+      current: 1,
+      //当前的退单列表
+      setList: [],
+      dataList: [],
+      settlement: [],
       searchForm: {
         prescriberId: '',
         beginTime: '2020-06-01',
@@ -33,23 +43,36 @@ export default class SettleDetailActor extends Actor {
     };
   }
 
-  constructor(props) {
+  /* constructor(props) {
     super(props);
 
     //console.log(history.location.params.prescriberId,222222222222222222222);
-  }
+  }*/
   @Action('list:init')
-  init(state: IMap, init) {
-    //const { content, pageSize, total } = res;
-    //console.log(res,2222222222222);
-    return state.set('setlist', init);
-    /* return state.withMutations(state => {
+  init(state: IMap, res) {
+    return state.set('dataList', res);
+  }
+  /*init(state, { content, total, currentPage }) {
+    return state
+      .set('setList', content)
+      .set('total', total)
+      .set('pageNum', currentPage);
+  }*/
+  /* init(state: IMap, res: ISettleInvoiceResponse) {
+    const { content, pageSize, total } = res;
+    return state.withMutations((state) => {
       state
         .set('total', total)
         .set('pageSize', pageSize)
-        .set('dataList', fromJS(content));
-    });*/
-  }
+        .set('setList', content);
+    });
+  }*/
+  /* init(state: IMap, init) {
+    const { content, pageSize, total } = res;
+    //console.log(res,2222222222222);
+    return state.set('setlist', init);
+
+  }*/
 
   @Action('list:echarts')
   echartsData(state: IMap, echarts) {

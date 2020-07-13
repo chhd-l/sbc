@@ -8,7 +8,7 @@ export default class SearchActor extends Actor {
     return {
       searchForm: {
         period: 60,
-        prescriberID: '',
+        prescriberId: '',
         prescriberName: '',
         //auditStatus: -1,
         pageNum: 0,

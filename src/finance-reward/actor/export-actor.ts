@@ -12,6 +12,11 @@ export default class ExportActor extends Actor {
     return state.setIn(['exportModalData', 'visible'], false);
   }
 
+  @Action('ticket:onRewardExport')
+  onRewardExport(state: IMap) {
+    // return state.setIn(['onRewardExport', 'onRewardExport'], false);
+  }
+
   @Action('ticket:export-modal:change')
   exportModalChange(state: IMap, modalStatus: IMap) {
     return state

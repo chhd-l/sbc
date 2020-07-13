@@ -7,7 +7,7 @@ import AppStore from './store';
 
 import SearchForm from './components/search-form';
 import ButtonGroup from './components/button-group';
-import OrderInvoiceList from './components/list';
+import DetailsList from './components/list';
 import OrderInvoiceAddModal from './components/order-invoice-modal';
 import OrderInvoiceViewModal from './components/order-invoice-view-modal';
 
@@ -48,7 +48,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
             <ButtonGroup />
-            <OrderInvoiceList />
+            <DetailsList />
             <OrderInvoiceAddModal />
             <OrderInvoiceViewModal />
           </div>

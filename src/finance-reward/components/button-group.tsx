@@ -15,6 +15,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       onExportByParams: Function;
       onExportByIds: Function;
       onExportModalChange: Function;
+      onRewardExport: Function;
     };
   };
 
@@ -25,21 +26,31 @@ export default class ButtonGroup extends React.Component<any, any> {
     onHideExportModal: noop,
     onExportByParams: noop,
     onExportByIds: noop,
-    onExportModalChange: noop
+    onExportModalChange: noop,
+    onRewardExport: noop
   };
 
   render() {
     const {
       onShow,
       onHideExportModal,
-      exportModalData
+      exportModalData,
+      onRewardExport
     } = this.props.relaxProps;
 
     return (
       <div className="handle-bar">
         <AuthWrapper functionName="editOrderInvoices">
-          <Button type="primary" onClick={() => onShow()}>
-            {<FormattedMessage id="BulkExport" />}
+          <Button type="primary">
+            {/*<a href="javascript:void(0);" onClick={() => onRewardExport()}>
+              {<FormattedMessage id="BulkExport" />}
+            </a>*/}
+            <a
+              href="javascript:void(0);"
+              onClick={() => this._handleBatchExport()}
+            >
+              {<FormattedMessage id="bulkExport" />}
+            </a>
           </Button>
         </AuthWrapper>
         {/* <AuthWrapper functionName="editOrderInvoices">
@@ -52,17 +63,12 @@ export default class ButtonGroup extends React.Component<any, any> {
   }
 
   _handleBatchExport() {
-    const {
-      onExportByParams,
-      onExportByIds,
-      onExportModalChange
-    } = this.props.relaxProps;
+    const { onRewardExport, onExportModalChange } = this.props.relaxProps;
     onExportModalChange({
       visible: true,
       byParamsTitle: '导出筛选出的开票纪录',
       byIdsTitle: '导出选中的开票纪录',
-      exportByParams: onExportByParams,
-      exportByIds: onExportByIds
+      onRewardExport: onRewardExport
     });
   }
 }

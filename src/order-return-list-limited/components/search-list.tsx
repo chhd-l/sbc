@@ -220,7 +220,6 @@ export default class SearchList extends React.Component<any, any> {
       onOfflineRefund,
       onRejectRefund
     } = this.props.relaxProps;
-
     return dataList.map((v, index) => {
       const rid = v.get('id');
       const customerId = v.getIn(['buyer', 'id']);

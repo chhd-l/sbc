@@ -49,7 +49,11 @@ export default class Customer extends React.Component<any, any> {
               {/*权限*/}
               <AuthWrapper functionName="f_goods_detail_1">
                 <span
-                  style={{ color: '#F56C1D', cursor: 'pointer' }}
+                  style={{
+                    color: '#F56C1D',
+                    cursor: 'pointer',
+                    marginLeft: '20px'
+                  }}
                   onClick={this._showCateModal}
                 >
                   <FormattedMessage id="ratingRule" />

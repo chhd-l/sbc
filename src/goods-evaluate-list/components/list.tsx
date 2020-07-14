@@ -122,7 +122,7 @@ export default class CustomerList extends React.Component<any, any> {
         <Column
           title={<FormattedMessage id="orderNumber" />}
           key="orderNo"
-          width={150}
+          width={170}
           dataIndex="orderNo"
           render={(orderNo) => (orderNo ? orderNo : '-')}
         />
@@ -130,7 +130,7 @@ export default class CustomerList extends React.Component<any, any> {
           title={<FormattedMessage id="consumerName" />}
           key="customerName,"
           dataIndex="customerName"
-          width={120}
+          width={220}
           render={(customerName, rowData) => {
             return (
               <div>
@@ -145,9 +145,9 @@ export default class CustomerList extends React.Component<any, any> {
           title={<FormattedMessage id="productRatings" />}
           key="evaluateScore"
           dataIndex="evaluateScore"
-          width={50}
+          width={150}
           render={(evaluateScore) =>
-            evaluateScore ? evaluateScore + '星' : '-'
+            evaluateScore ? evaluateScore + '  Star' : '-'
           }
         />
         {/*<Column*/}
@@ -204,10 +204,12 @@ export default class CustomerList extends React.Component<any, any> {
         {/*  }}*/}
         {/*/>*/}
         <Column
-          title={<FormattedMessage id="displayStatus" />}
-          key="isShow"
-          dataIndex="isShow"
-          render={(isShow) => (isShow ? isShowFunction(isShow) : '否')}
+          title={<FormattedMessage id="anonymousStatus" />}
+          key="isAnonymous"
+          dataIndex="isAnonymous"
+          render={(isAnonymous) =>
+            isAnonymous ? isShowFunction(isAnonymous) : 'No'
+          }
         />
         <Column
           title={<FormattedMessage id="reviewTime" />}

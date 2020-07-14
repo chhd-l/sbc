@@ -654,7 +654,95 @@ export default {
   'rewardAmount': 'Reward amount',
   'items':'Items',
   'product.subscriptionStatus': 'Subscription status',
-  'product.subscriptionPrice': 'Subscription Price'
+  'product.subscriptionPrice': 'Subscription Price',
+
+  'subscription.subList': 'Subscription List',
+  'subscription.orderNumber': 'Order number',
+  'subscription.consumerName': 'Consumer name',
+  'subscription.productName': 'Product name',
+  'subscription.deliveryDate': 'Delivery date',
+  'subscription.frequency': 'Frequency',
+  'subscription.receiver': 'Receiver',
+  'subscription.orderData': 'Subscription order date',
+  'subscription.quantity': 'Quantity',
+  'subscription.notYet': 'Not Yet Shipped',
+  'subscription.nextOrder': 'Next Order',
+  'subscription.order': 'Order',
+  'subscription.total': 'Total',
+  'subscription.totalInclu': 'Total(Inclu IVA)',
+  'subscription.saveDiscount': 'Subscription Save Discount',
+  'subscription.shipping': 'Shipping',
+  'subscription.shippingAddress': 'Shipping address',
+  'subscription.BillingAddress': 'Billing address',
+  'subscription.paymentMethod': 'Payment method',
+  'subscription.change': 'change',
+  'subscription.product': 'Product',
+  'subscription.number': 'Subscription number',
+  'subscription.subscriptionNumberTip': 'Please enter subscription number',
+  'subscription.date': 'Subscription date',
+  'subscription.nextDeliveryDate': 'Next delivery date',
+  'subscription.detail': 'Subscription detail',
+  'subscription.sub': 'Sub-',
+  'subscription.operation': 'Operation',
+  'subscription.subscriptionDate':'Subscription Date',
+  'items': 'Items',
+  'petCategory': 'Pet Category',
+  'petName': 'Pet Name',
+  'gender': 'Gender',
+  'breed': 'Breed',
+  'birthday': 'Birthday',
+  'specialNeeds': 'Special needs',
+  'sterilizedStatus': 'Sterilized status',
+  //
+  'reviewManagement': 'Review Management',
+  // 'overview': 'Overview',
+  // 'overallRating': 'Overall rating',
+  'productRatings': 'Product rating',
+  'experienceRating': 'Purchase experience rating',
+  'logisticRating': 'Logistic rating',
+  'rate': 'Rate',
+  'star': 'star',
+  'yes': 'Yes',
+  'no': 'No',
+  'description': '',
+  'reviewTip': 'Review overview shows the summary of review data in the past 180 days',
+  'ratingRule': 'Rating rule',
+  'consumerNumber': 'Consumer number',
+  // 'consumerAccount': 'Consumer account',
+  'displayStatus': 'Display status',
+  'anonymousStatus': 'Anonymous status',
+  'reviewList': 'Review List',
+  // 'productName': 'Product name',
+  // 'consumerName': 'Consumer name',
+  'reviewTime': 'Review Time',
+  'reviewDetail': 'Review details',
+  // 'operation': 'Operation',
+  // 'view': 'View',
+  // 'delete': 'Delete',
+  'comments': 'Comments',
+  'replyComments': 'Reply comments',
+  'enter500': 'Enter up to 500 characters',
+  'shopRatingDetail': 'Shop evaluation details',
+  'evaluationNextDay': 'The store evaluation data will be updated the next day',
+  'lastest180': 'lastest 180 day',
+  'detailScore': '{name} score',
+  'averageScore': 'Average score',
+  'evaluationHistory': 'Evaluation history',
+
+  'subscriptionList':'Subscription List',
+  'setBanner': 'Set banner',
+  'pc': 'PC',
+  'mobile': 'Mobile'
+
+
+
+
+
+
+
+
+
+
 };
 
 

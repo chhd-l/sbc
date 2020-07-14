@@ -1,8 +1,7 @@
 import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 import LoadingActor from './actor/loading-actor';
-import FormActor from './actor/form-actor';
-import TabActor from './actor/tab-actor';
+import ListActor from './actor/list-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { Const, history, util } from 'qmkit';
@@ -17,7 +16,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new LoadingActor(), new FormActor(), new TabActor()];
+    return [new LoadingActor(), new ListActor()];
   }
 
   /**

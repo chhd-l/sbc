@@ -166,7 +166,7 @@ export default class See extends React.Component<any, any> {
               </div>
               <div className="detail">
                 <span className="text">
-                  <FormattedMessage id="productRating" />：
+                  <FormattedMessage id="productRatings" />：
                 </span>
                 <Rate
                   value={goodsEvaluate.evaluateScore}
@@ -217,7 +217,7 @@ export default class See extends React.Component<any, any> {
               <div className="compuctor-detail mar-top-22">
                 {
                   <ul className="drying-list">
-                    <li className="dry-name">晒单</li>
+                    <li className="dry-name">Picture</li>
                     <li className="dry-imgs">
                       {goodsEvaluate.evaluateImageList.map((v, k) =>
                         k < 5 ? (

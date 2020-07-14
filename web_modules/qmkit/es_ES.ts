@@ -678,10 +678,11 @@ export default {
   'no': 'No',
   'description': '',
   'reviewTip': 'Review overview shows the summary of review data in the past 180 days',
-  'ratingRule': 'rating rule',
+  'ratingRule': 'Rating rule',
   'consumerNumber': 'Consumer number',
   // 'consumerAccount': 'Consumer account',
   'displayStatus': 'Display status',
+  'anonymousStatus': 'Anonymous status',
   'reviewList': 'Review List',
   // 'productName': 'Product name',
   // 'consumerName': 'Consumer name',
@@ -700,7 +701,10 @@ export default {
   'averageScore': 'Average score',
   'evaluationHistory': 'Evaluation history',
 
-  'subscriptionList':'Subscription List'
+  'subscriptionList':'Subscription List',
+  'setBanner': 'Set banner',
+  'pc': 'PC',
+  'mobile': 'Mobile'
 
 
 

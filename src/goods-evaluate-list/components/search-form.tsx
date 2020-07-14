@@ -67,16 +67,16 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="displayStatus" />}
+            label={<FormattedMessage id="anonymousStatus" />}
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'isShow',
+                field: 'isAnonymous',
                 value
               });
             }}
-            value={form.get('isShow')}
+            value={form.get('isAnonymous')}
           >
             <Option value="-1">
               <FormattedMessage id="all" />
@@ -215,7 +215,7 @@ export default class SearchForm extends React.Component<any, any> {
           });
         }}
         value={this.state.customerOptions}
-        style={{ width: 100 }}
+        style={{ width: 150 }}
       >
         <Option value="customerName">
           <FormattedMessage id="consumerName" />

@@ -780,6 +780,7 @@ export default class AppStore extends Store {
   };
 
   updateGoodsForm = (goodsForm) => {
+    console.log(goodsForm, goodsForm, 'goodsForm');
     this.dispatch('formActor:goods', goodsForm);
   };
   updateLogisticsForm = (logisticsForm) => {
@@ -1154,6 +1155,8 @@ export default class AppStore extends Store {
       if (item.get('stock') === null) {
         isEmptyStock = true;
       }
+      console.log(item.toJS(), 'itemtojs');
+      return;
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1163,7 +1166,8 @@ export default class AppStore extends Store {
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,
-          goodsInfoImg: imageUrl
+          goodsInfoImg: imageUrl,
+          subscriptionPrice: item.get('subscriptionPrice') || 0
         })
       );
     });

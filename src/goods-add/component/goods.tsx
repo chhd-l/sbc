@@ -14,7 +14,7 @@ import {
   TreeSelect
 } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { noop, QMMethod, Tips, ValidConst } from 'qmkit';
+import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
 import ImageLibraryUpload from './image-library-upload';
@@ -25,6 +25,7 @@ import { consoleTestResultHandler } from 'tslint/lib/test';
 
 const { TextArea } = Input;
 const { Option } = Select;
+// const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const TreeNode = Tree.TreeNode;
 
@@ -304,7 +305,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please input the SPU code'
+                    message: 'Please fill in the SPU code'
                   },
                   {
                     min: 1,
@@ -325,6 +326,32 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'goodsNo'),
                 initialValue: goods.get('goodsNo')
               })(<Input />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.subscriptionStatus" />}
+            >
+              {getFieldDecorator('subscriptionStatus', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'subscriptionStatus'),
+                initialValue:
+                  goods.get('subscriptionStatus') &&
+                  goods.get('subscriptionStatus').toString()
+              })(
+                <Select
+                  getPopupContainer={() =>
+                    document.getElementById('page-content')
+                  }
+                  placeholder="please select status"
+                >
+                  <Option value="1">Y</Option>
+                  <Option value="0">N</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -374,7 +401,7 @@ class GoodsForm extends React.Component<any, any> {
                     document.getElementById('page-content')
                   }
                   placeholder="Please select category"
-                  notFoundContent="No categories"
+                  notFoundContent="No classification"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
@@ -407,7 +434,7 @@ class GoodsForm extends React.Component<any, any> {
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
                   placeholder="Please select store category"
-                  notFoundContent="No categories"
+                  notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   showSearch={false}
@@ -470,7 +497,7 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'goodsUnit'),
                 initialValue: goods.get('goodsUnit')
               })(
-                <Input placeholder="Please input the unit of measurement，no more than 10 words" />
+                <Input placeholder="Please fill in the unit of measurement，no more than 10 words" />
               )}
             </FormItem>
           </Col>
@@ -528,7 +555,7 @@ class GoodsForm extends React.Component<any, any> {
                   {
                     pattern: ValidConst.zeroPrice,
                     message:
-                      'Please input the legal amount with two decimal places'
+                      'Please fill in the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
@@ -541,7 +568,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'linePrice'),
                 initialValue: goods.get('linePrice')
-              })(<Input placeholder="Please input the underlined price" />)}
+              })(<Input placeholder="Please fill in the underlined price" />)}
             </FormItem>
           </Col>
         </Row>
@@ -579,7 +606,7 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TextArea
                   rows={4}
-                  placeholder="Please input the description of the item"
+                  placeholder="Please fill in the description of the item"
                 />
               )}
             </FormItem>
@@ -836,6 +863,7 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
+      console.log(goods.toJS(), 'goodsjs');
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }

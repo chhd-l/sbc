@@ -166,7 +166,6 @@ export default class GoodsActor extends Actor {
    */
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
-    console.log(data.toJS());
     return state.update('goods', (goods) => goods.merge(data));
   }
 
@@ -176,13 +175,8 @@ export default class GoodsActor extends Actor {
       goods.set(
         'goodsNo',
         'P' +
-          new Date()
-            .getTime()
-            .toString()
-            .slice(4, 10) +
-          Math.random()
-            .toString()
-            .slice(2, 5)
+          new Date().getTime().toString().slice(4, 10) +
+          Math.random().toString().slice(2, 5)
       )
     );
   }

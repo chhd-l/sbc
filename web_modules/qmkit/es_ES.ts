@@ -382,7 +382,7 @@ export default {
   'order.valetOrder': 'Valet order',
   'order.fightTogether': 'Fight together',
   'order.audit': 'Audit',
-  'order.turnDown': 'Reject',
+  'order.turnDown': 'Turn down',
   'order.review': 'Review',
   'order.confirmReceivedAllProducts': 'Confirm that all products have been received?',
   'order.confirmReview': 'Are you sure you want to return the selected order for reconsideration?',
@@ -501,7 +501,6 @@ export default {
   'VISA': 'VISA',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
-  'Revenue':'Revenue',
 
   'balance': 'Balance',
   'total2': 'total',
@@ -550,6 +549,7 @@ export default {
   'RewardType': 'Reward Type',
   'RewardAmount': 'Reward Amount',
   'Operation': 'Operation',
+
   //Finance Reward-Details
   'rewardDetails': 'Reward Details',
   'RewardRules': 'Reward Rules',
@@ -557,6 +557,7 @@ export default {
   'OrderTime': 'Order Time',
   'RewardRate': 'Reward Rate',
   'RewardRemark': 'Reward Remark',
+
   'firstRewardRate': 'First Reward Rate',
   'repeatRewardRate': 'Repeat Reward Rate',
 
@@ -577,13 +578,11 @@ export default {
   'toBeInvoiced': 'To be invoiced',
   'viewBilling': 'View Billing',
   'billingItems': 'Billing Items',
-  'FinanceReward': 'Finance Reward',
 
   'supportedBillingTypes': 'Supported billing types',
   'doesNotSupportInvoicing': 'Does not support invoicing',
 
   'vatSpecialInvoice': 'VAT special invoice',
-  "invoiceReceiptInformation": "Invoice receipt information",
   'saveSettings': 'Save Settings',
   'Edit': 'Edit',
   'Delete': 'Delete',
@@ -624,7 +623,6 @@ export default {
   'consumer.removeConsumer': 'Remove Consumer',
 
   'shopping': 'Shopping',
-  "last180": 'Last 180 days',
   'overall': 'Overall',
 
   'toBePaidOrders': 'To be paid orders',
@@ -647,11 +645,14 @@ export default {
   'totalSKU': 'Total SKU',
   'productsOnShelvesNumber': 'Products on shelves number',
   'member number': 'memberNumber',
-  'uv': 'UV',
+  'uv':'UV',
   'pv': 'PV',
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
+  'items':'Items',
+  'product.subscriptionStatus': 'Subscription status',
+  'product.subscriptionPrice': 'Subscription Price',
 
   'subscription.subList': 'Subscription List',
   'subscription.orderNumber': 'Order number',
@@ -703,10 +704,11 @@ export default {
   'no': 'No',
   'description': '',
   'reviewTip': 'Review overview shows the summary of review data in the past 180 days',
-  'ratingRule': 'rating rule',
+  'ratingRule': 'Rating rule',
   'consumerNumber': 'Consumer number',
   // 'consumerAccount': 'Consumer account',
   'displayStatus': 'Display status',
+  'anonymousStatus': 'Anonymous status',
   'reviewList': 'Review List',
   // 'productName': 'Product name',
   // 'consumerName': 'Consumer name',
@@ -725,7 +727,10 @@ export default {
   'averageScore': 'Average score',
   'evaluationHistory': 'Evaluation history',
 
-  'subscriptionList':'Subscription List'
+  'subscriptionList':'Subscription List',
+  'setBanner': 'Set banner',
+  'pc': 'PC',
+  'mobile': 'Mobile'
 
 
 

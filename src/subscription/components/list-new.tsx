@@ -148,21 +148,22 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '20%' }}>Product</th>
+                      <th style={{ width: '15%' }}>Product</th>
+                      <th style={{ width: '15%' }}>Product Name</th>
                       <th style={{ width: '10%' }}>Subscription Status</th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
                       </th>
-                      <th style={{ width: '14%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.frequency" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      {/* <th style={{ width: '8%' }}>
                         <FormattedMessage id="subscription.quantity" />
-                      </th>
-                      <th style={{ width: '16%' }}>
+                      </th> */}
+                      <th style={{ width: '15%' }}>
                         <FormattedMessage id="subscription.operation" />
                       </th>
                     </tr>
@@ -218,14 +219,14 @@ export default class ListView extends React.Component<any, any> {
             className="ant-table-row  ant-table-row-level-0"
             key={v.subscribeId}
           >
-            <td colSpan={8} style={{ padding: 0 }}>
+            <td colSpan={12} style={{ padding: 0 }}>
               <table
                 className="ant-table-self"
                 style={{ border: '1px solid #ddd' }}
               >
                 <thead>
                   <tr>
-                    <td colSpan={8} style={{ padding: 0, color: '#999' }}>
+                    <td colSpan={12} style={{ padding: 0, color: '#999' }}>
                       <div
                         style={{
                           marginTop: 12,
@@ -260,7 +261,7 @@ export default class ListView extends React.Component<any, any> {
                   <tr>
                     {/* product */}
                     <td style={{ width: '3%' }} />
-                    <td style={{ width: '20%' }}>
+                    <td style={{ width: '15%' }}>
                       {/*商品图片*/}
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) =>
@@ -291,39 +292,44 @@ export default class ListView extends React.Component<any, any> {
                         ) : null
                       }
                     </td>
-
+                    <td style={{ width: '15%', paddingLeft: 20 }}>
+                      {v.goodsInfo &&
+                        v.goodsInfo.map((item, k) => <p>{item.goodsName}</p>)}
+                    </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%' }}>
-                      {v.subscribeStatus === '0' ? 'Active' : 'InAction'}
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                      {v.subscribeStatus === '0' ? 'Active' : 'Inactive'}
                     </td>
                     {/* consumerName */}
-                    <td style={{ width: '12%' }}>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.customerName ? v.customerName : ''}
                     </td>
                     {/* Recipient */}
-                    <td style={{ width: '12%' }}>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}
                     </td>
                     {/*Frequency*/}
-                    <td style={{ width: '14%' }}>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.frequency ? v.frequency : ''}
                     </td>
                     {/* Quantity */}
-                    <td style={{ width: '10%' }}>
+                    {/* <td style={{ width: '8%' }}>
                       {v.goodsInfo && this.goodsSum(v.goodsInfo)}
-                    </td>
+                    </td> */}
                     {/*Operation*/}
-                    <td style={{ width: '16%' }} className="operation-td">
+                    <td style={{ width: '15%' }} className="operation-td">
                       <Button type="link">
                         <Link to={'/subscription-detail/' + v.subscribeId}>
                           Details
                         </Link>
                       </Button>
-                      <Button type="link">
-                        <Link to={'/subscription-edit/' + v.subscribeId}>
-                          Edit
-                        </Link>
-                      </Button>
+                      {v.subscribeStatus === '0' ? (
+                        <Button type="link">
+                          <Link to={'/subscription-edit/' + v.subscribeId}>
+                            Edit
+                          </Link>
+                        </Button>
+                      ) : null}
                       {v.subscribeStatus === '0' ? (
                         <Popconfirm
                           placement="topRight"

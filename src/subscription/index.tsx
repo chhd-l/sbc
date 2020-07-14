@@ -19,8 +19,6 @@ import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
-import subscriptionData from './subscriptionData';
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -36,14 +34,14 @@ export default class SubscriptionList extends Component<any, any> {
         productOption: 'Product Name',
         product: '',
         frequency: '',
-        recipientOption: 'Recipient',
+        recipientOption: 'Receiver',
         recipient: ''
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
 
       consumerOption: ['Consumer Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
-      recipientOption: ['Recipient', 'Recipient Phone'],
+      recipientOption: ['Receiver', 'Receiver Phone'],
       frequencyList: [],
       activeKey: 'all',
       subscriptionList: [],

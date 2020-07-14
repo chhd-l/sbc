@@ -282,7 +282,6 @@ export default class ListView extends React.Component<any, any> {
 
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
-
     return (
       dataList &&
       dataList.map((v, index) => {

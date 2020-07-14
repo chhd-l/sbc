@@ -33,9 +33,6 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
-    setTimeout(() => {
-      console.log(this.state.fetchFindListByPrescriber, 11111111111111);
-    }, 1000);
 
     //console.log(this.props.location.params.prescriberId,1111)
   }

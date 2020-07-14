@@ -55,9 +55,7 @@ export default class List extends React.Component<any, any> {
             key="settleTime"
             dataIndex="settleTime"
             render={(value) => {
-              return moment(value)
-                .format(Const.DAY_FORMAT)
-                .toString();
+              return moment(value).format(Const.DAY_FORMAT).toString();
             }}
           />
         )}
@@ -67,9 +65,7 @@ export default class List extends React.Component<any, any> {
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
-            return moment(value)
-              .format(Const.DAY_FORMAT)
-              .toString();
+            return moment(value).format(Const.DAY_FORMAT).toString();
           }}
         />
 
@@ -80,7 +76,7 @@ export default class List extends React.Component<any, any> {
         />
 
         <Column
-          title={<FormattedMessage id="billingPeriod" />}
+          title={<FormattedMessage id="statementPeriod" />}
           key="statementTime"
           render={(row) => {
             return `${row.startTime}～${row.endTime}`;
@@ -94,7 +90,7 @@ export default class List extends React.Component<any, any> {
         />
 
         <Column
-          title={<FormattedMessage id="totalPaidGoods" />}
+          title={<FormattedMessage id="Paymentamount" />}
           key="splitPayPrice"
           dataIndex="splitPayPrice"
           render={(value) => {
@@ -102,14 +98,14 @@ export default class List extends React.Component<any, any> {
           }}
         />
 
-        <Column
+        {/* <Column
           title={<FormattedMessage id="totalFreight" />}
           key="deliveryPrice"
           dataIndex="deliveryPrice"
           render={(value) => {
             return util.FORMAT_YUAN(value);
           }}
-        />
+        />*/}
 
         {/* <Column
           title="通用券优惠总额"

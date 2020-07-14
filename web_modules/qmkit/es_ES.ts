@@ -511,7 +511,7 @@ export default {
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
-
+  'Paymentamount': 'Payment amount',
   'financialSettlement': 'Finance Settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
@@ -521,6 +521,8 @@ export default {
   'statementGenerationTime': 'Statement Generation Time',
   'statementTime': 'Billing Time',
   'statementNumber': 'Statement Number',
+  'statementPeriod': 'Statement Period',
+
   'billingPeriod': 'Billing Period',
   'totalPaidGoods': 'Total Paid Goods',
   'totalFreight': 'Total Freight',

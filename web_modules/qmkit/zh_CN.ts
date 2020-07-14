@@ -202,7 +202,7 @@ export default {
   'paymentOrder': '订单支付',
   'createOrder': '创建订单',
   'order': '订单',
-  'back': '返回',
+  'back': 'Back',
 
   "initiateApplication": "发起售后申请",
   "amountQuantity": "金额数量",

@@ -24,12 +24,12 @@ export default class Foot extends React.Component<any, any> {
           style={{ marginRight: 10 }}
           onClick={() =>
             history.push({
-              pathname: `/finance-manage-check`,
+              pathname: '/finance-manage-check',
               state: { kind: this.props.relaxProps.kind }
             })
           }
         >
-          返回
+          Back
         </Button>
       </div>
     );

@@ -69,10 +69,7 @@ export default class AllPresentAddForm extends React.Component<any, any> {
     if (this.state.joinLevel._joinLevel == joinLevel) {
       return;
     }
-    const levelList = store
-      .state()
-      .get('levelList')
-      .toJS();
+    const levelList = store.state().get('levelList').toJS();
     this.setState({ joinLevel: { _joinLevel: joinLevel } });
     if (joinLevel == undefined || joinLevel == null) {
       const { customerLevel } = this.state;
@@ -107,10 +104,7 @@ export default class AllPresentAddForm extends React.Component<any, any> {
     let { level } = this.state;
     const store = this._store as any;
     const activity = store.state().get('activity');
-    const levelList = store
-      .state()
-      .get('levelList')
-      .toJS();
+    const levelList = store.state().get('levelList').toJS();
     const { getFieldDecorator } = form;
 
     return (
@@ -152,9 +146,7 @@ export default class AllPresentAddForm extends React.Component<any, any> {
                     if (
                       value &&
                       moment(new Date()).second(0) &&
-                      moment(new Date())
-                        .second(0)
-                        .unix() > value[0].unix()
+                      moment(new Date()).second(0).unix() > value[0].unix()
                     ) {
                       callback('开始时间不能早于现在');
                     } else if (value[0] && value[0].unix() >= value[1].unix()) {
@@ -200,7 +192,10 @@ export default class AllPresentAddForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem {...formItemLayout} label="选择优惠券" required={true}>
-            {getFieldDecorator('coupons', {})(
+            {getFieldDecorator(
+              'coupons',
+              {}
+            )(
               <ChooseCoupons
                 form={form}
                 coupons={activity.get('coupons').toJS()}
@@ -304,7 +299,7 @@ export default class AllPresentAddForm extends React.Component<any, any> {
                 保存
               </Button>
               &nbsp;&nbsp;
-              <Button onClick={() => history.goBack()}>返回</Button>
+              <Button onClick={() => history.goBack()}>Back</Button>
             </Col>
           </Row>
         </Form>
@@ -326,9 +321,7 @@ export default class AllPresentAddForm extends React.Component<any, any> {
       //强制校验创建时间
       if (
         moment().second(0) &&
-        moment()
-          .second(0)
-          .unix() > moment(activity.get('startTime')).unix()
+        moment().second(0).unix() > moment(activity.get('startTime')).unix()
       ) {
         form.setFields({
           ['time']: {

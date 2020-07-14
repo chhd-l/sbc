@@ -3,9 +3,10 @@ import { Action, IMap, Relax, Store } from 'plume2';
 import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
 import { List } from 'immutable';
 import { Link } from 'react-router-dom';
-import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
+import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
 
 type TList = List<any>;
 const Column = DataGrid;
@@ -25,7 +26,14 @@ const payOrderStatusDic = {
   2: '待确认',
   null: '未付款'
 };
-
+const OptionDiv = styled.div`
+  width: 100%;
+  text-align: left;
+  display: block;
+  /*position: absolute;
+  right: 40px;
+  top: 90px;*/
+`;
 /**
  * 订单收款单列表
  */
@@ -76,7 +84,9 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       init,
       current
     } = this.props.relaxProps;
-
+    setTimeout(() => {
+      console.log(dataList);
+    }, 1000);
     return (
       <DataGrid
         loading={loading}
@@ -127,11 +137,36 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           key="orderRewardRate"
           dataIndex="orderRewardRate"
           width="11%"
-          render={(orderRewardRate) => (
-            <span>
-              {orderRewardRate != null
-                ? `$${orderRewardRate.toFixed(2)}%`
-                : '-'}
+          render={(orderRewardRate, record: any, i) => (
+            <span style={{ color: '#db0202' }}>
+              <OptionDiv style={{ width: '30%' }}>
+                <Tooltip
+                  overlayStyle={{
+                    overflowY: 'auto'
+                    //height: 100
+                  }}
+                  placement="bottomLeft"
+                  title={
+                    <div>
+                      First order：
+                      {record.prescriberReward
+                        ? record.prescriberReward.rewardRateFirst + '%'
+                        : '--'}
+                      <br />
+                      Repeat order：
+                      {record.prescriberReward
+                        ? record.prescriberReward.rewardRateMore + '%'
+                        : '--'}
+                    </div>
+                  }
+                >
+                  <span style={{ fontSize: 14 }}>
+                    {orderRewardRate != null
+                      ? `$${orderRewardRate.toFixed(2)}%`
+                      : '-'}
+                  </span>
+                </Tooltip>
+              </OptionDiv>
             </span>
           )}
         />
@@ -223,7 +258,11 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? '确定已开票？' : '确定作废开票记录？'}
+            title={
+              invoiceState == 0
+                ? 'Do you confirm to bill?？'
+                : 'Do you confirm to cancel bill record？'
+            }
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}

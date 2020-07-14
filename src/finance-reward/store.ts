@@ -393,11 +393,12 @@ export default class AppStore extends Store {
         if (token) {
           let result = JSON.stringify({ ...params, token: token });
           let encrypted = base64.urlEncode(result);
+          console.log(result, '+++++++++++++++++');
 
           // 新窗口下载
-          const exportHref =
+          /* const exportHref =
             Const.HOST + `/account/export/orderInvoices/${encrypted}`;
-          window.open(exportHref);
+          window.open(exportHref);*/
         } else {
           message.error('请登录');
         }
@@ -422,16 +423,16 @@ export default class AppStore extends Store {
   bulkExport = async () => {
     const queryParams = this.state().get('onRewardExportData').toJS();
     console.log(queryParams);
-    const { startTime, endTime } = queryParams;
+    const { period, endTime } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {
         // 参数加密
         const base64 = new util.Base64();
         const token = (window as any).token;
+        console.log(token);
         if (token) {
           const result = JSON.stringify({
-            startTime: startTime,
-            endTime: endTime,
+            period: period,
             token: token
           });
           const encrypted = base64.urlEncode(result);

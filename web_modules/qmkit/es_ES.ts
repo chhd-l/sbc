@@ -246,7 +246,7 @@ export default {
   'account': 'Account',
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
-
+  'settlement': 'Settlement',
 
 
   'product': 'Product',
@@ -501,6 +501,7 @@ export default {
   'VISA': 'VISA',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
+  'Revenue':'Revenue',
 
   'balance': 'Balance',
   'total2': 'total',

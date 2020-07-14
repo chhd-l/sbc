@@ -23,7 +23,7 @@ export function fetchAllPayWays() {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchIncomeDetail(params: {}) {
-  return Fetch<TResult>('/finance/bill/income/details', {
+  return Fetch<TResult>('/finance/bill/income/details2', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -35,7 +35,7 @@ export function fetchIncomeDetail(params: {}) {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export function fetchRefundDetail(params: {}) {
-  return Fetch<TResult>('/finance/bill/refund/details', {
+  return Fetch<TResult>('/finance/bill/refund/details2', {
     method: 'POST',
     body: JSON.stringify(params)
   });

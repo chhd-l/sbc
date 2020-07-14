@@ -336,7 +336,7 @@ const routes = [
   },*/
   //Reward
   {
-    path: '/finance-ticket-new',
+    path: '/finance-reward',
     asyncComponent: () => import('./finance-reward')
   },
   //Reward-detail

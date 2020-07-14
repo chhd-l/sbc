@@ -53,52 +53,56 @@ export default class RevenueList extends React.Component<any, any> {
           }
         >
           <Column
-            title="序号"
+            title="No"
             dataIndex="index"
             key="index"
-            width="50"
             render={(_text, _rowData: any, index) => {
               return pageNum * pageSize + index + 1;
             }}
           />
           <Column
-            title="下单时间"
+            title="Order time"
             dataIndex="orderTime"
             key="orderTime"
             render={(text, _rowData: any, _index) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          />
-          <Column title="订单编号" dataIndex="orderCode" key="orderCode" />
-          <Column title="交易流水号" dataIndex="tradeNo" key="tradeNo" />
+          <Column title="Order number" dataIndex="orderCode" key="orderCode" />
+          <Column title="Order Revenue" dataIndex="amount" key="amount" />
+
           <Column
-            title="客户昵称"
+            title="Transaction serial number"
+            dataIndex="tradeNo"
+            width="15%"
+            key="tradeNo"
+          />
+          <Column
+            title="Consumer name"
             dataIndex="customerName"
             key="customerName"
           />
           <Column
-            title="支付时间"
+            title="Payment time"
             dataIndex="tradeTime"
             key="tradeTime"
             render={(text, _rowData: any) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          />
-          <Column
-            title="支付渠道"
-            dataIndex="payWay"
-            key="payWay"
+          {/*<Column
+            title="Payment type"
+            dataIndex="paymentMethod"
+            key="paymentMethod"
             render={(text, rowData: any) => {
               return text ? (
                 <span>{payWaysObj.toJS()[rowData.payWay]}</span>
               ) : (
-                '无'
+                '--'
               );
             }}
-          />
-          />
+          />*/}
+
           {/*<Column*/}
           {/*title='优惠金额'*/}
           {/*dataIndex='discounts'*/}
@@ -108,7 +112,15 @@ export default class RevenueList extends React.Component<any, any> {
           {/*<span>{text}</span> :'￥0.00'*/}
           {/*}}/>*/}
           {/*/>*/}
-          <Column title="支付金额" dataIndex="amount" key="amount" />
+          <Column title="Payment method" dataIndex="vendor" key="vendor" />
+          <Column
+            title="Real Revenue"
+            dataIndex="practicalPrice"
+            key="practicalPrice"
+            render={(text, rowData: any) => {
+              return text ? <span>{text}</span> : '--';
+            }}
+          />
         </DataGrid>
         {/*<Table columns={columns} dataSource={data} />*/}
       </div>

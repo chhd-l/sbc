@@ -255,7 +255,7 @@ export default {
   'total2': '合计',
   'revenueReconciliationDetails': '收入对账明细',
   'paymentChannel': '支付渠道',
-  'transactionSerialNumber': '交易流水号',
+  'transactionSerialNumber': 'Transaction serial number',
   'export': '导出',
   'paymentTime': '支付时间',
   'paymentAmount': '支付金额',

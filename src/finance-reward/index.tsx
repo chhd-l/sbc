@@ -48,7 +48,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
           <div className="container">
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
-            <AuthWrapper functionName="f_settle_export">
+            <AuthWrapper functionName={'financeRewardExport'}>
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulkExport()}>
                   {<FormattedMessage id="bulkExport" />}

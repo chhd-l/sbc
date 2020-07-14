@@ -164,10 +164,22 @@ export default class GoodsSpecActor extends Actor {
     state,
     { id, key, value }: { id: string; key: string; value: string }
   ) {
-    return state.update('goodsList', (goodsList) => {
-      const index = goodsList.findIndex((item) => item.get('id') == id);
-      return goodsList.update(index, (item) => item.set(key, value));
-    });
+    console.log(id, key, value, state.toJS(), '1234');
+    // return
+    if (key === 'subscriptionStatus') {
+      let goodsList = state.toJS()['goodsList'];
+      goodsList.map((el) => {
+        if (el.id === id) {
+          el.subscriptionStatus = value;
+        }
+      });
+      return state.set('goodsList', fromJS(goodsList));
+    } else {
+      return state.update('goodsList', (goodsList) => {
+        const index = goodsList.findIndex((item) => item.get('id') == id);
+        return goodsList.update(index, (item) => item.set(key, value));
+      });
+    }
   }
 
   /**

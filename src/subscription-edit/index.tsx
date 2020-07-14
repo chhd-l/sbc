@@ -14,7 +14,8 @@ import {
   message,
   DatePicker,
   Table,
-  InputNumber
+  InputNumber,
+  Collapse
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
@@ -23,6 +24,8 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
+
+const Panel = Collapse.Panel;
 
 const InputGroup = Input.Group;
 const { Option } = Select;
@@ -120,23 +123,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>
         ),
-        dataIndex: 'Product',
         key: 'Product',
+        width: '40%',
         render: (text, record) => (
-          <div>
-            <img src={record.img} alt="" />
-            <span>{text}</span>
+          <div style={{ display: 'flex' }}>
+            <img src={record.goodsPic} style={{ width: 100 }} alt="" />
+            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
           </div>
         )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Price</span>,
-        dataIndex: 'Price',
         key: 'Price',
+        width: '15%',
         render: (text, record) => (
           <div>
-            <span style={{ textDecoration: 'line-through' }}>{text}</span>
-            <span>{text}</span>
+            <p style={{ textDecoration: 'line-through' }}>
+              ${record.originalPrice}
+            </p>
+            <p>${record.subscribePrice}</p>
           </div>
         )
       },
@@ -144,11 +149,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>
         ),
-        dataIndex: 'Quantity',
-        key: 'Quantity',
+        dataIndex: 'subscribeNum',
+        key: 'subscribeNum',
+        width: '15%',
         render: (text, record) => (
           <div>
-            <InputNumber min={1} max={100} defaultValue={3} />
+            <InputNumber min={1} max={100} value={record.subscribeNum} />
           </div>
         )
       },
@@ -156,9 +162,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Total</span>,
         dataIndex: 'Total',
         key: 'Total',
+        width: '15%',
         render: (text, record) => (
           <div>
-            <span>${text}</span>
+            <span>${+record.subscribeNum * +record.subscribePrice}</span>
           </div>
         )
       }

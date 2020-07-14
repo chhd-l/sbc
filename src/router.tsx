@@ -19,10 +19,21 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./subscription')
   },
+
+  {
+    path: '/set-banner',
+    exact: true,
+    asyncComponent: () => import('./set-banner')
+  },
   {
     path: '/subscription-detail/:subId',
     exact: true,
     asyncComponent: () => import('./subscription-detail')
+  },
+  {
+    path: '/subscription-edit/:subId',
+    exact: true,
+    asyncComponent: () => import('./subscription-edit')
   },
   // prescriber
   {
@@ -319,7 +330,7 @@ const routes = [
     asyncComponent: () => import('./vendor-new-accounts')
   },
   //开票管理-开票项目
- /* {
+  /* {
     path: '/finance-ticket-new',
     asyncComponent: () => import('./finance-ticket-new')
   },*/

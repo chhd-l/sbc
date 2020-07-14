@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Relax } from 'plume2';
+import { Relax, StoreProvider } from 'plume2';
 import { List } from 'immutable';
 import { withRouter } from 'react-router';
 import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
@@ -9,8 +9,9 @@ import { deleteGoodsById } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-import { message, Table } from 'antd';
-
+import { message, Modal, Table } from 'antd';
+import AppStore from '../store';
+const confirm = Modal.confirm;
 const Column = Table.Column;
 
 const isShowFunction = (status) => {
@@ -25,7 +26,10 @@ const isShowFunction = (status) => {
 
 @withRouter
 @Relax
+@StoreProvider(AppStore, { debug: __DEV__ })
 export default class CustomerList extends React.Component<any, any> {
+  store: AppStore;
+
   props: {
     history?: any;
     relaxProps?: {
@@ -36,6 +40,7 @@ export default class CustomerList extends React.Component<any, any> {
       currentPage: number;
       init: Function;
       modal: Function;
+      evaluateDelete: Function;
       goodsEvaluateDetail: Function;
     };
   };
@@ -48,6 +53,7 @@ export default class CustomerList extends React.Component<any, any> {
     dataList: 'dataList',
     init: noop,
     modal: noop,
+    evaluateDelete: noop,
     goodsEvaluateDetail: noop
   };
   async deleteEvaluate(evaluateId) {
@@ -55,13 +61,14 @@ export default class CustomerList extends React.Component<any, any> {
     let params = {
       evaluateId: evaluateId
     };
-    let { res } = await deleteGoodsById(params);
-    if (res.code === Const.SUCCESS_CODE) {
-      message.success('delete successful.');
-    } else {
-      console.log(res.message);
-      message.error('delete error.');
-    }
+    const { evaluateDelete } = this.props.relaxProps;
+    confirm({
+      title: 'Prompt',
+      content: 'Are you sure you want to delete this evaluate?',
+      onOk() {
+        evaluateDelete(params);
+      }
+    });
   }
 
   render() {

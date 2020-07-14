@@ -18,3 +18,25 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * get Subscription List
+ * @param filterParams
+ */
+export function getSubscriptionList(filterParams = {}) {
+  return Fetch<TResult>('/sub/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function cancelSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/cancelSubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

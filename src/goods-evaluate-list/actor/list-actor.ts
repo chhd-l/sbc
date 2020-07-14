@@ -36,8 +36,8 @@ export default class ListActor extends Actor {
   @Action('listActor:init')
   init(state: IMap, res: IGoodsEvaluateResponse) {
     const { content, total } = res;
-
     return state.withMutations((state) => {
+      debugger;
       state.set('total', total).set('dataList', fromJS(content));
     });
   }

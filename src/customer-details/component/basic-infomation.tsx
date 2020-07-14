@@ -74,12 +74,56 @@ class BasicInfomation extends React.Component<any, any> {
   }
 
   getDict = () => {
-    let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
-    let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-    this.setState({
-      countryArr: countryArr,
-      cityArr: cityArr
-    });
+    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
+      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+      this.setState({
+        countryArr: countryArr
+      });
+    } else {
+      this.querySysDictionary('country');
+    }
+    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
+      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+      this.setState({
+        cityArr: cityArr
+      });
+    } else {
+      this.querySysDictionary('city');
+    }
+  };
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({
+        type: type
+      })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (type === 'city') {
+            this.setState({
+              cityArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-city',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'country') {
+            this.setState({
+              countryArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-country',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
   };
 
   getSelectedClinic = (array) => {
@@ -295,7 +339,7 @@ class BasicInfomation extends React.Component<any, any> {
 
   compareEmail = (rule, value, callback) => {
     const { form } = this.props;
-    let reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+    let reg = /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/;
     if (!reg.test(form.getFieldValue('email'))) {
       callback('Please enter the correct email');
     } else {

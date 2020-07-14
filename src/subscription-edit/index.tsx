@@ -14,15 +14,12 @@ import {
   message,
   DatePicker,
   Table,
-  InputNumber,
-  Modal,
-  Popconfirm,
-  Radio
+  InputNumber
 } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Link } from 'react-router-dom';
 
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
@@ -36,16 +33,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Details',
-      subscriptionId: this.props.match.params.subId,
-      loading: true,
+      pageType: 'Edit',
       orderInfo: {
         orderTimes: 1,
         recentOrder: 'O123456234',
         orderStatus: 'Not Yet Shipped'
       },
       subscriptionInfo: {
-        deliveryTimes: '',
         subscriptionStatus: 'Active',
         subscriptionNumber: 'S202007071782774',
         subscriptionTime: '2020-07-07 17:56:25',
@@ -69,16 +63,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         petName: 'Rita',
         petType: 'cat',
         petBirthday: '2018/12/12'
-      },
-      visibleShipping: false,
-      visibleBilling: false,
-      visiblePetInfo: false
+      }
     };
   }
 
   componentDidMount() {
     this.querySysDictionary('Frequency');
-    this.getSubscriptionDetail(this.state.subscriptionId);
   }
 
   //查询frequency
@@ -100,15 +90,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  getSubscriptionDetail = (id: String) => {
-    webapi.getSubscriptionDetail(id).then((data) => {
-      console.log(data);
-    });
-  };
-  skipNextDelivery = (id: String) => {
-    message.success('Successful');
-  };
-
   render() {
     const {
       orderInfo,
@@ -121,9 +102,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription</span>
-        <span className="order-time">
-          {'#' + subscriptionInfo.deliveryTimes}
-        </span>
+        <span className="order-time">{'#' + orderInfo.orderTimes}</span>
       </div>
     );
     const menu = (
@@ -133,21 +112,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         ))}
       </Menu>
     );
-    const cartExtra = (
-      <Popconfirm
-        placement="topRight"
-        title="Are you sure skip next dilivery?"
-        onConfirm={() =>
-          this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
-        }
-        okText="Confirm"
-        cancelText="Cancel"
-      >
-        <Button type="link" style={{ fontSize: 16 }}>
-          Skip Next Dilivery
-        </Button>
-      </Popconfirm>
-    );
+    // const cartExtra = (
+    //   <Button type="link"  style={{fontSize:16,}}>Skip Next Dilivery</Button>
+    // );
     const columns = [
       {
         title: (
@@ -213,7 +180,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <Card
           title={cartTitle}
           bordered={false}
-          extra={cartExtra}
+          // extra={cartExtra}
           style={{ margin: 20 }}
         >
           {/* subscription 基本信息 */}
@@ -261,6 +228,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Previous Orders</p>
+
                 <Dropdown overlay={menu} trigger={['click']}>
                   <a
                     className="ant-dropdown-link"
@@ -275,19 +243,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Frequency</p>
-                <Select style={{ width: '50%' }}>
-                  {frequencyList.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
+                <p>4 Weeks</p>
               </div>
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Next order date</p>
-                <DatePicker format={'MMMM Do YY'} style={{ width: '50%' }} />
+                <p>June, 23rd</p>
               </div>
             </Col>
           </Row>
@@ -342,16 +304,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Pet Infomation</label>
                 </Col>
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visiblePetInfo: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Name: </p>
@@ -395,16 +348,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Shipping Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visibleShipping: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
@@ -430,16 +374,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visibleBilling: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
+                  <Button type="link">Change</Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
@@ -461,114 +396,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
           </Row>
           <Row style={{ marginTop: 20 }} className="subscription-btn">
+            <Button type="primary" style={{ marginRight: 20 }}>
+              Save
+            </Button>
+
             <Button>
               <Link to="/subscription-list">Cancel</Link>
             </Button>
           </Row>
         </Card>
-
-        <Modal
-          style={{ width: '500px' }}
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visibleShipping}
-          onOk={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Billing Address"
-          visible={this.state.visibleBilling}
-          onOk={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visiblePetInfo}
-          onOk={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
       </div>
     );
   }

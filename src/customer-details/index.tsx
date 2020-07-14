@@ -46,31 +46,31 @@ export default class CustomerDetails extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    this.querySysDictionary('country');
-    this.querySysDictionary('city');
+    // this.querySysDictionary('country');
+    // this.querySysDictionary('city');
   }
 
-  querySysDictionary = async (type: String) => {
-    const { res } = await webapi.querySysDictionary({
-      type: type
-    });
-    if (res.code === 'K-000000') {
-      if (type === 'city') {
-        sessionStorage.setItem(
-          'dict-city',
-          JSON.stringify(res.context.sysDictionaryVOS)
-        );
-      }
-      if (type === 'country') {
-        sessionStorage.setItem(
-          'dict-country',
-          JSON.stringify(res.context.sysDictionaryVOS)
-        );
-      }
-    } else {
-      message.error('Unsuccessful');
-    }
-  };
+  // querySysDictionary = async (type: String) => {
+  //   const { res } = await webapi.querySysDictionary({
+  //     type: type
+  //   });
+  //   if (res.code === 'K-000000') {
+  //     if (type === 'city') {
+  //       sessionStorage.setItem(
+  //         'dict-city',
+  //         JSON.stringify(res.context.sysDictionaryVOS)
+  //       );
+  //     }
+  //     if (type === 'country') {
+  //       sessionStorage.setItem(
+  //         'dict-country',
+  //         JSON.stringify(res.context.sysDictionaryVOS)
+  //       );
+  //     }
+  //   } else {
+  //     message.error('Unsuccessful');
+  //   }
+  // };
   clickTabs = (key) => {
     console.log(key);
   };

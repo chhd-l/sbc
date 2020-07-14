@@ -1,7 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
+import {
+  Checkbox,
+  Spin,
+  Pagination,
+  Modal,
+  Form,
+  Input,
+  Button,
+  Popconfirm,
+  message
+} from 'antd';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from './../webapi';
 const defaultImg = require('../../goods-list/img/none.png');
 
 export default class ListView extends React.Component<any, any> {
@@ -15,19 +26,98 @@ export default class ListView extends React.Component<any, any> {
         current: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      searchParams: {}
     };
   }
+  componentDidMount() {
+    // this.getSubscriptionList()
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataList: nextProps.data,
+      pagination: nextProps.pagination,
+      searchParams: nextProps.searchParams
+    });
+  }
+
   onCheckedAll = (checked) => {
     this.setState({
       allChecked: checked
     });
   };
+
   init = ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    console.log(pageNum, pageSize);
+    const { searchParams } = this.state;
+    let params = Object.assign({ pageSize, pageNum }, searchParams);
+    this.getSubscriptionList(params);
+  };
+
+  getSubscriptionList = (params) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getSubscriptionList(params)
+      .then((data) => {
+        let { res } = data;
+        if (res.code === 'K-000000') {
+          let pagination = {
+            current: res.context.currentPage + 1,
+            pageSize: 10,
+            total: res.context.total
+          };
+          this.setState(() => {
+            return {
+              dataList: res.context.subscriptionResponses,
+              loading: false,
+              pagination: pagination
+            };
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
   };
   onChecked = (index, checked) => {
     console.log(index, checked);
+  };
+
+  goodsSum = (array) => {
+    let sum = 0;
+    for (let index = 0; index < array.length; index++) {
+      sum += array[index].subscribeNum;
+    }
+    return sum;
+  };
+  cancelAll = (id: String) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .cancelSubscription({ subscribeId: id })
+      .then((data) => {
+        const { res } = this.state;
+        if (res.code === 'K-000000') {
+          message.success('Successful');
+          this.init();
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
   };
 
   render() {
@@ -43,7 +133,13 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%', borderSpacing: 'initial' }}>
+                      <th
+                        style={{
+                          width: '3%',
+                          borderSpacing: 'initial',
+                          textAlign: 'center'
+                        }}
+                      >
                         <Checkbox
                           checked={allChecked}
                           onChange={(e) => {
@@ -52,25 +148,21 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="subscription.orderNumber" />
-                      </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="subscription.orderData" />
-                      </th>
-                      <th style={{ width: '17%' }}>
+                      <th style={{ width: '20%' }}>Product</th>
+                      <th style={{ width: '10%' }}>Subscription Status</th>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="subscription.receiver" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '14%' }}>
                         <FormattedMessage id="subscription.frequency" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.quantity" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '16%' }}>
                         <FormattedMessage id="subscription.operation" />
                       </th>
                     </tr>
@@ -94,7 +186,7 @@ export default class ListView extends React.Component<any, any> {
           </div>
           {pagination.total > 0 ? (
             <Pagination
-              current={pagination.currentPage}
+              current={pagination.current}
               total={pagination.total}
               pageSize={pagination.pageSize}
               onChange={(pageNum, pageSize) => {
@@ -122,7 +214,10 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={v.id}>
+          <tr
+            className="ant-table-row  ant-table-row-level-0"
+            key={v.subscribeId}
+          >
             <td colSpan={8} style={{ padding: 0 }}>
               <table
                 className="ant-table-self"
@@ -149,13 +244,13 @@ export default class ListView extends React.Component<any, any> {
 
                         <div style={{ width: 310, display: 'inline-block' }}>
                           <span style={{ marginLeft: 20, color: '#000' }}>
-                            {v.id}{' '}
+                            {v.subscribeId}{' '}
                           </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="subscription.subscriptionDate" />
-                          :{v.subscriptionDate ? v.subscriptionDate : ''}
+                          :{v.createTime ? v.createTime : ''}
                         </span>
                       </div>
                     </td>
@@ -165,60 +260,83 @@ export default class ListView extends React.Component<any, any> {
                   <tr>
                     {/* product */}
                     <td style={{ width: '3%' }} />
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        padding: '16px 0',
-                        width: '100'
-                      }}
-                    >
+                    <td style={{ width: '20%' }}>
                       {/*商品图片*/}
-                      {v.productImgList.map((v, k) =>
-                        k < 4 ? (
-                          <img
-                            src={v.get('pic') ? v.get('pic') : defaultImg}
-                            style={styles.imgItem}
-                            key={k}
-                          />
-                        ) : null
-                      )}
+                      {v.goodsInfo &&
+                        v.goodsInfo.map((item, k) =>
+                          k < 4 ? (
+                            <img
+                              src={item.goodsPic ? item.goodsPic : defaultImg}
+                              style={styles.imgItem}
+                              key={k}
+                            />
+                          ) : null
+                        )}
 
-                      {/*第4张特殊处理*/
-                      //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
-                            //@ts-ignore
-                            src={v.get('pic') ? v.get('pic') : defaultImg}
-                            style={styles.imgFourth}
-                          />
-                          <div style={styles.imgNum}>
-                            <FormattedMessage id="total" />
-                            {v.get('tradeItems').size}{' '}
-                            <FormattedMessage id="piece" />
+                      {
+                        /*第4张特殊处理*/
+                        //@ts-ignore
+                        v.goodsInfo && v.goodsInfo.size > 3 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={item.goodsPic ? item.goodsPic : defaultImg}
+                              style={styles.imgFourth}
+                            />
+                            <div style={styles.imgNum}>
+                              <FormattedMessage id="total" />
+                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
-                    <td style={{ width: '14%' }}>
-                      {v.getIn(['buyer', 'name'])}
-                    </td>
+
                     {/*subscription status*/}
-                    <td style={{ width: '17%' }}>{v.status}</td>
+                    <td style={{ width: '10%' }}>
+                      {v.subscribeStatus === '0' ? 'Active' : 'InAction'}
+                    </td>
                     {/* consumerName */}
-                    <td style={{ width: '10%' }}>{v.consumerName}</td>
+                    <td style={{ width: '12%' }}>
+                      {v.customerName ? v.customerName : ''}
+                    </td>
                     {/* Recipient */}
-                    <td style={{ width: '12%' }}>{v.consumerName}</td>
+                    <td style={{ width: '12%' }}>
+                      {v.consignee ? v.consignee.consigneeName : ''}
+                    </td>
                     {/*Frequency*/}
-                    <td style={{ width: '12%' }}>{v.consumerName}</td>
+                    <td style={{ width: '14%' }}>
+                      {v.frequency ? v.frequency : ''}
+                    </td>
+                    {/* Quantity */}
+                    <td style={{ width: '10%' }}>
+                      {v.goodsInfo && this.goodsSum(v.goodsInfo)}
+                    </td>
                     {/*Operation*/}
-                    <td
-                      style={{ width: '12%', paddingRight: 22 }}
-                      className="operation-td"
-                    >
-                      {v.consumerName}
+                    <td style={{ width: '16%' }} className="operation-td">
+                      <Button type="link">
+                        <Link to={'/subscription-detail/' + v.subscribeId}>
+                          Details
+                        </Link>
+                      </Button>
+                      <Button type="link">
+                        <Link to={'/subscription-edit/' + v.subscribeId}>
+                          Edit
+                        </Link>
+                      </Button>
+                      {v.subscribeStatus === '0' ? (
+                        <Popconfirm
+                          placement="topRight"
+                          title="Are you sure cancel the subscription?"
+                          onConfirm={() => this.cancelAll(v.subscribeId)}
+                          okText="Confirm"
+                          cancelText="Cancel"
+                        >
+                          <Button type="link" style={{ fontSize: 16 }}>
+                            Cancel All
+                          </Button>
+                        </Popconfirm>
+                      ) : null}
                     </td>
                   </tr>
                 </tbody>

@@ -78,7 +78,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
             value={form.get('isAnonymous')}
           >
-            <Option value="-1">
+            <Option value={null}>
               <FormattedMessage id="all" />
             </Option>
             <Option value="1">

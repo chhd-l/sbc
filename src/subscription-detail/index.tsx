@@ -16,19 +16,23 @@ import {
   Table,
   InputNumber,
   Modal,
-  Popconfirm
+  Popconfirm,
+  Radio,
+  Collapse
 } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 
-import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
+const Panel = Collapse.Panel;
+
+import moment from 'moment';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
-const { confirm } = Modal;
 /**
  * 订单详情
  */
@@ -36,45 +40,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Edit',
-      orderInfo: {
-        orderTimes: 1,
-        recentOrder: 'O123456234',
-        orderStatus: 'Not Yet Shipped'
-      },
-      subscriptionInfo: {
-        subscriptionStatus: 'Active',
-        subscriptionNumber: 'S202007071782774',
-        subscriptionTime: '2020-07-07 17:56:25',
-        presciberID: '1758',
-        presciberName: 'CLINICA EL FAISAN',
-        consumer: 'ILIANA ROMO MANZANO',
-        consumerAccount: 'ilia****.com',
-        consumerType: 'Member',
-        phoneNumber: '57797287'
-      },
-      recentOrderList: [
-        {
-          id: '001',
-          orderNumber: 'O123456234'
-        }
-      ],
+      pageType: 'Details',
+      subscriptionId: this.props.match.params.subId,
+      loading: true,
+      orderInfo: {},
+      subscriptionInfo: {},
+      recentOrderList: [],
       frequencyList: [],
-      subscriptionData: [],
-      petInfo: {
+      goodsInfo: [],
+      petsId: '',
+      petsInfo: {
         breed: 'xxx',
         petName: 'Rita',
         petType: 'cat',
         petBirthday: '2018/12/12'
       },
-      visibleShipping: false,
-      visibleBilling: false,
-      visiblePetInfo: false
+      paymentInfo: {},
+      deliveryAddressId: '',
+      deliveryAddressInfo: {},
+      billingAddressId: '',
+      billingAddressInfo: {}
     };
   }
 
   componentDidMount() {
     this.querySysDictionary('Frequency');
+    this.getSubscriptionDetail(this.state.subscriptionId);
   }
 
   //查询frequency
@@ -95,8 +86,105 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
-  skipNextDelivery = (id) => {
-    message.success('Successful');
+
+  getSubscriptionDetail = (id: String) => {
+    webapi.getSubscriptionDetail(id).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        let subscriptionDetail = res.context;
+        let subscriptionInfo = {
+          deliveryTimes: subscriptionDetail.deliveryTimes,
+          subscriptionStatus:
+            subscriptionDetail.subscribeStatus === '0' ? 'Active' : 'Inactive',
+          subscriptionNumber: subscriptionDetail.subscribeId,
+          subscriptionTime: subscriptionDetail.createTime,
+          presciberID: subscriptionDetail.prescriberId,
+          presciberName: subscriptionDetail.prescriberName,
+          consumer: subscriptionDetail.customerName,
+          consumerAccount: subscriptionDetail.customerAccount,
+          consumerType: subscriptionDetail.customerType,
+          phoneNumber: subscriptionDetail.customerPhone,
+          frequency: subscriptionDetail.cycleTypeId,
+          frequencyName: subscriptionDetail.frequency,
+          nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+          promotionCode: subscriptionDetail.promotionCode
+        };
+        let orderInfo = {
+          recentOrderId: subscriptionDetail.trades[0].id,
+          orderStatus: subscriptionDetail.trades[0].tradeState.deliverStatus
+        };
+        let recentOrderList = [];
+        for (let i = 0; i < subscriptionDetail.trades.length; i++) {
+          let recentOrder = {
+            recentOrderId: subscriptionDetail.trades[i].id,
+            orderStatus: subscriptionDetail.trades[i].tradeState.deliverStatus
+          };
+          recentOrderList.push(recentOrder);
+        }
+
+        let goodsInfo = subscriptionDetail.goodsInfo;
+        let paymentInfo = subscriptionDetail.paymentInfo;
+        this.setState(
+          {
+            subscriptionInfo: subscriptionInfo,
+            orderInfo: orderInfo,
+            recentOrderList: recentOrderList,
+            goodsInfo: goodsInfo,
+            paymentInfo: paymentInfo,
+            petsId: subscriptionDetail.petsId,
+            deliveryAddressId: subscriptionDetail.deliveryAddressId,
+            billingAddressId: subscriptionDetail.billingAddressId,
+            loading: false
+          },
+          () => {
+            this.petsById(this.state.petsId);
+          }
+        );
+      }
+      console.log(data);
+    });
+  };
+  skipNextDelivery = (id: String) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .cancelNextSubscription({ subscribeId: id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.getSubscriptionDetail(this.state.subscriptionId);
+          message.success('Successful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.success('Unsuccessful');
+      });
+  };
+
+  petsById = (id) => {
+    let params = {
+      petsId: id
+    };
+    webapi
+      .petsById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let petsInfo = res.context.context;
+          this.setState({
+            petsInfo: petsInfo
+          });
+        } else {
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
   };
 
   render() {
@@ -105,19 +193,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       recentOrderList,
       subscriptionInfo,
       frequencyList,
-      subscriptionData,
-      petInfo
+      goodsInfo,
+      petsInfo,
+      paymentInfo,
+      deliveryAddressInfo,
+      billingAddressInfo
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription</span>
-        <span className="order-time">{'#' + orderInfo.orderTimes}</span>
+        <span className="order-time">
+          {'#' + subscriptionInfo.deliveryTimes}
+        </span>
       </div>
     );
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
-          <Menu.Item key={item.id}>{item.orderNumber}</Menu.Item>
+          <Menu.Item key={item.recentOrderId}>
+            {item.recentOrderId + '(' + item.orderStatus + ')'}
+          </Menu.Item>
         ))}
       </Menu>
     );
@@ -131,11 +226,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        <Button
-          type="link"
-          className="underline-button"
-          style={{ fontSize: 16 }}
-        >
+        <Button type="link" style={{ fontSize: 16 }}>
           Skip Next Dilivery
         </Button>
       </Popconfirm>
@@ -145,23 +236,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>
         ),
-        dataIndex: 'Product',
         key: 'Product',
+        width: '40%',
         render: (text, record) => (
-          <div>
-            <img src={record.img} alt="" />
-            <span>{text}</span>
+          <div style={{ display: 'flex' }}>
+            <img src={record.goodsPic} style={{ width: 100 }} alt="" />
+            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
           </div>
         )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Price</span>,
-        dataIndex: 'Price',
         key: 'Price',
+        width: '15%',
         render: (text, record) => (
           <div>
-            <span style={{ textDecoration: 'line-through' }}>{text}</span>
-            <span>{text}</span>
+            <p style={{ textDecoration: 'line-through' }}>
+              ${record.originalPrice}
+            </p>
+            <p>${record.subscribePrice}</p>
           </div>
         )
       },
@@ -169,21 +262,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>
         ),
-        dataIndex: 'Quantity',
-        key: 'Quantity',
-        render: (text, record) => (
-          <div>
-            <InputNumber min={1} max={100} defaultValue={3} />
-          </div>
-        )
+        dataIndex: 'subscribeNum',
+        key: 'subscribeNum',
+        width: '15%'
+        // render: (text, record) => (
+        //   <div>
+        //     <InputNumber min={1} max={100} value={record.subscribeNum} />
+        //   </div>
+        // )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Total</span>,
         dataIndex: 'Total',
         key: 'Total',
+        width: '15%',
         render: (text, record) => (
           <div>
-            <span>${text}</span>
+            <span>${+record.subscribeNum * +record.subscribePrice}</span>
           </div>
         )
       }
@@ -195,6 +290,57 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       fontWeight: 500
     };
 
+    enum operatorDic {
+      PLATFORM = 'Platform',
+      CUSTOMER = 'Customer',
+      SUPPLIER = 'Supplier'
+    }
+
+    const operatorColumns = [
+      {
+        title: 'Operator Type',
+        dataIndex: 'operator.platform',
+        key: 'operator.platform',
+        render: (val) => `${operatorDic[val]}`
+      },
+      {
+        title: 'Operator',
+        dataIndex: 'operator.name',
+        key: 'operator.name'
+      },
+      {
+        title: 'Time',
+        dataIndex: 'eventTime',
+        key: 'eventTime',
+        render: (time) =>
+          time &&
+          moment(time)
+            .format(Const.TIME_FORMAT)
+            .toString()
+      },
+      {
+        title: 'Operation Category',
+        dataIndex: 'eventType',
+        key: 'eventType'
+      },
+      {
+        title: 'Operation Log',
+        dataIndex: 'eventDetail',
+        key: 'eventDetail',
+        width: '50%'
+      }
+    ];
+
+    const styles = {
+      backItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginTop: 10,
+        marginBottom: 20
+      }
+    } as any;
+
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -203,6 +349,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
         <Card
+          loading={this.state.loading}
           title={cartTitle}
           bordered={false}
           extra={cartExtra}
@@ -258,7 +405,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     className="ant-dropdown-link"
                     onClick={(e) => e.preventDefault()}
                   >
-                    {orderInfo.recentOrder + '(' + orderInfo.orderStatus + ')'}
+                    {orderInfo.recentOrderId +
+                      '(' +
+                      orderInfo.orderStatus +
+                      ')'}
                     <Icon type="down" style={{ margin: '0 5px' }} />
                   </a>
                 </Dropdown>
@@ -267,26 +417,36 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Frequency</p>
-                <Select style={{ width: '50%' }}>
+                <p style={{ color: '#808285' }}>
+                  {subscriptionInfo.frequencyName}
+                </p>
+                {/* <Select style={{ width: '50%' }} value={subscriptionInfo.frequency}>
                   {frequencyList.map((item) => (
                     <Option value={item.id} key={item.id}>
                       {item.name}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
               </div>
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Next order date</p>
-                <DatePicker format={'MMMM Do YY'} style={{ width: '50%' }} />
+                <p style={{ color: '#808285' }}>
+                  {subscriptionInfo.nextDeliveryTime}
+                </p>
+                {/* <DatePicker value={subscriptionInfo.nextDeliveryTime} format={'MMMM Do YY'} style={{ width: '50%' }} /> */}
               </div>
             </Col>
           </Row>
           {/* subscription 和 total */}
           <Row style={{ marginTop: 20 }} gutter={16}>
             <Col span={16}>
-              <Table columns={columns} dataSource={subscriptionData}></Table>
+              <Table
+                columns={columns}
+                dataSource={goodsInfo}
+                pagination={false}
+              ></Table>
             </Col>
             <Col span={8}>
               <Card
@@ -305,6 +465,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <span>-$12</span>
                   </div>
                   <div className="flex-between">
+                    <span>Promotion Code</span>
+                    <span>{subscriptionInfo.promotionCode}</span>
+                  </div>
+                  <div className="flex-between">
                     <span>Shipping</span>
                     <span>Free</span>
                   </div>
@@ -314,7 +478,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>Total (Inclu IVA):</span>
                 <span>$0</span>
               </div>
-              <Row style={{ marginTop: 20 }}>
+              {/* <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
                   <Input placeholder="Promotional code" />
                 </Col>
@@ -323,7 +487,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     Apply
                   </Button>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
 
@@ -333,34 +497,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <label className="info-title">Pet Infomation</label>
                 </Col>
-                <Col span={12}>
-                  <Button
-                    type="link"
-                    className="underline-button"
-                    onClick={() => {
-                      this.setState({
-                        visiblePetInfo: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
-                </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petInfo.petName}</p>
+                  <p>{petsInfo.petsName}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petInfo.petType}</p>
+                  <p>{petsInfo.petsType}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petInfo.petBirthday}</p>
+                  <p>{petsInfo.birthOfPets}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.petsBreed}</p>
                 </Col>
               </Row>
             </Col>
@@ -372,11 +523,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                 <Col span={18}>
                   <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{paymentInfo.vendor}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{paymentInfo.cardNumber}</p>
                 </Col>
               </Row>
             </Col>
@@ -385,36 +536,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={12}>
               <Row>
                 <Col span={12}>
-                  <label className="info-title">Shipping Address</label>
+                  <label className="info-title">Delivery Address</label>
                 </Col>
-                <Col span={12}>
-                  <Button
-                    type="link"
-                    className="underline-button"
-                    onClick={() => {
-                      this.setState({
-                        visibleShipping: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
-                </Col>
+
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
               </Row>
             </Col>
@@ -423,101 +562,54 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <label className="info-title">Billing Address</label>
                 </Col>
-                <Col span={12}>
-                  <Button
-                    type="link"
-                    className="underline-button"
-                    onClick={() => {
-                      this.setState({
-                        visibleBilling: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
-                </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{petsInfo.breed}</p>
                 </Col>
               </Row>
             </Col>
           </Row>
-          <Row style={{ marginTop: 20 }} className="subscription-btn">
-            <Button>
-              <Link to="/subscription-list">Cancel</Link>
-            </Button>
+
+          <Row style={styles.backItem}>
+            <Collapse>
+              <Panel
+                header={<FormattedMessage id="operationLog" />}
+                key="1"
+                style={{ paddingRight: 10 }}
+              >
+                <Row>
+                  <Col span={24}>
+                    <Table
+                      // rowKey={(_record, index) => index.toString()}
+                      columns={operatorColumns}
+                      // dataSource={log.toJS()}
+                      pagination={false}
+                      bordered
+                    />
+                  </Col>
+                </Row>
+              </Panel>
+            </Collapse>
           </Row>
         </Card>
 
-        <Modal
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visibleShipping}
-          onOk={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Billing Address"
-          visible={this.state.visibleBilling}
-          onOk={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visiblePetInfo}
-          onOk={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
+        <div className="bar-button">
+          <Button type="primary" onClick={() => (history as any).go(-1)}>
+            {<FormattedMessage id="back" />}
+          </Button>
+        </div>
       </div>
     );
   }

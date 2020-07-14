@@ -31,3 +31,12 @@ export function getSubscriptionList(filterParams = {}) {
     })
   });
 }
+
+export function cancelSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/cancelSubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

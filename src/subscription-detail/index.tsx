@@ -210,7 +210,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
-          <Menu.Item key={item.recentOrderId}>{item.recentOrderId}</Menu.Item>
+          <Menu.Item key={item.recentOrderId}>
+            {item.recentOrderId + '(' + item.orderStatus + ')'}
+          </Menu.Item>
         ))}
       </Menu>
     );

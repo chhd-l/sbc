@@ -13,6 +13,7 @@ import OrderInvoiceViewModal from './components/order-invoice-view-modal';
 
 import { StoreProvider } from 'plume2';
 import { FormattedMessage } from 'react-intl';
+import { Button } from 'antd';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class FinanceOrderReceive extends React.Component<any, any> {
@@ -47,7 +48,14 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
           <div className="container">
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
-            <ButtonGroup />
+            <AuthWrapper functionName="f_settle_export">
+              <div style={{ paddingBottom: '16px' }}>
+                <Button onClick={() => this.store.bulkExport()}>
+                  {<FormattedMessage id="bulkExport" />}
+                </Button>
+              </div>
+            </AuthWrapper>
+            {/*<ButtonGroup />*/}
             <DetailsList />
             <OrderInvoiceAddModal />
             <OrderInvoiceViewModal />

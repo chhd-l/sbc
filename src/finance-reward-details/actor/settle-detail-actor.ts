@@ -40,7 +40,8 @@ export default class SettleDetailActor extends Actor {
       },
       tabKey: '1',
       //导出单独的时间参数
-      searchTime: {}
+      searchTime: {},
+      fetchFindListByPrescriber: {}
     };
   }
 
@@ -75,9 +76,9 @@ export default class SettleDetailActor extends Actor {
 
   }*/
 
-  @Action('list:echarts')
-  getEcharts(state: IMap, res) {
-    return state.set('echartsData', res);
+  @Action('list:EchartsData')
+  EchartsData(state: IMap, EchartsData) {
+    return state.set('EchartsData', EchartsData);
   }
 
   @Action('list:PeriodAmountTotal')
@@ -103,6 +104,19 @@ export default class SettleDetailActor extends Actor {
   @Action('list:setName')
   setName(state: IMap, setName) {
     return state.set('setName', fromJS(setName));
+  }
+  @Action('list:fetchFindListByPrescriber')
+  fetchFindListByPrescriber(state: IMap, fetchFindListByPrescriber) {
+    return state.set('fetchFindListByPrescriber', fetchFindListByPrescriber);
+  }
+  @Action('form:field')
+  formFieldChange(state, { field, value }) {
+    return state.setIn(['form', field], value);
+  }
+
+  @Action('form:clear')
+  formFieldClear(state: IMap) {
+    return state.set('form', Map());
   }
 
   /**

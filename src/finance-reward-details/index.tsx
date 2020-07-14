@@ -33,6 +33,10 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
+    setTimeout(() => {
+      console.log(this.state.fetchFindListByPrescriber, 11111111111111);
+    }, 1000);
+
     //console.log(this.props.location.params.prescriberId,1111)
   }
 
@@ -89,15 +93,28 @@ export default class BillingDetails extends React.Component<any, any> {
     return (
       <div>
         <div>
-          <div style={{ textAlign: 'center', fontSize: '18px' }}>
+          <div
+            style={{ textAlign: 'center', width: '170px', fontSize: '18px' }}
+          >
             Reward rules
           </div>
-          <br />
-          <div>
-            <p>1. 2020/06/06-Now:</p>
-            <p>First order: 12%</p>
-            <p>Repeat order:10%</p>
-          </div>
+          {this.state.fetchFindListByPrescriber.map((item, i) => {
+            return (
+              <div key={i} style={{ padding: '10px' }}>
+                <p>
+                  {i + 1}. {item.startTime} - {item.endTIme}
+                </p>
+                <p>
+                  {<FormattedMessage id="firstRewardRate" />}:{' '}
+                  {item.firstRewardRate}
+                </p>
+                <p>
+                  {<FormattedMessage id="repeatRewardRate" />}:{' '}
+                  {item.repeatRewardRate}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     );

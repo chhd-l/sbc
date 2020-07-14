@@ -25,7 +25,6 @@ export default class BillingDetails extends React.Component<any, any> {
 
   render() {
     const setName = this.props.relaxProps;
-    console.log(setName, '----------------');
     return (
       <div>
         <div style={styles.static}>

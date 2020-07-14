@@ -556,8 +556,8 @@ export default {
   'OrderTime': 'Order Time',
   'RewardRate': 'Reward Rate',
   'RewardRemark': 'Reward Remark',
-
-
+  'firstRewardRate': 'First Reward Rate',
+  'repeatRewardRate': 'Repeat Reward Rate',
 
 
 

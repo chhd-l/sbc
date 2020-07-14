@@ -16,6 +16,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       onExportByIds: Function;
       onExportModalChange: Function;
       onRewardExport: Function;
+      onRewardExportData: any;
     };
   };
 
@@ -27,7 +28,8 @@ export default class ButtonGroup extends React.Component<any, any> {
     onExportByParams: noop,
     onExportByIds: noop,
     onExportModalChange: noop,
-    onRewardExport: noop
+    onRewardExport: noop,
+    onRewardExportData: 'onRewardExportData'
   };
 
   render() {
@@ -35,22 +37,23 @@ export default class ButtonGroup extends React.Component<any, any> {
       onShow,
       onHideExportModal,
       exportModalData,
-      onRewardExport
+      onRewardExport,
+      onRewardExportData
     } = this.props.relaxProps;
-
+    console.log(onRewardExportData, 1111111111111111);
     return (
       <div className="handle-bar">
         <AuthWrapper functionName="editOrderInvoices">
           <Button type="primary">
-            {/*<a href="javascript:void(0);" onClick={() => onRewardExport()}>
+            <a href="javascript;" onClick={() => onRewardExport()}>
               {<FormattedMessage id="BulkExport" />}
-            </a>*/}
-            <a
+            </a>
+            {/*<a
               href="javascript:void(0);"
               onClick={() => this._handleBatchExport()}
             >
               {<FormattedMessage id="bulkExport" />}
-            </a>
+            </a>*/}
           </Button>
         </AuthWrapper>
         {/* <AuthWrapper functionName="editOrderInvoices">

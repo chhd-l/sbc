@@ -1,7 +1,7 @@
 import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, ValidConst } from 'qmkit';
 
 import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
@@ -55,7 +55,7 @@ export default class AppStore extends Store {
         // this.dispatch('loading:end');
         this.dispatch('list:init', res1.res.context.content);
         //this.dispatch('list:init', [111,222,333]);
-        this.dispatch('list:echarts', res2.res.context);
+        this.dispatch('list:EchartsData', res2.res.context);
         this.dispatch('current', param && param.pageNum + 1);
         this.dispatch('list:PeriodAmountTotal', PeriodAmountTotal.res.context);
         this.dispatch(
@@ -79,6 +79,123 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       }
     }
+  };
+  /**
+   * 带着搜索条件的分页点击查询
+   */
+  onSearch = async () => {
+    this.init({ pageNum: 0, pageSize: 10 });
+  };
+  /**
+   * 验证InputGroupCompact控件数值大小，并进行大小值交换
+   */
+  checkSwapInputGroupCompact = () => {
+    const params = this.state().get('form').toJS();
+    const {
+      salePriceFirst,
+      salePriceLast,
+      distributionCommissionFirst,
+      distributionCommissionLast, // distributionSalesCountFirst,
+      stockFirst,
+      stockLast,
+      commissionRateFirst,
+      commissionRateLast
+    } = params;
+
+    let validateFlag = false;
+    // 校验数据
+    if (salePriceFirst && !ValidConst.zeroPrice.test(salePriceFirst)) {
+      return validateFlag;
+    }
+
+    if (salePriceLast && !ValidConst.zeroPrice.test(salePriceLast)) {
+      return validateFlag;
+    }
+
+    if (
+      distributionCommissionFirst &&
+      !ValidConst.zeroPrice.test(distributionCommissionFirst)
+    ) {
+      return validateFlag;
+    }
+
+    if (
+      distributionCommissionLast &&
+      !ValidConst.zeroPrice.test(distributionCommissionLast)
+    ) {
+      return validateFlag;
+    }
+
+    if (stockFirst && !ValidConst.numbezz.test(stockFirst)) {
+      return validateFlag;
+    }
+
+    if (stockLast && !ValidConst.numbezz.test(stockLast)) {
+      return validateFlag;
+    }
+
+    if (
+      commissionRateFirst &&
+      !ValidConst.zeroPrice.test(commissionRateFirst)
+    ) {
+      return validateFlag;
+    }
+
+    if (commissionRateLast && !ValidConst.zeroPrice.test(commissionRateLast)) {
+      return validateFlag;
+    }
+    if (parseFloat(salePriceFirst) > parseFloat(salePriceLast)) {
+      this.onFormFieldChange({
+        key: 'salePriceFirst',
+        value: salePriceLast
+      });
+      this.onFormFieldChange({
+        key: 'salePriceLast',
+        value: salePriceFirst
+      });
+    }
+    if (
+      parseFloat(distributionCommissionFirst) >
+      parseFloat(distributionCommissionLast)
+    ) {
+      this.onFormFieldChange({
+        key: 'distributionCommissionFirst',
+        value: distributionCommissionLast
+      });
+      this.onFormFieldChange({
+        key: 'distributionCommissionLast',
+        value: distributionCommissionFirst
+      });
+    }
+    if (parseFloat(commissionRateFirst) > parseFloat(commissionRateLast)) {
+      this.onFormFieldChange({
+        key: 'commissionRateFirst',
+        value: commissionRateLast
+      });
+      this.onFormFieldChange({
+        key: 'commissionRateLast',
+        value: commissionRateFirst
+      });
+    }
+    if (parseInt(stockFirst) > parseInt(stockLast)) {
+      this.onFormFieldChange({
+        key: 'stockFirst',
+        value: stockLast
+      });
+      this.onFormFieldChange({
+        key: 'stockLast',
+        value: stockFirst
+      });
+    }
+
+    return !validateFlag;
+  };
+
+  /**
+   * enter键搜索时，参数错误调用此方法，默认查不到数据
+   */
+  wrongSearch = () => {
+    this.dispatch('wrong:search');
   };
 
   /**

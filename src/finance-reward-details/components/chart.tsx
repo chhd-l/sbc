@@ -26,9 +26,9 @@ export default class ListChart extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      getEcharts: Function;
+      getEcharts: any;
       PeriodAmountTotal: any;
-      echartsData: IList;
+      EchartsData: any;
     };
     settleId: number;
   };
@@ -48,10 +48,13 @@ export default class ListChart extends React.Component<any, any> {
     total: 'total',
     selected: 'selected',
     pageSize: 'pageSize',
-    echartsData: 'echartsData',
+    EchartsData: 'EchartsData',
     PeriodAmountTotal: 'PeriodAmountTotal'
   };
   componentDidMount() {
+    setTimeout(() => {
+      //console.log(chartData,'=============================');
+    }, 500);
     this.setState({ chartData: chartData });
   }
 
@@ -63,31 +66,34 @@ export default class ListChart extends React.Component<any, any> {
   }
 
   render() {
-    const echartsData = this.props.relaxProps.echartsData
-      ? this.props.relaxProps.echartsData
+    const echartsData = this.props.relaxProps.EchartsData
+      ? this.props.relaxProps.EchartsData
       : [];
     const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal
       ? this.props.relaxProps.PeriodAmountTotal
       : [];
 
-    let echartsVal = [];
+    let echartsVal1 = [];
+    let echartsVal2 = [];
 
-    setTimeout(() => {
-      echartsData.forEach((v, i) => {
-        chartData.push({
-          key: i,
-          skuTotalPv: v.orderMount,
-          skuTotalUv: v.orderQuantiry,
-          title: v.date,
-          totalPv: 2,
-          totalUv: 1
-        });
+    echartsData.forEach((v, i) => {
+      echartsVal1.push({
+        key: i,
+        skuTotalPv: v.orderMount,
+        skuTotalUv: v.orderQuantiry,
+        title: v.date,
+        totalPv: 2,
+        totalUv: 1
       });
-      /*this.setState({
-        chartData:echartsVal,
-      });*/
+      echartsVal2.push({
+        key: i,
+        skuTotalPv: v.orderMount,
+        skuTotalUv: v.orderQuantiry,
+        title: v.date,
+        totalPv: 2,
+        totalUv: 1
+      });
     });
-    console.log(this.state.chartData);
 
     return (
       <div className="chart space-between">
@@ -111,9 +117,12 @@ export default class ListChart extends React.Component<any, any> {
             startTime={new Date()}
             endTime={new Date()}
             height="260"
-            dataDesc={this.state.chartData}
+            dataDesc={[
+              { title: 'Order number', key: 'orderCount' },
+              { title: 'Order amount', key: 'orderAmount' }
+            ]}
             radioClickBack={() => {}}
-            content={this.state.chartData}
+            content={echartsVal1}
             rangeVisible={false}
           />
         </div>
@@ -124,18 +133,9 @@ export default class ListChart extends React.Component<any, any> {
             startTime={new Date()}
             endTime={new Date()}
             height="260"
-            dataDesc={[{ title: 'Order number', key: 'orderCount' }]}
+            dataDesc={[{ title: 'Reward mount', key: 'rewardMount' }]}
             radioClickBack={() => {}}
-            content={[
-              {
-                key: 0,
-                skuTotalPv: 0,
-                skuTotalUv: 0,
-                title: '2020/06/15Mon',
-                totalPv: 2,
-                totalUv: 1
-              }
-            ]}
+            content={echartsVal2}
             rangeVisible={false}
           />
         </div>

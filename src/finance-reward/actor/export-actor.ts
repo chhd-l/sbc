@@ -3,7 +3,8 @@ import { Actor, Action, IMap } from 'plume2';
 export default class ExportActor extends Actor {
   defaultState() {
     return {
-      exportModalData: {}
+      exportModalData: {},
+      onRewardExportData: {}
     };
   }
 
@@ -13,8 +14,8 @@ export default class ExportActor extends Actor {
   }
 
   @Action('ticket:onRewardExport')
-  onRewardExport(state: IMap) {
-    // return state.setIn(['onRewardExport', 'onRewardExport'], false);
+  onRewardExport(state: IMap, onRewardExportData) {
+    return state.set('onRewardExportData', onRewardExportData);
   }
 
   @Action('ticket:export-modal:change')

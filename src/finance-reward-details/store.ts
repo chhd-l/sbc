@@ -2,7 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { message } from 'antd';
 
 import { Const, history, util, ValidConst } from 'qmkit';
-
+import { fromJS } from 'immutable';
 import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
 
@@ -63,8 +63,15 @@ export default class AppStore extends Store {
           findListByPrescriberId.res.context
         );
         this.dispatch('list:setName', prescriberId);
+        this.dispatch('ticket:onRewardExport', fromJS(param));
       });
-
+      //获取收入对账明细
+      const searchTime = {
+        beginTime:
+          this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+        endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
+      };
+      this.dispatch('finance:searchTime', fromJS(searchTime));
       /*this.transaction(() => {
         this.dispatch('list:init', res1.res.context.content);
         this.dispatch('list:echarts', res2.res.context);
@@ -79,6 +86,14 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       }
     }
+  };
+
+  /**
+   * 改变时间
+   * @param params
+   */
+  changeDateRange = (field, value) => {
+    this.dispatch('finance:dateRange', { field, value });
   };
   /**
    * 带着搜索条件的分页点击查询
@@ -273,5 +288,34 @@ export default class AppStore extends Store {
     } else {
       message.error(res.message);
     }
+  };
+
+  //导出
+  bulkExport = async () => {
+    const queryParams = this.state().get('onRewardExportData').toJS();
+    const { beginTime, endTime, prescriberId } = queryParams;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 参数加密
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            beginTime: beginTime,
+            endTime: endTime,
+            prescriberId: prescriberId,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref =
+            Const.HOST + `/trade/prescriber/export/rewardDetails/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
   };
 }

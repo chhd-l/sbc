@@ -84,9 +84,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       init,
       current
     } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(dataList);
-    }, 1000);
+
     return (
       <DataGrid
         loading={loading}

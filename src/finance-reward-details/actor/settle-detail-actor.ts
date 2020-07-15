@@ -25,10 +25,14 @@ export default class SettleDetailActor extends Actor {
       setList: [],
       dataList: [],
       settlement: [],
+      //开始时间
+      beginTime: '',
+      //结束时间
+      endTime: '',
       searchForm: {
         prescriberId: '',
-        beginTime: '2020-06-01',
-        endTime: '2020-07-08',
+        beginTime: '',
+        endTime: '',
         pageNum: 0,
         pageSize: 10
       },
@@ -41,7 +45,8 @@ export default class SettleDetailActor extends Actor {
       tabKey: '1',
       //导出单独的时间参数
       searchTime: {},
-      fetchFindListByPrescriber: {}
+      fetchFindListByPrescriber: {},
+      onRewardExportData: {}
     };
   }
 
@@ -79,6 +84,11 @@ export default class SettleDetailActor extends Actor {
   @Action('list:EchartsData')
   EchartsData(state: IMap, EchartsData) {
     return state.set('EchartsData', EchartsData);
+  }
+
+  @Action('ticket:onRewardExport')
+  onRewardExport(state: IMap, onRewardExportData) {
+    return state.set('onRewardExportData', onRewardExportData);
   }
 
   @Action('list:PeriodAmountTotal')
@@ -134,5 +144,15 @@ export default class SettleDetailActor extends Actor {
   @Action('finance:searchTime')
   searchTime(state: IMap, searchTime: IMap) {
     return state.set('searchTime', searchTime);
+  }
+
+  /**
+   * 改变日期范围
+   * @param state
+   * @param param
+   */
+  @Action('finance:dateRange')
+  dateRange(state: IMap, param) {
+    return state.setIn(['dateRange', param['field']], param['value']);
   }
 }

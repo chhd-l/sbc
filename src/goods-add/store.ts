@@ -787,6 +787,7 @@ export default class AppStore extends Store {
     this.dispatch('formActor:logistics', logisticsForm);
   };
   updateSkuForm = (skuForm) => {
+    console.log(skuForm, 'skuform');
     this.dispatch('formActor:sku', skuForm);
   };
 
@@ -829,13 +830,13 @@ export default class AppStore extends Store {
         if (!errs) {
         }
       });
-    this.state()
-      .get('skuForm')
-      .validateFieldsAndScroll(null, (errs) => {
-        valid = valid && !errs;
-        if (!errs) {
-        }
-      });
+    // this.state()
+    //   .get('skuForm')
+    //   .validateFieldsAndScroll(null, (errs) => {
+    //     valid = valid && !errs;
+    //     if (!errs) {
+    //     }
+    //   });
     if (
       this.state().get('specForm') &&
       this.state().get('specForm').validateFieldsAndScroll
@@ -1123,6 +1124,16 @@ export default class AppStore extends Store {
     let goodsList = List();
     let isEmptyImage = false;
     let isEmptyStock = false;
+
+    if (
+      goods.get('subscriptionStatus') === 1 &&
+      data
+        .get('goodsList')
+        .filter((item) => item.get('subscriptionStatus') === 1).length === 0
+    ) {
+      message.error('At least one sku has a subscription status of yes');
+      return false;
+    }
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1155,8 +1166,6 @@ export default class AppStore extends Store {
       if (item.get('stock') === null) {
         isEmptyStock = true;
       }
-      console.log(item.toJS(), 'itemtojs');
-      return;
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1167,7 +1176,8 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
-          subscriptionPrice: item.get('subscriptionPrice') || 0
+          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionStatus: item.get('subscriptionStatus')
         })
       );
     });

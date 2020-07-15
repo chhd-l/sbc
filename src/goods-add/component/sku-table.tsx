@@ -14,7 +14,7 @@ import {
   Icon,
   Select
 } from 'antd';
-import { IList } from 'typings/globalType';
+import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
@@ -45,10 +45,13 @@ export default class SkuTable extends React.Component<any, any> {
       clickImg: Function;
       removeImg: Function;
       modalVisible: Function;
+      goods: IMap;
     };
   };
 
   static relaxProps = {
+    // 商品基本信息
+    goods: 'goods',
     goodsSpecs: 'goodsSpecs',
     goodsList: 'goodsList',
     stockChecked: 'stockChecked',
@@ -76,9 +79,10 @@ export default class SkuTable extends React.Component<any, any> {
     const { updateSkuForm } = this.props.relaxProps;
     return (
       <WrapperForm
-        ref={(form) => updateSkuForm(form)}
+        // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
+      // <SkuForm />
     );
   }
 }
@@ -126,9 +130,10 @@ class SkuForm extends React.Component<any, any> {
       removeImg,
       specSingleFlag,
       spuMarketPrice,
-      priceOpt
+      priceOpt,
+      goods
     } = this.props.relaxProps;
-
+    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -326,9 +331,15 @@ class SkuForm extends React.Component<any, any> {
               {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                 onChange: (e) =>
                   this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                initialValue: rowInfo.subscriptionStatus || '1'
+                initialValue:
+                  goods.get('subscriptionStatus') === '0'
+                    ? '0'
+                    : typeof rowInfo.subscriptionStatus === 'number'
+                    ? rowInfo.subscriptionStatus + ''
+                    : '1'
               })(
                 <Select
+                  disabled={goods.get('subscriptionStatus') === '0'}
                   getPopupContainer={() =>
                     document.getElementById('page-content')
                   }

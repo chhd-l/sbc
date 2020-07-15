@@ -317,105 +317,83 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    columns = columns.push({
-      title: (
-        <div>
-          <FormattedMessage id="product.subscriptionStatus" />
-        </div>
-      ),
-      key: 'subscriptionStatus',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                onChange: (e) =>
-                  this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                initialValue:
-                  goods.get('subscriptionStatus') === '0'
-                    ? '0'
-                    : typeof rowInfo.subscriptionStatus === 'number'
-                    ? rowInfo.subscriptionStatus + ''
-                    : '1'
-              })(
-                <Select
-                  disabled={goods.get('subscriptionStatus') === '0'}
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
-                  style={{ width: '100px' }}
-                  placeholder="please select status"
-                >
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
-                </Select>
-              )}
-            </FormItem>
-
-            {/* <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    pattern: ValidConst.number,
-                    message: '0 or positive integer'
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'subscriptionPrice'
-                ),
-                initialValue: rowInfo.subscriptionPrice || 0
-              })(
-                <InputNumber
-                  style={{ width: '100px' }}
-                  min={0}
-                  max={9999999}
-                  // disabled={rowInfo.index > 1 && stockChecked}
-                />
-              )}
-            </FormItem> */}
-          </Col>
-        </Row>
-      )
-    });
-    columns = columns.push({
-      title: (
-        <div>
-          <FormattedMessage id="product.subscriptionPrice" />
-        </div>
-      ),
-      key: 'subscriptionPrice',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    pattern: ValidConst.number,
-                    message: '0 or positive integer'
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'subscriptionPrice'
-                ),
-                initialValue: rowInfo.subscriptionPrice || 0
-              })(
-                <InputNumber
-                  style={{ width: '100px' }}
-                  min={0}
-                  max={9999999}
-                  // disabled={rowInfo.index > 1 && stockChecked}
-                />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-      )
-    });
+    if (goods.get('subscriptionStatus') !== '0') {
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionStatus" />
+          </div>
+        ),
+        key: 'subscriptionStatus',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                  onChange: (e) =>
+                    this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
+                  initialValue:
+                    goods.get('subscriptionStatus') === '0'
+                      ? '0'
+                      : typeof rowInfo.subscriptionStatus === 'number'
+                      ? rowInfo.subscriptionStatus + ''
+                      : '1'
+                })(
+                  <Select
+                    disabled={goods.get('subscriptionStatus') === '0'}
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    style={{ width: '100px' }}
+                    placeholder="please select status"
+                  >
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      });
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionPrice" />
+          </div>
+        ),
+        key: 'subscriptionPrice',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      pattern: ValidConst.number,
+                      message: '0 or positive integer'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(
+                    this,
+                    rowInfo.id,
+                    'subscriptionPrice'
+                  ),
+                  initialValue: rowInfo.subscriptionPrice || 0
+                })(
+                  <InputNumber
+                    style={{ width: '100px' }}
+                    min={0}
+                    max={9999999}
+                    // disabled={rowInfo.index > 1 && stockChecked}
+                  />
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      });
+    }
 
     columns = columns.push({
       title: (

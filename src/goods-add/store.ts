@@ -1124,9 +1124,8 @@ export default class AppStore extends Store {
     let goodsList = List();
     let isEmptyImage = false;
     let isEmptyStock = false;
-
     if (
-      goods.get('subscriptionStatus') === 1 &&
+      parseInt(goods.get('subscriptionStatus')) === 1 &&
       data
         .get('goodsList')
         .filter((item) => item.get('subscriptionStatus') === 1).length === 0
@@ -1236,7 +1235,7 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
-
+    console.log(result, 'result');
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -1307,7 +1306,6 @@ export default class AppStore extends Store {
       detailEditor.getContent ? detailEditor.getContent() : ''
     );
     console.log(goods.toJS(), 'goods111');
-    return;
     const tabs = [];
     if (
       data.get('detailEditor_0') &&

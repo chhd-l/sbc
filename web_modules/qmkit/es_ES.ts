@@ -682,6 +682,7 @@ export default {
   'subscription.date': 'Subscription date',
   'subscription.nextDeliveryDate': 'Next delivery date',
   'subscription.detail': 'Subscription detail',
+  'subscription.edit': 'Subscription edit',
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate':'Subscription Date',

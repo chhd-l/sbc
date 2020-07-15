@@ -47,3 +47,18 @@ export function petsById(filterParams = {}) {
     })
   });
 }
+// 根据ID查找Address信息
+export function addressById(id: String) {
+  return Fetch<TResult>('/customer/addressList/id/' + id, {
+    method: 'GET'
+  });
+}
+// 根据ID查找字典信息
+export function querySysDictionaryById(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionaryById', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

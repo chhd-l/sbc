@@ -49,12 +49,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       frequencyList: [],
       goodsInfo: [],
       petsId: '',
-      petsInfo: {
-        breed: 'xxx',
-        petName: 'Rita',
-        petType: 'cat',
-        petBirthday: '2018/12/12'
-      },
+      petsInfo: {},
       paymentInfo: {},
       deliveryAddressId: '',
       deliveryAddressInfo: {},
@@ -88,61 +83,79 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getSubscriptionDetail = (id: String) => {
-    webapi.getSubscriptionDetail(id).then((data) => {
-      const { res } = data;
-      if (res.code === 'K-000000') {
-        let subscriptionDetail = res.context;
-        let subscriptionInfo = {
-          deliveryTimes: subscriptionDetail.deliveryTimes,
-          subscriptionStatus:
-            subscriptionDetail.subscribeStatus === '0' ? 'Active' : 'Inactive',
-          subscriptionNumber: subscriptionDetail.subscribeId,
-          subscriptionTime: subscriptionDetail.createTime,
-          presciberID: subscriptionDetail.prescriberId,
-          presciberName: subscriptionDetail.prescriberName,
-          consumer: subscriptionDetail.customerName,
-          consumerAccount: subscriptionDetail.customerAccount,
-          consumerType: subscriptionDetail.customerType,
-          phoneNumber: subscriptionDetail.customerPhone,
-          frequency: subscriptionDetail.cycleTypeId,
-          frequencyName: subscriptionDetail.frequency,
-          nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
-          promotionCode: subscriptionDetail.promotionCode
-        };
-        let orderInfo = {
-          recentOrderId: subscriptionDetail.trades[0].id,
-          orderStatus: subscriptionDetail.trades[0].tradeState.deliverStatus
-        };
-        let recentOrderList = [];
-        for (let i = 0; i < subscriptionDetail.trades.length; i++) {
-          let recentOrder = {
-            recentOrderId: subscriptionDetail.trades[i].id,
-            orderStatus: subscriptionDetail.trades[i].tradeState.deliverStatus
+    webapi
+      .getSubscriptionDetail(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          let subscriptionDetail = res.context;
+          let subscriptionInfo = {
+            deliveryTimes: subscriptionDetail.deliveryTimes,
+            subscriptionStatus:
+              subscriptionDetail.subscribeStatus === '0'
+                ? 'Active'
+                : 'Inactive',
+            subscriptionNumber: subscriptionDetail.subscribeId,
+            subscriptionTime: subscriptionDetail.createTime,
+            presciberID: subscriptionDetail.prescriberId,
+            presciberName: subscriptionDetail.prescriberName,
+            consumer: subscriptionDetail.customerName,
+            consumerAccount: subscriptionDetail.customerAccount,
+            consumerType: subscriptionDetail.customerType,
+            phoneNumber: subscriptionDetail.customerPhone,
+            frequency: subscriptionDetail.cycleTypeId,
+            frequencyName: subscriptionDetail.frequency,
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+            promotionCode: subscriptionDetail.promotionCode
           };
-          recentOrderList.push(recentOrder);
-        }
-
-        let goodsInfo = subscriptionDetail.goodsInfo;
-        let paymentInfo = subscriptionDetail.paymentInfo;
-        this.setState(
-          {
-            subscriptionInfo: subscriptionInfo,
-            orderInfo: orderInfo,
-            recentOrderList: recentOrderList,
-            goodsInfo: goodsInfo,
-            paymentInfo: paymentInfo,
-            petsId: subscriptionDetail.petsId,
-            deliveryAddressId: subscriptionDetail.deliveryAddressId,
-            billingAddressId: subscriptionDetail.billingAddressId,
-            loading: false
-          },
-          () => {
-            this.petsById(this.state.petsId);
+          let orderInfo = {
+            recentOrderId: subscriptionDetail.trades
+              ? subscriptionDetail.trades[0].id
+              : '',
+            orderStatus: subscriptionDetail.trades
+              ? subscriptionDetail.trades[0].tradeState.deliverStatus
+              : ''
+          };
+          let recentOrderList = [];
+          if (subscriptionDetail.trades) {
+            for (let i = 0; i < subscriptionDetail.trades.length; i++) {
+              let recentOrder = {
+                recentOrderId: subscriptionDetail.trades[i].id,
+                orderStatus:
+                  subscriptionDetail.trades[i].tradeState.deliverStatus
+              };
+              recentOrderList.push(recentOrder);
+            }
           }
-        );
-      }
-      console.log(data);
-    });
+
+          let goodsInfo = subscriptionDetail.goodsInfo;
+          let paymentInfo = subscriptionDetail.paymentInfo;
+          this.setState(
+            {
+              subscriptionInfo: subscriptionInfo,
+              orderInfo: orderInfo,
+              recentOrderList: recentOrderList,
+              goodsInfo: goodsInfo,
+              paymentInfo: paymentInfo,
+              petsId: subscriptionDetail.petsId,
+              deliveryAddressId: subscriptionDetail.deliveryAddressId,
+              billingAddressId: subscriptionDetail.billingAddressId,
+              loading: false
+            },
+            () => {
+              this.petsById(this.state.petsId);
+              this.addressById(this.state.deliveryAddressId, 'delivery');
+            }
+          );
+        }
+        console.log(data);
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
   };
   skipNextDelivery = (id: String) => {
     this.setState({
@@ -155,17 +168,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           this.getSubscriptionDetail(this.state.subscriptionId);
           message.success('Successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.success('Unsuccessful');
+        message.error('Unsuccessful');
       });
   };
 
-  petsById = (id) => {
+  petsById = (id: String) => {
     let params = {
       petsId: id
     };
@@ -180,6 +198,57 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         } else {
           message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
+  addressById = (id: String, type: String) => {
+    webapi.addressById(id).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        if (type === 'delivery') {
+          console.log(res);
+          let deliveryAddressInfo = {};
+          this.setState(
+            {
+              deliveryAddressInfo: deliveryAddressInfo
+            },
+            () => {
+              if (
+                this.state.deliveryAddressId === this.state.billingAddressId
+              ) {
+                this.setState({
+                  billingAddressInfo: deliveryAddressInfo
+                });
+              } else {
+                this.addressById(this.state.billingAddressId, 'billing');
+              }
+            }
+          );
+        }
+        if (type === 'billing') {
+          let billingAddressInfo = {};
+          this.setState({
+            billingAddressInfo: billingAddressInfo
+          });
+        }
+      }
+    });
+  };
+
+  querySysDictionaryById = (id: String) => {
+    let params = {
+      id: id
+    };
+    webapi
+      .querySysDictionaryById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          debugger;
+          return;
         }
       })
       .catch((err) => {
@@ -211,7 +280,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       <Menu>
         {recentOrderList.map((item) => (
           <Menu.Item key={item.recentOrderId}>
-            {item.recentOrderId + '(' + item.orderStatus + ')'}
+            <Link to={'/order-detail/' + item.orderNumber}>
+              {item.recentOrderId + '(' + item.orderStatus + ')'}
+            </Link>
           </Menu.Item>
         ))}
       </Menu>
@@ -400,18 +471,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Previous Orders</p>
-                <Dropdown overlay={menu} trigger={['click']}>
-                  <a
-                    className="ant-dropdown-link"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    {orderInfo.recentOrderId +
-                      '(' +
-                      orderInfo.orderStatus +
-                      ')'}
-                    <Icon type="down" style={{ margin: '0 5px' }} />
-                  </a>
-                </Dropdown>
+                {orderInfo.recentOrderId ? (
+                  <Dropdown overlay={menu} trigger={['click']}>
+                    <a
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      {orderInfo.recentOrderId +
+                        '(' +
+                        orderInfo.orderStatus +
+                        ')'}
+                      <Icon type="down" style={{ margin: '0 5px' }} />
+                    </a>
+                  </Dropdown>
+                ) : null}
               </div>
             </Col>
             <Col span={8}>
@@ -443,6 +516,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <Row style={{ marginTop: 20 }} gutter={16}>
             <Col span={16}>
               <Table
+                rowKey={(record, index) => index.toString()}
                 columns={columns}
                 dataSource={goodsInfo}
                 pagination={false}
@@ -499,19 +573,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petsInfo.petsName}</p>
+                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petsInfo.petsType}</p>
+                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petsInfo.birthOfPets}</p>
+                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petsInfo.petsBreed}</p>
+                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -523,15 +597,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                 <Col span={18}>
                   <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{paymentInfo.vendor}</p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{paymentInfo.cardNumber}</p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
             </Col>
           </Row>
+
           <Row className="consumer-info">
             <Col span={12}>
               <Row>
@@ -541,19 +616,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.country : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>{deliveryAddressInfo ? deliveryAddressInfo.city : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                  </p>
                 </Col>
               </Row>
             </Col>
@@ -564,19 +645,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>{billingAddressInfo ? billingAddressInfo.country : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>{billingAddressInfo ? billingAddressInfo.city : ''}</p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                 </Col>
                 <Col span={18}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petsInfo.breed}</p>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -592,7 +673,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Row>
                   <Col span={24}>
                     <Table
-                      // rowKey={(_record, index) => index.toString()}
+                      rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
                       // dataSource={log.toJS()}
                       pagination={false}

@@ -106,7 +106,7 @@ export default class ListView extends React.Component<any, any> {
     webapi
       .cancelSubscription({ subscribeId: id })
       .then((data) => {
-        const { res } = this.state;
+        const { res } = data;
         if (res.code === 'K-000000') {
           message.success('Successful');
           this.init();

@@ -133,7 +133,7 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th
+                      {/* <th
                         style={{
                           width: '3%',
                           borderSpacing: 'initial',
@@ -147,7 +147,7 @@ export default class ListView extends React.Component<any, any> {
                             this.onCheckedAll(checked);
                           }}
                         />
-                      </th>
+                      </th> */}
                       <th style={{ width: '15%' }}>Product</th>
                       <th style={{ width: '15%' }}>Product Name</th>
                       <th style={{ width: '10%' }}>Subscription Status</th>
@@ -234,14 +234,14 @@ export default class ListView extends React.Component<any, any> {
                           height: 36
                         }}
                       >
-                        <span style={{ marginLeft: '1%' }}>
+                        {/* <span style={{ marginLeft: '1%' }}>
                           <Checkbox
                             onChange={(e) => {
                               const checked = (e.target as any).checked;
                               this.onChecked(index, checked);
                             }}
                           />
-                        </span>
+                        </span> */}
 
                         <div style={{ width: 310, display: 'inline-block' }}>
                           <span style={{ marginLeft: 20, color: '#000' }}>
@@ -260,7 +260,7 @@ export default class ListView extends React.Component<any, any> {
                 <tbody>
                   <tr>
                     {/* product */}
-                    <td style={{ width: '3%' }} />
+                    {/* <td style={{ width: '3%' }} /> */}
                     <td style={{ width: '15%' }}>
                       {/*商品图片*/}
                       {v.goodsInfo &&
@@ -336,9 +336,7 @@ export default class ListView extends React.Component<any, any> {
                           okText="Confirm"
                           cancelText="Cancel"
                         >
-                          <Button type="link" style={{ fontSize: 16 }}>
-                            Cancel All
-                          </Button>
+                          <Button type="link">Cancel All</Button>
                         </Popconfirm>
                       ) : null}
                     </td>

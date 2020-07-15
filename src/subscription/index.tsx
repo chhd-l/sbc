@@ -383,7 +383,7 @@ export default class SubscriptionList extends Component<any, any> {
                   </Button>
                 </FormItem>
               </Form>
-
+              {/* 
               <div className="handle-bar">
                 <Dropdown
                   overlay={menu}
@@ -397,7 +397,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Icon type="down" />
                   </Button>
                 </Dropdown>
-              </div>
+              </div> */}
 
               {/* <SearchList /> */}
 

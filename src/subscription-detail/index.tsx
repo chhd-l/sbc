@@ -54,33 +54,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressId: '',
       deliveryAddressInfo: {},
       billingAddressId: '',
-      billingAddressInfo: {}
+      billingAddressInfo: {},
+      countryArr: [],
+      cityArr: [],
+      operationLog: []
     };
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency');
+    this.getDict();
     this.getSubscriptionDetail(this.state.subscriptionId);
+    this.getBySubscribeId(this.state.subscriptionId);
   }
 
   //查询frequency
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS
-          });
-        } else {
-          message.error('Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error('Unsuccessful');
-      });
-  };
+  // querySysDictionary = (type: String) => {
+  //   webapi
+  //     .querySysDictionary({ type: type })
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === 'K-000000') {
+  //         this.setState({
+  //           frequencyList: res.context.sysDictionaryVOS
+  //         });
+  //       } else {
+  //         message.error('Unsuccessful');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       message.error('Unsuccessful');
+  //     });
+  // };
 
   getSubscriptionDetail = (id: String) => {
     webapi
@@ -139,16 +143,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               paymentInfo: paymentInfo,
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
+              deliveryAddressInfo: subscriptionDetail.consignee,
               billingAddressId: subscriptionDetail.billingAddressId,
+              billingAddressInfo: subscriptionDetail.invoice,
               loading: false
-            },
-            () => {
-              this.petsById(this.state.petsId);
-              this.addressById(this.state.deliveryAddressId, 'delivery');
             }
+            // () => {
+            //   if(this.state.petsId){
+            //     this.petsById(this.state.petsId);
+            //   }
+            //   if(this.state.deliveryAddressId){
+            //     this.addressById(this.state.deliveryAddressId, 'delivery');
+            //   }
+            // }
           );
         }
-        console.log(data);
       })
       .catch((err) => {
         this.setState({
@@ -209,51 +218,137 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === 'K-000000') {
         if (type === 'delivery') {
-          console.log(res);
-          let deliveryAddressInfo = {};
-          this.setState(
-            {
-              deliveryAddressInfo: deliveryAddressInfo
-            },
-            () => {
-              if (
-                this.state.deliveryAddressId === this.state.billingAddressId
-              ) {
-                this.setState({
-                  billingAddressInfo: deliveryAddressInfo
-                });
-              } else {
-                this.addressById(this.state.billingAddressId, 'billing');
+          let info = res.context;
+          let deliveryAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState(
+              {
+                deliveryAddressInfo: deliveryAddressInfo
+              },
+              () => {
+                if (
+                  this.state.deliveryAddressId === this.state.billingAddressId
+                ) {
+                  this.setState({
+                    billingAddressInfo: deliveryAddressInfo
+                  });
+                } else {
+                  this.addressById(this.state.billingAddressId, 'billing');
+                }
               }
-            }
-          );
+            );
+          }, 100);
         }
         if (type === 'billing') {
-          let billingAddressInfo = {};
-          this.setState({
-            billingAddressInfo: billingAddressInfo
-          });
+          let info = res.context;
+          let billingAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState({
+              billingAddressInfo: billingAddressInfo
+            });
+          }, 100);
         }
       }
     });
   };
 
-  querySysDictionaryById = (id: String) => {
-    let params = {
-      id: id
-    };
+  getDict = () => {
+    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
+      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+      this.setState({
+        countryArr: countryArr
+      });
+    } else {
+      this.querySysDictionary('country');
+    }
+    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
+      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+      this.setState({
+        cityArr: cityArr
+      });
+    } else {
+      this.querySysDictionary('city');
+    }
+
+    this.querySysDictionary('Frequency');
+  };
+  querySysDictionary = (type: String) => {
     webapi
-      .querySysDictionaryById(params)
+      .querySysDictionary({
+        type: type
+      })
       .then((data) => {
-        const res = data.res;
+        const { res } = data;
         if (res.code === 'K-000000') {
-          debugger;
-          return;
+          if (type === 'city') {
+            this.setState({
+              cityArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-city',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'country') {
+            this.setState({
+              countryArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-country',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'Frequency') {
+            this.setState({
+              frequencyList: res.context.sysDictionaryVOS
+            });
+          }
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
         message.error('Unsuccessful');
       });
+  };
+
+  getDictValue = (list, id) => {
+    if (list && list.length > 0) {
+      let item = list.find((item) => {
+        return item.id === id;
+      });
+      if (item) {
+        return item.name;
+      } else {
+        return id;
+      }
+    } else {
+      return id;
+    }
+  };
+  getBySubscribeId = (id: String) => {
+    let params = {
+      subscribeId: id
+    };
+    webapi.getBySubscribeId(params).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        let operationLog = res.context;
+        this.setState({
+          operationLog: operationLog
+        });
+      }
+    });
   };
 
   render() {
@@ -266,7 +361,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       petsInfo,
       paymentInfo,
       deliveryAddressInfo,
-      billingAddressInfo
+      billingAddressInfo,
+      countryArr,
+      cityArr,
+      operationLog
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
@@ -569,60 +667,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={12}>
               <Row>
                 <Col span={12}>
-                  <label className="info-title">Pet Infomation</label>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Row>
-                <Col span={18}>
-                  <label className="info-title">Payment Method</label>
-                </Col>
-
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Row className="consumer-info">
-            <Col span={12}>
-              <Row>
-                <Col span={12}>
                   <label className="info-title">Delivery Address</label>
                 </Col>
 
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.country : ''}
+                    {deliveryAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          deliveryAddressInfo.countryId
+                        )
+                      : ''}
                   </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{deliveryAddressInfo ? deliveryAddressInfo.city : ''}</p>
+                  <p>
+                    {deliveryAddressInfo
+                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
@@ -645,11 +710,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.country : ''}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          billingAddressInfo.countryId
+                        )
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.city : ''}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(cityArr, billingAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
@@ -658,6 +734,49 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          <Row className="consumer-info">
+            {/* <Col span={12}>
+              <Row>
+                <Col span={12}>
+                  <label className="info-title">Pet Infomation</label>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Name: </p>
+                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Type: </p>
+                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Birthday: </p>
+                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Breed: </p>
+                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
+                </Col>
+              </Row>
+            </Col>
+            */}
+            <Col span={12}>
+              <Row>
+                <Col span={18}>
+                  <label className="info-title">Payment Method</label>
+                </Col>
+
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Payment Method: </p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Card Number: </p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -675,7 +794,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <Table
                       rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
-                      // dataSource={log.toJS()}
+                      dataSource={operationLog}
                       pagination={false}
                       bordered
                     />

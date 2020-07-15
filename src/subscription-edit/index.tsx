@@ -17,7 +17,8 @@ import {
   InputNumber,
   Collapse,
   Modal,
-  Radio
+  Radio,
+  Checkbox
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
@@ -46,7 +47,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionInfo: {},
       recentOrderList: [],
       frequencyList: [],
-      subscriptionData: [],
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
@@ -57,33 +57,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       billingAddressInfo: {},
       visibleShipping: false,
       visibleBilling: false,
-      visiblePetInfo: false
+      visiblePetInfo: false,
+      countryArr: [],
+      cityArr: [],
+      deliveryList: [],
+      billingList: [],
+      customerAccount: '',
+      sameFlag: false,
+      operationLog: []
     };
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency');
+    this.getDict();
     this.getSubscriptionDetail(this.state.subscriptionId);
+    this.getBySubscribeId(this.state.subscriptionId);
   }
 
-  //查询frequency
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS
-          });
-        } else {
-          message.error('Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error('Unsuccessful');
-      });
-  };
   getSubscriptionDetail = (id: String) => {
     webapi
       .getSubscriptionDetail(id)
@@ -107,7 +97,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime
+              ? moment(subscriptionDetail.nextDeliveryTime).format('MMMM Do YY')
+              : null,
             promotionCode: subscriptionDetail.promotionCode
           };
           let orderInfo = {
@@ -141,16 +133,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               paymentInfo: paymentInfo,
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
+              deliveryAddressInfo: subscriptionDetail.consignee,
               billingAddressId: subscriptionDetail.billingAddressId,
+              billingAddressInfo: subscriptionDetail.invoice,
               loading: false
             },
             () => {
-              this.petsById(this.state.petsId);
-              this.addressById(this.state.deliveryAddressId, 'delivery');
+              if (
+                this.state.deliveryAddressInfo &&
+                this.state.deliveryAddressInfo.customerId
+              ) {
+                let customerId = this.state.deliveryAddressInfo.customerId;
+                this.getAddressList(customerId, 'DELIVERY');
+                this.getAddressList(customerId, 'BILLING');
+              }
+
+              // if(this.state.petsId){
+              //   this.petsById(this.state.petsId);
+              // }
+              // if(this.state.deliveryAddressId){
+              //   this.addressById(this.state.deliveryAddressId, 'delivery');
+              // }
             }
           );
         }
-        console.log(data);
       })
       .catch((err) => {
         this.setState({
@@ -181,36 +187,257 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
+
   addressById = (id: String, type: String) => {
     webapi.addressById(id).then((data) => {
       const { res } = data;
       if (res.code === 'K-000000') {
         if (type === 'delivery') {
-          console.log(res);
-          let deliveryAddressInfo = {};
-          this.setState(
-            {
-              deliveryAddressInfo: deliveryAddressInfo
-            },
-            () => {
-              if (
-                this.state.deliveryAddressId === this.state.billingAddressId
-              ) {
-                this.setState({
-                  billingAddressInfo: deliveryAddressInfo
-                });
-              } else {
-                this.addressById(this.state.billingAddressId, 'billing');
+          let info = res.context;
+          let deliveryAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState(
+              {
+                deliveryAddressInfo: deliveryAddressInfo
+              },
+              () => {
+                if (
+                  this.state.deliveryAddressId === this.state.billingAddressId
+                ) {
+                  this.setState({
+                    billingAddressInfo: deliveryAddressInfo
+                  });
+                } else {
+                  this.addressById(this.state.billingAddressId, 'billing');
+                }
               }
-            }
-          );
+            );
+          }, 100);
         }
         if (type === 'billing') {
-          let billingAddressInfo = {};
+          let info = res.context;
+          let billingAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState({
+              billingAddressInfo: billingAddressInfo
+            });
+          }, 100);
+        }
+      }
+    });
+  };
+
+  getDict = () => {
+    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
+      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+      this.setState({
+        countryArr: countryArr
+      });
+    } else {
+      this.querySysDictionary('country');
+    }
+    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
+      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+      this.setState({
+        cityArr: cityArr
+      });
+    } else {
+      this.querySysDictionary('city');
+    }
+
+    this.querySysDictionary('Frequency');
+  };
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({
+        type: type
+      })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (type === 'city') {
+            this.setState({
+              cityArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-city',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'country') {
+            this.setState({
+              countryArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-country',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'Frequency') {
+            this.setState({
+              frequencyList: res.context.sysDictionaryVOS
+            });
+          }
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
+  onSubscriptionChange = ({ field, value }) => {
+    let data = this.state.subscriptionInfo;
+    data[field] = value;
+    this.setState({
+      subscriptionInfo: data
+    });
+  };
+
+  onGoodsChange = ({ field, goodsId, value }) => {
+    let data = this.state.goodsInfo;
+    data = data.map((item) => {
+      if (item.skuId === goodsId) {
+        item.subscribeNum = value;
+      }
+      return item;
+    });
+    this.setState({
+      goodsInfo: data
+    });
+  };
+
+  updateSubscription = () => {
+    const {
+      subscriptionInfo,
+      goodsInfo,
+      deliveryAddressId,
+      billingAddressId
+    } = this.state;
+    let params = {
+      billingAddressId: deliveryAddressId,
+      cycleTypeId: subscriptionInfo.frequency,
+      deliveryAddressId: billingAddressId,
+      goodsItems: goodsInfo,
+      nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format(
+        'YYYY-MM-DD'
+      ),
+      subscribeId: subscriptionInfo.subscriptionNumber
+    };
+    webapi
+      .updateSubscription(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          message.success('Successful');
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
+  getDictValue = (list, id) => {
+    if (list && list.length > 0) {
+      let item = list.find((item) => {
+        return item.id === id;
+      });
+      if (item) {
+        return item.name;
+      } else {
+        return id;
+      }
+    } else {
+      return id;
+    }
+  };
+
+  getAddressList = (customerId, type) => {
+    webapi.getAddressListByType(customerId, type).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        let addressList = res.context.customerDeliveryAddressVOList;
+        let customerAccount = res.context.customerAccount;
+        if (type === 'DELIVERY') {
           this.setState({
-            billingAddressInfo: billingAddressInfo
+            deliveryList: addressList,
+            customerAccount: customerAccount
           });
         }
+        if (type === 'BILLING') {
+          this.setState({
+            billingList: addressList,
+            customerAccount: customerAccount
+          });
+        }
+      }
+    });
+  };
+  deliveryOpen = () => {
+    if (this.state.deliveryAddressId === this.state.billingAddressId) {
+      this.setState({
+        sameFlag: true,
+        visibleShipping: true
+      });
+    } else {
+      this.setState({
+        sameFlag: false,
+        visibleShipping: true
+      });
+    }
+  };
+  deliveryOK = () => {
+    const { deliveryList, deliveryAddressId } = this.state;
+    let deliveryAddressInfo = deliveryList.find((item) => {
+      return item.deliveryAddressId === deliveryAddressId;
+    });
+
+    if (this.state.sameFlag) {
+      this.setState({
+        deliveryAddressInfo: deliveryAddressInfo,
+        billingAddressInfo: deliveryAddressInfo,
+        visibleShipping: false
+      });
+    } else {
+      this.setState({
+        deliveryAddressInfo: deliveryAddressInfo,
+        visibleShipping: false
+      });
+    }
+  };
+  billingOK = () => {
+    const { billingList, billingAddressId } = this.state;
+    let billingAddressInfo = billingList.find((item) => {
+      return item.deliveryAddressId === billingAddressId;
+    });
+    this.setState({
+      billingAddressInfo: billingAddressInfo,
+      visibleBilling: false
+    });
+  };
+
+  getBySubscribeId = (id: String) => {
+    let params = {
+      subscribeId: id
+    };
+    webapi.getBySubscribeId(params).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        let operationLog = res.context;
+        this.setState({
+          operationLog: operationLog
+        });
       }
     });
   };
@@ -225,7 +452,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       petsInfo,
       paymentInfo,
       deliveryAddressInfo,
-      billingAddressInfo
+      billingAddressInfo,
+      countryArr,
+      cityArr,
+      deliveryList,
+      billingList,
+      customerAccount,
+      operationLog
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
@@ -285,7 +518,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <InputNumber min={1} max={100} value={record.subscribeNum} />
+            <InputNumber
+              min={1}
+              max={100}
+              onChange={(value) => {
+                let goodsId = record.skuId;
+                this.onGoodsChange({
+                  field: 'nextDeliveryTime',
+                  goodsId,
+                  value
+                });
+              }}
+              value={record.subscribeNum}
+            />
           </div>
         )
       },
@@ -348,7 +593,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '50%'
       }
     ];
-
     const styles = {
       backItem: {
         display: 'flex',
@@ -443,6 +687,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Select
                   style={{ width: '50%' }}
                   value={subscriptionInfo.frequency}
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    this.onSubscriptionChange({
+                      field: 'frequency',
+                      value
+                    });
+                  }}
                 >
                   {frequencyList.map((item) => (
                     <Option value={item.id} key={item.id}>
@@ -460,6 +711,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </p> */}
                 <DatePicker
                   value={subscriptionInfo.nextDeliveryTime}
+                  onChange={(value) => {
+                    this.onSubscriptionChange({
+                      field: 'nextDeliveryTime',
+                      value
+                    });
+                  }}
                   format={'MMMM Do YY'}
                   style={{ width: '50%' }}
                 />
@@ -470,6 +727,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <Row style={{ marginTop: 20 }} gutter={16}>
             <Col span={16}>
               <Table
+                rowKey={(record, index) => index.toString()}
                 columns={columns}
                 dataSource={goodsInfo}
                 pagination={false}
@@ -505,7 +763,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>Total (Inclu IVA):</span>
                 <span>$0</span>
               </div>
-              {/* <Row style={{ marginTop: 20 }}>
+              <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
                   <Input placeholder="Promotional code" />
                 </Col>
@@ -514,7 +772,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     Apply
                   </Button>
                 </Col>
-              </Row> */}
+              </Row>
             </Col>
           </Row>
 
@@ -522,72 +780,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={12}>
               <Row>
                 <Col span={12}>
-                  <label className="info-title">Pet Infomation</label>
-                </Col>
-                <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visiblePetInfo: true
-                      });
-                    }}
-                  >
-                    Change
-                  </Button>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Row>
-                <Col span={18}>
-                  <label className="info-title">Payment Method</label>
-                </Col>
-
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Row className="consumer-info">
-            <Col span={12}>
-              <Row>
-                <Col span={12}>
                   <label className="info-title">Delivery Address</label>
                 </Col>
 
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visibleShipping: true
-                      });
-                    }}
-                  >
+                  <Button type="link" onClick={() => this.deliveryOpen()}>
                     Change
                   </Button>
                 </Col>
@@ -595,12 +792,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.country : ''}
+                    {deliveryAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          deliveryAddressInfo.countryId
+                        )
+                      : ''}
                   </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{deliveryAddressInfo ? deliveryAddressInfo.city : ''}</p>
+                  <p>
+                    {deliveryAddressInfo
+                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
@@ -635,11 +841,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.country : ''}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          billingAddressInfo.countryId
+                        )
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.city : ''}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(cityArr, billingAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
@@ -648,6 +865,60 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          <Row className="consumer-info">
+            {/* <Col span={12}>
+              <Row>
+                <Col span={12}>
+                  <label className="info-title">Pet Infomation</label>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visiblePetInfo: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Name: </p>
+                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Type: </p>
+                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Birthday: </p>
+                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Breed: </p>
+                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
+                </Col>
+              </Row>
+            </Col> */}
+            <Col span={12}>
+              <Row>
+                <Col span={18}>
+                  <label className="info-title">Payment Method</label>
+                </Col>
+
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Payment Method: </p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Card Number: </p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -663,9 +934,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Row>
                   <Col span={24}>
                     <Table
-                      // rowKey={(_record, index) => index.toString()}
+                      rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
-                      // dataSource={log.toJS()}
+                      dataSource={operationLog}
                       pagination={false}
                       bordered
                     />
@@ -674,10 +945,107 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Panel>
             </Collapse>
           </Row>
+
+          <Modal
+            style={{ width: '500px' }}
+            title="Choose From Saved Shipping Address"
+            visible={this.state.visibleShipping}
+            onOk={() => this.deliveryOK()}
+            onCancel={() => {
+              this.setState({
+                visibleShipping: false
+              });
+            }}
+          >
+            <Checkbox
+              checked={this.state.sameFlag}
+              onChange={(e) => {
+                let value = e.target.checked;
+                this.setState({
+                  sameFlag: value
+                });
+              }}
+            >
+              Same as Delivery Address
+            </Checkbox>
+            <Radio.Group
+              value={this.state.deliveryAddressId}
+              onChange={(e) => {
+                let value = e.target.value;
+                this.setState({
+                  deliveryAddressId: value
+                });
+              }}
+            >
+              {deliveryList.map((item) => (
+                <Card
+                  style={{ width: 472, marginBottom: 10 }}
+                  bodyStyle={{ padding: 10 }}
+                  key={item.deliveryAddressId}
+                >
+                  <Radio value={item.deliveryAddressId}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p>{item.firstName + item.lastName}</p>
+                      <p>{customerAccount}</p>
+                      <p>
+                        {this.getDictValue(cityArr, item.cityId) +
+                          ',' +
+                          this.getDictValue(countryArr, item.countryId)}
+                      </p>
+                      <p>{item.address1}</p>
+                    </div>
+                  </Radio>
+                </Card>
+              ))}
+            </Radio.Group>
+          </Modal>
+
+          <Modal
+            title="Choose From Saved Billing Address"
+            style={{ width: '500px' }}
+            visible={this.state.visibleBilling}
+            onOk={() => this.billingOK()}
+            onCancel={() => {
+              this.setState({
+                visibleBilling: false
+              });
+            }}
+          >
+            <Radio.Group
+              value={this.state.billingAddressId}
+              onChange={(e) => {
+                let value = e.target.value;
+                this.setState({
+                  billingAddressId: value
+                });
+              }}
+            >
+              {billingList.map((item) => (
+                <Card
+                  style={{ width: 472, marginBottom: 10 }}
+                  bodyStyle={{ padding: 10 }}
+                  key={item.deliveryAddressId}
+                >
+                  <Radio value={item.deliveryAddressId}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p>{item.firstName + item.lastName}</p>
+                      <p>{customerAccount}</p>
+                      <p>
+                        {this.getDictValue(countryArr, item.countryId) +
+                          ',' +
+                          this.getDictValue(cityArr, item.cityId)}
+                      </p>
+                      <p>{item.address1}</p>
+                    </div>
+                  </Radio>
+                </Card>
+              ))}
+            </Radio.Group>
+          </Modal>
         </Card>
 
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button type="primary" onClick={() => this.updateSubscription()}>
             {<FormattedMessage id="save" />}
           </Button>
           <Button
@@ -687,109 +1055,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {<FormattedMessage id="back" />}
           </Button>
         </div>
-
-        <Modal
-          style={{ width: '500px' }}
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visibleShipping}
-          onOk={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleShipping: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Billing Address"
-          visible={this.state.visibleBilling}
-          onOk={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visibleBilling: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
-
-        <Modal
-          title="Choose From Saved Shipping Address"
-          visible={this.state.visiblePetInfo}
-          onOk={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-          onCancel={() => {
-            this.setState({
-              visiblePetInfo: false
-            });
-          }}
-        >
-          <Radio.Group value={1}>
-            {[1, 2].map((item) => (
-              <Card
-                style={{ width: 472, marginBottom: 10 }}
-                bodyStyle={{ padding: 10 }}
-                key={item}
-              >
-                <Radio value={item}>
-                  <div style={{ display: 'inline-grid' }}>
-                    <p>Echo Lei</p>
-                    <p>EchoLei@163.com</p>
-                    <p>Mexico, Lei</p>
-                    <p>Address</p>
-                  </div>
-                </Radio>
-              </Card>
-            ))}
-          </Radio.Group>
-        </Modal>
       </div>
     );
   }

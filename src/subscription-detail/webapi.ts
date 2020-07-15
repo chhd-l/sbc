@@ -62,3 +62,13 @@ export function querySysDictionaryById(filterParams = {}) {
     })
   });
 }
+//
+// 根据订阅单号查找日志信息
+export function getBySubscribeId(filterParams = {}) {
+  return Fetch<TResult>('/sub/getBySubscribeId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

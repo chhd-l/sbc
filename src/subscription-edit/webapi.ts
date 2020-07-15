@@ -44,3 +44,47 @@ export function getSubscriptionDetail(id: String) {
     method: 'POST'
   });
 }
+
+// 根据ID查找字典信息
+export function querySysDictionaryById(filterParams = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionaryById', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 更新Subscription
+export function updateSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/updateSubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+/**
+ * 分type查询该客户的所有收货地址
+ * @param filterParams
+ */
+export function getAddressListByType(id = null, type = '') {
+  return Fetch<TResult>(
+    '/customer/addressList/listByCustomerIdAndType?customerId=' +
+      id +
+      '&type=' +
+      type,
+    {
+      method: 'Get'
+    }
+  );
+}
+// 根据订阅单号查找日志信息
+export function getBySubscribeId(filterParams = {}) {
+  return Fetch<TResult>('/sub/getBySubscribeId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

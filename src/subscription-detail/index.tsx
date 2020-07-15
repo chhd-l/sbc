@@ -468,19 +468,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const operatorColumns = [
       {
         title: 'Operator Type',
-        dataIndex: 'operator.platform',
-        key: 'operator.platform',
-        render: (val) => `${operatorDic[val]}`
+        dataIndex: 'operatorType',
+        key: 'operatorType'
       },
       {
         title: 'Operator',
-        dataIndex: 'operator.name',
-        key: 'operator.name'
+        dataIndex: 'operator',
+        key: 'operator'
       },
       {
         title: 'Time',
-        dataIndex: 'eventTime',
-        key: 'eventTime',
+        dataIndex: 'time',
+        key: 'time',
         render: (time) =>
           time &&
           moment(time)
@@ -489,13 +488,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: 'Operation Category',
-        dataIndex: 'eventType',
-        key: 'eventType'
+        dataIndex: 'operationCategory',
+        key: 'operationCategory'
       },
       {
         title: 'Operation Log',
-        dataIndex: 'eventDetail',
-        key: 'eventDetail',
+        dataIndex: 'operationLog',
+        key: 'operationLog',
         width: '50%'
       }
     ];

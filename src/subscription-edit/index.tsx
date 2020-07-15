@@ -97,9 +97,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: subscriptionDetail.nextDeliveryTime
-              ? moment(subscriptionDetail.nextDeliveryTime).format('MMMM Do YY')
-              : null,
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode
           };
           let orderInfo = {
@@ -434,7 +432,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     webapi.getBySubscribeId(params).then((data) => {
       const { res } = data;
       if (res.code === 'K-000000') {
-        let operationLog = res.context;
+        let operationLog = res.context.subscriptionLogsVOS;
         this.setState({
           operationLog: operationLog
         });
@@ -562,19 +560,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const operatorColumns = [
       {
         title: 'Operator Type',
-        dataIndex: 'operator.platform',
-        key: 'operator.platform',
-        render: (val) => `${operatorDic[val]}`
+        dataIndex: 'operatorType',
+        key: 'operatorType'
       },
       {
         title: 'Operator',
-        dataIndex: 'operator.name',
-        key: 'operator.name'
+        dataIndex: 'operator',
+        key: 'operator'
       },
       {
         title: 'Time',
-        dataIndex: 'eventTime',
-        key: 'eventTime',
+        dataIndex: 'time',
+        key: 'time',
         render: (time) =>
           time &&
           moment(time)
@@ -583,13 +580,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: 'Operation Category',
-        dataIndex: 'eventType',
-        key: 'eventType'
+        dataIndex: 'operationCategory',
+        key: 'operationCategory'
       },
       {
         title: 'Operation Log',
-        dataIndex: 'eventDetail',
-        key: 'eventDetail',
+        dataIndex: 'operationLog',
+        key: 'operationLog',
         width: '50%'
       }
     ];
@@ -710,7 +707,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   {subscriptionInfo.nextDeliveryTime}
                 </p> */}
                 <DatePicker
-                  value={subscriptionInfo.nextDeliveryTime}
+                  defaultValue={moment(
+                    subscriptionInfo.nextDeliveryTime,
+                    'MMMM Do YY'
+                  )}
                   onChange={(value) => {
                     this.onSubscriptionChange({
                       field: 'nextDeliveryTime',

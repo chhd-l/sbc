@@ -16,7 +16,8 @@ import {
   Table,
   InputNumber,
   Collapse,
-  Modal
+  Modal,
+  Radio
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
@@ -53,7 +54,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressId: '',
       deliveryAddressInfo: {},
       billingAddressId: '',
-      billingAddressInfo: {}
+      billingAddressInfo: {},
+      visibleShipping: false,
+      visibleBilling: false,
+      visiblePetInfo: false
     };
   }
 
@@ -520,6 +524,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <label className="info-title">Pet Infomation</label>
                 </Col>
+                <Col span={12}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visiblePetInfo: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
+                </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Pet Name: </p>
                   <p>{petsInfo ? petsInfo.petsName : ''}</p>
@@ -563,6 +579,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Delivery Address</label>
                 </Col>
 
+                <Col span={12}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visibleShipping: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
+                </Col>
+
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
@@ -591,6 +620,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Row>
                 <Col span={12}>
                   <label className="info-title">Billing Address</label>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visibleBilling: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
@@ -648,7 +689,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </div>
 
         <Modal
-          title="Choose From Saved Delivery Address"
+          style={{ width: '500px' }}
+          title="Choose From Saved Shipping Address"
           visible={this.state.visibleShipping}
           onOk={() => {
             this.setState({
@@ -660,7 +702,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               visibleShipping: false
             });
           }}
-        ></Modal>
+        >
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
+        </Modal>
 
         <Modal
           title="Choose From Saved Billing Address"
@@ -675,7 +736,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               visibleBilling: false
             });
           }}
-        ></Modal>
+        >
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
+        </Modal>
 
         <Modal
           title="Choose From Saved Shipping Address"
@@ -690,7 +770,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               visiblePetInfo: false
             });
           }}
-        ></Modal>
+        >
+          <Radio.Group value={1}>
+            {[1, 2].map((item) => (
+              <Card
+                style={{ width: 472, marginBottom: 10 }}
+                bodyStyle={{ padding: 10 }}
+                key={item}
+              >
+                <Radio value={item}>
+                  <div style={{ display: 'inline-grid' }}>
+                    <p>Echo Lei</p>
+                    <p>EchoLei@163.com</p>
+                    <p>Mexico, Lei</p>
+                    <p>Address</p>
+                  </div>
+                </Radio>
+              </Card>
+            ))}
+          </Radio.Group>
+        </Modal>
       </div>
     );
   }

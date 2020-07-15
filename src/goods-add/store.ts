@@ -1124,9 +1124,8 @@ export default class AppStore extends Store {
     let goodsList = List();
     let isEmptyImage = false;
     let isEmptyStock = false;
-
     if (
-      goods.get('subscriptionStatus') === 1 &&
+      parseInt(goods.get('subscriptionStatus')) === 1 &&
       data
         .get('goodsList')
         .filter((item) => item.get('subscriptionStatus') === 1).length === 0

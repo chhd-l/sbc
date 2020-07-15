@@ -1236,7 +1236,7 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
-
+    console.log(result, 'result');
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -1307,7 +1307,6 @@ export default class AppStore extends Store {
       detailEditor.getContent ? detailEditor.getContent() : ''
     );
     console.log(goods.toJS(), 'goods111');
-    return;
     const tabs = [];
     if (
       data.get('detailEditor_0') &&

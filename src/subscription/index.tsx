@@ -107,9 +107,10 @@ export default class SubscriptionList extends Component<any, any> {
           searchParams: {
             customerAccount: param.consumerAccount ? param.consumerAccount : '',
             customerName: param.consumerName ? param.consumerName : '',
-            subscribeIds: param.subscriptionNumber
-              ? [param.subscriptionNumber]
-              : [],
+            subscribeId: param.subscriptionNumber,
+            // subscribeIds: param.subscriptionNumber
+            //   ? [param.subscriptionNumber]
+            //   : [],
             cycleTypeId: param.frequency,
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',

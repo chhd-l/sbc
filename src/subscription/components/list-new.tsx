@@ -292,7 +292,9 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '15%', paddingLeft: 20 }}>
                       {v.goodsInfo &&
-                        v.goodsInfo.map((item, k) => <p>{item.goodsName}</p>)}
+                        v.goodsInfo.map((item, k) => (
+                          <p key={k}>{item.goodsName}</p>
+                        ))}
                     </td>
                     {/*subscription status*/}
                     <td style={{ width: '10%', paddingLeft: 20 }}>

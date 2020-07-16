@@ -521,7 +521,7 @@ export default {
   'unsettlement': 'Unsettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
-  'statementTime': 'Billing Time',
+  'statementTime': 'Statement Time',
   'statementNumber': 'Statement Number',
   'statementPeriod': 'Statement Period',
 

@@ -1,16 +1,20 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Button, Select, DatePicker } from 'antd';
-import { SelectGroup, noop, Const } from 'qmkit';
+import { SelectGroup, noop, Const, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RangePicker = DatePicker.RangePicker;
-
+//const RangePicker = DatePicker.RangePicker;
+const { RangePicker } = DatePicker;
 @Relax
 export default class SearchForm extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       beginTime: moment(nextProps.relaxProps.dateRange.get('beginTime')),
@@ -30,6 +34,7 @@ export default class SearchForm extends React.Component<any, any> {
     relaxProps?: {
       searchForm: any;
       onFormChange: Function;
+      bulkExport: Function;
       onSearch: Function;
       dateRange: any;
       //改变日期范围
@@ -45,15 +50,17 @@ export default class SearchForm extends React.Component<any, any> {
     onSearch: noop,
     dateRange: 'dateRange',
     changeDateRange: noop,
-    searchByDate: noop
+    searchByDate: noop,
+    bulkExport: noop
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const { onFormChange, searchForm, onSearch } = this.props.relaxProps;
+    const {
+      onFormChange,
+      searchForm,
+      onSearch,
+      bulkExport
+    } = this.props.relaxProps;
     const { searchByDate } = this.props.relaxProps;
     const { beginTime, endTime, pickOpen, pickErrorInfo } = this.state;
     const options = {
@@ -63,14 +70,12 @@ export default class SearchForm extends React.Component<any, any> {
       onBlur: () => {
         this.setState({ pickOpen: false });
       }
-    }
+    };
     return (
-      <Form className="filter-content1" layout="inline">
+      <Form className="filter-content" layout="inline">
         <FormItem>
           <RangePicker
-            getCalendarContainer={() =>
-              document.getElementById('page-content')
-            }
+            getCalendarContainer={() => document.getElementById('page-content')}
             allowClear={false}
             format="YYYY-MM-DD"
             placeholder={['Start Time', 'End Time']}
@@ -118,7 +123,14 @@ export default class SearchForm extends React.Component<any, any> {
           </Button>
         </FormItem>
         <FormItem>
-          <Button
+          <AuthWrapper functionName={'financeRewardExport'}>
+            <div style={{ paddingBottom: '16px' }}>
+              <Button onClick={() => bulkExport()}>
+                {<FormattedMessage id="bulkExport" />}
+              </Button>
+            </div>
+          </AuthWrapper>
+          {/*<Button
             htmlType="submit"
             onClick={(e) => {
               e.preventDefault();
@@ -126,12 +138,11 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           >
             {<FormattedMessage id="BulkExport" />}
-          </Button>
+          </Button>*/}
         </FormItem>
       </Form>
     );
   }
-
 
   /**
    * 操作时间段的选择

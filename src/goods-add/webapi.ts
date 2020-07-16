@@ -105,7 +105,6 @@ export const getStoreGoodsTab = () => {
  */
 export const save = (param: any) => {
   console.log(param, 'save');
-  return;
   return Fetch('/goods/spu', {
     method: 'POST',
     body: JSON.stringify(param)

@@ -16,9 +16,9 @@ const Column = Table.Column;
 
 const isShowFunction = (status) => {
   if (status == '0') {
-    return '否';
+    return 'No';
   } else if (status == '1') {
-    return '是';
+    return 'Yes';
   } else {
     return '-';
   }

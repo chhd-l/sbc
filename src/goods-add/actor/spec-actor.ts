@@ -164,13 +164,12 @@ export default class GoodsSpecActor extends Actor {
     state,
     { id, key, value }: { id: string; key: string; value: string }
   ) {
-    console.log(id, key, value, state.toJS(), '1234');
     // return
     if (key === 'subscriptionStatus') {
       let goodsList = state.toJS()['goodsList'];
       goodsList.map((el) => {
         if (el.id === id) {
-          el.subscriptionStatus = value;
+          el.subscriptionStatus = parseInt(value);
         }
       });
       return state.set('goodsList', fromJS(goodsList));

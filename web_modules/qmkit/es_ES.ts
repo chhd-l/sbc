@@ -682,6 +682,7 @@ export default {
   'subscription.date': 'Subscription date',
   'subscription.nextDeliveryDate': 'Next delivery date',
   'subscription.detail': 'Subscription detail',
+  'subscription.edit': 'Subscription edit',
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate':'Subscription Date',
@@ -732,7 +733,9 @@ export default {
   'subscriptionList':'Subscription List',
   'setBanner': 'Set banner',
   'pc': 'PC',
-  'mobile': 'Mobile'
+  'mobile': 'Mobile',
+  'preview': 'Preview',
+  'last180':'last 180 day'
 
 
 

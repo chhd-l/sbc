@@ -8,7 +8,7 @@ import SettleActor from './actor/settle-actor';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
-    console.log(__DEV__,'---------------------')
+    //console.log(__DEV__,'---------------------')
     if (__DEV__) {
       (window as any)._store = this;
     }
@@ -31,9 +31,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   fetchSettleList = async (pageNum = null, pageSize = null) => {
-    let queryParams = this.state()
-      .get('queryParams')
-      .toJS();
+    let queryParams = this.state().get('queryParams').toJS();
     queryParams['startTime'] = queryParams['startTime']
       .format('YYYY-MM-DD')
       .toString();
@@ -127,9 +125,7 @@ export default class AppStore extends Store {
    * 批量导出
    */
   bulkExport = async () => {
-    const queryParams = this.state()
-      .get('settleQueryParams')
-      .toJS();
+    const queryParams = this.state().get('settleQueryParams').toJS();
     const { startTime, endTime } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {

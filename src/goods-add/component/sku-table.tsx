@@ -385,7 +385,7 @@ class SkuForm extends React.Component<any, any> {
                     style={{ width: '100px' }}
                     min={0}
                     max={9999999}
-                    // disabled={rowInfo.index > 1 && stockChecked}
+                    disabled={rowInfo.subscriptionStatus === 0}
                   />
                 )}
               </FormItem>

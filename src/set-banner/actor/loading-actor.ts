@@ -9,6 +9,7 @@ export default class LoadingActor extends Actor {
 
   @Action('loading:start')
   start(state: IMap) {
+    debugger;
     return state.set('loading', true);
   }
 

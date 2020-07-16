@@ -63,15 +63,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryList: [],
       billingList: [],
       customerAccount: '',
-      sameFlag: false,
-      operationLog: []
+      sameFlag: false
+      // operationLog: []
     };
   }
 
   componentDidMount() {
     this.getDict();
     this.getSubscriptionDetail(this.state.subscriptionId);
-    this.getBySubscribeId(this.state.subscriptionId);
+    // this.getBySubscribeId(this.state.subscriptionId);
   }
 
   getSubscriptionDetail = (id: String) => {
@@ -425,19 +425,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
-  getBySubscribeId = (id: String) => {
-    let params = {
-      subscribeId: id
-    };
-    webapi.getBySubscribeId(params).then((data) => {
-      const { res } = data;
-      if (res.code === 'K-000000') {
-        let operationLog = res.context.subscriptionLogsVOS;
-        this.setState({
-          operationLog: operationLog
-        });
-      }
-    });
+  // getBySubscribeId = (id: String) => {
+  //   let params = {
+  //     subscribeId: id
+  //   };
+  //   webapi.getBySubscribeId(params).then((data) => {
+  //     const { res } = data;
+  //     if (res.code === 'K-000000') {
+  //       let operationLog = res.context.subscriptionLogsVOS;
+  //       this.setState({
+  //         operationLog: operationLog
+  //       });
+  //     }
+  //   });
+  // };
+
+  disabledStartDate = (endValue) => {
+    let date = new Date();
+    date.setDate(date.getDate() + 3);
+    return endValue.valueOf() <= date.valueOf();
   };
 
   render() {
@@ -455,8 +461,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       cityArr,
       deliveryList,
       billingList,
-      customerAccount,
-      operationLog
+      customerAccount
+      // operationLog
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
@@ -478,7 +484,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     // const cartExtra = (
-    //   <Button type="link"  style={{fontSize:16,}}>Skip Next Dilivery</Button>
+    //   <Button type="link"  style={{fontSize:16,}}>Skip Next Delivery</Button>
     // );
     const columns = [
       {
@@ -551,54 +557,48 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       fontWeight: 500
     };
 
-    enum operatorDic {
-      PLATFORM = 'Platform',
-      CUSTOMER = 'Customer',
-      SUPPLIER = 'Supplier'
-    }
-
-    const operatorColumns = [
-      {
-        title: 'Operator Type',
-        dataIndex: 'operatorType',
-        key: 'operatorType'
-      },
-      {
-        title: 'Operator',
-        dataIndex: 'operator',
-        key: 'operator'
-      },
-      {
-        title: 'Time',
-        dataIndex: 'time',
-        key: 'time',
-        render: (time) =>
-          time &&
-          moment(time)
-            .format(Const.TIME_FORMAT)
-            .toString()
-      },
-      {
-        title: 'Operation Category',
-        dataIndex: 'operationCategory',
-        key: 'operationCategory'
-      },
-      {
-        title: 'Operation Log',
-        dataIndex: 'operationLog',
-        key: 'operationLog',
-        width: '50%'
-      }
-    ];
-    const styles = {
-      backItem: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginTop: 10,
-        marginBottom: 20
-      }
-    } as any;
+    // const operatorColumns = [
+    //   {
+    //     title: 'Operator Type',
+    //     dataIndex: 'operatorType',
+    //     key: 'operatorType'
+    //   },
+    //   {
+    //     title: 'Operator',
+    //     dataIndex: 'operator',
+    //     key: 'operator'
+    //   },
+    //   {
+    //     title: 'Time',
+    //     dataIndex: 'time',
+    //     key: 'time',
+    //     render: (time) =>
+    //       time &&
+    //       moment(time)
+    //         .format(Const.TIME_FORMAT)
+    //         .toString()
+    //   },
+    //   {
+    //     title: 'Operation Category',
+    //     dataIndex: 'operationCategory',
+    //     key: 'operationCategory'
+    //   },
+    //   {
+    //     title: 'Operation Log',
+    //     dataIndex: 'operationLog',
+    //     key: 'operationLog',
+    //     width: '50%'
+    //   }
+    // ];
+    // const styles = {
+    //   backItem: {
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     alignItems: 'flex-start',
+    //     marginTop: 10,
+    //     marginBottom: 20
+    //   }
+    // } as any;
 
     return (
       <div>
@@ -708,9 +708,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   {subscriptionInfo.nextDeliveryTime}
                 </p> */}
                 <DatePicker
+                  disabledDate={this.disabledStartDate}
                   defaultValue={moment(
-                    subscriptionInfo.nextDeliveryTime,
-                    'MMMM Do YY'
+                    new Date(subscriptionInfo.nextDeliveryTime),
+                    'MMMM Do YYYY'
                   )}
                   onChange={(value) => {
                     this.onSubscriptionChange({
@@ -718,7 +719,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       value
                     });
                   }}
-                  format={'MMMM Do YY'}
+                  format={'MMMM Do YYYY'}
                   style={{ width: '50%' }}
                 />
               </div>
@@ -762,7 +763,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>$0</span>
+                <span>$111</span>
               </div>
               <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
@@ -791,34 +792,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
 
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Country: </p>
+                  <p style={{ width: 140 }}>Name: </p>
                   <p>
                     {deliveryAddressInfo
-                      ? this.getDictValue(
-                          countryArr,
-                          deliveryAddressInfo.countryId
-                        )
+                      ? deliveryAddressInfo.firstName +
+                        ' ' +
+                        deliveryAddressInfo.lastName
                       : ''}
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>City: </p>
+                  <p style={{ width: 140 }}>City,Country: </p>
                   <p>
-                    {deliveryAddressInfo
-                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId)
-                      : ''}
+                    {this.getDictValue(cityArr, deliveryAddressInfo.cityId) +
+                      ',' +
+                      this.getDictValue(
+                        countryArr,
+                        deliveryAddressInfo.countryId
+                      )}
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
+                  <p style={{ width: 140 }}>Address: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address2: </p>
-                  <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
                   </p>
                 </Col>
               </Row>
@@ -840,11 +837,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     Change
                   </Button>
                 </Col>
+
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Country: </p>
+                  <p style={{ width: 140 }}>Name: </p>
                   <p>
                     {billingAddressInfo
-                      ? this.getDictValue(
+                      ? billingAddressInfo.firstName +
+                        ' ' +
+                        billingAddressInfo.lastName
+                      : ''}
+                  </p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>City,Country: </p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(cityArr, billingAddressInfo.cityId) +
+                        ',' +
+                        this.getDictValue(
                           countryArr,
                           billingAddressInfo.countryId
                         )
@@ -852,20 +862,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>City: </p>
-                  <p>
-                    {billingAddressInfo
-                      ? this.getDictValue(cityArr, billingAddressInfo.cityId)
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
+                  <p style={{ width: 140 }}>Address: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address2: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -941,7 +939,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col> */}
           </Row>
 
-          <Row style={styles.backItem}>
+          {/* <Row style={styles.backItem}>
             <Collapse>
               <Panel
                 header={<FormattedMessage id="operationLog" />}
@@ -961,11 +959,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Panel>
             </Collapse>
-          </Row>
+          </Row> */}
 
           <Modal
             style={{ width: '500px' }}
-            title="Choose From Saved Shipping Address"
+            title="Choose From Saved Delivery Address"
             visible={this.state.visibleShipping}
             onOk={() => this.deliveryOK()}
             onCancel={() => {
@@ -983,7 +981,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              Same as Delivery Address
+              Billing address is the same as
             </Checkbox>
             <Radio.Group
               style={{ maxHeight: 600, overflowY: 'auto' }}
@@ -1004,7 +1002,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <Radio value={item.deliveryAddressId}>
                     <div style={{ display: 'inline-grid' }}>
                       <p>{item.firstName + item.lastName}</p>
-                      <p>{customerAccount}</p>
                       <p>
                         {this.getDictValue(cityArr, item.cityId) +
                           ',' +
@@ -1030,6 +1027,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }}
           >
             <Radio.Group
+              style={{ maxHeight: 600, overflowY: 'auto' }}
               value={this.state.billingAddressId}
               onChange={(e) => {
                 let value = e.target.value;
@@ -1047,7 +1045,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <Radio value={item.deliveryAddressId}>
                     <div style={{ display: 'inline-grid' }}>
                       <p>{item.firstName + item.lastName}</p>
-                      <p>{customerAccount}</p>
                       <p>
                         {this.getDictValue(countryArr, item.countryId) +
                           ',' +

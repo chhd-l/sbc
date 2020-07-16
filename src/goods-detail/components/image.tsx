@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../../images/none.png');
 
 /**
@@ -25,13 +25,14 @@ export default class GoodsImage extends React.Component<any, any> {
                 this.setState({ previewVisible: true, previewImage: url })
               }
             >
-              预览
+              <FormattedMessage id="preview" />
             </p>
           )}
         </div>
 
         {this.state.previewVisible ? (
-          <Modal  maskClosable={false}
+          <Modal
+            maskClosable={false}
             className="bg-color"
             visible={this.state.previewVisible}
             footer={null}

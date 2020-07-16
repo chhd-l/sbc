@@ -163,7 +163,7 @@ export default class ListView extends React.Component<any, any> {
                       {/* <th style={{ width: '8%' }}>
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
-                      <th style={{ width: '20%' }}>
+                      <th style={{ width: '15%' }}>
                         <FormattedMessage id="subscription.operation" />
                       </th>
                     </tr>
@@ -317,14 +317,14 @@ export default class ListView extends React.Component<any, any> {
                       {v.goodsInfo && this.goodsSum(v.goodsInfo)}
                     </td> */}
                     {/*Operation*/}
-                    <td style={{ width: '20%' }} className="operation-td">
-                      <Button type="link">
+                    <td style={{ width: '15%' }} className="operation-td">
+                      <Button type="link" style={{ padding: '0 5px' }}>
                         <Link to={'/subscription-detail/' + v.subscribeId}>
                           Details
                         </Link>
                       </Button>
                       {v.subscribeStatus === '0' ? (
-                        <Button type="link">
+                        <Button type="link" style={{ padding: '0 5px' }}>
                           <Link to={'/subscription-edit/' + v.subscribeId}>
                             Edit
                           </Link>
@@ -338,7 +338,9 @@ export default class ListView extends React.Component<any, any> {
                           okText="Confirm"
                           cancelText="Cancel"
                         >
-                          <Button type="link">Cancel All</Button>
+                          <Button type="link" style={{ padding: '0 5px' }}>
+                            Cancel All
+                          </Button>
                         </Popconfirm>
                       ) : null}
                     </td>

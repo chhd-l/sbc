@@ -1124,15 +1124,6 @@ export default class AppStore extends Store {
     let goodsList = List();
     let isEmptyImage = false;
     let isEmptyStock = false;
-    if (
-      parseInt(goods.get('subscriptionStatus')) === 1 &&
-      data
-        .get('goodsList')
-        .filter((item) => item.get('subscriptionStatus') === 1).length === 0
-    ) {
-      message.error('At least one sku has a subscription status of yes');
-      return false;
-    }
     data.get('goodsList').forEach((item) => {
       if (skuNoMap.has(item.get('goodsInfoNo') + '')) {
         existedSkuNo = item.get('goodsInfoNo') + '';
@@ -1176,10 +1167,21 @@ export default class AppStore extends Store {
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          subscriptionStatus: item.get('subscriptionStatus')
+          subscriptionStatus:
+            item.get('subscriptionStatus') === undefined
+              ? 1
+              : item.get('subscriptionStatus')
         })
       );
     });
+    if (
+      parseInt(goods.get('subscriptionStatus')) === 1 &&
+      goodsList.toJS().filter((item) => item['subscriptionStatus'] === 1)
+        .length === 0
+    ) {
+      message.error('At least one sku has a subscription status of yes');
+      return false;
+    }
     if (isEmptyImage) {
       message.error('Spec image is required');
       return false;

@@ -125,6 +125,25 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+        <FormItem{...formItemLayout} label="Promotion type:">
+          {getFieldDecorator('subType', {
+
+            initialValue: isFullCount
+          })(
+            <RadioGroup
+              onChange={(e) => this.subTypeChange(marketingType, e)}
+            >
+              <Radio value={0}>
+                Normal promotion
+
+              </Radio>
+              <Radio value={1}>
+                Subscription promotion
+
+              </Radio>
+            </RadioGroup>
+          )}
+        </FormItem>
         <FormItem {...smallformItemLayout} label="Promotion Code">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode')

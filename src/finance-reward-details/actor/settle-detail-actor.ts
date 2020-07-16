@@ -48,7 +48,8 @@ export default class SettleDetailActor extends Actor {
       //导出单独的时间参数
       searchTime: {},
       fetchFindListByPrescriber: {},
-      onRewardExportData: {}
+      onRewardExportData: {},
+      orderNo:''
     };
   }
 

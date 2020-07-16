@@ -15,15 +15,19 @@ import {
   DatePicker,
   Table,
   InputNumber,
-  Collapse
+  Collapse,
+  Modal,
+  Radio,
+  Checkbox
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
-import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
+import moment from 'moment';
 
 const Panel = Collapse.Panel;
 
@@ -37,53 +41,251 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     super(props);
     this.state = {
       pageType: 'Edit',
-      orderInfo: {
-        orderTimes: 1,
-        recentOrder: 'O123456234',
-        orderStatus: 'Not Yet Shipped'
-      },
-      subscriptionInfo: {
-        subscriptionStatus: 'Active',
-        subscriptionNumber: 'S202007071782774',
-        subscriptionTime: '2020-07-07 17:56:25',
-        presciberID: '1758',
-        presciberName: 'CLINICA EL FAISAN',
-        consumer: 'ILIANA ROMO MANZANO',
-        consumerAccount: 'ilia****.com',
-        consumerType: 'Member',
-        phoneNumber: '57797287'
-      },
-      recentOrderList: [
-        {
-          id: '001',
-          orderNumber: 'O123456234'
-        }
-      ],
+      subscriptionId: this.props.match.params.subId,
+      loading: true,
+      orderInfo: {},
+      subscriptionInfo: {},
+      recentOrderList: [],
       frequencyList: [],
-      subscriptionData: [],
-      petInfo: {
-        breed: 'xxx',
-        petName: 'Rita',
-        petType: 'cat',
-        petBirthday: '2018/12/12'
-      }
+      goodsInfo: [],
+      petsId: '',
+      petsInfo: {},
+      paymentInfo: {},
+      deliveryAddressId: '',
+      deliveryAddressInfo: {},
+      billingAddressId: '',
+      billingAddressInfo: {},
+      visibleShipping: false,
+      visibleBilling: false,
+      visiblePetInfo: false,
+      countryArr: [],
+      cityArr: [],
+      deliveryList: [],
+      billingList: [],
+      customerAccount: '',
+      sameFlag: false,
+      operationLog: []
     };
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency');
+    this.getDict();
+    this.getSubscriptionDetail(this.state.subscriptionId);
+    this.getBySubscribeId(this.state.subscriptionId);
   }
 
-  //查询frequency
-  querySysDictionary = (type: String) => {
+  getSubscriptionDetail = (id: String) => {
     webapi
-      .querySysDictionary({ type: type })
+      .getSubscriptionDetail(id)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
+          let subscriptionDetail = res.context;
+          let subscriptionInfo = {
+            deliveryTimes: subscriptionDetail.deliveryTimes,
+            subscriptionStatus:
+              subscriptionDetail.subscribeStatus === '0'
+                ? 'Active'
+                : 'Inactive',
+            subscriptionNumber: subscriptionDetail.subscribeId,
+            subscriptionTime: subscriptionDetail.createTime,
+            presciberID: subscriptionDetail.prescriberId,
+            presciberName: subscriptionDetail.prescriberName,
+            consumer: subscriptionDetail.customerName,
+            consumerAccount: subscriptionDetail.customerAccount,
+            consumerType: subscriptionDetail.customerType,
+            phoneNumber: subscriptionDetail.customerPhone,
+            frequency: subscriptionDetail.cycleTypeId,
+            frequencyName: subscriptionDetail.frequency,
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+            promotionCode: subscriptionDetail.promotionCode
+          };
+          let orderInfo = {
+            recentOrderId: subscriptionDetail.trades
+              ? subscriptionDetail.trades[0].id
+              : '',
+            orderStatus: subscriptionDetail.trades
+              ? subscriptionDetail.trades[0].tradeState.deliverStatus
+              : ''
+          };
+          let recentOrderList = [];
+          if (subscriptionDetail.trades) {
+            for (let i = 0; i < subscriptionDetail.trades.length; i++) {
+              let recentOrder = {
+                recentOrderId: subscriptionDetail.trades[i].id,
+                orderStatus:
+                  subscriptionDetail.trades[i].tradeState.deliverStatus
+              };
+              recentOrderList.push(recentOrder);
+            }
+          }
+
+          let goodsInfo = subscriptionDetail.goodsInfo;
+          let paymentInfo = subscriptionDetail.paymentInfo;
+          this.setState(
+            {
+              subscriptionInfo: subscriptionInfo,
+              orderInfo: orderInfo,
+              recentOrderList: recentOrderList,
+              goodsInfo: goodsInfo,
+              paymentInfo: paymentInfo,
+              petsId: subscriptionDetail.petsId,
+              deliveryAddressId: subscriptionDetail.deliveryAddressId,
+              deliveryAddressInfo: subscriptionDetail.consignee,
+              billingAddressId: subscriptionDetail.billingAddressId,
+              billingAddressInfo: subscriptionDetail.invoice,
+              loading: false
+            },
+            () => {
+              if (
+                this.state.deliveryAddressInfo &&
+                this.state.deliveryAddressInfo.customerId
+              ) {
+                let customerId = this.state.deliveryAddressInfo.customerId;
+                this.getAddressList(customerId, 'DELIVERY');
+                this.getAddressList(customerId, 'BILLING');
+              }
+
+              // if(this.state.petsId){
+              //   this.petsById(this.state.petsId);
+              // }
+              // if(this.state.deliveryAddressId){
+              //   this.addressById(this.state.deliveryAddressId, 'delivery');
+              // }
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
+  };
+
+  petsById = (id) => {
+    let params = {
+      petsId: id
+    };
+    webapi
+      .petsById(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          let petsInfo = res.context.context;
           this.setState({
-            frequencyList: res.context.sysDictionaryVOS
+            petsInfo: petsInfo
           });
+        } else {
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
+
+  addressById = (id: String, type: String) => {
+    webapi.addressById(id).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        if (type === 'delivery') {
+          let info = res.context;
+          let deliveryAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState(
+              {
+                deliveryAddressInfo: deliveryAddressInfo
+              },
+              () => {
+                if (
+                  this.state.deliveryAddressId === this.state.billingAddressId
+                ) {
+                  this.setState({
+                    billingAddressInfo: deliveryAddressInfo
+                  });
+                } else {
+                  this.addressById(this.state.billingAddressId, 'billing');
+                }
+              }
+            );
+          }, 100);
+        }
+        if (type === 'billing') {
+          let info = res.context;
+          let billingAddressInfo = {
+            countryId: info.countryId,
+            cityId: info.cityId,
+            address1: info.address1,
+            address2: info.address2
+          };
+          setTimeout(() => {
+            this.setState({
+              billingAddressInfo: billingAddressInfo
+            });
+          }, 100);
+        }
+      }
+    });
+  };
+
+  getDict = () => {
+    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
+      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
+      this.setState({
+        countryArr: countryArr
+      });
+    } else {
+      this.querySysDictionary('country');
+    }
+    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
+      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
+      this.setState({
+        cityArr: cityArr
+      });
+    } else {
+      this.querySysDictionary('city');
+    }
+
+    this.querySysDictionary('Frequency');
+  };
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({
+        type: type
+      })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (type === 'city') {
+            this.setState({
+              cityArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-city',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'country') {
+            this.setState({
+              countryArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-country',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'Frequency') {
+            this.setState({
+              frequencyList: res.context.sysDictionaryVOS
+            });
+          }
         } else {
           message.error('Unsuccessful');
         }
@@ -92,6 +294,151 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
+  onSubscriptionChange = ({ field, value }) => {
+    let data = this.state.subscriptionInfo;
+    data[field] = value;
+    this.setState({
+      subscriptionInfo: data
+    });
+  };
+
+  onGoodsChange = ({ field, goodsId, value }) => {
+    let data = this.state.goodsInfo;
+    data = data.map((item) => {
+      if (item.skuId === goodsId) {
+        item.subscribeNum = value;
+      }
+      return item;
+    });
+    this.setState({
+      goodsInfo: data
+    });
+  };
+
+  updateSubscription = () => {
+    const {
+      subscriptionInfo,
+      goodsInfo,
+      deliveryAddressId,
+      billingAddressId
+    } = this.state;
+    let params = {
+      billingAddressId: deliveryAddressId,
+      cycleTypeId: subscriptionInfo.frequency,
+      deliveryAddressId: billingAddressId,
+      goodsItems: goodsInfo,
+      nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format(
+        'YYYY-MM-DD'
+      ),
+      subscribeId: subscriptionInfo.subscriptionNumber
+    };
+    webapi
+      .updateSubscription(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          message.success('Successful');
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
+  getDictValue = (list, id) => {
+    if (list && list.length > 0) {
+      let item = list.find((item) => {
+        return item.id === id;
+      });
+      if (item) {
+        return item.name;
+      } else {
+        return id;
+      }
+    } else {
+      return id;
+    }
+  };
+
+  getAddressList = (customerId, type) => {
+    webapi.getAddressListByType(customerId, type).then((data) => {
+      const res = data.res;
+      if (res.code === 'K-000000') {
+        let addressList = res.context.customerDeliveryAddressVOList;
+        let customerAccount = res.context.customerAccount;
+        if (type === 'DELIVERY') {
+          this.setState({
+            deliveryList: addressList,
+            customerAccount: customerAccount
+          });
+        }
+        if (type === 'BILLING') {
+          this.setState({
+            billingList: addressList,
+            customerAccount: customerAccount
+          });
+        }
+      }
+    });
+  };
+  deliveryOpen = () => {
+    if (this.state.deliveryAddressId === this.state.billingAddressId) {
+      this.setState({
+        sameFlag: true,
+        visibleShipping: true
+      });
+    } else {
+      this.setState({
+        sameFlag: false,
+        visibleShipping: true
+      });
+    }
+  };
+  deliveryOK = () => {
+    const { deliveryList, deliveryAddressId } = this.state;
+    let deliveryAddressInfo = deliveryList.find((item) => {
+      return item.deliveryAddressId === deliveryAddressId;
+    });
+
+    if (this.state.sameFlag) {
+      this.setState({
+        deliveryAddressInfo: deliveryAddressInfo,
+        billingAddressInfo: deliveryAddressInfo,
+        visibleShipping: false
+      });
+    } else {
+      this.setState({
+        deliveryAddressInfo: deliveryAddressInfo,
+        visibleShipping: false
+      });
+    }
+  };
+  billingOK = () => {
+    const { billingList, billingAddressId } = this.state;
+    let billingAddressInfo = billingList.find((item) => {
+      return item.deliveryAddressId === billingAddressId;
+    });
+    this.setState({
+      billingAddressInfo: billingAddressInfo,
+      visibleBilling: false
+    });
+  };
+
+  getBySubscribeId = (id: String) => {
+    let params = {
+      subscribeId: id
+    };
+    webapi.getBySubscribeId(params).then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        let operationLog = res.context.subscriptionLogsVOS;
+        this.setState({
+          operationLog: operationLog
+        });
+      }
+    });
+  };
 
   render() {
     const {
@@ -99,19 +446,34 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       recentOrderList,
       subscriptionInfo,
       frequencyList,
-      subscriptionData,
-      petInfo
+      goodsInfo,
+      petsInfo,
+      paymentInfo,
+      deliveryAddressInfo,
+      billingAddressInfo,
+      countryArr,
+      cityArr,
+      deliveryList,
+      billingList,
+      customerAccount,
+      operationLog
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription</span>
-        <span className="order-time">{'#' + orderInfo.orderTimes}</span>
+        <span className="order-time">
+          {'#' + subscriptionInfo.deliveryTimes}
+        </span>
       </div>
     );
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
-          <Menu.Item key={item.id}>{item.orderNumber}</Menu.Item>
+          <Menu.Item key={item.id}>
+            <Link to={'/order-detail/' + item.orderNumber}>
+              {item.recentOrderId + '(' + item.orderStatus + ')'}
+            </Link>
+          </Menu.Item>
         ))}
       </Menu>
     );
@@ -154,7 +516,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <InputNumber min={1} max={100} value={record.subscribeNum} />
+            <InputNumber
+              min={1}
+              max={100}
+              onChange={(value) => {
+                let goodsId = record.skuId;
+                this.onGoodsChange({
+                  field: 'nextDeliveryTime',
+                  goodsId,
+                  value
+                });
+              }}
+              value={record.subscribeNum}
+            />
           </div>
         )
       },
@@ -177,15 +551,66 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       fontWeight: 500
     };
 
+    enum operatorDic {
+      PLATFORM = 'Platform',
+      CUSTOMER = 'Customer',
+      SUPPLIER = 'Supplier'
+    }
+
+    const operatorColumns = [
+      {
+        title: 'Operator Type',
+        dataIndex: 'operatorType',
+        key: 'operatorType'
+      },
+      {
+        title: 'Operator',
+        dataIndex: 'operator',
+        key: 'operator'
+      },
+      {
+        title: 'Time',
+        dataIndex: 'time',
+        key: 'time',
+        render: (time) =>
+          time &&
+          moment(time)
+            .format(Const.TIME_FORMAT)
+            .toString()
+      },
+      {
+        title: 'Operation Category',
+        dataIndex: 'operationCategory',
+        key: 'operationCategory'
+      },
+      {
+        title: 'Operation Log',
+        dataIndex: 'operationLog',
+        key: 'operationLog',
+        width: '50%'
+      }
+    ];
+    const styles = {
+      backItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginTop: 10,
+        marginBottom: 20
+      }
+    } as any;
+
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            {<FormattedMessage id="subscription.detail" />}
+            {<FormattedMessage id="subscription.edit" />}
           </Breadcrumb.Item>
         </BreadCrumb>
         <Card
-          title={cartTitle}
+          loading={this.state.loading}
+          // title={cartTitle}
+          title="Subscription Edit"
           bordered={false}
           // extra={cartExtra}
           style={{ margin: 20 }}
@@ -235,35 +660,79 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Previous Orders</p>
-
-                <Dropdown overlay={menu} trigger={['click']}>
-                  <a
-                    className="ant-dropdown-link"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    {orderInfo.recentOrder + '(' + orderInfo.orderStatus + ')'}
-                    <Icon type="down" style={{ margin: '0 5px' }} />
-                  </a>
-                </Dropdown>
+                {orderInfo.recentOrderId ? (
+                  <Dropdown overlay={menu} trigger={['click']}>
+                    <a
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      {orderInfo.recentOrderId +
+                        '(' +
+                        orderInfo.orderStatus +
+                        ')'}
+                      <Icon type="down" style={{ margin: '0 5px' }} />
+                    </a>
+                  </Dropdown>
+                ) : null}
               </div>
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Frequency</p>
-                <p>4 Weeks</p>
+                {/* <p style={{ color: '#808285' }}>
+                  {subscriptionInfo.frequencyName}
+                </p> */}
+                <Select
+                  style={{ width: '50%' }}
+                  value={subscriptionInfo.frequency}
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    this.onSubscriptionChange({
+                      field: 'frequency',
+                      value
+                    });
+                  }}
+                >
+                  {frequencyList.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
               </div>
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
                 <p>Next order date</p>
-                <p>June, 23rd</p>
+                {/* <p style={{ color: '#808285' }}>
+                  {subscriptionInfo.nextDeliveryTime}
+                </p> */}
+                <DatePicker
+                  defaultValue={moment(
+                    subscriptionInfo.nextDeliveryTime,
+                    'MMMM Do YY'
+                  )}
+                  onChange={(value) => {
+                    this.onSubscriptionChange({
+                      field: 'nextDeliveryTime',
+                      value
+                    });
+                  }}
+                  format={'MMMM Do YY'}
+                  style={{ width: '50%' }}
+                />
               </div>
             </Col>
           </Row>
           {/* subscription 和 total */}
           <Row style={{ marginTop: 20 }} gutter={16}>
             <Col span={16}>
-              <Table columns={columns} dataSource={subscriptionData}></Table>
+              <Table
+                rowKey={(record, index) => index.toString()}
+                columns={columns}
+                dataSource={goodsInfo}
+                pagination={false}
+              ></Table>
             </Col>
             <Col span={8}>
               <Card
@@ -280,6 +749,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <div className="flex-between">
                     <span>Subscription Save Discount</span>
                     <span>-$12</span>
+                  </div>
+                  <div className="flex-between">
+                    <span>Promotion Code</span>
+                    <span>{subscriptionInfo.promotionCode}</span>
                   </div>
                   <div className="flex-between">
                     <span>Shipping</span>
@@ -308,70 +781,45 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Col span={12}>
               <Row>
                 <Col span={12}>
-                  <label className="info-title">Pet Infomation</label>
+                  <label className="info-title">Delivery Address</label>
                 </Col>
+
                 <Col span={12}>
-                  <Button type="link">Change</Button>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petInfo.petName}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petInfo.petType}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petInfo.petBirthday}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petInfo.breed}</p>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Row>
-                <Col span={18}>
-                  <label className="info-title">Payment Method</label>
+                  <Button type="link" onClick={() => this.deliveryOpen()}>
+                    Change
+                  </Button>
                 </Col>
 
                 <Col span={18}>
-                  <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{petInfo.breed}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{petInfo.breed}</p>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-          <Row className="consumer-info">
-            <Col span={12}>
-              <Row>
-                <Col span={12}>
-                  <label className="info-title">Shipping Address</label>
-                </Col>
-                <Col span={12}>
-                  <Button type="link">Change</Button>
-                </Col>
-                <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>
+                    {deliveryAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          deliveryAddressInfo.countryId
+                        )
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>
+                    {deliveryAddressInfo
+                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                  </p>
                 </Col>
               </Row>
             </Col>
@@ -381,37 +829,233 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button type="link">Change</Button>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visibleBilling: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Country: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(
+                          countryArr,
+                          billingAddressInfo.countryId
+                        )
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>City: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(cityArr, billingAddressInfo.cityId)
+                      : ''}
+                  </p>
                 </Col>
                 <Col span={18}>
                   <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                 </Col>
                 <Col span={18}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>{petInfo.breed}</p>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
           </Row>
-          <Row style={{ marginTop: 20 }} className="subscription-btn">
-            <Button type="primary" style={{ marginRight: 20 }}>
-              Save
-            </Button>
 
-            <Button>
-              <Link to="/subscription-list">Cancel</Link>
-            </Button>
+          <Row className="consumer-info">
+            {/* <Col span={12}>
+              <Row>
+                <Col span={12}>
+                  <label className="info-title">Pet Infomation</label>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      this.setState({
+                        visiblePetInfo: true
+                      });
+                    }}
+                  >
+                    Change
+                  </Button>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Name: </p>
+                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Type: </p>
+                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Pet Birthday: </p>
+                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Breed: </p>
+                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
+                </Col>
+              </Row>
+            </Col> */}
+            <Col span={12}>
+              <Row>
+                <Col span={18}>
+                  <label className="info-title">Payment Method</label>
+                </Col>
+
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Payment Method: </p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                </Col>
+                <Col span={18}>
+                  <p style={{ width: 140 }}>Card Number: </p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
+                </Col>
+              </Row>
+            </Col>
           </Row>
+
+          <Row style={styles.backItem}>
+            <Collapse>
+              <Panel
+                header={<FormattedMessage id="operationLog" />}
+                key="1"
+                style={{ paddingRight: 10 }}
+              >
+                <Row>
+                  <Col span={24}>
+                    <Table
+                      rowKey={(record, index) => index.toString()}
+                      columns={operatorColumns}
+                      dataSource={operationLog}
+                      pagination={false}
+                      bordered
+                    />
+                  </Col>
+                </Row>
+              </Panel>
+            </Collapse>
+          </Row>
+
+          <Modal
+            style={{ width: '500px' }}
+            title="Choose From Saved Shipping Address"
+            visible={this.state.visibleShipping}
+            onOk={() => this.deliveryOK()}
+            onCancel={() => {
+              this.setState({
+                visibleShipping: false
+              });
+            }}
+          >
+            <Checkbox
+              checked={this.state.sameFlag}
+              onChange={(e) => {
+                let value = e.target.checked;
+                this.setState({
+                  sameFlag: value
+                });
+              }}
+            >
+              Same as Delivery Address
+            </Checkbox>
+            <Radio.Group
+              value={this.state.deliveryAddressId}
+              onChange={(e) => {
+                let value = e.target.value;
+                this.setState({
+                  deliveryAddressId: value
+                });
+              }}
+            >
+              {deliveryList.map((item) => (
+                <Card
+                  style={{ width: 472, marginBottom: 10 }}
+                  bodyStyle={{ padding: 10 }}
+                  key={item.deliveryAddressId}
+                >
+                  <Radio value={item.deliveryAddressId}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p>{item.firstName + item.lastName}</p>
+                      <p>{customerAccount}</p>
+                      <p>
+                        {this.getDictValue(cityArr, item.cityId) +
+                          ',' +
+                          this.getDictValue(countryArr, item.countryId)}
+                      </p>
+                      <p>{item.address1}</p>
+                    </div>
+                  </Radio>
+                </Card>
+              ))}
+            </Radio.Group>
+          </Modal>
+
+          <Modal
+            title="Choose From Saved Billing Address"
+            style={{ width: '500px' }}
+            visible={this.state.visibleBilling}
+            onOk={() => this.billingOK()}
+            onCancel={() => {
+              this.setState({
+                visibleBilling: false
+              });
+            }}
+          >
+            <Radio.Group
+              value={this.state.billingAddressId}
+              onChange={(e) => {
+                let value = e.target.value;
+                this.setState({
+                  billingAddressId: value
+                });
+              }}
+            >
+              {billingList.map((item) => (
+                <Card
+                  style={{ width: 472, marginBottom: 10 }}
+                  bodyStyle={{ padding: 10 }}
+                  key={item.deliveryAddressId}
+                >
+                  <Radio value={item.deliveryAddressId}>
+                    <div style={{ display: 'inline-grid' }}>
+                      <p>{item.firstName + item.lastName}</p>
+                      <p>{customerAccount}</p>
+                      <p>
+                        {this.getDictValue(countryArr, item.countryId) +
+                          ',' +
+                          this.getDictValue(cityArr, item.cityId)}
+                      </p>
+                      <p>{item.address1}</p>
+                    </div>
+                  </Radio>
+                </Card>
+              ))}
+            </Radio.Group>
+          </Modal>
         </Card>
+
+        <div className="bar-button">
+          <Button type="primary" onClick={() => this.updateSubscription()}>
+            {<FormattedMessage id="save" />}
+          </Button>
+          <Button
+            style={{ marginLeft: 20 }}
+            onClick={() => (history as any).go(-1)}
+          >
+            {<FormattedMessage id="back" />}
+          </Button>
+        </div>
       </div>
     );
   }

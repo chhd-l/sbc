@@ -61,7 +61,7 @@ export default class List extends React.Component<any, any> {
         )}
 
         <Column
-          title={<FormattedMessage id="statementGenerationTime" />}
+          title={<FormattedMessage id="SettlementStatementTime" />}
           key="createTime"
           dataIndex="createTime"
           render={(value) => {

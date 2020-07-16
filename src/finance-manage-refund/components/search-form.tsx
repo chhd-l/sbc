@@ -14,6 +14,7 @@ export default class SearchForm extends React.Component<any, any> {
       //改变支付方式
       changePayWay: Function;
       changeTradeNo: Function;
+      onSearch: Function;
       payWaysObj: any;
       incomeDetail: any;
       kind: string;
@@ -33,6 +34,7 @@ export default class SearchForm extends React.Component<any, any> {
     kind: 'kind',
     exportIncomeDetail: noop,
     exportRefundDetail: noop,
+    onSearch: noop,
     refundDetail: 'refundDetail'
   };
 
@@ -44,7 +46,8 @@ export default class SearchForm extends React.Component<any, any> {
       exportIncomeDetail,
       exportRefundDetail,
       refundDetail,
-      incomeDetail
+      incomeDetail,
+      onSearch
     } = this.props.relaxProps;
     return (
       <div>
@@ -57,7 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
                   document.getElementById('page-content')
                 }
                 label={this.props.name}
-                style={{ width: 80 }}
+                style={{ width: 180 }}
               >
                 <Option value={null}>All</Option>
                 <Option value="ALIPAY">VISA</Option>
@@ -87,7 +90,7 @@ export default class SearchForm extends React.Component<any, any> {
                     disabled={incomeDetail.toJS().length <= 0}
                     onClick={(e) => {
                       e.preventDefault();
-                      exportIncomeDetail();
+                      onSearch();
                     }}
                   >
                     Search

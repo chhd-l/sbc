@@ -99,7 +99,9 @@ export default class AppStore extends Store {
    * 带着搜索条件的分页点击查询
    */
   onSearch = async () => {
-    this.init({ pageNum: 0, pageSize: 10 });
+    let getTime = this.state().get('dateRange').toJS();
+    getTime = await Object.assign(getTime, { pageNum: 0, pageSize: 10 });
+    await this.init(getTime);
   };
   /**
    * 验证InputGroupCompact控件数值大小，并进行大小值交换

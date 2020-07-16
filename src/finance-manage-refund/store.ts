@@ -40,6 +40,11 @@ export default class AppStore extends Store {
     }
   };
 
+  onSearch = async () => {
+    let search = this.state().get('payWaysObj').toJS();
+    search = await Object.assign(search, { pageNum: 0, pageSize: 10 });
+    await this.init(search);
+  };
   /**
    * 收入明细
    * @returns {Promise<void>}

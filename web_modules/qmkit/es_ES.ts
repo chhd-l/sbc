@@ -23,6 +23,7 @@ export default {
   'all': 'All',
   'edit': 'Edit',
   'operation': 'Operation',
+  'details': 'Details',
   'delete': 'Delete',
   'editProduct': 'Edit product',
   'basicInformation': 'Basic information',
@@ -247,8 +248,9 @@ export default {
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
   'settlement': 'Settlement',
-
-
+  'SettlementStatementTime': 'Settlement statement time',
+  'SettlementPeriod': 'Settlement period',
+  'Paymentamount':'Payment amount',
   'product': 'Product',
   'consumerList': 'Consumer List',
   'consumerClinicList': 'Consumer list(Presciber)',
@@ -527,7 +529,7 @@ export default {
   'totalPaidGoods': 'Total Paid Goods',
   'totalFreight': 'Total Freight',
 
-  'inquiryDetails': 'Inquiry Details',
+  'inquiryDetails': 'Details',
   'settlementDetails': 'Settlement Details',
   'exportDetails': 'Export Details',
 

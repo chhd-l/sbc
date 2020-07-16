@@ -222,7 +222,7 @@ export default class RefundList extends React.Component<any, any> {
                       })
                     }
                   >
-                    {<FormattedMessage id="details" />}
+                    Details
                   </a>
                 </AuthWrapper>
               );

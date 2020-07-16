@@ -31,8 +31,10 @@ export default class SettleDetailActor extends Actor {
       endTime: '',
       searchForm: {
         prescriberId: '',
-        beginTime: '',
-        endTime: '',
+        beginTime: moment(new Date()).format('YYYY-MM-DD').toString(),
+        endTime: moment(new Date()).format('YYYY-MM-DD').toString(),
+        /* beginTime: '2020-05-01',
+        endTime: '2020-07-01',*/
         pageNum: 0,
         pageSize: 10
       },

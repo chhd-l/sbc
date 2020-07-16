@@ -135,9 +135,20 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           key="orderRewardRate"
           dataIndex="orderRewardRate"
           width="11%"
-          render={(orderRewardRate, record: any, i) => (
+          render={(orderRewardRate) => (
+            <span>
+              {orderRewardRate != null ? `${orderRewardRate.toFixed(2)}%` : '-'}
+            </span>
+          )}
+        />
+        <Column
+          title={<FormattedMessage id="RewardRemark" />}
+          dataIndex="firstOrderFlag"
+          width="11%"
+          key="firstOrderFlag"
+          render={(firstOrderFlag, record: any, i) => (
             <span style={{ color: '#db0202' }}>
-              <OptionDiv style={{ width: '30%' }}>
+              <OptionDiv style={{ width: '100%' }}>
                 <Tooltip
                   overlayStyle={{
                     overflowY: 'auto'
@@ -159,22 +170,11 @@ export default class OrderInvoiceList extends React.Component<any, any> {
                   }
                 >
                   <span style={{ fontSize: 14 }}>
-                    {orderRewardRate != null
-                      ? `$${orderRewardRate.toFixed(2)}%`
-                      : '-'}
+                    {firstOrderFlag == 0 ? 'First' : 'Repeat'}
                   </span>
                 </Tooltip>
               </OptionDiv>
             </span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="RewardRemark" />}
-          dataIndex="firstOrderFlag"
-          width="11%"
-          key="firstOrderFlag"
-          render={(firstOrderFlag) => (
-            <span>{firstOrderFlag == 0 ? 'First' : 'Repeat'}</span>
           )}
         />
 

@@ -27,15 +27,15 @@ export default class BillingDetails extends React.Component<any, any> {
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 10 }}>
             <span style={styles.space}>
-              {<FormattedMessage id="billingPeriod" />}:
+              {<FormattedMessage id="SettlementPeriod" />}：
               {settlement.get('startTime')}～{settlement.get('endTime')}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="statementNumber" />}:
+              {<FormattedMessage id="statementNumber" />}：
               {settlement.get('settlementCode')}
             </span>
             <span style={styles.space}>
-              {<FormattedMessage id="statementGenerationTime" />}:
+              {<FormattedMessage id="statementGenerationTime" />}：
               {moment(settlement.get('createTime'))
                 .format(Const.DAY_FORMAT)
                 .toString()}
@@ -45,7 +45,7 @@ export default class BillingDetails extends React.Component<any, any> {
           <Row>
             <Col span={3}>
               <p style={styles.nav}>
-                {<FormattedMessage id="totalPaidGoods" />}
+                {<FormattedMessage id="Paymentamount" />}
               </p>
               <p style={styles.num}>
                 {settlement.get('splitPayPrice')
@@ -53,14 +53,14 @@ export default class BillingDetails extends React.Component<any, any> {
                   : '¥0.00'}
               </p>
             </Col>
-            <Col span={3}>
+            {/* <Col span={3}>
               <p style={styles.nav}>{<FormattedMessage id="totalFreight" />}</p>
               <p style={styles.num}>
                 {settlement.get('deliveryPrice')
                   ? util.FORMAT_YUAN(settlement.get('deliveryPrice'))
                   : '¥0.00'}
               </p>
-            </Col>
+            </Col>*/}
           </Row>
         </div>
       </div>

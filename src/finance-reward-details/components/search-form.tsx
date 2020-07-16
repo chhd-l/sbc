@@ -41,6 +41,8 @@ export default class SearchForm extends React.Component<any, any> {
       changeDateRange: Function;
       //根据日期搜索
       searchByDate: Function;
+      beginTime: any;
+      endTime: any;
     };
   };
 
@@ -123,7 +125,7 @@ export default class SearchForm extends React.Component<any, any> {
           </Button>
         </FormItem>
         <FormItem>
-          <AuthWrapper functionName={'financeRewardExport'}>
+          <AuthWrapper functionName={'rewardDetailListExport'}>
             <div style={{ paddingBottom: '16px' }}>
               <Button onClick={() => bulkExport()}>
                 {<FormattedMessage id="bulkExport" />}

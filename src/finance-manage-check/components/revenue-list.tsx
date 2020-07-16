@@ -31,7 +31,6 @@ export default class RevenueList extends React.Component<any, any> {
       incomeTotal,
       dateRange
     } = this.props.relaxProps;
-    console.log(incomeTotal.toJS());
     let totalAmount = 0;
     return (
       <div>
@@ -233,7 +232,7 @@ export default class RevenueList extends React.Component<any, any> {
                         })
                       }
                     >
-                      {<FormattedMessage id="details" />}
+                      {<FormattedMessage id="Details" />}
                     </a>
                   </AuthWrapper>
                 );

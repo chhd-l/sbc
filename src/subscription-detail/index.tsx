@@ -110,8 +110,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
             nextDeliveryTime: moment(
-              subscriptionDetail.nextDeliveryTime
-            ).format('MMMM Do YY'),
+              new Date(subscriptionDetail.nextDeliveryTime)
+            ).format('MMMM Do YYYY'),
             promotionCode: subscriptionDetail.promotionCode
           };
           let orderInfo = {
@@ -390,7 +390,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const cartExtra = (
       <Popconfirm
         placement="topRight"
-        title="Are you sure skip next dilivery?"
+        title="Are you sure skip next delivery?"
         onConfirm={() =>
           this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
         }
@@ -398,7 +398,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         cancelText="Cancel"
       >
         <Button type="link" style={{ fontSize: 16 }}>
-          Skip Next Dilivery
+          Skip Next Delivery
         </Button>
       </Popconfirm>
     );
@@ -520,8 +520,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </BreadCrumb>
         <Card
           loading={this.state.loading}
-          title={cartTitle}
-          // title="Subscription Details"
+          // title={cartTitle}
+          title="Subscription Details"
           bordered={false}
           extra={
             subscriptionInfo.subscriptionStatus === 'Active' ? cartExtra : ''
@@ -656,7 +656,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>$0</span>
+                <span>$111</span>
               </div>
               {/* <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
@@ -679,10 +679,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
 
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Country: </p>
+                  <p style={{ width: 140 }}>Name: </p>
                   <p>
                     {deliveryAddressInfo
-                      ? this.getDictValue(
+                      ? deliveryAddressInfo.firstName +
+                        ' ' +
+                        deliveryAddressInfo.lastName
+                      : ''}
+                  </p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>City,Country: </p>
+                  <p>
+                    {deliveryAddressInfo
+                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId) +
+                        ',' +
+                        this.getDictValue(
                           countryArr,
                           deliveryAddressInfo.countryId
                         )
@@ -690,23 +702,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>City: </p>
-                  <p>
-                    {deliveryAddressInfo
-                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId)
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
+                  <p style={{ width: 140 }}>Address: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address2: </p>
-                  <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
                   </p>
                 </Col>
               </Row>
@@ -716,11 +714,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Col span={12}>
                   <label className="info-title">Billing Address</label>
                 </Col>
+
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Country: </p>
+                  <p style={{ width: 140 }}>Name: </p>
                   <p>
                     {billingAddressInfo
-                      ? this.getDictValue(
+                      ? billingAddressInfo.firstName +
+                        ' ' +
+                        billingAddressInfo.lastName
+                      : ''}
+                  </p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>City,Country: </p>
+                  <p>
+                    {billingAddressInfo
+                      ? this.getDictValue(cityArr, billingAddressInfo.cityId) +
+                        ',' +
+                        this.getDictValue(
                           countryArr,
                           billingAddressInfo.countryId
                         )
@@ -728,20 +739,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>City: </p>
-                  <p>
-                    {billingAddressInfo
-                      ? this.getDictValue(cityArr, billingAddressInfo.cityId)
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
+                  <p style={{ width: 140 }}>Address: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address2: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>

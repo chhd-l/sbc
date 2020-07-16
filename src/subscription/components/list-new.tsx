@@ -154,16 +154,16 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
-                      </th>
+                      </th> */}
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.frequency" />
                       </th>
                       {/* <th style={{ width: '8%' }}>
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
-                      <th style={{ width: '15%' }}>
+                      <th style={{ width: '20%' }}>
                         <FormattedMessage id="subscription.operation" />
                       </th>
                     </tr>
@@ -274,23 +274,21 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.goodsInfo && v.goodsInfo.size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={item.goodsPic ? item.goodsPic : defaultImg}
-                              style={styles.imgFourth}
-                            />
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.goodsInfo.size} <FormattedMessage id="piece" />
-                            </div>
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.goodsInfo && v.goodsInfo.size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={item.goodsPic ? item.goodsPic : defaultImg}
+                            style={styles.imgFourth}
+                          />
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="total" />
+                            {v.goodsInfo.size} <FormattedMessage id="piece" />
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
                     <td style={{ width: '15%', paddingLeft: 20 }}>
                       {v.goodsInfo &&
@@ -307,9 +305,9 @@ export default class ListView extends React.Component<any, any> {
                       {v.customerName ? v.customerName : ''}
                     </td>
                     {/* Recipient */}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                    {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}
-                    </td>
+                    </td> */}
                     {/*Frequency*/}
                     <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.frequency ? v.frequency : ''}
@@ -319,7 +317,7 @@ export default class ListView extends React.Component<any, any> {
                       {v.goodsInfo && this.goodsSum(v.goodsInfo)}
                     </td> */}
                     {/*Operation*/}
-                    <td style={{ width: '15%' }} className="operation-td">
+                    <td style={{ width: '20%' }} className="operation-td">
                       <Button type="link">
                         <Link to={'/subscription-detail/' + v.subscribeId}>
                           Details

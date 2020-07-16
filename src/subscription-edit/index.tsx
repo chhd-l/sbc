@@ -703,7 +703,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
-                <p>Next order date</p>
+                <p>Next received date</p>
                 {/* <p style={{ color: '#808285' }}>
                   {subscriptionInfo.nextDeliveryTime}
                 </p> */}
@@ -778,7 +778,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </Row>
 
           <Row className="consumer-info" style={{ marginTop: 20 }}>
-            <Col span={12}>
+            <Col span={8}>
               <Row>
                 <Col span={12}>
                   <label className="info-title">Delivery Address</label>
@@ -790,7 +790,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Button>
                 </Col>
 
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
                     {deliveryAddressInfo
@@ -801,7 +801,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>City: </p>
                   <p>
                     {deliveryAddressInfo
@@ -809,13 +809,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
@@ -823,7 +823,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
               </Row>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Row>
                 <Col span={12}>
                   <label className="info-title">Billing Address</label>
@@ -840,7 +840,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     Change
                   </Button>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
                     {billingAddressInfo
@@ -851,7 +851,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>City: </p>
                   <p>
                     {billingAddressInfo
@@ -859,13 +859,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={24}>
+                  <label className="info-title">Payment Method</label>
+                </Col>
+
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Payment Method: </p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Card Number: </p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -907,7 +923,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
               </Row>
             </Col> */}
-            <Col span={12}>
+            {/* <Col span={12}>
               <Row>
                 <Col span={18}>
                   <label className="info-title">Payment Method</label>
@@ -922,7 +938,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
 
           <Row style={styles.backItem}>
@@ -970,6 +986,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               Same as Delivery Address
             </Checkbox>
             <Radio.Group
+              style={{ maxHeight: 600, overflowY: 'auto' }}
               value={this.state.deliveryAddressId}
               onChange={(e) => {
                 let value = e.target.value;

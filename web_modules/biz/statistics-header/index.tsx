@@ -31,7 +31,7 @@ export default class StatisticsHeader extends React.Component<
   }
 
   //初始化menu下拉菜单内容
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this._renderMenu();
     if (this.props.todayDisabled) {
       this.setState({
@@ -61,7 +61,7 @@ export default class StatisticsHeader extends React.Component<
                   onClick={() => this._change(0)}
                   className={clickKey == 0 ? 'statisticsItemCur'
                     : 'statisticsItem'}
-                  href="javascript:;"
+                  href="#!"
                 >
                   今天
                 </a>
@@ -72,7 +72,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(-1)}
                 className={clickKey == -1 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="javascript:;"
+                href="#!"
               >
                 昨天
               </a>
@@ -82,7 +82,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(1)}
                 className={clickKey == 1 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="javascript:;"
+                href="#!"
               >
                 最近7天
               </a>
@@ -92,7 +92,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(2)}
                 className={clickKey == 2 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="javascript:;"
+                href="#!"
               >
                 最近30天
               </a>

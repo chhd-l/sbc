@@ -119,7 +119,7 @@ export default class CustomerStatisticsMultiList extends React.Component<
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.dateRange.get('dateCycle') !==
       this.props.relaxProps.dateRange.get('dateCycle')

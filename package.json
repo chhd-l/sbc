@@ -63,7 +63,7 @@
     "@types/node": "^7.0.10",
     "@types/react": "^16.0.27",
     "@types/react-dom": "^16.0.3",
-    "antd": "^3.18.2",
+    "antd": "^3.9.4",
     "axios": "^0.19.2",
     "cache-loader": "^1.2.0",
     "core-js": "^3.1.2",
@@ -134,8 +134,8 @@
     "happypack": "^4.0.0",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "http-server": "^0.11.1",
-    "image-webpack-loader": "^4.6.0",
     "husky": "^3.0.1",
+    "image-webpack-loader": "^4.6.0",
     "less": "^3.9.0",
     "less-loader": "^4.0.5",
     "lint-staged": "^9.2.1",
@@ -179,6 +179,11 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-undef": "off",
+      "no-restricted-globals": "off",
+      "no-unused-vars": "off"
+    }
   }
 }

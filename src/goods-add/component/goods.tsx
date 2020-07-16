@@ -191,7 +191,7 @@ class GoodsForm extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
@@ -447,7 +447,7 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
           {/* <Col span={8}>
             <a
-              href="javascript:;"
+              href="#!"
               onClick={showCateModal}
               style={{ marginLeft: 10, lineHeight: '40px' }}
             >

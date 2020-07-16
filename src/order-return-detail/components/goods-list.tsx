@@ -231,7 +231,7 @@ export default class GoodsList extends React.Component<any, any> {
                   />
                 }
               >
-                <a href="javascript:;" style={styles.imgBox}>
+                <a href="#!" style={styles.imgBox}>
                   <img
                     key={index}
                     style={styles.attachment}

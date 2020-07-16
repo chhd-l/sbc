@@ -23,7 +23,7 @@ export default class IndicatorPopver extends React.Component<PopupProps, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       (this.state.visible &&
         this.state.checkedArray.length != nextProps.checkedArray.length) ||

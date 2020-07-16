@@ -38,13 +38,13 @@ export default class FinancialAccounts extends React.Component<any, any> {
               title={<FormattedMessage id="financialReconciliation" />}
             />
             <SearchForm />
-            <AuthWrapper functionName="f_check_export">
+            {/*<AuthWrapper functionName="f_check_export">
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulk_export()}>
                   {<FormattedMessage id="bulkExport" />}
                 </Button>
               </div>
-            </AuthWrapper>
+            </AuthWrapper>*/}
             <Tabs
               onChange={(key) => this.store.onTabChange(key)}
               activeKey={this.store.state().get('tabKey')}

@@ -29,7 +29,7 @@ const PAIN = {
 export default class ShopInfoEdit extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

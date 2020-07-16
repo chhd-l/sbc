@@ -12,7 +12,7 @@ import AppStore from './store';
 export default class DownloadReport extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init();
   }
 

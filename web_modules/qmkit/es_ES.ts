@@ -246,7 +246,7 @@ export default {
   'account': 'Account',
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
-
+  'settlement': 'Settlement',
 
 
   'product': 'Product',
@@ -289,7 +289,7 @@ export default {
   'collectionRecords': 'Payment Records',
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
-  'orderNumber': "Order number",
+  'orderNumber': "Order Number",
   'consumer': "Consumer",
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",
@@ -511,7 +511,7 @@ export default {
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
-
+  'Paymentamount': 'Payment amount',
   'financialSettlement': 'Finance Settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
@@ -521,6 +521,8 @@ export default {
   'statementGenerationTime': 'Statement Generation Time',
   'statementTime': 'Billing Time',
   'statementNumber': 'Statement Number',
+  'statementPeriod': 'Statement Period',
+
   'billingPeriod': 'Billing Period',
   'totalPaidGoods': 'Total Paid Goods',
   'totalFreight': 'Total Freight',
@@ -558,7 +560,8 @@ export default {
   'RewardRate': 'Reward Rate',
   'RewardRemark': 'Reward Remark',
 
-
+  'firstRewardRate': 'First Reward Rate',
+  'repeatRewardRate': 'Repeat Reward Rate',
 
 
 
@@ -577,13 +580,11 @@ export default {
   'toBeInvoiced': 'To be invoiced',
   'viewBilling': 'View Billing',
   'billingItems': 'Billing Items',
-  'FinanceReward': 'Finance Reward',
 
   'supportedBillingTypes': 'Supported billing types',
   'doesNotSupportInvoicing': 'Does not support invoicing',
 
   'vatSpecialInvoice': 'VAT special invoice',
-  "invoiceReceiptInformation": "Invoice receipt information",
   'saveSettings': 'Save Settings',
   'Edit': 'Edit',
   'Delete': 'Delete',
@@ -620,11 +621,10 @@ export default {
   'allSurvey': 'All Survey',
   'surveyTime': 'Survey time',
   'defaultPrescriberName': 'default Prescriber Name',
-  'consumer.consumerDetails':'Consumer Details',
-  'consumer.removeConsumer':'Remove Consumer',
+  'consumer.consumerDetails': 'Consumer Details',
+  'consumer.removeConsumer': 'Remove Consumer',
 
   'shopping': 'Shopping',
-  "last180": 'Last 180 days',
   'overall': 'Overall',
 
   'toBePaidOrders': 'To be paid orders',

@@ -159,7 +159,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf002">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() => this._showAudit(onAudit, rid)}
                   >
                     审核
@@ -171,7 +171,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf002">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() => this._showReject(onReject, rid)}
                   >
                     驳回
@@ -184,7 +184,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf003">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() => this._showDeliver(onDeliver, rid)}
                   >
                     Fill in logistics
@@ -196,7 +196,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf004">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() => this._showReceive(onReceive, rid)}
                   >
                     收货
@@ -208,7 +208,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf004">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() =>
                       this._showRejectReceive(onRejectReceive, rid)
                     }
@@ -225,7 +225,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                     {' '}
                     <a
                       style={styles.pr20}
-                      href="javascript:;"
+                      href="#!"
                       onClick={() => {
                         if (payType == 0) {
                           this._showOnlineRefund(
@@ -256,7 +256,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                 <AuthWrapper functionName="rolf005">
                   <a
                     style={styles.pr20}
-                    href="javascript:;"
+                    href="#!"
                     onClick={() =>
                       this._showRejectRefund(onRejectRefund, rid, 0 == payType)
                     }

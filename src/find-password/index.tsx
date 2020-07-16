@@ -20,7 +20,7 @@ export default class FindPassword extends React.Component<any, any> {
     super(props);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const state = this.props.location.state;
     const { phone } = (state || {}) as any;
     this.store.init(phone);

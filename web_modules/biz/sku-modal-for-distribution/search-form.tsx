@@ -42,7 +42,7 @@ export default class SearchForm extends React.Component<any, any> {
     this.init();
   }
 
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: {

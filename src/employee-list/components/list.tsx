@@ -211,7 +211,7 @@ export default class EmployeeList extends React.Component<any, any> {
         {accountState != 2 && (
           <AuthWrapper functionName={'enableDisableEmployee'}>
             {accountState == 0 ? (
-              <a href="javascript:;" onClick={() => switchModal(employeeId)}>
+              <a href="#!" onClick={() => switchModal(employeeId)}>
                 <FormattedMessage id="disabled" />
               </a>
             ) : (

@@ -49,7 +49,7 @@ export default class TradeStatisticsList extends React.Component<any, any> {
    * 数据源发生变化时，以新的为准
    * @param nextProps
    */
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.startDate !== this.props.relaxProps.startDate ||
       nextProps.sortedName != this.props.relaxProps.sortedName ||

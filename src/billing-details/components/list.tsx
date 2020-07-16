@@ -43,7 +43,7 @@ export default class List extends React.Component<any, any> {
     exportSettlementDetailList: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({ expandedRows: [] });
   }
 
@@ -89,16 +89,16 @@ export default class List extends React.Component<any, any> {
   _renderColumns = (): any[] => {
     return [
       {
-        title: 'Serial Number',
+        title: 'Transaction serial number',
         key: 'index',
         dataIndex: 'index',
         render: (value, row) => {
           return this._handleRowSpan(row, value);
         },
-        width: 80
+        width: 180
       },
       {
-        title: 'Order Credit Time',
+        title: 'Payment credited',
         dataIndex: 'finalTime',
         key: 'finalTime',
         render: (value, row) => {
@@ -107,7 +107,7 @@ export default class List extends React.Component<any, any> {
         width: 120
       },
       {
-        title: 'Order Number',
+        title: 'Order number',
         dataIndex: 'tradeCode',
         key: 'tradeCode',
         render: (value, row) => {
@@ -116,16 +116,16 @@ export default class List extends React.Component<any, any> {
         width: 110
       },
       {
-        title: 'Order Type',
+        title: 'Product name',
         dataIndex: 'orderType',
         key: 'orderType',
         width: 110
       },
       {
-        title: 'Product code/name/weight',
+        title: 'Product SKU',
         dataIndex: 'goodsName',
         key: 'goodsName',
-        width: 220,
+        width: 100,
         render: (value, row) => {
           return (
             <div style={{ maxWidth: 200 }}>
@@ -164,21 +164,21 @@ export default class List extends React.Component<any, any> {
         }
       },
       {
-        title: 'Category',
+        title: 'Product price',
         dataIndex: 'cateName',
         key: 'cateName',
-        width: 80
+        width: 100
       },
       {
-        title: 'Product Price',
+        title: 'Product quantity',
         dataIndex: 'goodsPrice',
         key: 'goodsPrice',
         render: (value) => {
           return util.FORMAT_YUAN(value.toFixed(2));
         },
         width: 100
-      },
-      {
+      }
+      /*{
         title: 'Quantity',
         dataIndex: 'num',
         key: 'num',
@@ -193,7 +193,7 @@ export default class List extends React.Component<any, any> {
           return this._handleRowSpan(row, util.FORMAT_YUAN(value));
         },
         width: 100
-      }
+      }*/
       // {
       //   title: '店铺应收金额',
       //   key: 'storePrice',

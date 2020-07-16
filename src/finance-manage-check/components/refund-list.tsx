@@ -33,6 +33,41 @@ export default class RefundList extends React.Component<any, any> {
     } = this.props.relaxProps;
     return (
       <div>
+        <div className="totalAmount">
+          <ul>
+            <li>
+              <p className="payName">&nbsp;Total Revenue</p>
+              <strong>
+                {refundList.toJS().map((item, index) => {
+                  let a = item.totalAmount.substr(
+                    0,
+                    item.totalAmount.length - 1
+                  );
+                  return a;
+                })}
+              </strong>
+              <p className="payPercent">100% &nbsp;{}</p>
+            </li>
+            <li>
+              <p className="payName">&nbsp;PayU</p>
+              <strong>
+                {refundList.toJS().map((item, index) => {
+                  let a = item.totalAmount.substr(
+                    0,
+                    item.totalAmount.length - 1
+                  );
+                  return a;
+                })}
+              </strong>
+              <p className="payPercent">100% &nbsp;{}</p>
+            </li>
+            <li>
+              <p className="payName">&nbsp;OXXO</p>
+              <strong>--</strong>
+              <p className="payPercent">-- &nbsp;{}</p>
+            </li>
+          </ul>
+        </div>
         {/* <div className="totalAmount">
           <ul>
             {refundTotal.toJS().length > 0

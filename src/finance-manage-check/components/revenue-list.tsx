@@ -31,11 +31,44 @@ export default class RevenueList extends React.Component<any, any> {
       incomeTotal,
       dateRange
     } = this.props.relaxProps;
+    console.log(incomeTotal.toJS());
+    let totalAmount = 0;
     return (
       <div>
-        {/* <div className="totalAmount">
+        <div className="totalAmount">
           <ul>
-            {incomeTotal.toJS().length > 0
+            <li>
+              <p className="payName">&nbsp;Total Revenue</p>
+              <strong>
+                {incomeList.toJS().map((item, index) => {
+                  let a = item.totalAmount.substr(
+                    0,
+                    item.totalAmount.length - 1
+                  );
+                  return a;
+                })}
+              </strong>
+              <p className="payPercent">100% &nbsp;{}</p>
+            </li>
+            <li>
+              <p className="payName">&nbsp;PayU</p>
+              <strong>
+                {incomeList.toJS().map((item, index) => {
+                  let a = item.totalAmount.substr(
+                    0,
+                    item.totalAmount.length - 1
+                  );
+                  return a;
+                })}
+              </strong>
+              <p className="payPercent">100% &nbsp;{}</p>
+            </li>
+            <li>
+              <p className="payName">&nbsp;OXXO</p>
+              <strong>--</strong>
+              <p className="payPercent">-- &nbsp;{}</p>
+            </li>
+            {/*{incomeTotal.toJS().length > 0
               ? incomeTotal.map((v, i) => {
                   //不显示预存款，优惠券和积分
                   return (
@@ -54,9 +87,9 @@ export default class RevenueList extends React.Component<any, any> {
                     )
                   );
                 })
-              : null}
+              : null}*/}
           </ul>
-        </div> */}
+        </div>
 
         <div>
           <DataGrid
@@ -65,7 +98,7 @@ export default class RevenueList extends React.Component<any, any> {
             pagination={false}
           >
             <Column
-              title={<FormattedMessage id="serialNumber" />}
+              title="NO."
               dataIndex="index"
               key="index"
               width="50"
@@ -128,15 +161,15 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             /> */}
             <Column
-              title="PayU"
+              title="Source"
               dataIndex="PayU"
               key="PayU"
               width="100"
               render={(_text, rowData: any) => {
-                return <span>{rowData.payItemAmountMap.POINT}</span>;
+                return <span>{'PayU'}</span>;
               }}
             />
-            <Column
+            {/*<Column
               title={<FormattedMessage id="balance" />}
               dataIndex="BALANCE"
               key="BALANCE"
@@ -144,7 +177,7 @@ export default class RevenueList extends React.Component<any, any> {
               render={(_text, rowData: any) => {
                 return <span>{rowData.payItemAmountMap.BALANCE}</span>;
               }}
-            />
+            />*/}
             {/*<Column*/}
             {/*title='预存款'*/}
             {/*dataIndex='ADVANCE'*/}
@@ -173,7 +206,7 @@ export default class RevenueList extends React.Component<any, any> {
             {/*}}*/}
             {/*/>*/}
             <Column
-              title={<FormattedMessage id="total2" />}
+              title={<FormattedMessage id="Revenue" />}
               dataIndex="totalAmount"
               key="totalAmount"
               width="100"

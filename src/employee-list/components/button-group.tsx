@@ -104,7 +104,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       <Menu>
         <Menu.Item key={0}>
           <AuthWrapper functionName={'enableDisableEmployee'}>
-            <a href="javascript:;" onClick={() => this._batchEnable()}>
+            <a href="#!" onClick={() => this._batchEnable()}>
               Batch enabled
             </a>
           </AuthWrapper>
@@ -112,7 +112,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={1}>
           <AuthWrapper functionName={'enableDisableEmployee'}>
-            <a href="javascript:;" onClick={() => this._batchDisable()}>
+            <a href="#!" onClick={() => this._batchDisable()}>
               Batch disable
             </a>
           </AuthWrapper>
@@ -120,7 +120,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={2}>
           <AuthWrapper functionName={'deleteEmployee'}>
-            <a href="javascript:;" onClick={() => this._batchDelete()}>
+            <a href="#!" onClick={() => this._batchDelete()}>
               Batch delete
             </a>
           </AuthWrapper>
@@ -128,7 +128,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={3}>
           <AuthWrapper functionName={'f_batch_ajust_department'}>
-            <a href="javascript:;" onClick={() => this._batchAdjust()}>
+            <a href="#!" onClick={() => this._batchAdjust()}>
               Adjust group
             </a>
           </AuthWrapper>
@@ -136,7 +136,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         {/* <Menu.Item key={4}>
           <AuthWrapper functionName={'f_batch_set_employee'}>
-            <a href="javascript:;" onClick={() => this._batchSetEmployee()}>
+            <a href="#!" onClick={() => this._batchSetEmployee()}>
               批量设为业务员
             </a>
           </AuthWrapper>
@@ -144,7 +144,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={5}>
           <AuthWrapper functionName={'f_batch_employee_dismiss'}>
-            <a href="javascript:;" onClick={() => this._batchSetLeave()}>
+            <a href="#!" onClick={() => this._batchSetLeave()}>
               批量设为离职
             </a>
           </AuthWrapper>
@@ -152,7 +152,7 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={6}>
           <AuthWrapper functionName={'f_batch_employee_active'}>
-            <a href="javascript:;" onClick={() => this._batchActive()}>
+            <a href="#!" onClick={() => this._batchActive()}>
               会员账户激活
             </a>
           </AuthWrapper>
@@ -160,14 +160,14 @@ export default class ButtonGroup extends React.Component<any, any> {
 
         <Menu.Item key={7}>
           <AuthWrapper functionName={'f_batch_employee_connect'}>
-            <a href="javascript:;" onClick={() => this._batchConnect()}>
+            <a href="#!" onClick={() => this._batchConnect()}>
               业务员交接
             </a>
           </AuthWrapper>
         </Menu.Item>
         <Menu.Item key={8}>
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() => {
               history.push({
                 pathname: '/employee-import'

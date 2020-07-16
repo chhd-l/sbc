@@ -123,9 +123,7 @@ export default class AppStore extends Store {
     const { res } = result;
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Delete Successful');
-      const { size, number } = this.state()
-        .get('storeFreight')
-        .toJS();
+      const { size, number } = this.state().get('storeFreight').toJS();
       if (isStore) {
         this.freightTemplateStore(number - 1, size);
       } else {

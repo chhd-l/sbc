@@ -50,7 +50,7 @@ export default class BillingDetails extends React.Component<any, any> {
 
         <div className="container">
           <Headline title={<FormattedMessage id="settlementDetails" />} />
-          <OptionDiv>
+          {/*<OptionDiv>
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto',
@@ -64,7 +64,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 &nbsp;&nbsp;{<FormattedMessage id="instructions" />}
               </a>
             </Tooltip>
-          </OptionDiv>
+          </OptionDiv>*/}
           <Detail />
           <List settleId={this.props.match.params.settleId} />
           <Bottom />

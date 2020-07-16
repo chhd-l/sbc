@@ -370,7 +370,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } = this.state;
     const cartTitle = (
       <div className="cart-title">
-        <span>Subscription</span>
+        <span>Subscription Details</span>
         <span className="order-time">
           {'#' + subscriptionInfo.deliveryTimes}
         </span>
@@ -483,7 +483,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time && moment(time).format(Const.TIME_FORMAT).toString()
+          time &&
+          moment(time)
+            .format(Const.TIME_FORMAT)
+            .toString()
       },
       {
         title: 'Operation Category',
@@ -517,10 +520,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </BreadCrumb>
         <Card
           loading={this.state.loading}
-          // title={cartTitle}
-          title="Subscription Details"
+          title={cartTitle}
+          // title="Subscription Details"
           bordered={false}
-          extra={subscriptionInfo.subscribeStatus === 'Active' ? cartExtra : ''}
+          extra={
+            subscriptionInfo.subscriptionStatus === 'Active' ? cartExtra : ''
+          }
           style={{ margin: 20 }}
         >
           {/* subscription 基本信息 */}
@@ -601,7 +606,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={8}>
               <div className="previous-order-info">
-                <p>Next order date</p>
+                <p>Next received date</p>
                 <p style={{ color: '#808285' }}>
                   {/* {moment(
                     subscriptionInfo.nextDeliveryTime,
@@ -667,13 +672,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </Row>
 
           <Row className="consumer-info" style={{ marginTop: 20 }}>
-            <Col span={12}>
+            <Col span={8}>
               <Row>
                 <Col span={12}>
                   <label className="info-title">Delivery Address</label>
                 </Col>
 
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
                     {deliveryAddressInfo
@@ -684,7 +689,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>City: </p>
                   <p>
                     {deliveryAddressInfo
@@ -692,13 +697,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
@@ -706,12 +711,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
               </Row>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Row>
                 <Col span={12}>
                   <label className="info-title">Billing Address</label>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Country: </p>
                   <p>
                     {billingAddressInfo
@@ -722,7 +727,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>City: </p>
                   <p>
                     {billingAddressInfo
@@ -730,13 +735,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       : ''}
                   </p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                 </Col>
-                <Col span={18}>
+                <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={24}>
+                  <label className="info-title">Payment Method</label>
+                </Col>
+
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Payment Method: </p>
+                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Card Number: </p>
+                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -767,7 +788,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Row>
             </Col>
             */}
-            <Col span={12}>
+            {/* <Col span={12}>
               <Row>
                 <Col span={18}>
                   <label className="info-title">Payment Method</label>
@@ -782,7 +803,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
                 </Col>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
 
           <Row style={styles.backItem}>

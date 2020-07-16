@@ -734,6 +734,7 @@ export default {
   'setBanner': 'Set banner',
   'pc': 'PC',
   'mobile': 'Mobile',
+  'preview': 'Preview',
   'last180':'last 180 day'
 
 

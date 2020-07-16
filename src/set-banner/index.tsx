@@ -7,13 +7,16 @@ import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
 import { Link } from 'react-router-dom';
 import BannerList from './components/set-banner-list';
+import UploadImageModal from './components/upload-image-modal';
 const FormItem = Form.Item;
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SetBanner extends Component<any, any> {
   store: AppStore;
 
-  componentDidMount() {}
+  componentDidMount() {
+    // this.store.uploadModalStatusChange(true)
+  }
   onFormChange = ({ field, value }) => {
     // let data = this.state.searchForm;
     // data[field] = value;
@@ -65,15 +68,9 @@ export default class SetBanner extends Component<any, any> {
                   </Button>
                 </Form.Item>
               </Form>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginBottom: '10px' }}
-                onClick={() => this.uploadImage()}
-              >
-                <Link>Upload</Link>
-              </Button>
+
               <BannerList />
+              <UploadImageModal />
             </div>
           </div>
         </div>

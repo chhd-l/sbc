@@ -704,7 +704,8 @@ export default {
   'subscriptionList':'Subscription List',
   'setBanner': 'Set banner',
   'pc': 'PC',
-  'mobile': 'Mobile'
+  'mobile': 'Mobile',
+  'preview': 'Preview'
 
 
 

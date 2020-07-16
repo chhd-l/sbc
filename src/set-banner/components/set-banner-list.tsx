@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
+import { noop } from 'qmkit';
 import {
   Form,
   Select,
@@ -71,9 +72,7 @@ const WrappedRejectForm = Form.create({})(RejectForm);
 @Relax
 export default class SetBannerList extends Component<any, any> {
   _rejectForm;
-  state: {
-    tableColumns: [];
-  };
+  state: {};
 
   props: {
     relaxProps?: {
@@ -82,6 +81,7 @@ export default class SetBannerList extends Component<any, any> {
       pageSize: number;
       currentPage: number;
       tableDatas: TList;
+      uploadModalStatusChange: Function;
     };
   };
 
@@ -90,30 +90,12 @@ export default class SetBannerList extends Component<any, any> {
     total: 'total',
     pageSize: 'pageSize',
     currentPage: 'currentPage',
-    tableDatas: 'tableDatas'
+    tableDatas: 'tableDatas',
+    uploadModalStatusChange: noop
   };
   handleTableChange() {}
-  componentDidMount() {
-    this.setState({
-      tableColumns: [
-        {
-          title: '姓名',
-          dataIndex: 'name',
-          key: 'name'
-        },
-        {
-          title: '年龄',
-          dataIndex: 'age',
-          key: 'age'
-        },
-        {
-          title: '住址',
-          dataIndex: 'address',
-          key: 'address'
-        }
-      ]
-    });
-  }
+  componentDidMount() {}
+  deleteRow(id) {}
   _renderLoading() {
     return (
       <tr style={styles.loading}>
@@ -127,15 +109,26 @@ export default class SetBannerList extends Component<any, any> {
   _renderContent(dataList) {
     return (
       dataList &&
-      dataList.map((v, index) => {
-        const id = v.get('id');
-        const pcImage = v.get('pcImage');
+      dataList.map((item, index) => {
+        const id = item.get('id');
+        const pcImage = item.get('pcImage');
+        const mobileImage = item.get('mobileImage');
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-            <td colSpan={8} style={{ padding: 0 }}>
-              <div>
-                <img src="" />
+            <td className="pad0">
+              <div className="img-box ">
+                <img className="img" src={pcImage} />
               </div>
+            </td>
+            <td className="pad0">
+              <div className="img-box">
+                <img className="img" src={mobileImage} />
+              </div>
+            </td>
+            <td>
+              <span className="red" onClick={() => this.deleteRow(id)}>
+                <FormattedMessage id="delete" />
+              </span>
             </td>
           </tr>
         );
@@ -149,12 +142,23 @@ export default class SetBannerList extends Component<any, any> {
       total,
       pageSize,
       currentPage,
-      tableDatas
+      tableDatas,
+      uploadModalStatusChange
     } = this.props.relaxProps;
     return (
       <div>
         {tableDatas.size > 0 ? (
           <div>
+            <div>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ marginBottom: '10px' }}
+                onClick={() => uploadModalStatusChange(true)}
+              >
+                <Link>Upload</Link>
+              </Button>
+            </div>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
                 <div className="ant-table-content">

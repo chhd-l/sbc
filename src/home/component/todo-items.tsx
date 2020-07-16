@@ -93,7 +93,7 @@ export default class TodoItems extends React.Component<any, any> {
       settlement
     } = this.props.relaxProps;
     let test = prescribersTotal;
-    const phone = employee.get('phone') || '无';
+    // const phone = employee.get('phone') || '无';
     let total = 0;
     let settled = 0;
     settlement.forEach((value) => {

@@ -35,7 +35,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     this.init(this.props.searchParams? this.props.searchParams : {});
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams?nextProps.searchParams:{}

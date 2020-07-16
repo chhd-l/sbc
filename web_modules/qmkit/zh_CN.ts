@@ -202,7 +202,7 @@ export default {
   'paymentOrder': '订单支付',
   'createOrder': '创建订单',
   'order': '订单',
-  'back': '返回',
+  'back': 'Back',
 
   "initiateApplication": "发起售后申请",
   "amountQuantity": "金额数量",
@@ -255,7 +255,7 @@ export default {
   'total2': '合计',
   'revenueReconciliationDetails': '收入对账明细',
   'paymentChannel': '支付渠道',
-  'transactionSerialNumber': '交易流水号',
+  'transactionSerialNumber': 'Transaction serial number',
   'export': '导出',
   'paymentTime': '支付时间',
   'paymentAmount': '支付金额',

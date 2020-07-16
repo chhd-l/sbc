@@ -66,7 +66,7 @@ export default class WMChart extends React.Component<WMChartProps, any> {
     rangeVisible: true
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     //渲染折线图跨度按钮显示状态
     this._renderDateRange(nextProps);
   }

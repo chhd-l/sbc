@@ -76,7 +76,7 @@ export default class EditForm extends React.Component<any, any> {
     }
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const _state = this._store.state();
     const employeeForm = _state.get('employeeForm');
     if (_state.get('edit')) {

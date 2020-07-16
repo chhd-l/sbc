@@ -14,7 +14,7 @@ export default class SearchForm extends React.Component<any, any> {
     super(props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       beginTime: moment(nextProps.relaxProps.dateRange.get('beginTime')),
       endTime: moment(nextProps.relaxProps.dateRange.get('endTime')),

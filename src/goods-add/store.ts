@@ -201,11 +201,7 @@ export default class AppStore extends Store {
         .find((item) => item.get('isDefault') == 1)
         .get('cateId');
     }
-    cateId = cateId
-      ? cateId
-      : this.state()
-          .get('videoCateId')
-          .toJS();
+    cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
 
     //查询视频分页信息
     const videoList: any = await fetchResource({
@@ -226,9 +222,7 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseVideos',
-            fromJS(videoList.res.context)
-              .get('content')
-              .slice(0, successCount)
+            fromJS(videoList.res.context).get('content').slice(0, successCount)
           );
         }
         this.dispatch('modal: videos', fromJS(videoList.res.context)); //初始化视频分页列表
@@ -281,9 +275,7 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseImgs',
-            fromJS(imageList.res.context)
-              .get('content')
-              .slice(0, successCount)
+            fromJS(imageList.res.context).get('content').slice(0, successCount)
           );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
@@ -788,12 +780,14 @@ export default class AppStore extends Store {
   };
 
   updateGoodsForm = (goodsForm) => {
+    console.log(goodsForm, goodsForm, 'goodsForm');
     this.dispatch('formActor:goods', goodsForm);
   };
   updateLogisticsForm = (logisticsForm) => {
     this.dispatch('formActor:logistics', logisticsForm);
   };
   updateSkuForm = (skuForm) => {
+    console.log(skuForm, 'skuform');
     this.dispatch('formActor:sku', skuForm);
   };
 
@@ -836,13 +830,13 @@ export default class AppStore extends Store {
         if (!errs) {
         }
       });
-    this.state()
-      .get('skuForm')
-      .validateFieldsAndScroll(null, (errs) => {
-        valid = valid && !errs;
-        if (!errs) {
-        }
-      });
+    // this.state()
+    //   .get('skuForm')
+    //   .validateFieldsAndScroll(null, (errs) => {
+    //     valid = valid && !errs;
+    //     if (!errs) {
+    //     }
+    //   });
     if (
       this.state().get('specForm') &&
       this.state().get('specForm').validateFieldsAndScroll
@@ -1171,10 +1165,23 @@ export default class AppStore extends Store {
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,
-          goodsInfoImg: imageUrl
+          goodsInfoImg: imageUrl,
+          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionStatus:
+            item.get('subscriptionStatus') === undefined
+              ? 1
+              : item.get('subscriptionStatus')
         })
       );
     });
+    if (
+      parseInt(goods.get('subscriptionStatus')) === 1 &&
+      goodsList.toJS().filter((item) => item['subscriptionStatus'] === 1)
+        .length === 0
+    ) {
+      message.error('At least one sku has a subscription status of yes');
+      return false;
+    }
     if (isEmptyImage) {
       message.error('Spec image is required');
       return false;
@@ -1230,7 +1237,7 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
-
+    console.log(result, 'result');
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -1301,7 +1308,6 @@ export default class AppStore extends Store {
       detailEditor.getContent ? detailEditor.getContent() : ''
     );
     console.log(goods.toJS(), 'goods111');
-    return;
     const tabs = [];
     if (
       data.get('detailEditor_0') &&
@@ -1513,10 +1519,7 @@ export default class AppStore extends Store {
       return;
     }
 
-    const goodsLevelPrices = data
-      .get('userLevelPrice')
-      .valueSeq()
-      .toList();
+    const goodsLevelPrices = data.get('userLevelPrice').valueSeq().toList();
     param = param.set('goodsLevelPrices', goodsLevelPrices);
 
     // -----商品客户价格列表-------
@@ -1533,17 +1536,11 @@ export default class AppStore extends Store {
       message.error('起订量不允许超过限订量');
       return;
     }
-    const userPrice = data
-      .get('userPrice')
-      .valueSeq()
-      .toList();
+    const userPrice = data.get('userPrice').valueSeq().toList();
     param = param.set('goodsCustomerPrices', userPrice);
 
     // -----商品订货区间价格列表-------
-    const areaPrice = data
-      .get('areaPrice')
-      .valueSeq()
-      .toList();
+    const areaPrice = data.get('areaPrice').valueSeq().toList();
     //验证订货区间是否重复
     if (priceType == 1 && areaPrice != null && areaPrice.count() > 0) {
       let cmap = Map();

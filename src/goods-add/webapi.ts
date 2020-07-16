@@ -104,6 +104,7 @@ export const getStoreGoodsTab = () => {
  * 保存商品基本信息
  */
 export const save = (param: any) => {
+  console.log(param, 'save');
   return Fetch('/goods/spu', {
     method: 'POST',
     body: JSON.stringify(param)
@@ -114,6 +115,7 @@ export const save = (param: any) => {
  * 修改商品基本信息
  */
 export const edit = (param: any) => {
+  console.log(param.goods.subscriptionStatus, 'save');
   return Fetch('/goods/spu', {
     method: 'PUT',
     body: JSON.stringify(param)

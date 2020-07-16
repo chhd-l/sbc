@@ -33,12 +33,12 @@ export default function AsyncRoute(props: Props) {
           return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
         } else {
           if (util.isLogin()) {
-            console.log(cache.LOGIN_DATA, 'loginData')
+            //console.log(cache.LOGIN_DATA, 'loginData')
             const loginInfo = JSON.parse(
               sessionStorage.getItem(cache.LOGIN_DATA)
             );
             const auditState = loginInfo.auditState; // 商家登录审核状态 -1:未开店(没有审核状态)  0:未审核  1:已审核  2:审核未通过
-              console.log(auditState, 'audit', routes, props.match.path)
+             // console.log(auditState, 'audit', routes, props.match.path)
             if (auditState == 1) {
               // return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
               // 2.1.审核通过状态下, 只能访问路由中定义的页面(入驻流程无法查看)

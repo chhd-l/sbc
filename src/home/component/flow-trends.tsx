@@ -17,7 +17,7 @@ export default class FlowTrendsCharts extends React.Component<any, any> {
 
   render() {
     const { flowTrendData } = this.props.relaxProps;
-
+    //console.log(flowTrendData.toJS(),11111111223);
     return (
       <WMChart
         title=""

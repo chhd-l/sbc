@@ -40,7 +40,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.visible
     });

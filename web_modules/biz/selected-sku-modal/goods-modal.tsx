@@ -34,7 +34,7 @@ export default class GoodsModal extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       selectedRows: nextProps.selectedRows
         ? nextProps.selectedRows

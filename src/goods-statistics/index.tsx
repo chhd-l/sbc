@@ -85,7 +85,7 @@ const defaultBrandColumns = [
 export default class GoodsStatistics extends React.Component<any, any> {
   store: AppStore;
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.store.init(defaultSkuColumns, defaultCateColumns, defaultBrandColumns);
   }
 

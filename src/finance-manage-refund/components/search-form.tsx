@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import {Form, Select, Button, Input} from 'antd';
+import { Form, Select, Button, Input } from 'antd';
 
 import { SelectGroup, noop, AuthWrapper } from 'qmkit';
 
@@ -59,20 +59,21 @@ export default class SearchForm extends React.Component<any, any> {
                 label={this.props.name}
                 style={{ width: 80 }}
               >
-                <Option value={null}>全部</Option>
-                <Option value="ALIPAY">支付宝</Option>
-                <Option value="CASH">转账汇款</Option>
-                <Option value="UNIONPAY">银联</Option>
+                <Option value={null}>All</Option>
+                <Option value="ALIPAY">VISA</Option>
+                <Option value="CASH">AMERICAN EXPRESS</Option>
+                <Option value="CASH">DISCOVER</Option>
+                {/*  <Option value="UNIONPAY"></Option>
                 <Option value="WECHAT">微信</Option>
                 <Option value="UNIONPAY_B2B">企业银联</Option>
                 <Option value="POINT">积分兑换</Option>
-                <Option value="BALANCE">余额</Option>
+                <Option value="BALANCE">余额</Option>*/}
               </SelectGroup>
             </FormItem>
 
             <FormItem>
               <Input
-                addonBefore="交易流水号"
+                addonBefore="Transaction serial number"
                 onChange={(e) => changeTradeNo(e.target.value)}
               />
             </FormItem>
@@ -89,7 +90,7 @@ export default class SearchForm extends React.Component<any, any> {
                       exportIncomeDetail();
                     }}
                   >
-                    导出
+                    Search
                   </Button>
                 ) : (
                   <Button
@@ -101,7 +102,7 @@ export default class SearchForm extends React.Component<any, any> {
                       exportRefundDetail();
                     }}
                   >
-                    导出
+                    Search
                   </Button>
                 )}
               </FormItem>

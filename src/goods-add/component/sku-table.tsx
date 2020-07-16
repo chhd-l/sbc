@@ -11,16 +11,17 @@ import {
   Button,
   message,
   Tooltip,
-  Icon
+  Icon,
+  Select
 } from 'antd';
-import { IList } from 'typings/globalType';
+import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
-
+const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
@@ -44,10 +45,13 @@ export default class SkuTable extends React.Component<any, any> {
       clickImg: Function;
       removeImg: Function;
       modalVisible: Function;
+      goods: IMap;
     };
   };
 
   static relaxProps = {
+    // 商品基本信息
+    goods: 'goods',
     goodsSpecs: 'goodsSpecs',
     goodsList: 'goodsList',
     stockChecked: 'stockChecked',
@@ -75,9 +79,10 @@ export default class SkuTable extends React.Component<any, any> {
     const { updateSkuForm } = this.props.relaxProps;
     return (
       <WrapperForm
-        ref={(form) => updateSkuForm(form)}
+        // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
+      // <SkuForm />
     );
   }
 }
@@ -85,12 +90,21 @@ export default class SkuTable extends React.Component<any, any> {
 class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
+    this.state = {
+      count: 0
+    };
   }
 
   render() {
     const { goodsList } = this.props.relaxProps;
     const columns = this._getColumns();
-
+    console.log(goodsList.toJS(), 'ghahaha');
+    // if(this.state.count < 100) {
+    //   let count = this.state.count + 1
+    //   this.setState({count: count})
+    // }else {
+    //   return false
+    // }
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
@@ -116,9 +130,10 @@ class SkuForm extends React.Component<any, any> {
       removeImg,
       specSingleFlag,
       spuMarketPrice,
-      priceOpt
+      priceOpt,
+      goods
     } = this.props.relaxProps;
-
+    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -278,7 +293,7 @@ class SkuForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: 'The maximum value is 9999999.99',
-                    transform: function(value) {
+                    transform: function (value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }
@@ -302,6 +317,83 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
+    if (goods.get('subscriptionStatus') !== '0') {
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionStatus" />
+          </div>
+        ),
+        key: 'subscriptionStatus',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                  onChange: (e) =>
+                    this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
+                  initialValue:
+                    goods.get('subscriptionStatus') === '0'
+                      ? '0'
+                      : typeof rowInfo.subscriptionStatus === 'number'
+                      ? rowInfo.subscriptionStatus + ''
+                      : '1'
+                })(
+                  <Select
+                    disabled={goods.get('subscriptionStatus') === '0'}
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    style={{ width: '100px' }}
+                    placeholder="please select status"
+                  >
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      });
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionPrice" />
+          </div>
+        ),
+        key: 'subscriptionPrice',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      pattern: ValidConst.number,
+                      message: '0 or positive integer'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(
+                    this,
+                    rowInfo.id,
+                    'subscriptionPrice'
+                  ),
+                  initialValue: rowInfo.subscriptionPrice || 0
+                })(
+                  <InputNumber
+                    style={{ width: '100px' }}
+                    min={0}
+                    max={9999999}
+                    disabled={rowInfo.subscriptionStatus === 0}
+                  />
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      });
+    }
 
     columns = columns.push({
       title: (
@@ -444,7 +536,7 @@ class SkuForm extends React.Component<any, any> {
     }
     editGoodsItem(id, key, e);
 
-    if (key == 'stock' || key == 'marketPrice') {
+    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存
       if (checked) {
         // 修改store中的库存或市场价

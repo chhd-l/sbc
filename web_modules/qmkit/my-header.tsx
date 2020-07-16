@@ -41,7 +41,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
     if (miniProgramUrl) {
       miniProgramDom = (
         <Menu.Item key="2">
-          <a href="javascript:;" className="previewCode">
+          <a href="#!" className="previewCode">
             <img src={miniProgramUrl} alt="二维码" width="80" height="80" />
             <p>小程序</p>
             <div className="previewImg">
@@ -82,7 +82,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           url = `${baseConfig['mobileWebsite']}/store-main/${loginInfo.storeId}`;
         }
         let qrCodeUrl = null;
-        QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function(
+        QRCode.toDataURL(url, { errorCorrectionLevel: 'H' }, function (
           _err,
           url
         ) {
@@ -161,7 +161,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
         <Menu.Item key="1">
           <a
-            href="javascript:;"
+            href="#!"
             onClick={() =>
               history.push({
                 pathname: '/find-password',
@@ -175,7 +175,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           </a>
         </Menu.Item>
         <Menu.Item key="2">
-          <a href="javascript:;" onClick={() => this._handleLogout()}>
+          <a href="#!" onClick={() => this._handleLogout()}>
             <Icon type="logout" /> Exit
           </a>
         </Menu.Item>
@@ -207,7 +207,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
             (!prescriberId ? (
               <a
                 className="ant-dropdown-link"
-                href="https://shopuat.466920.com/"
+                href={`${baseConfig.pcWebsite}`}
                 target="_blank"
               >
                 <Icon type="eye-o" />
@@ -215,18 +215,18 @@ export default class MyHeader extends React.PureComponent<any, any> {
                 {/* <Icon type="down" /> */}
               </a>
             ) : (
-              <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
-                <a
-                  className="ant-dropdown-link"
-                  href="#"
-                  onClick={() => this._handlePreview()}
-                >
-                  <Icon type="eye-o" />
-                  <span style={styles.dropdownText}>Preview</span>
-                  <Icon type="down" />
-                </a>
-              </Dropdown>
-            ))}
+                <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
+                  <a
+                    className="ant-dropdown-link"
+                    href="#"
+                    onClick={() => this._handlePreview()}
+                  >
+                    <Icon type="eye-o" />
+                    <span style={styles.dropdownText}>Preview</span>
+                    <Icon type="down" />
+                  </a>
+                </Dropdown>
+              ))}
         </div>
         <div>
           <Dropdown overlay={menu} trigger={['click']}>

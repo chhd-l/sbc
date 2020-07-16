@@ -48,7 +48,7 @@ export default class CateTable extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.dateFlag !== this.props.relaxProps.dateFlag ||
       nextProps.relaxProps.cateSortCol != this.props.relaxProps.cateSortCol ||

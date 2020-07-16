@@ -10,8 +10,11 @@
 var Common = require('./common');
 
 module.exports = {
-  host: 'http://52.168.31.130:8390',
-  HOST: 'http://52.168.31.130:8390',
+  host: 'https://store.royalcanin.com/api',
+  HOST: 'https://store.royalcanin.com/api',
+  //host: 'http://52.168.31.130:8390',
+  //HOST: 'http://52.168.31.130:8390',
+
   X_XITE_ADMIN_HOST: 'http://52.168.31.130:3000',
   X_XITE_OPEN_HOST: 'http://52.168.31.130:3000',
   ...Common

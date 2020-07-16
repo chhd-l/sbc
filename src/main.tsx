@@ -25,7 +25,7 @@ export default class Main extends React.Component<any, any> {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.state.matchedPath != '/login') {
       this.checkLogin(this.state.matchedPath);
     }
@@ -49,7 +49,7 @@ export default class Main extends React.Component<any, any> {
     });
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.location !== this.props.location) {
       // navigated!
       this.setState({

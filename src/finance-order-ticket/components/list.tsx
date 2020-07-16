@@ -101,9 +101,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           render={(invoiceTime) => (
             <span>
               {invoiceTime
-                ? momnet(invoiceTime)
-                    .format(Const.TIME_FORMAT)
-                    .toString()
+                ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString()
                 : '-'}
             </span>
           )}
@@ -200,7 +198,11 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? '确定已开票？' : '确定作废开票记录？'}
+            title={
+              invoiceState == 0
+                ? 'Do you confirm to bill?？'
+                : 'Do you confirm to cancel bill record？'
+            }
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}

@@ -45,7 +45,7 @@ export default class TabList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab={<FormattedMessage id="settled" />} key="1">
+          <Tabs.TabPane tab={<FormattedMessage id="settlement" />} key="1">
             <List />
           </Tabs.TabPane>
         </Tabs>

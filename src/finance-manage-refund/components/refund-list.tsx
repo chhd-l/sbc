@@ -53,54 +53,71 @@ export default class RefundList extends React.Component<any, any> {
           }
         >
           <Column
-            title="序号"
+            title="No"
             dataIndex="index"
             key="index"
-            width="50"
+            width="5%"
             render={(_text, _rowData: any, index) => {
               return pageNum * pageSize + index + 1;
             }}
           />
           <Column
-            title="退单时间"
+            title="Return Order time"
             dataIndex="orderTime"
             key="orderTime"
             render={(text, _rowData: any) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          />
           <Column
-            title="退单编号"
+            title="Return Order number"
             dataIndex="returnOrderCode"
             key="returnOrderCode"
           />
-          <Column title="订单编号" dataIndex="orderCode" key="orderCode" />
-          <Column title="交易流水号" dataIndex="tradeNo" key="tradeNo" />
+          <Column title="Order number" dataIndex="orderCode" key="orderCode" />
           <Column
-            title="客户昵称"
+            title="Order refund"
+            dataIndex="returnOrderCode"
+            key="returnOrderCode"
+          />
+          <Column
+            title="Trasaction serial number"
+            width="15%"
+            dataIndex="tradeNo"
+            key="tradeNo"
+          />
+
+          <Column
+            title="Customer name"
             dataIndex="customerName"
             key="customerName"
           />
           <Column
-            title="退款时间"
+            title="Refund time"
             dataIndex="tradeTime"
             key="tradeTime"
             render={(text, _rowData: any) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          />
+
           <Column
-            title="退款渠道"
-            dataIndex="payWay"
-            key="payWay"
+            title="Payment method"
+            dataIndex="vendor"
+            key="vendor"
             render={(_text, rowData: any) => {
               return <span>{payWaysObj.toJS()[rowData.payWay]}</span>;
             }}
           />
+
+          <Column
+            title="Real Refund"
+            dataIndex="practicalPrice"
+            key="practicalPrice"
+            render={(text, rowData: any) => {
+              return text ? <span>{text}</span> : '--';
+            }}
           />
-          <Column title="退款金额" dataIndex="amount" key="amount" />
         </DataGrid>
       </div>
     );

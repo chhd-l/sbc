@@ -232,6 +232,7 @@ class CateModalForm extends React.Component<any, any> {
       clickImg,
       removeImg
     } = this.props.relaxProps;
+    console.log(images.toJS(), 'images');
     // 返回一级分类列表
     const loop = (cateList) =>
       cateList

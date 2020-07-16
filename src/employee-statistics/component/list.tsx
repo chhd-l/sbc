@@ -44,7 +44,7 @@ export default class AchieveStatistics extends React.Component<any, any> {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.relaxProps.dateType !== this.props.relaxProps.dateType ||
       nextProps.relaxProps.achieveSortName !=

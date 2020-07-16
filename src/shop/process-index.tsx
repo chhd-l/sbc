@@ -29,7 +29,7 @@ const PAIN = {
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class ShopProcess extends React.Component<any, any> {
   store: AppStore;
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!this.store.state().get('pass')) {
       this.store.getEnterBusiness();
     }

@@ -30,20 +30,13 @@ export default class AppStore extends Store {
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async (param?) => {
     this.dispatch('loading:start');
-    param = this.state()
-      .get('searchForm')
-      .merge(fromJS(param))
-      .toJS();
+    param = this.state().get('searchForm').merge(fromJS(param)).toJS();
     param.startTime =
       param.dateRange[0] &&
-      moment(param.dateRange[0])
-        .format('YYYY-MM-DD')
-        .toString();
+      moment(param.dateRange[0]).format('YYYY-MM-DD').toString();
     param.endTime =
       param.dateRange[1] &&
-      moment(param.dateRange[1])
-        .format('YYYY-MM-DD')
-        .toString();
+      moment(param.dateRange[1]).format('YYYY-MM-DD').toString();
 
     if (param && param.endTime) {
       param.endTime = moment(param.endTime)
@@ -122,9 +115,7 @@ export default class AppStore extends Store {
    * @returns {Promise<IAsyncResult<TResult>>}
    */
   onExportByParams = () => {
-    const param = this.state()
-      .get('searchForm')
-      .toJS();
+    const param = this.state().get('searchForm').toJS();
     // param.startTime = momnet(param.dateRange[0]).format('yyyy-MM-dd HH:mm').toString()
     // param.endTime = momnet(param.dateRange[1]).format('yyyy-MM-dd HH:mm').toString()
     return this._onExport(param, () => this.dispatch('select:init', []));

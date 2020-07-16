@@ -246,7 +246,7 @@ export default {
   'account': 'Account',
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
-
+  'settlement': 'Settlement',
 
 
   'product': 'Product',
@@ -382,7 +382,7 @@ export default {
   'order.valetOrder': 'Valet order',
   'order.fightTogether': 'Fight together',
   'order.audit': 'Audit',
-  'order.turnDown': 'Reject',
+  'order.turnDown': 'Turn down',
   'order.review': 'Review',
   'order.confirmReceivedAllProducts': 'Confirm that all products have been received?',
   'order.confirmReview': 'Are you sure you want to return the selected order for reconsideration?',
@@ -494,7 +494,7 @@ export default {
   'deleteAccount': 'Delete account',
   'setMainAccount': 'Set the main account',
 
-  'financialReconciliation': 'Financial Reconciliation',
+  'financialReconciliation': 'Finance Reconciliation',
   'bulkExport': 'Bulk Export',
   'revenueReconciliation': 'Revenue Reconciliation',
   'refundReconciliation': 'Refund Reconciliation',
@@ -511,8 +511,8 @@ export default {
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
-
-  'financialSettlement': 'Financial Settlement',
+  'Paymentamount': 'Payment amount',
+  'financialSettlement': 'Finance Settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
@@ -521,6 +521,8 @@ export default {
   'statementGenerationTime': 'Statement Generation Time',
   'statementTime': 'Billing Time',
   'statementNumber': 'Statement Number',
+  'statementPeriod': 'Statement Period',
+
   'billingPeriod': 'Billing Period',
   'totalPaidGoods': 'Total Paid Goods',
   'totalFreight': 'Total Freight',
@@ -535,8 +537,33 @@ export default {
   'category': 'Category',
   'productPrice': 'Product Price',
   'freight': 'Freight',
-
+  //财务
+  //Finance Reward
+  'Reward': 'Reward',
   'orderInvoice': 'Order Invoice',
+  'PrescriberID': 'Prescriber ID',
+  'PrescriberName': 'Prescriber Name',
+  'BulkExport': 'Bulk Export',
+  'Refresh': 'Refresh',
+  'PrescriberType': 'Prescriber Type',
+  'OrderQuantity': 'Order Quantity',
+  'OrderAmount': 'Order Amount',
+  'RewardType': 'Reward Type',
+  'RewardAmount': 'Reward Amount',
+  'Operation': 'Operation',
+
+  //Finance Reward-Details
+  'rewardDetails': 'Reward Details',
+  'RewardRules': 'Reward Rules',
+  'OrderNumber': 'Order Number',
+  'OrderTime': 'Order Time',
+  'RewardRate': 'Reward Rate',
+  'RewardRemark': 'Reward Remark',
+
+  'firstRewardRate': 'First Reward Rate',
+  'repeatRewardRate': 'Repeat Reward Rate',
+
+
 
   'invoiceStatus': 'Invoice Status',
 
@@ -558,7 +585,6 @@ export default {
   'doesNotSupportInvoicing': 'Does not support invoicing',
 
   'vatSpecialInvoice': 'VAT special invoice',
-  "invoiceReceiptInformation": "Invoice receipt information",
   'saveSettings': 'Save Settings',
   'Edit': 'Edit',
   'Delete': 'Delete',
@@ -599,7 +625,6 @@ export default {
   'consumer.removeConsumer': 'Remove Consumer',
 
   'shopping': 'Shopping',
-  "last180": 'Last 180 days',
   'overall': 'Overall',
 
   'toBePaidOrders': 'To be paid orders',
@@ -622,11 +647,14 @@ export default {
   'totalSKU': 'Total SKU',
   'productsOnShelvesNumber': 'Products on shelves number',
   'member number': 'memberNumber',
-  'uv': 'UV',
+  'uv':'UV',
   'pv': 'PV',
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
+  'items':'Items',
+  'product.subscriptionStatus': 'Subscription status',
+  'product.subscriptionPrice': 'Subscription Price',
 
   'subscription.subList': 'Subscription List',
   'subscription.orderNumber': 'Order number',
@@ -654,6 +682,7 @@ export default {
   'subscription.date': 'Subscription date',
   'subscription.nextDeliveryDate': 'Next delivery date',
   'subscription.detail': 'Subscription detail',
+  'subscription.edit': 'Subscription edit',
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
   'subscription.subscriptionDate':'Subscription Date',
@@ -705,7 +734,8 @@ export default {
   'setBanner': 'Set banner',
   'pc': 'PC',
   'mobile': 'Mobile',
-  'preview': 'Preview'
+  'preview': 'Preview',
+  'last180':'last 180 day'
 
 
 

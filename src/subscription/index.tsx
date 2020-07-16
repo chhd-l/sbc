@@ -107,9 +107,10 @@ export default class SubscriptionList extends Component<any, any> {
           searchParams: {
             customerAccount: param.consumerAccount ? param.consumerAccount : '',
             customerName: param.consumerName ? param.consumerName : '',
-            subscribeIds: param.subscriptionNumber
-              ? [param.subscriptionNumber]
-              : [],
+            subscribeId: param.subscriptionNumber,
+            // subscribeIds: param.subscriptionNumber
+            //   ? [param.subscriptionNumber]
+            //   : [],
             cycleTypeId: param.frequency,
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',
@@ -225,7 +226,7 @@ export default class SubscriptionList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <Select
-                        style={{ width: 140 }}
+                        // style={{ width: auto }}
                         defaultValue={searchForm.subscriptionOption}
                         onChange={(value) => {
                           value = value === '' ? null : value;
@@ -256,7 +257,7 @@ export default class SubscriptionList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <Select
-                        style={{ width: 140 }}
+                        // style={{ width: 140 }}
                         defaultValue={searchForm.consumerOption}
                         onChange={(value) => {
                           value = value === '' ? null : value;
@@ -287,7 +288,7 @@ export default class SubscriptionList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <Select
-                        style={{ width: 140 }}
+                        // style={{ width: 140 }}
                         defaultValue={searchForm.productOption}
                         onChange={(value) => {
                           value = value === '' ? null : value;
@@ -318,7 +319,6 @@ export default class SubscriptionList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label="Frequency"
-                    style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -338,7 +338,7 @@ export default class SubscriptionList extends Component<any, any> {
                   </SelectGroup>
                 </FormItem>
 
-                <FormItem>
+                {/* <FormItem>
                   <Input
                     addonBefore={
                       <Select
@@ -367,7 +367,7 @@ export default class SubscriptionList extends Component<any, any> {
                       });
                     }}
                   />
-                </FormItem>
+                </FormItem> */}
 
                 <FormItem>
                   <Button
@@ -383,7 +383,7 @@ export default class SubscriptionList extends Component<any, any> {
                   </Button>
                 </FormItem>
               </Form>
-
+              {/* 
               <div className="handle-bar">
                 <Dropdown
                   overlay={menu}
@@ -397,7 +397,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Icon type="down" />
                   </Button>
                 </Dropdown>
-              </div>
+              </div> */}
 
               {/* <SearchList /> */}
 

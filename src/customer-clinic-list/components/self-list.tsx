@@ -47,7 +47,7 @@ export default class SelfCustomerList extends React.Component<any, any> {
     getSupplierNameByCustomerId: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({
       tooltipVisible: {},
       rejectDomVisible: false

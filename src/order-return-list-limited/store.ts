@@ -33,9 +33,7 @@ export default class AppStore extends Store {
   ) => {
     this.dispatch('order-return-list:loading:start');
     //获取form数据
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
@@ -323,9 +321,7 @@ export default class AppStore extends Store {
    */
   onExportByParams = () => {
     // 搜索条件
-    let params = this.state()
-      .get('form')
-      .toJS();
+    let params = this.state().get('form').toJS();
     // tab
     const key = this.state().getIn(['tab', 'key']);
     if (key != '0') {

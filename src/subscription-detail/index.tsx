@@ -109,7 +109,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+            nextDeliveryTime: moment(
+              subscriptionDetail.nextDeliveryTime
+            ).format('MMMM Do YY'),
             promotionCode: subscriptionDetail.promotionCode
           };
           let orderInfo = {
@@ -518,9 +520,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </BreadCrumb>
         <Card
           loading={this.state.loading}
-          title={cartTitle}
+          // title={cartTitle}
+          title="Subscription Details"
           bordered={false}
-          extra={cartExtra}
+          extra={subscriptionInfo.subscribeStatus === 'Active' ? cartExtra : ''}
           style={{ margin: 20 }}
         >
           {/* subscription 基本信息 */}
@@ -603,6 +606,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <div className="previous-order-info">
                 <p>Next order date</p>
                 <p style={{ color: '#808285' }}>
+                  {/* {moment(
+                    subscriptionInfo.nextDeliveryTime,
+                    'MMMM Do YY'
+                  )} */}
                   {subscriptionInfo.nextDeliveryTime}
                 </p>
                 {/* <DatePicker value={subscriptionInfo.nextDeliveryTime} format={'MMMM Do YY'} style={{ width: '50%' }} /> */}

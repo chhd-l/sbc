@@ -609,7 +609,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </BreadCrumb>
         <Card
           loading={this.state.loading}
-          title={cartTitle}
+          // title={cartTitle}
+          title="Subscription Edit"
           bordered={false}
           // extra={cartExtra}
           style={{ margin: 20 }}

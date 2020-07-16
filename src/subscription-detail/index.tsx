@@ -345,7 +345,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     webapi.getBySubscribeId(params).then((data) => {
       const { res } = data;
       if (res.code === 'K-000000') {
-        let operationLog = res.context;
+        let operationLog = res.context.subscriptionLogsVOS;
         this.setState({
           operationLog: operationLog
         });

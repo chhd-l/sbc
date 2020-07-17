@@ -55,4 +55,9 @@ export default class AppStore extends Store {
       });
     }
   };
+
+  uploadModalStatusChange = (modalVisible) => {
+    debugger;
+    this.dispatch('list:uploadModalStatusChange', modalVisible);
+  };
 }

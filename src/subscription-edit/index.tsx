@@ -66,7 +66,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       sameFlag: false,
       originalParams: {},
       isUnfoldedDelivery: false,
-      isUnfoldedBilling: false
+      isUnfoldedBilling: false,
+      saveLoading: false
 
       // operationLog: []
     };
@@ -292,6 +293,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       billingAddressId,
       originalParams
     } = this.state;
+    this.setState({
+      saveLoading: true
+    });
     let subscribeNumArr = [];
     for (let i = 0; i < goodsInfo.length; i++) {
       subscribeNumArr.push(goodsInfo.subscribeNum);
@@ -333,13 +337,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
+          this.setState({
+            saveLoading: false
+          });
           message.success('Successful');
           this.getSubscriptionDetail();
         } else {
+          this.setState({
+            saveLoading: false
+          });
           message.error('Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          saveLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -1123,7 +1136,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Card>
 
         <div className="bar-button">
-          <Button type="primary" onClick={() => this.updateSubscription()}>
+          <Button
+            type="primary"
+            onClick={() => this.updateSubscription()}
+            loading={this.state.saveLoading}
+          >
             {<FormattedMessage id="save" />}
           </Button>
           <Button

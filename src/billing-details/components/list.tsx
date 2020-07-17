@@ -89,9 +89,9 @@ export default class List extends React.Component<any, any> {
   _renderColumns = (): any[] => {
     return [
       {
-        title: 'Transaction serial number',
-        key: 'index',
-        dataIndex: 'index',
+        title: 'Order number',
+        key: 'tradeCode',
+        dataIndex: 'tradeCode',
         render: (value, row) => {
           return this._handleRowSpan(row, value);
         },
@@ -106,7 +106,7 @@ export default class List extends React.Component<any, any> {
         },
         width: 120
       },
-      {
+      /*{
         title: 'Order number',
         dataIndex: 'tradeCode',
         key: 'tradeCode',
@@ -114,7 +114,7 @@ export default class List extends React.Component<any, any> {
           return this._handleRowSpan(row, value);
         },
         width: 110
-      },
+      },*/
       {
         title: 'Product name',
         dataIndex: 'orderType',

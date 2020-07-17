@@ -15,6 +15,10 @@ export default class ListActor extends Actor {
       pageSize: 10,
       // 当前页数，从1开始
       currentPage: 1,
+      modalVisible: false,
+      visible: {
+        isTrue: false
+      },
       // 表格数据
       tableDatas: [
         {
@@ -38,11 +42,7 @@ export default class ListActor extends Actor {
           mobileImage:
             'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png'
         }
-      ],
-      modalVisible: false,
-      visible: {
-        isTrue: false
-      }
+      ]
     };
   }
   @Action('list:page')
@@ -60,9 +60,9 @@ export default class ListActor extends Actor {
     return state.set('modalVisible', visible);
   }
 
-  @Action('list:toggleModal')
-  toggleModal(state: IMap, data) {
-    debugger;
-    return state.setIn(['visible', 'isTrue'], true);
+  @Action('list:visible')
+  visible(state: IMap, modalVisible) {
+    console.log(modalVisible, 11111111111111111111111111111);
+    return state.set('visible', fromJS(modalVisible));
   }
 }

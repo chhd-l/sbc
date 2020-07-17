@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
+import { IList, IMap } from 'typings/globalType';
 import {
   Form,
   Select,
@@ -84,7 +85,7 @@ export default class UploadImageModal extends Component<any, any> {
   props: {
     relaxProps?: {
       modalVisible: boolean;
-      visible: any;
+      visible: IMap;
     };
   };
 
@@ -99,8 +100,7 @@ export default class UploadImageModal extends Component<any, any> {
     // modal(false);
   };
   render() {
-    debugger;
-    const { modalVisible, visible } = this.props.relaxProps as any;
+    const { modalVisible, visible } = this.props.relaxProps;
     setTimeout(() => {
       console.log(visible.toJS(), 1000000);
     }, 1000);
@@ -108,7 +108,7 @@ export default class UploadImageModal extends Component<any, any> {
       <Modal
         maskClosable={false}
         title={<FormattedMessage id="reviewDetail" />}
-        visible={modalVisible}
+        visible={visible.toJS().isTrue}
         width={920}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}

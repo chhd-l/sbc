@@ -26,6 +26,7 @@ export default class AppStore extends Store {
    */
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
+    this.uploadModalStatusChange(true);
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
@@ -57,7 +58,6 @@ export default class AppStore extends Store {
   };
 
   uploadModalStatusChange = (modalVisible) => {
-    debugger;
-    this.dispatch('list:uploadModalStatusChange', modalVisible);
+    this.dispatch('list:visible', modalVisible);
   };
 }

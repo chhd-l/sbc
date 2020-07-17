@@ -1,7 +1,8 @@
-import { IOptions, Store } from 'plume2';
+import { IOptions, Store, ViewAction } from 'plume2';
 import { message } from 'antd';
 import LoadingActor from './actor/loading-actor';
 import ListActor from './actor/list-actor';
+import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { Const, history, util } from 'qmkit';
@@ -16,48 +17,64 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new LoadingActor(), new ListActor()];
+    return [new LoadingActor(), new ListActor(), new ImageActor()];
   }
 
-  /**
-   * 页面初始化
-   * @param pageNum
-   * @param pageSize
-   */
-  init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    this.dispatch('loading:start');
-    //获取form数据
-    let form = this.state().get('form').toJS();
-    const key = this.state().getIn(['tab', 'key']);
-
-    if (key != '0') {
-      const [state, value] = key.split('-');
-      form['tradeState'][state] = value;
-    }
-    form['orderType'] = 'NORMAL_ORDER';
-    const { res: needRes } = await webapi.getOrderNeedAudit();
-    if (needRes.code == Const.SUCCESS_CODE) {
-      webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context);
-            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-            this.dispatch('list:setNeedAudit', needRes.context.audit);
-            this.btnLoading = false;
-          });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
-          }
-        }
-      });
-    }
+  setModalVisible = async (visible) => {
+    this.dispatch('imageActor:setModalVisible', visible);
+  };
+  onFormChange = ({ field, value }) => {
+    this.dispatch('list:changeFormField', { field, value });
+  };
+  onSearch = (params) => {
+    this.getList(params);
+  };
+  deleteRow = async (params) => {
+    const res = await webapi.deleteRow(params);
   };
 
-  uploadModalStatusChange = (modalVisible) => {
+  getList = async (params) => {
     debugger;
-    this.dispatch('list:uploadModalStatusChange', modalVisible);
+    this.dispatch('loading:start');
+    // const res = await webapi.getList(params)
+    const list = [
+      {
+        id: 1,
+        pcName: 'test.png',
+        mobileName: 'test.mp4',
+        pcImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png',
+        mobileImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png'
+      },
+      {
+        id: 2,
+        pcName: 'ddd.mp4',
+        mobileName: 'ddd.mp4',
+        pcImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
+        mobileImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
+      },
+      {
+        id: 3,
+        pcName: '123.mp4',
+        mobileName: '123.mp4',
+        pcImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
+        mobileImage:
+          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
+      }
+    ];
+    this.dispatch('list:setCurrentPage', 2);
+    this.dispatch('list:setTotalPages', 3);
+    this.dispatch('list:getList', fromJS(list));
+    setTimeout(() => {
+      this.dispatch('loading:end');
+    }, 3000);
+    // if(res) {
+    // } else {
+    //   this.dispatch('loading:end')
+    // }
   };
 }

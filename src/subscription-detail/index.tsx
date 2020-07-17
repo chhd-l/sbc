@@ -380,7 +380,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       <Menu>
         {recentOrderList.map((item) => (
           <Menu.Item key={item.recentOrderId}>
-            <Link to={'/order-detail/' + item.orderNumber}>
+            <Link to={'/order-detail/' + item.recentOrderId}>
               {item.recentOrderId + '(' + item.orderStatus + ')'}
             </Link>
           </Menu.Item>
@@ -460,12 +460,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       color: '#8E8E8E',
       fontWeight: 500
     };
-
-    enum operatorDic {
-      PLATFORM = 'Platform',
-      CUSTOMER = 'Customer',
-      SUPPLIER = 'Supplier'
-    }
 
     const operatorColumns = [
       {

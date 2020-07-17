@@ -46,7 +46,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       orderInfo: {},
       subscriptionInfo: {},
       recentOrderList: [],
-      frequencyList: [],
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
@@ -282,7 +281,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       this.querySysDictionary('city');
     }
 
-    this.querySysDictionary('Frequency');
+    // this.querySysDictionary('Frequency');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -310,11 +309,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               JSON.stringify(res.context.sysDictionaryVOS)
             );
           }
-          if (type === 'Frequency') {
-            this.setState({
-              frequencyList: res.context.sysDictionaryVOS
-            });
-          }
+          // if (type === 'Frequency') {
+          //   this.setState({
+          //     frequencyList: res.context.sysDictionaryVOS
+          //   });
+          // }
         } else {
           message.error('Unsuccessful');
         }
@@ -352,15 +351,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     });
   };
+  subTotal = () => {
+    const { goodsInfo } = this.state;
+    let sum = 0;
+    for (let i = 0; i < goodsInfo.length; i++) {
+      if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
+        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
+      }
+    }
+    return sum;
+  };
 
   render() {
     const {
       orderInfo,
       recentOrderList,
       subscriptionInfo,
-      frequencyList,
       goodsInfo,
-      petsInfo,
       paymentInfo,
       deliveryAddressInfo,
       billingAddressInfo,
@@ -477,10 +484,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time &&
-          moment(time)
-            .format(Const.TIME_FORMAT)
-            .toString()
+          time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
         title: 'Operation Category',
@@ -536,7 +540,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </p>
               <p>
                 Subscription Time :
-                <span>{subscriptionInfo.subscriptionTime}</span>
+                <span>
+                  {moment(new Date(subscriptionInfo.subscriptionTime)).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                </span>
               </p>
               <p>
                 Presciber ID : <span>{subscriptionInfo.presciberID}</span>
@@ -547,7 +555,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={11} className="basic-info">
               <p>
-                Consumer : <span>{subscriptionInfo.consumer}</span>
+                Consumer Name: <span>{subscriptionInfo.consumer}</span>
               </p>
               <p>
                 Consumer Account :{' '}
@@ -632,11 +640,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div className="order-summary-content">
                   <div className="flex-between">
                     <span>Total</span>
-                    <span>$123</span>
+                    <span>${this.subTotal()}</span>
                   </div>
                   <div className="flex-between">
                     <span>Subscription Save Discount</span>
-                    <span>-$12</span>
+                    <span>-$0</span>
                   </div>
                   <div className="flex-between">
                     <span>Promotion Code</span>
@@ -650,7 +658,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>$111</span>
+                <span>${this.subTotal()}</span>
               </div>
               {/* <Row style={{ marginTop: 20 }}>
                 <Col span={16}>

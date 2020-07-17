@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
+import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
 
 export default class ListView extends React.Component<any, any> {
@@ -251,7 +252,12 @@ export default class ListView extends React.Component<any, any> {
 
                         <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="subscription.subscriptionDate" />
-                          :{v.createTime ? v.createTime : ''}
+                          :
+                          {v.createTime
+                            ? moment(new Date(v.createTime)).format(
+                                'YYYY-MM-DD HH:mm:ss'
+                              )
+                            : ''}
                         </span>
                       </div>
                     </td>
@@ -274,21 +280,23 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {/*第4张特殊处理*/
-                      //@ts-ignore
-                      v.goodsInfo && v.goodsInfo.size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
-                            //@ts-ignore
-                            src={item.goodsPic ? item.goodsPic : defaultImg}
-                            style={styles.imgFourth}
-                          />
-                          <div style={styles.imgNum}>
-                            <FormattedMessage id="total" />
-                            {v.goodsInfo.size} <FormattedMessage id="piece" />
+                      {
+                        /*第4张特殊处理*/
+                        //@ts-ignore
+                        v.goodsInfo && v.goodsInfo.size > 3 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={item.goodsPic ? item.goodsPic : defaultImg}
+                              style={styles.imgFourth}
+                            />
+                            <div style={styles.imgNum}>
+                              <FormattedMessage id="total" />
+                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
                     <td style={{ width: '15%', paddingLeft: 20 }}>
                       {v.goodsInfo &&

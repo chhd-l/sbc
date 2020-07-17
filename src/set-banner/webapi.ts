@@ -5,17 +5,24 @@ type TResult = {
   message: string;
   context: any;
 };
-
-export const fetchOrderList = (filter = {}) => {
-  return Fetch<TResult>('/trade', {
+const api = {
+  getList: '',
+  deleteRow: '/delete',
+  upload: ''
+};
+/**
+ * 获取列表
+ */
+export const getList = (filter = {}) => {
+  return Fetch<TResult>(api.getList, {
     method: 'POST',
     body: JSON.stringify(filter)
   });
 };
 
 /**
- * 查询订单是否需要审核
+ * 删除
  */
-export const getOrderNeedAudit = () => {
-  return Fetch<TResult>('/getSupplierOrderAudit');
+export const deleteRow = (params) => {
+  return Fetch<TResult>(api.deleteRow);
 };

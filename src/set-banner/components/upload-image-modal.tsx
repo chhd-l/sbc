@@ -3,75 +3,14 @@ import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
 import { IList, IMap } from 'typings/globalType';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Checkbox,
-  Pagination,
-  Spin,
-  Tooltip,
-  Modal,
-  Rate
-} from 'antd';
+import { Modal, Rate } from 'antd';
 import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
-import { AuthWrapper, Const } from 'qmkit';
+import { AuthWrapper, Const, noop } from 'qmkit';
 import momnet from 'moment';
 import Moment from 'moment';
 import moment from 'moment';
 import GoodsImage from '@/goods-detail/components/image';
-const FormItem = Form.Item;
-
-class RejectForm extends React.Component<any, any> {
-  render() {
-    const { getFieldDecorator } = this.props.form;
-
-    return (
-      <Form>
-        <FormItem>
-          {getFieldDecorator('comment', {
-            rules: [
-              {
-                required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
-              },
-              { validator: this.checkComment }
-            ]
-          })(
-            <FormattedMessage id="order.rejectionReasonTip">
-              {(txt) => (
-                <Input.TextArea
-                  placeholder={txt.toString()}
-                  autosize={{ minRows: 4, maxRows: 4 }}
-                />
-              )}
-            </FormattedMessage>
-          )}
-        </FormItem>
-      </Form>
-    );
-  }
-
-  checkComment = (_rule, value, callback) => {
-    if (!value) {
-      callback();
-      return;
-    }
-
-    if (value.length > 100) {
-      callback(new Error('Please input less than 100 characters'));
-      return;
-    }
-    callback();
-  };
-}
-
-const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
 export default class UploadImageModal extends Component<any, any> {
@@ -85,12 +24,14 @@ export default class UploadImageModal extends Component<any, any> {
   props: {
     relaxProps?: {
       modalVisible: boolean;
+      uploadModalStatusChange: Function;
       visible: IMap;
     };
   };
 
   static relaxProps = {
     modalVisible: 'modalVisible',
+    uploadModalStatusChange: noop,
     visible: 'visible'
   };
   componentDidMount() {}
@@ -100,15 +41,19 @@ export default class UploadImageModal extends Component<any, any> {
     // modal(false);
   };
   render() {
-    const { modalVisible, visible } = this.props.relaxProps;
+    const {
+      modalVisible,
+      visible,
+      uploadModalStatusChange
+    } = this.props.relaxProps;
     setTimeout(() => {
-      console.log(visible.toJS(), 1000000);
+      console.log(modalVisible, 1000000);
     }, 1000);
     return (
       <Modal
         maskClosable={false}
         title={<FormattedMessage id="reviewDetail" />}
-        visible={visible.toJS().isTrue}
+        visible={modalVisible}
         width={920}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}

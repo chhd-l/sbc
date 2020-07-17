@@ -94,7 +94,10 @@ export default class SetBannerList extends Component<any, any> {
     uploadModalStatusChange: noop
   };
   handleTableChange() {}
-  componentDidMount() {}
+  componentDidMount() {
+    const { uploadModalStatusChange } = this.props.relaxProps;
+    uploadModalStatusChange(true);
+  }
   deleteRow(id) {}
   _renderLoading() {
     return (
@@ -154,7 +157,7 @@ export default class SetBannerList extends Component<any, any> {
                 type="primary"
                 htmlType="submit"
                 style={{ marginBottom: '10px' }}
-                onClick={() => uploadModalStatusChange(true)}
+                onClick={() => uploadModalStatusChange()}
               >
                 <Link>Upload</Link>
               </Button>

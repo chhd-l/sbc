@@ -9,6 +9,7 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
 import TabList from './components/tab-list';
+import ButtonGroup from './components/button-group';
 import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -47,7 +48,7 @@ export default class FinancialSettlement extends React.Component<any, any> {
                 </Button>
               </div>
             </AuthWrapper>*/}
-            {/* <ButtonGroup /> */}
+            <ButtonGroup />
 
             {/*财务结算表格*/}
             <TabList />

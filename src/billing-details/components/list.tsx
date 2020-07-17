@@ -99,10 +99,10 @@ export default class List extends React.Component<any, any> {
       },
       {
         title: 'Payment credited',
-        dataIndex: 'finalTime',
-        key: 'finalTime',
-        render: (value, row) => {
-          return this._handleRowSpan(row, value);
+        dataIndex: 'splitPayPrice',
+        key: 'splitPayPrice',
+        render: (value) => {
+          return util.FORMAT_YUAN(value.toFixed(2));
         },
         width: 120
       },
@@ -117,16 +117,17 @@ export default class List extends React.Component<any, any> {
       },*/
       {
         title: 'Product name',
-        dataIndex: 'orderType',
-        key: 'orderType',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
         width: 110
       },
       {
         title: 'Product SKU',
-        dataIndex: 'goodsName',
-        key: 'goodsName',
-        width: 100,
-        render: (value, row) => {
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        width: 100
+
+        /*render: (value, row) => {
           return (
             <div style={{ maxWidth: 200 }}>
               <span
@@ -161,21 +162,22 @@ export default class List extends React.Component<any, any> {
               </span>
             </div>
           );
-        }
+        }*/
       },
       {
         title: 'Product price',
-        dataIndex: 'cateName',
-        key: 'cateName',
-        width: 100
+        dataIndex: 'goodsPrice',
+        key: 'goodsPrice',
+        width: 100,
+        render: (value) => {
+          return util.FORMAT_YUAN(value.toFixed(2));
+        }
       },
       {
         title: 'Product quantity',
-        dataIndex: 'goodsPrice',
-        key: 'goodsPrice',
-        render: (value) => {
-          return util.FORMAT_YUAN(value.toFixed(2));
-        },
+        dataIndex: 'num',
+        key: 'num',
+
         width: 100
       }
       /*{

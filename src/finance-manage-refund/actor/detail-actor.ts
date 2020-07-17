@@ -17,13 +17,15 @@ export default class DetailActor extends Actor {
       //退款明细
       refundDetail: [],
       //支付方式
-      payWaysObj: {},
+      payWaysObj: null,
+      VendorWay: null,
+      PayWay: null,
       //付款方式（收入明细）
       incomePayWay: '',
       //付款方式（对账明细）
       refundPayWay: '',
       //交易流水号
-      tradeNo:'',
+      tradeNo: '',
       //开始时间
       beginTime: '',
       //结束时间
@@ -74,6 +76,15 @@ export default class DetailActor extends Actor {
     return state.set('payWaysObj', fromJS(res));
   }
 
+  @Action('detail:changeVendorWay')
+  changeVendorWay(state: IMap, value) {
+    return state.set('VendorWay', value);
+  }
+
+  @Action('detail:changePayWay')
+  changePayWay(state: IMap, value) {
+    return state.set('PayWay', value);
+  }
   /**
    * 支付方式
    * @param state

@@ -63,20 +63,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryList: [],
       billingList: [],
       customerAccount: '',
-      sameFlag: false
+      sameFlag: false,
+      originalParams: {},
+      isUnfoldedDelivery: false,
+      isUnfoldedBilling: false
+
       // operationLog: []
     };
   }
 
   componentDidMount() {
     this.getDict();
-    this.getSubscriptionDetail(this.state.subscriptionId);
+    this.getSubscriptionDetail();
     // this.getBySubscribeId(this.state.subscriptionId);
   }
 
-  getSubscriptionDetail = (id: String) => {
+  getSubscriptionDetail = () => {
     webapi
-      .getSubscriptionDetail(id)
+      .getSubscriptionDetail(this.state.subscriptionId)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
@@ -122,6 +126,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.paymentInfo;
+
+          let subscribeNumArr = [];
+          for (let i = 0; i < goodsInfo.length; i++) {
+            subscribeNumArr.push(goodsInfo.subscribeNum);
+          }
+          let originalParams = {
+            billingAddressId: subscriptionDetail.deliveryAddressId,
+            cycleTypeId: subscriptionInfo.frequency,
+            deliveryAddressId: subscriptionDetail.billingAddressId,
+            subscribeNumArr: subscribeNumArr,
+            nextDeliveryTime: subscriptionInfo.nextDeliveryTime
+          };
+
           this.setState(
             {
               subscriptionInfo: subscriptionInfo,
@@ -134,6 +151,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               deliveryAddressInfo: subscriptionDetail.consignee,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
+              originalParams: originalParams,
               loading: false
             },
             () => {
@@ -184,55 +202,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .catch((err) => {
         message.error('Unsuccessful');
       });
-  };
-
-  addressById = (id: String, type: String) => {
-    webapi.addressById(id).then((data) => {
-      const { res } = data;
-      if (res.code === 'K-000000') {
-        if (type === 'delivery') {
-          let info = res.context;
-          let deliveryAddressInfo = {
-            countryId: info.countryId,
-            cityId: info.cityId,
-            address1: info.address1,
-            address2: info.address2
-          };
-          setTimeout(() => {
-            this.setState(
-              {
-                deliveryAddressInfo: deliveryAddressInfo
-              },
-              () => {
-                if (
-                  this.state.deliveryAddressId === this.state.billingAddressId
-                ) {
-                  this.setState({
-                    billingAddressInfo: deliveryAddressInfo
-                  });
-                } else {
-                  this.addressById(this.state.billingAddressId, 'billing');
-                }
-              }
-            );
-          }, 100);
-        }
-        if (type === 'billing') {
-          let info = res.context;
-          let billingAddressInfo = {
-            countryId: info.countryId,
-            cityId: info.cityId,
-            address1: info.address1,
-            address2: info.address2
-          };
-          setTimeout(() => {
-            this.setState({
-              billingAddressInfo: billingAddressInfo
-            });
-          }, 100);
-        }
-      }
-    });
   };
 
   getDict = () => {
@@ -320,24 +289,52 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionInfo,
       goodsInfo,
       deliveryAddressId,
-      billingAddressId
+      billingAddressId,
+      originalParams
     } = this.state;
+    let subscribeNumArr = [];
+    for (let i = 0; i < goodsInfo.length; i++) {
+      subscribeNumArr.push(goodsInfo.subscribeNum);
+    }
     let params = {
-      billingAddressId: deliveryAddressId,
+      billingAddressId: billingAddressId,
       cycleTypeId: subscriptionInfo.frequency,
-      deliveryAddressId: billingAddressId,
+      deliveryAddressId: deliveryAddressId,
       goodsItems: goodsInfo,
       nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format(
         'YYYY-MM-DD'
       ),
-      subscribeId: subscriptionInfo.subscriptionNumber
+      subscribeId: subscriptionInfo.subscriptionNumber,
+      changeField: ''
     };
+
+    let changeFieldArr = [];
+    if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
+      changeFieldArr.push('Delivery Address');
+    }
+    if (params.cycleTypeId !== originalParams.cycleTypeId) {
+      changeFieldArr.push('Frequency');
+    }
+    if (params.billingAddressId !== originalParams.billingAddressId) {
+      changeFieldArr.push('Billing Address');
+    }
+    if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
+      changeFieldArr.push('Next Delivery Time');
+    }
+    if (subscribeNumArr !== originalParams.subscribeNumArr) {
+      changeFieldArr.push('Order Quantity');
+    }
+    if (changeFieldArr.length > 0) {
+      params.changeField = changeFieldArr.join(',');
+    }
+
     webapi
       .updateSubscription(params)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
           message.success('Successful');
+          this.getSubscriptionDetail();
         } else {
           message.error('Unsuccessful');
         }
@@ -346,6 +343,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error('Unsuccessful');
       });
   };
+  compareField = (field1, field2, fieldName) => {
+    if (field1 === field2) {
+      return fieldName;
+    } else {
+      return '';
+    }
+  };
+
   getDictValue = (list, id) => {
     if (list && list.length > 0) {
       let item = list.find((item) => {
@@ -367,13 +372,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       if (res.code === 'K-000000') {
         let addressList = res.context.customerDeliveryAddressVOList;
         let customerAccount = res.context.customerAccount;
+
         if (type === 'DELIVERY') {
+          addressList = this.selectedOnTop(
+            addressList,
+            this.state.deliveryAddressId
+          );
+
           this.setState({
             deliveryList: addressList,
             customerAccount: customerAccount
           });
         }
         if (type === 'BILLING') {
+          addressList = this.selectedOnTop(
+            addressList,
+            this.state.billingAddressId
+          );
+
           this.setState({
             billingList: addressList,
             customerAccount: customerAccount
@@ -382,16 +398,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     });
   };
+  selectedOnTop = (addressList, selectedId) => {
+    let selectedAddress = addressList.find((item) => {
+      return item.deliveryAddressId === selectedId;
+    });
+    if (selectedAddress) {
+      addressList.unshift(selectedAddress);
+      addressList = Array.from(new Set(addressList));
+    }
+    return addressList;
+  };
   deliveryOpen = () => {
     if (this.state.deliveryAddressId === this.state.billingAddressId) {
       this.setState({
         sameFlag: true,
-        visibleShipping: true
+        visibleShipping: true,
+        isUnfoldedDelivery: false
       });
     } else {
       this.setState({
         sameFlag: false,
-        visibleShipping: true
+        visibleShipping: true,
+        isUnfoldedDelivery: false
       });
     }
   };
@@ -400,16 +428,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
+    let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
 
     if (this.state.sameFlag) {
       this.setState({
         deliveryAddressInfo: deliveryAddressInfo,
         billingAddressInfo: deliveryAddressInfo,
+        deliveryList: addressList,
         visibleShipping: false
       });
     } else {
       this.setState({
         deliveryAddressInfo: deliveryAddressInfo,
+        deliveryList: addressList,
         visibleShipping: false
       });
     }
@@ -419,8 +450,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let billingAddressInfo = billingList.find((item) => {
       return item.deliveryAddressId === billingAddressId;
     });
+    let addressList = this.selectedOnTop(billingList, billingAddressId);
     this.setState({
       billingAddressInfo: billingAddressInfo,
+      billingList: addressList,
       visibleBilling: false
     });
   };
@@ -444,6 +477,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let date = new Date();
     date.setDate(date.getDate() + 3);
     return endValue.valueOf() <= date.valueOf();
+  };
+  defaultValue = (nextDeliveryTime) => {
+    let current = new Date(nextDeliveryTime);
+    let normal = new Date();
+    normal.setDate(normal.getDate() + 3);
+    if (current >= normal) {
+      return moment(new Date(current), 'MMMM Do YYYY');
+    } else {
+      return moment(new Date(normal), 'MMMM Do YYYY');
+    }
+  };
+
+  subTotal = () => {
+    const { goodsInfo } = this.state;
+    let sum = 0;
+    for (let i = 0; i < goodsInfo.length; i++) {
+      if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
+        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
+      }
+    }
+    return sum;
   };
 
   render() {
@@ -475,8 +529,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
-          <Menu.Item key={item.id}>
-            <Link to={'/order-detail/' + item.orderNumber}>
+          <Menu.Item key={item.recentOrderId}>
+            <Link to={'/order-detail/' + item.recentOrderId}>
               {item.recentOrderId + '(' + item.orderStatus + ')'}
             </Link>
           </Menu.Item>
@@ -557,49 +611,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       fontWeight: 500
     };
 
-    // const operatorColumns = [
-    //   {
-    //     title: 'Operator Type',
-    //     dataIndex: 'operatorType',
-    //     key: 'operatorType'
-    //   },
-    //   {
-    //     title: 'Operator',
-    //     dataIndex: 'operator',
-    //     key: 'operator'
-    //   },
-    //   {
-    //     title: 'Time',
-    //     dataIndex: 'time',
-    //     key: 'time',
-    //     render: (time) =>
-    //       time &&
-    //       moment(time)
-    //         .format(Const.TIME_FORMAT)
-    //         .toString()
-    //   },
-    //   {
-    //     title: 'Operation Category',
-    //     dataIndex: 'operationCategory',
-    //     key: 'operationCategory'
-    //   },
-    //   {
-    //     title: 'Operation Log',
-    //     dataIndex: 'operationLog',
-    //     key: 'operationLog',
-    //     width: '50%'
-    //   }
-    // ];
-    // const styles = {
-    //   backItem: {
-    //     display: 'flex',
-    //     flexDirection: 'row',
-    //     alignItems: 'flex-start',
-    //     marginTop: 10,
-    //     marginBottom: 20
-    //   }
-    // } as any;
-
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -629,7 +640,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </p>
               <p>
                 Subscription Time :
-                <span>{subscriptionInfo.subscriptionTime}</span>
+                <span>
+                  {moment(new Date(subscriptionInfo.subscriptionTime)).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                </span>
               </p>
               <p>
                 Presciber ID : <span>{subscriptionInfo.presciberID}</span>
@@ -640,7 +655,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={11} className="basic-info">
               <p>
-                Consumer : <span>{subscriptionInfo.consumer}</span>
+                Consumer Name: <span>{subscriptionInfo.consumer}</span>
               </p>
               <p>
                 Consumer Account :{' '}
@@ -683,7 +698,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   {subscriptionInfo.frequencyName}
                 </p> */}
                 <Select
-                  style={{ width: '50%' }}
+                  style={{ width: '70%' }}
                   value={subscriptionInfo.frequency}
                   onChange={(value) => {
                     value = value === '' ? null : value;
@@ -720,7 +735,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     });
                   }}
                   format={'MMMM Do YYYY'}
-                  style={{ width: '50%' }}
+                  style={{ width: '70%' }}
                 />
               </div>
             </Col>
@@ -745,11 +760,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div className="order-summary-content">
                   <div className="flex-between">
                     <span>Total</span>
-                    <span>$123</span>
+                    <span>${this.subTotal()}</span>
                   </div>
                   <div className="flex-between">
                     <span>Subscription Save Discount</span>
-                    <span>-$12</span>
+                    <span>-$0</span>
                   </div>
                   <div className="flex-between">
                     <span>Promotion Code</span>
@@ -763,9 +778,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>$111</span>
+                <span>${this.subTotal()}</span>
               </div>
-              <Row style={{ marginTop: 20 }}>
+              {/* <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
                   <Input placeholder="Promotional code" />
                 </Col>
@@ -774,7 +789,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     Apply
                   </Button>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
 
@@ -830,7 +845,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     type="link"
                     onClick={() => {
                       this.setState({
-                        visibleBilling: true
+                        visibleBilling: true,
+                        isUnfoldedBilling: false
                       });
                     }}
                   >
@@ -939,28 +955,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col> */}
           </Row>
 
-          {/* <Row style={styles.backItem}>
-            <Collapse>
-              <Panel
-                header={<FormattedMessage id="operationLog" />}
-                key="1"
-                style={{ paddingRight: 10 }}
-              >
-                <Row>
-                  <Col span={24}>
-                    <Table
-                      rowKey={(record, index) => index.toString()}
-                      columns={operatorColumns}
-                      dataSource={operationLog}
-                      pagination={false}
-                      bordered
-                    />
-                  </Col>
-                </Row>
-              </Panel>
-            </Collapse>
-          </Row> */}
-
           <Modal
             style={{ width: '500px' }}
             title="Choose From Saved Delivery Address"
@@ -993,26 +987,61 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              {deliveryList.map((item) => (
-                <Card
-                  style={{ width: 472, marginBottom: 10 }}
-                  bodyStyle={{ padding: 10 }}
-                  key={item.deliveryAddressId}
-                >
-                  <Radio value={item.deliveryAddressId}>
-                    <div style={{ display: 'inline-grid' }}>
-                      <p>{item.firstName + item.lastName}</p>
-                      <p>
-                        {this.getDictValue(cityArr, item.cityId) +
-                          ',' +
-                          this.getDictValue(countryArr, item.countryId)}
-                      </p>
-                      <p>{item.address1}</p>
-                    </div>
-                  </Radio>
-                </Card>
-              ))}
+              {this.state.isUnfoldedDelivery
+                ? deliveryList.map((item) => (
+                    <Card
+                      style={{ width: 472, marginBottom: 10 }}
+                      bodyStyle={{ padding: 10 }}
+                      key={item.deliveryAddressId}
+                    >
+                      <Radio value={item.deliveryAddressId}>
+                        <div style={{ display: 'inline-grid' }}>
+                          <p>{item.firstName + item.lastName}</p>
+                          <p>
+                            {this.getDictValue(cityArr, item.cityId) +
+                              ',' +
+                              this.getDictValue(countryArr, item.countryId)}
+                          </p>
+                          <p>{item.address1}</p>
+                        </div>
+                      </Radio>
+                    </Card>
+                  ))
+                : deliveryList.map((item, index) =>
+                    index < 2 ? (
+                      <Card
+                        style={{ width: 472, marginBottom: 10 }}
+                        bodyStyle={{ padding: 10 }}
+                        key={item.deliveryAddressId}
+                      >
+                        <Radio value={item.deliveryAddressId}>
+                          <div style={{ display: 'inline-grid' }}>
+                            <p>{item.firstName + item.lastName}</p>
+                            <p>
+                              {this.getDictValue(cityArr, item.cityId) +
+                                ',' +
+                                this.getDictValue(countryArr, item.countryId)}
+                            </p>
+                            <p>{item.address1}</p>
+                          </div>
+                        </Radio>
+                      </Card>
+                    ) : null
+                  )}
             </Radio.Group>
+            {this.state.isUnfoldedDelivery ||
+            deliveryList.length <= 2 ? null : (
+              <Button
+                type="link"
+                onClick={() => {
+                  this.setState({
+                    isUnfoldedDelivery: true
+                  });
+                }}
+              >
+                Unfolded all delivery addresses
+              </Button>
+            )}
           </Modal>
 
           <Modal
@@ -1036,26 +1065,60 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              {billingList.map((item) => (
-                <Card
-                  style={{ width: 472, marginBottom: 10 }}
-                  bodyStyle={{ padding: 10 }}
-                  key={item.deliveryAddressId}
-                >
-                  <Radio value={item.deliveryAddressId}>
-                    <div style={{ display: 'inline-grid' }}>
-                      <p>{item.firstName + item.lastName}</p>
-                      <p>
-                        {this.getDictValue(countryArr, item.countryId) +
-                          ',' +
-                          this.getDictValue(cityArr, item.cityId)}
-                      </p>
-                      <p>{item.address1}</p>
-                    </div>
-                  </Radio>
-                </Card>
-              ))}
+              {this.state.isUnfoldedBilling
+                ? billingList.map((item) => (
+                    <Card
+                      style={{ width: 472, marginBottom: 10 }}
+                      bodyStyle={{ padding: 10 }}
+                      key={item.deliveryAddressId}
+                    >
+                      <Radio value={item.deliveryAddressId}>
+                        <div style={{ display: 'inline-grid' }}>
+                          <p>{item.firstName + item.lastName}</p>
+                          <p>
+                            {this.getDictValue(countryArr, item.countryId) +
+                              ',' +
+                              this.getDictValue(cityArr, item.cityId)}
+                          </p>
+                          <p>{item.address1}</p>
+                        </div>
+                      </Radio>
+                    </Card>
+                  ))
+                : billingList.map((item, index) =>
+                    index < 2 ? (
+                      <Card
+                        style={{ width: 472, marginBottom: 10 }}
+                        bodyStyle={{ padding: 10 }}
+                        key={item.deliveryAddressId}
+                      >
+                        <Radio value={item.deliveryAddressId}>
+                          <div style={{ display: 'inline-grid' }}>
+                            <p>{item.firstName + item.lastName}</p>
+                            <p>
+                              {this.getDictValue(countryArr, item.countryId) +
+                                ',' +
+                                this.getDictValue(cityArr, item.cityId)}
+                            </p>
+                            <p>{item.address1}</p>
+                          </div>
+                        </Radio>
+                      </Card>
+                    ) : null
+                  )}
             </Radio.Group>
+            {this.state.isUnfoldedBilling || billingList.length <= 2 ? null : (
+              <Button
+                type="link"
+                onClick={() => {
+                  this.setState({
+                    isUnfoldedBilling: true
+                  });
+                }}
+              >
+                Unfolded all delivery addresses
+              </Button>
+            )}
           </Modal>
         </Card>
 

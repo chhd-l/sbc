@@ -99,10 +99,9 @@ export default class UploadImageModal extends Component<any, any> {
     // modal(false);
   };
   render() {
-    debugger;
-    const { modalVisible, visible } = this.props.relaxProps as any;
+    const { modalVisible, visible } = this.props.relaxProps;
     setTimeout(() => {
-      console.log(visible.toJS(), 1000000);
+      console.log(modalVisible, 1000000);
     }, 1000);
     return (
       <Modal

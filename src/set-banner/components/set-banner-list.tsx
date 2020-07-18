@@ -114,7 +114,7 @@ export default class SetBannerList extends Component<any, any> {
         const pcImage = item.get('pcImage');
         const mobileImage = item.get('mobileImage');
         return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+          <tr className="ant-table-row  ant-table-row-level-0" key={index}>
             <td className="pad0">
               <div className="img-box ">
                 <img className="img" src={pcImage} />

@@ -56,13 +56,15 @@ export default class ListActor extends Actor {
   }
 
   @Action('list:uploadModalStatusChange')
-  uploadModalStatusChange(state: IMap, visible) {
-    return state.set('modalVisible', visible);
+  uploadModalStatusChange(state: IMap) {
+    return state.set('modalVisible', true);
   }
+  /*uploadModalStatusChange(state: IMap, visible) {
+    return state.set('modalVisible', visible);
+  }*/
 
   @Action('list:toggleModal')
   toggleModal(state: IMap, data) {
-    debugger;
     return state.setIn(['visible', 'isTrue'], true);
   }
 }

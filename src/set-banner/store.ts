@@ -8,7 +8,7 @@ import { Const, history, util } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
-  constructor(props: IOptions) {
+  constructor(props) {
     super(props);
     if (__DEV__) {
       (window as any)._store = this;
@@ -57,7 +57,8 @@ export default class AppStore extends Store {
   };
 
   uploadModalStatusChange = (modalVisible) => {
-    debugger;
-    this.dispatch('list:uploadModalStatusChange', modalVisible);
+    this.transaction(() => {
+      this.dispatch('list:uploadModalStatusChange', modalVisible);
+    });
   };
 }

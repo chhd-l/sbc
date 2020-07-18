@@ -102,7 +102,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-
+          <Column title="Payment type" dataIndex="payWay" key="payWay" />
           <Column
             title="Payment method"
             dataIndex="vendor"

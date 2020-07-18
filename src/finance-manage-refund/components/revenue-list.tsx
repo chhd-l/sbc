@@ -118,6 +118,7 @@ export default class RevenueList extends React.Component<any, any> {
           {/*<span>{text}</span> :'￥0.00'*/}
           {/*}}/>*/}
           {/*/>*/}
+          <Column title="Payment type" dataIndex="payWay" key="payWay" />
           <Column title="Payment method" dataIndex="vendor" key="vendor" />
           <Column
             title="Real Revenue"

@@ -20,19 +20,30 @@ export default class List extends React.Component<any, any> {
       changeSettleStatus: Function;
       queryParams: IMap;
       fetchSettleList: Function;
+      selected: any;
+      onSelect: Function;
     };
   };
 
   static relaxProps = {
     settlePage: 'settlePage',
+    selected: 'selected',
     setCheckedSettleIds: noop,
     changeSettleStatus: noop,
     queryParams: 'queryParams',
-    fetchSettleList: noop
+    fetchSettleList: noop,
+    onSelect: noop
   };
 
   render() {
-    const { settlePage, fetchSettleList, queryParams } = this.props.relaxProps;
+    const {
+      settlePage,
+      selected,
+      fetchSettleList,
+      queryParams,
+      onSelect,
+      changeSettleStatus
+    } = this.props.relaxProps;
 
     return (
       <DataGrid
@@ -40,6 +51,13 @@ export default class List extends React.Component<any, any> {
         dataSource={
           settlePage.get('content') ? settlePage.get('content').toJS() : []
         }
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys: selected,
+          onChange: (selectedRowKeys) => {
+            this._handleBatchOption(selectedRowKeys);
+          }
+        }}
         pagination={{
           total: settlePage.get('totalElements'),
           pageSize: settlePage.get('size'),
@@ -173,13 +191,13 @@ export default class List extends React.Component<any, any> {
     );
   }
 
-  // /**
-  //  * 批量操作
-  //  * @param status
-  //  * @private
-  //  */
-  // _handleBatchOption = (settleId, status) => {
-  // 	const {changeSettleStatus} = this.props.relaxProps;
-  // 	changeSettleStatus([settleId], status);
-  // }
+  /**
+   * 批量操作
+   * @param status
+   * @private
+   */
+  _handleBatchOption = (settleId, status) => {
+    const { changeSettleStatus } = this.props.relaxProps;
+    changeSettleStatus([settleId], status);
+  };
 }

@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
+import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
 
 export default class ListView extends React.Component<any, any> {
@@ -251,7 +252,12 @@ export default class ListView extends React.Component<any, any> {
 
                         <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="subscription.subscriptionDate" />
-                          :{v.createTime ? v.createTime : ''}
+                          :
+                          {v.createTime
+                            ? moment(new Date(v.createTime)).format(
+                                'YYYY-MM-DD HH:mm:ss'
+                              )
+                            : ''}
                         </span>
                       </div>
                     </td>

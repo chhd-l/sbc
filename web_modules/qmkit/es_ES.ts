@@ -521,7 +521,7 @@ export default {
   'unsettlement': 'Unsettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
-  'statementTime': 'Billing Time',
+  'statementTime': 'Statement Time',
   'statementNumber': 'Statement Number',
   'statementPeriod': 'Statement Period',
 
@@ -737,8 +737,17 @@ export default {
   'pc': 'PC',
   'mobile': 'Mobile',
   'preview': 'Preview',
-  'last180':'last 180 day'
-
+  'last180':'last 180 day',
+  'ChooseUploadType': ' Choose upload type',
+  'image': 'Image',
+  'upload': 'Upload',
+  'video': 'Video',
+  'resource' : '{type} resource',
+  'selectResource': 'Select {type} resource',
+  'dragImagesOrVideos' : 'Click or drag images or videos to upload',
+  'supportUpload': 'Support one or more pictures or videos upload',
+  'action': 'Action',
+  'resourceName': '{type} resource name'
 
 
 

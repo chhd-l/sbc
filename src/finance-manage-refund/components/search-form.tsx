@@ -13,6 +13,7 @@ export default class SearchForm extends React.Component<any, any> {
     relaxProps?: {
       //改变支付方式
       changePayWay: Function;
+      changeVendorWay: Function;
       changeTradeNo: Function;
       onSearch: Function;
       payWaysObj: any;
@@ -28,6 +29,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   static relaxProps = {
     changePayWay: noop,
+    changeVendorWay: noop,
     changeTradeNo: noop,
     payWaysObj: 'payWaysObj',
     incomeDetail: 'incomeDetail',
@@ -41,6 +43,7 @@ export default class SearchForm extends React.Component<any, any> {
   render() {
     const {
       changePayWay,
+      changeVendorWay,
       changeTradeNo,
       kind,
       exportIncomeDetail,
@@ -59,13 +62,27 @@ export default class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
+                label="Payment type"
+                style={{ width: 180 }}
+              >
+                <Option value={null}>All</Option>
+                <Option value="PAYU">PayU</Option>
+                <Option value="OXXO">OXXO</Option>
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <SelectGroup
+                onChange={(value) => changeVendorWay(value)}
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
                 label={this.props.name}
                 style={{ width: 180 }}
               >
                 <Option value={null}>All</Option>
-                <Option value="ALIPAY">VISA</Option>
-                <Option value="CASH">AMERICAN EXPRESS</Option>
-                <Option value="CASH">DISCOVER</Option>
+                <Option value="VISA">VISA</Option>
+                <Option value="AMERICAN EXPRESS">AMERICAN EXPRESS</Option>
+                <Option value="DISCOVER">DISCOVER</Option>
                 {/*  <Option value="UNIONPAY"></Option>
                 <Option value="WECHAT">微信</Option>
                 <Option value="UNIONPAY_B2B">企业银联</Option>

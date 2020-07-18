@@ -82,7 +82,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       //已经存在于其他同类型的营销活动的skuId
       skuExists: [],
       saveLoading: false,
-      promotionCode: ''
+      promotionCode: '',
+      PromotionTypeValue: 0,
+      PromotionTypeChecked: false
     };
   }
 
@@ -94,10 +96,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       let randomNumber = (
         '0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)
       ).slice(-8);
-      let timeStamp = new Date()
-        .getTime()
-        .toString()
-        .slice(-10);
+      let timeStamp = new Date().getTime().toString().slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
         promotionCode: promotionCode
@@ -125,6 +124,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+        <FormItem {...formItemLayout} label="Promotion type:">
+          <Radio.Group
+            onChange={this.promotionType}
+            value={this.state.PromotionTypeValue}
+          >
+            <Radio value={0}>Normal promotion</Radio>
+            <Radio value={1}>Subscription promotion</Radio>
+          </Radio.Group>
+        </FormItem>
         <FormItem {...smallformItemLayout} label="Promotion Code">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode')
@@ -134,6 +142,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
           <Checkbox
             style={{ marginLeft: 20 }}
+            checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
               this.onBeanChange({
                 publicStatus: e.target.checked ? '1' : '0'
@@ -185,11 +194,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (
                     value &&
-                    moment(new Date())
-                      .hour(0)
-                      .minute(0)
-                      .second(0)
-                      .unix() > value[0].unix()
+                    moment(new Date()).hour(0).minute(0).second(0).unix() >
+                      value[0].unix()
                   ) {
                     callback("You can't start earlier than now");
                   } else {
@@ -245,9 +251,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 <Radio value={0}>
                   Full amount {Enum.GET_MARKETING_STRING(marketingType)}
                 </Radio>
-                <Radio value={1}>
-                  Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
-                </Radio>
+                {/* {
+                  this.state.PromotionTypeValue == 1?
+                  <Radio value={1}>
+                    Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
+                  </Radio>
+                  :{}
+                }*/}
               </RadioGroup>
             )}
           </FormItem>
@@ -418,6 +428,23 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
   };
 
+  /**
+   * Promotion type
+   * @param joinLevel
+   */
+  promotionType = (e) => {
+    //console.log('radio checked', e.target.value);
+    let { marketingBean } = this.state;
+
+    this.setState({
+      PromotionTypeValue: e.target.value,
+      PromotionTypeChecked: !this.state.PromotionTypeChecked
+    });
+    if (!marketingBean.get('publicStatus')) {
+      //console.log(11111111111111)
+      marketingBean.set('publicStatus', '1');
+    }
+  };
   /**
    * 等级初始化
    * @param joinLevel

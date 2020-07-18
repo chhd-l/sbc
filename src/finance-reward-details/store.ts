@@ -87,7 +87,9 @@ export default class AppStore extends Store {
       }
     }
   };
-
+  onFormChange = (searchParam) => {
+    this.dispatch('change:searchForm', searchParam);
+  };
   /**
    * 改变时间
    * @param params

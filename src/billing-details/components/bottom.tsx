@@ -23,7 +23,12 @@ export default class Bottom extends React.Component<any, any> {
 
   render() {
     return (
-      <div>
+      <div style={'flex-start'}>
+        <Button
+          style={{ marginLeft: 10, background: '#e2001a', color: '#ffffff' }}
+        >
+          {<FormattedMessage id="Settlement" />}
+        </Button>
         <div style={{ marginTop: 20 }}>
           <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
             {<FormattedMessage id="back" />}

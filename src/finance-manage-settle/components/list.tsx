@@ -19,10 +19,11 @@ export default class List extends React.Component<any, any> {
       settlePage: IMap;
       setCheckedSettleIds: Function;
       changeSettleStatus: Function;
+      checkedSettleIds: any;
       queryParams: IMap;
       fetchSettleList: Function;
       selected: any;
-      onChecked: Function;
+      onSelect: Function;
       onSelectChange: Function;
     };
   };
@@ -33,9 +34,10 @@ export default class List extends React.Component<any, any> {
     selected: 'selected',
     setCheckedSettleIds: noop,
     changeSettleStatus: noop,
+    checkedSettleIds: 'checkedSettleIds',
     queryParams: 'queryParams',
     fetchSettleList: noop,
-    onChecked: noop
+    onSelect: noop
   };
 
   render() {
@@ -43,9 +45,11 @@ export default class List extends React.Component<any, any> {
       loading,
       settlePage,
       selected,
+      checkedSettleIds,
       fetchSettleList,
       queryParams,
-      onChecked,
+      onSelect,
+      setCheckedSettleIds,
       changeSettleStatus
     } = this.props.relaxProps;
 
@@ -58,9 +62,9 @@ export default class List extends React.Component<any, any> {
         }
         rowSelection={{
           type: 'checkbox',
-          selectedRowKeys: selected.toJS(),
+          selectedRowKeys: checkedSettleIds.toJS(),
           onChange: (selectedRowKeys, i) => {
-            onChecked(selectedRowKeys, i);
+            setCheckedSettleIds(selectedRowKeys, i);
           }
         }}
         pagination={{

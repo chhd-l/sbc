@@ -69,7 +69,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     if (checkedSettleIds && checkedSettleIds.size != 0) {
       changeSettleStatus(checkedSettleIds.toJS(), status);
     } else {
-      message.error('您未勾选任何记录');
+      message.error('You have not checked any records ！');
     }
   };
 }

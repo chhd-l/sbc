@@ -17,7 +17,8 @@ export default class SettleActor extends Actor {
       selected: [],
       checkedSettleIds: [],
       accountDay: '',
-      settleQueryParams: {}
+      settleQueryParams: {},
+      checkedSettleIds: []
     };
   }
 
@@ -53,6 +54,11 @@ export default class SettleActor extends Actor {
   @Action('settle:setCheckedSettleIds')
   setCheckedSettleIds(state: IMap, checkedIds) {
     return state.set('checkedSettleIds', fromJS(checkedIds));
+  }
+
+  @Action('select:init')
+  init(state: IMap, list) {
+    return state.set('selected', fromJS(list));
   }
 
   @Action('list:check')

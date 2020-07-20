@@ -6,6 +6,7 @@ import { ValidConst } from 'qmkit';
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
+
 const HasError = styled.div`
   display: flex;
   flex-direction: row;
@@ -25,7 +26,8 @@ export default class ReductionLevels extends React.Component<any, any> {
       isFullCount: props.isFullCount,
       fullReductionLevelList: props.fullReductionLevelList
         ? props.fullReductionLevelList
-        : []
+        : [],
+      PromotionTypeValue: 0
     };
   }
 
@@ -76,6 +78,7 @@ export default class ReductionLevels extends React.Component<any, any> {
     const { form } = this.props;
 
     const { getFieldDecorator } = form;
+    console.log(this.props.PromotionTypeValue);
 
     return (
       <div>
@@ -83,51 +86,65 @@ export default class ReductionLevels extends React.Component<any, any> {
           return (
             <div key={level.key ? level.key : level.reductionLevelId}>
               <HasError>
-                <span>Full&nbsp;</span>
-                <FormItem>
-                  {getFieldDecorator(`level_rule_value_${index}`, {
-                    rules: [
-                      { required: true, message: 'Must enter rules' },
-                      {
-                        validator: (_rule, value, callback) => {
-                          if (value) {
-                            if (!isFullCount) {
-                              if (
-                                !ValidConst.price.test(value) ||
-                                !(value < 100000000 && value > 0)
-                              ) {
-                                callback('0.01-99999999.99');
-                              }
-                            } else {
-                              if (
-                                !ValidConst.noZeroNumber.test(value) ||
-                                !(value < 10000 && value > 0)
-                              ) {
-                                callback('1-9999');
+                {this.props.PromotionTypeValue == 0 ? (
+                  <span>Full&nbsp;</span>
+                ) : (
+                  ''
+                )}
+                {this.props.PromotionTypeValue == 0 ? (
+                  <FormItem>
+                    {getFieldDecorator(`level_rule_value_${index}`, {
+                      rules: [
+                        { required: true, message: 'Must enter rules' },
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (value) {
+                              if (!isFullCount) {
+                                if (
+                                  !ValidConst.price.test(value) ||
+                                  !(value < 100000000 && value > 0)
+                                ) {
+                                  callback('0.01-99999999.99');
+                                }
+                              } else {
+                                if (
+                                  !ValidConst.noZeroNumber.test(value) ||
+                                  !(value < 10000 && value > 0)
+                                ) {
+                                  callback('1-9999');
+                                }
                               }
                             }
+                            callback();
                           }
-                          callback();
                         }
-                      }
-                    ],
-                    initialValue: !isFullCount
-                      ? level.fullAmount
-                      : level.fullCount
-                  })(
-                    <Input
-                      style={{ width: 200 }}
-                      placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
-                      onChange={(e) => {
-                        this.ruleValueChange(index, e.target.value);
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <span>
-                  &nbsp;{!isFullCount ? 'yuan' : 'items'}
-                  ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
-                </span>
+                      ],
+                      initialValue: !isFullCount
+                        ? level.fullAmount
+                        : level.fullCount
+                    })(
+                      <Input
+                        style={{ width: 200 }}
+                        placeholder={
+                          !isFullCount ? '0.01-99999999.99' : '1-9999'
+                        }
+                        onChange={(e) => {
+                          this.ruleValueChange(index, e.target.value);
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                ) : (
+                  ''
+                )}
+                {this.props.PromotionTypeValue == 0 ? (
+                  <span>
+                    &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                    ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
+                  </span>
+                ) : (
+                  <span>reduction&nbsp;&nbsp;</span>
+                )}
                 <FormItem>
                   {getFieldDecorator(`level_rule_reduction_${index}`, {
                     rules: [
@@ -165,13 +182,21 @@ export default class ReductionLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        <Button
-          onClick={this.addLevels}
-          disabled={fullReductionLevelList.length >= 5}
-        >
-          Add multi-level promotions
-        </Button>
-        &nbsp;&nbsp;up to 5 levels can be set
+        {this.props.PromotionTypeValue == 0 ? (
+          <Button
+            onClick={this.addLevels}
+            disabled={fullReductionLevelList.length >= 5}
+          >
+            Add multi-level promotions
+          </Button>
+        ) : (
+          ''
+        )}
+        {this.props.PromotionTypeValue == 0 ? (
+          <span>&nbsp;&nbsp;up to 5 levels can be set</span>
+        ) : (
+          ''
+        )}
       </div>
     );
   }

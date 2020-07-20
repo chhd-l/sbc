@@ -91,6 +91,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   componentDidMount() {
     this.init();
   }
+
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
       let randomNumber = (
@@ -248,16 +249,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <RadioGroup
                 onChange={(e) => this.subTypeChange(marketingType, e)}
               >
-                <Radio value={0}>
-                  Full amount {Enum.GET_MARKETING_STRING(marketingType)}
-                </Radio>
-                {/* {
-                  this.state.PromotionTypeValue == 1?
-                  <Radio value={1}>
-                    Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
+                {this.state.PromotionTypeValue == 0 ? (
+                  <Radio value={0}>
+                    Full amount {Enum.GET_MARKETING_STRING(marketingType)}
                   </Radio>
-                  :{}
-                }*/}
+                ) : (
+                  <div></div>
+                )}
+                <Radio value={1}>
+                  Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
+                </Radio>
               </RadioGroup>
             )}
           </FormItem>
@@ -308,6 +309,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                   onChangeBack={this.onRulesChange}
                   isFullCount={isFullCount}
+                  PromotionTypeValue={this.state.PromotionTypeValue}
                 />
               )}
           </FormItem>
@@ -491,7 +493,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
     const { marketingType, form } = this.props;
     form.resetFields();
-    console.log(this.state.promotionCode);
+    //console.log(this.state.promotionCode);
 
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {

@@ -542,7 +542,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>{subscriptionInfo.subscriptionNumber}</span>
               </p>
               <p>
-                Subscription Time :
+                Subscription Date :
                 <span>
                   {moment(new Date(subscriptionInfo.subscriptionTime)).format(
                     'YYYY-MM-DD HH:mm:ss'
@@ -823,7 +823,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
                       dataSource={operationLog}
-                      pagination={false}
                       bordered
                     />
                   </Col>

@@ -130,12 +130,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           let subscribeNumArr = [];
           for (let i = 0; i < goodsInfo.length; i++) {
-            subscribeNumArr.push(goodsInfo.subscribeNum);
+            subscribeNumArr.push(goodsInfo[i].subscribeNum);
           }
           let originalParams = {
-            billingAddressId: subscriptionDetail.deliveryAddressId,
+            billingAddressId: subscriptionDetail.billingAddressId,
             cycleTypeId: subscriptionInfo.frequency,
-            deliveryAddressId: subscriptionDetail.billingAddressId,
+            deliveryAddressId: subscriptionDetail.deliveryAddressId,
             subscribeNumArr: subscribeNumArr,
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime
           };
@@ -298,7 +298,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
     let subscribeNumArr = [];
     for (let i = 0; i < goodsInfo.length; i++) {
-      subscribeNumArr.push(goodsInfo.subscribeNum);
+      subscribeNumArr.push(goodsInfo[i].subscribeNum);
     }
     let params = {
       billingAddressId: billingAddressId,
@@ -311,7 +311,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscribeId: subscriptionInfo.subscriptionNumber,
       changeField: ''
     };
-
+    debugger;
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
       changeFieldArr.push('Delivery Address');
@@ -325,7 +325,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
       changeFieldArr.push('Next Delivery Time');
     }
-    if (subscribeNumArr !== originalParams.subscribeNumArr) {
+    if (
+      subscribeNumArr.join(',') !== originalParams.subscribeNumArr.join(',')
+    ) {
       changeFieldArr.push('Order Quantity');
     }
     if (changeFieldArr.length > 0) {
@@ -652,7 +654,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>{subscriptionInfo.subscriptionNumber}</span>
               </p>
               <p>
-                Subscription Time :
+                Subscription Date :
                 <span>
                   {moment(new Date(subscriptionInfo.subscriptionTime)).format(
                     'YYYY-MM-DD HH:mm:ss'

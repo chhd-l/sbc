@@ -542,7 +542,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>{subscriptionInfo.subscriptionNumber}</span>
               </p>
               <p>
-                Subscription Time :
+                Subscription Date :
                 <span>
                   {moment(new Date(subscriptionInfo.subscriptionTime)).format(
                     'YYYY-MM-DD HH:mm:ss'
@@ -707,12 +707,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
                   </p>
                 </Col>
               </Row>
+              <Col span={24}>
+                <p style={{ width: 140 }}>Address2: </p>
+                <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+              </Col>
             </Col>
             <Col span={8}>
               <Row>
@@ -744,8 +748,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                </Col>
+
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -823,7 +832,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
                       dataSource={operationLog}
-                      pagination={false}
                       bordered
                     />
                   </Col>

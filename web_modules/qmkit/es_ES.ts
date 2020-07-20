@@ -745,7 +745,7 @@ export default {
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',
   'action': 'Action',
-  'resourceName': '{type} resource name'
+  'resourceName': 'Banner name'
 
 
 

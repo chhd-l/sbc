@@ -121,7 +121,7 @@ export default class SetBannerList extends Component<any, any> {
                 </div>
               )}
             </td>
-            <td>{mobileName}</td>
+            {/*<td>{mobileName}</td>*/}
             <td className="pad0">
               {mobileType === 'image' ? (
                 <div className="img-box">
@@ -136,6 +136,9 @@ export default class SetBannerList extends Component<any, any> {
             <td>
               <span className="red" onClick={() => deleteRow(id)}>
                 <FormattedMessage id="delete" />
+              </span>
+              <span className="red mgl20" onClick={() => editRow(id)}>
+                <FormattedMessage id="edit" />
               </span>
             </td>
           </tr>
@@ -184,10 +187,7 @@ export default class SetBannerList extends Component<any, any> {
                       <thead className="ant-table-thead">
                         <tr>
                           <th>
-                            <FormattedMessage
-                              id="resourceName"
-                              values={{ type: 'Pc' }}
-                            />
+                            <FormattedMessage id="resourceName" />
                           </th>
                           <th>
                             <FormattedMessage
@@ -195,12 +195,12 @@ export default class SetBannerList extends Component<any, any> {
                               values={{ type: 'Pc' }}
                             />
                           </th>
-                          <th>
-                            <FormattedMessage
-                              id="resourceName"
-                              values={{ type: 'Mobile' }}
-                            />
-                          </th>
+                          {/*<th>*/}
+                          {/*  <FormattedMessage*/}
+                          {/*    id="resourceName"*/}
+                          {/*    values={{ type: 'Mobile' }}*/}
+                          {/*  />*/}
+                          {/*</th>*/}
                           <th>
                             <FormattedMessage
                               id="resource"

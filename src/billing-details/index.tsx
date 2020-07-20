@@ -65,7 +65,7 @@ export default class BillingDetails extends React.Component<any, any> {
               </a>
             </Tooltip>
           </OptionDiv>*/}
-          <Detail />
+          {/* <Detail />*/}
           <List settleId={this.props.match.params.settleId} />
           <Bottom />
         </div>

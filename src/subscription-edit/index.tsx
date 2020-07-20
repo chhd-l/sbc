@@ -311,7 +311,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscribeId: subscriptionInfo.subscriptionNumber,
       changeField: ''
     };
-    debugger;
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
       changeFieldArr.push('Delivery Address');
@@ -843,9 +842,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
+                  </p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
                   </p>
                 </Col>
               </Row>
@@ -893,8 +898,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -1018,6 +1027,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               this.getDictValue(countryArr, item.countryId)}
                           </p>
                           <p>{item.address1}</p>
+                          <p>{item.address2}</p>
                         </div>
                       </Radio>
                     </Card>
@@ -1038,6 +1048,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 this.getDictValue(countryArr, item.countryId)}
                             </p>
                             <p>{item.address1}</p>
+                            <p>{item.address2}</p>
                           </div>
                         </Radio>
                       </Card>
@@ -1096,6 +1107,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               this.getDictValue(cityArr, item.cityId)}
                           </p>
                           <p>{item.address1}</p>
+                          <p>{item.address2}</p>
                         </div>
                       </Radio>
                     </Card>
@@ -1116,6 +1128,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 this.getDictValue(cityArr, item.cityId)}
                             </p>
                             <p>{item.address1}</p>
+                            <p>{item.address2}</p>
                           </div>
                         </Radio>
                       </Card>

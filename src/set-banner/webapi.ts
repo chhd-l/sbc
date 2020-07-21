@@ -8,7 +8,8 @@ type TResult = {
 const api = {
   getList: '',
   deleteRow: '/delete',
-  upload: ''
+  upload: '',
+  editRow: '/edit'
 };
 /**
  * 获取列表
@@ -25,4 +26,10 @@ export const getList = (filter = {}) => {
  */
 export const deleteRow = (params) => {
   return Fetch<TResult>(api.deleteRow);
+};
+/**
+ * 编辑
+ */
+export const editRow = (params) => {
+  return Fetch<TResult>(api.editRow);
 };

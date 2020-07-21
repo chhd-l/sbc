@@ -298,10 +298,18 @@ export default class ListView extends React.Component<any, any> {
                         ) : null
                       }
                     </td>
-                    <td style={{ width: '15%', paddingLeft: 20 }}>
+                    <td
+                      style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}
+                    >
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p key={k}>{item.goodsName}</p>
+                          <p
+                            key={k}
+                            style={styles.ellipsisName}
+                            title={item.goodsName}
+                          >
+                            {item.goodsName}
+                          </p>
                         ))}
                     </td>
                     {/*subscription status*/}
@@ -418,5 +426,11 @@ const styles = {
     border: ' 1px solid #F56C1D',
     color: '#F56C15',
     borderRadius: 5
+  },
+  ellipsisName: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 150
   }
 } as any;

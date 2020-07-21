@@ -223,7 +223,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       this.querySysDictionary('city');
     }
 
-    this.querySysDictionary('Frequency');
+    this.querySysDictionary('Frequency_week');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -251,9 +251,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               JSON.stringify(res.context.sysDictionaryVOS)
             );
           }
-          if (type === 'Frequency') {
+          if (type === 'Frequency_week') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month')
+            );
+          }
+          if (type === 'Frequency_month') {
+            let frequencyList = [
+              ...this.state.frequencyList,
+              ...res.context.sysDictionaryVOS
+            ];
             this.setState({
-              frequencyList: res.context.sysDictionaryVOS
+              frequencyList: frequencyList
             });
           }
         } else {
@@ -564,7 +577,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} style={{ width: 100 }} alt="" />
-            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
       },

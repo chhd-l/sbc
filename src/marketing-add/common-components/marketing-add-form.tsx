@@ -445,7 +445,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
       })
     });
 
-    //console.log(11111111111111)
     marketingBean.set('publicStatus', '1');
   };
 

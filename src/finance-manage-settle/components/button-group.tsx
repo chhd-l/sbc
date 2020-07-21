@@ -42,19 +42,19 @@ export default class ButtonGroup extends React.Component<any, any> {
 
   _menu = () => {
     const { queryParams } = this.props.relaxProps;
-    const settleStatus = queryParams.get('settleStatus');
+    const settleStatus = queryParams.get('settleStatus').toString();
     return (
       <Menu>
-        {(settleStatus == 0 || settleStatus == 2) && (
+        {(settleStatus == '0' || settleStatus == 2) && (
           <Menu.Item>
             <a onClick={() => this._handleBatchOption(1)}>Set as settled</a>
           </Menu.Item>
         )}
-        {settleStatus == 0 && (
+        {/* {settleStatus == 0 && (
           <Menu.Item>
             <a onClick={() => this._handleBatchOption(2)}>No processing</a>
           </Menu.Item>
-        )}
+        )}*/}
       </Menu>
     );
   };

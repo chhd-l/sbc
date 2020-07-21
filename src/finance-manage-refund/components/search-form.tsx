@@ -107,7 +107,7 @@ export default class SearchForm extends React.Component<any, any> {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    disabled={incomeDetail.toJS().length <= 0}
+                    /*disabled={incomeDetail.toJS().length <= 0}*/
                     onClick={(e) => {
                       e.preventDefault();
                       onSearch();
@@ -119,7 +119,7 @@ export default class SearchForm extends React.Component<any, any> {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    disabled={refundDetail.toJS().length <= 0}
+                    /*disabled={refundDetail.toJS().length <= 0}*/
                     onClick={(e) => {
                       e.preventDefault();
                       exportRefundDetail();

@@ -496,10 +496,10 @@ export default {
   'deleteAccount': 'Delete account',
   'setMainAccount': 'Set the main account',
 
-  'financialReconciliation': 'Finance Reconciliation',
+  'financialReconciliation': 'Finance reconciliation',
   'bulkExport': 'Bulk Export',
-  'revenueReconciliation': 'Revenue Reconciliation',
-  'refundReconciliation': 'Refund Reconciliation',
+  'revenueReconciliation': 'Revenue reconciliation',
+  'refundReconciliation': 'Refund reconciliation',
   'VISA': 'VISA',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',

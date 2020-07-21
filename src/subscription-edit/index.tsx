@@ -66,7 +66,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       sameFlag: false,
       originalParams: {},
       isUnfoldedDelivery: false,
-      isUnfoldedBilling: false
+      isUnfoldedBilling: false,
+      saveLoading: false
 
       // operationLog: []
     };
@@ -129,12 +130,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           let subscribeNumArr = [];
           for (let i = 0; i < goodsInfo.length; i++) {
-            subscribeNumArr.push(goodsInfo.subscribeNum);
+            subscribeNumArr.push(goodsInfo[i].subscribeNum);
           }
           let originalParams = {
-            billingAddressId: subscriptionDetail.deliveryAddressId,
+            billingAddressId: subscriptionDetail.billingAddressId,
             cycleTypeId: subscriptionInfo.frequency,
-            deliveryAddressId: subscriptionDetail.billingAddressId,
+            deliveryAddressId: subscriptionDetail.deliveryAddressId,
             subscribeNumArr: subscribeNumArr,
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime
           };
@@ -292,9 +293,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       billingAddressId,
       originalParams
     } = this.state;
+    this.setState({
+      saveLoading: true
+    });
     let subscribeNumArr = [];
     for (let i = 0; i < goodsInfo.length; i++) {
-      subscribeNumArr.push(goodsInfo.subscribeNum);
+      subscribeNumArr.push(goodsInfo[i].subscribeNum);
     }
     let params = {
       billingAddressId: billingAddressId,
@@ -307,7 +311,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscribeId: subscriptionInfo.subscriptionNumber,
       changeField: ''
     };
-
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
       changeFieldArr.push('Delivery Address');
@@ -321,7 +324,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
       changeFieldArr.push('Next Delivery Time');
     }
-    if (subscribeNumArr !== originalParams.subscribeNumArr) {
+    if (
+      subscribeNumArr.join(',') !== originalParams.subscribeNumArr.join(',')
+    ) {
       changeFieldArr.push('Order Quantity');
     }
     if (changeFieldArr.length > 0) {
@@ -333,13 +338,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
+          this.setState({
+            saveLoading: false
+          });
           message.success('Successful');
           this.getSubscriptionDetail();
         } else {
+          this.setState({
+            saveLoading: false
+          });
           message.error('Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          saveLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -639,7 +653,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>{subscriptionInfo.subscriptionNumber}</span>
               </p>
               <p>
-                Subscription Time :
+                Subscription Date :
                 <span>
                   {moment(new Date(subscriptionInfo.subscriptionTime)).format(
                     'YYYY-MM-DD HH:mm:ss'
@@ -828,9 +842,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
+                  </p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
                   </p>
                 </Col>
               </Row>
@@ -878,8 +898,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                </Col>
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -1003,6 +1027,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               this.getDictValue(countryArr, item.countryId)}
                           </p>
                           <p>{item.address1}</p>
+                          <p>{item.address2}</p>
                         </div>
                       </Radio>
                     </Card>
@@ -1023,6 +1048,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 this.getDictValue(countryArr, item.countryId)}
                             </p>
                             <p>{item.address1}</p>
+                            <p>{item.address2}</p>
                           </div>
                         </Radio>
                       </Card>
@@ -1081,6 +1107,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               this.getDictValue(cityArr, item.cityId)}
                           </p>
                           <p>{item.address1}</p>
+                          <p>{item.address2}</p>
                         </div>
                       </Radio>
                     </Card>
@@ -1101,6 +1128,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 this.getDictValue(cityArr, item.cityId)}
                             </p>
                             <p>{item.address1}</p>
+                            <p>{item.address2}</p>
                           </div>
                         </Radio>
                       </Card>
@@ -1123,7 +1151,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Card>
 
         <div className="bar-button">
-          <Button type="primary" onClick={() => this.updateSubscription()}>
+          <Button
+            type="primary"
+            onClick={() => this.updateSubscription()}
+            loading={this.state.saveLoading}
+          >
             {<FormattedMessage id="save" />}
           </Button>
           <Button

@@ -56,7 +56,7 @@ export default class SubscriptionList extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency');
+    this.querySysDictionary('Frequency_week');
 
     this.getSubscriptionList();
   }
@@ -131,9 +131,24 @@ export default class SubscriptionList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS
-          });
+          if (type === 'Frequency_week') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month')
+            );
+          }
+          if (type === 'Frequency_month') {
+            let frequencyList = [
+              ...this.state.frequencyList,
+              ...res.context.sysDictionaryVOS
+            ];
+            this.setState({
+              frequencyList: frequencyList
+            });
+          }
         } else {
           message.error('Unsuccessful');
         }
@@ -201,7 +216,6 @@ export default class SubscriptionList extends Component<any, any> {
       frequencyList,
       activeKey
     } = this.state;
-
     const menu = (
       <Menu>
         <Menu.Item>
@@ -330,8 +344,8 @@ export default class SubscriptionList extends Component<any, any> {
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {frequencyList.map((item) => (
-                      <Option value={item.id} key={item.id}>
+                    {frequencyList.map((item, index) => (
+                      <Option value={item.id} key={index}>
                         {item.name}
                       </Option>
                     ))}

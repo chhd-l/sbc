@@ -84,7 +84,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       saveLoading: false,
       promotionCode: '',
       PromotionTypeValue: 0,
-      PromotionTypeChecked: false
+      PromotionTypeChecked: true
     };
   }
 
@@ -146,7 +146,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
               this.onBeanChange({
-                publicStatus: e.target.checked ? '1' : '0'
+                publicStatus: e.target.checked ? '0' : '1'
               });
             }}
           >
@@ -437,15 +437,27 @@ export default class MarketingAddForm extends React.Component<any, any> {
   promotionType = (e) => {
     //console.log('radio checked', e.target.value);
     let { marketingBean } = this.state;
-
     this.setState({
       PromotionTypeValue: e.target.value,
+      PromotionTypeChecked: !this.state.PromotionTypeChecked,
+      marketingBean: this.state.marketingBean.merge({
+        publicStatus: e.target.value
+      })
+    });
+
+    //console.log(11111111111111)
+    marketingBean.set('publicStatus', '1');
+  };
+
+  /**
+   * 内部方法，修改marketingBean对象的属性
+   * @param params
+   */
+  onBeanChange = (params) => {
+    this.setState({
+      marketingBean: this.state.marketingBean.merge(params),
       PromotionTypeChecked: !this.state.PromotionTypeChecked
     });
-    if (!marketingBean.get('publicStatus')) {
-      //console.log(11111111111111)
-      marketingBean.set('publicStatus', '1');
-    }
   };
   /**
    * 等级初始化
@@ -486,14 +498,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
-    let { marketingBean, level, isFullCount, selectedSkuIds } = this.state;
+    let {
+      marketingBean,
+      level,
+      isFullCount,
+      selectedSkuIds,
+      PromotionTypeValue
+    } = this.state;
 
     let levelList = fromJS([]);
     let errorObject = {};
-
+    marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
     form.resetFields();
     //console.log(this.state.promotionCode);
+    console.log(marketingBean, 111111);
 
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
@@ -521,7 +540,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
           : Enum.SUB_TYPE.GIFT_FULL_AMOUNT
       );
     }
-    if (!levelList || levelList.isEmpty()) {
+    if (
+      !levelList ||
+      (levelList.isEmpty() && this.state.PromotionTypeValue == 0)
+    ) {
       errorObject['rules'] = {
         value: null,
         errors: [new Error('Please setting rules')]
@@ -539,20 +561,30 @@ export default class MarketingAddForm extends React.Component<any, any> {
             })
           );
           if (!isFullCount && +level.fullAmount <= +level.reduction) {
-            errorObject[`level_rule_value_${index}`] = {
-              errors: [
-                new Error(
-                  'The conditional amount must be greater than the deductible amount'
-                )
-              ]
-            };
-            errorObject[`level_rule_reduction_${index}`] = {
-              errors: [
-                new Error(
-                  'The deductible amount must be less than the conditional amount'
-                )
-              ]
-            };
+            if (this.state.PromotionTypeValue == 0) {
+              errorObject[`level_rule_value_${index}`] = {
+                errors: [
+                  new Error(
+                    'The conditional amount must be greater than the deductible amount'
+                  )
+                ]
+              };
+              errorObject[`level_rule_reduction_${index}`] = {
+                errors: [
+                  new Error(
+                    'The deductible amount must be less than the conditional amount'
+                  )
+                ]
+              };
+            } else {
+              errorObject[`level_rule_reduction_${index}`] = {
+                errors: [
+                  new Error(
+                    'The deductible amount must be less than the conditional amount'
+                  )
+                ]
+              };
+            }
           }
         });
       } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
@@ -818,15 +850,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       this.onBeanChange({ fullReductionLevelList: rules });
     }
-  };
-
-  /**
-   * 内部方法，修改marketingBean对象的属性
-   * @param params
-   */
-  onBeanChange = (params) => {
-    this.setState({ marketingBean: this.state.marketingBean.merge(params) });
-    console.log(this.state.marketingBean);
   };
 
   /**

@@ -72,3 +72,12 @@ export function getBySubscribeId(filterParams = {}) {
     })
   });
 }
+
+export function orderNow(filterParams = {}) {
+  return Fetch<TResult>('/sub/orderNow', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

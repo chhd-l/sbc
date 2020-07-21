@@ -79,19 +79,15 @@ export default class ListChart extends React.Component<any, any> {
     echartsData.forEach((v, i) => {
       echartsVal1.push({
         key: i,
-        skuTotalPv: v.orderMount,
-        skuTotalUv: v.orderQuantiry,
         title: v.date,
-        totalPv: 2,
-        totalUv: 1
+        orderQuantiry: v.orderQuantiry,
+        rewardMount: v.rewardMount
       });
       echartsVal2.push({
         key: i,
-        skuTotalPv: v.orderMount,
-        skuTotalUv: v.orderQuantiry,
         title: v.date,
-        totalPv: 2,
-        totalUv: 1
+        orderQuantiry: v.orderQuantiry,
+        orderMount: v.orderMount
       });
     });
 
@@ -114,12 +110,13 @@ export default class ListChart extends React.Component<any, any> {
         <div className="chartDetails2">
           <WMChart
             title=""
+            multiYAxis={true}
             startTime={new Date()}
             endTime={new Date()}
             height="260"
             dataDesc={[
-              { title: 'Order number', key: 'orderCount' },
-              { title: 'Order amount', key: 'orderAmount' }
+              { title: 'Order number', key: 'orderQuantiry' },
+              { title: 'Reward mount', key: 'rewardMount' }
             ]}
             radioClickBack={() => {}}
             content={echartsVal1}
@@ -130,10 +127,14 @@ export default class ListChart extends React.Component<any, any> {
         <div className="chartDetails2">
           <WMChart
             title=""
+            multiYAxis={true}
             startTime={new Date()}
             endTime={new Date()}
             height="260"
-            dataDesc={[{ title: 'Reward mount', key: 'rewardMount' }]}
+            dataDesc={[
+              { title: 'Order number', key: 'orderQuantiry' },
+              { title: 'Order amount', key: 'orderMount' }
+            ]}
             radioClickBack={() => {}}
             content={echartsVal2}
             rangeVisible={false}

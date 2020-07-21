@@ -13,7 +13,9 @@ export default class SearchForm extends React.Component<any, any> {
     relaxProps?: {
       //改变支付方式
       changePayWay: Function;
+      changeVendorWay: Function;
       changeTradeNo: Function;
+      onSearch: Function;
       payWaysObj: any;
       incomeDetail: any;
       kind: string;
@@ -27,24 +29,28 @@ export default class SearchForm extends React.Component<any, any> {
 
   static relaxProps = {
     changePayWay: noop,
+    changeVendorWay: noop,
     changeTradeNo: noop,
     payWaysObj: 'payWaysObj',
     incomeDetail: 'incomeDetail',
     kind: 'kind',
     exportIncomeDetail: noop,
     exportRefundDetail: noop,
+    onSearch: noop,
     refundDetail: 'refundDetail'
   };
 
   render() {
     const {
       changePayWay,
+      changeVendorWay,
       changeTradeNo,
       kind,
       exportIncomeDetail,
       exportRefundDetail,
       refundDetail,
-      incomeDetail
+      incomeDetail,
+      onSearch
     } = this.props.relaxProps;
     return (
       <div>
@@ -56,13 +62,27 @@ export default class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
-                label={this.props.name}
-                style={{ width: 80 }}
+                label="Payment type"
+                style={{ width: 180 }}
               >
                 <Option value={null}>All</Option>
-                <Option value="ALIPAY">VISA</Option>
-                <Option value="CASH">AMERICAN EXPRESS</Option>
-                <Option value="CASH">DISCOVER</Option>
+                <Option value="PAYU">PayU</Option>
+                <Option value="OXXO">OXXO</Option>
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <SelectGroup
+                onChange={(value) => changeVendorWay(value)}
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={this.props.name}
+                style={{ width: 180 }}
+              >
+                <Option value={null}>All</Option>
+                <Option value="VISA">VISA</Option>
+                <Option value="AMERICAN EXPRESS">AMERICAN EXPRESS</Option>
+                <Option value="DISCOVER">DISCOVER</Option>
                 {/*  <Option value="UNIONPAY"></Option>
                 <Option value="WECHAT">微信</Option>
                 <Option value="UNIONPAY_B2B">企业银联</Option>
@@ -87,7 +107,7 @@ export default class SearchForm extends React.Component<any, any> {
                     disabled={incomeDetail.toJS().length <= 0}
                     onClick={(e) => {
                       e.preventDefault();
-                      exportIncomeDetail();
+                      onSearch();
                     }}
                   >
                     Search

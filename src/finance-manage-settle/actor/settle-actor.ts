@@ -14,9 +14,11 @@ export default class SettleActor extends Actor {
       },
       settlePage: {},
       storeMap: {},
+      selected: [],
       checkedSettleIds: [],
       accountDay: '',
-      settleQueryParams: {}
+      settleQueryParams: {},
+      checkedSettleIds: []
     };
   }
 
@@ -52,5 +54,34 @@ export default class SettleActor extends Actor {
   @Action('settle:setCheckedSettleIds')
   setCheckedSettleIds(state: IMap, checkedIds) {
     return state.set('checkedSettleIds', fromJS(checkedIds));
+  }
+
+  @Action('select:init')
+  init(state: IMap, list) {
+    return state.set('selected', fromJS(list));
+  }
+
+  @Action('list:check')
+  check(state: IMap, { index, checked }) {
+    // 设置选中
+    //state = state.setIn(['dataList', index, 'checked'], checked);
+
+    // 更新已选中的id
+    let value = state.getIn(['dataList', index]);
+    let selected = state.get('selected');
+    let foundIndex = selected.findIndex((v) => v === value.get('id'));
+    if (checked) {
+      if (foundIndex === -1) {
+        selected = selected.push(value.get('id'));
+        state = state.set('selected', selected);
+      }
+    } else {
+      if (foundIndex > -1) {
+        selected = selected.delete(foundIndex);
+        state = state.set('selected', selected);
+      }
+    }
+
+    return state;
   }
 }

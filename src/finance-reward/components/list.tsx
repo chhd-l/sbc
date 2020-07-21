@@ -136,17 +136,15 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           key="orderQuantity"
           dataIndex="orderQuantity"
           width="11%"
-          render={(orderPrice) => (
-            <span>
-              {orderPrice != null ? `$${orderPrice.toFixed(2)}` : '-'}
-            </span>
-          )}
         />
         <Column
           title={<FormattedMessage id="OrderAmount" />}
           dataIndex="orderAmount"
           width="11%"
           key="orderAmount"
+          render={(orderPrice) => (
+            <span>{orderPrice != null ? `${orderPrice.toFixed(2)}` : '-'}</span>
+          )}
           /* render={(payOrderStatus) => (
             <span> {payOrderStatusDic[payOrderStatus]} </span>
           )}*/

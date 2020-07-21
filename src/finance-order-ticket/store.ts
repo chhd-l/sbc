@@ -115,6 +115,7 @@ export default class AppStore extends Store {
    * @param ids
    */
   onSelect = (ids: string[]) => {
+    console.log(ids, 2222222222);
     this.dispatch('select:init', ids);
   };
 

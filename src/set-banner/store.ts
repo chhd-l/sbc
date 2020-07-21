@@ -33,6 +33,10 @@ export default class AppStore extends Store {
     const res = await webapi.deleteRow(params);
   };
 
+  editRow = async (params) => {
+    const res = await webapi.editRow(params);
+  };
+
   getList = async (params) => {
     debugger;
     this.dispatch('loading:start');

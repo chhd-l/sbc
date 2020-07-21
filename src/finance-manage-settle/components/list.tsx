@@ -15,39 +15,63 @@ const Column = Table.Column;
 export default class List extends React.Component<any, any> {
   props: {
     relaxProps?: {
+      loading: boolean;
       settlePage: IMap;
       setCheckedSettleIds: Function;
       changeSettleStatus: Function;
+      checkedSettleIds: any;
       queryParams: IMap;
       fetchSettleList: Function;
+      selected: any;
+      onSelect: Function;
+      onSelectChange: Function;
     };
   };
 
   static relaxProps = {
     settlePage: 'settlePage',
+    loading: 'loading',
+    selected: 'selected',
     setCheckedSettleIds: noop,
     changeSettleStatus: noop,
+    checkedSettleIds: 'checkedSettleIds',
     queryParams: 'queryParams',
-    fetchSettleList: noop
+    fetchSettleList: noop,
+    onSelect: noop
   };
 
   render() {
-    const { settlePage, fetchSettleList, queryParams } = this.props.relaxProps;
+    const {
+      loading,
+      settlePage,
+      selected,
+      checkedSettleIds,
+      fetchSettleList,
+      queryParams,
+      onSelect,
+      setCheckedSettleIds,
+      changeSettleStatus
+    } = this.props.relaxProps;
 
     return (
       <DataGrid
+        loading={loading}
         rowKey="settleId"
         dataSource={
           settlePage.get('content') ? settlePage.get('content').toJS() : []
         }
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys: checkedSettleIds.toJS(),
+          onChange: (selectedRowKeys, i) => {
+            setCheckedSettleIds(selectedRowKeys, i);
+          }
+        }}
         pagination={{
           total: settlePage.get('totalElements'),
           pageSize: settlePage.get('size'),
           current: settlePage.get('number') + 1
         }}
-        onChange={(pagination) =>
-          fetchSettleList(pagination['current'] - 1, 10)
-        }
       >
         {queryParams.get('settleStatus') == 1 && (
           <Column
@@ -61,7 +85,7 @@ export default class List extends React.Component<any, any> {
         )}
 
         <Column
-          title={<FormattedMessage id="statementGenerationTime" />}
+          title={<FormattedMessage id="SettlementStatementTime" />}
           key="createTime"
           dataIndex="createTime"
           render={(value) => {
@@ -173,13 +197,14 @@ export default class List extends React.Component<any, any> {
     );
   }
 
-  // /**
-  //  * 批量操作
-  //  * @param status
-  //  * @private
-  //  */
-  // _handleBatchOption = (settleId, status) => {
-  // 	const {changeSettleStatus} = this.props.relaxProps;
-  // 	changeSettleStatus([settleId], status);
-  // }
+  /**
+   * 批量操作
+   * @param status
+   * @private
+   */
+  _handleBatchOption = (settleId, status) => {
+    const { changeSettleStatus } = this.props.relaxProps;
+    console.log(settleId);
+    changeSettleStatus([settleId], status);
+  };
 }

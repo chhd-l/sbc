@@ -423,7 +423,7 @@ class GoodsForm extends React.Component<any, any> {
                     message: 'Please select store category'
                   }
                 ],
-                onChange: this.storeCateChange,
+
                 initialValue: storeCateValues
               })(
                 <TreeSelect
@@ -439,6 +439,7 @@ class GoodsForm extends React.Component<any, any> {
                   treeDefaultExpandAll
                   showSearch={false}
                   disabled={!goods.get('cateId')}
+                  onChange={this.storeCateChange}
                 >
                   {this.generateStoreCateTree(storeCateList)}
                 </TreeSelect>

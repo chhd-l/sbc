@@ -73,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
               const value = (e.target as any).value;
               onFormChange({
                 field: 'prescriberId',
-                value: Number(value)
+                value: value
               });
             }}
             value={searchForm.get('prescriberId')}

@@ -36,7 +36,7 @@ export default class RefundList extends React.Component<any, any> {
         <div className="totalAmount">
           <ul>
             <li>
-              <p className="payName">&nbsp;Total Revenue</p>
+              <p className="payName">&nbsp;Total Refund</p>
               <strong>
                 {refundList.toJS().map((item, index) => {
                   let a = item.totalAmount.substr(
@@ -96,7 +96,7 @@ export default class RefundList extends React.Component<any, any> {
           pagination={false}
         >
           <Column
-            title={<FormattedMessage id="serialNumber" />}
+            title="NO."
             dataIndex="index"
             key="index"
             width="50"
@@ -150,7 +150,7 @@ export default class RefundList extends React.Component<any, any> {
             }}
           /> */}
           <Column
-            title="PayU"
+            title="Source"
             dataIndex="PayU"
             key="PayU"
             width="100"
@@ -158,7 +158,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
             }}
           />
-          <Column
+          {/*<Column
             title={<FormattedMessage id="balance" />}
             dataIndex="BALANCE"
             key="BALANCE"
@@ -166,7 +166,7 @@ export default class RefundList extends React.Component<any, any> {
             render={(_text, rowData: any) => {
               return <span>{rowData.payItemAmountMap.BALANCE}</span>;
             }}
-          />
+          />*/}
           {/*<Column*/}
           {/*title='预存款'*/}
           {/*dataIndex='ADVANCE'*/}
@@ -195,7 +195,7 @@ export default class RefundList extends React.Component<any, any> {
           {/*}}*/}
           {/*/>*/}
           <Column
-            title={<FormattedMessage id="total2" />}
+            title={<FormattedMessage id="Refund" />}
             dataIndex="totalAmount"
             key="totalAmount"
             width="100"
@@ -222,7 +222,7 @@ export default class RefundList extends React.Component<any, any> {
                       })
                     }
                   >
-                    {<FormattedMessage id="details" />}
+                    Details
                   </a>
                 </AuthWrapper>
               );

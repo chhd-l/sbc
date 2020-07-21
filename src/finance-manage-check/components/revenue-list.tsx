@@ -34,7 +34,7 @@ export default class RevenueList extends React.Component<any, any> {
     let totalAmount = 0;
     return (
       <div>
-        <div className="totalAmount">
+        {/*<div className="totalAmount">
           <ul>
             <li>
               <p className="payName">&nbsp;Total Revenue</p>
@@ -67,7 +67,7 @@ export default class RevenueList extends React.Component<any, any> {
               <strong>--</strong>
               <p className="payPercent">-- &nbsp;{}</p>
             </li>
-            {/*{incomeTotal.toJS().length > 0
+            {incomeTotal.toJS().length > 0
               ? incomeTotal.map((v, i) => {
                   //不显示预存款，优惠券和积分
                   return (
@@ -86,14 +86,14 @@ export default class RevenueList extends React.Component<any, any> {
                     )
                   );
                 })
-              : null}*/}
+              : null}
           </ul>
-        </div>
+        </div>*/}
 
         <div>
           <DataGrid
             dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []}
-            rowKey={(record) => record.index}
+            rowKey={(record, index) => index}
             pagination={false}
           >
             <Column
@@ -104,6 +104,11 @@ export default class RevenueList extends React.Component<any, any> {
               render={(_text, _rowData: any, index) => {
                 return index + 1;
               }}
+            />
+            <Column
+              title="Total Revenue"
+              dataIndex="totalAmount"
+              key="totalAmount"
             />
             {/* <Column
               title="转账汇款"
@@ -159,15 +164,7 @@ export default class RevenueList extends React.Component<any, any> {
                 return <span>{rowData.payItemAmountMap.POINT}</span>;
               }}
             /> */}
-            <Column
-              title="Source"
-              dataIndex="PayU"
-              key="PayU"
-              width="100"
-              render={(_text, rowData: any) => {
-                return <span>{'PayU'}</span>;
-              }}
-            />
+            <Column title="PayU" dataIndex="totalAmount" key="supplierId" />
             {/*<Column
               title={<FormattedMessage id="balance" />}
               dataIndex="BALANCE"
@@ -204,16 +201,16 @@ export default class RevenueList extends React.Component<any, any> {
             {/*return <span>{rowData.payItemAmountMap.POINT}</span>*/}
             {/*}}*/}
             {/*/>*/}
-            <Column
+            {/*<Column
               title={<FormattedMessage id="Revenue" />}
               dataIndex="totalAmount"
               key="totalAmount"
               width="100"
-            />
+            />*/}
             <Column
               title={<FormattedMessage id="operation" />}
               dataIndex="operate"
-              key="operate"
+              key="storeId"
               width="100"
               render={(_text, record: any) => {
                 return (
@@ -232,7 +229,7 @@ export default class RevenueList extends React.Component<any, any> {
                         })
                       }
                     >
-                      {<FormattedMessage id="Details" />}
+                      {<FormattedMessage id="details" />}
                     </a>
                   </AuthWrapper>
                 );

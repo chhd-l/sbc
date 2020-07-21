@@ -56,12 +56,13 @@ export default class SearchForm extends React.Component<any, any> {
       <div>
         <div style={styles.head}>
           <Form className="filter-content" layout="inline">
-            <FormItem>
+            {/* <FormItem>
               <SelectGroup
                 onChange={(value) => changePayWay(value)}
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
+                defaultValue="All"
                 label="Payment type"
                 style={{ width: 180 }}
               >
@@ -69,7 +70,7 @@ export default class SearchForm extends React.Component<any, any> {
                 <Option value="PAYU">PayU</Option>
                 <Option value="OXXO">OXXO</Option>
               </SelectGroup>
-            </FormItem>
+            </FormItem>*/}
             <FormItem>
               <SelectGroup
                 onChange={(value) => changeVendorWay(value)}
@@ -78,9 +79,11 @@ export default class SearchForm extends React.Component<any, any> {
                 }
                 label={this.props.name}
                 style={{ width: 180 }}
+                defaultValue="All"
               >
                 <Option value={null}>All</Option>
                 <Option value="VISA">VISA</Option>
+                <Option value="OXXO">OXXO</Option>
                 <Option value="AMERICAN EXPRESS">AMERICAN EXPRESS</Option>
                 <Option value="DISCOVER">DISCOVER</Option>
                 {/*  <Option value="UNIONPAY"></Option>

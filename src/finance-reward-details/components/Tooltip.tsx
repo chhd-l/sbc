@@ -37,7 +37,6 @@ export default class List extends React.Component<any, any> {
   UNSAFE_componentWillMount() {
     //const state = this.props.location.state;
 
-    //console.log(state,11111111111111111111111);
     this.setState({ expandedRows: [] });
   }
 

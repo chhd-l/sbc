@@ -114,8 +114,8 @@ export default class RefundList extends React.Component<any, any> {
 
           <Column
             title="Real Refund"
-            dataIndex="practicalPrice"
-            key="practicalPrice"
+            dataIndex="paymentOSActualReturnPrice"
+            key="paymentOSActualReturnPrice"
             render={(text, rowData: any) => {
               return text ? <span>{text}</span> : '--';
             }}

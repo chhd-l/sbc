@@ -122,8 +122,8 @@ export default class RevenueList extends React.Component<any, any> {
           <Column title="Payment method" dataIndex="vendor" key="vendor" />
           <Column
             title="Real Revenue"
-            dataIndex="practicalPrice"
-            key="practicalPrice"
+            dataIndex="paymentOSActualPrice"
+            key="paymentOSActualPrice"
             render={(text, rowData: any) => {
               return text ? <span>{text}</span> : '--';
             }}

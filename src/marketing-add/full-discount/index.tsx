@@ -40,7 +40,7 @@ export default class MarketingFullDiscountAdd extends React.Component<
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
             <Breadcrumb.Item>
-              {marketingId ? 'Edit' : 'Create'} full minus activity
+              {marketingId ? 'Edit' : 'Create'} Discount activity
             </Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
@@ -58,8 +58,8 @@ export default class MarketingFullDiscountAdd extends React.Component<
             <Headline
               title={
                 marketingId
-                  ? 'Edit full minus activity'
-                  : 'Create full minus activity'
+                  ? 'Edit discount activity'
+                  : 'Create discount activity'
               }
             />
             <Alert

@@ -203,7 +203,7 @@ export default class List extends React.Component<any, any> {
                     <img src={images.full_01} />
                   </span>
                   <div className="info">
-                    <h5>Full minus</h5>
+                    <h5>Reduction</h5>
                     <p>
                       Meet the specified conditions to enjoy the price reduction
                     </p>
@@ -229,8 +229,8 @@ export default class List extends React.Component<any, any> {
                     <img src={images.full_02} />
                   </span>
                   <div className="info">
-                    <h5>Full discount</h5>
-                    <p>Full discount at specified conditions</p>
+                    <h5>Discount</h5>
+                    <p>Discount at specified conditions</p>
                   </div>
                 </a>
               </Col>

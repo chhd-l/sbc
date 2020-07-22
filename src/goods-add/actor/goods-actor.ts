@@ -22,6 +22,7 @@ export default class GoodsActor extends Actor {
         goodsName: '',
         // SPU编码
         goodsNo: '',
+        internalGoodsNo: '',
         // 计量单位
         goodsUnit: '',
         // 上下架状态
@@ -170,14 +171,14 @@ export default class GoodsActor extends Actor {
   }
 
   @Action('goodsActor:randomGoodsNo')
-  randomGoodsNo(state) {
+  randomGoodsNo(state, prefix) {
+    let number =
+      new Date().getTime().toString().slice(4, 10) +
+      Math.random().toString().slice(2, 5);
     return state.update('goods', (goods) =>
-      goods.set(
-        'goodsNo',
-        'P' +
-          new Date().getTime().toString().slice(4, 10) +
-          Math.random().toString().slice(2, 5)
-      )
+      goods
+        .set('goodsNo', 'P' + number)
+        .set('internalGoodsNo', prefix + '_P' + number)
     );
   }
 

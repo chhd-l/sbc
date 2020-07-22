@@ -24,6 +24,7 @@ export default class ReductionLevels extends React.Component<any, any> {
     super(props);
     this.state = {
       isFullCount: props.isFullCount,
+      isNormal: true,
       fullReductionLevelList: props.fullReductionLevelList
         ? props.fullReductionLevelList
         : [],
@@ -39,7 +40,11 @@ export default class ReductionLevels extends React.Component<any, any> {
       this.initLevel();
     }
   }
-
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    this.setState({
+      isNormal: nextProps.isNormal
+    });
+  }
   shouldComponentUpdate(nextProps) {
     let resetFields = {};
     const { fullReductionLevelList, isFullCount } = this.props;
@@ -85,65 +90,58 @@ export default class ReductionLevels extends React.Component<any, any> {
           return (
             <div key={level.key ? level.key : level.reductionLevelId}>
               <HasError>
-                {this.props.PromotionTypeValue == 0 ? (
-                  <span>Full&nbsp;</span>
-                ) : (
-                  ''
-                )}
-                {this.props.PromotionTypeValue == 0 ? (
-                  <FormItem>
-                    {getFieldDecorator(`level_rule_value_${index}`, {
-                      rules: [
-                        { required: true, message: 'Must enter rules' },
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (value) {
-                              if (!isFullCount) {
-                                if (
-                                  !ValidConst.price.test(value) ||
-                                  !(value < 100000000 && value > 0)
-                                ) {
-                                  callback('0.01-99999999.99');
-                                }
-                              } else {
-                                if (
-                                  !ValidConst.noZeroNumber.test(value) ||
-                                  !(value < 10000 && value > 0)
-                                ) {
-                                  callback('1-9999');
+                {this.state.isNormal ? (
+                  <div>
+                    <span>Full&nbsp;</span>
+                    <FormItem style={{ display: 'inline-block' }}>
+                      {getFieldDecorator(`level_rule_value_${index}`, {
+                        rules: [
+                          { required: true, message: 'Must enter rules' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!isFullCount) {
+                                  if (
+                                    !ValidConst.price.test(value) ||
+                                    !(value < 100000000 && value > 0)
+                                  ) {
+                                    callback('0.01-99999999.99');
+                                  }
+                                } else {
+                                  if (
+                                    !ValidConst.noZeroNumber.test(value) ||
+                                    !(value < 10000 && value > 0)
+                                  ) {
+                                    callback('1-9999');
+                                  }
                                 }
                               }
+                              callback();
                             }
-                            callback();
+                            // callback();
                           }
-                        }
-                      ],
-                      initialValue: !isFullCount
-                        ? level.fullAmount
-                        : level.fullCount
-                    })(
-                      <Input
-                        style={{ width: 200 }}
-                        placeholder={
-                          !isFullCount ? '0.01-99999999.99' : '1-9999'
-                        }
-                        onChange={(e) => {
-                          this.ruleValueChange(index, e.target.value);
-                        }}
-                      />
-                    )}
-                  </FormItem>
-                ) : (
-                  ''
-                )}
-                {this.props.PromotionTypeValue == 0 ? (
-                  <span>
-                    &nbsp;{!isFullCount ? 'yuan' : 'items'}
-                    ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
-                  </span>
-                ) : (
-                  <span>reduction&nbsp;&nbsp;</span>
-                )}
+                        ],
+                        initialValue: !isFullCount
+                          ? level.fullAmount
+                          : level.fullCount
+                      })(
+                        <Input
+                          style={{ width: 200 }}
+                          placeholder={
+                            !isFullCount ? '0.01-99999999.99' : '1-9999'
+                          }
+                          onChange={(e) => {
+                            this.ruleValueChange(index, e.target.value);
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                    <span>
+                      &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                      ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
+                    </span>
+                  </div>
+                ) : null}
                 <FormItem>
                   {getFieldDecorator(`level_rule_reduction_${index}`, {
                     rules: [
@@ -181,21 +179,17 @@ export default class ReductionLevels extends React.Component<any, any> {
             </div>
           );
         })}
-        {this.props.PromotionTypeValue == 0 ? (
-          <Button
-            onClick={this.addLevels}
-            disabled={fullReductionLevelList.length >= 5}
-          >
-            Add multi-level promotions
-          </Button>
-        ) : (
-          ''
-        )}
-        {this.props.PromotionTypeValue == 0 ? (
-          <span>&nbsp;&nbsp;up to 5 levels can be set</span>
-        ) : (
-          ''
-        )}
+        {this.state.isNormal ? (
+          <div>
+            <Button
+              onClick={this.addLevels}
+              disabled={fullReductionLevelList.length >= 5}
+            >
+              Add multi-level promotions
+            </Button>
+            &nbsp;&nbsp;up to 5 levels can be set
+          </div>
+        ) : null}
       </div>
     );
   }

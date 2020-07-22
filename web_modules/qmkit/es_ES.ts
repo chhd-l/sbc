@@ -338,6 +338,7 @@ export default {
 
   'order.orderList': 'Order List',
   'order.orderNumber': 'Order number',
+  'order.subscriptioNumber': 'Subscription number',
   'order.shippingStatus': 'Shipping status',
   'order.paymentStatus': 'Payment status',
   'order.orderStatus': 'Order status',

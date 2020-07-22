@@ -327,7 +327,7 @@ export default class ListView extends React.Component<any, any> {
                         style={{
                           marginTop: 12,
                           borderBottom: '1px solid #F5F5F5',
-                          height: 36
+                          height: 40
                         }}
                       >
                         <span style={{ marginLeft: '1%' }}>
@@ -341,7 +341,14 @@ export default class ListView extends React.Component<any, any> {
                         </span>
 
                         <div style={{ width: 310, display: 'inline-block' }}>
-                          <span style={{ marginLeft: 20, color: '#000' }}>
+                          <span
+                            style={{
+                              marginLeft: 20,
+                              color: '#000',
+                              display: 'inline-block',
+                              position: 'relative'
+                            }}
+                          >
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
@@ -355,6 +362,22 @@ export default class ListView extends React.Component<any, any> {
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.fightTogether" />
                               </span>
+                            )}
+                            {v.get('isAutoSub') && (
+                              <span style={styles.platform}>S</span>
+                            )}
+                            {v.get('isAutoSub') ? (
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  left: '0',
+                                  top: '20px'
+                                }}
+                              >
+                                {v.get('payOrderId')}
+                              </span>
+                            ) : (
+                              ''
                             )}
                           </span>
                         </div>
@@ -522,37 +545,35 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {
-                        /*最后一张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 4 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
+                      {/*最后一张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 4 ? (
+                        <div style={styles.imgBg}>
+                          <img
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />{' '}
-                              {v.get('tradeItems').concat(gifts).size}
-                              <FormattedMessage id="items" />
-                            </div>
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
+                          //@ts-ignore
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="total" />{' '}
+                            {v.get('tradeItems').concat(gifts).size}
+                            <FormattedMessage id="items" />
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
                     <td style={{ width: '14%' }}>
                       {/*客户名称*/}

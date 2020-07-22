@@ -38,23 +38,11 @@ export default class SearchForm extends React.Component<any, any> {
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>
-          <Input
-            addonBefore="Activity Name"
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'marketingName',
-                value
-              });
-            }}
-          />
-        </FormItem>
-
-        <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="Activity Type"
-            style={{ width: 80 }}
+            label="Campaign Type"
+            style={{ width: 160 }}
+            defaultValue="All"
             onChange={(value) => {
               value = value === '' ? '-1' : value;
               onFormChange({
@@ -72,7 +60,39 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="5">满数量赠</Option> */}
           </SelectGroup>
         </FormItem>
-
+        <FormItem>
+          <SelectGroup
+            getPopupContainer={() => document.getElementById('page-content')}
+            label="Promotion type"
+            style={{ width: 170 }}
+            defaultValue="All"
+            onChange={(value) => {
+              value = value === '' ? '-1' : value;
+              onFormChange({
+                field: 'promotionType',
+                value
+              });
+            }}
+          >
+            <Option value="">All</Option>
+            <Option value="0">Normal promotion</Option>
+            <Option value="1">Subscription promotion</Option>
+            {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+          </SelectGroup>
+        </FormItem>
+        <FormItem>
+          <Input
+            addonBefore="Campaign name"
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              onFormChange({
+                field: 'marketingName',
+                value
+              });
+            }}
+          />
+        </FormItem>
         <FormItem>
           <DatePicker
             allowClear={true}
@@ -98,10 +118,10 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        {/*<FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="Target consumer"
+            label="Promotion type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -123,7 +143,7 @@ export default class SearchForm extends React.Component<any, any> {
               </Option>
             ))}
           </SelectGroup>
-        </FormItem>
+        </FormItem>*/}
 
         <FormItem>
           <Button

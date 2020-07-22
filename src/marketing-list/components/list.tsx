@@ -81,7 +81,7 @@ export default class MarketingList extends React.Component<any, any> {
     return (
       <DataGrid
         loading={loading}
-        rowKey="marketingId"
+        rowKey="Campaign name"
         isScroll={false}
         pagination={{
           current: currentPage,
@@ -93,8 +93,8 @@ export default class MarketingList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column
-          title="Activity Name"
+        {/*<Column
+          title="Campaign type"
           width="15%"
           key="marketingName"
           dataIndex="marketingName"
@@ -106,26 +106,34 @@ export default class MarketingList extends React.Component<any, any> {
               <span>-</span>
             );
           }}
-        />
-
+        />*/}
         <Column
-          title="Activity Type"
-          key="subType"
-          width="10%"
-          dataIndex="subType"
-          render={(subType) => {
+          title="Campaign name"
+          key="marketingName"
+          dataIndex="marketingName"
+          /*render={(subType) => {
             return SUB_TYPE[subType];
-          }}
+          }}*/
+        />
+        <Column
+          title="Campaign type"
+          key="marketingType"
+          dataIndex="marketingType"
+          /*render={(subType) => {
+            return SUB_TYPE[subType];
+          }}*/
+        />
+        <Column
+          title="Promotion type"
+          key="marketing_promotion_type"
+          dataIndex="marketing_promotion_type"
+          /*render={(subType) => {
+            return SUB_TYPE[subType];
+          }}*/
         />
 
         <Column
-          title={
-            <p>
-              Start
-              <br />
-              End Time
-            </p>
-          }
+          title="Time"
           width="15%"
           render={(rowData) => {
             return (
@@ -143,7 +151,7 @@ export default class MarketingList extends React.Component<any, any> {
         />
 
         <Column
-          title="Target consumer"
+          title="Campaign status"
           width="15%"
           key="joinLevel"
           dataIndex="joinLevel"
@@ -182,7 +190,7 @@ export default class MarketingList extends React.Component<any, any> {
           }}
         />
 
-        <Column
+        {/*<Column
           title="Activity Status"
           width="10%"
           key="marketingStatus"
@@ -197,17 +205,28 @@ export default class MarketingList extends React.Component<any, any> {
           key="promotionCode"
           width="10%"
           dataIndex="promotionCode"
-        />
+        />*/}
 
         <Column
           title="Operation"
           width="15%"
           className={'operation-th'}
           render={(rowInfo) => {
+            setTimeout(() => {
+              console.log(rowInfo, 111111111111111);
+            }, 1000);
             let url = '';
-            if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1) {
+            if (
+              rowInfo['subType'] === 0 ||
+              rowInfo['subType'] === 1 ||
+              rowInfo['subType'] === 6
+            ) {
               url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
-            } else if (rowInfo['subType'] === 2 || rowInfo['subType'] === 3) {
+            } else if (
+              rowInfo['subType'] === 2 ||
+              rowInfo['subType'] === 3 ||
+              rowInfo['subType'] === 7
+            ) {
               url = `/marketing-full-discount/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;

@@ -93,7 +93,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       saveLoading: false,
       promotionCode: '',
       PromotionTypeValue: 0,
-      PromotionTypeChecked: true
+      PromotionTypeChecked: false
     };
   }
 
@@ -165,6 +165,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             style={{ marginLeft: 20 }}
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
+              debugger;
               if (this.state.PromotionTypeValue === 0) {
                 this.setState({
                   PromotionTypeChecked: e.target.checked
@@ -468,13 +469,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
   promotionType = (e) => {
     //console.log('radio checked', e.target.value);
     let { marketingBean } = this.state;
-    this.setState({
-      PromotionTypeValue: e.target.value,
-      PromotionTypeChecked: !this.state.PromotionTypeChecked,
-      marketingBean: this.state.marketingBean.merge({
-        publicStatus: e.target.value
-      })
-    });
+    this.setState(
+      {
+        PromotionTypeValue: e.target.value,
+        marketingBean: this.state.marketingBean.merge({
+          publicStatus: e.target.value
+        })
+      },
+      () => {
+        if (this.state.PromotionTypeValue === 1) {
+          this.setState({
+            PromotionTypeChecked: true
+          });
+        }
+      }
+    );
 
     marketingBean.set('publicStatus', '1');
   };
@@ -485,8 +494,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   onBeanChange = (params) => {
     this.setState({
-      marketingBean: this.state.marketingBean.merge(params),
-      PromotionTypeChecked: true
+      marketingBean: this.state.marketingBean.merge(params)
+      // PromotionTypeChecked: true
     });
   };
   /**

@@ -167,7 +167,7 @@ export default class AppStore extends Store {
     } else {
       // 新增商品，可以选择平台类目
       const storeCode = await getStoreCode();
-
+      localStorage.setItem('storeCode', storeCode.res.context);
       this.dispatch('goodsActor: disableCate', false);
       this.dispatch('goodsActor:randomGoodsNo', storeCode.res.context);
 
@@ -299,6 +299,7 @@ export default class AppStore extends Store {
   _getGoodsDetail = async (goodsId?: string) => {
     let goodsDetail: any = await getGoodsDetail(goodsId);
     const storeCode = await getStoreCode();
+    localStorage.setItem('storeCode', storeCode.res.context);
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
@@ -600,7 +601,7 @@ export default class AppStore extends Store {
   /**
    * 修改商品基本信息
    */
-  editGoods = (goods: IMap) => {
+  editGoods = async (goods: IMap) => {
     if (
       goods.get('saleType') !== undefined &&
       goods.get('saleType') === 1 &&
@@ -608,6 +609,16 @@ export default class AppStore extends Store {
     ) {
       this.editPriceSetting('priceOpt', 2);
     }
+    console.log(goods.toJS(), 'haha');
+    if (goods.get('goodsNo')) {
+      console.log(1);
+      goods = goods.set(
+        'internalGoodsNo',
+        localStorage.getItem('storeCode') + '_' + goods.get('goodsNo')
+      );
+    }
+    console.log(2);
+    console.log(goods.toJS(), 'haha');
     this.dispatch('goodsActor: editGoods', goods);
   };
 

@@ -335,7 +335,7 @@ class GoodsForm extends React.Component<any, any> {
               {...formItemLayout}
               label={<FormattedMessage id="product.InternalSPU" />}
             >
-              {getFieldDecorator('goodsNo', {
+              {getFieldDecorator('internalGoodsNo', {
                 rules: [
                   {
                     required: true,

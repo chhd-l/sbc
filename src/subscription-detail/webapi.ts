@@ -72,3 +72,22 @@ export function getBySubscribeId(filterParams = {}) {
     })
   });
 }
+
+export function orderNow(filterParams = {}) {
+  return Fetch<TResult>('/sub/orderNow', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 根据参数查询促销的金额与订单运费
+export function getPromotionPrice(filterParams = {}) {
+  return Fetch<TResult>('/sub/getPromotionPrice', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

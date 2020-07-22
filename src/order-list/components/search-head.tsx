@@ -138,6 +138,17 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
+                addonBefore={<FormattedMessage id="order.subscriptioNumber" />}
+                onChange={(e) => {
+                  this.setState({
+                    subscriptioNumber: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
+              <Input
                 addonBefore={this._renderBuyerOptionSelect()}
                 onChange={(e) => {
                   this.setState({

@@ -49,9 +49,6 @@ export default class AppStore extends Store {
   };
 
   onSearch = async () => {
-    console.log(this.state().get('PayWay'), 11111111111111111111);
-    console.log(this.state().get('VendorWay'), 22222);
-
     /*  .set('storeId', sid)
           .set('kind', kind)
           .set('beginTime', beginTime)

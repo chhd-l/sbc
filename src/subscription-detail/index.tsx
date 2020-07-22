@@ -193,6 +193,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
+  orderNow = (id: String) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .orderNow({ subscribeId: id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.getSubscriptionDetail(this.state.subscriptionId);
+          message.success('Successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
+  };
+
   petsById = (id: String) => {
     let params = {
       petsId: id
@@ -395,19 +421,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     const cartExtra = (
-      <Popconfirm
-        placement="topRight"
-        title="Are you sure skip next delivery?"
-        onConfirm={() =>
-          this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
-        }
-        okText="Confirm"
-        cancelText="Cancel"
-      >
-        <Button type="link" style={{ fontSize: 16 }}>
-          Skip Next Delivery
-        </Button>
-      </Popconfirm>
+      <div>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure skip next delivery?"
+          onConfirm={() =>
+            this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
+          }
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Skip Next Delivery
+          </Button>
+        </Popconfirm>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure order now?"
+          onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Order Now
+          </Button>
+        </Popconfirm>
+      </div>
     );
     const columns = [
       {
@@ -419,7 +458,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} style={{ width: 100 }} alt="" />
-            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
       },

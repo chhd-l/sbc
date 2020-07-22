@@ -85,7 +85,6 @@ export default class AppStore extends Store {
 
   onSearch = async () => {
     let param = this.state().get('searchForm').toJS();
-    console.log(param, '111111111111111111111111111111');
     if (param && param.endTime) {
       param.endTime = moment(param.endTime)
         .add(1, 'day')

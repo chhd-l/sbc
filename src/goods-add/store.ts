@@ -48,7 +48,8 @@ import {
   fetchCustomerList,
   checkEnterpriseType,
   enterpriseToGeneralgoods,
-  getDetailTab
+  getDetailTab,
+  getStoreCode
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 
@@ -165,8 +166,11 @@ export default class AppStore extends Store {
       this._getGoodsDetail(goodsId);
     } else {
       // 新增商品，可以选择平台类目
+      const storeCode = await getStoreCode();
+
       this.dispatch('goodsActor: disableCate', false);
-      this.dispatch('goodsActor:randomGoodsNo');
+      this.dispatch('goodsActor:randomGoodsNo', storeCode.res.context);
+
       const storeGoodsTab = await getStoreGoodsTab();
       if ((storeGoodsTab.res as any).code === Const.SUCCESS_CODE) {
         const tabs = [];
@@ -294,6 +298,7 @@ export default class AppStore extends Store {
    */
   _getGoodsDetail = async (goodsId?: string) => {
     let goodsDetail: any = await getGoodsDetail(goodsId);
+    const storeCode = await getStoreCode();
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
@@ -337,6 +342,9 @@ export default class AppStore extends Store {
 
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
+
+      let id = goods.get('goodsNo');
+      goods = goods.set('internalGoodsNo', storeCode.res.context + '_' + id);
 
       // 商品可能没有品牌，后面取值有toString等操作，空字符串方便处理
       if (!goods.get('brandId')) {
@@ -1044,7 +1052,10 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-
+    if (images.length === 0) {
+      message.error('Product image is required');
+      return false;
+    }
     param = param.set('images', images);
 
     // -----商品规格列表-------
@@ -1359,7 +1370,10 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-
+    if (images.length === 0) {
+      message.error('Product image is required');
+      return false;
+    }
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();
@@ -2008,6 +2022,8 @@ export default class AppStore extends Store {
                     (tmpId) => tmpId === d.get('detailId')
                   );
                   if (d.get('detailId') == detailId) {
+                    return d.set('select', 'select');
+                  } else if (d.get('detailId') === '0') {
                     return d.set('select', 'select');
                   }
                   return d.set('select', '');

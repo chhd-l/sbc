@@ -6,6 +6,7 @@ import { ValidConst } from 'qmkit';
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
+
 const HasError = styled.div`
   display: flex;
   flex-direction: row;
@@ -26,7 +27,8 @@ export default class ReductionLevels extends React.Component<any, any> {
       isNormal: true,
       fullReductionLevelList: props.fullReductionLevelList
         ? props.fullReductionLevelList
-        : []
+        : [],
+      PromotionTypeValue: 0
     };
   }
 
@@ -116,6 +118,7 @@ export default class ReductionLevels extends React.Component<any, any> {
                               }
                               callback();
                             }
+                            // callback();
                           }
                         ],
                         initialValue: !isFullCount
@@ -219,8 +222,8 @@ export default class ReductionLevels extends React.Component<any, any> {
     if (fullReductionLevelList.length >= 5) return;
     fullReductionLevelList.push({
       key: this.makeRandom(),
-      fullAmount: null,
-      fullCount: null,
+      fullAmount: '0',
+      fullCount: '0',
       reduction: null
     });
     this.setState({ fullReductionLevelList: fullReductionLevelList });
@@ -237,8 +240,8 @@ export default class ReductionLevels extends React.Component<any, any> {
     const initLevel = [
       {
         key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
+        fullAmount: '0',
+        fullCount: '0',
         reduction: null
       }
     ];

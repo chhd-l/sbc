@@ -104,6 +104,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
   _getPropSelect = (propValues, propId) => {
     const propVal = propValues.find((item) => item.get('select') === 'select');
     const selected = propVal ? propVal.get('detailId') : '0';
+    console.log(selected, 'selected');
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}

@@ -140,7 +140,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             cycleTypeId: subscriptionInfo.frequency,
             deliveryAddressId: subscriptionDetail.deliveryAddressId,
             subscribeNumArr: subscribeNumArr,
-            nextDeliveryTime: subscriptionInfo.nextDeliveryTime
+            nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
+            promotionCode: subscriptionDetail.promotionCode
           };
 
           this.setState(
@@ -347,6 +348,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
       changeFieldArr.push('Next Delivery Time');
+    }
+    if (params.promotionCode !== originalParams.promotionCode) {
+      changeFieldArr.push('Promotion Code');
     }
     if (
       subscribeNumArr.join(',') !== originalParams.subscribeNumArr.join(',')

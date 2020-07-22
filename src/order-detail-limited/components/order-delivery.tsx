@@ -229,7 +229,7 @@ export default class OrderDelivery extends React.Component<any, any> {
         key: 'skuNo'
       },
       {
-        title: 'Product Name',
+        title: 'Product name',
         dataIndex: 'skuName',
         key: 'skuName',
         width: '50%'
@@ -282,7 +282,7 @@ export default class OrderDelivery extends React.Component<any, any> {
         key: 'skuNo'
       },
       {
-        title: 'Product Name',
+        title: 'Product name',
         dataIndex: 'itemName',
         key: 'itemName'
       },

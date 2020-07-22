@@ -254,7 +254,7 @@ export default {
   'product': 'Product',
   'consumerList': 'Consumer List',
   'consumerClinicList': 'Consumer list(Presciber)',
-  'consumerName': 'Consumer Name',
+  'consumerName': 'Consumer name',
   'area': 'Area',
   'targetCountry': 'Target Country',
   'targetCity': 'Target City',
@@ -291,7 +291,7 @@ export default {
   'collectionRecords': 'Payment Records',
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
-  'orderNumber': "Order Number",
+  'orderNumber': "Order number",
   'consumer': "Consumer",
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",
@@ -496,10 +496,10 @@ export default {
   'deleteAccount': 'Delete account',
   'setMainAccount': 'Set the main account',
 
-  'financialReconciliation': 'Finance Reconciliation',
-  'bulkExport': 'Bulk Export',
-  'revenueReconciliation': 'Revenue Reconciliation',
-  'refundReconciliation': 'Refund Reconciliation',
+  'financialReconciliation': 'Finance reconciliation',
+  'bulkExport': 'Bulk export',
+  'revenueReconciliation': 'Revenue reconciliation',
+  'refundReconciliation': 'Refund reconciliation',
   'VISA': 'VISA',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
@@ -514,16 +514,16 @@ export default {
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
   'Paymentamount': 'Payment amount',
-  'financialSettlement': 'Finance Settlement',
+  'financialSettlement': 'Finance settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
   'unsettlement': 'Unsettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
-  'statementTime': 'Statement Time',
-  'statementNumber': 'Statement Number',
-  'statementPeriod': 'Statement Period',
+  'statementTime': 'Statement time',
+  'statementNumber': 'Statement number',
+  'statementPeriod': 'Statement period',
 
   'billingPeriod': 'Billing Period',
   'totalPaidGoods': 'Total Paid Goods',
@@ -542,16 +542,16 @@ export default {
   //财务
   //Finance Reward
   'Reward': 'Reward',
-  'orderInvoice': 'Order Invoice',
+  'orderInvoice': 'Order invoice',
   'PrescriberID': 'Prescriber ID',
-  'PrescriberName': 'Prescriber Name',
+  'PrescriberName': 'Prescriber name',
   'BulkExport': 'Bulk Export',
   'Refresh': 'Refresh',
-  'PrescriberType': 'Prescriber Type',
-  'OrderQuantity': 'Order Quantity',
-  'OrderAmount': 'Order Amount',
-  'RewardType': 'Reward Type',
-  'RewardAmount': 'Reward Amount',
+  'PrescriberType': 'Prescriber type',
+  'OrderQuantity': 'Order quantity',
+  'OrderAmount': 'Order amount',
+  'RewardType': 'Reward type',
+  'RewardAmount': 'Reward amount',
   'Operation': 'Operation',
 
   //Finance Reward-Details
@@ -567,20 +567,20 @@ export default {
 
 
 
-  'invoiceStatus': 'Invoice Status',
+  'invoiceStatus': 'Invoice status',
 
-  'bulkOperation': 'Bulk Operation',
-  'bulkInvoice': 'Bulk Invoice',
+  'bulkOperation': 'Bulk operation',
+  'bulkInvoice': 'Bulk invoice',
 
-  'billingTime': 'Billing Time',
-  'orderAmount': 'Order Amount',
-  'invoiceType': 'Invoice Type',
+  'billingTime': 'Billing time',
+  'orderAmount': 'Order amount',
+  'invoiceType': 'Invoice type',
 
 
   'ordinaryInvoice': 'Ordinary invoice',
   'personal': 'Personal',
   'toBeInvoiced': 'To be invoiced',
-  'viewBilling': 'View Billing',
+  'viewBilling': 'View billing',
   'billingItems': 'Billing Items',
 
   'supportedBillingTypes': 'Supported billing types',
@@ -607,7 +607,7 @@ export default {
   'cardNumber': 'Card number',
   'selectedPrescriberId': 'Selected Prescriber ID',
   'prescriberId': 'Prescriber ID',
-  'prescriberName': 'Prescriber Name',
+  'prescriberName': 'Prescriber name',
   'prescriberPhone': 'Prescriber Phone',
   'prescriberZip': 'Prescriber Zip',
   'oldPassword': 'Old Password',
@@ -747,10 +747,10 @@ export default {
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',
   'action': 'Action',
-  'resourceName': 'Banner name'
+  'resourceName': 'Banner name',
 
-
-
+  'RefundRreconciliationDetail':'Refund reconciliation detail',
+  'TotalRevenue':'Total revenue'
 
 
 

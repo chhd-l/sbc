@@ -101,7 +101,7 @@ export default class SearchHead extends Component<any, any> {
             <AuthWrapper functionName="fOrderList002">
               <a
                 target="_blank"
-                href="#!"
+                href="javascript:;"
                 onClick={() => this._showBatchAudit()}
               >
                 <FormattedMessage id="order.batchReview" />
@@ -111,7 +111,7 @@ export default class SearchHead extends Component<any, any> {
         )}
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004_3pl">
-            <a href="#!" onClick={() => this._handleBatchExport()}>
+            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
               <FormattedMessage id="order.batchExport" />
             </a>
           </AuthWrapper>

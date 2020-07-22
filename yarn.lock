@@ -1893,7 +1893,7 @@ ansi-styles@^4.1.0:
     "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
-antd@^3.9.4:
+antd@^3.26.16:
   version "3.26.18"
   resolved "https://registry.yarnpkg.com/antd/-/antd-3.26.18.tgz#541e26a6865dd20e5d192027c45599b963146e67"
   integrity sha512-TPuacNJJNPji+LnapU46uWGqi+6JlyH75paMNs95IH0F7gGYtp4oSkua88gGsoAaUbDxTIF+cWI9mdIsr7ywlw==
@@ -3933,7 +3933,7 @@ commander@2.17.x:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
 
-commander@^2.12.1, commander@^2.20.0, commander@^2.9.0:
+commander@^2.12.1, commander@^2.18.0, commander@^2.20.0, commander@^2.9.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -9657,14 +9657,16 @@ please-upgrade-node@^3.1.1, please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
-plume2@^0.3.2:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/plume2/-/plume2-0.3.3.tgz#f0ee7756ebd0649e7969ba585ed55c33d56662c9"
-  integrity sha512-CcFzC0Fwj6w/ebfwDxoGtKdIm8ze3MPyraGyIajuPUPhnRbg+g5+UdVW1m1gxH69M1lBlGOOMPZ+obcPE10z1g==
+plume2@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/plume2/-/plume2-1.2.7.tgz#ba84b17b9e85874eb3f0378db6a23410a59c10a3"
+  integrity sha512-Sd+h+Nesztq8eLKlKyrWPggVRDqK9B3ZizsgriNbyYn7fRPM1bubq061hi70BBrn2WUSmbRCPVRtRY1iOlRtpQ==
   dependencies:
+    commander "^2.18.0"
     immutable "^3.8.1"
     mitt "^1.1.2"
     prop-types "^15.5.10"
+    raf "^3.4.0"
 
 pngjs@^2.3.1:
   version "2.3.1"

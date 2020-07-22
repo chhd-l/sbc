@@ -37,7 +37,8 @@ export default class GiftLevels extends React.Component<any, any> {
       goodsModal: {
         _modalVisible: false,
         _forIndex: 0
-      }
+      },
+      PromotionTypeValue: 0
     };
   }
 

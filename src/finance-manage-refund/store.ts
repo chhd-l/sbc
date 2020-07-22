@@ -2,7 +2,7 @@
  * Created by feitingting on 2017/12/13.
  */
 
-import { IOptions, Store } from 'plume2';
+import { Action, IMap, IOptions, Store } from 'plume2';
 import { message } from 'antd';
 import { Const, util } from 'qmkit';
 import DetailActor from './actor/detail-actor';
@@ -40,6 +40,28 @@ export default class AppStore extends Store {
     }
   };
 
+  changePayWay = async (res) => {
+    this.dispatch('detail:changePayWay', res);
+  };
+
+  changeVendorWay = async (res) => {
+    this.dispatch('detail:changeVendorWay', res);
+  };
+
+  onSearch = async () => {
+    /*  .set('storeId', sid)
+          .set('kind', kind)
+          .set('beginTime', beginTime)
+          .set('endTime', endTime);*/
+    /*let search = this.state().get('payWaysObj').toJS();
+    search = await Object.assign(search, { pageNum: 0, pageSize: 10 });*/
+    if (this.state().get('kind') == 'income') {
+      //收入对账明细
+      await this.getIncomeDetail();
+    } else {
+      await this.getRefundDetail();
+    }
+  };
   /**
    * 收入明细
    * @returns {Promise<void>}
@@ -47,9 +69,8 @@ export default class AppStore extends Store {
   getIncomeDetail = async () => {
     const { res } = await webapi.fetchIncomeDetail({
       storeId: this.state().get('storeId'),
-      payWay: this.state().get('incomePayWay')
-        ? this.state().get('incomePayWay')
-        : null,
+      payWay: this.state().get('PayWay'),
+      vendor: this.state().get('VendorWay'),
       tradeNo: this.state().get('tradeNo'),
       beginTime: this.state().get('beginTime'),
       endTime: this.state().get('endTime'),
@@ -74,9 +95,8 @@ export default class AppStore extends Store {
   getRefundDetail = async () => {
     const { res } = await webapi.fetchRefundDetail({
       storeId: this.state().get('storeId'),
-      payWay: this.state().get('refundPayWay')
-        ? this.state().get('refundPayWay')
-        : null,
+      payWay: this.state().get('PayWay'),
+      vendor: this.state().get('VendorWay'),
       tradeNo: this.state().get('tradeNo'),
       beginTime: this.state().get('beginTime'),
       endTime: this.state().get('endTime'),
@@ -93,19 +113,19 @@ export default class AppStore extends Store {
    * 支付方式下拉改变
    * @param value
    */
-  changePayWay = async (value) => {
+  /*changePayWay = async (value) => {
     const kind = this.state().get('kind');
     //都从第一页开始
     this.dispatch('detail:pageNum', 0);
     if (kind == 'income') {
       this.dispatch('detail:income:payWay', value);
       //收入对账明细
-      await this.getIncomeDetail();
+      //await this.getIncomeDetail();
     } else {
       this.dispatch('detail:refund:payWay', value);
-      await this.getRefundDetail();
+      //await this.getRefundDetail();
     }
-  };
+  };*/
 
   /**
    * 按交易流水号查询
@@ -117,9 +137,9 @@ export default class AppStore extends Store {
     this.dispatch('detail:pageNum', 0);
     this.dispatch('detail:tradeNo', value.trim());
     if (kind == 'income') {
-      await this.getIncomeDetail();
+      //await this.getIncomeDetail();
     } else {
-      await this.getRefundDetail();
+      //await this.getRefundDetail();
     }
   };
 
@@ -195,9 +215,9 @@ export default class AppStore extends Store {
   onPagination = async (current, _pageSize) => {
     this.dispatch('detail:pageNum', current - 1);
     if (this.state().get('kind') == 'income') {
-      await this.getIncomeDetail();
+      //await this.getIncomeDetail();
     } else {
-      await this.getRefundDetail();
+      //await this.getRefundDetail();
     }
   };
 }

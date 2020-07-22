@@ -56,6 +56,7 @@ export default class RevenueList extends React.Component<any, any> {
             title="No"
             dataIndex="index"
             key="index"
+            width="5%"
             render={(_text, _rowData: any, index) => {
               return pageNum * pageSize + index + 1;
             }}
@@ -68,7 +69,12 @@ export default class RevenueList extends React.Component<any, any> {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-          <Column title="Order number" dataIndex="orderCode" key="orderCode" />
+          <Column
+            title="Order number"
+            dataIndex="orderCode"
+            key="orderCode"
+            width="12%"
+          />
           <Column title="Order Revenue" dataIndex="amount" key="amount" />
 
           <Column
@@ -112,11 +118,12 @@ export default class RevenueList extends React.Component<any, any> {
           {/*<span>{text}</span> :'￥0.00'*/}
           {/*}}/>*/}
           {/*/>*/}
+          <Column title="Payment type" dataIndex="payWay" key="payWay" />
           <Column title="Payment method" dataIndex="vendor" key="vendor" />
           <Column
             title="Real Revenue"
-            dataIndex="practicalPrice"
-            key="practicalPrice"
+            dataIndex="paymentOSActualPrice"
+            key="paymentOSActualPrice"
             render={(text, rowData: any) => {
               return text ? <span>{text}</span> : '--';
             }}

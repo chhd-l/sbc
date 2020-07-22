@@ -32,7 +32,8 @@ export default class ButtonGroup extends React.Component<any, any> {
           getPopupContainer={() => document.getElementById('page-content')}
         >
           <Button>
-            批量操作<Icon type="down" />
+            Batch operation
+            <Icon type="down" />
           </Button>
         </Dropdown>
       </div>
@@ -41,19 +42,19 @@ export default class ButtonGroup extends React.Component<any, any> {
 
   _menu = () => {
     const { queryParams } = this.props.relaxProps;
-    const settleStatus = queryParams.get('settleStatus');
+    const settleStatus = queryParams.get('settleStatus').toString();
     return (
       <Menu>
-        {(settleStatus == 0 || settleStatus == 2) && (
+        {(settleStatus == '0' || settleStatus == 2) && (
           <Menu.Item>
-            <a onClick={() => this._handleBatchOption(1)}>设为已结算</a>
+            <a onClick={() => this._handleBatchOption(1)}>Set as settled</a>
           </Menu.Item>
         )}
-        {settleStatus == 0 && (
+        {/* {settleStatus == 0 && (
           <Menu.Item>
-            <a onClick={() => this._handleBatchOption(2)}>暂不处理</a>
+            <a onClick={() => this._handleBatchOption(2)}>No processing</a>
           </Menu.Item>
-        )}
+        )}*/}
       </Menu>
     );
   };
@@ -63,12 +64,12 @@ export default class ButtonGroup extends React.Component<any, any> {
    * @param status
    * @private
    */
-  _handleBatchOption = status => {
+  _handleBatchOption = (status) => {
     const { changeSettleStatus, checkedSettleIds } = this.props.relaxProps;
     if (checkedSettleIds && checkedSettleIds.size != 0) {
       changeSettleStatus(checkedSettleIds.toJS(), status);
     } else {
-      message.error('您未勾选任何记录');
+      message.error('You have not checked any records ！');
     }
   };
 }

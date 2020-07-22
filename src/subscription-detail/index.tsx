@@ -46,7 +46,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       orderInfo: {},
       subscriptionInfo: {},
       recentOrderList: [],
-      frequencyList: [],
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
@@ -194,6 +193,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
+  orderNow = (id: String) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .orderNow({ subscribeId: id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.getSubscriptionDetail(this.state.subscriptionId);
+          message.success('Successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
+  };
+
   petsById = (id: String) => {
     let params = {
       petsId: id
@@ -282,7 +307,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       this.querySysDictionary('city');
     }
 
-    this.querySysDictionary('Frequency');
+    // this.querySysDictionary('Frequency');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -310,11 +335,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               JSON.stringify(res.context.sysDictionaryVOS)
             );
           }
-          if (type === 'Frequency') {
-            this.setState({
-              frequencyList: res.context.sysDictionaryVOS
-            });
-          }
+          // if (type === 'Frequency') {
+          //   this.setState({
+          //     frequencyList: res.context.sysDictionaryVOS
+          //   });
+          // }
         } else {
           message.error('Unsuccessful');
         }
@@ -352,15 +377,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     });
   };
+  subTotal = () => {
+    const { goodsInfo } = this.state;
+    let sum = 0;
+    for (let i = 0; i < goodsInfo.length; i++) {
+      if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
+        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
+      }
+    }
+    return sum;
+  };
 
   render() {
     const {
       orderInfo,
       recentOrderList,
       subscriptionInfo,
-      frequencyList,
       goodsInfo,
-      petsInfo,
       paymentInfo,
       deliveryAddressInfo,
       billingAddressInfo,
@@ -388,19 +421,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     const cartExtra = (
-      <Popconfirm
-        placement="topRight"
-        title="Are you sure skip next delivery?"
-        onConfirm={() =>
-          this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
-        }
-        okText="Confirm"
-        cancelText="Cancel"
-      >
-        <Button type="link" style={{ fontSize: 16 }}>
-          Skip Next Delivery
-        </Button>
-      </Popconfirm>
+      <div>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure skip next delivery?"
+          onConfirm={() =>
+            this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
+          }
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Skip Next Delivery
+          </Button>
+        </Popconfirm>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure order now?"
+          onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Order Now
+          </Button>
+        </Popconfirm>
+      </div>
     );
     const columns = [
       {
@@ -412,7 +458,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} style={{ width: 100 }} alt="" />
-            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
       },
@@ -535,8 +581,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <span>{subscriptionInfo.subscriptionNumber}</span>
               </p>
               <p>
-                Subscription Time :
-                <span>{subscriptionInfo.subscriptionTime}</span>
+                Subscription Date :
+                <span>
+                  {moment(new Date(subscriptionInfo.subscriptionTime)).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
+                </span>
               </p>
               <p>
                 Presciber ID : <span>{subscriptionInfo.presciberID}</span>
@@ -547,7 +597,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={11} className="basic-info">
               <p>
-                Consumer : <span>{subscriptionInfo.consumer}</span>
+                Consumer Name: <span>{subscriptionInfo.consumer}</span>
               </p>
               <p>
                 Consumer Account :{' '}
@@ -632,11 +682,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div className="order-summary-content">
                   <div className="flex-between">
                     <span>Total</span>
-                    <span>$123</span>
+                    <span>${this.subTotal()}</span>
                   </div>
                   <div className="flex-between">
                     <span>Subscription Save Discount</span>
-                    <span>-$12</span>
+                    <span>-$0</span>
                   </div>
                   <div className="flex-between">
                     <span>Promotion Code</span>
@@ -650,7 +700,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>$111</span>
+                <span>${this.subTotal()}</span>
               </div>
               {/* <Row style={{ marginTop: 20 }}>
                 <Col span={16}>
@@ -696,12 +746,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>
                     {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
                   </p>
                 </Col>
               </Row>
+              <Col span={24}>
+                <p style={{ width: 140 }}>Address2: </p>
+                <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+              </Col>
             </Col>
             <Col span={8}>
               <Row>
@@ -733,8 +787,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={24}>
-                  <p style={{ width: 140 }}>Address: </p>
+                  <p style={{ width: 140 }}>Address1: </p>
                   <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                </Col>
+
+                <Col span={24}>
+                  <p style={{ width: 140 }}>Address2: </p>
+                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                 </Col>
               </Row>
             </Col>
@@ -812,7 +871,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       rowKey={(record, index) => index.toString()}
                       columns={operatorColumns}
                       dataSource={operationLog}
-                      pagination={false}
                       bordered
                     />
                   </Col>

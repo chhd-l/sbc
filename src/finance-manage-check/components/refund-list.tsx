@@ -33,10 +33,10 @@ export default class RefundList extends React.Component<any, any> {
     } = this.props.relaxProps;
     return (
       <div>
-        <div className="totalAmount">
+        {/*<div className="totalAmount">
           <ul>
             <li>
-              <p className="payName">&nbsp;Total Revenue</p>
+              <p className="payName">&nbsp;Total Refund</p>
               <strong>
                 {refundList.toJS().map((item, index) => {
                   let a = item.totalAmount.substr(
@@ -67,7 +67,7 @@ export default class RefundList extends React.Component<any, any> {
               <p className="payPercent">-- &nbsp;{}</p>
             </li>
           </ul>
-        </div>
+        </div>*/}
         {/* <div className="totalAmount">
           <ul>
             {refundTotal.toJS().length > 0
@@ -92,11 +92,11 @@ export default class RefundList extends React.Component<any, any> {
         </div> */}
         <DataGrid
           dataSource={refundList.toJS().length > 0 ? refundList.toJS() : []}
-          rowKey={(record) => record.index}
+          rowKey={(record, index) => index}
           pagination={false}
         >
           <Column
-            title={<FormattedMessage id="serialNumber" />}
+            title="NO."
             dataIndex="index"
             key="index"
             width="50"
@@ -150,15 +150,12 @@ export default class RefundList extends React.Component<any, any> {
             }}
           /> */}
           <Column
-            title="PayU"
-            dataIndex="PayU"
-            key="PayU"
-            width="100"
-            render={(_text, rowData: any) => {
-              return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
-            }}
+            title="Total Revenue"
+            dataIndex="totalAmount"
+            key="totalAmount"
           />
-          <Column
+
+          {/*<Column
             title={<FormattedMessage id="balance" />}
             dataIndex="BALANCE"
             key="BALANCE"
@@ -166,7 +163,7 @@ export default class RefundList extends React.Component<any, any> {
             render={(_text, rowData: any) => {
               return <span>{rowData.payItemAmountMap.BALANCE}</span>;
             }}
-          />
+          />*/}
           {/*<Column*/}
           {/*title='预存款'*/}
           {/*dataIndex='ADVANCE'*/}
@@ -194,16 +191,11 @@ export default class RefundList extends React.Component<any, any> {
           {/*return <span>{rowData.payItemAmountMap.POINT}</span>*/}
           {/*}}*/}
           {/*/>*/}
-          <Column
-            title={<FormattedMessage id="total2" />}
-            dataIndex="totalAmount"
-            key="totalAmount"
-            width="100"
-          />
+          <Column title="PayU" dataIndex="totalAmount" key="supplierId" />
           <Column
             title={<FormattedMessage id="operation" />}
             dataIndex="operate"
-            key="operate"
+            key="storeId"
             width="100"
             render={(_text, record: any, _index) => {
               return (
@@ -222,7 +214,7 @@ export default class RefundList extends React.Component<any, any> {
                       })
                     }
                   >
-                    {<FormattedMessage id="details" />}
+                    Details
                   </a>
                 </AuthWrapper>
               );

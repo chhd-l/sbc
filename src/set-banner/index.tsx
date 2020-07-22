@@ -15,14 +15,11 @@ export default class SetBanner extends Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
-    // this.store.uploadModalStatusChange(true)
+    // this.store.setModalVisible(true)
+    // this.store.getList(-1)
   }
   onFormChange = ({ field, value }) => {
-    // let data = this.state.searchForm;
-    // data[field] = value;
-    // this.setState({
-    //   searchForm: data
-    // });
+    this.store.onFormChange({ field, value });
   };
   onSearch = () => {
     console.log('search------------');
@@ -36,38 +33,38 @@ export default class SetBanner extends Component<any, any> {
           <div className="container">
             <Headline title={<FormattedMessage id="setBanner" />} />
             <div>
-              <Form className="filter-content" layout="inline">
-                <FormItem>
-                  <Input
-                    addonBefore="Keyword"
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'keywords',
-                        value
-                      });
-                    }}
-                    placeholder="Please input name or discription"
-                    style={{ width: 300 }}
-                  />
-                </FormItem>
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon="search"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.onSearch();
-                    }}
-                  >
-                    <span>
-                      {' '}
-                      <FormattedMessage id="search" />
-                    </span>
-                  </Button>
-                </Form.Item>
-              </Form>
+              {/*<Form className="filter-content" layout="inline">*/}
+              {/*  <FormItem>*/}
+              {/*    <Input*/}
+              {/*      addonBefore="Resource name"*/}
+              {/*      onChange={(e) => {*/}
+              {/*        const value = (e.target as any).value;*/}
+              {/*        this.onFormChange({*/}
+              {/*          field: 'resourceName',*/}
+              {/*          value*/}
+              {/*        });*/}
+              {/*      }}*/}
+              {/*      placeholder="Please input resource name"*/}
+              {/*      style={{ width: 400 }}*/}
+              {/*    />*/}
+              {/*  </FormItem>*/}
+              {/*  <Form.Item>*/}
+              {/*    <Button*/}
+              {/*      type="primary"*/}
+              {/*      htmlType="submit"*/}
+              {/*      icon="search"*/}
+              {/*      onClick={(e) => {*/}
+              {/*        e.preventDefault();*/}
+              {/*        this.store.onSearch(-1);*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      <span>*/}
+              {/*        {' '}*/}
+              {/*        <FormattedMessage id="search" />*/}
+              {/*      </span>*/}
+              {/*    </Button>*/}
+              {/*  </Form.Item>*/}
+              {/*</Form>*/}
 
               <BannerList />
               <UploadImageModal />

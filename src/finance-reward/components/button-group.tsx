@@ -40,7 +40,6 @@ export default class ButtonGroup extends React.Component<any, any> {
       onRewardExport,
       onRewardExportData
     } = this.props.relaxProps;
-    console.log(onRewardExportData, 1111111111111111);
     return (
       <div className="handle-bar">
         <AuthWrapper functionName={'financeRewardExport'}>

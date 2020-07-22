@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
+import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
 
 export default class ListView extends React.Component<any, any> {
@@ -251,7 +252,12 @@ export default class ListView extends React.Component<any, any> {
 
                         <span style={{ marginLeft: 60 }}>
                           <FormattedMessage id="subscription.subscriptionDate" />
-                          :{v.createTime ? v.createTime : ''}
+                          :
+                          {v.createTime
+                            ? moment(new Date(v.createTime)).format(
+                                'YYYY-MM-DD HH:mm:ss'
+                              )
+                            : ''}
                         </span>
                       </div>
                     </td>
@@ -274,26 +280,36 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {/*第4张特殊处理*/
-                      //@ts-ignore
-                      v.goodsInfo && v.goodsInfo.size > 3 ? (
-                        <div style={styles.imgBg}>
-                          <img
-                            //@ts-ignore
-                            src={item.goodsPic ? item.goodsPic : defaultImg}
-                            style={styles.imgFourth}
-                          />
-                          <div style={styles.imgNum}>
-                            <FormattedMessage id="total" />
-                            {v.goodsInfo.size} <FormattedMessage id="piece" />
+                      {
+                        /*第4张特殊处理*/
+                        //@ts-ignore
+                        v.goodsInfo && v.goodsInfo.size > 3 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={item.goodsPic ? item.goodsPic : defaultImg}
+                              style={styles.imgFourth}
+                            />
+                            <div style={styles.imgNum}>
+                              <FormattedMessage id="total" />
+                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
-                    <td style={{ width: '15%', paddingLeft: 20 }}>
+                    <td
+                      style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}
+                    >
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p key={k}>{item.goodsName}</p>
+                          <p
+                            key={k}
+                            style={styles.ellipsisName}
+                            title={item.goodsName}
+                          >
+                            {item.goodsName}
+                          </p>
                         ))}
                     </td>
                     {/*subscription status*/}
@@ -410,5 +426,11 @@ const styles = {
     border: ' 1px solid #F56C1D',
     color: '#F56C15',
     borderRadius: 5
+  },
+  ellipsisName: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 150
   }
 } as any;

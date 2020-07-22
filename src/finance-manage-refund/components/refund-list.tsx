@@ -65,6 +65,7 @@ export default class RefundList extends React.Component<any, any> {
             title="Return Order time"
             dataIndex="orderTime"
             key="orderTime"
+            width="11%"
             render={(text, _rowData: any) => {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
@@ -73,12 +74,13 @@ export default class RefundList extends React.Component<any, any> {
             title="Return Order number"
             dataIndex="returnOrderCode"
             key="returnOrderCode"
+            width="12%"
           />
           <Column title="Order number" dataIndex="orderCode" key="orderCode" />
           <Column
             title="Order refund"
-            dataIndex="returnOrderCode"
-            key="returnOrderCode"
+            dataIndex="orderRefund"
+            key="orderRefund"
           />
           <Column
             title="Trasaction serial number"
@@ -100,7 +102,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
             }}
           />
-
+          <Column title="Payment type" dataIndex="payWay" key="payWay" />
           <Column
             title="Payment method"
             dataIndex="vendor"
@@ -112,8 +114,8 @@ export default class RefundList extends React.Component<any, any> {
 
           <Column
             title="Real Refund"
-            dataIndex="practicalPrice"
-            key="practicalPrice"
+            dataIndex="paymentOSActualReturnPrice"
+            key="paymentOSActualReturnPrice"
             render={(text, rowData: any) => {
               return text ? <span>{text}</span> : '--';
             }}

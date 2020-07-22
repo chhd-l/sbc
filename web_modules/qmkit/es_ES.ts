@@ -23,6 +23,7 @@ export default {
   'all': 'All',
   'edit': 'Edit',
   'operation': 'Operation',
+  'details': 'Details',
   'delete': 'Delete',
   'editProduct': 'Edit product',
   'basicInformation': 'Basic information',
@@ -249,8 +250,9 @@ export default {
   'sub-branch': 'Sub-branch',
   'mainAccount': 'Main account',
   'settlement': 'Settlement',
-
-
+  'SettlementStatementTime': 'Settlement statement time',
+  'SettlementPeriod': 'Settlement period',
+  'Paymentamount':'Payment amount',
   'product': 'Product',
   'consumerList': 'Consumer List',
   'consumerClinicList': 'Consumer list(Presciber)',
@@ -321,25 +323,11 @@ export default {
   'onlinePayment': "online payment",
   'offlinePayment': "Offline payment",
   'generalInvoice': 'General invoice ',
-  'details': 'details',
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
   'expressDelivery	': "Express delivery",
   'deliveryInformation': "delivery information",
   'confirm': 'Confirm',
-  "serialNumber": "Serial number",
-  "shipped": "Shipped",
-  "thisShipment": "This shipment",
-  "amountReceivable": "Amount receivable",
-  "collectionSerialNumber": "Collection serial number",
-  "collectionTime": "Collection time",
-  "amountReceived": "Amount received",
-  "accountsReceivable": "Accounts receivable",
-  "accessories": "Accessories",
-  "status ": "Status",
-  "paid": "paid",
-  "remarks": "Remarks",
-  "operating": "Operating",
   'productFirstLetterUpperCase': 'Product',
   'recipient': 'Recipient',
   'recipientPhone': 'Recipient phone',
@@ -513,7 +501,6 @@ export default {
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
-  'Paymentamount': 'Payment amount',
   'financialSettlement': 'Finance Settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
@@ -521,7 +508,7 @@ export default {
   'unsettlement': 'Unsettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
-  'statementTime': 'Billing Time',
+  'statementTime': 'Statement Time',
   'statementNumber': 'Statement Number',
   'statementPeriod': 'Statement Period',
 
@@ -529,7 +516,7 @@ export default {
   'totalPaidGoods': 'Total Paid Goods',
   'totalFreight': 'Total Freight',
 
-  'inquiryDetails': 'Inquiry Details',
+  'inquiryDetails': 'Details',
   'settlementDetails': 'Settlement Details',
   'exportDetails': 'Export Details',
 
@@ -737,8 +724,17 @@ export default {
   'pc': 'PC',
   'mobile': 'Mobile',
   'preview': 'Preview',
-  'last180':'last 180 day'
-
+  'last180':'last 180 day',
+  'ChooseUploadType': ' Choose upload type',
+  'image': 'Image',
+  'upload': 'Upload',
+  'video': 'Video',
+  'resource' : '{type} resource',
+  'selectResource': 'Select {type} resource',
+  'dragImagesOrVideos' : 'Click or drag images or videos to upload',
+  'supportUpload': 'Support one or more pictures or videos upload',
+  'action': 'Action',
+  'resourceName': 'Banner name'
 
 
 

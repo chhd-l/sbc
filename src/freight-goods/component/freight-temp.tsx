@@ -37,9 +37,6 @@ const FormDiv = styled.div`
       }
     }
   }
-  .ant-form-item-label {
-    width: 100px;
-  }
   .ant-radio-group {
     .radio-item {
       margin-bottom: 5px;
@@ -117,10 +114,10 @@ const InlineBDiv = styled.div`
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
-    span: 2
+    span: 4
   },
   wrapperCol: {
-    span: 21
+    span: 20
   }
 };
 const SHOW_PARENT = TreeSelect.SHOW_PARENT;
@@ -361,9 +358,9 @@ export default class FreightTemp extends React.Component<any, any> {
               value={valuationType}
               onChange={(e: any) => this._changeFieldValue(e.target.value)}
             >
-              <Radio value={0}>按件数</Radio>
-              <Radio value={1}>按重量</Radio>
-              <Radio value={2}>按体积</Radio>
+              <Radio value={0}>By Nmber</Radio>
+              <Radio value={1}>By Weight</Radio>
+              <Radio value={2}>By Volume</Radio>
             </RadioGroup>
           </FormItem>
 

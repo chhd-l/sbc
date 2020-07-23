@@ -3,8 +3,7 @@ import React from 'react';
 import { Breadcrumb, Tooltip, Icon } from 'antd';
 import { StoreProvider } from 'plume2';
 import styled from 'styled-components';
-
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline, history, BreadCrumb } from 'qmkit';
 
 import Detail from './components/detail';
 import List from './components/list';
@@ -29,8 +28,8 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
-
-    console.log(this.store, 11111);
+    console.log(history.location.state.settlementType, 11111);
+    console.log(this.store.state(), 11111);
   }
 
   render() {
@@ -46,12 +45,12 @@ export default class BillingDetails extends React.Component<any, any> {
       >
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            {<FormattedMessage id="settlementDetails" />}
+            {history.location.state.settlementType}
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container">
-          <Headline title={<FormattedMessage id="settlementDetails" />} />
+          <Headline title={history.location.state.settlementType} />
           {/*<OptionDiv>
             <Tooltip
               overlayStyle={{

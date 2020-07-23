@@ -157,6 +157,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               this.applyPromationCode(this.state.promotionCode);
             }
           );
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -553,7 +555,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time && moment(time).format(Const.TIME_FORMAT).toString()
+          time &&
+          moment(time)
+            .format(Const.TIME_FORMAT)
+            .toString()
       },
       {
         title: 'Operation Category',

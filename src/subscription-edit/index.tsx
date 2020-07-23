@@ -179,6 +179,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             }
           );
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -866,7 +868,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                   <div className="flex-between">
                     <span>Shipping</span>
-                    <span>${this.state.deliveryPrice}</span>
+                    <span>
+                      ${this.state.deliveryPrice ? this.state.deliveryPrice : 0}
+                    </span>
                   </div>
                 </div>
               </Card>

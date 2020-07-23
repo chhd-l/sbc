@@ -18,6 +18,7 @@ export default class RevenueList extends React.Component<any, any> {
       pageNum: number;
       onPagination: Function;
       pageSize: number;
+      loading: boolean;
     };
   };
 
@@ -27,13 +28,15 @@ export default class RevenueList extends React.Component<any, any> {
     total: 'total',
     pageNum: 'pageNum',
     onPagination: noop,
-    pageSize: 'pageSize'
+    pageSize: 'pageSize',
+    loading: 'loading'
   };
 
   render() {
     const {
       incomeDetail,
       payWaysObj,
+      loading,
       total,
       pageSize,
       pageNum
@@ -41,6 +44,7 @@ export default class RevenueList extends React.Component<any, any> {
     return (
       <div>
         <DataGrid
+          loading={loading}
           dataSource={incomeDetail.toJS().length > 0 ? incomeDetail.toJS() : []}
           rowKey={(_record, index) => index.toString()}
           pagination={{

@@ -6,10 +6,10 @@ type TResult = {
   context: any;
 };
 const api = {
-  getList: '',
-  deleteRow: '/delete',
-  upload: '',
-  editRow: '/edit'
+  getList: '/banner/get',
+  deleteRow: '/banner/delete',
+  upload: '/banner/insert',
+  editRow: '/banner/modify'
 };
 /**
  * 获取列表
@@ -32,4 +32,13 @@ export const deleteRow = (params) => {
  */
 export const editRow = (params) => {
   return Fetch<TResult>(api.editRow);
+};
+/**
+ * 编辑
+ */
+export const updateBanner = (params) => {
+  return Fetch<TResult>(api.upload, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
 };

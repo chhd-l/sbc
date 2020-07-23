@@ -81,4 +81,9 @@ export default class AppStore extends Store {
     //   this.dispatch('loading:end')
     // }
   };
+
+  // setBannerName = (bannerName) => {
+  //   debugger
+  //   this.dispatch('imageActor:setBannerName', bannerName)
+  // }
 }

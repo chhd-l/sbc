@@ -32,6 +32,7 @@ export default class MarketingFullDiscountAdd extends React.Component<
     const state = this.props.location.state;
     const { marketingId } = this.props.match.params;
     const { source } = (state || {}) as any;
+
     return (
       <AuthWrapper functionName="f_marketing_discount_add">
         <div>

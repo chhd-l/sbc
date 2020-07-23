@@ -44,16 +44,16 @@ export default class SearchForm extends React.Component<any, any> {
             style={{ width: 160 }}
             defaultValue="All"
             onChange={(value) => {
-              value = value === '' ? '-1' : value;
+              value = value === '' ? null : value;
               onFormChange({
                 field: 'marketingSubType',
                 value
               });
             }}
           >
-            <Option value="-1">All</Option>
-            <Option value="0">Full amount minus</Option>
-            <Option value="1">Full quantity minus</Option>
+            <Option value={null}>All</Option>
+            <Option value="0">Full amount reduction</Option>
+            <Option value="1">Full quantity reduction</Option>
             <Option value="2">Full amount discount</Option>
             <Option value="3">Full quantity discount</Option>
             {/* <Option value="4">满金额赠</Option>
@@ -67,7 +67,8 @@ export default class SearchForm extends React.Component<any, any> {
             style={{ width: 170 }}
             defaultValue="All"
             onChange={(value) => {
-              value = value === '' ? '-1' : value;
+              debugger;
+              value = value === '' ? null : value;
               onFormChange({
                 field: 'promotionType',
                 value

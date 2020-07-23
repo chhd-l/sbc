@@ -119,10 +119,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
   // @ts-ignore
   render() {
-    const { marketingType, form } = this.props;
-
+    const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-
     const {
       customerLevel,
       selectedRows,
@@ -134,6 +132,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } = this.state;
     let settingLabel = 'setting rules';
     let settingRuleFrom = { ...formItemLayout };
+
     if (this.state.PromotionTypeValue === 1) {
       settingRuleFrom = { ...largeformItemLayout };
       if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
@@ -165,7 +164,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
             style={{ marginLeft: 20 }}
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
-              debugger;
               if (this.state.PromotionTypeValue === 0) {
                 this.setState({
                   PromotionTypeChecked: e.target.checked
@@ -444,11 +442,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.setState({ customerLevel: levelList });
 
     let { marketingBean } = this.state;
+    debugger;
     const subType = marketingBean.get('subType');
     if (subType != undefined && subType != null) {
       this.setState({ isFullCount: subType % 2 });
     } else {
-      this.setState({ isFullCount: 0 });
+      this.setState({
+        isFullCount: 0,
+        PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
+      });
     }
     this.levelInit(marketingBean.get('joinLevel'));
     // render selectedRows
@@ -550,8 +552,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
     form.resetFields();
-    //console.log(this.state.promotionCode);
-    console.log(marketingBean, 111111);
 
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {

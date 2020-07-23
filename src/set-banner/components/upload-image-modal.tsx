@@ -3,6 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
 import { cache, Const, noop, SelectGroup } from 'qmkit';
+import * as webapi from '../webapi';
 import {
   Form,
   Select,
@@ -22,10 +23,12 @@ import {
   Upload,
   Tree
 } from 'antd';
+import { fromJS, Map } from 'immutable';
 
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
 const Dragger = Upload.Dragger;
+const confirm = Modal.confirm;
 const formItemLayout = {
   labelCol: {
     span: 2,
@@ -52,7 +55,12 @@ export default class UploadImageModal extends Component<any, any> {
     cateId: '',
     fileList: [], //pc fileList
     mFileList: [], //mobile fileList
-    cateDisabled: false
+    pcUrl: '',
+    mobileUrl: '',
+    companyInfoId: 0,
+    storeId: 0,
+    bannerName: '',
+    okDisabled: false
   };
   props: {
     relaxProps?: {
@@ -70,8 +78,16 @@ export default class UploadImageModal extends Component<any, any> {
     onFormChange: noop,
     viewAction: 'viewAction'
   };
-  componentDidMount() {}
-  _handleSubmit = () => {
+  componentDidMount() {
+    const { storeId, companyInfoId } = JSON.parse(
+      sessionStorage.getItem(cache.LOGIN_DATA)
+    );
+    this.setState({
+      storeId,
+      companyInfoId
+    });
+  }
+  _handleSubmit = async () => {
     if (
       this.state.fileList.filter((file) => file.status === 'done').length <= 0
     ) {
@@ -84,9 +100,42 @@ export default class UploadImageModal extends Component<any, any> {
       message.error('Please choose to upload mobile resource!');
       return;
     }
-    debugger;
-    this._handleModelCancel();
-    // this._okFunc();
+    this.setState({
+      okDisabled: true
+    });
+    const params = {
+      bannerId: null,
+      bannerName: this.state.bannerName,
+      mobiUrl: this.state.mobileUrl,
+      storeId: this.state.storeId,
+      userId: null,
+      webUrl: this.state.pcUrl
+    };
+    const { res } = await webapi.updateBanner(params);
+    this.setState({
+      okDisabled: false
+    });
+    const ref = this;
+    if (res.code === 'K-000000') {
+      confirm({
+        title: '提示',
+        content: '是否继续添加banner',
+        onOk() {
+          ref.setState({
+            bannerName: '',
+            fileList: [],
+            mFileList: [],
+            pcUrl: '',
+            mobileUrl: ''
+          });
+        },
+        onCancel() {
+          this._handleModelCancel();
+        },
+        okText: 'OK',
+        cancelText: 'Cancel'
+      });
+    }
   };
   _handleModelCancel = () => {
     const { setModalVisible } = this.props.relaxProps;
@@ -101,59 +150,23 @@ export default class UploadImageModal extends Component<any, any> {
   _setCateDisabled = () => {
     this.setState({ cateDisabled: true });
   };
-  /**
-   * 确定并刷新对应分类的列表
-   * @private
-   */
-  _okFunc = () => {
-    // //提交
-    // const {
-    //   autoExpandImageCate,
-    //   showUploadImageModal,
-    //   queryImagePage
-    // } = this.props.relaxProps;
-    // //展开上传的分类
-    // autoExpandImageCate(this.state.cateId);
-    // showUploadImageModal(false);
-    // //刷新列表信息
-    // queryImagePage();
-    // this.setState({ cateId: '', fileList: [], cateDisabled: false });
-  };
-
+  setBannerName(e) {
+    this.setState({
+      bannerName: e.target.value
+    });
+  }
   render() {
     const { modalVisible, form, onFormChange } = this.props.relaxProps;
     if (!modalVisible) {
       return null;
     }
+    const ref = this;
+    const list = this.state.fileList;
+    const mList = this.state.mFileList;
     const setFileList = this._setFileList;
     const setMFileList = this._setMFileList;
-    const setCateDisabled = this._setCateDisabled;
-    const { storeId, companyInfoId } = JSON.parse(
-      sessionStorage.getItem(cache.LOGIN_DATA)
-    );
-    const cateIdCurr = this.state.cateId;
-    //处理分类的树形图结构数据
-    const loop = (cateList) =>
-      cateList.map((item) => {
-        if (item.get('children') && item.get('children').count()) {
-          return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName')}
-            >
-              {loop(item.get('children'))}
-            </TreeNode>
-          );
-        }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName')}
-          />
-        );
-      });
+    const storeId = this.state.storeId;
+    const companyInfoId = this.state.companyInfoId;
     const props = {
       name: 'uploadFile',
       headers: {
@@ -161,18 +174,14 @@ export default class UploadImageModal extends Component<any, any> {
         Authorization:
           'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },
-      multiple: true,
+      multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
       action:
         Const.HOST +
-        `/store/uploadStoreResource?cateId=${cateIdCurr}&storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
-        // if (!cateIdCurr) {
-        //   message.error('Please select category first!');
-        //   return false;
-        // }
         let fileName = file.name.toLowerCase();
 
         if (!fileName.trim()) {
@@ -193,7 +202,10 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('File name is too long');
           return false;
         }
-
+        if (list.length >= 1) {
+          message.error('Only can upload one resource.');
+          return false;
+        }
         // 支持的图片格式：jpg、jpeg、png、gif
         if (
           fileName.endsWith('.jpg') ||
@@ -224,8 +236,10 @@ export default class UploadImageModal extends Component<any, any> {
           ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
+            ref.setState({
+              pcUrl: info.file.response[0]
+            });
             message.success(`${info.file.name} uploaded successfully!`);
-            setCateDisabled();
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -237,16 +251,6 @@ export default class UploadImageModal extends Component<any, any> {
             (f.status == 'done' && !f.response) ||
             (f.status == 'done' && f.response && !f.response.code)
         );
-        debugger;
-        // lastModified: 1594892772516
-        // lastModifiedDate: Thu Jul 16 2020 17:46:12 GMT+0800 (China Standard Time) {}
-        // name: "test.mp4"
-        // originFileObj: File {uid: "rc-upload-1594955234202-2", name: "test.mp4", lastModified: 1594892772516, lastModifiedDate: Thu Jul 16 2020 17:46:12 GMT+0800 (China Standard Time), webkitRelativePath: "", …}
-        // percent: 100
-        // size: 1131520
-        // status: "uploading" /"done"
-        // type: "video/mp4"
-        // uid: "rc-upload-1594955234202-2"
         setFileList(fileList);
       }
     };
@@ -257,12 +261,12 @@ export default class UploadImageModal extends Component<any, any> {
         Authorization:
           'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },
-      multiple: true,
+      multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
       action:
         Const.HOST +
-        `/store/uploadStoreResource?cateId=${cateIdCurr}&storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         // if (!cateIdCurr) {
@@ -289,7 +293,10 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('File name is too long');
           return false;
         }
-
+        if (mList.length >= 1) {
+          message.error('Only can upload one resource.');
+          return false;
+        }
         // 支持的图片格式：jpg、jpeg、png、gif
         if (
           fileName.endsWith('.jpg') ||
@@ -313,6 +320,7 @@ export default class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
+          debugger;
           if (
             info.file.response &&
             info.file.response.code &&
@@ -320,8 +328,10 @@ export default class UploadImageModal extends Component<any, any> {
           ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
+            ref.setState({
+              mobileUrl: info.file.response[0]
+            });
             message.success(`${info.file.name} uploaded successfully!`);
-            setCateDisabled();
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -342,12 +352,24 @@ export default class UploadImageModal extends Component<any, any> {
         title={<FormattedMessage id="upload" />}
         visible={modalVisible}
         width={920}
+        // confirmLoading={true}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
         <div>
           <div>
             <Form>
+              <FormItem
+                label="Banner Name"
+                name="bannerName"
+                value={this.state.bannerName}
+                rules={[
+                  { required: true, message: 'Please input your bannerName.' },
+                  { max: 30, message: '最多30字符' }
+                ]}
+              >
+                <Input onChange={(e) => this.setBannerName(e)} />
+              </FormItem>
               <FormItem
                 {...formItemLayout}
                 label={

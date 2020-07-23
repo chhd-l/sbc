@@ -14,12 +14,18 @@ const Column = Table.Column;
 
 //默认每页展示的数量
 const SUB_TYPE = {
-  0: 'Full amount minus',
-  1: 'Full quantity minus',
+  0: 'Full amount reduction',
+  1: 'Full quantity reduction',
   2: 'Full amount discount',
-  3: 'Full quantity discount'
+  3: 'Full quantity discount',
+  6: '',
+  7: ''
   // 4: '满金额赠',
   // 5: '满数量赠'
+};
+const PROMOTION_TYPE = {
+  0: 'Normal promotion',
+  1: 'Subscription promotion'
 };
 
 //默认每页展示的数量
@@ -78,6 +84,7 @@ export default class MarketingList extends React.Component<any, any> {
       onPause,
       onStart
     } = this.props.relaxProps;
+    debugger;
     return (
       <DataGrid
         loading={loading}
@@ -111,25 +118,22 @@ export default class MarketingList extends React.Component<any, any> {
           title="Campaign name"
           key="marketingName"
           dataIndex="marketingName"
-          /*render={(subType) => {
-            return SUB_TYPE[subType];
-          }}*/
         />
         <Column
           title="Campaign type"
-          key="marketingType"
-          dataIndex="marketingType"
-          /*render={(subType) => {
+          key="subType"
+          dataIndex="subType"
+          render={(subType) => {
             return SUB_TYPE[subType];
-          }}*/
+          }}
         />
         <Column
           title="Promotion type"
-          key="marketing_promotion_type"
-          dataIndex="marketing_promotion_type"
-          /*render={(subType) => {
-            return SUB_TYPE[subType];
-          }}*/
+          key="promotionType"
+          dataIndex="promotionType"
+          render={(promotionType) => {
+            return PROMOTION_TYPE[promotionType];
+          }}
         />
 
         <Column

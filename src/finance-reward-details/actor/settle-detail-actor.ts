@@ -49,46 +49,23 @@ export default class SettleDetailActor extends Actor {
       searchTime: {},
       fetchFindListByPrescriber: {},
       onRewardExportData: {},
-      orderNo: ''
+      orderNo: '',
+      prescriber: {}
     };
   }
 
-  /* constructor(props) {
-    super(props);
-
-    //console.log(history.location.params.prescriberId,222222222222222222222);
-  }*/
+  //初始化
   @Action('list:init')
   init(state: IMap, res) {
     return state.set('dataList', res);
   }
-  /*init(state, { content, total, currentPage }) {
-    return state
-      .set('setList', content)
-      .set('total', total)
-      .set('pageNum', currentPage);
-  }*/
-  /* init(state: IMap, res: ISettleInvoiceResponse) {
-    const { content, pageSize, total } = res;
-    return state.withMutations((state) => {
-      state
-        .set('total', total)
-        .set('pageSize', pageSize)
-        .set('setList', content);
-    });
-  }*/
-  /* init(state: IMap, init) {
-    const { content, pageSize, total } = res;
-    //console.log(res,2222222222222);
-    return state.set('setlist', init);
 
-  }*/
-
+  //chart数据
   @Action('list:EchartsData')
   EchartsData(state: IMap, EchartsData) {
     return state.set('EchartsData', EchartsData);
   }
-
+  //列表数据
   @Action('ticket:onRewardExport')
   onRewardExport(state: IMap, onRewardExportData) {
     return state.set('onRewardExportData', onRewardExportData);
@@ -130,6 +107,12 @@ export default class SettleDetailActor extends Actor {
   @Action('form:clear')
   formFieldClear(state: IMap) {
     return state.set('form', Map());
+  }
+
+  //getPrescribe 文本
+  @Action('getPrescribe:prescriber')
+  prescriber(state: IMap, res) {
+    return state.set('prescriber', res);
   }
 
   /**

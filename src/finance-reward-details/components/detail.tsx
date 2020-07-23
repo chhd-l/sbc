@@ -15,27 +15,29 @@ export default class BillingDetails extends React.Component<any, any> {
     relaxProps?: {
       settlement: IMap;
       setName: IList;
+      prescriber: any;
     };
   };
 
   static relaxProps = {
     settlement: 'settlement',
-    setName: 'setName'
+    setName: 'setName',
+    prescriber: 'prescriber'
   };
 
   render() {
-    const setName = this.props.relaxProps;
+    const { prescriber } = this.props.relaxProps;
     return (
       <div>
         <div style={styles.static}>
           <p style={{ marginLeft: 5, marginBottom: 2 }}>
             <span style={styles.space}>
               {<FormattedMessage id="PrescriberID" />}：
-              {sessionStorage.getItem('prescriberId')}
+              {prescriber.prescriberId}
             </span>
             <span style={styles.space}>
               {<FormattedMessage id="PrescriberName" />}：
-              {sessionStorage.getItem('prescriberName')}
+              {prescriber.prescriberName}
             </span>
           </p>
         </div>

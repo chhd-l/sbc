@@ -42,7 +42,7 @@ export default class RefundList extends React.Component<any, any> {
       <div>
         <DataGrid
           dataSource={refundDetail.toJS().length > 0 ? refundDetail.toJS() : []}
-          rowKey={(record) => record.index}
+          rowKey={(_record, index) => index.toString()}
           pagination={{
             pageSize,
             total,
@@ -82,12 +82,12 @@ export default class RefundList extends React.Component<any, any> {
             dataIndex="orderRefund"
             key="orderRefund"
           />
-          <Column
+          {/*<Column
             title="Trasaction serial number"
             width="15%"
             dataIndex="tradeNo"
             key="tradeNo"
-          />
+          />*/}
 
           <Column
             title="Customer name"

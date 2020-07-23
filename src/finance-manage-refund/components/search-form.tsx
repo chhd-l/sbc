@@ -96,7 +96,7 @@ export default class SearchForm extends React.Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore="Transaction serial number"
+                addonBefore="Order number"
                 onChange={(e) => changeTradeNo(e.target.value)}
               />
             </FormItem>

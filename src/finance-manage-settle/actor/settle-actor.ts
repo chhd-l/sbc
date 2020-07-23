@@ -17,8 +17,7 @@ export default class SettleActor extends Actor {
       selected: [],
       checkedSettleIds: [],
       accountDay: '',
-      settleQueryParams: {},
-      checkedSettleIds: []
+      settleQueryParams: {}
     };
   }
 

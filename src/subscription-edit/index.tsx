@@ -179,6 +179,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             }
           );
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -321,8 +323,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       saveLoading: true
     });
     let subscribeNumArr = [];
+    let validNum = true;
     for (let i = 0; i < goodsInfo.length; i++) {
-      subscribeNumArr.push(goodsInfo[i].subscribeNum);
+      if (goodsInfo[i].subscribeNum) {
+        subscribeNumArr.push(goodsInfo[i].subscribeNum);
+      } else {
+        validNum = false;
+        break;
+      }
+    }
+    if (!validNum) {
+      this.setState({
+        saveLoading: false
+      });
+      message.error('Please enter the correct quantity!');
+      return;
     }
     let params = {
       billingAddressId: billingAddressId,
@@ -451,19 +466,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     return addressList;
   };
   deliveryOpen = () => {
+    let sameFlag = false;
     if (this.state.deliveryAddressId === this.state.billingAddressId) {
-      this.setState({
-        sameFlag: true,
-        visibleShipping: true,
-        isUnfoldedDelivery: false
-      });
-    } else {
-      this.setState({
-        sameFlag: false,
-        visibleShipping: true,
-        isUnfoldedDelivery: false
-      });
+      sameFlag = true;
     }
+    this.setState({
+      sameFlag: sameFlag,
+      visibleShipping: true,
+      isUnfoldedDelivery: false
+    });
   };
   deliveryOK = () => {
     const { deliveryList, deliveryAddressId } = this.state;
@@ -487,11 +498,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
     }
   };
+  billingOpen = () => {
+    let sameFlag = false;
+    if (this.state.deliveryAddressId === this.state.billingAddressId) {
+      sameFlag = true;
+    }
+    this.setState({
+      sameFlag: sameFlag,
+      visibleBilling: true,
+      isUnfoldedBilling: false
+    });
+  };
   billingOK = () => {
-    const { billingList, billingAddressId } = this.state;
+    const { billingList, deliveryList, billingAddressId } = this.state;
     let billingAddressInfo = billingList.find((item) => {
       return item.deliveryAddressId === billingAddressId;
     });
+    if (!billingAddressInfo && this.state.sameFlag) {
+      billingAddressInfo = deliveryList.find((item) => {
+        return item.deliveryAddressId === billingAddressId;
+      });
+    }
     let addressList = this.selectedOnTop(billingList, billingAddressId);
     this.setState({
       billingAddressInfo: billingAddressInfo,
@@ -866,7 +893,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                   <div className="flex-between">
                     <span>Shipping</span>
-                    <span>${this.state.deliveryPrice}</span>
+                    <span>
+                      ${this.state.deliveryPrice ? this.state.deliveryPrice : 0}
+                    </span>
                   </div>
                 </div>
               </Card>
@@ -958,15 +987,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visibleBilling: true,
-                        isUnfoldedBilling: false
-                      });
-                    }}
-                  >
+                  <Button type="link" onClick={() => this.billingOpen()}>
                     Change
                   </Button>
                 </Col>

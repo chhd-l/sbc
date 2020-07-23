@@ -85,21 +85,18 @@ export default class MarketingDes extends React.Component<any, any> {
         <Row>
           <Col span={24}>
             <span>Start and end Time:</span>
-            {moment(beginTime)
-              .format(Const.TIME_FORMAT)
-              .toString()}{' '}
-            ~{' '}
-            {moment(endTime)
-              .format(Const.TIME_FORMAT)
-              .toString()}
+            {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~{' '}
+            {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
-        <Row>
-          <Col span={24}>
-            <span>{MAK_TYPE[marketingType]}Type:</span>
-            {SUB_TYPE[subType]}
-          </Col>
-        </Row>
+        {subType === 6 || subType === 7 ? null : (
+          <Row>
+            <Col span={24}>
+              <span>{MAK_TYPE[marketingType]}Type:</span>
+              {SUB_TYPE[subType]}
+            </Col>
+          </Row>
+        )}
       </GreyBg>
     );
   }

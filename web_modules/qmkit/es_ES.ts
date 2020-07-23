@@ -506,7 +506,7 @@ export default {
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
-  'unsettlement': 'Unsettlement',
+  'unSettlement': 'UnSettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
   'statementTime': 'Statement Time',

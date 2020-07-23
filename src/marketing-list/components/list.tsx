@@ -212,9 +212,6 @@ export default class MarketingList extends React.Component<any, any> {
           width="15%"
           className={'operation-th'}
           render={(rowInfo) => {
-            setTimeout(() => {
-              console.log(rowInfo, 111111111111111);
-            }, 1000);
             let url = '';
             if (
               rowInfo['subType'] === 0 ||

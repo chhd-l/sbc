@@ -68,6 +68,7 @@ export default class SearchHead extends Component<any, any> {
       clinicSelect: 'clinicsName',
       buyerOptions: 'buyerName',
       id: '',
+      subscribeId: '',
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
@@ -141,7 +142,7 @@ export default class SearchHead extends Component<any, any> {
                 addonBefore={<FormattedMessage id="order.subscriptioNumber" />}
                 onChange={(e) => {
                   this.setState({
-                    subscriptioNumber: (e.target as any).value
+                    subscribeId: (e.target as any).value
                   });
                 }}
               />
@@ -332,6 +333,7 @@ export default class SearchHead extends Component<any, any> {
                     receiverSelect,
                     clinicSelect,
                     id,
+                    subscribeId,
                     buyerOptionsValue,
                     goodsOptionsValue,
                     receiverSelectValue,
@@ -356,6 +358,7 @@ export default class SearchHead extends Component<any, any> {
 
                   const params = {
                     id,
+                    subscribeId,
                     [buyerOptions]: buyerOptionsValue,
                     tradeState: ts,
                     [goodsOptions]: goodsOptionsValue,

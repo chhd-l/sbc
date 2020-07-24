@@ -19,7 +19,8 @@ import {
   Modal,
   Radio,
   Checkbox,
-  Tag
+  Tag,
+  Spin
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
@@ -72,7 +73,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       promotionCodeShow: '',
       promotionCodeInput: '',
       deliveryPrice: '',
-      discountsPrice: ''
+      discountsPrice: '',
+      isPromotionCodeValid: false,
+      promotionLoading: false
       // operationLog: []
     };
   }
@@ -168,7 +171,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
-                this.applyPromationCode(this.state.promotionCodeShow);
+                this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -306,7 +309,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         goodsInfo: data
       },
       () => {
-        this.applyPromationCode(this.state.promotionCodeShow);
+        this.applyPromotionCode(this.state.promotionCodeShow);
       }
     );
   };
@@ -572,12 +575,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         promotionCodeInput: ''
       },
       () => {
-        this.applyPromationCode();
+        this.applyPromotionCode();
       }
     );
   };
-  applyPromationCode = (promotionCode?: String) => {
+  applyPromotionCode = (promotionCode?: String) => {
     const { goodsInfo, promotionCodeInput } = this.state;
+    this.setState({
+      promotionLoading: true
+    });
     let goodsInfoList = [];
     for (let i = 0; i < goodsInfo.length; i++) {
       let goods = {
@@ -599,11 +605,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
-            promotionCodeShow: res.context.promotionCode
+            promotionCodeShow: res.context.promotionCode,
+            isPromotionCodeValid: res.context.promotionFlag,
+            promotionLoading: false
           });
+        } else {
+          this.setState({
+            promotionLoading: false
+          });
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          promotionLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -859,76 +875,100 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 pagination={false}
               ></Table>
             </Col>
+
             <Col span={8}>
-              <Card
-                title="Order Summary"
-                style={{ border: '1px solid #D7D7D7' }}
-                headStyle={totalCartTitleStyle}
-                bodyStyle={{ background: '#fafafa' }}
-              >
-                <div className="order-summary-content">
-                  <div className="flex-between">
-                    <span>Total</span>
-                    <span>${this.subTotal()}</span>
-                  </div>
+              <Spin spinning={this.state.promotionLoading}>
+                <Card
+                  title="Order Summary"
+                  style={{ border: '1px solid #D7D7D7' }}
+                  headStyle={totalCartTitleStyle}
+                  bodyStyle={{ background: '#fafafa' }}
+                >
+                  <div className="order-summary-content">
+                    <div className="flex-between">
+                      <span>Total</span>
+                      <span>${this.subTotal()}</span>
+                    </div>
 
-                  <div className="flex-between">
-                    <span>Promotion Discount</span>
-                    <span>
-                      $
-                      {this.state.discountsPrice
-                        ? this.state.discountsPrice
-                        : 0}
-                    </span>
-                  </div>
+                    <div className="flex-between">
+                      <span>Promotion Discount</span>
+                      <span>
+                        $
+                        {this.state.discountsPrice
+                          ? this.state.discountsPrice
+                          : 0}
+                      </span>
+                    </div>
 
-                  <div className="flex-between">
-                    <span>Promotion Code</span>
-                    {promotionCodeShow ? (
-                      <Tag closable onClose={() => this.removePromotionCode()}>
-                        {promotionCodeShow}
-                      </Tag>
-                    ) : null}
+                    <div className="flex-between">
+                      <span>Promotion Code</span>
+                      {promotionCodeShow ? (
+                        <Tag
+                          closable
+                          onClose={() => this.removePromotionCode()}
+                        >
+                          {promotionCodeShow}
+                        </Tag>
+                      ) : null}
+                    </div>
+                    <div className="flex-between">
+                      <span>Shipping</span>
+                      <span>
+                        $
+                        {this.state.deliveryPrice
+                          ? this.state.deliveryPrice
+                          : 0}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex-between">
-                    <span>Shipping</span>
-                    <span>
-                      ${this.state.deliveryPrice ? this.state.deliveryPrice : 0}
-                    </span>
-                  </div>
+                </Card>
+                <div className="order-summary-total flex-between">
+                  <span>Total (Inclu IVA):</span>
+                  <span>
+                    $
+                    {this.subTotal() -
+                      +this.state.discountsPrice +
+                      +this.state.deliveryPrice}
+                  </span>
                 </div>
-              </Card>
-              <div className="order-summary-total flex-between">
-                <span>Total (Inclu IVA):</span>
-                <span>
-                  $
-                  {this.subTotal() -
-                    +this.state.discountsPrice +
-                    +this.state.deliveryPrice}
-                </span>
-              </div>
-              <Row style={{ marginTop: 20 }}>
-                <Col span={16}>
-                  <Input
-                    placeholder="Promotional code"
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.setState({
-                        promotionCodeInput: value
-                      });
-                    }}
-                  />
-                </Col>
-                <Col span={8}>
-                  <Button
-                    style={{ marginLeft: 20 }}
-                    onClick={() => this.applyPromationCode()}
-                    type="primary"
-                  >
-                    Apply
-                  </Button>
-                </Col>
-              </Row>
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={16}>
+                    <Input
+                      placeholder="Promotional code"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.setState({
+                          promotionCodeInput: value
+                        });
+                      }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Button
+                      style={{ marginLeft: 20 }}
+                      onClick={() => this.applyPromotionCode()}
+                      type="primary"
+                    >
+                      Apply
+                    </Button>
+                  </Col>
+                  {this.state.isPromotionCodeValid && promotionCodeShow ? (
+                    <Col span={24}>
+                      <span
+                        style={{
+                          color: 'red',
+                          marginRight: '4px',
+                          fontSize: '12px'
+                        }}
+                      >
+                        {'Promotion Code (' +
+                          promotionCodeShow +
+                          ') is not valid'}
+                      </span>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Spin>
             </Col>
           </Row>
 

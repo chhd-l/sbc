@@ -122,7 +122,6 @@ export default class CateList extends React.Component<any, any> {
           className="nameBox"
           width={160}
           render={(rowInfo) => {
-            console.log(rowInfo,1111111111)
             return (
               <Tooltip
                 overlayStyle={{

@@ -49,7 +49,7 @@ export default class SettleDetailActor extends Actor {
       searchTime: {},
       fetchFindListByPrescriber: {},
       onRewardExportData: {},
-      orderNo: '',
+      id: '',
       prescriber: {}
     };
   }

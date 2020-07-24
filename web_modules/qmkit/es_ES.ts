@@ -321,7 +321,6 @@ export default {
   'onlinePayment': "online payment",
   'offlinePayment': "Offline payment",
   'generalInvoice': 'General invoice ',
-  'details': 'details',
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
   'expressDelivery	': "Express delivery",
@@ -497,11 +496,7 @@ export default {
   'setMainAccount': 'Set the main account',
 
   'financialReconciliation': 'Finance reconciliation',
-<<<<<<< HEAD
   'bulkExport': 'Bulk export',
-=======
-  'bulkExport': 'Bulk Export',
->>>>>>> e081ddb0491164b49597b7b423cc609e55c3e527
   'revenueReconciliation': 'Revenue reconciliation',
   'refundReconciliation': 'Refund reconciliation',
   'VISA': 'VISA',
@@ -517,7 +512,6 @@ export default {
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
   'paymentId': 'Payment Id',
-  'Paymentamount': 'Payment amount',
   'financialSettlement': 'Finance settlement',
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
@@ -658,7 +652,6 @@ export default {
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
-  'items':'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
 

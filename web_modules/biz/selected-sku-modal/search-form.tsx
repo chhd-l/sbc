@@ -139,17 +139,20 @@ export default class SearchForm extends React.Component<any, any> {
             </SelectGroup>
           </FormItem>
 
-          <Button
-            type="primary"
-            icon="search"
-            htmlType="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              this.searchBackFun();
-            }}
-          >
-            Search
-          </Button>
+          <FormItem>
+            <Button
+              style={{'marginTop': '6px'}}
+              type="primary"
+              icon="search"
+              htmlType="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                this.searchBackFun();
+              }}
+            >
+              Search
+            </Button>
+          </FormItem>
         </Form>
       </div>
     );

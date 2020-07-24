@@ -46,7 +46,7 @@ export default class SearchForm extends React.Component<any, any> {
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
-                field: 'marketingSubType',
+                field: 'subType',
                 value
               });
             }}

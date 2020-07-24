@@ -22,9 +22,10 @@ export default class ListActor extends Actor {
 
   @Action('listActor:init')
   init(state: IMap, res: MarketingResponse) {
+    debugger;
     const { content, totalElements } = res;
-
-    return state.withMutations(state => {
+    console.log(content, '6666666');
+    return state.withMutations((state) => {
       state.set('total', totalElements).set('dataList', fromJS(content));
     });
   }

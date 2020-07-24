@@ -9,12 +9,12 @@ import PaymentModel from './components/payment-modal';
 
 const formItemLayout = {
   labelCol: {
-    span: 2,
+    span: 4,
     xs: { span: 24 },
     sm: { span: 12 }
   },
   wrapperCol: {
-    span: 24,
+    span: 20,
     xs: { span: 24 },
     sm: { span: 12 }
   }
@@ -57,7 +57,8 @@ export default class PaymentSetting extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      paymentVisible: false
+      paymentVisible: false,
+      enabled: true
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -67,7 +68,11 @@ export default class PaymentSetting extends React.Component<any, any> {
       paymentVisible: false
     });
   };
-
+  setEnable(enabled) {
+    this.setState({
+      enabled: enabled
+    });
+  }
   render() {
     return (
       <div>
@@ -84,7 +89,9 @@ export default class PaymentSetting extends React.Component<any, any> {
                 />
               </div>
               <div className="bar">
-                <div className="status"></div>
+                <div className="status">
+                  {this.state.enabled ? 'Enabled' : 'Disabled'}
+                </div>
                 <div>
                   <a
                     onClick={() => {
@@ -99,7 +106,11 @@ export default class PaymentSetting extends React.Component<any, any> {
                 </div>
               </div>
             </Card>
-            <PaymentModel visible={this.state.paymentVisible} parent={this} />
+            <PaymentModel
+              visible={this.state.paymentVisible}
+              parent={this}
+              setEnabled={(enabled) => this.setEnable(enabled)}
+            />
           </ContainerDiv>
         </div>
       </div>

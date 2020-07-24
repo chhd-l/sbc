@@ -5,7 +5,7 @@ import ListActor from './actor/list-actor';
 import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { cache, Const, history, util } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -30,7 +30,14 @@ export default class AppStore extends Store {
     this.getList(params);
   };
   deleteRow = async (params) => {
-    const res = await webapi.deleteRow(params);
+    this.dispatch('loading:start');
+    const { res } = await webapi.deleteRow(params);
+    this.dispatch('loading:end');
+    if (res.code === Const.SUCCESS_CODE) {
+      this.getList({ storeId: this.getStoreId() });
+    } else {
+      message.error(res.message);
+    }
   };
 
   editRow = async (params) => {
@@ -38,52 +45,17 @@ export default class AppStore extends Store {
   };
 
   getList = async (params) => {
-    debugger;
     this.dispatch('loading:start');
-    // const res = await webapi.getList(params)
-    const list = [
-      {
-        id: 1,
-        pcName: 'test.png',
-        mobileName: 'test.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png'
-      },
-      {
-        id: 2,
-        pcName: 'ddd.mp4',
-        mobileName: 'ddd.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
-      },
-      {
-        id: 3,
-        pcName: '123.mp4',
-        mobileName: '123.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
-      }
-    ];
-    this.dispatch('list:setCurrentPage', 2);
-    this.dispatch('list:setTotalPages', 3);
-    this.dispatch('list:getList', fromJS(list));
-    setTimeout(() => {
+    const { res } = await webapi.getList(params);
+    if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-    }, 3000);
-    // if(res) {
-    // } else {
-    //   this.dispatch('loading:end')
-    // }
+      this.dispatch('list:getList', fromJS(res.context));
+    } else {
+      message.error(res.message);
+    }
   };
-
-  // setBannerName = (bannerName) => {
-  //   debugger
-  //   this.dispatch('imageActor:setBannerName', bannerName)
-  // }
+  getStoreId = () => {
+    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    return storeId;
+  };
 }

@@ -324,6 +324,14 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="orderTime" />}:{' '}
                 {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
+              {detail.get('isAutoSub') ? (
+                <p style={styles.darkText}>
+                  <FormattedMessage id="order.subscriptioNumber" /> :{' '}
+                  {detail.get('subscribeId')}
+                </p>
+              ) : (
+                ''
+              )}
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>

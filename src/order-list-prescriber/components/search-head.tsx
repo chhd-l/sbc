@@ -138,6 +138,17 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
+                addonBefore={<FormattedMessage id="order.subscriptioNumber" />}
+                onChange={(e) => {
+                  this.setState({
+                    subscribeId: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
+              <Input
                 addonBefore={this._renderBuyerOptionSelect()}
                 onChange={(e) => {
                   this.setState({
@@ -309,6 +320,7 @@ export default class SearchHead extends Component<any, any> {
                     goodsOptions,
                     receiverSelect,
                     id,
+                    subscribeId,
                     buyerOptionsValue,
                     goodsOptionsValue,
                     receiverSelectValue,
@@ -332,6 +344,7 @@ export default class SearchHead extends Component<any, any> {
 
                   const params = {
                     id,
+                    subscribeId,
                     [buyerOptions]: buyerOptionsValue,
                     tradeState: ts,
                     [goodsOptions]: goodsOptionsValue,

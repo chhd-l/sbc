@@ -364,7 +364,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
       changeFieldArr.push('Next Delivery Time');
     }
-    if (params.promotionCode !== originalParams.promotionCode) {
+    if (
+      (params.promotionCode ? params.promotionCode : '') !==
+      (originalParams.promotionCode ? originalParams.promotionCode : '')
+    ) {
       changeFieldArr.push('Promotion Code');
     }
     if (
@@ -499,12 +502,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
   };
   billingOpen = () => {
-    let sameFlag = false;
-    if (this.state.deliveryAddressId === this.state.billingAddressId) {
-      sameFlag = true;
-    }
     this.setState({
-      sameFlag: sameFlag,
       visibleBilling: true,
       isUnfoldedBilling: false
     });
@@ -514,7 +512,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let billingAddressInfo = billingList.find((item) => {
       return item.deliveryAddressId === billingAddressId;
     });
-    if (!billingAddressInfo && this.state.sameFlag) {
+    if (!billingAddressInfo) {
       billingAddressInfo = deliveryList.find((item) => {
         return item.deliveryAddressId === billingAddressId;
       });
@@ -691,6 +689,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               min={1}
               max={100}
               onChange={(value) => {
+                value = +value.toString().replace(/\D/g, '');
                 let goodsId = record.skuId;
                 this.onGoodsChange({
                   goodsId,

@@ -27,13 +27,11 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state()
-      .get('form')
-      .toJS();
-    if (query.marketingSubType === '-1') {
-      query.marketingSubType = null;
-    }
-
+    const query = this.state().get('form').toJS();
+    // if (query.marketingSubType === '-1') {
+    //   query.marketingSubType = null;
+    // }
+    debugger;
     const { res } = await webapi.fetchList({ ...query, pageNum, pageSize });
     let levelList = [];
     if (util.isThirdStore()) {

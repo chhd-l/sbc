@@ -445,11 +445,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
     debugger;
     const subType = marketingBean.get('subType');
     if (subType != undefined && subType != null) {
-      this.setState({ isFullCount: subType % 2 });
+      this.setState(
+        {
+          isFullCount: subType % 2,
+          PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
+        },
+        () => {
+          this.setState({
+            PromotionTypeChecked:
+              this.state.PromotionTypeValue === 1 ? true : false
+          });
+        }
+      );
     } else {
       this.setState({
-        isFullCount: 0,
-        PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
+        isFullCount: 0
       });
     }
     this.levelInit(marketingBean.get('joinLevel'));
@@ -609,7 +619,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             fromJS({
               index: index,
               value: isFullCount ? level.fullCount : level.fullAmount
-            }) && this.state.PromotionTypeValue === 0
+            })
           );
           if (!isFullCount && +level.fullAmount <= +level.reduction) {
             if (this.state.PromotionTypeValue == 0) {
@@ -674,6 +684,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         });
       }
       //校验多级促销条件是否相同
+      debugger;
       ruleArray
         .groupBy((item) => +(item as any).get('value'))
         .filter((value) => value.size > 1)

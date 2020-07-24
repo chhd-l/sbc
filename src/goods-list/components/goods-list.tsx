@@ -121,6 +121,27 @@ export default class CateList extends React.Component<any, any> {
           key="goodsName"
           className="nameBox"
           width={160}
+          render={(rowInfo) => {
+            console.log(rowInfo,1111111111)
+            return (
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                  //height: 100
+                }}
+                placement="bottomLeft"
+                title={
+                  <div>
+                    {rowInfo}
+                  </div>
+                }
+              >
+                <p style={styles.text}>
+                  {rowInfo}
+                </p>
+              </Tooltip>
+            );
+          }}
         />
         <Column
           title={<FormattedMessage id="product.SPU" />}
@@ -458,6 +479,11 @@ const styles = {
     flexDirection: 'row',
     margin: '10px 0',
     height: 124
+  },
+  text: {
+    overflow: 'hidden',
+    textOverflow:'ellipsis',
+    whiteSpace: 'nowrap',
   },
   cell: {
     color: '#999',

@@ -373,9 +373,10 @@ class GoodsForm extends React.Component<any, any> {
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
-                initialValue:
+                initialValue: "Y"
+                /*initialValue:
                   goods.get('subscriptionStatus') &&
-                  goods.get('subscriptionStatus').toString()
+                  goods.get('subscriptionStatus').toString()*/
               })(
                 <Select
                   getPopupContainer={() =>

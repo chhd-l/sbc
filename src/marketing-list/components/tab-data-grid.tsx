@@ -28,7 +28,7 @@ export default class TabDataGrid extends React.Component<any, any> {
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="In process" key="1">
+        <Tabs.TabPane tab="On-going" key="1">
           <MarketingList />
         </Tabs.TabPane>
 
@@ -36,11 +36,11 @@ export default class TabDataGrid extends React.Component<any, any> {
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="No start" key="3">
+        <Tabs.TabPane tab="Plan" key="3">
           <MarketingList />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="End" key="4">
+        <Tabs.TabPane tab="Completed" key="4">
           <MarketingList />
         </Tabs.TabPane>
       </Tabs>

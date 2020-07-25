@@ -286,8 +286,8 @@ export default class WMChart extends React.Component<WMChartProps, any> {
         data: legend
       },
       grid: {
-        left: '6%',
-        right: '6%',
+        left: '9%',
+        right: '9%',
         bottom: '3%',
         containLabel: true
       },

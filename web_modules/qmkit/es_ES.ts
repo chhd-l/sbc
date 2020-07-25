@@ -338,6 +338,7 @@ export default {
 
   'order.orderList': 'Order List',
   'order.orderNumber': 'Order number',
+  'order.subscriptioNumber': 'Subscription number',
   'order.shippingStatus': 'Shipping status',
   'order.paymentStatus': 'Payment status',
   'order.orderStatus': 'Order status',
@@ -489,6 +490,8 @@ export default {
   'revenueReconciliation': 'Revenue Reconciliation',
   'refundReconciliation': 'Refund Reconciliation',
   'VISA': 'VISA',
+  'visa': 'VISA',
+  'OXXO': 'OXXO',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
 
@@ -505,7 +508,7 @@ export default {
   'settlementTips1': 'Your settlement date is',
   'settlementTips2': 'th of each month, when the month does not include the set date, it will be postponed to the next settlement date',
 
-  'unsettlement': 'Unsettlement',
+  'unSettlement': 'UnSettlement',
   'settled': 'Settled',
   'statementGenerationTime': 'Statement Generation Time',
   'statementTime': 'Statement Time',
@@ -641,7 +644,6 @@ export default {
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
-  'items':'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
 

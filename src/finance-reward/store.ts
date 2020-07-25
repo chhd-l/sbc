@@ -421,7 +421,6 @@ export default class AppStore extends Store {
   };
   bulkExport = async () => {
     const queryParams = this.state().get('onRewardExportData').toJS();
-    console.log(queryParams);
     const { period, endTime } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {

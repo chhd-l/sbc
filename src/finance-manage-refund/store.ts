@@ -7,6 +7,7 @@ import { message } from 'antd';
 import { Const, util } from 'qmkit';
 import DetailActor from './actor/detail-actor';
 import * as webapi from './webapi';
+import { fromJS } from 'immutable';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -26,11 +27,18 @@ export default class AppStore extends Store {
    * @param kind
    */
   init = async ({ sid, kind, beginTime, endTime }) => {
+    this.dispatch('loading:start');
+
     this.dispatch('detail:init', { sid, kind, beginTime, endTime });
     //所有支付方式
     const { res } = await webapi.fetchAllPayWays();
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('detail:payWays', res.context);
+      this.transaction(() => {
+        this.dispatch('detail:payWays', res.context);
+        this.dispatch('loading:end');
+      });
+    } else {
+      message.error(res.message);
     }
     if (kind == 'income') {
       //收入对账明细
@@ -215,9 +223,9 @@ export default class AppStore extends Store {
   onPagination = async (current, _pageSize) => {
     this.dispatch('detail:pageNum', current - 1);
     if (this.state().get('kind') == 'income') {
-      //await this.getIncomeDetail();
+      await this.getIncomeDetail();
     } else {
-      //await this.getRefundDetail();
+      await this.getRefundDetail();
     }
   };
 }

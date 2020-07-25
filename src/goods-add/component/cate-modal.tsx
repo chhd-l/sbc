@@ -222,7 +222,6 @@ class CateModalForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     let storeCateList = this.props.relaxProps.storeCateList;
-    console.log(this.props.relaxProps, 'relaxprops111');
     const {
       sourceCateList,
       goods,

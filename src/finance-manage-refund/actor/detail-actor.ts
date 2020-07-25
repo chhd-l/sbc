@@ -35,7 +35,8 @@ export default class DetailActor extends Actor {
       //总数
       total: 0,
       //每页显示
-      pageSize: 15
+      pageSize: 15,
+      loading: true
     };
   }
 
@@ -147,5 +148,15 @@ export default class DetailActor extends Actor {
   @Action('detail:total')
   total(state, value) {
     return state.set('total', value);
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

@@ -50,11 +50,11 @@ export default class ButtonGroup extends React.Component<any, any> {
             <a onClick={() => this._handleBatchOption(1)}>Set as settled</a>
           </Menu.Item>
         )}
-        {/* {settleStatus == 0 && (
+        {settleStatus == 0 && (
           <Menu.Item>
             <a onClick={() => this._handleBatchOption(2)}>No processing</a>
           </Menu.Item>
-        )}*/}
+        )}
       </Menu>
     );
   };

@@ -18,7 +18,9 @@ import {
   Collapse,
   Modal,
   Radio,
-  Checkbox
+  Checkbox,
+  Tag,
+  Spin
 } from 'antd';
 import { StoreProvider } from 'plume2';
 
@@ -67,8 +69,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       originalParams: {},
       isUnfoldedDelivery: false,
       isUnfoldedBilling: false,
-      saveLoading: false
-
+      saveLoading: false,
+      promotionCodeShow: '',
+      promotionCodeInput: '',
+      deliveryPrice: '',
+      discountsPrice: '',
+      isPromotionCodeValid: false,
+      promotionLoading: false
       // operationLog: []
     };
   }
@@ -102,8 +109,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
-            promotionCode: subscriptionDetail.promotionCode
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades
@@ -137,7 +143,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             cycleTypeId: subscriptionInfo.frequency,
             deliveryAddressId: subscriptionDetail.deliveryAddressId,
             subscribeNumArr: subscribeNumArr,
-            nextDeliveryTime: subscriptionInfo.nextDeliveryTime
+            nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
+            promotionCode: subscriptionDetail.promotionCode
           };
 
           this.setState(
@@ -153,6 +160,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
               originalParams: originalParams,
+              promotionCodeShow: subscriptionDetail.promotionCode,
               loading: false
             },
             () => {
@@ -163,6 +171,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 let customerId = this.state.deliveryAddressInfo.customerId;
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
+                this.applyPromotionCode(this.state.promotionCodeShow);
               }
 
               // if(this.state.petsId){
@@ -173,6 +182,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               // }
             }
           );
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -285,7 +296,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
-  onGoodsChange = ({ field, goodsId, value }) => {
+  onGoodsChange = ({ goodsId, value }) => {
     let data = this.state.goodsInfo;
     data = data.map((item) => {
       if (item.skuId === goodsId) {
@@ -293,9 +304,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       return item;
     });
-    this.setState({
-      goodsInfo: data
-    });
+    this.setState(
+      {
+        goodsInfo: data
+      },
+      () => {
+        this.applyPromotionCode(this.state.promotionCodeShow);
+      }
+    );
   };
 
   updateSubscription = () => {
@@ -310,8 +326,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       saveLoading: true
     });
     let subscribeNumArr = [];
+    let validNum = true;
     for (let i = 0; i < goodsInfo.length; i++) {
-      subscribeNumArr.push(goodsInfo[i].subscribeNum);
+      if (goodsInfo[i].subscribeNum) {
+        subscribeNumArr.push(goodsInfo[i].subscribeNum);
+      } else {
+        validNum = false;
+        break;
+      }
+    }
+    if (!validNum) {
+      this.setState({
+        saveLoading: false
+      });
+      message.error('Please enter the correct quantity!');
+      return;
     }
     let params = {
       billingAddressId: billingAddressId,
@@ -322,7 +351,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         'YYYY-MM-DD'
       ),
       subscribeId: subscriptionInfo.subscriptionNumber,
-      changeField: ''
+      changeField: '',
+      promotionCode: this.state.promotionCodeShow
     };
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
@@ -336,6 +366,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     if (params.nextDeliveryTime !== originalParams.nextDeliveryTime) {
       changeFieldArr.push('Next Delivery Time');
+    }
+    if (
+      (params.promotionCode ? params.promotionCode : '') !==
+      (originalParams.promotionCode ? originalParams.promotionCode : '')
+    ) {
+      changeFieldArr.push('Promotion Code');
     }
     if (
       subscribeNumArr.join(',') !== originalParams.subscribeNumArr.join(',')
@@ -436,19 +472,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     return addressList;
   };
   deliveryOpen = () => {
+    let sameFlag = false;
     if (this.state.deliveryAddressId === this.state.billingAddressId) {
-      this.setState({
-        sameFlag: true,
-        visibleShipping: true,
-        isUnfoldedDelivery: false
-      });
-    } else {
-      this.setState({
-        sameFlag: false,
-        visibleShipping: true,
-        isUnfoldedDelivery: false
-      });
+      sameFlag = true;
     }
+    this.setState({
+      sameFlag: sameFlag,
+      visibleShipping: true,
+      isUnfoldedDelivery: false
+    });
   };
   deliveryOK = () => {
     const { deliveryList, deliveryAddressId } = this.state;
@@ -472,11 +504,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
     }
   };
+  billingOpen = () => {
+    this.setState({
+      visibleBilling: true,
+      isUnfoldedBilling: false
+    });
+  };
   billingOK = () => {
-    const { billingList, billingAddressId } = this.state;
+    const { billingList, deliveryList, billingAddressId } = this.state;
     let billingAddressInfo = billingList.find((item) => {
       return item.deliveryAddressId === billingAddressId;
     });
+    if (!billingAddressInfo) {
+      billingAddressInfo = deliveryList.find((item) => {
+        return item.deliveryAddressId === billingAddressId;
+      });
+    }
     let addressList = this.selectedOnTop(billingList, billingAddressId);
     this.setState({
       billingAddressInfo: billingAddressInfo,
@@ -526,6 +569,60 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     return sum;
   };
+  removePromotionCode = () => {
+    this.setState(
+      {
+        promotionCodeInput: ''
+      },
+      () => {
+        this.applyPromotionCode();
+      }
+    );
+  };
+  applyPromotionCode = (promotionCode?: String) => {
+    const { goodsInfo, promotionCodeInput } = this.state;
+    this.setState({
+      promotionLoading: true
+    });
+    let goodsInfoList = [];
+    for (let i = 0; i < goodsInfo.length; i++) {
+      let goods = {
+        goodsInfoId: goodsInfo[i].skuId,
+        buyCount: goodsInfo[i].subscribeNum
+      };
+      goodsInfoList.push(goods);
+    }
+    let params = {
+      goodsInfoList: goodsInfoList,
+      promotionCode: promotionCode ? promotionCode : promotionCodeInput,
+      isAutoSub: true
+    };
+    webapi
+      .getPromotionPrice(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.setState({
+            deliveryPrice: res.context.deliveryPrice,
+            discountsPrice: res.context.discountsPrice,
+            promotionCodeShow: res.context.promotionCode,
+            isPromotionCodeValid: res.context.promotionFlag,
+            promotionLoading: false
+          });
+        } else {
+          this.setState({
+            promotionLoading: false
+          });
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          promotionLoading: false
+        });
+        message.error('Unsuccessful');
+      });
+  };
 
   render() {
     const {
@@ -542,7 +639,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       cityArr,
       deliveryList,
       billingList,
-      customerAccount
+      customerAccount,
+      promotionCodeShow
       // operationLog
     } = this.state;
     const cartTitle = (
@@ -607,9 +705,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               min={1}
               max={100}
               onChange={(value) => {
+                value = +value.toString().replace(/\D/g, '');
                 let goodsId = record.skuId;
                 this.onGoodsChange({
-                  field: 'nextDeliveryTime',
                   goodsId,
                   value
                 });
@@ -777,46 +875,100 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 pagination={false}
               ></Table>
             </Col>
+
             <Col span={8}>
-              <Card
-                title="Order Summary"
-                style={{ border: '1px solid #D7D7D7' }}
-                headStyle={totalCartTitleStyle}
-                bodyStyle={{ background: '#fafafa' }}
-              >
-                <div className="order-summary-content">
-                  <div className="flex-between">
-                    <span>Total</span>
-                    <span>${this.subTotal()}</span>
+              <Spin spinning={this.state.promotionLoading}>
+                <Card
+                  title="Order Summary"
+                  style={{ border: '1px solid #D7D7D7' }}
+                  headStyle={totalCartTitleStyle}
+                  bodyStyle={{ background: '#fafafa' }}
+                >
+                  <div className="order-summary-content">
+                    <div className="flex-between">
+                      <span>Total</span>
+                      <span>${this.subTotal()}</span>
+                    </div>
+
+                    <div className="flex-between">
+                      <span>Promotion Discount</span>
+                      <span>
+                        $
+                        {this.state.discountsPrice
+                          ? this.state.discountsPrice
+                          : 0}
+                      </span>
+                    </div>
+
+                    <div className="flex-between">
+                      <span>Promotion Code</span>
+                      {promotionCodeShow ? (
+                        <Tag
+                          closable
+                          onClose={() => this.removePromotionCode()}
+                        >
+                          {promotionCodeShow}
+                        </Tag>
+                      ) : null}
+                    </div>
+                    <div className="flex-between">
+                      <span>Shipping</span>
+                      <span>
+                        $
+                        {this.state.deliveryPrice
+                          ? this.state.deliveryPrice
+                          : 0}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex-between">
-                    <span>Subscription Save Discount</span>
-                    <span>-$0</span>
-                  </div>
-                  <div className="flex-between">
-                    <span>Promotion Code</span>
-                    <span>{subscriptionInfo.promotionCode}</span>
-                  </div>
-                  <div className="flex-between">
-                    <span>Shipping</span>
-                    <span>Free</span>
-                  </div>
+                </Card>
+                <div className="order-summary-total flex-between">
+                  <span>Total (Inclu IVA):</span>
+                  <span>
+                    $
+                    {this.subTotal() -
+                      +this.state.discountsPrice +
+                      +this.state.deliveryPrice}
+                  </span>
                 </div>
-              </Card>
-              <div className="order-summary-total flex-between">
-                <span>Total (Inclu IVA):</span>
-                <span>${this.subTotal()}</span>
-              </div>
-              {/* <Row style={{ marginTop: 20 }}>
-                <Col span={16}>
-                  <Input placeholder="Promotional code" />
-                </Col>
-                <Col span={8}>
-                  <Button style={{ marginLeft: 20 }} type="primary">
-                    Apply
-                  </Button>
-                </Col>
-              </Row> */}
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={16}>
+                    <Input
+                      placeholder="Promotional code"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.setState({
+                          promotionCodeInput: value
+                        });
+                      }}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Button
+                      style={{ marginLeft: 20 }}
+                      onClick={() => this.applyPromotionCode()}
+                      type="primary"
+                    >
+                      Apply
+                    </Button>
+                  </Col>
+                  {this.state.isPromotionCodeValid && promotionCodeShow ? (
+                    <Col span={24}>
+                      <span
+                        style={{
+                          color: 'red',
+                          marginRight: '4px',
+                          fontSize: '12px'
+                        }}
+                      >
+                        {'Promotion Code (' +
+                          promotionCodeShow +
+                          ') is not valid'}
+                      </span>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Spin>
             </Col>
           </Row>
 
@@ -874,15 +1026,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <label className="info-title">Billing Address</label>
                 </Col>
                 <Col span={12}>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      this.setState({
-                        visibleBilling: true,
-                        isUnfoldedBilling: false
-                      });
-                    }}
-                  >
+                  <Button type="link" onClick={() => this.billingOpen()}>
                     Change
                   </Button>
                 </Col>

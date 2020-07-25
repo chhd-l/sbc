@@ -23,8 +23,7 @@ export default class ListActor extends Actor {
   @Action('listActor:init')
   init(state: IMap, res: MarketingResponse) {
     const { content, totalElements } = res;
-
-    return state.withMutations(state => {
+    return state.withMutations((state) => {
       state.set('total', totalElements).set('dataList', fromJS(content));
     });
   }
@@ -32,5 +31,10 @@ export default class ListActor extends Actor {
   @Action('list:currentPage')
   currentPage(state: IMap, current) {
     return state.set('currentPage', current);
+  }
+
+  @Action('list:reset')
+  reset(state: IMap) {
+    return state.set('dataList', []);
   }
 }

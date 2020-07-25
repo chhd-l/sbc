@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
-import { noop } from 'qmkit';
+import { cache, noop } from 'qmkit';
 import {
   Form,
   Select,
@@ -37,9 +37,6 @@ export default class SetBannerList extends Component<any, any> {
   props: {
     relaxProps?: {
       loading: boolean;
-      total: number;
-      pageSize: number;
-      currentPage: number;
       tableDatas: TList;
       setModalVisible: Function;
       deleteRow: Function;
@@ -49,9 +46,6 @@ export default class SetBannerList extends Component<any, any> {
 
   static relaxProps = {
     loading: 'loading',
-    total: 'total',
-    pageSize: 'pageSize',
-    currentPage: 'currentPage',
     tableDatas: 'tableDatas',
     setModalVisible: noop,
     deleteRow: noop,
@@ -60,9 +54,14 @@ export default class SetBannerList extends Component<any, any> {
   handleTableChange() {}
   componentDidMount() {
     const { getList } = this.props.relaxProps;
-    getList();
+    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    getList({ storeId: storeId });
   }
-  deleteRow(id) {}
+  deleteRow({ bannerId }) {
+    debugger;
+    const { deleteRow } = this.props.relaxProps;
+    deleteRow({ bannerId: bannerId });
+  }
   _renderLoading() {
     return (
       <tr style={styles.loading}>
@@ -74,21 +73,21 @@ export default class SetBannerList extends Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { deleteRow } = this.props.relaxProps;
     return (
       dataList &&
       dataList.map((item, index) => {
         const id = item.get('id');
-        const pcName = item.get('pcName');
-        const mobileName = item.get('mobileName');
-        const pcImage = item.get('pcImage');
-        const mobileImage = item.get('mobileImage');
+        const pcName = item.get('bannerName');
+        // const mobileName = item.get('mobileName');
+        const pcImage = item.get('webUrl');
+        const mobileImage = item.get('mobiUrl');
         let pcType, mobileType;
+        debugger;
         if (
-          pcName.endsWith('.jpg') ||
-          pcName.endsWith('.jpeg') ||
-          pcName.endsWith('.png') ||
-          pcName.endsWith('.gif')
+          pcImage.endsWith('.jpg') ||
+          pcImage.endsWith('.jpeg') ||
+          pcImage.endsWith('.png') ||
+          pcImage.endsWith('.gif')
         ) {
           pcType = 'image';
         } else {
@@ -134,12 +133,12 @@ export default class SetBannerList extends Component<any, any> {
               )}
             </td>
             <td>
-              <span className="red" onClick={() => deleteRow(id)}>
+              <span className="red" onClick={() => this.deleteRow(item.toJS())}>
                 <FormattedMessage id="delete" />
               </span>
-              <span className="red mgl20" onClick={() => editRow(id)}>
-                <FormattedMessage id="edit" />
-              </span>
+              {/*<span className="red mgl20" onClick={() => editRow(id)}>*/}
+              {/*  <FormattedMessage id="edit" />*/}
+              {/*</span>*/}
             </td>
           </tr>
         );
@@ -148,32 +147,25 @@ export default class SetBannerList extends Component<any, any> {
   }
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      currentPage,
-      tableDatas,
-      setModalVisible
-    } = this.props.relaxProps;
+    const { loading, tableDatas, setModalVisible } = this.props.relaxProps;
     debugger;
     return (
       <div>
+        <div>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ marginBottom: '10px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setModalVisible(true);
+            }}
+          >
+            <FormattedMessage id="upload" />
+          </Button>
+        </div>
         {tableDatas.size > 0 ? (
           <div>
-            <div>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginBottom: '10px' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setModalVisible(true);
-                }}
-              >
-                <FormattedMessage id="upload" />
-              </Button>
-            </div>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
                 <div className="ant-table-content">
@@ -219,33 +211,18 @@ export default class SetBannerList extends Component<any, any> {
                       </tbody>
                     </table>
                   </div>
-                  {total == 0 ? (
-                    <div className="ant-table-placeholder">
-                      <span>
-                        <i className="anticon anticon-frown-o" />
-                        No Data
-                      </span>
-                    </div>
-                  ) : null}
                 </div>
               </div>
-              {total > 0 ? (
-                <Pagination
-                  current={currentPage}
-                  total={total}
-                  pageSize={pageSize}
-                  // onChange={(pageNum, pageSize) => {
-                  //   init({
-                  //     pageNum: pageNum - 1,
-                  //     pageSize: pageSize,
-                  //     flushSelected: false
-                  //   });
-                  // }}
-                />
-              ) : null}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="ant-table-placeholder">
+            <span>
+              <i className="anticon anticon-frown-o" />
+              No Data
+            </span>
+          </div>
+        )}
       </div>
     );
   }

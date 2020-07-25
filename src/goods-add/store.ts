@@ -1188,6 +1188,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          linePrice: item.get('linePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus:
             item.get('subscriptionStatus') === undefined

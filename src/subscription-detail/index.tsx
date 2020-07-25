@@ -56,7 +56,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       billingAddressInfo: {},
       countryArr: [],
       cityArr: [],
-      operationLog: []
+      operationLog: [],
+      promotionCode: '',
+      deliveryPrice: '',
+      discountsPrice: ''
     };
   }
 
@@ -147,17 +150,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               deliveryAddressInfo: subscriptionDetail.consignee,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
+              promotionCode: subscriptionDetail.promotionCode,
               loading: false
+            },
+            () => {
+              this.applyPromationCode(this.state.promotionCode);
             }
-            // () => {
-            //   if(this.state.petsId){
-            //     this.petsById(this.state.petsId);
-            //   }
-            //   if(this.state.deliveryAddressId){
-            //     this.addressById(this.state.deliveryAddressId, 'delivery');
-            //   }
-            // }
           );
+        } else {
+          message.error('Unsuccessful');
         }
       })
       .catch((err) => {
@@ -173,6 +174,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
     webapi
       .cancelNextSubscription({ subscribeId: id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.getSubscriptionDetail(this.state.subscriptionId);
+          message.success('Successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error('Unsuccessful');
+      });
+  };
+
+  orderNow = (id: String) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .orderNow({ subscribeId: id })
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
@@ -361,6 +388,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     return sum;
   };
+  applyPromationCode = (promotionCode?: String) => {
+    const { goodsInfo } = this.state;
+    let goodsInfoList = [];
+    for (let i = 0; i < goodsInfo.length; i++) {
+      let goods = {
+        goodsInfoId: goodsInfo[i].skuId,
+        buyCount: goodsInfo[i].subscribeNum
+      };
+      goodsInfoList.push(goods);
+    }
+    let params = {
+      goodsInfoList: goodsInfoList,
+      promotionCode: promotionCode,
+      isAutoSub: true
+    };
+    webapi
+      .getPromotionPrice(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.setState({
+            deliveryPrice: res.context.deliveryPrice,
+            discountsPrice: res.context.discountsPrice,
+            promotionCodeShow: res.context.promotionCode
+          });
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
 
   render() {
     const {
@@ -395,19 +453,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       </Menu>
     );
     const cartExtra = (
-      <Popconfirm
-        placement="topRight"
-        title="Are you sure skip next delivery?"
-        onConfirm={() =>
-          this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
-        }
-        okText="Confirm"
-        cancelText="Cancel"
-      >
-        <Button type="link" style={{ fontSize: 16 }}>
-          Skip Next Delivery
-        </Button>
-      </Popconfirm>
+      <div>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure skip next delivery?"
+          onConfirm={() =>
+            this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
+          }
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Skip Next Delivery
+          </Button>
+        </Popconfirm>
+        <Popconfirm
+          placement="topRight"
+          title="Are you sure order now?"
+          onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
+          okText="Confirm"
+          cancelText="Cancel"
+        >
+          <Button type="link" style={{ fontSize: 16 }}>
+            Order Now
+          </Button>
+        </Popconfirm>
+      </div>
     );
     const columns = [
       {
@@ -419,7 +490,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} style={{ width: 100 }} alt="" />
-            <span style={{ margin: 'auto 0' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
       },
@@ -642,34 +713,36 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <span>Total</span>
                     <span>${this.subTotal()}</span>
                   </div>
+
                   <div className="flex-between">
-                    <span>Subscription Save Discount</span>
-                    <span>-$0</span>
+                    <span>Promotion Discount</span>
+                    <span>
+                      $
+                      {this.state.discountsPrice
+                        ? this.state.discountsPrice
+                        : 0}
+                    </span>
                   </div>
+
                   <div className="flex-between">
                     <span>Promotion Code</span>
-                    <span>{subscriptionInfo.promotionCode}</span>
+                    <span>{this.state.promotionCode}</span>
                   </div>
                   <div className="flex-between">
                     <span>Shipping</span>
-                    <span>Free</span>
+                    <span>${this.state.deliveryPrice}</span>
                   </div>
                 </div>
               </Card>
               <div className="order-summary-total flex-between">
                 <span>Total (Inclu IVA):</span>
-                <span>${this.subTotal()}</span>
+                <span>
+                  $
+                  {this.subTotal() -
+                    +this.state.discountsPrice +
+                    +this.state.deliveryPrice}
+                </span>
               </div>
-              {/* <Row style={{ marginTop: 20 }}>
-                <Col span={16}>
-                  <Input placeholder="Promotional code" />
-                </Col>
-                <Col span={8}>
-                  <Button style={{ marginLeft: 20 }} type="primary">
-                    Apply
-                  </Button>
-                </Col>
-              </Row> */}
             </Col>
           </Row>
 

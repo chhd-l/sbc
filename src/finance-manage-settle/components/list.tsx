@@ -52,7 +52,7 @@ export default class List extends React.Component<any, any> {
       setCheckedSettleIds,
       changeSettleStatus
     } = this.props.relaxProps;
-
+    console.log(queryParams.get('settleStatus').toString(), 2222222222);
     return (
       <DataGrid
         loading={loading}
@@ -60,13 +60,17 @@ export default class List extends React.Component<any, any> {
         dataSource={
           settlePage.get('content') ? settlePage.get('content').toJS() : []
         }
-        rowSelection={{
-          type: 'checkbox',
-          selectedRowKeys: checkedSettleIds.toJS(),
-          onChange: (selectedRowKeys, i) => {
-            setCheckedSettleIds(selectedRowKeys, i);
-          }
-        }}
+        rowSelection={
+          queryParams.get('settleStatus').toString() == 0
+            ? {
+                type: 'checkbox',
+                selectedRowKeys: checkedSettleIds.toJS(),
+                onChange: (selectedRowKeys, i) => {
+                  setCheckedSettleIds(selectedRowKeys, i);
+                }
+              }
+            : ''
+        }
         pagination={{
           total: settlePage.get('totalElements'),
           pageSize: settlePage.get('size'),
@@ -184,7 +188,15 @@ export default class List extends React.Component<any, any> {
               <AuthWrapper functionName="f_billing_details">
                 <a
                   onClick={() =>
-                    history.push(`/billing-details/${row.settleId}`)
+                    history.push({
+                      pathname: `/billing-details/${row.settleId}`,
+                      state: {
+                        settlementType:
+                          queryParams.get('settleStatus').toString() == 0
+                            ? 'UnSettlement details'
+                            : 'Settlement details'
+                      }
+                    })
                   }
                 >
                   {<FormattedMessage id="inquiryDetails" />}

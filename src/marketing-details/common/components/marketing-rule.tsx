@@ -56,7 +56,8 @@ export default class MarketingRule extends React.Component<any, any> {
               <Row>
                 <Col span={24}>
                   <span>Rules:</span>
-                  Full {level.fullAmount ? level.fullAmount : level.fullCount}
+                  {subType === 6 || subType === 7 ? null : 'Full '}
+                  {level.fullAmount ? level.fullAmount : level.fullCount}
                   {subType == '0' || subType == '2' ? ' yuan ' : ' items '}{' '}
                   {subType == '0' || subType == '1' ? ' minus ' : ''}{' '}
                   {marketingType == 1 ? level.discount * 10 : level.reduction}{' '}

@@ -35,13 +35,16 @@ export default class SubscriptionList extends Component<any, any> {
         product: '',
         frequency: '',
         recipientOption: 'Receiver',
-        recipient: ''
+        recipient: '',
+        prescriberOption: 'Prescriber Name',
+        prescriber: ''
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
 
       consumerOption: ['Consumer Name', 'Consumer Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
+      prescriberOption: ['Prescriber Name', 'Prescriber ID'],
       frequencyList: [],
       activeKey: 'all',
       subscriptionList: [],
@@ -56,7 +59,7 @@ export default class SubscriptionList extends Component<any, any> {
   }
 
   componentDidMount() {
-    this.querySysDictionary('Frequency');
+    this.querySysDictionary('Frequency_week');
 
     this.getSubscriptionList();
   }
@@ -98,6 +101,14 @@ export default class SubscriptionList extends Component<any, any> {
         searchForm.recipientOption === 'Recipient Phone'
           ? searchForm.recipient
           : '',
+      prescriberId:
+        searchForm.prescriberOption === 'Prescriber ID'
+          ? searchForm.prescriber
+          : '',
+      prescriberName:
+        searchForm.prescriberOption === 'Prescriber Name'
+          ? searchForm.prescriber
+          : '',
       frequency: searchForm.frequency,
       status: activeKey
     };
@@ -117,7 +128,9 @@ export default class SubscriptionList extends Component<any, any> {
             consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
             skuNo: param.skuCode ? param.skuCode : '',
-            goodsName: param.productName ? param.productName : ''
+            goodsName: param.productName ? param.productName : '',
+            prescriberId: param.prescriberId ? param.prescriberId : '',
+            prescriberName: param.prescriberName ? param.prescriberName : ''
           }
         };
       },
@@ -131,9 +144,24 @@ export default class SubscriptionList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          this.setState({
-            frequencyList: res.context.sysDictionaryVOS
-          });
+          if (type === 'Frequency_week') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month')
+            );
+          }
+          if (type === 'Frequency_month') {
+            let frequencyList = [
+              ...this.state.frequencyList,
+              ...res.context.sysDictionaryVOS
+            ];
+            this.setState({
+              frequencyList: frequencyList
+            });
+          }
         } else {
           message.error('Unsuccessful');
         }
@@ -199,9 +227,9 @@ export default class SubscriptionList extends Component<any, any> {
       consumerOption,
       recipientOption,
       frequencyList,
-      activeKey
+      activeKey,
+      prescriberOption
     } = this.state;
-
     const menu = (
       <Menu>
         <Menu.Item>
@@ -330,8 +358,8 @@ export default class SubscriptionList extends Component<any, any> {
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {frequencyList.map((item) => (
-                      <Option value={item.id} key={item.id}>
+                    {frequencyList.map((item, index) => (
+                      <Option value={item.id} key={index}>
                         {item.name}
                       </Option>
                     ))}
@@ -368,6 +396,37 @@ export default class SubscriptionList extends Component<any, any> {
                     }}
                   />
                 </FormItem> */}
+
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <Select
+                        // style={{ width: 140 }}
+                        defaultValue={searchForm.prescriberOption}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'prescriberOption',
+                            value
+                          });
+                        }}
+                      >
+                        {prescriberOption.map((item) => (
+                          <Option value={item} key={item}>
+                            {item}
+                          </Option>
+                        ))}
+                      </Select>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriber',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
 
                 <FormItem>
                   <Button

@@ -328,3 +328,10 @@ export function getDetailTab() {
     body: JSON.stringify(params)
   });
 }
+
+export function getStoreCode() {
+  return Fetch<TResult>('/goods/getStoreCode', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}

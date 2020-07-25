@@ -295,6 +295,8 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem
               {...formItemLayout}
@@ -328,6 +330,39 @@ class GoodsForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem>
           </Col>
+          <Col span={8}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="product.InternalSPU" />}
+            >
+              {getFieldDecorator('internalGoodsNo', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: 'Please fill in the SPU code'
+                  },
+                  {
+                    min: 1,
+                    max: 20,
+                    message: '1-20 characters'
+                  },
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(
+                        rule,
+                        value,
+                        callback,
+                        'SPU encoding'
+                      );
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsNo'),
+                initialValue: goods.get('internalGoodsNo')
+              })(<Input disabled />)}
+            </FormItem>
+          </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
@@ -338,9 +373,10 @@ class GoodsForm extends React.Component<any, any> {
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
-                initialValue:
+                initialValue: 'Y'
+                /*initialValue:
                   goods.get('subscriptionStatus') &&
-                  goods.get('subscriptionStatus').toString()
+                  goods.get('subscriptionStatus').toString()*/
               })(
                 <Select
                   getPopupContainer={() =>
@@ -721,7 +757,21 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="product.productImage" />}
+              label={
+                <span>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px'
+                    }}
+                  >
+                    *
+                  </span>
+                  <FormattedMessage id="product.productImage" />
+                </span>
+              }
             >
               <div style={{ width: 550 }}>
                 <ImageLibraryUpload

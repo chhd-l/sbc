@@ -164,6 +164,7 @@ export default class PicModal extends React.Component<any, any> {
         }
         visible={visible}
         width={880}
+        zIndex={200}
         onCancel={this.handleCancel}
         onOk={() => this._handleOk()}
       >

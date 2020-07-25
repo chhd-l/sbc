@@ -19,8 +19,6 @@ export default class AppStore extends Store {
   }
 
   init = async (param?: any) => {
-    //console.log(history.location.params.prescriberId,222222222222222);
-
     this.dispatch('loading:start');
     if (history.location.params) {
       sessionStorage.setItem(
@@ -36,6 +34,10 @@ export default class AppStore extends Store {
     }
     // sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriberId:sessionStorage.getItem('prescriberId'));
     let prescriberId = sessionStorage.getItem('prescriberId');
+    this.dispatch(
+      'getPrescribe:prescriber',
+      history.location.params ? history.location.params : prescriberId
+    );
 
     //sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriber.prescriberId:sessionStorage.getItem('prescriberId'));
     param = Object.assign(

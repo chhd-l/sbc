@@ -5,6 +5,9 @@ export default class ImageActor extends Actor {
   defaultState() {
     return {
       modalVisible: false
+      // imageForm: {
+      //   bannerName: ''
+      // }
     };
   }
 
@@ -12,4 +15,9 @@ export default class ImageActor extends Actor {
   setModalVisible(state, visible) {
     return state.set('modalVisible', visible);
   }
+
+  // @Action('imageActor:setBannerName')
+  // setBannerName(state, bannerName) {
+  //   return state.setIn(['form','bannerName'], bannerName);
+  // }
 }

@@ -335,7 +335,14 @@ export default class ListView extends React.Component<any, any> {
                         </span>
 
                         <div style={{ width: 310, display: 'inline-block' }}>
-                          <span style={{ marginLeft: 20, color: '#000' }}>
+                          <span
+                            style={{
+                              marginLeft: 20,
+                              color: '#000',
+                              display: 'inline-block',
+                              position: 'relative'
+                            }}
+                          >
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
@@ -349,6 +356,22 @@ export default class ListView extends React.Component<any, any> {
                               <span style={styles.platform}>
                                 <FormattedMessage id="order.fightTogether" />
                               </span>
+                            )}
+                            {v.get('isAutoSub') && (
+                              <span style={styles.platform}>S</span>
+                            )}
+                            {v.get('isAutoSub') ? (
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  left: '0',
+                                  top: '20px'
+                                }}
+                              >
+                                {v.get('subscribeId')}
+                              </span>
+                            ) : (
+                              ''
                             )}
                           </span>
                         </div>

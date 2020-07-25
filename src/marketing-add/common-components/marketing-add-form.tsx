@@ -47,6 +47,15 @@ const smallformItemLayout = {
   }
 };
 
+const largeformItemLayout = {
+  labelCol: {
+    span: 6
+  },
+  wrapperCol: {
+    span: 10
+  }
+};
+
 export default class MarketingAddForm extends React.Component<any, any> {
   props;
 
@@ -91,6 +100,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   componentDidMount() {
     this.init();
   }
+
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
       let randomNumber = (
@@ -107,11 +117,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
     }
   };
 
+  // @ts-ignore
   render() {
-    const { marketingType, form } = this.props;
-
+    const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-
     const {
       customerLevel,
       selectedRows,
@@ -121,6 +130,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
       skuExists,
       saveLoading
     } = this.state;
+    let settingLabel = 'setting rules';
+    let settingRuleFrom = { ...formItemLayout };
+
+    if (this.state.PromotionTypeValue === 1) {
+      settingRuleFrom = { ...largeformItemLayout };
+      if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+        settingLabel = 'For the first subscription order,discount';
+      } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
+        settingLabel = 'For the first subscription order,reduction';
+      }
+    }
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
@@ -144,8 +164,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
             style={{ marginLeft: 20 }}
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
+              if (this.state.PromotionTypeValue === 0) {
+                this.setState({
+                  PromotionTypeChecked: e.target.checked
+                });
+              } else {
+                this.setState({
+                  PromotionTypeChecked: true
+                });
+              }
               this.onBeanChange({
-                publicStatus: e.target.checked ? '1' : '0'
+                publicStatus: e.target.checked ? '0' : '1'
               });
             }}
           >
@@ -229,7 +258,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        {isFullCount != null && (
+        {isFullCount != null && this.state.PromotionTypeValue === 0 && (
           <FormItem
             {...formItemLayout}
             label={`full ${Enum.GET_MARKETING_STRING(marketingType)} type`}
@@ -248,22 +277,22 @@ export default class MarketingAddForm extends React.Component<any, any> {
               <RadioGroup
                 onChange={(e) => this.subTypeChange(marketingType, e)}
               >
-                <Radio value={0}>
-                  Full amount {Enum.GET_MARKETING_STRING(marketingType)}
-                </Radio>
-                {/* {
-                  this.state.PromotionTypeValue == 1?
-                  <Radio value={1}>
-                    Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
+                {this.state.PromotionTypeValue == 0 ? (
+                  <Radio value={0}>
+                    Full amount {Enum.GET_MARKETING_STRING(marketingType)}
                   </Radio>
-                  :{}
-                }*/}
+                ) : (
+                  <div></div>
+                )}
+                <Radio value={1}>
+                  Full quantity {Enum.GET_MARKETING_STRING(marketingType)}
+                </Radio>
               </RadioGroup>
             )}
           </FormItem>
         )}
         {isFullCount != null && (
-          <FormItem {...formItemLayout} label="setting rules" required={true}>
+          <FormItem {...settingRuleFrom} label={settingLabel} required={true}>
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
               getFieldDecorator(
                 'rules',
@@ -293,6 +322,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                   onChangeBack={this.onRulesChange}
                   isFullCount={isFullCount}
+                  isNormal={this.state.PromotionTypeValue === 0}
                 />
               )}
             {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION &&
@@ -308,6 +338,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                   onChangeBack={this.onRulesChange}
                   isFullCount={isFullCount}
+                  isNormal={this.state.PromotionTypeValue === 0}
+                  PromotionTypeValue={this.state.PromotionTypeValue}
                 />
               )}
           </FormItem>
@@ -410,11 +442,25 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.setState({ customerLevel: levelList });
 
     let { marketingBean } = this.state;
+    debugger;
     const subType = marketingBean.get('subType');
     if (subType != undefined && subType != null) {
-      this.setState({ isFullCount: subType % 2 });
+      this.setState(
+        {
+          isFullCount: subType % 2,
+          PromotionTypeValue: subType === 6 || subType === 7 ? 1 : 0
+        },
+        () => {
+          this.setState({
+            PromotionTypeChecked:
+              this.state.PromotionTypeValue === 1 ? true : false
+          });
+        }
+      );
     } else {
-      this.setState({ isFullCount: 0 });
+      this.setState({
+        isFullCount: 0
+      });
     }
     this.levelInit(marketingBean.get('joinLevel'));
     // render selectedRows
@@ -435,15 +481,34 @@ export default class MarketingAddForm extends React.Component<any, any> {
   promotionType = (e) => {
     //console.log('radio checked', e.target.value);
     let { marketingBean } = this.state;
+    this.setState(
+      {
+        PromotionTypeValue: e.target.value,
+        marketingBean: this.state.marketingBean.merge({
+          publicStatus: e.target.value
+        })
+      },
+      () => {
+        if (this.state.PromotionTypeValue === 1) {
+          this.setState({
+            PromotionTypeChecked: true
+          });
+        }
+      }
+    );
 
+    marketingBean.set('publicStatus', '1');
+  };
+
+  /**
+   * 内部方法，修改marketingBean对象的属性
+   * @param params
+   */
+  onBeanChange = (params) => {
     this.setState({
-      PromotionTypeValue: e.target.value,
-      PromotionTypeChecked: !this.state.PromotionTypeChecked
+      marketingBean: this.state.marketingBean.merge(params)
+      // PromotionTypeChecked: true
     });
-    if (!marketingBean.get('publicStatus')) {
-      //console.log(11111111111111)
-      marketingBean.set('publicStatus', '1');
-    }
   };
   /**
    * 等级初始化
@@ -484,32 +549,46 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
-    let { marketingBean, level, isFullCount, selectedSkuIds } = this.state;
+    let {
+      marketingBean,
+      level,
+      isFullCount,
+      selectedSkuIds,
+      PromotionTypeValue
+    } = this.state;
 
     let levelList = fromJS([]);
     let errorObject = {};
-
+    marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
     const { marketingType, form } = this.props;
     form.resetFields();
-    console.log(this.state.promotionCode);
 
     //判断设置规则
     if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
       levelList = marketingBean.get('fullReductionLevelList');
-      marketingBean = marketingBean.set(
-        'subType',
-        isFullCount
-          ? Enum.SUB_TYPE.REDUCTION_FULL_COUNT
-          : Enum.SUB_TYPE.REDUCTION_FULL_AMOUNT
-      );
+      if (this.state.PromotionTypeValue === 0) {
+        marketingBean = marketingBean.set(
+          'subType',
+          isFullCount
+            ? Enum.SUB_TYPE.REDUCTION_FULL_COUNT
+            : Enum.SUB_TYPE.REDUCTION_FULL_AMOUNT
+        );
+      } else {
+        marketingBean = marketingBean.set('subType', 6);
+      }
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
       levelList = marketingBean.get('fullDiscountLevelList');
-      marketingBean = marketingBean.set(
-        'subType',
-        isFullCount
-          ? Enum.SUB_TYPE.DISCOUNT_FULL_COUNT
-          : Enum.SUB_TYPE.DISCOUNT_FULL_AMOUNT
-      );
+
+      if (this.state.PromotionTypeValue === 0) {
+        marketingBean = marketingBean.set(
+          'subType',
+          isFullCount
+            ? Enum.SUB_TYPE.DISCOUNT_FULL_COUNT
+            : Enum.SUB_TYPE.DISCOUNT_FULL_AMOUNT
+        );
+      } else {
+        marketingBean = marketingBean.set('subType', 7);
+      }
     } else if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
       levelList = marketingBean.get('fullGiftLevelList');
       marketingBean = marketingBean.set(
@@ -519,7 +598,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
           : Enum.SUB_TYPE.GIFT_FULL_AMOUNT
       );
     }
-    if (!levelList || levelList.isEmpty()) {
+    if (
+      !levelList ||
+      (levelList.isEmpty() && this.state.PromotionTypeValue == 0)
+    ) {
       errorObject['rules'] = {
         value: null,
         errors: [new Error('Please setting rules')]
@@ -527,7 +609,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       let ruleArray = List();
 
-      if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
+      if (
+        marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION &&
+        this.state.PromotionTypeValue === 0
+      ) {
         levelList.toJS().forEach((level, index) => {
           //为下面的多级条件校验加入因子
           ruleArray = ruleArray.push(
@@ -537,23 +622,36 @@ export default class MarketingAddForm extends React.Component<any, any> {
             })
           );
           if (!isFullCount && +level.fullAmount <= +level.reduction) {
-            errorObject[`level_rule_value_${index}`] = {
-              errors: [
-                new Error(
-                  'The conditional amount must be greater than the deductible amount'
-                )
-              ]
-            };
-            errorObject[`level_rule_reduction_${index}`] = {
-              errors: [
-                new Error(
-                  'The deductible amount must be less than the conditional amount'
-                )
-              ]
-            };
+            if (this.state.PromotionTypeValue == 0) {
+              errorObject[`level_rule_value_${index}`] = {
+                errors: [
+                  new Error(
+                    'The conditional amount must be greater than the deductible amount'
+                  )
+                ]
+              };
+              errorObject[`level_rule_reduction_${index}`] = {
+                errors: [
+                  new Error(
+                    'The deductible amount must be less than the conditional amount'
+                  )
+                ]
+              };
+            } else {
+              errorObject[`level_rule_reduction_${index}`] = {
+                errors: [
+                  new Error(
+                    'The deductible amount must be less than the conditional amount'
+                  )
+                ]
+              };
+            }
           }
         });
-      } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      } else if (
+        marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
+        this.state.PromotionTypeValue === 0
+      ) {
         levelList.toJS().forEach((level, index) => {
           //为下面的多级条件校验加入因子
           ruleArray = ruleArray.push(
@@ -586,6 +684,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         });
       }
       //校验多级促销条件是否相同
+      debugger;
       ruleArray
         .groupBy((item) => +(item as any).get('value'))
         .filter((value) => value.size > 1)
@@ -816,15 +915,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       this.onBeanChange({ fullReductionLevelList: rules });
     }
-  };
-
-  /**
-   * 内部方法，修改marketingBean对象的属性
-   * @param params
-   */
-  onBeanChange = (params) => {
-    this.setState({ marketingBean: this.state.marketingBean.merge(params) });
-    console.log(this.state.marketingBean);
   };
 
   /**

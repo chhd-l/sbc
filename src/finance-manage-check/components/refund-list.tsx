@@ -33,7 +33,7 @@ export default class RefundList extends React.Component<any, any> {
     } = this.props.relaxProps;
     return (
       <div>
-        <div className="totalAmount">
+        {/*<div className="totalAmount">
           <ul>
             <li>
               <p className="payName">
@@ -69,7 +69,7 @@ export default class RefundList extends React.Component<any, any> {
               <p className="payPercent">-- &nbsp;{}</p>
             </li>
           </ul>
-        </div>
+        </div>*/}
         {/* <div className="totalAmount">
           <ul>
             {refundTotal.toJS().length > 0
@@ -94,7 +94,7 @@ export default class RefundList extends React.Component<any, any> {
         </div> */}
         <DataGrid
           dataSource={refundList.toJS().length > 0 ? refundList.toJS() : []}
-          rowKey={(record) => record.index}
+          rowKey={(record, index) => index}
           pagination={false}
         >
           <Column
@@ -152,14 +152,11 @@ export default class RefundList extends React.Component<any, any> {
             }}
           /> */}
           <Column
-            title="Source"
-            dataIndex="PayU"
-            key="PayU"
-            width="100"
-            render={(_text, rowData: any) => {
-              return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
-            }}
+            title="Total Revenue"
+            dataIndex="totalAmount"
+            key="totalAmount"
           />
+
           {/*<Column
             title={<FormattedMessage id="balance" />}
             dataIndex="BALANCE"
@@ -196,16 +193,11 @@ export default class RefundList extends React.Component<any, any> {
           {/*return <span>{rowData.payItemAmountMap.POINT}</span>*/}
           {/*}}*/}
           {/*/>*/}
-          <Column
-            title={<FormattedMessage id="Refund" />}
-            dataIndex="totalAmount"
-            key="totalAmount"
-            width="100"
-          />
+          <Column title="PayU" dataIndex="totalAmount" key="supplierId" />
           <Column
             title={<FormattedMessage id="operation" />}
             dataIndex="operate"
-            key="operate"
+            key="storeId"
             width="100"
             render={(_text, record: any, _index) => {
               return (

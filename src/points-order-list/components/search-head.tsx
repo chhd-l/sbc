@@ -21,6 +21,8 @@ import {
 } from 'qmkit';
 import { IList } from 'typings/globalType';
 
+import { FormattedMessage } from 'react-intl';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
@@ -108,7 +110,9 @@ export default class SearchHead extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="订单编号"
+                addonBefore={
+                  <FormattedMessage id="orderNumber"></FormattedMessage>
+                }
                 onChange={(e) => {
                   this.setState({
                     id: (e.target as any).value

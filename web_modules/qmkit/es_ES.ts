@@ -490,6 +490,8 @@ export default {
   'revenueReconciliation': 'Revenue Reconciliation',
   'refundReconciliation': 'Refund Reconciliation',
   'VISA': 'VISA',
+  'visa': 'VISA',
+  'OXXO': 'OXXO',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
 

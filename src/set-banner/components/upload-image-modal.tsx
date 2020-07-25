@@ -24,6 +24,7 @@ import {
   Tree
 } from 'antd';
 import { fromJS, Map } from 'immutable';
+import { FunctionOrConstructorTypeNodeBase } from 'ts-morph';
 
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
@@ -65,18 +66,24 @@ export default class UploadImageModal extends Component<any, any> {
   props: {
     relaxProps?: {
       modalVisible: boolean;
+      tableDatas: TList;
       form: Object;
       setModalVisible: Function;
       onFormChange: Function;
+      getList: Function;
+      getStoreId: Function;
     };
   };
 
   static relaxProps = {
     modalVisible: 'modalVisible',
+    tableDatas: 'tableDatas',
     form: 'form',
+    viewAction: 'viewAction',
     setModalVisible: noop,
     onFormChange: noop,
-    viewAction: 'viewAction'
+    getList: noop,
+    getStoreId: noop
   };
   componentDidMount() {
     const { storeId, companyInfoId } = JSON.parse(
@@ -88,6 +95,11 @@ export default class UploadImageModal extends Component<any, any> {
     });
   }
   _handleSubmit = async () => {
+    const { tableDatas } = this.props.relaxProps;
+    if (tableDatas.size >= 5) {
+      this._handleModelCancel();
+      return;
+    }
     if (
       this.state.fileList.filter((file) => file.status === 'done').length <= 0
     ) {
@@ -111,7 +123,9 @@ export default class UploadImageModal extends Component<any, any> {
       userId: null,
       webUrl: this.state.pcUrl
     };
+    const { getList, getStoreId } = this.props.relaxProps;
     const { res } = await webapi.updateBanner(params);
+    getList({ storeId: getStoreId() });
     this.setState({
       okDisabled: false
     });
@@ -130,7 +144,9 @@ export default class UploadImageModal extends Component<any, any> {
           });
         },
         onCancel() {
-          this._handleModelCancel();
+          const { getList, getStoreId } = ref.props.relaxProps;
+          ref._handleModelCancel();
+          getList({ storeId: getStoreId() });
         },
         okText: 'OK',
         cancelText: 'Cancel'
@@ -147,16 +163,19 @@ export default class UploadImageModal extends Component<any, any> {
   _setMFileList = (mFileList) => {
     this.setState({ mFileList });
   };
-  _setCateDisabled = () => {
-    this.setState({ cateDisabled: true });
-  };
+
   setBannerName(e) {
     this.setState({
       bannerName: e.target.value
     });
   }
   render() {
-    const { modalVisible, form, onFormChange } = this.props.relaxProps;
+    const {
+      modalVisible,
+      tableDatas,
+      form,
+      onFormChange
+    } = this.props.relaxProps;
     if (!modalVisible) {
       return null;
     }
@@ -183,6 +202,11 @@ export default class UploadImageModal extends Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
+        debugger;
+        if (tableDatas.size >= 5) {
+          message.error('You can only add up to 5 banner.');
+          return false;
+        }
 
         if (!fileName.trim()) {
           message.error('Please input a file name');
@@ -202,6 +226,7 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('File name is too long');
           return false;
         }
+
         if (list.length >= 1) {
           message.error('Only can upload one resource.');
           return false;
@@ -274,6 +299,11 @@ export default class UploadImageModal extends Component<any, any> {
         //   return false;
         // }
         let fileName = file.name.toLowerCase();
+
+        if (tableDatas.size >= 5) {
+          message.error('You can only add up to 5 banner.');
+          return false;
+        }
 
         if (!fileName.trim()) {
           message.error('Please input a file name');

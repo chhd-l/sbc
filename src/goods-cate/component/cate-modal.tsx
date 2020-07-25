@@ -85,6 +85,7 @@ export default class CateModal extends React.Component<any, any> {
         maskClosable={false}
         title={formData.get('storeCateId') ? 'Edit' : 'Add'}
         visible={modalVisible}
+        zIndex={100}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
@@ -118,6 +119,7 @@ export default class CateModal extends React.Component<any, any> {
    */
   _handleModelCancel = () => {
     const { closeModal } = this.props.relaxProps;
+    Modal.destroyAll();
     closeModal();
   };
 }
@@ -161,7 +163,6 @@ class CateModalForm extends React.Component<any, any> {
 
   render() {
     const formData = this._store.state().get('formData');
-    console.log(formData, 'formData');
     const cateName = formData.get('cateName');
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
@@ -200,7 +201,6 @@ class CateModalForm extends React.Component<any, any> {
       clickImg,
       removeImg
     } = this.props.relaxProps;
-    console.log(cateList, sourceCateList, 'cateList');
     return (
       <Form className="login-form">
         <FormItem

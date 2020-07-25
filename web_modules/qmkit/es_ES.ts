@@ -642,7 +642,6 @@ export default {
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
-  'items':'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
 

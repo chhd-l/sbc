@@ -47,7 +47,7 @@ export default class EmployeeList extends React.Component<any, any> {
             <ButtonGroup />
 
             <Row>
-              <Col span={3}>
+              <Col span={3} className="userDepartTree">
                 <p
                   style={Object.assign(
                     { cursor: 'pointer' },
@@ -100,7 +100,10 @@ export default class EmployeeList extends React.Component<any, any> {
         this.store.toggleClick();
         if (this.state.click) {
           this.store.lastDepartmentIds(
-            this.store.state().get('searchForm').get('departmentIds')
+            this.store
+              .state()
+              .get('searchForm')
+              .get('departmentIds')
           );
           this.store.onFormChange({
             field: 'departmentIds',

@@ -47,6 +47,7 @@ export default {
   'toBeDelivered': "待发货",
   'ship': "发货",
   'orderNumber': "订单号",
+  'payWay': '支付方式',
   'consumer': "客户",
   'consumerAccount': "客户账号",
   'orderTime': "下单时间",

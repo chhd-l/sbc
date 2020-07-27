@@ -294,6 +294,7 @@ export default {
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
   'orderNumber': "Order Number",
+  'payWay': 'Pay Way',
   'consumer': "Consumer",
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",

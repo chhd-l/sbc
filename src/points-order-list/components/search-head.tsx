@@ -96,7 +96,7 @@ export default class SearchHead extends Component<any, any> {
               href="#!"
               onClick={() => this._handleBatchExport()}
             >
-              批量导出
+              Batch operation
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -105,7 +105,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="积分订单列表" />
+        <Headline title="Integral order list" />
         <div>
           <Form className="filter-content" layout="inline">
             <FormItem>
@@ -161,7 +161,7 @@ export default class SearchHead extends Component<any, any> {
                   document.getElementById('page-content')
                 }
                 defaultValue=""
-                label="发货状态"
+                label="Delivery status"
                 onChange={(value) => {
                   this.setState({
                     tradeState: {
@@ -172,10 +172,10 @@ export default class SearchHead extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">全部</Option>
-                <Option value="NOT_YET_SHIPPED">未发货</Option>
-                <Option value="PART_SHIPPED">部分发货</Option>
-                <Option value="SHIPPED">全部发货</Option>
+                <Option value="">All</Option>
+                <Option value="NOT_YET_SHIPPED">Unshipped</Option>
+                <Option value="PART_SHIPPED">Partially shipped</Option>
+                <Option value="SHIPPED">All shipped</Option>
               </SelectGroup>
             </FormItem>
             <FormItem>
@@ -240,7 +240,7 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                搜索
+                Research
               </Button>
             </FormItem>
           </Form>
@@ -255,7 +255,7 @@ export default class SearchHead extends Component<any, any> {
                 }
               >
                 <Button>
-                  批量操作 <Icon type="down" />
+                  Batch operation <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -284,8 +284,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">客户名称</Option>
-        <Option value="buyerAccount">客户账号</Option>
+        <Option value="buyerName">Client name</Option>
+        <Option value="buyerAccount">Client accounts</Option>
       </Select>
     );
   };
@@ -302,8 +302,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">商品名称</Option>
-        <Option value="skuNo">SKU编码</Option>
+        <Option value="skuName">Product name</Option>
+        <Option value="skuNo">SKU code</Option>
       </Select>
     );
   };
@@ -320,8 +320,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 100 }}
       >
-        <Option value="consigneeName">收件人</Option>
-        <Option value="consigneePhone">收件人手机</Option>
+        <Option value="consigneeName">Recipient</Option>
+        <Option value="consigneePhone">Recipient's cell</Option>
       </Select>
     );
   };
@@ -330,8 +330,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: '导出筛选出的订单',
-      byIdsTitle: '导出选中的订单',
+      byParamsTitle: 'Export filtered orders',
+      byIdsTitle: 'Export selected orders',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

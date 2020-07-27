@@ -32,7 +32,9 @@ const styles = {
 @Relax
 export default class SetBannerList extends Component<any, any> {
   _rejectForm;
-  state: {};
+  state: {
+    storeId: 0;
+  };
 
   props: {
     relaxProps?: {
@@ -41,6 +43,10 @@ export default class SetBannerList extends Component<any, any> {
       setModalVisible: Function;
       deleteRow: Function;
       getList: Function;
+      getBannerById: Function;
+      getStoreId: Function;
+      setBannerId: Function;
+      setBannerName: Function;
     };
   };
 
@@ -49,18 +55,34 @@ export default class SetBannerList extends Component<any, any> {
     tableDatas: 'tableDatas',
     setModalVisible: noop,
     deleteRow: noop,
-    getList: noop
+    getList: noop,
+    getStoreId: noop,
+    setBannerId: noop,
+    getBannerById: noop,
+    setBannerName: noop
   };
   handleTableChange() {}
   componentDidMount() {
-    const { getList } = this.props.relaxProps;
-    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    const { getList, getStoreId } = this.props.relaxProps;
+    const storeId = getStoreId();
+    this.setState({
+      storeId
+    });
     getList({ storeId: storeId });
   }
   deleteRow({ bannerId }) {
-    debugger;
     const { deleteRow } = this.props.relaxProps;
     deleteRow({ bannerId: bannerId });
+  }
+  async editRow({ bannerId }) {
+    const {
+      setModalVisible,
+      getBannerById,
+      setBannerId
+    } = this.props.relaxProps;
+    setBannerId(bannerId);
+    await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
+    setModalVisible(true);
   }
   _renderLoading() {
     return (
@@ -78,11 +100,11 @@ export default class SetBannerList extends Component<any, any> {
       dataList.map((item, index) => {
         const id = item.get('id');
         const pcName = item.get('bannerName');
+        const bannerNo = item.get('bannerNo');
         // const mobileName = item.get('mobileName');
         const pcImage = item.get('webUrl');
         const mobileImage = item.get('mobiUrl');
         let pcType, mobileType;
-        debugger;
         if (
           pcImage.endsWith('.jpg') ||
           pcImage.endsWith('.jpeg') ||
@@ -106,6 +128,7 @@ export default class SetBannerList extends Component<any, any> {
 
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+            <td>{bannerNo}</td>
             <td>{pcName}</td>
             <td className="pad0">
               {pcType === 'image' ? (
@@ -136,9 +159,12 @@ export default class SetBannerList extends Component<any, any> {
               <span className="red" onClick={() => this.deleteRow(item.toJS())}>
                 <FormattedMessage id="delete" />
               </span>
-              {/*<span className="red mgl20" onClick={() => editRow(id)}>*/}
-              {/*  <FormattedMessage id="edit" />*/}
-              {/*</span>*/}
+              <span
+                className="red mgl20"
+                onClick={() => this.editRow(item.toJS())}
+              >
+                <FormattedMessage id="edit" />
+              </span>
             </td>
           </tr>
         );
@@ -147,8 +173,13 @@ export default class SetBannerList extends Component<any, any> {
   }
 
   render() {
-    const { loading, tableDatas, setModalVisible } = this.props.relaxProps;
-    debugger;
+    const {
+      loading,
+      tableDatas,
+      setModalVisible,
+      setBannerId,
+      setBannerName
+    } = this.props.relaxProps;
     return (
       <div>
         <div>
@@ -158,6 +189,8 @@ export default class SetBannerList extends Component<any, any> {
             style={{ marginBottom: '10px' }}
             onClick={(e) => {
               e.stopPropagation();
+              setBannerId(null);
+              setBannerName('');
               setModalVisible(true);
             }}
           >
@@ -178,6 +211,9 @@ export default class SetBannerList extends Component<any, any> {
                     >
                       <thead className="ant-table-thead">
                         <tr>
+                          <th>
+                            <FormattedMessage id="bannerNo" />
+                          </th>
                           <th>
                             <FormattedMessage id="resourceName" />
                           </th>

@@ -169,7 +169,7 @@ export default {
   'privateKey': 'Private key',
   'publicKey': 'Public key',
   'apiVersion': 'API version',
-
+  'bannerNo': 'Banner No',
   'partnerAccount': 'Partner account',
   'employeeList': 'User list',
   'employeeName': 'User name',

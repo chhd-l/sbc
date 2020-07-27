@@ -1,5 +1,5 @@
 import { IOptions, Store, ViewAction } from 'plume2';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import LoadingActor from './actor/loading-actor';
 import ListActor from './actor/list-actor';
 import ImageActor from './actor/image-actor';
@@ -7,6 +7,7 @@ import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { cache, Const, history, util } from 'qmkit';
 
+const confirm = Modal.confirm;
 export default class AppStore extends Store {
   //btn加载
   constructor(props: IOptions) {
@@ -54,8 +55,57 @@ export default class AppStore extends Store {
       message.error(res.message);
     }
   };
+  getBannerById = async (params) => {
+    const { res } = await webapi.getList(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.dispatch('imageActor:setBannerName', res.context[0].bannerName);
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  editBanner = async (params) => {
+    const { res } = await webapi.editRow(params);
+    if (res.code === Const.SUCCESS_CODE) {
+    } else {
+      message.error(res.message);
+    }
+  };
+  uploadBanner = async (params) => {
+    const { res } = await webapi.uploadBanner(params);
+    const ref = this;
+    if (res.code === Const.SUCCESS_CODE) {
+      // confirm({
+      //   title: 'Tip',
+      //   content: '是否继续添加banner',
+      //   onOk() {
+      //     ref.setBannerName('')
+      //   },
+      //   onCancel() {
+      //     debugger
+      //     ref.setModalVisible(false);
+      //     ref.getList({ storeId: this.getStoreId() });
+      //   },
+      //   okText: 'OK',
+      //   cancelText: 'Cancel'
+      // });
+    } else {
+      message.error(res.message);
+    }
+  };
   getStoreId = () => {
     const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     return storeId;
+  };
+
+  setBannerId = (bannerId) => {
+    this.dispatch('imageActor:setBannerId', bannerId);
+  };
+  setBannerName = (bannerName) => {
+    this.dispatch('imageActor:setBannerName', bannerName);
+  };
+
+  onImageFormChange = ({ field, value }) => {
+    this.dispatch('imageActor:field', { field, value });
   };
 }

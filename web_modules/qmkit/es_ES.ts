@@ -169,7 +169,7 @@ export default {
   'privateKey': 'Private key',
   'publicKey': 'Public key',
   'apiVersion': 'API version',
-
+  'bannerNo': 'Banner No',
   'partnerAccount': 'Partner account',
   'employeeList': 'User list',
   'employeeName': 'User name',
@@ -294,6 +294,7 @@ export default {
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
   'orderNumber': "Order Number",
+  'payWay': 'Pay Way',
   'consumer': "Consumer",
   'consumerAccount': "Consumer Account",
   'consumerInfo': "Consumer information",

@@ -34,12 +34,15 @@ export const deleteRow = (params) => {
  * 编辑
  */
 export const editRow = (params) => {
-  return Fetch<TResult>(api.editRow);
+  return Fetch<TResult>(api.editRow, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
 };
 /**
  * 编辑
  */
-export const updateBanner = (params) => {
+export const uploadBanner = (params) => {
   return Fetch<TResult>(api.upload, {
     method: 'POST',
     body: JSON.stringify(params)

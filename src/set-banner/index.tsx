@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import BannerList from './components/set-banner-list';
 import UploadImageModal from './components/upload-image-modal';
 const FormItem = Form.Item;
+const UploadImageModalForm = Form.create({})(UploadImageModal);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SetBanner extends Component<any, any> {
@@ -67,7 +68,7 @@ export default class SetBanner extends Component<any, any> {
               {/*</Form>*/}
 
               <BannerList />
-              <UploadImageModal />
+              <UploadImageModalForm />
             </div>
           </div>
         </div>

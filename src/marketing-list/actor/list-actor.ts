@@ -33,6 +33,11 @@ export default class ListActor extends Actor {
     return state.set('currentPage', current);
   }
 
+  @Action('list:total')
+  totalPage(state: IMap, total) {
+    return state.set('total', total);
+  }
+
   @Action('list:reset')
   reset(state: IMap) {
     return state.set('dataList', []);

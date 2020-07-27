@@ -43,6 +43,7 @@ const formItemLayout = {
   }
 };
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
+
 @Relax
 export default class UploadImageModal extends Component<any, any> {
   _rejectForm;
@@ -61,17 +62,25 @@ export default class UploadImageModal extends Component<any, any> {
     companyInfoId: 0,
     storeId: 0,
     bannerName: '',
-    okDisabled: false
+    okDisabled: false,
+    bannerId: null
   };
   props: {
+    form: any;
     relaxProps?: {
       modalVisible: boolean;
       tableDatas: TList;
+      bannerNoList: TList;
       form: Object;
+      imageForm: any;
       setModalVisible: Function;
       onFormChange: Function;
       getList: Function;
       getStoreId: Function;
+      setBannerName: Function;
+      onImageFormChange: Function;
+      uploadBanner: Function;
+      editBanner: Function;
     };
   };
 
@@ -80,81 +89,111 @@ export default class UploadImageModal extends Component<any, any> {
     tableDatas: 'tableDatas',
     form: 'form',
     viewAction: 'viewAction',
+    imageForm: 'imageForm',
+    bannerNoList: 'bannerNoList',
     setModalVisible: noop,
     onFormChange: noop,
     getList: noop,
-    getStoreId: noop
+    getStoreId: noop,
+    setBannerName: noop,
+    onImageFormChange: noop,
+    uploadBanner: noop,
+    editBanner: noop
   };
   componentDidMount() {
     const { storeId, companyInfoId } = JSON.parse(
       sessionStorage.getItem(cache.LOGIN_DATA)
     );
+    const { imageForm } = this.props.relaxProps;
     this.setState({
       storeId,
       companyInfoId
     });
   }
-  _handleSubmit = async () => {
-    const { tableDatas } = this.props.relaxProps;
-    if (tableDatas.size >= 5) {
-      this._handleModelCancel();
-      return;
-    }
-    if (
-      this.state.fileList.filter((file) => file.status === 'done').length <= 0
-    ) {
-      message.error('Please choose to upload pc resource!');
-      return;
-    }
-    if (
-      this.state.mFileList.filter((file) => file.status === 'done').length <= 0
-    ) {
-      message.error('Please choose to upload mobile resource!');
-      return;
-    }
+
+  _handleSubmit = () => {
+    const {
+      tableDatas,
+      imageForm,
+      uploadBanner,
+      editBanner
+    } = this.props.relaxProps;
     this.setState({
       okDisabled: true
     });
-    const params = {
-      bannerId: null,
-      bannerName: this.state.bannerName,
-      mobiUrl: this.state.mobileUrl,
-      storeId: this.state.storeId,
-      userId: null,
-      webUrl: this.state.pcUrl
-    };
-    const { getList, getStoreId } = this.props.relaxProps;
-    const { res } = await webapi.updateBanner(params);
-    getList({ storeId: getStoreId() });
-    this.setState({
-      okDisabled: false
-    });
-    const ref = this;
-    if (res.code === 'K-000000') {
-      confirm({
-        title: '提示',
-        content: '是否继续添加banner',
-        onOk() {
-          ref.setState({
-            bannerName: '',
-            fileList: [],
-            mFileList: [],
-            pcUrl: '',
-            mobileUrl: ''
-          });
-        },
-        onCancel() {
-          const { getList, getStoreId } = ref.props.relaxProps;
-          ref._handleModelCancel();
-          getList({ storeId: getStoreId() });
-        },
-        okText: 'OK',
-        cancelText: 'Cancel'
-      });
+    if (tableDatas.size >= 5) {
+      message.error('You can only add up to 5 banner.');
+      // this._handleModelCancel();
+      return;
     }
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        if (
+          this.state.fileList.filter((file) => file.status === 'done').length <=
+          0
+        ) {
+          message.error('Please choose to upload pc resource!');
+          return;
+        }
+        if (
+          this.state.mFileList.filter((file) => file.status === 'done')
+            .length <= 0
+        ) {
+          message.error('Please choose to upload mobile resource!');
+          return;
+        }
+        if (imageForm.toJS().bannerId) {
+          // edit
+          const params = {
+            bannerId: imageForm.toJS().bannerId,
+            bannerNo: imageForm.toJS().bannerNo,
+            bannerName: imageForm.toJS().bannerName,
+            mobiUrl: this.state.mobileUrl,
+            storeId: this.state.storeId,
+            userId: null,
+            webUrl: this.state.pcUrl
+          };
+          editBanner(params);
+          this.setState({
+            okDisabled: false
+          });
+        } else {
+          //上传
+          const params = {
+            bannerId: null,
+            bannerName: imageForm.toJS().bannerName,
+            bannerNo: imageForm.toJS().bannerNo,
+            mobiUrl: this.state.mobileUrl,
+            storeId: this.state.storeId,
+            userId: null,
+            webUrl: this.state.pcUrl
+          };
+          const { getList, getStoreId, setBannerName } = this.props.relaxProps;
+          const ref = this;
+          uploadBanner(params);
+          confirm({
+            title: 'Tip',
+            content: '是否继续添加banner',
+            onOk() {
+              setBannerName('');
+            },
+            onCancel() {
+              ref._handleModelCancel();
+              getList({ storeId: getStoreId() });
+            },
+            okText: 'OK',
+            cancelText: 'Cancel'
+          });
+          this.setState({
+            okDisabled: false
+          });
+        }
+      }
+    });
   };
   _handleModelCancel = () => {
     const { setModalVisible } = this.props.relaxProps;
+    this.props.form.resetFields();
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
@@ -165,27 +204,49 @@ export default class UploadImageModal extends Component<any, any> {
   };
 
   setBannerName(e) {
-    this.setState({
-      bannerName: e.target.value
-    });
+    const { setBannerName } = this.props.relaxProps;
+    setBannerName(e.target.value);
   }
   render() {
     const {
       modalVisible,
       tableDatas,
+      imageForm,
+      bannerNoList,
+      onImageFormChange,
       form,
       onFormChange
     } = this.props.relaxProps;
+
     if (!modalVisible) {
       return null;
     }
     const ref = this;
+    const { getFieldDecorator } = this.props.form;
     const list = this.state.fileList;
     const mList = this.state.mFileList;
     const setFileList = this._setFileList;
     const setMFileList = this._setMFileList;
     const storeId = this.state.storeId;
+    const bannerId = imageForm.toJS().bannerId;
+    const bannerName = imageForm.toJS().bannerName;
     const companyInfoId = this.state.companyInfoId;
+    const fileList = [
+      {
+        uid: '-1',
+        name: 'xxx.png',
+        status: 'done',
+        url:
+          'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        thumbUrl:
+          'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+      },
+      {
+        uid: '-2',
+        name: 'yyy.png',
+        status: 'error'
+      }
+    ];
     const props = {
       name: 'uploadFile',
       headers: {
@@ -202,7 +263,6 @@ export default class UploadImageModal extends Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
-        debugger;
         if (tableDatas.size >= 5) {
           message.error('You can only add up to 5 banner.');
           return false;
@@ -264,7 +324,7 @@ export default class UploadImageModal extends Component<any, any> {
             ref.setState({
               pcUrl: info.file.response[0]
             });
-            message.success(`${info.file.name} uploaded successfully!`);
+            // message.success(`${info.file.name} uploaded successfully!`);
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -278,6 +338,7 @@ export default class UploadImageModal extends Component<any, any> {
         );
         setFileList(fileList);
       }
+      // defaultFileList: [...fileList]
     };
     const mProps = {
       name: 'uploadFile',
@@ -350,7 +411,6 @@ export default class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
-          debugger;
           if (
             info.file.response &&
             info.file.response.code &&
@@ -361,7 +421,7 @@ export default class UploadImageModal extends Component<any, any> {
             ref.setState({
               mobileUrl: info.file.response[0]
             });
-            message.success(`${info.file.name} uploaded successfully!`);
+            // message.success(`${info.file.name} uploaded successfully!`);
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -389,17 +449,43 @@ export default class UploadImageModal extends Component<any, any> {
         <div>
           <div>
             <Form>
-              <FormItem
-                label="Banner Name"
-                name="bannerName"
-                value={this.state.bannerName}
-                rules={[
-                  { required: true, message: 'Please input your bannerName.' },
-                  { max: 30, message: '最多30字符' }
-                ]}
-              >
-                <Input onChange={(e) => this.setBannerName(e)} />
+              <FormItem {...formItemLayout} label="Banner No" name="bannerNo">
+                {getFieldDecorator('bannerNo', {
+                  initialValue: null,
+                  rules: [
+                    { required: true, message: 'Please select banner No.' }
+                  ]
+                })(
+                  <Select
+                    style={{ width: 160 }}
+                    onChange={(e) => {
+                      onImageFormChange({
+                        field: 'bannerNo',
+                        value: e
+                      });
+                    }}
+                  >
+                    {bannerNoList.map((item) => (
+                      <Select.Option key={item} value={item}>
+                        {item}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
               </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="Banner name"
+                name="bannerName"
+              >
+                {getFieldDecorator('bannerName', {
+                  initialValue: bannerName,
+                  rules: [
+                    { required: true, message: 'Please enter banner name.' }
+                  ]
+                })(<Input onChange={(e) => this.setBannerName(e)} />)}
+              </FormItem>
+
               <FormItem
                 {...formItemLayout}
                 label={

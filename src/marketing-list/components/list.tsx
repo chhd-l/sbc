@@ -33,8 +33,8 @@ const MARKETING_STATUS = {
   0: 'All',
   1: 'In process',
   2: 'Pause',
-  3: 'No start',
-  4: 'End'
+  3: 'Not start',
+  4: 'Completed'
 };
 
 @withRouter
@@ -88,17 +88,18 @@ export default class MarketingList extends React.Component<any, any> {
     return (
       <DataGrid
         loading={loading}
-        rowKey="Campaign name"
+        rowKey={(record) => record.marketingId}
         isScroll={false}
+        dataSource={dataList.toJS()}
         pagination={{
           current: currentPage,
-          pageSize,
-          total,
+          pageSize: pageSize,
+          total: total,
           onChange: (pageNum, pageSize) => {
+            debugger;
             init({ pageNum: pageNum - 1, pageSize });
           }
         }}
-        dataSource={dataList.toJS()}
       >
         {/*<Column
           title="Campaign type"
@@ -120,6 +121,14 @@ export default class MarketingList extends React.Component<any, any> {
           dataIndex="marketingName"
         />
         <Column
+          title="Promotion type"
+          key="promotionType"
+          dataIndex="promotionType"
+          render={(promotionType) => {
+            return PROMOTION_TYPE[promotionType];
+          }}
+        />
+        <Column
           title="Campaign type"
           key="subType"
           dataIndex="subType"
@@ -127,16 +136,6 @@ export default class MarketingList extends React.Component<any, any> {
             return SUB_TYPE[subType];
           }}
         />
-        <Column
-          title="Promotion type"
-          key="promotionType"
-          dataIndex="promotionType"
-          render={(promotionType) => {
-            debugger;
-            return PROMOTION_TYPE[promotionType];
-          }}
-        />
-
         <Column
           title="Time"
           width="15%"
@@ -155,48 +154,48 @@ export default class MarketingList extends React.Component<any, any> {
           }}
         />
 
-        <Column
-          title="Campaign status"
-          width="15%"
-          key="joinLevel"
-          dataIndex="joinLevel"
-          render={(joinLevel) => {
-            if (joinLevel == '-1') {
-              return 'Full platform consumer';
-            } else if (joinLevel == '0') {
-              return 'All Leave';
-            } else if (joinLevel != '') {
-              return (
-                <Tooltip
-                  title={joinLevel
-                    .split(',')
-                    .map((info) =>
-                      customerLevels
-                        .filter((v) => v.get('customerLevelId') == info)
-                        .getIn([0, 'customerLevelName'])
-                    )
-                    .filter((v) => v)
-                    .join('，')}
-                >
-                  <div className="line-two">
-                    {joinLevel
-                      .split(',')
-                      .map((info) =>
-                        customerLevels
-                          .filter((v) => v.get('customerLevelId') == info)
-                          .getIn([0, 'customerLevelName'])
-                      )
-                      .filter((v) => v)
-                      .join('，')}
-                  </div>
-                </Tooltip>
-              );
-            }
-          }}
-        />
+        {/*<Column*/}
+        {/*  title="Campaign status"*/}
+        {/*  width="15%"*/}
+        {/*  key="joinLevel"*/}
+        {/*  dataIndex="joinLevel"*/}
+        {/*  render={(joinLevel) => {*/}
+        {/*    if (joinLevel == '-1') {*/}
+        {/*      return 'Full platform consumer';*/}
+        {/*    } else if (joinLevel == '0') {*/}
+        {/*      return 'All Leave';*/}
+        {/*    } else if (joinLevel != '') {*/}
+        {/*      return (*/}
+        {/*        <Tooltip*/}
+        {/*          title={joinLevel*/}
+        {/*            .split(',')*/}
+        {/*            .map((info) =>*/}
+        {/*              customerLevels*/}
+        {/*                .filter((v) => v.get('customerLevelId') == info)*/}
+        {/*                .getIn([0, 'customerLevelName'])*/}
+        {/*            )*/}
+        {/*            .filter((v) => v)*/}
+        {/*            .join('，')}*/}
+        {/*        >*/}
+        {/*          <div className="line-two">*/}
+        {/*            {joinLevel*/}
+        {/*              .split(',')*/}
+        {/*              .map((info) =>*/}
+        {/*                customerLevels*/}
+        {/*                  .filter((v) => v.get('customerLevelId') == info)*/}
+        {/*                  .getIn([0, 'customerLevelName'])*/}
+        {/*              )*/}
+        {/*              .filter((v) => v)*/}
+        {/*              .join('，')}*/}
+        {/*          </div>*/}
+        {/*        </Tooltip>*/}
+        {/*      );*/}
+        {/*    }*/}
+        {/*  }}*/}
+        {/*/>*/}
 
-        {/*<Column
-          title="Activity Status"
+        <Column
+          title="Campaign Status"
           width="10%"
           key="marketingStatus"
           dataIndex="marketingStatus"
@@ -204,7 +203,7 @@ export default class MarketingList extends React.Component<any, any> {
             return <span>{MARKETING_STATUS[marketingStatus]}</span>;
           }}
         />
-
+        {/*
         <Column
           title="Promotion Code"
           key="promotionCode"

@@ -132,6 +132,7 @@ export default class MarketingList extends React.Component<any, any> {
           key="promotionType"
           dataIndex="promotionType"
           render={(promotionType) => {
+            debugger;
             return PROMOTION_TYPE[promotionType];
           }}
         />

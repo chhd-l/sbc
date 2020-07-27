@@ -67,7 +67,6 @@ export default class SearchForm extends React.Component<any, any> {
             style={{ width: 170 }}
             defaultValue="All"
             onChange={(value) => {
-              debugger;
               value = value === '' ? null : value;
               onFormChange({
                 field: 'promotionType',

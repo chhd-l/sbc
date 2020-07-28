@@ -104,12 +104,12 @@ export default class FreightTemplate extends React.Component<any, any> {
             tabBarStyle={{ marginTop: 16 }}
           >
             {checkAuth('f_store_temp_list') && (
-              <Tabs.TabPane tab="Store Freight" key={0}>
+              <Tabs.TabPane tab="Store Freight" key="0">
                 <StoreSetting />
               </Tabs.TabPane>
             )}
             {checkAuth('f_goods_temp_list') && (
-              <Tabs.TabPane tab="Single Product Freight" key={1}>
+              <Tabs.TabPane tab="Single Product Freight" key="1">
                 <GoodsSetting />
               </Tabs.TabPane>
             )}

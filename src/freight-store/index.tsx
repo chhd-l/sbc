@@ -1,11 +1,12 @@
 import React from 'react';
 import { StoreProvider, Relax } from 'plume2';
 
-import { Breadcrumb, Form } from 'antd';
+import { Breadcrumb, Form, message } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
 
 import FreightTemp from './component/freight-temp';
 import AppStore from './store';
+import * as webapi from './webapi';
 
 const FreightTempForm = Form.create()(FreightTemp) as any;
 const FreightTempRelax = Relax(FreightTempForm);
@@ -32,7 +33,47 @@ export default class StoreFreight extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      cityArr: [],
+      countryArr: [],
+      treeData: []
+    };
   }
+  componentDidMount() {}
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({
+        type: type
+      })
+      .then((data: any) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (type === 'city') {
+            this.setState({
+              cityArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-city',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+          if (type === 'country') {
+            this.setState({
+              countryArr: res.context.sysDictionaryVOS
+            });
+            sessionStorage.setItem(
+              'dict-country',
+              JSON.stringify(res.context.sysDictionaryVOS)
+            );
+          }
+        } else {
+          message.error('Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error('Unsuccessful');
+      });
+  };
 
   render() {
     let typeTxt = 'Add';

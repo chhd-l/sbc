@@ -73,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <SelectGroup
-            label="Customer Type"
+            label="Customer type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;

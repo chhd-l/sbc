@@ -26,14 +26,14 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer Account',
+          title: 'Consumer account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%',
           ellipsis: true
         },
         {
-          title: 'Consumer Name',
+          title: 'Consumer name',
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
@@ -43,7 +43,7 @@ export default class Customer extends React.Component<any, any> {
           )
         },
         {
-          title: 'Consumer Type',
+          title: 'Consumer type',
           dataIndex: 'customerLevelName',
           key: 'consumerType',
           width: '10%',
@@ -58,13 +58,13 @@ export default class Customer extends React.Component<any, any> {
         },
 
         {
-          title: 'Phone Number',
+          title: 'Phone number',
           dataIndex: 'contactPhone',
           key: 'phoneNumber',
           width: '15%'
         },
         {
-          title: 'Default Prescriber Name',
+          title: 'Default prescriber name',
           dataIndex: 'defaultClinics',
           key: 'defaultClinics',
           width: '15%',
@@ -325,7 +325,7 @@ export default class Customer extends React.Component<any, any> {
               <FormItem>
                 <SelectGroup
                   defaultValue=""
-                  label="Customer Type"
+                  label="Customer type"
                   style={{ width: 80 }}
                   onChange={(value) => {
                     value = value === '' ? null : value;

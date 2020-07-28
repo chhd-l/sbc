@@ -31,21 +31,21 @@ export default class ClinicList extends Component<any, any> {
           ellipsis: true
         },
         {
-          title: 'Prescriber Name',
+          title: 'Prescriber name',
           dataIndex: 'prescriberName',
           key: 'prescriberName',
           width: '15%',
           ellipsis: true
         },
         {
-          title: 'Prescriber Phone',
+          title: 'Prescriber phone',
           dataIndex: 'phone',
           key: 'prescriberPhone',
           width: '10%',
           ellipsis: true
         },
         {
-          title: 'Prescriber City',
+          title: 'Prescriber city',
           dataIndex: 'primaryCity',
           key: 'prescriberCity',
           width: '10%',
@@ -71,21 +71,21 @@ export default class ClinicList extends Component<any, any> {
         // },
 
         {
-          title: 'Prescriber Type',
+          title: 'Prescriber type',
           dataIndex: 'prescriberType',
           key: 'prescriberType',
           width: '10%',
           ellipsis: true
         },
         {
-          title: 'Reward Period',
+          title: 'Reward period',
           dataIndex: 'rewardType',
           key: 'rewardRate',
           width: '10%',
           ellipsis: true
         },
         {
-          title: 'Prescriber Status',
+          title: 'Prescriber status',
           dataIndex: 'enabled',
           key: 'enabled',
           width: '10%',
@@ -324,7 +324,7 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title="Prescriber List" />
+          <Headline title="Prescriber list" />
           {/*搜索条件*/}
           <Form className="filter-content" layout="inline">
             <FormItem>
@@ -369,7 +369,7 @@ export default class ClinicList extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue=""
-                label="Prescriber City"
+                label="Prescriber city"
                 style={{ width: 80 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -406,7 +406,7 @@ export default class ClinicList extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue=""
-                label="Prescriber Type"
+                label="Prescriber type"
                 style={{ width: 80 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -430,7 +430,7 @@ export default class ClinicList extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="true"
-                label="Prescriber Status"
+                label="Prescriber status"
                 style={{ width: 80 }}
                 onChange={(value) => {
                   value = value === '' ? '' : value;

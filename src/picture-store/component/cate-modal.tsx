@@ -163,7 +163,7 @@ class PicCateForm extends React.Component<any, any> {
           style={{ marginBottom: '50px' }}
           className={'c-tree-select'}
           {...formItemLayout}
-          label="Parent Category"
+          label="Parent category"
           hasFeedback
         >
           {getFieldDecorator('cateParentId', {
@@ -193,7 +193,7 @@ class PicCateForm extends React.Component<any, any> {
             title="To add a new category, please select the superior category first"
           />
         </FormItem>
-        <FormItem {...formItemLayout} label="Category Name" hasFeedback>
+        <FormItem {...formItemLayout} label="Category name" hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               { required: true, message: 'Please input the category name' },

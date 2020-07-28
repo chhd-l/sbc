@@ -40,8 +40,13 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
+<<<<<<< HEAD
             label="Promotion type"
             style={{ width: 170 }}
+=======
+            label="Campaign type"
+            style={{ width: 160 }}
+>>>>>>> translate
             defaultValue="All"
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -100,7 +105,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={startValue}
-            placeholder="Start Time"
+            placeholder="Start time"
             onChange={this.onStartChange}
             showToday={false}
           />
@@ -112,7 +117,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={endValue}
-            placeholder="End Time"
+            placeholder="End time"
             onChange={this.onEndChange}
             showToday={false}
           />

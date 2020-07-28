@@ -129,15 +129,9 @@ export default class CateList extends React.Component<any, any> {
                   //height: 100
                 }}
                 placement="bottomLeft"
-                title={
-                  <div>
-                    {rowInfo}
-                  </div>
-                }
+                title={<div>{rowInfo}</div>}
               >
-                <p style={styles.text}>
-                  {rowInfo}
-                </p>
+                <p style={styles.text}>{rowInfo}</p>
               </Tooltip>
             );
           }}
@@ -481,8 +475,8 @@ const styles = {
   },
   text: {
     overflow: 'hidden',
-    textOverflow:'ellipsis',
-    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   },
   cell: {
     color: '#999',

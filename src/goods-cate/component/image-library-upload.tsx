@@ -25,7 +25,6 @@ export default class ImageLibraryUpload extends Component<any, any> {
       imgType,
       skuId
     } = this.props;
-
     return (
       <div>
         {images.map((v) => {

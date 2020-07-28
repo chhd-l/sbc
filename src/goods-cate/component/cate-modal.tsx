@@ -210,8 +210,12 @@ class CateModalForm extends React.Component<any, any> {
         >
           {getFieldDecorator('cateName', {
             rules: [
-              { required: true, whitespace: true, message: '请输入分类名称' },
-              { max: 20, message: '最多20字符' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please enter a category name'
+              },
+              { max: 20, message: 'Up to 20 characters' },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, '分类名称');
@@ -219,7 +223,7 @@ class CateModalForm extends React.Component<any, any> {
               }
             ],
             initialValue: cateName,
-            onChange: this._changeCateName
+             onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
         <FormItem
@@ -238,7 +242,7 @@ class CateModalForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: '请选择平台商品类目'
+                message: 'Please select platform product category'
               },
               {
                 validator: (_rule, value, callback) => {

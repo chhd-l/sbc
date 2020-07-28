@@ -43,7 +43,6 @@ export default class CateActor extends Actor {
         saleType: 0
       },
       sourceCateList: [],
-      images: [],
       resCateAllList: []
     };
   }
@@ -93,7 +92,10 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: closeModal')
   close(state) {
-    return state.set('modalVisible', false).set('formData', Map());
+    return state.set('modalVisible', false).set(
+      'images',
+      state.get('images').filter((i) => {return false})
+    ).set('formData', Map());
   }
 
   /**
@@ -160,5 +162,39 @@ export default class CateActor extends Actor {
   @Action('cateActor: cateId')
   editCateId(state, cateId) {
     return state.set('videoCateId', cateId);
+  }
+
+  @Action('cateActor: editImages')
+  editImages(state, images) {
+    return state.set(
+      'images',
+      images.map((i, index) => {
+        i = i.set('imageId', index);
+        return i;
+      })
+    );
+  }
+
+  /**
+   * 移除图片
+   * @param state
+   * @param {number} imageId
+   */
+  @Action('cateActor: remove')
+  removeImg(state, imageId: number) {
+    return state.set(
+      'images',
+      state.get('images').filter((i) => i.get('imageId') !== imageId)
+    );
+  }
+
+  @Action('cateActor: editVideo')
+  editVideo(state, video) {
+    return state.set('video', video);
+  }
+
+  @Action('cateActor: deleteVideo')
+  deleteVideo(state: IMap) {
+    return state.set('video', {});
   }
 }

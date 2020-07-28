@@ -407,7 +407,7 @@ export default class AppStore extends Store {
    */
   removeImg = ({ type, id }) => {
     if (type === 0) {
-      this.dispatch('imageActor: remove', id);
+      this.dispatch('cateActor: remove', id);
     } else {
       this.dispatch('goodsSpecActor: removeImg', id);
     }
@@ -491,7 +491,7 @@ export default class AppStore extends Store {
     if (imgType === 0) {
       let images = this.state().get('images');
       images = images.concat(chooseImgs);
-      this.dispatch('imageActor: editImages', images);
+      this.dispatch('cateActor: editImages', images);
     } else if (imgType === 1) {
       const skuId = this.state().get('skuId');
       this.dispatch('goodsSpecActor: editGoodsItem', {
@@ -537,7 +537,7 @@ export default class AppStore extends Store {
    * 修改商品图片
    */
   editImages = (images: IList) => {
-    this.dispatch('imageActor: editImages', images);
+    this.dispatch('cateActor: editImages', images);
   };
   /**
    * 清除选中的图片集合

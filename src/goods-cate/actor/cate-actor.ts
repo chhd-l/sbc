@@ -43,7 +43,9 @@ export default class CateActor extends Actor {
         saleType: 0
       },
       sourceCateList: [],
-      resCateAllList: []
+      resCateAllList: [],
+      images: [],
+      video: {}
     };
   }
 

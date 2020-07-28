@@ -150,8 +150,8 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th> */}
                       <th style={{ width: '15%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product Name</th>
-                      <th style={{ width: '10%' }}>Subscription Status</th>
+                      <th style={{ width: '15%' }}>Product name</th>
+                      <th style={{ width: '10%' }}>Subscription status</th>
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>

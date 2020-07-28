@@ -223,7 +223,7 @@ export default class CustomerList extends React.Component<any, any> {
           }
         />
 
-        <DataGrid.Column
+        <Column
           title={<FormattedMessage id="operation" />}
           key="evaluateId"
           dataIndex="evaluateId"

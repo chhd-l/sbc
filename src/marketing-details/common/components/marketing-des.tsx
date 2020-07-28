@@ -28,8 +28,8 @@ const MAK_TYPE = {
 };
 
 const SUB_TYPE = {
-  0: 'Full amount minus',
-  1: 'Full quantity minus',
+  0: 'Full amount reduction',
+  1: 'Full quantity reduction',
   2: 'Full amount discount',
   3: 'Full quantity discount'
   // 4: '满金额赠',

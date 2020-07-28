@@ -52,7 +52,6 @@ export default class List extends React.Component<any, any> {
       setCheckedSettleIds,
       changeSettleStatus
     } = this.props.relaxProps;
-    console.log(queryParams.get('settleStatus').toString(), 2222222222);
     return (
       <DataGrid
         loading={loading}

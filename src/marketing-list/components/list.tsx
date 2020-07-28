@@ -84,7 +84,6 @@ export default class MarketingList extends React.Component<any, any> {
       onPause,
       onStart
     } = this.props.relaxProps;
-    debugger;
     return (
       <DataGrid
         loading={loading}
@@ -96,7 +95,6 @@ export default class MarketingList extends React.Component<any, any> {
           pageSize: pageSize,
           total: total,
           onChange: (pageNum, pageSize) => {
-            debugger;
             init({ pageNum: pageNum - 1, pageSize });
           }
         }}

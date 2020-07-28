@@ -71,7 +71,7 @@ export default class EditForm extends React.Component<any, any> {
       <Form>
         <FormItem
           {...formItemLayout}
-          label="客户名称"
+          label="Customername"
           required={true}
           hasFeedback={true}
         >

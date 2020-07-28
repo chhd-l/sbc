@@ -36,7 +36,9 @@ export default class RefundList extends React.Component<any, any> {
         {/*<div className="totalAmount">
           <ul>
             <li>
-              <p className="payName">&nbsp;Total Refund</p>
+              <p className="payName">
+                &nbsp;<FormattedMessage id="TotalRevenue"></FormattedMessage>
+              </p>
               <strong>
                 {refundList.toJS().map((item, index) => {
                   let a = item.totalAmount.substr(

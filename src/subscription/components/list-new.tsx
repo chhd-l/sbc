@@ -150,8 +150,8 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th> */}
                       <th style={{ width: '15%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product Name</th>
-                      <th style={{ width: '10%' }}>Subscription Status</th>
+                      <th style={{ width: '15%' }}>Product name</th>
+                      <th style={{ width: '10%' }}>Subscription status</th>
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.consumerName" />
                       </th>
@@ -280,23 +280,21 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.goodsInfo && v.goodsInfo.size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={item.goodsPic ? item.goodsPic : defaultImg}
-                              style={styles.imgFourth}
-                            />
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.goodsInfo.size} <FormattedMessage id="piece" />
-                            </div>
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.goodsInfo && v.goodsInfo.size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={item.goodsPic ? item.goodsPic : defaultImg}
+                            style={styles.imgFourth}
+                          />
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="total" />
+                            {v.goodsInfo.size} <FormattedMessage id="piece" />
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
                     <td
                       style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}

@@ -149,7 +149,7 @@ class CateModalForm extends React.Component<any, any> {
           })(<Input onChange={this._changeCateName} value={cateName} />)}
         </FormItem>
         {formData.get('cateParentName') && (
-          <FormItem {...formItemLayout} label="Parent Category">
+          <FormItem {...formItemLayout} label="Parent category">
             {formData.get('cateParentName')}
           </FormItem>
         )}

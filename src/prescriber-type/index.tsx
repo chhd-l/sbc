@@ -155,7 +155,7 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container">
-          <Headline title="Prescriber Type" />
+          <Headline title="Prescriber type" />
           {/*搜索条件*/}
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
             <Link to="/prescriber-type-add">Add</Link>

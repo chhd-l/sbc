@@ -131,14 +131,14 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th style={{ width: '300' }}>商品</th>
-                      <th style={{ width: '10%' }}>客户名称</th>
-                      <th style={{ width: '15%' }}>收件人</th>
-                      <th style={{ width: '10%' }}>积分/数量</th>
-                      <th style={{ width: '10%' }}>发货状态</th>
-                      <th style={{ width: '10%' }}>订单状态</th>
+                      <th style={{ width: '300' }}>Product</th>
+                      <th style={{ width: '10%' }}>Client name</th>
+                      <th style={{ width: '15%' }}>Recipient</th>
+                      <th style={{ width: '10%' }}>Integral/quantity</th>
+                      <th style={{ width: '10%' }}>Delivery status</th>
+                      <th style={{ width: '10%' }}>Order starus</th>
                       <th style={{ width: '10%', textAlign: 'right' }}>
-                        付款状态
+                        Payment status
                       </th>
                     </tr>
                   </thead>
@@ -229,9 +229,11 @@ export default class ListView extends React.Component<any, any> {
                             }}
                           />
                         </span>
-                        <span style={{ marginLeft: 20 }}>订单号：{id} </span>
+                        <span style={{ marginLeft: 20 }}>
+                          Order number：{id}{' '}
+                        </span>
                         <span style={{ marginLeft: 60 }}>
-                          下单时间：
+                          Order time：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -251,7 +253,7 @@ export default class ListView extends React.Component<any, any> {
                                   onClick={() => this._toDeliveryForm(id)}
                                   style={{ marginLeft: 20 }}
                                 >
-                                  发货
+                                  Delivery
                                 </a>
                               </AuthWrapper>
                             )}
@@ -266,7 +268,7 @@ export default class ListView extends React.Component<any, any> {
                             ) && (
                               <AuthWrapper functionName="f_points_order_list_005">
                                 <a onClick={() => this._toDeliveryForm(id)}>
-                                  发货
+                                  Delivery
                                 </a>
                               </AuthWrapper>
                             )}
@@ -280,7 +282,7 @@ export default class ListView extends React.Component<any, any> {
                                 }}
                                 href="javascript:void(0)"
                               >
-                                确认收货
+                                Delivery confirmed
                               </a>
                             </AuthWrapper>
                           )}
@@ -289,7 +291,7 @@ export default class ListView extends React.Component<any, any> {
                               style={{ marginLeft: 20, marginRight: 18 }}
                               to={`/points-order-detail/${id}`}
                             >
-                              查看详情
+                              View details
                             </Link>
                           </AuthWrapper>
                         </span>
@@ -322,35 +324,33 @@ export default class ListView extends React.Component<any, any> {
                             />
                           ) : null
                         )}
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              共{v.get('tradeItems').concat(gifts).size}件
-                            </div>
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
+                          //@ts-ignore
+                          <div style={styles.imgNum}>
+                            All{v.get('tradeItems').concat(gifts).size} items
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
                     <td style={{ width: '10%' }}>
                       {/*客户名称*/}
@@ -358,14 +358,14 @@ export default class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '15%' }}>
                       {/*收件人姓名*/}
-                      收件人：{v.getIn(['consignee', 'name'])}
+                      Recipients：{v.getIn(['consignee', 'name'])}
                       <br />
                       {/*收件人手机号码*/}
                       {v.getIn(['consignee', 'phone'])}
                     </td>
                     <td style={{ width: '10%' }}>
                       {tradePoints}
-                      <br />（{num}件)
+                      <br />（{num} items)
                     </td>
                     {/*发货状态*/}
                     <td style={{ width: '10%' }}>

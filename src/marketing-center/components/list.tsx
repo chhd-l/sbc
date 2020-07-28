@@ -24,7 +24,7 @@ export default class List extends React.Component<any, any> {
   render() {
     return (
       <div className="container">
-        <Headline title="Marketing Center" />
+        <Headline title="Marketing center" />
         <div className="appsMain">
           {/* <h3>
             获客拉新<span>全渠道新用户</span>

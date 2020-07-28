@@ -394,7 +394,7 @@ class CateModalForm extends React.Component<any, any> {
           })(
             <TextArea
               rows={4}
-              placeholder="Please input the product description"
+              placeholder="Please iwwwwwwwwwwwnput the sssssproduct description"
             />
           )}
         </FormItem>

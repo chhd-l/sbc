@@ -555,10 +555,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time &&
-          moment(time)
-            .format(Const.TIME_FORMAT)
-            .toString()
+          time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
         title: 'Operation Category',
@@ -629,14 +626,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Col>
             <Col span={11} className="basic-info">
               <p>
-                Consumer Name: <span>{subscriptionInfo.consumer}</span>
+                Consumer name: <span>{subscriptionInfo.consumer}</span>
               </p>
               <p>
                 Consumer Account :{' '}
                 <span>{subscriptionInfo.consumerAccount}</span>
               </p>
               <p>
-                Consumer Type : <span>{subscriptionInfo.consumerType}</span>
+                Consumer type : <span>{subscriptionInfo.consumerType}</span>
               </p>
               <p>
                 Phone Number : <span>{subscriptionInfo.phoneNumber}</span>

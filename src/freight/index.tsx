@@ -5,6 +5,8 @@ import { Breadcrumb, Alert, Radio, Button, Tabs } from 'antd';
 import { Headline, history, AuthWrapper, checkAuth, BreadCrumb } from 'qmkit';
 import styled from 'styled-components';
 
+import { FormattedMessage } from 'react-intl';
+
 import GoodsSetting from './component/goods-setting';
 import StoreSetting from './component/store-setting';
 import AppStore from './store';
@@ -61,7 +63,9 @@ export default class FreightTemplate extends React.Component<any, any> {
       //   <Breadcrumb.Item>运费模板</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title="Freight Template" />
+        <Headline
+          title={<FormattedMessage id="FreightTemplate"></FormattedMessage>}
+        />
         <Alert
           message={
             <div>
@@ -88,11 +92,15 @@ export default class FreightTemplate extends React.Component<any, any> {
               }
               value={fMode}
             >
-              <Radio value={0}>Store Freight</Radio>
-              <Radio value={1}>Single Product Freight</Radio>
+              <Radio value={0}>
+                <FormattedMessage id="StoreFreight"></FormattedMessage>
+              </Radio>
+              <Radio value={1}>
+                <FormattedMessage id="SingleProductFreight"></FormattedMessage>
+              </Radio>
             </RadioGroup>
             <Button type="primary" onClick={() => this._save()}>
-              Save Settings
+              Save settings
             </Button>
           </TitleBox>
         </AuthWrapper>
@@ -104,12 +112,20 @@ export default class FreightTemplate extends React.Component<any, any> {
             tabBarStyle={{ marginTop: 16 }}
           >
             {checkAuth('f_store_temp_list') && (
-              <Tabs.TabPane tab="Store Freight" key={0}>
+              <Tabs.TabPane
+                tab={<FormattedMessage id="StoreFreight"></FormattedMessage>}
+                key={0}
+              >
                 <StoreSetting />
               </Tabs.TabPane>
             )}
             {checkAuth('f_goods_temp_list') && (
-              <Tabs.TabPane tab="Single Product Freight" key={1}>
+              <Tabs.TabPane
+                tab={
+                  <FormattedMessage id="SingleProductFreight"></FormattedMessage>
+                }
+                key={1}
+              >
                 <GoodsSetting />
               </Tabs.TabPane>
             )}

@@ -30,7 +30,7 @@ export default class Customer extends React.Component<any, any> {
         </Breadcrumb> */}
         <AuthWrapper functionName={'f_customer_iep_page'}>
           <div className="container customer">
-            <Headline title="企业会员" />
+            <Headline title="Corporate member" />
 
             {/*搜索条件*/}
             <SearchForm />

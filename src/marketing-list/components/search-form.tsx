@@ -40,6 +40,27 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
+            label="Promotion type"
+            style={{ width: 170 }}
+            defaultValue="All"
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              onFormChange({
+                field: 'promotionType',
+                value
+              });
+            }}
+          >
+            <Option value="">All</Option>
+            <Option value="0">Normal promotion</Option>
+            <Option value="1">Subscription promotion</Option>
+            {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+          </SelectGroup>
+        </FormItem>
+        <FormItem>
+          <SelectGroup
+            getPopupContainer={() => document.getElementById('page-content')}
             label="Campaign Type"
             style={{ width: 160 }}
             defaultValue="All"
@@ -56,27 +77,6 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="1">Full quantity reduction</Option>
             <Option value="2">Full amount discount</Option>
             <Option value="3">Full quantity discount</Option>
-            {/* <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option> */}
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label="Promotion type"
-            style={{ width: 170 }}
-            defaultValue="All"
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'promotionType',
-                value
-              });
-            }}
-          >
-            <Option value="">All</Option>
-            <Option value="0">Normal promotion</Option>
-            <Option value="1">Subscription promotion</Option>
             {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
           </SelectGroup>

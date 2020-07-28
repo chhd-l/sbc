@@ -10,6 +10,7 @@ import OrderReceive from './components/order-receive';
 
 import { Headline, BreadCrumb } from 'qmkit';
 
+import { FormattedMessage } from 'react-intl';
 /**
  * 积分订单详情
  */
@@ -33,10 +34,16 @@ export default class OrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>积分订单详情</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="PointsOrderDetails"></FormattedMessage>
+          </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container">
-          <Headline title="积分订单详情" />
+          <Headline
+            title={
+              <FormattedMessage id="PointsOrderDetails"></FormattedMessage>
+            }
+          />
 
           <Tabs
             onChange={(key) => this.store.onTabsChange(key)}

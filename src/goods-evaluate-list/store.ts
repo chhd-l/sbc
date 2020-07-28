@@ -57,7 +57,6 @@ export default class AppStore extends Store {
       pageSize
     });
 
-    debugger;
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('loading:end');

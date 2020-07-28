@@ -83,7 +83,7 @@ export default class FreightGoodsList extends React.Component<any, any> {
       }
     },
     {
-      title: 'Product Name',
+      title: 'Product name',
       dataIndex: 'goodsName',
       key: 'goodsName'
     },

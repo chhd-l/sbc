@@ -96,7 +96,7 @@ export default class SearchList extends React.Component<any, any> {
               <div className="ant-table-placeholder">
                 <span>
                   <i className="anticon anticon-frown-o" />
-                  {<FormattedMessage id="nodata" />}
+                  {<FormattedMessage id="noData" />}
                 </span>
               </div>
             ) : null}

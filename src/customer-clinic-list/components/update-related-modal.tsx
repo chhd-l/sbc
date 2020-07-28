@@ -45,7 +45,7 @@ class UpdateRelaterForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem {...formItemLayout} label="客户名称">
+        <FormItem {...formItemLayout} label="Customername">
           <span>{customerInfo.get('customerName')}</span>
         </FormItem>
 

@@ -9,22 +9,22 @@ const columns = [
     key: 'clinicID'
   },
   {
-    title: 'Prescriber Name',
+    title: 'Prescriber name',
     dataIndex: 'clinicName',
     key: 'clinicName'
   },
   {
-    title: 'Prescriber Phone',
+    title: 'Prescriber phone',
     dataIndex: 'clinicPhone',
     key: 'clinicPhone'
   },
   {
-    title: 'Prescriber City',
+    title: 'Prescriber city',
     dataIndex: 'clinicCity',
     key: 'clinicCity'
   },
   {
-    title: 'Prescriber Zip',
+    title: 'Prescriber zip',
     dataIndex: 'clinicZip',
     key: 'clinicZip'
   },

@@ -38,7 +38,7 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="客户名称"
+            addonBefore="Consumer name"
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -52,7 +52,7 @@ export default class SearchForm extends React.Component<any, any> {
         {/*省市区*/}
         <FormItem>
           <AreaSelect
-            label="所在地区"
+            label="Area"
             getPopupContainer={() => document.getElementById('page-content')}
             onChange={(value) => {
               onFormChange({
@@ -66,7 +66,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="账号状态"
+            label="Account status"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -76,15 +76,15 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
-            <Option value="0">启用</Option>
-            <Option value="1">禁用</Option>
+            <Option value="">All</Option>
+            <Option value="0">Enable</Option>
+            <Option value="1">Disabled</Option>
           </SelectGroup>
         </FormItem>
 
         <FormItem>
           <Input
-            addonBefore="账号"
+            addonBefore="Account number"
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -98,7 +98,7 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="平台等级"
+            label="Plarform level"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -108,7 +108,7 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
+            <Option value="">All</Option>
             {customerLevels.map((v) => (
               <Option
                 key={v.get('customerLevelId').toString()}
@@ -124,7 +124,7 @@ export default class SearchForm extends React.Component<any, any> {
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
-            label="业务员"
+            label="Auditors"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -134,7 +134,7 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
+            <Option value="">All</Option>
             {employee.map((v) => (
               <Option
                 key={v.get('employeeId').toString()}
@@ -148,7 +148,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="公司名称"
+            addonBefore="Company name"
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -163,7 +163,7 @@ export default class SearchForm extends React.Component<any, any> {
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
-            label="公司性质"
+            label="Company type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -173,7 +173,7 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
           >
-            <Option value="">全部</Option>
+            <Option value="">All</Option>
             {FindBusiness.getBusinessNatures()
               .toJS()
               .map((c: any) => (
@@ -186,7 +186,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Button type="primary" onClick={() => onSearch()} htmlType="submit">
-            搜索
+            Search
           </Button>
         </FormItem>
       </Form>

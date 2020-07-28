@@ -40,7 +40,7 @@ export default class SearchTabList extends React.Component<any, any> {
           >
             {tab.get('key') === 'flowState-INIT' ? <List /> : null}
           </Tabs.TabPane>
-          {<FormattedMessage id="pendingReview" />}
+          {/*{<FormattedMessage id="pendingReview" />}*/}
           <Tabs.TabPane
             tab={<FormattedMessage id="toBeFilledOutLogisticsInformation" />}
             key="flowState-AUDIT"

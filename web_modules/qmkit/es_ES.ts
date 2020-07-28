@@ -326,7 +326,7 @@ export default {
   'generalInvoice': 'General invoice ',
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
-  'expressDelivery	': "Express delivery",
+  'expressDelivery': 'Express delivery',
   'deliveryInformation': "delivery information",
   'confirm': 'Confirm',
   'productFirstLetterUpperCase': 'Product',
@@ -501,6 +501,7 @@ export default {
   'revenueReconciliationDetails': 'Revenue Reconciliation Details',
   'paymentChannel': 'Payment Channel',
   'transactionSerialNumber': 'Transaction Serial Number',
+  'serialNumber': 'Serial number',
   'paymentTime': 'Payment Time',
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
@@ -737,9 +738,9 @@ export default {
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',
   'action': 'Action',
-  'resourceName': 'Banner name'
-
-
+  'resourceName': 'Banner name',
+  'Instructions': 'Instructions',
+  'amountReceivable': 'Amount receivable'
 
 
 

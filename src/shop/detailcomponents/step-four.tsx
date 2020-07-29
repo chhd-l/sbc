@@ -114,11 +114,11 @@ export default class StepFour extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="confirmationEmail" />}
+                  label={<FormattedMessage id="legalTerms" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.confirmationEmail ? (
-                      this.state.contentInformation.confirmationEmail
+                    {this.state.contentInformation.legalTerms ? (
+                      this.state.contentInformation.legalTerms
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -182,6 +182,24 @@ export default class StepFour extends React.Component<any, any> {
                       <FormattedMessage id="none" />
                     )}
                   </span>
+                </FormItem>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="confirmationEmail" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.confirmationEmail ? (
+                      this.state.contentInformation.confirmationEmail
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
                 </FormItem>
               </Col>
             </Row>

@@ -102,11 +102,11 @@ export default class FreightItem extends React.Component<any, any> {
         width: typeFlag ? '20%' : '30%',
         dataIndex: 'deliverWay',
         render: (text) => {
-          return text == 1 ? 'Express Delivery' : '';
+          return text == 1 ? 'Express delivery' : '';
         }
       } as any,
       {
-        title: 'Ship To',
+        title: 'Ship to',
         width: typeFlag ? '20%' : '35%',
         dataIndex: 'destinationAreaName',
         render: (text) => {
@@ -142,7 +142,7 @@ export default class FreightItem extends React.Component<any, any> {
       // 店铺
       columns = columns.concat([
         {
-          title: 'Billing Rules',
+          title: 'Billing rules',
           width: '35%',
           dataIndex: 'freightType',
           render: (text, record) => {

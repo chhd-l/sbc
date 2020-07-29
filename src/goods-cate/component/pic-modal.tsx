@@ -505,7 +505,7 @@ const styles = {
   title: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   grey: {
     fontSize: 12,

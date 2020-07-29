@@ -326,7 +326,7 @@ export default {
   'generalInvoice': 'General invoice ',
   'invoiceReceivingAddress': "Invoice receiving address",
   'deliveryMethod': 'Delivery method',
-  'expressDelivery	': "Express delivery",
+  'expressDelivery': 'Express delivery',
   'deliveryInformation': "delivery information",
   'confirm': 'Confirm',
   'productFirstLetterUpperCase': 'Product',
@@ -491,8 +491,6 @@ export default {
   'revenueReconciliation': 'Revenue Reconciliation',
   'refundReconciliation': 'Refund Reconciliation',
   'VISA': 'VISA',
-  'visa': 'VISA',
-  'OXXO': 'OXXO',
   'AMERICAN EXPRESS': 'AMERICAN EXPRESS',
   'masterCard': 'MasterCard',
 
@@ -501,6 +499,7 @@ export default {
   'revenueReconciliationDetails': 'Revenue Reconciliation Details',
   'paymentChannel': 'Payment Channel',
   'transactionSerialNumber': 'Transaction Serial Number',
+  'serialNumber': 'Serial number',
   'paymentTime': 'Payment Time',
   'paymentAmount': 'Payment Amount',
   'paymentNumber': 'Payment number',
@@ -645,10 +644,11 @@ export default {
   'numberOfPaymentOrders': 'Number of payment orders',
   'rewardSummary': 'Reward summary',
   'rewardAmount': 'Reward amount',
+  'items':'Items',
   'product.subscriptionStatus': 'Subscription status',
   'product.subscriptionPrice': 'Subscription Price',
 
-  'subscription.subList': 'Subscription List',
+  'subscription.subList': 'Subscription list',
   'subscription.orderNumber': 'Order number',
   'subscription.consumerName': 'Consumer name',
   'subscription.productName': 'Product name',
@@ -677,7 +677,7 @@ export default {
   'subscription.edit': 'Subscription edit',
   'subscription.sub': 'Sub-',
   'subscription.operation': 'Operation',
-  'subscription.subscriptionDate':'Subscription Date',
+  'subscription.subscriptionDate':'Subscription date',
   'items': 'Items',
   'petCategory': 'Pet Category',
   'petName': 'Pet Name',
@@ -722,7 +722,7 @@ export default {
   'averageScore': 'Average score',
   'evaluationHistory': 'Evaluation history',
 
-  'subscriptionList':'Subscription List',
+  'subscriptionList':'Subscription list',
   'setBanner': 'Set banner',
   'pc': 'PC',
   'mobile': 'Mobile',
@@ -737,9 +737,9 @@ export default {
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',
   'action': 'Action',
-  'resourceName': 'Banner name'
-
-
+  'resourceName': 'Banner name',
+  'Instructions': 'Instructions',
+  'amountReceivable': 'Amount receivable'
 
 
 

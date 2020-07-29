@@ -46,7 +46,7 @@ export default class SetBannerList extends Component<any, any> {
       getBannerById: Function;
       getStoreId: Function;
       setBannerId: Function;
-      setBannerName: Function;
+      onImageFormChange: Function;
     };
   };
 
@@ -59,7 +59,7 @@ export default class SetBannerList extends Component<any, any> {
     getStoreId: noop,
     setBannerId: noop,
     getBannerById: noop,
-    setBannerName: noop
+    onImageFormChange: noop
   };
   handleTableChange() {}
   componentDidMount() {
@@ -178,7 +178,7 @@ export default class SetBannerList extends Component<any, any> {
       tableDatas,
       setModalVisible,
       setBannerId,
-      setBannerName
+      onImageFormChange
     } = this.props.relaxProps;
     return (
       <div>
@@ -190,7 +190,8 @@ export default class SetBannerList extends Component<any, any> {
             onClick={(e) => {
               e.stopPropagation();
               setBannerId(null);
-              setBannerName('');
+              onImageFormChange({ field: 'bannerNo', value: null });
+              onImageFormChange({ field: 'bannerName', value: '' });
               setModalVisible(true);
             }}
           >

@@ -58,7 +58,14 @@ export default class AppStore extends Store {
   getBannerById = async (params) => {
     const { res } = await webapi.getList(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.dispatch('imageActor:setBannerName', res.context[0].bannerName);
+      this.onImageFormChange({
+        field: 'bannerName',
+        value: res.context[0].bannerName
+      });
+      this.onImageFormChange({
+        field: 'bannerNo',
+        value: res.context[0].bannerNo
+      });
     } else {
       message.error(res.message);
     }
@@ -75,20 +82,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.uploadBanner(params);
     const ref = this;
     if (res.code === Const.SUCCESS_CODE) {
-      // confirm({
-      //   title: 'Tip',
-      //   content: '是否继续添加banner',
-      //   onOk() {
-      //     ref.setBannerName('')
-      //   },
-      //   onCancel() {
-      //     debugger
-      //     ref.setModalVisible(false);
-      //     ref.getList({ storeId: this.getStoreId() });
-      //   },
-      //   okText: 'OK',
-      //   cancelText: 'Cancel'
-      // });
     } else {
       message.error(res.message);
     }
@@ -106,6 +99,7 @@ export default class AppStore extends Store {
   };
 
   onImageFormChange = ({ field, value }) => {
+    debugger;
     this.dispatch('imageActor:field', { field, value });
   };
 }

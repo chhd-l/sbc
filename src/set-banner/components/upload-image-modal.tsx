@@ -54,7 +54,6 @@ export default class UploadImageModal extends Component<any, any> {
     super(props);
   }
   state = {
-    cateId: '',
     fileList: [], //pc fileList
     mFileList: [], //mobile fileList
     pcUrl: '',
@@ -77,7 +76,6 @@ export default class UploadImageModal extends Component<any, any> {
       onFormChange: Function;
       getList: Function;
       getStoreId: Function;
-      setBannerName: Function;
       onImageFormChange: Function;
       uploadBanner: Function;
       editBanner: Function;
@@ -95,7 +93,6 @@ export default class UploadImageModal extends Component<any, any> {
     onFormChange: noop,
     getList: noop,
     getStoreId: noop,
-    setBannerName: noop,
     onImageFormChange: noop,
     uploadBanner: noop,
     editBanner: noop
@@ -109,6 +106,20 @@ export default class UploadImageModal extends Component<any, any> {
       storeId,
       companyInfoId
     });
+    // const fileList = [
+    //   {
+    //     name: "test2.jpg",
+    //     // percent: 100,
+    //     response: ["https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280132205167.jpg"],
+    //     // size: 27330,
+    //     status: "done",
+    //     type: "image/jpeg",
+    //     uid: "rc-upload-1595899921402-3"
+    //   }
+    // ];
+    // this.setState({
+    //   fileList: fileList
+    // })
   }
 
   _handleSubmit = () => {
@@ -168,14 +179,27 @@ export default class UploadImageModal extends Component<any, any> {
             userId: null,
             webUrl: this.state.pcUrl
           };
-          const { getList, getStoreId, setBannerName } = this.props.relaxProps;
+          const {
+            getList,
+            getStoreId,
+            onImageFormChange
+          } = this.props.relaxProps;
           const ref = this;
           uploadBanner(params);
           confirm({
             title: 'Tip',
             content: '是否继续添加banner',
             onOk() {
-              setBannerName('');
+              onImageFormChange({
+                field: 'bannerName',
+                value: ''
+              });
+              onImageFormChange({
+                field: 'bannerNo',
+                value: null
+              });
+              ref.state.fileList = [];
+              ref.state.mFileList = [];
             },
             onCancel() {
               ref._handleModelCancel();
@@ -194,6 +218,8 @@ export default class UploadImageModal extends Component<any, any> {
   _handleModelCancel = () => {
     const { setModalVisible } = this.props.relaxProps;
     this.props.form.resetFields();
+    this.state.fileList = [];
+    this.state.mFileList = [];
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
@@ -203,10 +229,6 @@ export default class UploadImageModal extends Component<any, any> {
     this.setState({ mFileList });
   };
 
-  setBannerName(e) {
-    const { setBannerName } = this.props.relaxProps;
-    setBannerName(e.target.value);
-  }
   render() {
     const {
       modalVisible,
@@ -229,24 +251,10 @@ export default class UploadImageModal extends Component<any, any> {
     const setMFileList = this._setMFileList;
     const storeId = this.state.storeId;
     const bannerId = imageForm.toJS().bannerId;
+    const bannerNo = imageForm.toJS().bannerNo;
     const bannerName = imageForm.toJS().bannerName;
     const companyInfoId = this.state.companyInfoId;
-    const fileList = [
-      {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url:
-          'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        thumbUrl:
-          'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-      },
-      {
-        uid: '-2',
-        name: 'yyy.png',
-        status: 'error'
-      }
-    ];
+
     const props = {
       name: 'uploadFile',
       headers: {
@@ -336,6 +344,7 @@ export default class UploadImageModal extends Component<any, any> {
             (f.status == 'done' && !f.response) ||
             (f.status == 'done' && f.response && !f.response.code)
         );
+        console.log(fileList, 'ddddddddddddddddddddddd');
         setFileList(fileList);
       }
       // defaultFileList: [...fileList]
@@ -451,7 +460,7 @@ export default class UploadImageModal extends Component<any, any> {
             <Form>
               <FormItem {...formItemLayout} label="Banner No" name="bannerNo">
                 {getFieldDecorator('bannerNo', {
-                  initialValue: null,
+                  initialValue: bannerNo,
                   rules: [
                     { required: true, message: 'Please select banner No.' }
                   ]
@@ -483,7 +492,16 @@ export default class UploadImageModal extends Component<any, any> {
                   rules: [
                     { required: true, message: 'Please enter banner name.' }
                   ]
-                })(<Input onChange={(e) => this.setBannerName(e)} />)}
+                })(
+                  <Input
+                    onChange={(e) =>
+                      onImageFormChange({
+                        field: 'bannerName',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
               </FormItem>
 
               <FormItem

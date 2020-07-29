@@ -117,7 +117,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
-        <FormItem label="Prescriber Type Name">
+        <FormItem label="Prescriber type name">
           {getFieldDecorator('clinicTypeName', {
             rules: [
               { required: true, message: 'Please input Prescriber Type Name!' },
@@ -138,7 +138,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Prescriber Type Description">
+        <FormItem label="Prescriber type description">
           {getFieldDecorator('clinicTypeDesc', {
             rules: [
               {
@@ -173,7 +173,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
             </Button>
           )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="/prescriber-type">Back To List</Link>
+            <Link to="/prescriber-type">Back to list</Link>
           </Button>
         </FormItem>
       </Form>

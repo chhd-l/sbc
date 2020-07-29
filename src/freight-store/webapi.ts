@@ -8,6 +8,7 @@ import { Fetch } from 'qmkit';
  * @returns
  */
 export function fetchFreightStore(freightId) {
+  debugger;
   return Fetch(`/freightTemplate/freightTemplateStore/${freightId}`);
 }
 
@@ -30,4 +31,17 @@ export function freightStoreSave(request) {
  */
 export function fetchSelectedAreaIds() {
   return Fetch('/freightTemplate/freightTemplateStore/selected/area');
+}
+
+/**
+ * get Dict
+ * @param filterParams
+ */
+export function querySysDictionary(filterParams = {}) {
+  return Fetch('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
 }

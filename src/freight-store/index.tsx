@@ -22,7 +22,7 @@ export default class StoreFreight extends React.Component<any, any> {
     const { freightId } = (this.props.match && this.props.match.params) || {
       freightId: 0
     };
-
+    this.store.getCountryCity();
     if (freightId) {
       // 初始化
       this.store.init(freightId);

@@ -68,7 +68,7 @@ export default class List extends React.Component<any, any> {
                   setCheckedSettleIds(selectedRowKeys, i);
                 }
               }
-            : ''
+            : undefined
         }
         pagination={{
           total: settlePage.get('totalElements'),

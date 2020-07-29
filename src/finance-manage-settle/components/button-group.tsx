@@ -12,13 +12,15 @@ export default class ButtonGroup extends React.Component<any, any> {
       changeSettleStatus: Function;
       checkedSettleIds: IList;
       queryParams: IMap;
+      bulkExport: Function;
     };
   };
 
   static relaxProps = {
     changeSettleStatus: noop,
     checkedSettleIds: 'checkedSettleIds',
-    queryParams: 'queryParams'
+    queryParams: 'queryParams',
+    bulkExport: noop
   };
 
   render() {
@@ -27,7 +29,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <Dropdown
-          disabled={settleStatus == 1}
+          /*disabled={settleStatus == 1}*/
           overlay={this._menu()}
           getPopupContainer={() => document.getElementById('page-content')}
         >
@@ -41,7 +43,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   }
 
   _menu = () => {
-    const { queryParams } = this.props.relaxProps;
+    const { queryParams, bulkExport } = this.props.relaxProps;
     const settleStatus = queryParams.get('settleStatus').toString();
     return (
       <Menu>
@@ -52,7 +54,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         )}
         {settleStatus == 0 && (
           <Menu.Item>
-            <a onClick={() => this._handleBatchOption(2)}>No processing</a>
+            <a onClick={() => bulkExport()}>Bulk Export</a>
           </Menu.Item>
         )}
       </Menu>

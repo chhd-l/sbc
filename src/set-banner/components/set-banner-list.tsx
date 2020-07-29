@@ -45,7 +45,6 @@ export default class SetBannerList extends Component<any, any> {
       getList: Function;
       getBannerById: Function;
       getStoreId: Function;
-      setBannerId: Function;
       onImageFormChange: Function;
     };
   };
@@ -57,7 +56,6 @@ export default class SetBannerList extends Component<any, any> {
     deleteRow: noop,
     getList: noop,
     getStoreId: noop,
-    setBannerId: noop,
     getBannerById: noop,
     onImageFormChange: noop
   };
@@ -78,9 +76,9 @@ export default class SetBannerList extends Component<any, any> {
     const {
       setModalVisible,
       getBannerById,
-      setBannerId
+      onImageFormChange
     } = this.props.relaxProps;
-    setBannerId(bannerId);
+    onImageFormChange({ field: 'bannerId', value: null });
     await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
     setModalVisible(true);
   }
@@ -127,7 +125,7 @@ export default class SetBannerList extends Component<any, any> {
         }
 
         return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+          <tr className="ant-table-row  ant-table-row-level-0" key={index}>
             <td>{bannerNo}</td>
             <td>{pcName}</td>
             <td className="pad0">
@@ -177,7 +175,6 @@ export default class SetBannerList extends Component<any, any> {
       loading,
       tableDatas,
       setModalVisible,
-      setBannerId,
       onImageFormChange
     } = this.props.relaxProps;
     return (
@@ -189,7 +186,7 @@ export default class SetBannerList extends Component<any, any> {
             style={{ marginBottom: '10px' }}
             onClick={(e) => {
               e.stopPropagation();
-              setBannerId(null);
+              onImageFormChange({ field: 'bannerId', value: null });
               onImageFormChange({ field: 'bannerNo', value: null });
               onImageFormChange({ field: 'bannerName', value: '' });
               setModalVisible(true);

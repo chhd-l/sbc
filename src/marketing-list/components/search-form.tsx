@@ -40,8 +40,10 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
+
             label="Promotion type"
             style={{ width: 170 }}
+
             defaultValue="All"
             onChange={(value) => {
               value = value === '' ? null : value;

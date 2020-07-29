@@ -179,35 +179,7 @@ export default class UploadImageModal extends Component<any, any> {
             userId: null,
             webUrl: this.state.pcUrl
           };
-          const {
-            getList,
-            getStoreId,
-            onImageFormChange
-          } = this.props.relaxProps;
-          const ref = this;
-          uploadBanner(params);
-          confirm({
-            title: 'Tip',
-            content: '是否继续添加banner',
-            onOk() {
-              onImageFormChange({
-                field: 'bannerName',
-                value: ''
-              });
-              onImageFormChange({
-                field: 'bannerNo',
-                value: null
-              });
-              ref.state.fileList = [];
-              ref.state.mFileList = [];
-            },
-            onCancel() {
-              ref._handleModelCancel();
-              getList({ storeId: getStoreId() });
-            },
-            okText: 'OK',
-            cancelText: 'Cancel'
-          });
+          this._uploadBanner(params);
           this.setState({
             okDisabled: false
           });
@@ -215,11 +187,40 @@ export default class UploadImageModal extends Component<any, any> {
       }
     });
   };
-  _handleModelCancel = () => {
-    const { setModalVisible } = this.props.relaxProps;
-    this.props.form.resetFields();
+
+  _uploadBanner = async (params) => {
+    const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
+    const ref = this;
+    const res = await uploadBanner(params);
+    if (res != -1) {
+      confirm({
+        title: 'Tip',
+        content: '是否继续添加banner',
+        onOk() {
+          ref.resetForm();
+          getList({ storeId: getStoreId() });
+        },
+        onCancel() {
+          ref._handleModelCancel();
+          getList({ storeId: getStoreId() });
+        },
+        okText: 'OK',
+        cancelText: 'Cancel'
+      });
+    }
+  };
+  resetForm() {
+    // this.props.form.resetFields();
+    const { onImageFormChange } = this.props.relaxProps;
+    onImageFormChange({ field: 'bannerId', value: null });
+    onImageFormChange({ field: 'bannerNo', value: null });
+    onImageFormChange({ field: 'bannerName', value: '' });
     this.state.fileList = [];
     this.state.mFileList = [];
+  }
+  _handleModelCancel = () => {
+    const { setModalVisible } = this.props.relaxProps;
+    this.resetForm();
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
@@ -458,7 +459,7 @@ export default class UploadImageModal extends Component<any, any> {
         <div>
           <div>
             <Form>
-              <FormItem {...formItemLayout} label="Banner No" name="bannerNo">
+              <FormItem {...formItemLayout} label="Banner No">
                 {getFieldDecorator('bannerNo', {
                   initialValue: bannerNo,
                   rules: [
@@ -482,11 +483,7 @@ export default class UploadImageModal extends Component<any, any> {
                   </Select>
                 )}
               </FormItem>
-              <FormItem
-                {...formItemLayout}
-                label="Banner name"
-                name="bannerName"
-              >
+              <FormItem {...formItemLayout} label="Banner name">
                 {getFieldDecorator('bannerName', {
                   initialValue: bannerName,
                   rules: [

@@ -66,7 +66,7 @@ export default class CustomerList extends React.Component<any, any> {
         loading={loading}
         isScroll={false}
         className="resetTable"
-        sc
+        /*sc*/
         rowKey="evaluateId"
         pagination={{
           current: currentPage,
@@ -183,14 +183,12 @@ export default class CustomerList extends React.Component<any, any> {
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime)
-                  .format(Const.TIME_FORMAT)
-                  .toString()
+              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
               : ''
           }
         />
 
-        <DataGrid.Column
+        <Column
           title={<FormattedMessage id="operation" />}
           key="evaluateId"
           dataIndex="evaluateId"

@@ -72,14 +72,15 @@ export default class DitionaryList extends Component<any, any> {
   getDictionary = async (
     { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
   ) => {
-    this.setState({
-      loading: true
-    });
     const query = this.state.searchForm;
     const { res } = await webapi.fetchDictionaryList({
       ...query,
       pageNum,
       pageSize
+    });
+
+    this.setState({
+      loading: true
     });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
@@ -201,7 +202,7 @@ export default class DitionaryList extends Component<any, any> {
             <Link to="/dictionary-add">Add</Link>
           </Button>
           <Table
-            rowKey={(record) => record.id}
+            rowKey={(record, index) => index}
             dataSource={this.state.dictionaryData}
             columns={columns}
             pagination={this.state.pagination}

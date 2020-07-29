@@ -52,7 +52,7 @@ export default class StoreSetting extends React.Component<any, any> {
           onClick={() => history.push('/store-freight')}
           key="button"
         >
-          New store shipping template
+          Add store shipping template
         </Button>
       ) : null,
       <FreightList key="freightList" data={content} isStore={true} />,

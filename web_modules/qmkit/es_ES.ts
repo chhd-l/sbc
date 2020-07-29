@@ -151,6 +151,7 @@ export default {
   'storeContactPhoneNumber': 'Shop contact phone',
   'storeContactEmail': 'Shop contact email',
   'contactTimePeriod': 'Contact time period',
+  'legalTerms': 'Legal Terms',
 
   'signedInformation': 'Signed information',
   'financialInformation': 'Financial Information',
@@ -264,6 +265,7 @@ export default {
   'timeZone': 'Time zone',
   'currency': 'Currency',
   'domainName': 'Domain Name',
+  'miniCharge': 'Minimum Charge',
   'taxRate': 'Tax Rate',
   'detailAddress': 'Detail address',
   'selectAddress': 'Please select an address',

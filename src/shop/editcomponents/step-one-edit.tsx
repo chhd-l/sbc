@@ -510,6 +510,33 @@ export default class StepOneEdit extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="miniCharge" />}
+                >
+                  {getFieldDecorator('miniCharge', {
+                    initialValue: storeInfo.get('miniCharge'),
+                    rules: [
+                      {
+                        required: false,
+                        message: 'Please input Minimum Charge!'
+                      }
+                    ]
+                  })(
+                    <InputNumber
+                      min={0}
+                      onChange={(value) =>
+                        onChange({
+                          field: 'miniCharge',
+                          value: value
+                        })
+                      }
+                    />
+                  )}
+                </FormItem>
+              </Col>
             </Row>
             <Row>
               <Col span={12}>

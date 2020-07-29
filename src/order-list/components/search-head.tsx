@@ -297,8 +297,14 @@ export default class SearchHead extends Component<any, any> {
               <Input
                 addonBefore={this._renderClinicSelect()}
                 onChange={(e) => {
+                  let a = e.target.value.split(',');
+                  console.log(a.map(Number), 111);
+
                   this.setState({
-                    clinicSelectValue: (e.target as any).value
+                    clinicSelectValue:
+                      this.state.clinicSelect == 'clinicsName'
+                        ? (e.target as any).value
+                        : e.target.value.split(',').map(Number)
                   });
                 }}
               />
@@ -408,7 +414,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(value) => {
+        onChange={(value, a) => {
           this.setState({
             buyerOptions: value
           });
@@ -474,18 +480,19 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(val) =>
+        onChange={(val, a) => {
+          console.log(val, 22222);
           this.setState({
             clinicSelect: val
-          })
-        }
+          });
+        }}
         value={this.state.clinicSelect}
         // style={{ width: 100 }}
       >
         <Option value="clinicsName">
           <FormattedMessage id="clinicName" />
         </Option>
-        <Option value="clinicsId">
+        <Option value="clinicsIds">
           <FormattedMessage id="clinicID" />
         </Option>
       </Select>

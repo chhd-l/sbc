@@ -18,7 +18,8 @@ import {
   Modal,
   Popconfirm,
   Radio,
-  Collapse
+  Collapse,
+  Spin
 } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
@@ -379,9 +380,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   subTotal = () => {
+    debugger;
     const { goodsInfo } = this.state;
     let sum = 0;
-    for (let i = 0; i < goodsInfo.length; i++) {
+    for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
         sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
       }
@@ -391,7 +393,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   applyPromationCode = (promotionCode?: String) => {
     const { goodsInfo } = this.state;
     let goodsInfoList = [];
-    for (let i = 0; i < goodsInfo.length; i++) {
+    for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       let goods = {
         goodsInfoId: goodsInfo[i].skuId,
         buyCount: goodsInfo[i].subscribeNum
@@ -555,10 +557,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time &&
-          moment(time)
-            .format(Const.TIME_FORMAT)
-            .toString()
+          time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
         title: 'Operation Category',
@@ -590,267 +589,279 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {<FormattedMessage id="subscription.detail" />}
           </Breadcrumb.Item>
         </BreadCrumb>
-        <Card
-          loading={this.state.loading}
-          // title={cartTitle}
-          title="Subscription Details"
-          bordered={false}
-          extra={
-            subscriptionInfo.subscriptionStatus === 'Active' ? cartExtra : ''
-          }
-          style={{ margin: 20 }}
-        >
-          {/* subscription 基本信息 */}
-          <Row className="subscription-basic-info">
-            <Col span={24}>
-              <span style={{ fontSize: '16px', color: '#3DB014' }}>
-                {subscriptionInfo.subscriptionStatus}
-              </span>
-            </Col>
-            <Col span={11} className="basic-info">
-              <p>
-                Subscription Number :{' '}
-                <span>{subscriptionInfo.subscriptionNumber}</span>
-              </p>
-              <p>
-                Subscription Date :
-                <span>
-                  {moment(new Date(subscriptionInfo.subscriptionTime)).format(
-                    'YYYY-MM-DD HH:mm:ss'
-                  )}
+        <Spin spinning={this.state.loading}>
+          <Card
+            // title={cartTitle}
+            title="Subscription Details"
+            bordered={false}
+            extra={
+              subscriptionInfo.subscriptionStatus === 'Active' ? cartExtra : ''
+            }
+            style={{ margin: 20 }}
+          >
+            {/* subscription 基本信息 */}
+            <Row className="subscription-basic-info">
+              <Col span={24}>
+                <span style={{ fontSize: '16px', color: '#3DB014' }}>
+                  {subscriptionInfo.subscriptionStatus}
                 </span>
-              </p>
-              <p>
-                Presciber ID : <span>{subscriptionInfo.presciberID}</span>
-              </p>
-              <p>
-                Presciber Name : <span>{subscriptionInfo.presciberName}</span>
-              </p>
-            </Col>
-            <Col span={11} className="basic-info">
-              <p>
-                Consumer name: <span>{subscriptionInfo.consumer}</span>
-              </p>
-              <p>
-                Consumer Account :{' '}
-                <span>{subscriptionInfo.consumerAccount}</span>
-              </p>
-              <p>
-                Consumer type : <span>{subscriptionInfo.consumerType}</span>
-              </p>
-              <p>
-                Phone Number : <span>{subscriptionInfo.phoneNumber}</span>
-              </p>
-            </Col>
-          </Row>
-
-          {/* 订阅频率，配送日期修改 */}
-          <Row style={{ marginTop: 20 }} gutter={16}>
-            <Col span={8}>
-              <div className="previous-order-info">
-                <p>Previous Orders</p>
-                {orderInfo.recentOrderId ? (
-                  <Dropdown overlay={menu} trigger={['click']}>
-                    <a
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      {orderInfo.recentOrderId +
-                        '(' +
-                        orderInfo.orderStatus +
-                        ')'}
-                      <Icon type="down" style={{ margin: '0 5px' }} />
-                    </a>
-                  </Dropdown>
-                ) : null}
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="previous-order-info">
-                <p>Frequency</p>
-                <p style={{ color: '#808285' }}>
-                  {subscriptionInfo.frequencyName}
+              </Col>
+              <Col span={11} className="basic-info">
+                <p>
+                  Subscription Number :{' '}
+                  <span>{subscriptionInfo.subscriptionNumber}</span>
                 </p>
-                {/* <Select style={{ width: '50%' }} value={subscriptionInfo.frequency}>
+                <p>
+                  Subscription Date :
+                  <span>
+                    {moment(new Date(subscriptionInfo.subscriptionTime)).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    )}
+                  </span>
+                </p>
+                <p>
+                  Presciber ID : <span>{subscriptionInfo.presciberID}</span>
+                </p>
+                <p>
+                  Presciber Name : <span>{subscriptionInfo.presciberName}</span>
+                </p>
+              </Col>
+              <Col span={11} className="basic-info">
+                <p>
+                  Consumer name: <span>{subscriptionInfo.consumer}</span>
+                </p>
+                <p>
+                  Consumer Account :{' '}
+                  <span>{subscriptionInfo.consumerAccount}</span>
+                </p>
+                <p>
+                  Consumer type : <span>{subscriptionInfo.consumerType}</span>
+                </p>
+                <p>
+                  Phone Number : <span>{subscriptionInfo.phoneNumber}</span>
+                </p>
+              </Col>
+            </Row>
+
+            {/* 订阅频率，配送日期修改 */}
+            <Row style={{ marginTop: 20 }} gutter={16}>
+              <Col span={8}>
+                <div className="previous-order-info">
+                  <p>Previous Orders</p>
+                  {orderInfo.recentOrderId ? (
+                    <Dropdown overlay={menu} trigger={['click']}>
+                      <a
+                        className="ant-dropdown-link"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {orderInfo.recentOrderId +
+                          '(' +
+                          orderInfo.orderStatus +
+                          ')'}
+                        <Icon type="down" style={{ margin: '0 5px' }} />
+                      </a>
+                    </Dropdown>
+                  ) : null}
+                </div>
+              </Col>
+              <Col span={8}>
+                <div className="previous-order-info">
+                  <p>Frequency</p>
+                  <p style={{ color: '#808285' }}>
+                    {subscriptionInfo.frequencyName}
+                  </p>
+                  {/* <Select style={{ width: '50%' }} value={subscriptionInfo.frequency}>
                   {frequencyList.map((item) => (
                     <Option value={item.id} key={item.id}>
                       {item.name}
                     </Option>
                   ))}
                 </Select> */}
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="previous-order-info">
-                <p>Next received date</p>
-                <p style={{ color: '#808285' }}>
-                  {/* {moment(
+                </div>
+              </Col>
+              <Col span={8}>
+                <div className="previous-order-info">
+                  <p>Next received date</p>
+                  <p style={{ color: '#808285' }}>
+                    {/* {moment(
                     subscriptionInfo.nextDeliveryTime,
                     'MMMM Do YY'
                   )} */}
-                  {subscriptionInfo.nextDeliveryTime}
-                </p>
-                {/* <DatePicker value={subscriptionInfo.nextDeliveryTime} format={'MMMM Do YY'} style={{ width: '50%' }} /> */}
-              </div>
-            </Col>
-          </Row>
-          {/* subscription 和 total */}
-          <Row style={{ marginTop: 20 }} gutter={16}>
-            <Col span={16}>
-              <Table
-                rowKey={(record, index) => index.toString()}
-                columns={columns}
-                dataSource={goodsInfo}
-                pagination={false}
-              ></Table>
-            </Col>
-            <Col span={8}>
-              <Card
-                title="Order Summary"
-                style={{ border: '1px solid #D7D7D7' }}
-                headStyle={totalCartTitleStyle}
-                bodyStyle={{ background: '#fafafa' }}
-              >
-                <div className="order-summary-content">
-                  <div className="flex-between">
-                    <span>Total</span>
-                    <span>${this.subTotal()}</span>
-                  </div>
-
-                  <div className="flex-between">
-                    <span>Promotion Discount</span>
-                    <span>
-                      $
-                      {this.state.discountsPrice
-                        ? this.state.discountsPrice
-                        : 0}
-                    </span>
-                  </div>
-
-                  <div className="flex-between">
-                    <span>Promotion Code</span>
-                    <span>{this.state.promotionCode}</span>
-                  </div>
-                  <div className="flex-between">
-                    <span>Shipping</span>
-                    <span>${this.state.deliveryPrice}</span>
-                  </div>
+                    {subscriptionInfo.nextDeliveryTime}
+                  </p>
+                  {/* <DatePicker value={subscriptionInfo.nextDeliveryTime} format={'MMMM Do YY'} style={{ width: '50%' }} /> */}
                 </div>
-              </Card>
-              <div className="order-summary-total flex-between">
-                <span>Total (Inclu IVA):</span>
-                <span>
-                  $
-                  {this.subTotal() -
-                    +this.state.discountsPrice +
-                    +this.state.deliveryPrice}
-                </span>
-              </div>
-            </Col>
-          </Row>
-
-          <Row className="consumer-info" style={{ marginTop: 20 }}>
-            <Col span={8}>
-              <Row>
-                <Col span={12}>
-                  <label className="info-title">Delivery Address</label>
-                </Col>
-
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Name: </p>
-                  <p>
-                    {deliveryAddressInfo
-                      ? deliveryAddressInfo.firstName +
-                        ' ' +
-                        deliveryAddressInfo.lastName
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>City,Country: </p>
-                  <p>
-                    {deliveryAddressInfo
-                      ? this.getDictValue(cityArr, deliveryAddressInfo.cityId) +
-                        ',' +
-                        this.getDictValue(
-                          countryArr,
-                          deliveryAddressInfo.countryId
-                        )
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
-                  </p>
-                </Col>
-              </Row>
-              <Col span={24}>
-                <p style={{ width: 140 }}>Address2: </p>
-                <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
               </Col>
-            </Col>
-            <Col span={8}>
-              <Row>
-                <Col span={12}>
-                  <label className="info-title">Billing Address</label>
-                </Col>
+            </Row>
+            {/* subscription 和 total */}
+            <Row style={{ marginTop: 20 }} gutter={16}>
+              <Col span={16}>
+                <Table
+                  rowKey={(record, index) => index.toString()}
+                  columns={columns}
+                  dataSource={goodsInfo}
+                  pagination={false}
+                ></Table>
+              </Col>
+              <Col span={8}>
+                <Card
+                  title="Order Summary"
+                  style={{ border: '1px solid #D7D7D7' }}
+                  headStyle={totalCartTitleStyle}
+                  bodyStyle={{ background: '#fafafa' }}
+                >
+                  <div className="order-summary-content">
+                    <div className="flex-between">
+                      <span>Total</span>
+                      <span>${this.subTotal()}</span>
+                    </div>
 
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Name: </p>
-                  <p>
-                    {billingAddressInfo
-                      ? billingAddressInfo.firstName +
-                        ' ' +
-                        billingAddressInfo.lastName
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>City,Country: </p>
-                  <p>
-                    {billingAddressInfo
-                      ? this.getDictValue(cityArr, billingAddressInfo.cityId) +
-                        ',' +
-                        this.getDictValue(
-                          countryArr,
-                          billingAddressInfo.countryId
-                        )
-                      : ''}
-                  </p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Address1: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                </Col>
+                    <div className="flex-between">
+                      <span>Promotion Discount</span>
+                      <span>
+                        $
+                        {this.state.discountsPrice
+                          ? this.state.discountsPrice
+                          : 0}
+                      </span>
+                    </div>
 
+                    <div className="flex-between">
+                      <span>Promotion Code</span>
+                      <span>{this.state.promotionCode}</span>
+                    </div>
+                    <div className="flex-between">
+                      <span>Shipping</span>
+                      <span>${this.state.deliveryPrice}</span>
+                    </div>
+                  </div>
+                </Card>
+                <div className="order-summary-total flex-between">
+                  <span>Total (Inclu IVA):</span>
+                  <span>
+                    $
+                    {this.subTotal() -
+                      +this.state.discountsPrice +
+                      +this.state.deliveryPrice}
+                  </span>
+                </div>
+              </Col>
+            </Row>
+
+            <Row className="consumer-info" style={{ marginTop: 20 }}>
+              <Col span={8}>
+                <Row>
+                  <Col span={12}>
+                    <label className="info-title">Delivery Address</label>
+                  </Col>
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Name: </p>
+                    <p>
+                      {deliveryAddressInfo
+                        ? deliveryAddressInfo.firstName +
+                          ' ' +
+                          deliveryAddressInfo.lastName
+                        : ''}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>City,Country: </p>
+                    <p>
+                      {deliveryAddressInfo
+                        ? this.getDictValue(
+                            cityArr,
+                            deliveryAddressInfo.cityId
+                          ) +
+                          ',' +
+                          this.getDictValue(
+                            countryArr,
+                            deliveryAddressInfo.countryId
+                          )
+                        : ''}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Address1: </p>
+                    <p>
+                      {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
+                    </p>
+                  </Col>
+                </Row>
                 <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
-                  <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                  <p>
+                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                  </p>
                 </Col>
-              </Row>
-            </Col>
-            <Col span={8}>
-              <Row>
-                <Col span={24}>
-                  <label className="info-title">Payment Method</label>
-                </Col>
+              </Col>
+              <Col span={8}>
+                <Row>
+                  <Col span={12}>
+                    <label className="info-title">Billing Address</label>
+                  </Col>
 
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
-                </Col>
-                <Col span={24}>
-                  <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Name: </p>
+                    <p>
+                      {billingAddressInfo
+                        ? billingAddressInfo.firstName +
+                          ' ' +
+                          billingAddressInfo.lastName
+                        : ''}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>City,Country: </p>
+                    <p>
+                      {billingAddressInfo
+                        ? this.getDictValue(
+                            cityArr,
+                            billingAddressInfo.cityId
+                          ) +
+                          ',' +
+                          this.getDictValue(
+                            countryArr,
+                            billingAddressInfo.countryId
+                          )
+                        : ''}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Address1: </p>
+                    <p>
+                      {billingAddressInfo ? billingAddressInfo.address1 : ''}
+                    </p>
+                  </Col>
 
-          <Row className="consumer-info">
-            {/* <Col span={12}>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Address2: </p>
+                    <p>
+                      {billingAddressInfo ? billingAddressInfo.address2 : ''}
+                    </p>
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={8}>
+                <Row>
+                  <Col span={24}>
+                    <label className="info-title">Payment Method</label>
+                  </Col>
+
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Payment Method: </p>
+                    <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                  </Col>
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>Card Number: </p>
+                    <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <Row className="consumer-info">
+              {/* <Col span={12}>
               <Row>
                 <Col span={12}>
                   <label className="info-title">Pet Infomation</label>
@@ -874,7 +885,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Row>
             </Col>
             */}
-            {/* <Col span={12}>
+              {/* <Col span={12}>
               <Row>
                 <Col span={18}>
                   <label className="info-title">Payment Method</label>
@@ -890,29 +901,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
               </Row>
             </Col> */}
-          </Row>
+            </Row>
 
-          <Row style={styles.backItem}>
-            <Collapse>
-              <Panel
-                header={<FormattedMessage id="operationLog" />}
-                key="1"
-                style={{ paddingRight: 10 }}
-              >
-                <Row>
-                  <Col span={24}>
-                    <Table
-                      rowKey={(record, index) => index.toString()}
-                      columns={operatorColumns}
-                      dataSource={operationLog}
-                      bordered
-                    />
-                  </Col>
-                </Row>
-              </Panel>
-            </Collapse>
-          </Row>
-        </Card>
+            <Row style={styles.backItem}>
+              <Collapse>
+                <Panel
+                  header={<FormattedMessage id="operationLog" />}
+                  key="1"
+                  style={{ paddingRight: 10 }}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <Table
+                        rowKey={(record, index) => index.toString()}
+                        columns={operatorColumns}
+                        dataSource={operationLog}
+                        bordered
+                      />
+                    </Col>
+                  </Row>
+                </Panel>
+              </Collapse>
+            </Row>
+          </Card>
+        </Spin>
 
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>

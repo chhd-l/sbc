@@ -281,6 +281,15 @@ export default class StepOneEdit extends React.Component<any, any> {
                   <p style={{ color: '#333' }}>{storeInfo.get('domainName')}</p>
                 </FormItem>
               </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="miniCharge" />}
+                >
+                  <p style={{ color: '#333' }}>{storeInfo.get('miniCharge')}</p>
+                </FormItem>
+              </Col>
             </Row>
           </Form>
         </div>

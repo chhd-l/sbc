@@ -210,14 +210,14 @@ export default class FreightTemp extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Billing rules" required={true}>
+          <FormItem {...formItemLayout} label="Charging rule" required={true}>
             <RadioGroup
               defaultValue={freightType}
               value={freightType}
               onChange={(e) => this._changeFreightType(e.target.value)}
             >
               <div className="radio-item">
-                <Radio value={0}>Dissatisfied order</Radio>
+                <Radio value={0}>If orders less than </Radio>
                 <FormItem>
                   {getFieldDecorator('satisfyPrice', {
                     initialValue: satisfyPrice,
@@ -242,7 +242,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  Freight
+                  dollar, the freight would be 
                 </span>
                 <FormItem>
                   {getFieldDecorator('satisfyFreight', {
@@ -261,13 +261,41 @@ export default class FreightTemp extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <span style={{ paddingLeft: 10 }}>
-                  After the conditions are met, the package will be shipped, and
-                  the order will be judged according to the amount after
-                  excluding the preferential activities
+                dollar. Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount
                 </span>
               </div>
+              
               <div className="radio-item">
-                <Radio value={1}>Fixed freight</Radio>
+                <span
+                  style={{
+                    paddingLeft: 23,
+                    paddingRight: 17,
+                    marginTop: '10px',
+                    display: 'inline-block'
+                  }}
+                >
+                  Minimum delivery amount is
+                </span>
+                <FormItem>
+                  {getFieldDecorator('minimumDeliveryFee', {
+                    initialValue: minimumDeliveryFee,
+                    rules: this._validMoney(freightType, 1)
+                  })(
+                    <Input
+                      onChange={(e) => {
+                        storeFreightFieldsValue({
+                          field: 'minimumDeliveryFee',
+                          value: e.target.value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <span style={{ paddingLeft: 10 }}>dollar</span>
+              </div>
+
+              <div className="radio-item">
+                <Radio value={1}>Fixed shipping</Radio>
                 <FormItem>
                   {getFieldDecorator('fixedFreight', {
                     initialValue: fixedFreight,
@@ -293,34 +321,6 @@ export default class FreightTemp extends React.Component<any, any> {
                 >
                   dollar
                 </span>
-              </div>
-              <div className="radio-item">
-                <span
-                  style={{
-                    paddingLeft: 23,
-                    paddingRight: 17,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  Minimum shipping
-                </span>
-                <FormItem>
-                  {getFieldDecorator('minimumDeliveryFee', {
-                    initialValue: minimumDeliveryFee,
-                    rules: this._validMoney(freightType, 1)
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        storeFreightFieldsValue({
-                          field: 'minimumDeliveryFee',
-                          value: e.target.value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <span style={{ paddingLeft: 10 }}>dollar</span>
               </div>
             </RadioGroup>
           </FormItem>

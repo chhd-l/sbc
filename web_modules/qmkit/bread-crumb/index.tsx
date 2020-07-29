@@ -61,7 +61,7 @@ export default class BreadCrumb extends React.Component<any, any> {
         'url'
       ]) || '';
     return (
-      <Breadcrumb >
+      <Breadcrumb>
         <Breadcrumb.Item><a href={firstUrl}>{first}</a></Breadcrumb.Item>
         <Breadcrumb.Item>{this.props.thirdLevel ? <a href={thirdUrl}>{third}</a> : third}</Breadcrumb.Item>
         {this.props.children}

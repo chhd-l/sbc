@@ -51,7 +51,6 @@ export default class AppStore extends Store {
 
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        debugger;
         this.dispatch('loading:end');
         this.dispatch('listActor:init', res.context);
         this.dispatch('list:currentPage', pageNum + 1);

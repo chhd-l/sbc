@@ -1,11 +1,12 @@
 import React from 'react';
 import { StoreProvider, Relax } from 'plume2';
 
-import { Breadcrumb, Form } from 'antd';
+import { Breadcrumb, Form, message } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
 
 import FreightTemp from './component/freight-temp';
 import AppStore from './store';
+import * as webapi from './webapi';
 
 const FreightTempForm = Form.create()(FreightTemp) as any;
 const FreightTempRelax = Relax(FreightTempForm);
@@ -32,7 +33,13 @@ export default class StoreFreight extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      cityArr: [],
+      countryArr: [],
+      treeData: []
+    };
   }
+  componentDidMount() {}
 
   render() {
     let typeTxt = 'Add';

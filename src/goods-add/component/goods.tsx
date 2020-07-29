@@ -585,7 +585,7 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="product.linePrice" />}
+              label={<FormattedMessage id="price" />}
             >
               {getFieldDecorator('linePrice', {
                 rules: [
@@ -598,7 +598,7 @@ class GoodsForm extends React.Component<any, any> {
                     type: 'number',
                     max: 9999999.99,
                     message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
+                    transform: function(value) {
                       return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
                   }

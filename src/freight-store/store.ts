@@ -50,12 +50,14 @@ export default class AppStore extends Store {
       selectedAreas: fromJS(selectedAreas),
       freightTempId: freightId
     });
+    this.getCountryCity();
   };
 
   /**
    * 查询已经被选中的区域Ids
    */
   fetchSelectedAreaIds = async () => {
+    this.getCountryCity();
     const { res } = (await webapi.fetchSelectedAreaIds()) as any;
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('freight: store: field: value', {
@@ -115,5 +117,15 @@ export default class AppStore extends Store {
     } else {
       message.error(res.message);
     }
+  };
+
+  getCountryCity = async () => {
+    debugger;
+    const country = (await webapi.querySysDictionary({
+      type: 'country'
+    })) as any;
+    const city = (await webapi.querySysDictionary({
+      type: 'city'
+    })) as any;
   };
 }

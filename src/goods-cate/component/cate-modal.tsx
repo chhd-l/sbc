@@ -223,7 +223,7 @@ class CateModalForm extends React.Component<any, any> {
               }
             ],
             initialValue: cateName,
-             onChange: this._changeCateName
+            onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
         <FormItem

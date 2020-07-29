@@ -555,7 +555,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'time',
         key: 'time',
         render: (time) =>
-          time && moment(time).format(Const.TIME_FORMAT).toString()
+          time &&
+          moment(time)
+            .format(Const.TIME_FORMAT)
+            .toString()
       },
       {
         title: 'Operation Category',

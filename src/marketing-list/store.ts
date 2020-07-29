@@ -27,7 +27,9 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state().get('form').toJS();
+    const query = this.state()
+      .get('form')
+      .toJS();
     // if (query.marketingSubType === '-1') {
     //   query.marketingSubType = null;
     // }

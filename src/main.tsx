@@ -31,6 +31,12 @@ export default class Main extends React.Component<any, any> {
     }
     Fetch('/baseConfig').then((resIco: any) => {
       if (resIco.res.code == Const.SUCCESS_CODE) {
+        if ((resIco.res as any).defaultLocalDateTime) {
+          sessionStorage.setItem(
+            'defaultLocalDateTime',
+            (resIco.res as any).defaultLocalDateTime
+          );
+        }
         const ico = (resIco.res.context as any).pcIco
           ? JSON.parse((resIco.res.context as any).pcIco)
           : null;

@@ -184,19 +184,19 @@ export default class FreightTemp extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Shipping method" required={true}>
+          {/* <FormItem {...formItemLayout} label="Shipping method" required={true}>
             <Radio defaultChecked>Express delivery</Radio>
             <label style={{ color: '#b5b5b5' }}>
               Please set shipping template for express delivery
             </label>
-          </FormItem>
-          <FormItem {...formItemLayout} label="Locale" required={true}>
+          </FormItem> */}
+          <FormItem {...formItemLayout} label="Location" required={true}>
             {getFieldDecorator('destinationArea', {
               initialValue: destinationArea.toJS(),
               rules: [
                 {
                   required: true,
-                  message: 'Please select the region'
+                  message: 'Please select the city'
                 }
               ]
             })(
@@ -412,7 +412,7 @@ export default class FreightTemp extends React.Component<any, any> {
         type: 'number',
         max: 99999999.99,
         message: 'The maximum value is 99999999.99',
-        transform: function (value) {
+        transform: function(value) {
           return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
         }
       }

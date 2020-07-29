@@ -43,7 +43,9 @@ export default class CateActor extends Actor {
         saleType: 0
       },
       sourceCateList: [],
-      resCateAllList: []
+      resCateAllList: [],
+      images: [],
+      video: {}
     };
   }
 
@@ -92,10 +94,15 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: closeModal')
   close(state) {
-    return state.set('modalVisible', false).set(
-      'images',
-      state.get('images').filter((i) => {return false})
-    ).set('formData', Map());
+    return state
+      .set('modalVisible', false)
+      .set(
+        'images',
+        state.get('images').filter((i) => {
+          return false;
+        })
+      )
+      .set('formData', Map());
   }
 
   /**

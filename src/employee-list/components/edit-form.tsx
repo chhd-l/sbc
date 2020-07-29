@@ -81,7 +81,7 @@ export default class EditForm extends React.Component<any, any> {
     const employeeForm = _state.get('employeeForm');
     if (_state.get('edit')) {
       this.setState({
-        selectRoleNames: this.getRoleNamesByIds(_state.get('roles'))
+        selectRoleNames: this.getRoleNamesByIds(employeeForm.get('roleIds'))
       });
     } else {
       this.setState({
@@ -640,6 +640,7 @@ export default class EditForm extends React.Component<any, any> {
   getRoleNamesByIds = (rolesIds) => {
     const _state = this._store.state();
     const roles = _state.get('roles');
+    debugger;
     let roleIdList = rolesIds.split(',');
     let roleNames = [];
     roleIdList.map((x) => {

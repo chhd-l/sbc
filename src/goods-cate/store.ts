@@ -47,7 +47,6 @@ export default class AppStore extends Store {
     const result: any = await getCateList();
     const result1: any = await getSignCateList();
     this.transaction(() => {
-      // console.log(result1, 'result1')
       this.dispatch('cateActor: init', fromJS(result.res.context));
       this.dispatch('cateActor: initCateList', fromJS(result1.res.context));
       this.dispatch('cateActor: closeModal');
@@ -302,7 +301,6 @@ export default class AppStore extends Store {
     ) {
       this.editPriceSetting('priceOpt', 2);
     }
-    console.log(1);
     this.dispatch('cateActor: editGoods', goods);
   };
   /**
@@ -372,7 +370,6 @@ export default class AppStore extends Store {
     imgType: number,
     skuId: string
   ) => {
-    console.log(1);
     // if (this.state().get('visible')) {
     // console.log(2)
     this.initImg({
@@ -389,7 +386,6 @@ export default class AppStore extends Store {
     //   });
     // }
     if (maxCount) {
-      console.log(3);
       //取消时候, 该值为0, 不重置, 防止页面渲染太快, 看到数量变化不友好
       this.dispatch('modal: maxCount', maxCount);
     }

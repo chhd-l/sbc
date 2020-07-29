@@ -229,7 +229,9 @@ export default class ListView extends React.Component<any, any> {
                             }}
                           />
                         </span>
-                        <span style={{ marginLeft: 20 }}>Order number：{id} </span>
+                        <span style={{ marginLeft: 20 }}>
+                          Order number：{id}{' '}
+                        </span>
                         <span style={{ marginLeft: 60 }}>
                           Order time：
                           {v.getIn(['tradeState', 'createTime'])
@@ -280,7 +282,7 @@ export default class ListView extends React.Component<any, any> {
                                 }}
                                 href="javascript:void(0)"
                               >
-                                 Delivery confirmed 
+                                Delivery confirmed
                               </a>
                             </AuthWrapper>
                           )}
@@ -322,35 +324,33 @@ export default class ListView extends React.Component<any, any> {
                             />
                           ) : null
                         )}
-                      {
-                        /*第4张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 3 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
+                      {/*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              All{v.get('tradeItems').concat(gifts).size} items
-                            </div>
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
+                          //@ts-ignore
+                          <div style={styles.imgNum}>
+                            All{v.get('tradeItems').concat(gifts).size} items
                           </div>
-                        ) : null
-                      }
+                        </div>
+                      ) : null}
                     </td>
                     <td style={{ width: '10%' }}>
                       {/*客户名称*/}

@@ -380,7 +380,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   subTotal = () => {
-    debugger;
     const { goodsInfo } = this.state;
     let sum = 0;
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
@@ -726,10 +725,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       </span>
                     </div>
 
-                    <div className="flex-between">
+                    {/* <div className="flex-between">
                       <span>Promotion Code</span>
                       <span>{this.state.promotionCode}</span>
-                    </div>
+                    </div> */}
                     <div className="flex-between">
                       <span>Shipping</span>
                       <span>${this.state.deliveryPrice}</span>

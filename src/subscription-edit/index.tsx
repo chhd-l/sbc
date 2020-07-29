@@ -900,7 +900,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       </span>
                     </div>
 
-                    <div className="flex-between">
+                    {/* <div className="flex-between">
                       <span>Promotion Code</span>
                       {promotionCodeShow ? (
                         <Tag
@@ -910,7 +910,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           {promotionCodeShow}
                         </Tag>
                       ) : null}
-                    </div>
+                    </div> */}
                     <div className="flex-between">
                       <span>Shipping</span>
                       <span>

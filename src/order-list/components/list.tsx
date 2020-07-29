@@ -189,6 +189,7 @@ export default class ListView extends React.Component<any, any> {
                     <tr>
                       <th style={{ width: '5%' }}>
                         <Checkbox
+                          style={{ borderSpacing: 0 }}
                           checked={allChecked}
                           onChange={(e) => {
                             const checked = (e.target as any).checked;

@@ -585,7 +585,7 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="product.linePrice" />}
+              label={<FormattedMessage id="price" />}
             >
               {getFieldDecorator('linePrice', {
                 rules: [

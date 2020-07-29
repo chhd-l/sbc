@@ -150,9 +150,9 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          /*const exportHref =
+          const exportHref =
             Const.HOST + `/finance/settlement/export/${encrypted}`;
-          window.open(exportHref);*/
+          window.open(exportHref);
         } else {
           message.error('请登录');
         }

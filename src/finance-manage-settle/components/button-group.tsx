@@ -52,7 +52,7 @@ export default class ButtonGroup extends React.Component<any, any> {
             <a onClick={() => this._handleBatchOption(1)}>Set as settled</a>
           </Menu.Item>
         )}
-        {settleStatus == 0 && (
+        {(settleStatus == '0' || settleStatus == 1) && (
           <Menu.Item>
             <a onClick={() => bulkExport()}>Bulk Export</a>
           </Menu.Item>

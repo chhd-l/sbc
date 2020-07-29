@@ -640,7 +640,6 @@ export default class EditForm extends React.Component<any, any> {
   getRoleNamesByIds = (rolesIds) => {
     const _state = this._store.state();
     const roles = _state.get('roles');
-    debugger;
     let roleIdList = rolesIds.split(',');
     let roleNames = [];
     roleIdList.map((x) => {

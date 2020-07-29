@@ -82,8 +82,10 @@ export default class AppStore extends Store {
     const { res } = await webapi.uploadBanner(params);
     const ref = this;
     if (res.code === Const.SUCCESS_CODE) {
+      return res;
     } else {
       message.error(res.message);
+      return -1;
     }
   };
   getStoreId = () => {
@@ -91,15 +93,7 @@ export default class AppStore extends Store {
     return storeId;
   };
 
-  setBannerId = (bannerId) => {
-    this.dispatch('imageActor:setBannerId', bannerId);
-  };
-  setBannerName = (bannerName) => {
-    this.dispatch('imageActor:setBannerName', bannerName);
-  };
-
   onImageFormChange = ({ field, value }) => {
-    debugger;
     this.dispatch('imageActor:field', { field, value });
   };
 }

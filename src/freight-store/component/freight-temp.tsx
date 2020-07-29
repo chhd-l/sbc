@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, Input, Radio, TreeSelect, Button } from 'antd';
+import { Form, Input, InputNumber, Radio, TreeSelect, Button } from 'antd';
 import { QMMethod, FindArea, ValidConst, noop, history } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
@@ -97,6 +97,10 @@ export default class FreightTemp extends React.Component<any, any> {
       storeFreightFieldsValue: Function;
       // 存储运费模板
       saveStoreFreight: Function;
+      // Country
+      country: IList;
+      //city
+      city: IList;
     };
   };
 
@@ -112,10 +116,43 @@ export default class FreightTemp extends React.Component<any, any> {
     selectedAreas: 'selectedAreas',
     defaultFlag: 'defaultFlag',
     destinationAreaName: 'destinationAreaName',
+    country: 'country',
+    city: 'city',
 
     areaIdsSave: noop,
     storeFreightFieldsValue: noop,
     saveStoreFreight: noop
+  };
+
+  treeDataSource = (parent, children) => {
+    debugger;
+    let parentNodes = [];
+    let childrenNodes = [];
+    if (parent && parent.length > 0) {
+      for (let i = 0; i < parent.length; i++) {
+        let parentNode = {
+          title: parent[i].name,
+          value: parent[i].id,
+          key: parent[i].id,
+          children: []
+        };
+        parentNodes.push(parentNode);
+      }
+    }
+    if (children && children.length > 0) {
+      for (let i = 0; i < children.length; i++) {
+        let childrenNode = {
+          title: children[i].name,
+          value: children[i].id,
+          key: children[i].id
+        };
+        childrenNodes.push(childrenNode);
+      }
+    }
+    if (parentNodes.length > 0) {
+      parentNodes[0].children = childrenNodes;
+    }
+    return parentNodes;
   };
 
   render() {
@@ -130,10 +167,13 @@ export default class FreightTemp extends React.Component<any, any> {
       storeFreightFieldsValue,
       selectedAreas,
       destinationAreaName,
-      defaultFlag
+      defaultFlag,
+      country,
+      city
     } = this.props.relaxProps;
-    const treeData = FindArea.findProvinceCity(selectedAreas.toJS());
-    console.log('3333333334444444444444', treeData);
+    // const treeData = FindArea.findProvinceCity(selectedAreas.toJS());
+    const treeData = this.treeDataSource(country.toJS(), city.toJS());
+
     const tProps = {
       treeData,
       onChange: this._changeArea,
@@ -210,25 +250,25 @@ export default class FreightTemp extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Billing rules" required={true}>
+          <FormItem {...formItemLayout} label="Charging rule" required={true}>
             <RadioGroup
               defaultValue={freightType}
               value={freightType}
               onChange={(e) => this._changeFreightType(e.target.value)}
             >
               <div className="radio-item">
-                <Radio value={0}>Dissatisfied order</Radio>
+                <Radio value={0}>If orders less than </Radio>
                 <FormItem>
                   {getFieldDecorator('satisfyPrice', {
                     initialValue: satisfyPrice,
                     rules: this._validMoney(freightType, 0)
                   })(
-                    <Input
+                    <InputNumber
                       disabled={freightType == 1}
-                      onChange={(e) =>
+                      onChange={(value) =>
                         storeFreightFieldsValue({
                           field: 'satisfyPrice',
-                          value: e.target.value
+                          value: value
                         })
                       }
                     />
@@ -242,43 +282,83 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  Freight
+                  dollar, the freight would be
                 </span>
                 <FormItem>
                   {getFieldDecorator('satisfyFreight', {
                     initialValue: satisfyFreight,
                     rules: this._validMoney(freightType, 0)
                   })(
-                    <Input
+                    <InputNumber
                       disabled={freightType == 1}
-                      onChange={(e) =>
+                      onChange={(value) =>
                         storeFreightFieldsValue({
                           field: 'satisfyFreight',
-                          value: e.target.value
+                          value: value
                         })
                       }
                     />
                   )}
                 </FormItem>
                 <span style={{ paddingLeft: 10 }}>
-                  After the conditions are met, the package will be shipped, and
-                  the order will be judged according to the amount after
-                  excluding the preferential activities
+                  dollar. Freight after meeting the conditions will be
+                  free.Order is judged whether it meets the free shipping
+                  conditions according to the amount after excluding the
+                  discount.
                 </span>
               </div>
+
               <div className="radio-item">
-                <Radio value={1}>Fixed freight</Radio>
+                <Radio value={1}> Minimum delivery amount is</Radio>
+                {/* <span
+                  style={{
+                    paddingLeft: 23,
+                    paddingRight: 17,
+                    marginTop: '10px',
+                    display: 'inline-block'
+                  }}
+                >
+                  Minimum delivery amount is
+                </span> */}
+                <FormItem>
+                  {getFieldDecorator('minimumDeliveryFee', {
+                    initialValue: minimumDeliveryFee,
+                    rules: this._validMoney(freightType, 1)
+                  })(
+                    <InputNumber
+                      disabled={freightType === 0}
+                      onChange={(value) => {
+                        storeFreightFieldsValue({
+                          field: 'minimumDeliveryFee',
+                          value: value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <span style={{ paddingLeft: 10 }}>dollar.</span>
+                <span
+                  style={{
+                    paddingLeft: 23,
+                    paddingRight: 17,
+                    marginTop: '10px',
+                    display: 'inline-block'
+                  }}
+                >
+                  Fixed shipping
+                </span>
+                {/* <Radio value={1}>Fixed shipping</Radio> */}
                 <FormItem>
                   {getFieldDecorator('fixedFreight', {
                     initialValue: fixedFreight,
                     rules: this._validMoney(freightType, 1)
                   })(
-                    <Input
-                      disabled={freightType == 0}
-                      onChange={(e) => {
+                    <InputNumber
+                      disabled={freightType === 0}
+                      onChange={(value) => {
                         storeFreightFieldsValue({
                           field: 'fixedFreight',
-                          value: e.target.value
+                          value: value
                         });
                       }}
                     />
@@ -291,36 +371,8 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  dollar
+                  dollar.
                 </span>
-              </div>
-              <div className="radio-item">
-                <span
-                  style={{
-                    paddingLeft: 23,
-                    paddingRight: 17,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  Minimum shipping
-                </span>
-                <FormItem>
-                  {getFieldDecorator('minimumDeliveryFee', {
-                    initialValue: minimumDeliveryFee,
-                    rules: this._validMoney(freightType, 1)
-                  })(
-                    <Input
-                      onChange={(e) => {
-                        storeFreightFieldsValue({
-                          field: 'minimumDeliveryFee',
-                          value: e.target.value
-                        });
-                      }}
-                    />
-                  )}
-                </FormItem>
-                <span style={{ paddingLeft: 10 }}>dollar</span>
               </div>
             </RadioGroup>
           </FormItem>
@@ -412,7 +464,7 @@ export default class FreightTemp extends React.Component<any, any> {
         type: 'number',
         max: 99999999.99,
         message: 'The maximum value is 99999999.99',
-        transform: function(value) {
+        transform: function (value) {
           return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
         }
       }

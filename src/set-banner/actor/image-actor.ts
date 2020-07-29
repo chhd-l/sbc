@@ -28,7 +28,7 @@ export default class ImageActor extends Actor {
     return state.setIn(['imageForm', 'bannerNo'], bannerNo);
   }
 
-  @Action('imageActor:filed')
+  @Action('imageActor:setBannerId')
   setBannerId(state, { bannerId }) {
     return state.setIn(['imageForm', 'bannerId'], bannerId);
   }

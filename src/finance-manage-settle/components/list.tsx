@@ -52,7 +52,6 @@ export default class List extends React.Component<any, any> {
       setCheckedSettleIds,
       changeSettleStatus
     } = this.props.relaxProps;
-    console.log(queryParams.get('settleStatus').toString(), 2222222222);
     return (
       <DataGrid
         loading={loading}
@@ -69,7 +68,7 @@ export default class List extends React.Component<any, any> {
                   setCheckedSettleIds(selectedRowKeys, i);
                 }
               }
-            : ''
+            : undefined
         }
         pagination={{
           total: settlePage.get('totalElements'),

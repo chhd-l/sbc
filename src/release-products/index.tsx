@@ -43,7 +43,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
                   </div>
                 </Link>
               </AuthWrapper>
-              {/* <AuthWrapper functionName="f_goods_import_1">
+              <AuthWrapper functionName="f_goods_import_1">
                 <Link to="/goods-import">
                   <div className="item">
                     <div className="context">
@@ -76,7 +76,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
                     </div>
                   </div>
                 </Link>
-              </AuthWrapper> */}
+              </AuthWrapper>
             </div>
           </div>
         </div>

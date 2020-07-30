@@ -351,7 +351,7 @@ export default class AppStore extends Store {
         : [];
       const length = flowList.length;
       let flowTrendData = flowList
-        // .slice(length >= 10 ? length - 10 : 0, length)
+        .slice(length >= 10 ? length - 10 : 0, length)
         .map((flow, index) => {
           return {
             key: index,
@@ -402,7 +402,7 @@ export default class AppStore extends Store {
       let context = results[13].res.context ? results[13].res.context : [];
       const length = context.length;
       let tradeTrendData = context
-        // .slice(length >= 10 ? length - 10 : 0, length)
+        .slice(length >= 10 ? length - 10 : 0, length)
         .map((order, index) => {
           return {
             key: index,

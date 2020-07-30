@@ -122,7 +122,8 @@ export default class SearchForm extends React.Component<any, any> {
                     /*disabled={refundDetail.toJS().length <= 0}*/
                     onClick={(e) => {
                       e.preventDefault();
-                      exportRefundDetail();
+                      //exportRefundDetail();
+                      onSearch();
                     }}
                   >
                     Search

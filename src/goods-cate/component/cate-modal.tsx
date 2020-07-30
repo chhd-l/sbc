@@ -215,10 +215,15 @@ class CateModalForm extends React.Component<any, any> {
                 whitespace: true,
                 message: 'Please enter a category name'
               },
-              { max: 20, message: 'Up to 20 characters' },
+              { max: 100, message: 'Up to 100 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '分类名称');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Category Name'
+                  );
                 }
               }
             ],

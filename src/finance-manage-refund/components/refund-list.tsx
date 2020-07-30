@@ -1,157 +1,138 @@
+// 退款对账明细
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Select, Button, Input } from 'antd';
+import { DataGrid, noop } from 'qmkit';
+import moment from 'moment';
+import { Table } from 'antd';
 
-import { SelectGroup, noop, AuthWrapper } from 'qmkit';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
+const Column = Table.Column;
 
 @Relax
-export default class SearchForm extends React.Component<any, any> {
+export default class RefundList extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      //改变支付方式
-      changePayWay: Function;
-      changeVendorWay: Function;
-      changeTradeNo: Function;
-      onSearch: Function;
       payWaysObj: any;
-      incomeDetail: any;
-      kind: string;
-      //导出收入明细
-      exportIncomeDetail: Function;
-      exportRefundDetail: Function;
       refundDetail: any;
+      total: number;
+      pageNum: number;
+      onPagination: Function;
+      pageSize: number;
     };
-    name?: string;
   };
 
   static relaxProps = {
-    changePayWay: noop,
-    changeVendorWay: noop,
-    changeTradeNo: noop,
     payWaysObj: 'payWaysObj',
-    incomeDetail: 'incomeDetail',
-    kind: 'kind',
-    exportIncomeDetail: noop,
-    exportRefundDetail: noop,
-    onSearch: noop,
-    refundDetail: 'refundDetail'
+    refundDetail: 'refundDetail',
+    total: 'total',
+    pageNum: 'pageNum',
+    onPagination: noop,
+    pageSize: 'pageSize'
   };
 
   render() {
     const {
-      changePayWay,
-      changeVendorWay,
-      changeTradeNo,
-      kind,
-      exportIncomeDetail,
-      exportRefundDetail,
       refundDetail,
-      incomeDetail,
-      onSearch
+      total,
+      pageNum,
+      pageSize,
+      payWaysObj
     } = this.props.relaxProps;
+
     return (
       <div>
-        <div style={styles.head}>
-          <Form className="filter-content" layout="inline">
-            {/* <FormItem>
-              <SelectGroup
-                onChange={(value) => changePayWay(value)}
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                defaultValue="All"
-                label="Payment type"
-                style={{ width: 180 }}
-              >
-                <Option value={null}>All</Option>
-                <Option value="PAYU">PayU</Option>
-                <Option value="OXXO">OXXO</Option>
-              </SelectGroup>
-            </FormItem>*/}
-            <FormItem>
-              <SelectGroup
-                onChange={(value) => changeVendorWay(value)}
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label={this.props.name}
-                style={{ width: 180 }}
-                defaultValue="All"
-              >
-                <Option value={null}>All</Option>
-                <Option value="VISA">VISA</Option>
-                <Option value="OXXO">OXXO</Option>
-                <Option value="AMERICAN EXPRESS">AMERICAN EXPRESS</Option>
-                <Option value="DISCOVER">DISCOVER</Option>
-                {/*  <Option value="UNIONPAY"></Option>
-                <Option value="WECHAT">微信</Option>
-                <Option value="UNIONPAY_B2B">企业银联</Option>
-                <Option value="POINT">积分兑换</Option>
-                <Option value="BALANCE">余额</Option>*/}
-              </SelectGroup>
-            </FormItem>
+        <DataGrid
+          dataSource={refundDetail.toJS().length > 0 ? refundDetail.toJS() : []}
+          rowKey={(_record, index) => index.toString()}
+          pagination={{
+            pageSize,
+            total,
+            current: pageNum + 1
+          }}
+          onChange={(pagination, filters, sorter) =>
+            this._getData(pagination, filters, sorter)
+          }
+        >
+          <Column
+            title="No"
+            dataIndex="index"
+            key="index"
+            width="5%"
+            render={(_text, _rowData: any, index) => {
+              return pageNum * pageSize + index + 1;
+            }}
+          />
+          <Column
+            title="Return Order time"
+            dataIndex="orderTime"
+            key="orderTime"
+            width="11%"
+            render={(text, _rowData: any) => {
+              return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
+            }}
+          />
+          <Column
+            title="Return Order number"
+            dataIndex="returnOrderCode"
+            key="returnOrderCode"
+            width="12%"
+          />
+          <Column title="Order number" dataIndex="orderCode" key="orderCode" />
+          <Column
+            title="Order refund"
+            dataIndex="orderRefund"
+            key="orderRefund"
+          />
+          {/*<Column
+            title="Trasaction serial number"
+            width="15%"
+            dataIndex="tradeNo"
+            key="tradeNo"
+          />*/}
 
-            <FormItem>
-              <Input
-                addonBefore="Order number"
-                onChange={(e) => changeTradeNo(e.target.value)}
-              />
-            </FormItem>
+            title="Customer name"
+            dataIndex="customerName"
+            key="customerName"
+          />
+          <Column
+            title="Refund time"
+            dataIndex="tradeTime"
+            key="tradeTime"
+            render={(text, _rowData: any) => {
+              return <span>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</span>;
+            }}
+          />
+          <Column title="Payment type" dataIndex="payWay" key="payWay" />
+          <Column
+            title="Payment method"
+            dataIndex="vendor"
+            key="vendor"
+            render={(_text, rowData: any) => {
+              return <span>{payWaysObj.toJS()[rowData.payWay]}</span>;
+            }}
+          />
 
-            <AuthWrapper functionName="f_finance_export">
-              <FormItem>
-                {kind == 'income' ? (
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    /*disabled={incomeDetail.toJS().length <= 0}*/
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSearch();
-                    }}
-                  >
-                    Search
-                  </Button>
-                ) : (
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    /*disabled={refundDetail.toJS().length <= 0}*/
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSearch();
-                      //exportRefundDetail();
-                    }}
-                  >
-                    Search
-                  </Button>
-                )}
-              </FormItem>
-            </AuthWrapper>
-          </Form>
-          {/*<div>*/}
-          {/*<Icon type="shop" style={styles.shopIcon}/>*/}
-          {/*/!*{incomeDetail.toJS().length>0?incomeDetail.toJS()[0].storeName:''}*!/*/}
-          {/*</div>*/}
-        </div>
+          <Column
+            title="Real Refund"
+            dataIndex="paymentOSActualReturnPrice"
+            key="paymentOSActualReturnPrice"
+            render={(text, rowData: any) => {
+              return text ? <span>{text}</span> : '--';
+            }}          <Column
+
+          />
+        </DataGrid>
       </div>
     );
   }
-}
 
-const styles = {
-  head: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  } as any,
-  shopIcon: {
-    color: '#3d85cc',
-    fontSize: 16,
-    marginRight: 5
-  }
-};
+  /**
+   * 分页查询
+   * @param pageNum
+   * @param pageSize
+   * @private
+   */
+  _getData = (pagination, _filter, _sorter) => {
+    const { onPagination } = this.props.relaxProps;
+    onPagination(pagination.current, pagination.pageSize);
+  };
+}

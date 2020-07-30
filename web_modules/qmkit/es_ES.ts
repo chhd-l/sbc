@@ -735,6 +735,7 @@ export default {
   'upload': 'Upload',
   'video': 'Video',
   'resource' : '{type} resource',
+  'bannerUrl': '{type} Url',
   'selectResource': 'Select {type} resource',
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',

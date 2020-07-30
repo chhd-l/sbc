@@ -96,11 +96,6 @@ export default class EmployeeList extends React.Component<any, any> {
           )}
         />
         <Column
-          title={<FormattedMessage id="employeePhone" />}
-          key="employeeMobile"
-          dataIndex="employeeMobile"
-        />
-        <Column
           title={<FormattedMessage id="email" />}
           key="email"
           dataIndex="email"
@@ -163,6 +158,7 @@ export default class EmployeeList extends React.Component<any, any> {
 
         <Column
           title={<FormattedMessage id="operation" />}
+          width="18%"
           render={(rowInfo) => {
             //如果是店铺主账号
             if (rowInfo.isMasterAccount == 1) {
@@ -211,7 +207,10 @@ export default class EmployeeList extends React.Component<any, any> {
         {accountState != 2 && (
           <AuthWrapper functionName={'enableDisableEmployee'}>
             {accountState == 0 ? (
-              <a href="#!" onClick={() => switchModal(employeeId)}>
+              <a
+                href="javascript:void(0);"
+                onClick={() => switchModal(employeeId)}
+              >
                 <FormattedMessage id="disabled" />
               </a>
             ) : (
@@ -227,7 +226,7 @@ export default class EmployeeList extends React.Component<any, any> {
 
         {accountState == 2 && (
           <a href="javascript:void(0);" onClick={() => onEdit(employeeId)}>
-            查看
+            View
           </a>
         )}
       </div>

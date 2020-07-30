@@ -458,7 +458,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber Name">
+                <FormItem label="Prescriber name">
                   {getFieldDecorator('prescriberName', {
                     rules: [
                       {
@@ -482,7 +482,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber Phone Number">
+                <FormItem label="Prescriber phone number">
                   {getFieldDecorator('phone', {
                     rules: [
                       {
@@ -503,7 +503,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber City">
+                <FormItem label="Prescriber city">
                   {getFieldDecorator('primaryCity', {
                     rules: [
                       {
@@ -529,7 +529,7 @@ class ClinicForm extends React.Component<any, any> {
                     </Select>
                   )}
                 </FormItem>
-                <FormItem label="Prescriber Zip">
+                <FormItem label="Prescriber zip">
                   {getFieldDecorator('primaryZip', {
                     rules: [
                       {
@@ -550,7 +550,7 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Prescriber Type">
+                <FormItem label="Prescriber type">
                   {getFieldDecorator('prescriberType', {
                     rules: [
                       {
@@ -617,7 +617,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Prescriber Address">
+                <FormItem label="Prescriber address">
                   {getFieldDecorator('location', {
                     rules: [
                       {
@@ -643,7 +643,7 @@ class ClinicForm extends React.Component<any, any> {
                   </Button>
 
                   <Button style={{ marginLeft: '20px' }}>
-                    <Link to="/prescriber">Back To List</Link>
+                    <Link to="/prescriber">Back to list</Link>
                   </Button>
                 </FormItem>
               </Form>
@@ -783,7 +783,7 @@ class ClinicForm extends React.Component<any, any> {
                       >
                         *
                       </span>
-                      Reward Rate
+                      Reward rate
                     </div>
                   }
                   key="rewardRate"
@@ -835,7 +835,7 @@ class ClinicForm extends React.Component<any, any> {
                 Save
               </Button>
               <Button style={{ marginLeft: '20px' }}>
-                <Link to="/prescriber">Back To List</Link>
+                <Link to="/prescriber">Back to list</Link>
               </Button>
               {/* <Button onClick={() => this.clearAndSave()}>
                 Clear rules and Save

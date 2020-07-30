@@ -114,14 +114,14 @@ export default class CustomerList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title="客户名称"
+          title="Consumer name"
           key="customerName"
           dataIndex="customerName"
           render={(customerName) => (customerName ? customerName : '-')}
         />
 
         <Column
-          title="账号"
+          title="Account number"
           key="customerAccount"
           dataIndex="customerAccount"
           render={(customerAccount, rowData) =>
@@ -137,7 +137,7 @@ export default class CustomerList extends React.Component<any, any> {
         />
 
         <Column
-          title="公司性质"
+          title="Company type"
           key="businessNatureType"
           dataIndex="businessNatureType"
           render={(businessNatureType) =>
@@ -148,28 +148,28 @@ export default class CustomerList extends React.Component<any, any> {
         />
 
         <Column
-          title="公司名称"
+          title="Company name"
           key="enterpriseName"
           dataIndex="enterpriseName"
           render={(enterpriseName) => (enterpriseName ? enterpriseName : '-')}
         />
 
         <Column
-          title="联系人"
+          title="Contact person"
           key="contactName"
           dataIndex="contactName"
           render={(contactName) => (contactName ? contactName : '-')}
         />
 
         <Column
-          title="联系方式"
+          title="Contact information"
           key="contactPhone"
           dataIndex="contactPhone"
           render={(contactPhone) => (contactPhone ? contactPhone : '-')}
         />
 
         <Column
-          title="平台等级"
+          title="Platform level"
           key="customerLevelName"
           dataIndex="customerLevelName"
           render={(customerLevelName) =>
@@ -177,14 +177,14 @@ export default class CustomerList extends React.Component<any, any> {
           }
         />
         <Column
-          title="成长值"
+          title="Growth value"
           key="growthValue"
           dataIndex="growthValue"
           render={(growthValue) => (growthValue ? growthValue : 0)}
         />
 
         <Column
-          title="审核状态"
+          title="Approval status"
           key="enterpriseCheckState"
           dataIndex="enterpriseCheckState"
           render={(enterpriseCheckState, record) => {
@@ -214,7 +214,7 @@ export default class CustomerList extends React.Component<any, any> {
         form.get('enterpriseCheckState') === '-1' ||
         form.get('enterpriseCheckState') === '2' ? (
           <Column
-            title="账号状态"
+            title="Account status"
             key="customerStatus"
             dataIndex="customerStatus"
             render={(customerStatus, rowData) => {
@@ -240,7 +240,7 @@ export default class CustomerList extends React.Component<any, any> {
         ) : null}
 
         <Column
-          title="业务员"
+          title="Auditors"
           key="employeeName"
           dataIndex="employeeName"
           render={(employeeName) => (employeeName ? employeeName : '-')}

@@ -27,11 +27,12 @@ export default class AppStore extends Store {
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
-    const query = this.state().get('form').toJS();
+    const query = this.state()
+      .get('form')
+      .toJS();
     // if (query.marketingSubType === '-1') {
     //   query.marketingSubType = null;
     // }
-    debugger;
     const { res } = await webapi.fetchList({ ...query, pageNum, pageSize });
     let levelList = [];
     if (util.isThirdStore()) {
@@ -52,7 +53,8 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('listActor:init', res.context);
-        this.dispatch('list:currentPage', pageNum && pageNum + 1);
+        this.dispatch('list:currentPage', pageNum + 1);
+        this.dispatch('list:total', res.context.total);
         this.dispatch('customerLevel:init', fromJS(levelList));
         this.dispatch('select:init', []);
       });

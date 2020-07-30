@@ -18,6 +18,8 @@ export default class FormActor extends Actor {
         promotionType: null,
         //查询类型
         queryTab: '0',
+
+        marketingStatus: '0',
         //未删除
         delFlag: 0
       }

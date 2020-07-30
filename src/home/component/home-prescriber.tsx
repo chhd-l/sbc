@@ -360,8 +360,10 @@ export default class homePrescriber extends Component<any, any> {
             </h3>
             <WMChart
               title=""
-              startTime={new Date()}
-              endTime={new Date()}
+              startTime={
+                new Date(sessionStorage.getItem('defaultLocalDateTime'))
+              }
+              endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
               dataDesc={[
                 { title: 'Total active consumer number', key: 'cusAllCount' },
                 {

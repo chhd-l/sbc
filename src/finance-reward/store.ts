@@ -420,17 +420,18 @@ export default class AppStore extends Store {
     this.dispatch('aaa', res);
   };
   bulkExport = async () => {
-    const queryParams = this.state().get('onRewardExportData').toJS();
-    const { period, endTime } = queryParams;
+    const queryParams = this.state().get('searchForm').toJS();
+    const { period, prescriberId, prescriberName } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {
         // 参数加密
         const base64 = new util.Base64();
         const token = (window as any).token;
-        console.log(token);
         if (token) {
           const result = JSON.stringify({
             period: period,
+            prescriberId: prescriberId,
+            prescriberName: prescriberName,
             token: token
           });
           const encrypted = base64.urlEncode(result);

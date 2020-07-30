@@ -85,6 +85,7 @@ export default class CateModal extends React.Component<any, any> {
         maskClosable={false}
         title={formData.get('storeCateId') ? 'Edit' : 'Add'}
         visible={modalVisible}
+        zIndex={100}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
@@ -118,6 +119,7 @@ export default class CateModal extends React.Component<any, any> {
    */
   _handleModelCancel = () => {
     const { closeModal } = this.props.relaxProps;
+    Modal.destroyAll();
     closeModal();
   };
 }
@@ -161,7 +163,6 @@ class CateModalForm extends React.Component<any, any> {
 
   render() {
     const formData = this._store.state().get('formData');
-    console.log(formData, 'formData');
     const cateName = formData.get('cateName');
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
@@ -200,7 +201,8 @@ class CateModalForm extends React.Component<any, any> {
       clickImg,
       removeImg
     } = this.props.relaxProps;
-    console.log(cateList, sourceCateList, 'cateList');
+    console.log(images.toJS());
+
     return (
       <Form className="login-form">
         <FormItem
@@ -210,11 +212,20 @@ class CateModalForm extends React.Component<any, any> {
         >
           {getFieldDecorator('cateName', {
             rules: [
-              { required: true, whitespace: true, message: '请输入分类名称' },
-              { max: 20, message: '最多20字符' },
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please enter a category name'
+              },
+              { max: 100, message: 'Up to 100 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '分类名称');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Category Name'
+                  );
                 }
               }
             ],
@@ -238,7 +249,7 @@ class CateModalForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: '请选择平台商品类目'
+                message: 'Please select platform product category'
               },
               {
                 validator: (_rule, value, callback) => {
@@ -272,7 +283,7 @@ class CateModalForm extends React.Component<any, any> {
                 formData.get('children')
               }
               getPopupContainer={() => document.getElementById('page-content')}
-              placeholder="Please select category"
+              placeholder="Please select classification"
               notFoundContent="暂无分类"
               // disabled={cateDisabled}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

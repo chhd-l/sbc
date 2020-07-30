@@ -86,8 +86,8 @@ const Common = {
     REFUND: '退款',
     AUDIT: 'To be delivered',
     DELIVERED_PART: 'To be delivered',
-    DELIVERED: '待收货',
-    CONFIRMED: '已收货',
+    DELIVERED: 'Ready for receiving',
+    CONFIRMED: 'Received',
     COMPLETED: 'Finished',
     VOID: 'Invalid',
     REFUND_FAILED: '退款失败'

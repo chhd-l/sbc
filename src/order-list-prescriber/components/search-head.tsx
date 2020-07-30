@@ -246,7 +246,7 @@ export default class SearchHead extends Component<any, any> {
                       <FormattedMessage id="order.toBeConfirmed" />
                     </Option>
                     <Option value="PAID">
-                      <FormattedMessage id="paid" />
+                      <FormattedMessage id="order.paid" />
                     </Option>
                   </SelectGroup>
                 )}

@@ -344,7 +344,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Consumer Account">
+                    <FormItem label="Consumer account">
                       {getFieldDecorator('customerAccount', {
                         rules: [
                           {

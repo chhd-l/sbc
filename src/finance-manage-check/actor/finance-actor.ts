@@ -12,10 +12,14 @@ export default class FinanceActor extends Actor {
     return {
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId,
       dateRange: {
-        beginTime: moment(new Date())
+        beginTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
           .format('YYYY-MM-DD')
           .toString(),
-        endTime: moment(new Date())
+        endTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
           .format('YYYY-MM-DD')
           .toString()
       },

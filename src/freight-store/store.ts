@@ -116,4 +116,26 @@ export default class AppStore extends Store {
       message.error(res.message);
     }
   };
+
+  getCountryCity = async () => {
+    const country = (await webapi.querySysDictionary({
+      type: 'country'
+    })) as any;
+    if (country.res.code === Const.SUCCESS_CODE) {
+      this.dispatch('freight: store: field: value', {
+        field: 'country',
+        value: fromJS(country.res.context.sysDictionaryVOS)
+      });
+    }
+
+    const city = (await webapi.querySysDictionary({
+      type: 'city'
+    })) as any;
+    if (city.res.code === Const.SUCCESS_CODE) {
+      this.dispatch('freight: store: field: value', {
+        field: 'city',
+        value: fromJS(city.res.context.sysDictionaryVOS)
+      });
+    }
+  };
 }

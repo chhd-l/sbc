@@ -452,7 +452,7 @@ export default class VideoModal extends React.Component<any, any> {
                 >
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No Data
+                    No data
                   </span>
                 </div>
               )}

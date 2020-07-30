@@ -66,8 +66,8 @@ export default class List extends React.Component<any, any> {
         <div className="chartDetails2">
           <WMChart
             title=""
-            startTime={new Date()}
-            endTime={new Date()}
+            startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+            endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[
               { title: 'order Mount', key: 'orderMount' },
@@ -91,8 +91,8 @@ export default class List extends React.Component<any, any> {
         <div className="chartDetails2">
           <WMChart
             title=""
-            startTime={new Date()}
-            endTime={new Date()}
+            startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+            endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[{ title: 'Order number', key: 'orderCount' }]}
             radioClickBack={() => {}}

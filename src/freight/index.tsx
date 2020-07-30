@@ -5,6 +5,8 @@ import { Breadcrumb, Alert, Radio, Button, Tabs } from 'antd';
 import { Headline, history, AuthWrapper, checkAuth, BreadCrumb } from 'qmkit';
 import styled from 'styled-components';
 
+import { FormattedMessage } from 'react-intl';
+
 import GoodsSetting from './component/goods-setting';
 import StoreSetting from './component/store-setting';
 import AppStore from './store';
@@ -61,19 +63,15 @@ export default class FreightTemplate extends React.Component<any, any> {
       //   <Breadcrumb.Item>运费模板</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title="Freight Template" />
+        <Headline
+          title={<FormattedMessage id="Freight template"></FormattedMessage>}
+        />
         <Alert
           message={
             <div>
-              Please set the freight calculation mode first, and when selecting
-              the single item freight, the order freight uses the freight
-              overlay of each product{' '}
-              <a onClick={() => history.push('/freight-instruction')}>
-                View calculation formula
-              </a>{' '}
-              ， If you choose the store freight, the single product freight
-              template of the product selection will not take effect, and a
-              uniform freight will be charged according to the order amount.；
+              Please set the shipping calculation mode first. When selecting a single product, the order shipping uses the shipping charge of each product;
+              if the store shipping is selected, the single product shipping template selected by the product will not be effective, 
+              and the unified shipping will be charged according to the order amount;
             </div>
           }
           type="info"
@@ -81,18 +79,22 @@ export default class FreightTemplate extends React.Component<any, any> {
         />
         <AuthWrapper functionName="f_freight_type_set">
           <TitleBox>
-            Set freight calculation mode:
+          Set the shipping calculation mode  :
             <RadioGroup
               onChange={(e: any) =>
                 this.store.fieldSave({ field: 'fMode', value: e.target.value })
               }
               value={fMode}
             >
-              <Radio value={0}>Store Freight</Radio>
-              <Radio value={1}>Single Product Freight</Radio>
+              <Radio value={0}>
+                <FormattedMessage id="Store shipping"></FormattedMessage>
+              </Radio>
+              <Radio value={1}>
+                <FormattedMessage id="Single product shipping"></FormattedMessage>
+              </Radio>
             </RadioGroup>
             <Button type="primary" onClick={() => this._save()}>
-              Save Settings
+              Save settings
             </Button>
           </TitleBox>
         </AuthWrapper>
@@ -104,12 +106,20 @@ export default class FreightTemplate extends React.Component<any, any> {
             tabBarStyle={{ marginTop: 16 }}
           >
             {checkAuth('f_store_temp_list') && (
-              <Tabs.TabPane tab="Store Freight" key={0}>
+              <Tabs.TabPane
+                tab={<FormattedMessage id="Store shipping"></FormattedMessage>}
+                key={0}
+              >
                 <StoreSetting />
               </Tabs.TabPane>
             )}
             {checkAuth('f_goods_temp_list') && (
-              <Tabs.TabPane tab="Single Product Freight" key={1}>
+              <Tabs.TabPane
+                tab={
+                  <FormattedMessage id="Single product shipping"></FormattedMessage>
+                }
+                key={1}
+              >
                 <GoodsSetting />
               </Tabs.TabPane>
             )}

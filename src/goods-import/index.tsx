@@ -22,14 +22,17 @@ const header = {
 
 const steps = [
   {
+    id: 1,
     title: <FormattedMessage id="product.downloadProductImportTemplate" />,
     content: 'First-content'
   },
   {
+    id: 2,
     title: <FormattedMessage id="uploadData" />,
     content: 'Second-content'
   },
   {
+    id: 3,
     title: <FormattedMessage id="finish" />,
     content: 'Third-content'
   }
@@ -91,7 +94,7 @@ export default class GoodsImport extends React.Component<any, any> {
           <div style={styles.uploadTit}>
             <Steps current={current}>
               {steps.map((item) => (
-                <Step key={item.title} title={item.title} />
+                <Step key={item.id} title={item.title} />
               ))}
             </Steps>
           </div>

@@ -37,7 +37,11 @@ export default class RevenueList extends React.Component<any, any> {
         {/*<div className="totalAmount">
           <ul>
             <li>
-              <p className="payName">&nbsp;Total Revenue</p>
+              <p className="payName">
+                &nbsp;
+                <FormattedMessage id="TotalRevenue" />
+              </p>
+
               <strong>
                 {incomeList.toJS().map((item, index) => {
                   let a = item.totalAmount.substr(
@@ -106,7 +110,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             />
             <Column
-              title="Total Revenue"
+              title="Total revenue"
               dataIndex="totalAmount"
               key="totalAmount"
             />

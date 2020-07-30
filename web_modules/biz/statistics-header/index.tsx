@@ -182,11 +182,11 @@ export default class StatisticsHeader extends React.Component<
     const { onClick } = this.props;
     const rangeDate = new Array();
     //获取昨天的日期
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const yesterday = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 60 * 60 * 1000);
     //获取7天前的日期
-    const sevenago = new Date(new Date().getTime() - 24 * 7 * 60 * 60 * 1000);
+    const sevenago = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 7 * 60 * 60 * 1000);
     //获取30天前的日期
-    const monthago = new Date(new Date().getTime() - 24 * 30 * 60 * 60 * 1000);
+    const monthago = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 30 * 60 * 60 * 1000);
     if (key == '-1') {
       //获取昨天的日期,再加一个索引标识，方便兼容各个模块的接口调用入参
       rangeDate.push(
@@ -197,8 +197,8 @@ export default class StatisticsHeader extends React.Component<
     } else if (key == '0') {
       //获取当天的日期
       rangeDate.push(
-        util.formateDate(new Date()),
-        util.formateDate(new Date()),
+        util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))),
+        util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))),
         0
       );
     } else if (key == '1') {
@@ -221,7 +221,7 @@ export default class StatisticsHeader extends React.Component<
   };
 
   _renderMenu = () => {
-    let date = new Date();
+    let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
     let menuList = new Array();
     for (let i = 0; i < 6; i++) {
       date.setMonth(date.getMonth() - 1, 1);

@@ -37,7 +37,7 @@ export default class GoodsSetting extends React.Component<any, any> {
           onClick={() => history.push('/goods-freight')}
           key="button"
         >
-          New single product shipping template
+          Add single product shipping template
         </Button>
       ),
       <FreightList

@@ -40,11 +40,12 @@ export default class PageModal extends React.Component {
     const addUrl =
       Const.X_XITE_ADMIN_HOST +
       '/editor/editor?action=createBlank&platform=weixin&pageCode=' +
-      new Date().getTime() +
+      new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() +
       `&storeId=${storeId}&scene=onlineMall&pageType=index&userTpl=true&id=weixin-wechat&sc=H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA%3D%3D`;
     return (
       <div>
-        <Modal  maskClosable={false}
+        <Modal
+          maskClosable={false}
           title="选择模板"
           visible={visible}
           onCancel={() => setVisible(false)}
@@ -53,18 +54,17 @@ export default class PageModal extends React.Component {
         >
           <div className="page-modal-wx-title">
             <ul>
-              {platform == 'weixin' &&
-                includePageTypeList.get(0) === 'index' && (
-                  <li className="page-modal-li">
-                    <a target="_blank" href={addUrl}>
-                      <img
-                        className="page-img"
-                        src={require('../img/space.png')}
-                      />
-                      <p className="page-title">空白自建</p>
-                    </a>
-                  </li>
-                )}
+              {platform == 'weixin' && includePageTypeList.get(0) === 'index' && (
+                <li className="page-modal-li">
+                  <a target="_blank" href={addUrl}>
+                    <img
+                      className="page-img"
+                      src={require('../img/space.png')}
+                    />
+                    <p className="page-title">空白自建</p>
+                  </a>
+                </li>
+              )}
               {templateList &&
                 templateList.map((info) => {
                   const editUrl =
@@ -72,7 +72,9 @@ export default class PageModal extends React.Component {
                     `/editor/editor?action=create&&storeId=${storeId}&platform=` +
                     platform +
                     '&pageCode=' +
-                    new Date().getTime() +
+                    new Date(
+                      sessionStorage.getItem('defaultLocalDateTime')
+                    ).getTime() +
                     '&scene=onlineMall&pageType=' +
                     includePageTypeList.get(0) +
                     '&id=' +

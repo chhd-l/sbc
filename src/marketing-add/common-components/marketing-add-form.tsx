@@ -107,7 +107,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
       let randomNumber = (
         '0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)
       ).slice(-8);
-      let timeStamp = new Date().getTime().toString().slice(-10);
+      let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        .getTime()
+        .toString()
+        .slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
         promotionCode: promotionCode,
@@ -241,8 +244,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (
                     value &&
-                    moment(new Date()).hour(0).minute(0).second(0).unix() >
-                      value[0].unix()
+                    moment(
+                      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+                    )
+                      .hour(0)
+                      .minute(0)
+                      .second(0)
+                      .unix() > value[0].unix()
                   ) {
                     callback("You can't start earlier than now");
                   } else {

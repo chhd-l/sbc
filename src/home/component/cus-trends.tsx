@@ -24,8 +24,8 @@ export default class CustomerGrowTrendsCharts extends React.Component<
     return (
       <WMChart
         title=""
-        startTime={new Date()}
-        endTime={new Date()}
+        startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+        endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
         dataDesc={[
           { title: 'Total active consumer number', key: 'cusAllCount' },
           { title: 'New  active consumer number', key: 'cusDayGrowthCount' },

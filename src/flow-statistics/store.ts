@@ -29,7 +29,9 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   init = async () => {
-    const nowDay = moment(new Date())
+    const nowDay = moment(
+      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+    )
       .format(Const.DAY_FORMAT)
       .toString();
     this.setDateRange(nowDay, nowDay, 0);
@@ -60,9 +62,7 @@ export default class AppStore extends Store {
       } else {
         this.getFlowData(false);
       }
-      const sortedInfo = this.state()
-        .get('sortedInfo')
-        .toJS();
+      const sortedInfo = this.state().get('sortedInfo').toJS();
       this.getPageData(1, pageSize, sortedInfo.columnKey, sortedInfo.order);
     });
   };
@@ -77,9 +77,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   getPageData = async (pageNum, pageSize, sortName, sortType) => {
-    const { dateCycle } = this.state()
-      .get('dateRange')
-      .toJS();
+    const { dateCycle } = this.state().get('dateRange').toJS();
     const { res } = await webapi.getPageData(
       dateCycle,
       pageNum,
@@ -108,9 +106,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   getFlowData = async (isWeek) => {
-    const { dateCycle } = this.state()
-      .get('dateRange')
-      .toJS();
+    const { dateCycle } = this.state().get('dateRange').toJS();
     const { res } = await webapi.getFlowData(dateCycle, isWeek);
     if (res && res.code == Const.SUCCESS_CODE) {
       this.dispatch('flow:getFlowData', res.context);

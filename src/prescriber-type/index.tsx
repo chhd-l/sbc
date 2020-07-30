@@ -38,7 +38,7 @@ export default class ClinicList extends Component<any, any> {
               <Popconfirm
                 placement="topLeft"
                 title="Are you sure to delete this item?"
-                onConfirm={() => this.delClinicType(this.state.customerId)}
+                onConfirm={() => this.delClinicType(record.id)}
                 okText="Confirm"
                 cancelText="Cancel"
               >

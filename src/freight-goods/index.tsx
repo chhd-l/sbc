@@ -58,7 +58,7 @@ export default class GoodsFreight extends React.Component<any, any> {
                 If you want to set up shipping, please choose the seller to bear
                 the shipping cost, if you want to set up shipping in some
                 regions, please choose the buyer to bear the shipping cost, and
-                then specify the conditions of shipping
+                then specify the conditions of shipping.
               </div>
             </div>
           }

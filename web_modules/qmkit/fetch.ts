@@ -56,7 +56,6 @@ export default async function Fetch<T>(
     url = url.replace(/([^:])\/\//, '$1/');
 
     const res = await fetch(url, merge);
-    
     if(url.indexOf('/clinics/exportPrescriber') !== -1){
       const resBlob =await res.blob();
       return {
@@ -90,6 +89,8 @@ export default async function Fetch<T>(
     }
 
     //TODO 和后端约定返回的数据格式, 然后再细分
+    sessionStorage.setItem('defaultLocalDateTime',resJSON.defaultLocalDateTime)
+    
     return {
       res: resJSON,
       err: null

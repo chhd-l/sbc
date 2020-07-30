@@ -54,7 +54,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         )}
         {settleStatus == 0 && (
           <Menu.Item>
-            <a onClick={() => bulkExport()}>Bulk Export</a>
+            <a onClick={() => bulkExport()}>Bulk export</a>
           </Menu.Item>
         )}
       </Menu>

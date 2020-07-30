@@ -52,19 +52,15 @@ class PaymentModal extends React.Component<any, any> {
     this.state = {
       paymentForm: {}
     };
-    this.getPaymentSetting();
+  }
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    if (nextProps.paymentForm) {
+      this.setState({
+        paymentForm: nextProps.paymentForm
+      });
+    }
   }
 
-  getPaymentSetting = async () => {
-    const { res } = await webapi.getPaymentSetting();
-    if (res.code === 'K-000000') {
-      this.setState({
-        paymentForm: res.context
-      });
-    } else {
-      message.error(res.message);
-    }
-  };
   onFormChange = ({ field, value }) => {
     let data = this.state.paymentForm;
     // if(value.length > 0) {

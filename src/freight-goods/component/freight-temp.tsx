@@ -129,7 +129,7 @@ const FREIGHT_TEMP = {
   //0: { unit: '件', label: '件', options: '件数' },
   //1: { unit: 'kg', label: '重', options: '重量' },
   //2: { unit: 'm³', label: '体积', options: '体积' }
-  0: { unit: 'Item', label: 'Quantity', options: 'Quatity' },
+  0: { unit: 'item', label: 'quantity', options: 'quatity' },
   1: { unit: 'kg', label: 'weight', options: 'weight' },
   2: { unit: 'm³', label: 'volume', options: 'volume' }
 };
@@ -581,7 +581,7 @@ export default class FreightTemp extends React.Component<any, any> {
               checked={specifyTermFlag == 1}
               onChange={(e) => changeSpecifyTermFlag(e.target.checked ? 1 : 0)}
             >
-              Free shipping under certain shipping Conditions.
+              Free shipping under certain shipping conditions
             </Checkbox>
             <Table
               rowKey="id"

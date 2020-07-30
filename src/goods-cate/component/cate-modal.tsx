@@ -281,7 +281,7 @@ class CateModalForm extends React.Component<any, any> {
                 formData.get('children')
               }
               getPopupContainer={() => document.getElementById('page-content')}
-              placeholder="Please select category"
+              placeholder="Please select classification"
               notFoundContent="暂无分类"
               // disabled={cateDisabled}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

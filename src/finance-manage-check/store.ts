@@ -28,17 +28,8 @@ export default class AppStore extends Store {
     //获取收入对账明细
     const searchTime = {
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     };
     this.dispatch('finance:searchTime', fromJS(searchTime));
     await this.fetchIncomeList();
@@ -50,32 +41,14 @@ export default class AppStore extends Store {
   fetchIncomeList = async () => {
     const { res: income } = await webapi.fetchIncomeList({
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     //总体
     const { res: incomeTotal } = await webapi.fetchIncomeTotal({
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     if (income.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:income', income.context.content);
@@ -101,17 +74,8 @@ export default class AppStore extends Store {
   searchByDate = async () => {
     const searchTime = {
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     };
     this.dispatch('finance:searchTime', fromJS(searchTime));
     if (this.state().get('tabKey') == 1) {
@@ -128,8 +92,8 @@ export default class AppStore extends Store {
     this.dispatch('finance:tabkey', key);
     //zhanghao 原型修改，时间不需要重置
     //时间还原为当天
-    // this.changeDateRange('beginTime', moment(new Date()).format('YYYY-MM-DD'));
-    // this.changeDateRange('endTime', moment(new Date()).format('YYYY-MM-DD'));
+    // this.changeDateRange('beginTime', moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY-MM-DD'));
+    // this.changeDateRange('endTime', moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY-MM-DD'));
     //收入对账
     if (key == 1) {
       await this.fetchIncomeList();
@@ -145,31 +109,13 @@ export default class AppStore extends Store {
   fetchRefundList = async () => {
     const { res: refund } = await webapi.fetchRefundList({
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     const { res: refundTotal } = await webapi.fetchRefundTotal({
       beginTime:
-        this.state()
-          .get('dateRange')
-          .get('beginTime') +
-        ' ' +
-        '00:00:00',
-      endTime:
-        this.state()
-          .get('dateRange')
-          .get('endTime') +
-        ' ' +
-        '23:59:59'
+        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     if (refundTotal.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:refundTotal', refundTotal.context);
@@ -185,9 +131,7 @@ export default class AppStore extends Store {
    * 批量导出
    */
   bulk_export = async () => {
-    const searchTime = this.state()
-      .get('searchTime')
-      .toJS();
+    const searchTime = this.state().get('searchTime').toJS();
     const { beginTime, endTime } = searchTime;
     const keywords = this.state().get('storeName');
     return new Promise((resolve) => {

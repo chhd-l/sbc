@@ -218,9 +218,9 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
    */
   _recentThirtyDays = () => {
     //昨天
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const yesterday = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 60 * 60 * 1000);
     //获取30天前的日期
-    const monthago = new Date(new Date().getTime() - 24 * 30 * 60 * 60 * 1000);
+    const monthago = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 30 * 60 * 60 * 1000);
     let rangeDate = new Array();
     rangeDate.push(util.formateDate(monthago), util.formateDate(yesterday));
     return rangeDate;
@@ -232,9 +232,9 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
    */
   _recentNintyDays = () => {
     //昨天
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const yesterday = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 60 * 60 * 1000);
     //获取90天前的日期
-    const nintyago = new Date(new Date().getTime() - 24 * 90 * 60 * 60 * 1000);
+    const nintyago = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 90 * 60 * 60 * 1000);
     let rangeDate = new Array();
     rangeDate.push(util.formateDate(nintyago), util.formateDate(yesterday));
     return rangeDate;

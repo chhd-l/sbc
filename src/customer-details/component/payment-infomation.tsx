@@ -424,7 +424,12 @@ class BillingInfomation extends React.Component<any, any> {
                             message: 'your card expiration_date is invalid!'
                           }
                         ],
-                        initialValue: moment(new Date(), 'MM/YY')
+                        initialValue: moment(
+                          new Date(
+                            sessionStorage.getItem('defaultLocalDateTime')
+                          ),
+                          'MM/YY'
+                        )
                       })(
                         <MonthPicker
                           disabled

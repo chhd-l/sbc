@@ -145,8 +145,14 @@ export default class AllPresentAddForm extends React.Component<any, any> {
                   validator: (_rule, value, callback) => {
                     if (
                       value &&
-                      moment(new Date()).second(0) &&
-                      moment(new Date()).second(0).unix() > value[0].unix()
+                      moment(
+                        new Date(sessionStorage.getItem('defaultLocalDateTime'))
+                      ).second(0) &&
+                      moment(
+                        new Date(sessionStorage.getItem('defaultLocalDateTime'))
+                      )
+                        .second(0)
+                        .unix() > value[0].unix()
                     ) {
                       callback('开始时间不能早于现在');
                     } else if (value[0] && value[0].unix() >= value[1].unix()) {

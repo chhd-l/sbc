@@ -37,7 +37,9 @@ export default class RewardRate extends Component<any, any> {
   addSection() {
     let section = {
       timeZone: this.state.timeZone,
-      tempId: new Date().valueOf(),
+      tempId: new Date(
+        sessionStorage.getItem('defaultLocalDateTime')
+      ).valueOf(),
       orderAmount: '',
       rewardRate: ''
     };

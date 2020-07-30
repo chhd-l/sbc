@@ -41,7 +41,10 @@ export default class GoodsSpecActor extends Actor {
   _randomGoodsInfoNo() {
     const skuNo =
       '8' +
-      new Date().getTime().toString().slice(4, 10) +
+      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        .getTime()
+        .toString()
+        .slice(4, 10) +
       Math.random().toString().slice(2, 5);
 
     // 如果已经生成过，重新生成

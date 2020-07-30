@@ -88,7 +88,9 @@ export default class AddForm extends React.Component<any, any> {
               { required: true, message: '请选择起止时间' },
               {
                 validator: (_rule, value, callback) => {
-                  const nowMoment = moment(new Date()).subtract(1, 'minute');
+                  const nowMoment = moment(
+                    new Date(sessionStorage.getItem('defaultLocalDateTime'))
+                  ).subtract(1, 'minute');
                   if (
                     value &&
                     nowMoment.second(0) &&

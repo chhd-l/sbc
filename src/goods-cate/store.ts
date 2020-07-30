@@ -72,9 +72,10 @@ export default class AppStore extends Store {
   /**
    * 显示修改弹窗
    */
-  showEditModal = (formData: IMap) => {
+  showEditModal = (formData: IMap, images: IMap) => {
     this.transaction(() => {
       this.dispatch('cateActor: editFormData', formData);
+      this.dispatch('cateActor: editImages', images);
       this.dispatch('cateActor: showModal');
     });
   };
@@ -100,14 +101,17 @@ export default class AppStore extends Store {
   doAdd = async () => {
     const formData = this.state().get('formData');
     const images = this.state().get('images');
-    console.log(images.toJS());
 
-    console.log('doAdd');
+    let imagesJs = images.toJS();
+    let formDataJs = formData.toJS();
+    if (imagesJs) {
+      formDataJs.cateImg = JSON.stringify(imagesJs);
+    }
     let result: any;
     if (formData.get('storeCateId')) {
-      result = await editCate(formData);
+      result = await editCate(formDataJs);
     } else {
-      result = await addCate(formData);
+      result = await addCate(formDataJs);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('save successful');

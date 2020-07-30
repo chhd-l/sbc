@@ -129,7 +129,7 @@ const FREIGHT_TEMP = {
   //0: { unit: '件', label: '件', options: '件数' },
   //1: { unit: 'kg', label: '重', options: '重量' },
   //2: { unit: 'm³', label: '体积', options: '体积' }
-  0: { unit: 'Piece', label: 'Piece', options: 'number' },
+  0: { unit: 'item', label: 'quantity', options: 'quatity' },
   1: { unit: 'kg', label: 'weight', options: 'weight' },
   2: { unit: 'm³', label: 'volume', options: 'volume' }
 };
@@ -301,7 +301,7 @@ export default class FreightTemp extends React.Component<any, any> {
                 style={{ width: 350 }}
                 disabled={defaultFlag == 1}
                 //placeholder="模板名称限制2-20个字符"
-                placeholder="The template name is limited to 2-20 characters"
+                placeholder="Template name must be 2-20 characters"
                 onChange={(e) =>
                   changeFieldValue({
                     field: 'freightTempName',
@@ -315,7 +315,7 @@ export default class FreightTemp extends React.Component<any, any> {
             <FormItem
               {...formItemLayout}
               required={true}
-              label="delivery address"
+              label="Delivery address"
             >
               {getFieldDecorator('area', {
                 initialValue: aIds,
@@ -340,27 +340,31 @@ export default class FreightTemp extends React.Component<any, any> {
 
           <FormItem
             {...formItemLayout}
-            label="Whether free shipping"
+            label="Who pay the freight"
             required={true}
           >
             <RadioGroup
               onChange={(e: any) => this._changeFreightFreeFlag(e.target.value)}
               value={freightFreeFlag}
             >
-              <Radio value={0}>The buyer bears the freight</Radio>
-              <Radio value={1}>Seller bears freight</Radio>
+              <Radio value={0}>Buyer</Radio>
+              <Radio value={1}>Seller</Radio>
             </RadioGroup>
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Pricing method" required={true}>
+          <FormItem
+            {...formItemLayout}
+            label="Pricing based on"
+            required={true}
+          >
             <RadioGroup
               disabled={freightFreeFlag == 1}
               value={valuationType}
               onChange={(e: any) => this._changeFieldValue(e.target.value)}
             >
-              <Radio value={0}>By Nmber</Radio>
-              <Radio value={1}>By Weight</Radio>
-              <Radio value={2}>By Volume</Radio>
+              <Radio value={0}>Quantity</Radio>
+              <Radio value={1}>Weight</Radio>
+              <Radio value={2}>Volume</Radio>
             </RadioGroup>
           </FormItem>
 
@@ -378,14 +382,14 @@ export default class FreightTemp extends React.Component<any, any> {
                   title: 'Delivery area',
                   dataIndex: 'destinationArea',
                   key: 'destinationArea',
-                  width: '32%',
+                  width: '24%',
                   render: (text, record, index) => {
                     return record.defaultFlag == 1 || index == 0 ? (
                       <div>
-                        默认
+                        {/* 默认 */}
                         <span style={{ color: '#b5b5b5' }}>
-                          Except for the designated regions, the freight rates
-                          in the rest of the regions are "default freight rates"
+                          Except for designated regions, the freight rates in
+                          the rest of the regions are "default freight rates".
                         </span>
                       </div>
                     ) : (
@@ -419,10 +423,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: `first${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
+                  title: `Initial ${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
                   dataIndex: 'freightStartNum',
                   key: 'freightStartNum',
-                  width: '15%',
+                  width: '16%',
                   render: (text, record) => {
                     return (
                       <FormItem>
@@ -450,10 +454,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'Down payment (yuan)',
+                  title: 'Down payment (dollar)',
                   dataIndex: 'freightStartPrice',
                   key: 'freightStartPrice',
-                  width: '15%',
+                  width: '13%',
                   render: (text, record) => {
                     return (
                       <FormItem>
@@ -481,10 +485,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: `Renewal${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
+                  title: `Additional ${FREIGHT_TEMP[valuationType].label}(${FREIGHT_TEMP[valuationType].unit})`,
                   dataIndex: 'freightPlusNum',
                   key: 'freightPlusNum',
-                  width: '15%',
+                  width: '16%',
                   render: (text, record) => {
                     return (
                       <FormItem>
@@ -512,7 +516,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'Renewal fee (yuan)',
+                  title: 'Renewal fee (dollar)',
                   dataIndex: 'freightPlusPrice',
                   key: 'freightPlusPrice',
                   width: '15%',
@@ -543,10 +547,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'operation',
+                  title: 'Operation',
                   dataIndex: 'operation',
                   key: 'operation',
-                  width: '8%',
+                  width: '13%',
                   render: (_text, record, index) => {
                     return record.defaultFlag == 1 || index == 0 ? (
                       <Icon
@@ -577,7 +581,7 @@ export default class FreightTemp extends React.Component<any, any> {
               checked={specifyTermFlag == 1}
               onChange={(e) => changeSpecifyTermFlag(e.target.checked ? 1 : 0)}
             >
-              指定条件包邮
+              Free shipping under certain shipping conditions
             </Checkbox>
             <Table
               rowKey="id"
@@ -588,7 +592,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   title: 'Delivery area',
                   dataIndex: 'destinationArea',
                   key: 'destinationArea',
-                  width: '20%',
+                  width: '24%',
                   render: (_text, record) => {
                     return (
                       <div className="treeSelectBox">
@@ -624,7 +628,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   title: 'Shipping method',
                   dataIndex: 'deliverWay',
                   key: 'deliverWay',
-                  width: '20%',
+                  width: '16%',
                   render: () => {
                     return (
                       <Select defaultValue="1">
@@ -637,7 +641,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   title: 'Set shipping conditions',
                   dataIndex: 'conditionType',
                   key: 'conditionType',
-                  width: '52%',
+                  width: '42%',
                   render: (text, record) => {
                     return (
                       <div className="set-condition">
@@ -663,10 +667,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'operation',
+                  title: 'Operation',
                   dataIndex: 'operation',
                   key: 'operation',
-                  width: '8%',
+                  width: '13%',
                   render: (_text, record, index) => {
                     return index == 0 ? (
                       <Icon
@@ -695,7 +699,7 @@ export default class FreightTemp extends React.Component<any, any> {
             >
               Save
             </Button>
-            <Button onClick={() => history.push('/freight')}>Cancle</Button>
+            <Button onClick={() => history.push('/freight')}>Cancel</Button>
           </div>
         </Form>
       </FormDiv>

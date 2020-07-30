@@ -153,7 +153,7 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>Signed Brand</H2>
+            <H2>Signed brand</H2>
             <GreyText>
               Signed {brandList ? brandList.length : 0} brands, Up to 50 brands
               can be signed
@@ -167,13 +167,13 @@ export default class StepThree extends React.Component<any, any> {
               pagination={false}
             >
               <Column
-                title="Brand Name"
+                title="Brand name"
                 dataIndex="brandName"
                 key="brandName"
                 width="15%"
               />
               <Column
-                title="Brand Alias"
+                title="Brand alias"
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -182,7 +182,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="Brand Logo"
+                title="Brand logo"
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -204,7 +204,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="Authorization Document"
+                title="Authorization document"
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -296,7 +296,7 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>Merchant Type</H2>
+            <H2>Merchant type</H2>
           </div>
           <RadioGroup value={storeInfo.get('companyType')}>
             {storeInfo.get('companyType') == 0 ? (

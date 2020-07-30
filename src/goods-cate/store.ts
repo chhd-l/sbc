@@ -72,9 +72,10 @@ export default class AppStore extends Store {
   /**
    * 显示修改弹窗
    */
-  showEditModal = (formData: IMap) => {
+  showEditModal = (formData: IMap, images: IMap) => {
     this.transaction(() => {
       this.dispatch('cateActor: editFormData', formData);
+      this.dispatch('cateActor: editImages', images);
       this.dispatch('cateActor: showModal');
     });
   };
@@ -99,12 +100,18 @@ export default class AppStore extends Store {
    */
   doAdd = async () => {
     const formData = this.state().get('formData');
-    console.log('doAdd');
+    const images = this.state().get('images');
+
+    let imagesJs = images.toJS();
+    let formDataJs = formData.toJS();
+    if (imagesJs) {
+      formDataJs.cateImg = JSON.stringify(imagesJs);
+    }
     let result: any;
     if (formData.get('storeCateId')) {
-      result = await editCate(formData);
+      result = await editCate(formDataJs);
     } else {
-      result = await addCate(formData);
+      result = await addCate(formDataJs);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('save successful');
@@ -160,9 +167,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   cateSort = async (catePath, dragIndex, hoverIndex) => {
-    let cates = this.state()
-      .get('dataList')
-      .toJS();
+    let cates = this.state().get('dataList').toJS();
     //cateIds: 0|245|246|
     let cateIds = catePath.split('|');
     //拖拽排序后的列表
@@ -350,9 +355,7 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseImgs',
-            fromJS(imageList.res.context)
-              .get('content')
-              .slice(0, successCount)
+            fromJS(imageList.res.context).get('content').slice(0, successCount)
           );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));

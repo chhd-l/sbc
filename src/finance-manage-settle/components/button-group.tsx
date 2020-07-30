@@ -10,9 +10,9 @@ export default class ButtonGroup extends React.Component<any, any> {
   props: {
     relaxProps?: {
       changeSettleStatus: Function;
+      bulkExport: Function;
       checkedSettleIds: IList;
       queryParams: IMap;
-      bulkExport: Function;
     };
   };
 
@@ -29,7 +29,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <Dropdown
-          /*disabled={settleStatus == 1}*/
+          //disabled={settleStatus == 1}
           overlay={this._menu()}
           getPopupContainer={() => document.getElementById('page-content')}
         >

@@ -21,8 +21,8 @@ export default class FlowTrendsCharts extends React.Component<any, any> {
     return (
       <WMChart
         title=""
-        startTime={new Date()}
-        endTime={new Date()}
+        startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+        endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
         dataDesc={[
           { title: 'UV', key: 'totalUv' },
           { title: 'PV', key: 'totalPv' }

@@ -173,8 +173,10 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:randomGoodsNo')
   randomGoodsNo(state, prefix) {
     let number =
-      new Date().getTime().toString().slice(4, 10) +
-      Math.random().toString().slice(2, 5);
+      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        .getTime()
+        .toString()
+        .slice(4, 10) + Math.random().toString().slice(2, 5);
     return state.update('goods', (goods) =>
       goods
         .set('goodsNo', 'P' + number)

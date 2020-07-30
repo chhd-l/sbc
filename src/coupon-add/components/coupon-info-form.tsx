@@ -668,8 +668,11 @@ export default class CouponInfoForm extends Component<any, any> {
       //强制校验创建时间
       if (
         rangeDayType == 0 &&
-        moment(new Date()).hour(0).minute(0).second(0).unix() >
-          moment(startTime).unix()
+        moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
+          .hour(0)
+          .minute(0)
+          .second(0)
+          .unix() > moment(startTime).unix()
       ) {
         this.props.form.setFields({
           rangeDay: {

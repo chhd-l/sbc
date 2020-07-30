@@ -110,7 +110,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             />
             <Column
-              title="Total Revenue"
+              title="Total revenue"
               dataIndex="totalAmount"
               key="totalAmount"
             />

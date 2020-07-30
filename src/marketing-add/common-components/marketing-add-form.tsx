@@ -92,8 +92,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       skuExists: [],
       saveLoading: false,
       promotionCode: '',
+      promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
-      PromotionTypeChecked: false
+      PromotionTypeChecked: true
     };
   }
 
@@ -106,10 +107,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
       let randomNumber = (
         '0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)
       ).slice(-8);
-      let timeStamp = new Date().getTime().toString().slice(-10);
+      let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        .getTime()
+        .toString()
+        .slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
-        promotionCode: promotionCode
+        promotionCode: promotionCode,
+        promotionCode2: promotionCode
       });
       return promotionCode;
     } else {
@@ -158,7 +163,17 @@ export default class MarketingAddForm extends React.Component<any, any> {
             initialValue: marketingBean.get('promotionCode')
               ? marketingBean.get('promotionCode')
               : this.getPromotionCode()
-          })(<Input disabled style={{ width: 160 }} />)}
+          })(
+            <Input
+              onChange={(e) => {
+                this.setState({
+                  promotionCode: e.target.value
+                });
+              }}
+              disabled={this.state.PromotionTypeChecked}
+              style={{ width: 160 }}
+            />
+          )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
@@ -168,6 +183,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 this.setState({
                   PromotionTypeChecked: e.target.checked
                 });
+
+                if (e.target.checked) {
+                  this.props.form.setFieldsValue({
+                    promotionCode: this.state.promotionCode2
+                  });
+                }
               } else {
                 this.setState({
                   PromotionTypeChecked: true
@@ -223,8 +244,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (
                     value &&
-                    moment(new Date()).hour(0).minute(0).second(0).unix() >
-                      value[0].unix()
+                    moment(
+                      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+                    )
+                      .hour(0)
+                      .minute(0)
+                      .second(0)
+                      .unix() > value[0].unix()
                   ) {
                     callback("You can't start earlier than now");
                   } else {
@@ -492,6 +518,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
         if (this.state.PromotionTypeValue === 1) {
           this.setState({
             PromotionTypeChecked: true
+            // promotionCode: this.state.promotionCode2
+          });
+          this.props.form.setFieldsValue({
+            promotionCode: this.state.promotionCode2
           });
         }
       }

@@ -46,6 +46,7 @@ export default class SetBannerList extends Component<any, any> {
       getBannerById: Function;
       getStoreId: Function;
       onImageFormChange: Function;
+      resetForm: Funciton;
     };
   };
 
@@ -57,7 +58,8 @@ export default class SetBannerList extends Component<any, any> {
     getList: noop,
     getStoreId: noop,
     getBannerById: noop,
-    onImageFormChange: noop
+    onImageFormChange: noop,
+    resetForm: noop
   };
   handleTableChange() {}
   componentDidMount() {
@@ -80,6 +82,7 @@ export default class SetBannerList extends Component<any, any> {
     } = this.props.relaxProps;
     onImageFormChange({ field: 'bannerId', value: null });
     await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
+    this.props.editStatusChange(true);
     setModalVisible(true);
   }
   _renderLoading() {
@@ -99,6 +102,8 @@ export default class SetBannerList extends Component<any, any> {
         const id = item.get('id');
         const pcName = item.get('bannerName');
         const bannerNo = item.get('bannerNo');
+        const webSkipUrl = item.get('webSkipUrl');
+        const mobiSkipUrl = item.get('mobiSkipUrl');
         // const mobileName = item.get('mobileName');
         const pcImage = item.get('webUrl');
         const mobileImage = item.get('mobiUrl');
@@ -153,6 +158,8 @@ export default class SetBannerList extends Component<any, any> {
                 </video>
               )}
             </td>
+            <td>{webSkipUrl}</td>
+            <td>{mobiSkipUrl}</td>
             <td>
               <span className="red" onClick={() => this.deleteRow(item.toJS())}>
                 <FormattedMessage id="delete" />
@@ -175,7 +182,8 @@ export default class SetBannerList extends Component<any, any> {
       loading,
       tableDatas,
       setModalVisible,
-      onImageFormChange
+      onImageFormChange,
+      resetForm
     } = this.props.relaxProps;
     return (
       <div>
@@ -186,9 +194,8 @@ export default class SetBannerList extends Component<any, any> {
             style={{ marginBottom: '10px' }}
             onClick={(e) => {
               e.stopPropagation();
-              onImageFormChange({ field: 'bannerId', value: null });
-              onImageFormChange({ field: 'bannerNo', value: null });
-              onImageFormChange({ field: 'bannerName', value: '' });
+              resetForm();
+              this.props.editStatusChange(false);
               setModalVisible(true);
             }}
           >
@@ -221,20 +228,26 @@ export default class SetBannerList extends Component<any, any> {
                               values={{ type: 'Pc' }}
                             />
                           </th>
-                          {/*<th>*/}
-                          {/*  <FormattedMessage*/}
-                          {/*    id="resourceName"*/}
-                          {/*    values={{ type: 'Mobile' }}*/}
-                          {/*  />*/}
-                          {/*</th>*/}
                           <th>
                             <FormattedMessage
-                              id="resource"
+                              id="resourceName"
                               values={{ type: 'Mobile' }}
                             />
                           </th>
                           <th>
-                            <FormattedMessage id="action" />
+                            <FormattedMessage
+                              id="bannerUrl"
+                              values={{ type: 'Pc' }}
+                            />
+                          </th>
+                          <th>
+                            <FormattedMessage
+                              id="bannerUrl"
+                              values={{ type: 'Mobile' }}
+                            />
+                          </th>
+                          <th>
+                            <FormattedMessage id="operator" />
                           </th>
                         </tr>
                       </thead>
@@ -253,7 +266,7 @@ export default class SetBannerList extends Component<any, any> {
           <div className="ant-table-placeholder">
             <span>
               <i className="anticon anticon-frown-o" />
-              No Data
+              No data
             </span>
           </div>
         )}

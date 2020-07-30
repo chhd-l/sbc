@@ -110,8 +110,8 @@ export default class ListChart extends React.Component<any, any> {
           <WMChart
             title=""
             multiYAxis={true}
-            startTime={new Date()}
-            endTime={new Date()}
+            startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+            endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[
               { title: 'Order number', key: 'orderQuantiry' },
@@ -127,8 +127,8 @@ export default class ListChart extends React.Component<any, any> {
           <WMChart
             title=""
             multiYAxis={true}
-            startTime={new Date()}
-            endTime={new Date()}
+            startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
+            endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[
               { title: 'Order number', key: 'orderQuantiry' },

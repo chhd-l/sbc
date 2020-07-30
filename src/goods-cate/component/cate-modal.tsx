@@ -201,6 +201,8 @@ class CateModalForm extends React.Component<any, any> {
       clickImg,
       removeImg
     } = this.props.relaxProps;
+    console.log(images.toJS());
+
     return (
       <Form className="login-form">
         <FormItem
@@ -215,10 +217,15 @@ class CateModalForm extends React.Component<any, any> {
                 whitespace: true,
                 message: 'Please enter a category name'
               },
-              { max: 20, message: 'Up to 20 characters' },
+              { max: 100, message: 'Up to 100 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '分类名称');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Category Name'
+                  );
                 }
               }
             ],
@@ -276,7 +283,7 @@ class CateModalForm extends React.Component<any, any> {
                 formData.get('children')
               }
               getPopupContainer={() => document.getElementById('page-content')}
-              placeholder="Please select category"
+              placeholder="Please select classification"
               notFoundContent="暂无分类"
               // disabled={cateDisabled}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

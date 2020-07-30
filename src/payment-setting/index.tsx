@@ -6,7 +6,6 @@ const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
-
 const formItemLayout = {
   labelCol: {
     span: 4,
@@ -58,10 +57,24 @@ export default class PaymentSetting extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentVisible: false,
-      enabled: true
+      enabled: true,
+      paymentForm: {}
     };
     this.closeModel = this.closeModel.bind(this);
   }
+  componentDidMount() {
+    this.getPaymentSetting();
+  }
+  getPaymentSetting = async () => {
+    const { res } = await webapi.getPaymentSetting();
+    if (res.code === 'K-000000') {
+      this.setState({
+        paymentForm: res.context
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
 
   closeModel = () => {
     this.setState({
@@ -81,32 +94,51 @@ export default class PaymentSetting extends React.Component<any, any> {
         <div className="container">
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
-            <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-              <div className="methodItem">
-                <img
-                  src={require('./img/payu.jpg')}
-                  style={{ width: '150px', height: '100%', marginTop: '10px' }}
-                />
-              </div>
-              <div className="bar">
-                <div className="status">
-                  {this.state.enabled ? 'Enabled' : 'Disabled'}
+            {this.state.paymentForm ? (
+              <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                <div className="methodItem">
+                  {this.state.paymentForm.storeId === 123457908 ? (
+                    <img
+                      src={require('./img/adycn.png')}
+                      style={{
+                        width: '150px',
+                        height: '100%',
+                        marginTop: '10px'
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={this.state.paymentImage}
+                      src={require('./img/payu.jpg')}
+                      style={{
+                        width: '150px',
+                        height: '100%',
+                        marginTop: '10px'
+                      }}
+                    />
+                  )}
                 </div>
-                <div>
-                  <a
-                    onClick={() => {
-                      this.setState({
-                        paymentVisible: true
-                      });
-                    }}
-                    className="links"
-                  >
-                    <FormattedMessage id="edit" />
-                  </a>
+                <div className="bar">
+                  <div className="status">
+                    {this.state.enabled ? 'Enabled' : 'Disabled'}
+                  </div>
+                  <div>
+                    <a
+                      onClick={() => {
+                        this.setState({
+                          paymentVisible: true
+                        });
+                      }}
+                      className="links"
+                    >
+                      <FormattedMessage id="edit" />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            ) : null}
             <PaymentModel
+              paymentForm={this.state.paymentForm}
               visible={this.state.paymentVisible}
               parent={this}
               setEnabled={(enabled) => this.setEnable(enabled)}

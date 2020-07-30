@@ -7,8 +7,12 @@ export default class SettleActor extends Actor {
   defaultState() {
     return {
       queryParams: {
-        startTime: moment(new Date()).subtract(3, 'months'),
-        endTime: moment(new Date()),
+        startTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        ).subtract(3, 'months'),
+        endTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        ),
         storeId: null,
         settleStatus: 0
       },

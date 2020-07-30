@@ -89,7 +89,6 @@ export default class RefundList extends React.Component<any, any> {
             key="tradeNo"
           />*/}
 
-          <Column
             title="Customer name"
             dataIndex="customerName"
             key="customerName"
@@ -118,7 +117,8 @@ export default class RefundList extends React.Component<any, any> {
             key="paymentOSActualReturnPrice"
             render={(text, rowData: any) => {
               return text ? <span>{text}</span> : '--';
-            }}
+            }}          <Column
+
           />
         </DataGrid>
       </div>

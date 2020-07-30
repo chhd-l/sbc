@@ -99,6 +99,9 @@ export default class AppStore extends Store {
    */
   doAdd = async () => {
     const formData = this.state().get('formData');
+    const images = this.state().get('images');
+    console.log(images.toJS());
+
     console.log('doAdd');
     let result: any;
     if (formData.get('storeCateId')) {
@@ -160,9 +163,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   cateSort = async (catePath, dragIndex, hoverIndex) => {
-    let cates = this.state()
-      .get('dataList')
-      .toJS();
+    let cates = this.state().get('dataList').toJS();
     //cateIds: 0|245|246|
     let cateIds = catePath.split('|');
     //拖拽排序后的列表
@@ -350,9 +351,7 @@ export default class AppStore extends Store {
           //表示上传成功之后需要选中这些图片
           this.dispatch(
             'modal: chooseImgs',
-            fromJS(imageList.res.context)
-              .get('content')
-              .slice(0, successCount)
+            fromJS(imageList.res.context).get('content').slice(0, successCount)
           );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));

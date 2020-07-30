@@ -73,7 +73,8 @@ class CateList extends React.Component<any, any> {
       title: <FormattedMessage id="categoryName" />,
       dataIndex: 'cateName',
       key: 'cateName',
-      className: 'namerow'
+      className: 'namerow',
+      ellipsis: 'true'
     },
     {
       title: <FormattedMessage id="operation" />,

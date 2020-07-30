@@ -27,24 +27,24 @@ export default class SubscriptionList extends Component<any, any> {
     super(props);
     this.state = {
       searchForm: {
-        subscriptionOption: 'Subscription number',
+        subscriptionOption: 'Subscription Number',
         number: '',
-        consumerOption: 'Consumer name',
+        consumerOption: 'Consumer Name',
         consumer: '',
-        productOption: 'Product name',
+        productOption: 'Product Name',
         product: '',
         frequency: '',
         recipientOption: 'Receiver',
         recipient: '',
-        prescriberOption: 'Prescriber name',
+        prescriberOption: 'Prescriber Name',
         prescriber: ''
       },
-      subscriptionOption: ['Subscription number', 'Order number'],
+      subscriptionOption: ['Subscription Number', 'Order Number'],
 
-      consumerOption: ['Consumer name', 'Consumer account'],
-      productOption: ['Product name', 'SKU code'],
-      recipientOption: ['Receiver', 'Receiver phone'],
-      prescriberOption: ['Prescriber name', 'Prescriber id'],
+      consumerOption: ['Consumer Name', 'Consumer Account'],
+      productOption: ['Product Name', 'SKU Code'],
+      recipientOption: ['Receiver', 'Receiver Phone'],
+      prescriberOption: ['Prescriber Name', 'Prescriber ID'],
       frequencyList: [],
       activeKey: 'all',
       subscriptionList: [],

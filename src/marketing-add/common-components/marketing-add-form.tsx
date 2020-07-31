@@ -162,7 +162,25 @@ export default class MarketingAddForm extends React.Component<any, any> {
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode')
               ? marketingBean.get('promotionCode')
-              : this.getPromotionCode()
+              : this.getPromotionCode(),
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please input promotion code'
+              },
+              { min: 4, max: 20, message: '4-20 words' },
+              {
+                validator: (rule, value, callback) => {
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Promotion code'
+                  );
+                }
+              }
+            ]
           })(
             <Input
               onChange={(e) => {

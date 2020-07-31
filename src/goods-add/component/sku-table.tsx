@@ -243,6 +243,38 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
+          <FormattedMessage id="product.listPrice" />
+        </div>
+      ),
+      key: 'linePrice',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('linePrice_' + rowInfo.id, {
+                rules: [
+                  {
+                    pattern: ValidConst.number,
+                    message: '0 or positive integer'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(
+                  this,
+                  rowInfo.id,
+                  'linePrice'
+                ),
+                initialValue: rowInfo.linePrice || 0
+              })(
+                <InputNumber style={{ width: '100px' }} min={0} max={9999999} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+    columns = columns.push({
+      title: (
+        <div>
           <span
             style={{
               color: 'red',
@@ -394,38 +426,6 @@ class SkuForm extends React.Component<any, any> {
         )
       });
     }
-    columns = columns.push({
-      title: (
-        <div>
-          <FormattedMessage id="product.linePrice" />
-        </div>
-      ),
-      key: 'linePrice',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('linePrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    pattern: ValidConst.number,
-                    message: '0 or positive integer'
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'linePrice'
-                ),
-                initialValue: rowInfo.linePrice || 0
-              })(
-                <InputNumber style={{ width: '100px' }} min={0} max={9999999} />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-      )
-    });
     columns = columns.push({
       title: (
         <div>

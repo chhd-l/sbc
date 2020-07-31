@@ -56,8 +56,8 @@ export default class UploadImageModal extends Component<any, any> {
   state = {
     fileList: [], //pc fileList
     mFileList: [], //mobile fileList
-    pcUrl: '',
-    mobileUrl: '',
+    webUrl: '',
+    mobiUrl: '',
     companyInfoId: 0,
     storeId: 0,
     okDisabled: false,
@@ -99,10 +99,15 @@ export default class UploadImageModal extends Component<any, any> {
     resetForm: noop
   };
   componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
-    if (nextProps.isEdit) {
+    debugger;
+    // this.setState({
+    //   fileList: [],
+    //   mFileList: []
+    // });
+    if (nextProps.operation === 'edit') {
       const { imageForm } = this.props.relaxProps;
-      const webSkipUrl = imageForm.toJS().webSkipUrl;
-      const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
+      const webUrl = imageForm.toJS().webUrl;
+      const mobiUrl = imageForm.toJS().mobiUrl;
       const webUuid = imageForm.toJS().webUuid;
       const mobiUuid = imageForm.toJS().mobiUuid;
       const webImgName = imageForm.toJS().webImgName;
@@ -111,21 +116,21 @@ export default class UploadImageModal extends Component<any, any> {
         {
           name: webImgName,
           percent: 100,
-          response: [webSkipUrl],
-          // size: 27330,
+          response: [webUrl],
           status: 'done',
           type: 'image/jpg',
           uid: webUuid
         }
       ];
       this.setState({
+        webUrl: webUrl,
         fileList: fileList
       });
       const mFileList = [
         {
           name: mobiImgName,
           percent: 100,
-          response: [mobiSkipUrl],
+          response: [mobiUrl],
           // size: 27330,
           status: 'done',
           type: 'image/jpg',
@@ -133,6 +138,7 @@ export default class UploadImageModal extends Component<any, any> {
         }
       ];
       this.setState({
+        mobiUrl: mobiUrl,
         mFileList: mFileList
       });
     }
@@ -185,8 +191,8 @@ export default class UploadImageModal extends Component<any, any> {
             bannerId: imageForm.toJS().bannerId,
             bannerNo: imageForm.toJS().bannerNo,
             bannerName: imageForm.toJS().bannerName,
-            mobiUrl: this.state.mobileUrl,
-            webUrl: this.state.pcUrl,
+            mobiUrl: this.state.mobiUrl,
+            webUrl: this.state.webUrl,
             storeId: this.state.storeId,
             userId: null,
             webSkipUrl: imageForm.toJS().webSkipUrl,
@@ -206,8 +212,8 @@ export default class UploadImageModal extends Component<any, any> {
             bannerId: null,
             bannerName: imageForm.toJS().bannerName,
             bannerNo: imageForm.toJS().bannerNo,
-            mobiUrl: this.state.mobileUrl,
-            webUrl: this.state.pcUrl,
+            mobiUrl: this.state.mobiUrl,
+            webUrl: this.state.webUrl,
             storeId: this.state.storeId,
             userId: null,
             webSkipUrl: imageForm.toJS().webSkipUrl,
@@ -248,13 +254,16 @@ export default class UploadImageModal extends Component<any, any> {
     }
   };
   resetImageForm() {
-    // this.props.form.resetFields();
+    debugger;
     const { resetForm } = this.props.relaxProps;
     resetForm();
-    this.state.fileList = [];
-    this.state.mFileList = [];
+    this.setState({
+      fileList: [],
+      mFileList: []
+    });
   }
   _handleModelCancel = () => {
+    debugger;
     const { setModalVisible } = this.props.relaxProps;
     this.resetImageForm();
     setModalVisible(false);
@@ -369,7 +378,7 @@ export default class UploadImageModal extends Component<any, any> {
             message.error(`${info.file.name} upload failed!`);
           } else {
             ref.setState({
-              pcUrl: info.file.response[0]
+              webUrl: info.file.response[0]
             });
             onImageFormChange({
               field: 'webUuid',
@@ -475,7 +484,7 @@ export default class UploadImageModal extends Component<any, any> {
             message.error(`${info.file.name} upload failed!`);
           } else {
             ref.setState({
-              mobileUrl: info.file.response[0]
+              mobiUrl: info.file.response[0]
             });
             onImageFormChange({
               field: 'mobiUuid',

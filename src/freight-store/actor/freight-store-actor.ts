@@ -23,8 +23,7 @@ export default class FreightStoreActor extends Actor {
       defaultFlag: 0,
       // 发货地区名字
       destinationAreaName: [],
-      country: [],
-      city: []
+      treeNode: []
     };
   }
 
@@ -61,8 +60,7 @@ export default class FreightStoreActor extends Actor {
       destinationAreaName,
       freightTempId,
       defaultFlag,
-      country,
-      city
+      treeNode
     }
   ) {
     return state
@@ -77,7 +75,6 @@ export default class FreightStoreActor extends Actor {
       .set('selectedAreas', selectedAreas)
       .set('freightTempId', freightTempId)
       .set('defaultFlag', defaultFlag)
-      .set('country', country)
-      .set('city', city);
+      .set('treeNode', treeNode);
   }
 }

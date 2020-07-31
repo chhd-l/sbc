@@ -5,11 +5,16 @@ export default class ImageActor extends Actor {
   defaultState() {
     return {
       modalVisible: false,
+      isEdit: false,
       bannerNoList: [1, 2, 3, 4, 5],
+      fileList: [],
+      mFileList: [],
       imageForm: {
         bannerId: null,
         bannerName: '',
         bannerNo: null,
+        webUrl: '',
+        mobiUrl: '',
         webSkipUrl: '',
         mobiSkipUrl: '',
         webUuid: 0,
@@ -24,19 +29,9 @@ export default class ImageActor extends Actor {
   setModalVisible(state, visible) {
     return state.set('modalVisible', visible);
   }
-
-  @Action('imageActor:setBannerName')
-  setBannerName(state, bannerName) {
-    return state.setIn(['imageForm', 'bannerName'], bannerName);
-  }
-  @Action('imageActor:bannerNo')
-  bannerNo(state, bannerNo) {
-    return state.setIn(['imageForm', 'bannerNo'], bannerNo);
-  }
-
-  @Action('imageActor:setBannerId')
-  setBannerId(state, { bannerId }) {
-    return state.setIn(['imageForm', 'bannerId'], bannerId);
+  @Action('imageActor:setIsEdit')
+  setIsEdit(state, isEdit) {
+    return state.set('isEdit', isEdit);
   }
 
   @Action('imageActor:bannerNoList')
@@ -47,6 +42,14 @@ export default class ImageActor extends Actor {
   @Action('imageActor:field')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['imageForm', field], value);
+  }
+  @Action('imageActor:setMFileList')
+  setMFileList(state, mFileList) {
+    return state.set('mFileList', mFileList);
+  }
+  @Action('imageActor:setFileList')
+  setFileList(state, fileList) {
+    return state.set('fileList', fileList);
   }
 
   @Action('imageActor:resetForm')

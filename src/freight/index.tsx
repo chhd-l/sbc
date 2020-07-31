@@ -64,14 +64,17 @@ export default class FreightTemplate extends React.Component<any, any> {
       // </Breadcrumb>,
       <div className="container" key="container">
         <Headline
-          title={<FormattedMessage id="Freight template"></FormattedMessage>}
+          title={<FormattedMessage id="freightTemplate"></FormattedMessage>}
         />
         <Alert
           message={
             <div>
-              Please set the shipping calculation mode first. When selecting a single product, the order shipping uses the shipping charge of each product;
-              if the store shipping is selected, the single product shipping template selected by the product will not be effective, 
-              and the unified shipping will be charged according to the order amount;
+              Please set the shipping calculation mode first. When selecting a
+              single product, the order shipping uses the shipping charge of
+              each product; if the store shipping is selected, the single
+              product shipping template selected by the product will not be
+              effective, and the unified shipping will be charged according to
+              the order amount;
             </div>
           }
           type="info"
@@ -79,18 +82,18 @@ export default class FreightTemplate extends React.Component<any, any> {
         />
         <AuthWrapper functionName="f_freight_type_set">
           <TitleBox>
-          Set the shipping calculation mode  :
+            Set the shipping calculation mode :
             <RadioGroup
               onChange={(e: any) =>
                 this.store.fieldSave({ field: 'fMode', value: e.target.value })
               }
               value={fMode}
             >
-              <Radio value={0}>
-                <FormattedMessage id="Store shipping"></FormattedMessage>
+              <Radio value={0} key="0">
+                <FormattedMessage id="storeShipping"></FormattedMessage>
               </Radio>
-              <Radio value={1}>
-                <FormattedMessage id="Single product shipping"></FormattedMessage>
+              <Radio value={1} key="1">
+                <FormattedMessage id="singleProductShipping"></FormattedMessage>
               </Radio>
             </RadioGroup>
             <Button type="primary" onClick={() => this._save()}>
@@ -107,8 +110,8 @@ export default class FreightTemplate extends React.Component<any, any> {
           >
             {checkAuth('f_store_temp_list') && (
               <Tabs.TabPane
-                tab={<FormattedMessage id="Store shipping"></FormattedMessage>}
-                key={0}
+                tab={<FormattedMessage id="storeShipping"></FormattedMessage>}
+                key="0"
               >
                 <StoreSetting />
               </Tabs.TabPane>
@@ -116,9 +119,9 @@ export default class FreightTemplate extends React.Component<any, any> {
             {checkAuth('f_goods_temp_list') && (
               <Tabs.TabPane
                 tab={
-                  <FormattedMessage id="Single product shipping"></FormattedMessage>
+                  <FormattedMessage id="singleProductShipping"></FormattedMessage>
                 }
-                key={1}
+                key="1"
               >
                 <GoodsSetting />
               </Tabs.TabPane>

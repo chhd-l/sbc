@@ -97,10 +97,8 @@ export default class FreightTemp extends React.Component<any, any> {
       storeFreightFieldsValue: Function;
       // 存储运费模板
       saveStoreFreight: Function;
-      // Country
-      country: IList;
-      //city
-      city: IList;
+      // treeData
+      treeNode: IList;
     };
   };
 
@@ -116,43 +114,11 @@ export default class FreightTemp extends React.Component<any, any> {
     selectedAreas: 'selectedAreas',
     defaultFlag: 'defaultFlag',
     destinationAreaName: 'destinationAreaName',
-    country: 'country',
-    city: 'city',
+    treeNode: 'treeNode',
 
     areaIdsSave: noop,
     storeFreightFieldsValue: noop,
     saveStoreFreight: noop
-  };
-
-  treeDataSource = (parent, children) => {
-    debugger;
-    let parentNodes = [];
-    let childrenNodes = [];
-    if (parent && parent.length > 0) {
-      for (let i = 0; i < parent.length; i++) {
-        let parentNode = {
-          title: parent[i].name,
-          value: parent[i].id,
-          key: parent[i].id,
-          children: []
-        };
-        parentNodes.push(parentNode);
-      }
-    }
-    if (children && children.length > 0) {
-      for (let i = 0; i < children.length; i++) {
-        let childrenNode = {
-          title: children[i].name,
-          value: children[i].id,
-          key: children[i].id
-        };
-        childrenNodes.push(childrenNode);
-      }
-    }
-    if (parentNodes.length > 0) {
-      parentNodes[0].children = childrenNodes;
-    }
-    return parentNodes;
   };
 
   render() {
@@ -168,11 +134,9 @@ export default class FreightTemp extends React.Component<any, any> {
       selectedAreas,
       destinationAreaName,
       defaultFlag,
-      country,
-      city
+      treeNode
     } = this.props.relaxProps;
-    // const treeData = FindArea.findProvinceCity(selectedAreas.toJS());
-    const treeData = this.treeDataSource(country.toJS(), city.toJS());
+    let treeData = treeNode ? treeNode.toJS() : [];
 
     const tProps = {
       treeData,

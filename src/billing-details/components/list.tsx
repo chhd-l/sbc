@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, Button } from 'antd';
+import { Table, Button, Tooltip } from 'antd';
 import { Relax } from 'plume2';
 import { IList } from 'typings/globalType';
 import { AuthWrapper, noop, util } from 'qmkit';
@@ -92,18 +92,18 @@ export default class List extends React.Component<any, any> {
         title: 'Order number',
         key: 'tradeCode',
         dataIndex: 'tradeCode',
-        render: (value, row) => {
+        /*render: (value, row) => {
           return this._handleRowSpan(row, value);
-        },
-        width: 180
+        },*/
+        width: 160
       },
       {
         title: 'Payment credited',
-        dataIndex: 'splitPayPrice',
-        key: 'splitPayPrice',
-        render: (value) => {
+        dataIndex: 'practicalPrice',
+        key: 'practicalPrice',
+        /*render: (value) => {
           return util.FORMAT_YUAN(value.toFixed(2));
-        },
+        },*/
         width: 120
       },
       /*{
@@ -119,12 +119,56 @@ export default class List extends React.Component<any, any> {
         title: 'Product name',
         dataIndex: 'goodsName',
         key: 'goodsName',
-        width: 110
+        render: (value, row, a) => {
+          return row.goodsViewList.map((item, i) => {
+            return (
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                  //height: 100
+                }}
+                placement="bottomLeft"
+                title={row.goodsViewList.map((a, n) => {
+                  return (
+                    <p style={{ display: 'block', width: '100%' }} key={n}>
+                      {a.goodsName}
+                    </p>
+                  );
+                })}
+              >
+                {i <= 1 ? <div>{item.goodsName}</div> : ''}
+              </Tooltip>
+            );
+          });
+        },
+        width: 160
       },
       {
         title: 'Product SKU',
         dataIndex: 'skuNo',
         key: 'skuNo',
+        render: (value, row) => {
+          return row.goodsViewList.map((item, i) => {
+            return (
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                  //height: 100
+                }}
+                placement="bottomLeft"
+                title={row.goodsViewList.map((a, n) => {
+                  return (
+                    <p style={{ display: 'block', width: '100%' }} key={n}>
+                      {a.skuNo}
+                    </p>
+                  );
+                })}
+              >
+                {i <= 1 ? <div>{item.skuNo}</div> : ''}
+              </Tooltip>
+            );
+          });
+        },
         width: 100
 
         /*render: (value, row) => {
@@ -164,7 +208,7 @@ export default class List extends React.Component<any, any> {
           );
         }*/
       },
-      {
+      /*{
         title: 'Product price',
         dataIndex: 'goodsPrice',
         key: 'goodsPrice',
@@ -172,12 +216,33 @@ export default class List extends React.Component<any, any> {
         render: (value) => {
           return util.FORMAT_YUAN(value.toFixed(2));
         }
-      },
+      },*/
       {
         title: 'Product quantity',
         dataIndex: 'num',
         key: 'num',
-
+        render: (value, row) => {
+          return row.goodsViewList.map((item, i) => {
+            return (
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                  //height: 100
+                }}
+                placement="bottomLeft"
+                title={row.goodsViewList.map((a, n) => {
+                  return (
+                    <p style={{ display: 'block', width: '100%' }} key={n}>
+                      {a.num}
+                    </p>
+                  );
+                })}
+              >
+                {i <= 1 ? <div>{item.num}</div> : ''}
+              </Tooltip>
+            );
+          });
+        },
         width: 100
       }
       /*{

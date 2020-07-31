@@ -293,16 +293,7 @@ const styles = {
   },
   dropdownText: {
     marginLeft: 8,
-    marginRight: 8,
-  },
-  // dropdownText1: {
-  //   marginLeft: 8,
-  //   marginRight: 8,
-  //   position:'fixed',
-  //   left:210
-  // },
-  eyeStyle:{
-
+    marginRight: 8
   },
   headerRight: {
     textAlign: 'right'

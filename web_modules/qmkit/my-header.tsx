@@ -275,7 +275,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
 const styles = {
   logoBg: {
-    width: 240,
+    width: 134,
     height: 44,
     display: 'flex',
     alignItems: 'center',
@@ -293,7 +293,16 @@ const styles = {
   },
   dropdownText: {
     marginLeft: 8,
-    marginRight: 8
+    marginRight: 8,
+  },
+  // dropdownText1: {
+  //   marginLeft: 8,
+  //   marginRight: 8,
+  //   position:'fixed',
+  //   left:210
+  // },
+  eyeStyle:{
+
   },
   headerRight: {
     textAlign: 'right'

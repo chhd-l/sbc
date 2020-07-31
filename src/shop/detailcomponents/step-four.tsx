@@ -9,12 +9,12 @@ import moment from 'moment';
 
 const formItemLayout = {
   labelCol: {
-    span: 2,
+    span: 3,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
-    span: 24,
+    span: 21,
     xs: { span: 24 },
     sm: { span: 14 }
   }
@@ -129,6 +129,23 @@ export default class StepFour extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
+                  label={<FormattedMessage id="confirmationEmail" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.confirmationEmail ? (
+                      this.state.contentInformation.confirmationEmail
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+            <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
                   label={<FormattedMessage id="storeContactPhoneNumber" />}
                 >
                   <p style={{ color: '#333' }}>
@@ -140,8 +157,6 @@ export default class StepFour extends React.Component<any, any> {
                   </p>
                 </FormItem>
               </Col>
-            </Row>
-            <Row>
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
@@ -157,7 +172,7 @@ export default class StepFour extends React.Component<any, any> {
                   </p>
                 </FormItem>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
@@ -183,19 +198,19 @@ export default class StepFour extends React.Component<any, any> {
                     )}
                   </span>
                 </FormItem>
-              </Col>
+              </Col> */}
             </Row>
 
             <Row>
-              <Col span={12}>
+            <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="confirmationEmail" />}
+                  label={<FormattedMessage id="customerServiceEamil" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.confirmationEmail ? (
-                      this.state.contentInformation.confirmationEmail
+                    {this.state.contentInformation.customerServiceEamil ? (
+                      this.state.contentInformation.customerServiceEamil
                     ) : (
                       <FormattedMessage id="none" />
                     )}

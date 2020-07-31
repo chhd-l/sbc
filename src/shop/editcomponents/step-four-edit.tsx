@@ -12,7 +12,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -279,7 +279,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
+              {/* <FormItem
                 {...formItemLayout}
                 required={false}
                 label={<FormattedMessage id="contactTimePeriod" />}
@@ -311,6 +311,30 @@ export default class StepFour extends React.Component<any, any> {
                       ]
                     }}
                     format="YYYY-MM-DD HH:mm:ss"
+                  />
+                )}
+              </FormItem> */}
+              <FormItem
+                {...formItemLayout}
+                required={false}
+                label={<FormattedMessage id="customerServiceEamil" />}
+              >
+                {getFieldDecorator('customerServiceEamil', {
+                  initialValue: this.state.contentForm.customerServiceEamil,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Customer Service Eamil!'
+                    }
+                  ]
+                })(
+                  <Input
+                    onChange={(e: any) =>
+                      this.onFormChange({
+                        field: 'customerServiceEamil',
+                        value: e.target.value
+                      })
+                    }
                   />
                 )}
               </FormItem>

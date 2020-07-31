@@ -93,7 +93,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       saveLoading: false,
       promotionCode: '',
       PromotionTypeValue: 0,
-      PromotionTypeChecked: false
+      promotionTypeChecked: true
     };
   }
 
@@ -103,9 +103,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
   getPromotionCode = () => {
     if (!this.state.promotionCode) {
-      let randomNumber = (
-        '0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)
-      ).slice(-8);
+      let randomValue = Math.pow(2, 40) * Math.random();
+      let randomValueString = randomValue.toString();
+      let randomNumber = ('0'.repeat(8) + parseInt(randomValueString)).slice(
+        -8
+      );
       let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime'))
         .getTime()
         .toString()
@@ -156,34 +158,67 @@ export default class MarketingAddForm extends React.Component<any, any> {
             <Radio value={1}>Subscription promotion</Radio>
           </Radio.Group>
         </FormItem>
-        <FormItem {...smallformItemLayout} label="Promotion Code">
-          {getFieldDecorator('promotionCode', {
-            initialValue: marketingBean.get('promotionCode')
-              ? marketingBean.get('promotionCode')
-              : this.getPromotionCode()
-          })(<Input disabled style={{ width: 160 }} />)}
+        {this.state.promotionTypeChecked ? (
+          <FormItem {...smallformItemLayout} label="Promotion Code">
+            <Checkbox
+              style={{ marginLeft: 20 }}
+              checked={this.state.promotionTypeChecked}
+              onChange={(e) => {
+                if (this.state.PromotionTypeValue === 0) {
+                  this.setState({
+                    promotionTypeChecked: e.target.checked
+                  });
+                } else {
+                  this.setState({
+                    promotionTypeChecked: true
+                  });
+                }
+                this.onBeanChange({
+                  publicStatus: e.target.checked ? '0' : '1'
+                });
+              }}
+            >
+              Public
+            </Checkbox>
+          </FormItem>
+        ) : (
+          <FormItem {...smallformItemLayout} label="Promotion Code">
+            {getFieldDecorator('promotionCode', {
+              initialValue: marketingBean.get('promotionCode')
+                ? marketingBean.get('promotionCode')
+                : this.getPromotionCode(),
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input Promotion Code'
+                },
+                { min: 4, max: 20, message: '4-20 words' }
+              ],
+              onChange: (e) => this.setState({ promotionCode: e.target.value })
+            })(<Input style={{ width: 160 }} />)}
 
-          <Checkbox
-            style={{ marginLeft: 20 }}
-            checked={this.state.PromotionTypeChecked}
-            onChange={(e) => {
-              if (this.state.PromotionTypeValue === 0) {
-                this.setState({
-                  PromotionTypeChecked: e.target.checked
+            <Checkbox
+              style={{ marginLeft: 20 }}
+              checked={this.state.promotionTypeChecked}
+              onChange={(e) => {
+                if (this.state.PromotionTypeValue === 0) {
+                  this.setState({
+                    promotionTypeChecked: e.target.checked
+                  });
+                } else {
+                  this.setState({
+                    promotionTypeChecked: true
+                  });
+                }
+                this.onBeanChange({
+                  publicStatus: e.target.checked ? '0' : '1'
                 });
-              } else {
-                this.setState({
-                  PromotionTypeChecked: true
-                });
-              }
-              this.onBeanChange({
-                publicStatus: e.target.checked ? '0' : '1'
-              });
-            }}
-          >
-            Public
-          </Checkbox>
-        </FormItem>
+              }}
+            >
+              Public
+            </Checkbox>
+          </FormItem>
+        )}
 
         <FormItem {...smallformItemLayout} label="Promotion Name">
           {getFieldDecorator('marketingName', {
@@ -460,7 +495,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         },
         () => {
           this.setState({
-            PromotionTypeChecked:
+            promotionTypeChecked:
               this.state.PromotionTypeValue === 1 ? true : false
           });
         }
@@ -499,7 +534,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       () => {
         if (this.state.PromotionTypeValue === 1) {
           this.setState({
-            PromotionTypeChecked: true
+            promotionTypeChecked: true
           });
         }
       }
@@ -515,7 +550,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
   onBeanChange = (params) => {
     this.setState({
       marketingBean: this.state.marketingBean.merge(params)
-      // PromotionTypeChecked: true
+      // promotionTypeChecked: true
     });
   };
   /**
@@ -736,11 +771,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
         errors: [new Error('Please select the product to be marketed')]
       };
     }
-    if (this.state.promotionCode) {
+    if (!this.state.promotionTypeChecked && this.state.promotionCode) {
       marketingBean = marketingBean.set(
         'promotionCode',
         this.state.promotionCode
       );
+    } else {
+      marketingBean = marketingBean.set('promotionCode', '');
     }
     if (!marketingBean.get('publicStatus')) {
       marketingBean = marketingBean.set('publicStatus', '0');

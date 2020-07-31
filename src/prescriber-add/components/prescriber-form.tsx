@@ -34,6 +34,7 @@ class ClinicForm extends React.Component<any, any> {
     super(props);
     this.state = {
       prescriberForm: {
+        id: '',
         prescriberId: '',
         prescriberOwner: 'john',
         prescriberName: '',
@@ -196,7 +197,7 @@ class ClinicForm extends React.Component<any, any> {
 
   getDetail = async (id) => {
     const { res } = await webapi.getClinicById({
-      prescriberId: id
+      id: id
     });
     if (res.code === 'K-000000') {
       let qrCodeLink = res.context.qrCodeLink;
@@ -207,6 +208,7 @@ class ClinicForm extends React.Component<any, any> {
         prescriberForm: res.context
       });
       this.props.form.setFieldsValue({
+        id: res.context.id,
         prescriberId: res.context.prescriberId,
         prescriberName: res.context.prescriberName,
         phone: res.context.phone,

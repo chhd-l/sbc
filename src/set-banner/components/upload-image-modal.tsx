@@ -60,7 +60,6 @@ export default class UploadImageModal extends Component<any, any> {
     mobileUrl: '',
     companyInfoId: 0,
     storeId: 0,
-    bannerName: '',
     okDisabled: false,
     bannerId: null
   };
@@ -79,6 +78,7 @@ export default class UploadImageModal extends Component<any, any> {
       onImageFormChange: Function;
       uploadBanner: Function;
       editBanner: Function;
+      resetForm: Function;
     };
   };
 
@@ -95,31 +95,57 @@ export default class UploadImageModal extends Component<any, any> {
     getStoreId: noop,
     onImageFormChange: noop,
     uploadBanner: noop,
-    editBanner: noop
+    editBanner: noop,
+    resetForm: noop
   };
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    if (nextProps.isEdit) {
+      const { imageForm } = this.props.relaxProps;
+      const webSkipUrl = imageForm.toJS().webSkipUrl;
+      const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
+      const webUuid = imageForm.toJS().webUuid;
+      const mobiUuid = imageForm.toJS().mobiUuid;
+      const webImgName = imageForm.toJS().webImgName;
+      const mobiImgName = imageForm.toJS().mobiImgName;
+      const fileList = [
+        {
+          name: webImgName,
+          percent: 100,
+          response: [webSkipUrl],
+          // size: 27330,
+          status: 'done',
+          type: 'image/jpg',
+          uid: webUuid
+        }
+      ];
+      this.setState({
+        fileList: fileList
+      });
+      const mFileList = [
+        {
+          name: mobiImgName,
+          percent: 100,
+          response: [mobiSkipUrl],
+          // size: 27330,
+          status: 'done',
+          type: 'image/jpg',
+          uid: mobiUuid
+        }
+      ];
+      this.setState({
+        mFileList: mFileList
+      });
+    }
+  }
+
   componentDidMount() {
     const { storeId, companyInfoId } = JSON.parse(
       sessionStorage.getItem(cache.LOGIN_DATA)
     );
-    const { imageForm } = this.props.relaxProps;
     this.setState({
       storeId,
       companyInfoId
     });
-    // const fileList = [
-    //   {
-    //     name: "test2.jpg",
-    //     // percent: 100,
-    //     response: ["https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280132205167.jpg"],
-    //     // size: 27330,
-    //     status: "done",
-    //     type: "image/jpeg",
-    //     uid: "rc-upload-1595899921402-3"
-    //   }
-    // ];
-    // this.setState({
-    //   fileList: fileList
-    // })
   }
 
   _handleSubmit = () => {
@@ -160,9 +186,15 @@ export default class UploadImageModal extends Component<any, any> {
             bannerNo: imageForm.toJS().bannerNo,
             bannerName: imageForm.toJS().bannerName,
             mobiUrl: this.state.mobileUrl,
+            webUrl: this.state.pcUrl,
             storeId: this.state.storeId,
             userId: null,
-            webUrl: this.state.pcUrl
+            webSkipUrl: imageForm.toJS().webSkipUrl,
+            mobiSkipUrl: imageForm.toJS().mobiSkipUrl,
+            webUuid: imageForm.toJS().webUuid,
+            mobiUuid: imageForm.toJS().mobiUuid,
+            webImgName: imageForm.toJS().webImgName,
+            mobiImgName: imageForm.toJS().mobiImgName
           };
           editBanner(params);
           this.setState({
@@ -175,9 +207,15 @@ export default class UploadImageModal extends Component<any, any> {
             bannerName: imageForm.toJS().bannerName,
             bannerNo: imageForm.toJS().bannerNo,
             mobiUrl: this.state.mobileUrl,
+            webUrl: this.state.pcUrl,
             storeId: this.state.storeId,
             userId: null,
-            webUrl: this.state.pcUrl
+            webSkipUrl: imageForm.toJS().webSkipUrl,
+            mobiSkipUrl: imageForm.toJS().mobiSkipUrl,
+            webUuid: imageForm.toJS().webUuid,
+            mobiUuid: imageForm.toJS().mobiUuid,
+            webImgName: imageForm.toJS().webImgName,
+            mobiImgName: imageForm.toJS().mobiImgName
           };
           this._uploadBanner(params);
           this.setState({
@@ -197,7 +235,7 @@ export default class UploadImageModal extends Component<any, any> {
         title: 'Tip',
         content: '是否继续添加banner',
         onOk() {
-          ref.resetForm();
+          ref.resetImageForm();
           getList({ storeId: getStoreId() });
         },
         onCancel() {
@@ -209,18 +247,16 @@ export default class UploadImageModal extends Component<any, any> {
       });
     }
   };
-  resetForm() {
+  resetImageForm() {
     // this.props.form.resetFields();
-    const { onImageFormChange } = this.props.relaxProps;
-    onImageFormChange({ field: 'bannerId', value: null });
-    onImageFormChange({ field: 'bannerNo', value: null });
-    onImageFormChange({ field: 'bannerName', value: '' });
+    const { resetForm } = this.props.relaxProps;
+    resetForm();
     this.state.fileList = [];
     this.state.mFileList = [];
   }
   _handleModelCancel = () => {
     const { setModalVisible } = this.props.relaxProps;
-    this.resetForm();
+    this.resetImageForm();
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
@@ -254,6 +290,8 @@ export default class UploadImageModal extends Component<any, any> {
     const bannerId = imageForm.toJS().bannerId;
     const bannerNo = imageForm.toJS().bannerNo;
     const bannerName = imageForm.toJS().bannerName;
+    const webSkipUrl = imageForm.toJS().webSkipUrl;
+    const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
     const companyInfoId = this.state.companyInfoId;
 
     const props = {
@@ -332,6 +370,14 @@ export default class UploadImageModal extends Component<any, any> {
           } else {
             ref.setState({
               pcUrl: info.file.response[0]
+            });
+            onImageFormChange({
+              field: 'webUuid',
+              value: info.file.uid
+            });
+            onImageFormChange({
+              field: 'webImgName',
+              value: info.file.name
             });
             // message.success(`${info.file.name} uploaded successfully!`);
           }
@@ -431,6 +477,14 @@ export default class UploadImageModal extends Component<any, any> {
             ref.setState({
               mobileUrl: info.file.response[0]
             });
+            onImageFormChange({
+              field: 'mobiUuid',
+              value: info.file.uid
+            });
+            onImageFormChange({
+              field: 'mobiImgName',
+              value: info.file.name
+            });
             // message.success(`${info.file.name} uploaded successfully!`);
           }
         } else if (status === 'error') {
@@ -500,7 +554,40 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-
+              <FormItem {...formItemLayout} label="Pc href">
+                {getFieldDecorator('webSkipUrl', {
+                  initialValue: webSkipUrl,
+                  rules: [{ required: true, message: 'Please enter pc href.' }]
+                })(
+                  <Input
+                    placeholder="Example: https://www.baidu.com/"
+                    onChange={(e) =>
+                      onImageFormChange({
+                        field: 'webSkipUrl',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="Mobile href">
+                {getFieldDecorator('mobiSkipUrl', {
+                  initialValue: mobiSkipUrl,
+                  rules: [
+                    { required: true, message: 'Please enter mobile href.' }
+                  ]
+                })(
+                  <Input
+                    placeholder="Example: https://www.baidu.com/"
+                    onChange={(e) =>
+                      onImageFormChange({
+                        field: 'mobiSkipUrl',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
               <FormItem
                 {...formItemLayout}
                 label={

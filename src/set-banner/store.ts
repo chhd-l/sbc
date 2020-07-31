@@ -66,6 +66,30 @@ export default class AppStore extends Store {
         field: 'bannerNo',
         value: res.context[0].bannerNo
       });
+      this.onImageFormChange({
+        field: 'webSkipUrl',
+        value: res.context[0].webSkipUrl
+      });
+      this.onImageFormChange({
+        field: 'mobiSkipUrl',
+        value: res.context[0].mobiSkipUrl
+      });
+      this.onImageFormChange({
+        field: 'webUuid',
+        value: res.context[0].webUuid
+      });
+      this.onImageFormChange({
+        field: 'mobiUuid',
+        value: res.context[0].mobiUuid
+      });
+      this.onImageFormChange({
+        field: 'webImgName',
+        value: res.context[0].webImgName
+      });
+      this.onImageFormChange({
+        field: 'mobiImgName',
+        value: res.context[0].mobiImgName
+      });
     } else {
       message.error(res.message);
     }
@@ -95,5 +119,9 @@ export default class AppStore extends Store {
 
   onImageFormChange = ({ field, value }) => {
     this.dispatch('imageActor:field', { field, value });
+  };
+
+  resetForm = () => {
+    this.dispatch('imageActor:resetForm');
   };
 }

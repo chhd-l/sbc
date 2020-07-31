@@ -24,6 +24,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
     }
 
     const accountName = loginInfo && loginInfo.employeeName;
+    const storeName = loginInfo && loginInfo.storeName;
     const isMasterAccount = loginInfo && loginInfo.isMasterAccount;
     const mobile = loginInfo && loginInfo.mobile;
 
@@ -228,7 +229,8 @@ export default class MyHeader extends React.PureComponent<any, any> {
                 </Dropdown>
               ))}
         </div>
-        <div>
+        <div style={styles.headerRight} className='flex-content-right'>
+          <div style={{height: 20}}>
           <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               {/* <Icon type="user" /> */}
@@ -239,6 +241,8 @@ export default class MyHeader extends React.PureComponent<any, any> {
               <Icon type="down" />
             </a>
           </Dropdown>
+          </div>
+          <div>{storeName}</div>
         </div>
       </Header>
     );
@@ -271,7 +275,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
 const styles = {
   logoBg: {
-    width: 140,
+    width: 240,
     height: 44,
     display: 'flex',
     alignItems: 'center',
@@ -290,5 +294,8 @@ const styles = {
   dropdownText: {
     marginLeft: 8,
     marginRight: 8
+  },
+  headerRight: {
+    textAlign: 'right'
   }
 } as any;

@@ -92,6 +92,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       skuExists: [],
       saveLoading: false,
       promotionCode: '',
+      promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
       promotionTypeChecked: true
     };
@@ -114,7 +115,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
         .slice(-10);
       let promotionCode = randomNumber + timeStamp;
       this.setState({
-        promotionCode: promotionCode
+        promotionCode: promotionCode,
+        promotionCode2: promotionCode
       });
       return promotionCode;
     } else {

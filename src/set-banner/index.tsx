@@ -14,6 +14,9 @@ const UploadImageModalForm = Form.create({})(UploadImageModal);
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SetBanner extends Component<any, any> {
   store: AppStore;
+  state: {
+    isEdit: false;
+  };
 
   componentDidMount() {
     // this.store.setModalVisible(true)
@@ -25,8 +28,14 @@ export default class SetBanner extends Component<any, any> {
   onSearch = () => {
     console.log('search------------');
   };
+  editStatusChange(isEdit) {
+    this.setState({
+      isEdit: isEdit
+    });
+  }
   uploadImage() {}
   render() {
+    const isEdit = this.state.isEdit;
     return (
       <AuthWrapper functionName="fOrderList001">
         <div className="order-con">
@@ -67,8 +76,10 @@ export default class SetBanner extends Component<any, any> {
               {/*  </Form.Item>*/}
               {/*</Form>*/}
 
-              <BannerList />
-              <UploadImageModalForm />
+              <BannerList
+                editStatusChange={(isEdit) => this.editStatusChange(isEdit)}
+              />
+              <UploadImageModalForm isEdit={isEdit} />
             </div>
           </div>
         </div>

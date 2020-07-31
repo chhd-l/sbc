@@ -9,7 +9,13 @@ export default class ImageActor extends Actor {
       imageForm: {
         bannerId: null,
         bannerName: '',
-        bannerNo: null
+        bannerNo: null,
+        webSkipUrl: '',
+        mobiSkipUrl: '',
+        webUuid: 0,
+        mobiUuid: 0,
+        webImgName: '',
+        mobiImgName: ''
       }
     };
   }
@@ -41,5 +47,19 @@ export default class ImageActor extends Actor {
   @Action('imageActor:field')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['imageForm', field], value);
+  }
+
+  @Action('imageActor:resetForm')
+  resetForm(state: IMap) {
+    const imageForm = {
+      bannerId: null,
+      bannerName: '',
+      bannerNo: null,
+      webSkipUrl: '',
+      mobiSkipUrl: '',
+      webUuid: 0,
+      mobiUuid: 0
+    };
+    return state.set('imageForm', fromJS(imageForm));
   }
 }

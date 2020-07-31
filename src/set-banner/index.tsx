@@ -29,11 +29,7 @@ export default class SetBanner extends Component<any, any> {
   onSearch = () => {
     console.log('search------------');
   };
-  editStatusChange(operation) {
-    this.setState({
-      operation: operation
-    });
-  }
+
   uploadImage() {}
   render() {
     const operation = this.state.operation;
@@ -77,17 +73,8 @@ export default class SetBanner extends Component<any, any> {
               {/*  </Form.Item>*/}
               {/*</Form>*/}
 
-              <BannerList
-                editStatusChange={(operation) =>
-                  this.editStatusChange(operation)
-                }
-              />
-              <UploadImageModalForm
-                operation={operation}
-                editStatusChange={(operation) =>
-                  this.editStatusChange(operation)
-                }
-              />
+              <BannerList />
+              <UploadImageModalForm />
             </div>
           </div>
         </div>

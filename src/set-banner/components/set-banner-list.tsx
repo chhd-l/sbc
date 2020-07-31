@@ -84,7 +84,6 @@ export default class SetBannerList extends Component<any, any> {
     } = this.props.relaxProps;
     onImageFormChange({ field: 'bannerId', value: null });
     await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
-    this.props.editStatusChange('edit');
     setModalVisible(true);
   }
   _renderLoading() {
@@ -197,7 +196,6 @@ export default class SetBannerList extends Component<any, any> {
             onClick={(e) => {
               e.stopPropagation();
               resetForm();
-              this.props.editStatusChange('new');
               setModalVisible(true);
             }}
           >

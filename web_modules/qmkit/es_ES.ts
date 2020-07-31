@@ -151,6 +151,7 @@ export default {
   'cookies': 'Cookies',
   'storeContactPhoneNumber': 'Shop contact phone',
   'storeContactEmail': 'Shop contact email',
+  'customerServiceEamil': 'Customer Service Eamil',
   'contactTimePeriod': 'Contact time period',
   'legalTerms': 'Legal terms',
 

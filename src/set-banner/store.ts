@@ -102,6 +102,35 @@ export default class AppStore extends Store {
         field: 'mobiImgName',
         value: res.context[0].mobiImgName
       });
+      const fileList = [
+        {
+          name: res.context[0].webImgName,
+          percent: 100,
+          response: [res.context[0].webUrl],
+          status: 'done',
+          type: 'image/jpg',
+          uid: res.context[0].webUuid
+        }
+      ];
+      this.onImageFormChange({
+        field: 'fileList',
+        value: fileList
+      });
+
+      const mFileList = [
+        {
+          name: res.context[0].mobiImgName,
+          percent: 100,
+          response: [res.context[0].mobiUrl],
+          status: 'done',
+          type: 'image/jpg',
+          uid: res.context[0].mobiUuid
+        }
+      ];
+      this.onImageFormChange({
+        field: 'mFileList',
+        value: mFileList
+      });
     } else {
       message.error(res.message);
     }
@@ -111,7 +140,8 @@ export default class AppStore extends Store {
     const { res } = await webapi.editRow(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.setModalVisible(false);
-      message.error('Edit successfully.');
+      this.getList({ storeId: this.getStoreId() });
+      message.success('Edit successfully.');
     } else {
       message.error(res.message);
     }
@@ -147,5 +177,9 @@ export default class AppStore extends Store {
   };
   setMFileList = (list) => {
     this.dispatch('imageActor:setMFileList', list);
+  };
+
+  setList = (list) => {
+    this.dispatch('imageActor:list', list);
   };
 }

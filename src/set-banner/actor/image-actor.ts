@@ -7,8 +7,8 @@ export default class ImageActor extends Actor {
       modalVisible: false,
       isEdit: false,
       bannerNoList: [1, 2, 3, 4, 5],
-      fileList: [],
-      mFileList: [],
+      // fileList: [],
+      // mFileList: [],
       imageForm: {
         bannerId: null,
         bannerName: '',
@@ -20,7 +20,9 @@ export default class ImageActor extends Actor {
         webUuid: 0,
         mobiUuid: 0,
         webImgName: '',
-        mobiImgName: ''
+        mobiImgName: '',
+        fileList: [],
+        mFileList: []
       }
     };
   }

@@ -47,6 +47,7 @@ export default {
   'product.offShelves': 'Off shelves',
   'product.image': 'Image',
   'product.linePrice': 'Line price',
+  'product.listPrice': 'List price',
   'product.onOrOffShelves': 'On/off shelves',
   'product.setPrice': 'Set price',
   'product.editProduct': 'Edit product',

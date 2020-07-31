@@ -239,7 +239,7 @@ class CateModalForm extends React.Component<any, any> {
         >
           {formData.get('cateParentName')
             ? formData.get('cateParentName')
-            : '无'}
+            : 'none'}
         </FormItem>
         <FormItem
           {...formItemLayout}
@@ -265,7 +265,11 @@ class CateModalForm extends React.Component<any, any> {
                   });
 
                   if (overLen) {
-                    callback(new Error('请选择最末级的分类'));
+                    callback(
+                      new Error(
+                        'Please select the last level of classification'
+                      )
+                    );
                     return;
                   }
 
@@ -284,7 +288,7 @@ class CateModalForm extends React.Component<any, any> {
               }
               getPopupContainer={() => document.getElementById('page-content')}
               placeholder="Please select classification"
-              notFoundContent="暂无分类"
+              notFoundContent="No classification"
               // disabled={cateDisabled}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               treeDefaultExpandAll
@@ -319,7 +323,12 @@ class CateModalForm extends React.Component<any, any> {
             rules: [
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(rule, value, callback, '商品描述');
+                  QMMethod.validatorEmoji(
+                    rule,
+                    value,
+                    callback,
+                    'Product Description'
+                  );
                 }
               }
             ],
@@ -389,7 +398,7 @@ class CateModalForm extends React.Component<any, any> {
       } else {
         let message = '';
         //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
-        if (checkFlag == 'true') {
+        if (checkFlag) {
           if (enterpriseFlag) {
             //分销商品和企业购商品
             message =

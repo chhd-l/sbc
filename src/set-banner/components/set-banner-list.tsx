@@ -47,6 +47,7 @@ export default class SetBannerList extends Component<any, any> {
       getStoreId: Function;
       onImageFormChange: Function;
       resetForm: Funciton;
+      setIsEdit: Function;
     };
   };
 
@@ -59,7 +60,8 @@ export default class SetBannerList extends Component<any, any> {
     getStoreId: noop,
     getBannerById: noop,
     onImageFormChange: noop,
-    resetForm: noop
+    resetForm: noop,
+    setIsEdit: noop
   };
   handleTableChange() {}
   componentDidMount() {
@@ -82,7 +84,7 @@ export default class SetBannerList extends Component<any, any> {
     } = this.props.relaxProps;
     onImageFormChange({ field: 'bannerId', value: null });
     await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
-    this.props.editStatusChange(true);
+    this.props.editStatusChange('edit');
     setModalVisible(true);
   }
   _renderLoading() {
@@ -195,7 +197,7 @@ export default class SetBannerList extends Component<any, any> {
             onClick={(e) => {
               e.stopPropagation();
               resetForm();
-              this.props.editStatusChange(false);
+              this.props.editStatusChange('new');
               setModalVisible(true);
             }}
           >

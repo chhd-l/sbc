@@ -100,9 +100,9 @@ export default class ClinicList extends Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
-              <Link to={'/prescriber-edit/' + record.prescriberId}>Edit</Link>
+              <Link to={'/prescriber-edit/' + record.id}>Edit</Link>
               <Divider type="vertical" />
-              <a onClick={() => this.enableAndDisable(record.prescriberId)}>
+              <a onClick={() => this.enableAndDisable(record.id)}>
                 {record.enabled ? 'Disable' : 'Enable'}
               </a>
               {/* <Divider type="vertical" />
@@ -212,7 +212,7 @@ export default class ClinicList extends Component<any, any> {
   };
   delClinic = async (id) => {
     const { res } = await webapi.deleteClinic({
-      prescriberId: id
+      id: id
     });
     if (res.code === 'K-000000') {
       message.success(res.message || 'Successful');
@@ -484,7 +484,7 @@ export default class ClinicList extends Component<any, any> {
           </Button>
           <Table
             columns={columns}
-            rowKey={(record) => record.prescriberId}
+            rowKey={(record) => record.id}
             dataSource={this.state.prescriberList}
             pagination={this.state.pagination}
             loading={this.state.loading}

@@ -275,7 +275,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
 
 const styles = {
   logoBg: {
-    width: 240,
+    width: 134,
     height: 44,
     display: 'flex',
     alignItems: 'center',

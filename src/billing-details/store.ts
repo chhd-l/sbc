@@ -31,10 +31,8 @@ export default class AppStore extends Store {
     const settlement = await webapi.getSettlementById(settleId);
     this.transaction(() => {
       if (settleDetailList.res.code == Const.SUCCESS_CODE) {
-        this.dispatch(
-          'settleDetail:list',
-          this.renderSettleDetailList(settleDetailList.res.context)
-        );
+        this.dispatch('settleDetail:list', settleDetailList.res.context);
+        //this.dispatch('settleDetail:list', this.renderSettleDetailList(settleDetailList.res.context));
       }
       if (settlement.res.code == Const.SUCCESS_CODE) {
         this.dispatch('settleDetail:settlement', settlement.res.context);

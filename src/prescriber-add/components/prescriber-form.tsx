@@ -71,13 +71,13 @@ class ClinicForm extends React.Component<any, any> {
         rewardRateFirst: 0,
         rewardRateMore: 0,
         rewardRule: false,
-        storeId: 123456858,
         timeZone: 'Year'
       },
       activeKey: 'basic',
       isJump: false,
       qrCodeLink: '',
-      url: ''
+      url: '',
+      saveLoading: false
     };
     this.getDetail = this.getDetail.bind(this);
 
@@ -129,7 +129,6 @@ class ClinicForm extends React.Component<any, any> {
       rewardRateFirst: sectionList[0].rewardRate,
       rewardRateMore: sectionList[1].rewardRate,
       rewardRule: this.state.rewardMode,
-      storeId: rewardForm.storeId,
       timeZone: this.state.timeZone,
       delFlag: 0
     };
@@ -138,13 +137,22 @@ class ClinicForm extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Successful');
+          message.success('Successful');
+          this.setState({
+            saveLoading: false
+          });
           this.getClinicsReward(id);
         } else {
+          this.setState({
+            saveLoading: false
+          });
           message.error('Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          saveLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -255,6 +263,9 @@ class ClinicForm extends React.Component<any, any> {
     });
   };
   onCreate = () => {
+    this.setState({
+      saveLoading: true
+    });
     const prescriberForm = this.state.prescriberForm;
     webapi
       .addClinic({ ...prescriberForm })
@@ -270,15 +281,24 @@ class ClinicForm extends React.Component<any, any> {
             message.error('Prescriber ID does not exist');
           }
         } else {
+          this.setState({
+            saveLoading: false
+          });
           message.error('Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          saveLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
   onUpdate = () => {
     const prescriberForm = this.state.prescriberForm;
+    this.setState({
+      saveLoading: true
+    });
     webapi
       .updateClinic({ ...prescriberForm })
       .then((data) => {
@@ -290,13 +310,22 @@ class ClinicForm extends React.Component<any, any> {
             });
             this.saveReward(prescriberForm.prescriberId);
           } else {
+            this.setState({
+              saveLoading: false
+            });
             message.error('Prescriber ID does not exist');
           }
         } else {
+          this.setState({
+            saveLoading: false
+          });
           message.error('Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          saveLoading: false
+        });
         message.error('Unsuccessful');
       });
   };
@@ -833,7 +862,11 @@ class ClinicForm extends React.Component<any, any> {
               </Table>
             </Col>
             <Col span={24} style={{ marginTop: '20px' }}>
-              <Button type="primary" onClick={() => this.savePrescriber()}>
+              <Button
+                type="primary"
+                loading={this.state.saveLoading}
+                onClick={() => this.savePrescriber()}
+              >
                 Save
               </Button>
               <Button style={{ marginLeft: '20px' }}>

@@ -32,7 +32,7 @@ export const getStoreCateList = (goodsCateId) => {
   // return Fetch('/storeCate');
   let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
   let params = {
-    goodsCateId: 1129,
+    goodsCateId: goodsCateId,
     storeId: loginInfo.storeId
   };
   return Fetch('/storeCate/storeCateByCondition', {

@@ -47,6 +47,7 @@ export default {
   'product.offShelves': 'Off shelves',
   'product.image': 'Image',
   'product.linePrice': 'Line price',
+  'product.listPrice': 'List price',
   'product.onOrOffShelves': 'On/off shelves',
   'product.setPrice': 'Set price',
   'product.editProduct': 'Edit product',
@@ -742,7 +743,11 @@ export default {
   'action': 'Action',
   'resourceName': 'Banner name',
   'Instructions': 'Instructions',
-  'amountReceivable': 'Amount receivable'
+  'amountReceivable': 'Amount receivable',
+  'freightTemplate':'Freight template',
+  'storeShipping':'Store shipping',
+  'singleProductShipping':'Single product shipping'
+
 
 
 

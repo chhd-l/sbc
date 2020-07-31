@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Checkbox } from 'antd';
 
 import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import { Const } from 'qmkit';
-
+import '../../index.css';
 import styled from 'styled-components';
 
 const GreyBg = styled.div`
@@ -42,6 +42,7 @@ export default class MarketingDes extends React.Component<any, any> {
   props: {
     relaxProps?: {
       marketingName: any;
+      publicStatus: any;
       beginTime: any;
       endTime: any;
       marketingType: any;
@@ -56,7 +57,8 @@ export default class MarketingDes extends React.Component<any, any> {
     endTime: 'endTime',
     marketingType: 'marketingType',
     subType: 'subType',
-    promotionCode: 'promotionCode'
+    promotionCode: 'promotionCode',
+    publicStatus: 'publicStatus'
   };
 
   render() {
@@ -66,8 +68,10 @@ export default class MarketingDes extends React.Component<any, any> {
       endTime,
       marketingType,
       subType,
-      promotionCode
+      promotionCode,
+      publicStatus
     } = this.props.relaxProps;
+    debugger;
     return (
       <GreyBg>
         <Row>
@@ -80,18 +84,21 @@ export default class MarketingDes extends React.Component<any, any> {
           <Col span={24}>
             <span>Promotion Code:</span>
             {promotionCode}
+            <Checkbox
+              className="publicBox"
+              style={{ marginLeft: 20 }}
+              checked={publicStatus === '1'}
+              disabled={true}
+            >
+              Public
+            </Checkbox>
           </Col>
         </Row>
         <Row>
           <Col span={24}>
             <span>Start and end Time:</span>
-            {moment(beginTime)
-              .format(Const.TIME_FORMAT)
-              .toString()}{' '}
-            ~{' '}
-            {moment(endTime)
-              .format(Const.TIME_FORMAT)
-              .toString()}
+            {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~{' '}
+            {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
         {subType === 6 || subType === 7 ? null : (

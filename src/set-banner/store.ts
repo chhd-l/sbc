@@ -59,12 +59,24 @@ export default class AppStore extends Store {
     const { res } = await webapi.getList(params);
     if (res.code === Const.SUCCESS_CODE) {
       this.onImageFormChange({
+        field: 'bannerId',
+        value: res.context[0].bannerId
+      });
+      this.onImageFormChange({
         field: 'bannerName',
         value: res.context[0].bannerName
       });
       this.onImageFormChange({
         field: 'bannerNo',
         value: res.context[0].bannerNo
+      });
+      this.onImageFormChange({
+        field: 'webUrl',
+        value: res.context[0].webUrl
+      });
+      this.onImageFormChange({
+        field: 'mobiUrl',
+        value: res.context[0].mobiUrl
       });
       this.onImageFormChange({
         field: 'webSkipUrl',
@@ -98,6 +110,8 @@ export default class AppStore extends Store {
   editBanner = async (params) => {
     const { res } = await webapi.editRow(params);
     if (res.code === Const.SUCCESS_CODE) {
+      this.setModalVisible(false);
+      message.error('Edit successfully.');
     } else {
       message.error(res.message);
     }
@@ -123,5 +137,15 @@ export default class AppStore extends Store {
 
   resetForm = () => {
     this.dispatch('imageActor:resetForm');
+  };
+
+  setIsEdit = (isEdit) => {
+    this.dispatch('imageActor:setIsEdit', isEdit);
+  };
+  setFileList = (list) => {
+    this.dispatch('imageActor:setFileList', list);
+  };
+  setMFileList = (list) => {
+    this.dispatch('imageActor:setMFileList', list);
   };
 }

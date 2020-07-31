@@ -14,7 +14,7 @@ export default class FreightList extends React.Component<any, any> {
     const { data, isStore } = this.props;
     return data.map((d, i) => (
       <FreightItem
-        key={Math.random()}
+        key={i}
         data={
           isStore
             ? [d]

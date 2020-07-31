@@ -743,7 +743,11 @@ export default {
   'action': 'Action',
   'resourceName': 'Banner name',
   'Instructions': 'Instructions',
-  'amountReceivable': 'Amount receivable'
+  'amountReceivable': 'Amount receivable',
+  'freightTemplate':'Freight template',
+  'storeShipping':'Store shipping',
+  'singleProductShipping':'Single product shipping'
+
 
 
 

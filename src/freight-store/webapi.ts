@@ -8,7 +8,6 @@ import { Fetch } from 'qmkit';
  * @returns
  */
 export function fetchFreightStore(freightId) {
-  debugger;
   return Fetch(`/freightTemplate/freightTemplateStore/${freightId}`);
 }
 

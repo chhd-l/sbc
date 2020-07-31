@@ -125,7 +125,6 @@ export default class FreightTemp extends React.Component<any, any> {
   };
 
   treeDataSource = (parent, children) => {
-    debugger;
     let parentNodes = [];
     let childrenNodes = [];
     if (parent && parent.length > 0) {
@@ -171,8 +170,10 @@ export default class FreightTemp extends React.Component<any, any> {
       country,
       city
     } = this.props.relaxProps;
+    let countryJS = country ? country.toJS() : [];
+    let cityJS = city ? city.toJS() : [];
     // const treeData = FindArea.findProvinceCity(selectedAreas.toJS());
-    const treeData = this.treeDataSource(country.toJS(), city.toJS());
+    const treeData = this.treeDataSource(countryJS, cityJS);
 
     const tProps = {
       treeData,

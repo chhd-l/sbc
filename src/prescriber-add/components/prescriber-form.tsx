@@ -107,11 +107,11 @@ class ClinicForm extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -146,14 +146,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   // clearAndSave = () => {
@@ -175,11 +175,11 @@ class ClinicForm extends React.Component<any, any> {
   //         this.getClinicsReward(this.props.prescriberId);
   //         message.success(res.message || 'Successful');
   //       } else {
-  //         message.error('Unsuccessful');
+  //         message.error(res.message||'Unsuccessful');
   //       }
   //     })
   //     .catch((err) => {
-  //       message.error('Unsuccessful');
+  //       message.error(res.message||'Unsuccessful');
   //     });
   // };
 
@@ -228,7 +228,7 @@ class ClinicForm extends React.Component<any, any> {
         prescriberType: res.context.prescriberType
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   queryClinicsDictionary = async (type: String) => {
@@ -240,7 +240,7 @@ class ClinicForm extends React.Component<any, any> {
         typeArr: res.context
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
@@ -252,7 +252,7 @@ class ClinicForm extends React.Component<any, any> {
         cityArr: res.context.sysDictionaryVOS
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -284,14 +284,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   onUpdate = () => {
@@ -319,14 +319,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 

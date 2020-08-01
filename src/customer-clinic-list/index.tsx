@@ -24,17 +24,17 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer Account',
+          title: 'Consumer account',
           dataIndex: 'customerAccount',
           key: 'consumerAccount'
         },
         {
-          title: 'Consumer Name',
+          title: 'Consumer name',
           dataIndex: 'customerName',
           key: 'consumerName'
         },
         {
-          title: 'Consumer Type',
+          title: 'Consumer type',
           dataIndex: 'customerLevelName',
           key: 'consumerType'
         },
@@ -135,7 +135,7 @@ export default class Customer extends React.Component<any, any> {
     this.init({ pageNum: pagination.current, pageSize: 10 });
   }
 
-  init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
+  init = ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     this.setState({
       loading: true
     });
@@ -149,24 +149,25 @@ export default class Customer extends React.Component<any, any> {
       email: query.email
     };
     pageNum = pageNum - 1;
-    await webapi
+    webapi
       .getCustomerList({
         ...params,
         pageNum,
         pageSize
       })
       .then((data) => {
-        if (data.res.code === 'K-000000') {
+        const { res } = data;
+        if (res.code === 'K-000000') {
           let pagination = this.state.pagination;
-          let searchList = data.res.context.detailResponseList;
-          pagination.total = data.res.context.total;
+          let searchList = res.context ? res.context.detailResponseList : [];
+          pagination.total = res.context ? res.context.total : 0;
           this.setState({
             pagination: pagination,
             searchList: searchList,
             loading: false
           });
         } else {
-          message.error(data.res.message || 'get data filed');
+          message.error(res.message || 'get data filed');
           this.setState({
             loading: false
           });
@@ -263,7 +264,7 @@ export default class Customer extends React.Component<any, any> {
               </FormItem>
               <FormItem>
                 <SelectGroup
-                  label="Customer Type"
+                  label="Customer type"
                   style={{ width: 80 }}
                   onChange={(value) => {
                     value = value === '' ? null : value;

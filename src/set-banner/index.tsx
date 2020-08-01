@@ -9,10 +9,15 @@ import { Link } from 'react-router-dom';
 import BannerList from './components/set-banner-list';
 import UploadImageModal from './components/upload-image-modal';
 const FormItem = Form.Item;
+const UploadImageModalForm = Form.create({})(UploadImageModal);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SetBanner extends Component<any, any> {
   store: AppStore;
+  state: {
+    operation: 'new'; //edit
+    isEdit: false;
+  };
 
   componentDidMount() {
     // this.store.setModalVisible(true)
@@ -24,8 +29,14 @@ export default class SetBanner extends Component<any, any> {
   onSearch = () => {
     console.log('search------------');
   };
+  editStatusChange(operation) {
+    this.setState({
+      operation: operation
+    });
+  }
   uploadImage() {}
   render() {
+    const operation = this.state.operation;
     return (
       <AuthWrapper functionName="fOrderList001">
         <div className="order-con">
@@ -66,8 +77,17 @@ export default class SetBanner extends Component<any, any> {
               {/*  </Form.Item>*/}
               {/*</Form>*/}
 
-              <BannerList />
-              <UploadImageModal />
+              <BannerList
+                editStatusChange={(operation) =>
+                  this.editStatusChange(operation)
+                }
+              />
+              <UploadImageModalForm
+                operation={operation}
+                editStatusChange={(operation) =>
+                  this.editStatusChange(operation)
+                }
+              />
             </div>
           </div>
         </div>

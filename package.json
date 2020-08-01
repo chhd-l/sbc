@@ -65,6 +65,7 @@
     "@types/react-dom": "^16.0.3",
     "antd": "^3.26.16",
     "axios": "^0.19.2",
+    "babel-polyfill": "^6.26.0",
     "cache-loader": "^1.2.0",
     "core-js": "^3.1.2",
     "echarts": "4.2.1",
@@ -79,6 +80,7 @@
     "plume2": "^1.2.7",
     "prop-types": "^15.6.0",
     "react": "^16.8.3",
+    "react-app-polyfill": "^1.0.6",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.2.0",
@@ -122,6 +124,7 @@
     "babel-root-slash-import": "^1.1.0",
     "bfj": "^6.1.1",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
+    "compression-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
@@ -161,7 +164,7 @@
     "typescript": "^3.5.2",
     "url-loader": "^0.6.2",
     "webpack": "4.28.3",
-    "webpack-dev-server": "3.1.14",
+    "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "2.0.4",
     "whatwg-fetch": "^3.0.0",
     "workbox-webpack-plugin": "^4.3.1"
@@ -171,13 +174,13 @@
       ">0.2%",
       "not dead",
       "not op_mini all",
-      "ie > 9"
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version",
-      "ie > 9"
+      "ie 11"
     ]
   },
   "eslintConfig": {

@@ -116,4 +116,60 @@ export default class AppStore extends Store {
       message.error(res.message);
     }
   };
+
+  getCountryCity = async () => {
+    const country = (await webapi.querySysDictionary({
+      type: 'country'
+    })) as any;
+
+    const city = (await webapi.querySysDictionary({
+      type: 'city'
+    })) as any;
+
+    if (
+      city.res.code === Const.SUCCESS_CODE &&
+      country.res.code === Const.SUCCESS_CODE
+    ) {
+      let countryList = country.res.context.sysDictionaryVOS
+        ? country.res.context.sysDictionaryVOS
+        : [];
+      let cityList = city.res.context.sysDictionaryVOS
+        ? city.res.context.sysDictionaryVOS
+        : [];
+      let treeNode = this.treeDataSource(countryList, cityList);
+      this.dispatch('freight: store: field: value', {
+        field: 'treeNode',
+        value: fromJS(treeNode)
+      });
+    }
+  };
+  treeDataSource = (parent, children) => {
+    let parentNodes = [];
+    let childrenNodes = [];
+    if (parent && parent.length > 0) {
+      for (let i = 0; i < parent.length; i++) {
+        let parentNode = {
+          title: parent[i].name,
+          value: parent[i].id,
+          key: parent[i].id,
+          children: []
+        };
+        parentNodes.push(parentNode);
+      }
+    }
+    if (children && children.length > 0) {
+      for (let i = 0; i < children.length; i++) {
+        let childrenNode = {
+          title: children[i].name,
+          value: children[i].id,
+          key: children[i].id
+        };
+        childrenNodes.push(childrenNode);
+      }
+    }
+    if (parentNodes.length > 0) {
+      parentNodes[0].children = childrenNodes;
+    }
+    return parentNodes;
+  };
 }

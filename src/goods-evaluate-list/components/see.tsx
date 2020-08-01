@@ -251,14 +251,12 @@ export default class See extends React.Component<any, any> {
    */
   _handleSubmit = () => {
     const { saveAnswer, goodsEditEvaluate } = this.props.relaxProps;
-    debugger;
     if (
       !goodsEditEvaluate.get('evaluateAnswer') ||
       !goodsEditEvaluate.get('evaluateAnswer').trim()
     ) {
       this._handleModelCancel();
     } else {
-      console.log(goodsEditEvaluate.toJS(), 'goodsEditEvaluate-----------');
       saveAnswer(
         goodsEditEvaluate.get('evaluateId'),
         goodsEditEvaluate.get('evaluateContent'),
@@ -277,7 +275,6 @@ export default class See extends React.Component<any, any> {
    * 关闭弹框
    */
   _handleModelCancel = () => {
-    debugger;
     const { modal } = this.props.relaxProps;
     modal(false);
   };

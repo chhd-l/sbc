@@ -73,7 +73,8 @@ class CateList extends React.Component<any, any> {
       title: <FormattedMessage id="categoryName" />,
       dataIndex: 'cateName',
       key: 'cateName',
-      className: 'namerow'
+      className: 'namerow',
+      ellipsis: 'true'
     },
     {
       title: <FormattedMessage id="operation" />,
@@ -87,6 +88,7 @@ class CateList extends React.Component<any, any> {
    * 获取操作项
    */
   _getOption = (rowInfo) => {
+    rowInfo.cateImg = rowInfo.cateImg ? JSON.parse(rowInfo.cateImg) : [];
     rowInfo = fromJS(rowInfo);
 
     let hasAuth = checkAuth('f_goods_cate_1') || checkAuth('f_goods_cate_2');
@@ -127,7 +129,8 @@ class CateList extends React.Component<any, any> {
                     rowInfo.get('cateParentId'),
                     rowInfo.get('goodsCateId'),
                     rowInfo.get('children'),
-                    rowInfo.get('cateDescription')
+                    rowInfo.get('cateDescription'),
+                    rowInfo.get('cateImg')
                   )}
                 >
                   <FormattedMessage id="edit" />
@@ -170,7 +173,8 @@ class CateList extends React.Component<any, any> {
     cateParentId: number,
     goodsCateId: number,
     children: IList,
-    cateDescription: string
+    cateDescription: string,
+    cateImg: IList
   ) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
@@ -189,7 +193,8 @@ class CateList extends React.Component<any, any> {
       children,
       cateDescription
     });
-    showEditModal(cateInfo);
+    // let images = Map(cateImg)
+    showEditModal(cateInfo, cateImg);
   };
 
   /**

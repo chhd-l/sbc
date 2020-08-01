@@ -162,7 +162,7 @@ class OnlineRefundModalForm extends React.Component<any, any> {
                     actualReturnPrice: (e.target as any).value
                   });
                 }}
-                value={this.state.refund}
+                // value={this.state.refund}
               />
             )}
             {this.state.editRefund ? (
@@ -174,7 +174,7 @@ class OnlineRefundModalForm extends React.Component<any, any> {
                     actualReturnPrice: (e.target as any).value
                   });
                 }}
-                value={this.state.refund}
+                // value={this.state.refund}
               />
             ) : (
               <label style={{ marginRight: 10 }}>

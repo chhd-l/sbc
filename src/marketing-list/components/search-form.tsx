@@ -40,34 +40,12 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="Campaign Type"
-            style={{ width: 160 }}
-            defaultValue="All"
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'marketingSubType',
-                value
-              });
-            }}
-          >
-            <Option value={null}>All</Option>
-            <Option value="0">Full amount reduction</Option>
-            <Option value="1">Full quantity reduction</Option>
-            <Option value="2">Full amount discount</Option>
-            <Option value="3">Full quantity discount</Option>
-            {/* <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option> */}
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
+
             label="Promotion type"
             style={{ width: 170 }}
+
             defaultValue="All"
             onChange={(value) => {
-              debugger;
               value = value === '' ? null : value;
               onFormChange({
                 field: 'promotionType',
@@ -78,6 +56,29 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="">All</Option>
             <Option value="0">Normal promotion</Option>
             <Option value="1">Subscription promotion</Option>
+            {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+          </SelectGroup>
+        </FormItem>
+        <FormItem>
+          <SelectGroup
+            getPopupContainer={() => document.getElementById('page-content')}
+            label="Campaign Type"
+            style={{ width: 160 }}
+            defaultValue="All"
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              onFormChange({
+                field: 'subType',
+                value
+              });
+            }}
+          >
+            <Option value={null}>All</Option>
+            <Option value="0">Full amount reduction</Option>
+            <Option value="1">Full quantity reduction</Option>
+            <Option value="2">Full amount discount</Option>
+            <Option value="3">Full quantity discount</Option>
             {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
           </SelectGroup>
@@ -101,7 +102,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={startValue}
-            placeholder="Start Time"
+            placeholder="Start time"
             onChange={this.onStartChange}
             showToday={false}
           />
@@ -113,7 +114,7 @@ export default class SearchForm extends React.Component<any, any> {
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={endValue}
-            placeholder="End Time"
+            placeholder="End time"
             onChange={this.onEndChange}
             showToday={false}
           />

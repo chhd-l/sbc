@@ -138,6 +138,7 @@ export default class Tool extends React.Component<any, any> {
 
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
+    console.log(selectedSpuKeys.count());
     if (selectedSpuKeys.count() < 1) {
       message.error('Select at least one item');
       return;

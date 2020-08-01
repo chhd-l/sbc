@@ -7,7 +7,9 @@ export default class FormActor extends Actor {
         //活动名称
         marketingName: '',
         //活动类型
-        marketingSubType: '-1',
+        marketingSubType: null,
+        //
+        subType: null,
         //市
         startTime: null,
         //区
@@ -16,6 +18,8 @@ export default class FormActor extends Actor {
         promotionType: null,
         //查询类型
         queryTab: '0',
+
+        marketingStatus: '0',
         //未删除
         delFlag: 0
       }

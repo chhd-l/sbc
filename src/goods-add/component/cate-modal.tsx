@@ -222,7 +222,6 @@ class CateModalForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     let storeCateList = this.props.relaxProps.storeCateList;
-    console.log(this.props.relaxProps, 'relaxprops111');
     const {
       sourceCateList,
       goods,
@@ -395,7 +394,7 @@ class CateModalForm extends React.Component<any, any> {
           })(
             <TextArea
               rows={4}
-              placeholder="Please input the product description"
+              placeholder="Please iwwwwwwwwwwwnput the sssssproduct description"
             />
           )}
         </FormItem>

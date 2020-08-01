@@ -298,8 +298,10 @@ export default class AppStore extends Store {
 
   //导出
   bulkExport = async () => {
+    const orderId = this.state().get('searchForm').toJS();
     const queryParams = this.state().get('onRewardExportData').toJS();
-    const { beginTime, endTime, prescriberId } = queryParams;
+
+    const { beginTime, endTime, prescriberId, id } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {
         // 参数加密
@@ -310,6 +312,7 @@ export default class AppStore extends Store {
             beginTime: beginTime,
             endTime: endTime,
             prescriberId: prescriberId,
+            id: orderId.id,
             token: token
           });
           const encrypted = base64.urlEncode(result);

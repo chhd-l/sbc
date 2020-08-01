@@ -102,15 +102,15 @@ export default class SearchHead extends Component<any, any> {
                   this.setState({ search: search });
                 }}
               >
-                <Option value="">全部</Option>
-                <Option value="登录">登录</Option>
-                <Option value="商品">商品</Option>
-                <Option value="订单">订单</Option>
-                <Option value="客户">客户</Option>
-                <Option value="营销">营销</Option>
-                <Option value="财务">财务</Option>
-                <Option value="设置">设置</Option>
-                <Option value="账户管理">账户管理</Option>
+                <Option value="">All</Option>
+                <Option value="登录">Login</Option>
+                <Option value="商品">Product</Option>
+                <Option value="订单">Order</Option>
+                <Option value="客户">Client</Option>
+                <Option value="营销">Marketing</Option>
+                <Option value="财务">Finance</Option>
+                <Option value="设置">Setting</Option>
+                <Option value="账户管理">Account management</Option>
               </SelectGroup>
             </FormItem>
             <FormItem>

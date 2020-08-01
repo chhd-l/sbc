@@ -981,12 +981,10 @@ export default class AppStore extends Store {
     );
     goodsDetailTab.map((item, i) => {
       // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
-      if (i < 3) {
-        console.log(data.get('detailEditor_' + i), 'detailEditor_' + i);
-        goodsDetailTabTemplate[item.get('name')] = data
-          .get('detailEditor_' + i)
-          .getContent();
-      }
+      console.log(data.get('detailEditor_' + i), 'detailEditor_' + i);
+      goodsDetailTabTemplate[item.get('name')] = data
+        .get('detailEditor_' + i)
+        .getContent();
     });
     goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
 
@@ -1188,6 +1186,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          linePrice: item.get('linePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus:
             item.get('subscriptionStatus') === undefined

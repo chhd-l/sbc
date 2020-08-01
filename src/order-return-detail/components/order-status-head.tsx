@@ -151,7 +151,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                       state: { rid: `${rid}` }
                     }}
                   >
-                    修改
+                    Update
                   </Link>
                 </AuthWrapper>
               )}
@@ -162,7 +162,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                     href="#!"
                     onClick={() => this._showAudit(onAudit, rid)}
                   >
-                    审核
+                    Audit
                   </a>
                 </AuthWrapper>
               )}
@@ -174,7 +174,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
                     href="#!"
                     onClick={() => this._showReject(onReject, rid)}
                   >
-                    驳回
+                    Reject
                   </a>
                 </AuthWrapper>
               )}
@@ -283,6 +283,9 @@ export default class OrderStatusHead extends React.Component<any, any> {
               </p>
               <p style={styles.darkText}>
                 <FormattedMessage id="orderNumber" />：{detail.get('tid')}
+              </p>
+              <p style={styles.darkText}>
+                <FormattedMessage id="payWay" />：{detail.get('payWay')}
               </p>
             </Col>
             <Col span={8}>

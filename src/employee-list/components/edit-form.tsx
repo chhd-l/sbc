@@ -58,7 +58,7 @@ export default class EditForm extends React.Component<any, any> {
       changePassword: false,
       value: undefined,
       clinicsLites: [],
-      selectRoleIds: '',
+      selectRoleNames: '',
       prescriberIds: {}
     };
     this._store = ctx['_plume$Store'];
@@ -81,11 +81,11 @@ export default class EditForm extends React.Component<any, any> {
     const employeeForm = _state.get('employeeForm');
     if (_state.get('edit')) {
       this.setState({
-        selectRoleIds: employeeForm.get('roleIds')
+        selectRoleNames: this.getRoleNamesByIds(employeeForm.get('roleIds'))
       });
     } else {
       this.setState({
-        selectRoleIds: ''
+        selectRoleNames: ''
       });
     }
     this.setState({
@@ -426,8 +426,8 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          {this.state.selectRoleIds &&
-          this.state.selectRoleIds.indexOf('168') > -1 ? (
+          {this.state.selectRoleNames &&
+          this.state.selectRoleNames.indexOf('Prescriber') > -1 ? (
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="Prescriber" />}
@@ -628,12 +628,27 @@ export default class EditForm extends React.Component<any, any> {
   }
   roleChange = (value) => {
     // let roleStringIds = value.join(',');
+
     this.setState({
-      selectRoleIds: value,
+      selectRoleNames: this.getRoleNamesByIds(value),
       prescriberIds: {
         initialValue: []
       }
     });
+  };
+
+  getRoleNamesByIds = (rolesIds) => {
+    const _state = this._store.state();
+    const roles = _state.get('roles');
+    let roleIdList = rolesIds.split(',');
+    let roleNames = [];
+    roleIdList.map((x) => {
+      let role = roles.find((r) => r.get('roleInfoId').toString() === x);
+      if (role) {
+        roleNames.push(role.get('roleName'));
+      }
+    });
+    return roleNames.join(',');
   };
 
   // clinicChange = (value) => {

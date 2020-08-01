@@ -48,11 +48,13 @@ export default class TemplateList extends React.Component {
         {dataList.map((item) => {
           let editor = `${
             Const.X_XITE_ADMIN_HOST
-            }/editor/editor?action=create&platform=${platform}&pageCode=${new Date().getTime()}&scene=onlineMall&pageType=${item.get(
-              'pageType'
-            )}&storeId=${storeId}&id=${item.get(
-              'id'
-            )}&sc=H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA%3D%3D`;
+          }/editor/editor?action=create&platform=${platform}&pageCode=${new Date(
+            sessionStorage.getItem('defaultLocalDateTime')
+          ).getTime()}&scene=onlineMall&pageType=${item.get(
+            'pageType'
+          )}&storeId=${storeId}&id=${item.get(
+            'id'
+          )}&sc=H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA%3D%3D`;
           if (item.get('userTpl')) {
             editor += '&userTpl=true';
           }
@@ -78,42 +80,42 @@ export default class TemplateList extends React.Component {
                   </div>
                   <div className="template-name">
                     {inputEdit.get('isShow') &&
-                      inputEdit.get('id') === item.get('_id') ? (
-                        <Input
-                          className="ant-input"
-                          onBlur={(e: any) =>
-                            onSetEdit({
-                              isShow: false,
-                              id: item.get('_id'),
-                              title: e.target.value
-                            })
-                          }
-                          onPressEnter={(e: any) =>
-                            onSetEdit({
-                              isShow: false,
-                              id: item.get('_id'),
-                              title: e.target.value
-                            })
-                          }
-                          defaultValue={item.get('name')}
-                        />
-                      ) : item.get('userTpl') ? (
-                        <div
-                          className="template-name-edit"
-                          onClick={() => {
-                            onSetEdit({ isShow: true, id: item.get('_id') });
-                          }}
-                        >
-                          <span>{item.get('name')}</span>
-                          <a>
-                            <i className="anticon anticon-edit edit" />
-                          </a>
-                        </div>
-                      ) : (
-                          <div className="template-name-edit">
-                            <span>{item.get('name')}</span>
-                          </div>
-                        )}
+                    inputEdit.get('id') === item.get('_id') ? (
+                      <Input
+                        className="ant-input"
+                        onBlur={(e: any) =>
+                          onSetEdit({
+                            isShow: false,
+                            id: item.get('_id'),
+                            title: e.target.value
+                          })
+                        }
+                        onPressEnter={(e: any) =>
+                          onSetEdit({
+                            isShow: false,
+                            id: item.get('_id'),
+                            title: e.target.value
+                          })
+                        }
+                        defaultValue={item.get('name')}
+                      />
+                    ) : item.get('userTpl') ? (
+                      <div
+                        className="template-name-edit"
+                        onClick={() => {
+                          onSetEdit({ isShow: true, id: item.get('_id') });
+                        }}
+                      >
+                        <span>{item.get('name')}</span>
+                        <a>
+                          <i className="anticon anticon-edit edit" />
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="template-name-edit">
+                        <span>{item.get('name')}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 {item.get('userTpl') && item.get('platform') === 'weixin' ? (
@@ -138,12 +140,12 @@ export default class TemplateList extends React.Component {
                     </Popconfirm>
                   </div>
                 ) : (
-                    <div className="actions apply">
-                      <a href={editor} target="_blank">
-                        <div className="action apply" title="应用模板" />
-                      </a>
-                    </div>
-                  )}
+                  <div className="actions apply">
+                    <a href={editor} target="_blank">
+                      <div className="action apply" title="应用模板" />
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           );

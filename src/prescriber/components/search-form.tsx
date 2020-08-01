@@ -61,7 +61,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="Prescriber Name"
+            addonBefore="Prescriber name"
             onChange={(e) => {
               const value = (e.target as any).value;
               this.onFormChange({
@@ -74,7 +74,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="Prescriber Phone"
+            addonBefore="Prescriber phone"
             onChange={(e) => {
               const value = (e.target as any).value;
               this.onFormChange({
@@ -87,7 +87,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <SelectGroup
-            label="Prescriber City"
+            label="Prescriber city"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -105,7 +105,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <Input
-            addonBefore="Prescriber Zip"
+            addonBefore="Prescriber zip"
             onChange={(e) => {
               const value = (e.target as any).value;
               this.onFormChange({
@@ -118,7 +118,7 @@ export default class SearchForm extends React.Component<any, any> {
 
         <FormItem>
           <SelectGroup
-            label="Prescriber Type"
+            label="Prescriber type"
             style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;

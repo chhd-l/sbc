@@ -30,10 +30,9 @@ export default class AppStore extends Store {
     const query = this.state()
       .get('form')
       .toJS();
-    if (query.marketingSubType === '-1') {
-      query.marketingSubType = null;
-    }
-
+    // if (query.marketingSubType === '-1') {
+    //   query.marketingSubType = null;
+    // }
     const { res } = await webapi.fetchList({ ...query, pageNum, pageSize });
     let levelList = [];
     if (util.isThirdStore()) {
@@ -54,7 +53,8 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('listActor:init', res.context);
-        this.dispatch('list:currentPage', pageNum && pageNum + 1);
+        this.dispatch('list:currentPage', pageNum + 1);
+        this.dispatch('list:total', res.context.total);
         this.dispatch('customerLevel:init', fromJS(levelList));
         this.dispatch('select:init', []);
       });

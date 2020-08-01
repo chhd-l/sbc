@@ -35,7 +35,7 @@ export default class AccountList extends React.Component<any, any> {
     initOffLineAccounts: noop
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { initOffLineAccounts } = this.props.relaxProps;
 
     initOffLineAccounts();

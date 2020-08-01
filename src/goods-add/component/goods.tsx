@@ -373,9 +373,8 @@ class GoodsForm extends React.Component<any, any> {
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
-                initialValue:
-                  goods.get('subscriptionStatus') &&
-                  goods.get('subscriptionStatus').toString()
+                // initialValue: 'Y'
+                initialValue: goods.get('subscriptionStatus') === 0 ? 'N' : 'Y'
               })(
                 <Select
                   getPopupContainer={() =>
@@ -584,7 +583,7 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="product.marketPrice" />}
+              label={<FormattedMessage id="price" />}
             >
               {getFieldDecorator('linePrice', {
                 rules: [
@@ -840,7 +839,6 @@ class GoodsForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-
     if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {

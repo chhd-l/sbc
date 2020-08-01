@@ -25,7 +25,6 @@ export default class ImageLibraryUpload extends Component<any, any> {
       imgType,
       skuId
     } = this.props;
-
     return (
       <div>
         {images.map((v) => {
@@ -75,7 +74,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
             </div>
           );
         })}
-        {images.count() < 1 ? (
+        {images.count() < 10 ? (
           <div
             onClick={() => modalVisible(imgCount, imgType, skuId)}
             style={styles.addImg}

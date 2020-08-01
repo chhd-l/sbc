@@ -189,6 +189,7 @@ export default class ListView extends React.Component<any, any> {
                     <tr>
                       <th style={{ width: '5%' }}>
                         <Checkbox
+                          style={{ borderSpacing: 0 }}
                           checked={allChecked}
                           onChange={(e) => {
                             const checked = (e.target as any).checked;
@@ -364,7 +365,7 @@ export default class ListView extends React.Component<any, any> {
                               </span>
                             )}
                             {v.get('isAutoSub') && (
-                              <span style={styles.platform}>S</span>
+                              <span style={styles.platform}>Subscription</span>
                             )}
                             {v.get('isAutoSub') ? (
                               <span
@@ -545,35 +546,37 @@ export default class ListView extends React.Component<any, any> {
                           ) : null
                         )}
 
-                      {/*最后一张特殊处理*/
-                      //@ts-ignore
-                      v.get('tradeItems').concat(gifts).size > 4 ? (
-                        <div style={styles.imgBg}>
-                          <img
+                      {
+                        /*最后一张特殊处理*/
+                        //@ts-ignore
+                        v.get('tradeItems').concat(gifts).size > 4 ? (
+                          <div style={styles.imgBg}>
+                            <img
+                              //@ts-ignore
+                              src={
+                                v
+                                  .get('tradeItems')
+                                  .concat(gifts)
+                                  .get(3)
+                                  .get('pic')
+                                  ? v
+                                      .get('tradeItems')
+                                      .concat(gifts)
+                                      .get(3)
+                                      .get('pic')
+                                  : defaultImg
+                              }
+                              style={styles.imgFourth}
+                            />
                             //@ts-ignore
-                            src={
-                              v
-                                .get('tradeItems')
-                                .concat(gifts)
-                                .get(3)
-                                .get('pic')
-                                ? v
-                                    .get('tradeItems')
-                                    .concat(gifts)
-                                    .get(3)
-                                    .get('pic')
-                                : defaultImg
-                            }
-                            style={styles.imgFourth}
-                          />
-                          //@ts-ignore
-                          <div style={styles.imgNum}>
-                            <FormattedMessage id="total" />{' '}
-                            {v.get('tradeItems').concat(gifts).size}
-                            <FormattedMessage id="items" />
+                            <div style={styles.imgNum}>
+                              <FormattedMessage id="total" />{' '}
+                              {v.get('tradeItems').concat(gifts).size}
+                              <FormattedMessage id="items" />
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
+                        ) : null
+                      }
                     </td>
                     <td style={{ width: '14%' }}>
                       {/*客户名称*/}

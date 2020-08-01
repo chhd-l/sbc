@@ -74,7 +74,7 @@ export function getBySubscribeId(filterParams = {}) {
 }
 
 export function orderNow(filterParams = {}) {
-  return Fetch<TResult>('/sub/orderNow', {
+  return Fetch<TResult>('/sub/createOrderNow', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

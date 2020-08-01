@@ -4,6 +4,7 @@ import { Relax } from 'plume2';
 import { noop, Const, cache } from 'qmkit';
 import { List } from 'immutable';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
 
 const TreeNode = Tree.TreeNode;
@@ -168,7 +169,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="Upload Video"
+        title={<FormattedMessage id="uploadVideo"></FormattedMessage>}
         visible={uploadVisible}
         cancelText="Close"
         onCancel={this._handleCancel}
@@ -177,7 +178,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
         <Form>
           <FormItem
             {...formItemLayout}
-            label="Choose Category"
+            label={<FormattedMessage id="ChooseCategory"></FormattedMessage>}
             required={true}
             hasFeedback
           >
@@ -201,7 +202,7 @@ export default class uploadVideoModal extends React.Component<any, any> {
               {loop(cateList)}
             </TreeSelect>
           </FormItem>
-          <FormItem {...formItemLayout} label="Select Video" required={true}>
+          <FormItem {...formItemLayout} label="Select video" required={true}>
             <div>
               <Upload {...props} fileList={this.state.fileList}>
                 <Button>

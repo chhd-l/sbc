@@ -173,7 +173,7 @@ export default class SearchList extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No Data
+                    No data
                   </span>
                 </div>
               ) : null}

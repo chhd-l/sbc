@@ -12,13 +12,13 @@ export default class FreightList extends React.Component<any, any> {
 
   render() {
     const { data, isStore } = this.props;
-    return data.map(d => (
+    return data.map((d, i) => (
       <FreightItem
-        key={Math.random()}
+        key={i}
         data={
           isStore
             ? [d]
-            : d.freightTemplateGoodsExpresses.map(f => {
+            : d.freightTemplateGoodsExpresses.map((f) => {
                 f.deliverWay = d.deliverWay;
                 return f;
               })

@@ -1,12 +1,13 @@
 import { IOptions, Store, ViewAction } from 'plume2';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import LoadingActor from './actor/loading-actor';
 import ListActor from './actor/list-actor';
 import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { cache, Const, history, util } from 'qmkit';
 
+const confirm = Modal.confirm;
 export default class AppStore extends Store {
   //btn加载
   constructor(props: IOptions) {
@@ -30,7 +31,14 @@ export default class AppStore extends Store {
     this.getList(params);
   };
   deleteRow = async (params) => {
-    const res = await webapi.deleteRow(params);
+    this.dispatch('loading:start');
+    const { res } = await webapi.deleteRow(params);
+    this.dispatch('loading:end');
+    if (res.code === Const.SUCCESS_CODE) {
+      this.getList({ storeId: this.getStoreId() });
+    } else {
+      message.error(res.message);
+    }
   };
 
   editRow = async (params) => {
@@ -38,52 +46,106 @@ export default class AppStore extends Store {
   };
 
   getList = async (params) => {
-    debugger;
     this.dispatch('loading:start');
-    // const res = await webapi.getList(params)
-    const list = [
-      {
-        id: 1,
-        pcName: 'test.png',
-        mobileName: 'test.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202004291813187993.png'
-      },
-      {
-        id: 2,
-        pcName: 'ddd.mp4',
-        mobileName: 'ddd.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
-      },
-      {
-        id: 3,
-        pcName: '123.mp4',
-        mobileName: '123.mp4',
-        pcImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4',
-        mobileImage:
-          'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/201912042220517874.mp4'
-      }
-    ];
-    this.dispatch('list:setCurrentPage', 2);
-    this.dispatch('list:setTotalPages', 3);
-    this.dispatch('list:getList', fromJS(list));
-    setTimeout(() => {
+    const { res } = await webapi.getList(params);
+    if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-    }, 3000);
-    // if(res) {
-    // } else {
-    //   this.dispatch('loading:end')
-    // }
+      this.dispatch('list:getList', fromJS(res.context));
+    } else {
+      message.error(res.message);
+    }
+  };
+  getBannerById = async (params) => {
+    const { res } = await webapi.getList(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.onImageFormChange({
+        field: 'bannerId',
+        value: res.context[0].bannerId
+      });
+      this.onImageFormChange({
+        field: 'bannerName',
+        value: res.context[0].bannerName
+      });
+      this.onImageFormChange({
+        field: 'bannerNo',
+        value: res.context[0].bannerNo
+      });
+      this.onImageFormChange({
+        field: 'webUrl',
+        value: res.context[0].webUrl
+      });
+      this.onImageFormChange({
+        field: 'mobiUrl',
+        value: res.context[0].mobiUrl
+      });
+      this.onImageFormChange({
+        field: 'webSkipUrl',
+        value: res.context[0].webSkipUrl
+      });
+      this.onImageFormChange({
+        field: 'mobiSkipUrl',
+        value: res.context[0].mobiSkipUrl
+      });
+      this.onImageFormChange({
+        field: 'webUuid',
+        value: res.context[0].webUuid
+      });
+      this.onImageFormChange({
+        field: 'mobiUuid',
+        value: res.context[0].mobiUuid
+      });
+      this.onImageFormChange({
+        field: 'webImgName',
+        value: res.context[0].webImgName
+      });
+      this.onImageFormChange({
+        field: 'mobiImgName',
+        value: res.context[0].mobiImgName
+      });
+    } else {
+      message.error(res.message);
+    }
   };
 
-  // setBannerName = (bannerName) => {
-  //   debugger
-  //   this.dispatch('imageActor:setBannerName', bannerName)
-  // }
+  editBanner = async (params) => {
+    const { res } = await webapi.editRow(params);
+    if (res.code === Const.SUCCESS_CODE) {
+      this.setModalVisible(false);
+      message.error('Edit successfully.');
+    } else {
+      message.error(res.message);
+    }
+  };
+  uploadBanner = async (params) => {
+    const { res } = await webapi.uploadBanner(params);
+    const ref = this;
+    if (res.code === Const.SUCCESS_CODE) {
+      return res;
+    } else {
+      message.error(res.message);
+      return -1;
+    }
+  };
+  getStoreId = () => {
+    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    return storeId;
+  };
+
+  onImageFormChange = ({ field, value }) => {
+    this.dispatch('imageActor:field', { field, value });
+  };
+
+  resetForm = () => {
+    this.dispatch('imageActor:resetForm');
+  };
+
+  setIsEdit = (isEdit) => {
+    this.dispatch('imageActor:setIsEdit', isEdit);
+  };
+  setFileList = (list) => {
+    this.dispatch('imageActor:setFileList', list);
+  };
+  setMFileList = (list) => {
+    this.dispatch('imageActor:setMFileList', list);
+  };
 }

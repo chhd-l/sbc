@@ -31,8 +31,16 @@ export default class SettleDetailActor extends Actor {
       endTime: '',
       searchForm: {
         prescriberId: '',
-        beginTime: moment(new Date()).format('YYYY-MM-DD').toString(),
-        endTime: moment(new Date()).format('YYYY-MM-DD').toString(),
+        beginTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
+          .format('YYYY-MM-DD')
+          .toString(),
+        endTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
+          .format('YYYY-MM-DD')
+          .toString(),
         /* beginTime: '2020-05-01',
         endTime: '2020-07-01',*/
         pageNum: 0,
@@ -41,15 +49,23 @@ export default class SettleDetailActor extends Actor {
       echartsData: {},
       setName: {},
       dateRange: {
-        beginTime: moment(new Date()).format('YYYY-MM-DD').toString(),
-        endTime: moment(new Date()).format('YYYY-MM-DD').toString()
+        beginTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
+          .format('YYYY-MM-DD')
+          .toString(),
+        endTime: moment(
+          new Date(sessionStorage.getItem('defaultLocalDateTime'))
+        )
+          .format('YYYY-MM-DD')
+          .toString()
       },
       tabKey: '1',
       //导出单独的时间参数
       searchTime: {},
       fetchFindListByPrescriber: {},
       onRewardExportData: {},
-      orderNo: '',
+      id: '',
       prescriber: {}
     };
   }

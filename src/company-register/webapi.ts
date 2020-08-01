@@ -40,7 +40,11 @@ export const sendCode = (tel: string, type: Number) => {
 export const getSiteInfo = () => {
   return Fetch('/baseConfig');
 };
-
+export const getConfig = () => {
+  return Fetch('/initConfig/getConfig', {
+    method: 'POST'
+  });
+};
 export const getBusinessConfig = () => {
   return Fetch('/business/config');
 };

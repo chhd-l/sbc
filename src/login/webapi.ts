@@ -41,7 +41,13 @@ export const fetchFunctions = () => {
 export const getSiteInfo = () => {
   return Fetch('/baseConfig');
 };
-
+/**
+ * 获取平台站点信息11
+ * @type {Promise<AsyncResult<T>>}
+ */
+export const getConfig = () => {
+  return Fetch('/initConfig/getConfig');
+};
 /**
  * 获取商家端的小程序码
  */

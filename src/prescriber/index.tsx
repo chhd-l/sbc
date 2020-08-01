@@ -483,8 +483,8 @@ export default class ClinicList extends Component<any, any> {
             </Link>
           </Button>
           <Table
+            rowKey="id"
             columns={columns}
-            rowKey={(record) => record.id}
             dataSource={this.state.prescriberList}
             pagination={this.state.pagination}
             loading={this.state.loading}

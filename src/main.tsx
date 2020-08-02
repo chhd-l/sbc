@@ -47,6 +47,25 @@ export default class Main extends React.Component<any, any> {
         }
       }
     });
+    Fetch('/initConfig/getConfig').then((resIco: any) => {
+      if (resIco.res.code == Const.SUCCESS_CODE) {
+        console.log(resIco.res, 111111);
+        /*if ((resIco.res as any).defaultLocalDateTime) {
+          sessionStorage.setItem(
+            'defaultLocalDateTime',
+            (resIco.res as any).defaultLocalDateTime
+          );
+        }
+        const ico = (resIco.res.context as any).pcIco
+          ? JSON.parse((resIco.res.context as any).pcIco)
+          : null;
+        if (ico) {
+          const linkEle = document.getElementById('icoLink') as any;
+          linkEle.href = ico[0].url;
+          linkEle.type = 'image/x-icon';
+        }*/
+      }
+    });
   }
 
   handlePathMatched = (path) => {

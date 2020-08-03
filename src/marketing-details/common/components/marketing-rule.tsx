@@ -3,7 +3,7 @@ import { Row, Col } from 'antd';
 import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
-
+import { cache } from 'qmkit';
 import styled from 'styled-components';
 
 const GreyBg = styled.div`
@@ -68,7 +68,7 @@ export default class MarketingRule extends React.Component<any, any> {
                     : subType === 7
                     ? 'For the first subscription order,reduction '
                     : subType == '0' || subType == '1'
-                    ? ' yuan '
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
                     : ' items '}
                   {subType == '0' || subType == '1' ? ' reduction ' : null}
                   {subType == '2' || subType == '3' ? ' discount ' : null}
@@ -76,7 +76,7 @@ export default class MarketingRule extends React.Component<any, any> {
                     ? level.discount * 10
                     : level.reduction}{' '}
                   {subType == '0' || subType == '1' || subType == '6'
-                    ? 'yuan'
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
                     : 'discount'}
                 </Col>
               </Row>

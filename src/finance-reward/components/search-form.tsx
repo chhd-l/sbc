@@ -37,7 +37,22 @@ export default class SearchForm extends React.Component<any, any> {
       }
     };
   }
+  componentDidMount() {
+    if (sessionStorage.getItem('s2b-supplier@employee')) {
+      let employee = JSON.parse(
+        sessionStorage.getItem('s2b-supplier@employee')
+      );
+      console.log(employee, '+++++++++++++++');
 
+      if (employee.roleName.indexOf('Prescriber') !== -1) {
+        const { searchForm } = this.state;
+        console.log(searchForm, 1111111111111);
+        console.log(employee, 2222222);
+      } else {
+        //this.onSearch();
+      }
+    }
+  }
   render() {
     const {
       onFormChange,

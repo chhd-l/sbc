@@ -4,7 +4,7 @@ import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import { fromJS } from 'immutable';
 import { IList } from 'typings/globalType';
-
+import { cache } from 'qmkit';
 const { Column } = Table;
 
 import styled from 'styled-components';
@@ -86,7 +86,9 @@ export default class GiftList extends React.Component<any, any> {
                 <Col span={24}>
                   <span>Rules:</span>Full
                   {level.fullAmount ? level.fullAmount : level.fullCount}
-                  {subType == '4' ? 'Yuan' : 'Items'}{' '}
+                  {subType == '4'
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
+                    : 'Items'}{' '}
                   {level.giftType == '1'
                     ? 'An optional one'
                     : 'The default all give'}

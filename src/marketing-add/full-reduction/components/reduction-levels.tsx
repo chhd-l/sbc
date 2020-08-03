@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Input, Button, Form } from 'antd';
-import { ValidConst } from 'qmkit';
+import { ValidConst, cache } from 'qmkit';
 
 const FormItem = Form.Item;
 
@@ -174,7 +174,10 @@ export default class ReductionLevels extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span>&nbsp;yuan&nbsp;&nbsp;</span>
+                <span>
+                  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                  &nbsp;&nbsp;
+                </span>
                 {index > 0 && (
                   <a onClick={() => this.deleteLevels(index)}>Delete</a>
                 )}

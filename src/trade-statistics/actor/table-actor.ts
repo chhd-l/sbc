@@ -2,6 +2,8 @@
  * Created by feitingting on 2017/10/18.
  */
 import { Actor, Action, IMap } from 'plume2';
+import { cache } from 'qmkit';
+
 export default class TableActor extends Actor {
   defaultState() {
     return {
@@ -29,7 +31,7 @@ export default class TableActor extends Actor {
    */
   @Action('trade:table')
   table(state: IMap, context: any) {
-    context.map(v => {
+    context.map((v) => {
       //百分率后面加%
       v.orderConversionRate =
         parseFloat(v.orderConversionRate).toFixed(2) + '%';
@@ -38,15 +40,25 @@ export default class TableActor extends Actor {
       v.wholeStoreConversionRate =
         parseFloat(v.wholeStoreConversionRate).toFixed(2) + '%';
       //下单金额
-      v.orderAmt = '￥' + parseFloat(v.orderAmt).toFixed(2);
+      v.orderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(v.orderAmt).toFixed(2);
       //退单金额
-      v.returnOrderAmt = '￥' + parseFloat(v.returnOrderAmt).toFixed(2);
+      v.returnOrderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(v.returnOrderAmt).toFixed(2);
       //付款金额
-      v.payOrderAmt = '￥' + parseFloat(v.payOrderAmt).toFixed(2);
+      v.payOrderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(v.payOrderAmt).toFixed(2);
       //笔单价
-      v.everyUnitPrice = '￥' + parseFloat(v.everyUnitPrice).toFixed(2);
+      v.everyUnitPrice =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(v.everyUnitPrice).toFixed(2);
       //客单价
-      v.customerUnitPrice = '￥' + parseFloat(v.customerUnitPrice).toFixed(2);
+      v.customerUnitPrice =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(v.customerUnitPrice).toFixed(2);
     });
     return state.set('tradeTable', context);
   }

@@ -2,6 +2,8 @@
  * Created by feitingting on 2017/10/19.
  */
 import { Actor, Action } from 'plume2';
+
+import { cache } from 'qmkit';
 export default class SkuActor extends Actor {
   defaultState() {
     return {
@@ -33,15 +35,18 @@ export default class SkuActor extends Actor {
       report.orderConversion =
         parseFloat(report.orderConversion).toFixed(2) + '%';
       //下单金额
-      report.orderAmt = '￥' + parseFloat(report.orderAmt).toFixed(2);
+      report.orderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.orderAmt).toFixed(2);
       //退单金额
       report.returnOrderAmt =
-        '￥' + parseFloat(report.returnOrderAmt).toFixed(2);
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.returnOrderAmt).toFixed(2);
       //序号
       report.index =
         (state.get('skuCurrent') - 1) * state.get('skuPageSize') + i + 1;
 
-      context.goodsSkuViewList.map(view => {
+      context.goodsSkuViewList.map((view) => {
         if (report.id == view.id) {
           //商品SKU编码
           report.goodsInfoNo = view.goodsInfoNo;

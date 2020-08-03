@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, history, AuthWrapper } from 'qmkit';
+import { DataGrid, history, AuthWrapper, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'antd';
 
@@ -113,6 +113,13 @@ export default class RevenueList extends React.Component<any, any> {
               title="Total revenue"
               dataIndex="totalAmount"
               key="totalAmount"
+              render={(_text, rowData: any) => {
+                return (
+                  <span>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}
+                  </span>
+                );
+              }}
             />
             {/* <Column
               title="转账汇款"
@@ -168,7 +175,18 @@ export default class RevenueList extends React.Component<any, any> {
                 return <span>{rowData.payItemAmountMap.POINT}</span>;
               }}
             /> */}
-            <Column title="PayU" dataIndex="totalAmount" key="supplierId" />
+            <Column
+              title="PayU"
+              dataIndex="totalAmount"
+              key="supplierId"
+              render={(_text, rowData: any) => {
+                return (
+                  <span>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}
+                  </span>
+                );
+              }}
+            />
             {/*<Column
               title={<FormattedMessage id="balance" />}
               dataIndex="BALANCE"

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS } from 'immutable';
 
-import { DataGrid } from 'qmkit';
+import { DataGrid, cache } from 'qmkit';
 import { Table } from 'antd';
 
 const Column = Table.Column;
@@ -104,7 +104,9 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             dataIndex="marketPrice"
             width="10%"
             render={(data) => {
-              return `¥${data}`;
+              return `${
+                sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data
+              }`;
             }}
           />
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Relax, IMap } from 'plume2';
-
+import { cache } from 'qmkit';
 import moment from 'moment';
 
 import { Form, Table } from 'antd';
@@ -66,7 +66,12 @@ const columns = [
     title: '单价',
     key: 'marketPrice',
     dataIndex: 'marketPrice',
-    render: (text) => <span>{`￥${QMFloat.addZero(text)}`}</span>,
+    render: (text) => (
+      <span>
+        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          QMFloat.addZero(text)}
+      </span>
+    ),
     width: '20%'
   }
 ];

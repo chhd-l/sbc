@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Checkbox, Form, Table } from 'antd';
 import { Relax } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
-
+import { cache } from 'qmkit';
 import UserPrice from './user-price';
 
 const { Column } = Table;
@@ -70,10 +70,8 @@ class LevelPriceForm extends React.Component<any, any> {
         <div style={styles.bar}>
           <Form className="login-form" layout="inline">
             <div style={{ marginTop: 6, display: 'inline-block' }}>
-              <span style={{ paddingRight:10 }}>
-              SPU市场价：{marketPrice}
-              </span>
-                <Checkbox disabled checked={openUserPrice}>
+              <span style={{ paddingRight: 10 }}>SPU市场价：{marketPrice}</span>
+              <Checkbox disabled checked={openUserPrice}>
                 按客户单独定价
               </Checkbox>
             </div>
@@ -98,9 +96,10 @@ class LevelPriceForm extends React.Component<any, any> {
                 render={(rowInfo) => (
                   <div>
                     <div>
-                      ¥{(marketPrice * rowInfo.customerLevelDiscount).toFixed(
-                        2
-                      )}
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                        (marketPrice * rowInfo.customerLevelDiscount).toFixed(
+                          2
+                        )}
                     </div>
                     <div>
                       {(rowInfo.customerLevelDiscount * 100).toFixed(0) + '%'}

@@ -228,9 +228,9 @@ export function devision(a, b) {
 
 export function formateMoney(money) {
   if (money) {
-    return '￥' + money.toFixed(2);
+    return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + money.toFixed(2);
   } else {
-    return '￥' + '0.00';
+    return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
   }
 }
 
@@ -310,12 +310,12 @@ export function FORMAT_YUAN(value, asMinus = false, showPlus = false) {
       value = -value;
     }
     if (value < 0) {
-      return `-¥${Math.abs(value).toFixed(2)}`;
+      return `-${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + Math.abs(value).toFixed(2)}`;
     } else {
       if (showPlus && value != 0) {
-        return `+¥${value.toFixed(2)}`;
+        return `+${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + value.toFixed(2)}`;
       } else {
-        return `¥${value.toFixed(2)}`;
+        return `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + value.toFixed(2)}`;
       }
     }
   }
@@ -345,6 +345,7 @@ export function logout() {
   localStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.SYSTEM_BASE_CONFIG);
+  sessionStorage.removeItem(cache.SYSTEM_GET_CONFIG);
   sessionStorage.removeItem(cache.LOGIN_MENUS);
   sessionStorage.removeItem(cache.LOGIN_FUNCTIONS);
   sessionStorage.removeItem(cache.FIRST_ACTIVE);

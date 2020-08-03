@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
+import { cache } from 'qmkit';
 
 import { Icon } from 'antd';
 
@@ -75,7 +76,8 @@ export default class MobileShowBox extends Component<any, any> {
             <div style={styles.couponBox}>
               <div style={{ flex: 1, textAlign: 'center', maxWidth: 98 }}>
                 <p>
-                  ￥<span style={{ fontSize: 24 }}>{denomination || 0}</span>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  <span style={{ fontSize: 24 }}>{denomination || 0}</span>
                 </p>
                 <p>{this.fullBuyTypeBox(fullBuyType, fullBuyPrice)}</p>
               </div>

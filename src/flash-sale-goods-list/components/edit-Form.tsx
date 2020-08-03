@@ -62,7 +62,7 @@ export default class EditForm extends React.Component<any, any> {
           {formData.get('goodsInfo').get('storeName')}
         </FormItem>
         <FormItem {...formItemLayout} label="市场价格">
-          {'￥' +
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
             (formData.get('goodsInfo').get('marketPrice') == null
               ? 0
               : formData.get('goodsInfo').get('marketPrice'))}

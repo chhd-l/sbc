@@ -38,7 +38,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           批量导出
         </Button>
         <h2 style={styles.total}>
-          收款合计: {'￥'}
+          收款合计: {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
           {sumPrice
             ? sumPrice.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
             : (0.0).toFixed(2)}

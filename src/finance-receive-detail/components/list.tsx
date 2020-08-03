@@ -1,10 +1,9 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Const, DataGrid, noop } from 'qmkit';
+import { Const, DataGrid, noop, cache } from 'qmkit';
 import { List } from 'immutable';
 import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
-
 type TList = List<any>;
 import { Table } from 'antd';
 
@@ -98,9 +97,7 @@ export default class PayOrderList extends React.Component<any, any> {
           render={(receiveTime) => (
             <span>
               {receiveTime
-                ? momnet(receiveTime)
-                    .format(Const.TIME_FORMAT)
-                    .toString()
+                ? momnet(receiveTime).format(Const.TIME_FORMAT).toString()
                 : '-'}
             </span>
           )}
@@ -114,9 +111,9 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="payOrderPrice"
           render={(payOrderPrice) => (
             <span>
-              {`￥${
-                payOrderPrice ? payOrderPrice.toFixed(2) : (0.0).toFixed(2)
-              }`}
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + payOrderPrice
+                ? payOrderPrice.toFixed(2)
+                : (0.0).toFixed(2)}
             </span>
           )}
         />

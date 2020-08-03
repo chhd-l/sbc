@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Const, DataGrid, noop, AuthWrapper, checkAuth } from 'qmkit';
+import { Const, DataGrid, noop, AuthWrapper, checkAuth, cache } from 'qmkit';
 import { List } from 'immutable';
 import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
 import momnet from 'moment';
@@ -123,7 +123,10 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           dataIndex="orderPrice"
           render={(orderPrice) => (
             <span>
-              {orderPrice != null ? `￥${orderPrice.toFixed(2)}` : '-'}
+              {orderPrice != null
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  orderPrice.toFixed(2)
+                : '-'}
             </span>
           )}
         />

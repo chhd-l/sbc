@@ -137,7 +137,10 @@ export default class ReductionLevels extends React.Component<any, any> {
                       )}
                     </FormItem>
                     <span>
-                      &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                      &nbsp;
+                      {!isFullCount
+                        ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
+                        : 'items'}
                       ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
                     </span>
                   </div>

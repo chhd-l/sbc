@@ -82,7 +82,7 @@ export default class OrderInvoiceViewForm extends React.Component<any, any> {
           label={<FormattedMessage id="orderAmount" />}
         >
           <label>
-            {'￥'}
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
             {invoiceView.get('orderPrice') &&
               invoiceView.get('orderPrice').toFixed(2)}
           </label>

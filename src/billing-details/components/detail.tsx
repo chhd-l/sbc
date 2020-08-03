@@ -5,7 +5,7 @@ import { Relax } from 'plume2';
 import { IMap } from 'typings/globalType';
 import moment from 'moment';
 
-import { Const, util } from 'qmkit';
+import { Const, util, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 @Relax
@@ -50,7 +50,7 @@ export default class BillingDetails extends React.Component<any, any> {
               <p style={styles.num}>
                 {settlement.get('splitPayPrice')
                   ? util.FORMAT_YUAN(settlement.get('splitPayPrice'))
-                  : '¥0.00'}
+                  : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00'}
               </p>
             </Col>
             {/* <Col span={3}>

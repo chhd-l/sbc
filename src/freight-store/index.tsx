@@ -33,11 +33,6 @@ export default class StoreFreight extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
-    this.state = {
-      cityArr: [],
-      countryArr: [],
-      treeData: []
-    };
   }
   componentDidMount() {}
 

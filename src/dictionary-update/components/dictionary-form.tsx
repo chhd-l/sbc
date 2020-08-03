@@ -17,7 +17,7 @@ import * as webapi from './../webapi';
 import { history } from 'qmkit';
 
 const FormItem = Form.Item;
-
+const Option = Select.Option;
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 }
@@ -34,8 +34,11 @@ class DictionaryForm extends Component<any, any> {
         description: '',
         valueEn: '',
         enabled: 0,
-        priority: 0
-      }
+        priority: 0,
+        parentId: ''
+      },
+      countryArr: [],
+      isCity: false
     };
     this.getDetail = this.getDetail.bind(this);
 
@@ -49,6 +52,7 @@ class DictionaryForm extends Component<any, any> {
         priority: 0
       });
     }
+    this.querySysDictionary('country');
   }
   getDetail = async (id) => {
     const { res } = await webapi.getDictionaryDetails({
@@ -63,10 +67,16 @@ class DictionaryForm extends Component<any, any> {
         description: response.description,
         valueEn: response.valueEn,
         priority: response.priority,
-        enabled: response.priority
+        enabled: response.priority,
+        parentId: response.parentId
       };
+      let isCity = false;
+      if (dictionaryForm.type.toLowerCase() === 'city') {
+        isCity = true;
+      }
       this.setState({
-        dictionaryForm: dictionaryForm
+        dictionaryForm: dictionaryForm,
+        isCity: isCity
       });
       this.props.form.setFieldsValue({
         id: response.id,
@@ -75,7 +85,8 @@ class DictionaryForm extends Component<any, any> {
         description: response.description,
         valueEn: response.valueEn,
         priority: response.priority,
-        enabled: response.enabled === 0 ? true : false
+        enabled: response.enabled === 0 ? true : false,
+        parentId: response.parentId
       });
     } else {
       message.error(res.message || 'get data faild');
@@ -95,13 +106,22 @@ class DictionaryForm extends Component<any, any> {
     });
   };
   onFormChange = ({ field, value }) => {
+    let { isCity } = this.state;
     let data = this.state.dictionaryForm;
     if (field === 'enabled') {
       value = value ? 0 : 1;
     }
+    if (field === 'type') {
+      if (value.toLowerCase() === 'city') {
+        isCity = true;
+      } else {
+        isCity = false;
+      }
+    }
     data[field] = value;
     this.setState({
-      dictionaryForm: data
+      dictionaryForm: data,
+      isCity: isCity
     });
   };
   onCreate = async () => {
@@ -129,6 +149,27 @@ class DictionaryForm extends Component<any, any> {
       message.error(res.message || 'update faild');
     }
   };
+
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({
+        type: type
+      })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          this.setState({
+            countryArr: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error(res.message || 'Unsuccessful');
+        }
+      })
+      .catch((err) => {
+        message.error(err.message || 'Unsuccessful');
+      });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -187,6 +228,33 @@ class DictionaryForm extends Component<any, any> {
             />
           )}
         </FormItem>
+        {this.state.isCity ? (
+          <FormItem label="Country">
+            {getFieldDecorator(
+              'parentId',
+              {}
+            )(
+              <Select
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'parentId',
+                    value
+                  });
+                }}
+              >
+                {this.state.countryArr
+                  ? this.state.countryArr.map((item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))
+                  : null}
+              </Select>
+            )}
+          </FormItem>
+        ) : null}
+
         <FormItem label="Description">
           {getFieldDecorator(
             'description',

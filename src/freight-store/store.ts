@@ -162,13 +162,20 @@ export default class AppStore extends Store {
         let childrenNode = {
           title: children[i].name,
           value: children[i].id,
-          key: children[i].id
+          key: children[i].id,
+          parentId: children[i].parentId
         };
         childrenNodes.push(childrenNode);
       }
     }
     if (parentNodes.length > 0) {
-      parentNodes[0].children = childrenNodes;
+      for (let i = 0; i < parentNodes.length; i++) {
+        let nodes = childrenNodes.filter(
+          (item) => item.parentId === parentNodes[i].value
+        );
+
+        parentNodes[i].children = nodes;
+      }
     }
     return parentNodes;
   };

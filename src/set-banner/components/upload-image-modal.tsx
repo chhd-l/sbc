@@ -54,10 +54,10 @@ export default class UploadImageModal extends Component<any, any> {
     super(props);
   }
   state = {
-    // fileList: [], //pc fileList
+    fileList: [], //pc fileList
     mFileList: [], //mobile fileList
-    webUrl: '',
-    mobiUrl: '',
+    pcUrl: '',
+    mobileUrl: '',
     companyInfoId: 0,
     storeId: 0,
     okDisabled: false,
@@ -71,6 +71,8 @@ export default class UploadImageModal extends Component<any, any> {
       bannerNoList: TList;
       form: Object;
       imageForm: any;
+      fileList: TList;
+      mFileList: TList;
       setModalVisible: Function;
       onFormChange: Function;
       getList: Function;
@@ -79,6 +81,8 @@ export default class UploadImageModal extends Component<any, any> {
       uploadBanner: Function;
       editBanner: Function;
       resetForm: Function;
+      setFileList: Function;
+      setMFileList: Function;
     };
   };
 
@@ -89,6 +93,8 @@ export default class UploadImageModal extends Component<any, any> {
     viewAction: 'viewAction',
     imageForm: 'imageForm',
     bannerNoList: 'bannerNoList',
+    fileList: 'fileList',
+    mFileList: 'mFileList',
     setModalVisible: noop,
     onFormChange: noop,
     getList: noop,
@@ -96,8 +102,45 @@ export default class UploadImageModal extends Component<any, any> {
     onImageFormChange: noop,
     uploadBanner: noop,
     editBanner: noop,
-    resetForm: noop
+    resetForm: noop,
+    setFileList: noop,
+    setMFileList: noop
   };
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    if (nextProps.isEdit) {
+      const { imageForm, setFileList, setMFileList } = this.props.relaxProps;
+      const webSkipUrl = imageForm.toJS().webSkipUrl;
+      const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
+      const webUuid = imageForm.toJS().webUuid;
+      const mobiUuid = imageForm.toJS().mobiUuid;
+      const webImgName = imageForm.toJS().webImgName;
+      const mobiImgName = imageForm.toJS().mobiImgName;
+      const fileList = [
+        {
+          name: webImgName,
+          percent: 100,
+          response: [webSkipUrl],
+          // size: 27330,
+          status: 'done',
+          type: 'image/jpg',
+          uid: webUuid
+        }
+      ];
+      setFileList(fileList);
+      const mFileList = [
+        {
+          name: mobiImgName,
+          percent: 100,
+          response: [mobiSkipUrl],
+          // size: 27330,
+          status: 'done',
+          type: 'image/jpg',
+          uid: mobiUuid
+        }
+      ];
+      setMFileList(mFileList);
+    }
+  }
 
   componentDidMount() {
     const { storeId, companyInfoId } = JSON.parse(
@@ -110,35 +153,32 @@ export default class UploadImageModal extends Component<any, any> {
   }
 
   _handleSubmit = () => {
-    const { tableDatas, imageForm, editBanner } = this.props.relaxProps;
+    const {
+      tableDatas,
+      imageForm,
+      fileList,
+      mFileList,
+      editBanner
+    } = this.props.relaxProps;
     this.setState({
       okDisabled: true
     });
-    if (!imageForm.toJS().bannerId && tableDatas.size >= 5) {
+    if (tableDatas.size >= 5) {
       message.error('You can only add up to 5 banner.');
+      // this._handleModelCancel();
       return;
     }
     this.props.form.validateFields((err) => {
       if (!err) {
-        debugger;
-        if (
-          !imageForm.toJS().fileList ||
-          (imageForm.toJS().fileList &&
-            imageForm.toJS().fileList.filter((file) => file.status === 'done')
-              .length <= 0)
-        ) {
+        if (fileList.filter((file) => file.status === 'done').length <= 0) {
           message.error('Please choose to upload pc resource!');
           return;
         }
-        if (
-          !imageForm.toJS().mFileList ||
-          (imageForm.toJS().mFileList &&
-            imageForm.toJS().mFileList.filter((file) => file.status === 'done')
-              .length <= 0)
-        ) {
+        if (mFileList.filter((file) => file.status === 'done').length <= 0) {
           message.error('Please choose to upload mobile resource!');
           return;
         }
+        debugger;
         if (imageForm.toJS().bannerId) {
           // edit
           const params = {
@@ -166,8 +206,8 @@ export default class UploadImageModal extends Component<any, any> {
             bannerId: null,
             bannerName: imageForm.toJS().bannerName,
             bannerNo: imageForm.toJS().bannerNo,
-            mobiUrl: this.state.mobiUrl,
-            webUrl: this.state.webUrl,
+            mobiUrl: this.state.mobileUrl,
+            webUrl: this.state.pcUrl,
             storeId: this.state.storeId,
             userId: null,
             webSkipUrl: imageForm.toJS().webSkipUrl,
@@ -193,7 +233,7 @@ export default class UploadImageModal extends Component<any, any> {
     if (res != -1) {
       confirm({
         title: 'Tip',
-        content: 'Whether to continue to add banner ?',
+        content: '是否继续添加banner',
         onOk() {
           ref.resetImageForm();
           getList({ storeId: getStoreId() });
@@ -208,13 +248,13 @@ export default class UploadImageModal extends Component<any, any> {
     }
   };
   resetImageForm() {
+    // this.props.form.resetFields();
     const { resetForm } = this.props.relaxProps;
     resetForm();
-    this.props.form.resetFields();
-    // this.setState({
-    //   fileList: [],
-    //   mFileList: []
-    // });
+    this._setFileList([]);
+    this._setMFileList([]);
+    // this.state.fileList = [];
+    // this.state.mFileList = [];
   }
   _handleModelCancel = () => {
     const { setModalVisible } = this.props.relaxProps;
@@ -222,25 +262,22 @@ export default class UploadImageModal extends Component<any, any> {
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
-    const { onImageFormChange } = this.props.relaxProps;
-    onImageFormChange({
-      field: 'fileList',
-      value: fileList
-    });
+    const { setFileList } = this.props.relaxProps;
+    setFileList(fileList);
+    // this.setState({ fileList });
   };
   _setMFileList = (mFileList) => {
+    const { setMFileList } = this.props.relaxProps;
+    setMFileList(mFileList);
     // this.setState({ mFileList });
-    const { onImageFormChange } = this.props.relaxProps;
-    onImageFormChange({
-      field: 'mFileList',
-      value: mFileList
-    });
   };
 
   render() {
     const {
       modalVisible,
       tableDatas,
+      fileList,
+      mFileList,
       imageForm,
       bannerNoList,
       onImageFormChange
@@ -251,11 +288,8 @@ export default class UploadImageModal extends Component<any, any> {
     }
     const ref = this;
     const { getFieldDecorator } = this.props.form;
-    // const list = this.state.fileList;
-    const fileList = imageForm.toJS().fileList ? imageForm.toJS().fileList : [];
-    const mFileList = imageForm.toJS().mFileList
-      ? imageForm.toJS().mFileList
-      : [];
+    const list = fileList;
+    const mList = mFileList;
     const setFileList = this._setFileList;
     const setMFileList = this._setMFileList;
     const storeId = this.state.storeId;
@@ -265,6 +299,7 @@ export default class UploadImageModal extends Component<any, any> {
     const webSkipUrl = imageForm.toJS().webSkipUrl;
     const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
     const companyInfoId = this.state.companyInfoId;
+
     const props = {
       name: 'uploadFile',
       headers: {
@@ -281,7 +316,7 @@ export default class UploadImageModal extends Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
-        if (!bannerId && tableDatas.size >= 5) {
+        if (tableDatas.size >= 5) {
           message.error('You can only add up to 5 banner.');
           return false;
         }
@@ -305,7 +340,7 @@ export default class UploadImageModal extends Component<any, any> {
           return false;
         }
 
-        if (fileList.length >= 1) {
+        if (list.length >= 1) {
           message.error('Only can upload one resource.');
           return false;
         }
@@ -331,6 +366,7 @@ export default class UploadImageModal extends Component<any, any> {
       onChange(info) {
         const status = info.file.status;
         let fileList = info.fileList;
+        debugger;
         if (status === 'done') {
           if (
             info.file.response &&
@@ -339,10 +375,13 @@ export default class UploadImageModal extends Component<any, any> {
           ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
-            ref.setState({
-              webUrl: info.file.response[0]
+            // ref.setState({
+            //   pcUrl: info.file.response[0]
+            // });
+            onImageFormChange({
+              field: 'webUrl',
+              value: info.file.response[0]
             });
-
             onImageFormChange({
               field: 'webUuid',
               value: info.file.uid
@@ -351,7 +390,6 @@ export default class UploadImageModal extends Component<any, any> {
               field: 'webImgName',
               value: info.file.name
             });
-            // message.success(`${info.file.name} uploaded successfully!`);
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -363,7 +401,6 @@ export default class UploadImageModal extends Component<any, any> {
             (f.status == 'done' && !f.response) ||
             (f.status == 'done' && f.response && !f.response.code)
         );
-        console.log(fileList, 'ddddddddddddddddddddddd');
         setFileList(fileList);
       }
     };
@@ -388,7 +425,7 @@ export default class UploadImageModal extends Component<any, any> {
         // }
         let fileName = file.name.toLowerCase();
 
-        if (!bannerId && tableDatas.size >= 5) {
+        if (tableDatas.size >= 5) {
           message.error('You can only add up to 5 banner.');
           return false;
         }
@@ -411,7 +448,7 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('File name is too long');
           return false;
         }
-        if (mFileList.length >= 1) {
+        if (mList.length >= 1) {
           message.error('Only can upload one resource.');
           return false;
         }
@@ -445,8 +482,12 @@ export default class UploadImageModal extends Component<any, any> {
           ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
-            ref.setState({
-              mobiUrl: info.file.response[0]
+            // ref.setState({
+            //   mobileUrl: info.file.response[0]
+            // });
+            onImageFormChange({
+              field: 'mobiUrl',
+              value: info.file.response[0]
             });
             onImageFormChange({
               field: 'mobiUuid',
@@ -527,8 +568,8 @@ export default class UploadImageModal extends Component<any, any> {
               </FormItem>
               <FormItem {...formItemLayout} label="Pc href">
                 {getFieldDecorator('webSkipUrl', {
-                  initialValue: webSkipUrl
-                  // rules: [{ required: true, message: 'Please enter pc href.' }]
+                  initialValue: webSkipUrl,
+                  rules: [{ required: true, message: 'Please enter pc href.' }]
                 })(
                   <Input
                     placeholder="Example: https://www.baidu.com/"
@@ -543,10 +584,10 @@ export default class UploadImageModal extends Component<any, any> {
               </FormItem>
               <FormItem {...formItemLayout} label="Mobile href">
                 {getFieldDecorator('mobiSkipUrl', {
-                  initialValue: mobiSkipUrl
-                  // rules: [
-                  //   { required: true, message: 'Please enter mobile href.' }
-                  // ]
+                  initialValue: mobiSkipUrl,
+                  rules: [
+                    { required: true, message: 'Please enter mobile href.' }
+                  ]
                 })(
                   <Input
                     placeholder="Example: https://www.baidu.com/"
@@ -559,7 +600,6 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-
               <FormItem
                 {...formItemLayout}
                 label={
@@ -570,24 +610,24 @@ export default class UploadImageModal extends Component<any, any> {
                 }
                 required={true}
               >
-                {getFieldDecorator('fileList', {
-                  initialValue: fileList
-                })(
-                  <div style={{ marginTop: 16 }}>
-                    <Dragger {...props} fileList={fileList}>
-                      <p className="ant-upload-drag-icon">
-                        <Icon type="inbox" />
-                      </p>
-                      <p className="ant-upload-text">
-                        <FormattedMessage id="dragImagesOrVideos" />
-                      </p>
-                      <p className="ant-upload-hint">
-                        <FormattedMessage id="supportUpload" />
-                      </p>
-                    </Dragger>
-                  </div>
-                )}
+                <div style={{ marginTop: 16 }}>
+                  <Dragger {...props} fileList={fileList}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox" />
+                    </p>
+                    <p className="ant-upload-text">
+                      <FormattedMessage id="dragImagesOrVideos" />
+                    </p>
+                    <p className="ant-upload-hint">
+                      <FormattedMessage id="supportUpload" />
+                    </p>
+                  </Dragger>
+                </div>
               </FormItem>
+            </Form>
+          </div>
+          <div>
+            <Form>
               <FormItem
                 {...formItemLayout}
                 label={
@@ -598,23 +638,19 @@ export default class UploadImageModal extends Component<any, any> {
                 }
                 required={true}
               >
-                {getFieldDecorator('mFileList', {
-                  initialValue: mFileList
-                })(
-                  <div style={{ marginTop: 16 }}>
-                    <Dragger {...mProps} fileList={mFileList}>
-                      <p className="ant-upload-drag-icon">
-                        <Icon type="inbox" />
-                      </p>
-                      <p className="ant-upload-text">
-                        <FormattedMessage id="dragImagesOrVideos" />
-                      </p>
-                      <p className="ant-upload-hint">
-                        <FormattedMessage id="supportUpload" />
-                      </p>
-                    </Dragger>
-                  </div>
-                )}
+                <div style={{ marginTop: 16 }}>
+                  <Dragger {...mProps} fileList={mFileList}>
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="inbox" />
+                    </p>
+                    <p className="ant-upload-text">
+                      <FormattedMessage id="dragImagesOrVideos" />
+                    </p>
+                    <p className="ant-upload-hint">
+                      <FormattedMessage id="supportUpload" />
+                    </p>
+                  </Dragger>
+                </div>
               </FormItem>
             </Form>
           </div>

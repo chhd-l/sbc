@@ -21,7 +21,8 @@ export default class FormActor extends Actor {
 
         marketingStatus: '0',
         //未删除
-        delFlag: 0
+        delFlag: 0,
+        defaultLocalDateTime: ''
       }
     };
   }
@@ -29,5 +30,10 @@ export default class FormActor extends Actor {
   @Action('form:field')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['form', field], value);
+  }
+
+  @Action('form:defaultLocalDateTime')
+  defaultLocalDateTime(state: IMap, time) {
+    return state.set('defaultLocalDateTime', time);
   }
 }

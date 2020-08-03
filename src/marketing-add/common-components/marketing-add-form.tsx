@@ -23,6 +23,8 @@ import SelectedGoodsGrid from './selected-goods-grid';
 
 import * as webapi from '../webapi';
 import * as Enum from './marketing-enum';
+import { doc } from 'prettier';
+// import debug = doc.debug;
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -213,7 +215,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 });
               }
               this.onBeanChange({
-                publicStatus: e.target.checked ? '0' : '1'
+                publicStatus: e.target.checked ? '1' : '0'
               });
             }}
           >
@@ -486,7 +488,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.setState({ customerLevel: levelList });
 
     let { marketingBean } = this.state;
-    debugger;
+    this.setState({
+      promotionCode2: marketingBean.get('promotionCode')
+        ? marketingBean.get('promotionCode')
+        : this.getPromotionCode()
+    });
     const subType = marketingBean.get('subType');
     if (subType != undefined && subType != null) {
       this.setState(
@@ -732,7 +738,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         });
       }
       //校验多级促销条件是否相同
-      debugger;
       ruleArray
         .groupBy((item) => +(item as any).get('value'))
         .filter((value) => value.size > 1)
@@ -984,6 +989,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   openGoodsModal = () => {
     const { selectedRows, selectedSkuIds } = this.state;
+    debugger;
     this.setState({
       goodsModal: {
         _modalVisible: true,

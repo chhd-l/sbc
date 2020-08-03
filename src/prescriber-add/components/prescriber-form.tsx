@@ -83,7 +83,6 @@ class ClinicForm extends React.Component<any, any> {
 
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
-      this.getClinicsReward(this.props.prescriberId);
     }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
@@ -216,7 +215,7 @@ class ClinicForm extends React.Component<any, any> {
         prescriberForm: res.context
       });
       this.props.form.setFieldsValue({
-        id: res.context.id,
+        // id: res.context.id,
         prescriberId: res.context.prescriberId,
         prescriberName: res.context.prescriberName,
         phone: res.context.phone,
@@ -227,6 +226,7 @@ class ClinicForm extends React.Component<any, any> {
         location: res.context.location,
         prescriberType: res.context.prescriberType
       });
+      this.getClinicsReward(res.context.prescriberId);
     } else {
       message.error(res.message || 'Unsuccessful');
     }
@@ -790,7 +790,7 @@ class ClinicForm extends React.Component<any, any> {
               <Table
                 style={{ paddingTop: '10px' }}
                 pagination={false}
-                rowKey="intervalPriceId"
+                rowKey="id"
                 dataSource={this.state.sectionList}
               >
                 <Column

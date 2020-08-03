@@ -2,3 +2,9 @@
   width: 17px !important;
   margin: 0 !important;
 }
+
+.rule-span {
+  text-align: left !important;
+  width: 400px !important;
+  display: inline-block;
+}

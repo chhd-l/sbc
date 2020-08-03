@@ -3,7 +3,10 @@ import { Relax, IMap } from 'plume2';
 import { Form, Select, Input, Button, DatePicker } from 'antd';
 import { SelectGroup, noop, Const, util } from 'qmkit';
 import { List } from 'immutable';
-
+// import locale from 'antd/es/date-picker/locale/lv_LV';
+import moment from 'moment';
+import 'moment/locale/en-au';
+moment.locale('en-au');
 type TList = List<IMap>;
 
 const FormItem = Form.Item;
@@ -15,6 +18,7 @@ export default class SearchForm extends React.Component<any, any> {
     form?: any;
     relaxProps?: {
       customerLevels: TList;
+      defaultLocalDateTime: any;
       onFormChange: Function;
       onSearch: Function;
     };
@@ -28,22 +32,27 @@ export default class SearchForm extends React.Component<any, any> {
 
   static relaxProps = {
     customerLevels: ['customerLevels'],
+    defaultLocalDateTime: 'defaultLocalDateTime',
     onFormChange: noop,
     onSearch: noop
   };
 
   render() {
-    const { onFormChange, onSearch, customerLevels } = this.props.relaxProps;
+    const {
+      onFormChange,
+      onSearch,
+      customerLevels,
+      defaultLocalDateTime
+    } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
+    debugger;
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-
             label="Promotion type"
             style={{ width: 170 }}
-
             defaultValue="All"
             onChange={(value) => {
               value = value === '' ? null : value;
@@ -99,6 +108,7 @@ export default class SearchForm extends React.Component<any, any> {
           <DatePicker
             allowClear={true}
             disabledDate={this.disabledStartDate}
+            // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={startValue}
@@ -111,6 +121,7 @@ export default class SearchForm extends React.Component<any, any> {
           <DatePicker
             allowClear={true}
             disabledDate={this.disabledEndDate}
+            // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
             showTime={{ format: 'HH:mm' }}
             format={Const.DATE_FORMAT}
             value={endValue}

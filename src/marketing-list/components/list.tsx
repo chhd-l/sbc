@@ -54,6 +54,7 @@ export default class MarketingList extends React.Component<any, any> {
       onPause: Function;
       customerLevels: TList;
       onStart: Function;
+      close: Function;
     };
   };
 
@@ -68,7 +69,8 @@ export default class MarketingList extends React.Component<any, any> {
     form: 'form',
     onPause: noop,
     customerLevels: ['customerLevels'],
-    onStart: noop
+    onStart: noop,
+    close: noop
   };
 
   render() {
@@ -82,6 +84,7 @@ export default class MarketingList extends React.Component<any, any> {
       onDelete,
       customerLevels,
       onPause,
+      close,
       onStart
     } = this.props.relaxProps;
     return (
@@ -276,6 +279,15 @@ export default class MarketingList extends React.Component<any, any> {
                       onClick={() => onPause(rowInfo['marketingId'])}
                     >
                       Stop
+                    </a>
+                  )}
+                  {rowInfo['marketingStatus'] == 1 && (
+                    <a
+                      href="javascript:void(0);"
+                      style={{ marginRight: 5 }}
+                      onClick={() => close(rowInfo['marketingId'])}
+                    >
+                      Close
                     </a>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (

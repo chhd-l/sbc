@@ -56,7 +56,8 @@ export default class SubscriptionList extends Component<any, any> {
         total: 0
       },
       isPrescriber: false,
-      prescriberList: []
+      prescriberList: [],
+      prescriberIds: []
     };
   }
 
@@ -70,13 +71,20 @@ export default class SubscriptionList extends Component<any, any> {
         const { searchForm } = this.state;
         let prescriberList = employee.prescribers;
         let isPrescriber = true;
+        let prescriberIds = [];
+        for (let i = 0; i < prescriberList.length; i++) {
+          if (prescriberList[i].id) {
+            prescriberIds.push(prescriberList[i].id);
+          }
+        }
         searchForm.prescriberOption = 'Prescriber ID';
-        searchForm.prescriber = prescriberList[0].id;
+        searchForm.prescriber = 'all';
         this.setState(
           {
             searchForm: searchForm,
             prescriberList: prescriberList,
-            isPrescriber: isPrescriber
+            isPrescriber: isPrescriber,
+            prescriberIds: prescriberIds
           },
           () => {
             this.onSearch();
@@ -210,7 +218,12 @@ export default class SubscriptionList extends Component<any, any> {
     );
   };
   getSubscriptionList = (param = {}) => {
+    if (this.state.isPrescriber && param.prescriberId === 'all') {
+      param.prescriberId = '';
+      param.prescriberIds = this.state.prescriberIds;
+    }
     let params = Object.assign({ pageSize: 10, pageNum: 0 }, param);
+
     this.setState({
       loading: true
     });
@@ -439,6 +452,7 @@ export default class SubscriptionList extends Component<any, any> {
                         });
                       }}
                     >
+                      <Option value="all">All</Option>
                       {prescriberList &&
                         prescriberList.map((item, index) => (
                           <Option value={item.id} key={index}>

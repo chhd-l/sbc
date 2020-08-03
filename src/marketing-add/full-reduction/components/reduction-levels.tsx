@@ -93,7 +93,9 @@ export default class ReductionLevels extends React.Component<any, any> {
                 {this.state.isNormal ? (
                   <div>
                     <span>Full&nbsp;</span>
-                    <FormItem style={{ display: 'inline-block' }}>
+                    <FormItem
+                      style={{ display: 'inline-block', width: '250px' }}
+                    >
                       {getFieldDecorator(`level_rule_value_${index}`, {
                         rules: [
                           { required: true, message: 'Must enter rules' },
@@ -135,17 +137,12 @@ export default class ReductionLevels extends React.Component<any, any> {
                           }}
                         />
                       )}
+                      <span>&nbsp;{!isFullCount ? 'yuan' : 'items'}，</span>
                     </FormItem>
-                    <span>
-                      &nbsp;
-                      {!isFullCount
-                        ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
-                        : 'items'}
-                      ，&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;
-                    </span>
                   </div>
                 ) : null}
                 <FormItem>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
                   {getFieldDecorator(`level_rule_reduction_${index}`, {
                     rules: [
                       { required: true, message: 'Amount must be entered' },
@@ -173,11 +170,12 @@ export default class ReductionLevels extends React.Component<any, any> {
                       }}
                     />
                   )}
+                  <span>
+                    &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                    &nbsp;&nbsp;
+                  </span>
                 </FormItem>
-                <span>
-                  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
-                  &nbsp;&nbsp;
-                </span>
+
                 {index > 0 && (
                   <a onClick={() => this.deleteLevels(index)}>Delete</a>
                 )}

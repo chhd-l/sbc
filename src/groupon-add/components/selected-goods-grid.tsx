@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { InputNumber, Input, Form } from 'antd';
 
-import { DataGrid, ValidConst } from 'qmkit';
+import { DataGrid, ValidConst, cache } from 'qmkit';
 
 import { Table } from 'antd';
 
@@ -88,7 +88,9 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             dataIndex="marketPrice"
             width="10%"
             render={(data) => {
-              return `¥${data}`;
+              return `${
+                sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data
+              }`;
             }}
           />
 

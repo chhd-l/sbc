@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Const, DataGrid, noop } from 'qmkit';
+import { Const, DataGrid, noop, cache } from 'qmkit';
 import { List } from 'immutable';
 import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
 import momnet from 'moment';
@@ -101,9 +101,7 @@ export default class RefundList extends React.Component<any, any> {
           dataIndex="refundBillTime"
           render={(refundBillTime) => (
             <span>
-              {momnet(refundBillTime)
-                .format(Const.TIME_FORMAT)
-                .toString()}
+              {momnet(refundBillTime).format(Const.TIME_FORMAT).toString()}
             </span>
           )}
         />
@@ -119,7 +117,12 @@ export default class RefundList extends React.Component<any, any> {
           key="returnPrice"
           dataIndex="returnPrice"
           render={(returnPrice) => (
-            <span>{returnPrice ? `￥${returnPrice.toFixed(2)}` : '-'}</span>
+            <span>
+              {returnPrice
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  returnPrice.toFixed(2)
+                : '-'}
+            </span>
           )}
         />
         <Column
@@ -128,7 +131,10 @@ export default class RefundList extends React.Component<any, any> {
           dataIndex="actualReturnPrice"
           render={(actualReturnPrice) => (
             <span>
-              {actualReturnPrice ? `￥${actualReturnPrice.toFixed(2)}` : '-'}
+              {actualReturnPrice
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  actualReturnPrice.toFixed(2)
+                : '-'}
             </span>
           )}
         />

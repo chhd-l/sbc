@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, noop, history, AuthWrapper, Const, checkAuth } from 'qmkit';
+import {
+  DataGrid,
+  noop,
+  history,
+  AuthWrapper,
+  Const,
+  cache,
+  checkAuth
+} from 'qmkit';
 import { List, fromJS } from 'immutable';
 import { Menu, Dropdown, Icon, Modal, Tooltip } from 'antd';
 import { withRouter } from 'react-router';
@@ -169,6 +177,7 @@ export default class CateList extends React.Component<any, any> {
             return (
               <div>
                 <p style={styles.lineThrough}>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {marketPrice == null ? 0.0 : marketPrice.toFixed(2)}
                 </p>
                 <p style={{ color: '#999' }}>{Const.priceType[priceType]}</p>

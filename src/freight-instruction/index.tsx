@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { cache } from 'qmkit';
 const Containerp = styled.div`
   overflow: auto;
   padding: 20px;
@@ -64,21 +65,29 @@ export default class FreightInstruction extends React.Component<any, any> {
         </p>
         <p className="ml28">
           A10 pieces of goods (weight 0.5KG, volume 0.6m³) associated freight
-          template 1 (by weight, default region) : first weight 0.5KG, 10 yuan,
-          continued weight 1Kg, 5 yuan (less than 1kg, calculated by 1kg)
+          template 1 (by weight, default region) : first weight 0.5KG, 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, continued
+          weight 1Kg, 5 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}{' '}
+          (less than 1kg, calculated by 1kg)
           <br />
           Commodity B10 pieces (weight 0.5KG, volume 0.6m³) associated freight
           template 2 (by volume, default area) : first volume 0.5m³, 12 yuan,
-          continued volume 0.5m³, 6 yuan (less than 0.5m³, calculated by 0.5m³)
+          continued volume 0.5m³, 6{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)} (less than
+          0.5m³, calculated by 0.5m³)
           <br />
           Commodity C10 pieces (weight 0.5KG, volume 0.6m³) associated freight
           template 3 (by number of pieces, default region) : 1 for the first
-          piece, 5 yuan, 1 for the continuation, 4 yuan
+          piece, 5 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, 1 for
+          the continuation, 4{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
           <br />
           Product D10 pieces (weight 0.5KG, volume 0.6m³) associated freight
           template 4 (by number of pieces, default region) : 1 for the first
-          item, 4 yuan, 1 for the continuation, 4 yuan, Jiangsu, Zhejiang and
-          Shanghai area, purchase of 1 free shipping
+          item, 4 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, 1 for
+          the continuation, 4{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, Jiangsu,
+          Zhejiang and Shanghai area, purchase of 1 free shipping
         </p>
 
         <p>The calculation process is：</p>
@@ -103,9 +112,11 @@ export default class FreightInstruction extends React.Component<any, any> {
         <p>
           How to judge whether the product is free shipping
           <br />
-          For example: the basic freight set for commodity A is 10 yuan, and for
-          each additional piece, the freight is 2 yuan, and the free shipping is
-          over 3 pieces
+          For example: the basic freight set for commodity A is 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, and for each
+          additional piece, the freight is 2{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, and the free
+          shipping is over 3 pieces
           <br />
           If: There is only product A in an order. If A is over 3 items, it will
           not be included in the freight calculation.
@@ -125,21 +136,29 @@ export default class FreightInstruction extends React.Component<any, any> {
           <br />
           An order contains:
           <br />
-          Commodity ABCDEFGHI, paid 198.00 yuan
+          Commodity ABCDEFGHI, paid 198.00{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
           <br />
           The delivery address is Yuhuatai District, Nanjing City, Jiangsu
           Province
           <br />
-          If: The shipping cost of the shop in Nanjing is less than 150 yuan per
-          order and the shipping cost is 10 yuan, then the shipping cost for
-          this order is 0 yuan
+          If: The shipping cost of the shop in Nanjing is less than 150{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)} per order and
+          the shipping cost is 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, then the
+          shipping cost for this order is 0{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
           <br />
-          If: The shipping cost of the shop in Nanjing is less than 200 yuan per
-          order and the shipping cost is 10 yuan, then the shipping cost for
-          this order is 10 yuan
+          If: The shipping cost of the shop in Nanjing is less than 200{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)} per order and
+          the shipping cost is 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, then the
+          shipping cost for this order is 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
           <br />
           If: The shipping fee of the store in Nanjing is fixed freight of 10
-          yuan, then the freight of this order is 10 yuan
+          yuan, then the freight of this order is 10{' '}
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
         </p>
       </Containerp>
     );

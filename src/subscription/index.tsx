@@ -54,14 +54,49 @@ export default class SubscriptionList extends Component<any, any> {
         current: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      isPrescriber: false,
+      prescriberList: [],
+      prescriberIds: []
     };
   }
 
   componentDidMount() {
     this.querySysDictionary('Frequency_week');
-
-    this.getSubscriptionList();
+    if (sessionStorage.getItem('s2b-supplier@employee')) {
+      let employee = JSON.parse(
+        sessionStorage.getItem('s2b-supplier@employee')
+      );
+      if (employee.roleName.indexOf('Prescriber') !== -1) {
+        const { searchForm } = this.state;
+        let prescriberList = employee.prescribers;
+        let isPrescriber = true;
+        let prescriberIds = [];
+        for (let i = 0; i < prescriberList.length; i++) {
+          if (prescriberList[i].id) {
+            prescriberIds.push(prescriberList[i].id);
+          }
+        }
+        searchForm.prescriberOption = 'Prescriber ID';
+        searchForm.prescriber = 'all';
+        this.setState(
+          {
+            searchForm: searchForm,
+            prescriberList: prescriberList,
+            isPrescriber: isPrescriber,
+            prescriberIds: prescriberIds
+          },
+          () => {
+            this.onSearch();
+          }
+        );
+      } else {
+        this.onSearch();
+      }
+    } else {
+      this.onSearch();
+    }
+    //
   }
 
   onFormChange = ({ field, value }) => {
@@ -163,11 +198,11 @@ export default class SubscriptionList extends Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   //todo
@@ -183,7 +218,12 @@ export default class SubscriptionList extends Component<any, any> {
     );
   };
   getSubscriptionList = (param = {}) => {
+    if (this.state.isPrescriber && param.prescriberId === 'all') {
+      param.prescriberId = '';
+      param.prescriberIds = this.state.prescriberIds;
+    }
     let params = Object.assign({ pageSize: 10, pageNum: 0 }, param);
+
     this.setState({
       loading: true
     });
@@ -208,14 +248,14 @@ export default class SubscriptionList extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -228,7 +268,8 @@ export default class SubscriptionList extends Component<any, any> {
       recipientOption,
       frequencyList,
       activeKey,
-      prescriberOption
+      prescriberOption,
+      prescriberList
     } = this.state;
     const menu = (
       <Menu>
@@ -358,11 +399,12 @@ export default class SubscriptionList extends Component<any, any> {
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {frequencyList.map((item, index) => (
-                      <Option value={item.id} key={index}>
-                        {item.name}
-                      </Option>
-                    ))}
+                    {frequencyList &&
+                      frequencyList.map((item, index) => (
+                        <Option value={item.id} key={index}>
+                          {item.name}
+                        </Option>
+                      ))}
                   </SelectGroup>
                 </FormItem>
 
@@ -397,36 +439,60 @@ export default class SubscriptionList extends Component<any, any> {
                   />
                 </FormItem> */}
 
-                <FormItem>
-                  <Input
-                    addonBefore={
-                      <Select
-                        // style={{ width: 140 }}
-                        defaultValue={searchForm.prescriberOption}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onFormChange({
-                            field: 'prescriberOption',
-                            value
-                          });
-                        }}
-                      >
-                        {prescriberOption.map((item) => (
-                          <Option value={item} key={item}>
-                            {item}
+                {this.state.isPrescriber ? (
+                  <FormItem>
+                    <SelectGroup
+                      value={searchForm.prescriber}
+                      label="Prescriber"
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'prescriber',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="all">All</Option>
+                      {prescriberList &&
+                        prescriberList.map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            {item.prescriberName}
                           </Option>
                         ))}
-                      </Select>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'prescriber',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
+                    </SelectGroup>
+                  </FormItem>
+                ) : (
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <Select
+                          // style={{ width: 140 }}
+                          defaultValue={searchForm.prescriberOption}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'prescriberOption',
+                              value
+                            });
+                          }}
+                        >
+                          {prescriberOption.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'prescriber',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                )}
 
                 <FormItem>
                   <Button

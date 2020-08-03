@@ -144,7 +144,10 @@ export default class GiftLevels extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <span>
-                  &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                  &nbsp;
+                  {!isFullCount
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
+                    : 'items'}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 <Button

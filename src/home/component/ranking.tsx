@@ -1,8 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
-
 import { IList } from 'typings/globalType';
-import { AuthWrapper, util } from 'qmkit';
+import { AuthWrapper, util, cache } from 'qmkit';
 
 import { skuRankingQL } from '../ql';
 import { Table } from 'antd';
@@ -39,7 +38,9 @@ const skuSalesColumns = [
     title: 'Order amount',
     dataIndex: 'skuOrderAmt',
     key: 'skuOrderAmt',
-    render: (_text, record) => '￥' + (record.skuOrderAmt || 0).toFixed(2)
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.skuOrderAmt || 0).toFixed(2)
   },
   {
     title: 'The quantity of order',
@@ -68,7 +69,9 @@ const customerOrderColumns = [
     title: 'Order amount',
     dataIndex: 'tradeAmount',
     key: 'tradeAmount',
-    render: (_text, record) => '￥' + (record.tradeAmount || 0).toFixed(2)
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.tradeAmount || 0).toFixed(2)
   }
 ];
 
@@ -92,7 +95,9 @@ const employeeSaleColumns = [
     title: '下单金额',
     dataIndex: 'amount',
     key: 'amount',
-    render: (_text, record) => '￥' + (record.amount || 0).toFixed(2)
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.amount || 0).toFixed(2)
   },
   {
     title: '付款订单数',
@@ -103,7 +108,9 @@ const employeeSaleColumns = [
     title: '付款金额',
     dataIndex: 'payAmount',
     key: 'payAmount',
-    render: (_text, record) => '￥' + (record.payAmount || 0).toFixed(2)
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.payAmount || 0).toFixed(2)
   }
 ];
 

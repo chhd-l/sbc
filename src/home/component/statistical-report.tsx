@@ -3,6 +3,7 @@ import { IMap, Relax } from 'plume2';
 
 import { AuthWrapper } from 'qmkit';
 import { Table } from 'antd';
+import { cache } from 'qmkit';
 
 import TradeTrendsCharts from './trade-trends';
 import { IList } from 'typings/globalType';
@@ -42,7 +43,9 @@ const tradeColumns = [
   {
     title: 'Order amount',
     dataIndex: 'orderAmt',
-    render: (_text, record) => '￥' + (record.orderAmt || 0).toFixed(2),
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
@@ -53,7 +56,9 @@ const tradeColumns = [
   {
     title: 'Payment amount',
     dataIndex: 'payOrderAmt',
-    render: (_text, record) => '￥' + (record.payOrderAmt || 0).toFixed(2),
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
   }
 ];
@@ -208,7 +213,8 @@ export default class StatisticalReport extends React.Component<any, any> {
                 <FormattedMessage id="orderAmount" />
               </label>
               <strong>
-                ￥{tradeNum ? (tradeNum.get('orderAmt') || 0).toFixed(2) : 0.0}
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {tradeNum ? (tradeNum.get('orderAmt') || 0).toFixed(2) : 0.0}
               </strong>
             </div>
           </div>
@@ -226,7 +232,7 @@ export default class StatisticalReport extends React.Component<any, any> {
                 <FormattedMessage id="paymentAmount" />
               </label>
               <strong>
-                ￥
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 {tradeNum ? (tradeNum.get('payOrderAmt') || 0).toFixed(2) : 0.0}
               </strong>
             </div>

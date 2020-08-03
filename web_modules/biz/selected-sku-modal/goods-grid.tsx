@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid } from 'qmkit';
+import { Const, DataGrid, cache } from 'qmkit';
 
 import SearchForm from './search-form';
 import * as webapi from './webapi';
@@ -162,7 +162,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             key="marketPrice"
             dataIndex="marketPrice"
             render={(data) => {
-              return data ? `¥${data}` : '￥0.00';
+              return data ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+ '0.00';
             }}
           />
         </DataGrid>

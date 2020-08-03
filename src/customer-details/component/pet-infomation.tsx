@@ -152,11 +152,11 @@ class PetInfomation extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   getSpecialNeeds = (array) => {
@@ -221,14 +221,14 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   editPets = () => {
@@ -280,11 +280,11 @@ class PetInfomation extends React.Component<any, any> {
           message.success('Successful');
           this.petsByConsumer();
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -332,7 +332,7 @@ class PetInfomation extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -354,14 +354,14 @@ class PetInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
     // const res = await delPets(params)
     // if (res.code === 'K-000000') {

@@ -83,7 +83,6 @@ class ClinicForm extends React.Component<any, any> {
 
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
-      this.getClinicsReward(this.props.prescriberId);
     }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
@@ -107,11 +106,11 @@ class ClinicForm extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -146,14 +145,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   // clearAndSave = () => {
@@ -175,11 +174,11 @@ class ClinicForm extends React.Component<any, any> {
   //         this.getClinicsReward(this.props.prescriberId);
   //         message.success(res.message || 'Successful');
   //       } else {
-  //         message.error('Unsuccessful');
+  //         message.error(res.message||'Unsuccessful');
   //       }
   //     })
   //     .catch((err) => {
-  //       message.error('Unsuccessful');
+  //       message.error(res.message||'Unsuccessful');
   //     });
   // };
 
@@ -216,7 +215,7 @@ class ClinicForm extends React.Component<any, any> {
         prescriberForm: res.context
       });
       this.props.form.setFieldsValue({
-        id: res.context.id,
+        // id: res.context.id,
         prescriberId: res.context.prescriberId,
         prescriberName: res.context.prescriberName,
         phone: res.context.phone,
@@ -227,8 +226,9 @@ class ClinicForm extends React.Component<any, any> {
         location: res.context.location,
         prescriberType: res.context.prescriberType
       });
+      this.getClinicsReward(res.context.prescriberId);
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   queryClinicsDictionary = async (type: String) => {
@@ -240,7 +240,7 @@ class ClinicForm extends React.Component<any, any> {
         typeArr: res.context
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
@@ -252,7 +252,7 @@ class ClinicForm extends React.Component<any, any> {
         cityArr: res.context.sysDictionaryVOS
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -284,14 +284,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   onUpdate = () => {
@@ -319,14 +319,14 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           saveLoading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -790,7 +790,7 @@ class ClinicForm extends React.Component<any, any> {
               <Table
                 style={{ paddingTop: '10px' }}
                 pagination={false}
-                rowKey="intervalPriceId"
+                rowKey="id"
                 dataSource={this.state.sectionList}
               >
                 <Column

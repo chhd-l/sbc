@@ -3,6 +3,7 @@
  */
 import { Actor, Action } from 'plume2';
 import { IList } from 'typings/globalType';
+import { cache } from 'qmkit';
 
 export default class CateActor extends Actor {
   defaultState() {
@@ -39,11 +40,14 @@ export default class CateActor extends Actor {
       report.name = '无';
       report.parentNames = '无';
       //下单金额
-      report.orderAmt = '￥' + parseFloat(report.orderAmt).toFixed(2);
+      report.orderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.orderAmt).toFixed(2);
       //退单金额
       report.returnOrderAmt =
-        '￥' + parseFloat(report.returnOrderAmt).toFixed(2);
-      context.goodsCateViewList.map(view => {
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.returnOrderAmt).toFixed(2);
+      context.goodsCateViewList.map((view) => {
         if (report.id == view.id) {
           //分类名称
           report.name = view.name;
@@ -99,11 +103,11 @@ export default class CateActor extends Actor {
   init(state, cateList: IList) {
     // 改变数据形态，变为层级结构(二级分类)
     const newDataList = cateList
-      .filter(item => item.get('cateParentId') == 0)
-      .map(data => {
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
         const children = cateList
-          .filter(item => item.get('cateParentId') == data.get('storeCateId'))
-          .map(childrenData => {
+          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
+          .map((childrenData) => {
             // const lastChildren = cateList.filter(item => item.get('storeCateId') == childrenData.get('storeCateId'));
             // if (!lastChildren.isEmpty()) {
             //   childrenData = childrenData.set('children', lastChildren);

@@ -160,7 +160,7 @@ export default class TodoItems extends React.Component<any, any> {
         <div className="flowBox" style={{ marginLeft: -5, marginRight: -5 }}>
           {false && (
             <div className="homeItem pending">
-              <h3>￥资金概况</h3>
+              <h3>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}资金概况</h3>
               <label>已结算资金</label>
               <strong>{settled}</strong>
 

@@ -1,6 +1,14 @@
 import React from 'react';
 import { Action, IMap, Relax, Store } from 'plume2';
-import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
+import {
+  Const,
+  DataGrid,
+  noop,
+  AuthWrapper,
+  checkAuth,
+  history,
+  cache
+} from 'qmkit';
 import { List } from 'immutable';
 import { Link } from 'react-router-dom';
 import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
@@ -129,6 +137,13 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           key="tradePrice"
           dataIndex="tradePrice.totalPrice"
           width="11%"
+          render={(OrderAmount) => (
+            <span>
+              {OrderAmount != null
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + OrderAmount
+                : '-'}
+            </span>
+          )}
         />
         <Column
           title={<FormattedMessage id="RewardRate" />}
@@ -184,7 +199,12 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           key="orderRewardAmount"
           width="11%"
           render={(orderRewardRate) => (
-            <span>{orderRewardRate != null ? orderRewardRate : '-'}</span>
+            <span>
+              {orderRewardRate != null
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  orderRewardRate
+                : '-'}
+            </span>
           )}
           //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />

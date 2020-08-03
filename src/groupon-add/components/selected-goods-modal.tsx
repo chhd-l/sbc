@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Form, Input, Tree, Modal, Select, message } from 'antd';
-import { Const, DataGrid, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { Const, DataGrid, SelectGroup, TreeSelectGroup, cache } from 'qmkit';
 import styled from 'styled-components';
 import { fromJS } from 'immutable';
 import * as webapi from '../webapi';
@@ -240,7 +240,12 @@ export default class SelectedGoodsModal extends React.Component<any, any> {
           key="marketPrice"
           dataIndex="marketPrice"
           render={(data) => {
-            return data ? `¥${data.toFixed(2)}` : '¥0.00';
+            return data
+              ? `${
+                  sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  data.toFixed(2)
+                }`
+              : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
           }}
         />
       </DataGrid>

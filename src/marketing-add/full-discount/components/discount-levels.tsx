@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Input, Button, Form } from 'antd';
-import { noop, ValidConst } from 'qmkit';
+import { noop, ValidConst, cache } from 'qmkit';
 
 const FormItem = Form.Item;
 
@@ -140,7 +140,12 @@ export default class DiscountLevels extends React.Component<any, any> {
                         </FormItem>
                         <span>
                           {' '}
-                          &nbsp;{!isFullCount ? 'yuan' : 'items'}
+                          &nbsp;
+                          {!isFullCount
+                            ? sessionStorage.getItem(
+                                cache.SYSTEM_GET_CONFIG_NAME
+                              )
+                            : 'items'}
                           ，&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;&nbsp;
                         </span>
                       </div>

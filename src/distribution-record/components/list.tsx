@@ -194,9 +194,7 @@ export default class ListView extends React.Component<any, any> {
           dataIndex="payTime"
           width="110"
           render={(payTime) => {
-            const day = Moment(payTime)
-              .format(Const.DAY_FORMAT)
-              .toString();
+            const day = Moment(payTime).format(Const.DAY_FORMAT).toString();
             const time = Moment(payTime)
               .format(Const.DATE_FORMAT_SECOND)
               .toString();
@@ -213,9 +211,7 @@ export default class ListView extends React.Component<any, any> {
           key="finishTime"
           dataIndex="finishTime"
           render={(finishTime) => {
-            const day = Moment(finishTime)
-              .format(Const.DAY_FORMAT)
-              .toString();
+            const day = Moment(finishTime).format(Const.DAY_FORMAT).toString();
             const time = Moment(finishTime)
               .format(Const.DATE_FORMAT_SECOND)
               .toString();
@@ -260,10 +256,13 @@ export default class ListView extends React.Component<any, any> {
             return (
               <div>
                 <div>
-                  {orderGoodsPrice ? '￥' + orderGoodsPrice.toFixed(2) : '-'}
+                  {orderGoodsPrice
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      orderGoodsPrice.toFixed(2)
+                    : '-'}
                 </div>
                 <div style={{ color: '#999' }}>
-                  {orderGoodsNum ? orderGoodsNum + '件' : '-'}
+                  {orderGoodsNum ? orderGoodsNum + 'piece' : '-'}
                 </div>
               </div>
             );
@@ -288,7 +287,10 @@ export default class ListView extends React.Component<any, any> {
             return (
               <div>
                 <div>
-                  {commissionGoods ? '￥' + commissionGoods.toFixed(2) : '-'}
+                  {commissionGoods
+                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      commissionGoods.toFixed(2)
+                    : '-'}
                 </div>
                 <div style={{ color: '#999' }}>{commissionRate}</div>
               </div>

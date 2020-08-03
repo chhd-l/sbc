@@ -5,7 +5,6 @@ import {
   goodsExpressFormQL,
   goodsFreeFormQL
 } from '../ql';
-
 import {
   Form,
   Input,
@@ -24,7 +23,8 @@ import {
   ValidConst,
   AreaSelect,
   noop,
-  history
+  history,
+  cache
 } from 'qmkit';
 import { fromJS } from 'immutable';
 import styled from 'styled-components';
@@ -774,7 +774,9 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span className="pl3">yuan Free shipping</span>
+              <span className="pl3">
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free shipping
+              </span>
             </InlineBDiv>
           </FormItem>
         );
@@ -818,7 +820,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span className="pl3 pr3">More than Yuan Free shipping</span>
+              <span className="pl3 pr3">
+                More than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free
+                shipping
+              </span>
             </FormItem>
           </div>
         );
@@ -871,7 +876,9 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 />
               )}
-              <span>yuan free shipping</span>
+              <span>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free shipping
+              </span>
             </InlineBDiv>
           </FormItem>
         );
@@ -916,7 +923,11 @@ export default class FreightTemp extends React.Component<any, any> {
                 />
               )}
             </FormItem>
-            <span className="pl3"> more than yuan free shipping</span>
+            <span className="pl3">
+              {' '}
+              more than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free
+              shipping
+            </span>
           </div>
         );
       }
@@ -1150,7 +1161,9 @@ export default class FreightTemp extends React.Component<any, any> {
       Confirm({
         title: 'prompt',
         content:
-          'Switch the seller to bear the freight. The freight in all areas will be set to 0 yuan and the original freight setting cannot be restored. Are you sure to continue?',
+          'Switch the seller to bear the freight. The freight in all areas will be set to 0 ' +
+          `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` +
+          'and the original freight setting cannot be restored. Are you sure to continue?',
         iconType: 'exclamation-circle',
         onOk() {
           changeFieldValue({ field: 'freightFreeFlag', value });

@@ -105,7 +105,7 @@ export default class AddOrderInvoiceForm extends React.Component<any, any> {
         </FormItem>
         <FormItem {...formItemLayout} label="订单金额">
           <label>
-            {'￥ '}
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
             {orderInvoiceDetail.get('orderPrice') &&
               orderInvoiceDetail.get('orderPrice').toFixed(2)}
           </label>

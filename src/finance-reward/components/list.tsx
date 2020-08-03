@@ -1,6 +1,14 @@
 import React from 'react';
 import { Action, IMap, Relax, Store } from 'plume2';
-import { Const, DataGrid, noop, AuthWrapper, checkAuth, history } from 'qmkit';
+import {
+  Const,
+  DataGrid,
+  noop,
+  AuthWrapper,
+  checkAuth,
+  cache,
+  history
+} from 'qmkit';
 import { List } from 'immutable';
 import { Link } from 'react-router-dom';
 import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
@@ -143,7 +151,14 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           width="11%"
           key="orderAmount"
           render={(orderPrice) => (
-            <span>{orderPrice != null ? `${orderPrice.toFixed(2)}` : '-'}</span>
+            <span>
+              {orderPrice != null
+                ? `${
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    orderPrice.toFixed(2)
+                  }`
+                : '-'}
+            </span>
           )}
           /* render={(payOrderStatus) => (
             <span> {payOrderStatusDic[payOrderStatus]} </span>

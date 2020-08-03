@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Const, DataGrid, noop } from 'qmkit';
+import { Const, DataGrid, noop, cache } from 'qmkit';
 import { List } from 'immutable';
 import {
   Dropdown,
@@ -113,9 +113,7 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="createTime"
           render={(createTime) => (
             <span>
-              {momnet(createTime)
-                .format(Const.TIME_FORMAT)
-                .toString()}
+              {momnet(createTime).format(Const.TIME_FORMAT).toString()}
             </span>
           )}
         />
@@ -127,7 +125,9 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="returnPrice"
           render={(returnPrice) => (
             <span>
-              {`￥${returnPrice ? returnPrice.toFixed(2) : (0.0).toFixed(2)}`}
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + returnPrice
+                ? returnPrice.toFixed(2)
+                : (0.0).toFixed(2)}
             </span>
           )}
         />
@@ -137,7 +137,10 @@ export default class PayOrderList extends React.Component<any, any> {
           dataIndex="actualReturnPrice"
           render={(actualReturnPrice) => (
             <span>
-              {actualReturnPrice ? `￥${actualReturnPrice.toFixed(2)}` : '-'}
+              {actualReturnPrice
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  actualReturnPrice.toFixed(2)
+                : '-'}
             </span>
           )}
         />

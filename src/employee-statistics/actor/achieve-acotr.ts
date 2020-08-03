@@ -2,6 +2,7 @@
  * Created by feitingting on 2017/10/27.
  */
 import { Actor, Action } from 'plume2';
+import { cache } from 'qmkit';
 
 export default class AchieveActor extends Actor {
   //数据源
@@ -42,15 +43,25 @@ export default class AchieveActor extends Actor {
           i +
           1;
         //金额处理(下单金额)
-        v.amount = '￥' + parseFloat(v.amount).toFixed(2);
+        v.amount =
+          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          parseFloat(v.amount).toFixed(2);
         //付款金额
-        v.payAmount = '￥' + parseFloat(v.payAmount).toFixed(2);
+        v.payAmount =
+          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          parseFloat(v.payAmount).toFixed(2);
         //退单金额
-        v.returnAmount = '￥' + parseFloat(v.returnAmount).toFixed(2);
+        v.returnAmount =
+          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          parseFloat(v.returnAmount).toFixed(2);
         //笔单价
-        v.orderUnitPrice = '￥' + parseFloat(v.orderUnitPrice).toFixed(2);
+        v.orderUnitPrice =
+          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          parseFloat(v.orderUnitPrice).toFixed(2);
         //客单价
-        v.customerUnitPrice = '￥' + parseFloat(v.customerUnitPrice).toFixed(2);
+        v.customerUnitPrice =
+          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+          parseFloat(v.customerUnitPrice).toFixed(2);
       });
     }
     return state.set('achieveViewList', context);

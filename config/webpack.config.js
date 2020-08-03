@@ -162,8 +162,25 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         }),
       ],
       splitChunks: {
-        chunks: 'all',
-        name: false,
+        chunks: "all",
+        cacheGroups: {
+          commons: {
+            chunks: "initial",
+            minChunks: 2,
+            name: "commons",
+            maxInitialRequests: 5,
+            minSize: 0, // 默认是30kb，minSize设置为0之后
+            // 多次引用的utility1.js和utility2.js会被压缩到commons中
+          },
+          reactBase: {
+            test: (module) => {
+              return /react|redux|prop-types/.test(module.context);
+            }, // 直接使用 test 来做路径匹配，抽离react相关代码
+            chunks: "initial",
+            name: "reactBase",
+            priority: 10,
+          }
+        }
       },
       runtimeChunk: true,
     },

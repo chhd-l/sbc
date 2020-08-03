@@ -18,9 +18,10 @@ export default class AppStore extends Store {
   init = async () => {
     const uuid = UUID.create().toString();
     const res = ((await webapi.getSiteInfo()) as any).res;
+    const resConfig = ((await webapi.getConfig()) as any).res;
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch('register:logo', res.context);
+        this.dispatch('register:logo', resConfig.context);
         this.dispatch('register:init', uuid);
         this.dispatch('register:supplierWebsite', res.context);
       });

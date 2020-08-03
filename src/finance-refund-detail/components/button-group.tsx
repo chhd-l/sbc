@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Button } from 'antd';
 import { ExportModal, noop } from 'qmkit';
-
+import { cache } from 'qmkit';
 @Relax
 export default class ButtonGroup extends React.Component<any, any> {
   props: {
@@ -38,7 +38,8 @@ export default class ButtonGroup extends React.Component<any, any> {
           批量导出
         </Button>
         <h2 style={styles.total}>
-          退款合计: ￥{sumReturnPrice
+          退款合计: {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+          {sumReturnPrice
             ? sumReturnPrice
                 .toFixed(2)
                 .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')

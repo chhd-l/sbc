@@ -1,7 +1,7 @@
 // 收入对账明细
 import React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, noop } from 'qmkit';
+import { DataGrid, noop, cache } from 'qmkit';
 import moment from 'moment';
 import { Table } from 'antd';
 
@@ -79,7 +79,18 @@ export default class RevenueList extends React.Component<any, any> {
             key="orderCode"
             width="12%"
           />
-          <Column title="Order Revenue" dataIndex="amount" key="amount" />
+          <Column
+            title="Order Revenue"
+            dataIndex="amount"
+            key="amount"
+            render={(text, _rowData: any) => {
+              return (
+                <span>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text}
+                </span>
+              );
+            }}
+          />
 
           {/*<Column
             title="Transaction serial number"

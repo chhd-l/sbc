@@ -236,6 +236,7 @@ export default class AppStore extends Store {
             message.success('login successful');
             //登录成功之后，塞入baseConfig
             const config = (await webapi.getSiteInfo()) as any;
+
             sessionStorage.setItem(
               cache.SYSTEM_BASE_CONFIG,
               JSON.stringify(config.res.context)

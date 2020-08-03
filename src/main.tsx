@@ -47,6 +47,20 @@ export default class Main extends React.Component<any, any> {
         }
       }
     });
+    Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
+      if (resIco.res.code == Const.SUCCESS_CODE) {
+        if ((resIco.res as any).context) {
+          sessionStorage.setItem(
+            cache.SYSTEM_GET_CONFIG,
+            (resIco.res as any).context.currency.valueEn
+          ); //货币符号
+          sessionStorage.setItem(
+            cache.SYSTEM_GET_CONFIG_NAME,
+            (resIco.res as any).context.currency.name
+          ); //货币名称
+        }
+      }
+    });
   }
 
   handlePathMatched = (path) => {

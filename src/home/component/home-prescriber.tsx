@@ -23,7 +23,9 @@ const tradeColumns = [
   {
     title: 'Order amount',
     dataIndex: 'orderAmt',
-    render: (_text, record) => '￥' + (record.orderAmt || 0).toFixed(2),
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
@@ -34,7 +36,9 @@ const tradeColumns = [
   {
     title: 'Payment amount',
     dataIndex: 'payOrderAmt',
-    render: (_text, record) => '￥' + (record.payOrderAmt || 0).toFixed(2),
+    render: (_text, record) =>
+      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+      (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
   }
 ];
@@ -232,7 +236,7 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="orderAmount" />
                 </label>
                 <strong>
-                  ￥
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
                   {this.state.tradeInfo.orderAmt
                     ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
                     : 0.0}
@@ -249,7 +253,7 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="paymentAmount" />
                 </label>
                 <strong>
-                  ￥
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
                   {this.state.tradeInfo.payOrderAmt
                     ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
                     : 0.0}
@@ -277,7 +281,7 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="rewardAmount" />
                 </label>
                 <strong>
-                  ￥
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
                   {this.state.tradeInfo.orderCount
                     ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
                     : 0.0}

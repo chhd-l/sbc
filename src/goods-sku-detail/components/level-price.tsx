@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Checkbox, Form, Table } from 'antd';
 import { Relax } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
-import { QMFloat } from 'qmkit';
+import { QMFloat, cache } from 'qmkit';
 
 import UserPrice from './user-price';
 
@@ -70,7 +70,8 @@ class LevelPriceForm extends React.Component<any, any> {
           <Form className="login-form" layout="inline">
             <div style={{ marginTop: 20, display: 'inline-block' }}>
               <span>
-                SKU市场价：<strong style={{ color: '#333333' }}>
+                SKU市场价：
+                <strong style={{ color: '#333333' }}>
                   {QMFloat.addZero(marketPrice)}
                 </strong>
               </span>
@@ -104,7 +105,8 @@ class LevelPriceForm extends React.Component<any, any> {
             render={(rowInfo) => (
               <div>
                 <div>
-                  ¥{(marketPrice * rowInfo.customerLevelDiscount).toFixed(2)}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    (marketPrice * rowInfo.customerLevelDiscount).toFixed(2)}
                 </div>
                 <div>
                   {(rowInfo.customerLevelDiscount * 100).toFixed(0) + '%'}

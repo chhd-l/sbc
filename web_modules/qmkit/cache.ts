@@ -8,6 +8,8 @@ export default {
   SITE_LOGO: 's2b-supplier@logo', //商城logo
   DATA_BOARD: 's2b-supplier@dataBoard:', //控制面板
   SYSTEM_BASE_CONFIG: 's2b-supplier@systemBaseConfig:', //系统配置，如pc，h5系统配置
+  SYSTEM_GET_CONFIG: 's2b-supplier@systemGetConfig:', //默认配置 //价格符号
+  SYSTEM_GET_CONFIG_NAME: 's2b-supplier@systemGetConfigName:',//价格名称
   FIRST_ACTIVE: 's2b-supplier@firstActive', //选中的第一层菜单下标
   SECOND_ACTIVE: 's2b-supplier@secondActive', //选中的第二层菜单下标
   THIRD_ACTIVE: 's2b-supplier@thirdActive', //选中的第三层菜单下标

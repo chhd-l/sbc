@@ -3,6 +3,7 @@
  */
 import { Actor, Action } from 'plume2';
 import { IList } from 'typings/globalType';
+import { cache } from 'qmkit';
 import { List } from 'immutable';
 export default class BrandActor extends Actor {
   defaultState() {
@@ -31,12 +32,15 @@ export default class BrandActor extends Actor {
       report.index =
         (state.get('brandCurrent') - 1) * state.get('brandPageSize') + i + 1;
       //下单金额
-      report.orderAmt = '￥' + parseFloat(report.orderAmt).toFixed(2);
+      report.orderAmt =
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.orderAmt).toFixed(2);
       //退单金额
       report.returnOrderAmt =
-        '￥' + parseFloat(report.returnOrderAmt).toFixed(2);
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        parseFloat(report.returnOrderAmt).toFixed(2);
       report.name = '无';
-      context.goodsBrandViewList.map(view => {
+      context.goodsBrandViewList.map((view) => {
         if (report.id == view.id) {
           //分类名称
           report.name = view.name;

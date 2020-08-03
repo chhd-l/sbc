@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Input, Checkbox, Table, InputNumber, Tooltip, Icon } from 'antd';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { noop, ValidConst, QMFloat } from 'qmkit';
+import { noop, ValidConst, QMFloat, cache } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 
 import UserPrice from './user-price';
@@ -184,7 +184,8 @@ class LevelPriceForm extends React.Component<any, any> {
             render={(rowInfo) => (
               <div>
                 <div>
-                  ¥{(marketPrice * rowInfo.customerLevelDiscount).toFixed(2)}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    (marketPrice * rowInfo.customerLevelDiscount).toFixed(2)}
                 </div>
                 <div>
                   {(rowInfo.customerLevelDiscount * 100).toFixed(0) + '%'}

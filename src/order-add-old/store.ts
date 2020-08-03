@@ -9,7 +9,7 @@ import { message, Modal } from 'antd';
 import * as webapi from './webapi';
 import { fromJS, List } from 'immutable';
 import { IList } from 'typings/globalType';
-import { Const, FindArea, history, QMFloat, QMMethod } from 'qmkit';
+import { Const, FindArea, history, QMFloat, QMMethod, cache } from 'qmkit';
 import moment from 'moment';
 
 const confirm = Modal.confirm;
@@ -1169,7 +1169,9 @@ export default class AppStore extends Store {
       if (newPrice != oldPrice) {
         confirm({
           title: '配送费用变更',
-          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥${oldPrice}变更为￥${newPrice}，您可手动修改后再保存或者直接保存！`,
+          content: `由于配送地区、商品、运费模板或者运费计算模式发生了变化，配送费用已由￥{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + oldPrice}变更为${
+            sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + newPrice
+          }，您可手动修改后再保存或者直接保存！`,
           okText: '直接保存',
           cancelText: '我要修改',
           onOk: () =>

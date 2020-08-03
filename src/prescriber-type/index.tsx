@@ -103,11 +103,11 @@ export default class ClinicList extends Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   delClinicType = async (id) => {
@@ -124,7 +124,7 @@ export default class ClinicList extends Component<any, any> {
       };
       this.getTypeList(params);
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
     console.log(this.state.typeList);
   };

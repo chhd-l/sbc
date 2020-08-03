@@ -46,7 +46,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
         clinicTypeDesc: res.context.description
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
     console.log(this.state.clinicTypeForm);
   };
@@ -75,7 +75,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
     if (res.code === 'K-000000') {
       message.success('Successful');
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   onUpdate = async () => {
@@ -96,7 +96,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
     if (res.code === 'K-000000') {
       message.success('Successful');
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
 

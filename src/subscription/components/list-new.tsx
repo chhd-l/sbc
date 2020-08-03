@@ -79,14 +79,14 @@ export default class ListView extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   onChecked = (index, checked) => {
@@ -111,13 +111,15 @@ export default class ListView extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           message.success('Successful');
           this.init();
+        } else {
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 

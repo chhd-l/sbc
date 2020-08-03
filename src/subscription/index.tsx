@@ -190,11 +190,11 @@ export default class SubscriptionList extends Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   //todo
@@ -235,14 +235,14 @@ export default class SubscriptionList extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 

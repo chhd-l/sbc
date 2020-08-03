@@ -104,14 +104,14 @@ export default class CustomerDetails extends React.Component<any, any> {
           message.success('Successful');
           history.push('/customer-list');
         } else {
-          message.error('Unsuccessful');
+          message.error(data.res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
         this.setState({
           loading: false
         });

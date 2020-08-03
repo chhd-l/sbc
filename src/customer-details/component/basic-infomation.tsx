@@ -118,11 +118,11 @@ class BasicInfomation extends React.Component<any, any> {
             );
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -141,7 +141,7 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         let res = data.res;
         if (res.code && res.code !== 'K-000000') {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         } else {
           let res2 = JSON.stringify(data.res);
 
@@ -205,7 +205,7 @@ class BasicInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -281,11 +281,11 @@ class BasicInfomation extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           message.success('Successful');
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
 
@@ -306,14 +306,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
       });
   };
   //手机校验

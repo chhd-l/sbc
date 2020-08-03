@@ -195,7 +195,7 @@ export default class ClinicList extends Component<any, any> {
         typeArr: res.context
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
@@ -207,7 +207,7 @@ export default class ClinicList extends Component<any, any> {
         cityArr: res.context.sysDictionaryVOS
       });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   delClinic = async (id) => {
@@ -218,7 +218,7 @@ export default class ClinicList extends Component<any, any> {
       message.success(res.message || 'Successful');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   enableAndDisable = async (id) => {
@@ -228,7 +228,7 @@ export default class ClinicList extends Component<any, any> {
       message.success(res.message || 'Successful');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
-      message.error('Unsuccessful');
+      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {

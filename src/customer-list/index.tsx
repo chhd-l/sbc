@@ -218,14 +218,14 @@ export default class Customer extends React.Component<any, any> {
             });
           }
         } else {
-          message.error('Unsuccessful');
+          message.error(res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error('Unsuccessful');
+        message.error(err.message || 'Unsuccessful');
 
         this.setState({
           loading: false
@@ -257,14 +257,14 @@ export default class Customer extends React.Component<any, any> {
   //         message.success('Successful');
   //         this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
   //       } else {
-  //         message.error('Unsuccessful');
+  //         message.error(res.message||'Unsuccessful');
   //         this.setState({
   //           loading: true
   //         });
   //       }
   //     })
   //     .catch((err) => {
-  //       message.error('Unsuccessful');
+  //       message.error(res.message||'Unsuccessful');
   //       this.setState({
   //         loading: true
   //       });
@@ -398,7 +398,7 @@ export default class Customer extends React.Component<any, any> {
             </Form>
             <Table
               columns={columns}
-              rowKey={(record) => record.customerDetailId}
+              rowKey="customerDetailId"
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
               loading={this.state.loading}

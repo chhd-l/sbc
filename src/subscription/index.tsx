@@ -63,29 +63,30 @@ export default class SubscriptionList extends Component<any, any> {
   componentDidMount() {
     this.querySysDictionary('Frequency_week');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
-      debugger;
       let employee = JSON.parse(
         sessionStorage.getItem('s2b-supplier@employee')
       );
       if (employee.roleName.indexOf('Prescriber') !== -1) {
+        const { searchForm } = this.state;
         let prescriberList = employee.prescribers;
         let isPrescriber = true;
-        let prescriber = prescriberList[0].id;
+        searchForm.prescriberOption = 'Prescriber ID';
+        searchForm.prescriber = prescriberList[0].id;
         this.setState(
           {
-            prescriber: prescriber,
+            searchForm: searchForm,
             prescriberList: prescriberList,
             isPrescriber: isPrescriber
           },
           () => {
-            this.getSubscriptionList();
+            this.onSearch();
           }
         );
       } else {
-        this.getSubscriptionList();
+        this.onSearch();
       }
     } else {
-      this.getSubscriptionList();
+      this.onSearch();
     }
     //
   }
@@ -428,7 +429,7 @@ export default class SubscriptionList extends Component<any, any> {
                 {this.state.isPrescriber ? (
                   <FormItem>
                     <SelectGroup
-                      value={this.state.prescriber}
+                      value={searchForm.prescriber}
                       label="Prescriber"
                       onChange={(value) => {
                         value = value === '' ? null : value;

@@ -57,27 +57,41 @@ export default class MarketingRule extends React.Component<any, any> {
               <Row>
                 <Col span={24}>
                   <span>Rules:</span>
-                  {subType === 6 || subType === 7 ? null : 'Full '}
-                  {subType === 6 || subType === 7
-                    ? null
-                    : level.fullAmount
-                    ? level.fullAmount
-                    : level.fullCount}
-                  {subType === 6
-                    ? 'For the first subscription order,reduction '
-                    : subType === 7
-                    ? 'For the first subscription order,reduction '
-                    : subType == '0' || subType == '1'
-                    ? ' yuan '
-                    : ' items '}
-                  {subType == '0' || subType == '1' ? ' reduction ' : null}
-                  {subType == '2' || subType == '3' ? ' discount ' : null}
-                  {marketingType == 1
-                    ? level.discount * 10
-                    : level.reduction}{' '}
-                  {subType == '0' || subType == '1' || subType == '6'
-                    ? 'yuan'
-                    : 'discount'}
+                  {subType === 0 ? ( // full amount reduction
+                    <span className="rule-span">
+                      Full{' '}
+                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
+                      yuan reduction {level.reduction} yuan
+                    </span>
+                  ) : subType === 1 ? ( // full quantity reduction
+                    <span className="rule-span">
+                      Full{' '}
+                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
+                      items reduction {level.reduction} yuan
+                    </span>
+                  ) : subType === 2 ? ( //full amount discount
+                    <span className="rule-span">
+                      Full{' '}
+                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
+                      yuan discount {level.discount * 10} discount
+                    </span>
+                  ) : subType === 3 ? ( //full quantity discount
+                    <span className="rule-span">
+                      Full{' '}
+                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
+                      items discount {level.discount * 10} discount
+                    </span>
+                  ) : subType === 6 ? ( // subsctiption reduction
+                    <span className="rule-span">
+                      For the first subscription order, reduction{' '}
+                      {level.reduction} yuan
+                    </span>
+                  ) : subType === 7 ? ( // subsctiption discount
+                    <span className="rule-span">
+                      For the first subscription order, discount{' '}
+                      {level.discount * 10} discount
+                    </span>
+                  ) : null}
                 </Col>
               </Row>
             </GreyBg>

@@ -1061,10 +1061,10 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
+    // if (images.length === 0) {
+    //   message.error('Product image is required');
+    //   return false;
+    // }
     param = param.set('images', images);
 
     // -----商品规格列表-------
@@ -1203,10 +1203,10 @@ export default class AppStore extends Store {
       message.error('At least one sku has a subscription status of yes');
       return false;
     }
-    if (isEmptyImage) {
-      message.error('Spec image is required');
-      return false;
-    }
+    // if (isEmptyImage) {
+    //   message.error('Spec image is required');
+    //   return false;
+    // }
     if (isEmptyStock) {
       message.error('Spec stock is required');
       return false;

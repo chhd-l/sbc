@@ -757,7 +757,7 @@ class GoodsForm extends React.Component<any, any> {
               {...formItemLayout}
               label={
                 <span>
-                  <span
+                  {/* <span
                     style={{
                       color: 'red',
                       fontFamily: 'SimSun',
@@ -766,7 +766,7 @@ class GoodsForm extends React.Component<any, any> {
                     }}
                   >
                     *
-                  </span>
+                  </span> */}
                   <FormattedMessage id="product.productImage" />
                 </span>
               }

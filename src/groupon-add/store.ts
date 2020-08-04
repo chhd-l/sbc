@@ -154,7 +154,7 @@ export default class AppStore extends Store {
     } else if (res.res.code === 'K-080021') {
       message.error(res.res.message);
     } else {
-      message.error('操作失败');
+      message.error('operation failed !');
     }
   }
 }

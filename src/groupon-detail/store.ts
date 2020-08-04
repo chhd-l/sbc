@@ -64,7 +64,7 @@ export default class AppStore extends Store {
       });
       this.dispatch('groupon:order:page', res.context);
     } else {
-      message.error('操作失败');
+      message.error('operation failed !');
     }
   };
 

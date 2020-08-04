@@ -742,7 +742,7 @@ export default {
   'dragImagesOrVideos' : 'Click or drag images or videos to upload',
   'supportUpload': 'Support one or more pictures or videos upload',
   'action': 'Action',
-  'resourceName': 'Banner name',
+  'resourceName': 'Mobile resource',
   'Instructions': 'Instructions',
   'amountReceivable': 'Amount receivable',
   'freightTemplate':'Freight template',

@@ -202,7 +202,7 @@ export default class UploadImageModal extends Component<any, any> {
     if (res != -1) {
       confirm({
         title: 'Tip',
-        content: '是否继续添加banner',
+        content: 'Are you sure continue to add banner?',
         onOk() {
           ref.resetImageForm();
           getList({ storeId: getStoreId() });
@@ -334,6 +334,7 @@ export default class UploadImageModal extends Component<any, any> {
         }
       },
       onChange(info) {
+        debugger;
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {

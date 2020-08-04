@@ -135,6 +135,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
           };
         })
       : [];
+    console.log(propVals.toJS(), selected, 'props');
     return (
       <TreeSelect
         getPopupContainer={() => document.getElementById('page-content')}

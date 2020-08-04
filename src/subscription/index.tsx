@@ -67,7 +67,7 @@ export default class SubscriptionList extends Component<any, any> {
       let employee = JSON.parse(
         sessionStorage.getItem('s2b-supplier@employee')
       );
-      if (employee.roleName.indexOf('Prescriber') !== -1) {
+      if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
         const { searchForm } = this.state;
         let prescriberList = employee.prescribers;
         let isPrescriber = true;

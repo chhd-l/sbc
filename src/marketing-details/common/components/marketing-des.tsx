@@ -71,7 +71,6 @@ export default class MarketingDes extends React.Component<any, any> {
       promotionCode,
       publicStatus
     } = this.props.relaxProps;
-    debugger;
     return (
       <GreyBg>
         <Row>

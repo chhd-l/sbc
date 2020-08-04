@@ -771,7 +771,6 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   onEditStoreInfo = async (storeInfo) => {
-    debugger;
     const { res } = await webApi.editStoreInfo(storeInfo);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('save successful!');

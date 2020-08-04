@@ -178,7 +178,6 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('Please choose to upload mobile resource!');
           return;
         }
-        debugger;
         if (imageForm.toJS().bannerId) {
           // edit
           const params = {
@@ -366,7 +365,6 @@ export default class UploadImageModal extends Component<any, any> {
       onChange(info) {
         const status = info.file.status;
         let fileList = info.fileList;
-        debugger;
         if (status === 'done') {
           if (
             info.file.response &&

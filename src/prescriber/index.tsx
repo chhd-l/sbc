@@ -270,7 +270,6 @@ export default class ClinicList extends Component<any, any> {
   //   if (!response) {
   //     return;
   //   }
-  //   debugger;
   //   // const fileName = response.headers['content-disposition'].split(';')[1].split('=')[1]
   //   const fileName = 'test.xls';
   //   const url = window.URL.createObjectURL(new Blob([data]));

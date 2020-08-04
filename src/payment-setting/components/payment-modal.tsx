@@ -76,7 +76,6 @@ class PaymentModal extends React.Component<any, any> {
         paymentForm: data
       },
       () => {
-        debugger;
         const data = this.state.paymentForm;
       }
     );

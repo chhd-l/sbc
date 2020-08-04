@@ -18,7 +18,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.fetchCouponInfo(couponId);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        // debugger
         this.dispatch('coupon: detail: field: value', {
           field: 'couponCates',
           value: fromJS(

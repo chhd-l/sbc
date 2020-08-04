@@ -102,7 +102,7 @@ export default class AppStore extends Store {
         field: 'mobiImgName',
         value: res.context[0].mobiImgName
       });
-      debugger;
+
       const fileList = [
         {
           name: res.context[0].webImgName,

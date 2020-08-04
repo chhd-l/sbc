@@ -989,7 +989,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   openGoodsModal = () => {
     const { selectedRows, selectedSkuIds } = this.state;
-    debugger;
     this.setState({
       goodsModal: {
         _modalVisible: true,

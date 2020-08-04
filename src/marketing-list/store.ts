@@ -32,7 +32,6 @@ export default class AppStore extends Store {
     //   query.marketingSubType = null;
     // }
     const { res } = await webapi.fetchList({ ...query, pageNum, pageSize });
-    debugger;
     let levelList = [];
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
@@ -51,7 +50,6 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('loading:end');
-        debugger;
         this.dispatch('form:defaultLocalDateTime', res.defaultLocalDateTime);
         this.dispatch('listActor:init', res.context);
         this.dispatch('list:currentPage', pageNum + 1);

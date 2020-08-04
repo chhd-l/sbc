@@ -37,7 +37,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="fetchOrderInovices">
+      <AuthWrapper functionName="financeRewardQuery">
         <div>
           <BreadCrumb />
           {/* <Breadcrumb separator=">">

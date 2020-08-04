@@ -33,7 +33,8 @@ export default class SearchForm extends React.Component<any, any> {
       listData: {
         lastDay: '',
         prescriberId: Number,
-        PrescriberName: ''
+        PrescriberName: '',
+        PrescriberList: []
       }
     };
   }
@@ -45,14 +46,22 @@ export default class SearchForm extends React.Component<any, any> {
       console.log(employee, '+++++++++++++++');
 
       if (employee.roleName.indexOf('Prescriber') !== -1) {
-        const { searchForm } = this.state;
-        console.log(searchForm, 1111111111111);
+        const { listData } = this.state;
+        listData.PrescriberList = employee.prescribers;
+        console.log(listData.PrescriberList, 1111111111111);
         console.log(employee, 2222222);
       } else {
         //this.onSearch();
       }
     }
   }
+  onFormChange = ({ field, value }) => {
+    let data = this.state.listData.PrescriberName;
+    data[field] = value;
+    this.setState({
+      PrescriberName: data
+    });
+  };
   render() {
     const {
       onFormChange,
@@ -95,8 +104,26 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
         <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="PrescriberName" />}
+          {/*<Input
+            addonBefore={
+              <Select
+                // style={{ width: 140 }}
+                defaultValue={searchForm.consumerOption}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  this.onFormChange({
+                    field: 'consumerOption',
+                    value
+                  });
+                }}
+              >
+                {this.state.listData.PrescriberName.map((item) => (
+                  <Option value={item} key={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+            }
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -105,7 +132,7 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
             value={searchForm.get('prescriberName')}
-          />
+          />*/}
         </FormItem>
 
         {/* <br /> */}

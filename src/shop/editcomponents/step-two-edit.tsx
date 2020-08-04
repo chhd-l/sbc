@@ -71,7 +71,6 @@ export default class StepTwo extends React.Component<any, any> {
   };
 
   render() {
-    debugger;
     const { getFieldDecorator } = this.props.form;
     return (
       <div>

@@ -45,7 +45,6 @@ export default class SearchForm extends React.Component<any, any> {
       defaultLocalDateTime
     } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
-    debugger;
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>

@@ -593,6 +593,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       goodsInfoList.push(goods);
     }
     let params = {
+      totalPrice: this.subTotal(),
       goodsInfoList: goodsInfoList,
       promotionCode: promotionCode ? promotionCode : promotionCodeInput,
       isAutoSub: true

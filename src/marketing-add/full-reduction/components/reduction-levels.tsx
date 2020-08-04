@@ -128,7 +128,7 @@ export default class ReductionLevels extends React.Component<any, any> {
                           : level.fullCount
                       })(
                         <Input
-                          style={{ width: 200 }}
+                          style={{ width: 180 }}
                           placeholder={
                             !isFullCount ? '0.01-99999999.99' : '1-9999'
                           }

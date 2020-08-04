@@ -102,6 +102,7 @@ export default class AppStore extends Store {
         field: 'mobiImgName',
         value: res.context[0].mobiImgName
       });
+      debugger;
       const fileList = [
         {
           name: res.context[0].webImgName,
@@ -172,12 +173,12 @@ export default class AppStore extends Store {
   setIsEdit = (isEdit) => {
     this.dispatch('imageActor:setIsEdit', isEdit);
   };
-  setFileList = (list) => {
-    this.dispatch('imageActor:setFileList', list);
-  };
-  setMFileList = (list) => {
-    this.dispatch('imageActor:setMFileList', list);
-  };
+  // setFileList = (list) => {
+  //   this.dispatch('imageActor:setFileList', list);
+  // };
+  // setMFileList = (list) => {
+  //   this.dispatch('imageActor:setMFileList', list);
+  // };
 
   setList = (list) => {
     this.dispatch('imageActor:list', list);

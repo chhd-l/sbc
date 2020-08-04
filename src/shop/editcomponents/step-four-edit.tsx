@@ -56,16 +56,7 @@ export default class StepFour extends React.Component<any, any> {
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.contentForm;
-    if (field === 'contactTimePeriod') {
-      data['contactTimePeriodFrom'] = moment(value[0]).format(
-        'YYYY-MM-DD hh:mm:ss'
-      );
-      data['contactTimePeriodTo'] = moment(value[1]).format(
-        'YYYY-MM-DD hh:mm:ss'
-      );
-    } else {
-      data[field] = value;
-    }
+    data[field] = value;
     this.setState({
       contentForm: data
     });
@@ -279,41 +270,6 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              {/* <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="contactTimePeriod" />}
-              >
-                {getFieldDecorator('contactTimePeriod', {
-                  initialValue: [
-                    moment(this.state.contentForm.contactTimePeriodFrom),
-                    moment(this.state.contentForm.contactTimePeriodTo)
-                  ],
-                  rules: [
-                    {
-                      required: false,
-                      message: 'Please input Store Contact Time Period!'
-                    }
-                  ]
-                })(
-                  <RangePicker
-                    onChange={(dateRange) =>
-                      this.onFormChange({
-                        field: 'contactTimePeriod',
-                        value: dateRange
-                      })
-                    }
-                    showTime={{
-                      hideDisabledOptions: true,
-                      defaultValue: [
-                        moment('00:00:00', 'HH:mm:ss'),
-                        moment('11:59:59', 'HH:mm:ss')
-                      ]
-                    }}
-                    format="YYYY-MM-DD HH:mm:ss"
-                  />
-                )}
-              </FormItem> */}
               <FormItem
                 {...formItemLayout}
                 required={false}
@@ -332,6 +288,32 @@ export default class StepFour extends React.Component<any, any> {
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'customerServiceEamil',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={false}
+                label={<FormattedMessage id="contactTimePeriod" />}
+              >
+                {getFieldDecorator('contactTimePeriod', {
+                  initialValue: this.state.contentForm.contactTimePeriod,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Contact Time Period Eamil!'
+                    }
+                  ]
+                })(
+                  <Input
+                    onChange={(e: any) =>
+                      this.onFormChange({
+                        field: 'contactTimePeriod',
                         value: e.target.value
                       })
                     }

@@ -152,7 +152,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.unshift({
       title: (
         <div>
-          <span
+          {/* <span
             style={{
               color: 'red',
               fontFamily: 'SimSun',
@@ -161,7 +161,7 @@ class SkuForm extends React.Component<any, any> {
             }}
           >
             *
-          </span>
+          </span> */}
           <FormattedMessage id="product.image" />
         </div>
       ),

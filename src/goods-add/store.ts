@@ -1061,10 +1061,10 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
+    // if (images.length === 0) {
+    //   message.error('Product image is required');
+    //   return false;
+    // }
     param = param.set('images', images);
 
     // -----商品规格列表-------
@@ -1203,10 +1203,10 @@ export default class AppStore extends Store {
       message.error('At least one sku has a subscription status of yes');
       return false;
     }
-    if (isEmptyImage) {
-      message.error('Spec image is required');
-      return false;
-    }
+    // if (isEmptyImage) {
+    //   message.error('Spec image is required');
+    //   return false;
+    // }
     if (isEmptyStock) {
       message.error('Spec stock is required');
       return false;
@@ -2006,9 +2006,9 @@ export default class AppStore extends Store {
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
             fromJS({
-              detailId: '0',
+              detailId: 0,
               detailName: 'Other',
-              select: 'select'
+              select: ''
             })
           );
           return prop.set('goodsPropDetails', goodsPropDetails);
@@ -2033,9 +2033,10 @@ export default class AppStore extends Store {
                   );
                   if (d.get('detailId') == detailId) {
                     return d.set('select', 'select');
-                  } else if (d.get('detailId') === '0') {
-                    return d.set('select', 'select');
                   }
+                  // else if (d.get('detailId') === '0' && detailIds.length === 0) {
+                  //   return d.set('select', 'select');
+                  // }
                   return d.set('select', '');
                 });
               catePropDetail = catePropDetail.setIn(

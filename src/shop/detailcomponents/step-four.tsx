@@ -172,37 +172,10 @@ export default class StepFour extends React.Component<any, any> {
                   </p>
                 </FormItem>
               </Col>
-              {/* <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="contactTimePeriod" />}
-                >
-                  <span style={{ color: '#333' }}>
-                    {this.state.contentInformation.contactTimePeriodFrom ? (
-                      moment(
-                        this.state.contentInformation.contactTimePeriodFrom
-                      ).format('YYYY-MM-DD hh:ss')
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </span>
-                  <span>-</span>
-                  <span style={{ color: '#333' }}>
-                    {this.state.contentInformation.contactTimePeriodTo ? (
-                      moment(
-                        this.state.contentInformation.contactTimePeriodTo
-                      ).format('YYYY-MM-DD hh:ss')
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </span>
-                </FormItem>
-              </Col> */}
             </Row>
 
             <Row>
-            <Col span={12}>
+              <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
@@ -211,6 +184,21 @@ export default class StepFour extends React.Component<any, any> {
                   <p style={{ color: '#333' }}>
                     {this.state.contentInformation.customerServiceEamil ? (
                       this.state.contentInformation.customerServiceEamil
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="contactTimePeriod" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.contactTimePeriod ? (
+                      this.state.contentInformation.contactTimePeriod
                     ) : (
                       <FormattedMessage id="none" />
                     )}

@@ -106,42 +106,6 @@ export default class UploadImageModal extends Component<any, any> {
     setFileList: noop,
     setMFileList: noop
   };
-  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
-    if (nextProps.isEdit) {
-      const { imageForm, setFileList, setMFileList } = this.props.relaxProps;
-      const webSkipUrl = imageForm.toJS().webSkipUrl;
-      const mobiSkipUrl = imageForm.toJS().mobiSkipUrl;
-      const webUuid = imageForm.toJS().webUuid;
-      const mobiUuid = imageForm.toJS().mobiUuid;
-      const webImgName = imageForm.toJS().webImgName;
-      const mobiImgName = imageForm.toJS().mobiImgName;
-      const fileList = [
-        {
-          name: webImgName,
-          percent: 100,
-          response: [webSkipUrl],
-          // size: 27330,
-          status: 'done',
-          type: 'image/jpg',
-          uid: webUuid
-        }
-      ];
-      setFileList(fileList);
-      const mFileList = [
-        {
-          name: mobiImgName,
-          percent: 100,
-          response: [mobiSkipUrl],
-          // size: 27330,
-          status: 'done',
-          type: 'image/jpg',
-          uid: mobiUuid
-        }
-      ];
-      setMFileList(mFileList);
-    }
-  }
-
   componentDidMount() {
     const { storeId, companyInfoId } = JSON.parse(
       sessionStorage.getItem(cache.LOGIN_DATA)
@@ -170,11 +134,17 @@ export default class UploadImageModal extends Component<any, any> {
     }
     this.props.form.validateFields((err) => {
       if (!err) {
-        if (fileList.filter((file) => file.status === 'done').length <= 0) {
+        if (
+          imageForm.toJS().fileList.filter((file) => file.status === 'done')
+            .length <= 0
+        ) {
           message.error('Please choose to upload pc resource!');
           return;
         }
-        if (mFileList.filter((file) => file.status === 'done').length <= 0) {
+        if (
+          imageForm.toJS().mFileList.filter((file) => file.status === 'done')
+            .length <= 0
+        ) {
           message.error('Please choose to upload mobile resource!');
           return;
         }
@@ -205,8 +175,8 @@ export default class UploadImageModal extends Component<any, any> {
             bannerId: null,
             bannerName: imageForm.toJS().bannerName,
             bannerNo: imageForm.toJS().bannerNo,
-            mobiUrl: this.state.mobileUrl,
-            webUrl: this.state.pcUrl,
+            mobiUrl: imageForm.toJS().mobiUrl,
+            webUrl: imageForm.toJS().webUrl,
             storeId: this.state.storeId,
             userId: null,
             webSkipUrl: imageForm.toJS().webSkipUrl,
@@ -247,7 +217,7 @@ export default class UploadImageModal extends Component<any, any> {
     }
   };
   resetImageForm() {
-    // this.props.form.resetFields();
+    this.props.form.resetFields();
     const { resetForm } = this.props.relaxProps;
     resetForm();
     this._setFileList([]);
@@ -261,22 +231,24 @@ export default class UploadImageModal extends Component<any, any> {
     setModalVisible(false);
   };
   _setFileList = (fileList) => {
-    const { setFileList } = this.props.relaxProps;
-    setFileList(fileList);
-    // this.setState({ fileList });
+    const { onImageFormChange } = this.props.relaxProps;
+    onImageFormChange({
+      field: 'fileList',
+      value: fileList
+    });
   };
   _setMFileList = (mFileList) => {
-    const { setMFileList } = this.props.relaxProps;
-    setMFileList(mFileList);
-    // this.setState({ mFileList });
+    const { onImageFormChange } = this.props.relaxProps;
+    onImageFormChange({
+      field: 'mFileList',
+      value: mFileList
+    });
   };
 
   render() {
     const {
       modalVisible,
       tableDatas,
-      fileList,
-      mFileList,
       imageForm,
       bannerNoList,
       onImageFormChange
@@ -287,8 +259,8 @@ export default class UploadImageModal extends Component<any, any> {
     }
     const ref = this;
     const { getFieldDecorator } = this.props.form;
-    const list = fileList;
-    const mList = mFileList;
+    const list = imageForm.toJS().fileList;
+    const mList = imageForm.toJS().mFileList;
     const setFileList = this._setFileList;
     const setMFileList = this._setMFileList;
     const storeId = this.state.storeId;
@@ -333,13 +305,12 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('Please enter the file name in the correct format');
           return false;
         }
-
         if (fileName.length > 40) {
           message.error('File name is too long');
           return false;
         }
 
-        if (list.length >= 1) {
+        if (list && list.length >= 1) {
           message.error('Only can upload one resource.');
           return false;
         }
@@ -446,7 +417,7 @@ export default class UploadImageModal extends Component<any, any> {
           message.error('File name is too long');
           return false;
         }
-        if (mList.length >= 1) {
+        if (mList && mList.length >= 1) {
           message.error('Only can upload one resource.');
           return false;
         }
@@ -564,10 +535,9 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="Pc href">
+              <FormItem {...formItemLayout} label="Pc url">
                 {getFieldDecorator('webSkipUrl', {
-                  initialValue: webSkipUrl,
-                  rules: [{ required: true, message: 'Please enter pc href.' }]
+                  initialValue: webSkipUrl
                 })(
                   <Input
                     placeholder="Example: https://www.baidu.com/"
@@ -580,12 +550,9 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="Mobile href">
+              <FormItem {...formItemLayout} label="Mobile url">
                 {getFieldDecorator('mobiSkipUrl', {
-                  initialValue: mobiSkipUrl,
-                  rules: [
-                    { required: true, message: 'Please enter mobile href.' }
-                  ]
+                  initialValue: mobiSkipUrl
                 })(
                   <Input
                     placeholder="Example: https://www.baidu.com/"
@@ -609,7 +576,7 @@ export default class UploadImageModal extends Component<any, any> {
                 required={true}
               >
                 <div style={{ marginTop: 16 }}>
-                  <Dragger {...props} fileList={fileList}>
+                  <Dragger {...props} fileList={list}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox" />
                     </p>
@@ -637,7 +604,7 @@ export default class UploadImageModal extends Component<any, any> {
                 required={true}
               >
                 <div style={{ marginTop: 16 }}>
-                  <Dragger {...mProps} fileList={mFileList}>
+                  <Dragger {...mProps} fileList={mList}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox" />
                     </p>

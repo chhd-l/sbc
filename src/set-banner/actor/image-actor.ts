@@ -60,10 +60,16 @@ export default class ImageActor extends Actor {
       bannerId: null,
       bannerName: '',
       bannerNo: null,
+      webUrl: '',
+      mobiUrl: '',
       webSkipUrl: '',
       mobiSkipUrl: '',
       webUuid: 0,
-      mobiUuid: 0
+      mobiUuid: 0,
+      webImgName: '',
+      mobiImgName: '',
+      fileList: [],
+      mFileList: []
     };
     return state.set('imageForm', fromJS(imageForm));
   }

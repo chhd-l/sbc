@@ -445,17 +445,9 @@ export default class EditForm extends React.Component<any, any> {
                   disabled={editDisable}
                   // onChange={this.clinicChange}
                   showSearch
-                  // filterOption={(input, option: { props }) =>
-                  //   option.props.children
-                  //     .toLowerCase()
-                  //     .indexOf(input.toLowerCase()) >= 0
-                  // }
+                  filterOption={this.filterOption}
                 >
-                  {this.state.clinicsLites.map((item) => (
-                    <Option value={item.prescriberId} key={item.prescriberId}>
-                      {item.prescriberId}-{item.prescriberName}
-                    </Option>
-                  ))}
+                  { this._renderPerscirbersOption() }
                 </Select>
               )}
             </FormItem>
@@ -614,6 +606,16 @@ export default class EditForm extends React.Component<any, any> {
       );
     });
   }
+
+  filterOption = (input, option: { props }) => {
+    return (
+      option.props.children
+        .toString()
+        .toLowerCase()
+        .indexOf(input.toLowerCase()) >= 0
+    );
+  };
+    
 
   /**
    * 医院

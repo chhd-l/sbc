@@ -336,7 +336,7 @@ export default class EditForm extends React.Component<any, any> {
 
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="Gender" />}
+            label={<FormattedMessage id="gender" />}
           >
             {getFieldDecorator('sex', {
               ...sex
@@ -375,7 +375,7 @@ export default class EditForm extends React.Component<any, any> {
                 // treeData = {treeData.toJS()}
                 showSearch={false}
                 style={{ width: '100%' }}
-                value={departmentIdList}
+                // value={departmentIdList}
                 dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
                 placeholder="Please select, Multiple choice"
                 allowClear
@@ -440,18 +440,22 @@ export default class EditForm extends React.Component<any, any> {
                 ]
               })(
                 <Select
-                  mode="multiple"
+                  mode="tags"
                   placeholder="Please Select Prescribers"
                   disabled={editDisable}
                   // onChange={this.clinicChange}
                   showSearch
-                  filterOption={(input, option: { props }) =>
-                    option.props.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
+                  // filterOption={(input, option: { props }) =>
+                  //   option.props.children
+                  //     .toLowerCase()
+                  //     .indexOf(input.toLowerCase()) >= 0
+                  // }
                 >
-                  {this._renderPerscirbersOption()}
+                  {this.state.clinicsLites.map((item) => (
+                    <Option value={item.prescriberId} key={item.prescriberId}>
+                      {item.prescriberId}-{item.prescriberName}
+                    </Option>
+                  ))}
                 </Select>
               )}
             </FormItem>
@@ -681,7 +685,7 @@ export default class EditForm extends React.Component<any, any> {
     const manageDepartmentIdList = _state.get('manageDepartmentIdList');
     //是否为主账号
     const isMaster = _state.get('isMaster');
-    return allDeparts.map((dep) => {
+    return allDeparts.map((dep, index) => {
       //子部门
       if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
@@ -693,6 +697,7 @@ export default class EditForm extends React.Component<any, any> {
             }
             value={dep.get('departmentId')}
             title={dep.get('departmentName')}
+            key={index}
           >
             {this._loop(childDeparts)}
           </TreeNode>
@@ -706,6 +711,7 @@ export default class EditForm extends React.Component<any, any> {
           }
           value={dep.get('departmentId')}
           title={dep.get('departmentName')}
+          key={index}
         />
       );
     });

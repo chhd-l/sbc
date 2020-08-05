@@ -27,8 +27,7 @@ export default class ClinicList extends Component<any, any> {
           title: 'Prescriber ID',
           dataIndex: 'prescriberId',
           key: 'prescriberID',
-          width: '10%',
-          ellipsis: true
+          width: '10%'
         },
         {
           title: 'Prescriber name',
@@ -41,15 +40,13 @@ export default class ClinicList extends Component<any, any> {
           title: 'Prescriber phone',
           dataIndex: 'phone',
           key: 'prescriberPhone',
-          width: '10%',
-          ellipsis: true
+          width: '10%'
         },
         {
           title: 'Prescriber city',
           dataIndex: 'primaryCity',
           key: 'prescriberCity',
-          width: '10%',
-          ellipsis: true
+          width: '10%'
         },
         // {
         //   title: 'Prescriber Zip',
@@ -74,22 +71,32 @@ export default class ClinicList extends Component<any, any> {
           title: 'Prescriber type',
           dataIndex: 'prescriberType',
           key: 'prescriberType',
-          width: '10%',
-          ellipsis: true
+          width: '10%'
         },
         {
-          title: 'Reward period',
-          dataIndex: 'rewardType',
-          key: 'rewardRate',
+          title: 'Audit Status',
+          dataIndex: 'auditStatus',
+          key: 'auditStatus',
           width: '10%',
-          ellipsis: true
+          render: (text, record) => (
+            <p>{record.auditStatus === '1' ? 'Online' : 'Offline'}</p> //1 线上 0 线下
+          )
+        },
+
+        {
+          title: 'Recommendation code',
+          dataIndex: 'prescriberCode',
+          key: 'prescriberCode',
+          width: '10%',
+          render: (text, record) => (
+            <p>{record.auditStatus === '1' ? '' : text}</p> //1 线上 0 线下
+          )
         },
         {
           title: 'Prescriber status',
           dataIndex: 'enabled',
           key: 'enabled',
           width: '10%',
-          ellipsis: true,
           render: (text, record) => (
             <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
           )
@@ -124,7 +131,8 @@ export default class ClinicList extends Component<any, any> {
         primaryCity: '',
         primaryZip: '',
         prescriberType: '',
-        enabled: 'true'
+        enabled: 'true',
+        prescriberCode: ''
       },
       cityArr: [],
       typeArr: [],
@@ -396,6 +404,19 @@ export default class ClinicList extends Component<any, any> {
                   const value = (e.target as any).value;
                   this.onFormChange({
                     field: 'primaryZip',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
+              <Input
+                addonBefore="Recommendation code"
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onFormChange({
+                    field: 'prescriberCode',
                     value
                   });
                 }}

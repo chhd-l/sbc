@@ -62,3 +62,7 @@ export const fetchMiniProgramQrcode = (storeId) => {
 export const employee = () => {
   return Fetch('/customer/employee/info');
 };
+
+export const getUserSiteInfo = () => {
+  return Fetch('/queryBaseConfig');
+};

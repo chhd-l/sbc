@@ -48,3 +48,6 @@ export const getConfig = () => {
 export const getBusinessConfig = () => {
   return Fetch('/business/config');
 };
+export const getUserSiteInfo = () => {
+  return Fetch('/queryBaseConfig');
+};

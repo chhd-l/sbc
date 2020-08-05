@@ -522,6 +522,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         selectedSkuIds: scopeIds.toJS()
       });
     }
+    sessionStorage.setItem('PromotionTypeValue', 0);
   };
 
   /**
@@ -529,7 +530,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param joinLevel
    */
   promotionType = (e) => {
-    //console.log('radio checked', e.target.value);
+    sessionStorage.setItem('PromotionTypeValue', e.target.value);
     let { marketingBean } = this.state;
     this.setState(
       {

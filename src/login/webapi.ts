@@ -39,7 +39,7 @@ export const fetchFunctions = () => {
  * @type {Promise<AsyncResult<T>>}
  */
 export const getSiteInfo = () => {
-  return Fetch('/queryBaseConfig');
+  return Fetch('/baseConfig');
 };
 /**
  * 获取平台站点信息11
@@ -61,4 +61,8 @@ export const fetchMiniProgramQrcode = (storeId) => {
  */
 export const employee = () => {
   return Fetch('/customer/employee/info');
+};
+
+export const getUserSiteInfo = () => {
+  return Fetch('/queryBaseConfig');
 };

@@ -36,7 +36,7 @@ class ClinicForm extends React.Component<any, any> {
       prescriberForm: {
         id: '',
         prescriberId: '',
-        prescriberOwner: 'john',
+        prescriberOwner: 'admin',
         prescriberName: '',
         phone: '',
         primaryCity: '',
@@ -46,7 +46,9 @@ class ClinicForm extends React.Component<any, any> {
         latitude: '',
         location: '',
         enabled: true,
-        delFlag: 0
+        delFlag: 0,
+        auditStatus: '1',
+        prescriberCode: ''
       },
       cityArr: [],
       typeArr: [],
@@ -80,9 +82,14 @@ class ClinicForm extends React.Component<any, any> {
       saveLoading: false
     };
     this.getDetail = this.getDetail.bind(this);
-
+  }
+  componentDidMount() {
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
+    } else {
+      this.props.form.setFieldsValue({
+        auditStatus: this.state.prescriberForm.auditStatus
+      });
     }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
@@ -224,7 +231,9 @@ class ClinicForm extends React.Component<any, any> {
         longitude: res.context.longitude,
         latitude: res.context.latitude,
         location: res.context.location,
-        prescriberType: res.context.prescriberType
+        prescriberType: res.context.prescriberType,
+        auditStatus: res.context.auditStatus,
+        prescriberCode: res.context.prescriberCode
       });
       this.getClinicsReward(res.context.prescriberId);
     } else {
@@ -257,10 +266,21 @@ class ClinicForm extends React.Component<any, any> {
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.prescriberForm;
+
     data[field] = value;
-    this.setState({
-      prescriberForm: data
-    });
+    this.setState(
+      {
+        prescriberForm: data
+      },
+      () => {
+        if (field === 'auditStatus' && this.state.isEdit) {
+          debugger;
+          this.props.form.setFieldsValue({
+            prescriberCode: data.prescriberCode
+          });
+        }
+      }
+    );
   };
   onCreate = () => {
     this.setState({
@@ -459,7 +479,7 @@ class ClinicForm extends React.Component<any, any> {
   };
 
   render() {
-    const { cityArr, typeArr } = this.state;
+    const { cityArr, typeArr, prescriberForm } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
@@ -513,6 +533,41 @@ class ClinicForm extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
+
+                <FormItem label="Audit status">
+                  {getFieldDecorator('auditStatus', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please select Audit status!'
+                      }
+                    ]
+                  })(
+                    <Radio.Group
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'auditStatus',
+                          value
+                        });
+                      }}
+                    >
+                      <Radio value="1">Online</Radio>
+                      <Radio value="0">Offline</Radio>
+                    </Radio.Group>
+                  )}
+                </FormItem>
+                {this.state.isEdit &&
+                this.props.prescriberId &&
+                prescriberForm.auditStatus === '0' ? (
+                  <FormItem label="Recommendation code">
+                    {getFieldDecorator(
+                      'prescriberCode',
+                      {}
+                    )(<Input disabled />)}
+                  </FormItem>
+                ) : null}
+
                 <FormItem label="Prescriber phone number">
                   {getFieldDecorator('phone', {
                     rules: [

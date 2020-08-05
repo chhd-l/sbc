@@ -16,6 +16,7 @@ import {
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
+const Option = Select.Option;
 import * as webapi from '../webapi';
 import { SelectGroup } from 'qmkit';
 
@@ -98,48 +99,6 @@ class PaymentModal extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="environment" />}
-              >
-                {getFieldDecorator('environment', {
-                  initialValue: this.state.paymentForm.environment,
-                  rules: [{ required: false, message: 'Please input taxRate!' }]
-                })(
-                  <Input
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'environment',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="URL" />}
-              >
-                {getFieldDecorator('url', {
-                  initialValue: this.state.paymentForm.url,
-                  rules: [{ required: false, message: 'Please input taxRate!' }]
-                })(
-                  <Input
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'url',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
                 label={<FormattedMessage id="appID" />}
               >
                 {getFieldDecorator('appId', {
@@ -150,29 +109,6 @@ class PaymentModal extends React.Component<any, any> {
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'appId',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="apiVersion" />}
-              >
-                {getFieldDecorator('apiVersion', {
-                  initialValue: this.state.paymentForm.apiVersion,
-                  rules: [
-                    { required: false, message: 'Please input Api Version!' }
-                  ]
-                })(
-                  <Input
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'apiVersion',
                         value: e.target.value
                       })
                     }
@@ -254,7 +190,7 @@ class PaymentModal extends React.Component<any, any> {
                       })
                     }
                   >
-                    <Option value={null}>All</Option>
+                    <Option value="">All</Option>
                     <Option value="VISA">
                       <img
                         src={require('../img/visa.png')}
@@ -298,6 +234,17 @@ class PaymentModal extends React.Component<any, any> {
                         }}
                       />
                       OXXO
+                    </Option>
+                    <Option value="AmericanExpress">
+                      <img
+                        src={require('../img/Klarna_Logo.png')}
+                        style={{
+                          width: '30px',
+                          height: '20px',
+                          marginRight: '10px'
+                        }}
+                      />
+                      Klarna
                     </Option>
                     <Option value="JCB">
                       <img

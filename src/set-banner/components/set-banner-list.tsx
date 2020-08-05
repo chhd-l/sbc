@@ -17,11 +17,12 @@ import {
   Tooltip
 } from 'antd';
 import { Link } from 'react-router-dom';
-import { fromJS } from 'immutable';
 import { AuthWrapper, Const } from 'qmkit';
-import momnet from 'moment';
-import Moment from 'moment';
+import { IMap } from 'plume2';
+import { List, fromJS, Map } from 'immutable';
 const FormItem = Form.Item;
+
+type TList = List<IMap>;
 const styles = {
   loading: {
     textAlign: 'center',
@@ -108,7 +109,8 @@ export default class SetBannerList extends Component<any, any> {
         // const mobileName = item.get('mobileName');
         const pcImage = item.get('webUrl');
         const mobileImage = item.get('mobiUrl');
-        let pcType, mobileType;
+        let pcType = 'image';
+        let mobileType = 'image';
         if (
           pcImage.endsWith('.jpg') ||
           pcImage.endsWith('.jpeg') ||
@@ -141,7 +143,7 @@ export default class SetBannerList extends Component<any, any> {
                 </div>
               ) : (
                 <div>
-                  <video width="220" height="260" controls>
+                  <video width="220" height="240" controls>
                     <source src={pcImage} type="video/mp4" />
                   </video>
                 </div>
@@ -154,7 +156,7 @@ export default class SetBannerList extends Component<any, any> {
                   <img className="img" src={mobileImage} />
                 </div>
               ) : (
-                <video width="220" height="260" controls>
+                <video width="220" height="240" controls>
                   <source src={mobileImage} type="video/mp4" />
                 </video>
               )}
@@ -216,37 +218,37 @@ export default class SetBannerList extends Component<any, any> {
                     >
                       <thead className="ant-table-thead">
                         <tr>
-                          <th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage id="bannerNo" />
                           </th>
-                          <th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage id="resourceName" />
                           </th>
-                          <th>
+                          <th style={{ width: '20%' }}>
                             <FormattedMessage
                               id="resource"
                               values={{ type: 'Pc' }}
                             />
                           </th>
-                          <th>
+                          <th style={{ width: '20%' }}>
                             <FormattedMessage
                               id="resourceName"
                               values={{ type: 'Mobile' }}
                             />
                           </th>
-                          <th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage
                               id="bannerUrl"
                               values={{ type: 'Pc' }}
                             />
                           </th>
-                          <th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage
                               id="bannerUrl"
                               values={{ type: 'Mobile' }}
                             />
                           </th>
-                          <th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage id="operator" />
                           </th>
                         </tr>

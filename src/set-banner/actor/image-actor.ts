@@ -22,7 +22,9 @@ export default class ImageActor extends Actor {
         webImgName: '',
         mobiImgName: '',
         fileList: [],
-        mFileList: []
+        mFileList: [],
+        isVideo: 0,
+        isMobiVideo: 0
       }
     };
   }

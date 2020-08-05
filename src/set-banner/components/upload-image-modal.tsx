@@ -23,12 +23,15 @@ import {
   Upload,
   Tree
 } from 'antd';
-import { fromJS, Map } from 'immutable';
+import { IMap } from 'plume2';
+import { List, fromJS, Map } from 'immutable';
 import { FunctionOrConstructorTypeNodeBase } from 'ts-morph';
 
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
 const Dragger = Upload.Dragger;
+const Option = Select.Option;
+type TList = List<IMap>;
 const confirm = Modal.confirm;
 const formItemLayout = {
   labelCol: {
@@ -134,36 +137,38 @@ export default class UploadImageModal extends Component<any, any> {
     }
     this.props.form.validateFields((err) => {
       if (!err) {
+        let imageObj = imageForm.toJS();
         if (
-          imageForm.toJS().fileList.filter((file) => file.status === 'done')
-            .length <= 0
+          imageObj.fileList.filter((file) => file.status === 'done').length <= 0
         ) {
           message.error('Please choose to upload pc resource!');
           return;
         }
         if (
-          imageForm.toJS().mFileList.filter((file) => file.status === 'done')
-            .length <= 0
+          imageObj.mFileList.filter((file) => file.status === 'done').length <=
+          0
         ) {
           message.error('Please choose to upload mobile resource!');
           return;
         }
-        if (imageForm.toJS().bannerId) {
+        if (imageObj.bannerId) {
           // edit
           const params = {
-            bannerId: imageForm.toJS().bannerId,
-            bannerNo: imageForm.toJS().bannerNo,
-            bannerName: imageForm.toJS().bannerName,
-            mobiUrl: imageForm.toJS().mobiUrl,
-            webUrl: imageForm.toJS().webUrl,
+            bannerId: imageObj.bannerId,
+            bannerNo: imageObj.bannerNo,
+            bannerName: imageObj.bannerName,
+            mobiUrl: imageObj.mobiUrl,
+            webUrl: imageObj.webUrl,
             storeId: this.state.storeId,
             userId: null,
-            webSkipUrl: imageForm.toJS().webSkipUrl,
-            mobiSkipUrl: imageForm.toJS().mobiSkipUrl,
-            webUuid: imageForm.toJS().webUuid,
-            mobiUuid: imageForm.toJS().mobiUuid,
-            webImgName: imageForm.toJS().webImgName,
-            mobiImgName: imageForm.toJS().mobiImgName
+            webSkipUrl: imageObj.webSkipUrl,
+            mobiSkipUrl: imageObj.mobiSkipUrl,
+            webUuid: imageObj.webUuid,
+            mobiUuid: imageObj.mobiUuid,
+            webImgName: imageObj.webImgName,
+            mobiImgName: imageObj.mobiImgName,
+            isVideo: imageObj.isVideo,
+            isMobiVideo: imageObj.isMobiVideo
           };
           editBanner(params);
           this.setState({
@@ -173,18 +178,20 @@ export default class UploadImageModal extends Component<any, any> {
           //上传
           const params = {
             bannerId: null,
-            bannerName: imageForm.toJS().bannerName,
-            bannerNo: imageForm.toJS().bannerNo,
-            mobiUrl: imageForm.toJS().mobiUrl,
-            webUrl: imageForm.toJS().webUrl,
+            bannerName: imageObj.bannerName,
+            bannerNo: imageObj.bannerNo,
+            mobiUrl: imageObj.mobiUrl,
+            webUrl: imageObj.webUrl,
             storeId: this.state.storeId,
             userId: null,
-            webSkipUrl: imageForm.toJS().webSkipUrl,
-            mobiSkipUrl: imageForm.toJS().mobiSkipUrl,
-            webUuid: imageForm.toJS().webUuid,
-            mobiUuid: imageForm.toJS().mobiUuid,
-            webImgName: imageForm.toJS().webImgName,
-            mobiImgName: imageForm.toJS().mobiImgName
+            webSkipUrl: imageObj.webSkipUrl,
+            mobiSkipUrl: imageObj.mobiSkipUrl,
+            webUuid: imageObj.webUuid,
+            mobiUuid: imageObj.mobiUuid,
+            webImgName: imageObj.webImgName,
+            mobiImgName: imageObj.mobiImgName,
+            isVideo: imageObj.isVideo,
+            isMobiVideo: imageObj.isMobiVideo
           };
           this._uploadBanner(params);
           this.setState({
@@ -334,7 +341,6 @@ export default class UploadImageModal extends Component<any, any> {
         }
       },
       onChange(info) {
-        debugger;
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
@@ -360,6 +366,17 @@ export default class UploadImageModal extends Component<any, any> {
               field: 'webImgName',
               value: info.file.name
             });
+            if (info.file.type.indexOf('video') !== -1) {
+              onImageFormChange({
+                field: 'isVideo',
+                value: 1
+              });
+            } else {
+              onImageFormChange({
+                field: 'isVideo',
+                value: 0
+              });
+            }
           }
         } else if (status === 'error') {
           message.error(`${info.file.name} upload failed!`);
@@ -467,6 +484,17 @@ export default class UploadImageModal extends Component<any, any> {
               field: 'mobiImgName',
               value: info.file.name
             });
+            if (info.file.type.indexOf('video') !== -1) {
+              onImageFormChange({
+                field: 'isMobiVideo',
+                value: 1
+              });
+            } else {
+              onImageFormChange({
+                field: 'isMobiVideo',
+                value: 0
+              });
+            }
             // message.success(`${info.file.name} uploaded successfully!`);
           }
         } else if (status === 'error') {
@@ -511,10 +539,10 @@ export default class UploadImageModal extends Component<any, any> {
                       });
                     }}
                   >
-                    {bannerNoList.map((item) => (
-                      <Select.Option key={item} value={item}>
+                    {bannerNoList.map((item: any, index) => (
+                      <Option key={index} value={item}>
                         {item}
-                      </Select.Option>
+                      </Option>
                     ))}
                   </Select>
                 )}
@@ -541,7 +569,7 @@ export default class UploadImageModal extends Component<any, any> {
                   initialValue: webSkipUrl
                 })(
                   <Input
-                    placeholder="Example: https://www.baidu.com/"
+                    placeholder="Example: https://www.royalcanin.com/"
                     onChange={(e) =>
                       onImageFormChange({
                         field: 'webSkipUrl',
@@ -556,7 +584,7 @@ export default class UploadImageModal extends Component<any, any> {
                   initialValue: mobiSkipUrl
                 })(
                   <Input
-                    placeholder="Example: https://www.baidu.com/"
+                    placeholder="Example: https://www.royalcanin.com/"
                     onChange={(e) =>
                       onImageFormChange({
                         field: 'mobiSkipUrl',

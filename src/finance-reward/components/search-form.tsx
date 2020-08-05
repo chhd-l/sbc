@@ -43,13 +43,10 @@ export default class SearchForm extends React.Component<any, any> {
       let employee = JSON.parse(
         sessionStorage.getItem('s2b-supplier@employee')
       );
-      console.log(employee, '+++++++++++++++');
 
       if (employee.roleName.indexOf('Prescriber') !== -1) {
         const { listData } = this.state;
         listData.PrescriberList = employee.prescribers;
-        console.log(listData.PrescriberList, 1111111111111);
-        console.log(employee, 2222222);
       } else {
         //this.onSearch();
       }
@@ -104,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
         <FormItem>
-          {/*<Input
+          <Input
             addonBefore={
               <Select
                 // style={{ width: 140 }}
@@ -117,11 +114,12 @@ export default class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                {this.state.listData.PrescriberName.map((item) => (
+                {this.state.listData.PrescriberName}
+                {/*{this.state.listData.PrescriberName.map((item) => (
                   <Option value={item} key={item}>
                     {item}
                   </Option>
-                ))}
+                ))}*/}
               </Select>
             }
             onChange={(e) => {
@@ -132,7 +130,7 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
             value={searchForm.get('prescriberName')}
-          />*/}
+          />
         </FormItem>
 
         {/* <br /> */}

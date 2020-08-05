@@ -58,7 +58,8 @@ export default class PaymentSetting extends React.Component<any, any> {
     this.state = {
       paymentVisible: false,
       enabled: true,
-      paymentForm: {}
+      paymentForm: {}, //edit
+      paymentList: []
     };
     this.closeModel = this.closeModel.bind(this);
   }
@@ -69,7 +70,7 @@ export default class PaymentSetting extends React.Component<any, any> {
     const { res } = await webapi.getPaymentSetting();
     if (res.code === 'K-000000') {
       this.setState({
-        paymentForm: res.context
+        paymentList: res.context.payGatewayVOList
       });
     } else {
       message.error(res.message);
@@ -87,6 +88,7 @@ export default class PaymentSetting extends React.Component<any, any> {
     });
   }
   render() {
+    const { paymentList } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -94,10 +96,14 @@ export default class PaymentSetting extends React.Component<any, any> {
         <div className="container">
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
-            {this.state.paymentForm ? (
-              <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                <div className="methodItem">
-                  {this.state.paymentForm.storeId === 123457908 ? (
+            {paymentList &&
+              paymentList.map((item, index) => (
+                <Card
+                  style={{ width: 300 }}
+                  bodyStyle={{ padding: 10 }}
+                  key={index}
+                >
+                  <div className="methodItem">
                     <img
                       src={require('./img/adycn.png')}
                       style={{
@@ -106,37 +112,29 @@ export default class PaymentSetting extends React.Component<any, any> {
                         marginTop: '10px'
                       }}
                     />
-                  ) : (
-                    <img
-                      src={this.state.paymentImage}
-                      src={require('./img/payu.jpg')}
-                      style={{
-                        width: '150px',
-                        height: '100%',
-                        marginTop: '10px'
-                      }}
-                    />
-                  )}
-                </div>
-                <div className="bar">
-                  <div className="status">
-                    {this.state.enabled ? 'Enabled' : 'Disabled'}
                   </div>
-                  <div>
-                    <a
-                      onClick={() => {
-                        this.setState({
-                          paymentVisible: true
-                        });
-                      }}
-                      className="links"
-                    >
-                      <FormattedMessage id="edit" />
-                    </a>
+                  <div className="bar">
+                    <div className="status">
+                      {this.state.enabled ? 'Enabled' : 'Disabled'}
+                    </div>
+                    <div>
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          this.setState({
+                            paymentVisible: true,
+                            paymentForm: item
+                          });
+                        }}
+                        className="links"
+                      >
+                        <FormattedMessage id="edit" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ) : null}
+                </Card>
+              ))}
+
             <PaymentModel
               paymentForm={this.state.paymentForm}
               visible={this.state.paymentVisible}

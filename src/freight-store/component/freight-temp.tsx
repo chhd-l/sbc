@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Form, Input, InputNumber, Radio, TreeSelect, Button } from 'antd';
-import { QMMethod, FindArea, ValidConst, noop, history } from 'qmkit';
+import { QMMethod, FindArea, ValidConst, noop, cache, history } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 const FormDiv = styled.div`
@@ -246,7 +246,8 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  dollar, the freight would be
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, the
+                  freight would be
                 </span>
                 <FormItem>
                   {getFieldDecorator('satisfyFreight', {
@@ -265,10 +266,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <span style={{ paddingLeft: 10 }}>
-                  dollar. Freight after meeting the conditions will be
-                  free.Order is judged whether it meets the free shipping
-                  conditions according to the amount after excluding the
-                  discount.
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
+                  Freight after meeting the conditions will be free.Order is
+                  judged whether it meets the free shipping conditions according
+                  to the amount after excluding the discount.
                 </span>
               </div>
 
@@ -300,7 +301,9 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>dollar.</span>
+                <span style={{ paddingLeft: 10 }}>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
+                </span>
                 <span
                   style={{
                     paddingLeft: 23,
@@ -335,7 +338,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  dollar.
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
                 </span>
               </div>
             </RadioGroup>

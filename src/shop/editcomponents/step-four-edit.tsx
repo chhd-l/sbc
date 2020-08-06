@@ -147,6 +147,33 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
+                label={<FormattedMessage id="contactUsUrl" />}
+              >
+                {getFieldDecorator('contactUsUrl', {
+                  initialValue: this.state.contentForm.contactUsUrl,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Contact Us Url'
+                    }
+                  ]
+                })(
+                  <Input
+                    addonBefore="URL"
+                    onChange={(e: any) =>
+                      this.onFormChange({
+                        field: 'contactUsUrl',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={false}
                 label={<FormattedMessage id="termsOfUse" />}
               >
                 {getFieldDecorator('termsOfUse', {

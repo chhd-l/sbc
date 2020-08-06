@@ -352,6 +352,7 @@ export default {
   'storeContactPhoneNumber': '商店联系人电话',
   'storeContactEmail': '商店联系人邮件',
   'contactTimePeriod': '联系间隔',
+  'contactUsUrl': '联系我们',
 
 'payment': '支付',
 'environment': '环境',

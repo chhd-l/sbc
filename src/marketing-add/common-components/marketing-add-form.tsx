@@ -275,16 +275,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
               },
               {
                 validator: (_rule, value, callback) => {
-                  console.log(value[0].unix(), 1111);
-                  console.log(
-                    moment(new Date(sessionStorage.getItem('zoneDate')))
-                      .hour(0)
-                      .minute(0)
-                      .second(0)
-                      .unix(),
-                    1111
-                  );
-
                   if (
                     value &&
                     moment(new Date(sessionStorage.getItem('zoneDate')))
@@ -302,10 +292,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
             ],
             onChange: (date, dateString) => {
               if (date) {
-                console.log(
-                  moment(sessionStorage.getItem('zoneDate')).format('h:mm:ss '),
-                  1111111
-                );
                 this.onBeanChange({
                   beginTime: dateString[0] + ':00',
                   endTime: dateString[1] + ':00'

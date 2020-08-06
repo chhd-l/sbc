@@ -89,7 +89,10 @@ export default async function Fetch<T>(
     }
 
     //TODO 和后端约定返回的数据格式, 然后再细分
-    sessionStorage.setItem('defaultLocalDateTime',resJSON.defaultLocalDateTime)
+    if(resJSON.defaultLocalDateTime){
+      sessionStorage.setItem('defaultLocalDateTime',resJSON.defaultLocalDateTime)
+    }
+    
     
     return {
       res: resJSON,

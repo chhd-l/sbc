@@ -105,7 +105,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                 >
                   <div className="methodItem">
                     <img
-                      src={require('./img/adycn.png')}
+                      src={item.imgUrl}
                       style={{
                         width: '150px',
                         height: '100%',

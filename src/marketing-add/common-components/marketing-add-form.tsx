@@ -96,7 +96,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       promotionCode: '',
       promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
-      PromotionTypeChecked: true
+      PromotionTypeChecked: true,
+      timeZone: []
     };
   }
 
@@ -123,7 +124,19 @@ export default class MarketingAddForm extends React.Component<any, any> {
       return this.state.promotionCode;
     }
   };
-
+  handleEndOpenChange = async (date) => {
+    if (date == true) {
+      const { res } = await webapi.timeZone();
+      if (res.code == Const.SUCCESS_CODE) {
+        this.setState({
+          timeZone: moment(res.defaultLocalDateTime).format('hh:mm:ss')
+        });
+      } else {
+        message.error(res.message);
+        return;
+      }
+    }
+  };
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
@@ -287,6 +300,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 });
               }
             },
+
             initialValue: marketingBean.get('beginTime') &&
               marketingBean.get('endTime') && [
                 moment(marketingBean.get('beginTime')),
@@ -301,6 +315,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               format={Const.DATE_FORMAT}
               placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
+              onOpenChange={this.handleEndOpenChange}
             />
           )}
         </FormItem>

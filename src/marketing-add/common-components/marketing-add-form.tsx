@@ -325,11 +325,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
               allowClear={false}
               //format={Const.DATE_FORMAT}
-              format={
-                'YYYY-MM-DD' +
-                ' ' +
-                moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')
-              }
+              //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
+              format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
               onOpenChange={this.handleEndOpenChange}

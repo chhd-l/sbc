@@ -129,8 +129,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
       const { res } = await webapi.timeZone();
       if (res.code == Const.SUCCESS_CODE) {
         this.setState({
-          timeZone: moment(res.defaultLocalDateTime).format('hh:mm:ss')
+          timeZone: res.defaultLocalDateTime
         });
+        console.log(this.state.timeZone, 2222);
       } else {
         message.error(res.message);
         return;
@@ -291,6 +292,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
             ],
             onChange: (date, dateString) => {
+              console.log(date, 11111);
+              console.log(
+                marketingBean.get('beginTime'),
+                '11111111111111111111'
+              );
+              console.log(dateString, 2222);
               if (date) {
                 this.onBeanChange({
                   beginTime: dateString[0] + ':00',
@@ -299,20 +306,22 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
             },
 
-            initialValue: marketingBean.get('beginTime') &&
-              marketingBean.get('endTime') && [
-                moment(marketingBean.get('beginTime')),
-                moment(marketingBean.get('endTime'))
-              ]
+            initialValue:
+              marketingBean.get('beginTime') == undefined
+                ? [moment(this.state.timeZone), moment(this.state.timeZone)]
+                : [
+                    moment(marketingBean.get('beginTime')),
+                    moment(marketingBean.get('endTime'))
+                  ]
           })(
             <RangePicker
               getCalendarContainer={() =>
                 document.getElementById('page-content')
               }
               allowClear={false}
-              //format={Const.DATE_FORMAT}
+              format={Const.DATE_FORMAT}
               //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
-              format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
+              // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
               onOpenChange={this.handleEndOpenChange}

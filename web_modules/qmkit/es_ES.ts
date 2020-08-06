@@ -153,6 +153,7 @@ export default {
   'storeContactEmail': 'Shop contact email',
   'customerServiceEamil': 'Customer Service Eamil',
   'contactTimePeriod': 'Contact time period',
+  'contactUsUrl': 'Contact Us Url',
   'legalTerms': 'Legal terms',
 
   'signedInformation': 'Signed information',

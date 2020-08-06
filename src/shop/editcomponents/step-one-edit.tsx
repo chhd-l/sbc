@@ -159,7 +159,6 @@ export default class StepOneEdit extends React.Component<any, any> {
 
     const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     const companyInfoId = companyInfo.companyInfoId;
-
     return (
       <div>
         <Form>
@@ -305,7 +304,8 @@ export default class StepOneEdit extends React.Component<any, any> {
                       onChange={(value) =>
                         onChange({
                           field: 'languageId',
-                          value: value
+                          value: value,
+                          valueEn: value
                         })
                       }
                     >
@@ -340,10 +340,11 @@ export default class StepOneEdit extends React.Component<any, any> {
                           .toLowerCase()
                           .indexOf(input.toLowerCase()) >= 0
                       }
-                      onChange={(value) =>
+                      onChange={(value, zone) =>
                         onChange({
                           field: 'timeZoneId',
-                          value: value
+                          value: value,
+                          zone: zone.props.children
                         })
                       }
                     >

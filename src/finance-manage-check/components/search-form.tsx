@@ -67,6 +67,7 @@ export default class SearchForm extends React.Component<any, any> {
               allowClear={false}
               format="YYYY-MM-DD"
               placeholder={['Start Time', 'End Time']}
+              defaultPickerValue={[moment('2020-08-05'), moment('2020-08-05')]}
               onChange={(date, dateString) =>
                 this._handleDateParams(date, dateString)
               }

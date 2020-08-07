@@ -350,6 +350,21 @@ module.exports = function (webpackEnv, envCode = 'prod') {
               ),
             },
             {
+              test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+              use: [
+                {
+                  loader: 'babel-loader',
+                },
+                {
+                  loader: '@svgr/webpack',
+                  options: {
+                    babel: false,
+                    icon: true,
+                  },
+                },
+              ],
+            },
+            {
               loader: require.resolve('file-loader'),
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {

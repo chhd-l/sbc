@@ -96,44 +96,47 @@ export default class PaymentSetting extends React.Component<any, any> {
         <div className="container">
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
+            <Row>
             {paymentList &&
               paymentList.map((item, index) => (
-                <Card
-                  style={{ width: 300 }}
-                  bodyStyle={{ padding: 10 }}
-                  key={index}
-                >
-                  <div className="methodItem">
-                    <img
-                      src={item.imgUrl}
-                      style={{
-                        width: '150px',
-                        height: '100%',
-                        marginTop: '10px'
-                      }}
-                    />
-                  </div>
-                  <div className="bar">
-                    <div className="status">
-                      {this.state.enabled ? 'Enabled' : 'Disabled'}
-                    </div>
-                    <div>
-                      <Button
-                        type="link"
-                        onClick={() => {
-                          this.setState({
-                            paymentVisible: true,
-                            paymentForm: item
-                          });
+                <Col span={8} key={index}>
+                  <Card
+                    style={{ width: 300 }}
+                    bodyStyle={{ padding: 10 }}
+                  >
+                    <div className="methodItem">
+                      <img
+                        src={item.imgUrl}
+                        style={{
+                          width: '150px',
+                          height: '80px',
+                          marginTop: '10px'
                         }}
-                        className="links"
-                      >
-                        <FormattedMessage id="edit" />
-                      </Button>
+                      />
                     </div>
-                  </div>
-                </Card>
+                    <div className="bar">
+                      <div className="status">
+                        {this.state.enabled ? 'Enabled' : 'Disabled'}
+                      </div>
+                      <div>
+                        <Button
+                          type="link"
+                          onClick={() => {
+                            this.setState({
+                              paymentVisible: true,
+                              paymentForm: item
+                            });
+                          }}
+                          className="links"
+                        >
+                          <FormattedMessage id="edit" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
               ))}
+            </Row>
 
             <PaymentModel
               paymentForm={this.state.paymentForm}

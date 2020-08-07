@@ -97,7 +97,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
       PromotionTypeChecked: true,
-      timeZone: []
+      timeZone: moment
     };
   }
 
@@ -307,7 +307,9 @@ export default class MarketingAddForm extends React.Component<any, any> {
             },
 
             initialValue:
-              marketingBean.get('beginTime') == undefined
+              this.state.timeZone == moment
+                ? [marketingBean.get('beginTime'), marketingBean.get('endTime')]
+                : marketingBean.get('beginTime') == undefined
                 ? [moment(this.state.timeZone), moment(this.state.timeZone)]
                 : [
                     moment(marketingBean.get('beginTime')),
@@ -320,6 +322,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
               allowClear={false}
               format={Const.DATE_FORMAT}
+              //defaultValue = {moment[undefined,undefined]}
               //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
               // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={['Start time', 'End time']}

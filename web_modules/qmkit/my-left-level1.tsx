@@ -66,9 +66,8 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     return (
       <Sider width={134} className="leftHeader">
         <Menu
-          style={{ width: '100 %', backgroundColor: '#4d4d4d' }}
           inlineIndent={16}
-          theme="dark"
+          theme="light"
           mode="inline"
           selectedKeys={level1SelectKeys}
         >
@@ -76,7 +75,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
           {auditState == 1 &&
             this.state.allGradeMenus.toJS().map((v:any, i:any) => {
               return (
-                <Menu.Item key={i.toString()}>
+                <Menu.Item key={i.toString()} style={{height:60,marginBottom:0 }}>
                   <a
                     onClick={() => this._goFirstMenu(i)}
                     style={styles.navItem}
@@ -84,8 +83,9 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                     <img
                       style={styles.menuIcon}
                       src={util.requireLocalSrc(`icon/${v.icon}`)}
+                      // src={util.requireLocalSrc(`icon/btn-product.svg`)}
                     />
-                    {v.title}
+                    <p style={{lineHeight:'10px'}}>{v.title}</p>
                   </a>
                 </Menu.Item>
               );
@@ -140,14 +140,14 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
 
 const styles = {
   menuIcon: {
-    width: 16,
-    height: 16,
-    marginRight: 8
+    width: 25,
+    height: 25,
   },
   navItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    overflow: 'hidden'
+    textAlign: 'center',
+    // display: 'flex',
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // overflow: 'hidden'
   }
 } as any;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 import { history, cache } from 'qmkit';
@@ -22,7 +22,8 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       // 是否第一次加载(区分 点击展开收缩菜单 与 第一次加载的展开菜单)
       firstInitFlag: true,
       // 能不能申请退单
-      applyReturnOrder: false
+      applyReturnOrder: false,
+      showSubMenu:true
     };
   }
 
@@ -47,6 +48,8 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     if (path == '/account-manage') {
       return (
         <Sider width={200} className="leftSideNav">
+          
+          
           <Menu
             mode="inline"
             // theme="dark"
@@ -130,42 +133,65 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       currFirstMenu.get('children').size > 0
     ) {
       return (
-        <Sider width={200} className="leftSideNav">
-          <Menu
-            mode="inline"
-            // theme="dark"
-            inlineIndent={10}
-            openKeys={level2OpenedKeys}
-            selectedKeys={level3SelectKeys}
-            onOpenChange={this._openKeysChange}
-            style={{ height: '100%' }}
-          >
-            {currFirstMenu
-              .get('children')
-              .toJS()
-              .map((item, index) => {
-                return (
-                  <SubMenu
-                    key={index}
-                    title={
-                      <div className="leftNavItem">
-                        {/*<img
-                          style={styles.menuIcon}
-                          src={util.requireLocalSrc(`icon/${item.icon}`)}
-                        />*/}
-                        <span>{item.title}</span>
-                      </div>
-                    }
-                  >
-                    {item.children &&
-                      item.children.map((v, i) => {
-                        return this._renderThirdMenu(v, index, i);
-                      })}
-                  </SubMenu>
-                );
-              })}
-          </Menu>
-        </Sider>
+        <div>
+        {
+          this.state.showSubMenu?(
+            <Sider width={200} className="leftSideNav" >
+              <Menu
+                mode="inline"
+                // theme="dark"
+                inlineIndent={10}
+                openKeys={level2OpenedKeys}
+                selectedKeys={level3SelectKeys}
+                onOpenChange={this._openKeysChange}
+                style={{ height: '100%',  }}
+              >
+                <div style={styles.showBtnLeft} onClick={()=>{
+                  this.setState({
+                    showSubMenu:!this.state.showSubMenu
+                  })
+                }}>
+                  
+                    <Icon type="left" />
+                  
+                </div>
+                
+                {currFirstMenu
+                  .get('children')
+                  .toJS()
+                  .map((item, index) => {
+                    return (
+                      <SubMenu
+                        key={index}
+                        title={
+                          <div className="leftNavItem">
+                            {/*<img
+                              style={styles.menuIcon}
+                              src={util.requireLocalSrc(`icon/${item.icon}`)}
+                            />*/}
+                            <span>{item.title}</span>
+                          </div>
+                        }
+                      >
+                        {item.children &&
+                          item.children.map((v, i) => {
+                            return this._renderThirdMenu(v, index, i);
+                          })}
+                      </SubMenu>
+                    );
+                  })}
+              </Menu>
+            </Sider>):(<div style={styles.showBtnRight} onClick={()=>{
+                  this.setState({
+                    showSubMenu:!this.state.showSubMenu
+                  })
+                }}>
+                  
+                    <Icon type="right" />
+                  
+                </div>)
+        }
+        </div>
       );
     } else {
       return null;
@@ -238,10 +264,27 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
   };
 }
 
-// const styles = {
-//   menuIcon: {
-//     width: 20,
-//     height: 20,
-//     marginRight: 5
-//   }
-// } as any;
+const styles = {
+  showBtnLeft: {
+    borderRadius: '5px 0 0 5px',
+    width: '14px',
+    height: '30px',
+    lineHeight: '30px',
+    backgroundColor: '#ffe7e6',
+    position: 'absolute',
+    top: '50%',
+    left: '186px',
+    zIndex:2,
+  },
+  showBtnRight:
+  {
+    borderRadius: '0 5px 5px 0',
+    width: '14px',
+    height: '30px',
+    lineHeight: '30px',
+    backgroundColor: '#ffe7e6',
+    position: 'absolute',
+    top: '50%',
+    zIndex:2,
+  }
+} as any;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
 import { history, cache, util } from 'qmkit';
 import { fromJS } from 'immutable';
+
 
 export default class MyLeftLevel1 extends React.PureComponent<any, any> {
   constructor(props) {
@@ -14,8 +15,13 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     // 2.初始化信息
     this.state = {
       firstActive: 0,
-      allGradeMenus: allGradeMenus
+      allGradeMenus: allGradeMenus,
+      collapsed:false
     };
+  }
+  onCollapse=()=>{
+    this.setState({ collapsed:!this.state.collapsed})
+    
   }
 
   render() {
@@ -64,7 +70,10 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     }
 
     return (
-      <Sider width={134} className="leftHeader">
+      <Sider width={134} className="leftHeader" 
+        trigger={null}
+        collapsible collapsed={this.state.collapsed}
+        onCollapse={this.onCollapse}>
         <Menu
           inlineIndent={16}
           theme="light"
@@ -75,18 +84,22 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
           {auditState == 1 &&
             this.state.allGradeMenus.toJS().map((v:any, i:any) => {
               return (
-                <Menu.Item key={i.toString()} style={{height:60,marginBottom:0 }}>
-                  <a
-                    onClick={() => this._goFirstMenu(i)}
-                    style={styles.navItem}
-                  >
-                    <img
+                <Menu.Item 
+                  key={i.toString()} 
+                  style={styles.navItem}
+                  onClick={() => this._goFirstMenu(i)}>
+
+                    {/* <img
                       style={styles.menuIcon}
                       src={util.requireLocalSrc(`icon/${v.icon}`)}
                       // src={util.requireLocalSrc(`icon/btn-product.svg`)}
-                    />
-                    <p style={{lineHeight:'10px'}}>{v.title}</p>
-                  </a>
+                    /> */}
+                    {/* <Icon className="icon iconfont icondingyue">
+                    </Icon> */}
+                    {/* <Icon type="home" style={{fontSize:30 }}/>
+                    <span style={{display: 'block',lineHeight:'10px',}} >{v.title}</span> */}
+                    <i className={"icon iconfont " + v.icon } style={{fontSize:30 }}></i>
+                    <span style={{display: this.state.collapsed?'none':'block',lineHeight:'10px',}} >{v.title}</span>
                 </Menu.Item>
               );
             })}
@@ -100,8 +113,10 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
    * @param i
    */
   _goFirstMenu = (i) => {
+
     // 缓存中记录当前选中的一级菜单
     sessionStorage.setItem(cache.FIRST_ACTIVE, i);
+    
     this.setState({ firstActive: i });
     this.props.onFirstActiveChange(); //让父级告诉兄弟组件,选中的一级菜单变化了
 
@@ -140,11 +155,13 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
 
 const styles = {
   menuIcon: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
   },
   navItem: {
     textAlign: 'center',
+    height:70,
+    marginBottom:0
     // display: 'flex',
     // flexDirection: 'row',
     // alignItems: 'center',

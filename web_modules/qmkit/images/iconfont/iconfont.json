@@ -1,0 +1,86 @@
+{
+  "id": "1991001",
+  "name": "RC nav",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "导航",
+  "glyphs": [
+    {
+      "icon_id": "16395207",
+      "name": "btn-prescriber",
+      "font_class": "Prescriber",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "16395208",
+      "name": "btn-product",
+      "font_class": "Product",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "16395209",
+      "name": "btn-home",
+      "font_class": "Home",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "16395210",
+      "name": "btn-order",
+      "font_class": "Order",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "16395211",
+      "name": "btn-application",
+      "font_class": "Application",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "16395212",
+      "name": "btn-consumer",
+      "font_class": "Consumer",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "554484",
+      "name": "数据",
+      "font_class": "Data",
+      "unicode": "e749",
+      "unicode_decimal": 59209
+    },
+    {
+      "icon_id": "5269225",
+      "name": "财务",
+      "font_class": "Finance",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "5383656",
+      "name": "设置",
+      "font_class": "Setting",
+      "unicode": "e781",
+      "unicode_decimal": 59265
+    },
+    {
+      "icon_id": "11488100",
+      "name": "product",
+      "font_class": "mofang",
+      "unicode": "e75d",
+      "unicode_decimal": 59229
+    },
+    {
+      "icon_id": "2811143",
+      "name": "订阅",
+      "font_class": "Subscription",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

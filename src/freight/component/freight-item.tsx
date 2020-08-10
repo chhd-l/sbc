@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax, IMap } from 'plume2';
 
 import { Table, Modal, message } from 'antd';
-import { history, noop, QMFloat, AuthWrapper, checkAuth } from 'qmkit';
+import { history, noop, QMFloat, AuthWrapper, cache, checkAuth } from 'qmkit';
 import styled from 'styled-components';
 const TableDiv = styled.div`
   margin-top: 20px;
@@ -123,7 +123,9 @@ export default class FreightItem extends React.Component<any, any> {
           width: '15%'
         },
         {
-          title: 'Down Payment(dollar)',
+          title: `Down Payment(${sessionStorage.getItem(
+            cache.SYSTEM_GET_CONFIG_NAME
+          )})`,
           dataIndex: 'freightStartPrice',
           width: '15%'
         },
@@ -133,7 +135,7 @@ export default class FreightItem extends React.Component<any, any> {
           width: '15%'
         },
         {
-          title: 'Renewal(dollar)',
+          title: `Renewal(${operateWay[valuationType].label}(${operateWay[valuationType].unit})`,
           dataIndex: 'freightPlusPrice',
           width: '15%'
         }
@@ -149,15 +151,17 @@ export default class FreightItem extends React.Component<any, any> {
             if (text == 0) {
               return (
                 <div>
-                  Order less than {QMFloat.addZero(record.satisfyPrice)} dollar,
+                  Order less than {QMFloat.addZero(record.satisfyPrice)}{' '}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)},
                   Shipping fee is {QMFloat.addZero(record.satisfyFreight)}{' '}
-                  dollar
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
                 </div>
               );
             } else {
               return (
                 <div>
-                  Fixed freight {QMFloat.addZero(record.fixedFreight)} dollar
+                  Fixed freight {QMFloat.addZero(record.fixedFreight)}{' '}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
                 </div>
               );
             }

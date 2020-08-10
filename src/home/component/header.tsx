@@ -36,26 +36,26 @@ export default class Header extends React.Component<any, any> {
           <div className="store-score">
             <FormattedMessage id="overall" />
           </div>
+          <div className="store-date">
+            <FormattedMessage id="last180" />
+          </div>
           <div className="store-number">
             {storeEvaluateSum.sumCompositeScore
               ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
               : '-'}
-          </div>
-          <div className="store-date">
-            <FormattedMessage id="last180" />
           </div>
         </div>
         <div className="store-mess">
           <div className="store-score">
             <FormattedMessage id="shopping" />
           </div>
+          <div className="store-date">
+            <FormattedMessage id="last180" />
+          </div>
           <div className="store-number">
             {storeEvaluateSum.sumCompositeScore
               ? parseFloat(storeEvaluateSum.sumCompositeScore).toFixed(2)
               : '-'}
-          </div>
-          <div className="store-date">
-            <FormattedMessage id="last180" />
           </div>
         </div>
       </div>

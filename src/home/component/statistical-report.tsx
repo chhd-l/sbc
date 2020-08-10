@@ -10,6 +10,9 @@ import { IList } from 'typings/globalType';
 import FlowTrendsCharts from './flow-trends';
 import CustomerGrowTrendsCharts from './cus-trends';
 import { FormattedMessage } from 'react-intl';
+const visitorsImg = require('/public/images/other/home-icon/btn-visitors.png');
+import { PieChart } from 'biz';
+import ReactEchartsCore from 'echarts-for-react/lib/core';
 
 const trafficColumns = [
   {
@@ -166,22 +169,30 @@ export default class StatisticalReport extends React.Component<any, any> {
             <h3>
               <FormattedMessage id="visitsToday" />
             </h3>
-            <div className="dateBg">
-              <div className="dataItem">
-                <label>
-                  <FormattedMessage id="uv" />
-                </label>
-                <strong>{trafficNum.get('totalUv') || 0}</strong>
+            <div className="align-items-center">
+              <div style={{ width: '20%' }}>
+                <img src={visitorsImg} alt="" width={47} height={47} />
+              </div>
+              <div style={{ width: '80%' }}>
+                <div className="dateBg">
+                  <div className="dataItem">
+                    <label>
+                      <FormattedMessage id="uv" />
+                    </label>
+                    <strong>{trafficNum.get('totalUv') || 0}</strong>
+                  </div>
+                </div>
+                <div className="dateBg">
+                  <div className="dataItem">
+                    <label>
+                      <FormattedMessage id="pv" />
+                    </label>
+                    <strong>{trafficNum.get('totalPv') || 0}</strong>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="dateBg">
-              <div className="dataItem">
-                <label>
-                  <FormattedMessage id="pv" />
-                </label>
-                <strong>{trafficNum.get('totalPv') || 0}</strong>
-              </div>
-            </div>
+
             {/* <div className="dateBg">
                 <div className="dataItem">
                   <label>Product visitor number</label>
@@ -220,9 +231,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           </div>
           <div className="dateBg">
             <div className="dataItem">
-              <label>
-                <FormattedMessage id="numberOfPaymentOrders" />
-              </label>
+              <label>Payment orders</label>
               <strong>
                 {tradeNum && (tradeNum.get('payOrderCount') || 0)}
               </strong>
@@ -271,20 +280,26 @@ export default class StatisticalReport extends React.Component<any, any> {
           <h3>
             <FormattedMessage id="productToday" />
           </h3>
-          <div className="dateBg">
-            <div className="dataItem">
+          <div className="align-items-center">
+            <div className="dateBg1">
+              <PieChart
+                total={skuNum && (skuNum.get('total') || 0)}
+                shelves={skuNum && (skuNum.get('addedTotal') || 0)}
+              />
+              {/*<div className="dataItem">
               <label>
                 <FormattedMessage id="totalSKU" />
               </label>
               <strong>{skuNum && (skuNum.get('total') || 0)}</strong>
+            </div>*/}
             </div>
-          </div>
-          <div className="dateBg">
-            <div className="dataItem">
-              <label>
-                <FormattedMessage id="productsOnShelvesNumber" />
-              </label>
-              <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
+            <div className="dateBg2">
+              <div className="dataItem">
+                <label>
+                  <FormattedMessage id="productsOnShelvesNumber" />
+                </label>
+                <strong>{skuNum && (skuNum.get('addedTotal') || 0)}</strong>
+              </div>
             </div>
           </div>
           {/* <div className="dateBg">

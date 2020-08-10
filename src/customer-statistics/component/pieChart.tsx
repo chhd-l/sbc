@@ -34,9 +34,9 @@ export default class WMPieChart extends React.Component<WMPieChartProps, any> {
     );
   }
 
-  _renderChartData = content => {
+  _renderChartData = (content) => {
     let nameArray = [];
-    content = content.map(value => {
+    content = content.map((value) => {
       nameArray.push(value.levelName);
       return { name: value.levelName, value: value.num };
     });
@@ -54,7 +54,7 @@ export default class WMPieChart extends React.Component<WMPieChartProps, any> {
       series: [
         {
           name: '客户等级',
-          type: 'pie',
+          type: 'chart-pie',
           radius: '50%',
           label: {
             normal: {

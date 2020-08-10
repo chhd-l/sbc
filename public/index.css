@@ -28,12 +28,12 @@
     margin: 0;
     font-size: 14px;
     line-height: 12px;
-    padding: 14px 20px;
+    padding: 21px 20px;
     color:#999;
 }
 
 #root .ant-tabs-nav .ant-tabs-tab-active {
-    color: #F56C1D;
+    color: #E1021A;
     background: rgba(245, 108, 29, 0.06);
     border-radius: 4px 4px 0 0;
 }
@@ -45,3 +45,6 @@
     border-collapse:separate
 }
 
+#root .ant-tabs-ink-bar-animated {
+    height: 4px;
+}

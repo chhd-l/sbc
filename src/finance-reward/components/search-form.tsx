@@ -43,24 +43,24 @@ export default class SearchForm extends React.Component<any, any> {
       let employee = JSON.parse(
         sessionStorage.getItem('s2b-supplier@employee')
       );
-      console.log(employee, '+++++++++++++++');
 
       if (employee.roleName.indexOf('Prescriber') !== -1) {
-        const { listData } = this.state;
-        listData.PrescriberList = employee.prescribers;
-        console.log(listData.PrescriberList, 1111111111111);
-        console.log(employee, 2222222);
+        let prescribers = this.state.listData;
+        prescribers.PrescriberList = employee.prescribers;
+        this.setState({ listData: prescribers });
+
+        console.log(this.state.listData.PrescriberList, 111);
       } else {
         //this.onSearch();
       }
     }
   }
   onFormChange = ({ field, value }) => {
-    let data = this.state.listData.PrescriberName;
+    /*let data = this.state.listData.PrescriberName;
     data[field] = value;
     this.setState({
       PrescriberName: data
-    });
+    });*/
   };
   render() {
     const {
@@ -69,7 +69,6 @@ export default class SearchForm extends React.Component<any, any> {
       onSearch,
       rewardList
     } = this.props.relaxProps;
-
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>
@@ -104,6 +103,25 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
         <FormItem>
+          <SelectGroup
+            defaultValue=""
+            label="Prescriber name"
+            onChange={(e) => {
+              onFormChange({
+                field: 'prescriberName',
+                value: e
+              });
+            }}
+          >
+            <Option value="">
+              <FormattedMessage id="all" />
+            </Option>
+            {this.state.listData.PrescriberList.map((item) => (
+              <Option value={item.prescriberName} key={item}>
+                {item.prescriberName}
+              </Option>
+            ))}
+          </SelectGroup>
           {/*<Input
             addonBefore={
               <Select
@@ -116,10 +134,11 @@ export default class SearchForm extends React.Component<any, any> {
                     value
                   });
                 }}
+                style={{width:100}}
               >
-                {this.state.listData.PrescriberName.map((item) => (
-                  <Option value={item} key={item}>
-                    {item}
+                {this.state.listData.PrescriberList.map((item) => (
+                  <Option value={item.prescriberName} key={item}>
+                    {item.prescriberName}
                   </Option>
                 ))}
               </Select>

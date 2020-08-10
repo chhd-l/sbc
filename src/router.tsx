@@ -7,6 +7,12 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-list')
   },
+  //订单列表(俄罗斯)
+  {
+    path: '/external-order-page',
+    exact: true,
+    asyncComponent: () => import('./external-order-page')
+  },
   {
     path: '/order-list-limited',
     exact: true,

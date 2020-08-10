@@ -60,7 +60,8 @@ export default class MarketingRule extends React.Component<any, any> {
                     <span className="rule-span">
                       Full{' '}
                       {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      yuan reduction {level.reduction}{' '}
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}{' '}
+                      reduction {level.reduction}{' '}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
                     </span>
                   ) : subType === 1 ? ( // full quantity reduction
@@ -74,7 +75,8 @@ export default class MarketingRule extends React.Component<any, any> {
                     <span className="rule-span">
                       Full{' '}
                       {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      yuan discount {level.discount * 10} discount
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}{' '}
+                      discount {level.discount * 10} discount
                     </span>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">

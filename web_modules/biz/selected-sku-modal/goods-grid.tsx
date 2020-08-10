@@ -175,7 +175,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     this.init({ ...params, pageNum, pageSize });
     this.setState({
       pageNum,
-      pageSize
+      pageSize,
     });
   };
 
@@ -186,10 +186,9 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
+    params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
 
-    let { res } = await webapi.fetchGoodsList({
-      ...params
-    });
+    let { res } = await webapi.fetchGoodsList({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
       res = (res as any).context;

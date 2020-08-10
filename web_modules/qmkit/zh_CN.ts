@@ -358,6 +358,7 @@ export default {
 'environment': '环境',
 'URL': '地址',
 'appID': 'APP ID',
+'apiKey': 'API 密钥',
 'privateKey': '密钥',
 'publicKey': '公钥',
 'apiVersion': 'API版本',

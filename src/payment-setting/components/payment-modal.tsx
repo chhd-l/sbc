@@ -39,23 +39,22 @@ class PaymentModal extends React.Component<any, any> {
     super(props);
     this.state = {
       paymentForm: {
-        id: null,
-        appId: '',
-        privateKey: '',
-        publicKey: '',
-        paymentMethod: '',
         enabled: false
       },
-      gatewayConfigSaveRequest: {},
-      gatewayModifyRequest: {}
+      enabled: null
     };
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.paymentForm.config) {
+      debugger
       var config = nextProps.paymentForm.config
       this.setState({
         paymentForm: Object.assign({
-          id: nextProps.paymentForm.id,
+          configId: config.id,
+          modifyId: nextProps.paymentForm.id,
+          gatewayId: config.payGateway.id,
+          gatewayEnum: config.payGateway.name,
+          apiKey: config.apiKey,
           appId: config.appId,
           privateKey: config.privateKey,
           publicKey: config.publicKey,
@@ -66,34 +65,20 @@ class PaymentModal extends React.Component<any, any> {
     }
   }
 
-  onFormChange = ({ field, value }) => {
-    let data = this.state.paymentForm;
-    data[field] = value;
-    if(field === 'paymentMethod') {
-      data[field] = value.join(',')
-    }
-    if(field === 'enabled') {
-      data[field] = value ? 1 : 0
-    }
+  onFormChange = (value) => {
     this.setState(
       {
-        gatewayConfigSaveRequest: Object.assign({
-          id: data.id,
-          appId: data.appId,
-          privateKey: data.privateKey,
-          publicKey: data.publicKey,
-        }),
-        gatewayModifyRequest: Object.assign({
-          id: data.id,
-          isOpen: data.enabled,
-          storePaymentMethod: data.paymentMethod
-        })
+        enabled: value
       }
     );
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    var checked = this.state.paymentForm.enabled;
+    if(this.state.enabled != null){
+      checked = this.state.enabled
+    }
 
     return (
       <Modal
@@ -105,6 +90,21 @@ class PaymentModal extends React.Component<any, any> {
       >
         <Form>
           <Row>
+          <Col span={24}>
+              <FormItem
+                {...formItemLayout}
+                required={true}
+                label={<FormattedMessage id="apiKey" />}
+              >
+                {getFieldDecorator('apiKey', {
+                  initialValue: this.state.paymentForm.apiKey,
+                  rules: [{ required: true, message: 'Please input Api Key!' }]
+                })(
+                  <Input
+                  />
+                )}
+              </FormItem>
+            </Col>
             <Col span={24}>
               <FormItem
                 {...formItemLayout}
@@ -116,12 +116,6 @@ class PaymentModal extends React.Component<any, any> {
                   rules: [{ required: false, message: 'Please input App ID!' }]
                 })(
                   <Input
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'appId',
-                        value: e.target.value
-                      })
-                    }
                   />
                 )}
               </FormItem>
@@ -139,12 +133,6 @@ class PaymentModal extends React.Component<any, any> {
                   ]
                 })(
                   <Input.TextArea
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'privateKey',
-                        value: e.target.value
-                      })
-                    }
                   />
                 )}
               </FormItem>
@@ -162,12 +150,6 @@ class PaymentModal extends React.Component<any, any> {
                   ]
                 })(
                   <Input.TextArea
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'publicKey',
-                        value: e.target.value
-                      })
-                    }
                   />
                 )}
               </FormItem>
@@ -177,7 +159,7 @@ class PaymentModal extends React.Component<any, any> {
             <Col span={24}>
               <FormItem
                 {...formItemLayout}
-                required={true}
+                required={false}
                 label={<FormattedMessage id="paymentMethod" />}
               >
                 {getFieldDecorator('paymentMethod', {
@@ -191,12 +173,6 @@ class PaymentModal extends React.Component<any, any> {
                 })(
                   <Select
                     mode="multiple"
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'paymentMethod',
-                        value: e
-                      })
-                    }
                   >
                     <Option value="VISA">
                       <img
@@ -293,19 +269,15 @@ class PaymentModal extends React.Component<any, any> {
             <Col span={24}>
               <FormItem
                 {...formItemLayout}
-                required={true}
                 label={<FormattedMessage id="enabled" />}
               >
                 {getFieldDecorator('enabled', {
                   initialValue: this.state.paymentForm.enabled
                 })(
                   <Switch
-                    checked={this.state.paymentForm.enabled}
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'enabled',
-                        value: e
-                      })
+                    checked = {checked}
+                    onChange={(value) =>
+                      this.onFormChange(value)
                     }
                   />
                 )}
@@ -330,24 +302,44 @@ class PaymentModal extends React.Component<any, any> {
 
   cancel = () => {
     this.props.parent.closeModel();
+    this.props.form.resetFields();
+    this.setState(
+      {
+        enabled: null
+      }
+    )
   };
 
   onSave = async () => {
-    const paymentForm = this.state.paymentForm;
-    debugger
-    const { res } = await webapi.savePaymentSetting({
-      gatewayAndConfigModifyRequest : {
-        gatewayConfigSaveRequest: this.state.gatewayConfigSaveRequest,
-        gatewayModifyRequest: this.state.gatewayModifyRequest
+    this.props.form.validateFields(null, async(errs, values) => {
+      //如果校验通过
+      if (!errs) {
+        const { res } = await webapi.savePaymentSetting({
+            gatewayConfigSaveRequest: Object.assign({
+              id: this.state.paymentForm.configId,
+              gatewayId: this.state.paymentForm.gatewayId,
+              apiKey: values.apiKey,
+              appId: values.appId,
+              privateKey: values.privateKey,
+              publicKey: values.publicKey,
+            }),
+            gatewayModifyRequest: Object.assign({
+              gatewayEnum: this.state.paymentForm.gatewayEnum,
+              id: this.state.paymentForm.modifyId,
+              isOpen: values.enabled ? 1 : 0,
+              storePaymentMethod: values.paymentMethod.join(','),
+              type: true
+            }),
+        });
+        if (res.code === 'K-000000') {
+          message.success('save successful');
+          this.props.reflash();
+          this.cancel();
+        } else {
+          message.error(res.message || 'save faild');
+        }
       }
     });
-    if (res.code === 'K-000000') {
-      message.success('save successful');
-      this.props.setEnabled(paymentForm.enabled);
-      this.cancel();
-    } else {
-      message.error(res.message || 'save faild');
-    }
   };
 }
 export default Form.create()(PaymentModal);

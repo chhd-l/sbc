@@ -58,6 +58,10 @@ export default class Main extends React.Component<any, any> {
             cache.SYSTEM_GET_CONFIG_NAME,
             (resIco.res as any).context.currency.name
           ); //货币名称
+          sessionStorage.setItem(
+            cache.MAP_MODE,
+            (resIco.res as any).context.storeVO.prescriberMap
+          ); //货币名称
         }
       }
     });

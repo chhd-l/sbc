@@ -18,5 +18,6 @@ export default {
   VALUE_ADDED_SERVICES: 'value-added-service', // 增值服务
   HIDE_EMPLOYEE_SETTING: 'HIDE_EMPLOYEE_SETTING',
   PRESCRIBER_DATA: 's2b-prescriber@data',
-  EMPLOYEE_DATA: 's2b-employee@data'
+  EMPLOYEE_DATA: 's2b-employee@data',
+  MAP_MODE:'s2b-map-mode'
 };

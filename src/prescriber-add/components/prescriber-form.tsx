@@ -10,8 +10,10 @@ import {
   Row,
   Col,
   Radio,
-  Divider
+  Divider,
+  Icon
 } from 'antd';
+import { history, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
 import { Tabs } from 'antd';
@@ -47,7 +49,7 @@ class ClinicForm extends React.Component<any, any> {
         location: '',
         enabled: true,
         delFlag: 0,
-        auditStatus: '1',
+        // auditStatus: '1',
         prescriberCode: ''
       },
       cityArr: [],
@@ -79,18 +81,22 @@ class ClinicForm extends React.Component<any, any> {
       isJump: false,
       qrCodeLink: '',
       url: '',
-      saveLoading: false
+      saveLoading: false,
+      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false
     };
-    this.getDetail = this.getDetail.bind(this);
   }
   componentDidMount() {
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
     } else {
-      this.props.form.setFieldsValue({
-        auditStatus: this.state.prescriberForm.auditStatus
-      });
+      this.reloadCode();
     }
+
+    // else {
+    //   this.props.form.setFieldsValue({
+    //     auditStatus: this.state.prescriberForm.auditStatus
+    //   });
+    // }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
   }
@@ -147,7 +153,12 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          this.getClinicsReward(id);
+          if (this.props.prescriberId) {
+            this.getDetail(this.props.prescriberId);
+            this.getClinicsReward(id);
+          } else {
+            history.push('/prescriber');
+          }
         } else {
           this.setState({
             saveLoading: false
@@ -199,7 +210,6 @@ class ClinicForm extends React.Component<any, any> {
     let findData = data.find((item) => {
       return item.id === id || item.tempId === id;
     });
-    console.log(value);
 
     if (findData) {
       findData[field] = value;
@@ -232,7 +242,7 @@ class ClinicForm extends React.Component<any, any> {
         latitude: res.context.latitude,
         location: res.context.location,
         prescriberType: res.context.prescriberType,
-        auditStatus: res.context.auditStatus,
+        // auditStatus: res.context.auditStatus,
         prescriberCode: res.context.prescriberCode
       });
       this.getClinicsReward(res.context.prescriberId);
@@ -271,15 +281,15 @@ class ClinicForm extends React.Component<any, any> {
     this.setState(
       {
         prescriberForm: data
-      },
-      () => {
-        if (field === 'auditStatus' && this.state.isEdit) {
-          debugger;
-          this.props.form.setFieldsValue({
-            prescriberCode: data.prescriberCode
-          });
-        }
       }
+      // () => {
+      //   if (field === 'auditStatus' && this.state.isEdit) {
+      //     debugger;
+      //     this.props.form.setFieldsValue({
+      //       prescriberCode: data.prescriberCode
+      //     });
+      //   }
+      // }
     );
   };
   onCreate = () => {
@@ -478,6 +488,32 @@ class ClinicForm extends React.Component<any, any> {
     this.handleVerify();
   };
 
+  reloadCode = () => {
+    webapi.getRecommendationCode().then((data) => {
+      const { res } = data;
+      if (res.code === 'K-000000') {
+        if (res.context) {
+          let prescriber = this.state.prescriberForm;
+          prescriber.prescriberCode = res.context;
+          this.setState(
+            {
+              prescriberForm: prescriber
+            },
+            () => {
+              this.props.form.setFieldsValue({
+                prescriberCode: prescriber.prescriberCode
+              });
+            }
+          );
+        } else {
+          message.error(res.message || 'Recommendation Code is empty');
+        }
+      } else {
+        message.error(res.message || 'get Recommendation Code failed');
+      }
+    });
+  };
+
   render() {
     const { cityArr, typeArr, prescriberForm } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -534,7 +570,7 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                <FormItem label="Audit status">
+                {/* <FormItem label="Audit status">
                   {getFieldDecorator('auditStatus', {
                     rules: [
                       {
@@ -557,14 +593,24 @@ class ClinicForm extends React.Component<any, any> {
                     </Radio.Group>
                   )}
                 </FormItem>
-                {this.state.isEdit &&
-                this.props.prescriberId &&
-                prescriberForm.auditStatus === '0' ? (
+                 */}
+
+                {!this.state.isMapMode ? (
                   <FormItem label="Recommendation code">
                     {getFieldDecorator(
                       'prescriberCode',
                       {}
-                    )(<Input disabled />)}
+                    )(
+                      <Input
+                        addonAfter={
+                          <Icon
+                            onClick={() => this.reloadCode()}
+                            type="reload"
+                          />
+                        }
+                        disabled
+                      />
+                    )}
                   </FormItem>
                 ) : null}
 

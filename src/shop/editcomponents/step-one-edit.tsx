@@ -546,7 +546,8 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="prescriberMap" />}
                 >
                   {getFieldDecorator('prescriberMap', {
-                    initialValue: storeInfo.get('prescriberMap') === '1'? true : false,
+                    initialValue:
+                      storeInfo.get('prescriberMap') === '1' ? true : false,
                     rules: [
                       {
                         required: false,
@@ -555,14 +556,16 @@ export default class StepOneEdit extends React.Component<any, any> {
                     ]
                   })(
                     <Switch
-                      checked = { storeInfo.get('prescriberMap') === '1'? true : false }
+                      checked={
+                        storeInfo.get('prescriberMap') === '1' ? true : false
+                      }
                       onChange={(value) =>
                         onChange({
                           field: 'prescriberMap',
                           value: value ? '1' : '0'
                         })
                       }
-                  />
+                    />
                   )}
                 </FormItem>
               </Col>
@@ -573,7 +576,10 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="profilePaymentMethod" />}
                 >
                   {getFieldDecorator('profilePaymentMethod', {
-                    initialValue:storeInfo.get('profilePaymentMethod') === '1'? true : false,
+                    initialValue:
+                      storeInfo.get('profilePaymentMethod') === '1'
+                        ? true
+                        : false,
                     rules: [
                       {
                         required: false,
@@ -582,14 +588,18 @@ export default class StepOneEdit extends React.Component<any, any> {
                     ]
                   })(
                     <Switch
-                      checked = { storeInfo.get('profilePaymentMethod') === '1'? true : false }
+                      checked={
+                        storeInfo.get('profilePaymentMethod') === '1'
+                          ? true
+                          : false
+                      }
                       onChange={(value) =>
                         onChange({
                           field: 'profilePaymentMethod',
                           value: value ? '1' : '0'
                         })
                       }
-                  />
+                    />
                   )}
                 </FormItem>
               </Col>

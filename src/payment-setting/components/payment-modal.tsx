@@ -33,7 +33,6 @@ const formItemLayout = {
   }
 };
 
-
 class PaymentModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -46,8 +45,8 @@ class PaymentModal extends React.Component<any, any> {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.paymentForm.config) {
-      debugger
-      var config = nextProps.paymentForm.config
+      debugger;
+      let config = nextProps.paymentForm.config;
       this.setState({
         paymentForm: Object.assign({
           configId: config.id,
@@ -58,7 +57,9 @@ class PaymentModal extends React.Component<any, any> {
           appId: config.appId,
           privateKey: config.privateKey,
           publicKey: config.publicKey,
-          paymentMethod: nextProps.paymentForm.storePaymentMethod ? nextProps.paymentForm.storePaymentMethod.split(',') : [],
+          paymentMethod: nextProps.paymentForm.storePaymentMethod
+            ? nextProps.paymentForm.storePaymentMethod.split(',')
+            : [],
           enabled: nextProps.paymentForm.isOpen === 1 ? true : false
         })
       });
@@ -66,18 +67,16 @@ class PaymentModal extends React.Component<any, any> {
   }
 
   onFormChange = (value) => {
-    this.setState(
-      {
-        enabled: value
-      }
-    );
+    this.setState({
+      enabled: value
+    });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    var checked = this.state.paymentForm.enabled;
-    if(this.state.enabled != null){
-      checked = this.state.enabled
+    let checked = this.state.paymentForm.enabled;
+    if (this.state.enabled != null) {
+      checked = this.state.enabled;
     }
 
     return (
@@ -90,7 +89,7 @@ class PaymentModal extends React.Component<any, any> {
       >
         <Form>
           <Row>
-          <Col span={24}>
+            <Col span={24}>
               <FormItem
                 {...formItemLayout}
                 required={true}
@@ -99,10 +98,7 @@ class PaymentModal extends React.Component<any, any> {
                 {getFieldDecorator('apiKey', {
                   initialValue: this.state.paymentForm.apiKey,
                   rules: [{ required: true, message: 'Please input Api Key!' }]
-                })(
-                  <Input
-                  />
-                )}
+                })(<Input />)}
               </FormItem>
             </Col>
             <Col span={24}>
@@ -114,10 +110,7 @@ class PaymentModal extends React.Component<any, any> {
                 {getFieldDecorator('appId', {
                   initialValue: this.state.paymentForm.appId,
                   rules: [{ required: false, message: 'Please input App ID!' }]
-                })(
-                  <Input
-                  />
-                )}
+                })(<Input />)}
               </FormItem>
             </Col>
             <Col span={24}>
@@ -131,10 +124,7 @@ class PaymentModal extends React.Component<any, any> {
                   rules: [
                     { required: false, message: 'Please input Private Key!' }
                   ]
-                })(
-                  <Input.TextArea
-                  />
-                )}
+                })(<Input.TextArea />)}
               </FormItem>
             </Col>
             <Col span={24}>
@@ -148,10 +138,7 @@ class PaymentModal extends React.Component<any, any> {
                   rules: [
                     { required: false, message: 'Please input Public Key!' }
                   ]
-                })(
-                  <Input.TextArea
-                  />
-                )}
+                })(<Input.TextArea />)}
               </FormItem>
             </Col>
 
@@ -171,9 +158,7 @@ class PaymentModal extends React.Component<any, any> {
                     }
                   ]
                 })(
-                  <Select
-                    mode="multiple"
-                  >
+                  <Select mode="multiple">
                     <Option value="VISA">
                       <img
                         src={require('../img/visa.png')}
@@ -275,10 +260,8 @@ class PaymentModal extends React.Component<any, any> {
                   initialValue: this.state.paymentForm.enabled
                 })(
                   <Switch
-                    checked = {checked}
-                    onChange={(value) =>
-                      this.onFormChange(value)
-                    }
+                    checked={checked}
+                    onChange={(value) => this.onFormChange(value)}
                   />
                 )}
               </FormItem>
@@ -303,33 +286,31 @@ class PaymentModal extends React.Component<any, any> {
   cancel = () => {
     this.props.parent.closeModel();
     this.props.form.resetFields();
-    this.setState(
-      {
-        enabled: null
-      }
-    )
+    this.setState({
+      enabled: null
+    });
   };
 
   onSave = async () => {
-    this.props.form.validateFields(null, async(errs, values) => {
+    this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
       if (!errs) {
         const { res } = await webapi.savePaymentSetting({
-            gatewayConfigSaveRequest: Object.assign({
-              id: this.state.paymentForm.configId,
-              gatewayId: this.state.paymentForm.gatewayId,
-              apiKey: values.apiKey,
-              appId: values.appId,
-              privateKey: values.privateKey,
-              publicKey: values.publicKey,
-            }),
-            gatewayModifyRequest: Object.assign({
-              gatewayEnum: this.state.paymentForm.gatewayEnum,
-              id: this.state.paymentForm.modifyId,
-              isOpen: values.enabled ? 1 : 0,
-              storePaymentMethod: values.paymentMethod.join(','),
-              type: true
-            }),
+          gatewayConfigSaveRequest: Object.assign({
+            id: this.state.paymentForm.configId,
+            gatewayId: this.state.paymentForm.gatewayId,
+            apiKey: values.apiKey,
+            appId: values.appId,
+            privateKey: values.privateKey,
+            publicKey: values.publicKey
+          }),
+          gatewayModifyRequest: Object.assign({
+            gatewayEnum: this.state.paymentForm.gatewayEnum,
+            id: this.state.paymentForm.modifyId,
+            isOpen: values.enabled ? 1 : 0,
+            storePaymentMethod: values.paymentMethod.join(','),
+            type: true
+          })
         });
         if (res.code === 'K-000000') {
           message.success('save successful');

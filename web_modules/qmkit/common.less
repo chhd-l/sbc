@@ -386,7 +386,7 @@ html {
 
   h3 {
     font-size: 18px;
-    color    : #333;
+    color    : #000000;
   }
 
   span {
@@ -422,7 +422,7 @@ html {
   h3 {
     font-size  : 18px;
     text-indent: 10px;
-    color      : #333;
+    color      : #000;
   }
 
   small {
@@ -844,7 +844,7 @@ html {
 
     h3 {
       font-size  : 18px;
-      color      : #333333;
+      color      : #000000;
       line-height: 48px;
     }
 
@@ -860,43 +860,62 @@ html {
 
 .pending,
 .peopleInfo {
-  width       : calc(65% - 10px);
+  width       : calc(50% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
   .dateBg {
     display         : flex;
-    background-color: #f7f7f7;
+    background-color: #fff;
     flex-direction  : row;
     margin-top      : 10px;
   }
-
-  .dataItem {
-    width           : 25%;
-    display         : inline-block;
-    background-color: #f7f7f7;
-    margin-top      : 10px;
-    height          : 80px;
-    padding-left    : 40px;
-    padding-top     : 15px;
+  .dataItem1 {
+    width           : 100%;
+    background-color: #FEF7F8;
+    height          : 35px;
+    line-height: 35px;
+    padding: 0 20px;
+    margin-top: 15px;
 
     label {
-      color    : #666;
+      color    : #808285;
       display  : block;
       font-size: 14px;
     }
 
     strong {
       display   : block;
-      color     : #F56C1D;
-      font-size : 16px;
+      color     : #000000;
+      font-size : 20px;
+    }
+  }
+  .dataItem {
+    width           : 25%;
+    display         : inline-block;
+    background-color: #ffffff;
+    margin-top      : 5px;
+    height          : 80px;
+    padding-right    : 20px;
+    padding-top     : 15px;
+
+    label {
+      color    : #808285;
+      display  : block;
+      font-size: 14px;
+    }
+
+    strong {
+      display   : block;
+      color     : #000000;
+      font-size : 26px;
       margin-top: 5px;
     }
   }
 }
 
 .peopleInfo {
-  width       : calc(35% - 10px);
+  width       : calc(50% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
@@ -953,17 +972,20 @@ html {
     margin-right  : -5px;
     margin-left   : -5px;
   }
-
-  .dataItem {
-    display         : flex;
-    background-color: #f7f7f7;
-    flex-direction  : row;
-    justify-content : center;
-    align-items     : center;
-    height          : 100px;
-    flex            : 1;
+  .dataItem1 {
+    background: #CCCCCC;
+    height          : 85px;
+    width: 100%;
+    display: block;
     margin-left     : 5px;
     margin-right    : 5px;
+  }
+  .dataItem {
+    background-color: #f7f7f7;
+    height          : 100px;
+    margin-left     : 5px;
+    margin-right    : 5px;
+    width: 100%;
 
     .CommonImg {
       width : 40px;
@@ -986,7 +1008,7 @@ html {
 
   .dateBg {
     display         : flex;
-    background-color: #f7f7f7;
+    background-color: #FEF7F8;
     flex-direction  : row;
     margin-top      : 10px;
   }
@@ -1001,13 +1023,13 @@ html {
     padding-left   : 30px;
 
     label {
-      color    : #666;
+      color    : #808285;
       font-size: 14px;
     }
 
     strong {
-      color     : #333;
-      font-size : 16px;
+      color     : #000000;
+      font-size : 26px;
       margin-top: 5px;
     }
   }

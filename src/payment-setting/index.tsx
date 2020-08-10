@@ -6,18 +6,6 @@ const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
-const formItemLayout = {
-  labelCol: {
-    span: 4,
-    xs: { span: 24 },
-    sm: { span: 12 }
-  },
-  wrapperCol: {
-    span: 20,
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
 
 const ContainerDiv = styled.div`
   .methodItem {
@@ -82,10 +70,8 @@ export default class PaymentSetting extends React.Component<any, any> {
       paymentVisible: false
     });
   };
-  setEnable(enabled) {
-    this.setState({
-      enabled: enabled
-    });
+  reflash() {
+    this.getPaymentSetting()
   }
   render() {
     const { paymentList } = this.state;
@@ -116,7 +102,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                     </div>
                     <div className="bar">
                       <div className="status">
-                        {this.state.enabled ? 'Enabled' : 'Disabled'}
+                        {item.isOpen === 1 ? 'Enabled' : 'Disabled'}
                       </div>
                       <div>
                         <Button
@@ -142,7 +128,7 @@ export default class PaymentSetting extends React.Component<any, any> {
               paymentForm={this.state.paymentForm}
               visible={this.state.paymentVisible}
               parent={this}
-              setEnabled={(enabled) => this.setEnable(enabled)}
+              reflash={() => this.reflash()}
             />
           </ContainerDiv>
         </div>

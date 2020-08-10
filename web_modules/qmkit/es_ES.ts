@@ -170,6 +170,7 @@ export default {
   'environment': 'Environment',
   'URL': 'URL',
   'appID': 'APP ID',
+  'apiKey': 'API Key',
   'privateKey': 'Private key',
   'publicKey': 'Public key',
   'apiVersion': 'API version',

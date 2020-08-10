@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 
-import { Form, Col, Row } from 'antd';
+import { Form, Col, Row, Switch } from 'antd';
 import { FindArea } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -14,7 +14,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -288,6 +288,26 @@ export default class StepOneEdit extends React.Component<any, any> {
                   label={<FormattedMessage id="miniCharge" />}
                 >
                   <p style={{ color: '#333' }}>{storeInfo.get('miniCharge')}</p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+            <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="prescriberMap" />}
+                >
+                  <Switch disabled={true} checked = { storeInfo.get('prescriberMap') === '1' ? true : false }/>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="profilePaymentMethod" />}
+                >
+                  <Switch disabled={true} checked = { storeInfo.get('profilePaymentMethod') === '1' ? true : false }/>
                 </FormItem>
               </Col>
             </Row>

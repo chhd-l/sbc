@@ -11,7 +11,8 @@ import {
   Select,
   InputNumber,
   message,
-  Icon
+  Icon,
+  Switch
 } from 'antd';
 import { noop, Const, QMUpload, Tips, cache } from 'qmkit';
 import styled from 'styled-components';
@@ -27,7 +28,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 8 }
   },
   wrapperCol: {
     span: 24,
@@ -535,6 +536,60 @@ export default class StepOneEdit extends React.Component<any, any> {
                         })
                       }
                     />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="prescriberMap" />}
+                >
+                  {getFieldDecorator('prescriberMap', {
+                    initialValue: storeInfo.get('prescriberMap') === '1'? true : false,
+                    rules: [
+                      {
+                        required: false,
+                        message: 'Please input Prescriber Map!'
+                      }
+                    ]
+                  })(
+                    <Switch
+                      checked = { storeInfo.get('prescriberMap') === '1'? true : false }
+                      onChange={(value) =>
+                        onChange({
+                          field: 'prescriberMap',
+                          value: value ? '1' : '0'
+                        })
+                      }
+                  />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="profilePaymentMethod" />}
+                >
+                  {getFieldDecorator('profilePaymentMethod', {
+                    initialValue:storeInfo.get('profilePaymentMethod') === '1'? true : false,
+                    rules: [
+                      {
+                        required: false,
+                        message: 'Please input Profile Payment Method!'
+                      }
+                    ]
+                  })(
+                    <Switch
+                      checked = { storeInfo.get('profilePaymentMethod') === '1'? true : false }
+                      onChange={(value) =>
+                        onChange({
+                          field: 'profilePaymentMethod',
+                          value: value ? '1' : '0'
+                        })
+                      }
+                  />
                   )}
                 </FormItem>
               </Col>

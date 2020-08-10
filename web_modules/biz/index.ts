@@ -15,6 +15,7 @@ import DistributionGoodsMatterHead from './distribution-goods-matter-head';
 import ShowImageModel from './show-image';
 import SKUModal from './sku-modal-for-distribution/goods-modal';
 import EnterpriseSKUModal from './sku-modal-for-enterprise/goods-modal';
+import PieChart from './chart-pie/index';
 
 export {
   AddressInfo,
@@ -33,5 +34,6 @@ export {
   CustomerModel,
   DistributionGoodsMatterHead,
   ShowImageModel,
-  SKUModal
+  SKUModal,
+  PieChart
 };

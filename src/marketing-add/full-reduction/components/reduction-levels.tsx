@@ -137,7 +137,13 @@ export default class ReductionLevels extends React.Component<any, any> {
                           }}
                         />
                       )}
-                      <span>&nbsp;{!isFullCount ? 'yuan' : 'items'}，</span>
+                      <span>
+                        &nbsp;
+                        {!isFullCount
+                          ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
+                          : 'items'}
+                        ，
+                      </span>
                     </FormItem>
                   </div>
                 ) : null}

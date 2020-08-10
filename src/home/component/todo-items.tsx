@@ -170,9 +170,9 @@ export default class TodoItems extends React.Component<any, any> {
           )}
 
           {todoVisible ? (
-            <div className="homeItem pending">
-              <h3>To do list</h3>
-              <div>
+            <div className="space-between homeItem pending">
+              <h3 style={{ width: '20%', color: '#000000' }}>To do list</h3>
+              <div style={{ width: '80%' }}>
                 {/* {fOrderList002 ? (
                   <a
                     onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
@@ -183,24 +183,23 @@ export default class TodoItems extends React.Component<any, any> {
                   </a>
                 ) : null} */}
                 {fOrderList001 ? (
-                  <a
+                  <div
                     // onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
-                    className="dataItem"
-                    style={{ width: '33%' }}
+                    className="dataItem1 space-between"
                   >
                     <label>
                       <FormattedMessage id="toBePaidOrders" />
                     </label>
                     <strong>{tradeTodo.get('waitPay')}</strong>
-                  </a>
+                  </div>
                 ) : null}
                 {fOrderDetail002 ? (
                   <a
                     // onClick={() =>
                     //   this._toOrderList({ key: 'flowState-AUDIT' })
                     // }
-                    className="dataItem"
-                    style={{ width: '33%' }}
+                    className="dataItem1 space-between"
+                    style={{ width: '100%' }}
                   >
                     <label>
                       <FormattedMessage id="toBeDeliveredOrders" />
@@ -213,8 +212,8 @@ export default class TodoItems extends React.Component<any, any> {
                     // onClick={() =>
                     //   this._toOrderList({ key: 'flowState-DELIVERED' })
                     // }
-                    className="dataItem"
-                    style={{ width: '33%' }}
+                    className="dataItem1 space-between"
+                    style={{ width: '100%' }}
                   >
                     <label>
                       <FormattedMessage id="toBeReceivedOrders" />
@@ -337,10 +336,10 @@ export default class TodoItems extends React.Component<any, any> {
           </div> */}
           <div className="homeItem peopleInfo">
             <h3>Prescriber overview</h3>
-            <div>
+            <div style={{ width: '80%', margin: '0 auto' }}>
               <a
                 className="dataItem"
-                style={{ width: '40%' }}
+                style={{ width: '50%', textAlign: 'center' }}
                 // onClick={() =>
                 //   this._toPrescriber({ key: 'flowState-DELIVERED' })
                 // }
@@ -352,7 +351,7 @@ export default class TodoItems extends React.Component<any, any> {
               </a>
               <a
                 className="dataItem"
-                style={{ width: '60%' }}
+                style={{ width: '50%', textAlign: 'center' }}
                 // onClick={() =>
                 //   this._toPrescriber({ key: 'flowState-DELIVERED' })
                 // }

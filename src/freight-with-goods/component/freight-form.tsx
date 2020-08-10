@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Alert, Select } from 'antd';
-import { FindArea } from 'qmkit';
+import { FindArea, cache } from 'qmkit';
 const { Option } = Select;
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -115,7 +115,11 @@ export default class FreightForm extends React.Component<any, any> {
         // '件，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} dollar within ${freightStartNum} pieces, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} pieces`;
+        `${freightStartPrice} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} within ${freightStartNum} pieces, plus ${freightPlusNum} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} for every additional ${freightPlusNum} pieces`;
     } else if ((valuationType as number) == 1) {
       express =
         // freightStartNum +
@@ -127,7 +131,11 @@ export default class FreightForm extends React.Component<any, any> {
         // 'kg，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} dollar within ${freightStartNum} kg, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} kg`;
+        `${freightStartPrice} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} within ${freightStartNum} kg, plus ${freightPlusNum} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} for every additional ${freightPlusNum} kg`;
     } else if ((valuationType as number) == 2) {
       express =
         // freightStartNum +
@@ -139,7 +147,11 @@ export default class FreightForm extends React.Component<any, any> {
         // 'm³，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} dollar within ${freightStartNum} m³, plus ${freightPlusNum} dollar for every additional ${freightPlusNum} m³`;
+        `${freightStartPrice} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} within ${freightStartNum} m³, plus ${freightPlusNum} ${sessionStorage.getItem(
+          cache.SYSTEM_GET_CONFIG_NAME
+        )} for every additional ${freightPlusNum} m³`;
     }
     return express;
   };

@@ -274,7 +274,6 @@ class ClinicForm extends React.Component<any, any> {
       },
       () => {
         if (field === 'auditStatus' && this.state.isEdit) {
-          debugger;
           this.props.form.setFieldsValue({
             prescriberCode: data.prescriberCode
           });

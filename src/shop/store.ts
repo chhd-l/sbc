@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { fromJS, Map } from 'immutable';
 
 import { Const, history } from 'qmkit';
+import moment from 'moment';
 
 import ModalActor from './actor/modal-actor';
 import CommonActor from './actor/common-actor';
@@ -723,7 +724,7 @@ export default class AppStore extends Store {
   /**
    * 修改商家基本信息字段
    */
-  onChange = ({ field, value }) => {
+  onChange = ({ field, value, zone }) => {
     //如果是省市区级联
     if (field == 'area') {
       this.transaction(() => {
@@ -736,9 +737,39 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('company: store: merge', { field, value });
+      let a = zone.match(/\d+/g);
+      let b = Number(a[0] + '.' + a[1]);
+      if (zone.substring(4, 5) == '+') {
+        sessionStorage.setItem(
+          'zoneDate',
+          moment(this.GMTToStr(b))
+            .subtract(1, 'days')
+            .format('YYYY-MM-DD hh:mm:ss')
+        );
+      } else {
+        sessionStorage.setItem(
+          'zoneDate',
+          moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss')
+        );
+      }
+      console.log(sessionStorage.getItem('zoneDate'), 11111111111);
     }
   };
 
+  /*
+   * 格林威治标准时间GMT转换
+   *
+   */
+  GMTToStr(time) {
+    let timezone = time; //目标时区时间，东八区
+    console.log('timezone:' + timezone);
+    let offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+    let nowDate = new Date().getTime(); // 本地时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数
+    let targetDate = new Date(
+      nowDate + offset_GMT * 60 * 1000 + timezone * 60 * 60 * 1000
+    );
+    return targetDate;
+  }
   /**
    * 入驻流程 基本信息保存
    * @param storeInfo

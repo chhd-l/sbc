@@ -29,7 +29,7 @@ export const fetchCateList = () => {
  * 查询商品列表
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const fetchGoodsList = params => {
+export const fetchGoodsList = (params) => {
   return Fetch('/goods/skus', {
     method: 'POST',
     body: JSON.stringify({ ...params })
@@ -49,7 +49,7 @@ export const getUserLevelList = () => {
  * 判断sku是否已经存在于其他同类型的营销活动中
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const skuExists = params => {
+export const skuExists = (params) => {
   return Fetch<TResult>('/marketing/sku/exists', {
     method: 'POST',
     body: JSON.stringify({ ...params })
@@ -60,8 +60,15 @@ export const skuExists = params => {
  * 获取详情
  * @returns {Promise<IAsyncResult<T>>}
  */
-export const getMarketingInfo = marketingId => {
+export const getMarketingInfo = (marketingId) => {
   return Fetch<TResult>(`/marketing/${marketingId}`, {
     method: 'GET'
+  });
+};
+
+/*获取市区*/
+export const timeZone = () => {
+  return Fetch('/timeZone/convert', {
+    method: 'POST'
   });
 };

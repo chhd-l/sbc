@@ -21760,7 +21760,7 @@
      *     {mainType: 'dataZoom', query: {dataZoomId: 'abc'}}
      * );
      * var result = findComponents(
-     *     {mainType: 'series', subType: 'pie', query: {seriesName: 'uio'}}
+     *     {mainType: 'series', subType: 'chart-pie', query: {seriesName: 'uio'}}
      * );
      * var result = findComponents(
      *     {mainType: 'series'},
@@ -21825,7 +21825,7 @@
      *     function (model, index) {...}
      * );
      * eachComponent(
-     *     {mainType: 'series', subType: 'pie', query: {seriesName: 'uio'}},
+     *     {mainType: 'series', subType: 'chart-pie', query: {seriesName: 'uio'}},
      *     function (model, index) {...}
      * );
      *
@@ -23641,7 +23641,7 @@
   }
 
   /**
-   * Compatible with some cases (in pie, map) like:
+   * Compatible with some cases (in chart-pie, map) like:
    * data: [{name: 'xx', value: 5, selected: true}, ...]
    * where only sourceFormat is 'original' and 'objectRows' supported.
    *
@@ -43320,7 +43320,7 @@
 */
 
   var PieSeries = extendSeriesModel({
-    type: 'series.pie',
+    type: 'series.chart-pie',
 
     // Overwrite
     init: function(option) {
@@ -43548,7 +43548,7 @@
   }
 
   /**
-   * Piece of pie including Sector, Label, LabelLine
+   * Piece of chart-pie including Sector, Label, LabelLine
    * @constructor
    * @extends {module:zrender/graphic/Group}
    */
@@ -44018,7 +44018,7 @@
 
   // Pick color from palette for each data item.
   // Applicable for charts that require applying color palette
-  // in data level (like pie, funnel, chord).
+  // in data level (like chart-pie, funnel, chord).
   var dataColor = function(seriesType) {
     return {
       getTargetSeries: function(ecModel) {
@@ -58820,7 +58820,7 @@
 */
 
   /**
-   * Piece of pie including Sector, Label, LabelLine
+   * Piece of chart-pie including Sector, Label, LabelLine
    * @constructor
    * @extends {module:zrender/graphic/Group}
    */
@@ -75397,7 +75397,7 @@
 
             legendDrawnMap.set(name, true);
           } else {
-            // Data legend of pie, funnel
+            // Data legend of chart-pie, funnel
             ecModel.eachRawSeries(function(seriesModel) {
               // In case multiple series has same data name
               if (legendDrawnMap.get(name)) {
@@ -75431,7 +75431,7 @@
                 itemGroup
                   .on('click', curry$4(dispatchSelectAction, name, api))
                   // Should not specify the series name, consider legend controls
-                  // more than one pie series.
+                  // more than one chart-pie series.
                   .on(
                     'mouseover',
                     curry$4(
@@ -86183,8 +86183,8 @@
 
   registerProcessor({
     // `dataZoomProcessor` will only be performed in needed series. Consider if
-    // there is a line series and a pie series, it is better not to update the
-    // line series if only pie series is needed to be updated.
+    // there is a line series and a chart-pie series, it is better not to update the
+    // line series if only chart-pie series is needed to be updated.
     getTargetSeries: function(ecModel) {
       var seriesModelMap = createHashMap();
 
@@ -93207,7 +93207,7 @@
   /**
    * Group series into two types
    *  1. on category axis, like line, bar
-   *  2. others, like scatter, pie
+   *  2. others, like scatter, chart-pie
    * @param {module:echarts/model/Global} ecModel
    * @return {Object}
    * @inner

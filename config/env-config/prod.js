@@ -10,6 +10,8 @@
 var Common = require('./common');
 
 module.exports = {
+  //host: 'http://shopstg.royalcanin.com/api',
+  //HOST: 'http://shopstg.royalcanin.com/api',
   host: 'https://store.royalcanin.com/api',
   HOST: 'https://store.royalcanin.com/api',
   //host: 'http://52.168.31.130:8390',

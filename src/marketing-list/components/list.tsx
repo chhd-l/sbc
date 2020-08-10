@@ -283,7 +283,6 @@ export default class MarketingList extends React.Component<any, any> {
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
                     <a
-                      href="javascript:void(0);"
                       style={{ marginRight: 5 }}
                       onClick={() => close(rowInfo['marketingId'])}
                     >

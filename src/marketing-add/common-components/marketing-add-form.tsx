@@ -96,7 +96,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
       promotionCode: '',
       promotionCode2: '', //记录初始自动生成的promotionCode
       PromotionTypeValue: 0,
-      PromotionTypeChecked: true
+      PromotionTypeChecked: true,
+      timeZone: moment
     };
   }
 
@@ -123,7 +124,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
       return this.state.promotionCode;
     }
   };
-
+  handleEndOpenChange = async (date) => {
+    if (date == true) {
+      const { res } = await webapi.timeZone();
+      if (res.code == Const.SUCCESS_CODE) {
+        this.setState({
+          timeZone: res.defaultLocalDateTime
+        });
+        console.log(this.state.timeZone, 2222);
+      } else {
+        message.error(res.message);
+        return;
+      }
+    }
+  };
   // @ts-ignore
   render() {
     const { marketingType, marketingId, form } = this.props;
@@ -264,9 +278,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 validator: (_rule, value, callback) => {
                   if (
                     value &&
-                    moment(
-                      new Date(sessionStorage.getItem('defaultLocalDateTime'))
-                    )
+                    moment(new Date(sessionStorage.getItem('zoneDate')))
                       .hour(0)
                       .minute(0)
                       .second(0)
@@ -280,6 +292,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
             ],
             onChange: (date, dateString) => {
+              console.log(date, 11111);
+              console.log(
+                marketingBean.get('beginTime'),
+                '11111111111111111111'
+              );
+              console.log(dateString, 2222);
               if (date) {
                 this.onBeanChange({
                   beginTime: dateString[0] + ':00',
@@ -287,11 +305,16 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 });
               }
             },
-            initialValue: marketingBean.get('beginTime') &&
-              marketingBean.get('endTime') && [
-                moment(marketingBean.get('beginTime')),
-                moment(marketingBean.get('endTime'))
-              ]
+
+            initialValue:
+              this.state.timeZone == moment
+                ? [marketingBean.get('beginTime'), marketingBean.get('endTime')]
+                : marketingBean.get('beginTime') == undefined
+                ? [moment(this.state.timeZone), moment(this.state.timeZone)]
+                : [
+                    moment(marketingBean.get('beginTime')),
+                    moment(marketingBean.get('endTime'))
+                  ]
           })(
             <RangePicker
               getCalendarContainer={() =>
@@ -299,8 +322,12 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
               allowClear={false}
               format={Const.DATE_FORMAT}
+              //defaultValue = {moment[undefined,undefined]}
+              //format={'YYYY-MM-DD' + ' ' + moment(sessionStorage.getItem('zoneDate')).format('hh:mm:ss ')}
+              // format={'YYYY-MM-DD' + ' ' + this.state.timeZone}
               placeholder={['Start time', 'End time']}
               showTime={{ format: 'HH:mm' }}
+              onOpenChange={this.handleEndOpenChange}
             />
           )}
         </FormItem>
@@ -522,6 +549,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         selectedSkuIds: scopeIds.toJS()
       });
     }
+    sessionStorage.setItem('PromotionTypeValue', 0);
   };
 
   /**
@@ -529,7 +557,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    * @param joinLevel
    */
   promotionType = (e) => {
-    //console.log('radio checked', e.target.value);
+    sessionStorage.setItem('PromotionTypeValue', e.target.value);
     let { marketingBean } = this.state;
     this.setState(
       {

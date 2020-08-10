@@ -417,7 +417,7 @@ html {
 
   h3 {
     font-size: 18px;
-    color    : #333;
+    color    : #000000;
   }
 
   span {
@@ -453,7 +453,7 @@ html {
   h3 {
     font-size  : 18px;
     text-indent: 10px;
-    color      : #333;
+    color      : #000;
   }
 
   small {
@@ -875,7 +875,7 @@ html {
 
     h3 {
       font-size  : 18px;
-      color      : #333333;
+      color      : #000000;
       line-height: 48px;
     }
 
@@ -891,43 +891,62 @@ html {
 
 .pending,
 .peopleInfo {
-  width       : calc(65% - 10px);
+  width       : calc(50% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
   .dateBg {
     display         : flex;
-    background-color: #f7f7f7;
+    background-color: #fff;
     flex-direction  : row;
     margin-top      : 10px;
   }
-
-  .dataItem {
-    width           : 25%;
-    display         : inline-block;
-    background-color: #f7f7f7;
-    margin-top      : 10px;
-    height          : 80px;
-    padding-left    : 40px;
-    padding-top     : 15px;
+  .dataItem1 {
+    width           : 100%;
+    background-color: #FEF7F8;
+    height          : 35px;
+    line-height: 35px;
+    padding: 0 20px;
+    margin-top: 15px;
 
     label {
-      color    : #666;
+      color    : #808285;
       display  : block;
       font-size: 14px;
     }
 
     strong {
       display   : block;
-      color     : #F56C1D;
-      font-size : 16px;
+      color     : #000000;
+      font-size : 20px;
+    }
+  }
+  .dataItem {
+    width           : 25%;
+    display         : inline-block;
+    background-color: #ffffff;
+    margin-top      : 5px;
+    height          : 80px;
+    padding-right    : 20px;
+    padding-top     : 15px;
+
+    label {
+      color    : #808285;
+      display  : block;
+      font-size: 14px;
+    }
+
+    strong {
+      display   : block;
+      color     : #000000;
+      font-size : 26px;
       margin-top: 5px;
     }
   }
 }
 
 .peopleInfo {
-  width       : calc(35% - 10px);
+  width       : calc(50% - 10px);
   margin-left : 5px;
   margin-right: 5px;
 
@@ -984,17 +1003,20 @@ html {
     margin-right  : -5px;
     margin-left   : -5px;
   }
-
-  .dataItem {
-    display         : flex;
-    background-color: #f7f7f7;
-    flex-direction  : row;
-    justify-content : center;
-    align-items     : center;
-    height          : 100px;
-    flex            : 1;
+  .dataItem1 {
+    background: #CCCCCC;
+    height          : 85px;
+    width: 100%;
+    display: block;
     margin-left     : 5px;
     margin-right    : 5px;
+  }
+  .dataItem {
+    background-color: #f7f7f7;
+    height          : 100px;
+    margin-left     : 5px;
+    margin-right    : 5px;
+    width: 100%;
 
     .CommonImg {
       width : 40px;
@@ -1017,11 +1039,22 @@ html {
 
   .dateBg {
     display         : flex;
-    background-color: #f7f7f7;
+    background-color: #FEF7F8;
     flex-direction  : row;
     margin-top      : 10px;
   }
-
+  .dateBg1 {
+    width         : 50%;
+    background-color: #ffffff;
+    flex-direction  : row;
+    margin-top      : 10px;
+  }
+  .dateBg2 {
+    width         : 40%;
+    background-color: #ffffff;
+    flex-direction  : row;
+    margin-top      : 10px;
+  }
   .dataItem {
     display        : flex;
     flex-direction : column;
@@ -1032,13 +1065,13 @@ html {
     padding-left   : 30px;
 
     label {
-      color    : #666;
+      color    : #808285;
       font-size: 14px;
     }
 
     strong {
-      color     : #333;
-      font-size : 16px;
+      color     : #000000;
+      font-size : 26px;
       margin-top: 5px;
     }
   }
@@ -1634,9 +1667,7 @@ html {
 /* 申请开店 */
 
 .shopHeader {
-  background     : #ffffff;
-  border         : 1px solid #e9e9e9;
-  padding        : 20px;
+  background     : none;
   margin-bottom  : 10px;
   display        : flex;
   flex-direciton : row;
@@ -1977,32 +2008,35 @@ html {
 
 /* 首页 店铺评价 */
 .store-mess {
-  width        : 100px;
-  height       : 100px;
-  background   : rgba(245, 108, 29, 0.06);
-  border       : 1px solid #F56C1D;
-  border-radius: 10px;
-  margin-right : 40px;
-
+  width        : 197px;
+  height       : 113px;
+  margin-right : 15px;
+  background: #ffffff;
   .store-score {
     font-size : 18px;
-    color     : #333;
+    font-weight: bold;
+    color     : #000;
     text-align: center;
+    letter-spacing: 0;
     margin-top: 13px;
   }
 
   .store-number {
-    font-size : 28px;
-    color     : #F56C1D;
+    font-size: 32px;
+    color: #E1021A;
+    letter-spacing: 0;
     text-align: center;
-    margin-top: -10px;
+    margin-top: -6px;
+    font-weight: bold;
   }
 
   .store-date {
     font-size : 14px;
-    color     : #333;
+    color: #575757;
+    letter-spacing: 0;
     text-align: center;
-    margin-top: -7px;
+    margin-top: 2px;
+    opacity: 0.4;
   }
 }
 

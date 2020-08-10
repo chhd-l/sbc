@@ -18,7 +18,7 @@ export function fetchList(filterParams = {}) {
  * @param marketingId
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const pause = marketingId => {
+export const pause = (marketingId) => {
   return Fetch<TResult>(`/marketing/pause/${marketingId}`, {
     method: 'PUT'
   });
@@ -29,18 +29,28 @@ export const pause = marketingId => {
  * @param marketingId
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const start = marketingId => {
+export const start = (marketingId) => {
   return Fetch<TResult>(`/marketing/start/${marketingId}`, {
     method: 'PUT'
   });
 };
 
 /**
+ * 关闭
+ * @param marketingId
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export const close = (marketingId) => {
+  return Fetch<TResult>(`/marketing/close/${marketingId}`, {
+    method: 'PUT'
+  });
+};
+/**
  * 删除营销
  * @param marketingId
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deleteMarketing = marketingId => {
+export const deleteMarketing = (marketingId) => {
   return Fetch<TResult>(`/marketing/delete/${marketingId}`, {
     method: 'DELETE'
   });

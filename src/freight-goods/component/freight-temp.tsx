@@ -454,7 +454,9 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'Down payment (dollar)',
+                  title: `Down payment (${sessionStorage.getItem(
+                    cache.SYSTEM_GET_CONFIG_NAME
+                  )})`,
                   dataIndex: 'freightStartPrice',
                   key: 'freightStartPrice',
                   width: '13%',
@@ -516,7 +518,9 @@ export default class FreightTemp extends React.Component<any, any> {
                   }
                 },
                 {
-                  title: 'Renewal fee (dollar)',
+                  title: `Renewal fee (${sessionStorage.getItem(
+                    cache.SYSTEM_GET_CONFIG_NAME
+                  )})`,
                   dataIndex: 'freightPlusPrice',
                   key: 'freightPlusPrice',
                   width: '15%',

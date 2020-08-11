@@ -256,7 +256,8 @@ export default class SearchHead extends Component<any, any> {
       search.beginTime = beginTime;
       search.endTime = beginTime.clone().add(3, 'months');
       this.setState({
-        pickErrorInfo: '开始时间和结束时间需在三个月之内',
+        pickErrorInfo:
+          'The start time and end time should be within three months',
         search: search
       });
     }

@@ -164,7 +164,8 @@ export default class SearchForm extends React.Component<any, any> {
     } else {
       this.setState({
         pickOpen: true,
-        pickErrorInfo: '开始时间和结束时间需在三个月之内'
+        pickErrorInfo:
+          'The start time and end time should be within three months'
       });
     }
   };

@@ -145,3 +145,9 @@ export function getClinicsReward(id = '') {
     method: 'GET'
   });
 }
+
+export function getRecommendationCode() {
+  return Fetch<TResult>('/prescriber/getRecommendationCode', {
+    method: 'POST'
+  });
+}

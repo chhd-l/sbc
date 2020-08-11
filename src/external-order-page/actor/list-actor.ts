@@ -28,13 +28,10 @@ export default class ListActor extends Actor {
   @Action('list:init')
   init(state: IMap, res: ICustomerResponse) {
     const { content, totalElements } = res;
-
-    return state.withMutations((state) => {
-      state
-        .set('total', totalElements || 0)
-        .set('dataList', fromJS(content || {}))
-        .set('selected', fromJS([]));
-    });
+    return  state
+      .set('total', totalElements || 0)
+      .set('dataList', fromJS(content || {}))
+      .set('selected', fromJS([]));
   }
 
   @Action('list:checkedAll')

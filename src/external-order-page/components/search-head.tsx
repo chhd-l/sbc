@@ -128,10 +128,10 @@ export default class SearchHead extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="order.orderNumber" />}
+                addonBefore='Clinics CRM id'
                 onChange={(e) => {
                   this.setState({
-                    id: (e.target as any).value
+                    clientId: (e.target as any).value
                   });
                 }}
               />
@@ -139,10 +139,10 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="order.subscriptioNumber" />}
+                addonBefore='Clinics name'
                 onChange={(e) => {
                   this.setState({
-                    subscribeId: (e.target as any).value
+                    clinicsName: (e.target as any).value
                   });
                 }}
               />
@@ -150,16 +150,39 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore={this._renderBuyerOptionSelect()}
+                addonBefore='Prescription id'
                 onChange={(e) => {
                   this.setState({
-                    buyerOptionsValue: (e.target as any).value
+                    prescriptionId: (e.target as any).value
                   });
                 }}
               />
             </FormItem>
 
-            {/*商品名称、SKU编码*/}
+            <FormItem>
+              <Input
+                addonBefore='Order number'
+                onChange={(e) => {
+                  this.setState({
+                    orderId: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            <FormItem>
+              <Input
+                addonBefore='Product id'
+                onChange={(e) => {
+                  this.setState({
+                    productId: (e.target as any).value
+                  });
+                }}
+              />
+            </FormItem>
+
+            {/*
+            商品名称、SKU编码
             <FormItem>
               <Input
                 addonBefore={this._renderGoodsOptionSelect()}
@@ -252,7 +275,7 @@ export default class SearchHead extends Component<any, any> {
                   </SelectGroup>
                 )}
               </FormattedMessage>
-            </FormItem>
+            </FormItem>*/}
 
             {/* <FormItem>
               <FormattedMessage id="order.orderSource">
@@ -291,7 +314,7 @@ export default class SearchHead extends Component<any, any> {
                   </SelectGroup>
                 )}
               </FormattedMessage>
-            </FormItem> */}
+            </FormItem>
 
             <FormItem>
               <Input
@@ -309,7 +332,7 @@ export default class SearchHead extends Component<any, any> {
                 }}
               />
             </FormItem>
-
+            */}
             <FormItem>
               <RangePicker
                 getCalendarContainer={() =>
@@ -334,7 +357,12 @@ export default class SearchHead extends Component<any, any> {
                 onClick={(e) => {
                   e.preventDefault();
                   const {
-                    buyerOptions,
+                    clientId,
+                    clinicsName,
+                    prescriptionId,
+                    orderId,
+                    productId,
+                    /*buyerOptions,
                     goodsOptions,
                     receiverSelect,
                     clinicSelect,
@@ -344,12 +372,12 @@ export default class SearchHead extends Component<any, any> {
                     goodsOptionsValue,
                     receiverSelectValue,
                     clinicSelectValue,
-                    tradeState,
+                    tradeState,*/
                     beginTime,
                     endTime
                   } = this.state;
 
-                  const ts = {} as any;
+                  /*const ts = {} as any;
                   if (tradeState.deliverStatus) {
                     ts.deliverStatus = tradeState.deliverStatus;
                   }
@@ -360,16 +388,14 @@ export default class SearchHead extends Component<any, any> {
 
                   if (tradeState.orderSource) {
                     ts.orderSource = tradeState.orderSource;
-                  }
+                  }*/
 
                   const params = {
-                    id,
-                    subscribeId,
-                    [buyerOptions]: buyerOptionsValue,
-                    tradeState: ts,
-                    [goodsOptions]: goodsOptionsValue,
-                    [receiverSelect]: receiverSelectValue,
-                    [clinicSelect]: clinicSelectValue,
+                    clientId,
+                    clinicsName,
+                    prescriptionId,
+                    orderId,
+                    productId,
                     beginTime,
                     endTime
                   };
@@ -382,7 +408,7 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
           </Form>
 
-          {hasMenu && (
+          {/*{hasMenu && (
             <div className="handle-bar">
               <Dropdown
                 overlay={menu}
@@ -397,7 +423,7 @@ export default class SearchHead extends Component<any, any> {
                 </Button>
               </Dropdown>
             </div>
-          )}
+          )}*/}
         </div>
 
         <ExportModal

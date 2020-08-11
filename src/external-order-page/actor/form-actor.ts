@@ -5,8 +5,8 @@ export default class FormActor extends Actor {
   defaultState() {
     return {
       form: {
-        tradeState: {},
-        orderRejectModalVisible: false
+        //tradeState: {},
+        //orderRejectModalVisible: false
       }
     };
   }

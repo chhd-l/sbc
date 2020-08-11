@@ -14,6 +14,17 @@ type TResult = {
 };
 
 /**
+ * 列表
+ */
+export const getExternalOrderList = (filter = {}) => {
+  return Fetch<TResult>('/external/order/page', {
+    method: 'POST',
+    body: JSON.stringify(filter)
+  });
+};
+
+
+/**
  * 查询订单是否需要审核
  */
 export const getOrderNeedAudit = () => {

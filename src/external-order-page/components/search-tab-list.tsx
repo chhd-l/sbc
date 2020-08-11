@@ -25,64 +25,7 @@ export default class SearchList extends React.Component<any, any> {
 
     return (
       <div>
-        <Tabs
-          onChange={(key) => {
-            onTabChange(key);
-          }}
-          activeKey={key}
-        >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.pendingReview" />}
-            key="flowState-INIT"
-          >
-            <List />
-          </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeFormed" />}
-            key="flowState-GROUPON"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeDelivered" />}
-            key="flowState-AUDIT"
-          >
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeReceived" />}
-            key="flowState-DELIVERED"
-          >
-            <List />
-          </Tabs.TabPane>
-
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.received" />}
-            key="flowState-CONFIRMED"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
-            key="flowState-COMPLETED"
-          >
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.outOfDate" />}
-            key="flowState-VOID"
-          >
-            <List />
-          </Tabs.TabPane>
-        </Tabs>
+        <List />
       </div>
     );
   }

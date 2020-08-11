@@ -136,6 +136,18 @@ export default class RevenueList extends React.Component<any, any> {
           <Column title="Payment type" dataIndex="payWay" key="payWay" />
           <Column title="Payment method" dataIndex="vendor" key="vendor" />
           <Column
+            title="Syn status"
+            dataIndex="syncPayStatus"
+            key="syncPayStatus"
+            width="7%"
+          />
+          <Column
+            title="Credit status"
+            dataIndex="payStatus"
+            key="payStatus"
+            width="8%"
+          />
+          <Column
             title="Real Revenue"
             dataIndex="paymentOSActualPrice"
             key="paymentOSActualPrice"

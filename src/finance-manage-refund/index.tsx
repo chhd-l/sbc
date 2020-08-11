@@ -35,19 +35,27 @@ export default class FinancialRefund extends React.Component<any, any> {
           <Breadcrumb.Item>资金管理</Breadcrumb.Item>
           <Breadcrumb.Item>财务对账</Breadcrumb.Item>
         </Breadcrumb> */}
-        <div className="container">
+        <div>
           {
             this.store.state().get('kind') == 'income' ? (
               <div>
-                <Headline title="Revenue reconciliation detail" />
-                <SearchForm name="Payment method" />
-                <RevenueList />
+                <div className="container-search">
+                  <Headline title="Revenue reconciliation detail" />
+                  <SearchForm name="Payment method" />
+                </div>
+                <div className="container">
+                  <RevenueList />
+                </div>
               </div>
             ) : (
               <div>
-                <Headline title="Refund reconciliation detail" />
-                <SearchForm name="Payment method" />
-                <RefundList />
+                <div className="container-search">
+                  <Headline title="Refund reconciliation detail" />
+                  <SearchForm name="Payment method" />
+                </div>
+                <div className="container">
+                  <RefundList />
+                </div>
               </div>
             )
 

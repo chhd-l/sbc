@@ -58,7 +58,7 @@ const styles = {
     padding: 5
   },
   static: {
-    background: '#fafafa',
+    background: '#fff',
     padding: 10,
     marginBottom: 15,
     marginTop: 10

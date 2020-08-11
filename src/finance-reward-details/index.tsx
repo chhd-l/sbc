@@ -52,7 +52,7 @@ export default class BillingDetails extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container">
+        <div className="container-search">
           <div className="space-between">
             <div style={{ width: '60%' }}>
               <Headline title={<FormattedMessage id="rewardDetails" />} />
@@ -73,9 +73,10 @@ export default class BillingDetails extends React.Component<any, any> {
               </Tooltip>
             </OptionDiv>
           </div>
-
           <Detail />
           <SearchForm />
+        </div>
+        <div className="container">
           <Chart />
           <OrderInvoiceList settleId={this.props.match.params.settleId} />
           <Bottom />

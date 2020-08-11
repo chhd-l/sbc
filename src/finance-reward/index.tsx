@@ -45,7 +45,7 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Breadcrumb.Item>开票管理</Breadcrumb.Item>
             <Breadcrumb.Item>订单开票</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
             <AuthWrapper functionName={'financeRewardExport'}>
@@ -55,7 +55,9 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
                 </Button>
               </div>
             </AuthWrapper>
-            {/*<ButtonGroup />*/}
+          </div>
+          {/*<ButtonGroup />*/}
+          <div className="container">
             <DetailsList />
             <OrderInvoiceAddModal />
             <OrderInvoiceViewModal />

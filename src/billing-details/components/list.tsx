@@ -56,7 +56,7 @@ export default class List extends React.Component<any, any> {
       <div>
         <AuthWrapper functionName="f_sett_det_exp">
           <Button
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 20, marginTop: 20 }}
             disabled={settleList.length == 0}
             onClick={() => exportSettlementDetailList(this.props.settleId)}
           >

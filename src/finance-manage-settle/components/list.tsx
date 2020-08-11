@@ -7,7 +7,7 @@ import moment from 'moment';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 const Column = Table.Column;
 
@@ -185,21 +185,22 @@ export default class List extends React.Component<any, any> {
           render={(row) => {
             return (
               <AuthWrapper functionName="f_billing_details">
-                <a
-                  onClick={() =>
-                    history.push({
-                      pathname: `/billing-details/${row.settleId}`,
-                      state: {
-                        settlementType:
-                          queryParams.get('settleStatus').toString() == 0
-                            ? 'UnSettlement details'
-                            : 'Settlement details'
-                      }
-                    })
-                  }
-                >
-                  {<FormattedMessage id="inquiryDetails" />}
-                </a>
+                <Tooltip placement="top" title="Details">
+                  <a
+                    onClick={() =>
+                      history.push({
+                        pathname: `/billing-details/${row.settleId}`,
+                        state: {
+                          settlementType:
+                            queryParams.get('settleStatus').toString() == 0
+                              ? 'UnSettlement details'
+                              : 'Settlement details'
+                        }
+                      })
+                    }
+                    className="iconfont iconDetails"
+                  ></a>
+                </Tooltip>
               </AuthWrapper>
             );
           }}

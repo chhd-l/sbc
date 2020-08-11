@@ -1,18 +1,10 @@
 import React from 'react';
-import { Action, IMap, Relax, Store } from 'plume2';
-import {
-  Const,
-  DataGrid,
-  noop,
-  AuthWrapper,
-  checkAuth,
-  cache,
-  history
-} from 'qmkit';
+import { Relax, Store } from 'plume2';
+import { DataGrid, noop, AuthWrapper, cache, history } from 'qmkit';
 import { List } from 'immutable';
-import { Link } from 'react-router-dom';
-import { Dropdown, Icon, Menu, Popconfirm } from 'antd';
-import momnet from 'moment';
+//import { Link } from 'react-router-dom';
+import { Popconfirm, Tooltip } from 'antd';
+//import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
 
 type TList = List<any>;
@@ -189,12 +181,13 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           width="8%"
           render={(text, record: any, i) => {
             return (
-              <a
-                href="javascript:void(0)"
-                onClick={() => this._renderOperate(text)}
-              >
-                Details
-              </a>
+              <Tooltip placement="top" title="Details">
+                <a
+                  href="javascript:void(0)"
+                  onClick={() => this._renderOperate(text)}
+                  className="iconfont iconDetails"
+                ></a>
+              </Tooltip>
             );
           }}
           // render={(rowInfo) => this._renderOperate(rowInfo)}

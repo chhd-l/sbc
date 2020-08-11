@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, history, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 const Column = Table.Column;
 
@@ -202,22 +202,23 @@ export default class RefundList extends React.Component<any, any> {
             render={(_text, record: any, _index) => {
               return (
                 <AuthWrapper functionName="f_finance_manage_refund">
-                  <a
-                    onClick={() =>
-                      history.push({
-                        pathname: `/finance-manage-refund/${
-                          record.storeId
-                        }/${'refund'}`,
-                        state: {
-                          beginTime:
-                            dateRange.get('beginTime') + ' ' + '00:00:00',
-                          endTime: dateRange.get('endTime') + ' ' + '23:59:59'
-                        }
-                      })
-                    }
-                  >
-                    Details
-                  </a>
+                  <Tooltip placement="top" title="Details">
+                    <a
+                      onClick={() =>
+                        history.push({
+                          pathname: `/finance-manage-refund/${
+                            record.storeId
+                          }/${'refund'}`,
+                          state: {
+                            beginTime:
+                              dateRange.get('beginTime') + ' ' + '00:00:00',
+                            endTime: dateRange.get('endTime') + ' ' + '23:59:59'
+                          }
+                        })
+                      }
+                      className="iconfont iconDetails"
+                    ></a>
+                  </Tooltip>
                 </AuthWrapper>
               );
             }}

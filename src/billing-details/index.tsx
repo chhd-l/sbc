@@ -35,9 +35,7 @@ export default class BillingDetails extends React.Component<any, any> {
       <div
         style={{
           overflowY: 'auto',
-          height: 'calc(100vh - 64px)',
-          margin: -10,
-          padding: 10,
+          height: 'calc(100vh - 180px)',
           position: 'relative'
         }}
       >
@@ -47,7 +45,7 @@ export default class BillingDetails extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container">
+        <div className="container-search">
           <Headline title={history.location.state.settlementType} />
           {/*<OptionDiv>
             <Tooltip
@@ -65,6 +63,8 @@ export default class BillingDetails extends React.Component<any, any> {
             </Tooltip>
           </OptionDiv>*/}
           {/* <Detail />*/}
+        </div>
+        <div className="container">
           <List settleId={this.props.match.params.settleId} />
           <Bottom />
         </div>
@@ -72,7 +72,7 @@ export default class BillingDetails extends React.Component<any, any> {
     );
   }
 
-  _renderTitle = () => {
+  /* _renderTitle = () => {
     return (
       <div>
         <div>
@@ -139,5 +139,5 @@ export default class BillingDetails extends React.Component<any, any> {
         </div>
       </div>
     );
-  };
+  };*/
 }

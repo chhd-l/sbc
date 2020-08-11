@@ -30,7 +30,7 @@ export default class FinancialSettlement extends React.Component<any, any> {
             <Breadcrumb.Item>资金管理</Breadcrumb.Item>
             <Breadcrumb.Item>财务结算</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline
               title={<FormattedMessage id="financialSettlement" />}
               smallTitle={`Your settlement date is ${this.store
@@ -49,7 +49,8 @@ export default class FinancialSettlement extends React.Component<any, any> {
               </div>
             </AuthWrapper>*/}
             <ButtonGroup />
-
+          </div>
+          <div className="container">
             {/*财务结算表格*/}
             <TabList />
           </div>

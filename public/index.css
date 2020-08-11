@@ -17,7 +17,7 @@
 }
 /*全局表格表头颜色*/
 #root .ant-table-thead > tr > th {
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 1);
 }
 .operation-box{
     text-align: right;

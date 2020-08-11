@@ -33,7 +33,7 @@ export default class FinancialAccounts extends React.Component<any, any> {
             <Breadcrumb.Item>资金管理</Breadcrumb.Item>
             <Breadcrumb.Item>财务对账</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline
               title={<FormattedMessage id="financialReconciliation" />}
             />
@@ -45,6 +45,8 @@ export default class FinancialAccounts extends React.Component<any, any> {
                 </Button>
               </div>
             </AuthWrapper>*/}
+          </div>
+          <div className="container">
             <Tabs
               onChange={(key) => this.store.onTabChange(key)}
               activeKey={this.store.state().get('tabKey')}

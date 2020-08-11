@@ -178,7 +178,7 @@ export default class CateList extends React.Component<any, any> {
               return (
                 <div className="operation-th">
                   <AuthWrapper functionName="f_goods_detail_1">
-                    <Link to={`/goods-detail/${rowInfo.goodsId}`}>查看</Link>
+                    <Link to={`/goods-detail/${rowInfo.goodsId}`}>View</Link>
                   </AuthWrapper>
                 </div>
               );

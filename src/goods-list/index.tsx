@@ -28,12 +28,13 @@ export default class GoodsView extends React.Component<any, any> {
             <Breadcrumb.Item>商品管理</Breadcrumb.Item>
             <Breadcrumb.Item>商品列表</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="product.productList" />} />
 
             {/*搜索*/}
             <SearchForm />
-
+          </div>
+          <div className="container">
             {/*工具条*/}
             {/* <Tool /> */}
 

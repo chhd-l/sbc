@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Button, Select, Tree, Row, Col } from 'antd';
+import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect } from 'antd';
 import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
@@ -90,14 +90,25 @@ export default class SearchForm extends React.Component<any, any> {
           />
         );
       });
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 10 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 }
+      }
+    };
 
     return (
-      <Form className="filter-content" layout="inline">
+      <Form {...formItemLayout} className="filter-content" layout="inline">
         <Row>
           <Col span={8}>
             <FormItem label={<FormattedMessage id="product.productName" />}>
               <Input
                 value={likeGoodsName}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsName',
@@ -111,6 +122,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem label={<FormattedMessage id="product.SPU" />}>
               <Input
                 value={likeGoodsNo}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsNo',
@@ -124,6 +136,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem label={<FormattedMessage id="product.SKU" />}>
               <Input
                 value={likeGoodsInfoNo}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsInfoNo',
@@ -135,14 +148,14 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem>
-              <TreeSelectGroup
+            <FormItem label={<FormattedMessage id="product.storeCategory" />}>
+              <TreeSelect
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
-                label={<FormattedMessage id="product.storeCategory" />}
                 // defaultValue="全部"
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                style={{ width: 200 }}
                 treeDefaultExpandAll
                 onChange={(value) => {
                   onFormFieldChange({ key: 'storeCateId', value });
@@ -151,19 +164,19 @@ export default class SearchForm extends React.Component<any, any> {
                 <TreeNode key="-1" value="-1" title="All">
                   {loop(cateList)}
                 </TreeNode>
-              </TreeSelectGroup>
+              </TreeSelect>
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem>
+            <FormItem label={<FormattedMessage id="product.brand" />}>
               <SelectBox>
-                <SelectGroup
+                <Select
                   getPopupContainer={() =>
                     document.getElementById('page-content')
                   }
-                  label={<FormattedMessage id="product.brand" />}
                   defaultValue="All"
                   showSearch
+                  style={{ width: 200 }}
                   optionFilterProp="children"
                   onChange={(value) => {
                     onFormFieldChange({ key: 'brandId', value });
@@ -179,16 +192,17 @@ export default class SearchForm extends React.Component<any, any> {
                       </Option>
                     );
                   })}
-                </SelectGroup>
+                </Select>
               </SelectBox>
             </FormItem>
           </Col>
-          <Col span={24}>
+          <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"
                 htmlType="submit"
                 icon="search"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   onSearch();

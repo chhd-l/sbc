@@ -218,9 +218,7 @@ export default class CustomerList extends React.Component<any, any> {
           width={102}
           render={(evaluateTime) =>
             evaluateTime
-              ? Moment(evaluateTime)
-                  .format(Const.TIME_FORMAT)
-                  .toString()
+              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
               : ''
           }
         />
@@ -237,14 +235,24 @@ export default class CustomerList extends React.Component<any, any> {
                   <span
                     style={styles.see}
                     onClick={() => goodsEvaluateDetail(evaluateId, true)}
+                    title="View"
                   >
-                    <FormattedMessage id="view" />
+                    <span
+                      className="icon iconfont iconView"
+                      style={{ fontSize: 20 }}
+                    ></span>
+                    {/* <FormattedMessage id="view" /> */}
                   </span>
                   <span
                     style={styles.see}
                     onClick={() => this.deleteEvaluate(evaluateId)}
+                    title="Delete"
                   >
-                    <FormattedMessage id="delete" />
+                    <span
+                      className="icon iconfont iconDelete"
+                      style={{ fontSize: 20 }}
+                    ></span>
+                    {/* <FormattedMessage id="delete" /> */}
                   </span>
                 </AuthWrapper>
               </div>

@@ -278,8 +278,14 @@ export default class CateList extends React.Component<any, any> {
                 state: { tab: 'main' }
               })
             }
+            title="Edit"
+            style={{ marginRight: 5 }}
           >
-            <FormattedMessage id="edit" />
+            <span
+              className="icon iconfont iconEdit"
+              style={{ fontSize: 20 }}
+            ></span>
+            {/* <FormattedMessage id="edit" /> */}
           </a>
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -302,8 +308,13 @@ export default class CateList extends React.Component<any, any> {
               onClick={() => {
                 spuOnSale([rowInfo.goodsId]);
               }}
+              title="On Shelves"
+              style={{ marginRight: 5 }}
             >
-              <FormattedMessage id="product.onShelves" />
+              <span
+                className="icon iconfont iconOnShelves"
+                style={{ fontSize: 20 }}
+              ></span>
             </a>
           </AuthWrapper>
         ) : null}
@@ -314,8 +325,13 @@ export default class CateList extends React.Component<any, any> {
               onClick={() => {
                 spuOffSale([rowInfo.goodsId]);
               }}
+              title="Off Shelves"
+              style={{ marginRight: 5 }}
             >
-              <FormattedMessage id="product.offShelves" />
+              <span
+                className="icon iconfont iconOffShelves"
+                style={{ fontSize: 20 }}
+              ></span>
             </a>
           </AuthWrapper>
         ) : null}
@@ -325,8 +341,13 @@ export default class CateList extends React.Component<any, any> {
             onClick={() => {
               this._delete(rowInfo.goodsId);
             }}
+            title="Delete"
+            style={{ marginRight: 5 }}
           >
-            <FormattedMessage id="delete" />
+            <span
+              className="icon iconfont iconDelete"
+              style={{ fontSize: 20 }}
+            ></span>
           </a>
         </AuthWrapper>
       </div>

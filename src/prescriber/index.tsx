@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb, util, Const } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
 import {
   Form,
   Select,
@@ -22,102 +22,8 @@ export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      columns: [
-        {
-          title: 'Prescriber ID',
-          dataIndex: 'prescriberId',
-          key: 'prescriberID',
-          width: '10%'
-        },
-        {
-          title: 'Prescriber name',
-          dataIndex: 'prescriberName',
-          key: 'prescriberName',
-          width: '15%',
-          ellipsis: true
-        },
-        {
-          title: 'Prescriber phone',
-          dataIndex: 'phone',
-          key: 'prescriberPhone',
-          width: '10%'
-        },
-        {
-          title: 'Prescriber city',
-          dataIndex: 'primaryCity',
-          key: 'prescriberCity',
-          width: '10%'
-        },
-        // {
-        //   title: 'Prescriber Zip',
-        //   dataIndex: 'primaryZip',
-        //   key: 'prescriberZip',
-        //   width: 140
-        // },
-        // {
-        //   title: 'Latitude',
-        //   dataIndex: 'latitude',
-        //   key: 'latitude',
-        //   width: 120
-        // },
-        // {
-        //   title: 'Longitude',
-        //   dataIndex: 'longitude',
-        //   key: 'longitude',
-        //   width: 120
-        // },
+      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
 
-        {
-          title: 'Prescriber type',
-          dataIndex: 'prescriberType',
-          key: 'prescriberType',
-          width: '10%'
-        },
-        {
-          title: 'Audit Status',
-          dataIndex: 'auditStatus',
-          key: 'auditStatus',
-          width: '10%',
-          render: (text, record) => (
-            <p>{record.auditStatus === '1' ? 'Online' : 'Offline'}</p> //1 线上 0 线下
-          )
-        },
-
-        {
-          title: 'Recommendation code',
-          dataIndex: 'prescriberCode',
-          key: 'prescriberCode',
-          width: '10%',
-          render: (text, record) => (
-            <p>{record.auditStatus === '1' ? '' : text}</p> //1 线上 0 线下
-          )
-        },
-        {
-          title: 'Prescriber status',
-          dataIndex: 'enabled',
-          key: 'enabled',
-          width: '10%',
-          render: (text, record) => (
-            <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
-          )
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          width: '10%',
-          render: (text, record) => (
-            <span>
-              <Link to={'/prescriber-edit/' + record.id}>Edit</Link>
-              <Divider type="vertical" />
-              <a onClick={() => this.enableAndDisable(record.id)}>
-                {record.enabled ? 'Disable' : 'Enable'}
-              </a>
-              {/* <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
-            </span>
-          )
-        }
-      ],
       prescriberList: [],
       pagination: {
         current: 1,
@@ -325,7 +231,101 @@ export default class ClinicList extends Component<any, any> {
   }
 
   render() {
-    const { columns, cityArr, typeArr, searchForm } = this.state;
+    const { cityArr, typeArr, searchForm } = this.state;
+    const columns = [
+      {
+        title: 'Prescriber ID',
+        dataIndex: 'prescriberId',
+        key: 'prescriberID',
+        width: '10%'
+      },
+      {
+        title: 'Prescriber name',
+        dataIndex: 'prescriberName',
+        key: 'prescriberName',
+        width: '15%',
+        ellipsis: true
+      },
+      {
+        title: 'Prescriber phone',
+        dataIndex: 'phone',
+        key: 'prescriberPhone',
+        width: '10%'
+      },
+      {
+        title: 'Prescriber city',
+        dataIndex: 'primaryCity',
+        key: 'prescriberCity',
+        width: '10%'
+      },
+      // {
+      //   title: 'Prescriber Zip',
+      //   dataIndex: 'primaryZip',
+      //   key: 'prescriberZip',
+      //   width: 140
+      // },
+      // {
+      //   title: 'Latitude',
+      //   dataIndex: 'latitude',
+      //   key: 'latitude',
+      //   width: 120
+      // },
+      // {
+      //   title: 'Longitude',
+      //   dataIndex: 'longitude',
+      //   key: 'longitude',
+      //   width: 120
+      // },
+
+      {
+        title: 'Prescriber type',
+        dataIndex: 'prescriberType',
+        key: 'prescriberType',
+        width: '10%'
+      },
+      // {
+      //   title: 'Audit Status',
+      //   dataIndex: 'auditStatus',
+      //   key: 'auditStatus',
+      //   width: '10%',
+      //   render: (text, record) => (
+      //     <p>{record.auditStatus === '1' ? 'Online' : 'Offline'}</p> //1 线上 0 线下
+      //   )
+      // },
+
+      {
+        title: 'Recommendation code',
+        dataIndex: 'prescriberCode',
+        key: 'prescriberCode',
+        width: '10%',
+        render: (text, record) => <p>{this.state.isMapMode ? '' : text}</p>
+      },
+      {
+        title: 'Prescriber status',
+        dataIndex: 'enabled',
+        key: 'enabled',
+        width: '10%',
+        render: (text, record) => (
+          <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+        )
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            <Link to={'/prescriber-edit/' + record.id}>Edit</Link>
+            <Divider type="vertical" />
+            <a onClick={() => this.enableAndDisable(record.id)}>
+              {record.enabled ? 'Disable' : 'Enable'}
+            </a>
+            {/* <Divider type="vertical" />
+            <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
+          </span>
+        )
+      }
+    ];
     return (
       <div>
         <BreadCrumb />

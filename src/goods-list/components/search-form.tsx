@@ -110,7 +110,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem label={<FormattedMessage id="product.productName" />}>
               <Input
                 value={likeGoodsName}
-                style={{ minWidth: 200 }}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsName',
@@ -124,7 +124,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem label={<FormattedMessage id="product.SPU" />}>
               <Input
                 value={likeGoodsNo}
-                style={{ minWidth: 200 }}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsNo',
@@ -138,7 +138,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem label={<FormattedMessage id="product.SKU" />}>
               <Input
                 value={likeGoodsInfoNo}
-                style={{ minWidth: 200 }}
+                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsInfoNo',
@@ -158,7 +158,7 @@ export default class SearchForm extends React.Component<any, any> {
                 /* defaultValue="全部"*/
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
-                style={{ minWidth: 200 }}
+                style={{ width: 200 }}
                 onChange={(value) => {
                   onFormFieldChange({ key: 'storeCateId', value });
                 }}
@@ -179,7 +179,7 @@ export default class SearchForm extends React.Component<any, any> {
                 defaultValue="All"
                 showSearch
                 optionFilterProp="children"
-                style={{ minWidth: 200 }}
+                style={{ width: 200 }}
                 onChange={(value) => {
                   onFormFieldChange({ key: 'brandId', value });
                 }}
@@ -217,7 +217,7 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </SelectBox>
           </FormItem> */}
-          <Col span={24}>
+          <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"
@@ -228,7 +228,9 @@ export default class SearchForm extends React.Component<any, any> {
                   onSearch();
                 }}
               >
-                <FormattedMessage id="product.search" />
+                <span>
+                  <FormattedMessage id="product.search" />
+                </span>
               </Button>
             </FormItem>
           </Col>

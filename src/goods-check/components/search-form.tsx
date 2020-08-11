@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Button, Select, Tree } from 'antd';
+import { Form, Input, Button, Select, Tree, Row, Col } from 'antd';
 import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
@@ -92,122 +92,116 @@ export default class SearchForm extends React.Component<any, any> {
       });
 
     return (
-      <div>
-        <Form className="filter-content" layout="inline">
-          <FormItem>
-            <Input
-              addonBefore={<FormattedMessage id="product.productName" />}
-              value={likeGoodsName}
-              onChange={(e: any) => {
-                onFormFieldChange({
-                  key: 'likeGoodsName',
-                  value: e.target.value
-                });
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <Input
-              addonBefore={<FormattedMessage id="product.SPU" />}
-              value={likeGoodsNo}
-              onChange={(e: any) => {
-                onFormFieldChange({
-                  key: 'likeGoodsNo',
-                  value: e.target.value
-                });
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <Input
-              addonBefore={<FormattedMessage id="product.SKU" />}
-              value={likeGoodsInfoNo}
-              onChange={(e: any) => {
-                onFormFieldChange({
-                  key: 'likeGoodsInfoNo',
-                  value: e.target.value
-                });
-                onEditSkuNo(e.target.value);
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <TreeSelectGroup
-              getPopupContainer={() => document.getElementById('page-content')}
-              label={<FormattedMessage id="product.storeCategory" />}
-              // defaultValue="全部"
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              treeDefaultExpandAll
-              onChange={(value) => {
-                onFormFieldChange({ key: 'storeCateId', value });
-              }}
-            >
-              <TreeNode key="-1" value="-1" title="All">
-                {loop(cateList)}
-              </TreeNode>
-            </TreeSelectGroup>
-          </FormItem>
-          <FormItem>
-            <SelectBox>
-              <SelectGroup
+      <Form className="filter-content" layout="inline">
+        <Row>
+          <Col span={8}>
+            <FormItem label={<FormattedMessage id="product.productName" />}>
+              <Input
+                value={likeGoodsName}
+                onChange={(e: any) => {
+                  onFormFieldChange({
+                    key: 'likeGoodsName',
+                    value: e.target.value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem label={<FormattedMessage id="product.SPU" />}>
+              <Input
+                value={likeGoodsNo}
+                onChange={(e: any) => {
+                  onFormFieldChange({
+                    key: 'likeGoodsNo',
+                    value: e.target.value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem label={<FormattedMessage id="product.SKU" />}>
+              <Input
+                value={likeGoodsInfoNo}
+                onChange={(e: any) => {
+                  onFormFieldChange({
+                    key: 'likeGoodsInfoNo',
+                    value: e.target.value
+                  });
+                  onEditSkuNo(e.target.value);
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem>
+              <TreeSelectGroup
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
-                label={<FormattedMessage id="product.brand" />}
-                defaultValue="All"
-                showSearch
-                optionFilterProp="children"
+                label={<FormattedMessage id="product.storeCategory" />}
+                // defaultValue="全部"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'brandId', value });
+                  onFormFieldChange({ key: 'storeCateId', value });
                 }}
               >
-                <Option key="-1" value="-1">
-                  <FormattedMessage id="all" />
-                </Option>
-                {brandList.map((v, i) => {
-                  return (
-                    <Option key={i} value={v.get('brandId') + ''}>
-                      {v.get('nickName')}
-                    </Option>
-                  );
-                })}
-              </SelectGroup>
-            </SelectBox>
-          </FormItem>
-          <FormItem>
-            <SelectBox>
-              {/* <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="销售类型"
-                defaultValue="全部"
-                showSearch
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'saleType', value });
+                <TreeNode key="-1" value="-1" title="All">
+                  {loop(cateList)}
+                </TreeNode>
+              </TreeSelectGroup>
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem>
+              <SelectBox>
+                <SelectGroup
+                  getPopupContainer={() =>
+                    document.getElementById('page-content')
+                  }
+                  label={<FormattedMessage id="product.brand" />}
+                  defaultValue="All"
+                  showSearch
+                  optionFilterProp="children"
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'brandId', value });
+                  }}
+                >
+                  <Option key="-1" value="-1">
+                    <FormattedMessage id="all" />
+                  </Option>
+                  {brandList.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.get('brandId') + ''}>
+                        {v.get('nickName')}
+                      </Option>
+                    );
+                  })}
+                </SelectGroup>
+              </SelectBox>
+            </FormItem>
+          </Col>
+          <Col span={24}>
+            <FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon="search"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSearch();
                 }}
               >
-                <Option value="-1">全部</Option>
-                <Option value="0">批发</Option>
-                <Option value="1">零售</Option>
-              </SelectGroup> */}
-            </SelectBox>
-          </FormItem>
-          <FormItem>
-            <Button
-              type="primary"
-              htmlType="submit"
-              icon="search"
-              onClick={(e) => {
-                e.preventDefault();
-                onSearch();
-              }}
-            >
-              {<FormattedMessage id="search" />}
-            </Button>
-          </FormItem>
-        </Form>
-      </div>
+                <span>
+                  <FormattedMessage id="search" />
+                </span>
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }

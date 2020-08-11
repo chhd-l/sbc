@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import { noop } from 'qmkit';
 
 import GoodsList from '../components/goods-list';
+import Tool from './tool';
 import { FormattedMessage } from 'react-intl';
 
 const TabPane = Tabs.TabPane;
@@ -27,6 +28,7 @@ export default class Tab extends React.Component<any, any> {
     return (
       <Tabs
         defaultActiveKey={addedFlag}
+        tabBarExtraContent={<Tool></Tool>}
         onChange={(key) => onStateTabChange(key)}
       >
         <TabPane tab={<FormattedMessage id="all" />} key="-1">

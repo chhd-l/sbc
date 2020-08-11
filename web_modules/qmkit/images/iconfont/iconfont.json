@@ -6,6 +6,34 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "2077206",
+      "name": "删除",
+      "font_class": "Delete",
+      "unicode": "e6f5",
+      "unicode_decimal": 59125
+    },
+    {
+      "icon_id": "16461250",
+      "name": "下架",
+      "font_class": "OnShelves-copy",
+      "unicode": "e782",
+      "unicode_decimal": 59266
+    },
+    {
+      "icon_id": "1440916",
+      "name": "下架",
+      "font_class": "OffShelves",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "5964565",
+      "name": "编辑",
+      "font_class": "Edit",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "16395207",
       "name": "btn-prescriber",
       "font_class": "Prescriber",

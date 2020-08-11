@@ -4,7 +4,7 @@ import { StoreProvider } from 'plume2';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
-import Tool from './components/tool';
+// import Tool from './components/tool';
 import Tab from './components/tab';
 import FreightModal from './components/freight-modal';
 import { FormattedMessage } from 'react-intl';
@@ -35,7 +35,7 @@ export default class GoodsView extends React.Component<any, any> {
             <SearchForm />
 
             {/*工具条*/}
-            <Tool />
+            {/* <Tool /> */}
 
             {/*tab页显示商品列表*/}
             <Tab />

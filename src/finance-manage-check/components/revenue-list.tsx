@@ -236,29 +236,31 @@ export default class RevenueList extends React.Component<any, any> {
               render={(_text, record: any) => {
                 return (
                   <AuthWrapper functionName="f_finance_manage_refund">
-                    <a
-                      onClick={() =>
-                        history.push({
-                          pathname: `/finance-manage-refund/${
-                            record.storeId
-                          }/${'income'}`,
-                          state: {
-                            beginTime:
-                              dateRange.get('beginTime') + ' ' + '00:00:00',
-                            endTime: dateRange.get('endTime') + ' ' + '23:59:59'
-                          }
-                        })
-                      }
-                    >
+                    <div className="iconDetails">
                       <Tooltip
                         className="tooltipIcon"
-                        autoAdjustOverflow="true"
                         placement="top"
                         title="Details"
                       >
-                        <div className="iconDetails">&#xe63b;</div>
+                        <a
+                          onClick={() =>
+                            history.push({
+                              pathname: `/finance-manage-refund/${
+                                record.storeId
+                              }/${'income'}`,
+                              state: {
+                                beginTime:
+                                  dateRange.get('beginTime') + ' ' + '00:00:00',
+                                endTime:
+                                  dateRange.get('endTime') + ' ' + '23:59:59'
+                              }
+                            })
+                          }
+                        >
+                          &#xe63b;
+                        </a>
                       </Tooltip>
-                    </a>
+                    </div>
                   </AuthWrapper>
                 );
               }}

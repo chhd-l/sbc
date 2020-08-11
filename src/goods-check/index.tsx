@@ -4,7 +4,7 @@ import { StoreProvider } from 'plume2';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
-import Tool from './components/tool';
+// import Tool from './components/tool';
 import Tab from './components/tab';
 import { FormattedMessage } from 'react-intl';
 
@@ -31,14 +31,15 @@ export default class GoodsCheck extends React.Component<any, any> {
             <Breadcrumb.Item>商品管理</Breadcrumb.Item>
             <Breadcrumb.Item>待审核商品</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="pendingProducts" />} />
 
             {/*搜索*/}
             <SearchForm />
-
+          </div>
+          <div className="container">
             {/*工具条*/}
-            <Tool />
+            {/* <Tool /> */}
 
             {/*tab页显示商品列表*/}
             <Tab />

@@ -5,6 +5,7 @@ import { noop } from 'qmkit';
 
 import GoodsList from '../components/goods-list';
 import { FormattedMessage } from 'react-intl';
+import Tool from './tool';
 
 const TabPane = Tabs.TabPane;
 
@@ -26,7 +27,11 @@ export default class Tab extends React.Component<any, any> {
   render() {
     const { tabIndex, onStateTabChange } = this.props.relaxProps;
     return (
-      <Tabs activeKey={tabIndex} onChange={(key) => onStateTabChange(key)}>
+      <Tabs
+        activeKey={tabIndex}
+        onChange={(key) => onStateTabChange(key)}
+        tabBarExtraContent={<Tool></Tool>}
+      >
         <TabPane tab={<FormattedMessage id="all" />} key="1">
           <GoodsList />
         </TabPane>

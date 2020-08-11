@@ -6,9 +6,16 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "1071105",
+      "name": "查看",
+      "font_class": "View",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
       "icon_id": "788013",
       "name": "详情",
-      "font_class": "xiangqing",
+      "font_class": "Details",
       "unicode": "e63b",
       "unicode_decimal": 58939
     },
@@ -20,18 +27,18 @@
       "unicode_decimal": 59125
     },
     {
-      "icon_id": "16461250",
-      "name": "下架",
-      "font_class": "OnShelves-copy",
-      "unicode": "e782",
-      "unicode_decimal": 59266
-    },
-    {
-      "icon_id": "1440916",
+      "icon_id": "16486753",
       "name": "下架",
       "font_class": "OffShelves",
-      "unicode": "e640",
-      "unicode_decimal": 58944
+      "unicode": "e784",
+      "unicode_decimal": 59268
+    },
+    {
+      "icon_id": "16461250",
+      "name": "下架",
+      "font_class": "OnShelves",
+      "unicode": "e782",
+      "unicode_decimal": 59266
     },
     {
       "icon_id": "5964565",
@@ -41,18 +48,18 @@
       "unicode_decimal": 58898
     },
     {
-      "icon_id": "16395207",
-      "name": "btn-prescriber",
-      "font_class": "Prescriber",
-      "unicode": "e607",
-      "unicode_decimal": 58887
-    },
-    {
-      "icon_id": "16395208",
+      "icon_id": "16487827",
       "name": "btn-product",
       "font_class": "Product",
-      "unicode": "e608",
-      "unicode_decimal": 58888
+      "unicode": "e787",
+      "unicode_decimal": 59271
+    },
+    {
+      "icon_id": "16486687",
+      "name": "btn-consumer",
+      "font_class": "Consumer",
+      "unicode": "e783",
+      "unicode_decimal": 59267
     },
     {
       "icon_id": "16395209",
@@ -69,18 +76,18 @@
       "unicode_decimal": 58890
     },
     {
-      "icon_id": "16395211",
+      "icon_id": "16486948",
       "name": "btn-application",
       "font_class": "Application",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
+      "unicode": "e785",
+      "unicode_decimal": 59269
     },
     {
-      "icon_id": "16395212",
-      "name": "btn-consumer",
-      "font_class": "Consumer",
-      "unicode": "e60c",
-      "unicode_decimal": 58892
+      "icon_id": "16486965",
+      "name": "btn-prescriber",
+      "font_class": "Prescriber",
+      "unicode": "e786",
+      "unicode_decimal": 59270
     },
     {
       "icon_id": "554484",

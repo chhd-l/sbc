@@ -4,9 +4,11 @@
 }
 /*覆盖面包屑颜色*/
 #root .ant-layout .ant-breadcrumb{
-    height:40px;
-    padding:10px 0 0 24px;
+    height:45px;
+    padding:12px 0 0 10px;
     margin-bottom: 0;
+    margin-left: 12px;
+    margin-right: 12px;
     background-color: #fff;
 }
 /*表格checkBox的对其*/
@@ -15,7 +17,7 @@
 }
 /*全局表格表头颜色*/
 #root .ant-table-thead > tr > th {
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 1);
 }
 .operation-box{
     text-align: right;

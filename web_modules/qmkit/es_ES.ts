@@ -271,7 +271,7 @@ export default {
   'domainName': 'Domain name',
   'miniCharge': 'Minimum charge',
   'prescriberMap': 'Prescriber Map',
-  'profilePaymentMethod': 'Profile Payment Method',
+  'profilePaymentMethod': 'Profile-Payment Method',
   'taxRate': 'Tax rate',
   'detailAddress': 'Detail address',
   'selectAddress': 'Please select an address',

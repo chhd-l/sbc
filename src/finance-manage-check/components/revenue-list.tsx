@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, history, AuthWrapper, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 const Column = Table.Column;
 
@@ -233,7 +233,6 @@ export default class RevenueList extends React.Component<any, any> {
               title={<FormattedMessage id="operation" />}
               dataIndex="operate"
               key="storeId"
-              width="100"
               render={(_text, record: any) => {
                 return (
                   <AuthWrapper functionName="f_finance_manage_refund">
@@ -251,7 +250,14 @@ export default class RevenueList extends React.Component<any, any> {
                         })
                       }
                     >
-                      {<FormattedMessage id="details" />}
+                      <Tooltip
+                        className="tooltipIcon"
+                        autoAdjustOverflow="true"
+                        placement="top"
+                        title="Details"
+                      >
+                        <div className="iconDetails">&#xe63b;</div>
+                      </Tooltip>
                     </a>
                   </AuthWrapper>
                 );

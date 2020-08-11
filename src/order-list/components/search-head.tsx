@@ -8,7 +8,9 @@ import {
   Menu,
   Dropdown,
   Icon,
-  DatePicker
+  DatePicker,
+  Row,
+  Col
 } from 'antd';
 import {
   noop,
@@ -126,260 +128,236 @@ export default class SearchHead extends Component<any, any> {
         <Headline title={<FormattedMessage id="order.orderList" />} />
         <div>
           <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="order.orderNumber" />}
-                onChange={(e) => {
-                  this.setState({
-                    id: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="order.subscriptioNumber" />}
-                onChange={(e) => {
-                  this.setState({
-                    subscribeId: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore={this._renderBuyerOptionSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    buyerOptionsValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            {/*商品名称、SKU编码*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderGoodsOptionSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    goodsOptionsValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore={this._renderReceiverSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    receiverSelectValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <FormattedMessage id="order.shippingStatus">
-                {(txt) => (
-                  <SelectGroup
-                    getPopupContainer={() =>
-                      document.getElementById('page-content')
-                    }
-                    defaultValue=""
-                    label={txt.toString()}
-                    onChange={(value) => {
+            <Row>
+              <Col span={8}>
+                <FormItem label={<FormattedMessage id="order.orderNumber" />}>
+                  <Input
+                    onChange={(e) => {
                       this.setState({
-                        tradeState: {
-                          deliverStatus: value,
-                          payState: this.state.tradeState.payState,
-                          orderSource: this.state.tradeState.orderSource
-                        }
+                        id: (e.target as any).value
                       });
                     }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    <Option value="NOT_YET_SHIPPED">
-                      <FormattedMessage id="order.notShipped" />
-                    </Option>
-                    <Option value="PART_SHIPPED">
-                      <FormattedMessage id="order.partialShipment" />
-                    </Option>
-                    <Option value="SHIPPED">
-                      <FormattedMessage id="order.allShipments" />
-                    </Option>
-                  </SelectGroup>
-                )}
-              </FormattedMessage>
-            </FormItem>
-
-            <FormItem>
-              <FormattedMessage id="order.paymentStatus">
-                {(txt) => (
-                  <SelectGroup
-                    getPopupContainer={() =>
-                      document.getElementById('page-content')
-                    }
-                    onChange={(value) =>
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem
+                  label={<FormattedMessage id="order.subscriptioNumber" />}
+                >
+                  <Input
+                    onChange={(e) => {
                       this.setState({
-                        tradeState: {
-                          deliverStatus: this.state.tradeState.deliverStatus,
-                          payState: value,
-                          orderSource: this.state.tradeState.orderSource
-                        }
-                      })
-                    }
-                    label={txt.toString()}
-                    defaultValue=""
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    <Option value="NOT_PAID">
-                      <FormattedMessage id="order.unpaid" />
-                    </Option>
-                    <Option value="UNCONFIRMED">
-                      <FormattedMessage id="order.toBeConfirmed" />
-                    </Option>
-                    <Option value="PAID">
-                      <FormattedMessage id="order.paid" />
-                    </Option>
-                  </SelectGroup>
-                )}
-              </FormattedMessage>
-            </FormItem>
-
-            {/* <FormItem>
-              <FormattedMessage id="order.orderSource">
-                {(txt) => (
-                  <SelectGroup
-                    getPopupContainer={() =>
-                      document.getElementById('page-content')
-                    }
-                    defaultValue=""
-                    label={txt.toString()}
-                    onChange={(value) => {
-                      this.setState({
-                        tradeState: {
-                          deliverStatus: this.state.tradeState.deliverStatus,
-                          payState: this.state.tradeState.payState,
-                          orderSource: value
-                        }
+                        subscribeId: (e.target as any).value
                       });
                     }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderBuyerOptionSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        buyerOptionsValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                {/*商品名称、SKU编码*/}
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderGoodsOptionSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        goodsOptionsValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderReceiverSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        receiverSelectValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <FormattedMessage id="order.shippingStatus">
+                    {(txt) => (
+                      <SelectGroup
+                        getPopupContainer={() =>
+                          document.getElementById('page-content')
+                        }
+                        defaultValue=""
+                        label={txt.toString()}
+                        onChange={(value) => {
+                          this.setState({
+                            tradeState: {
+                              deliverStatus: value,
+                              payState: this.state.tradeState.payState,
+                              orderSource: this.state.tradeState.orderSource
+                            }
+                          });
+                        }}
+                      >
+                        <Option value="">
+                          <FormattedMessage id="all" />
+                        </Option>
+                        <Option value="NOT_YET_SHIPPED">
+                          <FormattedMessage id="order.notShipped" />
+                        </Option>
+                        <Option value="PART_SHIPPED">
+                          <FormattedMessage id="order.partialShipment" />
+                        </Option>
+                        <Option value="SHIPPED">
+                          <FormattedMessage id="order.allShipments" />
+                        </Option>
+                      </SelectGroup>
+                    )}
+                  </FormattedMessage>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <FormattedMessage id="order.paymentStatus">
+                    {(txt) => (
+                      <SelectGroup
+                        getPopupContainer={() =>
+                          document.getElementById('page-content')
+                        }
+                        onChange={(value) =>
+                          this.setState({
+                            tradeState: {
+                              deliverStatus: this.state.tradeState
+                                .deliverStatus,
+                              payState: value,
+                              orderSource: this.state.tradeState.orderSource
+                            }
+                          })
+                        }
+                        label={txt.toString()}
+                        defaultValue=""
+                      >
+                        <Option value="">
+                          <FormattedMessage id="all" />
+                        </Option>
+                        <Option value="NOT_PAID">
+                          <FormattedMessage id="order.unpaid" />
+                        </Option>
+                        <Option value="UNCONFIRMED">
+                          <FormattedMessage id="order.toBeConfirmed" />
+                        </Option>
+                        <Option value="PAID">
+                          <FormattedMessage id="order.paid" />
+                        </Option>
+                      </SelectGroup>
+                    )}
+                  </FormattedMessage>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderClinicSelect()}
+                    onChange={(e) => {
+                      let a = e.target.value.split(',');
+                      console.log(a.map(Number), 111);
+
+                      this.setState({
+                        clinicSelectValue:
+                          this.state.clinicSelect == 'clinicsName'
+                            ? (e.target as any).value
+                            : e.target.value.split(',').map(Number)
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <RangePicker
+                    getCalendarContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    onChange={(e) => {
+                      let beginTime = '';
+                      let endTime = '';
+                      if (e.length > 0) {
+                        beginTime = e[0].format(Const.DAY_FORMAT);
+                        endTime = e[1].format(Const.DAY_FORMAT);
+                      }
+                      this.setState({ beginTime: beginTime, endTime: endTime });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    icon="search"
+                    htmlType="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const {
+                        buyerOptions,
+                        goodsOptions,
+                        receiverSelect,
+                        clinicSelect,
+                        id,
+                        subscribeId,
+                        buyerOptionsValue,
+                        goodsOptionsValue,
+                        receiverSelectValue,
+                        clinicSelectValue,
+                        tradeState,
+                        beginTime,
+                        endTime
+                      } = this.state;
+
+                      const ts = {} as any;
+                      if (tradeState.deliverStatus) {
+                        ts.deliverStatus = tradeState.deliverStatus;
+                      }
+
+                      if (tradeState.payState) {
+                        ts.payState = tradeState.payState;
+                      }
+
+                      if (tradeState.orderSource) {
+                        ts.orderSource = tradeState.orderSource;
+                      }
+
+                      const params = {
+                        id,
+                        subscribeId,
+                        [buyerOptions]: buyerOptionsValue,
+                        tradeState: ts,
+                        [goodsOptions]: goodsOptionsValue,
+                        [receiverSelect]: receiverSelectValue,
+                        [clinicSelect]: clinicSelectValue,
+                        beginTime,
+                        endTime
+                      };
+
+                      onSearch(params);
+                    }}
                   >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    <Option value="PC">
-                      <FormattedMessage id="order.PCOrder" />
-                    </Option>
-                    <Option value="WECHAT">
-                      <FormattedMessage id="order.H5Order" />
-                    </Option>
-                    <Option value="APP">
-                      <FormattedMessage id="order.AppOrder" />
-                    </Option>
-                    <Option value="LITTLEPROGRAM">
-                      <FormattedMessage id="order.miniProgramOrder" />
-                    </Option>
-                  </SelectGroup>
-                )}
-              </FormattedMessage>
-            </FormItem> */}
-
-            <FormItem>
-              <Input
-                addonBefore={this._renderClinicSelect()}
-                onChange={(e) => {
-                  let a = e.target.value.split(',');
-                  console.log(a.map(Number), 111);
-
-                  this.setState({
-                    clinicSelectValue:
-                      this.state.clinicSelect == 'clinicsName'
-                        ? (e.target as any).value
-                        : e.target.value.split(',').map(Number)
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <RangePicker
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
-                onChange={(e) => {
-                  let beginTime = '';
-                  let endTime = '';
-                  if (e.length > 0) {
-                    beginTime = e[0].format(Const.DAY_FORMAT);
-                    endTime = e[1].format(Const.DAY_FORMAT);
-                  }
-                  this.setState({ beginTime: beginTime, endTime: endTime });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const {
-                    buyerOptions,
-                    goodsOptions,
-                    receiverSelect,
-                    clinicSelect,
-                    id,
-                    subscribeId,
-                    buyerOptionsValue,
-                    goodsOptionsValue,
-                    receiverSelectValue,
-                    clinicSelectValue,
-                    tradeState,
-                    beginTime,
-                    endTime
-                  } = this.state;
-
-                  const ts = {} as any;
-                  if (tradeState.deliverStatus) {
-                    ts.deliverStatus = tradeState.deliverStatus;
-                  }
-
-                  if (tradeState.payState) {
-                    ts.payState = tradeState.payState;
-                  }
-
-                  if (tradeState.orderSource) {
-                    ts.orderSource = tradeState.orderSource;
-                  }
-
-                  const params = {
-                    id,
-                    subscribeId,
-                    [buyerOptions]: buyerOptionsValue,
-                    tradeState: ts,
-                    [goodsOptions]: goodsOptionsValue,
-                    [receiverSelect]: receiverSelectValue,
-                    [clinicSelect]: clinicSelectValue,
-                    beginTime,
-                    endTime
-                  };
-
-                  onSearch(params);
-                }}
-              >
-                <FormattedMessage id="search" />
-              </Button>
-            </FormItem>
+                    <FormattedMessage id="search" />
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
 
           {hasMenu && (

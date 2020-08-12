@@ -36,8 +36,18 @@ export default class DetailActor extends Actor {
       total: 0,
       //每页显示
       pageSize: 15,
-      loading: true
+      loading: true,
+      payW: []
     };
+  }
+  /**
+   * 动态获取支付方式
+   * @param state
+   * @param res
+   */
+  @Action('finance:payW')
+  payW(state, res) {
+    return state.set('payW', fromJS(res));
   }
 
   /**

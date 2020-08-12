@@ -196,11 +196,11 @@ export default class SearchForm extends React.Component<any, any> {
           <Button
             icon="search"
             type="primary"
+            shape="round"
             onClick={() => onSearch()}
             htmlType="submit"
           >
             <span>
-              {' '}
               <FormattedMessage id="search" />
             </span>
           </Button>

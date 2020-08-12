@@ -182,13 +182,13 @@ export default class DitionaryList extends Component<any, any> {
                 type="primary"
                 htmlType="submit"
                 icon="search"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   this.onSearch();
                 }}
               >
                 <span>
-                  {' '}
                   <FormattedMessage id="search" />
                 </span>
               </Button>

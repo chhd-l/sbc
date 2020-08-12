@@ -125,7 +125,11 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                {<FormattedMessage id="search" />}
+                {
+                  <span>
+                    <FormattedMessage id="search" />
+                  </span>
+                }
               </Button>
             </FormItem>
           </Form>

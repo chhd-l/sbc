@@ -34,9 +34,6 @@ export default class RevenueList extends React.Component<any, any> {
       dateRange,
       payWay
     } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(payWay, 2222);
-    }, 500);
     let totalAmount = 0;
     return (
       <div>

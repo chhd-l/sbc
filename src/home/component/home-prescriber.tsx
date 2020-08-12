@@ -93,6 +93,16 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerData(id);
     this.getCustomerGrowTrendData(id);
   };
+  componentDidMount() {
+    let o = {
+      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
+        .prescribers[0].prescriberId,
+      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
+        .prescribers[0].prescriberName
+    };
+    let act = JSON.stringify(o);
+    sessionStorage.setItem('PrescriberType', act);
+  }
 
   getPrescriberDetail = async (id) => {
     if (id) {
@@ -201,7 +211,8 @@ export default class homePrescriber extends Component<any, any> {
     }
   };
 
-  _prescriberChange = (value) => {
+  _prescriberChange = (value, name) => {
+    sessionStorage.setItem('PrescriberType', JSON.stringify(name.props));
     this.allBind(value);
   };
 
@@ -305,7 +316,9 @@ export default class homePrescriber extends Component<any, any> {
                 <Col span={12}>
                   <div className="prescriberWord">
                     <Select
-                      onChange={(value) => this._prescriberChange(value)}
+                      onChange={(value, name) =>
+                        this._prescriberChange(value, name)
+                      }
                       defaultValue={this.props.prescriberId}
                       style={{ width: '140px', marginBottom: '10px' }}
                     >

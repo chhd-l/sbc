@@ -32,13 +32,14 @@ export default class SearchForm extends React.Component<any, any> {
     this.state = {
       listData: {
         lastDay: '',
-        prescriberId: Number,
+        prescriberId: '',
         PrescriberName: '',
         PrescriberList: []
       }
     };
   }
   componentDidMount() {
+    console.log(JSON.parse(sessionStorage.getItem('PrescriberType')), 22122);
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(
         sessionStorage.getItem('s2b-supplier@employee')
@@ -48,8 +49,6 @@ export default class SearchForm extends React.Component<any, any> {
         let prescribers = this.state.listData;
         prescribers.PrescriberList = employee.prescribers;
         this.setState({ listData: prescribers });
-
-        console.log(this.state.listData.PrescriberList, 111);
       } else {
         //this.onSearch();
       }
@@ -92,6 +91,12 @@ export default class SearchForm extends React.Component<any, any> {
         <FormItem>
           <Input
             addonBefore={<FormattedMessage id="PrescriberID" />}
+            disabled={
+              JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                .clinicsIds != null
+                ? 'disabled'
+                : null
+            }
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -99,10 +104,39 @@ export default class SearchForm extends React.Component<any, any> {
                 value: value
               });
             }}
-            value={searchForm.get('prescriberId')}
+            value={
+              JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                .clinicsIds != null
+                ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+                : searchForm.get('prescriberId')
+            }
           />
         </FormItem>
         <FormItem>
+          <Input
+            addonBefore={<FormattedMessage id="prescriberName" />}
+            disabled={
+              JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                .clinicsIds != null
+                ? 'disabled'
+                : null
+            }
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              onFormChange({
+                field: 'prescriberName',
+                value: value
+              });
+            }}
+            value={
+              JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                .clinicsIds != null
+                ? JSON.parse(sessionStorage.getItem('PrescriberType')).children
+                : searchForm.get('prescriberName')
+            }
+          />
+        </FormItem>
+        {/*<FormItem>
           <SelectGroup
             defaultValue=""
             label="Prescriber name"
@@ -122,7 +156,7 @@ export default class SearchForm extends React.Component<any, any> {
               </Option>
             ))}
           </SelectGroup>
-          {/*<Input
+          <Input
             addonBefore={
               <Select
                 // style={{ width: 140 }}
@@ -151,8 +185,8 @@ export default class SearchForm extends React.Component<any, any> {
               });
             }}
             value={searchForm.get('prescriberName')}
-          />*/}
-        </FormItem>
+          />
+        </FormItem>*/}
 
         {/* <br /> */}
 

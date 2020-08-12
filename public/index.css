@@ -50,3 +50,11 @@
 #root .ant-tabs-ink-bar-animated {
     height: 4px;
 }
+
+.img-item {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+  }

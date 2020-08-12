@@ -191,78 +191,75 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem>
-                  <FormattedMessage id="order.shippingStatus">
-                    {(txt) => (
-                      <SelectGroup
-                        getPopupContainer={() =>
-                          document.getElementById('page-content')
+                <FormItem
+                  label={
+                    <FormattedMessage id="order.shippingStatus"></FormattedMessage>
+                  }
+                >
+                  <Select
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    defaultValue=""
+                    onChange={(value) => {
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: value,
+                          payState: this.state.tradeState.payState,
+                          orderSource: this.state.tradeState.orderSource
                         }
-                        defaultValue=""
-                        label={txt.toString()}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: this.state.tradeState.payState,
-                              orderSource: this.state.tradeState.orderSource
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </SelectGroup>
-                    )}
-                  </FormattedMessage>
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_YET_SHIPPED">
+                      <FormattedMessage id="order.notShipped" />
+                    </Option>
+                    <Option value="PART_SHIPPED">
+                      <FormattedMessage id="order.partialShipment" />
+                    </Option>
+                    <Option value="SHIPPED">
+                      <FormattedMessage id="order.allShipments" />
+                    </Option>
+                  </Select>
                 </FormItem>
               </Col>
               <Col span={8}>
-                <FormItem>
-                  <FormattedMessage id="order.paymentStatus">
-                    {(txt) => (
-                      <SelectGroup
-                        getPopupContainer={() =>
-                          document.getElementById('page-content')
+                <FormItem
+                  label={
+                    <FormattedMessage id="order.paymentStatus"></FormattedMessage>
+                  }
+                >
+                  <Select
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    onChange={(value) =>
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: this.state.tradeState.deliverStatus,
+                          payState: value,
+                          orderSource: this.state.tradeState.orderSource
                         }
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: this.state.tradeState
-                                .deliverStatus,
-                              payState: value,
-                              orderSource: this.state.tradeState.orderSource
-                            }
-                          })
-                        }
-                        label={txt.toString()}
-                        defaultValue=""
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                      </SelectGroup>
-                    )}
-                  </FormattedMessage>
+                      })
+                    }
+                    defaultValue=""
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_PAID">
+                      <FormattedMessage id="order.unpaid" />
+                    </Option>
+                    <Option value="UNCONFIRMED">
+                      <FormattedMessage id="order.toBeConfirmed" />
+                    </Option>
+                    <Option value="PAID">
+                      <FormattedMessage id="order.paid" />
+                    </Option>
+                  </Select>
                 </FormItem>
               </Col>
               <Col span={8}>
@@ -301,12 +298,14 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              <Col span={8}>
+              <Col span={24}>
                 <FormItem>
                   <Button
                     type="primary"
                     icon="search"
                     htmlType="submit"
+                    shape="round"
+                    style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
                       const {

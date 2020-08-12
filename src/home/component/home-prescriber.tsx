@@ -94,6 +94,10 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerGrowTrendData(id);
   };
   componentDidMount() {
+    console.log(
+      sessionStorage.getItem('PrescriberType'),
+      'qwqqqqqqqqqqqqqqwewqewqewq'
+    );
     let o = {
       value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
         .prescribers[0].prescriberId,
@@ -101,7 +105,9 @@ export default class homePrescriber extends Component<any, any> {
         .prescribers[0].prescriberName
     };
     let act = JSON.stringify(o);
-    sessionStorage.setItem('PrescriberType', act);
+    if (sessionStorage.getItem('PrescriberType') === null) {
+      sessionStorage.setItem('PrescriberType', act);
+    }
   }
 
   getPrescriberDetail = async (id) => {
@@ -319,7 +325,10 @@ export default class homePrescriber extends Component<any, any> {
                       onChange={(value, name) =>
                         this._prescriberChange(value, name)
                       }
-                      defaultValue={this.props.prescriberId}
+                      defaultValue={
+                        JSON.parse(sessionStorage.getItem('PrescriberType'))
+                          .children
+                      }
                       style={{ width: '140px', marginBottom: '10px' }}
                     >
                       {allPrescribers.map((item) => (

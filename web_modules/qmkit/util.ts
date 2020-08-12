@@ -352,5 +352,6 @@ export function logout() {
   sessionStorage.removeItem(cache.SECOND_ACTIVE);
   sessionStorage.removeItem(cache.THIRD_ACTIVE);
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
+  sessionStorage.removeItem('PrescriberType');
   history.push('/login');
 }

@@ -25,7 +25,7 @@ export default class BasicSetting extends React.Component<any, any> {
       <AuthWrapper functionName="f_basicSetting_0">
         <div>
           <BreadCrumb />
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="storeSetting" />} />
             <SettingFormDetail />
           </div>

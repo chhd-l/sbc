@@ -38,7 +38,7 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>商品管理</Breadcrumb.Item>
             <Breadcrumb.Item>评价管理</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container customer">
+          <div className="container-search customer">
             <Headline title={<FormattedMessage id="surveyManage" />} />
             <EvaluateSum />
             <br />
@@ -57,7 +57,9 @@ export default class Customer extends React.Component<any, any> {
             <br />
             {/*搜索条件*/}
             <SearchForm />
-            {/*tab的评价列表*/}
+          </div>
+          {/*tab的评价列表*/}
+          <div className="container customer">
             <Tab />
             <SeeRecord />
             <See />

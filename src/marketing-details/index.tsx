@@ -34,7 +34,7 @@ export default class MarketingDetails extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container">
+        <div className="container-search">
           <Headline title={title} />
 
           {/*满赠顶部描述*/}
@@ -47,6 +47,8 @@ export default class MarketingDetails extends React.Component<any, any> {
             <MarketingRule />
           )}
           {/*商品列表*/}
+        </div>
+        <div className="container">
           <GoodsList />
 
           {/*满赠底部*/}

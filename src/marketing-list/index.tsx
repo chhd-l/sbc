@@ -30,7 +30,7 @@ export default class Marketing extends React.Component<any, any> {
             <Breadcrumb.Item>营销设置</Breadcrumb.Item>
             <Breadcrumb.Item>促销活动</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container customer">
+          <div className="container-search customer">
             <Headline title="Campaign list" />
 
             {/*搜索条件*/}

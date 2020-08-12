@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Table, Button, Divider, message, Modal, Popconfirm } from 'antd';
+import {
+  Table,
+  Button,
+  Divider,
+  message,
+  Modal,
+  Popconfirm,
+  Tooltip
+} from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -32,7 +40,13 @@ export default class ClinicList extends Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
-              <Link to={'/prescriber-type-edit/' + record.id}>Edit</Link>
+              <Tooltip placement="top" title="Edit">
+                <Link
+                  className="iconfont iconEdit"
+                  to={'/prescriber-type-edit/' + record.id}
+                ></Link>
+              </Tooltip>
+
               <Divider type="vertical" />
 
               <Popconfirm
@@ -42,9 +56,9 @@ export default class ClinicList extends Component<any, any> {
                 okText="Confirm"
                 cancelText="Cancel"
               >
-                <Button type="link">
-                  <FormattedMessage id="delete" />
-                </Button>
+                <Tooltip placement="top" title="Delete">
+                  <a type="link" className="iconfont iconDelete"></a>
+                </Tooltip>
               </Popconfirm>
               {/* <a onClick={() => this.showConfirm(record.id)}>Delete</a> */}
             </span>
@@ -60,6 +74,7 @@ export default class ClinicList extends Component<any, any> {
       loading: false
     };
   }
+
   componentDidMount() {
     const { pagination } = this.state;
     let params = {
@@ -69,6 +84,7 @@ export default class ClinicList extends Component<any, any> {
     };
     this.getTypeList(params);
   }
+
   getTypeList = (params) => {
     const { pagination } = this.state;
 
@@ -137,6 +153,7 @@ export default class ClinicList extends Component<any, any> {
 
     this.getTypeList(params);
   };
+
   showConfirm(id) {
     const that = this;
     confirm({
@@ -154,12 +171,14 @@ export default class ClinicList extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container">
+        <div className="container-search">
           <Headline title="Prescriber type" />
           {/*搜索条件*/}
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
             <Link to="/prescriber-type-add">Add</Link>
           </Button>
+        </div>
+        <div className="container">
           <Table
             columns={columns}
             rowKey={(record) => record.id}

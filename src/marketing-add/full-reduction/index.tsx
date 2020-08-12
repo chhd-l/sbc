@@ -54,7 +54,7 @@ export default class MarketingFullReductionAdd extends React.Component<
             </Breadcrumb.Item>
           </Breadcrumb> */}
 
-          <div className="container">
+          <div className="container-search" style={{ paddingBottom: 20 }}>
             <Headline
               title={
                 marketingId

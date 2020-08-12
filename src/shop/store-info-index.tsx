@@ -46,8 +46,10 @@ export default class ShopInfo extends React.Component<any, any> {
             <Breadcrumb.Item>店铺信息</Breadcrumb.Item>
           </Breadcrumb> */}
 
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="storeInformation" />} />
+          </div>
+          <div className="container">
             <Tabs
               onChange={(key) => this.store.setCurrentTab(key)}
               activeKey={currentTab}

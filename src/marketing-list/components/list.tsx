@@ -237,31 +237,33 @@ export default class MarketingList extends React.Component<any, any> {
             return (
               <div className="operation-box">
                 <AuthWrapper functionName="f_marketing_view">
-                  <a
-                    style={{ marginRight: 5 }}
-                    href="javascript:void(0)"
-                    onClick={() =>
-                      history.push({
-                        pathname: `/marketing-details/${rowInfo['marketingId']}`
-                      })
-                    }
-                  >
-                    View
-                  </a>
+                  <Tooltip placement="top" title="View">
+                    <a
+                      style={{ marginRight: 5 }}
+                      href="javascript:void(0)"
+                      onClick={() =>
+                        history.push({
+                          pathname: `/marketing-details/${rowInfo['marketingId']}`
+                        })
+                      }
+                      className="iconfont iconView"
+                    ></a>
+                  </Tooltip>
                 </AuthWrapper>
                 <AuthWrapper functionName="f_marketing_operate">
                   {rowInfo['marketingStatus'] == 3 && (
-                    <a
-                      href="javascript:void(0)"
-                      style={{ marginRight: 5 }}
-                      onClick={() =>
-                        history.push({
-                          pathname: url
-                        })
-                      }
-                    >
-                      Edit
-                    </a>
+                    <Tooltip placement="top" title="Edit">
+                      <a
+                        href="javascript:void(0)"
+                        style={{ marginRight: 5 }}
+                        onClick={() =>
+                          history.push({
+                            pathname: url
+                          })
+                        }
+                        className="iconfont iconEdit"
+                      ></a>
+                    </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 2 && (
                     <a

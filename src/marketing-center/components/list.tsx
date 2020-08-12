@@ -23,7 +23,7 @@ const images = {
 export default class List extends React.Component<any, any> {
   render() {
     return (
-      <div className="container">
+      <div className="container-search">
         <Headline title="Marketing center" />
         <div className="appsMain">
           {/* <h3>

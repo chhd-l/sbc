@@ -8,7 +8,7 @@ import Moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 const Column = Table.Column;
 
@@ -197,12 +197,13 @@ export default class CustomerList extends React.Component<any, any> {
             return (
               <div className="operation-th">
                 <AuthWrapper functionName={'query_nps'}>
-                  <span
-                    style={styles.see}
-                    onClick={() => goodsEvaluateDetail(rowData)}
-                  >
-                    View
-                  </span>
+                  <Tooltip placement="top" title="View">
+                    <span
+                      style={styles.see}
+                      onClick={() => goodsEvaluateDetail(rowData)}
+                      className="iconfont iconView"
+                    ></span>
+                  </Tooltip>
                 </AuthWrapper>
               </div>
             );

@@ -37,7 +37,7 @@ export default class ClinicList extends Component<any, any> {
             <Breadcrumb.Item>New Prescriber type</Breadcrumb.Item>
           </BreadCrumb>
         )}
-        <div className="container">
+        <div className="container-search">
           <Headline
             title={
               this.props.match.params.id
@@ -45,6 +45,8 @@ export default class ClinicList extends Component<any, any> {
                 : 'New Prescriber Type'
             }
           />
+        </div>
+        <div className="container-search">
           <PrescriberTypeForm
             pageType={this.state.pageType}
             clinicId={this.state.clinicId}

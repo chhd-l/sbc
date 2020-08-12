@@ -139,7 +139,7 @@ export default class DitionaryList extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container">
+        <div className="container-search">
           <Headline title="Dictionary" />
           <Form className="filter-content" layout="inline">
             <FormItem>
@@ -201,6 +201,8 @@ export default class DitionaryList extends Component<any, any> {
           >
             <Link to="/dictionary-add">Add</Link>
           </Button>
+        </div>
+        <div className="container">
           <Table
             rowKey={(record, index) => index}
             dataSource={this.state.dictionaryData}

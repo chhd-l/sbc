@@ -8,7 +8,8 @@ import {
   Table,
   Divider,
   message,
-  Modal
+  Modal,
+  Tooltip
 } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -315,7 +316,12 @@ export default class ClinicList extends Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <span>
-            <Link to={'/prescriber-edit/' + record.id}>Edit</Link>
+            <Tooltip placement="top" title="Details">
+              <Link
+                to={'/prescriber-edit/' + record.id}
+                className="iconfont iconDetails"
+              ></Link>
+            </Tooltip>
             <Divider type="vertical" />
             <a onClick={() => this.enableAndDisable(record.id)}>
               {record.enabled ? 'Disable' : 'Enable'}
@@ -330,7 +336,7 @@ export default class ClinicList extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container">
+        <div className="container-search">
           <Headline title="Prescriber list" />
           {/*搜索条件*/}
           <Form className="filter-content" layout="inline">
@@ -502,6 +508,8 @@ export default class ClinicList extends Component<any, any> {
               <FormattedMessage id="add" />
             </Link>
           </Button>
+        </div>
+        <div className="container">
           <Table
             rowKey="id"
             columns={columns}

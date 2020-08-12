@@ -14,6 +14,7 @@ export default class RevenueList extends React.Component<any, any> {
       incomeTotal: any;
       payWaysObj: any;
       dateRange: any;
+      payWay: any;
     };
   };
 
@@ -21,7 +22,8 @@ export default class RevenueList extends React.Component<any, any> {
     incomeList: 'incomeList',
     incomeTotal: 'incomeTotal',
     payWaysObj: 'payWaysObj',
-    dateRange: 'dateRange'
+    dateRange: 'dateRange',
+    payWay: 'payWay'
   };
 
   render() {
@@ -29,7 +31,8 @@ export default class RevenueList extends React.Component<any, any> {
       incomeList,
       payWaysObj,
       incomeTotal,
-      dateRange
+      dateRange,
+      payWay
     } = this.props.relaxProps;
     let totalAmount = 0;
     return (
@@ -176,7 +179,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             /> */}
             <Column
-              title="PayU"
+              title={payWay}
               dataIndex="totalAmount"
               key="supplierId"
               render={(_text, rowData: any) => {

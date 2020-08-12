@@ -9,6 +9,11 @@ type TResult = {
   context: any;
 };
 
+//获取网关详情
+export function getTradeGateWays() {
+  return Fetch<TResult>('/tradeManage/gateways');
+}
+
 /**
  * 获取所有支付方式的枚举
  * @returns {Promise<IAsyncResult<T>>}

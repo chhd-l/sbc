@@ -46,6 +46,8 @@ export default class AppStore extends Store {
     } else {
       await this.getRefundDetail();
     }
+    const { res2 } = await webapi.fetchAllPayW();
+    this.dispatch('finance:payW', res2.context.storePaymentMethod);
   };
 
   changePayWay = async (res) => {

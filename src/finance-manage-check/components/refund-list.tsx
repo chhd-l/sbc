@@ -14,6 +14,7 @@ export default class RefundList extends React.Component<any, any> {
       payWaysObj: any;
       refundTotal: any;
       dateRange: any;
+      payWay: any;
     };
   };
 
@@ -21,7 +22,8 @@ export default class RefundList extends React.Component<any, any> {
     refundList: 'refundList',
     payWaysObj: 'payWaysObj',
     refundTotal: 'refundTotal',
-    dateRange: 'dateRange'
+    dateRange: 'dateRange',
+    payWay: 'payWay'
   };
 
   render() {
@@ -29,7 +31,8 @@ export default class RefundList extends React.Component<any, any> {
       refundList,
       payWaysObj,
       refundTotal,
-      dateRange
+      dateRange,
+      payWay
     } = this.props.relaxProps;
     return (
       <div>
@@ -193,7 +196,7 @@ export default class RefundList extends React.Component<any, any> {
           {/*return <span>{rowData.payItemAmountMap.POINT}</span>*/}
           {/*}}*/}
           {/*/>*/}
-          <Column title="PayU" dataIndex="totalAmount" key="supplierId" />
+          <Column title={payWay} dataIndex="totalAmount" key="supplierId" />
           <Column
             title={<FormattedMessage id="operation" />}
             dataIndex="operate"

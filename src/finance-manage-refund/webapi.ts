@@ -10,6 +10,14 @@ type TResult = {
 };
 
 /**
+ * 动态获取支付方式
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function fetchAllPayW() {
+  return Fetch<TResult>('/tradeManage/get-store-open-gateways');
+}
+
+/**
  * 获取所有支付方式的枚举
  * @returns {Promise<IAsyncResult<T>>}
  */

@@ -326,12 +326,15 @@ export default class Customer extends React.Component<any, any> {
                   type="primary"
                   htmlType="submit"
                   icon="search"
+                  shape="round"
                   onClick={(e) => {
                     e.preventDefault();
                     this.onSearch();
                   }}
                 >
-                  <FormattedMessage id="search" />
+                  <span>
+                    <FormattedMessage id="search" />
+                  </span>
                 </Button>
               </FormItem>
             </Form>

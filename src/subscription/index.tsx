@@ -504,7 +504,9 @@ export default class SubscriptionList extends Component<any, any> {
                       this.onSearch();
                     }}
                   >
-                    <FormattedMessage id="search" />
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
                   </Button>
                 </FormItem>
               </Form>

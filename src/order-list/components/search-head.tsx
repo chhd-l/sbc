@@ -132,6 +132,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem label={<FormattedMessage id="order.orderNumber" />}>
                   <Input
+                    style={{ width: 200 }}
                     onChange={(e) => {
                       this.setState({
                         id: (e.target as any).value
@@ -145,6 +146,7 @@ export default class SearchHead extends Component<any, any> {
                   label={<FormattedMessage id="order.subscriptioNumber" />}
                 >
                   <Input
+                    style={{ width: 200 }}
                     onChange={(e) => {
                       this.setState({
                         subscribeId: (e.target as any).value
@@ -153,6 +155,44 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+              <Col span={8}>
+                <FormItem
+                  label={
+                    <FormattedMessage id="order.paymentStatus"></FormattedMessage>
+                  }
+                >
+                  <Select
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    style={{ width: 200 }}
+                    onChange={(value) =>
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: this.state.tradeState.deliverStatus,
+                          payState: value,
+                          orderSource: this.state.tradeState.orderSource
+                        }
+                      })
+                    }
+                    defaultValue=""
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_PAID">
+                      <FormattedMessage id="order.unpaid" />
+                    </Option>
+                    <Option value="UNCONFIRMED">
+                      <FormattedMessage id="order.toBeConfirmed" />
+                    </Option>
+                    <Option value="PAID">
+                      <FormattedMessage id="order.paid" />
+                    </Option>
+                  </Select>
+                </FormItem>
+              </Col>
+
               <Col span={8}>
                 <FormItem>
                   <Input
@@ -165,6 +205,7 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+
               <Col span={8}>
                 {/*商品名称、SKU编码*/}
                 <FormItem>
@@ -190,81 +231,7 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              <Col span={8}>
-                <FormItem>
-                  <FormattedMessage id="order.shippingStatus">
-                    {(txt) => (
-                      <SelectGroup
-                        getPopupContainer={() =>
-                          document.getElementById('page-content')
-                        }
-                        defaultValue=""
-                        label={txt.toString()}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: this.state.tradeState.payState,
-                              orderSource: this.state.tradeState.orderSource
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </SelectGroup>
-                    )}
-                  </FormattedMessage>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <FormattedMessage id="order.paymentStatus">
-                    {(txt) => (
-                      <SelectGroup
-                        getPopupContainer={() =>
-                          document.getElementById('page-content')
-                        }
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: this.state.tradeState
-                                .deliverStatus,
-                              payState: value,
-                              orderSource: this.state.tradeState.orderSource
-                            }
-                          })
-                        }
-                        label={txt.toString()}
-                        defaultValue=""
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                      </SelectGroup>
-                    )}
-                  </FormattedMessage>
-                </FormItem>
-              </Col>
+
               <Col span={8}>
                 <FormItem>
                   <Input
@@ -283,6 +250,45 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+
+              <Col span={8}>
+                <FormItem
+                  label={
+                    <FormattedMessage id="order.shippingStatus"></FormattedMessage>
+                  }
+                >
+                  <Select
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    style={{ width: 200 }}
+                    defaultValue=""
+                    onChange={(value) => {
+                      this.setState({
+                        tradeState: {
+                          deliverStatus: value,
+                          payState: this.state.tradeState.payState,
+                          orderSource: this.state.tradeState.orderSource
+                        }
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="NOT_YET_SHIPPED">
+                      <FormattedMessage id="order.notShipped" />
+                    </Option>
+                    <Option value="PART_SHIPPED">
+                      <FormattedMessage id="order.partialShipment" />
+                    </Option>
+                    <Option value="SHIPPED">
+                      <FormattedMessage id="order.allShipments" />
+                    </Option>
+                  </Select>
+                </FormItem>
+              </Col>
+
               <Col span={8}>
                 <FormItem>
                   <RangePicker
@@ -301,12 +307,15 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              <Col span={8}>
+
+              <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
                     type="primary"
                     icon="search"
                     htmlType="submit"
+                    shape="round"
+                    style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
                       const {
@@ -353,7 +362,9 @@ export default class SearchHead extends Component<any, any> {
                       onSearch(params);
                     }}
                   >
-                    <FormattedMessage id="search" />
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
                   </Button>
                 </FormItem>
               </Col>

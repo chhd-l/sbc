@@ -93,7 +93,9 @@ export default class SearchForm extends React.Component<any, any> {
                 searchByDate();
               }}
             >
-              {<FormattedMessage id="search" />}
+              <span>
+                <FormattedMessage id="search" />
+              </span>
             </Button>
           </FormItem>
         </Form>

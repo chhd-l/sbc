@@ -537,7 +537,8 @@ export default class ListView extends React.Component<any, any> {
                           k < 4 ? (
                             <img
                               src={v.get('pic') ? v.get('pic') : defaultImg}
-                              style={styles.imgItem}
+                              // style={styles.imgItem}
+                              className="img-item"
                               key={k}
                             />
                           ) : null

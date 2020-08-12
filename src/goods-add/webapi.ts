@@ -28,7 +28,7 @@ export const getCateList = () => {
 /**
  * 获取店铺分类列表
  */
-export const getStoreCateList = (goodsCateId) => {
+export const getStoreCateList = (goodsCateId?) => {
   // return Fetch('/storeCate');
   let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
   let params = {

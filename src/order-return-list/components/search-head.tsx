@@ -254,7 +254,9 @@ export default class SearchHead extends Component<any, any> {
                   this.props.relaxProps.onSearch(this.state);
                 }}
               >
-                <FormattedMessage id="search" />
+                <span>
+                  <FormattedMessage id="search" />
+                </span>
               </Button>
             </FormItem>
           </Form>

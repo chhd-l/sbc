@@ -75,7 +75,9 @@ export default class Tool extends React.Component<any, any> {
                 }}
               >
                 {' '}
-                <FormattedMessage id="search" />{' '}
+                <span>
+                  <FormattedMessage id="search" />
+                </span>{' '}
               </Button>
             </FormItem>
           </Form>

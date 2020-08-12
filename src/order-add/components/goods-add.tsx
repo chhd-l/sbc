@@ -164,7 +164,9 @@ class SearchForm extends React.Component<any, any> {
               this.props.onSearch(params);
             }}
           >
-            <FormattedMessage id="search" />
+            <span>
+              <FormattedMessage id="search" />
+            </span>
           </Button>
         </Form>
       </div>

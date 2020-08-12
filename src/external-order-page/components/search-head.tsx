@@ -128,7 +128,7 @@ export default class SearchHead extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore='Clinics CRM id'
+                addonBefore="Clinics CRM id"
                 onChange={(e) => {
                   this.setState({
                     clientId: (e.target as any).value
@@ -139,7 +139,7 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore='Clinics name'
+                addonBefore="Clinics name"
                 onChange={(e) => {
                   this.setState({
                     clinicsName: (e.target as any).value
@@ -150,7 +150,7 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore='Prescription id'
+                addonBefore="Prescription id"
                 onChange={(e) => {
                   this.setState({
                     prescriptionId: (e.target as any).value
@@ -161,7 +161,7 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore='Order number'
+                addonBefore="Order number"
                 onChange={(e) => {
                   this.setState({
                     orderId: (e.target as any).value
@@ -172,7 +172,7 @@ export default class SearchHead extends Component<any, any> {
 
             <FormItem>
               <Input
-                addonBefore='Product id'
+                addonBefore="Product id"
                 onChange={(e) => {
                   this.setState({
                     productId: (e.target as any).value
@@ -403,7 +403,9 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                <FormattedMessage id="search" />
+                <span>
+                  <FormattedMessage id="search" />
+                </span>
               </Button>
             </FormItem>
           </Form>

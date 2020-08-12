@@ -35,8 +35,19 @@ export default class FinanceActor extends Actor {
       refundTotal: [],
       tabKey: '1',
       //导出单独的时间参数
-      searchTime: {}
+      searchTime: {},
+      payWay: []
     };
+  }
+
+  /**
+   * 支付方式类型
+   * @param state
+   * @param res
+   */
+  @Action('finance:payWay')
+  payWay(state, res) {
+    return state.set('payWay', fromJS(res));
   }
 
   /**

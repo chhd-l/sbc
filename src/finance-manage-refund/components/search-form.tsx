@@ -23,6 +23,7 @@ export default class SearchForm extends React.Component<any, any> {
       exportIncomeDetail: Function;
       exportRefundDetail: Function;
       refundDetail: any;
+      payW: any;
     };
     name?: string;
   };
@@ -37,7 +38,8 @@ export default class SearchForm extends React.Component<any, any> {
     exportIncomeDetail: noop,
     exportRefundDetail: noop,
     onSearch: noop,
-    refundDetail: 'refundDetail'
+    refundDetail: 'refundDetail',
+    payW: 'payW'
   };
 
   render() {
@@ -50,7 +52,8 @@ export default class SearchForm extends React.Component<any, any> {
       exportRefundDetail,
       refundDetail,
       incomeDetail,
-      onSearch
+      onSearch,
+      payW
     } = this.props.relaxProps;
     return (
       <div>
@@ -82,10 +85,13 @@ export default class SearchForm extends React.Component<any, any> {
                 defaultValue="All"
               >
                 <Option value={null}>All</Option>
-                <Option value="VISA">VISA</Option>
-                <Option value="OXXO">OXXO</Option>
-                <Option value="AMERICAN EXPRESS">AMERICAN EXPRESS</Option>
-                <Option value="DISCOVER">DISCOVER</Option>
+                {payW.map((element, index) => {
+                  return (
+                    <Option key={index} value={element}>
+                      {element}
+                    </Option>
+                  );
+                })}
                 {/*  <Option value="UNIONPAY"></Option>
                 <Option value="WECHAT">微信</Option>
                 <Option value="UNIONPAY_B2B">企业银联</Option>

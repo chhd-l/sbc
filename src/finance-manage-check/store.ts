@@ -25,6 +25,13 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:payWays', res.context);
     }
+    const { res3 } = await webapi.getTradeGateWays();
+    if (res3.context[0].isOpen == 1) {
+      this.dispatch('finance:payWay', res3.context[0].name);
+    } else {
+      this.dispatch('finance:payWay', res3.context[1].name);
+    }
+
     //获取收入对账明细
     const searchTime = {
       beginTime:

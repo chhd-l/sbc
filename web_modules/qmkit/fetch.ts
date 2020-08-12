@@ -9,6 +9,8 @@ import { message } from 'antd';
  */
 export interface IAsyncResult<T> {
   res: T;
+  res2: T;
+  res3: T;
   err: Error;
   data?: Object
 }
@@ -60,6 +62,8 @@ export default async function Fetch<T>(
       const resBlob =await res.blob();
       return {
         res: null,
+        res2: null,
+        res3: null,
         data:resBlob,
         err: null
       };
@@ -96,6 +100,8 @@ export default async function Fetch<T>(
     
     return {
       res: resJSON,
+      res2: resJSON,
+      res3: resJSON,
       err: null
     };
   } catch (err) {
@@ -106,6 +112,8 @@ export default async function Fetch<T>(
     //全局的错误提示
     return {
       res: null,
+      res2: null,
+      res3: null,
       err
     };
   }

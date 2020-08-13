@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Relax, IMap } from 'plume2';
 import { Row, Col, Form, Modal, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './../webapi';
-import moment from 'moment';
 
 const formItemLayout = {
   labelCol: {
     span: 3,
     xs: { span: 24 },
-    sm: { span: 8 }
+    sm: { span: 10 }
   },
   wrapperCol: {
     span: 21,
@@ -44,17 +41,81 @@ export default class StepFour extends React.Component<any, any> {
     return (
       <div>
         <Form>
-          <Row>
+          <Row style={{ padding: '0 20px' }}>
             <Row>
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="FAQ" />}
+                  label={<FormattedMessage id="contactUsUrl" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.faqUrl ? (
-                      this.state.contentInformation.faqUrl
+                    {this.state.contentInformation.contactUsUrl ? (
+                      this.state.contentInformation.contactUsUrl
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="ourValues" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.ourValues ? (
+                      this.state.contentInformation.ourValues
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="qualityAndSafety" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.qualityAndSafety ? (
+                      this.state.contentInformation.qualityAndSafety
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="specificNutrition" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.specificNutrition ? (
+                      this.state.contentInformation.specificNutrition
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="informationForParents" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.informationForParents ? (
+                      this.state.contentInformation.informationForParents
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -82,75 +143,11 @@ export default class StepFour extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="privacyPolicy" />}
+                  label={<FormattedMessage id="storeContactEmail" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.privacyPolicyUrl ? (
-                      this.state.contentInformation.privacyPolicyUrl
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="contactUsUrl" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.contactUsUrl ? (
-                      this.state.contentInformation.contactUsUrl
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-            <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="termsOfUse" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.termsOfUse ? (
-                      this.state.contentInformation.termsOfUse
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="legalTerms" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.legalTerms ? (
-                      this.state.contentInformation.legalTerms
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="confirmationEmail" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.contentInformation.confirmationEmail ? (
-                      this.state.contentInformation.confirmationEmail
+                    {this.state.contentInformation.storeContactEmail ? (
+                      this.state.contentInformation.storeContactEmail
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -173,55 +170,37 @@ export default class StepFour extends React.Component<any, any> {
                 </FormItem>
               </Col>
             </Row>
-
             <Row>
               <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="storeContactEmail" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.contentInformation.storeContactEmail ? (
-                        this.state.contentInformation.storeContactEmail
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="customerServiceEamil" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.contentInformation.customerServiceEamil ? (
-                        this.state.contentInformation.customerServiceEamil
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
-            </Row>
-            <Row>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="contactTimePeriod" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.contactTimePeriod ? (
+                      this.state.contentInformation.contactTimePeriod
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
               <Col span={12}>
-                  <FormItem
-                    {...formItemLayout}
-                    required={false}
-                    label={<FormattedMessage id="contactTimePeriod" />}
-                  >
-                    <p style={{ color: '#333' }}>
-                      {this.state.contentInformation.contactTimePeriod ? (
-                        this.state.contentInformation.contactTimePeriod
-                      ) : (
-                        <FormattedMessage id="none" />
-                      )}
-                    </p>
-                  </FormItem>
-                </Col>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="confirmationEmail" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.confirmationEmail ? (
+                      this.state.contentInformation.confirmationEmail
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
             </Row>
           </Row>
         </Form>

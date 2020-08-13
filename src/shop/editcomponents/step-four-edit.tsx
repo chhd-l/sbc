@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Relax, IMap } from 'plume2';
 import { Row, Col, Form, Button, message, Input, DatePicker } from 'antd';
-import moment from 'moment';
 
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
@@ -12,7 +9,7 @@ const formItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 8 }
+    sm: { span: 10 }
   },
   wrapperCol: {
     span: 24,
@@ -69,80 +66,7 @@ export default class StepFour extends React.Component<any, any> {
     return (
       <div>
         <Form>
-          <Row>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="FAQ" />}
-              >
-                {getFieldDecorator('faqUrl', {
-                  initialValue: this.state.contentForm.faqUrl,
-                  rules: [{ required: false, message: 'Please input FAQ Url!' }]
-                })(
-                  <Input
-                    addonBefore="URL"
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'faqUrl',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="cookies" />}
-              >
-                {getFieldDecorator('cookiesUrl', {
-                  initialValue: this.state.contentForm.cookiesUrl,
-                  rules: [
-                    { required: false, message: 'Please input Cookies Url!' }
-                  ]
-                })(
-                  <Input
-                    addonBefore="URL"
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'cookiesUrl',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="privacyPolicy" />}
-              >
-                {getFieldDecorator('privacyPolicyUrl', {
-                  initialValue: this.state.contentForm.privacyPolicyUrl,
-                  rules: [
-                    {
-                      required: false,
-                      message: 'Please input Privacy Policy Url!'
-                    }
-                  ]
-                })(
-                  <Input
-                    addonBefore="URL"
-                    onChange={(e: any) =>
-                      this.onFormChange({
-                        field: 'privacyPolicyUrl',
-                        value: e.target.value
-                      })
-                    }
-                  />
-                )}
-              </FormItem>
-            </Col>
+          <Row style={{ padding: '0 20px' }}>
             <Col span={12}>
               <FormItem
                 {...formItemLayout}
@@ -174,19 +98,16 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="termsOfUse" />}
+                label={<FormattedMessage id="ourValues" />}
               >
-                {getFieldDecorator('termsOfUse', {
-                  initialValue: this.state.contentForm.termsOfUse,
-                  rules: [
-                    { required: false, message: 'Please input Terms Of Use!' }
-                  ]
+                {getFieldDecorator('ourValues', {
+                  initialValue: this.state.contentForm.ourValues
                 })(
                   <Input
                     addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'termsOfUse',
+                        field: 'ourValues',
                         value: e.target.value
                       })
                     }
@@ -198,19 +119,16 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="legalTerms" />}
+                label={<FormattedMessage id="qualityAndSafety" />}
               >
-                {getFieldDecorator('legalTerms', {
-                  initialValue: this.state.contentForm.legalTerms,
-                  rules: [
-                    { required: false, message: 'Please input Legal Terms!' }
-                  ]
+                {getFieldDecorator('qualityAndSafety', {
+                  initialValue: this.state.contentForm.qualityAndSafety
                 })(
                   <Input
                     addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'legalTerms',
+                        field: 'qualityAndSafety',
                         value: e.target.value
                       })
                     }
@@ -222,21 +140,16 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="confirmationEmail" />}
+                label={<FormattedMessage id="specificNutrition" />}
               >
-                {getFieldDecorator('confirmationEmail', {
-                  initialValue: this.state.contentForm.confirmationEmail,
-                  rules: [
-                    {
-                      required: false,
-                      message: 'Please input Confirmation Email!'
-                    }
-                  ]
+                {getFieldDecorator('specificNutrition', {
+                  initialValue: this.state.contentForm.specificNutrition
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'confirmationEmail',
+                        field: 'specificNutrition',
                         value: e.target.value
                       })
                     }
@@ -248,21 +161,37 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="storeContactPhoneNumber" />}
+                label={<FormattedMessage id="informationForParents" />}
               >
-                {getFieldDecorator('storeContactPhoneNumber', {
-                  initialValue: this.state.contentForm.storeContactPhoneNumber,
-                  rules: [
-                    {
-                      required: false,
-                      message: 'Please input Store Contact Phone Number!'
-                    }
-                  ]
+                {getFieldDecorator('informationForParents', {
+                  initialValue: this.state.contentForm.informationForParents
                 })(
                   <Input
+                    addonBefore="URL"
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'storeContactPhoneNumber',
+                        field: 'informationForParents',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={false}
+                label={<FormattedMessage id="cookies" />}
+              >
+                {getFieldDecorator('cookiesUrl', {
+                  initialValue: this.state.contentForm.cookiesUrl
+                })(
+                  <Input
+                    addonBefore="URL"
+                    onChange={(e: any) =>
+                      this.onFormChange({
+                        field: 'cookiesUrl',
                         value: e.target.value
                       })
                     }
@@ -300,21 +229,21 @@ export default class StepFour extends React.Component<any, any> {
               <FormItem
                 {...formItemLayout}
                 required={false}
-                label={<FormattedMessage id="customerServiceEamil" />}
+                label={<FormattedMessage id="storeContactPhoneNumber" />}
               >
-                {getFieldDecorator('customerServiceEamil', {
-                  initialValue: this.state.contentForm.customerServiceEamil,
+                {getFieldDecorator('storeContactPhoneNumber', {
+                  initialValue: this.state.contentForm.storeContactPhoneNumber,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Customer Service Eamil!'
+                      message: 'Please input Store Contact Phone Number!'
                     }
                   ]
                 })(
                   <Input
                     onChange={(e: any) =>
                       this.onFormChange({
-                        field: 'customerServiceEamil',
+                        field: 'storeContactPhoneNumber',
                         value: e.target.value
                       })
                     }
@@ -341,6 +270,32 @@ export default class StepFour extends React.Component<any, any> {
                     onChange={(e: any) =>
                       this.onFormChange({
                         field: 'contactTimePeriod',
+                        value: e.target.value
+                      })
+                    }
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                {...formItemLayout}
+                required={false}
+                label={<FormattedMessage id="confirmationEmail" />}
+              >
+                {getFieldDecorator('confirmationEmail', {
+                  initialValue: this.state.contentForm.confirmationEmail,
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input Confirmation Email!'
+                    }
+                  ]
+                })(
+                  <Input
+                    onChange={(e: any) =>
+                      this.onFormChange({
+                        field: 'confirmationEmail',
                         value: e.target.value
                       })
                     }

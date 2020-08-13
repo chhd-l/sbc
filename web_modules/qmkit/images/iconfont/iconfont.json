@@ -6,6 +6,41 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "16522590",
+      "name": "btn-魔方",
+      "font_class": "btn-mofang",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "16522591",
+      "name": "btn-product",
+      "font_class": "btn-product",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "16522592",
+      "name": "btn-数谋",
+      "font_class": "btn-shumou",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "16522594",
+      "name": "btn-setting",
+      "font_class": "btn-setting",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "16522640",
+      "name": "btn-finance",
+      "font_class": "btn-finance",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "1071105",
       "name": "查看",
       "font_class": "View",

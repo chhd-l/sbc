@@ -39,7 +39,7 @@ export default class EmployeeList extends React.Component<any, any> {
           <Breadcrumb.Item>员工列表</Breadcrumb.Item>
         </Breadcrumb> */}
         <AuthWrapper functionName="fetchEmploy">
-          <div className="container">
+          <div className="container" style={{ padding: '24px 12px 6px 24px' }}>
             <Headline title={<FormattedMessage id="employeeList" />} />
 
             <WrapperForm ref={(form) => (window['_form'] = form)} />
@@ -100,10 +100,7 @@ export default class EmployeeList extends React.Component<any, any> {
         this.store.toggleClick();
         if (this.state.click) {
           this.store.lastDepartmentIds(
-            this.store
-              .state()
-              .get('searchForm')
-              .get('departmentIds')
+            this.store.state().get('searchForm').get('departmentIds')
           );
           this.store.onFormChange({
             field: 'departmentIds',

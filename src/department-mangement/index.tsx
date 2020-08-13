@@ -22,7 +22,7 @@ export default class GoodsCate extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb />
-        <div className="container">
+        <div className="container-search">
           <Headline title={<FormattedMessage id="departmentManagement" />} />
           <div style={{ marginBottom: 16 }}>
             <Alert
@@ -42,13 +42,13 @@ export default class GoodsCate extends React.Component<any, any> {
               }
               type="info"
             />
+            <AuthWrapper functionName={'f_department_add_root'}>
+              {/*工具条*/}
+              <Tool />
+            </AuthWrapper>
           </div>
-
-          <AuthWrapper functionName={'f_department_add_root'}>
-            {/*工具条*/}
-            <Tool />
-          </AuthWrapper>
-
+        </div>
+        <div className="container">
           <AuthWrapper functionName={'f_department_list'}>
             {/*列表*/}
             <DepartmentList />

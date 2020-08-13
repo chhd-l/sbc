@@ -31,8 +31,10 @@ export default class PictureStore extends React.Component<any, any> {
             <Breadcrumb.Item>素材管理</Breadcrumb.Item>
             <Breadcrumb.Item>图片库</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="imageAsset" />} />
+          </div>
+          <div className="container">
             <div>
               <Row>
                 <Col span={4}>

@@ -40,8 +40,10 @@ export default class CustomerLevel extends React.Component<any, any> {
             <Breadcrumb.Item>客户管理</Breadcrumb.Item>
             <Breadcrumb.Item>客户等级</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="consumerLevel" />} />
+          </div>
+          <div className="container">
             {/* {util.isThirdStore() ? (
               <div>
                 <Tips />

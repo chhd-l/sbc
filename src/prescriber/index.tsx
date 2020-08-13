@@ -336,181 +336,204 @@ export default class ClinicList extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
+        <div id="inputs" className="container-search">
           <Headline title="Prescriber list" />
           {/*搜索条件*/}
-          <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="prescriberId" />}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'prescriberId',
-                    value
-                  });
-                }}
-              />
-            </FormItem>
+          <Form layout="inline">
+            <div className="space-around">
+              <div style={{ flex: 1, lineHeight: 3.5 }}>
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="prescriberId" />}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriberId',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
 
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="prescriberName" />}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'prescriberName',
-                    value
-                  });
-                }}
-              />
-            </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="prescriberName" />}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriberName',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
 
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="prescriberPhone" />}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'phone',
-                    value
-                  });
-                }}
-              />
-            </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="prescriberPhone" />}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'phone',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </div>
 
-            <FormItem>
-              <SelectGroup
-                defaultValue=""
-                label="Prescriber city"
-                style={{ width: 80 }}
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.onFormChange({
-                    field: 'primaryCity',
-                    value
-                  });
-                }}
-              >
-                <Option value="">
-                  <FormattedMessage id="all" />
-                </Option>
-                {cityArr.map((item) => (
-                  <Option value={item.valueEn} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-              </SelectGroup>
-            </FormItem>
+              <div style={{ flex: 1, lineHeight: 3.5 }}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label="Prescriber city"
+                    style={{ width: 80 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'primaryCity',
+                        value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {cityArr.map((item) => (
+                      <Option value={item.valueEn} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </SelectGroup>
+                </FormItem>
 
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="prescriberZip" />}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'primaryZip',
-                    value
-                  });
-                }}
-              />
-            </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="prescriberZip" />}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'primaryZip',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
 
-            <FormItem>
-              <Input
-                addonBefore="Recommendation code"
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'prescriberCode',
-                    value
-                  });
-                }}
-              />
-            </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore="Recommendation code"
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriberCode',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </div>
 
-            <FormItem>
-              <SelectGroup
-                defaultValue=""
-                label="Prescriber type"
-                style={{ width: 80 }}
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.onFormChange({
-                    field: 'prescriberType',
-                    value
-                  });
-                }}
-              >
-                <Option value="">
-                  <FormattedMessage id="all" />
-                </Option>
-                {typeArr.map((item) => (
-                  <Option value={item.valueEn} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-              </SelectGroup>
-            </FormItem>
+              <div style={{ flex: 1, lineHeight: 3.5 }}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label="Prescriber type"
+                    style={{ width: 80 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'prescriberType',
+                        value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {typeArr.map((item) => (
+                      <Option value={item.valueEn} key={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </SelectGroup>
+                </FormItem>
 
-            <FormItem>
-              <SelectGroup
-                defaultValue="true"
-                label="Prescriber status"
-                style={{ width: 80 }}
-                onChange={(value) => {
-                  value = value === '' ? '' : value;
-                  this.onFormChange({
-                    field: 'enabled',
-                    value
-                  });
-                }}
-              >
-                <Option value="">
-                  <FormattedMessage id="all" />{' '}
-                </Option>
-                <Option value="true" key="enabled">
-                  <FormattedMessage id="enabled" />
-                </Option>
-                <Option value="false" key="disabled">
-                  <FormattedMessage id="disabled" />
-                </Option>
-              </SelectGroup>
-            </FormItem>
-
-            <FormItem>
-              <Button
-                type="primary"
-                htmlType="submit"
-                shape="round"
-                icon="search"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.onSearch();
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
-              </Button>
-
-              <Button
-                style={{ marginLeft: '20px' }}
-                icon="download"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.onExport();
-                }}
-              >
-                <FormattedMessage id="export" />
-              </Button>
-            </FormItem>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue="true"
+                    label="Prescriber status"
+                    style={{ width: 80 }}
+                    onChange={(value) => {
+                      value = value === '' ? '' : value;
+                      this.onFormChange({
+                        field: 'enabled',
+                        value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />{' '}
+                    </Option>
+                    <Option value="true" key="enabled">
+                      <FormattedMessage id="enabled" />
+                    </Option>
+                    <Option value="false" key="disabled">
+                      <FormattedMessage id="disabled" />
+                    </Option>
+                  </SelectGroup>
+                </FormItem>
+              </div>
+            </div>
+            <div
+              style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}
+            >
+              <FormItem>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  shape="round"
+                  icon="search"
+                  style={{
+                    width: '100%',
+                    margin: '10px auto',
+                    textAlign: 'center'
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onSearch();
+                  }}
+                >
+                  <span>
+                    <FormattedMessage id="search" />
+                  </span>
+                </Button>
+              </FormItem>
+            </div>
           </Form>
-          <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
-            <Link to="/prescriber-add">
-              <FormattedMessage id="add" />
-            </Link>
-          </Button>
+          <div style={{ textAlign: 'left' }}>
+            <Button
+              style={{}}
+              icon="download"
+              onClick={(e) => {
+                e.preventDefault();
+                this.onExport();
+              }}
+            >
+              <FormattedMessage id="export" />
+            </Button>
+            <Button
+              style={{
+                backgroundColor: '#e2001a',
+                color: '#FFFFFF',
+                marginLeft: '20px'
+              }}
+            >
+              <Link to="/prescriber-add">
+                <FormattedMessage id="add" />
+              </Link>
+            </Button>
+          </div>
         </div>
         <div className="container">
           <Table

@@ -3,7 +3,7 @@ import { Select } from 'antd';
 import { SelectProps } from 'antd/lib/select';
 
 export default class SelectGroup extends React.PureComponent<any, any> {
-  props: SelectProps & { children?: any; label?: string };
+  props: SelectProps & { children?: any; label?: any };
 
   render() {
     const { label, children, ...rest } = this.props;

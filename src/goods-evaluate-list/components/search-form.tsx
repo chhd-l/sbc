@@ -50,9 +50,14 @@ export default class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <Row>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="orderNumber" />}>
+            <FormItem>
               <Input
-                style={{ width: 200 }}
+                addonBefore={
+                  <p style={styles.label}>
+                    <FormattedMessage id="orderNumber" />
+                  </p>
+                }
+                style={{ width: 300 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -79,12 +84,14 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="anonymousStatus" />}>
-              <Select
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
+            <FormItem>
+              <SelectGroup
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="anonymousStatus" />
+                  </p>
                 }
-                style={{ width: 200 }}
+                style={styles.wrapper}
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -103,16 +110,18 @@ export default class SearchForm extends React.Component<any, any> {
                 <Option value="0">
                   <FormattedMessage id="no" />
                 </Option>
-              </Select>
+              </SelectGroup>
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="productRatings" />}>
-              <Select
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
+            <FormItem>
+              <SelectGroup
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="productRatings" />
+                  </p>
                 }
-                style={{ width: 200 }}
+                style={styles.wrapper}
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -140,7 +149,7 @@ export default class SearchForm extends React.Component<any, any> {
                 <Option value="1">
                   1 <FormattedMessage id="star" />
                 </Option>
-              </Select>
+              </SelectGroup>
             </FormItem>
           </Col>
           <Col span={8}>
@@ -246,7 +255,7 @@ export default class SearchForm extends React.Component<any, any> {
           });
         }}
         value={this.state.customerOptions}
-        style={{ width: 150 }}
+        style={{ width: 160 }}
       >
         <Option value="customerName">
           <FormattedMessage id="consumerName" />
@@ -258,3 +267,13 @@ export default class SearchForm extends React.Component<any, any> {
     );
   };
 }
+
+const styles = {
+  label: {
+    width: 120,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 157
+  }
+} as any;

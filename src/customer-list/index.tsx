@@ -9,7 +9,9 @@ import {
   Select,
   Spin,
   message,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -297,77 +299,121 @@ export default class Customer extends React.Component<any, any> {
           <div className="container customer">
             <Headline title={<FormattedMessage id="consumerList" />} />
             <Form className="filter-content" layout="inline">
-              <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="consumerAccount" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'customerAccount',
-                      value
-                    });
-                  }}
-                />
-              </FormItem>
-
-              <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="consumerName" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'customerName',
-                      value
-                    });
-                  }}
-                />
-              </FormItem>
-              <FormItem>
-                <SelectGroup
-                  defaultValue=""
-                  label="Customer type"
-                  style={{ width: 80 }}
-                  onChange={(value) => {
-                    value = value === '' ? null : value;
-                    this.onFormChange({
-                      field: 'customerTypeId',
-                      value
-                    });
-                  }}
-                >
-                  <Option value="">All</Option>
-                  {customerTypeArr.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </SelectGroup>
-              </FormItem>
-              <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="email" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'email',
-                      value
-                    });
-                  }}
-                />
-              </FormItem>
-
-              <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="phoneNumber" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'phoneNumber',
-                      value
-                    });
-                  }}
-                />
-              </FormItem>
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="consumerAccount" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'customerAccount',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="consumerName" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'customerName',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <SelectGroup
+                      defaultValue=""
+                      label={<p style={styles.label}>Customer type</p>}
+                      style={{ width: 80 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'customerTypeId',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">All</Option>
+                      {customerTypeArr.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </SelectGroup>
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="email" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'email',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="phoneNumber" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'phoneNumber',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={24} style={{ textAlign: 'center' }}>
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      icon="search"
+                      shape="round"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onSearch();
+                      }}
+                    >
+                      <span>
+                        <FormattedMessage id="search" />
+                      </span>
+                    </Button>
+                  </FormItem>
+                </Col>
+              </Row>
 
               {/* <FormItem>
                 <Input
@@ -381,23 +427,6 @@ export default class Customer extends React.Component<any, any> {
                   }}
                 />
               </FormItem> */}
-
-              <FormItem>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  icon="search"
-                  shape="round"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
-                  }}
-                >
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
-                </Button>
-              </FormItem>
             </Form>
             <Table
               columns={columns}
@@ -414,3 +443,13 @@ export default class Customer extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  label: {
+    width: 120,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 157
+  }
+} as any;

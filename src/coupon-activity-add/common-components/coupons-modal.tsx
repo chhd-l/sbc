@@ -147,6 +147,7 @@ export default class CouponsModal extends React.Component<any, any> {
             <Button
               htmlType="submit"
               type="primary"
+              shape="round"
               icon="search"
               onClick={(e) => {
                 e.preventDefault();

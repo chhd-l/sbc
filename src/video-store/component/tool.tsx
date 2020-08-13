@@ -68,6 +68,7 @@ export default class Tool extends React.Component<any, any> {
               <Button
                 htmlType="submit"
                 type="primary"
+                shape="round"
                 icon="search"
                 onClick={(e) => {
                   e.preventDefault();

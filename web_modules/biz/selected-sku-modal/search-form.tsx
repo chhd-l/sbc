@@ -144,6 +144,7 @@ export default class SearchForm extends React.Component<any, any> {
               style={{'marginTop': '6px'}}
               type="primary"
               icon="search"
+              shape="round"
               htmlType="submit"
               onClick={(e) => {
                 e.preventDefault();

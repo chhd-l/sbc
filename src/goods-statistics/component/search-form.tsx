@@ -272,6 +272,7 @@ export default class SearchForm extends React.Component<any, any> {
               style={{ marginRight: 10 }}
               htmlType="submit"
               type="primary"
+              shape="round"
               icon="search"
               onClick={(e) => {
                 e.preventDefault();
@@ -292,8 +293,8 @@ export default class SearchForm extends React.Component<any, any> {
               tableFlag == 0
                 ? skuColumns
                 : tableFlag == 1
-                  ? cateColumns
-                  : brandColumns
+                ? cateColumns
+                : brandColumns
             }
           />
           <DownloadModal

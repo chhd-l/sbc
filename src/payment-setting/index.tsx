@@ -81,7 +81,7 @@ export default class PaymentSetting extends React.Component<any, any> {
         {/*导航面包屑*/}
         <div
           className="container-search"
-          style={{ height: '100vh', width: '100vh', background: '#fff' }}
+          style={{ height: '100vh', background: '#fff' }}
         >
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />

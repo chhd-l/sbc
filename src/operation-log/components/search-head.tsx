@@ -157,6 +157,7 @@ export default class SearchHead extends Component<any, any> {
                 htmlType="submit"
                 type="primary"
                 icon="search"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   //将搜索条件复制到导出条件

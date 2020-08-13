@@ -211,6 +211,7 @@ export default class PicModal extends React.Component<any, any> {
                     }}
                     type="primary"
                     icon="search"
+                    shape="round"
                     htmlType="submit"
                   >
                     Search

@@ -53,6 +53,7 @@ export default class ClientSearch extends React.Component<any, any> {
             htmlType="submit"
             type="primary"
             icon="search"
+            shape="round"
             onClick={(e) => {
               e.preventDefault();
               searchKeyWords(2);

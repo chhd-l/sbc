@@ -354,6 +354,7 @@ export default class SearchHead extends Component<any, any> {
                 type="primary"
                 icon="search"
                 htmlType="submit"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   const {

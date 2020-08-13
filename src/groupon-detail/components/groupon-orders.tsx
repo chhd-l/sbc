@@ -73,7 +73,12 @@ export default class GrouponOrders extends React.Component<any, any> {
               setOrderNo((e.target as any).value);
             }}
           />
-          <Button type="primary" icon="search" onClick={() => orderPage()}>
+          <Button
+            type="primary"
+            icon="search"
+            shape="round"
+            onClick={() => orderPage()}
+          >
             搜索
           </Button>
         </div>
@@ -104,9 +109,7 @@ export default class GrouponOrders extends React.Component<any, any> {
             key="grouponSuccessTime"
             render={(value) => {
               return value
-                ? moment(value)
-                    .format(Const.TIME_FORMAT)
-                    .toString()
+                ? moment(value).format(Const.TIME_FORMAT).toString()
                 : '-';
             }}
           />

@@ -97,7 +97,8 @@ export default class Main extends React.Component<any, any> {
       <div>
         <Layout>
           {/*头部*/}
-          <MyHeader />
+          <MyHeader className="my-header" />
+          <div className="layout-header"></div>
           <Layout className="ant-layout-has-sider">
             {/*左侧一级菜单*/}
             <MyLeftLevel1

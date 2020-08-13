@@ -35,7 +35,7 @@ class CreateOrder extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
         <Form>
-          <div className="container">
+          <div className="container-search">
             <Headline
               title={
                 this.props.edit ? (
@@ -45,7 +45,8 @@ class CreateOrder extends React.Component<any, any> {
                 )
               }
             />
-
+          </div>
+          <div className="container">
             {/*客戶信息*/}
             <CustomerInfo
               form={this.props.form}

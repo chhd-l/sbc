@@ -289,7 +289,7 @@ export default class SubscriptionList extends Component<any, any> {
       <AuthWrapper functionName="f_subscription_list">
         <div className="order-con">
           <BreadCrumb />
-          <div className="container">
+          <div className="container-search">
             <Spin spinning={this.state.loading}>
               <Headline title={<FormattedMessage id="subscriptionList" />} />
               <Form className="filter-content" layout="inline">
@@ -525,6 +525,10 @@ export default class SubscriptionList extends Component<any, any> {
                   />
                 </FormItem> */}
               </Form>
+            </Spin>
+          </div>
+          <div className="container">
+            <Spin>
               {/* 
               <div className="handle-bar">
                 <Dropdown

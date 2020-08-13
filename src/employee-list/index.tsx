@@ -39,13 +39,14 @@ export default class EmployeeList extends React.Component<any, any> {
           <Breadcrumb.Item>员工列表</Breadcrumb.Item>
         </Breadcrumb> */}
         <AuthWrapper functionName="fetchEmploy">
-          <div className="container" style={{ padding: '24px 12px 6px 24px' }}>
+          <div className="container-search">
             <Headline title={<FormattedMessage id="employeeList" />} />
 
             <WrapperForm ref={(form) => (window['_form'] = form)} />
 
             <ButtonGroup />
-
+          </div>
+          <div className="container">
             <Row>
               <Col span={3} className="userDepartTree">
                 <p

@@ -296,7 +296,7 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户管理</Breadcrumb.Item>
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container customer">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="consumerList" />} />
             <Form className="filter-content" layout="inline">
               <Row>
@@ -428,6 +428,8 @@ export default class Customer extends React.Component<any, any> {
                 />
               </FormItem> */}
             </Form>
+          </div>
+          <div className="container">
             <Table
               columns={columns}
               rowKey="customerDetailId"

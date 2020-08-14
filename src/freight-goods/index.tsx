@@ -44,7 +44,7 @@ export default class GoodsFreight extends React.Component<any, any> {
           {typeTxt}Single product shipping template
         </Breadcrumb.Item>
       </BreadCrumb>,
-      <div className="container" key="container">
+      <div className="container-search" key="container">
         <Headline title={`${typeTxt}Single product shipping template`} />
         <Alert
           message={

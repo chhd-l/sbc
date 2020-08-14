@@ -177,9 +177,7 @@ export default class AppStore extends Store {
    * 删除账号弹出
    */
   deleteAccount = (res) => {
-    const accountList = this.state()
-      .get('accountList')
-      .toJS();
+    const accountList = this.state().get('accountList').toJS();
     if (res.isDefaultAccount == 1 && accountList.length == 1) {
       message.error('请至少保留一个账号');
     } else {
@@ -198,11 +196,7 @@ export default class AppStore extends Store {
     let deleteIds = new Array();
     deleteIds.push(deleteModalContent.get('accountId'));
 
-    if (
-      this.state()
-        .get('accountList')
-        .toJS().length <= 1
-    ) {
+    if (this.state().get('accountList').toJS().length <= 1) {
       message.error('至少保留一个收款账号');
       return;
     } else {
@@ -210,7 +204,7 @@ export default class AppStore extends Store {
         deleteIds: deleteIds
       });
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('删除成功！');
+        message.success('Successfully deleted！');
         this.accountInfo();
       } else {
         message.error(res.message);

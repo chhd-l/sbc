@@ -62,4 +62,5 @@
 /* 输入框label选择 */
 .ant-input-group-addon {
     background-color: #ffffff !important;
+    width: 150px;
 }

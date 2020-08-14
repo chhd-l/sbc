@@ -67,7 +67,6 @@ export default class SearchForm extends React.Component<any, any> {
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label="Account status"
-            style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({
@@ -120,12 +119,11 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem>
 
-        <FormItem>
+        <FormItem style={{ width: '324px' }}>
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
             label="Auditors"
-            style={{ width: 80 }}
             onChange={(value) => {
               value = value === '' ? null : value;
               onFormChange({

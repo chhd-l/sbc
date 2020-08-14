@@ -274,6 +274,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 177
+    width: '100%'
   }
 } as any;

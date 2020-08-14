@@ -131,7 +131,7 @@ export default class SearchHead extends Component<any, any> {
                 }}
               />
             </FormItem>
-            <FormItem>
+            <FormItem style={{ width: '293px' }}>
               <RangePicker
                 getCalendarContainer={() =>
                   document.getElementById('page-content')

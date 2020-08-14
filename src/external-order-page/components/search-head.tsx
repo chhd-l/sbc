@@ -333,7 +333,7 @@ export default class SearchHead extends Component<any, any> {
               />
             </FormItem>
             */}
-            <FormItem>
+            <FormItem style={{ width: '324px' }}>
               <RangePicker
                 getCalendarContainer={() =>
                   document.getElementById('page-content')

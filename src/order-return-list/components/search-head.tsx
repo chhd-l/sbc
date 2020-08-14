@@ -142,6 +142,7 @@ export default class SearchHead extends Component<any, any> {
               <Input
                 // addonBefore="订单编号"
                 addonBefore={<FormattedMessage id="orderNumber" />}
+                maxLength={300}
                 onChange={(e) => {
                   this.setState(
                     { tid: (e.target as any).value },
@@ -225,7 +226,7 @@ export default class SearchHead extends Component<any, any> {
                 }}
               />
             </FormItem>
-            <FormItem>
+            <FormItem style={{ width: '325px' }}>
               <RangePicker
                 getCalendarContainer={() =>
                   document.getElementById('page-content')
@@ -262,7 +263,7 @@ export default class SearchHead extends Component<any, any> {
             </FormItem>
           </Form>
           {hasMenu ? (
-            <div className="handle-bar">
+            <div className="handle-bar ant-form-inline filter-content">
               <Dropdown
                 getPopupContainer={() =>
                   document.getElementById('page-content')

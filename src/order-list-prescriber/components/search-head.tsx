@@ -373,7 +373,7 @@ export default class SearchHead extends Component<any, any> {
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
+            <div className="handle-bar ant-form-inline filter-content">
               <Dropdown
                 overlay={menu}
                 placement="bottomLeft"
@@ -571,6 +571,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 185
+    width: 130
   }
 } as any;

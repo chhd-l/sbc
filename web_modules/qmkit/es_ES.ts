@@ -304,7 +304,7 @@ export default {
   'collectionRecords': 'Payment Records',
   'toBeDelivered': "To be delivered",
   'ship': "Ship",
-  'orderNumber': "Order number",
+  'orderNumber': "   Order number  ",
   'payWay': 'Pay Way',
   'consumer': "Consumer",
   'consumerAccount': "Consumer account",

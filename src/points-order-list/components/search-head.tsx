@@ -162,6 +162,7 @@ export default class SearchHead extends Component<any, any> {
                 }
                 defaultValue=""
                 label="Delivery status"
+                style={130}
                 onChange={(value) => {
                   this.setState({
                     tradeState: {

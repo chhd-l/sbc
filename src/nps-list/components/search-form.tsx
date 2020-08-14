@@ -62,7 +62,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           />
         </FormItem>
-        <FormItem>
+        <FormItem style={{ width: '324px' }}>
           <SelectGroup
             defaultValue=""
             label={<FormattedMessage id="consumerType" />}
@@ -95,7 +95,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           />
         </FormItem>
-        <FormItem>
+        <FormItem style={{ width: '324px' }}>
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}

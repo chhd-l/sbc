@@ -32,9 +32,9 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <Form className="filter-content" layout="inline">
-        <FormItem>
+        <FormItem style={{ width: '293px' }}>
           <Input
-            addonBefore={<FormattedMessage id="employeeName" />}
+            addonBefore={<FormattedMessage id="employeeName  " />}
             onChange={(e) => {
               const value = (e.target as any).value;
               onFormChange({
@@ -45,7 +45,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        <FormItem style={{ width: '293px' }}>
           <Input
             addonBefore={<FormattedMessage id="employeeEmail" />}
             onChange={(e) => {
@@ -58,7 +58,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        <FormItem style={{ width: '293px' }}>
           <Input
             addonBefore={<FormattedMessage id="employeeNo" />}
             onChange={(e) => {

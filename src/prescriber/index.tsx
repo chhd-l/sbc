@@ -323,9 +323,14 @@ export default class ClinicList extends Component<any, any> {
               ></Link>
             </Tooltip>
             <Divider type="vertical" />
-            <a onClick={() => this.enableAndDisable(record.id)}>
-              {record.enabled ? 'Disable' : 'Enable'}
-            </a>
+            <Tooltip
+              placement="top"
+              title={record.enabled ? 'Disable' : 'Enable'}
+            >
+              <a onClick={() => this.enableAndDisable(record.id)}>
+                {record.enabled ? 'Disable' : 'Enable'}
+              </a>
+            </Tooltip>
             {/* <Divider type="vertical" />
             <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
           </span>
@@ -357,6 +362,7 @@ export default class ClinicList extends Component<any, any> {
 
                 <FormItem>
                   <Input
+                    id="prescriberName"
                     addonBefore={<FormattedMessage id="prescriberName" />}
                     onChange={(e) => {
                       const value = (e.target as any).value;
@@ -365,6 +371,7 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
+                    style={{ width: '177px' }}
                   />
                 </FormItem>
 
@@ -378,6 +385,7 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
+                    style={{ width: '172px' }}
                   />
                 </FormItem>
               </div>

@@ -656,7 +656,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               payState === 'PAID' ||
               payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <Tooltip placement="top" title="Re-review">
+                  <Tooltip placement="top" title="Re-regitview">
                     <a
                       onClick={() => {
                         this._showRetrialConfirm(tid);

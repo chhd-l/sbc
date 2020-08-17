@@ -164,15 +164,27 @@ export default class SetBannerList extends Component<any, any> {
             <td>{webSkipUrl}</td>
             <td>{mobiSkipUrl}</td>
             <td>
-              <span className="red" onClick={() => this.deleteRow(item.toJS())}>
-                <FormattedMessage id="delete" />
-              </span>
-              <span
-                className="red mgl20"
-                onClick={() => this.editRow(item.toJS())}
-              >
-                <FormattedMessage id="edit" />
-              </span>
+              <Tooltip placement="top" title="Delete">
+                <span
+                  style={{ color: 'red', paddingRight: 10 }}
+                  /*className="red"*/ onClick={() =>
+                    this.deleteRow(item.toJS())
+                  }
+                  className="iconfont iconDelete"
+                >
+                  {/*<FormattedMessage id="delete" />*/}
+                </span>
+              </Tooltip>
+              <Tooltip placement="top" title="Edit">
+                <span
+                  /*className="red mgl20"*/
+                  style={{ color: 'red', paddingRight: 10 }}
+                  onClick={() => this.editRow(item.toJS())}
+                  className="iconfont iconEdit"
+                >
+                  {/*<FormattedMessage id="edit" />*/}
+                </span>
+              </Tooltip>
             </td>
           </tr>
         );

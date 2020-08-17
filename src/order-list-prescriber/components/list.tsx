@@ -519,8 +519,9 @@ export default class ListView extends React.Component<any, any> {
                               <Link
                                 style={{ marginLeft: 20, marginRight: 20 }}
                                 to={`/order-detail-prescriber/${id}`}
+                                className="iconfont iconDetails"
                               >
-                                <FormattedMessage id="order.seeDetails" />
+                                {/*<FormattedMessage id="order.seeDetails" />*/}
                               </Link>
                             </Tooltip>
                           </AuthWrapper>

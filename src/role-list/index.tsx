@@ -19,12 +19,14 @@ export default class CustomerEquities extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb />
-        <div className="container">
+        <div className="container-search">
           <Headline title={<FormattedMessage id="rolePermissions" />} />
           <AuthWrapper functionName={'f_role_add'}>
             {/*工具条*/}
             <RoleTool />
           </AuthWrapper>
+        </div>
+        <div className="container">
           <AuthWrapper functionName={'f_role_list'}>
             {/*列表*/}
             <EquitiesList />

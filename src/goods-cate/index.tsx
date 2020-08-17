@@ -33,7 +33,7 @@ export default class GoodsCate extends React.Component<any, any> {
           <Breadcrumb.Item>商品管理</Breadcrumb.Item>
           <Breadcrumb.Item>店铺分类</Breadcrumb.Item>
         </Breadcrumb> */}
-        <div className="container">
+        <div className="container-search">
           <Headline title={<FormattedMessage id="product.storeCategory" />} />
           <Alert
             message={<FormattedMessage id="product.storeCategoryInfo" />}
@@ -42,7 +42,8 @@ export default class GoodsCate extends React.Component<any, any> {
 
           {/*工具条*/}
           <Tool />
-
+        </div>
+        <div className="container">
           {/*列表*/}
           <CateList />
 

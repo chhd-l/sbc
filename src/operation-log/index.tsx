@@ -4,7 +4,7 @@ import AppStore from './store';
 import { Breadcrumb } from 'antd';
 import SearchHead from './components/search-head';
 import List from './components/list';
-import { AuthWrapper,BreadCrumb } from 'qmkit';
+import { AuthWrapper, BreadCrumb } from 'qmkit';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OperationLog extends Component<any, any> {
@@ -18,14 +18,16 @@ export default class OperationLog extends Component<any, any> {
     return (
       <AuthWrapper functionName="f_operation_log_list">
         <div>
-          <BreadCrumb/>
+          <BreadCrumb />
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>设置</Breadcrumb.Item>
             <Breadcrumb.Item>站点设置</Breadcrumb.Item>
             <Breadcrumb.Item>操作日志</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <SearchHead />
+          </div>
+          <div className="container">
             <List />
           </div>
         </div>

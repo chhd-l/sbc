@@ -113,7 +113,7 @@ export default class homePrescriber extends Component<any, any> {
   getPrescriberDetail = async (id) => {
     if (id) {
       const { res } = await getClinicById({
-        prescriberId: id
+        id: id
       });
       if (res.code === 'K-000000') {
         this.setState({
@@ -326,8 +326,10 @@ export default class homePrescriber extends Component<any, any> {
                         this._prescriberChange(value, name)
                       }
                       defaultValue={
-                        JSON.parse(sessionStorage.getItem('PrescriberType'))
-                          .children
+                        sessionStorage.getItem('PrescriberType')
+                          ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                              .children
+                          : null
                       }
                       style={{ width: '140px', marginBottom: '10px' }}
                     >

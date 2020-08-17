@@ -35,51 +35,11 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.pendingReview" />}
-            key="flowState-INIT"
-          >
-            <List />
-          </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeFormed" />}
-            key="flowState-GROUPON"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeDelivered" />}
-            key="flowState-AUDIT"
-          >
+          <Tabs.TabPane tab="Invalid" key="flowState-INIT">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.toBeReceived" />}
-            key="flowState-DELIVERED"
-          >
-            <List />
-          </Tabs.TabPane>
-
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="order.received" />}
-            key="flowState-CONFIRMED"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
-            key="flowState-COMPLETED"
-          >
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={<FormattedMessage id="order.outOfDate" />}
-            key="flowState-VOID"
-          >
+          <Tabs.TabPane tab="Valid" key="flowState-GROUPON">
             <List />
           </Tabs.TabPane>
         </Tabs>

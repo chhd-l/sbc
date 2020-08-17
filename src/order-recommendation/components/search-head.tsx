@@ -7,20 +7,11 @@ import {
   Button,
   Menu,
   Dropdown,
-  Icon,
   DatePicker,
   Row,
   Col
 } from 'antd';
-import {
-  noop,
-  ExportModal,
-  Const,
-  AuthWrapper,
-  checkAuth,
-  Headline,
-  SelectGroup
-} from 'qmkit';
+import { noop, AuthWrapper, checkAuth, Headline, history } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
@@ -131,17 +122,31 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="Recommendation list" />
-        <div>
+        <div className="space-between-align-items">
+          <Headline title="Recommendation list" />
+          <Button
+            type="primary"
+            icon="plus"
+            htmlType="submit"
+            shape="round"
+            style={{ textAlign: 'center', marginRight: '20px' }}
+            onClick={(e) => {
+              history.push('/recomm-page-detail');
+            }}
+          >
+            <span>New</span>
+          </Button>
+        </div>
+        <div id="inputs">
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={this._renderNumberSelect()}
+                    addonBefore="Recommendation No"
                     onChange={(e) => {
                       this.setState({
-                        numberSelectValue: (e.target as any).value
+                        RecommendationValue: (e.target as any).value
                       });
                     }}
                   />
@@ -178,10 +183,10 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={this._renderReceiverSelect()}
+                    addonBefore="Link Status"
                     onChange={(e) => {
                       this.setState({
-                        receiverSelectValue: (e.target as any).value
+                        linkStatusValue: (e.target as any).value
                       });
                     }}
                   />
@@ -207,7 +212,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              {/*<Col span={8}>
                 <FormItem>
                   <InputGroup compact>
                     {this._renderStatusSelect()}
@@ -268,9 +273,9 @@ export default class SearchHead extends Component<any, any> {
                     )}
                   </InputGroup>
                 </FormItem>
-              </Col>
+              </Col>*/}
 
-              <Col span={8}>
+              {/*<Col span={8}>
                 <FormItem>
                   <RangePicker
                     onChange={(e) => {
@@ -284,7 +289,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   />
                 </FormItem>
-              </Col>
+              </Col>*/}
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -293,7 +298,7 @@ export default class SearchHead extends Component<any, any> {
                     icon="search"
                     htmlType="submit"
                     shape="round"
-                    style={{ textAlign: 'center' }}
+                    style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
                       e.preventDefault();
                       const {
@@ -357,7 +362,7 @@ export default class SearchHead extends Component<any, any> {
             </Row>
           </Form>
 
-          {hasMenu && (
+          {/*{hasMenu && (
             <div className="handle-bar">
               <Dropdown
                 overlay={menu}
@@ -372,15 +377,15 @@ export default class SearchHead extends Component<any, any> {
                 </Button>
               </Dropdown>
             </div>
-          )}
+          )}*/}
         </div>
 
-        <ExportModal
+        {/*<ExportModal
           data={exportModalData}
           onHide={onExportModalHide}
           handleByParams={exportModalData.get('exportByParams')}
           handleByIds={exportModalData.get('exportByIds')}
-        />
+        />*/}
       </div>
     );
   }

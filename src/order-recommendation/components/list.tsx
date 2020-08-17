@@ -197,33 +197,17 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th>
+                      <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '14%' }}>
+                      <th style={{ width: '13%' }}>
                         <FormattedMessage id="consumerName" />
                       </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="recipient" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="amount" />
-                        <br />
-                        <FormattedMessage id="quantity" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="clinicName" />
-                      </th>
-                      {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.shippingStatus" />
-                      </th>
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.orderStatus" />
-                      </th>
-                      <th className="operation-th" style={{ width: '12%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
-                      </th>
+                      <th style={{ width: '15%' }}>Consumer Account</th>
+                      <th style={{ width: '11%' }}>Amount</th>
+                      <th style={{ width: '11%' }}>Link status</th>
+                      <th style={{ width: '11%' }}>Perscriber</th>
+                      <th style={{ width: '11%' }}>Operation</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">
@@ -579,7 +563,7 @@ export default class ListView extends React.Component<any, any> {
                         ) : null
                       }
                     </td>
-                    <td style={{ width: '14%' }}>
+                    <td style={{ width: '14.8%' }}>
                       {/*客户名称*/}
                       <p
                         title={v.getIn(['buyer', 'name'])}
@@ -588,7 +572,7 @@ export default class ListView extends React.Component<any, any> {
                         {v.getIn(['buyer', 'name'])}
                       </p>
                     </td>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '16.5%' }}>
                       {/*收件人姓名*/}
                       {/* <FormattedMessage id="recipient" />： */}
                       <p
@@ -602,11 +586,11 @@ export default class ListView extends React.Component<any, any> {
                       {/*收件人手机号码*/}
                       {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '13%' }}>
                       ${tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '12.5%' }}>
                       <p
                         title={v.getIn(['clinicsName', 'name'])}
                         className="line-ellipse"
@@ -614,15 +598,10 @@ export default class ListView extends React.Component<any, any> {
                         {v.get('clinicsName')}
                       </p>
                     </td>
-                    {/* <td style={{ width: '5%' }}> */}
-                    {/* 1{v.getIn(['invoice', 'rfc'])} */}
-                    {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '12%' }}>
-                      {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
-                    </td>
+
                     {/*订单状态*/}
-                    <td style={{ width: '12%' }}>
+                    <td style={{ width: '12.5%' }}>
                       {flowState(v.getIn(['tradeState', 'flowState']))}
                     </td>
                     {/*支付状态*/}

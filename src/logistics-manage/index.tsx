@@ -30,7 +30,7 @@ export default class LogisticsManage extends React.Component<any, any> {
             <Breadcrumb.Item>物流设置</Breadcrumb.Item>
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title="Logistics company settings" />
             <Alert
               message="Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up."

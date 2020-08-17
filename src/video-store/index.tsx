@@ -31,8 +31,10 @@ export default class VideoStore extends React.Component<any, any> {
             <Breadcrumb.Item>素材管理</Breadcrumb.Item>
             <Breadcrumb.Item>视频库</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="videoAsset" />} />
+          </div>
+          <div className="container">
             <div>
               <Row>
                 <Col span={4}>

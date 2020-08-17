@@ -29,12 +29,13 @@ export default class Customer extends React.Component<any, any> {
           <Breadcrumb.Item>客户列表</Breadcrumb.Item>
         </Breadcrumb> */}
         <AuthWrapper functionName={'f_customer_iep_page'}>
-          <div className="container customer">
+          <div className="container-search">
             <Headline title="Corporate member" />
 
             {/*搜索条件*/}
             <SearchForm />
-
+          </div>
+          <div className="container">
             {/*tab的客户列表*/}
             <CustomerList />
           </div>

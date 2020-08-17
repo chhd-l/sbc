@@ -674,6 +674,21 @@ const routes = [
   {
     path: '/prescriber-type-edit/:id',
     asyncComponent: () => import('./prescriber-type-add')
+  },
+  //message-email-list
+  {
+    path: '/message-email-list',
+    asyncComponent: () => import('./message-email-list')
+  },
+  //message-notification
+  {
+    path: '/message-notification',
+    asyncComponent: () => import('./message-notification')
+  },
+  //message-setting
+  {
+    path: '/message-setting',
+    asyncComponent: () => import('./message-setting')
   }
 ];
 

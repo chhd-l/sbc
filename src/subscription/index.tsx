@@ -289,7 +289,7 @@ export default class SubscriptionList extends Component<any, any> {
       <AuthWrapper functionName="f_subscription_list">
         <div className="order-con">
           <BreadCrumb />
-          <div className="container">
+          <div className="container-search">
             <Spin spinning={this.state.loading}>
               <Headline title={<FormattedMessage id="subscriptionList" />} />
               <Form className="filter-content" layout="inline">
@@ -525,7 +525,10 @@ export default class SubscriptionList extends Component<any, any> {
                   />
                 </FormItem> */}
               </Form>
-              {/* 
+            </Spin>
+          </div>
+          <div className="container">
+            {/* 
               <div className="handle-bar">
                 <Dropdown
                   overlay={menu}
@@ -541,37 +544,36 @@ export default class SubscriptionList extends Component<any, any> {
                 </Dropdown>
               </div> */}
 
-              {/* <SearchList /> */}
+            {/* <SearchList /> */}
 
-              <Tabs
-                onChange={(key) => {
-                  this.onTabChange(key);
-                }}
-                activeKey={activeKey}
-              >
-                <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
-                  <List
-                    data={this.state.subscriptionList}
-                    pagination={this.state.pagination}
-                    searchParams={this.state.searchParams}
-                  />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Active" key="0">
-                  <List
-                    data={this.state.subscriptionList}
-                    pagination={this.state.pagination}
-                    searchParams={this.state.searchParams}
-                  />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Inactive" key="2">
-                  <List
-                    data={this.state.subscriptionList}
-                    pagination={this.state.pagination}
-                    searchParams={this.state.searchParams}
-                  />
-                </Tabs.TabPane>
-              </Tabs>
-            </Spin>
+            <Tabs
+              onChange={(key) => {
+                this.onTabChange(key);
+              }}
+              activeKey={activeKey}
+            >
+              <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
+                <List
+                  data={this.state.subscriptionList}
+                  pagination={this.state.pagination}
+                  searchParams={this.state.searchParams}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Active" key="0">
+                <List
+                  data={this.state.subscriptionList}
+                  pagination={this.state.pagination}
+                  searchParams={this.state.searchParams}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Inactive" key="2">
+                <List
+                  data={this.state.subscriptionList}
+                  pagination={this.state.pagination}
+                  searchParams={this.state.searchParams}
+                />
+              </Tabs.TabPane>
+            </Tabs>
           </div>
         </div>
       </AuthWrapper>

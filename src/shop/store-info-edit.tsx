@@ -70,10 +70,7 @@ export default class ShopInfoEdit extends React.Component<any, any> {
               tab={<FormattedMessage id="signedInformation" />}
               key="2"
             />
-            <Tabs.TabPane
-              tab={<FormattedMessage id="contentInformation" />}
-              key="3"
-            />
+            <Tabs.TabPane tab={<FormattedMessage id="Footer" />} key="3" />
           </Tabs>
           <div className="steps-content" style={{ marginTop: 20 }}>
             {PAIN[currentTab]}

@@ -8,7 +8,9 @@ import {
   Divider,
   Select,
   Spin,
-  message
+  message,
+  Row,
+  Col
 } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -234,7 +236,7 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户管理</Breadcrumb.Item>
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container customer">
+          <div className="container-search">
             <Headline title={<FormattedMessage id="consumerClinicList" />} />
             <Form className="filter-content" layout="inline">
               {/* <FormItem>
@@ -250,38 +252,67 @@ export default class Customer extends React.Component<any, any> {
                 />
               </FormItem> */}
 
-              <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="consumerName" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'customerName',
-                      value
-                    });
-                  }}
-                />
-              </FormItem>
-              <FormItem>
-                <SelectGroup
-                  label="Customer type"
-                  style={{ width: 80 }}
-                  onChange={(value) => {
-                    value = value === '' ? null : value;
-                    this.onFormChange({
-                      field: 'customerTypeId',
-                      value
-                    });
-                  }}
-                >
-                  <Option value="">All</Option>
-                  {customerTypeArr.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </SelectGroup>
-              </FormItem>
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <p style={styles.label}>
+                          <FormattedMessage id="consumerName" />
+                        </p>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'customerName',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <SelectGroup
+                      label={<p style={styles.label}>Customer type</p>}
+                      style={{ width: 80 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'customerTypeId',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">All</Option>
+                      {customerTypeArr.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </SelectGroup>
+                  </FormItem>
+                </Col>
+                <Col span={24} style={{ textAlign: 'center' }}>
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      icon="search"
+                      shape="round"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onSearch();
+                      }}
+                    >
+                      <span>
+                        <FormattedMessage id="search" />
+                      </span>
+                    </Button>
+                  </FormItem>
+                </Col>
+              </Row>
+
               {/* <FormItem>
                 <Input
                   addonBefore={<FormattedMessage id="email" />}
@@ -320,27 +351,12 @@ export default class Customer extends React.Component<any, any> {
                   }}
                 />
               </FormItem> */}
-
-              <FormItem>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  icon="search"
-                  shape="round"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
-                  }}
-                >
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
-                </Button>
-              </FormItem>
             </Form>
+          </div>
+          <div className="container">
             <Table
               columns={columns}
-              rowKey={(record) => record.id}
+              rowKey="id"
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
               loading={this.state.loading}
@@ -352,3 +368,13 @@ export default class Customer extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  label: {
+    width: 120,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 157
+  }
+} as any;

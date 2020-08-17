@@ -95,7 +95,7 @@ export default class SearchForm extends React.Component<any, any> {
             }}
           />
         </FormItem>
-        <FormItem style={{ width: '324px' }}>
+        <FormItem style={{ width: '300px' }}>
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}
@@ -114,7 +114,7 @@ export default class SearchForm extends React.Component<any, any> {
             <Option value="N">N</Option>
           </SelectGroup>
         </FormItem>
-        <FormItem>
+        <FormItem style={{ marginRight: '4%' }}>
           <SelectGroup
             defaultValue=""
             getPopupContainer={() => document.getElementById('page-content')}

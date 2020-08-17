@@ -495,7 +495,7 @@ export default class ClinicList extends Component<any, any> {
                   shape="round"
                   icon="search"
                   style={{
-                    width: '100%',
+                    width: '100px',
                     margin: '10px auto',
                     textAlign: 'center'
                   }}

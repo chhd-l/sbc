@@ -118,7 +118,7 @@ export default class SearchForm extends React.Component<any, any> {
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="status" />}
-            style={{ width: 80 }}
+            style={{ width: 300 }}
             defaultValue={null}
             onChange={(e) => {
               onFormChange({

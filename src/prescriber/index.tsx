@@ -349,7 +349,11 @@ export default class ClinicList extends Component<any, any> {
               <div style={{ flex: 1, lineHeight: 3.5 }}>
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="prescriberId" />}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberId" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -362,8 +366,11 @@ export default class ClinicList extends Component<any, any> {
 
                 <FormItem>
                   <Input
-                    id="prescriberName"
-                    addonBefore={<FormattedMessage id="prescriberName" />}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberName" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -371,13 +378,16 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
-                    style={{ width: '177px' }}
                   />
                 </FormItem>
 
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="prescriberPhone" />}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberPhone" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -385,7 +395,6 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
-                    style={{ width: '172px' }}
                   />
                 </FormItem>
               </div>
@@ -393,9 +402,9 @@ export default class ClinicList extends Component<any, any> {
               <div style={{ flex: 1, lineHeight: 3.5 }}>
                 <FormItem>
                   <SelectGroup
+                    className="PrescriberCity"
                     defaultValue=""
                     label="Prescriber city"
-                    style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -417,7 +426,11 @@ export default class ClinicList extends Component<any, any> {
 
                 <FormItem>
                   <Input
-                    addonBefore={<FormattedMessage id="prescriberZip" />}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberZip" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -430,7 +443,11 @@ export default class ClinicList extends Component<any, any> {
 
                 <FormItem>
                   <Input
-                    addonBefore="Recommendation code"
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="Recommendation code" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({

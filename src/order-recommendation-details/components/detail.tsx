@@ -17,18 +17,15 @@ export default class BillingDetails extends React.Component<any, any> {
     relaxProps?: {
       settlement: IMap;
       setName: IList;
-      prescriber: any;
     };
   };
 
   static relaxProps = {
     settlement: 'settlement',
-    setName: 'setName',
-    prescriber: 'prescriber'
+    setName: 'setName'
   };
 
   render() {
-    const { prescriber } = this.props.relaxProps;
     return (
       <div style={styles.main}>
         <div style={styles.nav}>Select Recommended Product</div>

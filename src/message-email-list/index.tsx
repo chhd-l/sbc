@@ -105,7 +105,7 @@ export default class ClinicList extends Component<any, any> {
   };
   quickSend = () => {
     history.push({
-      pathname: '/message-detail'
+      pathname: '/message-quick-send'
     });
   };
 
@@ -191,7 +191,7 @@ export default class ClinicList extends Component<any, any> {
                       borderColor: '#e2001a'
                     }}
                   >
-                    <span style={{ color: '#e2001a' }}>Overview</span>
+                    <p style={{ color: '#e2001a' }}>Overview</p>
                   </Button>
                   <Button
                     shape="round"
@@ -202,7 +202,7 @@ export default class ClinicList extends Component<any, any> {
                       borderColor: '#e2001a'
                     }}
                   >
-                    <span style={{ color: '#e2001a' }}>Quick Send</span>
+                    <p style={{ color: '#e2001a' }}>Quick Send</p>
                   </Button>
                 </div>
               }

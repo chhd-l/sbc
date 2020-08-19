@@ -20,6 +20,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/toolbox';
 import './index.less';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 class Overview extends Component<any, any> {
@@ -231,6 +232,11 @@ class Overview extends Component<any, any> {
               ></div>
             </Col>
           </Row>
+        </div>
+        <div className="bar-button">
+          <Button type="primary" onClick={() => (history as any).go(-1)}>
+            {<FormattedMessage id="back" />}
+          </Button>
         </div>
       </div>
     );

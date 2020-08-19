@@ -71,6 +71,14 @@ class Notification extends Component<any, any> {
           isOpen: '1'
         }
       ],
+      RecommendationAutomationData: [
+        {
+          status: 'Recommendation creation',
+          emailTemplate: 'RC-US 12115',
+          isOpen: '1'
+        }
+      ],
+
       visible: false,
       selectedStatus: ''
     };
@@ -99,7 +107,8 @@ class Notification extends Component<any, any> {
     const {
       title,
       orderAutomationData,
-      subscriptionAutomationData
+      subscriptionAutomationData,
+      RecommendationAutomationData
     } = this.state;
     const columns = [
       {
@@ -168,6 +177,25 @@ class Notification extends Component<any, any> {
               style={{ marginTop: 20 }}
               columns={columns}
               dataSource={subscriptionAutomationData}
+              pagination={false}
+            />
+          </div>
+          <div style={{ marginTop: 30 }}>
+            <div style={{ display: 'flex' }}>
+              <div style={{ margin: 'auto 0' }}>
+                <Icon type="mail" style={{ fontSize: 40 }} />
+              </div>
+              <div style={{ marginLeft: 10 }}>
+                <h3>Email Automation - Recommendation</h3>
+                <p>
+                  Sending Email automatically by the status of Recommendation
+                </p>
+              </div>
+            </div>
+            <Table
+              style={{ marginTop: 20 }}
+              columns={columns}
+              dataSource={RecommendationAutomationData}
               pagination={false}
             />
           </div>

@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
+import { noop, Const, AuthWrapper, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -366,139 +366,6 @@ export default class ListView extends React.Component<any, any> {
                             )}
                           </span>
                         </div>
-
-                        <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="orderTime" />：
-                          {v.getIn(['tradeState', 'createTime'])
-                            ? Moment(v.getIn(['tradeState', 'createTime']))
-                                .format(Const.TIME_FORMAT)
-                                .toString()
-                            : ''}
-                        </span>
-                        <span style={{ marginRight: 0, float: 'right' }}>
-                          {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' &&
-                            v.get('tradeItems') &&
-                            !v
-                              .get('tradeItems')
-                              .get(0)
-                              .get('isFlashSaleGoods') && (
-                              <AuthWrapper functionName="edit_order_f_001">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    verify(id, buyerId);
-                                  }}
-                                >
-                                  <FormattedMessage id="edit" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                            'NON_CHECKED' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => {
-                                    onAudit(id, 'CHECKED');
-                                  }}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.audit" />
-                                </a>
-                              </AuthWrapper>
-                            )} */}
-                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                            'NON_CHECKED' &&
-                            v.getIn(['tradeState', 'payState']) != 'PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => this._showRejectedConfirm(id)}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.turnDown" />
-                                </a>
-                              </AuthWrapper>
-                            )} */}
-                          {/*待发货状态显示*/}
-                          {needAudit &&
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                >
-                                  <FormattedMessage id="order.review" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.ship" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED_PART' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'PART_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  <FormattedMessage id="order.ship" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003">
-                              <a
-                                onClick={() => {
-                                  this._showConfirm(id);
-                                }}
-                                href="javascript:void(0)"
-                              >
-                                <FormattedMessage id="order.confirmReceipt" />
-                              </a>
-                            </AuthWrapper>
-                          )}
-                          <AuthWrapper functionName="fOrderDetail001">
-                            <Link
-                              style={{ marginLeft: 20, marginRight: 20 }}
-                              to={`/order-detail/${id}`}
-                            >
-                              <FormattedMessage id="order.seeDetails" />
-                            </Link>
-                          </AuthWrapper>
-                        </span>
                       </div>
                     </td>
                   </tr>
@@ -609,7 +476,14 @@ export default class ListView extends React.Component<any, any> {
                       style={{ width: '12%', paddingRight: 22 }}
                       className="operation-td"
                     >
-                      {payStatus(v.getIn(['tradeState', 'payState']))}
+                      <div
+                        style={{ color: '#e2001a', cursor: 'pointer' }}
+                        onClick={(e) => {
+                          history.push('/recomm-page-detail');
+                        }}
+                      >
+                        Detail
+                      </div>
                     </td>
                   </tr>
                 </tbody>

@@ -139,7 +139,13 @@ export default class SubscriptionList extends Component<any, any> {
           ? searchForm.recipient
           : '',
       prescriberId:
-        searchForm.prescriberOption === 'Prescriber ID'
+        // searchForm.prescriberOption === 'Prescriber ID'
+        //   ? searchForm.prescriber
+        //   : '',
+        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
+        null
+          ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+          : searchForm.prescriberOption === 'Prescriber ID'
           ? searchForm.prescriber
           : '',
       prescriberName:
@@ -419,10 +425,27 @@ export default class SubscriptionList extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
+                    {/* todo */}
                     {this.state.isPrescriber ? (
                       <FormItem>
                         <SelectGroup
-                          value={searchForm.prescriber}
+                          disabled={
+                            JSON.parse(
+                              sessionStorage.getItem('s2b-employee@data')
+                            ).clinicsIds != null
+                              ? 'disabled'
+                              : null
+                          }
+                          value={
+                            JSON.parse(
+                              sessionStorage.getItem('s2b-employee@data')
+                            ).clinicsIds != null
+                              ? JSON.parse(
+                                  sessionStorage.getItem('PrescriberType')
+                                ).value
+                              : searchForm.prescriber
+                          }
+                          // value={searchForm.prescriber}
                           label={<p style={styles.label}>Prescriber</p>}
                           onChange={(value) => {
                             value = value === '' ? null : value;

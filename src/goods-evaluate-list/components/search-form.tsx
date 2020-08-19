@@ -48,7 +48,7 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <Form className="filter-content" layout="inline">
-        <Row>
+        <Row id="Range-picker-width">
           <Col span={8}>
             <FormItem>
               <Input

@@ -207,7 +207,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="input-group-width">
                 <FormItem>
                   <InputGroup compact>
                     {this._renderStatusSelect()}
@@ -270,7 +270,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
                     onChange={(e) => {
@@ -556,6 +556,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 139
+    // width: 139
   }
 } as any;

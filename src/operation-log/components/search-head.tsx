@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
-import { Button, DatePicker, Form, Input, Select } from 'antd';
+import { Button, DatePicker, Form, Input, Select, Row, Col } from 'antd';
 import moment from 'moment';
 
 import { Const, noop, SelectGroup, AuthWrapper } from 'qmkit';
@@ -72,168 +72,195 @@ export default class SearchHead extends Component<any, any> {
       <div>
         <div>
           <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="operatorAccount" />}
-                onChange={(e) => {
-                  search.opAccount = (e.target as any).value;
-                  this.setState({ search: search });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="operatorName" />}
-                onChange={(e) => {
-                  search.opName = (e.target as any).value;
-                  this.setState({ search: search });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                defaultValue=""
-                label={<FormattedMessage id="module" />}
-                onChange={(value) => {
-                  search.opModule = value;
-                  this.setState({ search: search });
-                }}
-              >
-                <Option value="">All</Option>
-                <Option value="登录">Login</Option>
-                <Option value="商品">Product</Option>
-                <Option value="订单">Order</Option>
-                <Option value="客户">Client</Option>
-                <Option value="营销">Marketing</Option>
-                <Option value="财务">Finance</Option>
-                <Option value="设置">Setting</Option>
-                <Option value="账户管理">Account management</Option>
-              </SelectGroup>
-            </FormItem>
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="operatorType" />}
-                onChange={(e) => {
-                  search.opCode = (e.target as any).value;
-                  this.setState({ search: search });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="operatorContent" />}
-                onChange={(e) => {
-                  search.opContext = (e.target as any).value;
-                  this.setState({ search: search });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <RangePicker
-                style={{ width: '294px' }}
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
-                defaultValue={[search.beginTime, search.endTime]}
-                value={[search.beginTime, search.endTime]}
-                format={Const.DATE_FORMAT}
-                showTime={{ format: 'HH:mm' }}
-                open={pickOpen}
-                allowClear={false}
-                renderExtraFooter={() =>
-                  pickErrorInfo != '' && (
-                    <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-                  )
-                }
-                onChange={this._handleDateParams}
-                onOk={this._dateOkBtn}
-                {...options}
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                htmlType="submit"
-                type="primary"
-                icon="search"
-                shape="round"
-                onClick={(e) => {
-                  e.preventDefault();
-                  //将搜索条件复制到导出条件
-                  const {
-                    opAccount,
-                    opName,
-                    opCode,
-                    opModule,
-                    opContext,
-                    beginTime,
-                    endTime
-                  } = this.state.search;
-
-                  this.setState({
-                    export: {
-                      opAccount,
-                      opName,
-                      opCode,
-                      opModule,
-                      opContext,
-                      beginTime,
-                      endTime
+            <Row id="input-lable-wwidth">
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p>
+                        <FormattedMessage id="operatorAccount" />
+                      </p>
                     }
-                  });
+                    onChange={(e) => {
+                      search.opAccount = (e.target as any).value;
+                      this.setState({ search: search });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p>
+                        <FormattedMessage id="operatorName" />
+                      </p>
+                    }
+                    // addonBefore={<FormattedMessage id="operatorName" />}
+                    onChange={(e) => {
+                      search.opName = (e.target as any).value;
+                      this.setState({ search: search });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8" id="select-group-width">
+                <FormItem>
+                  <SelectGroup
+                    getPopupContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    defaultValue=""
+                    label={<FormattedMessage id="module" />}
+                    onChange={(value) => {
+                      search.opModule = value;
+                      this.setState({ search: search });
+                    }}
+                  >
+                    <Option value="">All</Option>
+                    <Option value="登录">Login</Option>
+                    <Option value="商品">Product</Option>
+                    <Option value="订单">Order</Option>
+                    <Option value="客户">Client</Option>
+                    <Option value="营销">Marketing</Option>
+                    <Option value="财务">Finance</Option>
+                    <Option value="设置">Setting</Option>
+                    <Option value="账户管理">Account management</Option>
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="operatorType" />}
+                    onChange={(e) => {
+                      search.opCode = (e.target as any).value;
+                      this.setState({ search: search });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="operatorContent" />}
+                    onChange={(e) => {
+                      search.opContext = (e.target as any).value;
+                      this.setState({ search: search });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8" id="range-picker-width-mx">
+                <FormItem>
+                  <RangePicker
+                    // style={{ width: '294px' }}
+                    getCalendarContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    defaultValue={[search.beginTime, search.endTime]}
+                    value={[search.beginTime, search.endTime]}
+                    format={Const.DATE_FORMAT}
+                    showTime={{ format: 'HH:mm' }}
+                    open={pickOpen}
+                    allowClear={false}
+                    renderExtraFooter={() =>
+                      pickErrorInfo != '' && (
+                        <span style={{ color: 'red' }}>{pickErrorInfo}</span>
+                      )
+                    }
+                    onChange={this._handleDateParams}
+                    onOk={this._dateOkBtn}
+                    {...options}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      //将搜索条件复制到导出条件
+                      const {
+                        opAccount,
+                        opName,
+                        opCode,
+                        opModule,
+                        opContext,
+                        beginTime,
+                        endTime
+                      } = this.state.search;
 
-                  const params = {
-                    opAccount,
-                    opName,
-                    opCode,
-                    opModule,
-                    opContext,
-                    beginTime,
-                    endTime
-                  };
+                      this.setState({
+                        export: {
+                          opAccount,
+                          opName,
+                          opCode,
+                          opModule,
+                          opContext,
+                          beginTime,
+                          endTime
+                        }
+                      });
 
-                  onSearch(params);
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
-              </Button>
-            </FormItem>
-            <AuthWrapper functionName="f_operation_log_export">
-              <FormItem>
-                <Button
-                  type="primary"
-                  icon="download"
-                  onClick={() => {
-                    const {
-                      opAccount,
-                      opName,
-                      opCode,
-                      opModule,
-                      opContext,
-                      beginTime,
-                      endTime
-                    } = this.state.export;
+                      const params = {
+                        opAccount,
+                        opName,
+                        opCode,
+                        opModule,
+                        opContext,
+                        beginTime,
+                        endTime
+                      };
 
-                    const params = {
-                      opAccount,
-                      opName,
-                      opCode,
-                      opModule,
-                      opContext,
-                      beginTime,
-                      endTime
-                    };
-                    onExportByParams(params);
-                  }}
-                >
-                  <FormattedMessage id="export" />
-                </Button>
-              </FormItem>
-            </AuthWrapper>
+                      onSearch(params);
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <AuthWrapper functionName="f_operation_log_export">
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      icon="download"
+                      onClick={() => {
+                        const {
+                          opAccount,
+                          opName,
+                          opCode,
+                          opModule,
+                          opContext,
+                          beginTime,
+                          endTime
+                        } = this.state.export;
+
+                        const params = {
+                          opAccount,
+                          opName,
+                          opCode,
+                          opModule,
+                          opContext,
+                          beginTime,
+                          endTime
+                        };
+                        onExportByParams(params);
+                      }}
+                    >
+                      <FormattedMessage id="export" />
+                    </Button>
+                  </FormItem>
+                </AuthWrapper>
+              </Col>
+            </Row>
           </Form>
         </div>
       </div>

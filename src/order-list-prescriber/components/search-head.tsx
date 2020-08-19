@@ -186,13 +186,12 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="input-group-width">
                 <FormItem>
                   <InputGroup compact>
                     {this._renderStatusSelect()}
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
-                        style={styles.wrapper}
                         onChange={(value) =>
                           this.setState({
                             tradeState: {
@@ -249,7 +248,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
                     getCalendarContainer={() =>
@@ -319,7 +318,15 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         beginTime,
-                        endTime
+                        endTime,
+                        prescriberId:
+                          JSON.parse(
+                            sessionStorage.getItem('s2b-employee@data')
+                          ).clinicsIds != null
+                            ? JSON.parse(
+                                sessionStorage.getItem('PrescriberType')
+                              ).value
+                            : null
                       };
 
                       onSearch(params);

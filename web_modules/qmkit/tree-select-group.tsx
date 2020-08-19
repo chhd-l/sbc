@@ -8,7 +8,7 @@ export default class TreeSelectGroup extends React.PureComponent<any, any> {
   render() {
     const { label, children, ...rest } = this.props;
     return (
-      <div className="ant-input-wrapper ant-input-group select-group" id="input-select">
+      <div className="ant-input-wrapper ant-input-group select-group" id="tree-select-props-width">
         <span className="ant-input-group-addon">{label}</span>
         <TreeSelect dropdownMatchSelectWidth={false} {...rest}>
           {children}

@@ -9,7 +9,9 @@ import {
   Divider,
   message,
   Modal,
-  Tooltip
+  Tooltip,
+  Row,
+  Col
 } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -345,8 +347,10 @@ export default class ClinicList extends Component<any, any> {
           <Headline title="Prescriber list" />
           {/*搜索条件*/}
           <Form layout="inline">
-            <div className="space-around">
-              <div style={{ flex: 1, lineHeight: 3.5 }}>
+            <Row id="input-lable-wwidth">
+              {/* <div className="space-around"> */}
+              {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
+              <Col span="8">
                 <FormItem>
                   <Input
                     addonBefore={
@@ -363,43 +367,9 @@ export default class ClinicList extends Component<any, any> {
                     }}
                   />
                 </FormItem>
-
-                <FormItem>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberName" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'prescriberName',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-
-                <FormItem>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberPhone" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'phone',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </div>
-
-              <div style={{ flex: 1, lineHeight: 3.5 }}>
+              </Col>
+              <Col span="8" id="select-group-width">
+                {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem>
                   <SelectGroup
                     className="PrescriberCity"
@@ -423,48 +393,14 @@ export default class ClinicList extends Component<any, any> {
                     ))}
                   </SelectGroup>
                 </FormItem>
-
-                <FormItem>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberZip" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'primaryZip',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-
-                <FormItem>
-                  <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="Recommendation code" />
-                      </p>
-                    }
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'prescriberCode',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </div>
-
-              <div style={{ flex: 1, lineHeight: 3.5 }}>
+              </Col>
+              <Col span="8" id="select-group-width">
+                {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
                     label="Prescriber type"
-                    style={{ width: 80 }}
+                    // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -483,12 +419,69 @@ export default class ClinicList extends Component<any, any> {
                     ))}
                   </SelectGroup>
                 </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberName" />
+                      </p>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriberName',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
 
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberZip" />
+                      </p>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'primaryZip',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="prescriberPhone" />
+                      </p>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'phone',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+                {/* </div> */}
+              </Col>
+              <Col span="8" id="select-group-width">
                 <FormItem>
                   <SelectGroup
                     defaultValue="true"
                     label="Prescriber status"
-                    style={{ width: 80 }}
+                    // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? '' : value;
                       this.onFormChange({
@@ -508,33 +501,57 @@ export default class ClinicList extends Component<any, any> {
                     </Option>
                   </SelectGroup>
                 </FormItem>
-              </div>
-            </div>
-            <div
-              style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}
-            >
-              <FormItem>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  shape="round"
-                  icon="search"
-                  style={{
-                    width: '100px',
-                    margin: '10px auto',
-                    textAlign: 'center'
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
-                  }}
-                >
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
-                </Button>
-              </FormItem>
-            </div>
+                {/* </div> */}
+                {/* </div> */}
+                {/* <div */}
+                {/* style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}
+            > */}
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="Recommendation code" />
+                      </p>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'prescriberCode',
+                        value
+                      });
+                    }}
+                  />
+                </FormItem>
+                {/* </div> */}
+              </Col>
+
+              <Col span="24" style={{ textAlign: 'center' }}>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    shape="round"
+                    icon="search"
+                    style={{
+                      width: '100px',
+                      margin: '10px auto',
+                      textAlign: 'center'
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.onSearch();
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </FormItem>
+                {/* </div> */}
+              </Col>
+            </Row>
           </Form>
           <div style={{ textAlign: 'left' }}>
             <Button

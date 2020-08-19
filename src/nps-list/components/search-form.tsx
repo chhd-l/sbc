@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Form, Select, Input, Button, DatePicker } from 'antd';
+import { Form, Select, Input, Button, DatePicker, Row, Col } from 'antd';
 import { SelectGroup, noop, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
@@ -50,95 +50,117 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <Form className="filter-content" layout="inline">
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="orderNumber" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'orderNo',
-                value
-              });
-            }}
-          />
-        </FormItem>
-        <FormItem style={{ width: '324px' }}>
-          <SelectGroup
-            defaultValue=""
-            label={<FormattedMessage id="consumerType" />}
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'consumerType',
-                value
-              });
-            }}
-          >
-            <Option value="">All</Option>
-            {customerTypeArr.map((item) => (
-              <Option value={item.value} key={item.id}>
-                {item.name}
-              </Option>
-            ))}
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="consumerName" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'customerName',
-                value
-              });
-            }}
-          />
-        </FormItem>
-        <FormItem style={{ width: '300px' }}>
-          <SelectGroup
-            defaultValue=""
-            getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="ratingWithComment" />}
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'commentStatus',
-                value
-              });
-            }}
-          >
-            <Option value="">All</Option>
-            <Option value="Y">Y</Option>
-            <Option value="N">N</Option>
-          </SelectGroup>
-        </FormItem>
-        <FormItem style={{ marginRight: '4%' }}>
-          <SelectGroup
-            defaultValue=""
-            getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="rating" />}
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'goodsScore',
-                value
-              });
-            }}
-            // value={form.get('goodsScore')}
-          >
-            <Option value="">All</Option>
-            <Option value="5">5 star</Option>
-            <Option value="4">4 star</Option>
-            <Option value="3">3 star</Option>
-            <Option value="2">2 star</Option>
-            <Option value="1">1 star</Option>
-          </SelectGroup>
-        </FormItem>
-        {/*本迭代未做,暂时注释,留到下个迭代*/}
-        {/*<FormItem>
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={
+                  <p>
+                    <FormattedMessage id="orderNumber" />
+                  </p>
+                }
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'orderNo',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={
+                  <p>
+                    <FormattedMessage id="consumerName" />
+                  </p>
+                }
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'customerName',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                defaultValue=""
+                label={<FormattedMessage id="consumerType" />}
+                style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'consumerType',
+                    value
+                  });
+                }}
+              >
+                <Option value="">All</Option>
+                {customerTypeArr.map((item) => (
+                  <Option value={item.value} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                defaultValue=""
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={<FormattedMessage id="ratingWithComment" />}
+                // style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'commentStatus',
+                    value
+                  });
+                }}
+              >
+                <Option value="">All</Option>
+                <Option value="Y">Y</Option>
+                <Option value="N">N</Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                defaultValue=""
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={<FormattedMessage id="rating" />}
+                // style={{ width: 80 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'goodsScore',
+                    value
+                  });
+                }}
+                // value={form.get('goodsScore')}
+              >
+                <Option value="">All</Option>
+                <Option value="5">5 star</Option>
+                <Option value="4">4 star</Option>
+                <Option value="3">3 star</Option>
+                <Option value="2">2 star</Option>
+                <Option value="1">1 star</Option>
+              </SelectGroup>
+            </FormItem>
+            {/*本迭代未做,暂时注释,留到下个迭代*/}
+            {/*<FormItem>
                     <SelectGroup
                         getPopupContainer={() => document.getElementById('page-content')}
                         label="是否修改"
@@ -157,44 +179,51 @@ export default class SearchForm extends React.Component<any, any> {
                         <Option value="0">否</Option>
                     </SelectGroup>
                 </FormItem>*/}
-        <FormItem style={{ marginTop: 2 }}>
-          <RangePicker
-            getCalendarContainer={() => document.getElementById('page-content')}
-            onChange={(e) => {
-              let beginTime = null;
-              let endTime = null;
-              if (e.length > 0) {
-                beginTime = e[0].format(Const.DAY_FORMAT);
-                endTime = e[1].format(Const.DAY_FORMAT);
-              }
-              onFormChange({
-                field: 'createTimeBegin',
-                value: beginTime + ' 00:00:00'
-              });
-              onFormChange({
-                field: 'createTimeEnd',
-                value: endTime + ' 23:59:59'
-              });
-            }}
-          />
-        </FormItem>
-
-        <FormItem>
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon="search"
-            shape="round"
-            onClick={(e) => {
-              e.preventDefault();
-              onSearch();
-            }}
-          >
-            <span>
-              <FormattedMessage id="search" />
-            </span>
-          </Button>
-        </FormItem>
+          </Col>
+          <Col span="8" id="Range-picker-width-zuixiao">
+            <FormItem>
+              <RangePicker
+                getCalendarContainer={() =>
+                  document.getElementById('page-content')
+                }
+                onChange={(e) => {
+                  let beginTime = null;
+                  let endTime = null;
+                  if (e.length > 0) {
+                    beginTime = e[0].format(Const.DAY_FORMAT);
+                    endTime = e[1].format(Const.DAY_FORMAT);
+                  }
+                  onFormChange({
+                    field: 'createTimeBegin',
+                    value: beginTime + ' 00:00:00'
+                  });
+                  onFormChange({
+                    field: 'createTimeEnd',
+                    value: endTime + ' 23:59:59'
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon="search"
+                shape="round"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSearch();
+                }}
+              >
+                <span>
+                  <FormattedMessage id="search" />
+                </span>
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     );
   }

@@ -15,7 +15,7 @@ export default class PublishButton extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      visible: true
+      visible: false
     };
   }
 

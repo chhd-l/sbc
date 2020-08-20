@@ -1,8 +1,8 @@
 import * as React from 'react';
-
-import { Modal, Icon, Input, Checkbox, Button } from 'antd';
-import { noop } from 'qmkit';
+import { Modal, Icon, Input, Checkbox, Button, message } from 'antd';
+import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
+import copy from 'copy-to-clipboard'; //拷贝插件
 
 @Relax
 /*发布*/
@@ -28,9 +28,24 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   handleOk = (e) => {
-    //console.log(e);
     const { sharing } = this.props.relaxProps;
-    console.log(sharing.toJS(), 111111111111111);
+    let sharingObj = sharing.toJS();
+    if (
+      sharingObj.firstName != '' &&
+      sharingObj.lastName != '' &&
+      sharingObj.email != '' &&
+      sharingObj.emailChecked != ''
+    ) {
+      if (util.checkEmail(sharingObj.email) == true) {
+        console.log(sharingObj, 111111111111111);
+      } else {
+        message.error('Email format error!');
+        return false;
+      }
+    } else {
+      message.error('* Cannot be empty!');
+      return false;
+    }
   };
 
   handleCancel = (e) => {
@@ -39,6 +54,14 @@ export default class DetailPublish extends React.Component<any, any> {
   handleSendAnother = (e) => {
     this.props.showModal(false);
   };
+  copyLink = (e) => {
+    if (copy(e)) {
+      message.success('Copy successfully!');
+    } else {
+      message.error('Copy failed!');
+    }
+  };
+
   //选择框
   CheckboxChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
@@ -166,17 +189,28 @@ export default class DetailPublish extends React.Component<any, any> {
             />
           </div>
           <div className="link space-between">
-            <div style={{ paddingTop: 4 }}>
+            <div style={{ paddingTop: 4, marginLeft: 2 }}>
               <Icon type="link" />
-              <span style={{ marginLeft: 5 }}>
-                The share link has been generated and will be invalid after 7
-                days
+              <span style={{ marginLeft: 5, color: '#8f0101' }}>
+                https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025
               </span>
             </div>
             <div>
-              <Button style={{ marginRight: 10 }}>Copy the link</Button>
-              <Button>Preview</Button>
+              <Button
+                onClick={() =>
+                  this.copyLink(
+                    'https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025'
+                  )
+                }
+              >
+                Copy the link
+              </Button>
             </div>
+          </div>
+          <div style={{ paddingTop: 4 }}>
+            <span style={{ marginLeft: 2, fontSize: 12, color: '#ccc' }}>
+              The share link has been generated and will be invalid after 7 days
+            </span>
           </div>
         </Modal>
       </div>

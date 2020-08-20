@@ -3,36 +3,17 @@ import * as React from 'react';
 import { Modal, Table, Input, Checkbox, Button } from 'antd';
 import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name'
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age'
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address'
-  }
-];
+import { List } from 'immutable';
+declare type IList = List<any>;
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`
-  });
-}
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
+      productForm: any;
+      productList: IList;
       onSharing: Function;
       onProductForm: Function;
       loading: boolean;
@@ -41,9 +22,11 @@ export default class DetailPublish extends React.Component<any, any> {
 
   static relaxProps = {
     sharing: 'sharing',
+    productForm: 'productForm',
     onSharing: noop,
     onProductForm: noop,
-    loading: 'loading'
+    loading: 'loading',
+    productList: 'productList'
   };
 
   constructor(props) {
@@ -79,11 +62,14 @@ export default class DetailPublish extends React.Component<any, any> {
     this.props.showModal(false);
   };
 
+  handleTableChange(pagination: any) {
+    const { onProductForm } = this.props.relaxProps;
+
+    onProductForm({ pageNum: pagination.current, pageSize: 10 });
+  }
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visible, ok, cancel } = nextProps;
     // 当传入的type发生变化的时候，更新state
-    console.log('+++');
-
     if (visible !== prevState.visible) {
       return {
         visible
@@ -93,18 +79,51 @@ export default class DetailPublish extends React.Component<any, any> {
     return null;
   }
   componentDidMount() {
-    console.log('+++');
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
   }
   render() {
-    const { loading, sharing, onSharing } = this.props.relaxProps;
+    const {
+      loading,
+      sharing,
+      onProductForm,
+      productForm,
+      productList
+    } = this.props.relaxProps;
     const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    };
+    const rowSelection = { selectedRowKeys, onChange: this.onSelectChange };
     const hasSelected = selectedRowKeys.length > 0;
+    const columns = [
+      {
+        title: 'No',
+        dataIndex: 'name',
+        render: (text) => <a>{text}</a>
+      },
+      {
+        title: 'Image',
+        dataIndex: 'Image'
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'Product'
+      },
+      {
+        title: 'SKU',
+        dataIndex: 'SKU'
+      },
+      {
+        title: 'Member Price',
+        dataIndex: 'Member'
+      },
+      {
+        title: 'Status',
+        dataIndex: 'Status'
+      },
+      {
+        title: 'Operation',
+        dataIndex: 'Operation'
+      }
+    ];
     return (
       <div id="publishButton">
         <Modal
@@ -133,19 +152,17 @@ export default class DetailPublish extends React.Component<any, any> {
             <Table
               rowSelection={rowSelection}
               columns={columns}
-              dataSource={data}
+              dataSource={productList ? productList.toJS() : []}
               loading={loading}
-              onChange={this.handleTableChange}
+              pagination={{
+                onChange: (pageNum, pageSize) => {
+                  onProductForm({ pageNum: pageNum - 1, pageSize });
+                }
+              }}
             />
           </div>
         </Modal>
       </div>
     );
-  }
-  handleTableChange(pagination: any) {
-    this.setState({
-      pagination: pagination
-    });
-    this.init({ pageNum: pagination.current, pageSize: 10 });
   }
 }

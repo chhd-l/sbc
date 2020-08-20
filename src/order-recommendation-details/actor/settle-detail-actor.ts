@@ -11,19 +11,16 @@ export default class SettleDetailActor extends Actor {
   //数据源
   defaultState() {
     return {
-      //当前的数据总数
-      total: 0,
-      //当前的分页条数
-      pageSize: 10,
-      // 当前页数，从1开始
-      currentPage: 1,
-      current: 1,
       sharing: {
         firstName: '',
         lastName: '',
         emailChecked: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        pageNum: 0,
+        pageSize: 10,
+        current: 1,
+        total: 0
       },
       onProductForm: {
         a: '',
@@ -35,19 +32,32 @@ export default class SettleDetailActor extends Actor {
   //初始化
   @Action('list:init')
   init(state: IMap, res) {
-    return state.set('dataList', res);
+    return state.set('dataList', fromJS(res));
+    const { content, pageSize, total } = res;
+    /* return state.withMutations((state) => {
+      state
+        .set('total', total)
+        .set('pageSize', pageSize)
+        .set('dataList', fromJS(content));
+    });*/
+  }
+
+  //productList初始化
+  @Action('productList:productInit')
+  productInit(state: IMap, res) {
+    return state.set('productList', fromJS(res));
   }
 
   //Sharing send
   @Action('detail:sharing')
-  sharing(state: IMap, { field, value }) {
-    return state.setIn(['sharing', field], value);
+  sharing(state: IMap, res) {
+    return state.set('sharing', res);
   }
 
   //product:onProductForm
   @Action('product:productForm')
   productForm(state: IMap, res) {
-    return state.set('onProductForm', res);
+    return state.set('productForm', res);
   }
 
   //loading

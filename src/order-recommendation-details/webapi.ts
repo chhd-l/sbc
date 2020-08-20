@@ -12,7 +12,7 @@ type TResult = {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function fetchFinanceRewardDetails(param = {}) {
-  return Fetch<TResult>('/trade/prescriber/page', {
+  return Fetch<TResult>('/trade', {
     method: 'POST',
     body: JSON.stringify(param)
   });

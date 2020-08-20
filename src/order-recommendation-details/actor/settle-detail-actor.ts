@@ -24,6 +24,10 @@ export default class SettleDetailActor extends Actor {
         emailChecked: '',
         email: '',
         phoneNumber: ''
+      },
+      onProductForm: {
+        a: '',
+        b: ''
       }
     };
   }
@@ -38,5 +42,22 @@ export default class SettleDetailActor extends Actor {
   @Action('detail:sharing')
   sharing(state: IMap, { field, value }) {
     return state.setIn(['sharing', field], value);
+  }
+
+  //product:onProductForm
+  @Action('product:productForm')
+  productForm(state: IMap, res) {
+    return state.set('onProductForm', res);
+  }
+
+  //loading
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

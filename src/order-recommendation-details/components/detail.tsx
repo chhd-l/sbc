@@ -1,18 +1,26 @@
 import React from 'react';
 
-import { Row, Col, Button } from 'antd';
+import { Table, Col, Button } from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
+import ProductTooltip from './productTooltip';
 
-import moment from 'moment';
+//import moment from 'moment';
 
-import { Const, util } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
-import { bool } from 'prop-types';
+//import { Const, util } from 'qmkit';
+//import { FormattedMessage } from 'react-intl';
+//import { bool } from 'prop-types';
 
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false
+    };
+  }
+
   props: {
     relaxProps?: {
       settlement: IMap;
@@ -24,17 +32,34 @@ export default class BillingDetails extends React.Component<any, any> {
     settlement: 'settlement',
     setName: 'setName'
   };
-
+  showProduct = (res) => {
+    this.setState({
+      visible: res
+    });
+  };
   render() {
     return (
       <div style={styles.main}>
         <div style={styles.nav}>Select Recommended Product</div>
         <div style={styles.btn}>
-          <Button type="primary" shape="round" icon="edit">
+          <Button
+            type="primary"
+            shape="round"
+            icon="edit"
+            onClick={() => this.showProduct(true)}
+          >
             Add Product
           </Button>
         </div>
         <DetailList />
+        {this.state.visible == true ? (
+          <ProductTooltip
+            visible={this.state.visible}
+            showModal={this.showProduct}
+          />
+        ) : (
+          <React.Fragment />
+        )}
       </div>
     );
   }

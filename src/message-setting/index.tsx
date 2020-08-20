@@ -16,15 +16,33 @@ class MessageSetting extends Component<any, any> {
           imgUrl:
             'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
         }
-      ]
+      ],
+      settingForm: {
+        sender: '',
+        accessKeyId: '',
+        accessKeySecret: '',
+        enable: false
+      }
     };
   }
   componentDidMount() {}
 
-  handleOk = (e) => {
-    console.log(e);
+  onFormChange = ({ field, value }) => {
+    let data = this.state.settingForm;
+    data[field] = value;
     this.setState({
-      visible: false
+      searchForm: data
+    });
+  };
+
+  handleOk = () => {
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        console.log(this.state.settingForm);
+        this.setState({
+          visible: false
+        });
+      }
     });
   };
 
@@ -52,7 +70,6 @@ class MessageSetting extends Component<any, any> {
                 size="small"
                 extra={
                   <a
-                    href="javascript:void(0);"
                     style={styles.btn}
                     onClick={() =>
                       this.setState({
@@ -100,26 +117,67 @@ class MessageSetting extends Component<any, any> {
             <FormItem label="Sender" style={styles.formItem}>
               {getFieldDecorator('sender', {
                 rules: [{ required: true, message: 'Please input Sender!' }]
-              })(<Input />)}
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'sender',
+                      value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
             <FormItem label="Access Key ID" style={styles.formItem}>
               {getFieldDecorator('accessKeyId', {
                 rules: [
                   { required: true, message: 'Please input Access Key ID!' }
                 ]
-              })(<Input />)}
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'accessKeyId',
+                      value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
             <FormItem label="Access Key Secret" style={styles.formItem}>
               {getFieldDecorator('accessKeySecret', {
                 rules: [
                   { required: true, message: 'Please input Access Key Secret!' }
                 ]
-              })(<Input />)}
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'accessKeySecret',
+                      value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
             <FormItem label="Enable" style={styles.formItem}>
               {getFieldDecorator('enable', {
-                rules: [{ required: true }]
-              })(<Switch checkedChildren="on" unCheckedChildren="off" />)}
+                valuePropName: 'checked'
+              })(
+                <Switch
+                  checkedChildren="on"
+                  unCheckedChildren="off"
+                  onChange={(checked) => {
+                    this.onFormChange({
+                      field: 'enable',
+                      value: checked
+                    });
+                  }}
+                />
+              )}
             </FormItem>
           </Form>
         </Modal>

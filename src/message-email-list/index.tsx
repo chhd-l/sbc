@@ -165,7 +165,10 @@ export default class ClinicList extends Component<any, any> {
         render: (text, record) => (
           <span>
             <Tooltip placement="top" title="Details">
-              <Link to={'/'} className="iconfont iconDetails"></Link>
+              <Link
+                to={'/message-detail/' + record.id}
+                className="iconfont iconDetails"
+              ></Link>
             </Tooltip>
           </span>
         )

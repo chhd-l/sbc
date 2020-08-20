@@ -46,7 +46,7 @@ class Overview extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: []
+        data: ['2.1', '2.5', '3.3', '5.28', '7.7', '7.12']
       },
       yAxis: {
         type: 'value',
@@ -73,103 +73,103 @@ class Overview extends Component<any, any> {
           name: 'requests',
           type: 'line',
           lineStyle: {
-            color: 'rgba(219, 219, 219)'
+            color: '#246201'
           },
           itemStyle: {
-            color: 'rgba(219, 219, 219)'
+            color: '#246201'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(219, 219, 219)',
+              borderColor: '#246201',
               borderWidth: 2
             }
           },
-          data: []
+          data: [1, 2, 3, 45, 21, 12]
         },
         {
           name: 'delivered',
           type: 'line',
           lineStyle: {
-            color: 'rgba(148, 208, 80)'
+            color: '#bcd514'
           },
           itemStyle: {
-            color: 'rgba(148, 208, 80)'
+            color: '#bcd514'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(148, 208, 80)',
+              borderColor: '#bcd514',
               borderWidth: 2
             }
           },
-          data: []
+          data: [1, 22, 30, 45, 2, 12]
         },
         {
           name: 'opened',
           type: 'line',
           lineStyle: {
-            color: 'rgba(0, 178, 155)'
+            color: '#028690'
           },
           itemStyle: {
-            color: 'rgba(0, 178, 155)'
+            color: '#028690'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(0, 178, 155)',
+              borderColor: '#028690',
               borderWidth: 2
             }
           },
-          data: []
+          data: [13, 24, 3, 5, 2, 12]
         },
         {
           name: 'clicked',
           type: 'line',
           lineStyle: {
-            color: 'rgba(59, 172, 255)'
+            color: '#59c1ca'
           },
           itemStyle: {
-            color: 'rgba(59, 172, 255)'
+            color: '#59c1ca'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(59, 172, 255)',
+              borderColor: '#59c1ca',
               borderWidth: 2
             }
           },
-          data: []
+          data: [11, 2, 33, 45, 1, 12]
         },
         {
           name: 'bounces',
           type: 'line',
           lineStyle: {
-            color: 'rgba(247, 184, 68)'
+            color: '#c042be'
           },
           itemStyle: {
-            color: 'rgba(247, 184, 68)'
+            color: '#c042be'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(247, 184, 68)',
+              borderColor: '#c042be',
               borderWidth: 2
             }
           },
-          data: []
+          data: [1, 22, 3, 5, 21, 12]
         },
         {
           name: 'spam reports',
           type: 'line',
           lineStyle: {
-            color: 'rgba(245, 34, 45)'
+            color: '#e04427'
           },
           itemStyle: {
-            color: 'rgba(245, 34, 45)'
+            color: '#e04427'
           },
           emphasis: {
             itemStyle: {
-              borderColor: 'rgba(245, 34, 45)',
+              borderColor: '#e04427',
               borderWidth: 2
             }
           },
-          data: []
+          data: [5, 2, 3, 5, 11, 12]
         }
       ]
     });
@@ -192,37 +192,49 @@ class Overview extends Component<any, any> {
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">REQUESTS</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#246201' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">DELIVERED</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#bcd514' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">OPENED</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#028690' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">CLICKED</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#59c1ca' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">BOUNCES</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#c042be' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={4}>
               <div className="overview-item-border">
                 <p className="overview-item-name">SPAM REPORTS</p>
-                <p className="overview-item-value">0</p>
+                <p className="overview-item-value" style={{ color: '#e04427' }}>
+                  0
+                </p>
               </div>
             </Col>
             <Col span={24}>

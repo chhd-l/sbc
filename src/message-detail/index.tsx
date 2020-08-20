@@ -31,6 +31,8 @@ class MessageDetails extends Component<any, any> {
         this.props.location.pathname === '/message-quick-send'
           ? 'Quick Send'
           : 'Message Details',
+      isDetail:
+        this.props.location.pathname === '/message-quick-send' ? false : true,
       emailStatus: 'Draft',
       objectTypeList: [],
       categoryList: [],
@@ -169,7 +171,13 @@ class MessageDetails extends Component<any, any> {
           <div>
             <div style={styles.title}>
               <span style={styles.titleText}>Basic Information</span>
-              <Tag>{emailStatus}</Tag>
+              {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
+              {emailStatus === 'Finish' ? (
+                <Tag color="#87d068">{emailStatus}</Tag>
+              ) : null}
+              {emailStatus === 'To do' ? (
+                <Tag color="#108ee9">{emailStatus}</Tag>
+              ) : null}
             </div>
             <Form
               layout="horizontal"

@@ -2,8 +2,8 @@ import { Actor, Action, IMap } from 'plume2';
 import { fromJS } from 'immutable';
 
 interface ICustomerResponse {
-  content: Array<any>;
-  totalElements: number;
+  recommendations: Array<any>;
+  total: number;
 }
 
 export default class ListActor extends Actor {
@@ -26,15 +26,12 @@ export default class ListActor extends Actor {
   }
 
   @Action('list:init')
-  init(state: IMap, res: ICustomerResponse) {
-    const { content, totalElements } = res;
-
-    return state.withMutations((state) => {
-      state
-        .set('total', totalElements || 0)
-        .set('dataList', fromJS(content || {}))
-        .set('selected', fromJS([]));
-    });
+  init(state: IMap, res) {
+    return;
+    state
+      .set('total', res.total || 0)
+      .set('dataList', res.recommendations)
+      .set('selected', fromJS([]));
   }
 
   @Action('list:checkedAll')

@@ -120,7 +120,7 @@ export default class ListView extends React.Component<any, any> {
       total: number;
       pageSize: number;
       currentPage: number;
-      dataList: TList;
+      dataList: any;
       needAudit: boolean;
 
       onChecked: Function;
@@ -175,7 +175,9 @@ export default class ListView extends React.Component<any, any> {
       currentPage,
       orderRejectModalVisible
     } = this.props.relaxProps;
-
+    setTimeout(() => {
+      console.log(dataList, 121221);
+    }, 1000);
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -273,10 +275,15 @@ export default class ListView extends React.Component<any, any> {
     return (
       dataList &&
       dataList.map((v, index) => {
-        const id = v.get('id');
-        const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
-        const num =
+        const id = '123'; //v.get('recommendationId');
+        // const Imgs = v.get('recommendationGoodsInfoRels')
+        setTimeout(() => {
+          console.log(v);
+        }, 1000);
+
+        //const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+        //const gifts = v.get('recommendationGoodsInfoRels') ? v.get('recommendationGoodsInfoRels') : fromJS([]);
+        /*const num =
           v
             .get('tradeItems')
             .concat(gifts)
@@ -297,7 +304,7 @@ export default class ListView extends React.Component<any, any> {
           orderType = 'PC order';
         } else if (orderSource == 'LITTLEPROGRAM') {
           orderType = 'Mini Program order';
-        }
+        }*/
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={9} style={{ padding: 0 }}>
@@ -383,107 +390,7 @@ export default class ListView extends React.Component<any, any> {
                         width: '100'
                       }}
                     >
-                      {/*商品图片*/}
-                      {v
-                        .get('tradeItems')
-                        .concat(gifts)
-                        .map((v, k) =>
-                          k < 4 ? (
-                            <img
-                              src={v.get('pic') ? v.get('pic') : defaultImg}
-                              className="img-item"
-                              // style={styles.imgItem}
-                              key={k}
-                            />
-                          ) : null
-                        )}
-
-                      {
-                        /*最后一张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 4 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
-                            //@ts-ignore
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />{' '}
-                              {v.get('tradeItems').concat(gifts).size}
-                              <FormattedMessage id="items" />
-                            </div>
-                          </div>
-                        ) : null
-                      }
-                    </td>
-                    <td style={{ width: '14.8%' }}>
-                      {/*客户名称*/}
-                      <p
-                        title={v.getIn(['buyer', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.getIn(['buyer', 'name'])}
-                      </p>
-                    </td>
-                    <td style={{ width: '16.5%' }}>
-                      {/*收件人姓名*/}
-                      {/* <FormattedMessage id="recipient" />： */}
-                      <p
-                        title={v.getIn(['consignee', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.getIn(['consignee', 'name'])}
-                      </p>
-
-                      {/* <br /> */}
-                      {/*收件人手机号码*/}
-                      {/* {v.getIn(['consignee', 'phone'])} */}
-                    </td>
-                    <td style={{ width: '13%' }}>
-                      ${tradePrice.toFixed(2)}
-                      <br />（{num} <FormattedMessage id="piece" />)
-                    </td>
-                    <td style={{ width: '12.5%' }}>
-                      <p
-                        title={v.getIn(['clinicsName', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.get('clinicsName')}
-                      </p>
-                    </td>
-                    {/*发货状态*/}
-
-                    {/*订单状态*/}
-                    <td style={{ width: '12.5%' }}>
-                      {flowState(v.getIn(['tradeState', 'flowState']))}
-                    </td>
-                    {/*支付状态*/}
-                    <td
-                      style={{ width: '12%', paddingRight: 22 }}
-                      className="operation-td"
-                    >
-                      <div
-                        style={{ color: '#e2001a', cursor: 'pointer' }}
-                        onClick={(e) => {
-                          history.push('/recomm-page-detail');
-                        }}
-                      >
-                        Detail
-                      </div>
+                      {id}
                     </td>
                   </tr>
                 </tbody>

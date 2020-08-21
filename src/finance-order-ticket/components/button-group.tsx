@@ -88,7 +88,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         </Menu.Item>
         <Menu.Item>
           <AuthWrapper functionName="exportOpenOrderInvoice">
-            <a href="#!" onClick={() => this._handleBatchExport()}>
+            <a href="#" onClick={() => this._handleBatchExport()}>
               {<FormattedMessage id="bulkExport" />}
             </a>
           </AuthWrapper>

@@ -621,7 +621,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             />
           }
         >
-          <a href="#!">
+          <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
         </Popover>

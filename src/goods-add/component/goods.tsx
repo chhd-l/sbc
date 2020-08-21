@@ -482,7 +482,7 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
           {/* <Col span={8}>
             <a
-              href="#!"
+              href="#"
               onClick={showCateModal}
               style={{ marginLeft: 10, lineHeight: '40px' }}
             >

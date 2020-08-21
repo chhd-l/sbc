@@ -83,34 +83,34 @@ class TabList extends React.Component<any, any> {
         {rowInfo.get('isDefault') == 1
           ? '-'
           : hasAuth
-            ? [
-                // 非默认模板可编辑
-                checkAuth('f_store_goods_tab_1') && (
-                  <a
-                    key="item1"
-                    style={styles.edit}
-                    onClick={this._showEditModal.bind(
-                      this,
-                      rowInfo.get('tabId'),
-                      rowInfo.get('tabName')
-                    )}
-                  >
-                    编辑
-                  </a>
-                ),
-                checkAuth('f_store_goods_tab_2') && (
-                  <Popconfirm
-                    title="确认删除?"
-                    onConfirm={() => {
-                      const { doDelete } = this.props.relaxProps;
-                      doDelete(rowInfo.get('tabId'));
-                    }}
-                  >
-                    <a href="#!">删除</a>
-                  </Popconfirm>
-                )
-              ]
-            : '-'}
+          ? [
+              // 非默认模板可编辑
+              checkAuth('f_store_goods_tab_1') && (
+                <a
+                  key="item1"
+                  style={styles.edit}
+                  onClick={this._showEditModal.bind(
+                    this,
+                    rowInfo.get('tabId'),
+                    rowInfo.get('tabName')
+                  )}
+                >
+                  编辑
+                </a>
+              ),
+              checkAuth('f_store_goods_tab_2') && (
+                <Popconfirm
+                  title="确认删除?"
+                  onConfirm={() => {
+                    const { doDelete } = this.props.relaxProps;
+                    doDelete(rowInfo.get('tabId'));
+                  }}
+                >
+                  <a href="#">删除</a>
+                </Popconfirm>
+              )
+            ]
+          : '-'}
       </div>
     );
   };
@@ -134,7 +134,10 @@ class TabList extends React.Component<any, any> {
     const { dataList, propSort } = this.props.relaxProps;
     const dragRow = dataList.toJS()[dragIndex];
     let sortList = update(dataList.toJS(), {
-      $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]]
+      $splice: [
+        [dragIndex, 1],
+        [hoverIndex, 0, dragRow]
+      ]
     });
     propSort(sortList);
   };

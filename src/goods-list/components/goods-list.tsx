@@ -271,7 +271,7 @@ export default class CateList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
           <a
-            href="#!"
+            href="#"
             onClick={() =>
               history.push({
                 pathname: `/goods-edit/${rowInfo.goodsId}`,
@@ -290,7 +290,7 @@ export default class CateList extends React.Component<any, any> {
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">
           <a
-            href="#!"
+            href="#"
             onClick={() =>
               history.push({
                 pathname: `/goods-edit/${rowInfo.goodsId}`,
@@ -304,7 +304,7 @@ export default class CateList extends React.Component<any, any> {
         {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 spuOnSale([rowInfo.goodsId]);
               }}
@@ -321,7 +321,7 @@ export default class CateList extends React.Component<any, any> {
         {rowInfo.addedFlag == 1 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 spuOffSale([rowInfo.goodsId]);
               }}
@@ -337,7 +337,7 @@ export default class CateList extends React.Component<any, any> {
         ) : null}
         <AuthWrapper functionName="f_goods_6">
           <a
-            href="#!"
+            href="#"
             onClick={() => {
               this._delete(rowInfo.goodsId);
             }}
@@ -387,7 +387,7 @@ export default class CateList extends React.Component<any, any> {
               />
               <AuthWrapper functionName="f_goods_sku_edit_2">
                 <a
-                  href="#!"
+                  href="#"
                   style={{
                     marginTop: 5,
                     marginRight: 5,
@@ -406,7 +406,7 @@ export default class CateList extends React.Component<any, any> {
               <AuthWrapper functionName="f_goods_sku_edit_3">
                 {record.priceType === 1 && !record.allowPriceSet ? null : (
                   <a
-                    href="#!"
+                    href="#"
                     style={{ marginTop: 5, display: 'inline-block' }}
                     onClick={() =>
                       history.push({

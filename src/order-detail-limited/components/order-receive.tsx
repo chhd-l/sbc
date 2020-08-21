@@ -69,10 +69,7 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'receiveTime',
       key: 'receiveTime',
       render: (receiveTime) =>
-        receiveTime &&
-        moment(receiveTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: 'Amount Received',
@@ -108,7 +105,7 @@ export default class OrderReceive extends React.Component<any, any> {
             trigger="click"
             content={<img style={styles.attachmentView} src={encloses} />}
           >
-            <a href="#!">
+            <a href="#">
               <img style={styles.attachment} src={encloses} />
             </a>
           </Popover>

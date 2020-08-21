@@ -81,12 +81,10 @@ export default class EndList extends React.Component<any, any> {
           <div>
             <AuthWrapper functionName={'f_flash_sale_goods_list'}>
               <a
-                href="#!"
+                href="#"
                 onClick={() => {
                   history.push({
-                    pathname: `/flash-sale-goods-list/${record.activityDate}/${
-                      record.activityTime
-                    }`
+                    pathname: `/flash-sale-goods-list/${record.activityDate}/${record.activityTime}`
                   });
                 }}
               >

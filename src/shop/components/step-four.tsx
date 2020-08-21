@@ -282,10 +282,7 @@ export default class StepFour extends React.Component<any, any> {
                   return (
                     <div>
                       {offlineAccount.toJS().length == 1 ? null : (
-                        <a
-                          href="#!"
-                          onClick={() => deleteAccount(index)}
-                        >
+                        <a href="#" onClick={() => deleteAccount(index)}>
                           <Icon
                             type="minus-circle-o"
                             style={{ color: '#999', fontSize: 24 }}

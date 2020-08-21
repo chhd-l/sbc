@@ -61,7 +61,7 @@ export default class StatisticsHeader extends React.Component<
                   onClick={() => this._change(0)}
                   className={clickKey == 0 ? 'statisticsItemCur'
                     : 'statisticsItem'}
-                  href="#!"
+                  href="#"
                 >
                   今天
                 </a>
@@ -72,7 +72,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(-1)}
                 className={clickKey == -1 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="#!"
+                href="#"
               >
                 昨天
               </a>
@@ -82,7 +82,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(1)}
                 className={clickKey == 1 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="#!"
+                href="#"
               >
                 最近7天
               </a>
@@ -92,7 +92,7 @@ export default class StatisticsHeader extends React.Component<
                 onClick={() => this._change(2)}
                 className={clickKey == 2 ? 'statisticsItemCur'
                   : 'statisticsItem'}
-                href="#!"
+                href="#"
               >
                 最近30天
               </a>

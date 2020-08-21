@@ -137,6 +137,7 @@ const Common = {
   REACT_APP_ISSUER : "https://accountdev.royalcanin.com/oauth2/default",
   REACT_APP_RedirectURL: "https://shopstg.royalcanin.com/implicit/callback",
   REACT_APP_RegisterPrefix : "https://prd-weu1-rc-df-ciam-app-webapp-uat.cloud-effem.com/?redirect_uri=",
-  REACT_APP_RegisterCallback : "https://shopstg.royalcanin.com?origin=register"
+  REACT_APP_RegisterCallback : "https://shopstg.royalcanin.com?origin=register",
+
 };
 export default Common;

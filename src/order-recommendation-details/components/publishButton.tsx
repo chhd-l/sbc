@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Table, Button } from 'antd';
 import { Relax } from 'plume2';
 import { AuthWrapper, history, noop, util } from 'qmkit';
@@ -11,14 +10,21 @@ export default class PublishButton extends React.Component<any, any> {
   props: {
     relaxProps?: {
       productForm: any;
+      createLink: any;
+      productselect: any;
       fetchCreateLink: Function;
+      onCreateLink: Function;
+      onCreate: Function;
     };
   };
 
   static relaxProps = {
     settleList: 'settleList',
     productselect: 'productselect',
-    productForm: noop
+    productForm: noop,
+    createLink: 'createLink',
+    onCreateLink: noop,
+    onCreate: noop
   };
 
   constructor(props) {
@@ -28,9 +34,31 @@ export default class PublishButton extends React.Component<any, any> {
     };
   }
   showModal = (res) => {
-    this.setState({
-      visible: res
+    const {
+      createLink,
+      productselect,
+      onCreateLink,
+      onCreate
+    } = this.props.relaxProps;
+
+    let arr = productselect.map((v, i) => {
+      console.log(v);
+      return {
+        goodsInfoId: v.goodsInfoId,
+        recommendationNumber: v.companyInfoId
+      };
     });
+    onCreateLink({
+      field: 'recommendationGoodsInfoRels',
+      value: arr
+    });
+    setTimeout(() => {
+      onCreate(createLink);
+    });
+    console.log(createLink.toJS(), 1111111111);
+    /*this.setState({
+      visible: res
+    });*/
   };
 
   render() {

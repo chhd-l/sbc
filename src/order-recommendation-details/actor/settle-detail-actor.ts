@@ -74,9 +74,9 @@ export default class SettleDetailActor extends Actor {
   }
 
   //create Link
-  @Action('create:createLink\n')
-  createLink(state: IMap, res) {
-    return state.set('createLink', res);
+  @Action('create:createLink')
+  createLink(state: IMap, { field, value }) {
+    return state.setIn(['createLink', field], value);
   }
 
   //loading

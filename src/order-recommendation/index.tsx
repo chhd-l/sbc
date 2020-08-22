@@ -3,13 +3,18 @@ import { StoreProvider } from 'plume2';
 import AppStore from './store';
 import { Breadcrumb } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb } from 'qmkit';
+import { AuthWrapper, BreadCrumb, history } from 'qmkit';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-tab-list';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OrderList extends Component<any, any> {
   store: AppStore;
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   componentDidMount() {
     const state = this.props.location.state;
@@ -32,7 +37,13 @@ export default class OrderList extends Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="Recommendationlist">
+      <AuthWrapper
+        functionName={
+          history.location.pathname == '/recomm-page'
+            ? 'Recommendationlist'
+            : 'Recommendationlist_prescriber'
+        }
+      >
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">

@@ -7,6 +7,8 @@ import PublishButton from './components/publishButton';
 
 import AppStore from './store';
 import './style.less';
+//import { Simulate } from 'react-dom/test-utils';
+//import input = Simulate.input;
 //import { FormattedMessage } from 'react-intl';
 //import SearchForm from './components/search-form';
 //import { __DEV__ } from 'typings/global';
@@ -19,6 +21,12 @@ export default class BillingDetails extends React.Component<any, any> {
     const { settleId } = this.props.match.params;
     this.store.init(settleId);
   }
+  onInput = (e) => {
+    this.store.onCreateLink({
+      field: 'recommendationReasons',
+      value: e.target.value
+    });
+  };
   render() {
     return (
       <div>
@@ -40,6 +48,7 @@ export default class BillingDetails extends React.Component<any, any> {
               size="large"
               placeholder="Input Recommended Reasons"
               style={{ border: '1px #dedede solid' }}
+              onChange={this.onInput}
             />
           </div>
         </div>

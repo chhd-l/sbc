@@ -117,6 +117,11 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-recommendation')
   },
+  {
+    path: '/recomm-page2',
+    exact: true,
+    asyncComponent: () => import('./order-recommendation')
+  },
   //订单-订单管理-推荐列表--详情
   {
     path: '/recomm-page-detail',

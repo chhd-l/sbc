@@ -9,7 +9,16 @@ import PublishTooltip from './publishTooltip';
 @Relax
 export default class PublishButton extends React.Component<any, any> {
   props: {
-    relaxProps?: {};
+    relaxProps?: {
+      productForm: any;
+      fetchCreateLink: Function;
+    };
+  };
+
+  static relaxProps = {
+    settleList: 'settleList',
+    productselect: 'productselect',
+    productForm: noop
   };
 
   constructor(props) {
@@ -18,12 +27,6 @@ export default class PublishButton extends React.Component<any, any> {
       visible: false
     };
   }
-
-  static relaxProps = {
-    settleList: 'settleList',
-    exportSettlementDetailList: noop
-  };
-
   showModal = (res) => {
     this.setState({
       visible: res

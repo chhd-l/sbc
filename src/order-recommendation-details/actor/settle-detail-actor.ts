@@ -23,8 +23,15 @@ export default class SettleDetailActor extends Actor {
         total: 0
       },
       onProductForm: {
-        a: '',
-        b: ''
+        pageNum: 0,
+        pageSize: 10,
+        current: 1,
+        total: 0
+      },
+      productselect: [], //添加选中商品
+      createLink: {
+        recommendationReasons: '',
+        recommendationGoodsInfoRels: []
       }
     };
   }
@@ -58,6 +65,18 @@ export default class SettleDetailActor extends Actor {
   @Action('product:productForm')
   productForm(state: IMap, res) {
     return state.set('productForm', res);
+  }
+
+  //product select
+  @Action('product:productselect')
+  productselect(state: IMap, res) {
+    return state.set('productselect', res);
+  }
+
+  //create Link
+  @Action('create:createLink\n')
+  createLink(state: IMap, res) {
+    return state.set('createLink', res);
   }
 
   //loading

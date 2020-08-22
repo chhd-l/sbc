@@ -77,7 +77,8 @@ const styles = {
     padding: 5
   },
   btn: {
-    paddingTop: 5
+    paddingTop: 5,
+    marginBottom: 10
   },
   static: {
     background: '#fff',

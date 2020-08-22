@@ -8,7 +8,9 @@ import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
+import { accDiv } from '../../../web_modules/qmkit/float';
 const defaultImg = require('../../goods-list/img/none.png');
+import moment from 'moment';
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
@@ -122,7 +124,6 @@ export default class ListView extends React.Component<any, any> {
       currentPage: number;
       dataList: any;
       needAudit: boolean;
-
       onChecked: Function;
       onCheckedAll: Function;
       allChecked: boolean;
@@ -143,12 +144,10 @@ export default class ListView extends React.Component<any, any> {
     total: 'total',
     //当前的分页条数
     pageSize: 'pageSize',
-
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
     needAudit: 'needAudit',
-
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -175,9 +174,7 @@ export default class ListView extends React.Component<any, any> {
       currentPage,
       orderRejectModalVisible
     } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(dataList, 121221);
-    }, 1000);
+
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -189,7 +186,7 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%' }}>
+                      {/*<th style={{ width: '5%' }}>
                         <Checkbox
                           style={{ borderSpacing: 0 }}
                           checked={allChecked}
@@ -198,7 +195,7 @@ export default class ListView extends React.Component<any, any> {
                             onCheckedAll(checked);
                           }}
                         />
-                      </th>
+                      </th>*/}
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
@@ -271,19 +268,23 @@ export default class ListView extends React.Component<any, any> {
 
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
+    let list = dataList.toJS();
+    return list.map((v, index) => {
+      const id = v.recommendationId;
+      const createTime = v.createTime;
+      const img = v.recommendationGoodsInfoRels
+        ? v.recommendationGoodsInfoRels
+        : [];
+      const a = [{ a: 1 }, { b: 2 }];
 
-    return (
-      dataList &&
-      dataList.map((v, index) => {
-        const id = '123'; //v.get('recommendationId');
-        // const Imgs = v.get('recommendationGoodsInfoRels')
-        setTimeout(() => {
-          console.log(v);
-        }, 1000);
+      // const Imgs = v.get('recommendationGoodsInfoRels')
+      setTimeout(() => {
+        console.log(img);
+      }, 1000);
 
-        //const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        //const gifts = v.get('recommendationGoodsInfoRels') ? v.get('recommendationGoodsInfoRels') : fromJS([]);
-        /*const num =
+      //const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+      //const gifts = v.get('recommendationGoodsInfoRels') ? v.get('recommendationGoodsInfoRels') : fromJS([]);
+      /*const num =
           v
             .get('tradeItems')
             .concat(gifts)
@@ -305,24 +306,26 @@ export default class ListView extends React.Component<any, any> {
         } else if (orderSource == 'LITTLEPROGRAM') {
           orderType = 'Mini Program order';
         }*/
-        return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-            <td colSpan={9} style={{ padding: 0 }}>
-              <table
-                className="ant-table-self"
-                style={{ border: '1px solid #ddd' }}
-              >
-                <thead>
-                  <tr>
-                    <td colSpan={9} style={{ padding: 0, color: '#999' }}>
-                      <div
-                        style={{
-                          marginTop: 12,
-                          borderBottom: '1px solid #F5F5F5',
-                          height: 40
-                        }}
-                      >
-                        <span style={{ marginLeft: '1%' }}>
+      return (
+        <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+          <td colSpan={9} style={{ padding: 0 }}>
+            <table
+              className="ant-table-self"
+              style={{ border: '1px solid #ddd' }}
+            >
+              <thead>
+                <tr>
+                  <td colSpan={9} style={{ padding: 0, color: '#999' }}>
+                    <div
+                      style={{
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                        paddingLeft: 12,
+                        borderBottom: '1px solid #F5F5F5',
+                        fontSize: 12
+                      }}
+                    >
+                      {/*<span style={{ marginLeft: '1%' }}>
                           <Checkbox
                             checked={v.get('checked')}
                             onChange={(e) => {
@@ -330,76 +333,88 @@ export default class ListView extends React.Component<any, any> {
                               onChecked(index, checked);
                             }}
                           />
-                        </span>
-
-                        <div style={{ width: 310, display: 'inline-block' }}>
-                          <span
-                            style={{
-                              marginLeft: 20,
-                              color: '#000',
-                              display: 'inline-block',
-                              position: 'relative'
-                            }}
-                          >
-                            {id}{' '}
-                            {v.get('platform') != 'CUSTOMER' && (
-                              <span style={styles.platform}>
-                                <FormattedMessage id="order.valetOrder" />
-                              </span>
-                            )}
-                            {/* {orderType != '' && (
-                              <span style={styles.platform}>{orderType}</span>
-                            )} */}
-                            {v.get('grouponFlag') && (
-                              <span style={styles.platform}>
-                                <FormattedMessage id="order.fightTogether" />
-                              </span>
-                            )}
-                            {v.get('isAutoSub') && (
-                              <span style={styles.platform}>Subscription</span>
-                            )}
-                            {v.get('isAutoSub') ? (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  left: '0',
-                                  top: '20px'
-                                }}
-                              >
-                                {v.get('subscribeId')}
-                              </span>
-                            ) : (
-                              ''
-                            )}
-                          </span>
-                        </div>
+                        </span>*/}
+                      <div style={{ width: 310, display: 'inline-block' }}>
+                        <span> {id}</span>
                       </div>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style={{ width: '3%' }} />
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        flexWrap: 'wrap',
-                        padding: '16px 0',
-                        width: '100'
-                      }}
-                    >
-                      {id}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        );
-      })
-    );
+                      <div style={{ width: 310, display: 'inline-block' }}>
+                        <span>
+                          {' '}
+                          Created Time:{' '}
+                          {moment(v.createTime).format('YYYY-MM-DD')}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ width: '1%' }} />
+                  <td
+                    style={{
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      flexWrap: 'wrap',
+                      padding: '16px 0',
+                      width: '100px'
+                    }}
+                  >
+                    {img.map((item, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={item.goodsInfo.goodsInfoImg}
+                          width="40"
+                        />
+                      );
+                    })}
+                  </td>
+                  <td style={{ width: '16%' }}>
+                    {v.consumerLastName != null ? v.consumerLastName : '--'}
+                  </td>
+                  <td style={{ width: '18%' }}>
+                    {v.consumerEmail != null ? v.consumerEmail : '--'}
+                  </td>
+                  <td style={{ width: '14%' }}>
+                    {img.map((item, index) => {
+                      return (
+                        <div>
+                          {item.goodsInfo.retailPrice != null
+                            ? item.goodsInfo.retailPrice
+                            : '--'}
+                        </div>
+                      );
+                    })}
+                  </td>
+                  <td style={{ width: '13%' }}>
+                    {v.linkStatus != null ? v.linkStatus : '--'}
+                  </td>
+                  <td style={{ width: '15%' }}>
+                    {v.prescriberId != null ? v.prescriberId : '--'}
+                  </td>
+                  <td
+                    style={{
+                      width: '10%',
+                      color: '#E1021A',
+                      cursor: 'pointer',
+                      textAlign: 'right',
+                      paddingRight: 20
+                    }}
+                    onClick={(e) => {
+                      history.push('/recomm-page-detail');
+                    }}
+                  >
+                    Details
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      );
+    });
   }
 
   /**

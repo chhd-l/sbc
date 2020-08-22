@@ -83,4 +83,16 @@ export default class AppStore extends Store {
   onCheckedAll = (checked: boolean) => {
     this.dispatch('list:checkedAll', checked);
   };
+
+  /**
+   * 单选
+   * @param index
+   * @param checked
+   */
+  onChecked = (index: number, checked: boolean) => {
+    this.dispatch('list:check', {
+      index,
+      checked
+    });
+  };
 }

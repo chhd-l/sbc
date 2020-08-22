@@ -37,17 +37,18 @@ export default class AppStore extends Store {
     }
   };
   onProductForm = async (param?: any) => {
-    param = Object.assign(this.state().get('sharing').toJS(), param);
+    param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchFinanceRewardDetails(param);
+    const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
-      param.total = res1.res.context.total;
-
-      //param.total = res1.res.context.total
+      param.total = res1.res.context.goodsInfoPage.total;
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch('product:productList', res1.res.context.content);
+        this.dispatch(
+          'productList:productInit',
+          res1.res.context.goodsInfoPage.content
+        );
       });
     } else {
       message.error(res1.res.message);
@@ -55,6 +56,16 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       }
     }
+  };
+
+  //productselect
+  onProductselect = (addProduct) => {
+    this.dispatch('product:productselect', addProduct);
+  };
+
+  //Create Link
+  fetchCreateLink = (Link) => {
+    this.dispatch('create:createLink', Link);
   };
 
   //Send & Another

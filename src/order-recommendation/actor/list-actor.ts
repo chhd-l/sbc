@@ -26,12 +26,14 @@ export default class ListActor extends Actor {
   }
 
   @Action('list:init')
-  init(state: IMap, res) {
-    return;
-    state
-      .set('total', res.total || 0)
-      .set('dataList', res.recommendations)
-      .set('selected', fromJS([]));
+  init(state: IMap, res: ICustomerResponse) {
+    const { recommendations, total } = res;
+    return state.withMutations((state) => {
+      state
+        .set('total', total || 0)
+        .set('dataList', fromJS(recommendations || {}))
+        .set('selected', fromJS([]));
+    });
   }
 
   @Action('list:checkedAll')

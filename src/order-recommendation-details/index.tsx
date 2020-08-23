@@ -31,10 +31,10 @@ export default class BillingDetails extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>New Recommendation</Breadcrumb.Item>
+          <Breadcrumb.Item>New Prescription portal</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title="New Recommendation" />
+          <Headline title="New Prescription portal" />
         </div>
         <div className="container" id="recommendation">
           <Detail />

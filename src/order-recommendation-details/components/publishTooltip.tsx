@@ -11,25 +11,49 @@ export default class DetailPublish extends React.Component<any, any> {
     relaxProps?: {
       sharing: any;
       getLink: any;
+      send: any;
       onSharing: Function;
+      onSend: Function;
     };
   };
 
   static relaxProps = {
     sharing: 'sharing',
     getLink: 'getLink',
-    onSharing: noop
+    send: 'send',
+    onSharing: noop,
+    onSend: noop
   };
 
   constructor(props) {
     super(props);
     this.state = {
       visible: props.visible,
-      show: false
+      show: false,
+      clear: ''
     };
   }
 
-  handleOk = (e) => {
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {
+    const { send, onSharing } = this.props.relaxProps;
+    console.log(send, 1111111111);
+    if (send === true) {
+    }
+  }
+
+  componentWillUnmount() {
+    /*const { send, onSharing } = this.props.relaxProps;
+    onSharing({
+      field: 'firstName',
+      value: 11111
+    });*/
+  }
+
+  verification = () => {
     const { sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
     if (
@@ -39,7 +63,8 @@ export default class DetailPublish extends React.Component<any, any> {
       sharingObj.emailChecked != ''
     ) {
       if (util.checkEmail(sharingObj.email) == true) {
-        console.log(sharingObj, 111111111111111);
+        return sharingObj;
+        //onSend(Object.assign({}, sharingObj, {id:getLink}))
       } else {
         message.error('Email format error!');
         return false;
@@ -50,12 +75,23 @@ export default class DetailPublish extends React.Component<any, any> {
     }
   };
 
+  handleOk = (e) => {
+    const { onSend, getLink } = this.props.relaxProps;
+    onSend('send', Object.assign({}, this.verification(), { id: getLink }));
+  };
+
   handleCancel = (e) => {
     this.props.showModal(false);
   };
-  handleSendAnother = (e) => {
-    this.props.showModal(false);
+
+  handleSendAnother = async (param?: any) => {
+    const { onSend, getLink, send, onSharing } = this.props.relaxProps;
+    await onSend(
+      'addSend',
+      Object.assign({}, this.verification(), { id: getLink })
+    );
   };
+
   copyLink = (e) => {
     if (copy(e)) {
       message.success('Copy successfully!');
@@ -82,6 +118,7 @@ export default class DetailPublish extends React.Component<any, any> {
 
   render() {
     const { sharing, onSharing, getLink } = this.props.relaxProps;
+    const clear = this.state.clear;
     return (
       <div id="publishButton">
         <Modal
@@ -194,13 +231,15 @@ export default class DetailPublish extends React.Component<any, any> {
             <div style={{ paddingTop: 4, marginLeft: 2 }}>
               <Icon type="link" />
               <span style={{ marginLeft: 5, color: '#8f0101' }}>
-                https://shopuat.466920.com/details/{getLink}
+                https://shopuat.466920.com/recommendation/{getLink}
               </span>
             </div>
             <div>
               <Button
                 onClick={() =>
-                  this.copyLink(`https://shopuat.466920.com/details/${getLink}`)
+                  this.copyLink(
+                    `https://shopuat.466920.com/recommendation/${getLink}`
+                  )
                 }
               >
                 Copy the link

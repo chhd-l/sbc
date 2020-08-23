@@ -33,3 +33,10 @@ export function fetchCreateLink(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+export function fetchModify(param = {}) {
+  return Fetch<TResult>('/recommendation/modify', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

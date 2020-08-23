@@ -19,7 +19,7 @@ export default class AppStore extends Store {
   }
 
   init = async (param?: any) => {
-    param = Object.assign(this.state().get('sharing').toJS(), param);
+    param = Object.assign;
     this.dispatch('loading:start');
     const res1 = await webapi.fetchFinanceRewardDetails(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
@@ -77,5 +77,24 @@ export default class AppStore extends Store {
   //Send & Another
   onSharing = (sharing) => {
     this.dispatch('detail:sharing', sharing);
+  };
+
+  //Send
+  onSend = async (type, param?: any) => {
+    const res = await webapi.fetchModify(param);
+    if (res.res.code === Const.SUCCESS_CODE) {
+      message.success('send successfully!');
+      if (type == 'send') {
+        history.goBack();
+      } else {
+        this.dispatch('get:send', true);
+      }
+    } else {
+      message.error(res.res.message);
+      if (res.res.code === 'K-110001') {
+        message.success('send failed!');
+        return false;
+      }
+    }
   };
 }

@@ -60,7 +60,7 @@ export default class PublishButton extends React.Component<any, any> {
         <Button
           shape="round"
           style={{ width: 80, marginRight: 10 }}
-          href="/recomm-page"
+          //href="/recomm-page"
           onClick={() => history.goBack()}
         >
           Exit

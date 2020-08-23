@@ -33,7 +33,8 @@ export default class SettleDetailActor extends Actor {
         recommendationReasons: '',
         recommendationGoodsInfoRels: []
       },
-      getLink: ''
+      getLink: '',
+      send: ''
     };
   }
 
@@ -58,8 +59,9 @@ export default class SettleDetailActor extends Actor {
 
   //Sharing send
   @Action('detail:sharing')
-  sharing(state: IMap, res) {
-    return state.set('sharing', res);
+  sharing(state: IMap, { field, value }) {
+    return state.setIn(['sharing', field], value);
+    //return state.set('sharing', res);
   }
 
   //product:onProductForm
@@ -84,6 +86,12 @@ export default class SettleDetailActor extends Actor {
   @Action('get:getLink')
   getLink(state: IMap, res) {
     return state.set('getLink', res);
+  }
+
+  //Send
+  @Action('get:send')
+  send(state: IMap, res) {
+    return state.set('send', res);
   }
 
   //loading

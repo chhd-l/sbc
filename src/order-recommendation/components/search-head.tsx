@@ -123,7 +123,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <div>
         <div className="space-between-align-items">
-          <Headline title="Recommendation list" />
+          <Headline title="Prescription portal" />
           <Button
             type="primary"
             icon="plus"

@@ -57,12 +57,12 @@ export default class DetailPublish extends React.Component<any, any> {
     const { sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
     if (
-      sharingObj.firstName != '' &&
-      sharingObj.lastName != '' &&
-      sharingObj.email != '' &&
-      sharingObj.emailChecked != ''
+      sharingObj.consumerFirstName != '' &&
+      sharingObj.consumerLastName != '' &&
+      sharingObj.consumerEmail != '' &&
+      sharingObj.emailConsent != ''
     ) {
-      if (util.checkEmail(sharingObj.email) == true) {
+      if (util.checkEmail(sharingObj.consumerEmail) == true) {
         return sharingObj;
         //onSend(Object.assign({}, sharingObj, {id:getLink}))
       } else {
@@ -153,11 +153,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input First Name"
-              value={sharing.get('firstName')}
+              value={sharing.get('consumerFirstName')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'firstName',
+                  field: 'consumerFirstName',
                   value
                 });
               }}
@@ -170,11 +170,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input Last Name"
-              value={sharing.get('lastName')}
+              value={sharing.get('consumerLastName')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'lastName',
+                  field: 'consumerLastName',
                   value
                 });
               }}
@@ -187,7 +187,7 @@ export default class DetailPublish extends React.Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).checked;
                   onSharing({
-                    field: 'emailChecked',
+                    field: 'emailConsent',
                     value
                   });
                 }}
@@ -202,11 +202,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input E-mail"
-              value={sharing.get('email')}
+              value={sharing.get('consumerEmail')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'email',
+                  field: 'consumerEmail',
                   value
                 });
               }}
@@ -217,11 +217,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input the phone number"
-              value={sharing.get('phoneNumber')}
+              value={sharing.get('consumerPhoneNumber')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'phoneNumber',
+                  field: 'consumerPhoneNumber',
                   value
                 });
               }}

@@ -12,11 +12,11 @@ export default class SettleDetailActor extends Actor {
   defaultState() {
     return {
       sharing: {
-        firstName: '',
-        lastName: '',
-        emailChecked: '',
-        email: '',
-        phoneNumber: '',
+        consumerFirstName: '',
+        consumerLastName: '',
+        emailConsent: '',
+        consumerEmail: '',
+        consumerPhoneNumber: '',
         pageNum: 0,
         pageSize: 10,
         current: 1,

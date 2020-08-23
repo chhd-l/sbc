@@ -32,7 +32,8 @@ export default class SettleDetailActor extends Actor {
       createLink: {
         recommendationReasons: '',
         recommendationGoodsInfoRels: []
-      }
+      },
+      getLink: ''
     };
   }
 
@@ -77,6 +78,12 @@ export default class SettleDetailActor extends Actor {
   @Action('create:createLink')
   createLink(state: IMap, { field, value }) {
     return state.setIn(['createLink', field], value);
+  }
+
+  //get Link
+  @Action('get:getLink')
+  getLink(state: IMap, res) {
+    return state.set('getLink', res);
   }
 
   //loading

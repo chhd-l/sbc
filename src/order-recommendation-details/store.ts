@@ -67,9 +67,11 @@ export default class AppStore extends Store {
   onCreateLink = (Link) => {
     this.dispatch('create:createLink', Link);
   };
+
+  //Get Link
   onCreate = async (param?: any) => {
     const res = await webapi.fetchCreateLink(param);
-    console.log(param);
+    this.dispatch('get:getLink', res.res.context);
   };
 
   //Send & Another

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, message } from 'antd';
 import { Relax } from 'plume2';
 import { AuthWrapper, history, noop, util } from 'qmkit';
 import '../style.less';
@@ -41,24 +41,17 @@ export default class PublishButton extends React.Component<any, any> {
       onCreate
     } = this.props.relaxProps;
 
-    let arr = productselect.map((v, i) => {
-      console.log(v);
-      return {
-        goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.companyInfoId
-      };
-    });
-    onCreateLink({
-      field: 'recommendationGoodsInfoRels',
-      value: arr
-    });
-    setTimeout(() => {
-      onCreate(createLink);
-    });
-    console.log(createLink.toJS(), 1111111111);
-    /*this.setState({
-      visible: res
-    });*/
+    if (
+      createLink.toJS().recommendationReasons != '' &&
+      createLink.toJS().recommendationReasons != []
+    ) {
+      onCreate(createLink.toJS());
+      this.setState({
+        visible: res
+      });
+    } else {
+      message.error('Cannot be empty !');
+    }
   };
 
   render() {

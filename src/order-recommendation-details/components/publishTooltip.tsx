@@ -10,12 +10,14 @@ export default class DetailPublish extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
+      getLink: any;
       onSharing: Function;
     };
   };
 
   static relaxProps = {
     sharing: 'sharing',
+    getLink: 'getLink',
     onSharing: noop
   };
 
@@ -79,7 +81,7 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   render() {
-    const { sharing, onSharing } = this.props.relaxProps;
+    const { sharing, onSharing, getLink } = this.props.relaxProps;
     return (
       <div id="publishButton">
         <Modal
@@ -192,15 +194,13 @@ export default class DetailPublish extends React.Component<any, any> {
             <div style={{ paddingTop: 4, marginLeft: 2 }}>
               <Icon type="link" />
               <span style={{ marginLeft: 5, color: '#8f0101' }}>
-                https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025
+                https://shopuat.466920.com/details/{getLink}
               </span>
             </div>
             <div>
               <Button
                 onClick={() =>
-                  this.copyLink(
-                    'https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025'
-                  )
+                  this.copyLink(`https://shopuat.466920.com/details/${getLink}`)
                 }
               >
                 Copy the link

@@ -21,7 +21,7 @@ export default class AppStore extends Store {
   init = async (param?: any) => {
     param = Object.assign;
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchFinanceRewardDetails(param);
+    const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.total;
       //param.total = res1.res.context.total

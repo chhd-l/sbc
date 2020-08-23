@@ -85,6 +85,13 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   handleSendAnother = async (param?: any) => {
+    // const { onSharing } = this.props.relaxProps;
+
+    /*onSharing({
+        field: 'consumerFirstName',
+        value:1111111111111111
+      });*/
+
     const { onSend, getLink, send, onSharing } = this.props.relaxProps;
     await onSend(
       'addSend',
@@ -188,7 +195,7 @@ export default class DetailPublish extends React.Component<any, any> {
                   const value = (e.target as any).checked;
                   onSharing({
                     field: 'emailConsent',
-                    value
+                    value: value == true ? 1 : 0
                   });
                 }}
               />

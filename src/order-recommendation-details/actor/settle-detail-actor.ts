@@ -14,7 +14,7 @@ export default class SettleDetailActor extends Actor {
       sharing: {
         consumerFirstName: '',
         consumerLastName: '',
-        emailConsent: '',
+        emailConsent: 0,
         consumerEmail: '',
         consumerPhoneNumber: '',
         pageNum: 0,

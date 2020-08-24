@@ -26,7 +26,8 @@ export default class GoodsSpecActor extends Actor {
         }
       ],
       stockChecked: false,
-      marketPriceChecked: false
+      marketPriceChecked: false,
+      baseSpecId: 0
     };
   }
 
@@ -167,7 +168,9 @@ export default class GoodsSpecActor extends Actor {
     state,
     { id, key, value }: { id: string; key: string; value: string }
   ) {
-    // return
+    if (key === 'baseSpecId') {
+      return state.set('baseSpecId', fromJS(value));
+    }
     if (key === 'subscriptionStatus') {
       let goodsList = state.toJS()['goodsList'];
       goodsList.map((el) => {

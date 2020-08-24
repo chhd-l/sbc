@@ -1191,7 +1191,8 @@ export default class AppStore extends Store {
           subscriptionStatus:
             item.get('subscriptionStatus') === undefined
               ? 1
-              : item.get('subscriptionStatus')
+              : item.get('subscriptionStatus'),
+          description: item.get('description')
         })
       );
     });

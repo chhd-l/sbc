@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, Row, Col } from 'antd';
 import { noop, SelectGroup } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
@@ -32,46 +32,51 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <Form className="filter-content" layout="inline">
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="employeeName" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'userName',
-                value
-              });
-            }}
-          />
-        </FormItem>
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="employeeName  " />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'userName',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="employeeEmail" />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'email',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="employeeNo" />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'jobNo',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
 
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="employeeEmail" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'email',
-                value
-              });
-            }}
-          />
-        </FormItem>
-
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="employeeNo" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'jobNo',
-                value
-              });
-            }}
-          />
-        </FormItem>
-
-        {/* <FormItem>
+          {/* <FormItem>
           <Input
             addonBefore={<FormattedMessage id="basicSetting" />}
             onChange={(e) => {
@@ -84,7 +89,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem> */}
 
-        {/* <FormItem>
+          {/* <FormItem>
           <Input
             addonBefore={<FormattedMessage id="basicSetting" />}
             onChange={(e) => {
@@ -97,7 +102,7 @@ export default class SearchForm extends React.Component<any, any> {
           />
         </FormItem> */}
 
-        {/* <FormItem>
+          {/* <FormItem>
           <SelectGroup
             label={<FormattedMessage id="roles" />}
             mode="multiple"
@@ -114,28 +119,32 @@ export default class SearchForm extends React.Component<any, any> {
             {this._renderOption(roles)}
           </SelectGroup>
         </FormItem> */}
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label={<FormattedMessage id="status" />}
-            style={{ width: 80 }}
-            defaultValue={null}
-            onChange={(e) => {
-              onFormChange({
-                field: 'accountState',
-                value: e
-              });
-            }}
-          >
-            <Option value={null} key={null}>
-              {'All'}
-            </Option>
-            <Option value={'0'}>Enable</Option>
-            <Option value={'1'}>Disabled</Option>
-          </SelectGroup>
-        </FormItem>
 
-        {/* <FormItem>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={<FormattedMessage id="status" />}
+                // style={{ width: 300 }}
+                defaultValue={null}
+                onChange={(e) => {
+                  onFormChange({
+                    field: 'accountState',
+                    value: e
+                  });
+                }}
+              >
+                <Option value={null} key={null}>
+                  {'All'}
+                </Option>
+                <Option value={'0'}>Enable</Option>
+                <Option value={'1'}>Disabled</Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="supervisor" />}
@@ -154,7 +163,7 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem> */}
 
-        {/* <FormItem>
+          {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="assistant" />}
@@ -173,7 +182,7 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem> */}
 
-        {/* <FormItem>
+          {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="whetherToActivateTheMemberAccount" />}
@@ -192,19 +201,22 @@ export default class SearchForm extends React.Component<any, any> {
           </SelectGroup>
         </FormItem> */}
 
-        <FormItem>
-          <Button
-            icon="search"
-            type="primary"
-            shape="round"
-            onClick={() => onSearch()}
-            htmlType="submit"
-          >
-            <span>
-              <FormattedMessage id="search" />
-            </span>
-          </Button>
-        </FormItem>
+          <Col span="24" style={{ textAlign: 'center' }}>
+            <FormItem>
+              <Button
+                icon="search"
+                type="primary"
+                shape="round"
+                onClick={() => onSearch()}
+                htmlType="submit"
+              >
+                <span>
+                  <FormattedMessage id="search" />
+                </span>
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     );
   }

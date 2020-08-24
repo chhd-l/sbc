@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { noop, AuthWrapper } from 'qmkit';
 import { List, fromJS } from 'immutable';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
-import { Modal, Pagination, message } from 'antd';
+import { Modal, Pagination, message, Tooltip } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
 import { FormattedMessage } from 'react-intl';
@@ -100,12 +100,15 @@ export default class VideoList extends React.Component<any, any> {
                   {item.get('artworkUrl')}
                 </a>
                 <AuthWrapper functionName="f_videoStore_2">
-                  <a
-                    onClick={this._delete.bind(this, item.get('resourceId'))}
-                    style={styles.videoItem}
-                  >
-                    <FormattedMessage id="delete" />
-                  </a>
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      onClick={this._delete.bind(this, item.get('resourceId'))}
+                      style={styles.videoItem}
+                      className="iconfont iconDelete"
+                    >
+                      {/*<FormattedMessage id="delete" />*/}
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               </div>
             );

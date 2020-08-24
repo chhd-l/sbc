@@ -269,7 +269,7 @@ export default class AppStore extends Store {
     });
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('移动成功');
+      message.success('Move successfully');
       this.showMoveImageModal(false);
       this.queryImagePage();
     } else {
@@ -310,7 +310,7 @@ export default class AppStore extends Store {
 
     const result = (await deleteImage(imageIds)) as any;
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('删除成功');
+      message.success('Successfully deleted');
       this.queryImagePage();
     } else {
       message.error(result.res.message);

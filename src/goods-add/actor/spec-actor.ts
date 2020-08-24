@@ -26,7 +26,8 @@ export default class GoodsSpecActor extends Actor {
         }
       ],
       stockChecked: false,
-      marketPriceChecked: false
+      marketPriceChecked: false,
+      baseSpecId: 0
     };
   }
 
@@ -63,11 +64,17 @@ export default class GoodsSpecActor extends Actor {
   @Action('goodsSpecActor: init')
   init(
     state,
-    { goodsSpecs, goodsList }: { goodsSpecs: IList; goodsList: IList }
+    {
+      goodsSpecs,
+      goodsList,
+      baseSpecId
+    }: { goodsSpecs: IList; goodsList: IList; baseSpecId: Number }
   ) {
     if (!goodsSpecs.isEmpty()) {
       state = state.set('goodsSpecs', goodsSpecs);
     }
+    console.log(baseSpecId, 'baseSpecId');
+    state = state.set('baseSpecId', baseSpecId);
     return state.set('goodsList', goodsList);
   }
 
@@ -167,7 +174,9 @@ export default class GoodsSpecActor extends Actor {
     state,
     { id, key, value }: { id: string; key: string; value: string }
   ) {
-    // return
+    if (key === 'baseSpecId') {
+      return state.set('baseSpecId', fromJS(value));
+    }
     if (key === 'subscriptionStatus') {
       let goodsList = state.toJS()['goodsList'];
       goodsList.map((el) => {

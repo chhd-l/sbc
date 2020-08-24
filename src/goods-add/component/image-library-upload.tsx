@@ -97,8 +97,8 @@ const styles = {
   } as any,
   addImg: {
     border: '1px dashed #d9d9d9',
-    width: 96,
-    height: 96,
+    width: 60,
+    height: 60,
     borderRadius: 4,
     textAlign: 'center',
     display: 'inline-block',
@@ -112,6 +112,6 @@ const styles = {
     display: 'flex',
     alignItem: 'center',
     justifyContent: 'center',
-    padding: '32px 0'
+    padding: '16px 0'
   } as any
 };

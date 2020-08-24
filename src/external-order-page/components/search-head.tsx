@@ -8,7 +8,9 @@ import {
   Menu,
   Dropdown,
   Icon,
-  DatePicker
+  DatePicker,
+  Row,
+  Col
 } from 'antd';
 import {
   noop,
@@ -126,62 +128,66 @@ export default class SearchHead extends Component<any, any> {
         <Headline title="External order" />
         <div>
           <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                addonBefore="Clinics CRM id"
-                onChange={(e) => {
-                  this.setState({
-                    clientId: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore="Clinics name"
-                onChange={(e) => {
-                  this.setState({
-                    clinicsName: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore="Prescription id"
-                onChange={(e) => {
-                  this.setState({
-                    prescriptionId: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore="Order number"
-                onChange={(e) => {
-                  this.setState({
-                    orderId: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            <FormItem>
-              <Input
-                addonBefore="Product id"
-                onChange={(e) => {
-                  this.setState({
-                    productId: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            {/*
+            <Row id="input-lable-wwidth">
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore="Clinics CRM id"
+                    onChange={(e) => {
+                      this.setState({
+                        clientId: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <FormItem>
+                <Input
+                  addonBefore="Clinics name"
+                  onChange={(e) => {
+                    this.setState({
+                      clinicsName: (e.target as any).value
+                    });
+                  }}
+                />
+              </FormItem>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore="Prescription id"
+                    onChange={(e) => {
+                      this.setState({
+                        prescriptionId: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore="Order number"
+                    onChange={(e) => {
+                      this.setState({
+                        orderId: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore="Product id"
+                    onChange={(e) => {
+                      this.setState({
+                        productId: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*
             商品名称、SKU编码
             <FormItem>
               <Input
@@ -277,7 +283,7 @@ export default class SearchHead extends Component<any, any> {
               </FormattedMessage>
             </FormItem>*/}
 
-            {/* <FormItem>
+              {/* <FormItem>
               <FormattedMessage id="order.orderSource">
                 {(txt) => (
                   <SelectGroup
@@ -333,37 +339,40 @@ export default class SearchHead extends Component<any, any> {
               />
             </FormItem>
             */}
-            <FormItem>
-              <RangePicker
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
-                onChange={(e) => {
-                  let beginTime = '';
-                  let endTime = '';
-                  if (e.length > 0) {
-                    beginTime = e[0].format(Const.DAY_FORMAT);
-                    endTime = e[1].format(Const.DAY_FORMAT);
-                  }
-                  this.setState({ beginTime: beginTime, endTime: endTime });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                type="primary"
-                icon="search"
-                htmlType="submit"
-                shape="round"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const {
-                    clientId,
-                    clinicsName,
-                    prescriptionId,
-                    orderId,
-                    productId,
-                    /*buyerOptions,
+              <Col span="8" id="Range-picker-width">
+                <FormItem style={{ width: '324px' }}>
+                  <RangePicker
+                    getCalendarContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    onChange={(e) => {
+                      let beginTime = '';
+                      let endTime = '';
+                      if (e.length > 0) {
+                        beginTime = e[0].format(Const.DAY_FORMAT);
+                        endTime = e[1].format(Const.DAY_FORMAT);
+                      }
+                      this.setState({ beginTime: beginTime, endTime: endTime });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="24" style={{ textAlign: 'center' }}>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    icon="search"
+                    htmlType="submit"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const {
+                        clientId,
+                        clinicsName,
+                        prescriptionId,
+                        orderId,
+                        productId,
+                        /*buyerOptions,
                     goodsOptions,
                     receiverSelect,
                     clinicSelect,
@@ -374,11 +383,11 @@ export default class SearchHead extends Component<any, any> {
                     receiverSelectValue,
                     clinicSelectValue,
                     tradeState,*/
-                    beginTime,
-                    endTime
-                  } = this.state;
+                        beginTime,
+                        endTime
+                      } = this.state;
 
-                  /*const ts = {} as any;
+                      /*const ts = {} as any;
                   if (tradeState.deliverStatus) {
                     ts.deliverStatus = tradeState.deliverStatus;
                   }
@@ -391,24 +400,26 @@ export default class SearchHead extends Component<any, any> {
                     ts.orderSource = tradeState.orderSource;
                   }*/
 
-                  const params = {
-                    clientId,
-                    clinicsName,
-                    prescriptionId,
-                    orderId,
-                    productId,
-                    beginTime,
-                    endTime
-                  };
+                      const params = {
+                        clientId,
+                        clinicsName,
+                        prescriptionId,
+                        orderId,
+                        productId,
+                        beginTime,
+                        endTime
+                      };
 
-                  onSearch(params);
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
-              </Button>
-            </FormItem>
+                      onSearch(params);
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
 
           {/*{hasMenu && (

@@ -9,7 +9,7 @@ import { deleteGoodsById } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-import { message, Modal, Table } from 'antd';
+import { message, Modal, Table, Tooltip } from 'antd';
 import AppStore from '../store';
 const confirm = Modal.confirm;
 const Column = Table.Column;
@@ -232,28 +232,31 @@ export default class CustomerList extends React.Component<any, any> {
             return (
               <div className="operation-th">
                 <AuthWrapper functionName={'f_coupon_detail'}>
-                  <span
-                    style={styles.see}
-                    onClick={() => goodsEvaluateDetail(evaluateId, true)}
-                    title="View"
-                  >
+                  <Tooltip placement="top" title="View">
                     <span
-                      className="icon iconfont iconView"
-                      style={{ fontSize: 20 }}
-                    ></span>
-                    {/* <FormattedMessage id="view" /> */}
-                  </span>
-                  <span
-                    style={styles.see}
-                    onClick={() => this.deleteEvaluate(evaluateId)}
-                    title="Delete"
-                  >
+                      style={styles.see}
+                      onClick={() => goodsEvaluateDetail(evaluateId, true)}
+                    >
+                      <span
+                        className="icon iconfont iconView"
+                        style={{ fontSize: 20 }}
+                      ></span>
+                      {/* <FormattedMessage id="view" /> */}
+                    </span>
+                  </Tooltip>
+                  <Tooltip placement="top" title="Delete">
                     <span
-                      className="icon iconfont iconDelete"
-                      style={{ fontSize: 20 }}
-                    ></span>
-                    {/* <FormattedMessage id="delete" /> */}
-                  </span>
+                      style={styles.see}
+                      onClick={() => this.deleteEvaluate(evaluateId)}
+                      title="Delete"
+                    >
+                      <span
+                        className="icon iconfont iconDelete"
+                        style={{ fontSize: 20 }}
+                      ></span>
+                      {/* <FormattedMessage id="delete" /> */}
+                    </span>
+                  </Tooltip>
                 </AuthWrapper>
               </div>
             );

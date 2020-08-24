@@ -21,8 +21,10 @@ export default class Page extends React.Component<any, any> {
       <div>
         {/*导航面包屑*/}
         <BreadCrumb />
-        <div className="container">
+        <div className="container-search">
           <Headline title="列表" />
+        </div>
+        <div className="container">
           {/*列表*/}
           <TabDataGrid />
           {/*新增弹框*/}

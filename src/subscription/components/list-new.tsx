@@ -364,9 +364,13 @@ export default class ListView extends React.Component<any, any> {
                           cancelText="Cancel"
                         >
                           <Tooltip placement="top" title="Cancel all">
-                            <Button type="link" style={{ padding: '0 5px' }}>
-                              Cancel all
-                            </Button>
+                            <a
+                              type="link"
+                              style={{ padding: '0 5px' }}
+                              className="iconfont iconbtn-cancelall"
+                            >
+                              {/*Cancel all*/}
+                            </a>
                           </Tooltip>
                         </Popconfirm>
                       ) : null}

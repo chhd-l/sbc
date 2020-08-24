@@ -440,7 +440,7 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
           <FormattedMessage id="Base price" />
-          <Select onChange={this._handleChange}>
+          <Select value={baseSpecId || null} onChange={this._handleChange}>
             {goodsSpecs.map((item) => (
               <Option value={item.get('specId')}>{item.get('specName')}</Option>
             ))}
@@ -475,8 +475,10 @@ class SkuForm extends React.Component<any, any> {
                           parseFloat(rowInfo['specId-' + baseSpecId])
                       )
                         ? '0'
-                        : parseFloat(rowInfo.marketPrice) /
-                          parseFloat(rowInfo['specId-' + baseSpecId])}
+                        : (
+                            parseFloat(rowInfo.marketPrice) /
+                            parseFloat(rowInfo['specId-' + baseSpecId])
+                          ).toFixed(2)}
                     </p>
                     <p>
                       {isNaN(
@@ -484,8 +486,10 @@ class SkuForm extends React.Component<any, any> {
                           parseFloat(rowInfo['specId-' + baseSpecId])
                       )
                         ? '0'
-                        : parseFloat(rowInfo.subscriptionPrice) /
-                          parseFloat(rowInfo['specId-' + baseSpecId])}
+                        : (
+                            parseFloat(rowInfo.subscriptionPrice) /
+                            parseFloat(rowInfo['specId-' + baseSpecId])
+                          ).toFixed(2)}
                     </p>
                     {/* <InputNumber
                     style={{ width: '60px' }}

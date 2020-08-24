@@ -339,7 +339,7 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-      console.log(goods, 'goods');
+      console.log(goods.toJS(), 'goods');
 
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
@@ -406,6 +406,7 @@ export default class AppStore extends Store {
         goodsDetail.getIn(['goods', 'cateId']),
         goodsDetail.get('goodsPropDetailRels')
       );
+      console.log(goodsDetail.toJS(), 'goodsDetail');
       // 是否为多规格
       if (goodsDetail.getIn(['goods', 'moreSpecFlag']) == 1) {
         // 规格，按照id升序排列
@@ -470,7 +471,11 @@ export default class AppStore extends Store {
           item = item.set('index', index + 1);
           return item;
         });
-        this.dispatch('goodsSpecActor: init', { goodsSpecs, goodsList });
+        this.dispatch('goodsSpecActor: init', {
+          goodsSpecs,
+          goodsList,
+          baseSpecId: goods.get('baseSpec') || 0
+        });
       } else {
         // 商品列表
         let goodsList = List();
@@ -494,7 +499,8 @@ export default class AppStore extends Store {
         });
         this.dispatch('goodsSpecActor: init', {
           goodsSpecs: List(),
-          goodsList
+          goodsList,
+          baseSpecId: goods.get('baseSpec') || 0
         });
       }
 
@@ -1050,6 +1056,7 @@ export default class AppStore extends Store {
 
     goods = goods.set('goodsType', 0);
     goods = goods.set('goodsSource', 1);
+    goods = goods.set('baseSpec', data.get('baseSpecId'));
 
     param = param.set('goods', goods);
     // 基本信息保存参数中要把priceType去掉 priceType-mark

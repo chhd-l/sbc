@@ -64,11 +64,17 @@ export default class GoodsSpecActor extends Actor {
   @Action('goodsSpecActor: init')
   init(
     state,
-    { goodsSpecs, goodsList }: { goodsSpecs: IList; goodsList: IList }
+    {
+      goodsSpecs,
+      goodsList,
+      baseSpecId
+    }: { goodsSpecs: IList; goodsList: IList; baseSpecId: Number }
   ) {
     if (!goodsSpecs.isEmpty()) {
       state = state.set('goodsSpecs', goodsSpecs);
     }
+    console.log(baseSpecId, 'baseSpecId');
+    state = state.set('baseSpecId', baseSpecId);
     return state.set('goodsList', goodsList);
   }
 

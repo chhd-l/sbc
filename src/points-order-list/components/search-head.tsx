@@ -162,6 +162,7 @@ export default class SearchHead extends Component<any, any> {
                 }
                 defaultValue=""
                 label="Delivery status"
+                style={130}
                 onChange={(value) => {
                   this.setState({
                     tradeState: {
@@ -198,6 +199,7 @@ export default class SearchHead extends Component<any, any> {
               <Button
                 type="primary"
                 htmlType="submit"
+                shape="round"
                 icon="search"
                 onClick={(e) => {
                   e.preventDefault();

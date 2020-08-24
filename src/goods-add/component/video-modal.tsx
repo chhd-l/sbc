@@ -379,6 +379,7 @@ export default class VideoModal extends React.Component<any, any> {
                     }}
                     type="primary"
                     htmlType="submit"
+                    shape="round"
                     icon="search"
                   >
                     Search

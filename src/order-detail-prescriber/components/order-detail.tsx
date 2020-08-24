@@ -9,7 +9,8 @@ import {
   Modal,
   Popover,
   Row,
-  Table
+  Table,
+  Tooltip
 } from 'antd';
 import { AuthWrapper, Const, noop, util } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
@@ -621,27 +622,31 @@ export default class OrderDetailTab extends React.Component<any, any> {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {payState === 'NOT_PAID' && (
             <AuthWrapper functionName="edit_order_f_001">
-              <a
-                style={styles.pr20}
-                onClick={() => {
-                  verify(tid);
-                }}
-              >
-                Modify
-              </a>
+              <Tooltip placement="top" title="Modify">
+                <a
+                  style={styles.pr20}
+                  onClick={() => {
+                    verify(tid);
+                  }}
+                >
+                  Modify
+                </a>
+              </Tooltip>
             </AuthWrapper>
           )}
           {payState === 'PAID'
             ? null
             : flowState === 'INIT' && (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <a
-                    onClick={() => showRejectModal()}
-                    href="javascript:void(0)"
-                    style={styles.pr20}
-                  >
-                    <FormattedMessage id="order.turnDown" />
-                  </a>
+                  <Tooltip placement="top" title="Turn down">
+                    <a
+                      onClick={() => showRejectModal()}
+                      href="javascript:void(0)"
+                      style={styles.pr20}
+                    >
+                      <FormattedMessage id="order.turnDown" />
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
           {/*已审核处理的*/}
@@ -651,15 +656,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
               payState === 'PAID' ||
               payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <a
-                    onClick={() => {
-                      this._showRetrialConfirm(tid);
-                    }}
-                    href="javascript:void(0)"
-                    style={styles.pr20}
-                  >
-                    回审
-                  </a>
+                  <Tooltip placement="top" title="Re-regitview">
+                    <a
+                      onClick={() => {
+                        this._showRetrialConfirm(tid);
+                      }}
+                      href="javascript:void(0)"
+                      style={styles.pr20}
+                    >
+                      Re-review
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
               {/* {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
@@ -680,18 +687,20 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {/*未审核需要处理的*/}
           {flowState === 'INIT' && (
             <AuthWrapper functionName="fOrderList002_prescriber">
-              <a
-                // onClick={() => {
-                //   onAudit(tid, 'CHECKED');
-                // }}
-                onClick={() => {
-                  this._showAuditConfirm(tid);
-                }}
-                href="javascript:void(0)"
-                style={styles.pr20}
-              >
-                <FormattedMessage id="order.audit" />
-              </a>
+              <Tooltip placement="top" title="Audit">
+                <a
+                  // onClick={() => {
+                  //   onAudit(tid, 'CHECKED');
+                  // }}
+                  onClick={() => {
+                    this._showAuditConfirm(tid);
+                  }}
+                  href="javascript:void(0)"
+                  style={styles.pr20}
+                >
+                  <FormattedMessage id="order.audit" />
+                </a>
+              </Tooltip>
             </AuthWrapper>
           )}
         </div>
@@ -716,15 +725,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div>
           <AuthWrapper functionName="fOrderList003">
-            <a
-              onClick={() => {
-                this._showConfirm(tid);
-              }}
-              href="javascript:void(0)"
-              style={styles.pr20}
-            >
-              Confirm Receipt
-            </a>
+            <Tooltip placement="top" title="Confirm Receipt">
+              <a
+                onClick={() => {
+                  this._showConfirm(tid);
+                }}
+                href="javascript:void(0)"
+                style={styles.pr20}
+              >
+                Confirm Receipt
+              </a>
+            </Tooltip>
           </AuthWrapper>
         </div>
       );

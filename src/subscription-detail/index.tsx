@@ -468,7 +468,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             Skip Next Delivery
           </Button>
         </Popconfirm>
-        <Popconfirm
+        {/* <Popconfirm
           placement="topRight"
           title="Are you sure order now?"
           onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
@@ -478,7 +478,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <Button type="link" style={{ fontSize: 16 }}>
             Order Now
           </Button>
-        </Popconfirm>
+        </Popconfirm> */}
       </div>
     );
     const columns = [

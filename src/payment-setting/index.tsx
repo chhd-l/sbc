@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history } from 'qmkit';
-import { Row, Col, Form, Modal, message, Button, Card } from 'antd';
+import { Row, Col, Form, Modal, message, Button, Card, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './webapi';
@@ -81,7 +81,7 @@ export default class PaymentSetting extends React.Component<any, any> {
         {/*导航面包屑*/}
         <div
           className="container-search"
-          style={{ height: '100vh', width: '100vh', background: '#fff' }}
+          style={{ height: '100vh', background: '#fff' }}
         >
           <ContainerDiv>
             <Headline title={<FormattedMessage id="paymentSetting" />} />
@@ -105,18 +105,22 @@ export default class PaymentSetting extends React.Component<any, any> {
                           {item.isOpen === 1 ? 'Enabled' : 'Disabled'}
                         </div>
                         <div>
-                          <Button
-                            type="link"
-                            onClick={() => {
-                              this.setState({
-                                paymentVisible: true,
-                                paymentForm: item
-                              });
-                            }}
-                            className="links"
-                          >
-                            <FormattedMessage id="edit" />
-                          </Button>
+                          <Tooltip placement="top" title="Edit">
+                            <a
+                              style={{ color: 'red' }}
+                              type="link"
+                              onClick={() => {
+                                this.setState({
+                                  paymentVisible: true,
+                                  paymentForm: item
+                                });
+                              }}
+                              /* className="links"*/
+                              className="iconfont iconEdit"
+                            >
+                              {/* <FormattedMessage id="edit" />*/}
+                            </a>
+                          </Tooltip>
                         </div>
                       </div>
                     </Card>

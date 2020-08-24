@@ -21,26 +21,26 @@ export default class LogisticsManage extends React.Component<any, any> {
   }
 
   render() {
-    return (
-      <AuthWrapper functionName="f_expressManage_1">
-        <div>
-          <BreadCrumb />,
-          {/* <Breadcrumb separator=">">
+    return [
+      <BreadCrumb />,
+      <div>
+        {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>设置</Breadcrumb.Item>
             <Breadcrumb.Item>物流设置</Breadcrumb.Item>
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
-            <Headline title="Logistics company settings" />
-            <Alert
-              message="Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up."
-              type="info"
-              showIcon
-            />
+        <div className="container-search">
+          <Headline title="Logistics company settings" />
+          <Alert
+            message="Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up."
+            type="info"
+            showIcon
+          />
+          <AuthWrapper functionName="f_expressManage_1">
             <CompanyChoose />
-          </div>
+          </AuthWrapper>
         </div>
-      </AuthWrapper>
-    );
+      </div>
+    ];
   }
 }

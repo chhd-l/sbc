@@ -41,6 +41,7 @@ export default class FinancialSettlement extends React.Component<any, any> {
             />
 
             <SearchForm />
+
             {/*<AuthWrapper functionName="f_settle_export">
               <div style={{ paddingBottom: '16px' }}>
                 <Button onClick={() => this.store.bulkExport()}>

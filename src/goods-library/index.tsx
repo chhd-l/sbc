@@ -30,7 +30,7 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
             <Breadcrumb.Item>发布商品</Breadcrumb.Item>
             <Breadcrumb.Item>商品库导入</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <Headline
               title={<FormattedMessage id="commodityLibraryImport" />}
             />
@@ -48,7 +48,8 @@ export default class GoodsLibraryImport extends React.Component<any, any> {
             <SearchForm />
 
             <Tool />
-
+          </div>
+          <div className="container">
             {/*商品列表*/}
             <GoodsList />
           </div>

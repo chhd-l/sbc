@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
 
-import { Table, Modal, message } from 'antd';
+import { Table, Modal, message, Tooltip } from 'antd';
 import { history, noop, QMFloat, AuthWrapper, cache, checkAuth } from 'qmkit';
 import styled from 'styled-components';
 const TableDiv = styled.div`
@@ -185,38 +185,50 @@ export default class FreightItem extends React.Component<any, any> {
             <div className="operat-box">
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_temp_copy">
-                  <a
-                    href="javascript:void(0);"
-                    onClick={() => this._copy(freightId)}
-                  >
-                    Copy
-                  </a>
+                  <Tooltip placement="top" title="Copy">
+                    <a
+                      href="javascript:void(0);"
+                      onClick={() => this._copy(freightId)}
+                    >
+                      Copy
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
               {((checkAuth('f_store_temp_edit') && isStore) ||
                 (checkAuth('f_goods_temp_edit') && !isStore)) && (
-                <a href="#!" onClick={() => this._edit(freightId, isStore)}>
-                  Edit
-                </a>
+                <Tooltip placement="top" title="Edit">
+                  <a
+                    href="#!"
+                    onClick={() => this._edit(freightId, isStore)}
+                    className="iconfont iconEdit"
+                  ></a>
+                </Tooltip>
               )}
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_rela_list">
-                  <a
-                    href="#!"
-                    onClick={() =>
-                      history.push(`/freight-with-goods/${freightId}`)
-                    }
-                  >
-                    Related
-                  </a>
+                  <Tooltip placement="top" title="Related">
+                    <a
+                      href="#!"
+                      onClick={() =>
+                        history.push(`/freight-with-goods/${freightId}`)
+                      }
+                    >
+                      Related
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
               {!isDefault &&
                 ((checkAuth('f_store_temp_del') && isStore) ||
                   (checkAuth('f_goods_temp_del') && !isStore)) && (
-                  <a href="#!" onClick={() => this._del(freightId, isStore)}>
-                    Delete
-                  </a>
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      href="#!"
+                      onClick={() => this._del(freightId, isStore)}
+                      className="iconfont iconDelete"
+                    ></a>
+                  </Tooltip>
                 )}
             </div>
           </div>

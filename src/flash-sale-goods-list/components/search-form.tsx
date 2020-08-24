@@ -52,6 +52,7 @@ export default class SearchForm extends React.Component<any, any> {
             <Button
               type="primary"
               icon="search"
+              shape="round"
               htmlType="submit"
               onClick={(e) => {
                 e.preventDefault();

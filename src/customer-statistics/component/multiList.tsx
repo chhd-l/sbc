@@ -254,6 +254,7 @@ export default class CustomerStatisticsMultiList extends React.Component<
                 htmlType="submit"
                 type="primary"
                 icon="search"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   this._onQuery();

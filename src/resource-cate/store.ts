@@ -102,7 +102,7 @@ export default class AppStore extends Store {
   doDelete = async (cateId: string) => {
     let result: any = await deleteCate(cateId);
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('删除成功!');
+      message.success('Successfully deleted!');
       // 刷新
       this.refresh();
     } else {

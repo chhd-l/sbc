@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, AutoComplete, message } from 'antd';
-import { Headline, noop, Const, DatePickerLaber, AuthWrapper, ExportModal, checkAuth } from 'qmkit';
+import {
+  Headline,
+  noop,
+  Const,
+  DatePickerLaber,
+  AuthWrapper,
+  ExportModal,
+  checkAuth
+} from 'qmkit';
 import { IList } from 'typings/globalType';
 import { List } from 'immutable';
 
@@ -233,7 +241,8 @@ export default class SearchHead extends Component<any, any> {
                   let createTimeBegin;
                   let createTimeEnd;
                   if (e.length > 0) {
-                    createTimeBegin = e[0].format(Const.DAY_FORMAT) + ' 00:00:00';
+                    createTimeBegin =
+                      e[0].format(Const.DAY_FORMAT) + ' 00:00:00';
                     createTimeEnd = e[1].format(Const.DAY_FORMAT) + ' 23:59:59';
                   }
                   saveSearchParams({
@@ -257,7 +266,8 @@ export default class SearchHead extends Component<any, any> {
                   let finishTimeBegin;
                   let finishTimeEnd;
                   if (e.length > 0) {
-                    finishTimeBegin = e[0].format(Const.DAY_FORMAT) + ' 00:00:00';
+                    finishTimeBegin =
+                      e[0].format(Const.DAY_FORMAT) + ' 00:00:00';
                     finishTimeEnd = e[1].format(Const.DAY_FORMAT) + ' 23:59:59';
                   }
                   saveSearchParams({
@@ -303,6 +313,7 @@ export default class SearchHead extends Component<any, any> {
                 htmlType="submit"
                 type="primary"
                 icon="search"
+                shape="round"
                 onClick={(e) => {
                   e.preventDefault();
                   onSearch();
@@ -312,7 +323,6 @@ export default class SearchHead extends Component<any, any> {
               </Button>
             </FormItem>
           </Form>
-
 
           <div className="handle-bar">
             {/*导出分销记录权限*/}
@@ -338,7 +348,6 @@ export default class SearchHead extends Component<any, any> {
     const { setSearchKind } = this.props.relaxProps;
     setSearchKind({ kind, value });
   };
-
 
   async _handleBatchExport() {
     // 校验是否有导出权限

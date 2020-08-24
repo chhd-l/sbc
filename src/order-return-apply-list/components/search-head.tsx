@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import {} from 'immutable';
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Select, Button, Row, Col } from 'antd';
 import { Headline, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
@@ -52,86 +52,96 @@ export default class SearchHead extends Component<any, any> {
 
         <div>
           <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                addonBefore={<FormattedMessage id="order.orderNumber" />}
-                onChange={(e) => {
-                  this.setState({
-                    id: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
+            <Row id="input-lable-wwidth">
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={<FormattedMessage id="order.orderNumber" />}
+                    onChange={(e) => {
+                      this.setState({
+                        id: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*商品名称、SKU编码*/}
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderGoodsOptionSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        goodsOptionsValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*客户名称、客户账号*/}
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderBuyerSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        buyerSelectValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*收件人、收件人手机*/}
+              <Col span="8">
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderReceiverSelect()}
+                    onChange={(e) => {
+                      this.setState({
+                        receiverSelectValue: (e.target as any).value
+                      });
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span="24" style={{ textAlign: 'center' }}>
+                <FormItem>
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    shape="round"
+                    icon="search"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      let {
+                        goodsOptions,
+                        buyerSelect,
+                        receiverSelect,
+                        id,
+                        goodsOptionsValue,
+                        buyerSelectValue,
+                        receiverSelectValue
+                      } = this.state;
 
-            {/*商品名称、SKU编码*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderGoodsOptionSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    goodsOptionsValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
+                      let params = {
+                        id,
+                        [goodsOptions]: goodsOptionsValue,
+                        [buyerSelect]: buyerSelectValue,
+                        [receiverSelect]: receiverSelectValue
+                      };
 
-            {/*客户名称、客户账号*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderBuyerSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    buyerSelectValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-
-            {/*收件人、收件人手机*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderReceiverSelect()}
-                onChange={(e) => {
-                  this.setState({
-                    receiverSelectValue: (e.target as any).value
-                  });
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                htmlType="submit"
-                type="primary"
-                icon="search"
-                onClick={(e) => {
-                  e.preventDefault();
-                  let {
-                    goodsOptions,
-                    buyerSelect,
-                    receiverSelect,
-                    id,
-                    goodsOptionsValue,
-                    buyerSelectValue,
-                    receiverSelectValue
-                  } = this.state;
-
-                  let params = {
-                    id,
-                    [goodsOptions]: goodsOptionsValue,
-                    [buyerSelect]: buyerSelectValue,
-                    [receiverSelect]: receiverSelectValue
-                  };
-
-                  onSearch(params);
-                }}
-              >
-                {
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
-                }
-              </Button>
-            </FormItem>
+                      onSearch(params);
+                    }}
+                  >
+                    {
+                      <span>
+                        <FormattedMessage id="search" />
+                      </span>
+                    }
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
         </div>
       </div>

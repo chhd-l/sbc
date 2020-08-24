@@ -79,7 +79,7 @@ export default class GoodsImport extends React.Component<any, any> {
             <FormattedMessage id="productImport" />
           </Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container">
+        <div className="container-search">
           <Headline title={<FormattedMessage id="productImport" />} />
           <Alert
             message="Operation Description："

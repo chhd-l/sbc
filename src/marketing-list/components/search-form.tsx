@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
-import { Form, Select, Input, Button, DatePicker } from 'antd';
+import { Form, Select, Input, Button, DatePicker, Row, Col } from 'antd';
 import { SelectGroup, noop, Const, util } from 'qmkit';
 import { List } from 'immutable';
 // import locale from 'antd/es/date-picker/locale/lv_LV';
@@ -47,129 +47,120 @@ export default class SearchForm extends React.Component<any, any> {
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label="Promotion type"
-            style={{ width: 170 }}
-            defaultValue="All"
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'promotionType',
-                value
-              });
-            }}
-          >
-            <Option value="">All</Option>
-            <Option value="0">Normal promotion</Option>
-            <Option value="1">Subscription promotion</Option>
-            {/* <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option> */}
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label="Campaign Type"
-            style={{ width: 160 }}
-            defaultValue="All"
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'subType',
-                value
-              });
-            }}
-          >
-            <Option value={null}>All</Option>
-            <Option value="0">Full amount reduction</Option>
-            <Option value="1">Full quantity reduction</Option>
-            <Option value="2">Full amount discount</Option>
-            <Option value="3">Full quantity discount</Option>
-            {/* <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option> */}
-          </SelectGroup>
-        </FormItem>
-        <FormItem>
-          <Input
-            addonBefore="Campaign name"
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'marketingName',
-                value
-              });
-            }}
-          />
-        </FormItem>
-        <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledStartDate}
-            // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
-            showTime={{ format: 'HH:mm' }}
-            format={Const.DATE_FORMAT}
-            value={startValue}
-            placeholder="Start time"
-            onChange={this.onStartChange}
-            showToday={false}
-          />
-        </FormItem>
-        <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledEndDate}
-            // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
-            showTime={{ format: 'HH:mm' }}
-            format={Const.DATE_FORMAT}
-            value={endValue}
-            placeholder="End time"
-            onChange={this.onEndChange}
-            showToday={false}
-          />
-        </FormItem>
-
-        {/*<FormItem>
-          <SelectGroup
-            getPopupContainer={() => document.getElementById('page-content')}
-            label="Promotion type"
-            style={{ width: 80 }}
-            onChange={(value) => {
-              value = value === '' ? null : value;
-              onFormChange({
-                field: 'targetLevelId',
-                value
-              });
-            }}
-          >
-            <Option value="">All</Option>
-            <Option value="-1">Full platform consumer</Option>
-            {util.isThirdStore() && <Option value="0">All Leave</Option>}
-            {customerLevels.map((v) => (
-              <Option
-                key={v.get('customerLevelId').toString()}
-                value={v.get('customerLevelId').toString()}
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore="Campaign name"
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'marketingName',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label="Promotion type"
+                // style={{ width: 170 }}
+                defaultValue="All"
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'promotionType',
+                    value
+                  });
+                }}
               >
-                {v.get('customerLevelName')}
-              </Option>
-            ))}
-          </SelectGroup>
-        </FormItem>*/}
-
-        <FormItem>
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon="search"
-            onClick={(e) => {
-              e.preventDefault();
-              onSearch();
-            }}
-          >
-            Search
-          </Button>
-        </FormItem>
+                <Option value="">All</Option>
+                <Option value="0">Normal promotion</Option>
+                <Option value="1">Subscription promotion</Option>
+                {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label="Campaign Type"
+                // style={{ width: 160 }}
+                defaultValue="All"
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'subType',
+                    value
+                  });
+                }}
+              >
+                <Option value={null}>All</Option>
+                <Option value="0">Full amount reduction</Option>
+                <Option value="1">Full quantity reduction</Option>
+                <Option value="2">Full amount discount</Option>
+                <Option value="3">Full quantity discount</Option>
+                {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+              </SelectGroup>
+            </FormItem>
+          </Col>{' '}
+          <Col span="8">
+            <FormItem>
+              <DatePicker
+                allowClear={true}
+                disabledDate={this.disabledEndDate}
+                // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
+                showTime={{ format: 'HH:mm' }}
+                format={Const.DATE_FORMAT}
+                value={endValue}
+                placeholder="End time"
+                onChange={this.onEndChange}
+                showToday={false}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <DatePicker
+                allowClear={true}
+                disabledDate={this.disabledStartDate}
+                // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
+                showTime={{ format: 'HH:mm' }}
+                format={Const.DATE_FORMAT}
+                value={startValue}
+                placeholder="Start time"
+                onChange={this.onStartChange}
+                showToday={false}
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon="search"
+                shape="round"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSearch();
+                }}
+              >
+                Search
+              </Button>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     );
   }

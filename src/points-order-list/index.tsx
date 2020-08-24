@@ -39,8 +39,10 @@ export default class OrderList extends Component<any, any> {
             <Breadcrumb.Item>订单管理</Breadcrumb.Item>
             <Breadcrumb.Item>积分订单</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <SearchHead />
+          </div>
+          <div className="container">
             <SearchList />
           </div>
         </div>

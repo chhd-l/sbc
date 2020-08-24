@@ -26,8 +26,10 @@ export default class OrderReturnAdd extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>Add chargeback</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container" style={{ paddingBottom: 50 }}>
+        <div className="container-search">
           <Headline title="Add chargeback" />
+        </div>
+        <div className="container">
           <WrapperForm ref={(form) => (window['_form'] = form)} />
         </div>
       </div>

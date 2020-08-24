@@ -30,8 +30,10 @@ export default class OrderReturnApplyList extends React.Component<any, any> {
           <Breadcrumb.Item>订单管理</Breadcrumb.Item>
           <Breadcrumb.Item>代客退单</Breadcrumb.Item>
         </Breadcrumb> */}
-        <div className="container">
+        <div className="container-search">
           <SearchHead />
+        </div>
+        <div className="container">
           <SearchList />
         </div>
       </div>

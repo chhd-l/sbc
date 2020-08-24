@@ -93,11 +93,27 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerData(id);
     this.getCustomerGrowTrendData(id);
   };
+  componentDidMount() {
+    console.log(
+      sessionStorage.getItem('PrescriberType'),
+      'qwqqqqqqqqqqqqqqwewqewqewq'
+    );
+    let o = {
+      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
+        .prescribers[0].prescriberId,
+      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
+        .prescribers[0].prescriberName
+    };
+    let act = JSON.stringify(o);
+    if (sessionStorage.getItem('PrescriberType') === null) {
+      sessionStorage.setItem('PrescriberType', act);
+    }
+  }
 
   getPrescriberDetail = async (id) => {
     if (id) {
       const { res } = await getClinicById({
-        prescriberId: id
+        id: id
       });
       if (res.code === 'K-000000') {
         this.setState({
@@ -201,7 +217,8 @@ export default class homePrescriber extends Component<any, any> {
     }
   };
 
-  _prescriberChange = (value) => {
+  _prescriberChange = (value, name) => {
+    sessionStorage.setItem('PrescriberType', JSON.stringify(name.props));
     this.allBind(value);
   };
 
@@ -305,8 +322,15 @@ export default class homePrescriber extends Component<any, any> {
                 <Col span={12}>
                   <div className="prescriberWord">
                     <Select
-                      onChange={(value) => this._prescriberChange(value)}
-                      defaultValue={this.props.prescriberId}
+                      onChange={(value, name) =>
+                        this._prescriberChange(value, name)
+                      }
+                      defaultValue={
+                        sessionStorage.getItem('PrescriberType')
+                          ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                              .children
+                          : null
+                      }
                       style={{ width: '140px', marginBottom: '10px' }}
                     >
                       {allPrescribers.map((item) => (

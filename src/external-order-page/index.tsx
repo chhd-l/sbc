@@ -32,7 +32,7 @@ export default class OrderList extends Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="fOrderList001">
+      <AuthWrapper functionName="externalOrderPage">
         <div className="order-con">
           <BreadCrumb />
           {/* <Breadcrumb separator=">">
@@ -40,8 +40,10 @@ export default class OrderList extends Component<any, any> {
             <Breadcrumb.Item>订单管理</Breadcrumb.Item>
             <Breadcrumb.Item>订单列表</Breadcrumb.Item>
           </Breadcrumb> */}
-          <div className="container">
+          <div className="container-search">
             <SearchHead />
+          </div>
+          <div className="container">
             <SearchList />
           </div>
         </div>

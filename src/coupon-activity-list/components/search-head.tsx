@@ -140,6 +140,7 @@ export default class SearchHead extends React.Component<any, any> {
             htmlType="submit"
             type="primary"
             icon="search"
+            shape="round"
             onClick={(e) => {
               e.preventDefault();
               search();

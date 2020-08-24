@@ -8,7 +8,11 @@ export default class SearchActor extends Actor {
     return {
       searchForm: {
         period: 60,
-        prescriberId: null,
+        prescriberId:
+          JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
+          null
+            ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+            : '',
         prescriberName: '',
         //auditStatus: -1,
         pageNum: 0,

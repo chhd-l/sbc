@@ -94,6 +94,7 @@ export default class AchieveSearch extends React.Component<any, any> {
             htmlType="submit"
             type="primary"
             icon="search"
+            shape="round"
             onClick={(e) => {
               e.preventDefault();
               searchKeyWords(1);

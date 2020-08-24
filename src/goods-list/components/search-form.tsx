@@ -104,13 +104,18 @@ export default class SearchForm extends React.Component<any, any> {
       });
 
     return (
-      <Form {...formItemLayout} className="filter-content" layout="inline">
+      <Form className="filter-content" layout="inline">
         <Row>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="product.productName" />}>
+            <FormItem>
               <Input
+                addonBefore={
+                  <p style={styles.label}>
+                    <FormattedMessage id="product.productName" />
+                  </p>
+                }
                 value={likeGoodsName}
-                style={{ width: 200 }}
+                style={{ width: 300 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsName',
@@ -121,10 +126,15 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="product.SPU" />}>
+            <FormItem>
               <Input
+                addonBefore={
+                  <p style={styles.label}>
+                    <FormattedMessage id="product.SPU" />
+                  </p>
+                }
                 value={likeGoodsNo}
-                style={{ width: 200 }}
+                style={{ width: 300 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsNo',
@@ -135,10 +145,15 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="product.SKU" />}>
+            <FormItem>
               <Input
+                addonBefore={
+                  <p style={styles.label}>
+                    <FormattedMessage id="product.SKU" />
+                  </p>
+                }
+                style={{ width: 300 }}
                 value={likeGoodsInfoNo}
-                style={{ width: 200 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsInfoNo',
@@ -150,15 +165,20 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem label={<FormattedMessage id="product.storeCategory" />}>
-              <TreeSelect
+            <FormItem>
+              <TreeSelectGroup
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
+                label={
+                  <p style={styles.label}>
+                    <FormattedMessage id="product.storeCategory" />
+                  </p>
+                }
                 /* defaultValue="全部"*/
+                // style={styles.wrapper}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
-                style={{ width: 200 }}
                 onChange={(value) => {
                   onFormFieldChange({ key: 'storeCateId', value });
                 }}
@@ -166,35 +186,42 @@ export default class SearchForm extends React.Component<any, any> {
                 <TreeNode key="-1" value="-1" title="All">
                   {loop(cateList)}
                 </TreeNode>
-              </TreeSelect>
+              </TreeSelectGroup>
             </FormItem>
           </Col>
-          <Col span={8}>
-            <FormItem label={<FormattedMessage id="product.brand" />}>
-              <Select
-                // getPopupContainer={() =>
-                //   document.getElementById('page-content')
-                // }
 
-                defaultValue="All"
-                showSearch
-                optionFilterProp="children"
-                style={{ width: 200 }}
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'brandId', value });
-                }}
-              >
-                <Option key="-1" value="-1">
-                  <FormattedMessage id="all" />
-                </Option>
-                {brandList.map((v, i) => {
-                  return (
-                    <Option key={i} value={v.get('brandId') + ''}>
-                      {v.get('nickName')}
-                    </Option>
-                  );
-                })}
-              </Select>
+          <Col span={8}>
+            <FormItem>
+              <SelectBox>
+                <SelectGroup
+                  getPopupContainer={() =>
+                    document.getElementById('page-content')
+                  }
+                  style={styles.wrapper}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.brand" />
+                    </p>
+                  }
+                  defaultValue="All"
+                  showSearch
+                  optionFilterProp="children"
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'brandId', value });
+                  }}
+                >
+                  <Option key="-1" value="-1">
+                    <FormattedMessage id="all" />
+                  </Option>
+                  {brandList.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.get('brandId') + ''}>
+                        {v.get('nickName')}
+                      </Option>
+                    );
+                  })}
+                </SelectGroup>
+              </SelectBox>
             </FormItem>
           </Col>
 
@@ -240,3 +267,13 @@ export default class SearchForm extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  label: {
+    width: 100,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 177
+  }
+} as any;

@@ -22,7 +22,6 @@ import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
 import configOkta from '../web_modules/qmkit/config-okta';
-import Home from './login';
 
 moment.locale('zh-cn');
 
@@ -34,7 +33,6 @@ const B2BBoss = () => (
           <div className="father">
             <Switch>
               <Security {...configOkta.oidc}>
-                <Route path="/" exact={true} component={Home} />
                 <Route path="/implicit/callback" component={LoginCallback} />
                 {routeWithSubRoutes(homeRoutes, noop)}
                 <Route component={Main} />

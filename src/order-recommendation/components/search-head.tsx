@@ -402,12 +402,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="buyerName">
-          <FormattedMessage id="consumerName" />
-        </Option>
-        <Option value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
-        </Option>
+        <Option value="buyerName">Recipient name</Option>
+        <Option value="buyerAccount">Recipient mail</Option>
       </Select>
     );
   };

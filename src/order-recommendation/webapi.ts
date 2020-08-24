@@ -1,4 +1,6 @@
-import { Fetch } from 'qmkit';
+import { Const, Fetch } from 'qmkit';
+import * as webapi from '@/order-recommendation-details/webapi';
+import { message } from 'antd';
 
 export const fetchOrderList = (filter = {}) => {
   return Fetch<TResult>('/recommendation/findPage', {
@@ -14,8 +16,12 @@ type TResult = {
 };
 
 /**
- * 查询订单是否需要审核
+ * 详情
  */
-export const getOrderNeedAudit = () => {
-  return Fetch<TResult>('/getSupplierOrderAudit');
-};
+
+export function fetchFindById(param = {}) {
+  return Fetch<TResult>('/recommendation/findById', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

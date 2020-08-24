@@ -61,6 +61,21 @@ export default class AppStore extends Store {
     });
   };
 
+  //详情
+  onFindById = async (param?: any) => {
+    console.log(param);
+    const res = await webapi.fetchFindById(param);
+    if (res.res.code === Const.SUCCESS_CODE) {
+      console.log(11111111);
+    } else {
+      message.error(res.res.message);
+      if (res.res.code === 'K-110001') {
+        message.success('send failed!');
+        return false;
+      }
+    }
+  };
+
   onTabChange = (key) => {
     this.dispatch('tab:init', key);
     this.init({ pageNum: 0, pageSize: 10 });

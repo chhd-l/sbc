@@ -135,6 +135,7 @@ export default class ListView extends React.Component<any, any> {
       verify: Function;
       hideRejectModal: Function;
       showRejectModal: Function;
+      onFindById: Function;
     };
   };
 
@@ -159,7 +160,8 @@ export default class ListView extends React.Component<any, any> {
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
     hideRejectModal: noop,
-    showRejectModal: noop
+    showRejectModal: noop,
+    onFindById: noop
   };
 
   render() {
@@ -172,7 +174,8 @@ export default class ListView extends React.Component<any, any> {
       allChecked,
       init,
       currentPage,
-      orderRejectModalVisible
+      orderRejectModalVisible,
+      onFindById
     } = this.props.relaxProps;
 
     return (
@@ -199,10 +202,8 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '13%' }}>
-                        <FormattedMessage id="consumerName" />
-                      </th>
-                      <th style={{ width: '15%' }}>Consumer Account</th>
+                      <th style={{ width: '13%' }}>Recipient name</th>
+                      <th style={{ width: '15%' }}>Recipient mail</th>
                       <th style={{ width: '11%' }}>Amount</th>
                       <th style={{ width: '11%' }}>Link status</th>
                       <th style={{ width: '11%' }}>Perscriber</th>
@@ -266,8 +267,18 @@ export default class ListView extends React.Component<any, any> {
     );
   }
 
+  onDetail(e) {
+    console.log(e, 11111111111);
+  }
+
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
+    const {
+      onChecked,
+      onAudit,
+      verify,
+      needAudit,
+      onFindById
+    } = this.props.relaxProps;
     let list = dataList.toJS();
     return list.map((v, index) => {
       const id = v.recommendationId;
@@ -402,9 +413,7 @@ export default class ListView extends React.Component<any, any> {
                       textAlign: 'right',
                       paddingRight: 20
                     }}
-                    onClick={(e) => {
-                      history.push('/recomm-page-detail');
-                    }}
+                    onClick={() => onFindById({ id: v.id })}
                   >
                     Details
                   </td>

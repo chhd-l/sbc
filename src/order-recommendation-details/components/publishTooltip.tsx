@@ -30,27 +30,8 @@ export default class DetailPublish extends React.Component<any, any> {
     this.state = {
       visible: props.visible,
       show: false,
-      clear: ''
+      checked: false
     };
-  }
-
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>,
-    snapshot?: any
-  ) {
-    const { send, onSharing } = this.props.relaxProps;
-    console.log(send, 1111111111);
-    if (send === true) {
-    }
-  }
-
-  componentWillUnmount() {
-    /*const { send, onSharing } = this.props.relaxProps;
-    onSharing({
-      field: 'firstName',
-      value: 11111
-    });*/
   }
 
   verification = () => {
@@ -81,22 +62,25 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   handleCancel = (e) => {
-    this.props.showModal(false);
+    (this as any).props.showModal(false);
   };
 
   handleSendAnother = async (param?: any) => {
-    // const { onSharing } = this.props.relaxProps;
-
-    /*onSharing({
-        field: 'consumerFirstName',
-        value:1111111111111111
-      });*/
-
-    const { onSend, getLink, send, onSharing } = this.props.relaxProps;
-    await onSend(
-      'addSend',
-      Object.assign({}, this.verification(), { id: getLink })
-    );
+    const { onSend, getLink, send, onSharing, sharing } = this.props.relaxProps;
+    Promise.all([
+      onSend(
+        'addSend',
+        Object.assign({}, this.verification(), { id: getLink })
+      ),
+      onSharing({ field: 'consumerFirstName', value: '' }),
+      onSharing({ field: 'consumerLastName', value: '' }),
+      onSharing({ field: 'emailConsent', value: 0 }),
+      onSharing({ field: 'consumerEmail', value: '' }),
+      onSharing({ field: 'consumerPhoneNumber', value: '' }),
+      this.setState({ checked: !this.state.checked })
+    ]).then((values) => {
+      //console.log(values);
+    });
   };
 
   copyLink = (e) => {
@@ -108,8 +92,16 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   //选择框
-  CheckboxChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+  onCheck = (e) => {
+    const { onSharing } = this.props.relaxProps;
+
+    this.setState({
+      checked: e.target.checked
+    });
+    onSharing({
+      field: 'emailConsent',
+      value: e.target.checked == true ? 1 : 0
+    });
   };
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visible, ok, cancel } = nextProps;
@@ -191,13 +183,16 @@ export default class DetailPublish extends React.Component<any, any> {
             <div className="title">
               <span>*</span>
               <Checkbox
-                onChange={(e) => {
+                onChange={this.onCheck}
+                /*onChange={(e) => {
                   const value = (e.target as any).checked;
                   onSharing({
                     field: 'emailConsent',
                     value: value == true ? 1 : 0
                   });
-                }}
+                }}*/
+                checked={this.state.checked}
+                //checked={this.state.checkbox}
               />
               The customer has agreed to send the E-mail
             </div>

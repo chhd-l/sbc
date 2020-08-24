@@ -6,6 +6,111 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "16540892",
+      "name": "btn-delete",
+      "font_class": "btn-delete",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "16540894",
+      "name": "btn-stop",
+      "font_class": "btn-stop",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "16540895",
+      "name": "btn-offshelf",
+      "font_class": "btn-offshelf",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "16540896",
+      "name": "btn-open",
+      "font_class": "btn-open",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "16540897",
+      "name": "btn-set permission",
+      "font_class": "btn-setpermission",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "16540898",
+      "name": "btn-detail",
+      "font_class": "btn-detail",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "16540899",
+      "name": "btn-cancel all",
+      "font_class": "btn-cancelall",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "16718524",
+      "name": "btn-refund",
+      "font_class": "btn-refund",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "16718525",
+      "name": "btn-review",
+      "font_class": "btn-review",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "16718526",
+      "name": "btn-disable",
+      "font_class": "btn-disable",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "16718527",
+      "name": "btn-shipping",
+      "font_class": "btn-shipping",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "16718528",
+      "name": "btn-turn down",
+      "font_class": "btn-turndown",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "16718529",
+      "name": "btn-add subvisions:add category",
+      "font_class": "btn-addsubvisionsaddcategory",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "16718530",
+      "name": "btn-audit",
+      "font_class": "btn-audit",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "16718531",
+      "name": "btn-move",
+      "font_class": "btn-move",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
       "icon_id": "16522590",
       "name": "btn-魔方",
       "font_class": "btn-mofang",

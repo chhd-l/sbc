@@ -289,9 +289,6 @@ export default class ListView extends React.Component<any, any> {
       const a = [{ a: 1 }, { b: 2 }];
 
       // const Imgs = v.get('recommendationGoodsInfoRels')
-      setTimeout(() => {
-        console.log(img);
-      }, 1000);
 
       //const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
       //const gifts = v.get('recommendationGoodsInfoRels') ? v.get('recommendationGoodsInfoRels') : fromJS([]);

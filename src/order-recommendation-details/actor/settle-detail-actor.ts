@@ -88,6 +88,12 @@ export default class SettleDetailActor extends Actor {
     return state.set('getLink', res);
   }
 
+  //get Detail
+  @Action('get:getDetail')
+  getDetail(state: IMap, res) {
+    return state.set('getDetail', res);
+  }
+
   //Send
   @Action('get:send')
   send(state: IMap, res) {

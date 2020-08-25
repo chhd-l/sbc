@@ -98,9 +98,9 @@ class CateList extends React.Component<any, any> {
             <Link
               style={{ marginLeft: 20, marginRight: 20 }}
               to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`}
+              className="iconfont iconbtn-setpermission"
             >
               {/*<FormattedMessage id="setPermission" />*/}
-              <Icon type="edit" />
             </Link>
           </Tooltip>
         </AuthWrapper>

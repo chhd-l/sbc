@@ -219,8 +219,9 @@ export default class EmployeeList extends React.Component<any, any> {
                 <a
                   href="javascript:void(0);"
                   onClick={() => switchModal(employeeId)}
+                  className="iconfont iconbtn-disable"
                 >
-                  <FormattedMessage id="disabled" />
+                  {/*<FormattedMessage id="disabled" />*/}
                 </a>
               </Tooltip>
             ) : (

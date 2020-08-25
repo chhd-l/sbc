@@ -26,7 +26,7 @@ export default class Tool extends React.Component<any, any> {
   render() {
     return (
       <div className="handle-bar">
-        <Button onClick={this._spuCheckedFunc}>
+        <Button onClick={this._spuCheckedFunc} style={{ right: '-15px' }}>
           <FormattedMessage id="batchImport" />
         </Button>
       </div>

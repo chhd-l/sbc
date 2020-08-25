@@ -186,7 +186,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="input-group-width">
                 <FormItem>
                   <InputGroup compact>
                     {this._renderStatusSelect()}
@@ -249,7 +249,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
                     getCalendarContainer={() =>
@@ -375,7 +375,7 @@ export default class SearchHead extends Component<any, any> {
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
+            <div className="handle-bar ant-form-inline filter-content">
               <Dropdown
                 overlay={menu}
                 placement="bottomLeft"
@@ -573,6 +573,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 185
+    // width: 139
   }
 } as any;

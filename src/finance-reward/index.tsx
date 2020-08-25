@@ -49,7 +49,10 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
             <AuthWrapper functionName={'financeRewardExport'}>
-              <div style={{ paddingBottom: '16px' }}>
+              <div
+                style={{ paddingBottom: '16px' }}
+                className="ant-form-inline filter-content"
+              >
                 <Button onClick={() => this.store.bulkExport()}>
                   {<FormattedMessage id="bulkExport" />}
                 </Button>

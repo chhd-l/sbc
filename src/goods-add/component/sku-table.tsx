@@ -46,6 +46,7 @@ export default class SkuTable extends React.Component<any, any> {
       removeImg: Function;
       modalVisible: Function;
       goods: IMap;
+      baseSpecId: Number;
     };
   };
 
@@ -59,6 +60,7 @@ export default class SkuTable extends React.Component<any, any> {
     specSingleFlag: 'specSingleFlag',
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
+    baseSpecId: 'baseSpecId',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -96,9 +98,11 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsList } = this.props.relaxProps;
+    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    // const {  } = this.state
     const columns = this._getColumns();
-    console.log(goodsList.toJS(), 'ghahaha');
+    console.log(columns, 'columns', goods.toJS(), goodsSpecs.toJS());
+    console.log(goodsList.toJS(), 'columns', this.state);
     // if(this.state.count < 100) {
     //   let count = this.state.count + 1
     //   this.setState({count: count})
@@ -109,6 +113,7 @@ class SkuForm extends React.Component<any, any> {
       <div style={{ marginBottom: 20 }}>
         <Form>
           <Table
+            size="small"
             rowKey="id"
             dataSource={goodsList.toJS()}
             columns={columns}
@@ -131,8 +136,10 @@ class SkuForm extends React.Component<any, any> {
       specSingleFlag,
       spuMarketPrice,
       priceOpt,
-      goods
+      goods,
+      baseSpecId
     } = this.props.relaxProps;
+
     console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
@@ -140,6 +147,7 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
+          console.log(item.get('specId'), 'specid....');
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -148,7 +156,7 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-
+    console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -232,7 +240,7 @@ class SkuForm extends React.Component<any, any> {
                     'goodsInfoNo'
                   ),
                   initialValue: rowInfo.goodsInfoNo
-                })(<Input />)}
+                })(<Input style={{ width: '115px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -265,7 +273,7 @@ class SkuForm extends React.Component<any, any> {
                 ),
                 initialValue: rowInfo.linePrice || 0
               })(
-                <InputNumber style={{ width: '100px' }} min={0} max={9999999} />
+                <InputNumber style={{ width: '60px' }} min={0} max={9999999} />
               )}
             </FormItem>
           </Col>
@@ -338,6 +346,7 @@ class SkuForm extends React.Component<any, any> {
                 initialValue: rowInfo.marketPrice || 0
               })(
                 <Input
+                  style={{ width: '60px' }}
                   disabled={
                     (rowInfo.index > 1 && marketPriceChecked) ||
                     (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)
@@ -376,7 +385,7 @@ class SkuForm extends React.Component<any, any> {
                     getPopupContainer={() =>
                       document.getElementById('page-content')
                     }
-                    style={{ width: '100px' }}
+                    style={{ width: '60px' }}
                     placeholder="please select status"
                   >
                     <Option value="1">Y</Option>
@@ -414,7 +423,7 @@ class SkuForm extends React.Component<any, any> {
                   initialValue: rowInfo.subscriptionPrice || 0
                 })(
                   <InputNumber
-                    style={{ width: '100px' }}
+                    style={{ width: '60px' }}
                     min={0}
                     max={9999999}
                     disabled={rowInfo.subscriptionStatus === 0}
@@ -426,6 +435,119 @@ class SkuForm extends React.Component<any, any> {
         )
       });
     }
+    console.log(goodsSpecs.toJS(), 'goodsSpecs');
+    columns = columns.push({
+      title: (
+        <div>
+          <FormattedMessage id="Base price" />
+          <Select value={baseSpecId || null} onChange={this._handleChange}>
+            {goodsSpecs.map((item) => (
+              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+            ))}
+          </Select>
+        </div>
+      ),
+      key: 'basePrice',
+      render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo');
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('basePrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      pattern: ValidConst.number,
+                      message: '0 or positive integer'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(
+                    this,
+                    rowInfo.id,
+                    'basePrice'
+                  ),
+                  initialValue: rowInfo.basePrice || 0
+                })(
+                  <div>
+                    <p>
+                      {isNaN(
+                        parseFloat(rowInfo.marketPrice) /
+                          parseFloat(rowInfo['specId-' + baseSpecId])
+                      )
+                        ? '0'
+                        : (
+                            parseFloat(rowInfo.marketPrice) /
+                            parseFloat(rowInfo['specId-' + baseSpecId])
+                          ).toFixed(2)}
+                    </p>
+                    <p>
+                      {isNaN(
+                        parseFloat(rowInfo.subscriptionPrice) /
+                          parseFloat(rowInfo['specId-' + baseSpecId])
+                      )
+                        ? '0'
+                        : (
+                            parseFloat(rowInfo.subscriptionPrice) /
+                            parseFloat(rowInfo['specId-' + baseSpecId])
+                          ).toFixed(2)}
+                    </p>
+                    {/* <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled
+                  />
+                  <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled={rowInfo.subscriptionStatus === 0}
+                  /> */}
+                  </div>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+    columns = columns.push({
+      title: (
+        <div>
+          <FormattedMessage id="description" />
+        </div>
+      ),
+      key: 'description',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('description_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   pattern: ValidConst.number,
+                  //   message: '0 or positive integer'
+                  // }
+                ],
+                onChange: this._editGoodsItem.bind(
+                  this,
+                  rowInfo.id,
+                  'description'
+                ),
+                initialValue: rowInfo.description
+              })(
+                <Input
+                  style={{ width: '100px' }}
+                  min={0}
+                  max={9999999}
+                  disabled={rowInfo.description === 0}
+                />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
     columns = columns.push({
       title: (
         <div>
@@ -474,7 +596,7 @@ class SkuForm extends React.Component<any, any> {
                 initialValue: rowInfo.stock
               })(
                 <InputNumber
-                  style={{ width: '100px' }}
+                  style={{ width: '60px' }}
                   min={0}
                   max={9999999}
                   disabled={rowInfo.index > 1 && stockChecked}
@@ -485,7 +607,6 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-
     // columns = columns.push({
     //   title: '条形码',
     //   key: 'goodsInfoBarcode',
@@ -514,19 +635,36 @@ class SkuForm extends React.Component<any, any> {
     // });
 
     columns = columns.push({
-      title: <FormattedMessage id="operation" />,
+      // title: <FormattedMessage id="operation" />,
       key: 'opt',
       render: (rowInfo) =>
         specSingleFlag ? null : (
-          <Button onClick={() => this._deleteGoodsInfo(rowInfo.id)}>
-            <FormattedMessage id="delete" />
-          </Button>
+          // <Button onClick={() => this._deleteGoodsInfo(rowInfo.id)}>
+          //   <FormattedMessage id="delete" />
+          // </Button>
+          <a
+            href="#!"
+            onClick={() => {
+              this._deleteGoodsInfo(rowInfo.id);
+            }}
+            title="Delete"
+            style={{ marginRight: 5 }}
+          >
+            <span
+              className="icon iconfont iconDelete"
+              style={{ fontSize: 20 }}
+            ></span>
+          </a>
         )
     });
 
     return columns.toJS();
   };
-
+  _handleChange = (value) => {
+    sessionStorage.setItem('baseSpecId', value);
+    this._editGoodsItem(null, 'baseSpecId', value);
+    console.log(`selected ${value}`);
+  };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;
     deleteGoodsInfo(id);
@@ -565,6 +703,7 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
+
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
@@ -642,6 +781,54 @@ const styles = {
     fontSize: '28px'
   },
   tableFormItem: {
-    marginBottom: '0px'
+    marginBottom: '0px',
+    padding: '2px'
   }
 };
+
+// import { Table } from 'antd';
+
+// const columns = [
+//   {
+//     title: 'Name',
+//     dataIndex: 'name',
+//   },
+//   {
+//     title: 'Age',
+//     dataIndex: 'age',
+//   },
+//   {
+//     title: 'Address',
+//     dataIndex: 'address',
+//   },
+// ];
+// const data = [
+//   {
+//     key: '1',
+//     name: 'John Brown',
+//     age: 32,
+//     address: 'New York No. 1 Lake Park',
+//   },
+//   {
+//     key: '2',
+//     name: 'Jim Green',
+//     age: 42,
+//     address: 'London No. 1 Lake Park',
+//   },
+//   {
+//     key: '3',
+//     name: 'Joe Black',
+//     age: 32,
+//     address: 'Sidney No. 1 Lake Park',
+//   },
+// ];
+
+// ReactDOM.render(
+//   <div>
+//     <h4>Middle size table</h4>
+//     <Table columns={columns} dataSource={data} size="middle" />
+//     <h4>Small size table</h4>
+//     <Table columns={columns} dataSource={data} size="small" />
+//   </div>,
+//   mountNode,
+// );

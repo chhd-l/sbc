@@ -27,7 +27,7 @@ export default class ButtonGroup extends React.Component<any, any> {
     const { queryParams } = this.props.relaxProps;
     const settleStatus = queryParams.get('settleStatus');
     return (
-      <div className="handle-bar">
+      <div className="handle-bar ant-form-inline filter-content">
         <Dropdown
           //disabled={settleStatus == 1}
           overlay={this._menu()}

@@ -138,6 +138,11 @@ export default class Customer extends React.Component<any, any> {
   }
 
   init = ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
+    const prescriberId =
+      JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null
+        ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+        : null;
+
     this.setState({
       loading: true
     });
@@ -148,7 +153,8 @@ export default class Customer extends React.Component<any, any> {
       customerAccount: query.customerAccount,
       customerLevelId: query.customerTypeId,
       customerName: query.customerName,
-      email: query.email
+      email: query.email,
+      prescriberId
     };
     pageNum = pageNum - 1;
     webapi
@@ -271,11 +277,11 @@ export default class Customer extends React.Component<any, any> {
                     />
                   </FormItem>
                 </Col>
-                <Col span={8}>
+                <Col span={8} id="tree-select-props-width">
                   <FormItem>
                     <SelectGroup
                       label={<p style={styles.label}>Customer type</p>}
-                      style={{ width: 80 }}
+                      // style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -293,7 +299,7 @@ export default class Customer extends React.Component<any, any> {
                     </SelectGroup>
                   </FormItem>
                 </Col>
-                <Col span={24} style={{ textAlign: 'center' }}>
+                <Col span={8}>
                   <FormItem>
                     <Button
                       type="primary"
@@ -375,6 +381,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 157
+    // width: 157
   }
 } as any;

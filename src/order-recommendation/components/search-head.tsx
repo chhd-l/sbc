@@ -195,6 +195,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem id="ipt">
                   <SelectGroup
                     label="Link status"
+                    defaultValue="All"
                     style={{ width: 110 }}
                     onChange={(value) => {
                       this.setState({
@@ -203,8 +204,8 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <Option value="2">All</Option>
-                    <Option value="0">0</Option>
-                    <Option value="1">1</Option>
+                    <Option value="0">Invalid</Option>
+                    <Option value="1">Valid</Option>
                   </SelectGroup>
                   {/*<Input
                     addonBefore="Link status"
@@ -251,7 +252,6 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
-                      console.log(this.state.linkStatus, '+++++++++++');
                       e.preventDefault();
                       const {
                         recommendationId,
@@ -323,6 +323,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
+        defaultValue="Recipient name"
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -345,6 +346,7 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
+        defaultValue="Product name"
         value={this.state.goodsOptions}
         style={styles.label}
       >
@@ -386,12 +388,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option value="clinicsName">
-          <FormattedMessage id="clinicName" />
-        </Option>
-        <Option value="clinicsIds">
-          <FormattedMessage id="clinicID" />
-        </Option>
+        <Option value="clinicsName">Prescriber name</Option>
+        <Option value="clinicsIds">Prescriber id</Option>
       </Select>
     );
   };

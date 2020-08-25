@@ -287,33 +287,6 @@ export default class ListView extends React.Component<any, any> {
         ? v.recommendationGoodsInfoRels
         : [];
       const a = [{ a: 1 }, { b: 2 }];
-
-      // const Imgs = v.get('recommendationGoodsInfoRels')
-
-      //const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-      //const gifts = v.get('recommendationGoodsInfoRels') ? v.get('recommendationGoodsInfoRels') : fromJS([]);
-      /*const num =
-          v
-            .get('tradeItems')
-            .concat(gifts)
-            .map((v) => v.get('num'))
-            .reduce((a, b) => {
-              a = a + b;
-              return a;
-            }, 0) || 0;
-        const buyerId = v.getIn(['buyer', 'id']);
-
-        const orderSource = v.get('orderSource');
-        let orderType = '';
-        if (orderSource == 'WECHAT') {
-          orderType = 'H5 order';
-        } else if (orderSource == 'APP') {
-          orderType = 'APP order';
-        } else if (orderSource == 'PC') {
-          orderType = 'PC order';
-        } else if (orderSource == 'LITTLEPROGRAM') {
-          orderType = 'Mini Program order';
-        }*/
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={id}>
           <td colSpan={9} style={{ padding: 0 }}>
@@ -333,16 +306,7 @@ export default class ListView extends React.Component<any, any> {
                         fontSize: 12
                       }}
                     >
-                      {/*<span style={{ marginLeft: '1%' }}>
-                          <Checkbox
-                            checked={v.get('checked')}
-                            onChange={(e) => {
-                              const checked = (e.target as any).checked;
-                              onChecked(index, checked);
-                            }}
-                          />
-                        </span>*/}
-                      <div style={{ width: 310, display: 'inline-block' }}>
+                      <div style={{ width: 510, display: 'inline-block' }}>
                         <span> {id}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
@@ -363,10 +327,10 @@ export default class ListView extends React.Component<any, any> {
                     style={{
                       textAlign: 'left',
                       display: 'flex',
-                      alignItems: 'flex-end',
+                      alignItems: 'flex-start',
                       flexWrap: 'wrap',
                       padding: '16px 0',
-                      width: '100px'
+                      width: '120px'
                     }}
                   >
                     {img.map((item, index) => {
@@ -379,8 +343,10 @@ export default class ListView extends React.Component<any, any> {
                       );
                     })}
                   </td>
-                  <td style={{ width: '16%' }}>
-                    {v.consumerLastName != null ? v.consumerLastName : '--'}
+                  <td style={{ width: '15.4%' }}>
+                    {v.consumerLastName != null
+                      ? v.consumerLastName + ' ' + v.consumerLastName
+                      : '--'}
                   </td>
                   <td style={{ width: '18%' }}>
                     {v.consumerEmail != null ? v.consumerEmail : '--'}
@@ -399,12 +365,12 @@ export default class ListView extends React.Component<any, any> {
                   <td style={{ width: '13%' }}>
                     {v.linkStatus != null ? v.linkStatus : '--'}
                   </td>
-                  <td style={{ width: '15%' }}>
-                    {v.prescriberId != null ? v.prescriberId : '--'}
+                  <td style={{ width: '15.4%' }}>
+                    {v.prescriberId != null ? v.prescriberName : '--'}
                   </td>
                   <td
                     style={{
-                      width: '10%',
+                      width: '10.2%',
                       color: '#E1021A',
                       cursor: 'pointer',
                       textAlign: 'right',

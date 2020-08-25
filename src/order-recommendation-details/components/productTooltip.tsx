@@ -56,9 +56,10 @@ export default class DetailPublish extends React.Component<any, any> {
     }, 1000);
   };
 
-  onSelectChange = (selectedRowKeys, v) => {
-    console.log(this.state.quantity, 1111111111);
+  onSelectChange = (selectedRowKeys, v, o) => {
+    console.log(selectedRowKeys, 1111111111);
     console.log(v, 2222222);
+    console.log(o, 333333);
 
     this.setState({ selectedRowKeys, addProduct: v });
   };
@@ -89,8 +90,9 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   handleChange = (value, a, index, e) => {
-    const { onProductselect, createLink } = this.props.relaxProps;
-    this.setState({ quantity: Object.assign(a, { companyInfoId: e }) });
+    const { onProductselect, createLink, productList } = this.props.relaxProps;
+    console.log(productList, 111111111);
+    //this.setState({ quantity: Object.assign(a, { companyInfoId: e }) });
   };
 
   render() {
@@ -137,9 +139,7 @@ export default class DetailPublish extends React.Component<any, any> {
         dataIndex: 'Signed',
         key: 'Signed',
         render: (text, record, index) => {
-          //console.log(text);
-          //console.log(record);
-          return <span></span>;
+          return <span>{record.goods.goodsCateName}</span>;
         }
       },
       {
@@ -151,6 +151,7 @@ export default class DetailPublish extends React.Component<any, any> {
         title: 'Quantity',
         dataIndex: 'addedFlag',
         key: 'addedFlag',
+        width: '8%',
         render: (text, record, index) => {
           return (
             <Select

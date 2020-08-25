@@ -6,7 +6,7 @@ import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
-import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
+// import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Provider } from 'react-redux';
 import { routeWithSubRoutes, history, noop } from 'qmkit';
 import { homeRoutes } from './router';
@@ -32,11 +32,11 @@ const B2BBoss = () => (
         <Router history={history}>
           <div className="father">
             <Switch>
-              <Security {...configOkta.oidc}>
-                <Route path="/implicit/callback" component={LoginCallback} />
-                {routeWithSubRoutes(homeRoutes, noop)}
-                <Route component={Main} />
-              </Security>
+              {/* <Security {...configOkta.oidc}>
+                <Route path="/implicit/callback" component={LoginCallback} /> */}
+              {routeWithSubRoutes(homeRoutes, noop)}
+              <Route component={Main} />
+              {/* </Security> */}
             </Switch>
           </div>
         </Router>

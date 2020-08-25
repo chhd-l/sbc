@@ -9,19 +9,26 @@ import {
   Dropdown,
   DatePicker,
   Row,
-  Col
+  Col,
+  message,
+  Cascader
 } from 'antd';
-import { noop, AuthWrapper, checkAuth, Headline, history } from 'qmkit';
+import {
+  noop,
+  AuthWrapper,
+  checkAuth,
+  Headline,
+  history,
+  SelectGroup
+} from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
-import { message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 const InputGroup = Input.Group;
-
 /**
  * 订单查询头
  */
@@ -64,7 +71,7 @@ export default class SearchHead extends Component<any, any> {
       buyerOptions: 'Recipient name',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
-      linkStatus: Number,
+      linkStatus: 0,
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
@@ -126,18 +133,20 @@ export default class SearchHead extends Component<any, any> {
       <div>
         <div className="space-between-align-items">
           <Headline title="Prescription portal" />
-          <Button
-            type="primary"
-            icon="plus"
-            htmlType="submit"
-            shape="round"
-            style={{ textAlign: 'center', marginRight: '20px' }}
-            onClick={(e) => {
-              history.push('/recomm-page-detail');
-            }}
-          >
-            <span>New</span>
-          </Button>
+          {sessionStorage.getItem('PrescriberType') != null ? (
+            <Button
+              type="primary"
+              icon="plus"
+              htmlType="submit"
+              shape="round"
+              style={{ textAlign: 'center', marginRight: '20px' }}
+              onClick={(e) => {
+                history.push('/recomm-page-detail');
+              }}
+            >
+              <span>New</span>
+            </Button>
+          ) : null}
         </div>
         <div id="inputs">
           <Form className="filter-content" layout="inline">
@@ -184,7 +193,20 @@ export default class SearchHead extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem id="ipt">
-                  <Input
+                  <SelectGroup
+                    label="Link status"
+                    style={{ width: 110 }}
+                    onChange={(value) => {
+                      this.setState({
+                        linkStatus: value
+                      });
+                    }}
+                  >
+                    <Option value="2">All</Option>
+                    <Option value="0">0</Option>
+                    <Option value="1">1</Option>
+                  </SelectGroup>
+                  {/*<Input
                     addonBefore="Link status"
                     type="number"
                     onChange={(e) => {
@@ -192,7 +214,7 @@ export default class SearchHead extends Component<any, any> {
                         linkStatus: (e.target as any).value
                       });
                     }}
-                  />
+                  />*/}
                 </FormItem>
               </Col>
 
@@ -229,6 +251,7 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
+                      console.log(this.state.linkStatus, '+++++++++++');
                       e.preventDefault();
                       const {
                         recommendationId,

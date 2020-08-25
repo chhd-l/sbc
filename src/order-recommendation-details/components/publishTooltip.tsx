@@ -58,7 +58,10 @@ export default class DetailPublish extends React.Component<any, any> {
 
   handleOk = (e) => {
     const { onSend, getLink } = this.props.relaxProps;
-    onSend('send', Object.assign({}, this.verification(), { id: getLink }));
+    onSend(
+      'send',
+      Object.assign({}, this.verification(), { base64Id: getLink })
+    );
   };
 
   handleCancel = (e) => {
@@ -70,7 +73,7 @@ export default class DetailPublish extends React.Component<any, any> {
     Promise.all([
       onSend(
         'addSend',
-        Object.assign({}, this.verification(), { id: getLink })
+        Object.assign({}, this.verification(), { base64Id: getLink })
       ),
       onSharing({ field: 'consumerFirstName', value: '' }),
       onSharing({ field: 'consumerLastName', value: '' }),

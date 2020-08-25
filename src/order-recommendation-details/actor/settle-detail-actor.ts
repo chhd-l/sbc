@@ -12,6 +12,7 @@ export default class SettleDetailActor extends Actor {
   defaultState() {
     return {
       sharing: {
+        prescriberId: 0,
         consumerFirstName: '',
         consumerLastName: '',
         emailConsent: 0,

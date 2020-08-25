@@ -63,15 +63,17 @@ export default class PublishButton extends React.Component<any, any> {
           //href="/recomm-page"
           onClick={() => history.goBack()}
         >
-          Exit
+          Cancel
         </Button>
-        <Button
-          type="primary"
-          shape="round"
-          onClick={() => this.showModal(true)}
-        >
-          Create Link
-        </Button>
+        {history.location.state ? null : (
+          <Button
+            type="primary"
+            shape="round"
+            onClick={() => this.showModal(true)}
+          >
+            Create Link
+          </Button>
+        )}
         <PublishTooltip
           visible={this.state.visible}
           showModal={this.showModal}

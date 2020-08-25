@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { Modal, Table, Input, Checkbox, Button } from 'antd';
+import { Modal, Table, Select, Checkbox, Button } from 'antd';
 import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
 import { accDiv } from '../../../web_modules/qmkit/float';
 declare type IList = List<any>;
+const { Option } = Select;
 
 @Relax
 /*发布*/
@@ -19,6 +20,7 @@ export default class DetailPublish extends React.Component<any, any> {
       onSharing: Function;
       onProductForm: Function;
       loading: boolean;
+      createLink: any;
     };
   };
 
@@ -29,7 +31,8 @@ export default class DetailPublish extends React.Component<any, any> {
     onProductForm: noop,
     onProductselect: noop,
     loading: 'loading',
-    productList: 'productList'
+    productList: 'productList',
+    createLink: 'createLink'
   };
 
   constructor(props) {
@@ -38,7 +41,8 @@ export default class DetailPublish extends React.Component<any, any> {
       visible: props.visible,
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
-      addProduct: []
+      addProduct: [],
+      quantity: ''
     };
   }
   start = () => {
@@ -53,11 +57,12 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   onSelectChange = (selectedRowKeys, v) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    console.log(this.state.quantity, 1111111111);
+    console.log(v, 2222222);
+
     this.setState({ selectedRowKeys, addProduct: v });
   };
   handleOk = (e) => {
-    console.log(this.state.addProduct, 11111111);
     const { onProductselect } = this.props.relaxProps;
     onProductselect(this.state.addProduct);
     this.props.showModal(false);
@@ -82,6 +87,12 @@ export default class DetailPublish extends React.Component<any, any> {
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
   }
+
+  handleChange = (value, a, index, e) => {
+    const { onProductselect, createLink } = this.props.relaxProps;
+    this.setState({ quantity: Object.assign(a, { companyInfoId: e }) });
+  };
+
   render() {
     const {
       loading,
@@ -124,7 +135,12 @@ export default class DetailPublish extends React.Component<any, any> {
       {
         title: 'Signed classification',
         dataIndex: 'Signed',
-        key: 'Signed'
+        key: 'Signed',
+        render: (text, record, index) => {
+          //console.log(text);
+          //console.log(record);
+          return <span></span>;
+        }
       },
       {
         title: 'Price',
@@ -134,7 +150,27 @@ export default class DetailPublish extends React.Component<any, any> {
       {
         title: 'Quantity',
         dataIndex: 'addedFlag',
-        key: 'addedFlag'
+        key: 'addedFlag',
+        render: (text, record, index) => {
+          return (
+            <Select
+              defaultValue="1"
+              style={{ width: 120 }}
+              onChange={(e) => this.handleChange(text, record, index, e)}
+            >
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+              <Option value="6">6</Option>
+              <Option value="7">7</Option>
+              <Option value="8">8</Option>
+              <Option value="9">9</Option>
+              <Option value="10">10</Option>
+            </Select>
+          );
+        }
       }
       /*{
         title: 'Operation',

@@ -6,6 +6,7 @@ import './index.less';
 import { AuthWrapper, BreadCrumb, history } from 'qmkit';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-tab-list';
+import config from '../../web_modules/qmkit/config';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class OrderList extends Component<any, any> {
@@ -18,7 +19,6 @@ export default class OrderList extends Component<any, any> {
 
   componentDidMount() {
     const state = this.props.location.state;
-
     if (state) {
       // state.key? this.store.onTabChange(this.props.location.state.key) : null
       if (state.key) {

@@ -38,27 +38,30 @@ export default class AppStore extends Store {
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
+    let obj = { linkStatus: 0 };
 
     if (key != '0') {
-      const [state, value] = key.split('-');
-      form['tradeState'][state] = value;
+      obj.linkStatus = key == 'Invalid' ? 1 : 0;
     }
-    form['orderType'] = 'NORMAL_ORDER';
-    webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
-      if (res.code == Const.SUCCESS_CODE) {
-        this.transaction(() => {
-          this.dispatch('loading:end');
-          this.dispatch('list:init', res.context);
-          this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-          this.btnLoading = false;
-        });
-      } else {
-        message.error(res.message);
-        if (res.code === 'K-110001') {
-          this.dispatch('loading:end');
+    console.log(obj);
+
+    webapi
+      .fetchOrderList({ ...obj, ...form, pageNum, pageSize })
+      .then(({ res }) => {
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            this.dispatch('loading:end');
+            this.dispatch('list:init', res.context);
+            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+            this.btnLoading = false;
+          });
+        } else {
+          message.error(res.message);
+          if (res.code === 'K-110001') {
+            this.dispatch('loading:end');
+          }
         }
-      }
-    });
+      });
   };
 
   //详情

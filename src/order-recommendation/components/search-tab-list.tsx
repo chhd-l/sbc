@@ -28,7 +28,6 @@ export default class SearchList extends React.Component<any, any> {
         <Tabs
           onChange={(key) => {
             onTabChange(key);
-            console.log(key, 1111111111);
           }}
           activeKey={key}
         >
@@ -36,11 +35,11 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Invalid" key="1">
+          <Tabs.TabPane tab="Invalid" key="Invalid">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Valid" key="2">
+          <Tabs.TabPane tab="Valid" key="Valid">
             <List />
           </Tabs.TabPane>
         </Tabs>

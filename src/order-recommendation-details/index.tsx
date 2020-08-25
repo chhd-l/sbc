@@ -18,9 +18,12 @@ export default class BillingDetails extends React.Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
-    const { settleId } = this.props.match.params;
-    //this.store.init(settleId);
+    const { state } = history.location;
+    if (state) {
+      this.store.init(state);
+    }
   }
+
   onInput = (e) => {
     this.store.onCreateLink({
       field: 'recommendationReasons',

@@ -410,7 +410,12 @@ export default class ListView extends React.Component<any, any> {
                       textAlign: 'right',
                       paddingRight: 20
                     }}
-                    onClick={() => onFindById({ id: v.id })}
+                    onClick={() =>
+                      history.push({
+                        pathname: '/recomm-page-detail',
+                        state: { id: v.id }
+                      })
+                    }
                   >
                     Details
                   </td>

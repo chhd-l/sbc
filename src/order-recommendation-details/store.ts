@@ -19,15 +19,18 @@ export default class AppStore extends Store {
   }
 
   init = async (param?: any) => {
-    param = Object.assign;
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchproductTooltip(param);
+    const res1 = await webapi.fetchFindById(param);
+    let arr = [];
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.total;
       //param.total = res1.res.context.total
+      res1.res.context.recommendationGoodsInfoRels.map((v, i) => {
+        arr.push(v.goodsInfo);
+      });
       this.transaction(() => {
         this.dispatch('loading:end');
-        this.dispatch('list:init', res1.res.context.content);
+        this.dispatch('product:productselect', arr);
       });
     } else {
       message.error(res1.res.message);
@@ -42,6 +45,7 @@ export default class AppStore extends Store {
     const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
+      console.log(res1.res.context.goodsInfoPage.content, 22222222);
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);

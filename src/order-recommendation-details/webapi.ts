@@ -20,6 +20,17 @@ export function fetchFinanceRewardDetails(param = {}) {
   });
 }
 
+/**
+ * 详情
+ */
+
+export function fetchFindById(param = {}) {
+  return Fetch<TResult>('/recommendation/findById', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
 export function fetchproductTooltip(param) {
   return Fetch<TResult>('/recommendation/listGoodsInfo', {
     method: 'POST',

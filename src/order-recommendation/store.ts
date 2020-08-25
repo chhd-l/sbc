@@ -62,11 +62,14 @@ export default class AppStore extends Store {
   };
 
   //详情
-  onFindById = async (param?: any) => {
+  /*onFindById = async (param?: any) => {
     const res = await webapi.fetchFindById(param);
     if (res.res.code === Const.SUCCESS_CODE) {
-      this.dispatch('get:getDetail', res.res.context);
-      history.push('/recomm-page-detail');
+      //this.dispatch('get:getDetail', res.res.context);
+      history.push({
+        pathname: '/recomm-page-detail',
+        state: state
+      });
     } else {
       message.error(res.res.message);
       if (res.res.code === 'K-110001') {
@@ -74,7 +77,7 @@ export default class AppStore extends Store {
         return false;
       }
     }
-  };
+  };*/
 
   onTabChange = (key) => {
     this.dispatch('tab:init', key);

@@ -5,6 +5,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
+import { history } from 'qmkit';
 
 //import moment from 'moment';
 
@@ -38,18 +39,21 @@ export default class BillingDetails extends React.Component<any, any> {
     });
   };
   render() {
+    console.log(history.location.state, 12323221);
     return (
       <div style={styles.main}>
         <div style={styles.nav}>Select Recommended Product</div>
         <div style={styles.btn}>
-          <Button
-            type="primary"
-            shape="round"
-            icon="edit"
-            onClick={() => this.showProduct(true)}
-          >
-            Add Product
-          </Button>
+          {history.location.state ? null : (
+            <Button
+              type="primary"
+              shape="round"
+              icon="edit"
+              onClick={() => this.showProduct(true)}
+            >
+              Add Product
+            </Button>
+          )}
         </div>
         <DetailList />
         {this.state.visible == true ? (

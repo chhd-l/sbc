@@ -677,7 +677,7 @@ const routes = [
   },
   //message-email-list
   {
-    path: '/message-email-list',
+    path: '/message-email',
     asyncComponent: () => import('./message-email-list')
   },
   //message-notification
@@ -689,6 +689,24 @@ const routes = [
   {
     path: '/message-setting',
     asyncComponent: () => import('./message-setting')
+  },
+  //message-overview
+  {
+    path: '/message-overview',
+    asyncComponent: () => import('./message-overview')
+  },
+  //message-detail
+  {
+    path: '/message-quick-send',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/message-detail/:id',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/message-edit/:id',
+    asyncComponent: () => import('./message-detail')
   }
 ];
 

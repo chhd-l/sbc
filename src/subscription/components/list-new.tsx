@@ -90,9 +90,7 @@ export default class ListView extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  onChecked = (index, checked) => {
-    console.log(index, checked);
-  };
+  onChecked = (index, checked) => {};
 
   goodsSum = (array) => {
     let sum = 0;

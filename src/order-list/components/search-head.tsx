@@ -194,7 +194,6 @@ export default class SearchHead extends Component<any, any> {
                     addonBefore={this._renderClinicSelect()}
                     onChange={(e) => {
                       let a = e.target.value.split(',');
-                      console.log(a.map(Number), 111);
 
                       this.setState({
                         clinicSelectValue:

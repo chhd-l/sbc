@@ -51,3 +51,10 @@ export function fetchModify(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+export function fetchLinkStatus(param = {}) {
+  return Fetch<TResult>('/recommendation/modify/linkStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

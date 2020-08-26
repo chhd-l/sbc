@@ -170,7 +170,6 @@ class CateList extends React.Component<any, any> {
     cateParentName: string,
     goodsCateId: number
   ) => {
-    console.log(goodsCateId, 'goodsCateId');
     const { showEditModal } = this.props.relaxProps;
     showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
   };

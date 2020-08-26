@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, Col, Button, Select } from 'antd';
+import { Table, Col, Button, Select, Switch, Icon } from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
@@ -27,13 +27,17 @@ export default class BillingDetails extends React.Component<any, any> {
       settlement: IMap;
       setName: IList;
       onSharing: Function;
+      onLinkStatus: Function;
+      detailProductList: any;
     };
   };
 
   static relaxProps = {
     settlement: 'settlement',
     setName: 'setName',
-    onSharing: noop
+    onSharing: noop,
+    onLinkStatus: noop,
+    detailProductList: 'detailProductList'
   };
   componentDidMount() {
     const { onSharing } = this.props.relaxProps;
@@ -57,30 +61,61 @@ export default class BillingDetails extends React.Component<any, any> {
       value: value
     });
   };
+  onValid = (e) => {
+    const { onLinkStatus } = this.props.relaxProps;
+    let linkStatus = e == true ? 0 : 1;
+    onLinkStatus({ linkStatus, id: history.location.state.id });
+  };
   render() {
+    const { detailProductList } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers =
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
+
     return (
       <div style={styles.main}>
-        <div style={{ width: 150, marginTop: 15, marginBottom: 10 }}>
-          <SelectGroup
-            label="Prescriber"
-            defaultValue={
-              sessionStorage.getItem('PrescriberType')
-                ? JSON.parse(sessionStorage.getItem('PrescriberType')).children
-                : null
-            }
-            onChange={(value, name) => this._prescriberChange(value, name)}
-          >
-            {allPrescribers.map((item) => (
-              <Option value={item.prescriberId} key={item.prescriberId}>
-                {item.prescriberName}
-              </Option>
-            ))}
-          </SelectGroup>
+        <div
+          className="space-between"
+          style={{ marginTop: 15, marginBottom: 10 }}
+        >
+          <div style={{ width: 150 }}>
+            {history.location.state ? (
+              <SelectGroup
+                label="Prescriber"
+                disabled
+                defaultValue={detailProductList.prescriberName}
+              ></SelectGroup>
+            ) : (
+              <SelectGroup
+                label="Prescriber"
+                defaultValue={
+                  sessionStorage.getItem('PrescriberType')
+                    ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                        .children
+                    : null
+                }
+                onChange={(value, name) => this._prescriberChange(value, name)}
+              >
+                {allPrescribers.map((item) => (
+                  <Option value={item.prescriberId} key={item.prescriberId}>
+                    {item.prescriberName}
+                  </Option>
+                ))}
+              </SelectGroup>
+            )}
+          </div>
+          <div style={{ marginTop: 12, marginRight: 15 }}>
+            {history.location.state ? (
+              <Switch
+                checkedChildren=" Valid "
+                unCheckedChildren=" Invalid "
+                defaultChecked
+                onClick={this.onValid}
+              />
+            ) : null}
+          </div>
         </div>
 
         <div style={styles.nav}>

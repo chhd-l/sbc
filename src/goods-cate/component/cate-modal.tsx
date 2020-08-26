@@ -201,7 +201,6 @@ class CateModalForm extends React.Component<any, any> {
       clickImg,
       removeImg
     } = this.props.relaxProps;
-    console.log(images.toJS());
 
     return (
       <Form className="login-form">
@@ -376,7 +375,6 @@ class CateModalForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(key, 'key');
     if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {
@@ -446,7 +444,6 @@ class CateModalForm extends React.Component<any, any> {
         [key]: fromJS(e)
       });
       updateGoodsForm(this.props.form);
-      console.log(editGoods);
       editGoods(goods);
     }
   };

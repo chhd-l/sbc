@@ -4,6 +4,7 @@ import { StoreProvider } from 'plume2';
 import { Headline, BreadCrumb, history } from 'qmkit';
 import Detail from './components/detail';
 import PublishButton from './components/publishButton';
+import User from './components/user';
 
 import AppStore from './store';
 import './style.less';
@@ -57,13 +58,26 @@ export default class BillingDetails extends React.Component<any, any> {
           </div>
           <div className="reasonsInput">
             <span>Recommended Reasons</span>
-            <Input
-              size="large"
-              placeholder="Input Recommended Reasons"
-              style={{ border: '1px #dedede solid' }}
-              onChange={this.onInput}
-            />
+            {history.location.state ? (
+              <Input
+                size="large"
+                disabled
+                placeholder={
+                  this.store.state().get('detailProductList')
+                    .recommendationReasons
+                }
+                style={{ border: '1px #dedede solid' }}
+              />
+            ) : (
+              <Input
+                size="large"
+                placeholder="Input Recommended Reasons"
+                style={{ border: '1px #dedede solid' }}
+                onChange={this.onInput}
+              />
+            )}
           </div>
+          {history.location.state ? <User /> : null}
         </div>
         <div className="btn">
           <PublishButton />

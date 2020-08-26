@@ -7,7 +7,6 @@
  * @Date    2019/5/6
  **/
 
-
 /**
 
  直接调用
@@ -69,60 +68,88 @@
  }
  </Select>
  */
-export function extraPathsValue(...params):{paths:string[];value:any;batchUpdate} {
+export function extraPathsValue(
+  ...params
+): { paths: string[]; value: any; batchUpdate } {
+  let p1 = params[0],
+    p2 = params.length >= 2 ? params[1] : null;
 
-  let p1=params[0],p2=params.length>=2?params[1]:null;
-
-  let handFunc:any =null;
-  if(typeof params[params.length-1] ==='function') {
-    handFunc=params[params.length-1];
+  let handFunc: any = null;
+  if (typeof params[params.length - 1] === 'function') {
+    handFunc = params[params.length - 1];
   }
 
-  let paths:string[]=[],value,batchUpdate=[];
-  if( typeof p1 ==='string' && p2 && p2.props && p2.props['data-paths']) {
+  let paths: string[] = [],
+    value,
+    batchUpdate = [];
+  if (typeof p1 === 'string' && p2 && p2.props && p2.props['data-paths']) {
     //字符数组;
-    paths = p2.props['data-paths'].split(/[,\.]/ig);
+    paths = p2.props['data-paths'].split(/[,\.]/gi);
     value = p1;
-  } else if( p1 instanceof Array && p1[0].hasOwnProperty('paths') && p1[0].hasOwnProperty('value')  ) {
-    batchUpdate=p1.map(({paths,value})=>{
-      let _paths =paths;
-      if(typeof _paths ==='string'){
-        _paths=paths.split(/[,\.]/ig);
+  } else if (
+    p1 instanceof Array &&
+    p1[0].hasOwnProperty('paths') &&
+    p1[0].hasOwnProperty('value')
+  ) {
+    batchUpdate = p1.map(({ paths, value }) => {
+      let _paths = paths;
+      if (typeof _paths === 'string') {
+        _paths = paths.split(/[,\.]/gi);
       }
 
       return {
-        paths:_paths,value
-      }
+        paths: _paths,
+        value
+      };
     });
-  } else if(typeof p1 ==='string') {
+  } else if (typeof p1 === 'string') {
     //字符数组;
-    paths = p1.split(/[,\.]/ig);
+    paths = p1.split(/[,\.]/gi);
     value = p2;
-  } else if(p1.hasOwnProperty('target') && p1.target['data-paths'] && p1.target['value']!=undefined) {
+  } else if (
+    p1.hasOwnProperty('target') &&
+    p1.target['data-paths'] &&
+    p1.target['value'] != undefined
+  ) {
     //Radio.Group
-    paths = p1.target['data-paths'].split(/[,\.]/ig);
-    value=p1.target['value'];
-  } else if(p1.hasOwnProperty('target') && p1.target.dataset && p1.target.dataset.paths) {
+    paths = p1.target['data-paths'].split(/[,\.]/gi);
+    value = p1.target['value'];
+  } else if (
+    p1.hasOwnProperty('target') &&
+    p1.target.dataset &&
+    p1.target.dataset.paths
+  ) {
     //event; input text-area
     // @ts-ignore
-    paths = p1.target.dataset.paths.split(/[,\.]/ig);
+    paths = p1.target.dataset.paths.split(/[,\.]/gi);
     // @ts-ignore
     value = p1.target.value;
-  } else if(p1 instanceof Array && p2 instanceof Array && p2[0] && typeof p2[0].type === 'function' && p2[0].props && p2[0].props["data-paths"]) {
+  } else if (
+    p1 instanceof Array &&
+    p2 instanceof Array &&
+    p2[0] &&
+    typeof p2[0].type === 'function' &&
+    p2[0].props &&
+    p2[0].props['data-paths']
+  ) {
     // select checkbox多选状态
-    paths = p2[0].props["data-paths"].split(/[,\.]/ig);
-    value=p1 as Array<string|number>;
-  } else if(p1 instanceof Array) {
-    paths= p1;
-    value= p2;
-  } else if(p2 && p2.hasOwnProperty('props') && p2.props.hasOwnProperty('data-paths') && p2.props.hasOwnProperty('value')) {
+    paths = p2[0].props['data-paths'].split(/[,\.]/gi);
+    value = p1 as Array<string | number>;
+  } else if (p1 instanceof Array) {
+    paths = p1;
+    value = p2;
+  } else if (
+    p2 &&
+    p2.hasOwnProperty('props') &&
+    p2.props.hasOwnProperty('data-paths') &&
+    p2.props.hasOwnProperty('value')
+  ) {
     // select 单选
-    paths = p2.props['data-paths'].split(/[,\.]/ig);
+    paths = p2.props['data-paths'].split(/[,\.]/gi);
     value = p2.props['value'];
   }
-  console.log(paths,value,batchUpdate);
 
-  return handFunc?handFunc({paths,value,batchUpdate,raw:params}):{paths,value,batchUpdate};
+  return handFunc
+    ? handFunc({ paths, value, batchUpdate, raw: params })
+    : { paths, value, batchUpdate };
 }
-
-

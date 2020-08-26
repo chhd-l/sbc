@@ -79,7 +79,6 @@ class BillingInfomation extends React.Component<any, any> {
     webapi
       .getPaymentMethods({ customerId: this.props.customerId })
       .then((res) => {
-        console.log(res);
         let data = res.res.context;
         let sortData = data.sort((a, b) => b.isDefault - a.isDefault);
         let cardForm = sortData[0];
@@ -119,8 +118,6 @@ class BillingInfomation extends React.Component<any, any> {
   };
 
   async saveCard() {
-    console.log(this.state.cardForm, 'haha');
-
     const { cardForm } = this.state;
     this.setState({
       loading: true
@@ -151,7 +148,6 @@ class BillingInfomation extends React.Component<any, any> {
           }
         }
       );
-      console.log(res.data);
       let params = {
         cardCvv: cardForm.cardCvv,
         cardMmyy: cardForm.cardMmyy,
@@ -176,10 +172,6 @@ class BillingInfomation extends React.Component<any, any> {
         loading: false
       });
       if (res) {
-        console.log(
-          res.data.more_info,
-          'body/expiration_date should match pattern "^(0[1-9]|1[0-2])(/|-|.| )d{2,4}"'
-        );
         if (
           res.data.more_info.indexOf(
             'body/credit_card_cvv should match pattern'
@@ -209,7 +201,6 @@ class BillingInfomation extends React.Component<any, any> {
   onFormChange = ({ field, value }) => {
     let data = this.state.cardForm;
     data[field] = value;
-    console.log(data);
     this.setState({
       cardForm: data
     });
@@ -405,7 +396,6 @@ class BillingInfomation extends React.Component<any, any> {
                               /\s*/g,
                               ''
                             );
-                            console.log(value);
                             this.onFormChange({
                               field: 'cardNumber',
                               value
@@ -436,7 +426,6 @@ class BillingInfomation extends React.Component<any, any> {
                           style={{ width: '100%' }}
                           format="MM/YY"
                           disabledDate={(current) => {
-                            console.log(current);
                             return current && current > moment().endOf('day');
                           }}
                           onChange={(date, dateString) => {

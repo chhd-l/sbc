@@ -473,7 +473,6 @@ export default class AppStore extends Store {
   onSelectCustomerName = async (customerAccount: string) => {
     //反查出accoutId
     const customers = this.state().get('customers');
-    console.log(customers);
     const userInfo = this.state()
       .get('customers')
       .filter((v) => v.get('customerAccount') == customerAccount)

@@ -61,7 +61,6 @@ export default class OperateLog extends React.Component<any, any> {
   render() {
     const { log } = this.props.relaxProps;
     const Panel = Collapse.Panel;
-    console.log(log.toJS(), 'log');
     return (
       <div>
         <div style={styles.backItem}>

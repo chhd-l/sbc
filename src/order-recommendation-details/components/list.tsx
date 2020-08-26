@@ -54,12 +54,11 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     snapshot?: any
   ) {
     const { productselect, onCreateLink } = this.props.relaxProps;
-    console.log(productselect, 1111);
 
     let arr = productselect.map((v, i) => {
       return {
         goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.companyInfoId
+        recommendationNumber: v.quantity
       };
     });
     onCreateLink({
@@ -71,6 +70,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   render() {
     const { productselect, productForm } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
+
     return (
       <TableRow>
         <DataGrid
@@ -94,11 +94,11 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column
             title="Signed classification"
-            dataIndex="Signed"
-            key="Signed"
+            dataIndex="goods.goodsCateName"
+            key="goodsCateName"
           />
           <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
-          <Column title="Quantity" key="addedFlag" dataIndex="addedFlag" />
+          <Column title="Quantity" key="quantity" dataIndex="quantity" />
         </DataGrid>
       </TableRow>
     );

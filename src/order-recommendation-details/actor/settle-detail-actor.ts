@@ -35,7 +35,9 @@ export default class SettleDetailActor extends Actor {
         recommendationGoodsInfoRels: []
       },
       getLink: '',
-      send: ''
+      send: '',
+      detailProductList: {},
+      linkStatus: Number
     };
   }
 
@@ -50,6 +52,12 @@ export default class SettleDetailActor extends Actor {
         .set('pageSize', pageSize)
         .set('dataList', fromJS(content));
     });*/
+  }
+
+  //detailProductList
+  @Action('product:detailProductList')
+  detailProductList(state: IMap, res) {
+    return state.set('detailProductList', res);
   }
 
   //productList初始化
@@ -99,6 +107,12 @@ export default class SettleDetailActor extends Actor {
   @Action('get:send')
   send(state: IMap, res) {
     return state.set('send', res);
+  }
+
+  //linkStatus
+  @Action('get:linkStatus')
+  linkStatus(state: IMap, res) {
+    return state.set('linkStatus', res);
   }
 
   //loading

@@ -91,9 +91,7 @@ export default class SearchForm extends React.Component<any, any> {
     loading: false
   };
 
-  handleTableChange(pagination) {
-    console.log(pagination);
-  }
+  handleTableChange(pagination) {}
   render() {
     const { data, pagination, loading } = this.state;
     return (

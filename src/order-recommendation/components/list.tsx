@@ -345,7 +345,7 @@ export default class ListView extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '15.4%' }}>
                     {v.consumerLastName != null
-                      ? v.consumerLastName + ' ' + v.consumerLastName
+                      ? v.consumerFirstName + ' ' + v.consumerLastName
                       : '--'}
                   </td>
                   <td style={{ width: '18%' }}>

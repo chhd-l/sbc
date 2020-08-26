@@ -30,6 +30,7 @@ export default class AppStore extends Store {
       });
       this.transaction(() => {
         this.dispatch('loading:end');
+        this.dispatch('product:detailProductList', res1.res.context);
         this.dispatch('product:productselect', arr);
       });
     } else {
@@ -45,7 +46,6 @@ export default class AppStore extends Store {
     const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
-      console.log(res1.res.context.goodsInfoPage.content, 22222222);
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
@@ -98,6 +98,22 @@ export default class AppStore extends Store {
       message.error(res.res.message);
       if (res.res.code === 'K-110001') {
         message.success('send failed!');
+        return false;
+      }
+    }
+  };
+
+  //LinkStatus
+
+  onLinkStatus = async (param?: any) => {
+    const res = await webapi.fetchLinkStatus(param);
+    if (res.res.code === Const.SUCCESS_CODE) {
+      //message.success('switch successfully!');
+      this.dispatch('get:linkStatus', res.res.context);
+    } else {
+      message.error(res.res.message);
+      if (res.res.code === 'K-110001') {
+        message.success('switch failed!');
         return false;
       }
     }

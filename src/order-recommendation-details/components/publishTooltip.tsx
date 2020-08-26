@@ -138,14 +138,14 @@ export default class DetailPublish extends React.Component<any, any> {
             </Button>,
             <Button key="submit" type="primary" onClick={this.handleOk}>
               Send
-            </Button>,
-            <Button
+            </Button>
+            /*<Button
               key="Another"
               type="primary"
               onClick={this.handleSendAnother}
             >
               Send & Another
-            </Button>
+            </Button>*/
           ]}
         >
           <div className="share">

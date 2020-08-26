@@ -18,3 +18,69 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * 新增EmailTask
+ * @param filterParams
+ */
+export function addEmailTask(filterParams = {}) {
+  return Fetch<TResult>('/message/email/task', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * 修改EmailTask
+ * @param filterParams
+ */
+export function updateEmailTask(filterParams = {}) {
+  return Fetch<TResult>('/message/email/task', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * 获取详情
+ * @param filterParams
+ */
+export function findEmailTask(id: string) {
+  return Fetch<TResult>('/message/email/task/find/' + id, {
+    method: 'GET'
+  });
+}
+
+export function generateTaskId() {
+  return Fetch<TResult>('/message/email/task/generateTaskId', {
+    method: 'POST'
+  });
+}
+// 获取emailTemplateList
+export function getTemplateList() {
+  return Fetch<TResult>('/message/listEmailTemplate', {
+    method: 'POST'
+  });
+}
+// 获取订阅列表
+export function getSubscriptionList(filterParams = {}) {
+  return Fetch<TResult>('/sub/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+// 获取订单列表
+export function getOrderList(filterParams = {}) {
+  return Fetch<TResult>('/trade', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

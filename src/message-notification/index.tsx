@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline } from 'qmkit';
+import { BreadCrumb, Headline, Const } from 'qmkit';
+import * as webapi from './webapi';
 import {
   Icon,
   Table,
@@ -11,79 +12,48 @@ import {
   Form,
   Input,
   Row,
-  Col
+  Col,
+  message,
+  Select
 } from 'antd';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 class Notification extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       title: 'Notification Automation',
 
-      orderAutomationData: [
-        {
-          status: 'Out of date',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        },
-        {
-          status: 'Order Confirmation',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        },
-        {
-          status: 'Hava been shipped',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '0'
-        },
-        {
-          status: 'Partial shipment',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        },
-        {
-          status: 'To be recived',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        }
-      ],
+      orderAutomationData: [],
 
-      subscriptionAutomationData: [
-        {
-          status: 'New subscription order is coming',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        },
-        {
-          status: 'Information has been changed',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        },
-        {
-          status: 'Cancelled',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '0'
-        },
-        {
-          status: 'New subscription',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        }
-      ],
-      RecommendationAutomationData: [
-        {
-          status: 'Recommendation creation',
-          emailTemplate: 'RC-US 12115',
-          isOpen: '1'
-        }
-      ],
+      subscriptionAutomationData: [],
+      RecommendationAutomationData: [],
 
       visible: false,
-      selectedStatus: ''
+      selectedStatus: '',
+      selectedTemplate: '',
+      emailTemplateList: [],
+      previewHtml: ''
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getTemplateList();
+    this.getNotificationList();
+  }
+
+  getNotificationList = () => {
+    webapi.getNotificationList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          orderAutomationData: res.context.orderList,
+          subscriptionAutomationData: res.context.subscriptionList,
+          RecommendationAutomationData: res.context.recommendationList
+        });
+      }
+    });
+  };
   handleOk = () => {
     this.setState({
       visible: false,
@@ -96,10 +66,83 @@ class Notification extends Component<any, any> {
       selectedStatus: ''
     });
   };
-  openSetting = (selectedStatus) => {
+  openSetting = (obj) => {
     this.setState({
       visible: true,
-      selectedStatus: selectedStatus
+      selectedStatus: obj.objectStatus,
+      selectedTemplate: obj.templateId
+    });
+  };
+  changeAutoStatus = (id, status) => {
+    if (+status === 1) {
+      this.closeNotification(id);
+    } else {
+      this.startNotification(id);
+    }
+  };
+  closeNotification = (id: string) => {
+    webapi
+      .closeNotification(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getNotificationList();
+          message.success(res.message || 'Update Successful');
+        } else {
+          message.error(res.message || 'Update Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Failed');
+      });
+  };
+  startNotification = (id: string) => {
+    webapi
+      .startNotification(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getNotificationList();
+          message.success(res.message || 'Update Successful');
+        } else {
+          message.error(res.message || 'Update Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Failed');
+      });
+  };
+
+  getTemplateList = () => {
+    webapi.getTemplateList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          emailTemplateList: res.context.emailTemplateResponseList
+        });
+      }
+    });
+  };
+  templateChange = (value) => {
+    this.setState({
+      selectedTemplate: value
+    });
+
+    this.getEmailTemplateById(value);
+  };
+
+  getEmailTemplateById = (id: string) => {
+    let params = {
+      templateId: id
+    };
+    webapi.getEmailTemplateById(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let templateData = res.context.context;
+        this.setState({
+          previewHtml: templateData.emailTemplateHtml
+        });
+      }
     });
   };
 
@@ -108,13 +151,15 @@ class Notification extends Component<any, any> {
       title,
       orderAutomationData,
       subscriptionAutomationData,
-      RecommendationAutomationData
+      RecommendationAutomationData,
+      emailTemplateList,
+      previewHtml
     } = this.state;
     const columns = [
       {
         title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'objectStatus',
+        key: 'objectStatus',
         width: '40%'
       },
       {
@@ -129,12 +174,13 @@ class Notification extends Component<any, any> {
         width: '20%',
         render: (text, record) => (
           <span>
-            <a onClick={() => this.openSetting(record.status)}>setting</a>
+            <a onClick={() => this.openSetting(record)}>setting</a>
             <Divider type="vertical" />
             <Switch
               checkedChildren="on"
               unCheckedChildren="off"
-              defaultChecked={record.isOpen === '1' ? true : false}
+              defaultChecked={+record.status === 1 ? true : false}
+              onChange={() => this.changeAutoStatus(record.id, record.status)}
             />
           </span>
         )
@@ -193,6 +239,7 @@ class Notification extends Component<any, any> {
               </div>
             </div>
             <Table
+              rowKey="id"
               style={{ marginTop: 20 }}
               columns={columns}
               dataSource={RecommendationAutomationData}
@@ -227,9 +274,21 @@ class Notification extends Component<any, any> {
                   <p>{this.state.selectedStatus}</p>
                 </FormItem>
                 <FormItem label="Email Template">
-                  <Input />
+                  <Select onChange={(value) => this.templateChange(value)}>
+                    {emailTemplateList &&
+                      emailTemplateList.map((item, index) => (
+                        <Option value={item.templateId} key={index}>
+                          {item.emailTemplate}
+                        </Option>
+                      ))}
+                  </Select>
                 </FormItem>
               </Form>
+            </Col>
+            <Col span={16}>
+              {previewHtml ? (
+                <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
+              ) : null}
             </Col>
           </Row>
         </Modal>

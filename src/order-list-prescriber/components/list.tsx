@@ -405,7 +405,7 @@ export default class ListView extends React.Component<any, any> {
                                     }}
                                     className="iconfont iconEdit"
                                   >
-                                    <FormattedMessage id="edit" />
+                                    {/*<FormattedMessage id="edit" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>
@@ -422,8 +422,9 @@ export default class ListView extends React.Component<any, any> {
                                     }}
                                     href="javascript:void(0)"
                                     style={{ marginLeft: 20 }}
+                                    className="iconfont iconbtn-audit"
                                   >
-                                    <FormattedMessage id="order.audit" />
+                                    {/*<FormattedMessage id="order.audit" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>
@@ -440,8 +441,9 @@ export default class ListView extends React.Component<any, any> {
                                     }
                                     href="javascript:void(0)"
                                     style={{ marginLeft: 20 }}
+                                    className="iconfont iconbtn-turndown"
                                   >
-                                    <FormattedMessage id="order.turnDown" />
+                                    {/*<FormattedMessage id="order.turnDown" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>
@@ -461,8 +463,9 @@ export default class ListView extends React.Component<any, any> {
                                       this._showRetrialConfirm(id);
                                     }}
                                     href="javascript:void(0)"
+                                    className="iconfont iconbtn-review"
                                   >
-                                    <FormattedMessage id="order.review" />
+                                    {/*<FormattedMessage id="order.review" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>

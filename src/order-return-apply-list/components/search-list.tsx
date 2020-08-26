@@ -174,8 +174,9 @@ export default class SearchList extends React.Component<any, any> {
                             onClick={() => {
                               apply(id);
                             }}
+                            className="iconfont iconApplication"
                           >
-                            {<FormattedMessage id="application" />}
+                            {/*{<FormattedMessage id="application" />}*/}
                           </a>
                         </Tooltip>
                       </span>

@@ -460,8 +460,9 @@ export default class ListView extends React.Component<any, any> {
                                       this._showRetrialConfirm(id);
                                     }}
                                     href="javascript:void(0)"
+                                    className="iconfont iconbtn-review"
                                   >
-                                    <FormattedMessage id="order.review" />
+                                    {/*<FormattedMessage id="order.review" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>
@@ -478,8 +479,9 @@ export default class ListView extends React.Component<any, any> {
                                   <a
                                     onClick={() => this._toDeliveryForm(id)}
                                     style={{ marginLeft: 20 }}
+                                    className="iconfont iconbtn-shipping"
                                   >
-                                    <FormattedMessage id="order.ship" />
+                                    {/*<FormattedMessage id="order.ship" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>
@@ -495,8 +497,11 @@ export default class ListView extends React.Component<any, any> {
                             ) && (
                               <AuthWrapper functionName="fOrderDetail002">
                                 <Tooltip placement="top" title="Ship">
-                                  <a onClick={() => this._toDeliveryForm(id)}>
-                                    <FormattedMessage id="order.ship" />
+                                  <a
+                                    onClick={() => this._toDeliveryForm(id)}
+                                    className="iconfont iconbtn-shipping"
+                                  >
+                                    {/*<FormattedMessage id="order.ship" />*/}
                                   </a>
                                 </Tooltip>
                               </AuthWrapper>

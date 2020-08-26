@@ -19,7 +19,8 @@ import {
   Popconfirm,
   Radio,
   Collapse,
-  Spin
+  Spin,
+  Tooltip
 } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
@@ -464,9 +465,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           okText="Confirm"
           cancelText="Cancel"
         >
-          <Button type="link" style={{ fontSize: 16 }}>
-            Skip Next Delivery
-          </Button>
+          <Tooltip placement="top" title="Skip Next Delivery">
+            <Button type="link" style={{ fontSize: 16 }}>
+              Skip Next Delivery
+            </Button>
+          </Tooltip>
         </Popconfirm>
         {/* <Popconfirm
           placement="topRight"

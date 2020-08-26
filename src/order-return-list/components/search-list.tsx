@@ -457,8 +457,9 @@ export default class SearchList extends React.Component<any, any> {
                                     );
                                   }
                                 }}
+                                className="iconfont iconbtn-refund"
                               >
-                                <FormattedMessage id="refund" />
+                                {/*<FormattedMessage id="refund" />*/}
                               </a>
                             </Tooltip>
                           </AuthWrapper>

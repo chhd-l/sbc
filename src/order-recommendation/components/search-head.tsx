@@ -192,11 +192,11 @@ export default class SearchHead extends Component<any, any> {
               </Col>
 
               <Col span={8}>
-                <FormItem id="ipt">
+                <FormItem>
                   <SelectGroup
                     label="Link status"
                     defaultValue="All"
-                    style={{ width: 110 }}
+                    style={{ width: 170 }}
                     onChange={(value) => {
                       this.setState({
                         linkStatus: value
@@ -204,8 +204,8 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <Option value="2">All</Option>
-                    <Option value="0">Invalid</Option>
-                    <Option value="1">Valid</Option>
+                    <Option value="1">Invalid</Option>
+                    <Option value="0">Valid</Option>
                   </SelectGroup>
                   {/*<Input
                     addonBefore="Link status"

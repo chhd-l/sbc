@@ -8,6 +8,7 @@ import moment from 'moment';
 declare type IList = List<any>;
 const { Option } = Select;
 let arrQuantity = [];
+
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
@@ -41,8 +42,7 @@ export default class DetailPublish extends React.Component<any, any> {
       visible: props.visible,
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
-      addProduct: [],
-      quantity: []
+      addProduct: []
     };
   }
   start = () => {
@@ -57,21 +57,17 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   onSelectChange = (selectedRowKeys, v, o) => {
-    Promise.all([
-      selectedRowKeys.map((item, i) => {
-        if (arrQuantity.length > 0) {
-          arrQuantity.map((m, n) => {
-            if (m.no == item) {
-              v[i].quantity = m.quantity;
-            } else {
-              v[i].quantity = 1;
-            }
-          });
-        }
-      }),
-      console.log(v, '++++++++++++++++++++++++='),
-      this.setState({ selectedRowKeys, addProduct: v })
-    ]);
+    selectedRowKeys.map((item, i) => {
+      v[i].quantity = 1;
+      if (arrQuantity.length > 0) {
+        arrQuantity.map((m, n) => {
+          if (m.no == item) {
+            v[i].quantity = Number(m.quantity);
+          }
+        });
+      }
+    });
+    this.setState({ selectedRowKeys, addProduct: v });
   };
   handleOk = (e) => {
     const { onProductselect } = this.props.relaxProps;

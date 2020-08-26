@@ -74,6 +74,9 @@ export default class BillingDetails extends React.Component<any, any> {
         ? employee.prescribers
         : [];
 
+    setTimeout(() => {
+      console.log(detailProductList.prescriberName);
+    });
     return (
       <div style={styles.main}>
         <div
@@ -85,7 +88,7 @@ export default class BillingDetails extends React.Component<any, any> {
               <SelectGroup
                 label="Prescriber"
                 disabled
-                defaultValue={detailProductList.prescriberName}
+                value={detailProductList.prescriberName}
               ></SelectGroup>
             ) : (
               <SelectGroup

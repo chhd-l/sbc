@@ -80,7 +80,6 @@ export default class AppStore extends Store {
 
   //Send & Another
   onSharing = (sharing) => {
-    console.log(sharing, 11111111);
     this.dispatch('detail:sharing', sharing);
   };
 

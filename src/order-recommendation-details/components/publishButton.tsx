@@ -40,6 +40,7 @@ export default class PublishButton extends React.Component<any, any> {
       onCreateLink,
       onCreate
     } = this.props.relaxProps;
+
     if (createLink.toJS().recommendationGoodsInfoRels.length > 0) {
       onCreate(createLink.toJS());
       this.setState({

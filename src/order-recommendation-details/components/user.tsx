@@ -75,6 +75,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               : '--'}
           </span>
         </div>
+        <div className="text flex-start">
+          <span>
+            Link:
+            https://shopuat.466920.com/recommendation/MjAyMDA4MjYxMzU2NDE3MTI1
+          </span>
+          <span></span>
+        </div>
       </div>
     );
   }

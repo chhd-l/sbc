@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Table, Select, Checkbox, Button } from 'antd';
-import { cache, DataGrid, noop, util } from 'qmkit';
+import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
 import { accDiv } from '../../../web_modules/qmkit/float';
@@ -98,14 +98,7 @@ export default class DetailPublish extends React.Component<any, any> {
   handleChange = (value, a, index, e) => {
     arrQuantity.push({ no: index, quantity: e });
   };
-  _pageSearch = ({ pageNum, pageSize }) => {
-    const params = this.state.searchParams;
-    this.init({ ...params, pageNum, pageSize });
-    this.setState({
-      pageNum,
-      pageSize
-    });
-  };
+
   render() {
     const {
       loading,
@@ -214,115 +207,6 @@ export default class DetailPublish extends React.Component<any, any> {
                 {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
               </span>
             </div>
-            <DataGrid
-              loading={loading}
-              rowKey={(record) => record.goodsInfoId}
-              dataSource={productList ? productList.toJS() : []}
-              isScroll={false}
-              pagination={{
-                total: productList.totalElements,
-                current: productList.number + 1,
-                pageSize: productList.size,
-                onChange: (pageNum, pageSize) => {
-                  const param = {
-                    pageNum: --pageNum,
-                    pageSize: pageSize
-                  };
-                  this._pageSearch(param);
-                }
-              }}
-              rowSelection={{
-                selectedRowKeys: selectedRowKeys,
-                onChange: (
-                  selectedRowKeys: any[],
-                  selectedTableRows: any[]
-                ) => {
-                  const sRows = fromJS(selectedRows).filter((f) => f);
-                  let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet())
-                    .concat(fromJS(selectedTableRows).toSet())
-                    .toList();
-                  rows = selectedRowKeys
-                    .map((key) =>
-                      rows
-                        .filter((row) => row.get('goodsInfoId') == key)
-                        .first()
-                    )
-                    .filter((f) => f);
-                  this.setState({
-                    selectedRows: rows,
-                    selectedRowKeys
-                  });
-                  rowChangeBackFun(selectedRowKeys, fromJS(rows));
-                },
-                getCheckboxProps: (record) => ({
-                  /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
-                          该情况下商品checkbox置灰,禁止选中 */
-
-                  // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
-                  // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
-                  // 因此判断等于2的失效状态下禁用
-                  disabled: showValidGood
-                    ? !showValidGood
-                    : record.goodsStatus === 2
-                })
-              }}
-            >
-              <Column
-                title="SKU Code"
-                dataIndex="goodsInfoNo"
-                key="goodsInfoNo"
-                width="15%"
-              />
-
-              <Column
-                title="Product Name"
-                dataIndex="goodsInfoName"
-                key="goodsInfoName"
-                width="20%"
-                ellipsis
-              />
-
-              <Column
-                title="Specification"
-                dataIndex="specText"
-                key="specText"
-                width="20%"
-                ellipsis
-                render={(value) => {
-                  if (value) {
-                    return value;
-                  } else {
-                    return '-';
-                  }
-                }}
-              />
-
-              <Column title="Category" key="goodsCate" dataIndex="cateName" />
-
-              <Column
-                title="Brand"
-                key="goodsBrand"
-                dataIndex="brandName"
-                render={(value) => {
-                  if (value) {
-                    return value;
-                  } else {
-                    return '-';
-                  }
-                }}
-              />
-
-              <Column
-                title="Price"
-                key="marketPrice"
-                dataIndex="marketPrice"
-                render={(data) => {
-                  return data
-                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data
-                    : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
-                }}
-              />
-            </DataGrid>
             {/*<Table
               rowSelection={rowSelection}
               columns={columns}

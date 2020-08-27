@@ -75,8 +75,10 @@ export default class BillingDetails extends React.Component<any, any> {
         : [];
 
     setTimeout(() => {
+      console.log(detailProductList.linkStatus, 11111111111);
       console.log(detailProductList.prescriberName);
     });
+    let Checked = detailProductList.linkStatus == 0 ? true : false;
     return (
       <div style={styles.main}>
         <div
@@ -114,7 +116,7 @@ export default class BillingDetails extends React.Component<any, any> {
               <Switch
                 checkedChildren=" Valid "
                 unCheckedChildren=" Invalid "
-                defaultChecked
+                defaultChecked={Checked}
                 onClick={this.onValid}
               />
             ) : null}

@@ -70,10 +70,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
 
   render() {
     const { productselect, detailProductList } = this.props.relaxProps;
-    //const pageNum = productForm && productForm.pageNum;
-    setTimeout(() => {
-      console.log(detailProductList, 11111111111);
-    });
+
     return (
       <TableRow>
         <DataGrid
@@ -100,14 +97,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             dataIndex="goods.goodsCateName"
             key="goodsCateName"
             render={(text, record, i) => {
-              setTimeout(() => {
+              /*setTimeout(() => {
                 console.log(text, 11111111);
                 console.log(
                   detailProductList.recommendationGoodsInfoRels,
                   22222222
                 );
                 console.log(i, 33333333);
-              });
+              });*/
               return text;
               //return history.location.state?detailProductList.recommendationGoodsInfoRels[i].recommendationNumber:text
             }}

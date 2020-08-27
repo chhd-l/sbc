@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const formItemLayout = {
   labelCol: {

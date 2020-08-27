@@ -27,7 +27,7 @@ export default class Headline extends React.PureComponent<any, any> {
           {this.props.state}
         </span>
         {
-          this.props.extra && <div style={{position: 'absolute',right: 0}}>
+          this.props.extra && <div style={{position: 'absolute',right: 50}}>
             {
               this.props.extra
             }

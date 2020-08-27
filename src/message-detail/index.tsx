@@ -23,9 +23,19 @@ import {
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+
+//数字数组
+function range(start, end) {
+  const result = [];
+  for (let i = start; i < end; i++) {
+    result.push(i);
+  }
+  return result;
+}
 class MessageDetails extends Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -368,7 +378,7 @@ class MessageDetails extends Component<any, any> {
     webapi.findEmailTask(this.state.id).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let taskDetail = res.context.context;
+        let taskDetail = res.context;
         let consumerDetail = taskDetail.detailsResponse;
         let basicForm = {
           taskId: taskDetail.taskId,
@@ -415,7 +425,7 @@ class MessageDetails extends Component<any, any> {
                 objectType: basicForm.objectType,
                 objectNo: basicForm.objectNo,
                 sendType: basicForm.sendType,
-                sendTime: basicForm.sendTime,
+                sendTime: moment(basicForm.sendTime),
                 consumerAccount: detailForm.consumerAccount,
                 consumerName: detailForm.consumerName,
                 consumerType: detailForm.consumerType,
@@ -440,6 +450,37 @@ class MessageDetails extends Component<any, any> {
       }
     });
   };
+
+  //限制日期
+  disabledDate(current) {
+    return (
+      current &&
+      moment(current).startOf('day') <
+        moment(sessionStorage.getItem('defaultLocalDateTime')).startOf('day')
+    );
+  }
+  //限制时间
+  disabledDateTime(data) {
+    console.log(moment(data).format('YYYY-MM-DD HH:mm:ss'));
+
+    return {
+      disabledHours: () => {
+        let currentDay = moment(
+          sessionStorage.getItem('defaultLocalDateTime')
+        ).date();
+        let currentHours = moment(
+          sessionStorage.getItem('defaultLocalDateTime')
+        ).hours();
+        let selectedDay = moment(data).date();
+        console.log(currentDay, currentHours, selectedDay);
+        if (selectedDay > currentDay) {
+          return [];
+        } else {
+          return range(0, currentHours + 1);
+        }
+      }
+    };
+  }
 
   render() {
     const {
@@ -713,6 +754,8 @@ class MessageDetails extends Component<any, any> {
                       })(
                         <DatePicker
                           showTime
+                          disabledDate={this.disabledDate}
+                          disabledTime={this.disabledDateTime}
                           placeholder="Select Time"
                           style={{ width: '100%' }}
                           disabled={this.state.isDetail}

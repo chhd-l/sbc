@@ -4,21 +4,24 @@ import { StoreProvider } from 'plume2';
 
 import { history, Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
-import StepOne from './infocomponents/step-one-info';
-import StepTwo from './detailcomponents/step-two';
-import StepThree from './infocomponents/step-three-info';
-import StepFour from './detailcomponents/step-four';
+import StepOne from './infocomponents/step-basic';
+import StepTwo from './infocomponents/step-sso';
+import StepThree from './infocomponents/step-signed';
+import StepFour from './infocomponents/step-footer';
+import StepConsent from './infocomponents/step-consent';
 import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
 const StepTwoForm = Form.create()(StepTwo);
 const StepFourForm = Form.create()(StepFour);
+const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
   '0': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
-  '3': <StepFourForm />
+  '3': <StepFourForm />,
+  '4': <StepFiveForm />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -40,12 +43,6 @@ export default class ShopInfo extends React.Component<any, any> {
       <AuthWrapper functionName="f_storeInfo_0">
         <div>
           <BreadCrumb />
-          {/* <Breadcrumb separator=">">
-            <Breadcrumb.Item>设置</Breadcrumb.Item>
-            <Breadcrumb.Item>店铺设置</Breadcrumb.Item>
-            <Breadcrumb.Item>店铺信息</Breadcrumb.Item>
-          </Breadcrumb> */}
-
           <div className="container-search">
             <Headline title={<FormattedMessage id="storeInformation" />} />
           </div>
@@ -66,7 +63,8 @@ export default class ShopInfo extends React.Component<any, any> {
                 tab={<FormattedMessage id="signedInformation" />}
                 key="2"
               />
-              <Tabs.TabPane tab={<FormattedMessage id="Footer" />} key="3" />
+              <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
+              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}

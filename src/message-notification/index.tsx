@@ -14,7 +14,8 @@ import {
   Row,
   Col,
   message,
-  Select
+  Select,
+  Spin
 } from 'antd';
 
 const FormItem = Form.Item;
@@ -31,10 +32,20 @@ class Notification extends Component<any, any> {
       RecommendationAutomationData: [],
 
       visible: false,
+
+      selectedForm: {
+        selectedId: '',
+        selectedStatus: '',
+        selectedTemplateId: '',
+        selectedTemplateName: ''
+      },
+
       selectedStatus: '',
       selectedTemplate: '',
+      selectedTemplateName: '',
       emailTemplateList: [],
-      previewHtml: ''
+      previewHtml: '',
+      loading: false
     };
   }
   componentDidMount() {
@@ -54,24 +65,27 @@ class Notification extends Component<any, any> {
       }
     });
   };
-  handleOk = () => {
-    this.setState({
-      visible: false,
-      selectedStatus: ''
-    });
-  };
+
   handleCancel = () => {
+    const { selectedForm } = this.state;
     this.setState({
       visible: false,
-      selectedStatus: ''
+      selectedForm: []
     });
   };
   openSetting = (obj) => {
+    const { selectedForm } = this.state;
+    selectedForm.selectedId = obj.id;
+    selectedForm.selectedStatus = obj.objectStatus;
+    selectedForm.selectedTemplateId = obj.templateId;
+    selectedForm.selectedTemplateName = obj.emailTemplate;
     this.setState({
       visible: true,
-      selectedStatus: obj.objectStatus,
-      selectedTemplate: obj.templateId
+      selectedForm
     });
+    if (obj.templateId) {
+      this.getEmailTemplateById(obj.templateId);
+    }
   };
   changeAutoStatus = (id, status) => {
     if (+status === 1) {
@@ -123,27 +137,77 @@ class Notification extends Component<any, any> {
       }
     });
   };
-  templateChange = (value) => {
+  templateChange = (value, option) => {
+    const { selectedForm } = this.state;
+    selectedForm.selectedTemplateId = value;
+    selectedForm.selectedTemplateName = option.props.children;
     this.setState({
-      selectedTemplate: value
+      selectedForm
     });
-
     this.getEmailTemplateById(value);
   };
 
   getEmailTemplateById = (id: string) => {
+    this.setState({
+      loading: true
+    });
     let params = {
       templateId: id
     };
-    webapi.getEmailTemplateById(params).then((data) => {
-      const { res } = data;
-      if (res.code === Const.SUCCESS_CODE) {
-        let templateData = res.context.context;
+    webapi
+      .getEmailTemplateById(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let templateData = res.context;
+          this.setState({
+            loading: false,
+            previewHtml: templateData.emailTemplateHtml
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
         this.setState({
-          previewHtml: templateData.emailTemplateHtml
+          loading: false
         });
-      }
-    });
+      });
+  };
+
+  updateNotification = () => {
+    const { selectedForm } = this.state;
+    let params = {
+      id: selectedForm.selectedId,
+      templateId: selectedForm.selectedTemplateId,
+      emailTemplate: selectedForm.selectedTemplateName
+    };
+    webapi
+      .updateNotification(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState(
+            {
+              selectedForm: [],
+              visible: false
+            },
+            () => {
+              this.getNotificationList();
+            }
+          );
+          message.success(res.message || 'Save Successful');
+        } else {
+          message.error(res.message || 'Save Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Save Failed');
+      });
   };
 
   render() {
@@ -152,6 +216,7 @@ class Notification extends Component<any, any> {
       orderAutomationData,
       subscriptionAutomationData,
       RecommendationAutomationData,
+      selectedForm,
       emailTemplateList,
       previewHtml
     } = this.state;
@@ -251,7 +316,7 @@ class Notification extends Component<any, any> {
           width="800px"
           title="Template Setting"
           visible={this.state.visible}
-          onOk={this.handleOk}
+          onOk={this.updateNotification}
           onCancel={this.handleCancel}
           footer={[
             <Button key="back" shape="round" onClick={this.handleCancel}>
@@ -261,7 +326,7 @@ class Notification extends Component<any, any> {
               key="submit"
               shape="round"
               type="primary"
-              onClick={this.handleOk}
+              onClick={this.updateNotification}
             >
               Cofirm
             </Button>
@@ -271,10 +336,15 @@ class Notification extends Component<any, any> {
             <Col span={6}>
               <Form layout="vertical">
                 <FormItem label="Status">
-                  <p>{this.state.selectedStatus}</p>
+                  <p>{selectedForm.selectedStatus}</p>
                 </FormItem>
                 <FormItem label="Email Template">
-                  <Select onChange={(value) => this.templateChange(value)}>
+                  <Select
+                    defaultValue={selectedForm.selectedTemplateId}
+                    onChange={(value, option) =>
+                      this.templateChange(value, option)
+                    }
+                  >
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
                         <Option value={item.templateId} key={index}>
@@ -286,12 +356,14 @@ class Notification extends Component<any, any> {
               </Form>
             </Col>
             <Col span={18}>
-              {previewHtml ? (
-                <div
-                  dangerouslySetInnerHTML={{ __html: previewHtml }}
-                  style={{ zoom: '0.5' }}
-                ></div>
-              ) : null}
+              <Spin spinning={this.state.loading}>
+                {previewHtml ? (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: previewHtml }}
+                    style={{ zoom: '0.5' }}
+                  ></div>
+                ) : null}
+              </Spin>
             </Col>
           </Row>
         </Modal>

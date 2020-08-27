@@ -411,8 +411,21 @@ class SkuForm extends React.Component<any, any> {
                 {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
                   rules: [
                     {
-                      pattern: ValidConst.number,
-                      message: '0 or positive integer'
+                      required: true,
+                      message: 'Please input market price'
+                    },
+                    {
+                      pattern: ValidConst.zeroPrice,
+                      message:
+                        'Please input the legal amount with two decimal places'
+                    },
+                    {
+                      type: 'number',
+                      max: 9999999.99,
+                      message: 'The maximum value is 9999999.99',
+                      transform: function (value) {
+                        return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                      }
                     }
                   ],
                   onChange: this._editGoodsItem.bind(

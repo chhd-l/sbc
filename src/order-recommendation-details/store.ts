@@ -73,8 +73,9 @@ export default class AppStore extends Store {
   };
 
   //Get Link
-  onCreate = async (param?: any) => {
+  onCreate = async (param, type) => {
     const res = await webapi.fetchCreateLink(param);
+    this.dispatch('create:createLinkType', type);
     this.dispatch('get:getLink', res.res.context);
   };
 
@@ -103,7 +104,6 @@ export default class AppStore extends Store {
   };
 
   //LinkStatus
-
   onLinkStatus = async (param?: any) => {
     const res = await webapi.fetchLinkStatus(param);
     if (res.res.code === Const.SUCCESS_CODE) {

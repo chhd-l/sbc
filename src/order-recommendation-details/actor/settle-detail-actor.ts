@@ -91,6 +91,12 @@ export default class SettleDetailActor extends Actor {
     return state.setIn(['createLink', field], value);
   }
 
+  //createLinkType
+  @Action('create:createLinkType')
+  createLinkType(state: IMap, res) {
+    return state.set('createLinkType', res);
+  }
+
   //get Link
   @Action('get:getLink')
   getLink(state: IMap, res) {

@@ -5,6 +5,8 @@ import { AuthWrapper, history, noop, util } from 'qmkit';
 import '../style.less';
 import PublishTooltip from './publishTooltip';
 
+let linkType = 0;
+
 @Relax
 export default class PublishButton extends React.Component<any, any> {
   props: {
@@ -40,12 +42,13 @@ export default class PublishButton extends React.Component<any, any> {
       onCreateLink,
       onCreate
     } = this.props.relaxProps;
-
     if (createLink.toJS().recommendationGoodsInfoRels.length > 0) {
-      onCreate(createLink.toJS());
+      let a = linkType > 0 ? true : false;
+      onCreate(createLink.toJS(), a);
       this.setState({
         visible: res
       });
+      linkType++;
     } else {
       message.error('Recommended product cannot be empty !');
     }
@@ -68,7 +71,7 @@ export default class PublishButton extends React.Component<any, any> {
             shape="round"
             onClick={() => this.showModal(true)}
           >
-            Create Link
+            {this.state.linkType == true ? 'Create Link' : 'Sharing'}
           </Button>
         )}
         <PublishTooltip

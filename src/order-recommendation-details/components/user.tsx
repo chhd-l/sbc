@@ -6,7 +6,7 @@ const Column = Table.Column;
 import { Relax } from 'plume2';
 import moment from 'moment';
 declare type IList = List<any>;
-
+const baseConfigUrl = '';
 @Relax
 export default class SelectedGoodsGrid extends React.Component<any, any> {
   constructor(props) {
@@ -77,8 +77,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         </div>
         <div className="text flex-start">
           <span>
-            Link:
-            https://shopuat.466920.com/recommendation/MjAyMDA4MjYxMzU2NDE3MTI1
+            Link:{' '}
+            {
+              JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
+                .supplierWebsite
+            }
+            recommendation/
+            {detailProductList.base64Id ? detailProductList.base64Id : '--'}
           </span>
           <span></span>
         </div>

@@ -12,14 +12,14 @@ const Option = Select.Option;
 //import { Const, util } from 'qmkit';
 //import { FormattedMessage } from 'react-intl';
 //import { bool } from 'prop-types';
-let Checked = true;
+let check = Boolean;
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      Checked: true
+      check: Boolean
     };
   }
 
@@ -29,7 +29,9 @@ export default class BillingDetails extends React.Component<any, any> {
       setName: IList;
       onSharing: Function;
       onLinkStatus: Function;
+      linkStatus: any;
       detailProductList: any;
+      createLinkType: any;
     };
   };
 
@@ -38,15 +40,21 @@ export default class BillingDetails extends React.Component<any, any> {
     setName: 'setName',
     onSharing: noop,
     onLinkStatus: noop,
-    detailProductList: 'detailProductList'
+    detailProductList: 'detailProductList',
+    linkStatus: 'linkStatus',
+    createLinkType: 'createLinkType'
   };
+
   componentDidMount() {
-    const { onSharing } = this.props.relaxProps;
+    const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     onSharing({
       field: 'prescriberId',
       value: employee.clinicsIds[0]
     });
+
+    //this.onValid(detailProductList&&detailProductList.linkStatus)
+    //check = detailProductList&&detailProductList.linkStatus == 0 ? true : false;
   }
 
   showProduct = (res) => {
@@ -67,19 +75,34 @@ export default class BillingDetails extends React.Component<any, any> {
     let linkStatus = e == true ? 0 : 1;
     onLinkStatus({ linkStatus, id: history.location.state.id });
   };
+
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {}
+
   render() {
-    const { detailProductList } = this.props.relaxProps;
+    const {
+      detailProductList,
+      linkStatus,
+      createLinkType
+    } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers =
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
 
+    check = detailProductList.linkStatus == 0 ? true : false;
+
     setTimeout(() => {
-      console.log(detailProductList, 222222);
-      console.log(detailProductList.prescriberName);
+      console.log(
+        detailProductList && detailProductList,
+        '++++++++++++++++++++'
+      );
+      console.log(check, '12121221');
     });
-    Checked = detailProductList.linkStatus == 0 ? true : false;
     return (
       <div style={styles.main}>
         <div
@@ -96,6 +119,7 @@ export default class BillingDetails extends React.Component<any, any> {
             ) : (
               <SelectGroup
                 label="Prescriber"
+                disabled={createLinkType}
                 defaultValue={
                   sessionStorage.getItem('PrescriberType')
                     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
@@ -117,7 +141,8 @@ export default class BillingDetails extends React.Component<any, any> {
               <Switch
                 checkedChildren=" Valid "
                 unCheckedChildren=" Invalid "
-                defaultChecked={Checked}
+                defaultChecked={check}
+                //checked={check}
                 onClick={this.onValid}
               />
             ) : null}
@@ -134,6 +159,7 @@ export default class BillingDetails extends React.Component<any, any> {
             <Button
               type="primary"
               shape="round"
+              disabled={createLinkType}
               icon="edit"
               onClick={() => this.showProduct(true)}
             >

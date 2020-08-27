@@ -93,7 +93,8 @@ class MessageDetails extends Component<any, any> {
           id: 233
         }
       ],
-      previewHtml: ''
+      previewHtml: '',
+      consumerList: []
     };
   }
   componentDidMount() {
@@ -155,17 +156,17 @@ class MessageDetails extends Component<any, any> {
     let data = this.state.basicForm;
 
     if (field === 'objectType' && data['objectType'] !== value) {
-      if (value === 'Order' || value === 'Subscription') {
-        data['objectNoDisable'] = false;
-        this.props.form.setFieldsValue({
-          objectNo: ''
-        });
-      } else {
-        data['objectNoDisable'] = true;
-        this.props.form.setFieldsValue({
-          objectNo: ''
-        });
-      }
+      // if (value === 'Order' || value === 'Subscription') {
+      data['objectNoDisable'] = false;
+      this.props.form.setFieldsValue({
+        objectNo: ''
+      });
+      // } else {
+      //   data['objectNoDisable'] = true;
+      //   this.props.form.setFieldsValue({
+      //     objectNo: ''
+      //   });
+      // }
     }
     if (field === 'sendType' && data['sendType'] !== value) {
       data['sendTime'] = '';
@@ -182,8 +183,12 @@ class MessageDetails extends Component<any, any> {
     let data = this.state.detailForm;
     if (field === 'consumerType' && data['consumerType'] !== value) {
       data['consumerAccount'] = '';
+      data['consumerName'] = '';
+      data['email'] = '';
       this.props.form.setFieldsValue({
-        consumerAccount: ''
+        consumerAccount: '',
+        consumerName: '',
+        email: ''
       });
     }
     data[field] = value;
@@ -332,7 +337,6 @@ class MessageDetails extends Component<any, any> {
       .updateEmailTask(params)
       .then((data) => {
         const { res } = data;
-        debugger;
         if (res.code === Const.SUCCESS_CODE) {
           if (type === 'submit') {
             history.push({
@@ -390,6 +394,24 @@ class MessageDetails extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             objectNoList: res.context.subscriptionResponses,
+            fetching: false
+          });
+        }
+      });
+    } else if (basicForm.objectType === 'Recommendation') {
+      let params = {
+        recommendationId: value,
+        pageSize: 30,
+        pageNum: 0
+      };
+      webapi.getRecommendationList(params).then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log('不知道返回值格式，所以没有赋值');
+
+          this.setState({
+            objectNoList: [],
+            // objectNoList: res.context.subscriptionResponses,
             fetching: false
           });
         }
@@ -503,6 +525,22 @@ class MessageDetails extends Component<any, any> {
       }
     };
   }
+  getConsumerList = (value) => {
+    let params = {
+      customerAccount: value,
+      pageSize: 30,
+      pageNum: 0
+    };
+    webapi.getConsumerList(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          consumerList: res.context.detailResponseList,
+          fetching: false
+        });
+      }
+    });
+  };
 
   render() {
     const {
@@ -517,7 +555,8 @@ class MessageDetails extends Component<any, any> {
       fetching,
       objectNoList,
       customerTypeArr,
-      previewHtml
+      previewHtml,
+      consumerList
     } = this.state;
     const { getFieldDecorator } = this.props.form;
 
@@ -733,10 +772,16 @@ class MessageDetails extends Component<any, any> {
                           {objectNoList &&
                             objectNoList.map((item, index) => (
                               <Option
-                                value={item.id || item.subscribeId}
+                                value={
+                                  item.id ||
+                                  item.subscribeId ||
+                                  item.recommendationId
+                                }
                                 key={index}
                               >
-                                {item.id || item.subscribeId}
+                                {item.id ||
+                                  item.subscribeId ||
+                                  item.recommendationId}
                               </Option>
                             ))}
                         </Select>
@@ -856,28 +901,61 @@ class MessageDetails extends Component<any, any> {
                   </Col>
                   <Col span={8}>
                     <FormItem label="Consumer Account">
-                      {getFieldDecorator('consumerAccount', {
-                        rules: [
-                          {
-                            max: 50,
-                            message:
-                              'Consumer Account exceed the maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onDetailsFormChange({
-                              field: 'consumerAccount',
-                              value
-                            });
-                          }}
+                      {getFieldDecorator(
+                        'consumerAccount',
+                        {}
+                      )(
+                        <Select
                           disabled={
                             detailForm.consumerType !== 'Member' ||
                             this.state.isDetail
                           }
-                        />
+                          showSearch
+                          placeholder="Select a consumer"
+                          optionFilterProp="children"
+                          onChange={(value, option) => {
+                            let consumer = option.props['data-consumer'];
+                            let consumerName = consumer.customerName;
+                            let email = consumer.email;
+                            this.onDetailsFormChange({
+                              field: 'consumerAccount',
+                              value
+                            });
+                            this.onDetailsFormChange({
+                              field: 'consumerName',
+                              value: consumerName
+                            });
+                            this.onDetailsFormChange({
+                              field: 'email',
+                              value: email
+                            });
+                            this.props.form.setFieldsValue({
+                              consumerName: consumerName,
+                              email: email
+                            });
+                          }}
+                          notFoundContent={
+                            fetching ? <Spin size="small" /> : null
+                          }
+                          onSearch={this.getConsumerList}
+                          filterOption={(input, option) =>
+                            option.props.children
+                              .toString()
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {consumerList &&
+                            consumerList.map((item, index) => (
+                              <Option
+                                value={item.customerAccount}
+                                data-consumer={item}
+                                key={index}
+                              >
+                                {item.customerAccount}
+                              </Option>
+                            ))}
+                        </Select>
                       )}
                     </FormItem>
                   </Col>
@@ -896,7 +974,10 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.state.isDetail}
+                          disabled={
+                            detailForm.consumerType === 'Member' ||
+                            this.state.isDetail
+                          }
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onDetailsFormChange({
@@ -921,7 +1002,10 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={this.state.isDetail}
+                          disabled={
+                            detailForm.consumerType === 'Member' ||
+                            this.state.isDetail
+                          }
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onDetailsFormChange({

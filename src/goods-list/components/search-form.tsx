@@ -176,7 +176,7 @@ export default class SearchForm extends React.Component<any, any> {
                   </p>
                 }
                 /* defaultValue="全部"*/
-                style={styles.wrapper}
+                // style={styles.wrapper}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {

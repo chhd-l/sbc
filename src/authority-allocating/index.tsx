@@ -32,7 +32,7 @@ export default class AuthorityAllocating extends React.Component<any, any> {
       >
         <BreadCrumb />
 
-        <div className="container" style={{ paddingBottom: 50 }}>
+        <div className="container-search" style={{ paddingBottom: 50 }}>
           <Headline title="Edit Role Permissions" />
           <Alert
             message=""

@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Button,
+  Table,
+  Divider,
+  message,
+  Tooltip
+} from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -44,9 +53,19 @@ export default class DitionaryList extends Component<any, any> {
           key: 'operation',
           render: (text, record) => (
             <span>
-              <Link to={'/dictionary-edit/' + record.id}>Edit</Link>
+              <Tooltip placement="top" title="Edit">
+                <Link
+                  to={'/dictionary-edit/' + record.id}
+                  className="iconfont iconEdit"
+                ></Link>
+              </Tooltip>
               <Divider type="vertical" />
-              <a onClick={() => this.deleteDictionary(record.id)}>Delete</a>
+              <Tooltip placement="top" title="Delete">
+                <a
+                  onClick={() => this.deleteDictionary(record.id)}
+                  className="iconfont iconDelete"
+                ></a>
+              </Tooltip>
             </span>
           )
         }

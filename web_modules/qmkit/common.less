@@ -174,17 +174,17 @@ html {
   &::-webkit-scrollbar {
     height: 5px;
     width: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-    }
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: none;
-        border-radius: 0;
-        background: rgba(0, 4, 40, 0.06);
-    }
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 0;
+    background: rgba(0, 4, 40, 0.06);
+  }
 
   .ant-dropdown-link {
     color      : rgba(255, 255, 255, 0.67);
@@ -245,17 +245,17 @@ html {
   &::-webkit-scrollbar {
     height: 5px;
     width: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-    }
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: none;
-        border-radius: 0;
-        background: rgba(0, 4, 40, 0.06);
-    }
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 0;
+    background: rgba(0, 4, 40, 0.06);
+  }
   .ant-menu {
     background-color: transparent;
   }
@@ -3125,14 +3125,134 @@ form .ant-input-group-compact {
   overflow-x : hidden!important;
 }
 
-/*输入框样式*/
-#inputs .ant-input-group-addon:first-child {
-  width: 170px;
-}
-#inputs .ant-input-group .ant-input {
-  width: 200px;
-}
-#inputs .select-group .ant-select-selection {
-  width: 200px;
+// /*输入框样式*/
+// #inputs .ant-input-group-addon:first-child {
+//   width: 170px;
+// }
+// #inputs .ant-input-group .ant-input {
+//   width: 200px;
+// }
+// #inputs .select-group .ant-select-selection {
+//   width: 200px;
 
+// }
+// // #input-select{
+// //   max-width:300px ;
+// //   box-sizing: border-box;
+// // }
+
+// #input-label-width{
+//   width: 150px;
+// }
+// span .ant-input-group-addon{
+//   width: 150px;
+// }
+// #input-select-sm{
+//   width: 174px;
+// }
+// // .ant-form-item-control-wrapper{
+// //   width: 400px;
+// // }
+// .ant-select-enabled{
+//   width: 150px  !important;
+// }
+// .search-form-account .ant-input{
+//   width: 150px !important;
+// }
+// .ant-form-item-control{
+//   width: 303px;
+// }
+// p.prescriber-iput-lable {
+//   width: 150px;
+// }
+// .PrescriberCity .ant-select-selection--single{
+//   width: 255px !important;
+// }
+
+#tree-select-props-width .ant-select-enabled,
+#area-select-width .ant-cascader-picker
+{
+  width: 177px;
 }
+
+#Range-picker-width .ant-form-item-control-wrapper{
+  width: 370px;
+}
+#input-group-width .ant-select-enabled{
+  width: 207px;
+}
+
+#input-lable-wwidth .ant-input-group-addon{
+  width: 177px;
+}
+#Range-picker-width-sm .ant-form-item-control-wrapper{
+  width: 340px;
+}
+#Range-picker-width-zuixiao .ant-form-item-control-wrapper{
+  width: 323px;
+}
+#select-group-width .ant-select-enabled{
+  width: 206px;
+}
+
+#range-picker-width-mx .ant-calendar-picker{
+  width: 386px !important;
+}
+
+
+/*Loading*/
+.loadingAnimation{
+  position: absolute;top:50%;left: 50%;font-size: 26px;
+  span{
+    float:left;
+    position: relative;
+  }
+  span:nth-child(1){
+    -webkit-animation:jump 1s linear 0s infinite alternate;
+  }
+  span:nth-child(2){
+    -webkit-animation:jump 1s linear 0.1s infinite alternate;
+  }
+  span:nth-child(3){
+    -webkit-animation:jump 1s linear 0.2s infinite alternate;
+  }
+  span:nth-child(4){
+    -webkit-animation:jump 1s linear 0.3s infinite alternate;
+  }
+  span:nth-child(5){
+    -webkit-animation:jump 1s linear 0.4s infinite alternate;
+  }
+  span:nth-child(6){
+    -webkit-animation:jump 1s linear 0.5s infinite alternate;
+  }
+  span:nth-child(7){
+    -webkit-animation:jump 1s linear 0.6s infinite alternate;
+  }
+  span:nth-child(8){
+    -webkit-animation:jump 1s linear 0.7s infinite alternate;
+  }
+  span:nth-child(9){
+    -webkit-animation:jump 1s linear 0.8s infinite alternate;
+  }
+  span:nth-child(10){
+    -webkit-animation:jump 1s linear 0.9s infinite alternate;
+  }
+
+  @-webkit-keyframes jump
+  {
+    0%{
+      top:0px;
+      color: #990101;
+    }
+    50%{
+      top:-2px;
+      color: #f90202;
+    }
+    100%{
+      top:2px;
+      color: #950226;
+    }
+  }
+}
+
+

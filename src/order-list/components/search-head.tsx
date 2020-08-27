@@ -194,7 +194,6 @@ export default class SearchHead extends Component<any, any> {
                     addonBefore={this._renderClinicSelect()}
                     onChange={(e) => {
                       let a = e.target.value.split(',');
-                      console.log(a.map(Number), 111);
 
                       this.setState({
                         clinicSelectValue:
@@ -207,7 +206,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="input-group-width">
                 <FormItem>
                   <InputGroup compact>
                     {this._renderStatusSelect()}
@@ -270,7 +269,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
                     onChange={(e) => {
@@ -556,6 +555,6 @@ const styles = {
     textAlign: 'center'
   },
   wrapper: {
-    width: 185
+    // width: 139
   }
 } as any;

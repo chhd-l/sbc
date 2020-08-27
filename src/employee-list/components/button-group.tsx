@@ -60,7 +60,7 @@ export default class ButtonGroup extends React.Component<any, any> {
         // className="handle-bar"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
-        <div>
+        <div className="ant-form-inline filter-content">
           <AuthWrapper functionName={'updateEmployee'}>
             <Button type="primary" onClick={() => onAdd()}>
               <FormattedMessage id="add" />

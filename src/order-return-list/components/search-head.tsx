@@ -10,7 +10,9 @@ import {
   Modal,
   Select,
   DatePicker,
-  message
+  message,
+  Row,
+  Col
 } from 'antd';
 import {
   ExportModal,
@@ -95,7 +97,7 @@ export default class SearchHead extends Component<any, any> {
         {tabKey == 'flowState-INIT' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf002">
-              <a href="#!" onClick={() => this._handleBatchAudit()}>
+              <a href="#" onClick={() => this._handleBatchAudit()}>
                 批量审核
               </a>
             </AuthWrapper>
@@ -104,7 +106,7 @@ export default class SearchHead extends Component<any, any> {
         {tabKey == 'flowState-DELIVERED' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf004">
-              <a href="#!" onClick={() => this._handleBatchReceive()}>
+              <a href="#" onClick={() => this._handleBatchReceive()}>
                 批量收货
               </a>
             </AuthWrapper>
@@ -112,7 +114,7 @@ export default class SearchHead extends Component<any, any> {
         ) : null}
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
-            <a href="#!" onClick={() => this._handleBatchExport()}>
+            <a href="#" onClick={() => this._handleBatchExport()}>
               Bulk export
             </a>
           </AuthWrapper>
@@ -126,143 +128,168 @@ export default class SearchHead extends Component<any, any> {
 
         <div>
           <Form className="filter-content" layout="inline">
-            <FormItem>
-              <Input
-                // addonBefore="退单编号"
-                addonBefore={<FormattedMessage id="chargebackNumber" />}
-                onChange={(e) => {
-                  this.setState(
-                    { rid: (e.target as any).value },
-                    this._paramChanged
-                  );
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Input
-                // addonBefore="订单编号"
-                addonBefore={<FormattedMessage id="orderNumber" />}
-                onChange={(e) => {
-                  this.setState(
-                    { tid: (e.target as any).value },
-                    this._paramChanged
-                  );
-                }}
-              />
-            </FormItem>
-            {/*商品名称、SKU编码*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderGoodsOptionSelect()}
-                onChange={(e) => {
-                  if (this.state.goodsOptions === 'skuName') {
-                    this.setState(
-                      {
-                        skuName: (e.target as any).value,
-                        skuNo: ''
-                      },
-                      this._paramChanged
-                    );
-                  } else if (this.state.goodsOptions === 'skuNo') {
-                    this.setState(
-                      {
-                        skuName: '',
-                        skuNo: (e.target as any).value
-                      },
-                      this._paramChanged
-                    );
-                  }
-                }}
-              />
-            </FormItem>
-            {/*客户名称、客户账号*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderBuyerOptionSelect()}
-                onChange={(e) => {
-                  if (this.state.buyerOptions === 'buyerName') {
-                    this.setState(
-                      {
-                        buyerName: (e.target as any).value,
-                        buyerAccount: ''
-                      },
-                      this._paramChanged
-                    );
-                  } else if (this.state.buyerOptions === 'buyerAccount') {
-                    this.setState(
-                      {
-                        buyerName: '',
-                        buyerAccount: (e.target as any).value
-                      },
-                      this._paramChanged
-                    );
-                  }
-                }}
-              />
-            </FormItem>
-            {/*收件人、收件人手机*/}
-            <FormItem>
-              <Input
-                addonBefore={this._renderConsigneeOptionSelect()}
-                onChange={(e) => {
-                  if (this.state.consigneeOptions === 'consigneeName') {
-                    this.setState(
-                      {
-                        consigneeName: (e.target as any).value,
-                        consigneePhone: ''
-                      },
-                      this._paramChanged
-                    );
-                  } else if (this.state.consigneeOptions === 'consigneePhone') {
-                    this.setState(
-                      {
-                        consigneeName: '',
-                        consigneePhone: (e.target as any).value
-                      },
-                      this._paramChanged
-                    );
-                  }
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <RangePicker
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
-                onChange={(e) => {
-                  let beginTime = '';
-                  let endTime = '';
-                  if (e.length > 0) {
-                    beginTime = e[0].format(Const.DAY_FORMAT);
-                    endTime = e[1].format(Const.DAY_FORMAT);
-                  }
-                  this.setState(
-                    { beginTime: beginTime, endTime: endTime },
-                    this._paramChanged
-                  );
-                }}
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                htmlType="submit"
-                type="primary"
-                shape="round"
-                icon="search"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.props.relaxProps.onSearch(this.state);
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
-              </Button>
-            </FormItem>
+            <Row id="input-lable-wwidth">
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    // addonBefore="退单编号"
+                    addonBefore={<FormattedMessage id="chargebackNumber" />}
+                    onChange={(e) => {
+                      this.setState(
+                        { rid: (e.target as any).value },
+                        this._paramChanged
+                      );
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    // addonBefore="订单编号"
+                    addonBefore={<FormattedMessage id="orderNumber" />}
+                    maxLength={300}
+                    onChange={(e) => {
+                      this.setState(
+                        { tid: (e.target as any).value },
+                        this._paramChanged
+                      );
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*商品名称、SKU编码*/}
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderGoodsOptionSelect()}
+                    onChange={(e) => {
+                      if (this.state.goodsOptions === 'skuName') {
+                        this.setState(
+                          {
+                            skuName: (e.target as any).value,
+                            skuNo: ''
+                          },
+                          this._paramChanged
+                        );
+                      } else if (this.state.goodsOptions === 'skuNo') {
+                        this.setState(
+                          {
+                            skuName: '',
+                            skuNo: (e.target as any).value
+                          },
+                          this._paramChanged
+                        );
+                      }
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*客户名称、客户账号*/}
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderBuyerOptionSelect()}
+                    onChange={(e) => {
+                      if (this.state.buyerOptions === 'buyerName') {
+                        this.setState(
+                          {
+                            buyerName: (e.target as any).value,
+                            buyerAccount: ''
+                          },
+                          this._paramChanged
+                        );
+                      } else if (this.state.buyerOptions === 'buyerAccount') {
+                        this.setState(
+                          {
+                            buyerName: '',
+                            buyerAccount: (e.target as any).value
+                          },
+                          this._paramChanged
+                        );
+                      }
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              {/*收件人、收件人手机*/}
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={this._renderConsigneeOptionSelect()}
+                    onChange={(e) => {
+                      if (this.state.consigneeOptions === 'consigneeName') {
+                        this.setState(
+                          {
+                            consigneeName: (e.target as any).value,
+                            consigneePhone: ''
+                          },
+                          this._paramChanged
+                        );
+                      } else if (
+                        this.state.consigneeOptions === 'consigneePhone'
+                      ) {
+                        this.setState(
+                          {
+                            consigneeName: '',
+                            consigneePhone: (e.target as any).value
+                          },
+                          this._paramChanged
+                        );
+                      }
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8} id="Range-picker-width">
+                <FormItem>
+                  <RangePicker
+                    getCalendarContainer={() =>
+                      document.getElementById('page-content')
+                    }
+                    onChange={(e) => {
+                      let beginTime = '';
+                      let endTime = '';
+                      if (e.length > 0) {
+                        beginTime = e[0].format(Const.DAY_FORMAT);
+                        endTime = e[1].format(Const.DAY_FORMAT);
+                      }
+                      this.setState(
+                        { beginTime: beginTime, endTime: endTime },
+                        this._paramChanged
+                      );
+                    }}
+                  />
+                </FormItem>
+              </Col>
+              <Col span={24} style={{ textAlign: 'center' }}>
+                <FormItem
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                    shape="round"
+                    icon="search"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.props.relaxProps.onSearch(this.state);
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
           {hasMenu ? (
-            <div className="handle-bar">
+            <div className="handle-bar ant-form-inline filter-content">
               <Dropdown
                 getPopupContainer={() =>
                   document.getElementById('page-content')

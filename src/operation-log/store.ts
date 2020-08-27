@@ -31,9 +31,7 @@ export default class AppStore extends Store {
   init = ({ pageNum, pageSize } = { pageNum: 0, pageSize: 15 }) => {
     this.dispatch('loading:start');
     //获取form数据
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
     form['beginTime'] = form.beginTime.format(Const.DATE_FORMAT) + ':00';
     form['endTime'] = form.endTime.format(Const.DATE_FORMAT) + ':59';
 
@@ -65,7 +63,6 @@ export default class AppStore extends Store {
    */
   onSearch = (params) => {
     if (__DEV__) {
-      console.log('params--->', params);
     }
     this.dispatch('form:clear');
     this.dispatch('form:field', params);

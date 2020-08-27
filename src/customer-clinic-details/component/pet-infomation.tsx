@@ -101,12 +101,8 @@ class PetInfomation extends React.Component<any, any> {
     this.querySysDictionary('dogBreed');
     this.querySysDictionary('catBreed');
   }
-  handleChange = (value) => {
-    console.log(value);
-  };
-  onOpenChange = (value) => {
-    console.log(value);
-  };
+  handleChange = (value) => {};
+  onOpenChange = (value) => {};
   onFormChange = ({ field, value }) => {
     let data = this.state.petForm;
     data[field] = value;
@@ -120,7 +116,6 @@ class PetInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.editPets();
-        console.log(this.state.petForm);
       }
     });
   };
@@ -136,7 +131,6 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          console.log(res);
           if (type === 'dogBreed') {
             let dogBreed = res.context.sysDictionaryVOS;
             this.setState({

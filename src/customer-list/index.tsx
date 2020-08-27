@@ -11,7 +11,8 @@ import {
   message,
   Modal,
   Row,
-  Col
+  Col,
+  Tooltip
 } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -89,20 +90,21 @@ export default class Customer extends React.Component<any, any> {
           width: '8%',
           render: (text, record) => (
             <span>
-              <Link
-                to={
-                  '/customer-details/' +
-                  (record.customerLevelName
-                    ? record.customerLevelName
-                    : 'Guest') +
-                  '/' +
-                  record.customerId +
-                  '/' +
-                  record.customerAccount
-                }
-              >
-                Details
-              </Link>
+              <Tooltip placement="top" title="Details">
+                <Link
+                  to={
+                    '/customer-details/' +
+                    (record.customerLevelName
+                      ? record.customerLevelName
+                      : 'Guest') +
+                    '/' +
+                    record.customerId +
+                    '/' +
+                    record.customerAccount
+                  }
+                  className="iconfont iconDetails"
+                ></Link>
+              </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>

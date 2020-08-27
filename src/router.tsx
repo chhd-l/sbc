@@ -113,9 +113,20 @@ const routes = [
   },
   //订单-订单管理-推荐列表
   {
-    path: '/order-recommendation',
+    path: '/recomm-page',
     exact: true,
     asyncComponent: () => import('./order-recommendation')
+  },
+  {
+    path: '/recomm-page2',
+    exact: true,
+    asyncComponent: () => import('./order-recommendation')
+  },
+  //订单-订单管理-推荐列表--详情
+  {
+    path: '/recomm-page-detail',
+    exact: true,
+    asyncComponent: () => import('./order-recommendation-details')
   },
   //订单-订单管理-退单详情
   {
@@ -696,6 +707,10 @@ const routes = [
   },
   {
     path: '/message-detail/:id',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/message-edit/:id',
     asyncComponent: () => import('./message-detail')
   }
 ];

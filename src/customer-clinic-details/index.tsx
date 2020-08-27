@@ -65,9 +65,7 @@ class CustomerDetails extends React.Component<any, any> {
       message.error(res.message);
     }
   };
-  clickTabs = (key) => {
-    console.log(key);
-  };
+  clickTabs = (key) => {};
 
   render() {
     return (

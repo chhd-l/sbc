@@ -482,7 +482,7 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
           {/* <Col span={8}>
             <a
-              href="#!"
+              href="#"
               onClick={showCateModal}
               style={{ marginLeft: 10, lineHeight: '40px' }}
             >
@@ -820,7 +820,6 @@ class GoodsForm extends React.Component<any, any> {
     const { showGoodsPropDetail, changeStoreCategory } = this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
-    console.log(value, 'value');
   };
   /**
    * 修改商品项
@@ -911,7 +910,6 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
-      console.log(goods.toJS(), 'goodsjs');
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }

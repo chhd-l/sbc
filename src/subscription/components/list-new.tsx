@@ -9,7 +9,8 @@ import {
   Input,
   Button,
   Popconfirm,
-  message
+  message,
+  Tooltip
 } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
@@ -89,9 +90,7 @@ export default class ListView extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  onChecked = (index, checked) => {
-    console.log(index, checked);
-  };
+  onChecked = (index, checked) => {};
 
   goodsSum = (array) => {
     let sum = 0;
@@ -336,17 +335,23 @@ export default class ListView extends React.Component<any, any> {
                     </td> */}
                     {/*Operation*/}
                     <td style={{ width: '15%' }} className="operation-td">
-                      <Button type="link" style={{ padding: '0 5px' }}>
-                        <Link to={'/subscription-detail/' + v.subscribeId}>
-                          Details
-                        </Link>
-                      </Button>
-                      {v.subscribeStatus === '0' ? (
+                      <Tooltip placement="top" title="Details">
                         <Button type="link" style={{ padding: '0 5px' }}>
-                          <Link to={'/subscription-edit/' + v.subscribeId}>
-                            Edit
-                          </Link>
+                          <Link
+                            to={'/subscription-detail/' + v.subscribeId}
+                            className="iconfont iconDetails"
+                          ></Link>
                         </Button>
+                      </Tooltip>
+                      {v.subscribeStatus === '0' ? (
+                        <Tooltip placement="top" title="Edit">
+                          <Button type="link" style={{ padding: '0 5px' }}>
+                            <Link
+                              to={'/subscription-edit/' + v.subscribeId}
+                              className="iconfont iconEdit"
+                            ></Link>
+                          </Button>
+                        </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
                         <Popconfirm
@@ -356,9 +361,15 @@ export default class ListView extends React.Component<any, any> {
                           okText="Confirm"
                           cancelText="Cancel"
                         >
-                          <Button type="link" style={{ padding: '0 5px' }}>
-                            Cancel all
-                          </Button>
+                          <Tooltip placement="top" title="Cancel all">
+                            <a
+                              type="link"
+                              style={{ padding: '0 5px' }}
+                              className="iconfont iconbtn-cancelall"
+                            >
+                              {/*Cancel all*/}
+                            </a>
+                          </Tooltip>
                         </Popconfirm>
                       ) : null}
                     </td>

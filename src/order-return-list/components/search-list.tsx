@@ -326,74 +326,90 @@ export default class SearchList extends React.Component<any, any> {
                       <span style={{ marginRight: 0, float: 'right' }}>
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="f_order_return_edit">
-                            <Link
-                              style={{ marginLeft: 20 }}
-                              to={`/order-return-edit/${rid}`}
-                            >
-                              Modify
-                            </Link>
+                            <Tooltip placement="top" title="Modify">
+                              <Link
+                                style={{ marginLeft: 20 }}
+                                to={`/order-return-edit/${rid}`}
+                              >
+                                Modify
+                              </Link>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="rolf002">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => this._showAudit(onAudit, rid)}
-                            >
-                              审核
-                            </a>
+                            <Tooltip placement="top" title="审核">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => this._showAudit(onAudit, rid)}
+                              >
+                                审核
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {returnFlowState === 'INIT' && (
                           <AuthWrapper functionName="rolf002">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => this._showReject(onReject, rid)}
-                            >
-                              驳回
-                            </a>
+                            <Tooltip placement="top" title="驳回">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => this._showReject(onReject, rid)}
+                              >
+                                驳回
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {/*退货单的已审核状态*/}
                         {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
                           <AuthWrapper functionName="rolf003">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => this._showDeliver(onDeliver, rid)}
-                            >
-                              Fill in logistics
-                            </a>
+                            <Tooltip placement="top" title="Fill in logistics">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() =>
+                                  this._showDeliver(onDeliver, rid)
+                                }
+                              >
+                                Fill in logistics
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {returnFlowState === 'DELIVERED' && (
                           <AuthWrapper functionName="rolf004">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => this._showReceive(onReceive, rid)}
-                            >
-                              收货
-                            </a>
+                            <Tooltip placement="top" title="收货">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() =>
+                                  this._showReceive(onReceive, rid)
+                                }
+                              >
+                                收货
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {returnFlowState === 'DELIVERED' && (
                           <AuthWrapper functionName="rolf004">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() =>
-                                this._showRejectReceive(onRejectReceive, rid)
-                              }
-                            >
-                              拒绝收货
-                            </a>
+                            <Tooltip placement="top" title="拒绝收货">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() =>
+                                  this._showRejectReceive(onRejectReceive, rid)
+                                }
+                              >
+                                拒绝收货
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
@@ -402,74 +418,84 @@ export default class SearchList extends React.Component<any, any> {
                           (returnType == 'RETURN' &&
                             returnFlowState == 'RECEIVED')) && (
                           <AuthWrapper functionName="rolf005">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => {
-                                this._showRealRefund(onRealRefund, rid);
-                              }}
-                            >
-                              <FormattedMessage id="realRefund" />
-                            </a>
+                            <Tooltip placement="top" title="Real refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  this._showRealRefund(onRealRefund, rid);
+                                }}
+                              >
+                                <FormattedMessage id="realRefund" />
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {enableReturn && (
                           <AuthWrapper functionName="rolf005">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => {
-                                if (payType == 0) {
-                                  this._showOnlineRefund(
-                                    onOnlineRefund,
-                                    rid,
-                                    customerId,
-                                    payPrice,
-                                    applyPoints
-                                  );
-                                } else {
-                                  this._showOfflineRefund(
-                                    onOfflineRefund,
-                                    rid,
-                                    customerId,
-                                    payPrice,
-                                    applyPoints
-                                  );
-                                }
-                              }}
-                            >
-                              <FormattedMessage id="refund" />
-                            </a>
+                            <Tooltip placement="top" title="Refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  if (payType == 0) {
+                                    this._showOnlineRefund(
+                                      onOnlineRefund,
+                                      rid,
+                                      customerId,
+                                      payPrice,
+                                      applyPoints
+                                    );
+                                  } else {
+                                    this._showOfflineRefund(
+                                      onOfflineRefund,
+                                      rid,
+                                      customerId,
+                                      payPrice,
+                                      applyPoints
+                                    );
+                                  }
+                                }}
+                                className="iconfont iconbtn-refund"
+                              >
+                                {/*<FormattedMessage id="refund" />*/}
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {/*已收货状态 或者 退款单的已审核状态*/}
                         {enableReturn && (
                           <AuthWrapper functionName="rolf005">
-                            <a
-                              href="javascript:void(0)"
-                              style={{ marginLeft: 20 }}
-                              onClick={() => {
-                                console.log(onRejectRefund, 'onRejectRefund');
-                                this._showRejectRefund(
-                                  onRejectRefund,
-                                  rid,
-                                  0 == payType
-                                );
-                              }}
-                            >
-                              <FormattedMessage id="refusedToRefund" />
-                            </a>
+                            <Tooltip placement="top" title="Refused to refund">
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
+                                  console.log(onRejectRefund, 'onRejectRefund');
+                                  this._showRejectRefund(
+                                    onRejectRefund,
+                                    rid,
+                                    0 == payType
+                                  );
+                                }}
+                              >
+                                <FormattedMessage id="refusedToRefund" />
+                              </a>
+                            </Tooltip>
                           </AuthWrapper>
                         )}
                         <AuthWrapper functionName="rodf001">
-                          <Link
-                            style={{ marginRight: 18, marginLeft: 20 }}
-                            to={`/order-return-detail/${rid}`}
-                          >
-                            <FormattedMessage id="order.seeDetails" />
-                          </Link>
+                          <Tooltip placement="top" title="See details">
+                            <Link
+                              style={{ marginRight: 18, marginLeft: 20 }}
+                              to={`/order-return-detail/${rid}`}
+                              className="iconfont iconDetails"
+                            >
+                              {/*<FormattedMessage id="order.seeDetails" />*/}
+                            </Link>
+                          </Tooltip>
                         </AuthWrapper>
                       </span>
                     </div>

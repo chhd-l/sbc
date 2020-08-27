@@ -3,12 +3,14 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
+import { noop, Const, AuthWrapper, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
+import { accDiv } from '../../../web_modules/qmkit/float';
 const defaultImg = require('../../goods-list/img/none.png');
+import moment from 'moment';
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
@@ -120,9 +122,8 @@ export default class ListView extends React.Component<any, any> {
       total: number;
       pageSize: number;
       currentPage: number;
-      dataList: TList;
+      dataList: any;
       needAudit: boolean;
-
       onChecked: Function;
       onCheckedAll: Function;
       allChecked: boolean;
@@ -134,6 +135,7 @@ export default class ListView extends React.Component<any, any> {
       verify: Function;
       hideRejectModal: Function;
       showRejectModal: Function;
+      onFindById: Function;
     };
   };
 
@@ -143,12 +145,10 @@ export default class ListView extends React.Component<any, any> {
     total: 'total',
     //当前的分页条数
     pageSize: 'pageSize',
-
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
     needAudit: 'needAudit',
-
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -160,7 +160,8 @@ export default class ListView extends React.Component<any, any> {
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
     hideRejectModal: noop,
-    showRejectModal: noop
+    showRejectModal: noop,
+    onFindById: noop
   };
 
   render() {
@@ -173,7 +174,8 @@ export default class ListView extends React.Component<any, any> {
       allChecked,
       init,
       currentPage,
-      orderRejectModalVisible
+      orderRejectModalVisible,
+      onFindById
     } = this.props.relaxProps;
 
     return (
@@ -187,7 +189,7 @@ export default class ListView extends React.Component<any, any> {
                 >
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '5%' }}>
+                      {/*<th style={{ width: '5%' }}>
                         <Checkbox
                           style={{ borderSpacing: 0 }}
                           checked={allChecked}
@@ -196,34 +198,16 @@ export default class ListView extends React.Component<any, any> {
                             onCheckedAll(checked);
                           }}
                         />
-                      </th>
-                      <th>
+                      </th>*/}
+                      <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '14%' }}>
-                        <FormattedMessage id="consumerName" />
-                      </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="recipient" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="amount" />
-                        <br />
-                        <FormattedMessage id="quantity" />
-                      </th>
-                      <th style={{ width: '10%' }}>
-                        <FormattedMessage id="clinicName" />
-                      </th>
-                      {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.shippingStatus" />
-                      </th>
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.orderStatus" />
-                      </th>
-                      <th className="operation-th" style={{ width: '12%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
-                      </th>
+                      <th style={{ width: '13%' }}>Recipient name</th>
+                      <th style={{ width: '15%' }}>Recipient mail</th>
+                      <th style={{ width: '11%' }}>Amount</th>
+                      <th style={{ width: '11%' }}>Link status</th>
+                      <th style={{ width: '11%' }}>Perscriber</th>
+                      <th style={{ width: '11%' }}>Operation</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">
@@ -283,363 +267,131 @@ export default class ListView extends React.Component<any, any> {
     );
   }
 
+  onDetail(e) {
+    console.log(e, 11111111111);
+  }
+
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
-
-    return (
-      dataList &&
-      dataList.map((v, index) => {
-        const id = v.get('id');
-        const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
-        const num =
-          v
-            .get('tradeItems')
-            .concat(gifts)
-            .map((v) => v.get('num'))
-            .reduce((a, b) => {
-              a = a + b;
-              return a;
-            }, 0) || 0;
-        const buyerId = v.getIn(['buyer', 'id']);
-
-        const orderSource = v.get('orderSource');
-        let orderType = '';
-        if (orderSource == 'WECHAT') {
-          orderType = 'H5 order';
-        } else if (orderSource == 'APP') {
-          orderType = 'APP order';
-        } else if (orderSource == 'PC') {
-          orderType = 'PC order';
-        } else if (orderSource == 'LITTLEPROGRAM') {
-          orderType = 'Mini Program order';
-        }
-        return (
-          <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-            <td colSpan={9} style={{ padding: 0 }}>
-              <table
-                className="ant-table-self"
-                style={{ border: '1px solid #ddd' }}
-              >
-                <thead>
-                  <tr>
-                    <td colSpan={9} style={{ padding: 0, color: '#999' }}>
-                      <div
-                        style={{
-                          marginTop: 12,
-                          borderBottom: '1px solid #F5F5F5',
-                          height: 40
-                        }}
-                      >
-                        <span style={{ marginLeft: '1%' }}>
-                          <Checkbox
-                            checked={v.get('checked')}
-                            onChange={(e) => {
-                              const checked = (e.target as any).checked;
-                              onChecked(index, checked);
-                            }}
-                          />
-                        </span>
-
-                        <div style={{ width: 310, display: 'inline-block' }}>
-                          <span
-                            style={{
-                              marginLeft: 20,
-                              color: '#000',
-                              display: 'inline-block',
-                              position: 'relative'
-                            }}
-                          >
-                            {id}{' '}
-                            {v.get('platform') != 'CUSTOMER' && (
-                              <span style={styles.platform}>
-                                <FormattedMessage id="order.valetOrder" />
-                              </span>
-                            )}
-                            {/* {orderType != '' && (
-                              <span style={styles.platform}>{orderType}</span>
-                            )} */}
-                            {v.get('grouponFlag') && (
-                              <span style={styles.platform}>
-                                <FormattedMessage id="order.fightTogether" />
-                              </span>
-                            )}
-                            {v.get('isAutoSub') && (
-                              <span style={styles.platform}>Subscription</span>
-                            )}
-                            {v.get('isAutoSub') ? (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  left: '0',
-                                  top: '20px'
-                                }}
-                              >
-                                {v.get('subscribeId')}
-                              </span>
-                            ) : (
-                              ''
-                            )}
-                          </span>
-                        </div>
-
-                        <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="orderTime" />：
-                          {v.getIn(['tradeState', 'createTime'])
-                            ? Moment(v.getIn(['tradeState', 'createTime']))
-                                .format(Const.TIME_FORMAT)
-                                .toString()
-                            : ''}
-                        </span>
-                        <span style={{ marginRight: 0, float: 'right' }}>
-                          {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' &&
-                            v.get('tradeItems') &&
-                            !v
-                              .get('tradeItems')
-                              .get(0)
-                              .get('isFlashSaleGoods') && (
-                              <AuthWrapper functionName="edit_order_f_001">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    verify(id, buyerId);
-                                  }}
-                                >
-                                  <FormattedMessage id="edit" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                            'NON_CHECKED' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => {
-                                    onAudit(id, 'CHECKED');
-                                  }}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.audit" />
-                                </a>
-                              </AuthWrapper>
-                            )} */}
-                          {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) ===
-                            'NON_CHECKED' &&
-                            v.getIn(['tradeState', 'payState']) != 'PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => this._showRejectedConfirm(id)}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.turnDown" />
-                                </a>
-                              </AuthWrapper>
-                            )} */}
-                          {/*待发货状态显示*/}
-                          {needAudit &&
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                >
-                                  <FormattedMessage id="order.review" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.ship" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED_PART' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'PART_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  <FormattedMessage id="order.ship" />
-                                </a>
-                              </AuthWrapper>
-                            )}
-                          {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003">
-                              <a
-                                onClick={() => {
-                                  this._showConfirm(id);
-                                }}
-                                href="javascript:void(0)"
-                              >
-                                <FormattedMessage id="order.confirmReceipt" />
-                              </a>
-                            </AuthWrapper>
-                          )}
-                          <AuthWrapper functionName="fOrderDetail001">
-                            <Link
-                              style={{ marginLeft: 20, marginRight: 20 }}
-                              to={`/order-detail/${id}`}
-                            >
-                              <FormattedMessage id="order.seeDetails" />
-                            </Link>
-                          </AuthWrapper>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style={{ width: '3%' }} />
-                    <td
+    const {
+      onChecked,
+      onAudit,
+      verify,
+      needAudit,
+      onFindById
+    } = this.props.relaxProps;
+    let list = dataList.toJS();
+    return list.map((v, index) => {
+      const id = v.recommendationId;
+      const createTime = v.createTime;
+      const img = v.recommendationGoodsInfoRels
+        ? v.recommendationGoodsInfoRels
+        : [];
+      const a = [{ a: 1 }, { b: 2 }];
+      return (
+        <tr className="ant-table-row  ant-table-row-level-0" key={id}>
+          <td colSpan={9} style={{ padding: 0 }}>
+            <table
+              className="ant-table-self"
+              style={{ border: '1px solid #ddd' }}
+            >
+              <thead>
+                <tr>
+                  <td colSpan={9} style={{ padding: 0, color: '#999' }}>
+                    <div
                       style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        flexWrap: 'wrap',
-                        padding: '16px 0',
-                        width: '100'
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                        paddingLeft: 12,
+                        borderBottom: '1px solid #F5F5F5',
+                        fontSize: 12
                       }}
                     >
-                      {/*商品图片*/}
-                      {v
-                        .get('tradeItems')
-                        .concat(gifts)
-                        .map((v, k) =>
-                          k < 4 ? (
-                            <img
-                              src={v.get('pic') ? v.get('pic') : defaultImg}
-                              className="img-item"
-                              // style={styles.imgItem}
-                              key={k}
-                            />
-                          ) : null
-                        )}
-
-                      {
-                        /*最后一张特殊处理*/
-                        //@ts-ignore
-                        v.get('tradeItems').concat(gifts).size > 4 ? (
-                          <div style={styles.imgBg}>
-                            <img
-                              //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
-                              style={styles.imgFourth}
-                            />
-                            //@ts-ignore
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />{' '}
-                              {v.get('tradeItems').concat(gifts).size}
-                              <FormattedMessage id="items" />
-                            </div>
-                          </div>
-                        ) : null
-                      }
-                    </td>
-                    <td style={{ width: '14%' }}>
-                      {/*客户名称*/}
-                      <p
-                        title={v.getIn(['buyer', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.getIn(['buyer', 'name'])}
-                      </p>
-                    </td>
-                    <td style={{ width: '17%' }}>
-                      {/*收件人姓名*/}
-                      {/* <FormattedMessage id="recipient" />： */}
-                      <p
-                        title={v.getIn(['consignee', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.getIn(['consignee', 'name'])}
-                      </p>
-
-                      {/* <br /> */}
-                      {/*收件人手机号码*/}
-                      {/* {v.getIn(['consignee', 'phone'])} */}
-                    </td>
-                    <td style={{ width: '10%' }}>
-                      ${tradePrice.toFixed(2)}
-                      <br />（{num} <FormattedMessage id="piece" />)
-                    </td>
-                    <td style={{ width: '10%' }}>
-                      <p
-                        title={v.getIn(['clinicsName', 'name'])}
-                        className="line-ellipse"
-                      >
-                        {v.get('clinicsName')}
-                      </p>
-                    </td>
-                    {/* <td style={{ width: '5%' }}> */}
-                    {/* 1{v.getIn(['invoice', 'rfc'])} */}
-                    {/* </td> */}
-                    {/*发货状态*/}
-                    <td style={{ width: '12%' }}>
-                      {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
-                    </td>
-                    {/*订单状态*/}
-                    <td style={{ width: '12%' }}>
-                      {flowState(v.getIn(['tradeState', 'flowState']))}
-                    </td>
-                    {/*支付状态*/}
-                    <td
-                      style={{ width: '12%', paddingRight: 22 }}
-                      className="operation-td"
-                    >
-                      {payStatus(v.getIn(['tradeState', 'payState']))}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        );
-      })
-    );
+                      <div style={{ width: 510, display: 'inline-block' }}>
+                        <span> {id}</span>
+                      </div>
+                      <div style={{ width: 310, display: 'inline-block' }}>
+                        <span>
+                          {' '}
+                          Created Time:{' '}
+                          {moment(v.createTime).format('YYYY-MM-DD')}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ width: '1%' }} />
+                  <td
+                    style={{
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexWrap: 'wrap',
+                      padding: '16px 0',
+                      width: '120px'
+                    }}
+                  >
+                    {img.map((item, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={item.goodsInfo.goodsInfoImg}
+                          width="40"
+                        />
+                      );
+                    })}
+                  </td>
+                  <td style={{ width: '15.4%' }}>
+                    {v.consumerLastName != null
+                      ? v.consumerFirstName + ' ' + v.consumerLastName
+                      : '--'}
+                  </td>
+                  <td style={{ width: '18%' }}>
+                    {v.consumerEmail != null ? v.consumerEmail : '--'}
+                  </td>
+                  <td style={{ width: '14%' }}>
+                    {img.map((item, index) => {
+                      return (
+                        <div>
+                          {item.goodsInfo.retailPrice != null
+                            ? item.goodsInfo.retailPrice
+                            : '--'}
+                        </div>
+                      );
+                    })}
+                  </td>
+                  <td style={{ width: '13%' }}>
+                    {v.linkStatus != null ? v.linkStatus : '--'}
+                  </td>
+                  <td style={{ width: '15.4%' }}>
+                    {v.prescriberId != null ? v.prescriberName : '--'}
+                  </td>
+                  <td
+                    style={{
+                      width: '10.2%',
+                      color: '#E1021A',
+                      cursor: 'pointer',
+                      textAlign: 'right',
+                      paddingRight: 20
+                    }}
+                    onClick={() =>
+                      history.push({
+                        pathname: '/recomm-page-detail',
+                        state: { id: v.id }
+                      })
+                    }
+                  >
+                    Details
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      );
+    });
   }
 
   /**

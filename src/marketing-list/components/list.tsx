@@ -266,30 +266,33 @@ export default class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 2 && (
-                    <a
-                      href="javascript:void(0);"
-                      style={{ marginRight: 5 }}
-                      onClick={() => onStart(rowInfo['marketingId'])}
-                    >
-                      Open
-                    </a>
+                    <Tooltip placement="top" title="Open">
+                      <a
+                        href="javascript:void(0);"
+                        style={{ marginRight: 5 }}
+                        onClick={() => onStart(rowInfo['marketingId'])}
+                        className="iconfont iconbtn-open"
+                      ></a>
+                    </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
-                    <a
-                      href="javascript:void(0);"
-                      style={{ marginRight: 5 }}
-                      onClick={() => onPause(rowInfo['marketingId'])}
-                    >
-                      Stop
-                    </a>
+                    <Tooltip placement="top" title="Stop">
+                      <a
+                        href="javascript:void(0);"
+                        style={{ marginRight: 5 }}
+                        onClick={() => onPause(rowInfo['marketingId'])}
+                        className="iconfont iconbtn-stop"
+                      ></a>
+                    </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
-                    <a
-                      style={{ marginRight: 5 }}
-                      onClick={() => close(rowInfo['marketingId'])}
-                    >
-                      Close
-                    </a>
+                    <Tooltip placement="top" title="Close">
+                      <a
+                        style={{ marginRight: 5 }}
+                        onClick={() => close(rowInfo['marketingId'])}
+                        className="iconfont iconbtn-cancelall"
+                      ></a>
+                    </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
                     <Popconfirm
@@ -298,9 +301,13 @@ export default class MarketingList extends React.Component<any, any> {
                       okText="Confirm"
                       cancelText="Cancel"
                     >
-                      <a href="javascript:void(0);" style={{ marginRight: 5 }}>
-                        Delete
-                      </a>
+                      <Tooltip placement="top" title="Delete">
+                        <a
+                          href="javascript:void(0);"
+                          style={{ marginRight: 5 }}
+                          className="iconfont iconDelete"
+                        ></a>
+                      </Tooltip>
                     </Popconfirm>
                   )}
                 </AuthWrapper>

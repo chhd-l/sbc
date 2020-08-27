@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 const Column = Table.Column;
 const confirm = Modal.confirm;
@@ -70,38 +70,49 @@ export default class CateList extends React.Component<any, any> {
       <div>
         {rowInfo.get('cateGrade') != 3 && rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_2">
-            <a
-              style={styles.edit}
-              onClick={this._addChildrenCate.bind(
-                this,
-                rowInfo.get('cateId'),
-                rowInfo.get('cateName')
-              )}
-            >
-              <FormattedMessage id="addSubcategory" />
-            </a>
+            <Tooltip placement="top" title="Add subcategory">
+              <a
+                style={styles.edit}
+                onClick={this._addChildrenCate.bind(
+                  this,
+                  rowInfo.get('cateId'),
+                  rowInfo.get('cateName')
+                )}
+                className="iconfont iconbtn-addsubvisionsaddcategory"
+              >
+                {/*<FormattedMessage id="addSubcategory" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
         ) : null}
         {rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_2">
-            <a
-              style={styles.edit}
-              onClick={this._showEditModal.bind(
-                this,
-                rowInfo.get('cateId'),
-                rowInfo.get('cateName'),
-                rowInfo.get('cateParentId')
-              )}
-            >
-              <FormattedMessage id="edit" />
-            </a>
+            <Tooltip placement="top" title="Edit">
+              <a
+                style={styles.edit}
+                onClick={this._showEditModal.bind(
+                  this,
+                  rowInfo.get('cateId'),
+                  rowInfo.get('cateName'),
+                  rowInfo.get('cateParentId')
+                )}
+                className="iconfont iconEdit"
+              >
+                {/*<FormattedMessage id="edit" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
         ) : null}
         {rowInfo.get('isDefault') != 1 ? (
           <AuthWrapper functionName="f_resourceCate_1">
-            <a onClick={this._delete.bind(this, rowInfo.get('cateId'))}>
-              <FormattedMessage id="delete" />
-            </a>
+            <Tooltip placement="top" title="Delete">
+              <a
+                onClick={this._delete.bind(this, rowInfo.get('cateId'))}
+                className="iconfont iconDelete"
+              >
+                {/*<FormattedMessage id="delete" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
         ) : null}
       </div>

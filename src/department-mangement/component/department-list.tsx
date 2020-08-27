@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { List, Map, fromJS } from 'immutable';
-import { Modal, Table, Icon } from 'antd';
+import { Modal, Table, Icon, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, AuthWrapper } from 'qmkit';
@@ -114,21 +114,23 @@ class DepartmentList extends React.Component<any, any> {
       </AuthWrapper>
     ) : (
       <AuthWrapper functionName={'f_department_modify_leader'}>
-        <a
-          style={styles.edit}
-          onClick={this._showLeadrModal.bind(
-            this,
-            rowInfo.get('departmentId'),
-            rowInfo.get('departmentName'),
-            rowInfo.get('parentDepartmentId'),
-            rowInfo.get('parentDepartmentIds'),
-            '',
-            '',
-            rowInfo.get('employeeNum')
-          )}
-        >
-          <Icon type="edit" /> -
-        </a>
+        <Tooltip placement="top" title="Set supervisor">
+          <a
+            style={styles.edit}
+            onClick={this._showLeadrModal.bind(
+              this,
+              rowInfo.get('departmentId'),
+              rowInfo.get('departmentName'),
+              rowInfo.get('parentDepartmentId'),
+              rowInfo.get('parentDepartmentIds'),
+              '',
+              '',
+              rowInfo.get('employeeNum')
+            )}
+          >
+            <Icon type="edit" />
+          </a>
+        </Tooltip>
       </AuthWrapper>
     );
   };
@@ -141,41 +143,48 @@ class DepartmentList extends React.Component<any, any> {
     return (
       <div>
         <AuthWrapper functionName={'f_department_add_node'}>
-          <a
-            style={styles.edit}
-            onClick={this._addChildrenCate.bind(
-              this,
-              rowInfo.get('departmentId'),
-              rowInfo.get('departmentName'),
-              rowInfo.get('departmentGrade')
-            )}
-          >
-            Add subdivisions
-          </a>
+          <Tooltip placement="top" title="Add subdivisions">
+            <a
+              style={styles.edit}
+              onClick={this._addChildrenCate.bind(
+                this,
+                rowInfo.get('departmentId'),
+                rowInfo.get('departmentName'),
+                rowInfo.get('departmentGrade')
+              )}
+              className="iconfont iconbtn-addsubvisionsaddcategory"
+            ></a>
+          </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>
-          <a
-            style={styles.edit}
-            onClick={this._showEditModal.bind(
-              this,
-              rowInfo.get('departmentId'),
-              rowInfo.get('departmentName'),
-              rowInfo.get('parentDepartmentId')
-            )}
-          >
-            <FormattedMessage id="edit" />
-          </a>
+          <Tooltip placement="top" title="Edit">
+            <a
+              style={styles.edit}
+              onClick={this._showEditModal.bind(
+                this,
+                rowInfo.get('departmentId'),
+                rowInfo.get('departmentName'),
+                rowInfo.get('parentDepartmentId')
+              )}
+              className="iconfont iconEdit"
+            >
+              {/*<FormattedMessage id="edit" />*/}
+            </a>
+          </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_delete'}>
-          <a
-            onClick={this._delete.bind(
-              this,
-              rowInfo.get('departmentId'),
-              rowInfo.get('employeeNum')
-            )}
-          >
-            <FormattedMessage id="delete" />
-          </a>
+          <Tooltip placement="top" title="Delete">
+            <a
+              onClick={this._delete.bind(
+                this,
+                rowInfo.get('departmentId'),
+                rowInfo.get('employeeNum')
+              )}
+              className="iconfont iconDelete"
+            >
+              {/*<FormattedMessage id="delete" />*/}
+            </a>
+          </Tooltip>
         </AuthWrapper>
       </div>
     );

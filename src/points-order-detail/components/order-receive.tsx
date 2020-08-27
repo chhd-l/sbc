@@ -68,17 +68,13 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'receiveTime',
       key: 'receiveTime',
       render: (receiveTime) =>
-        receiveTime &&
-        moment(receiveTime)
-          .format(Const.TIME_FORMAT)
-          .toString()
+        receiveTime && moment(receiveTime).format(Const.TIME_FORMAT).toString()
     },
     {
       title: '实扣积分',
       dataIndex: 'payOrderPoints',
       key: 'payOrderPoints',
-      render: (text, record) =>
-        record.payOrderStatus == 1 ? '' : text || 0
+      render: (text, record) => (record.payOrderStatus == 1 ? '' : text || 0)
     },
     {
       title: '支付方式',
@@ -106,7 +102,7 @@ export default class OrderReceive extends React.Component<any, any> {
             trigger="click"
             content={<img style={styles.attachmentView} src={encloses} />}
           >
-            <a href="#!">
+            <a href="#">
               <img style={styles.attachment} src={encloses} />
             </a>
           </Popover>
@@ -155,8 +151,8 @@ export default class OrderReceive extends React.Component<any, any> {
         <div style={styles.addReceive}>
           <div style={styles.orderInfo}>
             <label style={styles.orderNum}>
-              订单号：{id}&nbsp;&nbsp;&nbsp;&nbsp; 应扣积分：{
-              totalPayPoints || 0 }
+              订单号：{id}&nbsp;&nbsp;&nbsp;&nbsp; 应扣积分：
+              {totalPayPoints || 0}
             </label>
           </div>
         </div>

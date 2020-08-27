@@ -292,12 +292,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
             ],
             onChange: (date, dateString) => {
-              console.log(date, 11111);
-              console.log(
-                marketingBean.get('beginTime'),
-                '11111111111111111111'
-              );
-              console.log(dateString, 2222);
               if (date) {
                 this.onBeanChange({
                   beginTime: dateString[0] + ':00',

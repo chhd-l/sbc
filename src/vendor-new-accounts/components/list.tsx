@@ -255,10 +255,7 @@ export default class List extends React.Component<any, any> {
                   return (
                     <div>
                       {newAccounts.toJS().length == 1 ? null : (
-                        <a
-                          href="#!"
-                          onClick={() => deleteAccount(rowData.key)}
-                        >
+                        <a href="#" onClick={() => deleteAccount(rowData.key)}>
                           <Icon
                             type="minus-circle-o"
                             style={{ color: '#999', fontSize: 24 }}

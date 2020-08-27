@@ -86,7 +86,7 @@ export default class TicketList extends React.Component<any, any> {
           <AuthWrapper functionName="editFinaceTicket">
             <a
               style={{ marginRight: '5px' }}
-              href="#!"
+              href="#"
               onClick={() => onEdit(rowInfo.projectId)}
             >
               {<FormattedMessage id="edit" />}
@@ -94,10 +94,7 @@ export default class TicketList extends React.Component<any, any> {
           </AuthWrapper>
           <span className="ant-divider" />
           <AuthWrapper functionName="deleteFinaceTicket">
-            <a
-              href="#!"
-              onClick={() => this._handleDelete(rowInfo.projectId)}
-            >
+            <a href="#" onClick={() => this._handleDelete(rowInfo.projectId)}>
               {<FormattedMessage id="delete" />}
             </a>
           </AuthWrapper>

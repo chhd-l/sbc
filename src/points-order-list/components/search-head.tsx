@@ -93,7 +93,7 @@ export default class SearchHead extends Component<any, any> {
           <AuthWrapper functionName="f_points_order_list_003">
             <a
               target="_blank"
-              href="#!"
+              href="#"
               onClick={() => this._handleBatchExport()}
             >
               Batch operation
@@ -162,6 +162,7 @@ export default class SearchHead extends Component<any, any> {
                 }
                 defaultValue=""
                 label="Delivery status"
+                style={130}
                 onChange={(value) => {
                   this.setState({
                     tradeState: {

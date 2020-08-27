@@ -496,7 +496,7 @@ export default class GoodsList extends React.Component<any, any> {
               width="61px"
               render={(_text, record: any) => (
                 <a
-                  href="#!"
+                  href="#"
                   onClick={() => {
                     if (record.gift) {
                       this._delGift(fromJS(record).get('goodsInfoId'));

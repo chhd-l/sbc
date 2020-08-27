@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { Spin, Pagination } from 'antd';
+import { Spin, Pagination, Tooltip } from 'antd';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
 import { Const, noop } from 'qmkit';
@@ -168,14 +168,17 @@ export default class SearchList extends React.Component<any, any> {
                         )}
                       </span>
                       <span style={{ marginRight: 20, float: 'right' }}>
-                        <a
-                          href="javascript:void(0)"
-                          onClick={() => {
-                            apply(id);
-                          }}
-                        >
-                          {<FormattedMessage id="application" />}
-                        </a>
+                        <Tooltip placement="top" title="Application">
+                          <a
+                            href="javascript:void(0)"
+                            onClick={() => {
+                              apply(id);
+                            }}
+                            className="iconfont iconApplication"
+                          >
+                            {/*{<FormattedMessage id="application" />}*/}
+                          </a>
+                        </Tooltip>
                       </span>
                     </div>
                   </td>
@@ -212,33 +215,35 @@ export default class SearchList extends React.Component<any, any> {
                         }
                       })}
 
-                    {/*第4张特殊处理*/
-                    //@ts-ignore
-                    v.get('tradeItems').concat(gifts).size > 3 ? (
-                      <div style={styles.imgBg}>
-                        <img
+                    {
+                      /*第4张特殊处理*/
+                      //@ts-ignore
+                      v.get('tradeItems').concat(gifts).size > 3 ? (
+                        <div style={styles.imgBg}>
+                          <img
+                            //@ts-ignore
+                            src={
+                              v
+                                .get('tradeItems')
+                                .concat(gifts)
+                                .get(3)
+                                .get('pic')
+                                ? v
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
+                                : defaultImg
+                            }
+                            style={styles.imgFourth}
+                          />
                           //@ts-ignore
-                          src={
-                            v
-                              .get('tradeItems')
-                              .concat(gifts)
-                              .get(3)
-                              .get('pic')
-                              ? v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                              : defaultImg
-                          }
-                          style={styles.imgFourth}
-                        />
-                        //@ts-ignore
-                        <div style={styles.imgNum}>
-                          total {v.get('tradeItems').concat(gifts).size}
+                          <div style={styles.imgNum}>
+                            total {v.get('tradeItems').concat(gifts).size}
+                          </div>
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null
+                    }
                   </td>
                   <td style={{ width: '10%' }}>
                     {/*客户名称*/}

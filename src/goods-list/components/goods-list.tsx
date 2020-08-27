@@ -270,23 +270,24 @@ export default class CateList extends React.Component<any, any> {
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
-          <a
-            href="#!"
-            onClick={() =>
-              history.push({
-                pathname: `/goods-edit/${rowInfo.goodsId}`,
-                state: { tab: 'main' }
-              })
-            }
-            title="Edit"
-            style={{ marginRight: 5 }}
-          >
-            <span
-              className="icon iconfont iconEdit"
-              style={{ fontSize: 20 }}
-            ></span>
-            {/* <FormattedMessage id="edit" /> */}
-          </a>
+          <Tooltip placement="top" title="Edit">
+            <a
+              href="#!"
+              onClick={() =>
+                history.push({
+                  pathname: `/goods-edit/${rowInfo.goodsId}`,
+                  state: { tab: 'main' }
+                })
+              }
+              style={{ marginRight: 5 }}
+            >
+              <span
+                className="icon iconfont iconEdit"
+                style={{ fontSize: 20 }}
+              ></span>
+              {/* <FormattedMessage id="edit" /> */}
+            </a>
+          </Tooltip>
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">
           <a
@@ -303,52 +304,55 @@ export default class CateList extends React.Component<any, any> {
         </AuthWrapper> */}
         {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <a
-              href="#!"
-              onClick={() => {
-                spuOnSale([rowInfo.goodsId]);
-              }}
-              title="On Shelves"
-              style={{ marginRight: 5 }}
-            >
-              <span
-                className="icon iconfont iconOnShelves"
-                style={{ fontSize: 20 }}
-              ></span>
-            </a>
+            <Tooltip placement="top" title="On Shelves">
+              <a
+                href="#!"
+                onClick={() => {
+                  spuOnSale([rowInfo.goodsId]);
+                }}
+                style={{ marginRight: 5 }}
+              >
+                <span
+                  className="icon iconfont iconOnShelves"
+                  style={{ fontSize: 20 }}
+                ></span>
+              </a>
+            </Tooltip>
           </AuthWrapper>
         ) : null}
         {rowInfo.addedFlag == 1 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <a
-              href="#!"
-              onClick={() => {
-                spuOffSale([rowInfo.goodsId]);
-              }}
-              title="Off Shelves"
-              style={{ marginRight: 5 }}
-            >
-              <span
-                className="icon iconfont iconOffShelves"
-                style={{ fontSize: 20 }}
-              ></span>
-            </a>
+            <Tooltip placement="top" title="Off Shelves">
+              <a
+                href="#!"
+                onClick={() => {
+                  spuOffSale([rowInfo.goodsId]);
+                }}
+                style={{ marginRight: 5 }}
+              >
+                <span
+                  className="icon iconfont iconOffShelves"
+                  style={{ fontSize: 20 }}
+                ></span>
+              </a>
+            </Tooltip>
           </AuthWrapper>
         ) : null}
         <AuthWrapper functionName="f_goods_6">
-          <a
-            href="#!"
-            onClick={() => {
-              this._delete(rowInfo.goodsId);
-            }}
-            title="Delete"
-            style={{ marginRight: 5 }}
-          >
-            <span
-              className="icon iconfont iconDelete"
-              style={{ fontSize: 20 }}
-            ></span>
-          </a>
+          <Tooltip placement="top" title="Delete">
+            <a
+              href="#!"
+              onClick={() => {
+                this._delete(rowInfo.goodsId);
+              }}
+              style={{ marginRight: 5 }}
+            >
+              <span
+                className="icon iconfont iconDelete"
+                style={{ fontSize: 20 }}
+              ></span>
+            </a>
+          </Tooltip>
         </AuthWrapper>
       </div>
     );

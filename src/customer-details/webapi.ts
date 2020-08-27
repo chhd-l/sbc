@@ -179,7 +179,6 @@ export function deleteCard(param) {
 }
 
 export function addOrUpdatePaymentMethod(param) {
-  console.log(param);
   return Fetch<TResult>('/payment-method/updata', {
     method: 'POST',
     body: JSON.stringify({

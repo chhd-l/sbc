@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -403,14 +403,17 @@ export default class ListView extends React.Component<any, any> {
                               .get(0)
                               .get('isFlashSaleGoods') && (
                               <AuthWrapper functionName="edit_order_f_001">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    verify(id, buyerId);
-                                  }}
-                                >
-                                  <FormattedMessage id="edit" />
-                                </a>
+                                <Tooltip placement="top" title="Edit">
+                                  <a
+                                    style={{ marginLeft: 20 }}
+                                    onClick={() => {
+                                      verify(id, buyerId);
+                                    }}
+                                    className="iconfont iconEdit"
+                                  >
+                                    {/*<FormattedMessage id="edit" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
                             )}
                           {/* {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
@@ -450,15 +453,18 @@ export default class ListView extends React.Component<any, any> {
                             v.getIn(['tradeState', 'payState']) ===
                               'NOT_PAID' && (
                               <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                >
-                                  <FormattedMessage id="order.review" />
-                                </a>
+                                <Tooltip placement="top" title="Review">
+                                  <a
+                                    style={{ marginLeft: 20 }}
+                                    onClick={() => {
+                                      this._showRetrialConfirm(id);
+                                    }}
+                                    href="javascript:void(0)"
+                                    className="iconfont iconbtn-review"
+                                  >
+                                    {/*<FormattedMessage id="order.review" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
                             )}
                           {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
@@ -469,12 +475,15 @@ export default class ListView extends React.Component<any, any> {
                               v.getIn(['tradeState', 'payState']) != 'PAID'
                             ) && (
                               <AuthWrapper functionName="fOrderDetail002">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.ship" />
-                                </a>
+                                <Tooltip placement="top" title="Ship">
+                                  <a
+                                    onClick={() => this._toDeliveryForm(id)}
+                                    style={{ marginLeft: 20 }}
+                                    className="iconfont iconbtn-shipping"
+                                  >
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
@@ -487,32 +496,42 @@ export default class ListView extends React.Component<any, any> {
                               v.getIn(['tradeState', 'payState']) != 'PAID'
                             ) && (
                               <AuthWrapper functionName="fOrderDetail002">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  <FormattedMessage id="order.ship" />
-                                </a>
+                                <Tooltip placement="top" title="Ship">
+                                  <a
+                                    onClick={() => this._toDeliveryForm(id)}
+                                    className="iconfont iconbtn-shipping"
+                                  >
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
                             )}
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) ===
                             'DELIVERED' && (
                             <AuthWrapper functionName="fOrderList003">
-                              <a
-                                onClick={() => {
-                                  this._showConfirm(id);
-                                }}
-                                href="javascript:void(0)"
-                              >
-                                <FormattedMessage id="order.confirmReceipt" />
-                              </a>
+                              <Tooltip placement="top" title="Confirm receipt">
+                                <a
+                                  onClick={() => {
+                                    this._showConfirm(id);
+                                  }}
+                                  href="javascript:void(0)"
+                                >
+                                  <FormattedMessage id="order.confirmReceipt" />
+                                </a>
+                              </Tooltip>
                             </AuthWrapper>
                           )}
                           <AuthWrapper functionName="fOrderDetail001">
-                            <Link
-                              style={{ marginLeft: 20, marginRight: 20 }}
-                              to={`/order-detail/${id}`}
-                            >
-                              <FormattedMessage id="order.seeDetails" />
-                            </Link>
+                            <Tooltip placement="top" title="See details">
+                              <Link
+                                style={{ marginLeft: 20, marginRight: 20 }}
+                                to={`/order-detail/${id}`}
+                                className="iconfont iconDetails"
+                              >
+                                {/*<FormattedMessage id="order.seeDetails" />*/}
+                              </Link>
+                            </Tooltip>
                           </AuthWrapper>
                         </span>
                       </div>

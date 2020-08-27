@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Breadcrumb } from 'antd';
 
-import { Headline,BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb } from 'qmkit';
 import { StoreProvider } from 'plume2';
 
 import ReportList from './components/list';
@@ -23,14 +23,16 @@ export default class DownloadReport extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <BreadCrumb/>
+        <BreadCrumb />
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>数谋</Breadcrumb.Item>
           <Breadcrumb.Item>统计报表</Breadcrumb.Item>
           <Breadcrumb.Item>报表下载</Breadcrumb.Item>
         </Breadcrumb> */}
-        <div className="container">
+        <div className="container-search">
           <Headline title="报表下载" />
+        </div>
+        <div className="container">
           <ReportList />
         </div>
       </div>

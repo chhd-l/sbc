@@ -45,7 +45,7 @@ export default class StoreFreight extends React.Component<any, any> {
       <BreadCrumb thirdLevel={true}>
         <Breadcrumb.Item>{typeTxt} Store freight template</Breadcrumb.Item>
       </BreadCrumb>,
-      <div className="container" key="container">
+      <div className="container-search" key="container">
         <Headline title={`${typeTxt} Store freight template`} />
         <FreightTempRelax />
       </div>

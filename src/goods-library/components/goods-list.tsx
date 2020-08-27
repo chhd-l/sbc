@@ -162,7 +162,7 @@ export default class GoodsList extends React.Component<any, any> {
 
             return (
               <a
-                href="#!"
+                href="#"
                 style={{
                   marginTop: 5,
                   marginRight: 5,

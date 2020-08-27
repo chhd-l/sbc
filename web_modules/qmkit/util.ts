@@ -355,3 +355,17 @@ export function logout() {
   sessionStorage.removeItem('PrescriberType');
   history.push('/login');
 }
+
+
+/**
+ * 邮箱验证
+ */
+export function checkEmail (str) {
+  let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+  if (re.test(str)) {
+    return true
+  } else {
+    return false
+  }
+}
+

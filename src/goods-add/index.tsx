@@ -80,7 +80,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item>
           <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
         </Breadcrumb> */}
-        <div className="container" style={{ paddingBottom: 50 }}>
+        <div className="container-search">
           <Headline
             title={
               gid ? (
@@ -91,7 +91,8 @@ export default class GoodsAdd extends React.Component<any, any> {
             }
             state={this._getState(gid)}
           />
-
+        </div>
+        <div className="container">
           <Tabs
             activeKey={this.store.state().get('activeTabKey')}
             onChange={(activeKey) => this.store.onMainTabChange(activeKey)}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
 import {
   Form,
   Spin,
@@ -11,7 +11,8 @@ import {
   message,
   Tooltip,
   Divider,
-  Table
+  Table,
+  Popconfirm
 } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -32,7 +33,8 @@ export default class ClinicList extends Component<any, any> {
         objectNo: '',
         emailTemplate: '',
         category: '',
-        status: ''
+        status: '',
+        templateId: ''
       },
       objectTypeList: [],
       categoryList: [],
@@ -42,13 +44,16 @@ export default class ClinicList extends Component<any, any> {
         current: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      emailTemplateList: []
     };
   }
   componentDidMount() {
     this.querySysDictionary('objectType');
     this.querySysDictionary('messageCategory');
     this.querySysDictionary('messageStatus');
+    this.getTemplateList();
+    this.getEmailTaskList();
   }
 
   onFormChange = ({ field, value }) => {
@@ -59,7 +64,47 @@ export default class ClinicList extends Component<any, any> {
     });
   };
   onSearch = () => {
-    message.success('coding');
+    this.getEmailTaskList();
+  };
+  getEmailTaskList = () => {
+    const { searchForm, pagination } = this.state;
+    let params = {
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize,
+      taskId: searchForm.taskId,
+      objectType: searchForm.objectType,
+      objectNo: searchForm.objectNo,
+      templateId: searchForm.templateId,
+      category: searchForm.category,
+      status: searchForm.status
+    };
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getEmailTaskList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          pagination.total = res.context.total;
+          this.setState({
+            taskList: res.context.content,
+            pagination: pagination,
+            loading: false
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -108,6 +153,41 @@ export default class ClinicList extends Component<any, any> {
       pathname: '/message-quick-send'
     });
   };
+  getTemplateList = () => {
+    webapi.getTemplateList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          emailTemplateList: res.context.emailTemplateResponseList
+        });
+      }
+    });
+  };
+  deleteTask = (id: string) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .deleteEmailTask(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Delete successful');
+          this.getEmailTaskList();
+        } else {
+          message.error(res.message || 'Delete Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Delete Failed');
+        this.setState({
+          loading: false
+        });
+      });
+  };
 
   render() {
     const {
@@ -116,7 +196,8 @@ export default class ClinicList extends Component<any, any> {
       objectTypeList,
       categoryList,
       statusList,
-      taskList
+      taskList,
+      emailTemplateList
     } = this.state;
 
     const columns = [
@@ -155,7 +236,18 @@ export default class ClinicList extends Component<any, any> {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        width: '10%'
+        width: '10%',
+        render: (text) => (
+          <span>
+            {+text === 0
+              ? 'Draft'
+              : +text === 1
+              ? 'To do'
+              : +text === 2
+              ? 'Finsh'
+              : ''}
+          </span>
+        )
       },
 
       {
@@ -163,14 +255,66 @@ export default class ClinicList extends Component<any, any> {
         key: 'operation',
         width: '10%',
         render: (text, record) => (
-          <span>
-            <Tooltip placement="top" title="Details">
-              <Link
-                to={'/message-detail/' + record.id}
-                className="iconfont iconDetails"
-              ></Link>
-            </Tooltip>
-          </span>
+          <div>
+            {+record.status === 0 ? (
+              <div>
+                <Tooltip placement="top" title="Edit">
+                  <Link
+                    to={'/message-edit/' + record.id}
+                    className="iconfont iconEdit"
+                  ></Link>
+                </Tooltip>
+
+                <Divider type="vertical" />
+
+                <Popconfirm
+                  placement="topLeft"
+                  title="Are you sure to delete this item?"
+                  onConfirm={() => this.deleteTask(record.id)}
+                  okText="Confirm"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a type="link" className="iconfont iconDelete"></a>
+                  </Tooltip>
+                </Popconfirm>
+              </div>
+            ) : null}
+            {+record.status === 1 ? (
+              <div>
+                <Tooltip placement="top" title="Details">
+                  <Link
+                    to={'/message-detail/' + record.id}
+                    className="iconfont iconDetails"
+                  ></Link>
+                </Tooltip>
+
+                <Divider type="vertical" />
+
+                <Popconfirm
+                  placement="topLeft"
+                  title="Are you sure to delete this item?"
+                  onConfirm={() => this.deleteTask(record.id)}
+                  okText="Confirm"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a type="link" className="iconfont iconDelete"></a>
+                  </Tooltip>
+                </Popconfirm>
+              </div>
+            ) : null}
+            {+record.status === 2 ? (
+              <div>
+                <Tooltip placement="top" title="Details">
+                  <Link
+                    to={'/message-detail/' + record.id}
+                    className="iconfont iconDetails"
+                  ></Link>
+                </Tooltip>
+              </div>
+            ) : null}
+          </div>
         )
       }
     ];
@@ -179,180 +323,192 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Spin spinning={this.state.loading}>
-            <Headline
-              title={title}
-              extra={
-                <div>
-                  <Button
-                    shape="round"
-                    onClick={() => {
-                      this.overview();
+          <Headline
+            title={title}
+            extra={
+              <div>
+                <Button
+                  shape="round"
+                  onClick={() => {
+                    this.overview();
+                  }}
+                  style={{
+                    marginRight: 20,
+                    borderColor: '#e2001a'
+                  }}
+                >
+                  <p style={{ color: '#e2001a' }}>Overview</p>
+                </Button>
+                <Button
+                  shape="round"
+                  onClick={() => {
+                    this.quickSend();
+                  }}
+                  style={{
+                    borderColor: '#e2001a'
+                  }}
+                >
+                  <p style={{ color: '#e2001a' }}>Quick Send</p>
+                </Button>
+              </div>
+            }
+          />
+          <Form className="filter-content" layout="inline">
+            <Row>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={<p style={styles.label}>Task ID</p>}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'taskId',
+                        value
+                      });
                     }}
-                    style={{
-                      marginRight: 20,
-                      borderColor: '#e2001a'
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label={<p style={styles.label}>Object Type</p>}
+                    style={{ width: 180 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'objectType',
+                        value
+                      });
                     }}
                   >
-                    <p style={{ color: '#e2001a' }}>Overview</p>
-                  </Button>
-                  <Button
-                    shape="round"
-                    onClick={() => {
-                      this.quickSend();
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {objectTypeList &&
+                      objectTypeList.map((item, index) => (
+                        <Option value={item.valueEn} key={index}>
+                          {item.name}
+                        </Option>
+                      ))}
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <Input
+                    addonBefore={<p style={styles.label}>Object No</p>}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'objectNo',
+                        value
+                      });
                     }}
-                    style={{
-                      borderColor: '#e2001a'
+                  />
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label={<p style={styles.label}>Email Template</p>}
+                    style={{ width: 180 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'templateId',
+                        value
+                      });
                     }}
                   >
-                    <p style={{ color: '#e2001a' }}>Quick Send</p>
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {emailTemplateList &&
+                      emailTemplateList.map((item, index) => (
+                        <Option value={item.templateId} key={index}>
+                          {item.emailTemplate}
+                        </Option>
+                      ))}
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label={<p style={styles.label}>Category</p>}
+                    style={{ width: 180 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'category',
+                        value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {categoryList &&
+                      categoryList.map((item, index) => (
+                        <Option value={item.valueEn} key={index}>
+                          {item.name}
+                        </Option>
+                      ))}
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    label={<p style={styles.label}>Status</p>}
+                    style={{ width: 180 }}
+                    onChange={(value) => {
+                      debugger;
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'status',
+                        value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    {statusList &&
+                      statusList.map((item, index) => (
+                        <Option value={item.valueEn} key={index}>
+                          {item.name}
+                        </Option>
+                      ))}
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+              <Col span={24} style={{ textAlign: 'center' }}>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.onSearch();
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
                   </Button>
-                </div>
-              }
-            />
-            <Form className="filter-content" layout="inline">
-              <Row>
-                <Col span={8}>
-                  <FormItem>
-                    <Input
-                      addonBefore={<p style={styles.label}>Task ID</p>}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'taskId',
-                          value
-                        });
-                      }}
-                    />
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem>
-                    <SelectGroup
-                      defaultValue=""
-                      label={<p style={styles.label}>Object Type</p>}
-                      style={{ width: 180 }}
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'objectType',
-                          value
-                        });
-                      }}
-                    >
-                      <Option value="">
-                        <FormattedMessage id="all" />
-                      </Option>
-                      {objectTypeList &&
-                        objectTypeList.map((item, index) => (
-                          <Option value={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </SelectGroup>
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem>
-                    <Input
-                      addonBefore={<p style={styles.label}>Object No</p>}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'objectNo',
-                          value
-                        });
-                      }}
-                    />
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem>
-                    <Input
-                      addonBefore={<p style={styles.label}>Email Template</p>}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'emailTemplate',
-                          value
-                        });
-                      }}
-                    />
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem>
-                    <SelectGroup
-                      defaultValue=""
-                      label={<p style={styles.label}>Category</p>}
-                      style={{ width: 180 }}
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'category',
-                          value
-                        });
-                      }}
-                    >
-                      <Option value="">
-                        <FormattedMessage id="all" />
-                      </Option>
-                      {categoryList &&
-                        categoryList.map((item, index) => (
-                          <Option value={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </SelectGroup>
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem>
-                    <SelectGroup
-                      defaultValue=""
-                      label={<p style={styles.label}>Status</p>}
-                      style={{ width: 180 }}
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'status',
-                          value
-                        });
-                      }}
-                    >
-                      <Option value="">
-                        <FormattedMessage id="all" />
-                      </Option>
-                      {statusList &&
-                        statusList.map((item, index) => (
-                          <Option value={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                    </SelectGroup>
-                  </FormItem>
-                </Col>
-                <Col span={24} style={{ textAlign: 'center' }}>
-                  <FormItem>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      icon="search"
-                      shape="round"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.onSearch();
-                      }}
-                    >
-                      <span>
-                        <FormattedMessage id="search" />
-                      </span>
-                    </Button>
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </Spin>
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
         </div>
         <div className="container">
           <Table

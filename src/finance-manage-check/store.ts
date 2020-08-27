@@ -26,11 +26,21 @@ export default class AppStore extends Store {
       this.dispatch('finance:payWays', res.context);
     }
     const { res3 } = await webapi.getTradeGateWays();
-    if (res3.context[0].isOpen == 1) {
+    let i;
+    for (i = 0; i < res3.context.length; ++i) {
+      if (res3.context[i].isOpen == 1) {
+        this.dispatch('finance:payWay', res3.context[i].name);
+      }
+    }
+    /*if (res3.context[0].isOpen == 1) {
       this.dispatch('finance:payWay', res3.context[0].name);
-    } else {
+    }
+    else if(res3.context[1].isOpen == 1) {
       this.dispatch('finance:payWay', res3.context[1].name);
     }
+    else {
+      this.dispatch('finance:payWay', res3.context[2].name);
+    }*/
 
     //获取收入对账明细
     const searchTime = {

@@ -184,9 +184,15 @@ export default class EmployeeList extends React.Component<any, any> {
       <div className="operation-box">
         {accountState != 2 && (
           <AuthWrapper functionName={'updateEmployee'}>
-            <a href="javascript:void(0);" onClick={() => onEdit(employeeId)}>
-              <FormattedMessage id="edit" />
-            </a>
+            <Tooltip placement="top" title="Edit">
+              <a
+                href="javascript:void(0);"
+                onClick={() => onEdit(employeeId)}
+                className="iconfont iconEdit"
+              >
+                {/* <FormattedMessage id="edit" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
         )}
         <AuthWrapper functionName={'deleteEmployee'}>
@@ -198,21 +204,26 @@ export default class EmployeeList extends React.Component<any, any> {
             okText="OK"
             cancelText="Cancel"
           >
-            <a href="javascript:void(0);">
-              <FormattedMessage id="delete" />
-            </a>
+            <Tooltip placement="top" title="Delete">
+              <a href="javascript:void(0);" className="iconfont iconDelete">
+                {/*<FormattedMessage id="delete" />*/}
+              </a>
+            </Tooltip>
           </Popconfirm>
         </AuthWrapper>
 
         {accountState != 2 && (
           <AuthWrapper functionName={'enableDisableEmployee'}>
             {accountState == 0 ? (
-              <a
-                href="javascript:void(0);"
-                onClick={() => switchModal(employeeId)}
-              >
-                <FormattedMessage id="disabled" />
-              </a>
+              <Tooltip placement="top" title="Disabled">
+                <a
+                  href="javascript:void(0);"
+                  onClick={() => switchModal(employeeId)}
+                  className="iconfont iconbtn-disable"
+                >
+                  {/*<FormattedMessage id="disabled" />*/}
+                </a>
+              </Tooltip>
             ) : (
               <a
                 href="javascript:void(0);"

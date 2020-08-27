@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { noop, AuthWrapper } from 'qmkit';
 import { List, fromJS } from 'immutable';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
-import { Modal, Pagination, message } from 'antd';
+import { Modal, Pagination, message, Tooltip } from 'antd';
 import { allCheckedQL } from '../ql';
 import Input from 'antd/lib/input/Input';
 import { FormattedMessage } from 'react-intl';
@@ -62,14 +62,26 @@ export default class ImageList extends React.Component<any, any> {
             <FormattedMessage id="selectAll" />
           </Checkbox>
           <AuthWrapper functionName="f_image_del">
-            <a onClick={this._delete} style={styles.link}>
-              <FormattedMessage id="delete" />
-            </a>
+            <Tooltip placement="top" title="Delete">
+              <a
+                onClick={this._delete}
+                style={styles.link}
+                className="iconfont iconDelete"
+              >
+                {/*<FormattedMessage id="delete" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
           <AuthWrapper functionName="f_picturePort_1">
-            <a style={styles.link} onClick={this._showModal}>
-              <FormattedMessage id="move" />
-            </a>
+            <Tooltip placement="top" title="Move">
+              <a
+                style={styles.link}
+                onClick={this._showModal}
+                className="iconfont iconbtn-move"
+              >
+                {/*<FormattedMessage id="move" />*/}
+              </a>
+            </Tooltip>
           </AuthWrapper>
         </div>
         <div style={styles.box}>

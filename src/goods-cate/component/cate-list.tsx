@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { List, Map, fromJS } from 'immutable';
-import { Modal, Table } from 'antd';
+import { Modal, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
@@ -104,46 +104,58 @@ class CateList extends React.Component<any, any> {
               rowInfo.get('cateGrade') < 2 &&
                 rowInfo.get('isDefault') != 1 &&
                 checkAuth('f_goods_cate_1') && (
-                  <a
-                    key="item1"
-                    style={styles.edit}
-                    onClick={this._addChildrenCate.bind(
-                      this,
-                      rowInfo.get('storeCateId'),
-                      rowInfo.get('cateName'),
-                      rowInfo.get('goodsCateId')
-                    )}
-                  >
-                    <FormattedMessage id="addSubcategory" />
-                  </a>
+                  <Tooltip placement="top" title="Add subcategory">
+                    <a
+                      key="item1"
+                      style={styles.edit}
+                      onClick={this._addChildrenCate.bind(
+                        this,
+                        rowInfo.get('storeCateId'),
+                        rowInfo.get('cateName'),
+                        rowInfo.get('goodsCateId')
+                      )}
+                      className="iconfont iconbtn-addsubvisionsaddcategory"
+                    >
+                      {/*<FormattedMessage id="addSubcategory" />*/}
+                    </a>
+                  </Tooltip>
                 ),
               // 非默认分类可编辑
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
-                <a
-                  key="item2"
-                  style={styles.edit}
-                  onClick={this._showEditModal.bind(
-                    this,
-                    rowInfo.get('storeCateId'),
-                    rowInfo.get('cateName'),
-                    rowInfo.get('cateParentId'),
-                    rowInfo.get('goodsCateId'),
-                    rowInfo.get('children'),
-                    rowInfo.get('cateDescription'),
-                    rowInfo.get('cateImg')
-                  )}
-                >
-                  <FormattedMessage id="edit" />
-                </a>
+                <Tooltip placement="top" title="Edit">
+                  <a
+                    key="item2"
+                    style={styles.edit}
+                    onClick={this._showEditModal.bind(
+                      this,
+                      rowInfo.get('storeCateId'),
+                      rowInfo.get('cateName'),
+                      rowInfo.get('cateParentId'),
+                      rowInfo.get('goodsCateId'),
+                      rowInfo.get('children'),
+                      rowInfo.get('cateDescription'),
+                      rowInfo.get('cateImg')
+                    )}
+                    className="iconfont iconEdit"
+                  >
+                    {/*<FormattedMessage id="edit" />*/}
+                  </a>
+                </Tooltip>
               ),
               // 非默认分类可删除
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_2') && (
-                <a
-                  key="item3"
-                  onClick={this._delete.bind(this, rowInfo.get('storeCateId'))}
-                >
-                  <FormattedMessage id="delete" />
-                </a>
+                <Tooltip placement="top" title="Delete">
+                  <a
+                    key="item3"
+                    onClick={this._delete.bind(
+                      this,
+                      rowInfo.get('storeCateId')
+                    )}
+                    className="iconfont iconDelete"
+                  >
+                    {/*<FormattedMessage id="delete" />*/}
+                  </a>
+                </Tooltip>
               )
             ]
           : '-'}
@@ -159,7 +171,6 @@ class CateList extends React.Component<any, any> {
     cateParentName: string,
     goodsCateId: number
   ) => {
-    console.log(goodsCateId, 'goodsCateId');
     const { showEditModal } = this.props.relaxProps;
     showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
   };

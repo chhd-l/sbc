@@ -148,7 +148,18 @@ class AsyncLoader extends React.Component<any, any> {
     return Component ? (
       <Component {...this.props} key={Math.random()} />
     ) : (
-      <div>loading...!!!!</div>
+      <div className="loadingAnimation">
+        <span>L</span>
+        <span>o</span>
+        <span>a</span>
+        <span>d</span>
+        <span>i</span>
+        <span>n</span>
+        <span>g</span>
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </div>
     );
   }
 }

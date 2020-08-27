@@ -55,7 +55,7 @@ export default class MarketingFullDiscountAdd extends React.Component<
             </Breadcrumb.Item>
           </Breadcrumb> */}
 
-          <div className="container">
+          <div className="container-search">
             <Headline
               title={
                 marketingId

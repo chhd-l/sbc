@@ -91,7 +91,6 @@ export default class AppStore extends Store {
    * 修改form信息
    */
   editFormData = (formData: IMap) => {
-    console.log(formData, 'formDatasssss');
     this.dispatch('cateActor: editFormData', formData);
   };
 

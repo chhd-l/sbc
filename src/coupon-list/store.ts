@@ -20,9 +20,7 @@ export default class AppStore extends Store {
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
-    const query = this.state()
-      .get('form')
-      .toJS();
+    const query = this.state().get('form').toJS();
     const couponStatus = this.state().get('queryTab');
     if (query.scopeType == -1) {
       query.scopeType = null;
@@ -48,9 +46,7 @@ export default class AppStore extends Store {
           //无门槛
           coupon.denominationStr = `满0减${coupon.denomination}`;
         } else {
-          coupon.denominationStr = `满${coupon.fullBuyPrice}减${
-            coupon.denomination
-          }`;
+          coupon.denominationStr = `满${coupon.fullBuyPrice}减${coupon.denomination}`;
         }
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
@@ -124,7 +120,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('删除成功');
+    message.success('Successfully deleted');
     //刷新页面
     this.init();
   };

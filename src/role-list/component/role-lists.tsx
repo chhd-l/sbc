@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { fromJS, List } from 'immutable';
-import { Modal, Table } from 'antd';
+import { Icon, Modal, Table, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import { Link } from 'react-router-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -94,26 +94,37 @@ class CateList extends React.Component<any, any> {
     return (
       <div>
         <AuthWrapper functionName={'f_role_modify_authority'}>
-          <Link
-            style={{ marginLeft: 20, marginRight: 20 }}
-            to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`}
-          >
-            <FormattedMessage id="setPermission" />
-          </Link>
+          <Tooltip placement="top" title="Set permission">
+            <Link
+              style={{ marginLeft: 20, marginRight: 20 }}
+              to={`/authority-allocating/${rowInfo.roleInfoId}/${rowInfo.roleName}`}
+              className="iconfont iconbtn-setpermission"
+            >
+              {/*<FormattedMessage id="setPermission" />*/}
+            </Link>
+          </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_role_edit'}>
-          <a
-            style={styles.edit}
-            onClick={this._showEditModal.bind(this, rowInfo)}
-          >
-            <FormattedMessage id="edit" />
-          </a>
+          <Tooltip placement="top" title="Edit">
+            <a
+              style={styles.edit}
+              onClick={this._showEditModal.bind(this, rowInfo)}
+              className="iconfont iconEdit"
+            >
+              {/*<FormattedMessage id="edit" />*/}
+            </a>
+          </Tooltip>
         </AuthWrapper>
 
         <AuthWrapper functionName={'f_role_delete'}>
-          <a onClick={this._delete.bind(this, rowInfo.roleInfoId)}>
-            <FormattedMessage id="delete" />
-          </a>
+          <Tooltip placement="top" title="Delete">
+            <a
+              onClick={this._delete.bind(this, rowInfo.roleInfoId)}
+              className="iconfont iconDelete"
+            >
+              {/*<FormattedMessage id="delete" />*/}
+            </a>
+          </Tooltip>
         </AuthWrapper>
       </div>
     );

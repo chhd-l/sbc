@@ -7,30 +7,28 @@ import {
   Button,
   Menu,
   Dropdown,
-  Icon,
   DatePicker,
   Row,
-  Col
+  Col,
+  message,
+  Cascader
 } from 'antd';
 import {
   noop,
-  ExportModal,
-  Const,
   AuthWrapper,
   checkAuth,
   Headline,
+  history,
   SelectGroup
 } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
-import { message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 const InputGroup = Input.Group;
-
 /**
  * 订单查询头
  */
@@ -66,12 +64,14 @@ export default class SearchHead extends Component<any, any> {
     super(props);
 
     this.state = {
-      goodsOptions: 'skuName',
+      recommendationId: '',
+      goodsOptions: 'Product name',
       receiverSelect: 'consigneeName',
       clinicSelect: 'clinicsName',
-      buyerOptions: 'buyerName',
+      buyerOptions: 'Recipient name',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
+      linkStatus: 0,
       id: '',
       subscribeId: '',
       buyerOptionsValue: '',
@@ -131,17 +131,33 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title="Recommendation list" />
-        <div>
+        <div className="space-between-align-items">
+          <Headline title="Prescription portal" />
+          {sessionStorage.getItem('PrescriberType') != null ? (
+            <Button
+              type="primary"
+              icon="plus"
+              htmlType="submit"
+              shape="round"
+              style={{ textAlign: 'center', marginRight: '20px' }}
+              onClick={(e) => {
+                history.push('/recomm-page-detail');
+              }}
+            >
+              <span>New</span>
+            </Button>
+          ) : null}
+        </div>
+        <div id="inputs">
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={this._renderNumberSelect()}
+                    addonBefore="Recommendation No"
                     onChange={(e) => {
                       this.setState({
-                        numberSelectValue: (e.target as any).value
+                        recommendationId: (e.target as any).value
                       });
                     }}
                   />
@@ -177,14 +193,29 @@ export default class SearchHead extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderReceiverSelect()}
-                    onChange={(e) => {
+                  <SelectGroup
+                    label="Link status"
+                    defaultValue="All"
+                    style={{ width: 170 }}
+                    onChange={(value) => {
                       this.setState({
-                        receiverSelectValue: (e.target as any).value
+                        linkStatus: value
                       });
                     }}
-                  />
+                  >
+                    <Option value="2">All</Option>
+                    <Option value="1">Invalid</Option>
+                    <Option value="0">Valid</Option>
+                  </SelectGroup>
+                  {/*<Input
+                    addonBefore="Link status"
+                    type="number"
+                    onChange={(e) => {
+                      this.setState({
+                        linkStatus: (e.target as any).value
+                      });
+                    }}
+                  />*/}
                 </FormItem>
               </Col>
 
@@ -193,6 +224,11 @@ export default class SearchHead extends Component<any, any> {
                   <Input
                     addonBefore={this._renderClinicSelect()}
                     onChange={(e) => {
+                      this.setState({
+                        clinicSelectValue: (e.target as any).value
+                      });
+                    }}
+                    /* onChange={(e) => {
                       let a = e.target.value.split(',');
                       console.log(a.map(Number), 111);
 
@@ -202,86 +238,7 @@ export default class SearchHead extends Component<any, any> {
                             ? (e.target as any).value
                             : e.target.value.split(',').map(Number)
                       });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact>
-                    {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
-                        style={styles.wrapper}
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <RangePicker
-                    onChange={(e) => {
-                      let beginTime = '';
-                      let endTime = '';
-                      if (e.length > 0) {
-                        beginTime = e[0].format(Const.DAY_FORMAT);
-                        endTime = e[1].format(Const.DAY_FORMAT);
-                      }
-                      this.setState({ beginTime: beginTime, endTime: endTime });
-                    }}
+                    }}*/
                   />
                 </FormItem>
               </Col>
@@ -293,58 +250,35 @@ export default class SearchHead extends Component<any, any> {
                     icon="search"
                     htmlType="submit"
                     shape="round"
-                    style={{ textAlign: 'center' }}
+                    style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
                       e.preventDefault();
                       const {
+                        recommendationId,
                         buyerOptions,
                         goodsOptions,
                         receiverSelect,
                         clinicSelect,
-                        numberSelect,
-                        id,
-                        subscribeId,
+                        linkStatus,
                         buyerOptionsValue,
                         goodsOptionsValue,
                         receiverSelectValue,
-                        clinicSelectValue,
-                        numberSelectValue,
-                        tradeState,
-                        beginTime,
-                        endTime
+                        clinicSelectValue
                       } = this.state;
-
-                      const ts = {} as any;
-                      if (tradeState.deliverStatus) {
-                        ts.deliverStatus = tradeState.deliverStatus;
-                      }
-
-                      if (tradeState.payState) {
-                        ts.payState = tradeState.payState;
-                      }
-
-                      if (tradeState.orderSource) {
-                        ts.orderSource = tradeState.orderSource;
-                      }
-
                       const params = {
-                        id:
-                          numberSelect === 'orderNumber'
-                            ? numberSelectValue
-                            : '',
-                        subscribeId:
-                          numberSelect !== 'orderNumber'
-                            ? numberSelectValue
-                            : '',
-                        [buyerOptions]: buyerOptionsValue,
-                        tradeState: ts,
-                        [goodsOptions]: goodsOptionsValue,
+                        recommendationId,
+                        [buyerOptions == 'Recipient name'
+                          ? 'consumerName'
+                          : 'consumerEmail']: buyerOptionsValue,
+                        [goodsOptions == 'Product name'
+                          ? 'goodsInfoName'
+                          : 'goodsInfoNo']: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
-                        [clinicSelect]: clinicSelectValue,
-                        beginTime,
-                        endTime
+                        [clinicSelect == 'clinicsName'
+                          ? 'prescriberName'
+                          : 'prescriberId']: clinicSelectValue,
+                        linkStatus
                       };
-
                       onSearch(params);
                     }}
                   >
@@ -357,7 +291,7 @@ export default class SearchHead extends Component<any, any> {
             </Row>
           </Form>
 
-          {hasMenu && (
+          {/*{hasMenu && (
             <div className="handle-bar">
               <Dropdown
                 overlay={menu}
@@ -372,15 +306,15 @@ export default class SearchHead extends Component<any, any> {
                 </Button>
               </Dropdown>
             </div>
-          )}
+          )}*/}
         </div>
 
-        <ExportModal
+        {/*<ExportModal
           data={exportModalData}
           onHide={onExportModalHide}
           handleByParams={exportModalData.get('exportByParams')}
           handleByIds={exportModalData.get('exportByIds')}
-        />
+        />*/}
       </div>
     );
   }
@@ -389,6 +323,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
+        defaultValue="Recipient name"
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -397,12 +332,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="buyerName">
-          <FormattedMessage id="consumerName" />
-        </Option>
-        <Option value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
-        </Option>
+        <Option value="consumerName">Recipient name</Option>
+        <Option value="consumerEmail">Recipient mail</Option>
       </Select>
     );
   };
@@ -415,15 +346,12 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
+        defaultValue="Product name"
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option value="skuName">
-          <FormattedMessage id="productName" />
-        </Option>
-        <Option value="skuNo">
-          <FormattedMessage id="skuCode" />
-        </Option>
+        <Option value="goodsInfoName">Product name</Option>
+        <Option value="goodsInfoNo">Product SKU</Option>
       </Select>
     );
   };
@@ -460,12 +388,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option value="clinicsName">
-          <FormattedMessage id="clinicName" />
-        </Option>
-        <Option value="clinicsIds">
-          <FormattedMessage id="clinicID" />
-        </Option>
+        <Option value="clinicsName">Prescriber name</Option>
+        <Option value="clinicsIds">Prescriber id</Option>
       </Select>
     );
   };

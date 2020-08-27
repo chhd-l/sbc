@@ -139,7 +139,13 @@ export default class SubscriptionList extends Component<any, any> {
           ? searchForm.recipient
           : '',
       prescriberId:
-        searchForm.prescriberOption === 'Prescriber ID'
+        // searchForm.prescriberOption === 'Prescriber ID'
+        //   ? searchForm.prescriber
+        //   : '',
+        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
+        null
+          ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+          : searchForm.prescriberOption === 'Prescriber ID'
           ? searchForm.prescriber
           : '',
       prescriberName:
@@ -290,59 +296,189 @@ export default class SubscriptionList extends Component<any, any> {
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Spin spinning={this.state.loading}>
-              <Headline title={<FormattedMessage id="subscriptionList" />} />
-              <Form className="filter-content" layout="inline">
-                <Row>
-                  <Col span={8}>
+            <Headline title={<FormattedMessage id="subscriptionList" />} />
+            <Form className="filter-content" layout="inline">
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <Select
+                          style={{ width: 180 }}
+                          defaultValue={searchForm.subscriptionOption}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'subscriptionOption',
+                              value
+                            });
+                          }}
+                        >
+                          {subscriptionOption.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'number',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <Select
+                          style={styles.label}
+                          defaultValue={searchForm.productOption}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'productOption',
+                              value
+                            });
+                          }}
+                        >
+                          {productOption.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'product',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <SelectGroup
+                      defaultValue=""
+                      label={<p style={{ width: 120 }}>Frequency</p>}
+                      style={{ width: 180 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'frequency',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {frequencyList &&
+                        frequencyList.map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </SelectGroup>
+                  </FormItem>
+                </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <Select
+                          style={{ width: 180 }}
+                          defaultValue={searchForm.consumerOption}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'consumerOption',
+                              value
+                            });
+                          }}
+                        >
+                          {consumerOption.map((item) => (
+                            <Option value={item} key={item}>
+                              {item}
+                            </Option>
+                          ))}
+                        </Select>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'consumer',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  {/* todo */}
+                  {this.state.isPrescriber ? (
                     <FormItem>
-                      <Input
-                        addonBefore={
-                          <Select
-                            style={{ width: 180 }}
-                            defaultValue={searchForm.subscriptionOption}
-                            onChange={(value) => {
-                              value = value === '' ? null : value;
-                              this.onFormChange({
-                                field: 'subscriptionOption',
-                                value
-                              });
-                            }}
-                          >
-                            {subscriptionOption.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
+                      <SelectGroup
+                        disabled={
+                          JSON.parse(
+                            sessionStorage.getItem('s2b-employee@data')
+                          ).clinicsIds
+                            ? true
+                            : false
                         }
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
+                        value={
+                          JSON.parse(
+                            sessionStorage.getItem('s2b-employee@data')
+                          ).clinicsIds
+                            ? JSON.parse(
+                                sessionStorage.getItem('PrescriberType')
+                              ).value
+                            : searchForm.prescriber
+                        }
+                        // value={searchForm.prescriber}
+                        label={<p style={styles.label}>Prescriber</p>}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
                           this.onFormChange({
-                            field: 'number',
+                            field: 'prescriber',
                             value
                           });
                         }}
-                      />
+                      >
+                        <Option value="all">All</Option>
+                        {prescriberList &&
+                          prescriberList.map((item, index) => (
+                            <Option value={item.id} key={index}>
+                              {item.prescriberName}
+                            </Option>
+                          ))}
+                      </SelectGroup>
                     </FormItem>
-                  </Col>
-
-                  <Col span={8}>
+                  ) : (
                     <FormItem>
                       <Input
                         addonBefore={
                           <Select
                             style={styles.label}
-                            defaultValue={searchForm.productOption}
+                            defaultValue={searchForm.prescriberOption}
                             onChange={(value) => {
                               value = value === '' ? null : value;
                               this.onFormChange({
-                                field: 'productOption',
+                                field: 'prescriberOption',
                                 value
                               });
                             }}
                           >
-                            {productOption.map((item) => (
+                            {prescriberOption.map((item) => (
                               <Option value={item} key={item}>
                                 {item}
                               </Option>
@@ -352,149 +488,35 @@ export default class SubscriptionList extends Component<any, any> {
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
-                            field: 'product',
+                            field: 'prescriber',
                             value
                           });
                         }}
                       />
                     </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    <FormItem>
-                      <SelectGroup
-                        defaultValue=""
-                        label={<p style={{ width: 120 }}>Frequency</p>}
-                        style={{ width: 180 }}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onFormChange({
-                            field: 'frequency',
-                            value
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        {frequencyList &&
-                          frequencyList.map((item, index) => (
-                            <Option value={item.id} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                      </SelectGroup>
-                    </FormItem>
-                  </Col>
+                  )}
+                </Col>
+                <Col span={24} style={{ textAlign: 'center' }}>
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      icon="search"
+                      shape="round"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onSearch();
+                      }}
+                    >
+                      <span>
+                        <FormattedMessage id="search" />
+                      </span>
+                    </Button>
+                  </FormItem>
+                </Col>
+              </Row>
 
-                  <Col span={8}>
-                    <FormItem>
-                      <Input
-                        addonBefore={
-                          <Select
-                            style={{ width: 180 }}
-                            defaultValue={searchForm.consumerOption}
-                            onChange={(value) => {
-                              value = value === '' ? null : value;
-                              this.onFormChange({
-                                field: 'consumerOption',
-                                value
-                              });
-                            }}
-                          >
-                            {consumerOption.map((item) => (
-                              <Option value={item} key={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                        }
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onFormChange({
-                            field: 'consumer',
-                            value
-                          });
-                        }}
-                      />
-                    </FormItem>
-                  </Col>
-                  <Col span={8}>
-                    {this.state.isPrescriber ? (
-                      <FormItem>
-                        <SelectGroup
-                          value={searchForm.prescriber}
-                          label={<p style={styles.label}>Prescriber</p>}
-                          onChange={(value) => {
-                            value = value === '' ? null : value;
-                            this.onFormChange({
-                              field: 'prescriber',
-                              value
-                            });
-                          }}
-                        >
-                          <Option value="all">All</Option>
-                          {prescriberList &&
-                            prescriberList.map((item, index) => (
-                              <Option value={item.id} key={index}>
-                                {item.prescriberName}
-                              </Option>
-                            ))}
-                        </SelectGroup>
-                      </FormItem>
-                    ) : (
-                      <FormItem>
-                        <Input
-                          addonBefore={
-                            <Select
-                              style={styles.label}
-                              defaultValue={searchForm.prescriberOption}
-                              onChange={(value) => {
-                                value = value === '' ? null : value;
-                                this.onFormChange({
-                                  field: 'prescriberOption',
-                                  value
-                                });
-                              }}
-                            >
-                              {prescriberOption.map((item) => (
-                                <Option value={item} key={item}>
-                                  {item}
-                                </Option>
-                              ))}
-                            </Select>
-                          }
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'prescriber',
-                              value
-                            });
-                          }}
-                        />
-                      </FormItem>
-                    )}
-                  </Col>
-                  <Col span={24} style={{ textAlign: 'center' }}>
-                    <FormItem>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon="search"
-                        shape="round"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.onSearch();
-                        }}
-                      >
-                        <span>
-                          <FormattedMessage id="search" />
-                        </span>
-                      </Button>
-                    </FormItem>
-                  </Col>
-                </Row>
-
-                {/* <FormItem>
+              {/* <FormItem>
                   <Input
                     addonBefore={
                       <Select
@@ -524,11 +546,12 @@ export default class SubscriptionList extends Component<any, any> {
                     }}
                   />
                 </FormItem> */}
-              </Form>
-            </Spin>
+            </Form>
           </div>
           <div className="container">
             {/* 
+            <Spin spinning={this.state.loading}>
+              {/* 
               <div className="handle-bar">
                 <Dropdown
                   overlay={menu}

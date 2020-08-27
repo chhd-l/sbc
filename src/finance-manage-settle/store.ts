@@ -65,7 +65,6 @@ export default class AppStore extends Store {
   };
 
   onSelect = (ids: string[]) => {
-    console.log(ids, 2222222222);
     this.dispatch('select:init', ids);
   };
 
@@ -80,7 +79,6 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   changeSettleStatus = async (settleIdArray, status) => {
-    console.log(settleIdArray, status, 33333);
     const { res } = await webapi.changeSettleStatus(settleIdArray, status);
     if (res.code == Const.SUCCESS_CODE) {
       this.fetchSettleList();

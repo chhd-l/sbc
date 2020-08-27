@@ -220,7 +220,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
           path={v.url}
           children={() => (
             <a
-              href="#!"
+              href="#"
               onClick={() => this._goThirdMenu(v.url, index, i)}
             >
               {v.title}

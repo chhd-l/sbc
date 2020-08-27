@@ -35,8 +35,10 @@ export default class ReturnOrderDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container" style={{ paddingBottom: 50 }}>
+        <div className="container-search">
           <Headline title={<FormattedMessage id="refundDetails" />} />
+        </div>
+        <div className="container">
           <OrderStatusHead />
           <GoodsList />
           {/*<ReceiverRecord/>*/}

@@ -329,8 +329,11 @@ export default class ClinicList extends Component<any, any> {
               placement="top"
               title={record.enabled ? 'Disable' : 'Enable'}
             >
-              <a onClick={() => this.enableAndDisable(record.id)}>
-                {record.enabled ? 'Disable' : 'Enable'}
+              <a
+                onClick={() => this.enableAndDisable(record.id)}
+                className="iconfont iconbtn-disable"
+              >
+                {/*{record.enabled ? 'Disable' : 'Enable'}*/}
               </a>
             </Tooltip>
             {/* <Divider type="vertical" />

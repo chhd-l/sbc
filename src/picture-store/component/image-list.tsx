@@ -74,8 +74,12 @@ export default class ImageList extends React.Component<any, any> {
           </AuthWrapper>
           <AuthWrapper functionName="f_picturePort_1">
             <Tooltip placement="top" title="Move">
-              <a style={styles.link} onClick={this._showModal}>
-                <FormattedMessage id="move" />
+              <a
+                style={styles.link}
+                onClick={this._showModal}
+                className="iconfont iconbtn-move"
+              >
+                {/*<FormattedMessage id="move" />*/}
               </a>
             </Tooltip>
           </AuthWrapper>

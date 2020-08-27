@@ -130,6 +130,14 @@ const Common = {
     TWO: 2 * 1024 * 1024
   },
 
-  spuMaxSku: 50
+  spuMaxSku: 50,
+  
+  //Okta配置
+  REACT_APP_CLIENT_ID: "0oat6gv4fzPJk8B1q0h7",
+  REACT_APP_ISSUER : "https://accountdev.royalcanin.com/oauth2/default",
+  REACT_APP_RedirectURL: "https://shopstg.royalcanin.com/implicit/callback",
+  REACT_APP_RegisterPrefix : "https://prd-weu1-rc-df-ciam-app-webapp-uat.cloud-effem.com/?redirect_uri=",
+  REACT_APP_RegisterCallback : "https://shopstg.royalcanin.com?origin=register",
+
 };
 export default Common;

@@ -114,8 +114,9 @@ class CateList extends React.Component<any, any> {
                         rowInfo.get('cateName'),
                         rowInfo.get('goodsCateId')
                       )}
+                      className="iconfont iconbtn-addsubvisionsaddcategory"
                     >
-                      <FormattedMessage id="addSubcategory" />
+                      {/*<FormattedMessage id="addSubcategory" />*/}
                     </a>
                   </Tooltip>
                 ),

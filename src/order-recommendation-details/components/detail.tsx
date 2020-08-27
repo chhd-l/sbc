@@ -45,6 +45,21 @@ export default class BillingDetails extends React.Component<any, any> {
     createLinkType: 'createLinkType'
   };
 
+  getSnapshotBeforeUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>
+  ): any | null {
+    const { detailProductList } = this.props.relaxProps;
+    setTimeout(() => {
+      check =
+        detailProductList && detailProductList.linkStatus == 0 ? true : false;
+    });
+    console.log(
+      detailProductList && detailProductList.linkStatus,
+      1111111111111
+    );
+  }
+
   componentDidMount() {
     const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
@@ -54,7 +69,6 @@ export default class BillingDetails extends React.Component<any, any> {
     });
 
     //this.onValid(detailProductList&&detailProductList.linkStatus)
-    //check = detailProductList&&detailProductList.linkStatus == 0 ? true : false;
   }
 
   showProduct = (res) => {
@@ -73,6 +87,7 @@ export default class BillingDetails extends React.Component<any, any> {
   onValid = (e) => {
     const { onLinkStatus } = this.props.relaxProps;
     let linkStatus = e == true ? 0 : 1;
+    console.log(e, 111111111111111);
     onLinkStatus({ linkStatus, id: history.location.state.id });
   };
 
@@ -94,15 +109,6 @@ export default class BillingDetails extends React.Component<any, any> {
         ? employee.prescribers
         : [];
 
-    check = detailProductList.linkStatus == 0 ? true : false;
-
-    setTimeout(() => {
-      console.log(
-        detailProductList && detailProductList,
-        '++++++++++++++++++++'
-      );
-      console.log(check, '12121221');
-    });
     return (
       <div style={styles.main}>
         <div
@@ -141,9 +147,8 @@ export default class BillingDetails extends React.Component<any, any> {
               <Switch
                 checkedChildren=" Valid "
                 unCheckedChildren=" Invalid "
-                defaultChecked={check}
-                //checked={check}
-                onClick={this.onValid}
+                checked={check}
+                onChange={this.onValid}
               />
             ) : null}
           </div>

@@ -56,6 +56,7 @@ class MessageDetails extends Component<any, any> {
       isAdd:
         this.props.location.pathname === '/message-quick-send' ? true : false,
       emailStatus: 'Draft',
+      loading: false,
       objectTypeList: [],
       categoryList: [],
       basicForm: {
@@ -292,6 +293,9 @@ class MessageDetails extends Component<any, any> {
     });
   };
   addEmailTask = (params, type) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .addEmailTask(params)
       .then((data) => {
@@ -303,21 +307,32 @@ class MessageDetails extends Component<any, any> {
             });
           }
           this.setState({
+            loading: false,
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
           message.error(res.message || type + ' Failed');
+          this.setState({
+            loading: false
+          });
         }
       })
       .catch((err) => {
         message.error(err || type + ' Failed');
+        this.setState({
+          loading: false
+        });
       });
   };
   updateEmailTask = (params, type) => {
+    this.setState({
+      loading: true
+    });
     webapi
       .updateEmailTask(params)
       .then((data) => {
         const { res } = data;
+        debugger;
         if (res.code === Const.SUCCESS_CODE) {
           if (type === 'submit') {
             history.push({
@@ -325,14 +340,21 @@ class MessageDetails extends Component<any, any> {
             });
           }
           this.setState({
+            loading: false,
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
           message.error(res.message || type + ' Failed');
+          this.setState({
+            loading: false
+          });
         }
       })
       .catch((err) => {
         message.error(err || type + ' Failed');
+        this.setState({
+          loading: false
+        });
       });
   };
   getObjectNoList = (value) => {
@@ -550,231 +572,235 @@ class MessageDetails extends Component<any, any> {
           <Breadcrumb.Item>Message Details</Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
+        <Spin spinning={this.state.loading}>
+          <div className="container-search">
+            <Headline title={title} />
 
-          <div>
-            <div style={styles.title}>
-              <span style={styles.titleText}>Basic Information</span>
-              {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
-              {emailStatus === 'Finish' ? (
-                <Tag color="#87d068">{emailStatus}</Tag>
-              ) : null}
-              {emailStatus === 'To do' ? (
-                <Tag color="#108ee9">{emailStatus}</Tag>
-              ) : null}
-            </div>
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 10 }}
-              wrapperCol={{ span: 14 }}
-              labelAlign="right"
-            >
-              <Row style={{ marginTop: 20 }}>
-                <Col span={8}>
-                  <FormItem label="Task ID">
-                    {getFieldDecorator('taskId', {
-                      rules: [{ required: true }]
-                    })(<Input disabled />)}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Email Category">
-                    {getFieldDecorator('emailCategory', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input Email Category!'
-                        }
-                      ]
-                    })(
-                      <Select
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onBasicFormFormChange({
-                            field: 'emailCategory',
-                            value
-                          });
-                        }}
-                        disabled={this.state.isDetail}
-                      >
-                        {categoryList &&
-                          categoryList.map((item, index) => (
-                            <Option value={item.name} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Email Template">
-                    {getFieldDecorator('templateId', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please select Email Template!'
-                        }
-                      ]
-                    })(
-                      <Select
-                        onChange={(value, option) => {
-                          let name = option.props.children;
-                          value = value === '' ? null : value;
-                          this.onBasicFormFormChange({
-                            field: 'emailTemplate',
-                            value: name
-                          });
-                          this.onBasicFormFormChange({
-                            field: 'templateId',
-                            value
-                          });
-                        }}
-                        disabled={this.state.isDetail}
-                      >
-                        {emailTemplateList &&
-                          emailTemplateList.map((item, index) => (
-                            <Option value={item.templateId} key={index}>
-                              {item.emailTemplate}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Object Type">
-                    {getFieldDecorator('objectType', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please Select Object Type!'
-                        }
-                      ]
-                    })(
-                      <Select
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onBasicFormFormChange({
-                            field: 'objectType',
-                            value
-                          });
-                        }}
-                        disabled={this.state.isDetail}
-                      >
-                        {objectTypeList &&
-                          objectTypeList.map((item, index) => (
-                            <Option value={item.name} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Object No">
-                    {getFieldDecorator('objectNo', {
-                      rules: [
-                        {
-                          max: 50,
-                          message: 'Object No exceed the maximum length!'
-                        }
-                      ]
-                    })(
-                      <Select
-                        disabled={
-                          basicForm.objectNoDisable || this.state.isDetail
-                        }
-                        showSearch
-                        placeholder="Select a Object No"
-                        optionFilterProp="children"
-                        onChange={(value) => {
-                          this.onBasicFormFormChange({
-                            field: 'objectNo',
-                            value
-                          });
-                        }}
-                        notFoundContent={
-                          fetching ? <Spin size="small" /> : null
-                        }
-                        onSearch={this.getObjectNoList}
-                        filterOption={(input, option) =>
-                          option.props.children
-                            .toString()
-                            .toLowerCase()
-                            .indexOf(input.toLowerCase()) >= 0
-                        }
-                      >
-                        {objectNoList &&
-                          objectNoList.map((item, index) => (
-                            <Option
-                              value={item.id || item.subscribeId}
-                              key={index}
-                            >
-                              {item.id || item.subscribeId}
-                            </Option>
-                          ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-
-                <Col span={8}>
-                  <FormItem label="Send Time">
-                    {getFieldDecorator('sendType', {
-                      rules: [
-                        { required: true, message: 'Please select Send Time!' }
-                      ]
-                    })(
-                      <Radio.Group
-                        disabled={this.state.isDetail}
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onBasicFormFormChange({
-                            field: 'sendType',
-                            value
-                          });
-                        }}
-                      >
-                        <Radio value="Immediately">Immediately</Radio>
-                        <Radio value="Timing">Timing</Radio>
-                      </Radio.Group>
-                    )}
-                  </FormItem>
-                </Col>
-                {basicForm.sendType === 'Timing' ? (
+            <div>
+              <div style={styles.title}>
+                <span style={styles.titleText}>Basic Information</span>
+                {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
+                {emailStatus === 'Finish' ? (
+                  <Tag color="#87d068">{emailStatus}</Tag>
+                ) : null}
+                {emailStatus === 'To do' ? (
+                  <Tag color="#108ee9">{emailStatus}</Tag>
+                ) : null}
+              </div>
+              <Form
+                layout="horizontal"
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
+                labelAlign="right"
+              >
+                <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Select Time">
-                      {getFieldDecorator('sendTime', {
+                    <FormItem label="Task ID">
+                      {getFieldDecorator('taskId', {
+                        rules: [{ required: true }]
+                      })(<Input disabled />)}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem label="Email Category">
+                      {getFieldDecorator('emailCategory', {
                         rules: [
-                          { required: true, message: 'Please select Time!' }
+                          {
+                            required: true,
+                            message: 'Please input Email Category!'
+                          }
                         ]
                       })(
-                        <DatePicker
-                          showTime
-                          disabledDate={this.disabledDate}
-                          disabledTime={this.disabledDateTime}
-                          placeholder="Select Time"
-                          style={{ width: '100%' }}
-                          disabled={this.state.isDetail}
-                          onChange={(value, dateString) => {
+                        <Select
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
                             this.onBasicFormFormChange({
-                              field: 'sendTime',
-                              value: dateString
+                              field: 'emailCategory',
+                              value
                             });
                           }}
-                        />
+                          disabled={this.state.isDetail}
+                        >
+                          {categoryList &&
+                            categoryList.map((item, index) => (
+                              <Option value={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
                       )}
                     </FormItem>
                   </Col>
-                ) : null}
-              </Row>
-            </Form>
-          </div>
+                  <Col span={8}>
+                    <FormItem label="Email Template">
+                      {getFieldDecorator('templateId', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please select Email Template!'
+                          }
+                        ]
+                      })(
+                        <Select
+                          onChange={(value, option) => {
+                            let name = option.props.children;
+                            value = value === '' ? null : value;
+                            this.onBasicFormFormChange({
+                              field: 'emailTemplate',
+                              value: name
+                            });
+                            this.onBasicFormFormChange({
+                              field: 'templateId',
+                              value
+                            });
+                          }}
+                          disabled={this.state.isDetail}
+                        >
+                          {emailTemplateList &&
+                            emailTemplateList.map((item, index) => (
+                              <Option value={item.templateId} key={index}>
+                                {item.emailTemplate}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem label="Object Type">
+                      {getFieldDecorator('objectType', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please Select Object Type!'
+                          }
+                        ]
+                      })(
+                        <Select
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onBasicFormFormChange({
+                              field: 'objectType',
+                              value
+                            });
+                          }}
+                          disabled={this.state.isDetail}
+                        >
+                          {objectTypeList &&
+                            objectTypeList.map((item, index) => (
+                              <Option value={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem label="Object No">
+                      {getFieldDecorator('objectNo', {
+                        rules: [
+                          {
+                            max: 50,
+                            message: 'Object No exceed the maximum length!'
+                          }
+                        ]
+                      })(
+                        <Select
+                          disabled={
+                            basicForm.objectNoDisable || this.state.isDetail
+                          }
+                          showSearch
+                          placeholder="Select a Object No"
+                          optionFilterProp="children"
+                          onChange={(value) => {
+                            this.onBasicFormFormChange({
+                              field: 'objectNo',
+                              value
+                            });
+                          }}
+                          notFoundContent={
+                            fetching ? <Spin size="small" /> : null
+                          }
+                          onSearch={this.getObjectNoList}
+                          filterOption={(input, option) =>
+                            option.props.children
+                              .toString()
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {objectNoList &&
+                            objectNoList.map((item, index) => (
+                              <Option
+                                value={item.id || item.subscribeId}
+                                key={index}
+                              >
+                                {item.id || item.subscribeId}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
 
-          {/* {this.state.isDetail ?
+                  <Col span={8}>
+                    <FormItem label="Send Time">
+                      {getFieldDecorator('sendType', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please select Send Time!'
+                          }
+                        ]
+                      })(
+                        <Radio.Group
+                          disabled={this.state.isDetail}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onBasicFormFormChange({
+                              field: 'sendType',
+                              value
+                            });
+                          }}
+                        >
+                          <Radio value="Immediately">Immediately</Radio>
+                          <Radio value="Timing">Timing</Radio>
+                        </Radio.Group>
+                      )}
+                    </FormItem>
+                  </Col>
+                  {basicForm.sendType === 'Timing' ? (
+                    <Col span={8}>
+                      <FormItem label="Select Time">
+                        {getFieldDecorator('sendTime', {
+                          rules: [
+                            { required: true, message: 'Please select Time!' }
+                          ]
+                        })(
+                          <DatePicker
+                            showTime
+                            disabledDate={this.disabledDate}
+                            disabledTime={this.disabledDateTime}
+                            placeholder="Select Time"
+                            style={{ width: '100%' }}
+                            disabled={this.state.isDetail}
+                            onChange={(value, dateString) => {
+                              this.onBasicFormFormChange({
+                                field: 'sendTime',
+                                value: dateString
+                              });
+                            }}
+                          />
+                        )}
+                      </FormItem>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Form>
+            </div>
+
+            {/* {this.state.isDetail ?
             <div>
               <div style={styles.title}>
                 <span style={styles.titleText}>Recipient details</span>
@@ -787,135 +813,141 @@ class MessageDetails extends Component<any, any> {
               />
             </div>
             : */}
-          <div>
-            <div style={styles.title}>
-              <span style={styles.titleText}>Recipient details</span>
-            </div>
-
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 10 }}
-              wrapperCol={{ span: 14 }}
-              labelAlign="right"
-            >
-              <Row style={{ marginTop: 20 }}>
-                <Col span={8}>
-                  <FormItem label="Consumer Type">
-                    {getFieldDecorator('consumerType', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input Consumer Type!'
-                        }
-                      ]
-                    })(
-                      <Select
-                        disabled={this.state.isDetail}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onDetailsFormChange({
-                            field: 'consumerType',
-                            value
-                          });
-                        }}
-                      >
-                        {customerTypeArr.map((item) => (
-                          <Option value={item.value} key={item.id}>
-                            {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Consumer Account">
-                    {getFieldDecorator('consumerAccount', {
-                      rules: [
-                        {
-                          max: 50,
-                          message: 'Consumer Account exceed the maximum length!'
-                        }
-                      ]
-                    })(
-                      <Input
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onDetailsFormChange({
-                            field: 'consumerAccount',
-                            value
-                          });
-                        }}
-                        disabled={
-                          detailForm.consumerType !== 'Member' ||
-                          this.state.isDetail
-                        }
-                      />
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={8}>
-                  <FormItem label="Consumer Name">
-                    {getFieldDecorator('consumerName', {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input Consumer Name!'
-                        },
-                        {
-                          max: 50,
-                          message: 'Consumer Name exceed the maximum length!'
-                        }
-                      ]
-                    })(
-                      <Input
-                        disabled={this.state.isDetail}
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onDetailsFormChange({
-                            field: 'consumerName',
-                            value
-                          });
-                        }}
-                      />
-                    )}
-                  </FormItem>
-                </Col>
-
-                <Col span={8}>
-                  <FormItem label="Email">
-                    {getFieldDecorator('email', {
-                      rules: [
-                        { required: true, message: 'Please input Email!' },
-                        { max: 50, message: 'Email exceed the maximum length!' }
-                      ]
-                    })(
-                      <Input
-                        disabled={this.state.isDetail}
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onDetailsFormChange({
-                            field: 'email',
-                            value
-                          });
-                        }}
-                      />
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-            </Form>
-          </div>
-          {/* } */}
-          {previewHtml ? (
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Preview</span>
+                <span style={styles.titleText}>Recipient details</span>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
+
+              <Form
+                layout="horizontal"
+                labelCol={{ span: 10 }}
+                wrapperCol={{ span: 14 }}
+                labelAlign="right"
+              >
+                <Row style={{ marginTop: 20 }}>
+                  <Col span={8}>
+                    <FormItem label="Consumer Type">
+                      {getFieldDecorator('consumerType', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input Consumer Type!'
+                          }
+                        ]
+                      })(
+                        <Select
+                          disabled={this.state.isDetail}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onDetailsFormChange({
+                              field: 'consumerType',
+                              value
+                            });
+                          }}
+                        >
+                          {customerTypeArr.map((item) => (
+                            <Option value={item.value} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem label="Consumer Account">
+                      {getFieldDecorator('consumerAccount', {
+                        rules: [
+                          {
+                            max: 50,
+                            message:
+                              'Consumer Account exceed the maximum length!'
+                          }
+                        ]
+                      })(
+                        <Input
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onDetailsFormChange({
+                              field: 'consumerAccount',
+                              value
+                            });
+                          }}
+                          disabled={
+                            detailForm.consumerType !== 'Member' ||
+                            this.state.isDetail
+                          }
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={8}>
+                    <FormItem label="Consumer Name">
+                      {getFieldDecorator('consumerName', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input Consumer Name!'
+                          },
+                          {
+                            max: 50,
+                            message: 'Consumer Name exceed the maximum length!'
+                          }
+                        ]
+                      })(
+                        <Input
+                          disabled={this.state.isDetail}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onDetailsFormChange({
+                              field: 'consumerName',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem label="Email">
+                      {getFieldDecorator('email', {
+                        rules: [
+                          { required: true, message: 'Please input Email!' },
+                          {
+                            max: 50,
+                            message: 'Email exceed the maximum length!'
+                          }
+                        ]
+                      })(
+                        <Input
+                          disabled={this.state.isDetail}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onDetailsFormChange({
+                              field: 'email',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+              </Form>
             </div>
-          ) : null}
-        </div>
+            {/* } */}
+            {previewHtml ? (
+              <div>
+                <div style={styles.title}>
+                  <span style={styles.titleText}>Preview</span>
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
+              </div>
+            ) : null}
+          </div>
+        </Spin>
+
         <div className="bar-button">
           {!this.state.isDetail ? (
             <Button

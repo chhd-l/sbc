@@ -138,11 +138,14 @@ export default class ClinicList extends Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  handleTableChange(pagination: any) {
-    this.setState({
-      pagination: pagination
-    });
-  }
+  handleTableChange = (pagination: any) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.onSearch()
+    );
+  };
   overview = () => {
     history.push({
       pathname: '/message-overview'

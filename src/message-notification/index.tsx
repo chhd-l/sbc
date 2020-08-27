@@ -248,7 +248,7 @@ class Notification extends Component<any, any> {
           </div>
         </div>
         <Modal
-          width="600px"
+          width="800px"
           title="Template Setting"
           visible={this.state.visible}
           onOk={this.handleOk}
@@ -268,7 +268,7 @@ class Notification extends Component<any, any> {
           ]}
         >
           <Row>
-            <Col span={8}>
+            <Col span={6}>
               <Form layout="vertical">
                 <FormItem label="Status">
                   <p>{this.state.selectedStatus}</p>
@@ -285,9 +285,12 @@ class Notification extends Component<any, any> {
                 </FormItem>
               </Form>
             </Col>
-            <Col span={16}>
+            <Col span={18}>
               {previewHtml ? (
-                <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: previewHtml }}
+                  style={{ zoom: '0.5' }}
+                ></div>
               ) : null}
             </Col>
           </Row>

@@ -874,7 +874,7 @@ class MessageDetails extends Component<any, any> {
           ) : null}
         </div>
         <div className="bar-button">
-          {this.state.isDetail ? (
+          {!this.state.isDetail ? (
             <Button
               type="primary"
               shape="round"
@@ -884,25 +884,17 @@ class MessageDetails extends Component<any, any> {
               Submit
             </Button>
           ) : null}
-          {this.state.isDetail ? (
+          {!this.state.isDetail ? (
             <Button
               type="primary"
               shape="round"
-              onClick={() => this.submit()}
               style={{ marginRight: 10 }}
+              onClick={() => this.save()}
             >
-              Submit
+              {<FormattedMessage id="save" />}
             </Button>
           ) : null}
 
-          <Button
-            type="primary"
-            shape="round"
-            style={{ marginRight: 10 }}
-            onClick={() => this.save()}
-          >
-            {<FormattedMessage id="save" />}
-          </Button>
           <Button
             shape="round"
             onClick={() => (history as any).go(-1)}

@@ -1,11 +1,13 @@
 import * as React from 'react';
-
-import { Modal, Table, Input, Checkbox, Button } from 'antd';
+import { Modal, Table, Select, Checkbox, Button } from 'antd';
 import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
+import { accDiv } from '../../../web_modules/qmkit/float';
+import moment from 'moment';
 declare type IList = List<any>;
-
+const { Option } = Select;
+let arrQuantity = [];
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
@@ -14,9 +16,11 @@ export default class DetailPublish extends React.Component<any, any> {
       sharing: any;
       productForm: any;
       productList: IList;
+      onProductselect: Function;
       onSharing: Function;
       onProductForm: Function;
       loading: boolean;
+      createLink: any;
     };
   };
 
@@ -25,8 +29,10 @@ export default class DetailPublish extends React.Component<any, any> {
     productForm: 'productForm',
     onSharing: noop,
     onProductForm: noop,
+    onProductselect: noop,
     loading: 'loading',
-    productList: 'productList'
+    productList: 'productList',
+    createLink: 'createLink'
   };
 
   constructor(props) {
@@ -34,7 +40,9 @@ export default class DetailPublish extends React.Component<any, any> {
     this.state = {
       visible: props.visible,
       selectedRowKeys: [], // Check here to configure the default column
-      loading: false
+      loading: false,
+      addProduct: [],
+      quantity: []
     };
   }
   start = () => {
@@ -48,27 +56,35 @@ export default class DetailPublish extends React.Component<any, any> {
     }, 1000);
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  onSelectChange = (selectedRowKeys, v, o) => {
+    Promise.all([
+      selectedRowKeys.map((item, i) => {
+        if (arrQuantity.length > 0) {
+          arrQuantity.map((m, n) => {
+            if (m.no == item) {
+              v[i].quantity = m.quantity;
+            } else {
+              v[i].quantity = 1;
+            }
+          });
+        }
+      }),
+      console.log(v, '++++++++++++++++++++++++='),
+      this.setState({ selectedRowKeys, addProduct: v })
+    ]);
   };
   handleOk = (e) => {
-    //console.log(e);
-    const { sharing } = this.props.relaxProps;
-    console.log(sharing.toJS(), 111111111111111);
+    const { onProductselect } = this.props.relaxProps;
+    onProductselect(this.state.addProduct);
+    this.props.showModal(false);
   };
 
   handleCancel = (e) => {
     this.props.showModal(false);
   };
 
-  handleTableChange(pagination: any) {
-    const { onProductForm } = this.props.relaxProps;
-
-    onProductForm({ pageNum: pagination.current, pageSize: 10 });
-  }
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible, ok, cancel } = nextProps;
+    const { visible } = nextProps;
     // 当传入的type发生变化的时候，更新state
     if (visible !== prevState.visible) {
       return {
@@ -82,6 +98,11 @@ export default class DetailPublish extends React.Component<any, any> {
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
   }
+
+  handleChange = (value, a, index, e) => {
+    arrQuantity.push({ no: index, quantity: e });
+  };
+
   render() {
     const {
       loading,
@@ -91,38 +112,79 @@ export default class DetailPublish extends React.Component<any, any> {
       productList
     } = this.props.relaxProps;
     const { selectedRowKeys } = this.state;
+    const total = productForm && productForm.total;
+    const pageNum = productForm && productForm.pageNum;
+
     const rowSelection = { selectedRowKeys, onChange: this.onSelectChange };
     const hasSelected = selectedRowKeys.length > 0;
     const columns = [
-      {
+      /*{
         title: 'No',
-        dataIndex: 'name',
-        render: (text) => <a>{text}</a>
+        dataIndex: 'id',
+        key: 'departmentName',
+        render: (text,record,index)=>{
+          return <span>{(pageNum)*10+index+1}</span>
+        }
       },
       {
         title: 'Image',
-        dataIndex: 'Image'
-      },
+        dataIndex: 'goodsInfoImg',
+        key: 'goodsInfoImg',
+        render: (text) => <img src={text} alt="" width="20" height="25"/>
+      },*/
       {
         title: 'Product Name',
-        dataIndex: 'Product'
+        dataIndex: 'goodsInfoName',
+        key: 'goodsInfoName'
       },
       {
         title: 'SKU',
-        dataIndex: 'SKU'
+        dataIndex: 'goodsInfoNo',
+        key: 'goodsInfoNo'
       },
       {
-        title: 'Member Price',
-        dataIndex: 'Member'
+        title: 'Signed classification',
+        dataIndex: 'Signed',
+        key: 'Signed',
+        render: (text, record, index) => {
+          return <span>{record.goods.goodsCateName}</span>;
+        }
       },
       {
-        title: 'Status',
-        dataIndex: 'Status'
+        title: 'Price',
+        dataIndex: 'marketPrice',
+        key: 'marketPrice'
       },
       {
+        title: 'Quantity',
+        dataIndex: 'addedFlag',
+        key: 'addedFlag',
+        width: '8%',
+        render: (text, record, index) => {
+          return (
+            <Select
+              defaultValue="1"
+              style={{ width: 120 }}
+              onChange={(e) => this.handleChange(text, record, index, e)}
+            >
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+              <Option value="6">6</Option>
+              <Option value="7">7</Option>
+              <Option value="8">8</Option>
+              <Option value="9">9</Option>
+              <Option value="10">10</Option>
+            </Select>
+          );
+        }
+      }
+      /*{
         title: 'Operation',
         dataIndex: 'Operation'
-      }
+      }*/
     ];
     return (
       <div id="publishButton">
@@ -154,7 +216,9 @@ export default class DetailPublish extends React.Component<any, any> {
               columns={columns}
               dataSource={productList ? productList.toJS() : []}
               loading={loading}
+              size="small"
               pagination={{
+                total,
                 onChange: (pageNum, pageSize) => {
                   onProductForm({ pageNum: pageNum - 1, pageSize });
                 }

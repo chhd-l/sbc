@@ -57,7 +57,6 @@ export default class CustomerList extends React.Component<any, any> {
     goodsEvaluateDetail: noop
   };
   async deleteEvaluate(evaluateId) {
-    console.log('delete: ' + evaluateId);
     let params = {
       evaluateId: evaluateId
     };

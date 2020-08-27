@@ -12,20 +12,32 @@ export default class SettleDetailActor extends Actor {
   defaultState() {
     return {
       sharing: {
-        firstName: '',
-        lastName: '',
-        emailChecked: '',
-        email: '',
-        phoneNumber: '',
+        prescriberId: 0,
+        consumerFirstName: '',
+        consumerLastName: '',
+        emailConsent: 0,
+        consumerEmail: '',
+        consumerPhoneNumber: '',
         pageNum: 0,
         pageSize: 10,
         current: 1,
         total: 0
       },
       onProductForm: {
-        a: '',
-        b: ''
-      }
+        pageNum: 0,
+        pageSize: 10,
+        current: 1,
+        total: 0
+      },
+      productselect: [], //添加选中商品
+      createLink: {
+        recommendationReasons: '',
+        recommendationGoodsInfoRels: []
+      },
+      getLink: '',
+      send: '',
+      detailProductList: {},
+      linkStatus: Number
     };
   }
 
@@ -42,6 +54,12 @@ export default class SettleDetailActor extends Actor {
     });*/
   }
 
+  //detailProductList
+  @Action('product:detailProductList')
+  detailProductList(state: IMap, res) {
+    return state.set('detailProductList', res);
+  }
+
   //productList初始化
   @Action('productList:productInit')
   productInit(state: IMap, res) {
@@ -50,14 +68,51 @@ export default class SettleDetailActor extends Actor {
 
   //Sharing send
   @Action('detail:sharing')
-  sharing(state: IMap, res) {
-    return state.set('sharing', res);
+  sharing(state: IMap, { field, value }) {
+    return state.setIn(['sharing', field], value);
+    //return state.set('sharing', res);
   }
 
   //product:onProductForm
   @Action('product:productForm')
   productForm(state: IMap, res) {
     return state.set('productForm', res);
+  }
+
+  //product select
+  @Action('product:productselect')
+  productselect(state: IMap, res) {
+    return state.set('productselect', res);
+  }
+
+  //create Link
+  @Action('create:createLink')
+  createLink(state: IMap, { field, value }) {
+    return state.setIn(['createLink', field], value);
+  }
+
+  //get Link
+  @Action('get:getLink')
+  getLink(state: IMap, res) {
+    return state.set('getLink', res);
+  }
+
+  //get Detail
+  @Action('get:getDetail')
+  getDetail(state: IMap, res) {
+    return state.set('getDetail', res);
+  }
+
+  //Send
+  @Action('get:send')
+  send(state: IMap, res) {
+    return state.set('send', res);
+  }
+
+  //linkStatus
+  @Action('get:linkStatus')
+  linkStatus(state: IMap, res) {
+    return state.set('linkStatus', res);
   }
 
   //loading

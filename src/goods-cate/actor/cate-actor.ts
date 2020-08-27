@@ -74,7 +74,6 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: editFormData')
   editCateInfo(state, data: IMap) {
-    console.log(data, 'editFormData');
     return state.update('formData', (formData) => formData.merge(data));
   }
 
@@ -157,8 +156,6 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: editGoods')
   editGoods(state, data: IMap) {
-    console.log(2);
-    console.log(data, 'data');
     return state.update('formData', (formData) => formData.merge(data));
   }
   /**

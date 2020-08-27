@@ -271,9 +271,8 @@ export default class MarketingList extends React.Component<any, any> {
                         href="javascript:void(0);"
                         style={{ marginRight: 5 }}
                         onClick={() => onStart(rowInfo['marketingId'])}
-                      >
-                        Open
-                      </a>
+                        className="iconfont iconbtn-open"
+                      ></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
@@ -282,9 +281,8 @@ export default class MarketingList extends React.Component<any, any> {
                         href="javascript:void(0);"
                         style={{ marginRight: 5 }}
                         onClick={() => onPause(rowInfo['marketingId'])}
-                      >
-                        Stop
-                      </a>
+                        className="iconfont iconbtn-stop"
+                      ></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 1 && (
@@ -292,9 +290,8 @@ export default class MarketingList extends React.Component<any, any> {
                       <a
                         style={{ marginRight: 5 }}
                         onClick={() => close(rowInfo['marketingId'])}
-                      >
-                        Close
-                      </a>
+                        className="iconfont iconbtn-cancelall"
+                      ></a>
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (

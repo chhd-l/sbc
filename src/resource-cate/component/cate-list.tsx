@@ -78,8 +78,9 @@ export default class CateList extends React.Component<any, any> {
                   rowInfo.get('cateId'),
                   rowInfo.get('cateName')
                 )}
+                className="iconfont iconbtn-addsubvisionsaddcategory"
               >
-                <FormattedMessage id="addSubcategory" />
+                {/*<FormattedMessage id="addSubcategory" />*/}
               </a>
             </Tooltip>
           </AuthWrapper>

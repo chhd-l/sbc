@@ -27,7 +27,6 @@ export default class SearchForm extends React.Component<any, any> {
   }
 
   render() {
-    console.log('SearchForm-render');
     const { onSearch, timeValue } = this.props.relaxProps;
     return (
       <div style={{ marginTop: 10 }}>

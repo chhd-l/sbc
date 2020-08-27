@@ -62,7 +62,7 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 this._spuOnSale();
               }}
@@ -74,7 +74,7 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 this._spuOffSale();
               }}
@@ -86,7 +86,7 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_6">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 this._delGoods();
               }}
@@ -98,7 +98,7 @@ export default class Tool extends React.Component<any, any> {
         {/* <Menu.Item>
           <AuthWrapper functionName="f_goods_temp_set">
             <a
-              href="#!"
+              href="#"
               onClick={() => {
                 this._setFeight();
               }}
@@ -138,7 +138,6 @@ export default class Tool extends React.Component<any, any> {
 
   _spuOffSale = () => {
     const { spuOffSale, selectedSpuKeys } = this.props.relaxProps;
-    console.log(selectedSpuKeys.count());
     if (selectedSpuKeys.count() < 1) {
       message.error('Select at least one item');
       return;

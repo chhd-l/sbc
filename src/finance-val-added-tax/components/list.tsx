@@ -63,7 +63,7 @@ export default class TaxList extends React.Component<any, any> {
           rowSelection={{
             type: 'checkbox',
             selectedRowKeys: selected.toJS(),
-            onChange: selectedRowKeys => {
+            onChange: (selectedRowKeys) => {
               onSelect(selectedRowKeys);
             }
           }}
@@ -87,11 +87,9 @@ export default class TaxList extends React.Component<any, any> {
             title="申请时间"
             dataIndex="createTime"
             key="createTime"
-            render={createTime => (
+            render={(createTime) => (
               <span>
-                {moment(createTime)
-                  .format(Const.DATE_FORMAT)
-                  .toString()}
+                {moment(createTime).format(Const.DATE_FORMAT).toString()}
               </span>
             )}
           />
@@ -122,12 +120,12 @@ export default class TaxList extends React.Component<any, any> {
 
           <Column
             title="资质证件"
-            render={rowInfo => this._renderImage(rowInfo)}
+            render={(rowInfo) => this._renderImage(rowInfo)}
           />
           <Column
             title="操作"
             className="left-td"
-            render={rowInfo => this._renderOperate(rowInfo)}
+            render={(rowInfo) => this._renderOperate(rowInfo)}
           />
         </DataGrid>
       </div>
@@ -207,7 +205,7 @@ export default class TaxList extends React.Component<any, any> {
     );
   };
 
-  _renderImage = rowInfo => {
+  _renderImage = (rowInfo) => {
     return (
       <Popover
         key={rowInfo.orderInvoiceId}
@@ -221,7 +219,7 @@ export default class TaxList extends React.Component<any, any> {
               src={
                 rowInfo.businessLicenseImg
                   ? JSON.parse(rowInfo.businessLicenseImg)[0].url
-                  : ``
+                  : ''
               }
             />
             <img
@@ -229,13 +227,13 @@ export default class TaxList extends React.Component<any, any> {
               src={
                 rowInfo.taxpayerIdentificationImg
                   ? JSON.parse(rowInfo.taxpayerIdentificationImg)[0].url
-                  : ``
+                  : ''
               }
             />
           </div>
         }
       >
-        <a href="#!">查看</a>
+        <a href="#">查看</a>
       </Popover>
     );
   };

@@ -73,7 +73,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       init,
       current
     } = this.props.relaxProps;
-    console.log(selected.toJS(), 1111111111);
     return (
       <DataGrid
         loading={loading}

@@ -594,7 +594,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             />
           }
         >
-          <a href="#!">
+          <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
         </Popover>
@@ -643,8 +643,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       onClick={() => showRejectModal()}
                       href="javascript:void(0)"
                       style={styles.pr20}
+                      className="iconfont iconbtn-turndown"
                     >
-                      <FormattedMessage id="order.turnDown" />
+                      {/*<FormattedMessage id="order.turnDown" />*/}
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -656,7 +657,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               payState === 'PAID' ||
               payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <Tooltip placement="top" title="Re-regitview">
+                  <Tooltip placement="top" title="Re-review">
                     <a
                       onClick={() => {
                         this._showRetrialConfirm(tid);
@@ -697,8 +698,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   }}
                   href="javascript:void(0)"
                   style={styles.pr20}
+                  className="iconfont iconbtn-audit"
                 >
-                  <FormattedMessage id="order.audit" />
+                  {/*<FormattedMessage id="order.audit" />*/}
                 </a>
               </Tooltip>
             </AuthWrapper>

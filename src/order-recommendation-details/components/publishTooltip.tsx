@@ -10,34 +10,42 @@ export default class DetailPublish extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
+      getLink: any;
+      send: any;
       onSharing: Function;
+      onSend: Function;
     };
   };
 
   static relaxProps = {
     sharing: 'sharing',
-    onSharing: noop
+    getLink: 'getLink',
+    send: 'send',
+    onSharing: noop,
+    onSend: noop
   };
 
   constructor(props) {
     super(props);
     this.state = {
       visible: props.visible,
-      show: false
+      show: false,
+      checked: false
     };
   }
 
-  handleOk = (e) => {
+  verification = () => {
     const { sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
     if (
-      sharingObj.firstName != '' &&
-      sharingObj.lastName != '' &&
-      sharingObj.email != '' &&
-      sharingObj.emailChecked != ''
+      sharingObj.consumerFirstName != '' &&
+      sharingObj.consumerLastName != '' &&
+      sharingObj.consumerEmail != '' &&
+      sharingObj.emailConsent != ''
     ) {
-      if (util.checkEmail(sharingObj.email) == true) {
-        console.log(sharingObj, 111111111111111);
+      if (util.checkEmail(sharingObj.consumerEmail) == true) {
+        return sharingObj;
+        //onSend(Object.assign({}, sharingObj, {id:getLink}))
       } else {
         message.error('Email format error!');
         return false;
@@ -48,12 +56,36 @@ export default class DetailPublish extends React.Component<any, any> {
     }
   };
 
+  handleOk = (e) => {
+    const { onSend, getLink } = this.props.relaxProps;
+    onSend(
+      'send',
+      Object.assign({}, this.verification(), { base64Id: getLink })
+    );
+  };
+
   handleCancel = (e) => {
-    this.props.showModal(false);
+    (this as any).props.showModal(false);
   };
-  handleSendAnother = (e) => {
-    this.props.showModal(false);
+
+  handleSendAnother = async (param?: any) => {
+    const { onSend, getLink, send, onSharing, sharing } = this.props.relaxProps;
+    Promise.all([
+      onSend(
+        'addSend',
+        Object.assign({}, this.verification(), { base64Id: getLink })
+      ),
+      onSharing({ field: 'consumerFirstName', value: '' }),
+      onSharing({ field: 'consumerLastName', value: '' }),
+      onSharing({ field: 'emailConsent', value: 0 }),
+      onSharing({ field: 'consumerEmail', value: '' }),
+      onSharing({ field: 'consumerPhoneNumber', value: '' }),
+      this.setState({ checked: !this.state.checked })
+    ]).then((values) => {
+      //console.log(values);
+    });
   };
+
   copyLink = (e) => {
     if (copy(e)) {
       message.success('Copy successfully!');
@@ -63,8 +95,16 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   //选择框
-  CheckboxChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+  onCheck = (e) => {
+    const { onSharing } = this.props.relaxProps;
+
+    this.setState({
+      checked: e.target.checked
+    });
+    onSharing({
+      field: 'emailConsent',
+      value: e.target.checked == true ? 1 : 0
+    });
   };
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visible, ok, cancel } = nextProps;
@@ -79,7 +119,8 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   render() {
-    const { sharing, onSharing } = this.props.relaxProps;
+    const { sharing, onSharing, getLink } = this.props.relaxProps;
+    const clear = this.state.clear;
     return (
       <div id="publishButton">
         <Modal
@@ -97,14 +138,14 @@ export default class DetailPublish extends React.Component<any, any> {
             </Button>,
             <Button key="submit" type="primary" onClick={this.handleOk}>
               Send
-            </Button>,
-            <Button
+            </Button>
+            /*<Button
               key="Another"
               type="primary"
               onClick={this.handleSendAnother}
             >
               Send & Another
-            </Button>
+            </Button>*/
           ]}
         >
           <div className="share">
@@ -114,11 +155,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input First Name"
-              value={sharing.get('firstName')}
+              value={sharing.get('consumerFirstName')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'firstName',
+                  field: 'consumerFirstName',
                   value
                 });
               }}
@@ -131,11 +172,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input Last Name"
-              value={sharing.get('lastName')}
+              value={sharing.get('consumerLastName')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'lastName',
+                  field: 'consumerLastName',
                   value
                 });
               }}
@@ -145,13 +186,16 @@ export default class DetailPublish extends React.Component<any, any> {
             <div className="title">
               <span>*</span>
               <Checkbox
-                onChange={(e) => {
+                onChange={this.onCheck}
+                /*onChange={(e) => {
                   const value = (e.target as any).checked;
                   onSharing({
-                    field: 'emailChecked',
-                    value
+                    field: 'emailConsent',
+                    value: value == true ? 1 : 0
                   });
-                }}
+                }}*/
+                checked={this.state.checked}
+                //checked={this.state.checkbox}
               />
               The customer has agreed to send the E-mail
             </div>
@@ -163,11 +207,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input E-mail"
-              value={sharing.get('email')}
+              value={sharing.get('consumerEmail')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'email',
+                  field: 'consumerEmail',
                   value
                 });
               }}
@@ -178,11 +222,11 @@ export default class DetailPublish extends React.Component<any, any> {
             <Input
               type="text"
               placeholder="Input the phone number"
-              value={sharing.get('phoneNumber')}
+              value={sharing.get('consumerPhoneNumber')}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 onSharing({
-                  field: 'phoneNumber',
+                  field: 'consumerPhoneNumber',
                   value
                 });
               }}
@@ -192,14 +236,14 @@ export default class DetailPublish extends React.Component<any, any> {
             <div style={{ paddingTop: 4, marginLeft: 2 }}>
               <Icon type="link" />
               <span style={{ marginLeft: 5, color: '#8f0101' }}>
-                https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025
+                https://shopuat.466920.com/recommendation/{getLink}
               </span>
             </div>
             <div>
               <Button
                 onClick={() =>
                   this.copyLink(
-                    'https://shopuat.466920.com/details/ff80808173a2adef0173b32788600025'
+                    `https://shopuat.466920.com/recommendation/${getLink}`
                   )
                 }
               >

@@ -1,4 +1,6 @@
 import { Fetch } from 'qmkit';
+import { Button } from 'antd';
+import React from 'react';
 
 type TResult = {
   code: string;
@@ -18,65 +20,41 @@ export function fetchFinanceRewardDetails(param = {}) {
   });
 }
 
-export function fetchEverydayAmountTotal(param) {
-  return Fetch<TResult>('/trade/prescriber/everydayAmountTotal', {
+/**
+ * 详情
+ */
+
+export function fetchFindById(param = {}) {
+  return Fetch<TResult>('/recommendation/findById', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
-export function fetchPeriodAmountTotal(param = {}) {
-  return Fetch<TResult>('/trade/prescriber/periodAmountTotal', {
+export function fetchproductTooltip(param) {
+  return Fetch<TResult>('/recommendation/listGoodsInfo', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
-export function fetchFindListByPrescriberId(param = {}) {
-  return Fetch<TResult>('/prescriberReward/findListByPrescriberId', {
+export function fetchCreateLink(param = {}) {
+  return Fetch<TResult>('/recommendation/addGoodsInfoRel', {
     method: 'POST',
     body: JSON.stringify(param)
   });
 }
 
-/**
- * 获取结算明细列表
- * @param settleId
- * @return {Promise<IAsyncResult<TResult>>}
- */
-export function fetchSettlementDetailList(settleId) {
-  return Fetch<TResult>(`/finance/settlement/detail/list/${settleId}`, {
-    method: 'GET'
+export function fetchModify(param = {}) {
+  return Fetch<TResult>('/recommendation/modify', {
+    method: 'POST',
+    body: JSON.stringify(param)
   });
 }
 
-/**
- * 更改结算单状态
- * @param settleIdArray
- * @param status
- * @returns {Promise<IAsyncResult<TResult>>}
- */
-export function getSettlementById(settleId) {
-  return Fetch<TResult>(`/finance/settlement/${settleId}`, {
-    method: 'GET'
-  });
-}
-
-/**
- * 更改结算单状态
- * @param settleIdArray
- * @param status
- * @returns {Promise<IAsyncResult<TResult>>}
- */
-export function changeSettleStatus(
-  settleIdList: Array<number>,
-  status: number
-) {
-  return Fetch<TResult>('/finance/settlement/status', {
-    method: 'PUT',
-    body: JSON.stringify({
-      settleIdList,
-      status
-    })
+export function fetchLinkStatus(param = {}) {
+  return Fetch<TResult>('/recommendation/modify/linkStatus', {
+    method: 'POST',
+    body: JSON.stringify(param)
   });
 }

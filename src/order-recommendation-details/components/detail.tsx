@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Table, Col, Button } from 'antd';
+import { Table, Col, Button, Select, Switch, Icon } from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
-
+import { cache, history, noop, SelectGroup } from 'qmkit';
+const Option = Select.Option;
 //import moment from 'moment';
 
 //import { Const, util } from 'qmkit';
@@ -25,31 +26,114 @@ export default class BillingDetails extends React.Component<any, any> {
     relaxProps?: {
       settlement: IMap;
       setName: IList;
+      onSharing: Function;
+      onLinkStatus: Function;
+      detailProductList: any;
     };
   };
 
   static relaxProps = {
     settlement: 'settlement',
-    setName: 'setName'
+    setName: 'setName',
+    onSharing: noop,
+    onLinkStatus: noop,
+    detailProductList: 'detailProductList'
   };
+  componentDidMount() {
+    const { onSharing } = this.props.relaxProps;
+    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    onSharing({
+      field: 'prescriberId',
+      value: employee.clinicsIds[0]
+    });
+  }
+
   showProduct = (res) => {
     this.setState({
       visible: res
     });
   };
+  _prescriberChange = (value, name) => {
+    //const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const { onSharing } = this.props.relaxProps;
+    onSharing({
+      field: 'prescriberId',
+      value: value
+    });
+  };
+  onValid = (e) => {
+    const { onLinkStatus } = this.props.relaxProps;
+    let linkStatus = e == true ? 0 : 1;
+    onLinkStatus({ linkStatus, id: history.location.state.id });
+  };
   render() {
+    const { detailProductList } = this.props.relaxProps;
+    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const allPrescribers =
+      employee && employee.prescribers && employee.prescribers.length > 0
+        ? employee.prescribers
+        : [];
+
     return (
       <div style={styles.main}>
-        <div style={styles.nav}>Select Recommended Product</div>
+        <div
+          className="space-between"
+          style={{ marginTop: 15, marginBottom: 10 }}
+        >
+          <div style={{ width: 150 }}>
+            {history.location.state ? (
+              <SelectGroup
+                label="Prescriber"
+                disabled
+                defaultValue={detailProductList.prescriberName}
+              ></SelectGroup>
+            ) : (
+              <SelectGroup
+                label="Prescriber"
+                defaultValue={
+                  sessionStorage.getItem('PrescriberType')
+                    ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                        .children
+                    : null
+                }
+                onChange={(value, name) => this._prescriberChange(value, name)}
+              >
+                {allPrescribers.map((item) => (
+                  <Option value={item.prescriberId} key={item.prescriberId}>
+                    {item.prescriberName}
+                  </Option>
+                ))}
+              </SelectGroup>
+            )}
+          </div>
+          <div style={{ marginTop: 12, marginRight: 15 }}>
+            {history.location.state ? (
+              <Switch
+                checkedChildren=" Valid "
+                unCheckedChildren=" Invalid "
+                defaultChecked
+                onClick={this.onValid}
+              />
+            ) : null}
+          </div>
+        </div>
+
+        <div style={styles.nav}>
+          {history.location.state
+            ? 'Recommended Product List'
+            : 'Select Recommended Product'}
+        </div>
         <div style={styles.btn}>
-          <Button
-            type="primary"
-            shape="round"
-            icon="edit"
-            onClick={() => this.showProduct(true)}
-          >
-            Add Product
-          </Button>
+          {history.location.state ? null : (
+            <Button
+              type="primary"
+              shape="round"
+              icon="edit"
+              onClick={() => this.showProduct(true)}
+            >
+              Add Product
+            </Button>
+          )}
         </div>
         <DetailList />
         {this.state.visible == true ? (
@@ -77,7 +161,8 @@ const styles = {
     padding: 5
   },
   btn: {
-    paddingTop: 5
+    paddingTop: 5,
+    marginBottom: 10
   },
   static: {
     background: '#fff',

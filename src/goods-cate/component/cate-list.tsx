@@ -114,8 +114,9 @@ class CateList extends React.Component<any, any> {
                         rowInfo.get('cateName'),
                         rowInfo.get('goodsCateId')
                       )}
+                      className="iconfont iconbtn-addsubvisionsaddcategory"
                     >
-                      <FormattedMessage id="addSubcategory" />
+                      {/*<FormattedMessage id="addSubcategory" />*/}
                     </a>
                   </Tooltip>
                 ),
@@ -170,7 +171,6 @@ class CateList extends React.Component<any, any> {
     cateParentName: string,
     goodsCateId: number
   ) => {
-    console.log(goodsCateId, 'goodsCateId');
     const { showEditModal } = this.props.relaxProps;
     showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
   };

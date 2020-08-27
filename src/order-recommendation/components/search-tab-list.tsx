@@ -35,11 +35,11 @@ export default class SearchList extends React.Component<any, any> {
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Invalid" key="flowState-INIT">
+          <Tabs.TabPane tab="Invalid" key="Invalid">
             <List />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Valid" key="flowState-GROUPON">
+          <Tabs.TabPane tab="Valid" key="Valid">
             <List />
           </Tabs.TabPane>
         </Tabs>

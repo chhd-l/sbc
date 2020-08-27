@@ -19,15 +19,19 @@ export default class AppStore extends Store {
   }
 
   init = async (param?: any) => {
-    param = Object.assign(this.state().get('sharing').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchFinanceRewardDetails(param);
+    const res1 = await webapi.fetchFindById(param);
+    let arr = [];
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.total;
       //param.total = res1.res.context.total
+      res1.res.context.recommendationGoodsInfoRels.map((v, i) => {
+        arr.push(v.goodsInfo);
+      });
       this.transaction(() => {
         this.dispatch('loading:end');
-        this.dispatch('list:init', res1.res.context.content);
+        this.dispatch('product:detailProductList', res1.res.context);
+        this.dispatch('product:productselect', arr);
       });
     } else {
       message.error(res1.res.message);
@@ -37,17 +41,18 @@ export default class AppStore extends Store {
     }
   };
   onProductForm = async (param?: any) => {
-    param = Object.assign(this.state().get('sharing').toJS(), param);
+    param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchFinanceRewardDetails(param);
+    const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
-      param.total = res1.res.context.total;
-
-      //param.total = res1.res.context.total
+      param.total = res1.res.context.goodsInfoPage.total;
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch('product:productList', res1.res.context.content);
+        this.dispatch(
+          'productList:productInit',
+          res1.res.context.goodsInfoPage.content
+        );
       });
     } else {
       message.error(res1.res.message);
@@ -57,8 +62,60 @@ export default class AppStore extends Store {
     }
   };
 
+  //productselect
+  onProductselect = (addProduct) => {
+    this.dispatch('product:productselect', addProduct);
+  };
+
+  //Create Link
+  onCreateLink = (Link) => {
+    this.dispatch('create:createLink', Link);
+  };
+
+  //Get Link
+  onCreate = async (param?: any) => {
+    const res = await webapi.fetchCreateLink(param);
+    this.dispatch('get:getLink', res.res.context);
+  };
+
   //Send & Another
   onSharing = (sharing) => {
+    console.log(sharing, 11111111);
     this.dispatch('detail:sharing', sharing);
+  };
+
+  //Send
+  onSend = async (type, param?: any) => {
+    const res = await webapi.fetchModify(param);
+    if (res.res.code === Const.SUCCESS_CODE) {
+      message.success('send successfully!');
+      if (type == 'send') {
+        history.goBack();
+      } else {
+        this.dispatch('get:send', true);
+      }
+    } else {
+      message.error(res.res.message);
+      if (res.res.code === 'K-110001') {
+        message.success('send failed!');
+        return false;
+      }
+    }
+  };
+
+  //LinkStatus
+
+  onLinkStatus = async (param?: any) => {
+    const res = await webapi.fetchLinkStatus(param);
+    if (res.res.code === Const.SUCCESS_CODE) {
+      //message.success('switch successfully!');
+      this.dispatch('get:linkStatus', res.res.context);
+    } else {
+      message.error(res.res.message);
+      if (res.res.code === 'K-110001') {
+        message.success('switch failed!');
+        return false;
+      }
+    }
   };
 }

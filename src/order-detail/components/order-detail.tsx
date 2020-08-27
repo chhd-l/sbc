@@ -622,7 +622,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             />
           }
         >
-          <a href="#!">
+          <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
         </Popover>
@@ -671,8 +671,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       onClick={() => showRejectModal()}
                       href="javascript:void(0)"
                       style={styles.pr20}
+                      className="iconfont iconbtn-turndown"
                     >
-                      <FormattedMessage id="order.turnDown" />
+                      {/*<FormattedMessage id="order.turnDown" />*/}
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -706,8 +707,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                       onClick={() => {
                         onDelivery();
                       }}
+                      className="iconfont iconbtn-shipping"
                     >
-                      {<FormattedMessage id="ship" />}
+                      {/*{<FormattedMessage id="ship" />}*/}
                     </a>
                   </Tooltip>
                 </AuthWrapper>
@@ -718,14 +720,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {flowState === 'INIT' && (
             <AuthWrapper functionName="fOrderList002">
               <Tooltip placement="top" title="Review">
-                <Button
+                <a
                   onClick={() => {
                     onAudit(tid, 'CHECKED');
                   }}
                   style={{ fontSize: 14 }}
+                  className="iconfont iconbtn-review"
                 >
-                  Review
-                </Button>
+                  {/*Review*/}
+                </a>
               </Tooltip>
             </AuthWrapper>
           )}
@@ -742,8 +745,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 onClick={() => {
                   onDelivery();
                 }}
+                className="iconfont iconbtn-shipping"
               >
-                {<FormattedMessage id="ship" />}
+                {/*{<FormattedMessage id="ship" />}*/}
               </a>
             </Tooltip>
           </AuthWrapper>

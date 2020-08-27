@@ -177,7 +177,6 @@ export default class ModalActor extends Actor {
    */
   @Action('modal: visible')
   visible(state, { imgType, skuId }: { imgType: number; skuId: string }) {
-    console.log(imgType, 'imgtype');
     if (imgType == 3) {
       let videoList = state.get('videoList');
       state = state

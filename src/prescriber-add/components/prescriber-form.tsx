@@ -50,7 +50,8 @@ class ClinicForm extends React.Component<any, any> {
         enabled: true,
         delFlag: 0,
         // auditStatus: '1',
-        prescriberCode: ''
+        prescriberCode: '',
+        partneredShop: ''
       },
       cityArr: [],
       typeArr: [],
@@ -696,6 +697,34 @@ class ClinicForm extends React.Component<any, any> {
                         value = value === '' ? null : value;
                         this.onFormChange({
                           field: 'prescriberType',
+                          value
+                        });
+                      }}
+                    >
+                      {typeArr.map((item) => (
+                        <Option value={item.valueEn} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                      {/* <Option value="Mexico City">Mexico City</Option>
+                    <Option value="Monterrey">Monterrey</Option> */}
+                    </Select>
+                  )}
+                </FormItem>
+                <FormItem label="Partnered Shop">
+                  {getFieldDecorator('partneredShop', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please select Partnered Shop!'
+                      }
+                    ]
+                  })(
+                    <Select
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'partneredShop',
                           value
                         });
                       }}

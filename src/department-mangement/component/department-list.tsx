@@ -128,7 +128,7 @@ class DepartmentList extends React.Component<any, any> {
               rowInfo.get('employeeNum')
             )}
           >
-            <Icon type="edit" /> -
+            <Icon type="edit" />
           </a>
         </Tooltip>
       </AuthWrapper>
@@ -152,9 +152,8 @@ class DepartmentList extends React.Component<any, any> {
                 rowInfo.get('departmentName'),
                 rowInfo.get('departmentGrade')
               )}
-            >
-              Add subdivisions
-            </a>
+              className="iconfont iconbtn-addsubvisionsaddcategory"
+            ></a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>

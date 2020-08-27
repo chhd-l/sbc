@@ -46,13 +46,14 @@ export default class AppStore extends Store {
     const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
+      /*let data = res1.res.context.goodsInfoPage.content.map((item, i) => {
+        console.log(item,2212211);
+        item.quantity = 1;
+      })*/
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch(
-          'productList:productInit',
-          res1.res.context.goodsInfoPage.content
-        );
+        this.dispatch('productList:productInit',res1.res.context.goodsInfoPage.content);
       });
     } else {
       message.error(res1.res.message);

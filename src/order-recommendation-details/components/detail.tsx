@@ -45,7 +45,7 @@ export default class BillingDetails extends React.Component<any, any> {
     createLinkType: 'createLinkType'
   };
 
-  getSnapshotBeforeUpdate(
+  /*getSnapshotBeforeUpdate(
     prevProps: Readonly<any>,
     prevState: Readonly<any>
   ): any | null {
@@ -58,7 +58,7 @@ export default class BillingDetails extends React.Component<any, any> {
       detailProductList && detailProductList.linkStatus,
       1111111111111
     );
-  }
+  }*/
 
   componentDidMount() {
     const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;

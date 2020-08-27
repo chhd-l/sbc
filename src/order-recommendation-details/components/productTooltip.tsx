@@ -8,7 +8,7 @@ import moment from 'moment';
 declare type IList = List<any>;
 const { Option } = Select;
 let arrQuantity = [];
-
+let dataObj = {}
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
@@ -57,8 +57,12 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   onSelectChange = (selectedRowKeys, v, o) => {
+    console.log(arrQuantity);
+    console.log(selectedRowKeys);
     selectedRowKeys.map((item, i) => {
-      v[i].quantity = 1;
+      console.log(item),111111111;
+      console.log(v[i]),222222;
+
       if (arrQuantity.length > 0) {
         arrQuantity.map((m, n) => {
           if (m.no == item) {
@@ -67,7 +71,12 @@ export default class DetailPublish extends React.Component<any, any> {
         });
       }
     });
-    this.setState({ selectedRowKeys, addProduct: v });
+    //dataObj = v.concat(v)
+    console.log(v,22222222);
+
+    console.log(dataObj,3333333);
+
+    this.setState({ selectedRowKeys, addProduct: dataObj });
   };
   handleOk = (e) => {
     const { onProductselect } = this.props.relaxProps;
@@ -96,7 +105,8 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   handleChange = (value, a, index, e) => {
-    arrQuantity.push({ no: index, quantity: e });
+
+    arrQuantity.push({ no: a.goodsInfoNo, quantity: e });
   };
 
   render() {
@@ -207,11 +217,12 @@ export default class DetailPublish extends React.Component<any, any> {
                 {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
               </span>
             </div>
-            {/*<Table
+            <Table
               rowSelection={rowSelection}
               columns={columns}
               dataSource={productList ? productList.toJS() : []}
               loading={loading}
+              rowKey={(record, index) => record.goodsInfoNo}
               size="small"
               pagination={{
                 total,
@@ -219,7 +230,7 @@ export default class DetailPublish extends React.Component<any, any> {
                   onProductForm({ pageNum: pageNum - 1, pageSize });
                 }
               }}
-            />*/}
+            />
           </div>
         </Modal>
       </div>

@@ -27,7 +27,7 @@ export default class SettleDetailActor extends Actor {
         pageNum: 0,
         pageSize: 10,
         current: 1,
-        total: 0
+        total: 60
       },
       productselect: [], //添加选中商品
       createLink: {

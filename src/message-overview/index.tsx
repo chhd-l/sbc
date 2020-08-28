@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline } from 'qmkit';
+import { BreadCrumb, Headline, Const } from 'qmkit';
+import * as webapi from './webapi';
 import {
   Icon,
   Table,
@@ -27,10 +28,28 @@ class Overview extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Email Task Overview'
+      title: 'Email Task Overview',
+      dateList: [],
+      requestsList: [],
+      deliveredList: [],
+      opensList: [],
+      clickedList: [],
+      bouncesList: [],
+      spamReportsList: [],
+      overviewTotal: {
+        requestsCount: '',
+        bounceRate: '',
+        clicksRate: '',
+        deliveredRate: '',
+        opensRate: '',
+        spamReportRate: ''
+      }
     };
   }
   componentDidMount() {
+    this.getOverview();
+  }
+  chartInit = () => {
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById('main'));
     // 绘制图表
@@ -46,7 +65,7 @@ class Overview extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: ['2.1', '2.5', '3.3', '5.28', '7.7', '7.12']
+        data: this.state.dateList
       },
       yAxis: {
         type: 'value',
@@ -84,7 +103,7 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 2, 3, 45, 21, 12]
+          data: this.state.requestsList
         },
         {
           name: 'delivered',
@@ -101,7 +120,7 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 22, 30, 45, 2, 12]
+          data: this.state.deliveredList
         },
         {
           name: 'opened',
@@ -118,7 +137,7 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [13, 24, 3, 5, 2, 12]
+          data: this.state.opensList
         },
         {
           name: 'clicked',
@@ -135,7 +154,7 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [11, 2, 33, 45, 1, 12]
+          data: this.state.clickedList
         },
         {
           name: 'bounces',
@@ -152,7 +171,7 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 22, 3, 5, 21, 12]
+          data: this.state.bouncesList
         },
         {
           name: 'spam reports',
@@ -169,14 +188,54 @@ class Overview extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [5, 2, 3, 5, 11, 12]
+          data: this.state.spamReportsList
         }
       ]
     });
-  }
+  };
+
+  getOverview = () => {
+    webapi.getOverview().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let overviewList = res.context.overviewList;
+        let overviewTotal = res.context.overviewTotal;
+        let dateList = [];
+        let requestsList = [];
+        let deliveredList = [];
+        let opensList = [];
+        let clickedList = [];
+        let bouncesList = [];
+        let spamReportsList = [];
+        for (let i = 0; i < overviewList.length; i++) {
+          dateList.push(overviewList[i].eventDate);
+          requestsList.push(overviewList[i].requestsCount);
+          deliveredList.push(overviewList[i].deliveredCount);
+          opensList.push(overviewList[i].opensCount);
+          clickedList.push(overviewList[i].clicksCount);
+          bouncesList.push(overviewList[i].bounceCount);
+          spamReportsList.push(overviewList[i].spamReportCount);
+        }
+        this.setState(
+          {
+            dateList,
+            requestsList,
+            deliveredList,
+            clickedList,
+            bouncesList,
+            spamReportsList,
+            overviewTotal
+          },
+          () => {
+            this.chartInit();
+          }
+        );
+      }
+    });
+  };
 
   render() {
-    const { title } = this.state;
+    const { title, overviewTotal } = this.state;
 
     return (
       <div>
@@ -193,7 +252,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">REQUESTS</p>
                 <p className="overview-item-value" style={{ color: '#246201' }}>
-                  0
+                  {overviewTotal.requestsCount}
                 </p>
               </div>
             </Col>
@@ -201,7 +260,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">DELIVERED</p>
                 <p className="overview-item-value" style={{ color: '#bcd514' }}>
-                  0
+                  {overviewTotal.deliveredRate}
                 </p>
               </div>
             </Col>
@@ -209,7 +268,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">OPENED</p>
                 <p className="overview-item-value" style={{ color: '#028690' }}>
-                  0
+                  {overviewTotal.opensRate}
                 </p>
               </div>
             </Col>
@@ -217,7 +276,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">CLICKED</p>
                 <p className="overview-item-value" style={{ color: '#59c1ca' }}>
-                  0
+                  {overviewTotal.clicksRate}
                 </p>
               </div>
             </Col>
@@ -225,7 +284,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">BOUNCES</p>
                 <p className="overview-item-value" style={{ color: '#c042be' }}>
-                  0
+                  {overviewTotal.bounceRate}
                 </p>
               </div>
             </Col>
@@ -233,7 +292,7 @@ class Overview extends Component<any, any> {
               <div className="overview-item-border">
                 <p className="overview-item-name">SPAM REPORTS</p>
                 <p className="overview-item-value" style={{ color: '#e04427' }}>
-                  0
+                  {overviewTotal.spamReportRate}
                 </p>
               </div>
             </Col>

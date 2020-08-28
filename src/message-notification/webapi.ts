@@ -39,3 +39,12 @@ export function getEmailTemplateById(filterParams = {}) {
     })
   });
 }
+
+export function updateNotification(filterParams = {}) {
+  return Fetch<TResult>('/message/updateNotificationAutomation', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

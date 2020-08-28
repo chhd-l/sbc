@@ -758,16 +758,6 @@ const auditDidNotPass = [
   {
     path: '/shop-process',
     asyncComponent: () => import('./shop/process-index')
-  },
-  //店铺信息 审核中/审核未通过
-  {
-    path: '/shop-info',
-    asyncComponent: () => import('./shop/info-index')
-  },
-  //编辑店铺信息 审核未通过编辑页面
-  {
-    path: '/shop-info-edit',
-    asyncComponent: () => import('./shop/info-edit')
   }
 ];
 

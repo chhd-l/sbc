@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Modal, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const formItemLayout = {
   labelCol: {

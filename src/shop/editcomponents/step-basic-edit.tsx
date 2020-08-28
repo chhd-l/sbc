@@ -18,7 +18,7 @@ import { noop, Const, QMUpload, Tips, cache } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import { Store } from 'plume2';
-import { fetchStoreInfo } from './../webapi';
+import { fetchStoreInfo } from '../webapi';
 import './style.less';
 
 const FormItem = Form.Item;

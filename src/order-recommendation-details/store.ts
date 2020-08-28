@@ -29,9 +29,9 @@ export default class AppStore extends Store {
         arr.push(v.goodsInfo);
       });
       this.transaction(() => {
-        this.dispatch('loading:end');
         this.dispatch('product:detailProductList', res1.res.context);
         this.dispatch('product:productselect', arr);
+        this.dispatch('loading:end');
       });
     } else {
       message.error(res1.res.message);
@@ -53,7 +53,10 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch('productList:productInit',res1.res.context.goodsInfoPage.content);
+        this.dispatch(
+          'productList:productInit',
+          res1.res.context.goodsInfoPage.content
+        );
       });
     } else {
       message.error(res1.res.message);

@@ -12,14 +12,16 @@ const Option = Select.Option;
 //import { Const, util } from 'qmkit';
 //import { FormattedMessage } from 'react-intl';
 //import { bool } from 'prop-types';
-let check = Boolean;
+let checkNum = 0;
+let check = true;
+
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
-      check: Boolean
+      check: true
     };
   }
 
@@ -45,21 +47,6 @@ export default class BillingDetails extends React.Component<any, any> {
     createLinkType: 'createLinkType'
   };
 
-  /*getSnapshotBeforeUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>
-  ): any | null {
-    const { detailProductList } = this.props.relaxProps;
-    setTimeout(() => {
-      check =
-        detailProductList && detailProductList.linkStatus == 0 ? true : false;
-    });
-    console.log(
-      detailProductList && detailProductList.linkStatus,
-      1111111111111
-    );
-  }*/
-
   componentDidMount() {
     const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
@@ -67,8 +54,6 @@ export default class BillingDetails extends React.Component<any, any> {
       field: 'prescriberId',
       value: employee.clinicsIds[0]
     });
-
-    //this.onValid(detailProductList&&detailProductList.linkStatus)
   }
 
   showProduct = (res) => {
@@ -87,27 +72,19 @@ export default class BillingDetails extends React.Component<any, any> {
   onValid = (e) => {
     const { onLinkStatus } = this.props.relaxProps;
     let linkStatus = e == true ? 0 : 1;
-    console.log(e, 111111111111111);
+
     onLinkStatus({ linkStatus, id: history.location.state.id });
   };
 
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>,
-    snapshot?: any
-  ) {}
-
   render() {
-    const {
-      detailProductList,
-      linkStatus,
-      createLinkType
-    } = this.props.relaxProps;
+    const { detailProductList, createLinkType } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers =
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
+    check =
+      detailProductList && detailProductList.linkStatus == 0 ? true : false;
 
     return (
       <div style={styles.main}>
@@ -147,7 +124,8 @@ export default class BillingDetails extends React.Component<any, any> {
               <Switch
                 checkedChildren=" Valid "
                 unCheckedChildren=" Invalid "
-                checked={check}
+                key={check}
+                defaultChecked={check}
                 onChange={this.onValid}
               />
             ) : null}

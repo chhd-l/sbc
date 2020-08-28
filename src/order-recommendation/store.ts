@@ -38,7 +38,7 @@ export default class AppStore extends Store {
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
-    let obj = { linkStatus: 0 };
+    let obj = { linkStatus: 2 };
 
     if (key != '0') {
       obj.linkStatus = key == 'Invalid' ? 1 : 0;

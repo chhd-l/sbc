@@ -3,16 +3,17 @@ import { Modal, Table, Select, Checkbox, Button } from 'antd';
 import { noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
-import { accDiv } from '../../../web_modules/qmkit/float';
-import moment from 'moment';
+//import { accDiv } from '../../../web_modules/qmkit/float';
+//import moment from 'moment';
 declare type IList = List<any>;
 const { Option } = Select;
 let arrQuantity = [];
-
+let dataObj = {};
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
   props: {
+    showModal: Function;
     relaxProps?: {
       sharing: any;
       productForm: any;
@@ -67,7 +68,8 @@ export default class DetailPublish extends React.Component<any, any> {
         });
       }
     });
-    this.setState({ selectedRowKeys, addProduct: v });
+    //dataObj = v.concat(v)
+    this.setState({ selectedRowKeys, addProduct: dataObj });
   };
   handleOk = (e) => {
     const { onProductselect } = this.props.relaxProps;
@@ -96,7 +98,7 @@ export default class DetailPublish extends React.Component<any, any> {
   }
 
   handleChange = (value, a, index, e) => {
-    arrQuantity.push({ no: index, quantity: e });
+    arrQuantity.push({ no: a.goodsInfoNo, quantity: e });
   };
 
   render() {
@@ -212,6 +214,7 @@ export default class DetailPublish extends React.Component<any, any> {
               columns={columns}
               dataSource={productList ? productList.toJS() : []}
               loading={loading}
+              rowKey={(record, index) => record.goodsInfoNo}
               size="small"
               pagination={{
                 total,

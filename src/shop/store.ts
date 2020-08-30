@@ -1057,17 +1057,8 @@ export default class AppStore extends Store {
   setCurrentTab = (tab) => {
     this.dispatch('common:current:tab', tab);
     switch (tab) {
-      case '0':
-        this.init();
-        break;
-      case '1':
-        this.fetchCompanyInfo();
-        break;
       case '2':
         this.fetchSignInfo(); //编辑签约信息
-        break;
-      case '3':
-        this.initAccount();
         break;
     }
   };

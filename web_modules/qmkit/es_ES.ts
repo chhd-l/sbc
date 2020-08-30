@@ -156,7 +156,8 @@ export default {
   registerCallback: 'Register callback',
 
   storeInformationEdit: 'Shop Information Edit',
-  Footer: 'Footer',
+  footer: 'Footer',
+  consent: 'Consent',
   confirmationEmail: 'Confirmation email',
   faqUrl: 'FAQ(URL)',
   privacyPolicy: 'Privacy policy',

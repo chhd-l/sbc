@@ -84,3 +84,24 @@ export function getOrderList(filterParams = {}) {
     })
   });
 }
+//获取Recommendation No
+
+export function getRecommendationList(filterParams = {}) {
+  return Fetch<TResult>('/recommendation/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//获取consumer List
+
+export function getConsumerList(filterParams = {}) {
+  return Fetch<TResult>('/customer/pageBySupplier', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

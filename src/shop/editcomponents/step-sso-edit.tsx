@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
 

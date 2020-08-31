@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, Col, Button, Select, Switch, Icon } from 'antd';
+import { Table, Col, Button, Select, Switch, Popconfirm, message } from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
@@ -21,7 +21,8 @@ export default class BillingDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       visible: false,
-      check: true
+      check: true,
+      showSwich: false
     };
   }
 
@@ -71,11 +72,25 @@ export default class BillingDetails extends React.Component<any, any> {
   };
   onValid = (e) => {
     const { onLinkStatus } = this.props.relaxProps;
-    let linkStatus = e == true ? 0 : 1;
-
-    onLinkStatus({ linkStatus, id: history.location.state.id });
+    if (this.state.showSwich == true) {
+      let linkStatus = e == true ? 0 : 1;
+      onLinkStatus({ linkStatus, id: history.location.state.id });
+    } else {
+      return;
+    }
+  };
+  confirm = (e) => {
+    this.setState({ showSwich: true });
+    console.log(e);
+    // message.success('Click on Yes');
   };
 
+  cancel = (e) => {
+    console.log(e);
+    this.setState({ showSwich: false });
+
+    // message.error('Click on No');
+  };
   render() {
     const { detailProductList, createLinkType } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
@@ -121,13 +136,21 @@ export default class BillingDetails extends React.Component<any, any> {
           </div>
           <div style={{ marginTop: 12, marginRight: 15 }}>
             {history.location.state ? (
-              <Switch
-                checkedChildren=" Valid "
-                unCheckedChildren=" Invalid "
-                key={check}
-                defaultChecked={check}
-                onChange={this.onValid}
-              />
+              <Popconfirm
+                title="Are you sure delete this task?"
+                onConfirm={this.confirm}
+                onCancel={this.cancel}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Switch
+                  checkedChildren=" Valid "
+                  unCheckedChildren=" Invalid "
+                  key={check}
+                  defaultChecked={check}
+                  onChange={this.onValid}
+                />
+              </Popconfirm>
             ) : null}
           </div>
         </div>

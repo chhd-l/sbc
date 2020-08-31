@@ -142,6 +142,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 onCancel={this.cancel}
                 okText="Yes"
                 cancelText="No"
+                disabled
               >
                 <Switch
                   checkedChildren=" Valid "

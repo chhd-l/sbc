@@ -8,7 +8,8 @@ import moment from 'moment';
 declare type IList = List<any>;
 const { Option } = Select;
 let arrQuantity = [];
-let dataObj = {}
+let arrAll = [];
+let getpageNum = [1];
 @Relax
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
@@ -42,7 +43,9 @@ export default class DetailPublish extends React.Component<any, any> {
       visible: props.visible,
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
-      addProduct: []
+      addProduct: [],
+      pageNum: 0,
+      getArr: []
     };
   }
   start = () => {
@@ -57,31 +60,29 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   onSelectChange = (selectedRowKeys, v, o) => {
-    console.log(arrQuantity);
-    console.log(selectedRowKeys);
+    // console.log(arrQuantity);
+    // console.log(selectedRowKeys);
     selectedRowKeys.map((item, i) => {
-      console.log(item),111111111;
-      console.log(v[i]),222222;
+      //  console.log(item),111111111;
+      //  console.log(v[i]),222222;
 
       if (arrQuantity.length > 0) {
         arrQuantity.map((m, n) => {
           if (m.no == item) {
-            v[i].quantity = Number(m.quantity);
+            v[i].recommendationNumber = Number(m.recommendationNumber);
           }
         });
       }
     });
-    //dataObj = v.concat(v)
-    console.log(v,22222222);
-
-    console.log(dataObj,3333333);
-
-    this.setState({ selectedRowKeys, addProduct: dataObj });
+    console.log(v, 1111);
+    console.log(arrAll, 1111);
+    this.setState({ selectedRowKeys, addProduct: v });
   };
   handleOk = (e) => {
     const { onProductselect } = this.props.relaxProps;
-    onProductselect(this.state.addProduct);
-    this.props.showModal(false);
+    console.log(arrAll);
+    //onProductselect(this.state.addProduct);
+    //this.props.showModal(false);
   };
 
   handleCancel = (e) => {
@@ -90,7 +91,13 @@ export default class DetailPublish extends React.Component<any, any> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visible } = nextProps;
-    // 当传入的type发生变化的时候，更新state
+    let getPageNum = nextProps.relaxProps.productForm
+      ? nextProps.relaxProps.productForm.pageNum
+      : 0;
+    //console.log(nextProps,'aaaaa');
+    //console.log(prevState.pageNum,'cccc');
+
+    // 当传入的visible发生变化的时候，更新state
     if (visible !== prevState.visible) {
       return {
         visible
@@ -99,14 +106,24 @@ export default class DetailPublish extends React.Component<any, any> {
     // 否则，对于state不进行任何操作
     return null;
   }
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {
+    console.log(prevProps, 'aaaaa');
+
+    console.log(this.state.pageNum, 123);
+    console.log(prevState.pageNum, 'bbbb');
+  }
+
   componentDidMount() {
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
   }
 
   handleChange = (value, a, index, e) => {
-
-    arrQuantity.push({ no: a.goodsInfoNo, quantity: e });
+    arrQuantity.push({ no: a.goodsInfoNo, recommendationNumber: e });
   };
 
   render() {
@@ -227,6 +244,21 @@ export default class DetailPublish extends React.Component<any, any> {
               pagination={{
                 total,
                 onChange: (pageNum, pageSize) => {
+                  getpageNum.push(pageNum);
+                  let a = [...new Set([...getpageNum])];
+                  console.log(a, '++++++++++++');
+                  a.map((v, i) => {
+                    console.log(pageNum);
+                    console.log(v);
+
+                    if (pageNum != v) {
+                      arrAll = arrAll.concat(this.state.addProduct);
+                    }
+                  });
+
+                  this.setState({ pageNum });
+                  console.log(pageNum);
+
                   onProductForm({ pageNum: pageNum - 1, pageSize });
                 }
               }}

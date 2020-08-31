@@ -59,7 +59,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     let arr = productselect.map((v, i) => {
       return {
         goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.quantity
+        recommendationNumber: v.recommendationNumber
       };
     });
     onCreateLink({
@@ -112,8 +112,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
           <Column
             title="Quantity"
-            key="quantity"
-            dataIndex="quantity"
+            key="recommendationNumber"
+            dataIndex="recommendationNumber"
             render={(text, record, i) => {
               return history.location.state
                 ? detailProductList.recommendationGoodsInfoRels[i]

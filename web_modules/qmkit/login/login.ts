@@ -1,59 +1,34 @@
-import { Store } from 'plume2';
-import { message } from 'antd';
-import { fromJS } from 'immutable';
 import { cache, Const, history, util } from 'qmkit';
 import * as webapi from './webapi';
-import FormActor from './actor/form-actor';
-import Item from 'antd/lib/list/Item';
-import { array } from 'prop-types';
+import { fromJS } from 'immutable';
+import { message } from 'antd';
 
-export default class AppStore extends Store {
-  bindActor() {
-    return [new FormActor()];
-  }
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
 
-  constructor(props) {
-    super(props);
-    //debug
-    (window as any)._store = this;
-  }
 
-  //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
-  init = async () => {
-    webapi.getSiteInfo().then((resIco: any) => {
-      if (resIco.res.code == Const.SUCCESS_CODE) {
-        //logo
-        const logo = JSON.parse((resIco.res.context as any).pcLogo);
-        this.dispatch('login:logo', logo[0].url);
-        sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
-        //icon
-        const ico = (resIco.res.context as any).pcIco
-          ? JSON.parse((resIco.res.context as any).pcIco)
-          : null;
-        if (ico) {
-          const linkEle = document.getElementById('icoLink') as any;
-          linkEle.href = ico[0].url;
-          linkEle.type = 'image/x-icon';
-        }
-      }
-      this.dispatch('login:refresh', true);
-    });
-  };
-
-  /**
-   * 账户密码登录;
-   */
-  login = async (form) => {
-    const account = form.account;
-    const password = form.password;
-    const isRemember = form.isRemember;
+export async function login(form, oktaToken: string) {
     let base64 = new util.Base64();
-    const { res } = await webapi.login(
-      base64.urlEncode(account),
-      base64.urlEncode(password)
-    );
+    var res = {} as TResult;
+    if (oktaToken) {
+     const resOkta  = await webapi.getJwtToken(oktaToken) as any;
+     res = resOkta.res as TResult;
+    } else {
+      const account = form.account;
+      const password = form.password;
+      const resLocal  = await webapi.login(
+        base64.urlEncode(account),
+        base64.urlEncode(password)
+      ) as any ;
+      res = resLocal.res as TResult;
+    }
+    
+    debugger
     if ((res as any).code === Const.SUCCESS_CODE) {
-      if (isRemember) {
+      if (form.isRemember) {
         localStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
       }
       window.token = res.context.token;
@@ -63,6 +38,7 @@ export default class AppStore extends Store {
 
       // 获取登录人拥有的菜单
       const menusRes = (await webapi.fetchMenus()) as any;
+      debugger
       if (menusRes.res.code === Const.SUCCESS_CODE) {
         let dataList = fromJS(menusRes.res.context);
         if (window.companyType == 0) {
@@ -71,7 +47,7 @@ export default class AppStore extends Store {
           );
         }
 
-        let allGradeMenus = this._getChildren(
+        let allGradeMenus = _getChildren(
           dataList.filter((item) => item.get('grade') === 1),
           dataList
         );
@@ -126,7 +102,7 @@ export default class AppStore extends Store {
             if (hasHomeFunction) {
               history.push('/');
             } else {
-              let url = this._getUrl(allGradeMenus);
+              let url = _getUrl(allGradeMenus);
               history.push(url);
             }
             break;
@@ -146,7 +122,20 @@ export default class AppStore extends Store {
     }
   };
 
-  _getUrl = (allGradeMenus) => {
+ function _getChildren (list, dataList) {
+    return list.map((data) => {
+      const children = dataList.filter(
+        (item) => item.get('pid') == data.get('id')
+      );
+      if (!children.isEmpty()) {
+        data = data.set('children', _getChildren(children, dataList));
+      }
+      return data;
+    });
+  };
+
+  
+  function _getUrl(allGradeMenus) {
     if (!allGradeMenus) {
       message.error('No Menus');
     }
@@ -156,40 +145,6 @@ export default class AppStore extends Store {
       return firstMenus.url;
     } else {
       let currentMenus = menus[0] ? menus[0] : menus;
-      return this._getUrl(currentMenus.children[0]);
+      return _getUrl(currentMenus.children[0]);
     }
   };
-
-  /**
-   * 获取子菜单
-   * @param list
-   * @private
-   */
-  _getChildren = (list, dataList) => {
-    return list.map((data) => {
-      const children = dataList.filter(
-        (item) => item.get('pid') == data.get('id')
-      );
-      if (!children.isEmpty()) {
-        data = data.set('children', this._getChildren(children, dataList));
-      }
-      return data;
-    });
-  };
-
-  /**
-   *  输入
-   */
-  onInput = (param) => {
-    this.dispatch('login:input', param);
-  };
-
-  messageByResult(res) {
-    if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
-    } else {
-      //登录失败原因
-      message.error(res.message);
-    }
-  }
-}

@@ -26,45 +26,48 @@ export default class Main extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillMount() {
-    if (this.state.matchedPath != '/login') {
-      this.checkLogin(this.state.matchedPath);
+    console.log(this.props.location);
+    if (this.props.location.pathname != '/implicit/callback') {
+      if (this.state.matchedPath != '/login') {
+        this.checkLogin(this.state.matchedPath);
+      }
+      Fetch('/baseConfig').then((resIco: any) => {
+        if (resIco.res.code == Const.SUCCESS_CODE) {
+          if ((resIco.res as any).defaultLocalDateTime) {
+            sessionStorage.setItem(
+              'defaultLocalDateTime',
+              (resIco.res as any).defaultLocalDateTime
+            );
+          }
+          const ico = (resIco.res.context as any).pcIco
+            ? JSON.parse((resIco.res.context as any).pcIco)
+            : null;
+          if (ico) {
+            const linkEle = document.getElementById('icoLink') as any;
+            linkEle.href = ico[0].url;
+            linkEle.type = 'image/x-icon';
+          }
+        }
+      });
+      Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
+        if (resIco.res.code == Const.SUCCESS_CODE) {
+          if ((resIco.res as any).context) {
+            sessionStorage.setItem(
+              cache.SYSTEM_GET_CONFIG,
+              (resIco.res as any).context.currency.valueEn
+            ); //货币符号
+            sessionStorage.setItem(
+              cache.SYSTEM_GET_CONFIG_NAME,
+              (resIco.res as any).context.currency.name
+            ); //货币名称
+            sessionStorage.setItem(
+              cache.MAP_MODE,
+              (resIco.res as any).context.storeVO.prescriberMap
+            ); //货币名称
+          }
+        }
+      });
     }
-    Fetch('/baseConfig').then((resIco: any) => {
-      if (resIco.res.code == Const.SUCCESS_CODE) {
-        if ((resIco.res as any).defaultLocalDateTime) {
-          sessionStorage.setItem(
-            'defaultLocalDateTime',
-            (resIco.res as any).defaultLocalDateTime
-          );
-        }
-        const ico = (resIco.res.context as any).pcIco
-          ? JSON.parse((resIco.res.context as any).pcIco)
-          : null;
-        if (ico) {
-          const linkEle = document.getElementById('icoLink') as any;
-          linkEle.href = ico[0].url;
-          linkEle.type = 'image/x-icon';
-        }
-      }
-    });
-    Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
-      if (resIco.res.code == Const.SUCCESS_CODE) {
-        if ((resIco.res as any).context) {
-          sessionStorage.setItem(
-            cache.SYSTEM_GET_CONFIG,
-            (resIco.res as any).context.currency.valueEn
-          ); //货币符号
-          sessionStorage.setItem(
-            cache.SYSTEM_GET_CONFIG_NAME,
-            (resIco.res as any).context.currency.name
-          ); //货币名称
-          sessionStorage.setItem(
-            cache.MAP_MODE,
-            (resIco.res as any).context.storeVO.prescriberMap
-          ); //货币名称
-        }
-      }
-    });
   }
 
   handlePathMatched = (path) => {
@@ -74,7 +77,10 @@ export default class Main extends React.Component<any, any> {
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.location !== this.props.location) {
+    if (
+      nextProps.location !== this.props.location &&
+      this.props.location.pathname != '/implicit/callback'
+    ) {
       // navigated!
       this.setState({
         matchedPath: nextProps.location.pathname

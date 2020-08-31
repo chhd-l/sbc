@@ -1,13 +1,12 @@
 import React from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Col } from 'antd';
 const FormItem = Form.Item;
-const logo = require('../img/logo.png');
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login } from 'qmkit';
 
-export default class LoginForm extends React.Component<any, any> {
+export default class VerifyForm extends React.Component<any, any> {
   form;
 
   _store: Store;
@@ -30,76 +29,61 @@ export default class LoginForm extends React.Component<any, any> {
       <Form style={styles.loginForm}>
         <FormItem style={{ marginBottom: 15 }}>
           <div style={styles.header}>
-            <img style={styles.logo} src={loginLogo ? loginLogo : logo} />
+            <img style={styles.logo} src={loginLogo} />
           </div>
           <strong style={styles.title}>Store portal</strong>
         </FormItem>
-        <label style={styles.label}>Login Account</label>
+        <label style={styles.label}>
+          This service is dedicated to our customers only.
+          <br />
+          Please complete the information below to confirm your access
+        </label>
         <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('account', {
+          {getFieldDecorator('prescriberId', {
             rules: [{ required: true, message: 'Account cannot be empty' }]
-          })(
-            <Input
-              size="large"
-              prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-              placeholder="Please input your login account"
-            />
-          )}
+          })(<Input size="large" placeholder="Client ID" />)}
         </FormItem>
-        <label style={styles.label}>Password</label>
+        <label style={styles.labelClientName}>
+          * Your client ID is specified on your Royal Canin invoice. It can be
+          an e-mail address or a client number
+        </label>
         <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('password', {
+          {getFieldDecorator('prescriberName', {
             rules: [{ required: true, message: 'Password cannot be empty' }]
-          })(
-            <Input
+          })(<Input size="large" disabled={true} placeholder="ClientName" />)}
+        </FormItem>
+        <FormItem>
+          <Col span={10}>
+            <Button
+              type="primary"
               size="large"
-              prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
-              type="password"
-              placeholder="Password"
-            />
-          )}
-        </FormItem>
-        <FormItem>
-          {/*{getFieldDecorator('isRemember', {
-          })(
-            <Checkbox>记住账号</Checkbox>
-          )}*/}
-          {/* <a
-            style={{ float: 'left' }}
-            onClick={() => history.push('/company-register')}
-          >
-            免费注册
-          </a> */}
-          {/* <a
-            style={{ float: 'right' }}
-            onClick={() => history.push('/find-password')}
-          >
-            Forgot your password
-          </a> */}
-        </FormItem>
-        <FormItem>
-          <Button
-            type="primary"
-            size="large"
-            htmlType="submit"
-            style={styles.loginBtn}
-            onClick={(e) => this._handleLogin(e)}
-          >
-            Login
-          </Button>
+              htmlType="submit"
+              style={styles.loginBtn}
+              onClick={() => history.push('/login')}
+            >
+              Cancel
+            </Button>
+          </Col>
+          <Col span={4}></Col>
+          <Col span={10}>
+            <Button
+              type="primary"
+              size="large"
+              htmlType="submit"
+              style={styles.loginBtn}
+              onClick={(e) => this._handleLogin(e)}
+            >
+              Proceed
+            </Button>
+          </Col>
         </FormItem>
         <FormItem style={{ marginBottom: 0 }}>
           <div>
             <p
               style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
             >
-              {/* © 2017-2019 南京万米信息技术有限公司 */}© Royal Canin SAS 2020
+              © Royal Canin SAS 2020
             </p>
-            {/* <p
-              style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
-            >
-              版本号：{Const.COPY_VERSION}
-            </p> */}
           </div>
         </FormItem>
       </Form>
@@ -137,6 +121,11 @@ const styles = {
   loginBtn: {
     width: '100%'
   },
+  loginCancel: {
+    width: '100%',
+    background: '#fff',
+    color: '#e2001a'
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',
@@ -162,7 +151,13 @@ const styles = {
   },
   label: {
     fontFamily: 'DINPro-Medium',
-    fontSize: '19px',
+    fontSize: '14px',
+    color: '#B6B6B6',
+    letterSpacing: 0
+  },
+  labelClientName: {
+    fontFamily: 'DINPro-Medium',
+    fontSize: '12px',
     color: '#B6B6B6',
     letterSpacing: 0
   }

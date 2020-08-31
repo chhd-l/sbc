@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form } from 'antd';
 import { StoreProvider } from 'plume2';
-import LoginHome from './components/login-home';
-import AppStore from './store';
-const bg = require('./img/bg-1.png');
-const bg_login = require('./img/bg_login.png');
-import LoginForm from './components/login-form';
+import verifyForm from './components/verify-form';
+const bg_login = require('../login/img/bg_login.png');
+import AppStore from '../login/store';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Login extends React.Component<any, any> {
@@ -13,28 +11,19 @@ export default class Login extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      isRcLogin: false
-    };
-    this.loginRc = this.loginRc.bind(this);
+    this.state = {};
   }
-
-  loginRc = () => {
-    this.setState({
-      isRcLogin: true
-    });
-  };
 
   componentDidMount() {
     this.store.init();
   }
 
   render() {
-    const LoginFormDetail = Form.create({})(LoginForm);
-    return this.state.isRcLogin ? (
-      <div style={styles.container}>{<LoginFormDetail />}</div>
-    ) : (
-      <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
+    const VerifyFormDetail = Form.create({})(verifyForm);
+    return (
+      <div style={styles.container}>
+        <VerifyFormDetail />
+      </div>
     );
   }
 }

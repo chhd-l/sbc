@@ -339,7 +339,9 @@ export function requireLocalSrc(srcPath) {
 /**
  * 清除缓存并跳转登录页
  */
+
 export function logout() {
+  debugger
   const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
     .accountName;
   localStorage.removeItem(cache.LOGIN_DATA);
@@ -353,7 +355,7 @@ export function logout() {
   sessionStorage.removeItem(cache.THIRD_ACTIVE);
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
   sessionStorage.removeItem('PrescriberType');
-  history.push('/login');
+  // history.push('/login');
 }
 
 

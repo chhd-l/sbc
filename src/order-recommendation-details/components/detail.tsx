@@ -1,6 +1,15 @@
 import React from 'react';
 
-import { Table, Col, Button, Select, Switch, Popconfirm, message } from 'antd';
+import {
+  Table,
+  Col,
+  Button,
+  Select,
+  Switch,
+  Popconfirm,
+  message,
+  Modal
+} from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
@@ -12,8 +21,9 @@ const Option = Select.Option;
 //import { Const, util } from 'qmkit';
 //import { FormattedMessage } from 'react-intl';
 //import { bool } from 'prop-types';
-let checkNum = 0;
-let check = true;
+// let checkNum = 0;
+// let check = true;
+let loading = false;
 
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
@@ -21,8 +31,8 @@ export default class BillingDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       visible: false,
-      check: true,
-      showSwich: false
+      // check: true,
+      showSwich: true
     };
   }
 
@@ -51,10 +61,12 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    onSharing({
-      field: 'prescriberId',
-      value: employee.clinicsIds[0]
-    });
+    if (employee.clinicsIds) {
+      onSharing({
+        field: 'prescriberId',
+        value: employee.clinicsIds[0]
+      });
+    }
   }
 
   showProduct = (res) => {
@@ -70,37 +82,40 @@ export default class BillingDetails extends React.Component<any, any> {
       value: value
     });
   };
-  onValid = (e) => {
+  onValid = (check) => {
+    loading = true;
     const { onLinkStatus } = this.props.relaxProps;
-    if (this.state.showSwich == true) {
-      let linkStatus = e == true ? 0 : 1;
+    if (this.state.showSwich === true) {
+      let linkStatus = check === true ? 0 : 1;
       onLinkStatus({ linkStatus, id: history.location.state.id });
     } else {
       return;
     }
   };
-  confirm = (e) => {
-    this.setState({ showSwich: true });
-    console.log(e);
+  confirm = (check) => {
+    this.onValid(!check);
+    // this.setState({ showSwich: true });
+    // console.log(check);
     // message.success('Click on Yes');
   };
 
-  cancel = (e) => {
-    console.log(e);
-    this.setState({ showSwich: false });
-
-    // message.error('Click on No');
+  cancel = () => {
+    message.info('canceled');
   };
   render() {
-    const { detailProductList, createLinkType } = this.props.relaxProps;
+    const {
+      detailProductList,
+      createLinkType,
+      linkStatus
+    } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers =
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
-    check =
-      detailProductList && detailProductList.linkStatus == 0 ? true : false;
+    const check = +linkStatus === 0 ? true : false;
 
+    loading = false;
     return (
       <div style={styles.main}>
         <div
@@ -138,18 +153,17 @@ export default class BillingDetails extends React.Component<any, any> {
             {history.location.state ? (
               <Popconfirm
                 title="Are you sure delete this task?"
-                onConfirm={this.confirm}
+                onConfirm={() => this.confirm(check)}
                 onCancel={this.cancel}
                 okText="Yes"
                 cancelText="No"
-                disabled
               >
                 <Switch
-                  checkedChildren=" Valid "
-                  unCheckedChildren=" Invalid "
-                  key={check}
-                  defaultChecked={check}
-                  onChange={this.onValid}
+                  loading={loading}
+                  checkedChildren="Valid"
+                  unCheckedChildren="Invalid"
+                  checked={check}
+                  // onChange={this.onValid}
                 />
               </Popconfirm>
             ) : null}

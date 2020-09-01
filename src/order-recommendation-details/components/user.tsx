@@ -85,7 +85,12 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             recommendation/
             {detailProductList.base64Id ? detailProductList.base64Id : '--'}
           </span>
-          <span></span>
+          <span>
+            Recommendation NO:{' '}
+            {detailProductList.recommendationId
+              ? detailProductList.recommendationId
+              : '--'}
+          </span>
         </div>
       </div>
     );

@@ -17,11 +17,11 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '0': <StepOneForm />,
+ /* '0': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
-  '3': <StepFourForm />,
-  '4': <StepFiveForm />
+  '3': <StepFourForm />,*/
+  '0': <StepFiveForm />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -53,7 +53,7 @@ export default class ShopInfo extends React.Component<any, any> {
             >
               <Tabs.TabPane
                 tab={<FormattedMessage id="basicInformation" />}
-                key="0"
+                key="4"
               />
               <Tabs.TabPane
                 tab={<FormattedMessage id="ssoSetting" />}
@@ -64,7 +64,7 @@ export default class ShopInfo extends React.Component<any, any> {
                 key="2"
               />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
-              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
+              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="0" />
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}

@@ -58,7 +58,7 @@ export default class VerifyForm extends React.Component<any, any> {
               type="primary"
               size="large"
               htmlType="submit"
-              style={styles.loginBtn}
+              style={styles.loginCancel}
               onClick={() => history.push('/login')}
             >
               Cancel

@@ -68,7 +68,8 @@ const styles = {
     boxShadow: '0 4px 40px 0 rgba(190,190,190,0.35)',
     borderRadius: '12px',
     textAlign: 'center',
-    padding: '35px 0'
+    padding: '35px 0',
+    cursor: 'pointer'
   } as any,
   welcomeFont: {
     fontFamily: 'DINPro-Regular',

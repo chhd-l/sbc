@@ -7,7 +7,9 @@ const OktaLogout = () => {
   const { authState, authService } = useOktaAuth();
 
   const oktaLogout = async () => {
+    if(authState.isAuthenticated) {
       await authService.logout('/')  
+    }
   }
 
   const clickLogoff = () => {

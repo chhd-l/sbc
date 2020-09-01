@@ -26,7 +26,6 @@ export async function login(form, oktaToken: string) {
       res = resLocal.res as TResult;
     }
     
-    debugger
     if ((res as any).code === Const.SUCCESS_CODE) {
       if (form.isRemember) {
         localStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));

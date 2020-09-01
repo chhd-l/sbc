@@ -407,11 +407,8 @@ class MessageDetails extends Component<any, any> {
       webapi.getRecommendationList(params).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log('不知道返回值格式，所以没有赋值');
-
           this.setState({
-            objectNoList: [],
-            // objectNoList: res.context.subscriptionResponses,
+            objectNoList: res.context.recommendations,
             fetching: false
           });
         }
@@ -773,15 +770,15 @@ class MessageDetails extends Component<any, any> {
                             objectNoList.map((item, index) => (
                               <Option
                                 value={
-                                  item.id ||
+                                  item.recommendationId ||
                                   item.subscribeId ||
-                                  item.recommendationId
+                                  item.id
                                 }
                                 key={index}
                               >
-                                {item.id ||
-                                  item.subscribeId ||
-                                  item.recommendationId}
+                                {item.subscribeId ||
+                                  item.recommendationId ||
+                                  item.id}
                               </Option>
                             ))}
                         </Select>

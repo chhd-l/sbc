@@ -55,7 +55,7 @@ export default class StepConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue=""
-                label="Language"
+                label="Category"
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -65,7 +65,7 @@ export default class StepConsent extends Component<any, any> {
                 });*/
                 }}
               >
-                <Option value="">English</Option>
+                <Option value="">Prescriber</Option>
                 {/*{customerTypeArr.map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -91,7 +91,7 @@ export default class StepConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue=""
-                label="Category"
+                label="Filed type"
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -101,7 +101,7 @@ export default class StepConsent extends Component<any, any> {
                 });*/
                 }}
               >
-                <Option value="">Prescriber</Option>
+                <Option value="">Optional</Option>
                 {/*{customerTypeArr.map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -127,6 +127,27 @@ export default class StepConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue=""
+                label="Page"
+                style={{ width: 280 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  /*this.onFormChange({
+                  field: 'customerTypeId',
+                  value
+                });*/
+                }}
+              >
+                <Option value=""></Option>
+                {/*{customerTypeArr.map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}*/}
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <SelectGroup
+                defaultValue=""
                 label="Consent type"
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -137,7 +158,7 @@ export default class StepConsent extends Component<any, any> {
                 });*/
                 }}
               >
-                <Option value="">All</Option>
+                <Option value=""></Option>
                 {/*{customerTypeArr.map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -148,8 +169,31 @@ export default class StepConsent extends Component<any, any> {
           </div>
 
           <div className="edit">
-            <div className="edit-content">Consent title</div>
-            <UEditor id={'edit'} content="" />
+            <div className="edit-consent">
+              <FormItem>
+                <SelectGroup
+                  defaultValue=""
+                  label="Consent title"
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    /*this.onFormChange({
+                    field: 'customerTypeId',
+                    value
+                  });*/
+                  }}
+                >
+                  <Option value=""></Option>
+                  {/*{customerTypeArr.map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}*/}
+                </SelectGroup>
+              </FormItem>
+            </div>
+            <div className="edit-content">
+              <UEditor id={'edit'} content="" height="150px" />
+            </div>
           </div>
           <div className="edit-add space-between-align">
             <div className="edit-content">Consent detail</div>
@@ -182,6 +226,22 @@ export default class StepConsent extends Component<any, any> {
               }
             })}
           </div>
+        </div>
+        <div className="language">
+          <Select
+            defaultValue="English"
+            style={{ width: 120 }}
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              /*this.onFormChange({
+            field: 'customerTypeId',
+            value
+          });*/
+            }}
+          >
+            <Option value="English">English</Option>
+            <Option value="China">China</Option>
+          </Select>
         </div>
       </div>
     );

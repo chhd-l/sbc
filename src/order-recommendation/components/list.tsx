@@ -287,6 +287,12 @@ export default class ListView extends React.Component<any, any> {
         ? v.recommendationGoodsInfoRels
         : [];
       const a = [{ a: 1 }, { b: 2 }];
+      let amount = 0;
+      for (let i = 0; i < img.length; ++i) {
+        if (img[i].goodsInfo.marketPrice != null) {
+          amount += img[i].goodsInfo.marketPrice;
+        }
+      }
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={id}>
           <td colSpan={9} style={{ padding: 0 }}>
@@ -352,18 +358,23 @@ export default class ListView extends React.Component<any, any> {
                     {v.consumerEmail != null ? v.consumerEmail : '--'}
                   </td>
                   <td style={{ width: '14%' }}>
-                    {img.map((item, index) => {
+                    {amount}
+                    {/* {img.map((item, index) => {
                       return (
                         <div>
-                          {item.goodsInfo.retailPrice != null
-                            ? item.goodsInfo.retailPrice
-                            : '--'}
+                          {item.goodsInfo.marketPrice != null
+                          ? item.goodsInfo.marketPrice
+                          : '--'}
                         </div>
                       );
-                    })}
+                    })}*/}
                   </td>
                   <td style={{ width: '13%' }}>
-                    {v.linkStatus != null ? v.linkStatus : '--'}
+                    {v.linkStatus != null
+                      ? v.linkStatus == 0
+                        ? 'Valid'
+                        : 'Invalid'
+                      : '--'}
                   </td>
                   <td style={{ width: '15.4%' }}>
                     {v.prescriberId != null ? v.prescriberName : '--'}

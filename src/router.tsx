@@ -1,3 +1,5 @@
+import { LoginCallback } from '@okta/okta-react';
+
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
@@ -722,6 +724,8 @@ const routes = [
 
 const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
+  { path: '/login-verify', asyncComponent: () => import('./login-verify') },
+  { path: '/implicit/callback', component: LoginCallback },
   {
     path: '/find-password',
     asyncComponent: () => import('./find-password')

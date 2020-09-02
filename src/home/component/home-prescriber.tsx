@@ -94,13 +94,9 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerGrowTrendData(id);
   };
   componentDidMount() {
-    console.log(
-      sessionStorage.getItem('PrescriberType'),
-      'qwqqqqqqqqqqqqqqwewqewqewq'
-    );
     let o = {
       value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
-        .prescribers[0].prescriberId,
+        .prescribers[0].id,
       children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
         .prescribers[0].prescriberName
     };
@@ -334,10 +330,7 @@ export default class homePrescriber extends Component<any, any> {
                       style={{ width: '140px', marginBottom: '10px' }}
                     >
                       {allPrescribers.map((item) => (
-                        <Option
-                          value={item.prescriberId}
-                          key={item.prescriberId}
-                        >
+                        <Option value={item.id} key={item.id}>
                           {item.prescriberName}
                         </Option>
                       ))}

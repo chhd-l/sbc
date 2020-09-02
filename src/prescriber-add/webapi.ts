@@ -151,3 +151,57 @@ export function getRecommendationCode() {
     method: 'POST'
   });
 }
+
+export function getClinicsLites() {
+  return Fetch<TResult>('/prescriber/queryPrescriberIdAndName', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}
+
+export function getUsersByPrescriberId(filterParams = {}) {
+  return Fetch<TResult>('/customer/employees', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+} // todo
+
+export function deleteEmployeeByIds(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      employeeIds: employeeIds
+    })
+  });
+}
+
+export function disableEmployee(
+  employeeId,
+  accountDisableReason,
+  accountState
+) {
+  return Fetch<TResult>('/customer/employee/disable', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeId: employeeId,
+      accountDisableReason: accountDisableReason,
+      accountState: accountState
+    })
+  });
+}
+
+export function enableEmployee(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee/enable', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeIds: employeeIds
+    })
+  });
+}
+
+export function saveEmployee(employee) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'POST',
+    body: JSON.stringify(employee)
+  });
+}

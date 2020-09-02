@@ -70,6 +70,7 @@ export const getUserSiteInfo = () => {
 export function getJwtToken(oktaToken: string) {
   return Fetch<TResult>('/oktaStore/getJwtToken', {
     method: 'POST',
-    body: JSON.stringify({ oktaToken: oktaToken })
+    body: JSON.stringify({ oktaToken: 'Bearer ' +  oktaToken })
   });
 }
+

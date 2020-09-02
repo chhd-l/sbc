@@ -35,7 +35,7 @@ const B2BBoss = () => (
               <Switch>
                 {routeWithSubRoutes(homeRoutes, noop)}
                 <Route component={Main} />
-                <Route path="/implicit/callback" component={LoginCallback} />
+                {/* <Route path="/implicit/callback" component={LoginCallback} /> */}
               </Switch>
             </div>
           </Security>

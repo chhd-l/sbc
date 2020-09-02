@@ -18,7 +18,8 @@ export default class StepConsent extends Component<any, any> {
     super(props);
     this.state = {
       pageType: 'Detail',
-      content: []
+      content: [],
+      consentTitle: true
     };
   }
 
@@ -45,6 +46,10 @@ export default class StepConsent extends Component<any, any> {
   addDetail = () => {
     addContent.push(1);
     this.setState({ content: addContent });
+  };
+
+  handleConsentTitle = (e) => {
+    this.setState({ consentTitle: e.key == '0' ? true : false });
   };
 
   render() {
@@ -172,17 +177,23 @@ export default class StepConsent extends Component<any, any> {
             <div className="edit-consent">
               <FormItem>
                 <SelectGroup
-                  defaultValue=""
+                  defaultValue="Content"
                   label="Consent title"
-                  onChange={(value) => {
+                  onChange={(value, index) => {
                     value = value === '' ? null : value;
+                    this.handleConsentTitle(index);
                     /*this.onFormChange({
                     field: 'customerTypeId',
                     value
                   });*/
                   }}
                 >
-                  <Option value=""></Option>
+                  <Option key="0" value="Content">
+                    Content
+                  </Option>
+                  <Option key="1" value="URL">
+                    URL
+                  </Option>
                   {/*{customerTypeArr.map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
@@ -192,7 +203,22 @@ export default class StepConsent extends Component<any, any> {
               </FormItem>
             </div>
             <div className="edit-content">
-              <UEditor id={'edit'} content="" height="150px" />
+              {this.state.consentTitle == true ? (
+                <div>
+                  <UEditor id={'edit'} content="" height="150px" />
+                </div>
+              ) : (
+                <Input
+                  placeholder="Please enter URL address"
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    /* onFormChange({
+                   field: 'prescriberName',
+                   value: value
+                 });*/
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className="edit-add space-between-align">

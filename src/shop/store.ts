@@ -9,6 +9,7 @@ import moment from 'moment';
 import ModalActor from './actor/modal-actor';
 import CommonActor from './actor/common-actor';
 import CompanyActor from './actor/company-actor';
+import Consent from './actor/consent';
 import * as webApi from './webapi';
 
 export default class AppStore extends Store {
@@ -19,7 +20,12 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new ModalActor(), new CommonActor(), new CompanyActor()];
+    return [
+      new ModalActor(),
+      new CommonActor(),
+      new CompanyActor(),
+      new Consent()
+    ];
   }
 
   /**
@@ -1070,6 +1076,55 @@ export default class AppStore extends Store {
       this.dispatch('common: businessEnter', businessEnter);
     } else {
       message.error(res.message);
+    }
+  };
+
+  /* ------------ consent  ------------- */
+
+  getConsentList = async (param?: any) => {
+    this.dispatch('loading:start');
+    const { res } = await webApi.fetchConsentList(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('loading:end');
+        this.dispatch(
+          'consent:consentList',
+          fromJS(res.context != null ? res.context.consentVOList : [])
+        );
+      });
+    }
+  };
+
+  //语言
+  getLanguage = async (param?: any) => {
+    const { res } = await webApi.fetchQuerySysDictionary({
+      type: 'consentLanguage'
+    });
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('consent:consentLanguage', res.context.sysDictionaryVOS);
+      });
+    }
+  };
+
+  propSort = async (param?: any) => {
+    const { res } = await webApi.fetchPropSort(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //删除
+  getConsentDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
     }
   };
 }

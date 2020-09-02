@@ -59,6 +59,10 @@ export default class UEditor extends React.Component<any, any> {
       'backcolor',
       'selectall',
       'cleardoc',
+      /*"|",
+      "link",
+      "unlink",
+      "anchor",*/
       '|',
       'rowspacingtop',
       'rowspacingbottom',

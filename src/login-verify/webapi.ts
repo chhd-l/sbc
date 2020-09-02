@@ -13,12 +13,11 @@ export function getPrescriberById(id: string) {
   });
 }
 
-export function verifyUser(prescriberId: string, prescriberName) {
+export function verifyUser(filterParams = {}) {
   return Fetch<TResult>('/prescriber/verifyUser', {
     method: 'POST',
     body: JSON.stringify({
-      prescriberId: prescriberId,
-      prescriberName: prescriberName
+      ...filterParams
     })
   });
 }

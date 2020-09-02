@@ -265,6 +265,18 @@ export default class EditForm extends React.Component<any, any> {
               rules: [
                 // { required: false, message: 'employee Phone' }
                 // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorMinAndMax(
+                      rule,
+                      value,
+                      callback,
+                      'Phone',
+                      8,
+                      20
+                    );
+                  }
+                }
               ]
             })(<Input disabled={editDisable} />)}
           </FormItem>
@@ -447,7 +459,7 @@ export default class EditForm extends React.Component<any, any> {
                   showSearch
                   filterOption={this.filterOption}
                 >
-                  { this._renderPerscirbersOption() }
+                  {this._renderPerscirbersOption()}
                 </Select>
               )}
             </FormItem>
@@ -607,15 +619,14 @@ export default class EditForm extends React.Component<any, any> {
     });
   }
 
-  filterOption = (input, option: { props }) => {
-    return (
-      option.props.children
-        .toString()
-        .toLowerCase()
-        .indexOf(input.toLowerCase()) >= 0
-    );
-  };
-    
+  filterOption = (input, option: { props }) => {
+    return (
+      option.props.children
+        .toString()
+        .toLowerCase()
+        .indexOf(input.toLowerCase()) >= 0
+    );
+  };
 
   /**
    * 医院

@@ -220,17 +220,16 @@ export default class EmployeeList extends React.Component<any, any> {
                   href="javascript:void(0);"
                   onClick={() => switchModal(employeeId)}
                   className="iconfont iconbtn-disable"
-                >
-                  {/*<FormattedMessage id="disabled" />*/}
-                </a>
+                ></a>
               </Tooltip>
             ) : (
-              <a
-                href="javascript:void(0);"
-                onClick={() => onEnable(employeeId)}
-              >
-                <FormattedMessage id="enable" />
-              </a>
+              <Tooltip placement="top" title="Enabled">
+                <a
+                  href="javascript:void(0);"
+                  onClick={() => onEnable(employeeId)}
+                  className="iconfont iconEnabled"
+                ></a>
+              </Tooltip>
             )}
           </AuthWrapper>
         )}

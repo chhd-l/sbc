@@ -14,8 +14,19 @@ export async function login(form, oktaToken: string) {
     let base64 = new util.Base64();
     var res = {} as TResult;
     if (oktaToken) {
+      sessionStorage.setItem(
+        cache.OKTA_TOKEN,
+        oktaToken
+      );
      const resOkta  = await webapi.getJwtToken(oktaToken) as any;
      res = resOkta.res as TResult;
+     if ((res as any).code === Const.SUCCESS_CODE) {
+       if(res.context.checkStatus === 0) {
+         history.push('login-verify')
+         return
+       }
+     }
+
     } else {
       const account = form.account;
       const password = form.password;
@@ -37,7 +48,6 @@ export async function login(form, oktaToken: string) {
 
       // 获取登录人拥有的菜单
       const menusRes = (await webapi.fetchMenus()) as any;
-      debugger
       if (menusRes.res.code === Const.SUCCESS_CODE) {
         let dataList = fromJS(menusRes.res.context);
         if (window.companyType == 0) {

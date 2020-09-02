@@ -160,11 +160,11 @@ export function getClinicsLites() {
 }
 
 export function getUsersByPrescriberId(filterParams = {}) {
-  return Fetch<TResult>('/prescriber/getUsersByPrescriberId', {
+  return Fetch<TResult>('/customer/employees', {
     method: 'POST',
     body: JSON.stringify({ ...filterParams })
   });
-}
+} // todo
 
 export function deleteEmployeeByIds(employeeIds: string[]) {
   return Fetch<TResult>('/customer/employee', {
@@ -186,6 +186,15 @@ export function disableEmployee(
       employeeId: employeeId,
       accountDisableReason: accountDisableReason,
       accountState: accountState
+    })
+  });
+}
+
+export function enableEmployee(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee/enable', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeIds: employeeIds
     })
   });
 }

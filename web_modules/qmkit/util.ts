@@ -341,7 +341,6 @@ export function requireLocalSrc(srcPath) {
  */
 
 export function logout() {
-  debugger
   const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
     .accountName;
   localStorage.removeItem(cache.LOGIN_DATA);

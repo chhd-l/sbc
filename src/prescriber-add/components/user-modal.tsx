@@ -36,9 +36,9 @@ class UserModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title="Edit Prescriber User"
+        title={this.props.userForm.id ? 'Edit User' : 'Add User'}
         visible={this.props.visible}
-        onOk={this._next}
+        onOk={this.onSave}
         onCancel={() => this.cancel()}
       >
         <Form>
@@ -49,7 +49,7 @@ class UserModal extends Component<any, any> {
                 label={<FormattedMessage id="firstName" />}
                 hasFeedback
               >
-                {getFieldDecorator('firstName', {
+                {getFieldDecorator('employeeName', {
                   initialValue: this.props.userForm.firstName,
                   rules: [
                     {
@@ -72,7 +72,7 @@ class UserModal extends Component<any, any> {
                 label={<FormattedMessage id="lastName" />}
                 hasFeedback
               >
-                {getFieldDecorator('lastName', {
+                {getFieldDecorator('employeeName', {
                   initialValue: this.props.userForm.lastName,
                   rules: [
                     {
@@ -126,15 +126,6 @@ class UserModal extends Component<any, any> {
     );
   }
 
-  _next = () => {
-    const form = this.props.form;
-    form.validateFields(null, (errs) => {
-      if (!errs) {
-        this.onSave();
-      }
-    });
-  };
-
   cancel = () => {
     this.props.parent.closeUserModel();
     this.props.form.resetFields();
@@ -144,7 +135,11 @@ class UserModal extends Component<any, any> {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
       if (!errs) {
-        const { res } = await webapi.saveEmployee({});
+        let param = Object.assign({
+          employeeId: this.props.userForm.id,
+          ...values
+        });
+        const { res } = await webapi.saveEmployee(param);
         if (res.code === 'K-000000') {
           message.success('save successful');
           this.props.reflash();

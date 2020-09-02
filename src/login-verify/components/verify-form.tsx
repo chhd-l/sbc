@@ -1,10 +1,12 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Col } from 'antd';
+import { Form, Icon, Input, Button, Col, message } from 'antd';
 const FormItem = Form.Item;
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const, login } from 'qmkit';
+import { history, Const, login, cache } from 'qmkit';
+import * as webApi from '../webapi';
+const { Search } = Input;
 
 export default class VerifyForm extends React.Component<any, any> {
   form;
@@ -40,8 +42,14 @@ export default class VerifyForm extends React.Component<any, any> {
         </label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('prescriberId', {
-            rules: [{ required: true, message: 'Account cannot be empty' }]
-          })(<Input size="large" placeholder="Client ID" />)}
+            rules: [{ required: true, message: 'Client ID cannot be empty' }]
+          })(
+            <Search
+              size="large"
+              placeholder="Client ID"
+              onSearch={(value, e) => this.search(value, e)}
+            />
+          )}
         </FormItem>
         <label style={styles.labelClientName}>
           * Your client ID is specified on your Royal Canin invoice. It can be
@@ -49,8 +57,8 @@ export default class VerifyForm extends React.Component<any, any> {
         </label>
         <FormItem style={{ marginTop: 10 }}>
           {getFieldDecorator('prescriberName', {
-            rules: [{ required: true, message: 'Password cannot be empty' }]
-          })(<Input size="large" disabled={true} placeholder="ClientName" />)}
+            rules: [{ required: false }]
+          })(<Input size="large" disabled={true} placeholder="Client Name" />)}
         </FormItem>
         <FormItem>
           <Col span={10}>
@@ -90,14 +98,32 @@ export default class VerifyForm extends React.Component<any, any> {
     );
   }
 
-  _handleLogin = (e) => {
+  search = async (value, e) => {
+    e.preventDefault();
+    const { res } = await webApi.getPrescriberById(value);
+    const form = this.props.form as WrappedFormUtils;
+    if (res.code === 'K-000000' && res.context.prescriberName) {
+      form.setFieldsValue({ prescriberName: res.context.prescriberName });
+    } else {
+      message.error('No Prescriber');
+      form.setFieldsValue({ prescriberName: '' });
+    }
+  };
+
+  _handleLogin = async (e) => {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
-    form.validateFields(null, (errs, values) => {
+    form.validateFields(null, async (errs, values) => {
       //如果校验通过
       if (!errs) {
-        // (this._store as any).login(values);
-        login(values, '');
+        const { res } = await webApi.verifyUser({ values });
+        if (res.code === 'K-000000') {
+          if (sessionStorage.getItem(cache.OKTA_TOKEN)) {
+            login({}, sessionStorage.getItem(cache.OKTA_TOKEN));
+          } else {
+            message.error('OKTA not logged in');
+          }
+        }
       }
     });
   };

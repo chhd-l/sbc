@@ -92,14 +92,13 @@ export default class DitionaryList extends Component<any, any> {
     { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
   ) => {
     const query = this.state.searchForm;
+    this.setState({
+      loading: true
+    });
     const { res } = await webapi.fetchDictionaryList({
       ...query,
       pageNum,
       pageSize
-    });
-
-    this.setState({
-      loading: true
     });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;

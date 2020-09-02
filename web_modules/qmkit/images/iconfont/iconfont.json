@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "12754943",
+      "name": "Enabled",
+      "font_class": "Enabled",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
       "icon_id": "16540892",
       "name": "btn-delete",
       "font_class": "btn-delete",

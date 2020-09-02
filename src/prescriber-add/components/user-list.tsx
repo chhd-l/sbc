@@ -50,24 +50,23 @@ class UserList extends Component<any, any> {
       (this.getUsers = this.getUsers.bind(this));
     this.deleteUser = this.deleteUser.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
-    // this.getUsers()
+    this.getUsers();
   }
 
-  getUsers = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+  getUsers = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 5 }) => {
     const query = this.state.searchForm;
+    this.setState({
+      loading: true
+    });
     const { res } = await webapi.getUsersByPrescriberId({
       ...query,
       prescriberId: this.props.prescriberId,
       pageNum,
       pageSize
     });
-
-    this.setState({
-      loading: true
-    });
     if (res.code === 'K-000000') {
       let pagination = this.state.pagination;
-      let userData = res.context;
+      let userData = res.context.content;
       pagination.total = res.context.total;
       this.setState({
         pagination: pagination,
@@ -81,21 +80,24 @@ class UserList extends Component<any, any> {
     this.setState({
       pagination: pagination
     });
-    this.getUsers({ pageNum: pagination.current - 1, pageSize: 10 });
+    this.getUsers({ pageNum: pagination.current - 1, pageSize: 5 });
   }
 
   deleteUser = async (id) => {
     let employeeIds = [];
     employeeIds.push(id);
-    await webapi.deleteEmployeeByIds(employeeIds);
+    const { res } = await webapi.deleteEmployeeByIds(employeeIds);
+    if (res.code === 'K-000000') {
+      this.getUsers();
+    }
   };
 
   editUser = async (record) => {
     this.setState({
       userForm: Object.assign({
-        id: record.id,
-        firstName: record.firstName,
-        lastName: record.lastName,
+        id: record.employeeId,
+        firstName: record.employeeName,
+        lastName: record.employeeName,
         email: record.email
       }),
       userVisible: true
@@ -106,11 +108,19 @@ class UserList extends Component<any, any> {
     this.setState({
       disabledModalVisible: true,
       userForm: Object.assign({
-        id: record.id,
-        accountState: record.accountState
+        id: record.employeeId
       })
     });
   };
+
+  enableUser = async (record) => {
+    const { res } = await webapi.enableEmployee([record.employeeId]);
+    if (res.code === 'K-000000') {
+      this.getUsers();
+    }
+  };
+
+  auditUser = async (record) => {};
 
   sendEmail = async (id) => {};
 
@@ -128,20 +138,28 @@ class UserList extends Component<any, any> {
     });
   };
 
-  _handleOk = () => {
+  cancelDisabled = () => {
+    this.setState({
+      disabledModalVisible: false
+    });
+    this.props.form.setFieldsValue({
+      reason: null
+    });
+  };
+  handleDisabled = () => {
     const form = this.props.form;
     // 账号禁用
     form.validateFields(null, async (errs, values) => {
       //如果校验通过
       if (!errs) {
-        await webapi.disableEmployee(
-          this.state.userForm.id,
-          values.reason,
-          this.state.userForm.accountState
-        );
+        await webapi.disableEmployee(this.state.userForm.id, values.reason, 1);
         this.props.form.setFieldsValue({
           reason: null
         });
+        this.setState({
+          disabledModalVisible: false
+        });
+        this.getUsers();
       }
     });
   };
@@ -151,13 +169,13 @@ class UserList extends Component<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId =
       employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers[0].prescriberId
+        ? employee.prescribers[0].id
         : null;
     const columns = [
       {
         title: 'User name',
-        dataIndex: 'name',
-        key: 'name'
+        dataIndex: 'employeeName',
+        key: 'employeeName'
       },
       {
         title: 'User email',
@@ -174,8 +192,8 @@ class UserList extends Component<any, any> {
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) =>
-          prescriberId ? (
-            <span>
+          !prescriberId ? (
+            <span className="operation-box">
               {record.accountState !== 3 ? (
                 <Tooltip placement="top" title="Edit">
                   <a
@@ -184,27 +202,52 @@ class UserList extends Component<any, any> {
                   ></a>
                 </Tooltip>
               ) : null}
-
-              <Tooltip placement="top" title="Delete">
-                <a
-                  onClick={() => this.deleteUser(record.id)}
-                  className="iconfont iconDelete"
-                ></a>
-              </Tooltip>
-              <Tooltip placement="top" title="Disabled">
-                <a
-                  onClick={() => this.disabledUser(record)}
-                  className="iconfont iconbtn-disable"
-                ></a>
-              </Tooltip>
-            </span>
-          ) : (
-            <span>
-              <a onClick={() => this.sendEmail(record.id)}>Send</a>
               <Popconfirm
                 title="Are you sure to remove the user?"
                 onConfirm={() => {
-                  this.deleteUser(record.id);
+                  this.deleteUser(record.employeeId);
+                }}
+                okText="OK"
+                cancelText="Cancel"
+              >
+                <Tooltip placement="top" title="Delete">
+                  <a
+                    href="javascript:void(0);"
+                    className="iconfont iconDelete"
+                  ></a>
+                </Tooltip>
+              </Popconfirm>
+              {record.accountState !== 1 ? (
+                <Tooltip placement="top" title="Disabled">
+                  <a
+                    onClick={() => this.disabledUser(record)}
+                    className="iconfont iconbtn-disable"
+                  ></a>
+                </Tooltip>
+              ) : record.accountState === 3 ? (
+                <Tooltip placement="top" title="Audit">
+                  <a
+                    onClick={() => this.auditUser(record)}
+                    className="iconfont iconbtn-audit"
+                  ></a>
+                </Tooltip>
+              ) : (
+                <Tooltip placement="top" title="Enabled">
+                  <a
+                    onClick={() => this.enableUser(record)}
+                    className="iconfont iconEnabled"
+                  ></a>
+                </Tooltip>
+              )}
+            </span>
+          ) : (
+            <span>
+              <a onClick={() => this.sendEmail(record.employeeId)}>Send</a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="Are you sure to remove the user?"
+                onConfirm={() => {
+                  this.deleteUser(record.employeeId);
                 }}
                 okText="OK"
                 cancelText="Cancel"
@@ -219,6 +262,9 @@ class UserList extends Component<any, any> {
     ];
     return (
       <div>
+        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>
+          *New added user still needs to register before logging in store portal
+        </p>
         <div className="container-search">
           <Form layout="inline">
             <FormItem>
@@ -227,7 +273,7 @@ class UserList extends Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
-                    field: 'name',
+                    field: 'userName',
                     value
                   });
                 }}
@@ -241,7 +287,7 @@ class UserList extends Component<any, any> {
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
-                    field: 'name',
+                    field: 'email',
                     value
                   });
                 }}
@@ -256,17 +302,17 @@ class UserList extends Component<any, any> {
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   this.onFormChange({
-                    field: 'type',
+                    field: 'accountState',
                     value
                   });
                 }}
                 style={{ width: 80 }}
               >
                 <Option value="">All</Option>
-                <Option value="4">Inactivated</Option>
-                <Option value="3">To be audit</Option>
-                <Option value="0">Enabled</Option>
-                <Option value="1">Disabled</Option>
+                <Option value={'4'}>Inactivated</Option>
+                <Option value={'3'}>To be audit</Option>
+                <Option value={'0'}>Enabled</Option>
+                <Option value={'1'}>Disabled</Option>
               </SelectGroup>
             </FormItem>
             <Form.Item>
@@ -291,7 +337,13 @@ class UserList extends Component<any, any> {
             htmlType="submit"
             onClick={() => {
               this.setState({
-                userVisible: true
+                userVisible: true,
+                userForm: Object.assign({
+                  id: '',
+                  firstName: '',
+                  lastName: '',
+                  email: ''
+                })
               });
             }}
             style={{ marginBottom: '10px', marginTop: '10px' }}
@@ -319,17 +371,13 @@ class UserList extends Component<any, any> {
           maskClosable={false}
           title="Please input the reason for suspension"
           visible={this.state.disabledModalVisible}
-          onCancel={() => {}}
-          onOk={this._handleOk}
+          onCancel={this.cancelDisabled}
+          onOk={this.handleDisabled}
         >
           <Form>
             <FormItem>
               {getFieldDecorator('reason', {
                 rules: [
-                  {
-                    required: true,
-                    message: 'Please input the reason for suspension'
-                  },
                   {
                     validator: (rule, value, callback) => {
                       QMMethod.validatorTrimMinAndMax(

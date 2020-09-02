@@ -57,11 +57,22 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   handleOk = (e) => {
-    const { onSend, getLink } = this.props.relaxProps;
-    onSend(
-      'send',
-      Object.assign({}, this.verification(), { base64Id: getLink })
-    );
+    const { onSend, getLink, sharing } = this.props.relaxProps;
+    let sharingObj = sharing.toJS();
+    if (
+      sharingObj.consumerFirstName != '' &&
+      sharingObj.consumerLastName != '' &&
+      sharingObj.consumerEmail != '' &&
+      sharingObj.emailConsent != '' &&
+      util.checkEmail(sharingObj.consumerEmail) == true
+    ) {
+      onSend(
+        'send',
+        Object.assign({}, this.verification(), { base64Id: getLink })
+      );
+    } else {
+      this.verification();
+    }
   };
 
   handleCancel = (e) => {

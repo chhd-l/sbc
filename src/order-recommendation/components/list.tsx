@@ -290,7 +290,7 @@ export default class ListView extends React.Component<any, any> {
       let amount = 0;
       for (let i = 0; i < img.length; ++i) {
         if (img[i].goodsInfo.marketPrice != null) {
-          amount += img[i].goodsInfo.marketPrice;
+          amount += img[i].goodsInfo.marketPrice * img[i].recommendationNumber;
         }
       }
       return (

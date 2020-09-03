@@ -5,7 +5,7 @@ import { Relax } from 'plume2';
 import DragTable from '../components/dragTable';
 import Detail from '../components/consent-detail';
 import { bool } from 'prop-types';
-import { noop } from 'qmkit';
+import { noop, SelectGroup } from 'qmkit';
 
 const { Option } = Select;
 
@@ -85,7 +85,7 @@ export default class StepConsent extends Component<any, any> {
                   onChange={this.handleChange}
                 >
                   <Option value="Prescriber">Prescriber</Option>
-                  <Option value="value1">value1</Option>
+                  <Option value="Consumer">Consumer</Option>
                 </Select>
                 <Select
                   value={description}

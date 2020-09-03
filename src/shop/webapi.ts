@@ -266,3 +266,11 @@ export function fetchNewConsent(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+//switch
+export function fetchSwitch(param = {}) {
+  return Fetch<TResult>('/consent/switch', {
+    method: 'PUT',
+    body: JSON.stringify(param)
+  });
+}

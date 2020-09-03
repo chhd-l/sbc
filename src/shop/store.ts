@@ -1161,4 +1161,11 @@ export default class AppStore extends Store {
   onFormChange = (param) => {
     this.dispatch('consent:consentForm', param);
   };
+
+  // Switch
+  onSwitch = async (param?: any) => {
+    const { res } = await webApi.fetchSwitch(param);
+    if (res.code == Const.SUCCESS_CODE) {
+    }
+  };
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { noop, checkAuth } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
-import { Table, Popconfirm } from 'antd';
+import { Table, Popconfirm, Switch, message } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
@@ -23,6 +23,7 @@ class TabList extends React.Component<any, any> {
       getConsentDelete: Function;
       propSort: Function;
       showEditModal: Function;
+      onSwitch: Function;
     };
   };
 
@@ -30,7 +31,8 @@ class TabList extends React.Component<any, any> {
     consentList: 'consentList',
     getConsentDelete: noop,
     showEditModal: noop,
-    propSort: noop
+    propSort: noop,
+    onSwitch: noop
   };
 
   render() {
@@ -91,49 +93,77 @@ class TabList extends React.Component<any, any> {
       render: (_text, _record) => this._getOption(_record)
     }
   ];
-
+  onChange = (checked, id) => {
+    const { onSwitch } = this.props.relaxProps;
+    onSwitch({ id, openFlag: checked == true ? 0 : 1 });
+  };
+  confirm = (check, id) => {
+    this.onChange(!check, id);
+    // this.setState({ showSwich: true });
+    // console.log(check);
+    // message.success('Click on Yes');
+  };
+  cancel = () => {
+    message.info('canceled');
+  };
   /**
    * 获取操作项
    */
   _getOption = (rowInfo) => {
+    const { onSwitch } = this.props.relaxProps;
     rowInfo = fromJS(rowInfo);
-    let hasAuth =
-      checkAuth('f_store_goods_tab_1') || checkAuth('f_store_goods_tab_2');
+    const check = +rowInfo.get('openFlag') === 0 ? true : false;
 
+    //const check = +linkStatus === 0 ? true : false;
+    setTimeout(() => {
+      console.log(rowInfo.get('openFlag'));
+      // console.log(index,22222);
+    }, 100);
     return (
-      <div>
-        {/*默认商品详情 展示"-" */}
-        {rowInfo.get('isDefault') == 1
-          ? '-'
-          : hasAuth
-          ? [
-              // 非默认模板可编辑
-              checkAuth('f_store_goods_tab_1') && (
-                <a
-                  key="item1"
-                  style={styles.edit}
-                  onClick={this._showEditModal.bind(
-                    this,
-                    rowInfo.get('tabId'),
-                    rowInfo.get('tabName')
-                  )}
-                >
-                  Edit
-                </a>
-              ),
-              checkAuth('f_store_goods_tab_2') && (
-                <Popconfirm
-                  title="Confirm deletion?"
-                  onConfirm={() => {
-                    const { getConsentDelete } = this.props.relaxProps;
-                    getConsentDelete(rowInfo.get('id'));
-                  }}
-                >
-                  <a href="#">Delete</a>
-                </Popconfirm>
-              )
-            ]
-          : '-'}
+      <div className="operation flex-end">
+        <div
+          key="item1"
+          className="edit"
+          onClick={this._showEditModal.bind(
+            this,
+            rowInfo.get('tabId'),
+            rowInfo.get('tabName')
+          )}
+        >
+          Edit
+        </div>
+        <Popconfirm
+          className="deleted"
+          title="Confirm deletion?"
+          onConfirm={() => {
+            const { getConsentDelete } = this.props.relaxProps;
+            getConsentDelete(rowInfo.get('id'));
+          }}
+        >
+          <a href="#">Delete</a>
+        </Popconfirm>
+        <div className="switch">
+          <Popconfirm
+            title="Are you sure delete this task?"
+            onConfirm={() => this.confirm(check, rowInfo.get('id'))}
+            onCancel={this.cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Switch
+              //loading={loading}
+              checked={check}
+              // onChange={this.onValid}
+            />
+          </Popconfirm>
+          {/*<Switch
+            checked={rowInfo.get('openFlag') == 0}
+            onChange={(e) => onSwitch({id:rowInfo.get('id'), openFlag:e.valueOf()})}
+          />*/}
+          {/*<Switch checked={
+            rowInfo.get('openFlag') == '1' ? false : true
+          } onChange={(e) => this.onChange(e, rowInfo.get('id'))} />*/}
+        </div>
       </div>
     );
   };

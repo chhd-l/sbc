@@ -1127,4 +1127,31 @@ export default class AppStore extends Store {
       });
     }
   };
+
+  //new
+  consentSubmit = async (param?: any) => {
+    let v = param.toJS();
+    console.log(param.toJS());
+    if (
+      v.consentId != '' &&
+      v.consentCode != '' &&
+      v.consentTitleType != '' &&
+      v.consentTitle != ''
+    ) {
+      const { res } = await webApi.fetchNewConsent(v);
+      if (res.code == Const.SUCCESS_CODE) {
+        message.success('Submit successful！');
+        //history.push('/shop-info');
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      message.error('Submit Can not be empty！');
+    }
+  };
+
+  //add FormChange
+  onFormChange = (param) => {
+    this.dispatch('consent:consentForm', param);
+  };
 }

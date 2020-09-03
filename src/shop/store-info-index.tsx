@@ -17,16 +17,19 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
- /* '0': <StepOneForm />,
+  '4': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
-  '3': <StepFourForm />,*/
+  '3': <StepFourForm />,
   '0': <StepFiveForm />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class ShopInfo extends React.Component<any, any> {
   store: AppStore;
+  state = {
+    tab: 0
+  };
 
   UNSAFE_componentWillMount() {
     this.store.init();
@@ -53,7 +56,7 @@ export default class ShopInfo extends React.Component<any, any> {
             >
               <Tabs.TabPane
                 tab={<FormattedMessage id="basicInformation" />}
-                key="4"
+                key="0"
               />
               <Tabs.TabPane
                 tab={<FormattedMessage id="ssoSetting" />}
@@ -64,7 +67,7 @@ export default class ShopInfo extends React.Component<any, any> {
                 key="2"
               />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
-              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="0" />
+              <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}
@@ -72,9 +75,22 @@ export default class ShopInfo extends React.Component<any, any> {
           </div>
           <AuthWrapper functionName="f_storeInfoEdit_0">
             <div className="bar-button">
-              <Button type="primary" onClick={() => this._edit()}>
-                <FormattedMessage id="edit" />
-              </Button>
+              {currentTab != 0 ? (
+                <Button type="primary" onClick={() => this._edit()}>
+                  <FormattedMessage id="edit" />
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    this.store.consentSubmit(
+                      this.store.state().get('consentForm')
+                    )
+                  }
+                >
+                  Submit
+                </Button>
+              )}
             </div>
           </AuthWrapper>
         </div>

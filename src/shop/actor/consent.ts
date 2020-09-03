@@ -9,7 +9,20 @@ export default class ModalActor extends Actor {
       //列表
       consentList: [],
       //语言
-      consentLanguage: []
+      consentLanguage: [],
+      //new consent
+      consentForm: {
+        languageTypeId: 'Spanish',
+        consentCategory: 'Prescriber',
+        filedType: 'Optional',
+        consentPage: 'Landing page',
+        consentId: '',
+        consentCode: '',
+        consentType: 'Email in',
+        consentTitleType: '',
+        consentTitle: '',
+        consentDetailList: []
+      }
     };
   }
 
@@ -25,6 +38,12 @@ export default class ModalActor extends Actor {
   @Action('consent:consentLanguage')
   consentLanguage(state: IMap, res) {
     return state.set('consentLanguage', res);
+  }
+
+  //new
+  @Action('consent:consentForm')
+  consentForm(state: IMap, { field, value }) {
+    return state.setIn(['consentForm', field], value);
   }
 
   @Action('loading:start')

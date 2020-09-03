@@ -258,3 +258,11 @@ export function fetchQuerySysDictionary(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+//new consent
+export function fetchNewConsent(param = {}) {
+  return Fetch<TResult>('/consent/add', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

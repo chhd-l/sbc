@@ -16,7 +16,7 @@ export default class StepConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'List',
+      pageType: 'Detail',
       description: ''
     };
   }
@@ -99,7 +99,7 @@ export default class StepConsent extends Component<any, any> {
             >
               New consent
             </Button>
-            <div className="consent-table">
+            <div id="consent" className="consent-table">
               <DragTable />
             </div>
           </React.Fragment>

@@ -12,17 +12,18 @@ export default class ModalActor extends Actor {
       consentLanguage: [],
       //new consent
       consentForm: {
-        languageTypeId: 'Spanish',
+        languageTypeId: '2619',
         consentCategory: 'Prescriber',
         filedType: 'Optional',
         consentPage: 'Landing page',
         consentId: '',
         consentCode: '',
         consentType: 'Email in',
-        consentTitleType: '',
+        consentTitleType: 'Content',
         consentTitle: '',
         consentDetailList: []
-      }
+      },
+      pageChangeType: 'Detail'
     };
   }
 
@@ -44,6 +45,12 @@ export default class ModalActor extends Actor {
   @Action('consent:consentForm')
   consentForm(state: IMap, { field, value }) {
     return state.setIn(['consentForm', field], value);
+  }
+
+  //pageChangeType
+  @Action('consent:pageChange')
+  pageChange(state: IMap, res) {
+    return state.set('pageChangeType', res);
   }
 
   @Action('loading:start')

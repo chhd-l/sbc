@@ -11,6 +11,8 @@ const { Option } = Select;
 const FormItem = Form.Item;
 
 let addContent = [];
+let content1 = '';
+let content2 = '';
 
 @Relax
 export default class StepConsent extends Component<any, any> {
@@ -19,7 +21,13 @@ export default class StepConsent extends Component<any, any> {
     this.state = {
       pageType: 'Detail',
       content: [],
-      consentTitle: true
+      consentTitle: true,
+      detailType: false,
+      a: { contentTitle: '', contentBody: '', sort: '' },
+      b: { contentTitle: '', contentBody: '', sort: '' },
+      c: { contentTitle: '', contentBody: '', sort: '' },
+      d: { contentTitle: '', contentBody: '', sort: '' },
+      e: { contentTitle: '', contentBody: '', sort: '' }
     };
   }
 
@@ -30,6 +38,7 @@ export default class StepConsent extends Component<any, any> {
       onFormChange: Function;
       consentLanguage: any;
       consentForm: any;
+      refDetailEditor: Function;
     };
   };
 
@@ -38,7 +47,8 @@ export default class StepConsent extends Component<any, any> {
     dataList: 'dataList',
     onFormChange: noop,
     consentLanguage: 'consentLanguage',
-    consentForm: 'consentForm'
+    consentForm: 'consentForm',
+    refDetailEditor: noop
   };
 
   handleChange = (value) => {
@@ -51,11 +61,58 @@ export default class StepConsent extends Component<any, any> {
 
   addDetail = () => {
     addContent.push(1);
-    this.setState({ content: addContent });
+    this.setState({ content: addContent, detailType: true });
   };
 
   handleConsentTitle = (e) => {
     this.setState({ consentTitle: e.key == '0' ? true : false });
+  };
+
+  handleContent = (m, n, o) => {
+    const { onFormChange } = this.props.relaxProps;
+    let list = [];
+    if (o == 0) {
+      this.setState({
+        a: {
+          ...this.state.a,
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
+      });
+    }
+    if (o == 1) {
+      this.setState({
+        b: { contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 2) {
+      this.setState({
+        c: { contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 3) {
+      this.setState({
+        d: { contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 4) {
+      this.setState({
+        e: { contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+
+    list.push(
+      this.state.a,
+      this.state.b,
+      this.state.c,
+      this.state.d,
+      this.state.e
+    );
+    onFormChange({
+      field: 'consentDetailList',
+      value: list
+    });
   };
 
   componentDidMount() {
@@ -66,13 +123,12 @@ export default class StepConsent extends Component<any, any> {
     const {
       onFormChange,
       consentLanguage,
-      consentForm
+      consentForm,
+      refDetailEditor
     } = this.props.relaxProps;
     let defaultLanguage =
       consentLanguage == [] ? consentLanguage[0].description : '';
-    setTimeout(() => {
-      console.log(consentForm, 1111);
-    });
+
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -83,7 +139,6 @@ export default class StepConsent extends Component<any, any> {
                 defaultValue="Prescriber"
                 style={{ width: 280 }}
                 onChange={(value) => {
-                  console.log(value, 12333);
                   value = value === '' ? null : value;
                   onFormChange({
                     field: 'consentCategory',
@@ -200,10 +255,10 @@ export default class StepConsent extends Component<any, any> {
                     });
                   }}
                 >
-                  <Option key="0" value="Content">
+                  <Option key="Content" value="Content">
                     Content
                   </Option>
-                  <Option key="1" value="URL">
+                  <Option key="URL" value="URL">
                     URL
                   </Option>
                 </SelectGroup>
@@ -212,24 +267,38 @@ export default class StepConsent extends Component<any, any> {
             <div className="edit-content">
               {this.state.consentTitle == true ? (
                 <div>
-                  <UEditor id={'edit'} content="" height="150px" />
+                  <UEditor
+                    id={'edit'}
+                    content=""
+                    height="150px"
+                    onContentChange={(UEditor) => {
+                      onFormChange({
+                        field: 'consentTitle',
+                        value: UEditor
+                      });
+                    }}
+                  />
                 </div>
               ) : (
                 <Input
                   placeholder="Please enter URL address"
                   onChange={(e) => {
                     const value = (e.target as any).value;
-                    /* onFormChange({
-                   field: 'prescriberName',
-                   value: value
-                 });*/
+                    onFormChange({
+                      field: 'consentTitle',
+                      value: value
+                    });
                   }}
                 />
               )}
             </div>
           </div>
-          <div className="edit-add space-between-align">
-            <div className="edit-content">Consent detail</div>
+          <div className="edit-add">
+            {this.state.detailType == true ? (
+              <div className="edit-add-content space-between-align">
+                <div className="edit-content">Consent detail</div>
+              </div>
+            ) : null}
             <Button
               className="btn"
               type="primary"
@@ -245,12 +314,28 @@ export default class StepConsent extends Component<any, any> {
               if (i <= 4) {
                 return (
                   <div className="add">
-                    <div className="add-title">Detail {i + 1}</div>
+                    <div className="add-content space-between">
+                      <div className="add-title">Detail {i + 1}</div>
+                      <div className="add-i">
+                        <Input
+                          placeholder="Please enter URL keywords"
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            content1 = value;
+                            this.handleContent(content1, content2, i);
+                          }}
+                        />
+                      </div>
+                    </div>
                     <UEditor
                       id={'detail' + i}
                       content=""
                       height="320px"
                       key={i}
+                      onContentChange={(UEditor) => {
+                        content2 = UEditor;
+                        this.handleContent(content1, content2, i);
+                      }}
                     />
                   </div>
                 );
@@ -265,9 +350,10 @@ export default class StepConsent extends Component<any, any> {
             defaultValue={defaultLanguage}
             style={{ width: 120 }}
             onChange={(value) => {
+              console.log(value);
               value = value === '' ? null : value;
               onFormChange({
-                field: 'customerTypeId',
+                field: 'languageTypeId',
                 value
               });
             }}

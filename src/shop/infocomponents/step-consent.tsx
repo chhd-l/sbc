@@ -16,7 +16,7 @@ export default class StepConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Detail',
+      //pageType: 'Detail',
       description: ''
     };
   }
@@ -27,8 +27,10 @@ export default class StepConsent extends Component<any, any> {
       loading: boolean;
       dataList: any;
       consentLanguage: any;
+      pageChangeType: any;
       getConsentList: Function;
       getLanguage: Function;
+      pageChange: Function;
     };
   };
 
@@ -36,8 +38,10 @@ export default class StepConsent extends Component<any, any> {
     loading: 'loading',
     dataList: 'dataList',
     consentLanguage: 'consentLanguage',
+    pageChangeType: 'pageChangeType',
     getConsentList: noop,
-    getLanguage: noop
+    getLanguage: noop,
+    pageChange: noop
   };
 
   componentDidMount() {
@@ -50,9 +54,9 @@ export default class StepConsent extends Component<any, any> {
     console.log(`selected ${value}`);
   };
 
-  pageChange = (e) => {
+  /*pageChange = (e) => {
     this.setState({ pageType: e });
-  };
+  };*/
 
   onDescription = (e, v) => {
     console.log(e, 1111);
@@ -61,12 +65,16 @@ export default class StepConsent extends Component<any, any> {
   };
 
   render() {
-    const { consentLanguage } = this.props.relaxProps;
+    const {
+      consentLanguage,
+      pageChange,
+      pageChangeType
+    } = this.props.relaxProps;
     description = consentLanguage[0] ? consentLanguage[0].description : '';
 
     return (
       <div className="consent">
-        {this.state.pageType == 'List' ? (
+        {pageChangeType == 'List' ? (
           <React.Fragment>
             <div className="consent-select space-between">
               <div className="consent-select-text">Category</div>
@@ -95,7 +103,7 @@ export default class StepConsent extends Component<any, any> {
               type="primary"
               shape="round"
               icon="plus"
-              onClick={() => this.pageChange('Detail')}
+              onClick={() => pageChange('Detail')}
             >
               New consent
             </Button>
@@ -105,7 +113,7 @@ export default class StepConsent extends Component<any, any> {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div onClick={() => this.pageChange('List')}>
+            <div onClick={() => pageChange('List')}>
               <div className="detail-title">
                 <Icon type="left" /> Concent edit
               </div>

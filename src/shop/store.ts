@@ -1140,7 +1140,12 @@ export default class AppStore extends Store {
     ) {
       const { res } = await webApi.fetchNewConsent(v);
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Submit successful！');
+        this.transaction(() => {
+          message.success('Submit successful！');
+          this.pageChange('List');
+          this.getConsentList();
+        });
+
         //history.push('/shop-info');
       } else {
         message.error(res.message);
@@ -1148,6 +1153,11 @@ export default class AppStore extends Store {
     } else {
       message.error('Submit Can not be empty！');
     }
+  };
+
+  //pageChange
+  pageChange = (param) => {
+    this.dispatch('consent:pageChange', param);
   };
 
   //add FormChange

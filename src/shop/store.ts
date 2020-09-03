@@ -758,7 +758,6 @@ export default class AppStore extends Store {
           moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss')
         );
       }
-      console.log(sessionStorage.getItem('zoneDate'), 11111111111);
     }
   };
 
@@ -768,7 +767,6 @@ export default class AppStore extends Store {
    */
   GMTToStr(time) {
     let timezone = time; //目标时区时间，东八区
-    console.log('timezone:' + timezone);
     let offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
     let nowDate = new Date().getTime(); // 本地时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数
     let targetDate = new Date(
@@ -1131,7 +1129,6 @@ export default class AppStore extends Store {
   //new
   consentSubmit = async (param?: any) => {
     let v = param.toJS();
-    console.log(param.toJS());
     if (
       v.consentId != '' &&
       v.consentCode != '' &&

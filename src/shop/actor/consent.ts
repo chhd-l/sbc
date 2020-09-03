@@ -23,7 +23,7 @@ export default class ModalActor extends Actor {
         consentTitle: '',
         consentDetailList: []
       },
-      pageChangeType: 'Detail'
+      pageChangeType: 'List'
     };
   }
 

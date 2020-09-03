@@ -167,10 +167,10 @@ class TabList extends React.Component<any, any> {
     });
     let sort = [];
     let obj = { exchangeSortList: [] };
-    sortList.map((item) => {
+    sortList.map((item, index) => {
       sort.push({
         id: item.id,
-        sort: item.sort
+        sort: index
       });
     });
     obj.exchangeSortList = sort;

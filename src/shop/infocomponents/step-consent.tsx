@@ -88,7 +88,7 @@ export default class StepConsent extends Component<any, any> {
                   <Option value="value1">value1</Option>
                 </Select>
                 <Select
-                  value={this.state.description}
+                  value={description}
                   style={{ width: 120 }}
                   onChange={(e, v) => this.onDescription(e, v)}
                 >
@@ -115,7 +115,7 @@ export default class StepConsent extends Component<any, any> {
           <React.Fragment>
             <div onClick={() => pageChange('List')}>
               <div className="detail-title">
-                <Icon type="left" /> Concent edit
+                <Icon type="left" /> Consent edit
               </div>
             </div>
             <Detail />

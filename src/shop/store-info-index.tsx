@@ -17,11 +17,11 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '0': <StepOneForm />,
+  '4': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
-  '4': <StepFiveForm />
+  '0': <StepFiveForm />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })

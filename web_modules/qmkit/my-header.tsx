@@ -7,6 +7,7 @@ import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import value from '*.json';
 const Option = Select.Option;
+import OktaLogout from './okta/okta-logout'
 
 export default class MyHeader extends React.PureComponent<any, any> {
   constructor(props) {
@@ -22,7 +23,6 @@ export default class MyHeader extends React.PureComponent<any, any> {
     if (!loginInfo) {
       return null;
     }
-
     const accountName = loginInfo && loginInfo.employeeName;
     const storeName = loginInfo && loginInfo.storeName;
     const isMasterAccount = loginInfo && loginInfo.isMasterAccount;
@@ -176,9 +176,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           </a>
         </Menu.Item>
         <Menu.Item key="2">
-          <a href="#" onClick={() => this._handleLogout()}>
-            <Icon type="logout" /> Exit
-          </a>
+           <OktaLogout />
         </Menu.Item>
       </Menu>
     );
@@ -188,7 +186,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId =
       employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers[0].prescriberId
+        ? employee.prescribers[0].id
         : null;
 
     return (
@@ -247,13 +245,6 @@ export default class MyHeader extends React.PureComponent<any, any> {
       </Header>
     );
   }
-
-  /**
-   * 退出登录
-   */
-  _handleLogout = () => {
-    util.logout();
-  };
 
   _handlePreview = async () => {
     var prescriber = JSON.parse(sessionStorage.getItem(cache.PRESCRIBER_DATA));

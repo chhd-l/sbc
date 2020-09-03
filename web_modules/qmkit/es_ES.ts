@@ -790,5 +790,7 @@ export default {
   amountReceivable: 'Amount receivable',
   freightTemplate: 'Freight template',
   storeShipping: 'Store shipping',
-  singleProductShipping: 'Single product shipping'
+  singleProductShipping: 'Single product shipping',
+  firstName: 'First name',
+  lastName: 'Last name'
 };

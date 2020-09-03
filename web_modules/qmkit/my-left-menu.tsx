@@ -129,6 +129,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     //console.log( this.state.allGradeMenus,'++++++++++++++++');
 
     if (
+      currFirstMenu &&
       currFirstMenu.get('children') &&
       currFirstMenu.get('children').size > 0
     ) {

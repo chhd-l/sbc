@@ -1,3 +1,5 @@
+import { LoginCallback } from '@okta/okta-react';
+
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
@@ -127,6 +129,11 @@ const routes = [
     path: '/recomm-page-detail',
     exact: true,
     asyncComponent: () => import('./order-recommendation-details')
+  },
+  {
+    path: '/recomm-page-detail-new',
+    exact: true,
+    asyncComponent: () => import('./order-recommendation-details-new')
   },
   //订单-订单管理-退单详情
   {
@@ -717,6 +724,8 @@ const routes = [
 
 const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
+  { path: '/login-verify', asyncComponent: () => import('./login-verify') },
+  { path: '/implicit/callback', component: LoginCallback },
   {
     path: '/find-password',
     asyncComponent: () => import('./find-password')

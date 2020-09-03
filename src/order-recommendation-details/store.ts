@@ -112,7 +112,7 @@ export default class AppStore extends Store {
     const res = await webapi.fetchLinkStatus(param);
     if (res.res.code === Const.SUCCESS_CODE) {
       //message.success('switch successfully!');
-      this.dispatch('get:linkStatus', res.res.context);
+      this.dispatch('get:linkStatus', res.res.context.linkStatus);
     } else {
       message.error(res.res.message);
       if (res.res.code === 'K-110001') {

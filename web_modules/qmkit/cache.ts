@@ -19,5 +19,6 @@ export default {
   HIDE_EMPLOYEE_SETTING: 'HIDE_EMPLOYEE_SETTING',
   PRESCRIBER_DATA: 's2b-prescriber@data',
   EMPLOYEE_DATA: 's2b-employee@data',
-  MAP_MODE:'s2b-map-mode'
+  MAP_MODE:'s2b-map-mode',
+  OKTA_TOKEN: 'okta-token'
 };

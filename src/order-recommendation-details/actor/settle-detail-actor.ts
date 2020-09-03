@@ -57,7 +57,9 @@ export default class SettleDetailActor extends Actor {
   //detailProductList
   @Action('product:detailProductList')
   detailProductList(state: IMap, res) {
-    return state.set('detailProductList', res);
+    return state
+      .set('detailProductList', res)
+      .set('linkStatus', res.linkStatus);
   }
 
   //productList初始化

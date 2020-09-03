@@ -1,16 +1,29 @@
 import React, { useEffect } from 'react';
 import { Form } from 'antd';
 import { StoreProvider } from 'plume2';
-import LoginForm from './components/login-form';
-import OktaLogin from './components/okta-login';
+import LoginHome from './components/login-home';
+import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
-import AppStore from './store';
-import { Const } from 'qmkit';
+import LoginForm from './components/login-form';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Login extends React.Component<any, any> {
   store: AppStore;
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      isRcLogin: false
+    };
+    this.loginRc = this.loginRc.bind(this);
+  }
+
+  loginRc = () => {
+    this.setState({
+      isRcLogin: true
+    });
+  };
 
   componentDidMount() {
     this.store.init();
@@ -18,22 +31,13 @@ export default class Login extends React.Component<any, any> {
 
   render() {
     const LoginFormDetail = Form.create({})(LoginForm);
-
-    return (
-      <div style={styles.container}>
-        {this.store.state().get('refresh') && <LoginFormDetail />}
-        {/* <a className="rc-styled-link" onClick={() => {
-          window.location.href = Const.REACT_APP_RegisterPrefix + window.encodeURIComponent(Const.REACT_APP_RegisterCallback)
-        }}>
-          test
-        </a> */}
-      </div>
-
-      // <OktaLogin/>
+    return this.state.isRcLogin ? (
+      <div style={styles.container}>{<LoginFormDetail />}</div>
+    ) : (
+      <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
     );
   }
 }
-
 const styles = {
   container: {
     display: 'flex',

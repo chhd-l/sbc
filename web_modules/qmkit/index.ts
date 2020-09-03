@@ -35,6 +35,7 @@ import DatePickerLaber from './date-picker-laber';
 import * as Resource from './resource';
 import BreadCrumb from './bread-crumb';
 import VASConst from './VAS-Const';
+import { login } from './login/login'
 
 export {
   noop,
@@ -75,5 +76,6 @@ export {
   Resource,
   BreadCrumb,
   VASConst,
-  FindBusiness
+  FindBusiness,
+  login
 };

@@ -59,20 +59,20 @@ export function validatorTrimMinAndMax(
   maxNum
 ) {
   if (!value) {
-    callback(fieldText + '不能为空');
+    callback( 'Please input ' + fieldText);
     return;
   } else {
     const val = value.toString();
     if (val.trim().length <= 0) {
-      callback(fieldText + '不能为空');
+      callback('Please input ' + fieldText );
       return;
     }
     if (val.trim().length > 0 && val.trim().length < minNum) {
-      callback(fieldText + '长度必须为' + minNum + '-' + maxNum + '个字符之间');
+      callback('The length of '+ fieldText + ' must be between ' + minNum + '-' + maxNum)
       return;
     }
     if (val.trim().length > minNum && val.trim().length > maxNum) {
-      callback(fieldText + '长度必须为' + minNum + '-' + maxNum + '个字符之间');
+      callback('The length of '+ fieldText + ' must be between ' + minNum + '-' + maxNum)
       return;
     }
   }
@@ -104,11 +104,11 @@ export function validatorMinAndMax(
   } else {
     const val = value.toString();
     if (val.trim().length > 0 && val.trim().length < minNum) {
-      callback(fieldText + '长度必须为' + minNum + '-' + maxNum + '个字符之间');
+      callback('The length of '+ fieldText + ' must be between ' + minNum + '-' + maxNum)
       return;
     }
     if (val.trim().length > minNum && val.trim().length > maxNum) {
-      callback(fieldText + '长度必须为' + minNum + '-' + maxNum + '个字符之间');
+      callback('The length of '+ fieldText + ' must be between ' + minNum + '-' + maxNum)
       return;
     }
   }

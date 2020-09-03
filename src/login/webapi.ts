@@ -66,3 +66,10 @@ export const employee = () => {
 export const getUserSiteInfo = () => {
   return Fetch('/queryBaseConfig');
 };
+
+export function getJwtToken(oktaToken: string) {
+  return Fetch<TResult>('/oktaStore/getJwtToken', {
+    method: 'POST',
+    body: JSON.stringify({ oktaToken: oktaToken })
+  });
+}

@@ -141,7 +141,7 @@ export default class SearchHead extends Component<any, any> {
               shape="round"
               style={{ textAlign: 'center', marginRight: '20px' }}
               onClick={(e) => {
-                history.push('/recomm-page-detail');
+                history.push('/recomm-page-detail-new');
               }}
             >
               <span>New</span>

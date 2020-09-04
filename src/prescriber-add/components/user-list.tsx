@@ -54,13 +54,16 @@ class UserList extends Component<any, any> {
   }
 
   getUsers = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 5 }) => {
+    if (!this.props.prescriberKeyId) {
+      return;
+    }
     const query = this.state.searchForm;
     this.setState({
       loading: true
     });
     const { res } = await webapi.getUsersByPrescriberId({
       ...query,
-      prescriberId: this.props.prescriberId,
+      prescriberId: this.props.prescriberKeyId,
       pageNum,
       pageSize
     });
@@ -96,8 +99,8 @@ class UserList extends Component<any, any> {
     this.setState({
       userForm: Object.assign({
         id: record.employeeId,
-        firstName: record.employeeName,
-        lastName: record.employeeName,
+        firstName: record.employeeName ? record.employeeName.split(' ')[0] : '',
+        lastName: record.employeeName ? record.employeeName.split(' ')[1] : '',
         email: record.email
       }),
       userVisible: true
@@ -120,7 +123,13 @@ class UserList extends Component<any, any> {
     }
   };
 
-  auditUser = async (record) => {};
+  auditUser = async (record) => {
+    const { res } = await webapi.auditEmployee([record.employeeId]);
+    debugger;
+    if (res.code === 'K-000000') {
+      this.getUsers();
+    }
+  };
 
   sendEmail = async (id) => {};
 
@@ -164,6 +173,22 @@ class UserList extends Component<any, any> {
     });
   };
 
+  addUser = () => {
+    if (!this.props.alreadyHasPrescriber) {
+      message.error('Please add prescriber first');
+      return;
+    }
+    this.setState({
+      userVisible: true,
+      userForm: Object.assign({
+        id: '',
+        firstName: '',
+        lastName: '',
+        email: ''
+      })
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
@@ -185,79 +210,107 @@ class UserList extends Component<any, any> {
       {
         title: 'User status',
         dataIndex: 'accountState',
-        key: 'accountState'
+        key: 'accountState',
+        render: (text, record) => {
+          switch (text) {
+            case 0:
+              return 'Enabled';
+            case 1:
+              return 'Disabled';
+            case 3:
+              return 'Inactivated';
+            case 4:
+              return 'To be audit';
+            default:
+              return '';
+          }
+        }
       },
       {
         title: 'Operation',
         dataIndex: 'operation',
         key: 'operation',
-        render: (text, record) =>
-          !prescriberId ? (
-            <span className="operation-box">
-              {record.accountState !== 3 ? (
+        render: (text, record) => {
+          if (record.accountState === 0 || record.accountState === 1) {
+            return (
+              <span className="operation-box">
                 <Tooltip placement="top" title="Edit">
                   <a
                     onClick={() => this.editUser(record)}
                     className="iconfont iconEdit"
                   ></a>
                 </Tooltip>
-              ) : null}
-              <Popconfirm
-                title="Are you sure to remove the user?"
-                onConfirm={() => {
-                  this.deleteUser(record.employeeId);
-                }}
-                okText="OK"
-                cancelText="Cancel"
-              >
-                <Tooltip placement="top" title="Delete">
-                  <a
-                    href="javascript:void(0);"
-                    className="iconfont iconDelete"
-                  ></a>
-                </Tooltip>
-              </Popconfirm>
-              {record.accountState !== 1 ? (
-                <Tooltip placement="top" title="Disabled">
-                  <a
-                    onClick={() => this.disabledUser(record)}
-                    className="iconfont iconbtn-disable"
-                  ></a>
-                </Tooltip>
-              ) : record.accountState === 3 ? (
-                <Tooltip placement="top" title="Audit">
-                  <a
-                    onClick={() => this.auditUser(record)}
-                    className="iconfont iconbtn-audit"
-                  ></a>
-                </Tooltip>
-              ) : (
-                <Tooltip placement="top" title="Enabled">
-                  <a
-                    onClick={() => this.enableUser(record)}
-                    className="iconfont iconEnabled"
-                  ></a>
-                </Tooltip>
-              )}
-            </span>
-          ) : (
-            <span>
-              <a onClick={() => this.sendEmail(record.employeeId)}>Send</a>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="Are you sure to remove the user?"
-                onConfirm={() => {
-                  this.deleteUser(record.employeeId);
-                }}
-                okText="OK"
-                cancelText="Cancel"
-              >
-                <Tooltip placement="top" title="Remove">
-                  <a href="javascript:void(0);">Remove</a>
-                </Tooltip>
-              </Popconfirm>
-            </span>
-          )
+                <Popconfirm
+                  title="Are you sure to remove the user?"
+                  onConfirm={() => {
+                    this.deleteUser(record.employeeId);
+                  }}
+                  okText="OK"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      href="javascript:void(0);"
+                      className="iconfont iconDelete"
+                    ></a>
+                  </Tooltip>
+                </Popconfirm>
+                {record.accountState === 0 ? (
+                  <Tooltip placement="top" title="Disabled">
+                    <a
+                      onClick={() => this.disabledUser(record)}
+                      className="iconfont iconbtn-disable"
+                    ></a>
+                  </Tooltip>
+                ) : (
+                  <Tooltip placement="top" title="Enabled">
+                    <a
+                      onClick={() => this.enableUser(record)}
+                      className="iconfont iconEnabled"
+                    ></a>
+                  </Tooltip>
+                )}
+              </span>
+            );
+          }
+
+          if (record.accountState === 3 || record.accountState === 4) {
+            return (
+              <span className="operation-box">
+                {record.accountState === 3 ? (
+                  <Tooltip placement="top" title="Send">
+                    <a
+                      onClick={() => this.sendEmail(record.employeeId)}
+                      className="iconfont iconemail"
+                    ></a>
+                  </Tooltip>
+                ) : prescriberId ? (
+                  <Tooltip placement="top" title="Audit">
+                    <a
+                      onClick={() => this.auditUser(record)}
+                      className="iconfont iconaudit"
+                    ></a>
+                  </Tooltip>
+                ) : null}
+                <Popconfirm
+                  title="Are you sure to remove the user?"
+                  onConfirm={() => {
+                    this.deleteUser(record.employeeId);
+                  }}
+                  okText="OK"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      href="javascript:void(0);"
+                      className="iconfont iconDelete"
+                    ></a>
+                  </Tooltip>
+                </Popconfirm>
+              </span>
+            );
+          }
+        }
       }
     ];
     return (
@@ -309,8 +362,8 @@ class UserList extends Component<any, any> {
                 style={{ width: 80 }}
               >
                 <Option value="">All</Option>
-                <Option value={'4'}>Inactivated</Option>
-                <Option value={'3'}>To be audit</Option>
+                <Option value={'3'}>Inactivated</Option>
+                <Option value={'4'}>To be audit</Option>
                 <Option value={'0'}>Enabled</Option>
                 <Option value={'1'}>Disabled</Option>
               </SelectGroup>
@@ -335,17 +388,7 @@ class UserList extends Component<any, any> {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={() => {
-              this.setState({
-                userVisible: true,
-                userForm: Object.assign({
-                  id: '',
-                  firstName: '',
-                  lastName: '',
-                  email: ''
-                })
-              });
-            }}
+            onClick={this.addUser}
             style={{ marginBottom: '10px', marginTop: '10px' }}
           >
             <FormattedMessage id="add" />
@@ -365,6 +408,7 @@ class UserList extends Component<any, any> {
           userForm={this.state.userForm}
           visible={this.state.userVisible}
           parent={this}
+          prescriberKeyId={this.props.prescriberKeyId}
           reflash={() => this.getUsers()}
         />
         <Modal

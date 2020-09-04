@@ -6,6 +6,34 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "12255116",
+      "name": "185078 - email mail streamline",
+      "font_class": "email",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "6854347",
+      "name": "send",
+      "font_class": "send1",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "4349644",
+      "name": "send",
+      "font_class": "send",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "5671023",
+      "name": "audit",
+      "font_class": "audit",
+      "unicode": "e87b",
+      "unicode_decimal": 59515
+    },
+    {
       "icon_id": "12754943",
       "name": "Enabled",
       "font_class": "Enabled",
@@ -102,13 +130,6 @@
       "font_class": "btn-addsubvisionsaddcategory",
       "unicode": "e61d",
       "unicode_decimal": 58909
-    },
-    {
-      "icon_id": "16718530",
-      "name": "btn-audit",
-      "font_class": "btn-audit",
-      "unicode": "e61e",
-      "unicode_decimal": 58910
     },
     {
       "icon_id": "16718531",

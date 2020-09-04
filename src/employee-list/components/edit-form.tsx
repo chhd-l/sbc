@@ -115,6 +115,8 @@ export default class EditForm extends React.Component<any, any> {
     //部门树
     const departTree = _state.get('departTree');
     let employeeName = {};
+    let firstName = {};
+    let lastName = {};
     let employeeMobile = {};
     //邮箱
     let email = {};
@@ -134,6 +136,18 @@ export default class EditForm extends React.Component<any, any> {
     if (_state.get('edit')) {
       employeeName = {
         initialValue: employeeForm.get('employeeName')
+      };
+
+      firstName = {
+        initialValue: employeeForm.get('employeeName')
+          ? employeeForm.get('employeeName').split(' ')[0]
+          : ''
+      };
+
+      lastName = {
+        initialValue: employeeForm.get('employeeName')
+          ? employeeForm.get('employeeName').split(' ')[1]
+          : ''
       };
 
       employeeMobile = {
@@ -187,34 +201,69 @@ export default class EditForm extends React.Component<any, any> {
         <Row>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="employeeName" />}
+            label={<FormattedMessage id="firstName" />}
             hasFeedback
           >
-            {getFieldDecorator('employeeName', {
-              ...employeeName,
+            {getFieldDecorator('firstName', {
+              ...firstName,
               rules: [
                 {
                   required: true,
-                  whitespace: true,
-                  message: 'Please input user name'
+                  whitespace: false,
+                  message: 'Please input first name'
                 },
                 {
                   min: 1,
                   max: 20,
                   message: '1-20 characters'
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorWhiteSpace(
+                      rule,
+                      value,
+                      callback,
+                      'firstName'
+                    );
+                  }
                 }
-                // {
-                //   validator: (rule, value, callback) => {
-                //     QMMethod.validatorTrimMinAndMax(
-                //       rule,
-                //       value,
-                //       callback,
-                //       '员工姓名',
-                //       1,
-                //       20
-                //     );
-                //   }
-                // }
+              ]
+            })(
+              <Input
+                disabled={editDisable}
+                placeholder="Only 1-20 characters"
+              />
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="lastName" />}
+            hasFeedback
+          >
+            {getFieldDecorator('lastName', {
+              ...lastName,
+              rules: [
+                {
+                  required: true,
+                  whitespace: false,
+                  message: 'Please input last name'
+                },
+                {
+                  min: 1,
+                  max: 20,
+                  message: '1-20 characters'
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorWhiteSpace(
+                      rule,
+                      value,
+                      callback,
+                      'lastName'
+                    );
+                  }
+                }
               ]
             })(
               <Input
@@ -240,13 +289,11 @@ export default class EditForm extends React.Component<any, any> {
                 },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
+                    QMMethod.validatorWhiteSpace(
                       rule,
                       value,
                       callback,
-                      'Email',
-                      0,
-                      50
+                      'Email'
                     );
                   }
                 }

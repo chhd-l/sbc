@@ -4,7 +4,7 @@ const FormItem = Form.Item;
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const, login, cache } from 'qmkit';
+import { history, Const, login, cache, OktaLogout } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
 
@@ -62,15 +62,7 @@ export default class VerifyForm extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <Col span={10}>
-            <Button
-              type="primary"
-              size="large"
-              htmlType="submit"
-              style={styles.loginCancel}
-              onClick={() => history.push('/login')}
-            >
-              Cancel
-            </Button>
+            <OktaLogout type="button" text="Cancel" />
           </Col>
           <Col span={4}></Col>
           <Col span={10}>

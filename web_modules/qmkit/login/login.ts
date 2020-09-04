@@ -18,14 +18,14 @@ export async function login(form, oktaToken: string) {
         cache.OKTA_TOKEN,
         oktaToken
       );
-     const resOkta  = await webapi.getJwtToken(oktaToken) as any;
-     res = resOkta.res as TResult;
-     if ((res as any).code === Const.SUCCESS_CODE) {
-       if(res.context.checkStatus === 0) {
-         history.push('login-verify')
-         return
-       }
-     }
+      const resOkta  = await webapi.getJwtToken(oktaToken) as any;
+      res = resOkta.res as TResult;
+      if ((res as any).code === Const.SUCCESS_CODE) {
+        if(res.context.checkState === 1) { // Not checked
+          history.push('login-verify')
+          return
+        }
+      }
 
     } else {
       const account = form.account;

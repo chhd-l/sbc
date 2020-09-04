@@ -176,7 +176,7 @@ export default class MyHeader extends React.PureComponent<any, any> {
           </a>
         </Menu.Item>
         <Menu.Item key="2">
-           <OktaLogout />
+           <OktaLogout type="link" text="Exit"/>
         </Menu.Item>
       </Menu>
     );

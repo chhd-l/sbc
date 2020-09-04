@@ -4,7 +4,7 @@ import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import DragTable from '../components/dragTable';
 import Detail from '../components/consent-detail';
-import { bool } from 'prop-types';
+//import { bool } from 'prop-types';
 import { noop, SelectGroup } from 'qmkit';
 
 const { Option } = Select;
@@ -48,6 +48,11 @@ export default class StepConsent extends Component<any, any> {
     const { getConsentList, getLanguage } = this.props.relaxProps;
     getConsentList();
     getLanguage();
+    const showColumnInfo = async (id) => {
+      /*const qianduanzhidian = await getZhihuColumn('qianduanzhidian')
+      console.log(`name:${FrontendMagazine.name}`)*/
+    };
+    showColumnInfo();
   }
 
   handleChange = (value) => {
@@ -61,7 +66,7 @@ export default class StepConsent extends Component<any, any> {
   onDescription = (e, v) => {
     console.log(e, 1111);
     console.log(v, 2222);
-    this.setState({ description: v.props.children });
+    this.setState({ description: description });
   };
 
   render() {
@@ -88,12 +93,16 @@ export default class StepConsent extends Component<any, any> {
                   <Option value="Consumer">Consumer</Option>
                 </Select>
                 <Select
-                  value={description}
+                  value={this.state.description}
                   style={{ width: 120 }}
                   onChange={(e, v) => this.onDescription(e, v)}
                 >
                   {consentLanguage.map((item) => {
-                    return <Option value={item.id}>{item.description}</Option>;
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.description}
+                      </Option>
+                    );
                   })}
                 </Select>
               </div>

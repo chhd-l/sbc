@@ -72,7 +72,11 @@ class TabList extends React.Component<any, any> {
     {
       title: 'Consent title',
       dataIndex: 'consentTitle',
-      key: 'consentTitle'
+      key: 'consentTitle',
+      render: (text) => {
+        let html = { __html: text };
+        return <div dangerouslySetInnerHTML={html}></div>;
+      }
     },
     {
       title: 'Consent Id',

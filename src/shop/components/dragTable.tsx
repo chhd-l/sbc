@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { noop, checkAuth } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
-import { Table, Popconfirm, Switch, message } from 'antd';
+import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
@@ -24,6 +24,8 @@ class TabList extends React.Component<any, any> {
       propSort: Function;
       showEditModal: Function;
       onSwitch: Function;
+      pageChange: Function;
+      linkStatus: any;
     };
   };
 
@@ -32,7 +34,9 @@ class TabList extends React.Component<any, any> {
     getConsentDelete: noop,
     showEditModal: noop,
     propSort: noop,
-    onSwitch: noop
+    onSwitch: noop,
+    pageChange: noop,
+    linkStatus: 'linkStatus'
   };
 
   render() {
@@ -95,6 +99,8 @@ class TabList extends React.Component<any, any> {
   ];
   onChange = (checked, id) => {
     const { onSwitch } = this.props.relaxProps;
+    //let linkStatus = checked === true ? 0 : 1;
+
     onSwitch({ id, openFlag: checked == true ? 0 : 1 });
   };
   confirm = (check, id) => {
@@ -110,28 +116,20 @@ class TabList extends React.Component<any, any> {
    * 获取操作项
    */
   _getOption = (rowInfo) => {
-    const { onSwitch } = this.props.relaxProps;
+    const { onSwitch, pageChange, linkStatus } = this.props.relaxProps;
     rowInfo = fromJS(rowInfo);
     const check = +rowInfo.get('openFlag') === 0 ? true : false;
+    // const check = +linkStatus === 0 ? true : false;
 
-    //const check = +linkStatus === 0 ? true : false;
-    setTimeout(() => {
-      console.log(rowInfo.get('openFlag'));
-      // console.log(index,22222);
-    }, 100);
     return (
       <div className="operation flex-end">
-        <div
-          key="item1"
-          className="edit"
-          onClick={this._showEditModal.bind(
-            this,
-            rowInfo.get('tabId'),
-            rowInfo.get('tabName')
-          )}
-        >
-          Edit
-        </div>
+        <Tooltip placement="top" title="Edit">
+          <a
+            href="javascript:void(0)"
+            onClick={() => pageChange('Detail', rowInfo.get('id'))}
+            className="iconfont iconEdit"
+          ></a>
+        </Tooltip>
         <Popconfirm
           className="deleted"
           title="Confirm deletion?"
@@ -140,7 +138,9 @@ class TabList extends React.Component<any, any> {
             getConsentDelete(rowInfo.get('id'));
           }}
         >
-          <a href="#">Delete</a>
+          <Tooltip placement="top" title="Delete">
+            <a href="javascript:void(0)" className="iconfont iconDelete"></a>
+          </Tooltip>
         </Popconfirm>
         <div className="switch">
           <Popconfirm

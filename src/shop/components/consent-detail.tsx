@@ -14,6 +14,7 @@ let addContent = [];
 let content1 = '';
 let content2 = '';
 
+let con = '';
 @Relax
 export default class StepConsent extends Component<any, any> {
   constructor(props) {
@@ -27,7 +28,8 @@ export default class StepConsent extends Component<any, any> {
       b: { contentTitle: '', contentBody: '', sort: '' },
       c: { contentTitle: '', contentBody: '', sort: '' },
       d: { contentTitle: '', contentBody: '', sort: '' },
-      e: { contentTitle: '', contentBody: '', sort: '' }
+      e: { contentTitle: '', contentBody: '', sort: '' },
+      category: ''
     };
   }
 
@@ -39,6 +41,8 @@ export default class StepConsent extends Component<any, any> {
       consentLanguage: any;
       consentForm: any;
       refDetailEditor: Function;
+      editList: any;
+      editId: any;
     };
   };
 
@@ -48,7 +52,9 @@ export default class StepConsent extends Component<any, any> {
     onFormChange: noop,
     consentLanguage: 'consentLanguage',
     consentForm: 'consentForm',
-    refDetailEditor: noop
+    refDetailEditor: noop,
+    editList: 'editList',
+    editId: 'editId'
   };
 
   handleChange = (value) => {
@@ -116,19 +122,36 @@ export default class StepConsent extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { consentLanguage } = this.props.relaxProps;
+    const { editList, consentForm } = this.props.relaxProps;
+    console.log(consentForm.toJS().consentCategory, 222222);
+
+    con = consentForm.toJS().consentCategory;
+    console.log(con, 111111);
   }
+
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {}
 
   render() {
     const {
       onFormChange,
       consentLanguage,
       consentForm,
-      refDetailEditor
+      refDetailEditor,
+      editList,
+      editId
     } = this.props.relaxProps;
+
+    setTimeout(() => {
+      console.log(editList);
+      console.log(editId);
+    });
+
     let defaultLanguage =
       consentLanguage == [] ? consentLanguage[0].description : '';
-
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -139,7 +162,6 @@ export default class StepConsent extends Component<any, any> {
                 defaultValue="Prescriber"
                 style={{ width: 280 }}
                 onChange={(value) => {
-                  value = value === '' ? null : value;
                   onFormChange({
                     field: 'consentCategory',
                     value

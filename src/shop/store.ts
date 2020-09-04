@@ -1139,7 +1139,7 @@ export default class AppStore extends Store {
       if (res.code == Const.SUCCESS_CODE) {
         this.transaction(() => {
           message.success('Submit successful！');
-          this.pageChange('List');
+          this.pageChange('List', null);
           this.getConsentList();
         });
 
@@ -1153,8 +1153,19 @@ export default class AppStore extends Store {
   };
 
   //pageChange
-  pageChange = (param) => {
+  pageChange = (param, id) => {
+    let a = this.state().get('consentForm').toJS();
+    for (let key in a) {
+      a[key] = '';
+    }
+    console.log(a, 111111);
+    this.dispatch('consent:editId', null);
+    this.dispatch('consent:consentForm', a);
+
     this.dispatch('consent:pageChange', param);
+    if (id) {
+      this.onEditList(id);
+    }
   };
 
   //add FormChange
@@ -1166,6 +1177,21 @@ export default class AppStore extends Store {
   onSwitch = async (param?: any) => {
     const { res } = await webApi.fetchSwitch(param);
     if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //fetchEditList
+  onEditList = async (param?: any) => {
+    const { res } = await webApi.fetchEditList(param);
+    console.log(res, 1111111111111);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      console.log(param, 222222222);
+      this.dispatch('consent:editList', res.context.consentAndDetailVO);
+      this.dispatch('consent:editId', param);
     }
   };
 }

@@ -23,7 +23,9 @@ export default class ModalActor extends Actor {
         consentTitle: '',
         consentDetailList: []
       },
-      pageChangeType: 'List'
+      pageChangeType: 'List',
+      editList: null,
+      editId: null
     };
   }
 
@@ -51,6 +53,16 @@ export default class ModalActor extends Actor {
   @Action('consent:pageChange')
   pageChange(state: IMap, res) {
     return state.set('pageChangeType', res);
+  }
+
+  //editList
+  @Action('consent:editList')
+  editList(state: IMap, res) {
+    return state.set('editList', res).set('editId', res);
+  }
+  @Action('consent:editId')
+  editId(state: IMap, res) {
+    return state.set('editId', res);
   }
 
   @Action('loading:start')

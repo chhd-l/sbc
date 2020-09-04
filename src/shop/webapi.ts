@@ -274,3 +274,10 @@ export function fetchSwitch(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+//edit-list
+export function fetchEditList(param = {}) {
+  return Fetch(`/consent/${param}`, {
+    method: 'GET'
+  });
+}

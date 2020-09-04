@@ -9,6 +9,7 @@ import moment from 'moment';
 import ModalActor from './actor/modal-actor';
 import CommonActor from './actor/common-actor';
 import CompanyActor from './actor/company-actor';
+import Consent from './actor/consent';
 import * as webApi from './webapi';
 
 export default class AppStore extends Store {
@@ -19,7 +20,12 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new ModalActor(), new CommonActor(), new CompanyActor()];
+    return [
+      new ModalActor(),
+      new CommonActor(),
+      new CompanyActor(),
+      new Consent()
+    ];
   }
 
   /**
@@ -752,7 +758,6 @@ export default class AppStore extends Store {
           moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss')
         );
       }
-      console.log(sessionStorage.getItem('zoneDate'), 11111111111);
     }
   };
 
@@ -762,7 +767,6 @@ export default class AppStore extends Store {
    */
   GMTToStr(time) {
     let timezone = time; //目标时区时间，东八区
-    console.log('timezone:' + timezone);
     let offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
     let nowDate = new Date().getTime(); // 本地时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数
     let targetDate = new Date(
@@ -1071,5 +1075,90 @@ export default class AppStore extends Store {
     } else {
       message.error(res.message);
     }
+  };
+
+  /* ------------ consent  ------------- */
+
+  getConsentList = async (param?: any) => {
+    this.dispatch('loading:start');
+    const { res } = await webApi.fetchConsentList(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('loading:end');
+        this.dispatch(
+          'consent:consentList',
+          fromJS(res.context != null ? res.context.consentVOList : [])
+        );
+      });
+    }
+  };
+
+  //语言
+  getLanguage = async (param?: any) => {
+    const { res } = await webApi.fetchQuerySysDictionary({
+      type: 'consentLanguage'
+    });
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('consent:consentLanguage', res.context.sysDictionaryVOS);
+      });
+    }
+  };
+
+  propSort = async (param?: any) => {
+    const { res } = await webApi.fetchPropSort(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //删除
+  getConsentDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //new
+  consentSubmit = async (param?: any) => {
+    let v = param.toJS();
+    if (
+      v.consentId != '' &&
+      v.consentCode != '' &&
+      v.consentTitleType != '' &&
+      v.consentTitle != ''
+    ) {
+      const { res } = await webApi.fetchNewConsent(v);
+      if (res.code == Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          message.success('Submit successful！');
+          this.pageChange('List');
+          this.getConsentList();
+        });
+
+        //history.push('/shop-info');
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      message.error('Submit Can not be empty！');
+    }
+  };
+
+  //pageChange
+  pageChange = (param) => {
+    this.dispatch('consent:pageChange', param);
+  };
+
+  //add FormChange
+  onFormChange = (param) => {
+    this.dispatch('consent:consentForm', param);
   };
 }

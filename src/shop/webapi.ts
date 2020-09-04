@@ -225,3 +225,44 @@ export const saveStoreContentInfo = (info) => {
     body: JSON.stringify(info)
   });
 };
+
+/* --------- consent  ----------*/
+
+//consentList
+export function fetchConsentList(param = {}) {
+  return Fetch<TResult>('/consent/list', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+//排序
+export function fetchPropSort(param = {}) {
+  return Fetch<TResult>('/consent/exchangeSort', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+//删除
+export const fetchConsentDelete = (params) => {
+  return Fetch(`/consent/${params}`, {
+    method: 'DELETE'
+  });
+};
+
+//语言字典
+export function fetchQuerySysDictionary(param = {}) {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+//new consent
+export function fetchNewConsent(param = {}) {
+  return Fetch<TResult>('/consent/add', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

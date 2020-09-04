@@ -27,6 +27,9 @@ const PAIN = {
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class ShopInfo extends React.Component<any, any> {
   store: AppStore;
+  state = {
+    tab: 0
+  };
 
   UNSAFE_componentWillMount() {
     this.store.init();
@@ -72,9 +75,22 @@ export default class ShopInfo extends React.Component<any, any> {
           </div>
           <AuthWrapper functionName="f_storeInfoEdit_0">
             <div className="bar-button">
-              <Button type="primary" onClick={() => this._edit()}>
-                <FormattedMessage id="edit" />
-              </Button>
+              {currentTab != 0 ? (
+                <Button type="primary" onClick={() => this._edit()}>
+                  <FormattedMessage id="edit" />
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    this.store.consentSubmit(
+                      this.store.state().get('consentForm')
+                    )
+                  }
+                >
+                  Submit
+                </Button>
+              )}
             </div>
           </AuthWrapper>
         </div>

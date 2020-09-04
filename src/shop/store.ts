@@ -1095,7 +1095,7 @@ export default class AppStore extends Store {
   };
 
   //语言
-  getLanguage = async (param?: any) => {
+  getLanguage = async (callback) => {
     const { res } = await webApi.fetchQuerySysDictionary({
       type: 'consentLanguage'
     });
@@ -1103,6 +1103,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('consent:consentLanguage', res.context.sysDictionaryVOS);
       });
+      //callback&&callback(res.context.sysDictionaryVOS)
     }
   };
 
@@ -1158,7 +1159,6 @@ export default class AppStore extends Store {
     for (let key in a) {
       a[key] = '';
     }
-    console.log(a, 111111);
     this.dispatch('consent:editId', null);
     this.dispatch('consent:consentForm', a);
 
@@ -1186,10 +1186,7 @@ export default class AppStore extends Store {
   //fetchEditList
   onEditList = async (param?: any) => {
     const { res } = await webApi.fetchEditList(param);
-    console.log(res, 1111111111111);
-
     if (res.code == Const.SUCCESS_CODE) {
-      console.log(param, 222222222);
       this.dispatch('consent:editList', res.context.consentAndDetailVO);
       this.dispatch('consent:editId', param);
     }

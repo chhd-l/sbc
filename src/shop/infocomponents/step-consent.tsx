@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Icon } from 'antd';
 import '../editcomponents/style.less';
-import { Relax } from 'plume2';
+import { Relax, Action } from 'plume2';
 import DragTable from '../components/dragTable';
 import Detail from '../components/consent-detail';
 //import { bool } from 'prop-types';
@@ -9,15 +9,16 @@ import { noop, SelectGroup } from 'qmkit';
 
 const { Option } = Select;
 
-let description = '';
-
 @Relax
 export default class StepConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       //pageType: 'Detail',
-      description: ''
+      listSelect: {
+        languageTypeId: '',
+        consentCategory: ''
+      }
     };
   }
 
@@ -28,9 +29,11 @@ export default class StepConsent extends Component<any, any> {
       dataList: any;
       consentLanguage: any;
       pageChangeType: any;
+      consentListSelect: any;
       getConsentList: Function;
       getLanguage: Function;
       pageChange: Function;
+      getConsentListSelect: Function;
     };
   };
 
@@ -39,34 +42,44 @@ export default class StepConsent extends Component<any, any> {
     dataList: 'dataList',
     consentLanguage: 'consentLanguage',
     pageChangeType: 'pageChangeType',
+    consentListSelect: 'consentListSelect',
     getConsentList: noop,
     getLanguage: noop,
-    pageChange: noop
+    pageChange: noop,
+    getConsentListSelect: noop
   };
 
   componentDidMount() {
     const { getConsentList, getLanguage } = this.props.relaxProps;
     getConsentList();
     getLanguage();
-    const showColumnInfo = async (id) => {
-      /*const qianduanzhidian = await getZhihuColumn('qianduanzhidian')
-      console.log(`name:${FrontendMagazine.name}`)*/
-    };
-    showColumnInfo();
+    /*getLanguage(callback=>{
+      this.setState({description:callback[0] ? callback[0].description : ''})
+    });*/
   }
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    const { getConsentList } = this.props.relaxProps;
+    this.setState(
+      {
+        listSelect: { ...this.state.listSelect, consentCategory: value }
+      },
+      () => {
+        getConsentList(this.state.listSelect);
+      }
+    );
   };
 
-  /*pageChange = (e) => {
-    this.setState({ pageType: e });
-  };*/
-
   onDescription = (e, v) => {
-    console.log(e, 1111);
-    console.log(v, 2222);
-    this.setState({ description: description });
+    const { getConsentList } = this.props.relaxProps;
+    this.setState(
+      {
+        listSelect: { ...this.state.listSelect, languageTypeId: e }
+      },
+      () => {
+        getConsentList(this.state.listSelect);
+      }
+    );
   };
 
   render() {
@@ -75,7 +88,6 @@ export default class StepConsent extends Component<any, any> {
       pageChange,
       pageChangeType
     } = this.props.relaxProps;
-    description = consentLanguage[0] ? consentLanguage[0].description : '';
 
     return (
       <div className="consent">
@@ -85,24 +97,22 @@ export default class StepConsent extends Component<any, any> {
               <div className="consent-select-text">Category</div>
               <div className="consent-select-data space-between">
                 <Select
-                  defaultValue="Prescriber"
+                  defaultValue="All"
                   style={{ width: 120 }}
                   onChange={this.handleChange}
                 >
+                  <Option value="">All</Option>
                   <Option value="Prescriber">Prescriber</Option>
                   <Option value="Consumer">Consumer</Option>
                 </Select>
                 <Select
-                  value={this.state.description}
                   style={{ width: 120 }}
+                  defaultValue="All"
                   onChange={(e, v) => this.onDescription(e, v)}
                 >
+                  <Option value="">All</Option>
                   {consentLanguage.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.description}
-                      </Option>
-                    );
+                    return <Option value={item.id}>{item.description}</Option>;
                   })}
                 </Select>
               </div>

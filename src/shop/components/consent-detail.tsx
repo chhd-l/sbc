@@ -58,7 +58,7 @@ export default class StepConsent extends Component<any, any> {
   };
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    //console.log(`selected ${value}`);
   };
 
   pageChange = (e) => {
@@ -79,32 +79,27 @@ export default class StepConsent extends Component<any, any> {
     let list = [];
     if (o == 0) {
       this.setState({
-        a: {
-          ...this.state.a,
-          contentTitle: m,
-          contentBody: n,
-          sort: o + 1
-        }
+        a: { ...this.state.a, contentTitle: m, contentBody: n, sort: o + 1 }
       });
     }
     if (o == 1) {
       this.setState({
-        b: { contentTitle: m, contentBody: n, sort: o + 1 }
+        b: { ...this.state.b, contentTitle: m, contentBody: n, sort: o + 1 }
       });
     }
     if (o == 2) {
       this.setState({
-        c: { contentTitle: m, contentBody: n, sort: o + 1 }
+        c: { ...this.state.c, contentTitle: m, contentBody: n, sort: o + 1 }
       });
     }
     if (o == 3) {
       this.setState({
-        d: { contentTitle: m, contentBody: n, sort: o + 1 }
+        d: { ...this.state.d, contentTitle: m, contentBody: n, sort: o + 1 }
       });
     }
     if (o == 4) {
       this.setState({
-        e: { contentTitle: m, contentBody: n, sort: o + 1 }
+        e: { ...this.state.e, contentTitle: m, contentBody: n, sort: o + 1 }
       });
     }
 
@@ -122,11 +117,8 @@ export default class StepConsent extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { editList, consentForm } = this.props.relaxProps;
-    console.log(consentForm.toJS().consentCategory, 222222);
-
+    const { consentForm } = this.props.relaxProps;
     con = consentForm.toJS().consentCategory;
-    console.log(con, 111111);
   }
 
   componentDidUpdate(
@@ -139,16 +131,9 @@ export default class StepConsent extends Component<any, any> {
     const {
       onFormChange,
       consentLanguage,
-      consentForm,
-      refDetailEditor,
       editList,
       editId
     } = this.props.relaxProps;
-
-    setTimeout(() => {
-      console.log(editList);
-      console.log(editId);
-    });
 
     let defaultLanguage =
       consentLanguage == [] ? consentLanguage[0].description : '';

@@ -160,11 +160,11 @@ export function getClinicsLites() {
 }
 
 export function getUsersByPrescriberId(filterParams = {}) {
-  return Fetch<TResult>('/customer/employees', {
+  return Fetch<TResult>('/prescriber/listEmployees', {
     method: 'POST',
     body: JSON.stringify({ ...filterParams })
   });
-} // todo
+}
 
 export function deleteEmployeeByIds(employeeIds: string[]) {
   return Fetch<TResult>('/customer/employee', {
@@ -199,9 +199,29 @@ export function enableEmployee(employeeIds: string[]) {
   });
 }
 
-export function saveEmployee(employee) {
+export function addUser(employee) {
   return Fetch<TResult>('/customer/employee', {
     method: 'POST',
     body: JSON.stringify(employee)
+  });
+}
+
+export function updateUser(employee) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'PUT',
+    body: JSON.stringify(employee)
+  });
+}
+
+export function getAllRoles() {
+  return Fetch('/customer/employee/roles');
+}
+
+export function auditEmployee(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee/audit', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeIds: employeeIds
+    })
   });
 }

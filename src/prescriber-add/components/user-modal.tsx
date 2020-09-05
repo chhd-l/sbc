@@ -15,6 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import { QMMethod, ValidConst } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
+import { fromJS, List } from 'immutable';
 
 const formItemLayout = {
   labelCol: {
@@ -28,8 +29,23 @@ const formItemLayout = {
 class UserModal extends Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {};
+    this.state = {
+      prescriberRoleId: ''
+    };
+    this.getPrescriberRole = this.getPrescriberRole.bind(this);
+    this.getPrescriberRole();
   }
+
+  getPrescriberRole = async () => {
+    const { res: roleRes } = await webapi.getAllRoles();
+    let prescriberRole = fromJS(roleRes).find(
+      (x) => x.get('roleName') === 'Prescriber'
+    );
+    this.setState({
+      prescriberRoleId: prescriberRole.get('roleInfoId')
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -49,18 +65,28 @@ class UserModal extends Component<any, any> {
                 label={<FormattedMessage id="firstName" />}
                 hasFeedback
               >
-                {getFieldDecorator('employeeName', {
+                {getFieldDecorator('firstName', {
                   initialValue: this.props.userForm.firstName,
                   rules: [
                     {
                       required: true,
-                      whitespace: true,
+                      whitespace: false,
                       message: 'Please input first name'
                     },
                     {
                       min: 1,
                       max: 20,
                       message: '1-20 characters'
+                    },
+                    {
+                      validator: (rule, value, callback) => {
+                        QMMethod.validatorWhiteSpace(
+                          rule,
+                          value,
+                          callback,
+                          'firstName'
+                        );
+                      }
                     }
                   ]
                 })(<Input placeholder="Only 1-20 characters" />)}
@@ -72,18 +98,28 @@ class UserModal extends Component<any, any> {
                 label={<FormattedMessage id="lastName" />}
                 hasFeedback
               >
-                {getFieldDecorator('employeeName', {
+                {getFieldDecorator('lastName', {
                   initialValue: this.props.userForm.lastName,
                   rules: [
                     {
                       required: true,
-                      whitespace: true,
+                      whitespace: false,
                       message: 'Please input last name'
                     },
                     {
                       min: 1,
                       max: 20,
                       message: '1-20 characters'
+                    },
+                    {
+                      validator: (rule, value, callback) => {
+                        QMMethod.validatorWhiteSpace(
+                          rule,
+                          value,
+                          callback,
+                          'lastName'
+                        );
+                      }
                     }
                   ]
                 })(<Input placeholder="Only 1-20 characters" />)}
@@ -137,15 +173,29 @@ class UserModal extends Component<any, any> {
       if (!errs) {
         let param = Object.assign({
           employeeId: this.props.userForm.id,
-          ...values
+          employeeName: values.firstName + ' ' + values.lastName,
+          email: values.email,
+          prescriberIds: [this.props.prescriberKeyId],
+          roleIdList: [this.state.prescriberRoleId.toString()]
         });
-        const { res } = await webapi.saveEmployee(param);
-        if (res.code === 'K-000000') {
-          message.success('save successful');
-          this.props.reflash();
-          this.cancel();
+        if (this.props.userForm.id) {
+          const { res } = await webapi.updateUser(param);
+          if (res.code === 'K-000000') {
+            message.success('save successful');
+            this.props.reflash();
+            this.cancel();
+          } else {
+            message.error(res.message || 'save faild');
+          }
         } else {
-          message.error(res.message || 'save faild');
+          const { res } = await webapi.addUser(param);
+          if (res.code === 'K-000000') {
+            message.success('save successful');
+            this.props.reflash();
+            this.cancel();
+          } else {
+            message.error(res.message || 'save faild');
+          }
         }
       }
     });

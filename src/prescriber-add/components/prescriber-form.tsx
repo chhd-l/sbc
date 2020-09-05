@@ -85,7 +85,8 @@ class ClinicForm extends React.Component<any, any> {
       url: '',
       saveLoading: false,
       isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
-      clinicsLites: []
+      clinicsLites: [],
+      prescriberKeyId: this.props.prescriberId
     };
   }
   componentDidMount() {
@@ -157,12 +158,9 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          if (this.props.prescriberId) {
-            this.getDetail(this.props.prescriberId);
-            this.getClinicsReward(id);
-          } else {
-            this.switchTab('users');
-          }
+          this.getDetail(this.props.prescriberId);
+          this.getClinicsReward(id);
+          this.switchTab('users');
         } else {
           this.setState({
             saveLoading: false
@@ -247,7 +245,8 @@ class ClinicForm extends React.Component<any, any> {
         location: res.context.location,
         prescriberType: res.context.prescriberType,
         // auditStatus: res.context.auditStatus,
-        prescriberCode: res.context.prescriberCode
+        prescriberCode: res.context.prescriberCode,
+        parentPrescriberId: res.context.parentPrescriberId
       });
       this.getClinicsReward(res.context.prescriberId);
     } else {
@@ -318,7 +317,8 @@ class ClinicForm extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           if (prescriberForm.prescriberId) {
             this.setState({
-              isEdit: true
+              isEdit: true,
+              prescriberKeyId: res.context.id
             });
             this.saveReward(prescriberForm.prescriberId);
           } else {
@@ -577,7 +577,6 @@ class ClinicForm extends React.Component<any, any> {
                     {}
                   )(
                     <Select
-                      disabled={this.state.isEdit}
                       showSearch
                       filterOption={this.filterOption}
                       onChange={(value) => {
@@ -1022,7 +1021,7 @@ class ClinicForm extends React.Component<any, any> {
         </TabPane>
         <TabPane tab="User List" key="users">
           <UserList
-            prescriberId={this.state.prescriberForm.prescriberId}
+            prescriberKeyId={this.state.prescriberKeyId}
             alreadyHasPrescriber={this.state.isEdit}
           />
         </TabPane>

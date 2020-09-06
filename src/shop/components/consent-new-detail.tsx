@@ -16,7 +16,7 @@ let content2 = '';
 let Prescriber = '';
 let con = '';
 @Relax
-export default class StepConsentDetail extends Component<any, any> {
+export default class StepNewConsent extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,8 +30,7 @@ export default class StepConsentDetail extends Component<any, any> {
       d: { contentTitle: '', contentBody: '', sort: '' },
       e: { contentTitle: '', contentBody: '', sort: '' },
       category: '',
-      editList: {},
-      consentLanguage: []
+      editList: {}
     };
   }
 
@@ -119,16 +118,13 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { editList, consentLanguage } = nextProps;
-    console.log(consentLanguage);
-
-    console.log(prevState);
+    const { editList } = nextProps;
+    console.log(editList !== prevState.editList);
 
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
       return {
-        editList: nextProps.relaxProps.editList,
-        consentLanguage: nextProps.relaxProps.consentLanguage
+        editList: nextProps.relaxProps.editList
       };
     }
     // 否则，对于state不进行任何操作
@@ -136,14 +132,22 @@ export default class StepConsentDetail extends Component<any, any> {
   }
 
   componentDidMount() {
-    console.log(this.state.consentLanguage, 1111);
-    console.log(this.state.editList, 2222);
+    const { consentForm } = this.props.relaxProps;
+    con = consentForm.toJS().consentCategory;
+    //this.categoryRef.current.props =111
+    console.log(this.state.editList, 111111222222);
+    console.log(this.props.relaxProps.editList, 333333);
   }
 
   render() {
-    const { onFormChange, editId } = this.props.relaxProps;
-    const { editList, consentLanguage } = this.state;
-
+    const {
+      onFormChange,
+      consentLanguage,
+      editList,
+      editId
+    } = this.props.relaxProps;
+    let defaultLanguage =
+      consentLanguage == [] ? consentLanguage[0].description : '';
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -151,11 +155,7 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 label="Category"
-                defaultValue={
-                  editList.consentCategory
-                    ? editList.consentCategory
-                    : 'Prescriber'
-                }
+                //defaultValue={this.state.editList.consentCategory}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   onFormChange({
@@ -171,7 +171,6 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <Input
                 addonBefore="Consent id"
-                defaultValue={editList.consentId ? editList.consentId : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -186,9 +185,7 @@ export default class StepConsentDetail extends Component<any, any> {
           <div className="detail-form">
             <FormItem>
               <SelectGroup
-                defaultValue={
-                  editList.filedType ? editList.filedType : 'Optional'
-                }
+                defaultValue="Optional"
                 label="Filed type"
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -211,7 +208,6 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <Input
                 addonBefore="Consent code"
-                defaultValue={editList.consentCode ? editList.consentCode : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -226,9 +222,7 @@ export default class StepConsentDetail extends Component<any, any> {
           <div className="detail-form">
             <FormItem>
               <SelectGroup
-                defaultValue={
-                  editList.consentPage ? editList.consentPage : 'Landing page'
-                }
+                defaultValue="Landing page"
                 label="Page"
                 style={{ width: 280 }}
                 onChange={(value) => {
@@ -246,9 +240,7 @@ export default class StepConsentDetail extends Component<any, any> {
             </FormItem>
             <FormItem>
               <SelectGroup
-                defaultValue={
-                  editList.consentType ? editList.consentType : 'E-mail in'
-                }
+                defaultValue="E-mail in"
                 label="Consent type"
                 style={{ width: 280 }}
                 onChange={(value, index) => {
@@ -270,11 +262,7 @@ export default class StepConsentDetail extends Component<any, any> {
             <div className="edit-consent">
               <FormItem>
                 <SelectGroup
-                  defaultValue={
-                    editList.consentTitleType
-                      ? editList.consentTitleType
-                      : 'Content'
-                  }
+                  defaultValue="Content"
                   label="Consent title"
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
@@ -299,7 +287,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <div>
                   <UEditor
                     id={'edit'}
-                    content={editList.consentTitle ? editList.consentTitle : ''}
+                    content=""
                     height="150px"
                     onContentChange={(UEditor) => {
                       onFormChange({
@@ -312,9 +300,6 @@ export default class StepConsentDetail extends Component<any, any> {
               ) : (
                 <Input
                   placeholder="Please enter URL address"
-                  defaultValue={
-                    editList.consentTitle ? editList.consentTitle : ''
-                  }
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     onFormChange({
@@ -380,15 +365,10 @@ export default class StepConsentDetail extends Component<any, any> {
         </div>
         <div className="language">
           <Select
-            defaultValue={
-              editList.languageTypeId
-                ? editList.languageTypeId
-                : consentLanguage[0]
-                ? consentLanguage[0].description
-                : []
-            }
+            defaultValue={defaultLanguage}
             style={{ width: 120 }}
             onChange={(value) => {
+              console.log(value);
               value = value === '' ? null : value;
               onFormChange({
                 field: 'languageTypeId',
@@ -396,14 +376,9 @@ export default class StepConsentDetail extends Component<any, any> {
               });
             }}
           >
-            {consentLanguage[0] &&
-              consentLanguage.map((item, i) => {
-                return (
-                  <Option key={i} value={item.id}>
-                    {item.description}
-                  </Option>
-                );
-              })}
+            {consentLanguage.map((item) => {
+              return <Option value={item.id}>{item.description}</Option>;
+            })}
           </Select>
         </div>
       </div>

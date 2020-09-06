@@ -3,7 +3,9 @@ import { Select, Button, Icon } from 'antd';
 import '../editcomponents/style.less';
 import { Relax, Action } from 'plume2';
 import DragTable from '../components/dragTable';
+import NewDetail from '../components/consent-new-detail';
 import Detail from '../components/consent-detail';
+
 //import { bool } from 'prop-types';
 import { noop, SelectGroup } from 'qmkit';
 
@@ -34,6 +36,7 @@ export default class StepConsent extends Component<any, any> {
       getLanguage: Function;
       pageChange: Function;
       getConsentListSelect: Function;
+      editId: any;
     };
   };
 
@@ -46,7 +49,8 @@ export default class StepConsent extends Component<any, any> {
     getConsentList: noop,
     getLanguage: noop,
     pageChange: noop,
-    getConsentListSelect: noop
+    getConsentListSelect: noop,
+    editId: 'editId'
   };
 
   componentDidMount() {
@@ -86,9 +90,9 @@ export default class StepConsent extends Component<any, any> {
     const {
       consentLanguage,
       pageChange,
-      pageChangeType
+      pageChangeType,
+      editId
     } = this.props.relaxProps;
-
     return (
       <div className="consent">
         {pageChangeType == 'List' ? (
@@ -122,7 +126,7 @@ export default class StepConsent extends Component<any, any> {
               type="primary"
               shape="round"
               icon="plus"
-              onClick={() => pageChange('Detail')}
+              onClick={() => pageChange('Detail', '000')}
             >
               New consent
             </Button>
@@ -137,7 +141,7 @@ export default class StepConsent extends Component<any, any> {
                 <Icon type="left" /> Consent edit
               </div>
             </div>
-            <Detail />
+            {editId != null ? <Detail /> : null}
           </React.Fragment>
         )}
       </div>

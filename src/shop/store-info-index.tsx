@@ -17,11 +17,11 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '0': <StepOneForm />,
+  '4': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
-  '4': <StepFiveForm />
+  '0': <StepFiveForm />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -74,7 +74,7 @@ export default class ShopInfo extends React.Component<any, any> {
             </div>
           </div>
           <AuthWrapper functionName="f_storeInfoEdit_0">
-            {currentTab != 4 ? (
+            {currentTab != 0 ? (
               <div className="bar-button">
                 <Button type="primary" onClick={() => this._edit()}>
                   <FormattedMessage id="edit" />

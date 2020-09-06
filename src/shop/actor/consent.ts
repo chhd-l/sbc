@@ -58,7 +58,7 @@ export default class ModalActor extends Actor {
   //editList
   @Action('consent:editList')
   editList(state: IMap, res) {
-    return state.set('editList', res).set('editId', res);
+    return state.set('editList', res);
   }
   @Action('consent:editId')
   editId(state: IMap, res) {

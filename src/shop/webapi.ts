@@ -281,3 +281,11 @@ export function fetchEditList(param = {}) {
     method: 'GET'
   });
 }
+
+//edit-save
+export function fetchEditSave(param = {}) {
+  return Fetch<TResult>('/consent/edit', {
+    method: 'PUT',
+    body: JSON.stringify(param)
+  });
+}

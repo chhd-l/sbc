@@ -88,7 +88,8 @@ export default class ShopInfo extends React.Component<any, any> {
                       type="primary"
                       onClick={() =>
                         this.store.consentSubmit(
-                          this.store.state().get('consentForm')
+                          this.store.state().get('consentForm'),
+                          this.store.state().get('editId')
                         )
                       }
                     >

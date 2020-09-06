@@ -1128,25 +1128,39 @@ export default class AppStore extends Store {
   };
 
   //new
-  consentSubmit = async (param?: any) => {
+  consentSubmit = async (param?: any, type) => {
     let v = param.toJS();
+    console.log(v, 333333);
     if (
       v.consentId != '' &&
       v.consentCode != '' &&
       v.consentTitleType != '' &&
       v.consentTitle != ''
     ) {
-      const { res } = await webApi.fetchNewConsent(v);
-      if (res.code == Const.SUCCESS_CODE) {
-        this.transaction(() => {
-          message.success('Submit successful！');
-          this.pageChange('List', null);
-          this.getConsentList();
-        });
-
-        //history.push('/shop-info');
+      if (type != '000') {
+        const { res } = await webApi.fetchEditSave(v);
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            message.success('Submit successful！');
+            this.pageChange('List', null);
+            this.getConsentList();
+          });
+        } else {
+          message.error(res.message);
+        }
       } else {
-        message.error(res.message);
+        const { res } = await webApi.fetchNewConsent(v);
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            message.success('Submit successful！');
+            this.pageChange('List', null);
+            this.getConsentList();
+          });
+
+          //history.push('/shop-info');
+        } else {
+          message.error(res.message);
+        }
       }
     } else {
       message.error('Submit Can not be empty！');
@@ -1170,6 +1184,7 @@ export default class AppStore extends Store {
 
   //add FormChange
   onFormChange = (param) => {
+    console.log(param, 22222);
     this.dispatch('consent:consentForm', param);
   };
 
@@ -1191,4 +1206,12 @@ export default class AppStore extends Store {
       this.dispatch('consent:editId', param);
     }
   };
+
+  //fetchEditSave
+  /*onEditSave = async (param?: any) => {
+    const { res } = await webApi.fetchEditSave(param);
+    if (res.code == Const.SUCCESS_CODE) {
+
+    }
+  };*/
 }

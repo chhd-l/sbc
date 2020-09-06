@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Select, Input, Icon, Form, Col, Button } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
+import { fromJS } from 'immutable';
 
 import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { render } from 'react-dom';
@@ -120,9 +121,6 @@ export default class StepConsentDetail extends Component<any, any> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { editList, consentLanguage } = nextProps;
-    console.log(consentLanguage);
-
-    console.log(prevState);
 
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
@@ -136,8 +134,9 @@ export default class StepConsentDetail extends Component<any, any> {
   }
 
   componentDidMount() {
-    console.log(this.state.consentLanguage, 1111);
-    console.log(this.state.editList, 2222);
+    const { onFormChange } = this.props.relaxProps;
+    console.log(this.state.editList, 1111);
+    onFormChange(fromJS(this.state.editList));
   }
 
   render() {

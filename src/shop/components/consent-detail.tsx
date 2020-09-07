@@ -4,6 +4,9 @@ import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
 
+import 'braft-editor/dist/index.css';
+import BraftEditor from 'braft-editor';
+
 import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { render } from 'react-dom';
 //import DragTable from '../components/dragTable';
@@ -32,7 +35,9 @@ export default class StepConsentDetail extends Component<any, any> {
       e: { contentTitle: '', contentBody: '', sort: '' },
       category: '',
       editList: {},
-      consentLanguage: []
+      consentLanguage: [],
+      // 创建一个空的editorState作为初始值
+      editorState: BraftEditor.createEditorState(null)
     };
   }
 
@@ -139,10 +144,27 @@ export default class StepConsentDetail extends Component<any, any> {
     //onFormChange(fromJS(this.state.editList));
     onFormChange(this.state.editList);
   }
+  handleEditorChange = (editorState) => {
+    this.setState({ editorState }, () => {
+      let rawInfo = this.state.editorState.toRAW();
+      let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
+      console.log('Html', htmlInfo);
+      console.log('Raw', rawInfo);
+    });
+  };
 
   render() {
     const { onFormChange, editId } = this.props.relaxProps;
-    const { editList, consentLanguage } = this.state;
+    const { editList, consentLanguage, editorState } = this.state;
+    const controls = [
+      'bold',
+      'italic',
+      'underline',
+      'text-color',
+      'separator',
+      'link',
+      'separator'
+    ];
 
     return (
       <div className="consent-detail">
@@ -326,6 +348,17 @@ export default class StepConsentDetail extends Component<any, any> {
               )}
             </div>
           </div>
+          <FormItem style={{ width: '100%' }}>
+            <div className="editor-wrapper">
+              <BraftEditor
+                value={editorState}
+                onChange={this.handleEditorChange}
+                className="my-editor"
+                controls={controls}
+              />
+            </div>
+          </FormItem>
+
           <div className="edit-add">
             {this.state.detailType == true ? (
               <div className="edit-add-content space-between-align">

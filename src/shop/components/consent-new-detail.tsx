@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Select, Input, Icon, Form, Col, Button } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
+import 'braft-editor/dist/index.css';
+import BraftEditor from 'braft-editor';
 
 import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { render } from 'react-dom';
@@ -146,6 +148,16 @@ export default class StepNewConsent extends Component<any, any> {
       editList,
       editId
     } = this.props.relaxProps;
+
+    const controls = [
+      'bold',
+      'italic',
+      'underline',
+      'text-color',
+      'separator',
+      'link',
+      'separator'
+    ];
     let defaultLanguage =
       consentLanguage == [] ? consentLanguage[0].description : '';
     return (
@@ -282,6 +294,14 @@ export default class StepNewConsent extends Component<any, any> {
                 </SelectGroup>
               </FormItem>
             </div>
+
+            <BraftEditor
+              className="my-editor"
+              controls={controls}
+              placeholder="请输入正文内容"
+            />
+
+            {/* 
             <div className="edit-content">
               {this.state.consentTitle == true ? (
                 <div>
@@ -310,7 +330,10 @@ export default class StepNewConsent extends Component<any, any> {
                 />
               )}
             </div>
+          
+           */}
           </div>
+
           <div className="edit-add">
             {this.state.detailType == true ? (
               <div className="edit-add-content space-between-align">

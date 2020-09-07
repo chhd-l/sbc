@@ -1131,6 +1131,9 @@ export default class AppStore extends Store {
   consentSubmit = async (param?: any, type) => {
     let v = param.toJS();
     console.log(v, 333333);
+    console.log(type, 44444);
+    console.log(this.state().get('consentForm'), 55555);
+
     if (
       v.consentId != '' &&
       v.consentCode != '' &&

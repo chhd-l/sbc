@@ -136,7 +136,8 @@ export default class StepConsentDetail extends Component<any, any> {
   componentDidMount() {
     const { onFormChange } = this.props.relaxProps;
     console.log(this.state.editList, 1111);
-    onFormChange(fromJS(this.state.editList));
+    //onFormChange(fromJS(this.state.editList));
+    onFormChange(this.state.editList);
   }
 
   render() {

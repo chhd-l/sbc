@@ -17,8 +17,7 @@ const FormItem = Form.Item;
 let addContent = [];
 let content1 = '';
 let content2 = '';
-let Prescriber = '';
-let con = '';
+
 @Relax
 export default class StepConsentDetail extends Component<any, any> {
   constructor(props) {
@@ -143,19 +142,28 @@ export default class StepConsentDetail extends Component<any, any> {
   componentDidMount() {
     const { onEditSave } = this.props.relaxProps;
     onEditSave(this.state.editList);
+    this.setState({ editorState: this.state.editList.consentTitle });
   }
   handleEditorChange = (editorState) => {
+    const { onFormChange } = this.props.relaxProps;
+
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
       console.log('Html', htmlInfo);
       console.log('Raw', rawInfo);
+      onFormChange({
+        field: 'consentTitle',
+        value: htmlInfo
+      });
     });
   };
 
   render() {
     const { onFormChange, editId } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
+    const htmlString = editList.consentTitle ? editList.consentTitle : '';
+    const editor = BraftEditor.createEditorState(htmlString);
     const controls = [
       'bold',
       'italic',
@@ -318,7 +326,19 @@ export default class StepConsentDetail extends Component<any, any> {
             </div>
             <div className="edit-content">
               {this.state.consentTitle == true ? (
-                <div>
+                <FormItem>
+                  <div className="editor-wrapper">
+                    <BraftEditor
+                      defaultValue={editor}
+                      //value={editorState}
+                      onChange={this.handleEditorChange}
+                      className="my-editor"
+                      controls={controls}
+                    />
+                  </div>
+                </FormItem>
+              ) : (
+                /*<div>
                   <UEditor
                     id={'edit'}
                     content={editList.consentTitle ? editList.consentTitle : ''}
@@ -330,8 +350,7 @@ export default class StepConsentDetail extends Component<any, any> {
                       });
                     }}
                   />
-                </div>
-              ) : (
+                </div>*/
                 <Input
                   placeholder="Please enter URL address"
                   defaultValue={
@@ -348,16 +367,6 @@ export default class StepConsentDetail extends Component<any, any> {
               )}
             </div>
           </div>
-          <FormItem style={{ width: '100%' }}>
-            <div className="editor-wrapper">
-              <BraftEditor
-                value={editorState}
-                onChange={this.handleEditorChange}
-                className="my-editor"
-                controls={controls}
-              />
-            </div>
-          </FormItem>
 
           <div className="edit-add">
             {this.state.detailType == true ? (

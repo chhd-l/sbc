@@ -102,7 +102,7 @@ export default class BillingDetails extends React.Component<any, any> {
             }
           />
         </div>
-        <div className="container" id="recommendation">
+        <div className="container step" id="recommendation">
           <Steps current={current}>
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />

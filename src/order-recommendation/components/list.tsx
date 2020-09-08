@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -383,7 +383,9 @@ export default class ListView extends React.Component<any, any> {
                       })
                     }
                   >
-                    Details
+                    <Tooltip placement="top" title="See Details">
+                      <span className="iconfont iconDetails "></span>
+                    </Tooltip>
                   </td>
                 </tr>
               </tbody>

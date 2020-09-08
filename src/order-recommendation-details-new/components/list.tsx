@@ -55,6 +55,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     prevState: Readonly<any>,
     snapshot?: any
   ) {
+    localStorage.removeItem('productselect');
     const { productselect, onCreateLink } = this.props.relaxProps;
     let arr = productselect.map((v, i) => {
       return {
@@ -66,13 +67,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       field: 'recommendationGoodsInfoRels',
       value: arr
     });
+    localStorage.setItem('productselect', String(productselect.length));
   }
 
   render() {
     const { productselect, detailProductList } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
     setTimeout(() => {
-      console.log(detailProductList, 11111111111);
+      console.log(productselect, '``````````````');
     });
     return (
       <TableRow>

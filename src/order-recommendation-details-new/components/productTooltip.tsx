@@ -65,6 +65,7 @@ export default class DetailPublish extends React.Component<any, any> {
             v[i].quantity = Number(m.quantity);
           }
         });
+        localStorage.setItem('arrQuantity', 'true');
       }
     });
     this.setState({ selectedRowKeys, addProduct: v });
@@ -93,6 +94,7 @@ export default class DetailPublish extends React.Component<any, any> {
   componentDidMount() {
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
+    localStorage.removeItem('arrQuantity');
   }
 
   handleChange = (value, a, index, e) => {

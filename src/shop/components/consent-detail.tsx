@@ -127,7 +127,7 @@ export default class StepConsentDetail extends Component<any, any> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { editList, consentLanguage } = nextProps;
-
+    console.log(1111111);
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
       return {
@@ -139,10 +139,23 @@ export default class StepConsentDetail extends Component<any, any> {
     return null;
   }
 
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {
+    /* if(prevProps.editList !==  this.props.editList) {
+      this.setState({
+        count: this.props.editList
+      })
+    }*/
+  }
+
   componentDidMount() {
     const { onEditSave } = this.props.relaxProps;
     onEditSave(this.state.editList);
-    this.setState({ editorState: this.state.editList.consentTitle });
+
+    //this.setState({ editorState: this.state.editList.consentTitle });
   }
   handleEditorChange = (editorState) => {
     const { onFormChange } = this.props.relaxProps;
@@ -338,19 +351,6 @@ export default class StepConsentDetail extends Component<any, any> {
                   </div>
                 </FormItem>
               ) : (
-                /*<div>
-                  <UEditor
-                    id={'edit'}
-                    content={editList.consentTitle ? editList.consentTitle : ''}
-                    height="150px"
-                    onContentChange={(UEditor) => {
-                      onFormChange({
-                        field: 'consentTitle',
-                        value: UEditor
-                      });
-                    }}
-                  />
-                </div>*/
                 <Input
                   placeholder="Please enter URL address"
                   defaultValue={

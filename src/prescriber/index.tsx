@@ -515,7 +515,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="Recommendation code" />
+                        Recommendation code
                       </p>
                     }
                     onChange={(e) => {

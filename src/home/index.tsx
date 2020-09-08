@@ -25,7 +25,7 @@ export default class HelloApp extends React.Component<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId =
       employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers[0].prescriberId
+        ? employee.prescribers[0].id
         : null;
 
     let allFunctions = JSON.parse(

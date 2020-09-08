@@ -339,9 +339,10 @@ export function requireLocalSrc(srcPath) {
 /**
  * 清除缓存并跳转登录页
  */
-export function logout() {
-  const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-    .accountName;
+
+export function logout(oktaLogined) {
+  const accountName = sessionStorage.getItem(cache.LOGIN_DATA) ? JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
+    .accountName : '';
   localStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.SYSTEM_BASE_CONFIG);
@@ -353,7 +354,9 @@ export function logout() {
   sessionStorage.removeItem(cache.THIRD_ACTIVE);
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
   sessionStorage.removeItem('PrescriberType');
-  history.push('/login');
+  if(!oktaLogined) {
+    history.push('/login');
+  }
 }
 
 

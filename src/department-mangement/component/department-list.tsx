@@ -7,9 +7,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
-declare type IList = List<any>;
 const confirm = Modal.confirm;
 
+declare type IList = List<any>;
 const styles = {
   edit: {
     paddingRight: 10

@@ -1,17 +1,15 @@
 import * as React from 'react';
-import { Modal, Table, Select, Checkbox, Button } from 'antd';
-import { noop, util } from 'qmkit';
+import { fromJS } from 'immutable';
+
+import { message, Modal } from 'antd';
+
+import ProductGrid from './product-grid';
+import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
-import { List } from 'immutable';
-import { accDiv } from '../../qmkit/float';
-import moment from 'moment';
-declare type IList = List<any>;
-const { Option } = Select;
-let arrQuantity = [];
+import { noop } from 'qmkit';
 
 @Relax
-/*发布*/
-export default class DetailPublish extends React.Component<any, any> {
+export default class GoodsModal extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
@@ -23,6 +21,19 @@ export default class DetailPublish extends React.Component<any, any> {
       loading: boolean;
       createLink: any;
     };
+    showModal: Function;
+    selectedSkuIds: IList;
+    selectedRows: IList;
+    visible: boolean;
+    onOkBackFun: Function;
+    onCancelBackFun: Function;
+    skuLimit?: number;
+    showValidGood?: boolean;
+    companyType?: number;
+    //搜索参数
+    searchParams?: Object;
+    //应用标示。如添加秒杀商品：saleType
+    application?: string;
   };
 
   static relaxProps = {
@@ -35,27 +46,15 @@ export default class DetailPublish extends React.Component<any, any> {
     productList: 'productList',
     createLink: 'createLink'
   };
-
   constructor(props) {
     super(props);
     this.state = {
-      visible: props.visible,
-      selectedRowKeys: [], // Check here to configure the default column
-      loading: false,
-      addProduct: []
+      selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
+      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
     };
   }
-  start = () => {
-    this.setState({ loading: true });
-    // ajax request after empty completing
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false
-      });
-    }, 1000);
-  };
 
+<<<<<<< HEAD
   onSelectChange = (selectedRowKeys, v, o) => {
     selectedRowKeys.map((item, i) => {
       v[i].quantity = 1;
@@ -95,136 +94,80 @@ export default class DetailPublish extends React.Component<any, any> {
     const { onProductForm } = this.props.relaxProps;
     onProductForm();
     localStorage.removeItem('arrQuantity');
+=======
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedRows: nextProps.selectedRows
+        ? nextProps.selectedRows
+        : fromJS([]),
+      selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
+    });
+>>>>>>> a9dbf9140911fa34f4217542e1c160e9abe2c6e0
   }
-
-  handleChange = (value, a, index, e) => {
-    arrQuantity.push({ no: index, quantity: e });
-  };
 
   render() {
     const {
-      loading,
-      sharing,
-      onProductForm,
-      productForm,
-      productList
-    } = this.props.relaxProps;
-    const { selectedRowKeys } = this.state;
-    const total = productForm && productForm.total;
-    const pageNum = productForm && productForm.pageNum;
-
-    const rowSelection = { selectedRowKeys, onChange: this.onSelectChange };
-    const hasSelected = selectedRowKeys.length > 0;
-    const columns = [
-      /*{
-        title: 'No',
-        dataIndex: 'id',
-        key: 'departmentName',
-        render: (text,record,index)=>{
-          return <span>{(pageNum)*10+index+1}</span>
-        }
-      },
-      {
-        title: 'Image',
-        dataIndex: 'goodsInfoImg',
-        key: 'goodsInfoImg',
-        render: (text) => <img src={text} alt="" width="20" height="25"/>
-      },*/
-      {
-        title: 'Product Name',
-        dataIndex: 'goodsInfoName',
-        key: 'goodsInfoName'
-      },
-      {
-        title: 'SKU',
-        dataIndex: 'goodsInfoNo',
-        key: 'goodsInfoNo'
-      },
-      {
-        title: 'Signed classification',
-        dataIndex: 'Signed',
-        key: 'Signed',
-        render: (text, record, index) => {
-          return <span>{record.goods.goodsCateName}</span>;
-        }
-      },
-      {
-        title: 'Price',
-        dataIndex: 'marketPrice',
-        key: 'marketPrice'
-      },
-      {
-        title: 'Quantity',
-        dataIndex: 'addedFlag',
-        key: 'addedFlag',
-        width: '8%',
-        render: (text, record, index) => {
-          return (
-            <Select
-              defaultValue="1"
-              style={{ width: 120 }}
-              onChange={(e) => this.handleChange(text, record, index, e)}
-            >
-              <Option value="1">1</Option>
-              <Option value="2">2</Option>
-              <Option value="3">3</Option>
-              <Option value="4">4</Option>
-              <Option value="5">5</Option>
-              <Option value="6">6</Option>
-              <Option value="7">7</Option>
-              <Option value="8">8</Option>
-              <Option value="9">9</Option>
-              <Option value="10">10</Option>
-            </Select>
-          );
-        }
-      }
-      /*{
-        title: 'Operation',
-        dataIndex: 'Operation'
-      }*/
-    ];
+      visible,
+      onOkBackFun,
+      onCancelBackFun,
+      skuLimit,
+      showValidGood,
+      searchParams,
+      application
+    } = this.props;
+    const { selectedSkuIds, selectedRows } = this.state;
+    const { onProductselect } = this.props.relaxProps;
     return (
-      <div id="publishButton">
-        <Modal
-          width={1200}
-          title={
-            //主要实现代码此处可传入一个html结构组件也是可以的
-            <div style={{ color: '#e2001a', fontSize: 18 }}>Sharing</div>
-          }
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <div className="product">
-            <div style={{ marginBottom: 16 }}>
-              <Button
-                type="primary"
-                onClick={this.start}
-                disabled={!hasSelected}
-              >
-                Reload
-              </Button>
-              <span style={{ marginLeft: 8 }}>
-                {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-              </span>
-            </div>
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={productList ? productList.toJS() : []}
-              loading={loading}
-              size="small"
-              pagination={{
-                total,
-                onChange: (pageNum, pageSize) => {
-                  onProductForm({ pageNum: pageNum - 1, pageSize });
-                }
-              }}
-            />
+      <Modal
+        maskClosable={false}
+        title={
+          <div>
+            Choose goods&nbsp;
+            <small>
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
+              items have been selected
+            </small>
           </div>
-        </Modal>
-      </div>
+        }
+        width={1100}
+        visible={visible}
+        onOk={() => {
+          onProductselect(this.state.selectedRows.toJS());
+          this.props.showModal(false);
+          /* if (application === 'saleType') {
+                   // onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+                 } else if (skuLimit && selectedSkuIds.length > skuLimit) {
+                   message.error('Choose up to 20 items');
+                 } else {
+                 //  onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+                 }*/
+        }}
+        onCancel={() => {
+          onCancelBackFun();
+        }}
+        okText="Confirm"
+        cancelText="Cancel"
+      >
+        {
+          <ProductGrid
+            visible={visible}
+            showValidGood={showValidGood}
+            skuLimit={skuLimit}
+            isScroll={false}
+            selectedSkuIds={selectedSkuIds}
+            selectedRows={selectedRows}
+            rowChangeBackFun={this.rowChangeBackFun}
+            searchParams={searchParams}
+          />
+        }
+      </Modal>
     );
   }
+
+  rowChangeBackFun = (selectedSkuIds, selectedRows) => {
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows
+    });
+  };
 }

@@ -36,7 +36,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore={<FormattedMessage id="employeeName  " />}
+                addonBefore={<FormattedMessage id="employeeName" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({

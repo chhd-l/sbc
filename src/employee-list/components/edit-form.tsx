@@ -115,6 +115,8 @@ export default class EditForm extends React.Component<any, any> {
     //部门树
     const departTree = _state.get('departTree');
     let employeeName = {};
+    let firstName = {};
+    let lastName = {};
     let employeeMobile = {};
     //邮箱
     let email = {};
@@ -134,6 +136,18 @@ export default class EditForm extends React.Component<any, any> {
     if (_state.get('edit')) {
       employeeName = {
         initialValue: employeeForm.get('employeeName')
+      };
+
+      firstName = {
+        initialValue: employeeForm.get('employeeName')
+          ? employeeForm.get('employeeName').split(' ')[0]
+          : ''
+      };
+
+      lastName = {
+        initialValue: employeeForm.get('employeeName')
+          ? employeeForm.get('employeeName').split(' ')[1]
+          : ''
       };
 
       employeeMobile = {
@@ -187,34 +201,69 @@ export default class EditForm extends React.Component<any, any> {
         <Row>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="employeeName" />}
+            label={<FormattedMessage id="firstName" />}
             hasFeedback
           >
-            {getFieldDecorator('employeeName', {
-              ...employeeName,
+            {getFieldDecorator('firstName', {
+              ...firstName,
               rules: [
                 {
                   required: true,
-                  whitespace: true,
-                  message: 'Please input user name'
+                  whitespace: false,
+                  message: 'Please input first name'
                 },
                 {
                   min: 1,
                   max: 20,
                   message: '1-20 characters'
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorWhiteSpace(
+                      rule,
+                      value,
+                      callback,
+                      'firstName'
+                    );
+                  }
                 }
-                // {
-                //   validator: (rule, value, callback) => {
-                //     QMMethod.validatorTrimMinAndMax(
-                //       rule,
-                //       value,
-                //       callback,
-                //       '员工姓名',
-                //       1,
-                //       20
-                //     );
-                //   }
-                // }
+              ]
+            })(
+              <Input
+                disabled={editDisable}
+                placeholder="Only 1-20 characters"
+              />
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="lastName" />}
+            hasFeedback
+          >
+            {getFieldDecorator('lastName', {
+              ...lastName,
+              rules: [
+                {
+                  required: true,
+                  whitespace: false,
+                  message: 'Please input last name'
+                },
+                {
+                  min: 1,
+                  max: 20,
+                  message: '1-20 characters'
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorWhiteSpace(
+                      rule,
+                      value,
+                      callback,
+                      'lastName'
+                    );
+                  }
+                }
               ]
             })(
               <Input
@@ -240,13 +289,11 @@ export default class EditForm extends React.Component<any, any> {
                 },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
+                    QMMethod.validatorWhiteSpace(
                       rule,
                       value,
                       callback,
-                      'Email',
-                      0,
-                      50
+                      'Email'
                     );
                   }
                 }
@@ -265,6 +312,18 @@ export default class EditForm extends React.Component<any, any> {
               rules: [
                 // { required: false, message: 'employee Phone' }
                 // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorMinAndMax(
+                      rule,
+                      value,
+                      callback,
+                      'Phone',
+                      8,
+                      20
+                    );
+                  }
+                }
               ]
             })(<Input disabled={editDisable} />)}
           </FormItem>
@@ -447,7 +506,7 @@ export default class EditForm extends React.Component<any, any> {
                   showSearch
                   filterOption={this.filterOption}
                 >
-                  { this._renderPerscirbersOption() }
+                  {this._renderPerscirbersOption()}
                 </Select>
               )}
             </FormItem>
@@ -607,15 +666,14 @@ export default class EditForm extends React.Component<any, any> {
     });
   }
 
-  filterOption = (input, option: { props }) => {
-    return (
-      option.props.children
-        .toString()
-        .toLowerCase()
-        .indexOf(input.toLowerCase()) >= 0
-    );
-  };
-    
+  filterOption = (input, option: { props }) => {
+    return (
+      option.props.children
+        .toString()
+        .toLowerCase()
+        .indexOf(input.toLowerCase()) >= 0
+    );
+  };
 
   /**
    * 医院

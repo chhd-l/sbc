@@ -5,6 +5,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
+
 import { cache, history, noop, SelectGroup } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';

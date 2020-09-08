@@ -44,6 +44,7 @@ export default class StepConsentDetail extends Component<any, any> {
       consentLanguage: any;
       consentForm: any;
       refDetailEditor: Function;
+      onEditSave: Function;
       editList: any;
       editId: any;
     };
@@ -56,6 +57,7 @@ export default class StepConsentDetail extends Component<any, any> {
     consentLanguage: 'consentLanguage',
     consentForm: 'consentForm',
     refDetailEditor: noop,
+    onEditSave: noop,
     editList: 'editList',
     editId: 'editId'
   };
@@ -134,10 +136,8 @@ export default class StepConsentDetail extends Component<any, any> {
   }
 
   componentDidMount() {
-    const { onFormChange } = this.props.relaxProps;
-    console.log(this.state.editList, 1111);
-    //onFormChange(fromJS(this.state.editList));
-    onFormChange(this.state.editList);
+    const { onEditSave } = this.props.relaxProps;
+    onEditSave(this.state.editList);
   }
 
   render() {

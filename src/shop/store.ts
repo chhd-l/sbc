@@ -1130,10 +1130,17 @@ export default class AppStore extends Store {
   //new
   consentSubmit = async (param?: any, type) => {
     let v = param.toJS();
-    console.log(v, 333333);
-    console.log(type, 44444);
-    console.log(this.state().get('consentForm'), 55555);
-
+    for (let key in v) {
+      if (v[key] === '') {
+        delete v[key];
+      }
+    }
+    let obj = {};
+    obj = Object.assign(this.state().get('formEdit'), v);
+    console.log(v, 11111);
+    console.log(this.state().get('formEdit'), 222222);
+    console.log(type);
+    console.log(obj, 33333);
     if (
       v.consentId != '' &&
       v.consentCode != '' &&
@@ -1187,8 +1194,12 @@ export default class AppStore extends Store {
 
   //add FormChange
   onFormChange = (param) => {
-    console.log(param, 22222);
     this.dispatch('consent:consentForm', param);
+  };
+
+  //onFormEdit
+  onEditSave = async (param?: any) => {
+    this.dispatch('consent:formEdit', param);
   };
 
   // Switch
@@ -1209,12 +1220,4 @@ export default class AppStore extends Store {
       this.dispatch('consent:editId', param);
     }
   };
-
-  //fetchEditSave
-  /*onEditSave = async (param?: any) => {
-    const { res } = await webApi.fetchEditSave(param);
-    if (res.code == Const.SUCCESS_CODE) {
-
-    }
-  };*/
 }

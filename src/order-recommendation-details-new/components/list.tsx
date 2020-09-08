@@ -56,6 +56,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     snapshot?: any
   ) {
     const { productselect, onCreateLink } = this.props.relaxProps;
+    localStorage.setItem('productselect', String(productselect.length));
     let arr = productselect.map((v, i) => {
       return {
         goodsInfoId: v.goodsInfoId,

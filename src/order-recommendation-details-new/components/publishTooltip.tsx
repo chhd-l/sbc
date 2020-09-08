@@ -252,7 +252,6 @@ export default class DetailPublish extends React.Component<any, any> {
         <Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
-        ,
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
         </Button>

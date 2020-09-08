@@ -34,6 +34,20 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <div className="user">
         <div className="text flex-start">
+           <span>
+            Recommendation NO:{' '}
+             {detailProductList.recommendationId
+               ? detailProductList.recommendationId
+               : '--'}
+          </span>
+          <span>
+            Recommendation reasons:{' '}
+            {detailProductList.recommendationReasons
+              ? detailProductList.recommendationReasons
+              : '--'}
+          </span>
+        </div>
+        <div className="text flex-start">
           <span>
             First name:{' '}
             {detailProductList.consumerFirstName
@@ -61,6 +75,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               : '--'}
           </span>
         </div>
+
         <div className="text flex-start">
           <span>
             Create time:{' '}
@@ -68,14 +83,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               ? moment(detailProductList.createTime).format('YYYY-MM-DD')
               : '--'}
           </span>
-          <span>
-            Recommendation reasons:{' '}
-            {detailProductList.recommendationReasons
-              ? detailProductList.recommendationReasons
-              : '--'}
-          </span>
-        </div>
-        <div className="text flex-start">
           <span>
             Link:{' '}
             {
@@ -85,12 +92,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             recommendation/
             {detailProductList.base64Id ? detailProductList.base64Id : '--'}
           </span>
-          <span>
-            Recommendation NO:{' '}
-            {detailProductList.recommendationId
-              ? detailProductList.recommendationId
-              : '--'}
-          </span>
+
         </div>
       </div>
     );

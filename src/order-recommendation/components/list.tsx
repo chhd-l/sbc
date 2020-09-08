@@ -202,12 +202,12 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '13%' }}>Recipient name</th>
-                      <th style={{ width: '15%' }}>Recipient mail</th>
+                      <th style={{ width: '12%' }}>Recipient name</th>
+                      <th style={{ width: '13.5%' }}>Recipient mail</th>
                       <th style={{ width: '11%' }}>Amount</th>
-                      <th style={{ width: '11%' }}>Link status</th>
-                      <th style={{ width: '11%' }}>Perscriber</th>
-                      <th style={{ width: '11%' }}>Operation</th>
+                      <th style={{ width: '10.5%' }}>Link status</th>
+                      <th style={{ width: '12.5%' }}>Perscriber</th>
+                      <th style={{ width: '7.1%' }}>Operation</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">
@@ -268,7 +268,7 @@ export default class ListView extends React.Component<any, any> {
   }
 
   onDetail(e) {
-    console.log(e, 11111111111);
+    //console.log(e, 11111111111);
   }
 
   _renderContent(dataList) {

@@ -150,11 +150,20 @@ export default class StepConsentDetail extends Component<any, any> {
     return null;
   }
 
+  /*componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    const { onFormChange } = this.props.relaxProps;
+    console.log(prevState);
+    console.log(prevProps);
+
+    onFormChange({
+      field: 'languageTypeId',
+      value: prevState.consentLanguage[0].id
+    });
+  }*/
 
   componentDidMount() {
-    const { onEditSave } = this.props.relaxProps;
-    onEditSave(this.state.editList);
-    console.log(this.state.editList.consentTitleType);
+    const { onEditSave,onFormChange } = this.props.relaxProps;
+    //onEditSave(this.state.editList);
     this.state.editList.consentTitleType&&this.setState({ consentTitleType: this.state.editList.consentTitleType == 'Content'?true:false });
     this.setState({content:this.state.editList.consentDetailList})
 

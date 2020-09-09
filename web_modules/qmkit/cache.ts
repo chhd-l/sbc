@@ -20,5 +20,6 @@ export default {
   PRESCRIBER_DATA: 's2b-prescriber@data',
   EMPLOYEE_DATA: 's2b-employee@data',
   MAP_MODE:'s2b-map-mode',
-  OKTA_TOKEN: 'okta-token'
+  OKTA_TOKEN: 'okta-token',
+  LOGIN_ACCOUNT_NAME: 'login-account-name'
 };

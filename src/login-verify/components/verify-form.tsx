@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
+import { withOktaAuth } from '@okta/okta-react';
 
-export default class VerifyForm extends React.Component<any, any> {
+export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   form;
 
   _store: Store;
@@ -24,7 +25,8 @@ export default class VerifyForm extends React.Component<any, any> {
       requiredConsents: [],
       optionalConsents: [],
       checkContentIds: [],
-      clickProcess: false
+      clickProcess: false,
+      prcessDisabled: true
     }),
       (this._store = ctx['_plume$Store']);
   }
@@ -52,7 +54,7 @@ export default class VerifyForm extends React.Component<any, any> {
           })(
             <Search
               size="large"
-              placeholder="Client ID"
+              placeholder="Please Search Client ID First"
               onSearch={(value, e) => this.search(value, e)}
             />
           )}
@@ -72,9 +74,9 @@ export default class VerifyForm extends React.Component<any, any> {
             onChange={this.consentChange}
           >
             <Row>
-              {this.state.requiredConsents.map((x) => {
+              {this.state.requiredConsents.map((x, index) => {
                 return (
-                  <Col span={24}>
+                  <Col span={24} key={index}>
                     <Checkbox value={x.id} key={x.id}>
                       <span
                         dangerouslySetInnerHTML={{ __html: x.consentTitle }}
@@ -85,9 +87,9 @@ export default class VerifyForm extends React.Component<any, any> {
                 );
               })}
 
-              {this.state.optionalConsents.map((x) => {
+              {this.state.optionalConsents.map((x, index) => {
                 return (
-                  <Col span={24}>
+                  <Col span={24} key={index}>
                     <Checkbox value={x.id} key={x.id}>
                       <span
                         dangerouslySetInnerHTML={{ __html: x.consentTitle }}
@@ -110,7 +112,8 @@ export default class VerifyForm extends React.Component<any, any> {
               size="large"
               htmlType="submit"
               style={styles.loginBtn}
-              onClick={(e) => this._handleLogin(e)}
+              onClick={(e) => this._handlePrcess(e)}
+              disabled={this.state.prcessDisabled}
             >
               Proceed
             </Button>
@@ -169,9 +172,15 @@ export default class VerifyForm extends React.Component<any, any> {
         optionalConsents: consentRes.context.optionalList
       });
     }
+
+    if (res.code === 'K-000000' && consentRes.code === 'K-000000') {
+      this.setState({
+        prcessDisabled: false
+      })
+    }
   };
 
-  _handleLogin = async (e) => {
+  _handlePrcess = async (e) => {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
     this.setState({
@@ -192,22 +201,47 @@ export default class VerifyForm extends React.Component<any, any> {
           message.error('No Prescriber');
           return;
         }
+        let requiredList = [];
+        let optionalList = [];
+      
+        this.state.requiredConsents.map(x=>{
+          let isSelected = this.state.checkContentIds.includes(x.id)
+          requiredList.push({ id: x.id, selectedFlag: isSelected })
+        })
+
+        this.state.optionalConsents.map(x=>{
+          let isSelected = this.state.checkContentIds.includes(x.id)
+          optionalList.push({ id: x.id, selectedFlag: isSelected })
+        })
+
+        this.state.optionalConsents
+
+        let oktaToken = this.props.authState.accessToken;
+        debugger
+        if(!oktaToken) {
+          message.error('OKTA Token Expired');
+          this.props.authService.login('/');
+          return
+        }
         let param = {
           storeId: ids[0],
-          prescriberId: ids[1]
+          prescriberId: ids[1],
+          userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
+          oktaToken: oktaToken,
+          requiredList: requiredList,
+          optionalList: optionalList
         };
         const { res } = await webApi.verifyUser({ param });
         if (res.code === 'K-000000') {
-          if (sessionStorage.getItem(cache.OKTA_TOKEN)) {
-            login({}, sessionStorage.getItem(cache.OKTA_TOKEN));
-          } else {
-            message.error('OKTA not logged in');
-          }
+            login({}, oktaToken);
+        }
+        else {
+          message.error(res.message || 'Verify failed');
         }
       }
     });
   };
-}
+})
 
 const styles = {
   loginForm: {

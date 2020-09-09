@@ -9,7 +9,9 @@ import {
   message,
   Tooltip,
   Popconfirm,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd';
 import { SelectGroup, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -46,7 +48,8 @@ class UserList extends Component<any, any> {
       },
       userVisible: false,
       disabledModalVisible: false,
-      disabledReason: ''
+      disabledReason: '',
+      auditModalVisible: false
     }),
       (this.getUsers = this.getUsers.bind(this));
     this.deleteUser = this.deleteUser.bind(this);
@@ -125,24 +128,33 @@ class UserList extends Component<any, any> {
   };
 
   auditUser = async (record) => {
-    confirm({
-      title: 'Agree or Reject?',
-      okText: 'Agree',
-      cancelText: 'Reject',
-      async onOk() {
-        const { res } = await webapi.auditEmployee([record.employeeId]);
-        if (res.code === 'K-000000') {
-          this.getUsers();
-        }
-      },
-      async onCancel() {
-        const { res } = await webapi.auditEmployee([record.employeeId]);
-        if (res.code === 'K-000000') {
-          this.getUsers();
-        }
-      }
-    });
+    this.setState({
+      auditModalVisible: true,
+      userForm: Object.assign({
+        id: record.employeeId
+      })
+    })
   };
+
+  handleAudit = async (agree: Boolean) => {
+     if (agree) {
+      const { res } = await webapi.auditEmployee([this.state.userForm.id], 0);
+      if (res.code === 'K-000000') {
+        this.setState({
+          auditModalVisible: false
+        })
+        this.getUsers();
+      }
+     } else {
+      const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
+      if (res.code === 'K-000000') {
+        this.setState({
+          auditModalVisible: false
+        })
+        this.getUsers();
+      }
+     }
+  }
 
   sendEmail = async (id) => {};
 
@@ -263,7 +275,6 @@ class UserList extends Component<any, any> {
                 >
                   <Tooltip placement="top" title="Delete">
                     <a
-                      href="javascript:void(0);"
                       className="iconfont iconDelete"
                     ></a>
                   </Tooltip>
@@ -315,7 +326,6 @@ class UserList extends Component<any, any> {
                 >
                   <Tooltip placement="top" title="Delete">
                     <a
-                      href="javascript:void(0);"
                       className="iconfont iconDelete"
                     ></a>
                   </Tooltip>
@@ -460,6 +470,24 @@ class UserList extends Component<any, any> {
               )}
             </FormItem>
           </Form>
+        </Modal>
+        <Modal
+          maskClosable={false}
+          visible={this.state.auditModalVisible}
+          footer={null}
+          title="Agree or Reject?"
+          onCancel={()=>this.setState({
+            auditModalVisible: false
+          })}
+        > 
+          <Row>
+            <Col span={12}>
+            </Col>
+            <Col span={12} style={{textAlign: 'right'}}>
+               <Button onClick={()=> this.handleAudit(false)} style={{ marginRight: '10px' }}>Reject</Button>
+               <Button type="primary" onClick={()=> this.handleAudit(true)}>Agree</Button>
+            </Col>
+          </Row>       
         </Modal>
       </div>
     );

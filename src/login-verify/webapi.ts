@@ -6,10 +6,17 @@ type TResult = {
   context: any;
 };
 
-export function getPrescriberById(id: string) {
-  return Fetch<TResult>('/prescriber/getPrescriberById', {
+export function getPrescriberByPrescriberIdAndStoreId(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/getPrescriberByPrescriberIdAndStoreId', {
     method: 'POST',
-    body: JSON.stringify({ id: id })
+    body: JSON.stringify({ ...filterParams })
+  });
+}
+
+export function getStoreOpenConsentList(filterParams = {}) {
+  return Fetch<TResult>('/consent/getStoreOpenConsentList', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
   });
 }
 

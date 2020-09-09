@@ -22,6 +22,10 @@ export async function login(form, oktaToken: string) {
       res = resOkta.res as TResult;
       if ((res as any).code === Const.SUCCESS_CODE) {
         if(res.context.checkState === 1) { // Not checked
+          sessionStorage.setItem(
+            cache.LOGIN_ACCOUNT_NAME,
+            res.context.accountName
+          );
           history.push('login-verify')
           return
         }

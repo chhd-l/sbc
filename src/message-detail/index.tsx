@@ -159,7 +159,8 @@ class MessageDetails extends Component<any, any> {
       // if (value === 'Order' || value === 'Subscription') {
       data['objectNoDisable'] = false;
       this.props.form.setFieldsValue({
-        objectNo: ''
+        objectNo: '',
+        objectNoList: []
       });
       // } else {
       //   data['objectNoDisable'] = true;
@@ -375,8 +376,6 @@ class MessageDetails extends Component<any, any> {
       webapi.getOrderList(params).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
-
           this.setState({
             objectNoList: res.context.content,
             fetching: false
@@ -770,15 +769,19 @@ class MessageDetails extends Component<any, any> {
                             objectNoList.map((item, index) => (
                               <Option
                                 value={
-                                  item.recommendationId ||
-                                  item.subscribeId ||
-                                  item.id
+                                  basicForm.objectType === 'Order'
+                                    ? item.id
+                                    : basicForm.objectType === 'Subscription'
+                                    ? item.subscribeId
+                                    : item.recommendationId
                                 }
                                 key={index}
                               >
-                                {item.subscribeId ||
-                                  item.recommendationId ||
-                                  item.id}
+                                {basicForm.objectType === 'Order'
+                                  ? item.id
+                                  : basicForm.objectType === 'Subscription'
+                                  ? item.subscribeId
+                                  : item.recommendationId}
                               </Option>
                             ))}
                         </Select>

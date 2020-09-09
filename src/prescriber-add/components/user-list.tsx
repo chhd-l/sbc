@@ -17,6 +17,7 @@ import * as webapi from '../webapi';
 import { Link } from 'react-router-dom';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
+const { confirm } = Modal;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -124,11 +125,23 @@ class UserList extends Component<any, any> {
   };
 
   auditUser = async (record) => {
-    const { res } = await webapi.auditEmployee([record.employeeId]);
-    debugger;
-    if (res.code === 'K-000000') {
-      this.getUsers();
-    }
+    confirm({
+      title: 'Agree or Reject?',
+      okText: 'Agree',
+      cancelText: 'Reject',
+      async onOk() {
+        const { res } = await webapi.auditEmployee([record.employeeId]);
+        if (res.code === 'K-000000') {
+          this.getUsers();
+        }
+      },
+      async onCancel() {
+        const { res } = await webapi.auditEmployee([record.employeeId]);
+        if (res.code === 'K-000000') {
+          this.getUsers();
+        }
+      }
+    });
   };
 
   sendEmail = async (id) => {};

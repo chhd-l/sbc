@@ -21,7 +21,7 @@ const LoginHome = (props) => {
     }
   }, [authState, authService]);
 
-  return (
+  return authState.isAuthenticated || toOkta ? null : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>

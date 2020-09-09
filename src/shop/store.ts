@@ -1141,14 +1141,9 @@ export default class AppStore extends Store {
     console.log(this.state().get('formEdit'), 222222);
     console.log(type);
     console.log(obj, 33333);
-    if (
-      v.consentId != '' &&
-      v.consentCode != '' &&
-      v.consentTitleType != '' &&
-      v.consentTitle != ''
-    ) {
+    if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
       if (type != '000') {
-        const { res } = await webApi.fetchEditSave(v);
+        const { res } = await webApi.fetchEditSave(obj);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');

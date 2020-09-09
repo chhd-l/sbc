@@ -279,6 +279,7 @@ export default class ListView extends React.Component<any, any> {
       needAudit,
       onFindById
     } = this.props.relaxProps;
+
     let list = dataList.toJS();
     return list.map((v, index) => {
       const id = v.recommendationId;
@@ -358,7 +359,10 @@ export default class ListView extends React.Component<any, any> {
                     {v.consumerEmail != null ? v.consumerEmail : '--'}
                   </td>
                   <td style={{ width: '14%' }}>
-                    {amount}
+                    {v.recommendationGoodsInfoRels.reduce((sum, item) => {
+                      return sum + item.goodsInfo.marketPrice;
+                    }, 0)}
+                    {/* {v.recommendationGoodsInfoRels[0].goodsInfo.marketPrice} */}
                     {/* {img.map((item, index) => {
                       return (
                         <div>

@@ -90,6 +90,9 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRows: rows,
                 selectedRowKeys
               });
+              console.log(selectedRowKeys, 11111);
+              console.log(rows, 2222222);
+
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => ({

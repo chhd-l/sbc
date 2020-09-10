@@ -1,0 +1,531 @@
+import React, { Component } from 'react';
+import { Select, Input, Icon, Form, Col, Button } from 'antd';
+import '../editcomponents/style.less';
+import { Relax } from 'plume2';
+import { fromJS } from 'immutable';
+
+import 'braft-editor/dist/index.css';
+import BraftEditor from 'braft-editor';
+
+import { SelectGroup, UEditor, noop } from 'qmkit';
+//import { render } from 'react-dom';
+//import DragTable from '../components/dragTable';
+//import { FormattedMessage } from 'react-intl';
+const { Option } = Select;
+const FormItem = Form.Item;
+
+let addContent = [];
+let content1 = '';
+let content2 = '';
+let consentDetailList = []
+@Relax
+export default class StepConsentDetail extends Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pageType: 'Detail',
+      content: [],
+      consentTitleType: true,
+      detailType: false,
+      a: { contentTitle: '', contentBody: '', sort: '' },
+      b: { contentTitle: '', contentBody: '', sort: '' },
+      c: { contentTitle: '', contentBody: '', sort: '' },
+      d: { contentTitle: '', contentBody: '', sort: '' },
+      e: { contentTitle: '', contentBody: '', sort: '' },
+      category: '',
+      editList: {},
+      consentLanguage: [],
+      // 创建一个空的editorState作为初始值
+      editorState: BraftEditor.createEditorState(null),
+      editId:'',
+      editor:{
+        contentTitle:'',
+        contentBody:'',
+        sort:''
+      }
+    };
+  }
+
+  props: {
+    relaxProps?: {
+      loading: boolean;
+      dataList: any;
+      onFormChange: Function;
+      consentLanguage: any;
+      consentForm: any;
+      refDetailEditor: Function;
+      onEditSave: Function;
+      editList: any;
+      editId: any;
+      formEdit: any
+    };
+  };
+
+  static relaxProps = {
+    loading: 'loading',
+    dataList: 'dataList',
+    onFormChange: noop,
+    consentLanguage: 'consentLanguage',
+    consentForm: 'consentForm',
+    refDetailEditor: noop,
+    onEditSave: noop,
+    editList: 'editList',
+    editId: 'editId',
+
+  };
+
+  handleChange = (value) => {
+    //console.log(`selected ${value}`);
+  };
+
+  pageChange = (e) => {
+    this.setState({ pageType: e });
+  };
+
+  addDetail = () => {
+    addContent.push(1);
+    this.setState({ content: addContent, detailType: true });
+  };
+
+  handleConsentTitle = (e) => {
+    //console.log(e.key);
+    this.setState({ consentTitleType: e.key == 'Content' ? true : false });
+  };
+
+  handleContent = (m, n, o) => {
+    const { onFormChange } = this.props.relaxProps;
+    let list = [];
+    if (o == 0) {
+      this.setState({
+        a: { ...this.state.a, contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 1) {
+      this.setState({
+        b: { ...this.state.b, contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 2) {
+      this.setState({
+        c: { ...this.state.c, contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 3) {
+      this.setState({
+        d: { ...this.state.d, contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+    if (o == 4) {
+      this.setState({
+        e: { ...this.state.e, contentTitle: m, contentBody: n, sort: o + 1 }
+      });
+    }
+
+    list.push(
+      this.state.a,
+      this.state.b,
+      this.state.c,
+      this.state.d,
+      this.state.e
+    );
+    onFormChange({
+      field: 'consentDetailList',
+      value: list
+    });
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { editList, consentLanguage } = nextProps;
+    // 当传入的type发生变化的时候，更新state
+    if (editList !== prevState.editList) {
+      //console.log(nextProps.relaxProps);
+      return {
+        editList: nextProps.relaxProps.editList,
+        consentLanguage: nextProps.relaxProps.consentLanguage,
+        //content: nextProps.relaxProps.editList.consentDetailList
+        //: nextProps.relaxProps.consentTitleType
+      };
+    }
+    // 否则，对于state不进行任何操作
+    return null;
+  }
+
+  /*componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    const { onFormChange } = this.props.relaxProps;
+    console.log(prevState);
+    console.log(prevProps);
+
+    onFormChange({
+      field: 'languageTypeId',
+      value: prevState.consentLanguage[0].id
+    });
+  }*/
+
+  componentDidMount() {
+    const { onEditSave,onFormChange } = this.props.relaxProps;
+    //onEditSave(this.state.editList);
+    this.state.editList.consentTitleType&&this.setState({ consentTitleType: this.state.editList.consentTitleType == 'Content'?true:false });
+    this.setState({content:this.state.editList.consentDetailList})
+
+  }
+
+  /* componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+     console.log(prevProps,22222222222)
+     console.log(prevState,33333333)
+
+   }*/
+
+  handleEditorChange = (editorState) => {
+    const { onFormChange } = this.props.relaxProps;
+
+    this.setState({ editorState }, () => {
+      let rawInfo = this.state.editorState.toRAW();
+      let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
+      //console.log('Html', htmlInfo);
+      //console.log('Raw', rawInfo);
+      onFormChange({
+        field: 'consentTitle',
+        value: htmlInfo
+      });
+    });
+  };
+  handleEditorDetailChange = (editorState,i) => {
+    const { onFormChange,consentForm, formEdit } = this.props.relaxProps;
+    this.setState({ editorState }, () => {
+      let rawInfo = this.state.editorState.toRAW();
+      let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
+      //console.log('Html', htmlInfo);
+      //console.log('Raw', rawInfo);
+      console.log(consentForm.toJS(),11111111);
+
+      if( i == 1) {
+        this.setState({
+          a: { ...this.state.a, contentBody: htmlInfo}
+        },()=>{
+        })
+      }
+      if( i == 2) {
+        this.setState({
+          b: { ...this.state.b, contentBody: htmlInfo}
+        },()=>{
+        })
+      }
+      if( i == 3) {
+        this.setState({
+          c: { ...this.state.c, contentBody: htmlInfo}
+        },()=>{
+        })
+      }
+      if( i == 4) {
+        this.setState({
+          d: { ...this.state.d, contentBody: htmlInfo}
+        },()=>{
+        })
+      }
+      if( i == 5) {
+        this.setState({
+          e: { ...this.state.e, contentBody: htmlInfo}
+        },()=>{
+        })
+      }
+      onFormChange({
+        field: 'consentDetailList',
+        value: [this.state.a,this.state.b,this.state.c,this.state.d,this.state.e]
+      });
+    });
+  };
+  render() {
+    const { onFormChange, editId } = this.props.relaxProps;
+    const { editList, consentLanguage, editorState } = this.state;
+    const htmlString = editList.consentTitle ? editList.consentTitle : '';
+    const editor = BraftEditor.createEditorState(htmlString);
+    const controls = [
+      'bold',
+      'italic',
+      'underline',
+      'text-color',
+      'separator',
+      'link',
+      'separator'
+    ];
+
+    return (
+      <div className="consent-detail">
+        <div className="detail space-between">
+          <div className="detail-form">
+            <FormItem>
+              <SelectGroup
+                label="Category"
+                defaultValue={
+                  editList.consentCategory
+                    ? editList.consentCategory
+                    : 'Prescriber'
+                }
+                style={{ width: 280 }}
+                onChange={(value) => {
+                  onFormChange({
+                    field: 'consentCategory',
+                    value
+                  });
+                }}
+              >
+                <Option value="Prescriber">Prescriber</Option>
+                <Option value="Consumer">Consumer</Option>
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <Input
+                addonBefore="Consent id"
+                defaultValue={editList.consentId ? editList.consentId : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'consentId',
+                    value: value
+                  });
+                }}
+              />
+            </FormItem>
+          </div>
+
+          <div className="detail-form">
+            <FormItem>
+              <SelectGroup
+                defaultValue={
+                  editList.filedType ? editList.filedType : 'Optional'
+                }
+                label="Filed type"
+                style={{ width: 280 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'filedType',
+                    value
+                  });
+                }}
+              >
+                <Option value="Optional">Optional</Option>
+                <Option value="Required">Required</Option>
+                {/*{customerTypeArr.map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}*/}
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <Input
+                addonBefore="Consent code"
+                defaultValue={editList.consentCode ? editList.consentCode : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'consentCode',
+                    value: value
+                  });
+                }}
+              />
+            </FormItem>
+          </div>
+
+          <div className="detail-form">
+            <FormItem>
+              <SelectGroup
+                defaultValue={
+                  editList.consentPage ? editList.consentPage : 'Landing page'
+                }
+                label="Page"
+                style={{ width: 280 }}
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'consentPage',
+                    value
+                  });
+                }}
+              >
+                <Option value="Landing page">Landing page</Option>
+                {/*<Option value="">landing page</Option>*/}
+                <Option value="Check out">check out</Option>
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <SelectGroup
+                defaultValue={
+                  editList.consentType ? editList.consentType : 'E-mail in'
+                }
+                label="Consent type"
+                style={{ width: 280 }}
+                onChange={(value, index) => {
+                  value = value === '' ? null : value;
+
+                  onFormChange({
+                    field: 'consentType',
+                    value
+                  });
+                }}
+              >
+                <Option value="E-mail in">Email in</Option>
+                <Option value="E-mail out">Email out</Option>
+              </SelectGroup>
+            </FormItem>
+          </div>
+
+          <div className="edit">
+            <div className="edit-consent">
+              <FormItem>
+                <SelectGroup
+                  defaultValue={
+                    editList.consentTitleType
+                      ? editList.consentTitleType
+                      : 'Content'
+                  }
+                  label="Consent title"
+                  onChange={(value, index) => {
+                    value = value === '' ? null : value;
+                    this.handleConsentTitle(index);
+                    onFormChange({
+                      field: 'consentTitleType',
+                      value
+                    });
+                  }}
+                >
+                  <Option key="Content" value="Content">
+                    Content
+                  </Option>
+                  <Option key="URL" value="URL">
+                    URL
+                  </Option>
+                </SelectGroup>
+              </FormItem>
+            </div>
+            <div className="edit-content">
+              {this.state.consentTitleType == true ? (
+                <FormItem>
+                  <div className="editor-wrapper">
+                    <BraftEditor
+                      defaultValue={editor}
+                      //value={editorState}
+                      onChange={this.handleEditorChange}
+                      className="my-editor"
+                      controls={controls}
+                    />
+                  </div>
+                </FormItem>
+              ) : (
+                <Input
+                  placeholder="Please enter URL address"
+                  defaultValue={
+                    editList.consentTitle ? editList.consentTitle : ''
+                  }
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    onFormChange({
+                      field: 'consentTitle',
+                      value: value
+                    });
+                  }}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="edit-add">
+            {this.state.detailType == true ? (
+              <div className="edit-add-content space-between-align">
+                <div className="edit-content">Consent detail</div>
+              </div>
+            ) : null}
+            {
+              (this.state.editList.consentTitleType == 'Content' || this.state.editId != '000')? ( <Button
+                className="btn"
+                type="primary"
+                shape="round"
+                icon="plus"
+                onClick={this.addDetail}
+              >
+                New detail
+              </Button>):null
+            }
+
+          </div>
+          <div className="detail-add">
+            {this.state.content&&this.state.content.map((item, i) => {
+              if (i <= 4) {
+                return (
+                  <div className="add" key={i}>
+                    <div className="add-content space-between">
+                      <div className="add-title">Detail {i + 1}</div>
+                      <div className="add-i">
+                        <Input
+                          placeholder="Please enter URL keywords"
+                          defaultValue={item.contentTitle}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            content1 = value;
+                            this.handleContent(content1, content2, i);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <FormItem>
+                      <div className="editor-wrapper">
+                        <BraftEditor
+                          defaultValue={BraftEditor.createEditorState(item.contentBody)}
+                          //value={editorState}
+                          onChange={(e) =>this.handleEditorDetailChange(e,i+1)}
+                          className="my-editor"
+                          controls={controls}
+                        />
+                      </div>
+                    </FormItem>
+                    {/*<UEditor
+                      id={'detail' + i}
+                      content=""
+                      height="320px"
+                      key={i}
+                      onContentChange={(UEditor) => {
+                        content2 = UEditor;
+                        this.handleContent(content1, content2, i);
+                      }}
+                    />*/}
+                  </div>
+                );
+              } else {
+                return false;
+              }
+            })}
+          </div>
+        </div>
+        <div className="language">
+          <Select
+            defaultValue={
+              editList.languageTypeId
+                ? editList.languageTypeId
+                : consentLanguage[0]
+                ? consentLanguage[0].description
+                : []
+            }
+            style={{ width: 120 }}
+            onChange={(value) => {
+              value = value === '' ? null : value;
+              onFormChange({
+                field: 'languageTypeId',
+                value
+              });
+            }}
+          >
+            {consentLanguage[0] &&
+            consentLanguage.map((item, i) => {
+              return (
+                <Option key={i} value={item.id}>
+                  {item.description}
+                </Option>
+              );
+            })}
+          </Select>
+        </div>
+      </div>
+    );
+  }
+}

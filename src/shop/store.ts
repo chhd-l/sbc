@@ -12,6 +12,7 @@ import CompanyActor from './actor/company-actor';
 import Consent from './actor/consent';
 import * as webApi from './webapi';
 
+const editList = {};
 export default class AppStore extends Store {
   constructor(props) {
     super(props);
@@ -1130,25 +1131,19 @@ export default class AppStore extends Store {
   //new
   consentSubmit = async (param?: any, type?: any) => {
     let v = param.toJS();
-    for (let key in v) {
+    /*for (let key in v) {
       if (v[key] === '') {
         delete v[key];
       }
-    }
+    }*/
     let obj = {};
-    obj = Object.assign(this.state().get('formEdit'), v);
-    /*console.log(v, 11111);
-    console.log(this.state().get('formEdit'), 222222);
+    console.log(v, 11111);
+    console.log(editList, 222222);
     console.log(type);
+    obj = Object.assign(this.state().get('formEdit'), v);
     console.log(obj, 33333);
-    console.log(this.state().get('consentLanguage'), 444444);*/
     //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
-    if (
-      v.consentId != '' &&
-      v.consentCode != '' &&
-      v.consentTitleType != '' &&
-      v.consentTitle != ''
-    ) {
+    /*if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
       if (type != '000') {
         const { res } = await webApi.fetchEditSave(obj);
         if (res.code == Const.SUCCESS_CODE) {
@@ -1176,7 +1171,7 @@ export default class AppStore extends Store {
       }
     } else {
       message.error('Submit Can not be empty！');
-    }
+    }*/
   };
 
   //pageChange
@@ -1218,8 +1213,22 @@ export default class AppStore extends Store {
   onEditList = async (param?: any) => {
     const { res } = await webApi.fetchEditList(param);
     if (res.code == Const.SUCCESS_CODE) {
+      console.log(res, '+++++++++++++');
+      editList = res.context.consentAndDetailVO;
       this.dispatch('consent:editList', res.context.consentAndDetailVO);
       this.dispatch('consent:editId', param);
+    }
+  };
+
+  //fetchConsentDetailDelete
+  getConsentDetailDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDetailDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        //this.getConsentList();
+      });
+    } else {
+      message.error(res.message);
     }
   };
 }

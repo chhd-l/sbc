@@ -60,6 +60,7 @@ export default class StepConsentDetail extends Component<any, any> {
       editList: any;
       editId: any;
       formEdit: any;
+      getConsentDetailDelete: Function;
     };
   };
 
@@ -72,7 +73,8 @@ export default class StepConsentDetail extends Component<any, any> {
     refDetailEditor: noop,
     onEditSave: noop,
     editList: 'editList',
-    editId: 'editId'
+    editId: 'editId',
+    getConsentDetailDelete: noop
   };
 
   handleChange = (value) => {
@@ -137,7 +139,13 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { onFormChange, consentLanguage } = this.props.relaxProps;
+    const {
+      onFormChange,
+      consentLanguage,
+      onEditSave,
+      editList
+    } = this.props.relaxProps;
+    console.log(this.state.editList.consentTitleType, 11111);
     this.setState({
       consentTitleType:
         this.state.editList.consentTitleType == 'Content' ? true : false
@@ -147,6 +155,8 @@ export default class StepConsentDetail extends Component<any, any> {
       field: 'languageTypeId',
       value: consentLanguage[0] && consentLanguage[0].id
     });
+    onEditSave(editList);
+    console.log(editList, 12211);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -203,6 +213,14 @@ export default class StepConsentDetail extends Component<any, any> {
         });
       });
     }
+  };
+
+  onDelete = (e) => {
+    const { getConsentDetailDelete } = this.props.relaxProps;
+    let content = this.state.content.filter((item) => item.sort != e.sort);
+    this.setState({ content: content }, () => {
+      getConsentDetailDelete(e.id);
+    });
   };
 
   render() {
@@ -396,7 +414,8 @@ export default class StepConsentDetail extends Component<any, any> {
               </FormItem>
             </div>
             <div className="edit-content">
-              {this.state.consentTitleType == true ? (
+              {this.state.consentTitleType == true ||
+              this.state.editId != '000' ? (
                 <FormItem>
                   <div className="editor-wrapper">
                     <BraftEditor
@@ -457,6 +476,7 @@ export default class StepConsentDetail extends Component<any, any> {
                           <Input
                             placeholder="Please enter URL keywords"
                             defaultValue={item.contentTitle}
+                            key={item.contentTitle + i}
                             onChange={(e) => {
                               const value = (e.target as any).value;
                               content1 = value;
@@ -464,6 +484,10 @@ export default class StepConsentDetail extends Component<any, any> {
                             }}
                           />
                         </div>
+                        <div
+                          className="iconfont iconDelete icon"
+                          onClick={(e) => this.onDelete(item)}
+                        ></div>
                       </div>
                       <FormItem>
                         <div className="editor-wrapper">
@@ -471,6 +495,7 @@ export default class StepConsentDetail extends Component<any, any> {
                             defaultValue={BraftEditor.createEditorState(
                               item.contentBody
                             )}
+                            key={item.contentBody + i}
                             //value={editorState}
                             onChange={(e) => {
                               content2 = BraftEditor.createEditorState(

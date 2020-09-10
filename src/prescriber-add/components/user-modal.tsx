@@ -176,7 +176,8 @@ class UserModal extends Component<any, any> {
           employeeName: values.firstName + ' ' + values.lastName,
           email: values.email,
           prescriberIds: [this.props.prescriberKeyId],
-          roleIdList: [this.state.prescriberRoleId.toString()]
+          roleIdList: [this.state.prescriberRoleId.toString()],
+          accountState: 3
         });
         if (this.props.userForm.id) {
           const { res } = await webapi.updateUser(param);

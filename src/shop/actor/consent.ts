@@ -12,7 +12,7 @@ export default class ModalActor extends Actor {
       consentLanguage: [],
       //new consent
       consentForm: {
-        languageTypeId: '2619',
+        languageTypeId: '',
         consentCategory: 'Prescriber',
         filedType: 'Optional',
         consentPage: 'Landing page',
@@ -25,7 +25,8 @@ export default class ModalActor extends Actor {
       },
       pageChangeType: 'List',
       editList: null,
-      editId: null
+      editId: null,
+      formEdit: {}
     };
   }
 
@@ -47,6 +48,11 @@ export default class ModalActor extends Actor {
   @Action('consent:consentForm')
   consentForm(state: IMap, { field, value }) {
     return state.setIn(['consentForm', field], value);
+  }
+  //formEdit
+  @Action('consent:formEdit')
+  formEdit(state: IMap, res) {
+    return state.set('formEdit', res);
   }
 
   //pageChangeType

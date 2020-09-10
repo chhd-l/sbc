@@ -101,7 +101,8 @@ export default class GoodsModal extends React.Component<any, any> {
                  }*/
         }}
         onCancel={() => {
-          onCancelBackFun();
+          this.props.showModal(false);
+          //onCancelBackFun();
         }}
         okText="Confirm"
         cancelText="Cancel"

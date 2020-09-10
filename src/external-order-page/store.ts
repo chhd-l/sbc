@@ -46,20 +46,22 @@ export default class AppStore extends Store {
     form['orderType'] = 'NORMAL_ORDER';
     const { res: needRes } = await webapi.getOrderNeedAudit();
     if (needRes.code == Const.SUCCESS_CODE) {
-      webapi.getExternalOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
+      webapi
+        .getExternalOrderList({ ...form, pageNum, pageSize })
+        .then(({ res }) => {
+          if (res.code == Const.SUCCESS_CODE) {
             this.dispatch('loading:end');
             this.dispatch('list:init', res.context);
             this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
             //this.dispatch('list:setNeedAudit', needRes.context.audit);
             this.btnLoading = false;
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
+          } else {
+            message.error(res.message);
+            if (res.code === 'K-110001') {
+              this.dispatch('loading:end');
+            }
           }
-        }
-      });
+        });
     }
   };
 
@@ -305,5 +307,45 @@ export default class AppStore extends Store {
    */
   hideRejectModal = () => {
     this.dispatch('order:list:reject:hide');
+  };
+
+  bulkExport = async () => {
+    const queryParams = this.state().get('form').toJS();
+    console.log(this.state().get('form').toJS(), 111122222);
+    const {
+      clientId,
+      clinicsName,
+      prescriptionId,
+      orderId,
+      productId,
+      beginTime,
+      endTime
+    } = queryParams;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 参数加密
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            clientId,
+            clinicsName,
+            prescriptionId,
+            orderId,
+            productId,
+            beginTime,
+            endTime,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref = Const.HOST + `/external/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Please log in');
+        }
+        resolve();
+      }, 500);
+    });
   };
 }

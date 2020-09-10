@@ -1128,7 +1128,7 @@ export default class AppStore extends Store {
   };
 
   //new
-  consentSubmit = async (param?: any, type) => {
+  consentSubmit = async (param?: any, type?: any) => {
     let v = param.toJS();
     for (let key in v) {
       if (v[key] === '') {
@@ -1137,10 +1137,10 @@ export default class AppStore extends Store {
     }
     let obj = {};
     obj = Object.assign(this.state().get('formEdit'), v);
-    console.log(v, 11111);
+    /*console.log(v, 11111);
     console.log(this.state().get('formEdit'), 222222);
     console.log(type);
-    console.log(obj, 33333);
+    console.log(obj, 33333);*/
     if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
       if (type != '000') {
         const { res } = await webApi.fetchEditSave(obj);

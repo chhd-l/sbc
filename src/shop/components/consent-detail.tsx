@@ -189,51 +189,6 @@ export default class StepConsentDetail extends Component<any, any> {
       });
     });
   };
-  handleEditorDetailChange = (editorState,i) => {
-    const { onFormChange,consentForm, formEdit } = this.props.relaxProps;
-    this.setState({ editorState }, () => {
-      let rawInfo = this.state.editorState.toRAW();
-      let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-      //console.log('Html', htmlInfo);
-      //console.log('Raw', rawInfo);
-      console.log(consentForm.toJS(),11111111);
-
-      if( i == 1) {
-        this.setState({
-          a: { ...this.state.a, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 2) {
-        this.setState({
-          b: { ...this.state.b, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 3) {
-        this.setState({
-          c: { ...this.state.c, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 4) {
-        this.setState({
-          d: { ...this.state.d, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 5) {
-        this.setState({
-          e: { ...this.state.e, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      onFormChange({
-        field: 'consentDetailList',
-        value: [this.state.a,this.state.b,this.state.c,this.state.d,this.state.e]
-      });
-    });
-  };
   render() {
     const { onFormChange, editId } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
@@ -473,7 +428,10 @@ export default class StepConsentDetail extends Component<any, any> {
                         <BraftEditor
                           defaultValue={BraftEditor.createEditorState(item.contentBody)}
                           //value={editorState}
-                          onChange={(e) =>this.handleEditorDetailChange(e,i+1)}
+                          onChange={(e) => {
+                            content2 = BraftEditor.createEditorState(e.toRAW()).toHTML();
+                            this.handleContent(content1, content2, i)
+                          }}
                           className="my-editor"
                           controls={controls}
                         />

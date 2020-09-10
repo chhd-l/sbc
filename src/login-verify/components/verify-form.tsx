@@ -26,7 +26,8 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
       optionalConsents: [],
       checkContentIds: [],
       clickProcess: false,
-      prcessDisabled: true
+      prcessDisabled: true,
+      prcessLoadding: false
     }),
       (this._store = ctx['_plume$Store']);
   }
@@ -70,7 +71,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         </FormItem>
         <FormItem style={{ marginTop: 10 }}>
           <Checkbox.Group
-            style={{ width: '100%' }}
+            style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
             onChange={this.consentChange}
           >
             <Row>
@@ -114,6 +115,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
               style={styles.loginBtn}
               onClick={(e) => this._handlePrcess(e)}
               disabled={this.state.prcessDisabled}
+              loading={this.state.prcessLoadding}
             >
               Proceed
             </Button>
@@ -148,7 +150,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   search = async (value, e) => {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
-    const ids = value.split('_');
+    const ids = value.split('-');
     if (ids && ids.length < 2) {
       message.error('No Prescriber');
       form.setFieldsValue({ prescriberName: '' });
@@ -171,6 +173,11 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         requiredConsents: consentRes.context.requiredList,
         optionalConsents: consentRes.context.optionalList
       });
+    } else {
+      this.setState({
+        requiredConsents:[],
+        optionalConsents: []
+      });
     }
 
     if (res.code === 'K-000000' && consentRes.code === 'K-000000') {
@@ -184,21 +191,28 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
     this.setState({
-      clickProcess: true
+      clickProcess: true,
+      prcessLoadding: true
     });
 
     let consentValid = true;
     this.state.requiredConsents.map((x) => {
       if (!this.state.checkContentIds.includes(x.id)) {
         consentValid = false;
+        this.setState({
+          prcessLoadding: false
+        });
         return;
       }
     });
     form.validateFields(null, async (errs, values) => {
       if (!errs && consentValid) {
-        let ids = values.prescriberId.split('_');
+        let ids = values.prescriberId.split('-');
         if (ids && ids.length < 2) {
           message.error('No Prescriber');
+          this.setState({
+            prcessLoadding: false
+          });
           return;
         }
         let requiredList = [];
@@ -217,26 +231,31 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         this.state.optionalConsents
 
         let oktaToken = this.props.authState.accessToken;
-        debugger
         if(!oktaToken) {
           message.error('OKTA Token Expired');
-          this.props.authService.login('/');
+          this.props.authService.logout('/');
           return
         }
         let param = {
           storeId: ids[0],
           prescriberId: ids[1],
           userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
-          oktaToken: oktaToken,
+          oktaToken: 'Bearer ' +  oktaToken,
           requiredList: requiredList,
           optionalList: optionalList
         };
-        const { res } = await webApi.verifyUser({ param });
+        const { res } = await webApi.verifyUser(param);
         if (res.code === 'K-000000') {
             login({}, oktaToken);
+            this.setState({
+              prcessLoadding: false
+            });
         }
         else {
           message.error(res.message || 'Verify failed');
+          this.setState({
+            prcessLoadding: false
+          });
         }
       }
     });

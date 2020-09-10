@@ -105,7 +105,7 @@ class TabList extends React.Component<any, any> {
     const { onSwitch } = this.props.relaxProps;
     //let linkStatus = checked === true ? 0 : 1;
 
-    onSwitch({ id, openFlag: checked == true ? 0 : 1 });
+    onSwitch({ id, openFlag: checked == true ? 1 : 0 });
   };
   confirm = (check, id) => {
     this.onChange(!check, id);
@@ -122,7 +122,7 @@ class TabList extends React.Component<any, any> {
   _getOption = (rowInfo) => {
     const { onSwitch, pageChange, linkStatus } = this.props.relaxProps;
     rowInfo = fromJS(rowInfo);
-    const check = +rowInfo.get('openFlag') === 0 ? true : false;
+    const check = +rowInfo.get('openFlag') === 0 ? false : true;
     // const check = +linkStatus === 0 ? true : false;
 
     return (

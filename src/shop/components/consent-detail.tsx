@@ -44,7 +44,8 @@ export default class StepConsentDetail extends Component<any, any> {
         contentBody: '',
         sort: ''
       },
-      value: ['Landing page', 'check out']
+      value: ['Landing page', 'check out'],
+      detailList: []
     };
   }
 
@@ -100,7 +101,7 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange, onDetailList, detailList } = this.props.relaxProps;
+    const { onFormChange, onEditSave, detailList } = this.props.relaxProps;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -166,24 +167,16 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.e
     );
     list = list.filter((item) => item.contentTitle != '');
-    console.log(list, 2222);
+    console.log(this.state.detailList, 2222);
     onFormChange({
       field: 'consentDetailList',
       value: list
     });
-    /*onDetailList({
-      field: 'detailList',
-      value: list
-    });*/
+    onEditSave(list);
   };
 
   componentDidMount() {
-    const {
-      onFormChange,
-      consentLanguage,
-      onEditSave,
-      editList
-    } = this.props.relaxProps;
+    const { onFormChange, consentLanguage } = this.props.relaxProps;
     console.log(this.state.editList.consentTitleType, 11111);
     this.setState({
       consentTitleType:
@@ -194,8 +187,7 @@ export default class StepConsentDetail extends Component<any, any> {
       field: 'languageTypeId',
       value: consentLanguage[0] && consentLanguage[0].id
     });
-    onEditSave(editList);
-    console.log(editList, 12211);
+    //onEditSave(editList);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -204,6 +196,7 @@ export default class StepConsentDetail extends Component<any, any> {
     if (editList !== prevState.editList) {
       return {
         editList: nextProps.relaxProps.editList,
+        detailList: nextProps.relaxProps.detailList,
         consentLanguage: nextProps.relaxProps.consentLanguage
       };
     }

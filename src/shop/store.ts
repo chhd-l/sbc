@@ -2,6 +2,7 @@ import { Store } from 'plume2';
 
 import { message } from 'antd';
 import { fromJS, Map } from 'immutable';
+import * as _ from 'lodash';
 
 import { Const, history } from 'qmkit';
 import moment from 'moment';
@@ -1136,12 +1137,25 @@ export default class AppStore extends Store {
       }
     }*/
     let obj = {};
-    v.consentDetailList = this.state().get('detailList');
+    let arr = '';
     console.log(v, 11111);
     console.log(this.state().get('detailList'), 222222);
+    console.log(this.state().get('formEdit'), 3333333);
     console.log(type);
-    obj = Object.assign(this.state().get('editList'), v);
-    console.log(obj, 33333);
+    let formEdit = this.state().get('formEdit');
+    _.reduce(
+      this.state().get('detailList'),
+      (obj, param) => {
+        console.log(obj);
+        console.log(param);
+        obj[formEdit.id] = param.id;
+        return obj;
+      },
+      {}
+    );
+
+    ///obj = Object.assign(this.state().get('formEdit'), v);
+    console.log(this.state().get('detailList'), 44444);
     //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
     /*if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
       if (type != '000') {

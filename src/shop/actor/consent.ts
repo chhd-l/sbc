@@ -15,7 +15,7 @@ export default class ModalActor extends Actor {
         languageTypeId: '',
         consentCategory: 'Prescriber',
         filedType: 'Optional',
-        consentPage: 'Landing page',
+        consentPage: ['Landing page', 'check out'].toString(),
         consentId: '',
         consentCode: '',
         consentType: 'Email in',

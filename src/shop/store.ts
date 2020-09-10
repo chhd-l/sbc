@@ -1140,8 +1140,15 @@ export default class AppStore extends Store {
     /*console.log(v, 11111);
     console.log(this.state().get('formEdit'), 222222);
     console.log(type);
-    console.log(obj, 33333);*/
-    if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
+    console.log(obj, 33333);
+    console.log(this.state().get('consentLanguage'), 444444);*/
+    //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
+    if (
+      v.consentId != '' &&
+      v.consentCode != '' &&
+      v.consentTitleType != '' &&
+      v.consentTitle != ''
+    ) {
       if (type != '000') {
         const { res } = await webApi.fetchEditSave(obj);
         if (res.code == Const.SUCCESS_CODE) {

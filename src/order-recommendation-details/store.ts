@@ -29,9 +29,9 @@ export default class AppStore extends Store {
         arr.push(v.goodsInfo);
       });
       this.transaction(() => {
-        this.dispatch('loading:end');
         this.dispatch('product:detailProductList', res1.res.context);
         this.dispatch('product:productselect', arr);
+        this.dispatch('loading:end');
       });
     } else {
       message.error(res1.res.message);
@@ -46,6 +46,10 @@ export default class AppStore extends Store {
     const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
+      /*let data = res1.res.context.goodsInfoPage.content.map((item, i) => {
+        console.log(item,2212211);
+        item.quantity = 1;
+      })*/
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
@@ -73,14 +77,14 @@ export default class AppStore extends Store {
   };
 
   //Get Link
-  onCreate = async (param?: any) => {
+  onCreate = async (param, type) => {
     const res = await webapi.fetchCreateLink(param);
+    this.dispatch('create:createLinkType', type);
     this.dispatch('get:getLink', res.res.context);
   };
 
   //Send & Another
   onSharing = (sharing) => {
-    console.log(sharing, 11111111);
     this.dispatch('detail:sharing', sharing);
   };
 
@@ -104,12 +108,11 @@ export default class AppStore extends Store {
   };
 
   //LinkStatus
-
   onLinkStatus = async (param?: any) => {
     const res = await webapi.fetchLinkStatus(param);
     if (res.res.code === Const.SUCCESS_CODE) {
       //message.success('switch successfully!');
-      this.dispatch('get:linkStatus', res.res.context);
+      this.dispatch('get:linkStatus', res.res.context.linkStatus);
     } else {
       message.error(res.res.message);
       if (res.res.code === 'K-110001') {

@@ -46,6 +46,7 @@ export default class SearchHead extends Component<any, any> {
       onExportModalChange: Function;
       onExportModalHide: Function;
       exportModalData: IMap;
+      bulkExport: Function;
     };
   };
 
@@ -58,6 +59,7 @@ export default class SearchHead extends Component<any, any> {
     onExportByIds: noop,
     onExportModalChange: noop,
     onExportModalHide: noop,
+    bulkExport: noop,
     exportModalData: 'exportModalData'
   };
 
@@ -88,7 +90,8 @@ export default class SearchHead extends Component<any, any> {
       onSearch,
       tab,
       exportModalData,
-      onExportModalHide
+      onExportModalHide,
+      bulkExport
     } = this.props.relaxProps;
     let hasMenu = false;
     if (
@@ -372,19 +375,19 @@ export default class SearchHead extends Component<any, any> {
                         prescriptionId,
                         orderId,
                         productId,
-                        /*buyerOptions,
-                    goodsOptions,
-                    receiverSelect,
-                    clinicSelect,
-                    id,
-                    subscribeId,
-                    buyerOptionsValue,
-                    goodsOptionsValue,
-                    receiverSelectValue,
-                    clinicSelectValue,
-                    tradeState,*/
                         beginTime,
                         endTime
+                        /*buyerOptions,
+                   goodsOptions,
+                   receiverSelect,
+                   clinicSelect,
+                   id,
+                   subscribeId,
+                   buyerOptionsValue,
+                   goodsOptionsValue,
+                   receiverSelectValue,
+                   clinicSelectValue,
+                   tradeState,*/
                       } = this.state;
 
                       /*const ts = {} as any;
@@ -421,7 +424,16 @@ export default class SearchHead extends Component<any, any> {
               </Col>
             </Row>
           </Form>
-
+          <AuthWrapper functionName={'externalOrderExport'}>
+            <div
+              style={{ paddingBottom: '16px' }}
+              className="ant-form-inline filter-content"
+            >
+              <Button onClick={() => bulkExport()}>
+                {<FormattedMessage id="bulkExport" />}
+              </Button>
+            </div>
+          </AuthWrapper>
           {/*{hasMenu && (
             <div className="handle-bar">
               <Dropdown

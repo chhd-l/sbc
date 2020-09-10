@@ -5,7 +5,7 @@ const logo = require('../img/logo.png');
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const } from 'qmkit';
+import { history, Const, login } from 'qmkit';
 
 export default class LoginForm extends React.Component<any, any> {
   form;
@@ -112,7 +112,8 @@ export default class LoginForm extends React.Component<any, any> {
     form.validateFields(null, (errs, values) => {
       //如果校验通过
       if (!errs) {
-        (this._store as any).login(values);
+        // (this._store as any).login(values);
+        login(values, '');
       }
     });
   };

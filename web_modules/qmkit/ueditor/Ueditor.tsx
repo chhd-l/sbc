@@ -59,6 +59,10 @@ export default class UEditor extends React.Component<any, any> {
       'backcolor',
       'selectall',
       'cleardoc',
+      /*"|",
+      "link",
+      "unlink",
+      "anchor",*/
       '|',
       'rowspacingtop',
       'rowspacingbottom',
@@ -210,6 +214,6 @@ export default class UEditor extends React.Component<any, any> {
     ) {
       this.editor.setContent(this.props.content);
     }
-    return <div id={this.props.id} style={{ width: '100%' }} />;
+    return <div id={this.props.id} style={{ width: '100%',height:this.props.height }} />;
   }
 }

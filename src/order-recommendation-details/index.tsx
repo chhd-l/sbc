@@ -71,6 +71,7 @@ export default class BillingDetails extends React.Component<any, any> {
             ) : (
               <Input
                 size="large"
+                disabled={this.store.state().get('createLinkType')}
                 placeholder="Input Recommended Reasons"
                 style={{ border: '1px #dedede solid' }}
                 onChange={this.onInput}

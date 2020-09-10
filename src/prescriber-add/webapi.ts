@@ -151,3 +151,85 @@ export function getRecommendationCode() {
     method: 'POST'
   });
 }
+
+export function getClinicsLites() {
+  return Fetch<TResult>('/prescriber/queryPrescriberIdAndName', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}
+
+export function getUsersByPrescriberId(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/listEmployees', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+}
+
+export function deleteEmployeeByIds(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      employeeIds: employeeIds
+    })
+  });
+}
+
+export function disableEmployee(
+  employeeId,
+  accountDisableReason,
+  accountState
+) {
+  return Fetch<TResult>('/customer/employee/disable', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeId: employeeId,
+      accountDisableReason: accountDisableReason,
+      accountState: accountState
+    })
+  });
+}
+
+export function enableEmployee(employeeIds: string[]) {
+  return Fetch<TResult>('/customer/employee/enable', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeIds: employeeIds
+    })
+  });
+}
+
+export function addUser(employee) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'POST',
+    body: JSON.stringify(employee)
+  });
+}
+
+export function updateUser(employee) {
+  return Fetch<TResult>('/customer/employee', {
+    method: 'PUT',
+    body: JSON.stringify(employee)
+  });
+}
+
+export function getAllRoles() {
+  return Fetch('/customer/employee/roles');
+}
+
+export function auditEmployee(employeeIds: string[], accountState: Number) {
+  return Fetch<TResult>('/customer/employee/audit', {
+    method: 'POST',
+    body: JSON.stringify({
+      employeeIds: employeeIds,
+      accountState: accountState
+    })
+  });
+}
+
+export function sendEmail(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/sendEmail', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+}

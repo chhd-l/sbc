@@ -67,10 +67,6 @@ export default class OperateModal extends React.Component<any, any> {
               initialValue: reason,
               rules: [
                 {
-                  required: true,
-                  message: 'Please input the reason for suspension'
-                },
-                {
                   validator: (rule, value, callback) => {
                     QMMethod.validatorTrimMinAndMax(
                       rule,

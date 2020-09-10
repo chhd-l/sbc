@@ -141,7 +141,7 @@ export default class SearchHead extends Component<any, any> {
               shape="round"
               style={{ textAlign: 'center', marginRight: '20px' }}
               onClick={(e) => {
-                history.push('/recomm-page-detail');
+                history.push('/recomm-page-detail-new');
               }}
             >
               <span>New</span>
@@ -191,7 +191,7 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8}>
+              {/*<Col span={8}>
                 <FormItem>
                   <SelectGroup
                     label="Link status"
@@ -207,7 +207,7 @@ export default class SearchHead extends Component<any, any> {
                     <Option value="1">Invalid</Option>
                     <Option value="0">Valid</Option>
                   </SelectGroup>
-                  {/*<Input
+                  <Input
                     addonBefore="Link status"
                     type="number"
                     onChange={(e) => {
@@ -215,9 +215,9 @@ export default class SearchHead extends Component<any, any> {
                         linkStatus: (e.target as any).value
                       });
                     }}
-                  />*/}
+                  />
                 </FormItem>
-              </Col>
+              </Col>*/}
 
               <Col span={8}>
                 <FormItem>

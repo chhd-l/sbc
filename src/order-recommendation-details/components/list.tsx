@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-import { DataGrid, cache, noop, Const } from 'qmkit';
+import { DataGrid, cache, noop, Const, history } from 'qmkit';
 import { Table } from 'antd';
 const Column = Table.Column;
 import styled from 'styled-components';
@@ -38,6 +38,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     relaxProps?: {
       productselect: any;
       productForm: any;
+      detailProductList: any;
       onCreateLink: Function;
     };
   };
@@ -45,6 +46,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   static relaxProps = {
     productselect: 'productselect',
     productForm: 'productForm',
+    detailProductList: 'detailProductList',
     onCreateLink: noop
   };
 
@@ -54,11 +56,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     snapshot?: any
   ) {
     const { productselect, onCreateLink } = this.props.relaxProps;
-
     let arr = productselect.map((v, i) => {
       return {
         goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.quantity
+        recommendationNumber: v.recommendationNumber
       };
     });
     onCreateLink({
@@ -68,8 +69,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   }
 
   render() {
-    const { productselect, productForm } = this.props.relaxProps;
-    //const pageNum = productForm && productForm.pageNum;
+    const { productselect, detailProductList } = this.props.relaxProps;
 
     return (
       <TableRow>
@@ -96,9 +96,31 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             title="Signed classification"
             dataIndex="goods.goodsCateName"
             key="goodsCateName"
+            render={(text, record, i) => {
+              /*setTimeout(() => {
+                console.log(text, 11111111);
+                console.log(
+                  detailProductList.recommendationGoodsInfoRels,
+                  22222222
+                );
+                console.log(i, 33333333);
+              });*/
+              return text;
+              //return history.location.state?detailProductList.recommendationGoodsInfoRels[i].recommendationNumber:text
+            }}
           />
           <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
-          <Column title="Quantity" key="quantity" dataIndex="quantity" />
+          <Column
+            title="Quantity"
+            key="recommendationNumber"
+            dataIndex="recommendationNumber"
+            render={(text, record, i) => {
+              return history.location.state
+                ? detailProductList.recommendationGoodsInfoRels[i]
+                    .recommendationNumber
+                : text;
+            }}
+          />
         </DataGrid>
       </TableRow>
     );

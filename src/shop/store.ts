@@ -9,6 +9,7 @@ import moment from 'moment';
 import ModalActor from './actor/modal-actor';
 import CommonActor from './actor/common-actor';
 import CompanyActor from './actor/company-actor';
+import Consent from './actor/consent';
 import * as webApi from './webapi';
 
 export default class AppStore extends Store {
@@ -19,7 +20,12 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new ModalActor(), new CommonActor(), new CompanyActor()];
+    return [
+      new ModalActor(),
+      new CommonActor(),
+      new CompanyActor(),
+      new Consent()
+    ];
   }
 
   /**
@@ -752,7 +758,6 @@ export default class AppStore extends Store {
           moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss')
         );
       }
-      console.log(sessionStorage.getItem('zoneDate'), 11111111111);
     }
   };
 
@@ -762,7 +767,6 @@ export default class AppStore extends Store {
    */
   GMTToStr(time) {
     let timezone = time; //目标时区时间，东八区
-    console.log('timezone:' + timezone);
     let offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
     let nowDate = new Date().getTime(); // 本地时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数
     let targetDate = new Date(
@@ -1057,17 +1061,8 @@ export default class AppStore extends Store {
   setCurrentTab = (tab) => {
     this.dispatch('common:current:tab', tab);
     switch (tab) {
-      case '0':
-        this.init();
-        break;
-      case '1':
-        this.fetchCompanyInfo();
-        break;
       case '2':
         this.fetchSignInfo(); //编辑签约信息
-        break;
-      case '3':
-        this.initAccount();
         break;
     }
   };
@@ -1079,6 +1074,150 @@ export default class AppStore extends Store {
       this.dispatch('common: businessEnter', businessEnter);
     } else {
       message.error(res.message);
+    }
+  };
+
+  /* ------------ consent  ------------- */
+
+  getConsentList = async (param?: any) => {
+    this.dispatch('loading:start');
+    const { res } = await webApi.fetchConsentList(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('loading:end');
+        this.dispatch(
+          'consent:consentList',
+          fromJS(res.context != null ? res.context.consentVOList : [])
+        );
+      });
+    }
+  };
+
+  //语言
+  getLanguage = async (callback) => {
+    const { res } = await webApi.fetchQuerySysDictionary({
+      type: 'consentLanguage'
+    });
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('consent:consentLanguage', res.context.sysDictionaryVOS);
+      });
+      //callback&&callback(res.context.sysDictionaryVOS)
+    }
+  };
+
+  propSort = async (param?: any) => {
+    const { res } = await webApi.fetchPropSort(param);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //删除
+  getConsentDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //new
+  consentSubmit = async (param?: any, type) => {
+    let v = param.toJS();
+    for (let key in v) {
+      if (v[key] === '') {
+        delete v[key];
+      }
+    }
+    let obj = {};
+    obj = Object.assign(this.state().get('formEdit'), v);
+    console.log(v, 11111);
+    console.log(this.state().get('formEdit'), 222222);
+    console.log(type);
+    console.log(obj, 33333);
+    if (
+      v.consentId != '' &&
+      v.consentCode != '' &&
+      v.consentTitleType != '' &&
+      v.consentTitle != ''
+    ) {
+      if (type != '000') {
+        const { res } = await webApi.fetchEditSave(obj);
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            message.success('Submit successful！');
+            this.pageChange('List', null);
+            this.getConsentList();
+          });
+        } else {
+          message.error(res.message);
+        }
+      } else {
+        const { res } = await webApi.fetchNewConsent(v);
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            message.success('Submit successful！');
+            this.pageChange('List', null);
+            this.getConsentList();
+          });
+
+          //history.push('/shop-info');
+        } else {
+          message.error(res.message);
+        }
+      }
+    } else {
+      message.error('Submit Can not be empty！');
+    }
+  };
+
+  //pageChange
+  pageChange = (param, id) => {
+    let a = this.state().get('consentForm').toJS();
+    for (let key in a) {
+      a[key] = '';
+    }
+    this.dispatch('consent:editId', null);
+    this.dispatch('consent:consentForm', a);
+
+    this.dispatch('consent:pageChange', param);
+    if (id) {
+      this.onEditList(id);
+    }
+  };
+
+  //add FormChange
+  onFormChange = (param) => {
+    this.dispatch('consent:consentForm', param);
+  };
+
+  //onFormEdit
+  onEditSave = async (param?: any) => {
+    this.dispatch('consent:formEdit', param);
+  };
+
+  // Switch
+  onSwitch = async (param?: any) => {
+    const { res } = await webApi.fetchSwitch(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.getConsentList();
+      });
+    }
+  };
+
+  //fetchEditList
+  onEditList = async (param?: any) => {
+    const { res } = await webApi.fetchEditList(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('consent:editList', res.context.consentAndDetailVO);
+      this.dispatch('consent:editId', param);
     }
   };
 }

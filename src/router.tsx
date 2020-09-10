@@ -1,3 +1,5 @@
+import { LoginCallback } from '@okta/okta-react';
+
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
@@ -127,6 +129,11 @@ const routes = [
     path: '/recomm-page-detail',
     exact: true,
     asyncComponent: () => import('./order-recommendation-details')
+  },
+  {
+    path: '/recomm-page-detail-new',
+    exact: true,
+    asyncComponent: () => import('./order-recommendation-details-new')
   },
   //订单-订单管理-退单详情
   {
@@ -682,7 +689,7 @@ const routes = [
   },
   //message-email-list
   {
-    path: '/message-email-list',
+    path: '/message-email',
     asyncComponent: () => import('./message-email-list')
   },
   //message-notification
@@ -694,11 +701,35 @@ const routes = [
   {
     path: '/message-setting',
     asyncComponent: () => import('./message-setting')
+  },
+  //message-overview
+  {
+    path: '/message-overview',
+    asyncComponent: () => import('./message-overview')
+  },
+  //message-detail
+  {
+    path: '/message-quick-send',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/message-detail/:id',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/message-edit/:id',
+    asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/order-setting',
+    asyncComponent: () => import('./order-setting')
   }
 ];
 
 const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
+  { path: '/login-verify', asyncComponent: () => import('./login-verify') },
+  { path: '/implicit/callback', component: LoginCallback },
   {
     path: '/find-password',
     asyncComponent: () => import('./find-password')
@@ -740,16 +771,6 @@ const auditDidNotPass = [
   {
     path: '/shop-process',
     asyncComponent: () => import('./shop/process-index')
-  },
-  //店铺信息 审核中/审核未通过
-  {
-    path: '/shop-info',
-    asyncComponent: () => import('./shop/info-index')
-  },
-  //编辑店铺信息 审核未通过编辑页面
-  {
-    path: '/shop-info-edit',
-    asyncComponent: () => import('./shop/info-edit')
   }
 ];
 

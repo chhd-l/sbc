@@ -27,7 +27,7 @@ export default class SettleDetailActor extends Actor {
         pageNum: 0,
         pageSize: 10,
         current: 1,
-        total: 0
+        total: 60
       },
       productselect: [], //添加选中商品
       createLink: {
@@ -57,7 +57,9 @@ export default class SettleDetailActor extends Actor {
   //detailProductList
   @Action('product:detailProductList')
   detailProductList(state: IMap, res) {
-    return state.set('detailProductList', res);
+    return state
+      .set('detailProductList', res)
+      .set('linkStatus', res.linkStatus);
   }
 
   //productList初始化
@@ -89,6 +91,12 @@ export default class SettleDetailActor extends Actor {
   @Action('create:createLink')
   createLink(state: IMap, { field, value }) {
     return state.setIn(['createLink', field], value);
+  }
+
+  //createLinkType
+  @Action('create:createLinkType')
+  createLinkType(state: IMap, res) {
+    return state.set('createLinkType', res);
   }
 
   //get Link

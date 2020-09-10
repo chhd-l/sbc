@@ -9,6 +9,7 @@ export default class Headline extends React.PureComponent<any, any> {
     //禁止显示line
     lineDisable?: Boolean;
     smallTitle?: string;
+    extra?:any;
   };
 
   render() {
@@ -25,6 +26,13 @@ export default class Headline extends React.PureComponent<any, any> {
         <span style={{ color: '#F56C1D', fontSize: 14 }}>
           {this.props.state}
         </span>
+        {
+          this.props.extra && <div style={{position: 'absolute',right: 50}}>
+            {
+              this.props.extra
+            }
+          </div>
+        }
       </div>
     );
   }

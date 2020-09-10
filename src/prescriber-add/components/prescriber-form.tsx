@@ -19,6 +19,7 @@ import * as webapi from '../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import copy from 'copy-to-clipboard';
+import UserList from './user-list';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -50,7 +51,8 @@ class ClinicForm extends React.Component<any, any> {
         enabled: true,
         delFlag: 0,
         // auditStatus: '1',
-        prescriberCode: ''
+        prescriberCode: '',
+        partneredShop: ''
       },
       cityArr: [],
       typeArr: [],
@@ -82,7 +84,9 @@ class ClinicForm extends React.Component<any, any> {
       qrCodeLink: '',
       url: '',
       saveLoading: false,
-      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false
+      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
+      clinicsLites: [],
+      prescriberKeyId: this.props.prescriberId
     };
   }
   componentDidMount() {
@@ -99,6 +103,7 @@ class ClinicForm extends React.Component<any, any> {
     // }
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
+    this.getClinicsLites();
   }
   getClinicsReward = (id) => {
     webapi
@@ -153,12 +158,9 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          if (this.props.prescriberId) {
-            this.getDetail(this.props.prescriberId);
-            this.getClinicsReward(id);
-          } else {
-            history.push('/prescriber');
-          }
+          this.getDetail(this.props.prescriberId);
+          this.getClinicsReward(id);
+          this.switchTab('users');
         } else {
           this.setState({
             saveLoading: false
@@ -243,7 +245,8 @@ class ClinicForm extends React.Component<any, any> {
         location: res.context.location,
         prescriberType: res.context.prescriberType,
         // auditStatus: res.context.auditStatus,
-        prescriberCode: res.context.prescriberCode
+        prescriberCode: res.context.prescriberCode,
+        parentPrescriberId: res.context.parentPrescriberId
       });
       this.getClinicsReward(res.context.prescriberId);
     } else {
@@ -272,6 +275,16 @@ class ClinicForm extends React.Component<any, any> {
       });
     } else {
       message.error(res.message || 'Unsuccessful');
+    }
+  };
+  getClinicsLites = async () => {
+    const { res } = await webapi.getClinicsLites();
+    if (res.code === 'K-000000') {
+      this.setState({
+        clinicsLites: res.context
+      });
+    } else {
+      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -304,7 +317,8 @@ class ClinicForm extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           if (prescriberForm.prescriberId) {
             this.setState({
-              isEdit: true
+              isEdit: true,
+              prescriberKeyId: res.context.id
             });
             this.saveReward(prescriberForm.prescriberId);
           } else {
@@ -394,49 +408,64 @@ class ClinicForm extends React.Component<any, any> {
   };
   //id校验
   compareID = (rule, value, callback) => {
+    if (!value) {
+      callback('Please input Prescriber id!');
+    }
     const { form } = this.props;
     let reg = /^[1-9][0-9]{2,12}$/;
     if (!reg.test(form.getFieldValue('prescriberId'))) {
-      callback('Please enter the correct Prescriber ID');
+      callback('Please enter the correct Prescriber ID!');
     } else {
       callback();
     }
   };
   //手机校验
   comparePhone = (rule, value, callback) => {
+    if (!value) {
+      callback();
+    }
     const { form } = this.props;
     let reg = /^[0-9+-\s]{6,20}$/;
     if (!reg.test(form.getFieldValue('phone'))) {
-      callback('Please enter the correct phone');
+      callback('Please enter the correct phone!');
     } else {
       callback();
     }
   };
 
   compareZip = (rule, value, callback) => {
+    if (!value) {
+      callback();
+    }
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('primaryZip'))) {
-      callback('Please enter the correct Prescriber Zip');
+      callback('Please enter the correct Prescriber Zip!');
     } else {
       callback();
     }
   };
   //经度校验longitude
   compareLongitude = (rule, value, callback) => {
+    if (!value) {
+      callback();
+    }
     const { form } = this.props;
     if (
       isNaN(form.getFieldValue('longitude')) ||
       form.getFieldValue('longitude') < -180 ||
       form.getFieldValue('longitude') > 180
     ) {
-      callback('Please enter the correct longitude');
+      callback('Please enter the correct longitude!');
     } else {
       callback();
     }
   };
   //纬度校验latitude
   compareLatitude = (rule, value, callback) => {
+    if (!value) {
+      callback();
+    }
     const { form } = this.props;
 
     if (
@@ -444,7 +473,7 @@ class ClinicForm extends React.Component<any, any> {
       form.getFieldValue('latitude') < -90 ||
       form.getFieldValue('latitude') > 90
     ) {
-      callback('Please enter the correct latitude');
+      callback('Please enter the correct latitude!');
     } else {
       callback();
     }
@@ -514,24 +543,57 @@ class ClinicForm extends React.Component<any, any> {
     });
   };
 
+  filterOption = (input, option: { props }) => {
+    return (
+      option.props.children
+        .toString()
+        .toLowerCase()
+        .indexOf(input.toLowerCase()) >= 0
+    );
+  };
+
+  _renderPerscirbersOption() {
+    return this.state.clinicsLites.map((option) => {
+      return (
+        <Option value={option.prescriberId} key={option.prescriberId}>
+          {option.prescriberId}-{option.prescriberName}
+        </Option>
+      );
+    });
+  }
+
   render() {
     const { cityArr, typeArr, prescriberForm } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
-        <TabPane tab="Basic infomation" key="basic">
+        <TabPane tab="Basic Infomation" key="basic">
           <Row>
             <Col span={12}>
               <Form {...layout} onSubmit={this.handleSubmit}>
+                <FormItem label="Parent prescriber">
+                  {getFieldDecorator(
+                    'parentPrescriberId',
+                    {}
+                  )(
+                    <Select
+                      showSearch
+                      filterOption={this.filterOption}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'parentPrescriberId',
+                          value
+                        });
+                      }}
+                    >
+                      {this._renderPerscirbersOption()}
+                    </Select>
+                  )}
+                </FormItem>
                 <FormItem label="Prescriber ID">
                   {getFieldDecorator('prescriberId', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input Prescriber id!'
-                      },
-                      { validator: this.compareID }
-                    ]
+                    rules: [{ required: true }, { validator: this.compareID }]
                   })(
                     <Input
                       disabled={this.state.isEdit}
@@ -616,13 +678,7 @@ class ClinicForm extends React.Component<any, any> {
 
                 <FormItem label="Prescriber phone number">
                   {getFieldDecorator('phone', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input Prescriber phone number!'
-                      },
-                      { validator: this.comparePhone }
-                    ]
+                    rules: [{ validator: this.comparePhone }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -636,14 +692,10 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
                 <FormItem label="Prescriber city">
-                  {getFieldDecorator('primaryCity', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please select Prescriber city!'
-                      }
-                    ]
-                  })(
+                  {getFieldDecorator(
+                    'primaryCity',
+                    {}
+                  )(
                     <Select
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -663,13 +715,7 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem label="Prescriber zip">
                   {getFieldDecorator('primaryZip', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please input Prescriber zip!'
-                      },
-                      { validator: this.compareZip }
-                    ]
+                    rules: [{ validator: this.compareZip }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -713,10 +759,7 @@ class ClinicForm extends React.Component<any, any> {
 
                 <FormItem label="Latitude">
                   {getFieldDecorator('latitude', {
-                    rules: [
-                      { required: true, message: 'Please input Latitude!' },
-                      { validator: this.compareLatitude }
-                    ]
+                    rules: [{ validator: this.compareLatitude }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -732,10 +775,7 @@ class ClinicForm extends React.Component<any, any> {
 
                 <FormItem label="Longitude">
                   {getFieldDecorator('longitude', {
-                    rules: [
-                      { required: true, message: 'Please input Longitude!' },
-                      { validator: this.compareLongitude }
-                    ]
+                    rules: [{ validator: this.compareLongitude }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -978,6 +1018,12 @@ class ClinicForm extends React.Component<any, any> {
               </Button> */}
             </Col>
           </Row>
+        </TabPane>
+        <TabPane tab="User List" key="users">
+          <UserList
+            prescriberKeyId={this.state.prescriberKeyId}
+            alreadyHasPrescriber={this.state.isEdit}
+          />
         </TabPane>
       </Tabs>
     );

@@ -1,40 +1,36 @@
-import React from 'react';
-import { Relax, IMap } from 'plume2';
+import React, { Component } from 'react';
 import { Row, Col, Form, Modal, message } from 'antd';
-import styled from 'styled-components';
-
-import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const formItemLayout = {
   labelCol: {
-    span: 2,
+    span: 3,
     xs: { span: 24 },
-    sm: { span: 6 }
+    sm: { span: 10 }
   },
   wrapperCol: {
-    span: 24,
+    span: 21,
     xs: { span: 24 },
     sm: { span: 14 }
   }
 };
 
-export default class StepTwo extends React.Component<any, any> {
+export default class StepFour extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      sso: {}
+      contentInformation: {}
     };
     this.getContentInformation();
   }
 
   getContentInformation = async () => {
-    const { res } = await webapi.getStoreSooSetting();
+    const { res } = await webapi.getStoreContentInfo();
     if (res.code === 'K-000000') {
       this.setState({
-        sso: res.context
+        contentInformation: res.context
       });
     } else {
       message.error(res.message);
@@ -45,17 +41,17 @@ export default class StepTwo extends React.Component<any, any> {
     return (
       <div>
         <Form>
-          <Row>
+          <Row style={{ padding: '0 20px' }}>
             <Row>
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="logIn" />}
+                  label={<FormattedMessage id="contactUsUrl" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.logIn ? (
-                      this.state.sso.logIn
+                    {this.state.contentInformation.contactUsUrl ? (
+                      this.state.contentInformation.contactUsUrl
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -66,11 +62,11 @@ export default class StepTwo extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label={<FormattedMessage id="UserinfoURL" />}
+                  label={<FormattedMessage id="ourValues" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.userInfoUrl ? (
-                      this.state.sso.userInfoUrl
+                    {this.state.contentInformation.ourValues ? (
+                      this.state.contentInformation.ourValues
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -82,11 +78,12 @@ export default class StepTwo extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
-                  label={<FormattedMessage id="clientID" />}
+                  required={false}
+                  label={<FormattedMessage id="qualityAndSafety" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.clientId ? (
-                      this.state.sso.clientId
+                    {this.state.contentInformation.qualityAndSafety ? (
+                      this.state.contentInformation.qualityAndSafety
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -96,41 +93,12 @@ export default class StepTwo extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
-                  label={<FormattedMessage id="issuer" />}
+                  required={false}
+                  label={<FormattedMessage id="specificNutrition" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.issuer ? (
-                      this.state.sso.issuer
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label={<FormattedMessage id="pedirectURL" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.sso.redirectUrl ? (
-                      this.state.sso.redirectUrl
-                    ) : (
-                      <FormattedMessage id="none" />
-                    )}
-                  </p>
-                </FormItem>
-              </Col>
-              <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label={<FormattedMessage id="registration" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.state.sso.registration ? (
-                      this.state.sso.registration
+                    {this.state.contentInformation.specificNutrition ? (
+                      this.state.contentInformation.specificNutrition
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -142,11 +110,12 @@ export default class StepTwo extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
-                  label={<FormattedMessage id="registerPrefix" />}
+                  required={false}
+                  label={<FormattedMessage id="informationForParents" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.registerPrefix ? (
-                      this.state.sso.registerPrefix
+                    {this.state.contentInformation.informationForParents ? (
+                      this.state.contentInformation.informationForParents
                     ) : (
                       <FormattedMessage id="none" />
                     )}
@@ -156,11 +125,76 @@ export default class StepTwo extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem
                   {...formItemLayout}
-                  label={<FormattedMessage id="registerCallback" />}
+                  required={false}
+                  label={<FormattedMessage id="cookies" />}
                 >
                   <p style={{ color: '#333' }}>
-                    {this.state.sso.registerCallback ? (
-                      this.state.sso.registerCallback
+                    {this.state.contentInformation.cookiesUrl ? (
+                      this.state.contentInformation.cookiesUrl
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="storeContactEmail" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.storeContactEmail ? (
+                      this.state.contentInformation.storeContactEmail
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="storeContactPhoneNumber" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.storeContactPhoneNumber ? (
+                      this.state.contentInformation.storeContactPhoneNumber
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="contactTimePeriod" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.contactTimePeriod ? (
+                      this.state.contentInformation.contactTimePeriod
+                    ) : (
+                      <FormattedMessage id="none" />
+                    )}
+                  </p>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  required={false}
+                  label={<FormattedMessage id="confirmationEmail" />}
+                >
+                  <p style={{ color: '#333' }}>
+                    {this.state.contentInformation.confirmationEmail ? (
+                      this.state.contentInformation.confirmationEmail
                     ) : (
                       <FormattedMessage id="none" />
                     )}

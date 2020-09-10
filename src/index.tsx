@@ -6,6 +6,7 @@ import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
+import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Provider } from 'react-redux';
 import { routeWithSubRoutes, history, noop } from 'qmkit';
 import { homeRoutes } from './router';
@@ -20,6 +21,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import { IntlProvider } from 'react-intl';
 import es_ES from '../web_modules/qmkit/es_ES';
+import configOkta from '../web_modules/qmkit/config-okta';
 
 moment.locale('zh-cn');
 
@@ -28,12 +30,15 @@ const B2BBoss = () => (
     <ConfigProvider locale={enUS}>
       <Provider store={store}>
         <Router history={history}>
-          <div className="father">
-            <Switch>
-              {routeWithSubRoutes(homeRoutes, noop)}
-              <Route component={Main} />
-            </Switch>
-          </div>
+          <Security {...configOkta.oidc}>
+            <div className="father">
+              <Switch>
+                {routeWithSubRoutes(homeRoutes, noop)}
+                <Route component={Main} />
+                {/* <Route path="/implicit/callback" component={LoginCallback} /> */}
+              </Switch>
+            </div>
+          </Security>
         </Router>
       </Provider>
     </ConfigProvider>

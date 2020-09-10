@@ -1,6 +1,15 @@
 import React from 'react';
 
-import { Table, Col, Button, Select, Switch, Icon } from 'antd';
+import {
+  Table,
+  Col,
+  Button,
+  Select,
+  Switch,
+  Popconfirm,
+  message,
+  Modal
+} from 'antd';
 import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
@@ -12,13 +21,18 @@ const Option = Select.Option;
 //import { Const, util } from 'qmkit';
 //import { FormattedMessage } from 'react-intl';
 //import { bool } from 'prop-types';
+// let checkNum = 0;
+// let check = true;
+let loading = false;
 
 @Relax
 export default class BillingDetails extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      // check: true,
+      showSwich: true
     };
   }
 
@@ -28,7 +42,9 @@ export default class BillingDetails extends React.Component<any, any> {
       setName: IList;
       onSharing: Function;
       onLinkStatus: Function;
+      linkStatus: any;
       detailProductList: any;
+      createLinkType: any;
     };
   };
 
@@ -37,15 +53,20 @@ export default class BillingDetails extends React.Component<any, any> {
     setName: 'setName',
     onSharing: noop,
     onLinkStatus: noop,
-    detailProductList: 'detailProductList'
+    detailProductList: 'detailProductList',
+    linkStatus: 'linkStatus',
+    createLinkType: 'createLinkType'
   };
+
   componentDidMount() {
-    const { onSharing } = this.props.relaxProps;
+    const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    onSharing({
-      field: 'prescriberId',
-      value: employee.clinicsIds[0]
-    });
+    if (employee.prescribers && employee.prescribers.length > 0) {
+      onSharing({
+        field: 'prescriberId',
+        value: employee.prescribers[0].id
+      });
+    }
   }
 
   showProduct = (res) => {
@@ -61,19 +82,40 @@ export default class BillingDetails extends React.Component<any, any> {
       value: value
     });
   };
-  onValid = (e) => {
+  onValid = (check) => {
+    loading = true;
     const { onLinkStatus } = this.props.relaxProps;
-    let linkStatus = e == true ? 0 : 1;
-    onLinkStatus({ linkStatus, id: history.location.state.id });
+    if (this.state.showSwich === true) {
+      let linkStatus = check === true ? 0 : 1;
+      onLinkStatus({ linkStatus, id: history.location.state.id });
+    } else {
+      return;
+    }
+  };
+  confirm = (check) => {
+    this.onValid(!check);
+    // this.setState({ showSwich: true });
+    // console.log(check);
+    // message.success('Click on Yes');
+  };
+
+  cancel = () => {
+    message.info('canceled');
   };
   render() {
-    const { detailProductList } = this.props.relaxProps;
+    const {
+      detailProductList,
+      createLinkType,
+      linkStatus
+    } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers =
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
+    const check = +linkStatus === 0 ? true : false;
 
+    loading = false;
     return (
       <div style={styles.main}>
         <div
@@ -85,11 +127,12 @@ export default class BillingDetails extends React.Component<any, any> {
               <SelectGroup
                 label="Prescriber"
                 disabled
-                defaultValue={detailProductList.prescriberName}
+                value={detailProductList.prescriberName}
               ></SelectGroup>
             ) : (
               <SelectGroup
                 label="Prescriber"
+                disabled={createLinkType}
                 defaultValue={
                   sessionStorage.getItem('PrescriberType')
                     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
@@ -99,7 +142,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 onChange={(value, name) => this._prescriberChange(value, name)}
               >
                 {allPrescribers.map((item) => (
-                  <Option value={item.prescriberId} key={item.prescriberId}>
+                  <Option value={item.id} key={item.id}>
                     {item.prescriberName}
                   </Option>
                 ))}
@@ -108,12 +151,24 @@ export default class BillingDetails extends React.Component<any, any> {
           </div>
           <div style={{ marginTop: 12, marginRight: 15 }}>
             {history.location.state ? (
-              <Switch
-                checkedChildren=" Valid "
-                unCheckedChildren=" Invalid "
-                defaultChecked
-                onClick={this.onValid}
-              />
+              <div className="proptContainer">
+                <Popconfirm
+                  title="Are you sure delete this task?"
+                  onConfirm={() => this.confirm(check)}
+                  onCancel={this.cancel}
+                  okText="Yes"
+                  cancelText="No"
+                  className="proptMessage"
+                >
+                  <Switch
+                    loading={loading}
+                    checkedChildren="Valid"
+                    unCheckedChildren="Invalid"
+                    checked={check}
+                    // onChange={this.onValid}
+                  />
+                </Popconfirm>
+              </div>
             ) : null}
           </div>
         </div>
@@ -128,6 +183,7 @@ export default class BillingDetails extends React.Component<any, any> {
             <Button
               type="primary"
               shape="round"
+              disabled={createLinkType}
               icon="edit"
               onClick={() => this.showProduct(true)}
             >

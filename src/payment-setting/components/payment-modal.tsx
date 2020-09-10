@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Relax, IMap } from 'plume2';
-import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -45,7 +42,6 @@ class PaymentModal extends React.Component<any, any> {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.paymentForm.config) {
-      debugger;
       let config = nextProps.paymentForm.config;
       this.setState({
         paymentForm: Object.assign({

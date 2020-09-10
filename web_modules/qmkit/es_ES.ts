@@ -156,7 +156,8 @@ export default {
   registerCallback: 'Register callback',
 
   storeInformationEdit: 'Shop Information Edit',
-  Footer: 'Footer',
+  footer: 'Footer',
+  consent: 'Consent',
   confirmationEmail: 'Confirmation email',
   faqUrl: 'FAQ(URL)',
   privacyPolicy: 'Privacy policy',
@@ -789,5 +790,7 @@ export default {
   amountReceivable: 'Amount receivable',
   freightTemplate: 'Freight template',
   storeShipping: 'Store shipping',
-  singleProductShipping: 'Single product shipping'
+  singleProductShipping: 'Single product shipping',
+  firstName: 'First name',
+  lastName: 'Last name'
 };

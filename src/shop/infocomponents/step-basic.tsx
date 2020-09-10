@@ -6,7 +6,7 @@ import { FindArea } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import { fromJS } from 'immutable';
-import * as webapi from './../webapi';
+import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
 

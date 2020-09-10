@@ -240,6 +240,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
           storeId: ids[0],
           prescriberId: ids[1],
           userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
+          employeeName:sessionStorage.getItem(cache.LOGIN_EMPLOYEE_NAME),
           oktaToken: 'Bearer ' +  oktaToken,
           requiredList: requiredList,
           optionalList: optionalList

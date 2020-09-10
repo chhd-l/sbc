@@ -46,6 +46,7 @@ export default class StepNewConsent extends Component<any, any> {
       refDetailEditor: Function;
       editList: any;
       editId: any;
+      onDetailList: any;
     };
   };
 
@@ -57,7 +58,8 @@ export default class StepNewConsent extends Component<any, any> {
     consentForm: 'consentForm',
     refDetailEditor: noop,
     editList: 'editList',
-    editId: 'editId'
+    editId: 'editId',
+    onDetailList: noop
   };
 
   handleChange = (value) => {
@@ -78,7 +80,7 @@ export default class StepNewConsent extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, onDetailList } = this.props.relaxProps;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -115,6 +117,11 @@ export default class StepNewConsent extends Component<any, any> {
     );
     onFormChange({
       field: 'consentDetailList',
+      value: list
+    });
+
+    onDetailList({
+      field: 'detailList',
       value: list
     });
   };

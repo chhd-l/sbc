@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Input, Icon, Form, Col, Button } from 'antd';
+import { Select, Input, TreeSelect, Icon, Form, Col, Button } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
@@ -13,11 +13,12 @@ import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { FormattedMessage } from 'react-intl';
 const { Option } = Select;
 const FormItem = Form.Item;
+const { SHOW_PARENT } = TreeSelect;
 
 let addContent = [];
 let content1 = '';
 let content2 = '';
-let consentDetailList = []
+let consentDetailList = [];
 @Relax
 export default class StepConsentDetail extends Component<any, any> {
   constructor(props) {
@@ -37,12 +38,14 @@ export default class StepConsentDetail extends Component<any, any> {
       consentLanguage: [],
       // 创建一个空的editorState作为初始值
       editorState: BraftEditor.createEditorState(null),
-      editId:'',
-      editor:{
-        contentTitle:'',
-        contentBody:'',
-        sort:''
-      }
+      editId: '',
+      editor: {
+        contentTitle: '',
+        contentBody: '',
+        sort: ''
+      },
+      value: ['Landing page', 'check out'],
+      detailList: []
     };
   }
 
@@ -57,7 +60,10 @@ export default class StepConsentDetail extends Component<any, any> {
       onEditSave: Function;
       editList: any;
       editId: any;
-      formEdit: any
+      formEdit: any;
+      detailList: any;
+      getConsentDetailDelete: Function;
+      onDetailList: Function;
     };
   };
 
@@ -71,7 +77,9 @@ export default class StepConsentDetail extends Component<any, any> {
     onEditSave: noop,
     editList: 'editList',
     editId: 'editId',
-
+    detailList: 'detailList',
+    getConsentDetailDelete: noop,
+    onDetailList: noop
   };
 
   handleChange = (value) => {
@@ -93,31 +101,61 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, onEditSave, detailList } = this.props.relaxProps;
     let list = [];
     if (o == 0) {
       this.setState({
-        a: { ...this.state.a, contentTitle: m, contentBody: n, sort: o + 1 }
+        a: {
+          ...this.state.a,
+          ...detailList[0],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 1) {
       this.setState({
-        b: { ...this.state.b, contentTitle: m, contentBody: n, sort: o + 1 }
+        b: {
+          ...this.state.b,
+          ...detailList[1],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 2) {
       this.setState({
-        c: { ...this.state.c, contentTitle: m, contentBody: n, sort: o + 1 }
+        c: {
+          ...this.state.c,
+          ...detailList[2],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 3) {
       this.setState({
-        d: { ...this.state.d, contentTitle: m, contentBody: n, sort: o + 1 }
+        d: {
+          ...this.state.d,
+          ...detailList[3],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 4) {
       this.setState({
-        e: { ...this.state.e, contentTitle: m, contentBody: n, sort: o + 1 }
+        e: {
+          ...this.state.e,
+          ...detailList[4],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
 
@@ -128,56 +166,46 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.d,
       this.state.e
     );
+    list = list.filter((item) => item.contentTitle != '');
+    console.log(this.state.detailList, 2222);
     onFormChange({
       field: 'consentDetailList',
       value: list
     });
+    onEditSave(list);
   };
 
+  componentDidMount() {
+    const { onFormChange, consentLanguage } = this.props.relaxProps;
+    console.log(this.state.editList.consentTitleType, 11111);
+    this.setState({
+      consentTitleType:
+        this.state.editList.consentTitleType == 'Content' ? true : false
+    });
+    this.setState({ content: this.state.editList.consentDetailList });
+    onFormChange({
+      field: 'languageTypeId',
+      value: consentLanguage[0] && consentLanguage[0].id
+    });
+    //onEditSave(editList);
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { editList, consentLanguage } = nextProps;
+    const { editList } = nextProps;
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
-      //console.log(nextProps.relaxProps);
       return {
         editList: nextProps.relaxProps.editList,
-        consentLanguage: nextProps.relaxProps.consentLanguage,
-        //content: nextProps.relaxProps.editList.consentDetailList
-        //: nextProps.relaxProps.consentTitleType
+        detailList: nextProps.relaxProps.detailList,
+        consentLanguage: nextProps.relaxProps.consentLanguage
       };
     }
     // 否则，对于state不进行任何操作
     return null;
   }
 
-  /*componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-    const { onFormChange } = this.props.relaxProps;
-    console.log(prevState);
-    console.log(prevProps);
-
-    onFormChange({
-      field: 'languageTypeId',
-      value: prevState.consentLanguage[0].id
-    });
-  }*/
-
-  componentDidMount() {
-    const { onEditSave,onFormChange } = this.props.relaxProps;
-    //onEditSave(this.state.editList);
-    this.state.editList.consentTitleType&&this.setState({ consentTitleType: this.state.editList.consentTitleType == 'Content'?true:false });
-    this.setState({content:this.state.editList.consentDetailList})
-
-  }
-
-  /* componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-     console.log(prevProps,22222222222)
-     console.log(prevState,33333333)
-
-   }*/
-
   handleEditorChange = (editorState) => {
     const { onFormChange } = this.props.relaxProps;
-
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
@@ -189,51 +217,44 @@ export default class StepConsentDetail extends Component<any, any> {
       });
     });
   };
-  handleEditorDetailChange = (editorState,i) => {
-    const { onFormChange,consentForm, formEdit } = this.props.relaxProps;
-    this.setState({ editorState }, () => {
-      let rawInfo = this.state.editorState.toRAW();
-      let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-      //console.log('Html', htmlInfo);
-      //console.log('Raw', rawInfo);
-      console.log(consentForm.toJS(),11111111);
 
-      if( i == 1) {
-        this.setState({
-          a: { ...this.state.a, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 2) {
-        this.setState({
-          b: { ...this.state.b, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 3) {
-        this.setState({
-          c: { ...this.state.c, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 4) {
-        this.setState({
-          d: { ...this.state.d, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
-      if( i == 5) {
-        this.setState({
-          e: { ...this.state.e, contentBody: htmlInfo}
-        },()=>{
-        })
-      }
+  onTreeChange = (e) => {
+    const { onFormChange } = this.props.relaxProps;
+    this.setState({ value: e }, () => {
       onFormChange({
-        field: 'consentDetailList',
-        value: [this.state.a,this.state.b,this.state.c,this.state.d,this.state.e]
+        field: 'consentPage',
+        value: e.toString()
       });
     });
   };
+
+  onCategory = (e) => {
+    const { onFormChange } = this.props.relaxProps;
+    if (e == 'Prescriber') {
+      this.setState({ value: ['Landing page', 'check out'] }, () => {
+        onFormChange({
+          field: 'consentPage',
+          value: this.state.value.toString()
+        });
+      });
+    } else {
+      this.setState({ value: ['Landing page'] }, () => {
+        onFormChange({
+          field: 'consentPage',
+          value: this.state.value.toString()
+        });
+      });
+    }
+  };
+
+  onDelete = (e) => {
+    const { getConsentDetailDelete } = this.props.relaxProps;
+    let content = this.state.content.filter((item) => item.sort != e.sort);
+    this.setState({ content: content }, () => {
+      getConsentDetailDelete(e.id);
+    });
+  };
+
   render() {
     const { onFormChange, editId } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
@@ -248,6 +269,29 @@ export default class StepConsentDetail extends Component<any, any> {
       'link',
       'separator'
     ];
+    const treeData = [
+      {
+        title: 'Landing page',
+        value: 'Landing page',
+        key: '0'
+      },
+      {
+        title: 'check out',
+        value: 'check out',
+        key: '1'
+      }
+    ];
+    const tProps = {
+      treeData,
+      value: this.state.value,
+      onChange: this.onTreeChange,
+      treeCheckable: true,
+      showCheckedStrategy: SHOW_PARENT,
+      searchPlaceholder: 'Please select',
+      style: {
+        width: '100%'
+      }
+    };
 
     return (
       <div className="consent-detail">
@@ -263,6 +307,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 }
                 style={{ width: 280 }}
                 onChange={(value) => {
+                  this.onCategory(value);
                   onFormChange({
                     field: 'consentCategory',
                     value
@@ -330,7 +375,8 @@ export default class StepConsentDetail extends Component<any, any> {
 
           <div className="detail-form">
             <FormItem>
-              <SelectGroup
+              <TreeSelect {...tProps} />
+              {/*<SelectGroup
                 defaultValue={
                   editList.consentPage ? editList.consentPage : 'Landing page'
                 }
@@ -345,9 +391,9 @@ export default class StepConsentDetail extends Component<any, any> {
                 }}
               >
                 <Option value="Landing page">Landing page</Option>
-                {/*<Option value="">landing page</Option>*/}
+                <Option value="">landing page</Option>
                 <Option value="Check out">check out</Option>
-              </SelectGroup>
+              </SelectGroup>*/}
             </FormItem>
             <FormItem>
               <SelectGroup
@@ -400,7 +446,8 @@ export default class StepConsentDetail extends Component<any, any> {
               </FormItem>
             </div>
             <div className="edit-content">
-              {this.state.consentTitleType == true ? (
+              {this.state.consentTitleType == true ||
+              this.state.editId != '000' ? (
                 <FormItem>
                   <div className="editor-wrapper">
                     <BraftEditor
@@ -436,8 +483,9 @@ export default class StepConsentDetail extends Component<any, any> {
                 <div className="edit-content">Consent detail</div>
               </div>
             ) : null}
-            {
-              (this.state.editList.consentTitleType == 'Content' || this.state.editId != '000')? ( <Button
+            {this.state.editList.consentTitleType == 'Content' ||
+            this.state.editId != '000' ? (
+              <Button
                 className="btn"
                 type="primary"
                 shape="round"
@@ -445,41 +493,54 @@ export default class StepConsentDetail extends Component<any, any> {
                 onClick={this.addDetail}
               >
                 New detail
-              </Button>):null
-            }
-
+              </Button>
+            ) : null}
           </div>
           <div className="detail-add">
-            {this.state.content&&this.state.content.map((item, i) => {
-              if (i <= 4) {
-                return (
-                  <div className="add" key={i}>
-                    <div className="add-content space-between">
-                      <div className="add-title">Detail {i + 1}</div>
-                      <div className="add-i">
-                        <Input
-                          placeholder="Please enter URL keywords"
-                          defaultValue={item.contentTitle}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            content1 = value;
-                            this.handleContent(content1, content2, i);
-                          }}
-                        />
+            {this.state.content &&
+              this.state.content.map((item, i) => {
+                if (i <= 4) {
+                  return (
+                    <div className="add" key={i}>
+                      <div className="add-content space-between">
+                        <div className="add-title">Detail {i + 1}</div>
+                        <div className="add-i">
+                          <Input
+                            placeholder="Please enter URL keywords"
+                            defaultValue={item.contentTitle}
+                            key={item.contentTitle + i}
+                            onChange={(e) => {
+                              const value = (e.target as any).value;
+                              content1 = value;
+                              this.handleContent(content1, content2, i);
+                            }}
+                          />
+                        </div>
+                        <div
+                          className="iconfont iconDelete icon"
+                          onClick={(e) => this.onDelete(item)}
+                        ></div>
                       </div>
-                    </div>
-                    <FormItem>
-                      <div className="editor-wrapper">
-                        <BraftEditor
-                          defaultValue={BraftEditor.createEditorState(item.contentBody)}
-                          //value={editorState}
-                          onChange={(e) =>this.handleEditorDetailChange(e,i+1)}
-                          className="my-editor"
-                          controls={controls}
-                        />
-                      </div>
-                    </FormItem>
-                    {/*<UEditor
+                      <FormItem>
+                        <div className="editor-wrapper">
+                          <BraftEditor
+                            defaultValue={BraftEditor.createEditorState(
+                              item.contentBody
+                            )}
+                            key={item.contentBody + i}
+                            //value={editorState}
+                            onChange={(e) => {
+                              content2 = BraftEditor.createEditorState(
+                                e.toRAW()
+                              ).toHTML();
+                              this.handleContent(content1, content2, i);
+                            }}
+                            className="my-editor"
+                            controls={controls}
+                          />
+                        </div>
+                      </FormItem>
+                      {/*<UEditor
                       id={'detail' + i}
                       content=""
                       height="320px"
@@ -489,12 +550,12 @@ export default class StepConsentDetail extends Component<any, any> {
                         this.handleContent(content1, content2, i);
                       }}
                     />*/}
-                  </div>
-                );
-              } else {
-                return false;
-              }
-            })}
+                    </div>
+                  );
+                } else {
+                  return false;
+                }
+              })}
           </div>
         </div>
         <div className="language">
@@ -516,13 +577,13 @@ export default class StepConsentDetail extends Component<any, any> {
             }}
           >
             {consentLanguage[0] &&
-            consentLanguage.map((item, i) => {
-              return (
-                <Option key={i} value={item.id}>
-                  {item.description}
-                </Option>
-              );
-            })}
+              consentLanguage.map((item, i) => {
+                return (
+                  <Option key={i} value={item.id}>
+                    {item.description}
+                  </Option>
+                );
+              })}
           </Select>
         </div>
       </div>

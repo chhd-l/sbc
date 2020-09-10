@@ -12,7 +12,6 @@ import CompanyActor from './actor/company-actor';
 import Consent from './actor/consent';
 import * as webApi from './webapi';
 
-const editList = {};
 export default class AppStore extends Store {
   constructor(props) {
     super(props);
@@ -1137,10 +1136,11 @@ export default class AppStore extends Store {
       }
     }*/
     let obj = {};
+    v.consentDetailList = this.state().get('detailList');
     console.log(v, 11111);
-    console.log(editList, 222222);
+    console.log(this.state().get('detailList'), 222222);
     console.log(type);
-    obj = Object.assign(this.state().get('formEdit'), v);
+    obj = Object.assign(this.state().get('editList'), v);
     console.log(obj, 33333);
     //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
     /*if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
@@ -1199,6 +1199,11 @@ export default class AppStore extends Store {
     this.dispatch('consent:formEdit', param);
   };
 
+  //onDetailList
+  onDetailList = async (param?: any) => {
+    this.dispatch('consent:detailList', param);
+  };
+
   // Switch
   onSwitch = async (param?: any) => {
     const { res } = await webApi.fetchSwitch(param);
@@ -1213,9 +1218,11 @@ export default class AppStore extends Store {
   onEditList = async (param?: any) => {
     const { res } = await webApi.fetchEditList(param);
     if (res.code == Const.SUCCESS_CODE) {
-      console.log(res, '+++++++++++++');
-      editList = res.context.consentAndDetailVO;
-      this.dispatch('consent:editList', res.context.consentAndDetailVO);
+      let data = res.context.consentAndDetailVO;
+      console.log(data.consentDetailList);
+
+      this.dispatch('consent:editList', data);
+      this.dispatch('consent:detailList', data.consentDetailList);
       this.dispatch('consent:editId', param);
     }
   };

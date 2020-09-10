@@ -276,7 +276,7 @@ export function fetchSwitch(param = {}) {
 }
 
 //edit-list
-export function fetchEditList(param = {}) {
+export function fetchEditList(param) {
   return Fetch(`/consent/${param}`, {
     method: 'GET'
   });

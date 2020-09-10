@@ -60,7 +60,9 @@ export default class StepConsentDetail extends Component<any, any> {
       editList: any;
       editId: any;
       formEdit: any;
+      detailList: any;
       getConsentDetailDelete: Function;
+      onDetailList: Function;
     };
   };
 
@@ -74,7 +76,9 @@ export default class StepConsentDetail extends Component<any, any> {
     onEditSave: noop,
     editList: 'editList',
     editId: 'editId',
-    getConsentDetailDelete: noop
+    detailList: 'detailList',
+    getConsentDetailDelete: noop,
+    onDetailList: noop
   };
 
   handleChange = (value) => {
@@ -96,31 +100,61 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, onDetailList, detailList } = this.props.relaxProps;
     let list = [];
     if (o == 0) {
       this.setState({
-        a: { ...this.state.a, contentTitle: m, contentBody: n, sort: o + 1 }
+        a: {
+          ...this.state.a,
+          ...detailList[0],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 1) {
       this.setState({
-        b: { ...this.state.b, contentTitle: m, contentBody: n, sort: o + 1 }
+        b: {
+          ...this.state.b,
+          ...detailList[1],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 2) {
       this.setState({
-        c: { ...this.state.c, contentTitle: m, contentBody: n, sort: o + 1 }
+        c: {
+          ...this.state.c,
+          ...detailList[2],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 3) {
       this.setState({
-        d: { ...this.state.d, contentTitle: m, contentBody: n, sort: o + 1 }
+        d: {
+          ...this.state.d,
+          ...detailList[3],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
     if (o == 4) {
       this.setState({
-        e: { ...this.state.e, contentTitle: m, contentBody: n, sort: o + 1 }
+        e: {
+          ...this.state.e,
+          ...detailList[4],
+          contentTitle: m,
+          contentBody: n,
+          sort: o + 1
+        }
       });
     }
 
@@ -132,10 +166,15 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.e
     );
     list = list.filter((item) => item.contentTitle != '');
+    console.log(list, 2222);
     onFormChange({
       field: 'consentDetailList',
       value: list
     });
+    /*onDetailList({
+      field: 'detailList',
+      value: list
+    });*/
   };
 
   componentDidMount() {

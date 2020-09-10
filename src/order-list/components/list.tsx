@@ -459,7 +459,6 @@ export default class ListView extends React.Component<any, any> {
                                     onClick={() => {
                                       this._showRetrialConfirm(id);
                                     }}
-                                    href="javascript:void(0)"
                                     className="iconfont iconbtn-review"
                                   >
                                     {/*<FormattedMessage id="order.review" />*/}

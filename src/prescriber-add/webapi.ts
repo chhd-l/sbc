@@ -226,3 +226,10 @@ export function auditEmployee(employeeIds: string[], accountState: Number) {
     })
   });
 }
+
+export function sendEmail(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/sendEmail', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+}

@@ -74,7 +74,9 @@ export default class BillingDetailsNext extends React.Component<any, any> {
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
-
+    setTimeout(() => {
+      console.log(detailProductList.prescriberName);
+    });
     return (
       <div style={styles.main}>
         <div style={styles.nav}>

@@ -40,6 +40,7 @@ export default class BillingDetails extends React.Component<any, any> {
       this.store.init(state);
     }
     localStorage.removeItem('enable');
+    localStorage.removeItem('productselect');
   }
 
   onInput = (e) => {
@@ -49,8 +50,17 @@ export default class BillingDetails extends React.Component<any, any> {
     });
   };
   next() {
-    const current = this.state.current + 1;
-    this.setState({ current });
+    if (this.state.current == 1) {
+      if (Number(localStorage.getItem('productselect')) > 0) {
+        const current = this.state.current + 1;
+        this.setState({ current });
+      } else {
+        message.error('Recommended product cannot be empty !');
+      }
+    } else {
+      const current = this.state.current + 1;
+      this.setState({ current });
+    }
   }
 
   prev() {

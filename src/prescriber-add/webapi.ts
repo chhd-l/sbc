@@ -217,11 +217,12 @@ export function getAllRoles() {
   return Fetch('/customer/employee/roles');
 }
 
-export function auditEmployee(employeeIds: string[]) {
+export function auditEmployee(employeeIds: string[], accountState: Number) {
   return Fetch<TResult>('/customer/employee/audit', {
     method: 'POST',
     body: JSON.stringify({
-      employeeIds: employeeIds
+      employeeIds: employeeIds,
+      accountState: accountState
     })
   });
 }

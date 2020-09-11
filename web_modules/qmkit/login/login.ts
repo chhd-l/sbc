@@ -33,6 +33,16 @@ export async function login(form, oktaToken: string) {
           history.push('login-verify')
           return
         }
+        if (res.context.accountState === 4 ) {
+            message.error('Your account need to audit, will notify you by email')
+            history.push('login-verify', {oktaLogout : true})
+            return
+        }
+        if(res.context.accountState === 1) {
+          message.error('Your account is disabled')
+          history.push('login-verify', {oktaLogout : true})
+          return
+        }
       }
 
     } else {

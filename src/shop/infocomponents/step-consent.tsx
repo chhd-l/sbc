@@ -141,7 +141,7 @@ export default class StepConsent extends Component<any, any> {
                 <Icon type="left" /> Consent edit
               </div>
             </div>
-            {editId != null ? <Detail editId={editId}/> : null}
+            {editId != null ? <Detail editId={editId} /> : null}
           </React.Fragment>
         )}
       </div>

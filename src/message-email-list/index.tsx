@@ -479,7 +479,6 @@ export default class ClinicList extends Component<any, any> {
                     label={<p style={styles.label}>Status</p>}
                     style={{ width: 180 }}
                     onChange={(value) => {
-                      debugger;
                       value = value === '' ? null : value;
                       this.onFormChange({
                         field: 'status',

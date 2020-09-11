@@ -9,7 +9,7 @@ import { Select, Table } from 'antd';
 const { Option } = Select;
 
 const Column = Table.Column;
-
+let selectedRowsList = [];
 /**
  * 商品添加
  */
@@ -155,25 +155,20 @@ export default class GoodsGrid extends React.Component<any, any> {
                       console.log(i);
                       console.log(this.state.selectedRowKeys, '++++++++++');
                       console.log(this.state.selectedRows.toJS(), '--------');
-                      let selectedRows = this.state.selectedRows.toJS();
-                      let obj = [];
-                      selectedRows = selectedRows.map((t) => {
-                        return t.goodsInfoId === i['goodsInfoId'] ? i : t;
+
+                      let obj = this.state.selectedRows.toJS();
+                      for (let o = 0; o < obj.length; o++) {
+                        obj[o].goodsInfoId === i['goodsInfoId']
+                          ? (obj[o].recommendationNumber = Number(e))
+                          : this.state.selectedRows.toJS();
+                      }
+                      this.setState({
+                        selectedRows: fromJS(obj)
                       });
-                      console.log(selectedRows);
 
-                      /*this.state.selectedRows.toJS().map(item=>{
-                        if(item.goodsInfoId == i['goodsInfoId']) {
-
-                        }
-
-                      })*/
                       i = i['recommendationNumber'] = Number(e);
-                      //rowChangeBackFun(this.state.selectedRowKeys, fromJS(obj));
+                      rowChangeBackFun(this.state.selectedRowKeys, fromJS(obj));
                     }}
-                    /*onChange={(e) =>
-                      (i = i['recommendationNumber'] = Number(e))
-                    }*/
                   >
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>

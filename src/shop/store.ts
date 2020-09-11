@@ -1128,22 +1128,31 @@ export default class AppStore extends Store {
   };
 
   //new
-  consentSubmit = async (param?: any, type) => {
+  consentSubmit = async (param?: any, type?: any) => {
     let v = param.toJS();
-    for (let key in v) {
-      if (v[key] === '') {
-        delete v[key];
+
+    //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
+    if (type != '000') {
+      for (let key in v) {
+        if (v[key] === '') {
+          delete v[key];
+        }
       }
-    }
-    let obj = {};
-    obj = Object.assign(this.state().get('formEdit'), v);
-    console.log(v, 11111);
-    console.log(this.state().get('formEdit'), 222222);
-    console.log(type);
-    console.log(obj, 33333);
-    if (v.consentId != '' && v.consentCode != '' && v.consentTitleType != '' && v.consentTitle != '') {
-      if (type != '000') {
-        const { res } = await webApi.fetchEditSave(obj);
+      let form = Object.assign(this.state().get('editList'), v);
+      let formEdit = this.state().get('formEdit');
+      let obj = this.state()
+        .get('detailList')
+        .map((item, index) => {
+          return { ...item, ...formEdit[index] };
+        });
+      form.consentDetailList = obj;
+      if (
+        form.consentId != '' &&
+        form.consentCode != '' &&
+        form.consentTitleType != '' &&
+        form.consentTitle != ''
+      ) {
+        const { res } = await webApi.fetchEditSave(form);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
@@ -1154,6 +1163,15 @@ export default class AppStore extends Store {
           message.error(res.message);
         }
       } else {
+        message.error('Submit Can not be empty！');
+      }
+    } else {
+      if (
+        v.consentId != '' &&
+        v.consentCode != '' &&
+        v.consentTitleType != '' &&
+        v.consentTitle != ''
+      ) {
         const { res } = await webApi.fetchNewConsent(v);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
@@ -1161,14 +1179,13 @@ export default class AppStore extends Store {
             this.pageChange('List', null);
             this.getConsentList();
           });
-
           //history.push('/shop-info');
         } else {
           message.error(res.message);
         }
+      } else {
+        message.error('Submit Can not be empty！');
       }
-    } else {
-      message.error('Submit Can not be empty！');
     }
   };
 
@@ -1197,6 +1214,11 @@ export default class AppStore extends Store {
     this.dispatch('consent:formEdit', param);
   };
 
+  //onDetailList
+  onDetailList = async (param?: any) => {
+    this.dispatch('consent:detailList', param);
+  };
+
   // Switch
   onSwitch = async (param?: any) => {
     const { res } = await webApi.fetchSwitch(param);
@@ -1211,8 +1233,24 @@ export default class AppStore extends Store {
   onEditList = async (param?: any) => {
     const { res } = await webApi.fetchEditList(param);
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('consent:editList', res.context.consentAndDetailVO);
+      let data = res.context.consentAndDetailVO;
+      console.log(data.consentDetailList);
+
+      this.dispatch('consent:editList', data);
+      this.dispatch('consent:detailList', data.consentDetailList);
       this.dispatch('consent:editId', param);
+    }
+  };
+
+  //fetchConsentDetailDelete
+  getConsentDetailDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDetailDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        //this.getConsentList();
+      });
+    } else {
+      message.error(res.message);
     }
   };
 }

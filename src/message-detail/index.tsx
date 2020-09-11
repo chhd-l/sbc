@@ -98,6 +98,9 @@ class MessageDetails extends Component<any, any> {
     };
   }
   componentDidMount() {
+    console.log(Const);
+    console.log(process.env.NODE_ENV);
+
     this.querySysDictionary('objectType');
     this.querySysDictionary('messageCategory');
     this.initPage();

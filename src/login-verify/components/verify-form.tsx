@@ -248,7 +248,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         const { res } = await webApi.verifyUser(param);
         if (res.code === 'K-000000') {
           if(res.context === 'needAudit') {
-            message.info("Your account need to audit, will notify you by email")
+            message.info('Your account need to audit, will notify you by email')
           } else {
             login({}, oktaToken);
           }

@@ -276,7 +276,7 @@ export function fetchSwitch(param = {}) {
 }
 
 //edit-list
-export function fetchEditList(param = {}) {
+export function fetchEditList(param) {
   return Fetch(`/consent/${param}`, {
     method: 'GET'
   });
@@ -289,3 +289,10 @@ export function fetchEditSave(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+//edit-Detail-Delete
+export const fetchConsentDetailDelete = (params) => {
+  return Fetch(`/consent/detail/${params}`, {
+    method: 'DELETE'
+  });
+};

@@ -66,7 +66,7 @@ export default class StepTwo extends React.Component<any, any> {
                 <FormItem
                   {...formItemLayout}
                   required={false}
-                  label='Userinfo URL'
+                  label="Userinfo URL"
                 >
                   <p style={{ color: '#333' }}>
                     {this.state.sso.userInfoUrl ? (

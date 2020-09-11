@@ -281,6 +281,7 @@ export default class ListView extends React.Component<any, any> {
     } = this.props.relaxProps;
 
     let list = dataList.toJS();
+    debugger;
     return list.map((v, index) => {
       const id = v.recommendationId;
       const createTime = v.createTime;
@@ -360,18 +361,11 @@ export default class ListView extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '14%' }}>
                     {v.recommendationGoodsInfoRels.reduce((sum, item) => {
-                      return sum + item.goodsInfo.marketPrice;
-                    }, 0)}
-                    {/* {v.recommendationGoodsInfoRels[0].goodsInfo.marketPrice} */}
-                    {/* {img.map((item, index) => {
                       return (
-                        <div>
-                          {item.goodsInfo.marketPrice != null
-                          ? item.goodsInfo.marketPrice
-                          : '--'}
-                        </div>
+                        sum +
+                        item.goodsInfo.marketPrice * item.recommendationNumber
                       );
-                    })}*/}
+                    }, 0)}
                   </td>
                   <td style={{ width: '13%' }}>
                     {v.linkStatus != null

@@ -187,7 +187,7 @@ export default class DetailPublish extends React.Component<any, any> {
           </div>
         </div>
         <div className="share">
-          <div className="title" style={{ clear: 'right' }}>
+          <div className="title" style={{ clear: 'left' }}>
             <span>*</span>E-mail
           </div>
           <Input

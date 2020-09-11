@@ -21,5 +21,6 @@ export default {
   EMPLOYEE_DATA: 's2b-employee@data',
   MAP_MODE:'s2b-map-mode',
   OKTA_TOKEN: 'okta-token',
-  LOGIN_ACCOUNT_NAME: 'login-account-name'
+  LOGIN_ACCOUNT_NAME: 'login-account-name',
+  LOGIN_EMPLOYEE_NAME: 'login-employee-name'
 };

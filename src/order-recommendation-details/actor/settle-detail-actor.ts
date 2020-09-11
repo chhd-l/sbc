@@ -34,6 +34,7 @@ export default class SettleDetailActor extends Actor {
         recommendationReasons: '',
         recommendationGoodsInfoRels: []
       },
+      //
       getLink: '',
       send: '',
       detailProductList: {},

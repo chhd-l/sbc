@@ -100,7 +100,7 @@ export default class BillingDetails extends React.Component<any, any> {
   };
 
   cancel = () => {
-    message.info('canceled');
+    //message.info('canceled');
   };
   render() {
     const {
@@ -153,9 +153,10 @@ export default class BillingDetails extends React.Component<any, any> {
             {history.location.state ? (
               <div className="proptContainer">
                 <Popconfirm
-                  title="Are you sure delete this task?"
+                  title="Do you change state?"
                   onConfirm={() => this.confirm(check)}
                   onCancel={this.cancel}
+                  getPopupContainer={(e) => document.body}
                   okText="Yes"
                   cancelText="No"
                   className="proptMessage"

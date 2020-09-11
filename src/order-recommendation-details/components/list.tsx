@@ -70,7 +70,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
 
   render() {
     const { productselect, detailProductList } = this.props.relaxProps;
-    debugger;
     return (
       <TableRow>
         <DataGrid

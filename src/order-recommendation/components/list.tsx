@@ -281,7 +281,6 @@ export default class ListView extends React.Component<any, any> {
     } = this.props.relaxProps;
 
     let list = dataList.toJS();
-    debugger;
     return list.map((v, index) => {
       const id = v.recommendationId;
       const createTime = v.createTime;

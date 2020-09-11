@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid } from 'qmkit';
+import { Const, DataGrid, SelectGroup } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -91,7 +91,7 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRowKeys
               });
               console.log(selectedRowKeys, 11111);
-              console.log(rows, 2222222);
+              console.log(fromJS(rows), 2222222);
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
@@ -150,9 +150,30 @@ export default class GoodsGrid extends React.Component<any, any> {
                   <Select
                     defaultValue="1"
                     style={{ width: 120 }}
-                    onChange={(e) =>
+                    onChange={(e, a) => {
+                      console.log(e);
+                      console.log(i);
+                      console.log(this.state.selectedRowKeys, '++++++++++');
+                      console.log(this.state.selectedRows.toJS(), '--------');
+                      let selectedRows = this.state.selectedRows.toJS();
+                      let obj = [];
+                      selectedRows = selectedRows.map((t) => {
+                        return t.goodsInfoId === i['goodsInfoId'] ? i : t;
+                      });
+                      console.log(selectedRows);
+
+                      /*this.state.selectedRows.toJS().map(item=>{
+                        if(item.goodsInfoId == i['goodsInfoId']) {
+
+                        }
+
+                      })*/
+                      i = i['recommendationNumber'] = Number(e);
+                      //rowChangeBackFun(this.state.selectedRowKeys, fromJS(obj));
+                    }}
+                    /*onChange={(e) =>
                       (i = i['recommendationNumber'] = Number(e))
-                    }
+                    }*/
                   >
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>

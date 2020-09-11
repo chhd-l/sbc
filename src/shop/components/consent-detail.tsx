@@ -167,7 +167,6 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.e
     );
     list = list.filter((item) => item.contentTitle != '');
-    console.log(this.state.detailList, 2222);
     onFormChange({
       field: 'consentDetailList',
       value: list

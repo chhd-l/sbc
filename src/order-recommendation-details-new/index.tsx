@@ -168,7 +168,11 @@ export default class BillingDetails extends React.Component<any, any> {
               </Button>
             )}
             {current > 0 && (
-              <Button shape="round" style={{ margin: '0 8px' }} onClick={() => this.prev()}>
+              <Button
+                shape="round"
+                style={{ margin: '0 8px' }}
+                onClick={() => this.prev()}
+              >
                 Previous
               </Button>
             )}

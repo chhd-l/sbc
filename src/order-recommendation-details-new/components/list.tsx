@@ -17,7 +17,7 @@ const TableRow = styled.div`
     > .ant-table-tbody
     > tr
     > td {
-    padding: 8px 20px;
+    padding: 8px 8px;
   }
   .ant-table-thead > tr:first-child > th:last-child {
     text-align: left;
@@ -59,11 +59,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     const { productselect, onCreateLink } = this.props.relaxProps;
     localStorage.setItem('productselect', String(productselect.length));
     let arr = productselect.map((v, i) => {
+      console.log('vvvvvvvvvvv', v);
       return {
         goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.quantity
+        recommendationNumber: v.recommendationNumber
       };
     });
+    console.log('onCreateLink', arr);
     onCreateLink({
       field: 'recommendationGoodsInfoRels',
       value: arr

@@ -32,6 +32,7 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log('nextProps.selectedSkuIds', nextProps.selectedSkuIds);
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {}
@@ -150,9 +151,10 @@ export default class GoodsGrid extends React.Component<any, any> {
                   <Select
                     defaultValue="1"
                     style={{ width: 120 }}
-                    onChange={(e) =>
-                      (i = i['recommendationNumber'] = Number(e))
-                    }
+                    onChange={(e) => {
+                      i = i['recommendationNumber'] = Number(e);
+                      console.log('iiiiiiiiiiiiiiiiiiiiiiiii', i);
+                    }}
                   >
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>

@@ -77,6 +77,7 @@ export default class AppStore extends Store {
     const res = await webapi.fetchCreateLink(param);
     this.dispatch('get:getLink', res.res.context);
   };
+  //
 
   //Send & Another
   onSharing = (sharing) => {

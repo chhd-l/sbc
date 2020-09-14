@@ -20,6 +20,7 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import copy from 'copy-to-clipboard';
 import UserList from './user-list';
+import { bool } from 'prop-types';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -54,6 +55,7 @@ class ClinicForm extends React.Component<any, any> {
         prescriberCode: '',
         partneredShop: ''
       },
+      firstPrescriberForm: {},
       cityArr: [],
       typeArr: [],
       sectionList: [
@@ -86,10 +88,11 @@ class ClinicForm extends React.Component<any, any> {
       saveLoading: false,
       isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
       clinicsLites: [],
-      prescriberKeyId: this.props.prescriberId
+      prescriberKeyId: this.props.prescriberId,
+      isPrescriber: bool
     };
   }
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
     } else {
@@ -101,6 +104,14 @@ class ClinicForm extends React.Component<any, any> {
     //     auditStatus: this.state.prescriberForm.auditStatus
     //   });
     // }
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId =
+      employee && employee.prescribers && employee.prescribers.length > 0
+        ? employee.prescribers[0].id
+        : null;
+    this.setState({
+      isPrescriber: prescriberId !== null
+    })
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
     this.getClinicsLites();
@@ -233,6 +244,13 @@ class ClinicForm extends React.Component<any, any> {
         url: url,
         prescriberForm: res.context
       });
+      var firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA)
+      if(!firstPrescriberForm) {
+        sessionStorage.setItem(cache.FIRST_PRESCRIBER_DATA, JSON.stringify(res.context))
+      }
+      this.setState({
+        firstPrescriberForm : JSON.parse(sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA))
+      })
       this.props.form.setFieldsValue({
         // id: res.context.id,
         prescriberId: res.context.prescriberId,
@@ -513,6 +531,10 @@ class ClinicForm extends React.Component<any, any> {
       message.error('Reward Rate can not be empty!');
       return;
     }
+    debugger
+    if(!this.state.isPrescriber) {
+      sessionStorage.removeItem(cache.FIRST_PRESCRIBER_DATA)
+    }
     this.handleVerify();
   };
 
@@ -562,8 +584,9 @@ class ClinicForm extends React.Component<any, any> {
   }
 
   render() {
-    const { cityArr, typeArr, prescriberForm } = this.state;
+    const { cityArr, typeArr, prescriberForm, firstPrescriberForm } = this.state;
     const { getFieldDecorator } = this.props.form;
+
     return (
       <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>
         <TabPane tab="Basic Infomation" key="basic">
@@ -576,6 +599,8 @@ class ClinicForm extends React.Component<any, any> {
                     {}
                   )(
                     <Select
+                      disabled={firstPrescriberForm && firstPrescriberForm.parentPrescriberId && this.state.isPrescriber}
+                      allowClear
                       showSearch
                       filterOption={this.filterOption}
                       onChange={(value) => {
@@ -620,6 +645,7 @@ class ClinicForm extends React.Component<any, any> {
                     ]
                   })(
                     <Input
+                      disabled={firstPrescriberForm && firstPrescriberForm.prescriberName && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -680,6 +706,7 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [{ validator: this.comparePhone }]
                   })(
                     <Input
+                      disabled={ firstPrescriberForm && firstPrescriberForm.phone && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -696,6 +723,7 @@ class ClinicForm extends React.Component<any, any> {
                     {}
                   )(
                     <Select
+                      disabled={firstPrescriberForm && firstPrescriberForm.primaryCity && this.state.isPrescriber}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -717,6 +745,7 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [{ validator: this.compareZip }]
                   })(
                     <Input
+                      disabled={firstPrescriberForm && firstPrescriberForm.primaryZip && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -737,6 +766,7 @@ class ClinicForm extends React.Component<any, any> {
                     ]
                   })(
                     <Select
+                      disabled={firstPrescriberForm && firstPrescriberForm.prescriberType && this.state.isPrescriber}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -761,6 +791,7 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [{ validator: this.compareLatitude }]
                   })(
                     <Input
+                      disabled={firstPrescriberForm && firstPrescriberForm.latitude && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -777,6 +808,7 @@ class ClinicForm extends React.Component<any, any> {
                     rules: [{ validator: this.compareLongitude }]
                   })(
                     <Input
+                      disabled={firstPrescriberForm && firstPrescriberForm.longitude && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -798,6 +830,7 @@ class ClinicForm extends React.Component<any, any> {
                     ]
                   })(
                     <Input.TextArea
+                      disabled={firstPrescriberForm && firstPrescriberForm.location && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -868,6 +901,7 @@ class ClinicForm extends React.Component<any, any> {
               </label>
               Every
               <Select
+                disabled={this.state.isPrescriber}
                 value={this.state.timeZone}
                 onChange={(value) => this.selectTimeZone(value)}
                 style={{ minWidth: '200px', marginLeft: '10px' }}
@@ -965,6 +999,7 @@ class ClinicForm extends React.Component<any, any> {
                         <Col span={10}>
                           <FormItem style={{ marginBottom: 0 }}>
                             <InputNumber
+                              disabled={this.state.isPrescriber}
                               value={rowInfo.rewardRate}
                               min={0}
                               max={100}

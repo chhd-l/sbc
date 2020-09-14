@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb, cache } from 'qmkit';
 import ClinicForm from './components/prescriber-form';
 import { Breadcrumb } from 'antd';
 
@@ -28,17 +28,24 @@ export default class ClinicList extends Component<any, any> {
     };
   }
   render() {
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId =
+      employee && employee.prescribers && employee.prescribers.length > 0
+        ? employee.prescribers[0].id
+        : null;
     return (
       <div>
-        {this.props.match.params.id ? (
-          <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>Edit Prescriber</Breadcrumb.Item>
-          </BreadCrumb>
-        ) : (
-          <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>New Prescriber</Breadcrumb.Item>
-          </BreadCrumb>
-        )}
+        { prescriberId ? null :
+          this.props.match.params.id ? (
+            <BreadCrumb thirdLevel={true}>
+              <Breadcrumb.Item>Edit Prescriber</Breadcrumb.Item>
+            </BreadCrumb>
+          ) : (
+            <BreadCrumb thirdLevel={true}>
+              <Breadcrumb.Item>New Prescriber</Breadcrumb.Item>
+            </BreadCrumb>
+          )
+        }
         <div className="container">
           {/* <Headline
             title={

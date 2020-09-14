@@ -105,3 +105,16 @@ export function getConsumerList(filterParams = {}) {
     })
   });
 }
+
+/**
+ * 获取Clinic列表
+ * @param filterParams
+ */
+export function getClinicList(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/listPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

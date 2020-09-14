@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Table, Divider, Row, Col, Select } from 'antd';
 import { WMChart } from 'biz';
 import { getClinicById } from './../../prescriber-add/webapi';
-import { cache } from 'qmkit';
+import { cache, history } from 'qmkit';
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
 const Option = Select.Option;
+import { Link } from 'react-router-dom';
 
 const prescriberLog = require('./../images/Prescriber.png');
 
@@ -67,8 +68,6 @@ export default class homePrescriber extends Component<any, any> {
     this.state = {
       tradeInfo: {},
       prescriber: {
-        prescriberId: '',
-        prescriberType: ''
       },
       tradeData: [],
       flowTrendData: [],
@@ -94,6 +93,7 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerGrowTrendData(id);
   };
   componentWillMount() {
+    this.getPrescriberDetail(this.props.prescriberId)
     let o = {
       value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
         .prescribers[0].id,
@@ -108,16 +108,15 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescriberDetail = async (id) => {
     if (id) {
-      const { res } = await getClinicById({
-        id: id
-      });
-      if (res.code === 'K-000000') {
+      var allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers
+      if(allPerscriber) {
+        var selectPerscriber = allPerscriber.find(x=>x.id === this.props.prescriberId)
         this.setState({
-          prescriber: res.context
+          prescriber:selectPerscriber
         });
         sessionStorage.setItem(
           cache.PRESCRIBER_DATA,
-          JSON.stringify(res.context)
+          JSON.stringify(selectPerscriber)
         );
       } else {
         sessionStorage.removeItem(cache.PRESCRIBER_DATA);
@@ -322,10 +321,7 @@ export default class homePrescriber extends Component<any, any> {
                         this._prescriberChange(value, name)
                       }
                       defaultValue={
-                        sessionStorage.getItem('PrescriberType')
-                          ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                              .value
-                          : null
+                        this.props.prescriberId
                       }
                       style={{ width: '140px', marginBottom: '10px' }}
                     >
@@ -340,6 +336,11 @@ export default class homePrescriber extends Component<any, any> {
                     </div>
                     <div className="prescriberLable">
                       Prescriber Type: {this.state.prescriber.prescriberType}
+                    </div>
+                    <div style={{ marginTop: '15px', fontWeight: 700 }}>
+                         <Link style={{ textDecoration: 'underline' }}
+                          to={'/prescriber-edit/' + this.state.prescriber.id}
+                         >Manage Prescriber</Link>
                     </div>
                   </div>
                 </Col>

@@ -90,9 +90,6 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRows: rows,
                 selectedRowKeys
               });
-              console.log(selectedRowKeys, 11111);
-              console.log(fromJS(rows), 2222222);
-
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => ({
@@ -144,7 +141,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             title="Quantity"
             key="recommendationNumber"
             dataIndex="recommendationNumber"
-            render={(value, i) => {
+            render={(value, i, a) => {
               if (value) {
                 return (
                   <Select

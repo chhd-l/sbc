@@ -144,8 +144,6 @@ export default class StepNewConsent extends Component<any, any> {
     const { consentForm } = this.props.relaxProps;
     con = consentForm.toJS().consentCategory;
     //this.categoryRef.current.props =111
-    console.log(this.state.editList, 111111222222);
-    console.log(this.props.relaxProps.editList, 333333);
   }
 
   render() {

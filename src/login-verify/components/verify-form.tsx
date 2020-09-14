@@ -249,6 +249,8 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         if (res.code === 'K-000000') {
           if(res.context === 'needAudit') {
             message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
+          } else if(res.context === 'alreadyRegister') {
+            message.info('Email already exists in store portal, please check.')
           } else {
             login({}, oktaToken);
           }

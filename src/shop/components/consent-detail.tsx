@@ -45,7 +45,7 @@ export default class StepConsentDetail extends Component<any, any> {
         sort: ''
       },
       value: ['Landing page'],
-      detailList: []
+      detailList: [],
     };
   }
 
@@ -123,6 +123,8 @@ export default class StepConsentDetail extends Component<any, any> {
           contentBody: n,
           sort: o + 1
         }
+      },()=>{
+
       });
     }
     if (o == 1) {
@@ -195,7 +197,9 @@ export default class StepConsentDetail extends Component<any, any> {
     if ( editId != '000') {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
-        content: this.state.editList.consentDetailList
+        content: this.state.editList.consentDetailList,
+        value: this.state.editList.consentPage.split(',')
+
       });
     }
 
@@ -225,7 +229,7 @@ export default class StepConsentDetail extends Component<any, any> {
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-
+      console.log(editorState,32223);
       onFormChange({
         field: 'consentTitle',
         value: htmlInfo
@@ -263,13 +267,14 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   onDelete = (item,i) => {
-    const { getConsentDetailDelete } = this.props.relaxProps;
+    const { getConsentDetailDelete, onDetailList } = this.props.relaxProps;
     let content = this.state.content.filter((item, index) => {
       return index != i;
     });
     this.setState({ content: content }, () => {
       if (item.id) {
         getConsentDetailDelete(item.id);
+        onDetailList(content)
         message.success('Deletion succeeded!');
       } else {
       }
@@ -325,7 +330,7 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 label="Category"
-                defaultValue={'Prescriber'}
+                defaultValue={editList.consentCategory ? editList.consentCategory : 'Prescriber'}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   this.onCategory(value);
@@ -372,11 +377,6 @@ export default class StepConsentDetail extends Component<any, any> {
               >
                 <Option value="Optional">Optional</Option>
                 <Option value="Required">Required</Option>
-                {/*{customerTypeArr.map((item) => (
-                <Option value={item.id} key={item.id}>
-                  {item.name}
-                </Option>
-              ))}*/}
               </SelectGroup>
             </FormItem>
             <FormItem>
@@ -397,24 +397,6 @@ export default class StepConsentDetail extends Component<any, any> {
           <div className="detail-form">
             <FormItem>
               <TreeSelect {...tProps} />
-              {/*<SelectGroup
-                defaultValue={
-                  editList.consentPage ? editList.consentPage : 'Landing page'
-                }
-                label="Page"
-                style={{ width: 280 }}
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  onFormChange({
-                    field: 'consentPage',
-                    value
-                  });
-                }}
-              >
-                <Option value="Landing page">Landing page</Option>
-                <Option value="">landing page</Option>
-                <Option value="Check out">check out</Option>
-              </SelectGroup>*/}
             </FormItem>
             <FormItem>
               <SelectGroup
@@ -520,14 +502,14 @@ export default class StepConsentDetail extends Component<any, any> {
               this.state.content.map((item, i) => {
                 if (i <= 4) {
                   return (
-                    <div className="add" key={item.id}>
+                    <div className="add" key={i}>
                       <div className="add-content space-between">
                         <div className="add-title">Detail {i + 1}</div>
                         <div className="add-i">
                           <Input
                             placeholder="Please enter  keywords"
                             defaultValue={item.contentTitle}
-                            key={item.id +'a'+ i}
+                            key={item.contentTitle}
                             onChange={(e) => {
                               const value = (e.target as any).value;
                               content1 = value;
@@ -598,7 +580,7 @@ export default class StepConsentDetail extends Component<any, any> {
             {consentLanguage[0] &&
               consentLanguage.map((item, i) => {
                 return (
-                  <Option key={i} value={item.id}>
+                  <Option key={item.id} value={item.id}>
                     {item.description}
                   </Option>
                 );

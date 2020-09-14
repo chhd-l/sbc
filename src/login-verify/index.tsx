@@ -16,7 +16,7 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   }
 
   componentWillMount() {
-    if (this.props.location.state.oktaLogout) {
+    if (this.props.location.state && this.props.location.state.oktaLogout) {
       this.props.authService.logout('/');
     };
   }

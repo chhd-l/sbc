@@ -16,11 +16,11 @@ export default class ModalActor extends Actor {
         languageTypeId: '',
         consentCategory: 'Prescriber',
         filedType: 'Optional',
-        consentPage: ['Landing page', 'check out'].toString(),
+        consentPage: ['Landing page'].toString(),
         consentId: '',
         consentCode: '',
         consentType: 'Email in',
-        consentTitleType: 'Content',
+        consentTitleType: true,
         consentTitle: '',
         consentDetailList: []
       },
@@ -28,7 +28,7 @@ export default class ModalActor extends Actor {
       editList: {},
       detailList: [],
       editId: null,
-      formEdit: {}
+      formEdit: []
     };
   }
 

@@ -39,10 +39,13 @@ class TabList extends React.Component<any, any> {
     linkStatus: 'linkStatus'
   };
 
+  componentDidMount() {}
+
   render() {
     const { consentList } = this.props.relaxProps;
     return (
       <Table
+        id="consent"
         rowKey="tabId"
         columns={this._columns}
         dataSource={consentList.toJS()}
@@ -92,6 +95,16 @@ class TabList extends React.Component<any, any> {
       title: 'Consent type',
       dataIndex: 'consentType',
       key: 'consentType'
+    },
+    {
+      title: 'Category',
+      dataIndex: 'consentCategory',
+      key: 'consentCategory'
+    },
+    {
+      title: 'Filed type',
+      dataIndex: 'filedType',
+      key: 'filedType'
     },
     ,
     {

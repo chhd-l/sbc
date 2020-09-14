@@ -248,7 +248,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         const { res } = await webApi.verifyUser(param);
         if (res.code === 'K-000000') {
           if(res.context === 'needAudit') {
-            message.info('Your account need to audit, will notify you by email')
+            message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
           } else {
             login({}, oktaToken);
           }
@@ -308,13 +308,13 @@ const styles = {
     marginBottom: 30
   },
   label: {
-    fontFamily: 'DINPro-Medium',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '14px',
     color: '#B6B6B6',
     letterSpacing: 0
   },
   labelClientName: {
-    fontFamily: 'DINPro-Medium',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '12px',
     color: '#B6B6B6',
     letterSpacing: 0

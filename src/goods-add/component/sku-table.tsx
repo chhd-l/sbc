@@ -433,10 +433,12 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="Base price" />
+          <FormattedMessage id="basePrice" />
           <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item) => (
-              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+            {goodsSpecs.map((item, i) => (
+              <Option key={i} value={item.get('specId')}>
+                {item.get('specName')}
+              </Option>
             ))}
           </Select>
         </div>

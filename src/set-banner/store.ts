@@ -58,50 +58,51 @@ export default class AppStore extends Store {
   getBannerById = async (params) => {
     const { res } = await webapi.getList(params);
     if (res.code === Const.SUCCESS_CODE) {
-      this.onImageFormChange({
-        field: 'bannerId',
-        value: res.context[0].bannerId
-      });
-      this.onImageFormChange({
-        field: 'bannerName',
-        value: res.context[0].bannerName
-      });
-      this.onImageFormChange({
-        field: 'bannerNo',
-        value: res.context[0].bannerNo
-      });
-      this.onImageFormChange({
-        field: 'webUrl',
-        value: res.context[0].webUrl
-      });
-      this.onImageFormChange({
-        field: 'mobiUrl',
-        value: res.context[0].mobiUrl
-      });
-      this.onImageFormChange({
-        field: 'webSkipUrl',
-        value: res.context[0].webSkipUrl
-      });
-      this.onImageFormChange({
-        field: 'mobiSkipUrl',
-        value: res.context[0].mobiSkipUrl
-      });
-      this.onImageFormChange({
-        field: 'webUuid',
-        value: res.context[0].webUuid
-      });
-      this.onImageFormChange({
-        field: 'mobiUuid',
-        value: res.context[0].mobiUuid
-      });
-      this.onImageFormChange({
-        field: 'webImgName',
-        value: res.context[0].webImgName
-      });
-      this.onImageFormChange({
-        field: 'mobiImgName',
-        value: res.context[0].mobiImgName
-      });
+      this.onChangeImageForm(res.context[0]);
+      // this.onImageFormChange({
+      //   field: 'bannerId',
+      //   value: res.context[0].bannerId
+      // });
+      // this.onImageFormChange({
+      //   field: 'bannerName',
+      //   value: res.context[0].bannerName
+      // });
+      // this.onImageFormChange({
+      //   field: 'bannerNo',
+      //   value: res.context[0].bannerNo
+      // });
+      // this.onImageFormChange({
+      //   field: 'webUrl',
+      //   value: res.context[0].webUrl
+      // });
+      // this.onImageFormChange({
+      //   field: 'mobiUrl',
+      //   value: res.context[0].mobiUrl
+      // });
+      // this.onImageFormChange({
+      //   field: 'webSkipUrl',
+      //   value: res.context[0].webSkipUrl
+      // });
+      // this.onImageFormChange({
+      //   field: 'mobiSkipUrl',
+      //   value: res.context[0].mobiSkipUrl
+      // });
+      // this.onImageFormChange({
+      //   field: 'webUuid',
+      //   value: res.context[0].webUuid
+      // });
+      // this.onImageFormChange({
+      //   field: 'mobiUuid',
+      //   value: res.context[0].mobiUuid
+      // });
+      // this.onImageFormChange({
+      //   field: 'webImgName',
+      //   value: res.context[0].webImgName
+      // });
+      // this.onImageFormChange({
+      //   field: 'mobiImgName',
+      //   value: res.context[0].mobiImgName
+      // });
 
       const fileList = [
         {
@@ -164,6 +165,9 @@ export default class AppStore extends Store {
 
   onImageFormChange = ({ field, value }) => {
     this.dispatch('imageActor:field', { field, value });
+  };
+  onChangeImageForm = (imageForm) => {
+    this.dispatch('imageActor:imageForm', imageForm);
   };
 
   resetForm = () => {

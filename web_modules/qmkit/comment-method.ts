@@ -57,7 +57,7 @@ export function validatorWhiteSpace(
   fieldText
 ) {
   if (!value) {
-    callback( 'Please input ' + fieldText);
+    callback();
     return;
   } else {
     const val = value.toString();

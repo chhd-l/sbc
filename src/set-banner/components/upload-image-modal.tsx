@@ -130,7 +130,7 @@ export default class UploadImageModal extends Component<any, any> {
     this.setState({
       okDisabled: true
     });
-    if (tableDatas.size >= 5) {
+    if (tableDatas.size > 5) {
       message.error('You can only add up to 5 banner.');
       // this._handleModelCancel();
       return;
@@ -152,6 +152,7 @@ export default class UploadImageModal extends Component<any, any> {
           return;
         }
         if (imageObj.bannerId) {
+          debugger;
           // edit
           const params = {
             bannerId: imageObj.bannerId,
@@ -294,7 +295,7 @@ export default class UploadImageModal extends Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
-        if (tableDatas.size >= 5) {
+        if (tableDatas.size > 5) {
           message.error('You can only add up to 5 banner.');
           return false;
         }
@@ -412,7 +413,7 @@ export default class UploadImageModal extends Component<any, any> {
         // }
         let fileName = file.name.toLowerCase();
 
-        if (tableDatas.size >= 5) {
+        if (tableDatas.size > 5) {
           message.error('You can only add up to 5 banner.');
           return false;
         }

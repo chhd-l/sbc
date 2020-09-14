@@ -44,7 +44,7 @@ export default class StepConsentDetail extends Component<any, any> {
         contentBody: '',
         sort: ''
       },
-      value: ['Landing page', 'check out'],
+      value: ['Landing page'],
       detailList: []
     };
   }
@@ -91,18 +91,32 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   addDetail = () => {
-    addContent.push(1);
+    addContent.push(this.state.content.length);
+    console.log(addContent);
     this.setState({ content: addContent, detailType: true });
   };
 
   handleConsentTitle = (e) => {
     //console.log(e.key);
-    this.setState({ consentTitleType: e.key == 'Content' ? true : false });
+    this.setState(
+      { consentTitleType: e.key == 'Content' ? true : false },
+      () => {
+        console.log(
+          '????????????????????',
+          this.state.editList.consentTitleType
+        );
+      }
+    );
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange, onEditSave, detailList, editId } = this.props.relaxProps;
-    editId == '000'?(detailList as any)=[]:detailList
+    const {
+      onFormChange,
+      onEditSave,
+      detailList,
+      editId
+    } = this.props.relaxProps;
+    editId == '000' ? ((detailList as any) = []) : detailList;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -230,14 +244,14 @@ export default class StepConsentDetail extends Component<any, any> {
   onCategory = (e) => {
     const { onFormChange } = this.props.relaxProps;
     if (e == 'Prescriber') {
-      this.setState({ value: ['Landing page', 'check out'] }, () => {
+      this.setState({ value: ['Landing page'] }, () => {
         onFormChange({
           field: 'consentPage',
           value: this.state.value.toString()
         });
       });
     } else {
-      this.setState({ value: ['Landing page'] }, () => {
+      this.setState({ value: ['Landing page', 'check out'] }, () => {
         onFormChange({
           field: 'consentPage',
           value: this.state.value.toString()
@@ -248,9 +262,17 @@ export default class StepConsentDetail extends Component<any, any> {
 
   onDelete = (e) => {
     const { getConsentDetailDelete } = this.props.relaxProps;
-    let content = this.state.content.filter((item) => item.sort != e.sort);
+    let content = this.state.content.filter((item, index) => {
+      console.log(index, e, item);
+      return index != e;
+    });
+    console.log(content);
     this.setState({ content: content }, () => {
-      getConsentDetailDelete(e.id);
+      if (e.id) {
+        getConsentDetailDelete(e.id);
+      } else {
+        console.log('删除成功');
+      }
     });
   };
 
@@ -299,11 +321,7 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 label="Category"
-                defaultValue={
-                  editList.consentCategory
-                    ? editList.consentCategory
-                    : 'Prescriber'
-                }
+                defaultValue={'Prescriber'}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   this.onCategory(value);
@@ -445,8 +463,7 @@ export default class StepConsentDetail extends Component<any, any> {
               </FormItem>
             </div>
             <div className="edit-content">
-              {this.state.consentTitleType == true ||
-              this.state.editId != '000' ? (
+              {this.state.consentTitleType == true ? (
                 <FormItem>
                   <div className="editor-wrapper">
                     <BraftEditor
@@ -482,8 +499,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <div className="edit-content">Consent detail</div>
               </div>
             ) : null}
-            {this.state.editList.consentTitleType == 'Content' ||
-            this.state.editId != '000' ? (
+            {this.state.consentTitleType ? (
               <Button
                 className="btn"
                 type="primary"
@@ -500,7 +516,7 @@ export default class StepConsentDetail extends Component<any, any> {
               this.state.content.map((item, i) => {
                 if (i <= 4) {
                   return (
-                    <div className="add" key={i}>
+                    <div className="add" key={item}>
                       <div className="add-content space-between">
                         <div className="add-title">Detail {i + 1}</div>
                         <div className="add-i">
@@ -517,7 +533,7 @@ export default class StepConsentDetail extends Component<any, any> {
                         </div>
                         <div
                           className="iconfont iconDelete icon"
-                          onClick={(e) => this.onDelete(item)}
+                          onClick={(e) => this.onDelete(i)}
                         ></div>
                       </div>
                       <FormItem>

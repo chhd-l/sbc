@@ -110,7 +110,8 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange, onEditSave, detailList } = this.props.relaxProps;
+    const { onFormChange, onEditSave, detailList, editId } = this.props.relaxProps;
+    editId == '000'?(detailList as any)=[]:detailList
     let list = [];
     if (o == 0) {
       this.setState({
@@ -176,7 +177,6 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.e
     );
     list = list.filter((item) => item.contentTitle != '');
-    console.log(this.state.detailList, 2222);
     onFormChange({
       field: 'consentDetailList',
       value: list
@@ -186,7 +186,6 @@ export default class StepConsentDetail extends Component<any, any> {
 
   componentDidMount() {
     const { onFormChange, consentLanguage } = this.props.relaxProps;
-    console.log(this.state.editList.consentTitleType, 11111);
     this.setState({
       consentTitleType:
         this.state.editList.consentTitleType == 'Content' ? true : false

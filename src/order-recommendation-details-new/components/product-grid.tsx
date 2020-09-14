@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid } from 'qmkit';
+import { Const, DataGrid, SelectGroup } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -9,7 +9,7 @@ import { Select, Table } from 'antd';
 const { Option } = Select;
 
 const Column = Table.Column;
-
+let selectedRowsList = [];
 /**
  * 商品添加
  */
@@ -32,7 +32,6 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log('nextProps.selectedSkuIds', nextProps.selectedSkuIds);
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {}
@@ -92,7 +91,7 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRowKeys
               });
               console.log(selectedRowKeys, 11111);
-              console.log(rows, 2222222);
+              console.log(fromJS(rows), 2222222);
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
@@ -151,9 +150,24 @@ export default class GoodsGrid extends React.Component<any, any> {
                   <Select
                     defaultValue="1"
                     style={{ width: 120 }}
-                    onChange={(e) => {
+                    onChange={(e, a) => {
+                      console.log(e);
+                      console.log(i);
+                      console.log(this.state.selectedRowKeys, '++++++++++');
+                      console.log(this.state.selectedRows.toJS(), '--------');
+
+                      let obj = this.state.selectedRows.toJS();
+                      for (let o = 0; o < obj.length; o++) {
+                        obj[o].goodsInfoId === i['goodsInfoId']
+                          ? (obj[o].recommendationNumber = Number(e))
+                          : this.state.selectedRows.toJS();
+                      }
+                      this.setState({
+                        selectedRows: fromJS(obj)
+                      });
+
                       i = i['recommendationNumber'] = Number(e);
-                      console.log('iiiiiiiiiiiiiiiiiiiiiiiii', i);
+                      rowChangeBackFun(this.state.selectedRowKeys, fromJS(obj));
                     }}
                   >
                     <Option value="1">1</Option>

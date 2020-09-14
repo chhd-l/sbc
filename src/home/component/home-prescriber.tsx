@@ -93,7 +93,7 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerData(id);
     this.getCustomerGrowTrendData(id);
   };
-  componentDidMount() {
+  componentWillMount() {
     let o = {
       value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
         .prescribers[0].id,
@@ -324,7 +324,7 @@ export default class homePrescriber extends Component<any, any> {
                       defaultValue={
                         sessionStorage.getItem('PrescriberType')
                           ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                              .children
+                              .value
                           : null
                       }
                       style={{ width: '140px', marginBottom: '10px' }}

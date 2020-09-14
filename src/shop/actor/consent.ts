@@ -28,7 +28,7 @@ export default class ModalActor extends Actor {
       editList: {},
       detailList: [],
       editId: null,
-      formEdit: {}
+      formEdit: []
     };
   }
 

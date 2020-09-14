@@ -1140,9 +1140,10 @@ export default class AppStore extends Store {
       }
       let form = Object.assign(this.state().get('editList'), v);
       let formEdit = this.state().get('formEdit');
-      let obj = this.state()
-        .get('detailList')
-        .map((item, index) => {
+      console.log(formEdit,'ccccc');
+      console.log( this.state().get('detailList'),'ddddd');
+
+      let obj = this.state().get('detailList').map((item, index) => {
           return { ...item, ...formEdit[index] };
         });
       form.consentDetailList = obj;
@@ -1210,7 +1211,7 @@ export default class AppStore extends Store {
   };
 
   //onFormEdit
-  onEditSave = async (param?: any) => {
+  onEditSave =  (param?: any) => {
     this.dispatch('consent:formEdit', param);
   };
 

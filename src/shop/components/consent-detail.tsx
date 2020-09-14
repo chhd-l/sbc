@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Input, TreeSelect, Icon, Form, Col, Button } from 'antd';
+import { Select, Input, TreeSelect, Icon, Form, Col, Button, message } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
@@ -26,7 +26,7 @@ export default class StepConsentDetail extends Component<any, any> {
     this.state = {
       pageType: 'Detail',
       content: [],
-      consentTitleType: true,
+      TitleType: true,
       detailType: false,
       a: { contentTitle: '', contentBody: '', sort: '' },
       b: { contentTitle: '', contentBody: '', sort: '' },
@@ -91,20 +91,16 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   addDetail = () => {
-    addContent.push(this.state.content.length);
-    console.log(addContent);
-    this.setState({ content: addContent, detailType: true });
+    this.state.content.push(new Array());
+    this.setState({ content: this.state.content, detailType: true });
   };
 
   handleConsentTitle = (e) => {
     //console.log(e.key);
     this.setState(
-      { consentTitleType: e.key == 'Content' ? true : false },
+      { TitleType: e.key == 'Content' ? true : false },
       () => {
-        console.log(
-          '????????????????????',
-          this.state.editList.consentTitleType
-        );
+
       }
     );
   };
@@ -181,21 +177,28 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.d,
       this.state.e
     );
-    list = list.filter((item) => item.contentTitle != '');
+    console.log(list);
+
+    list = list.filter(item =>{
+      return item.contentTitle != '' || item.contentBody != ''
+    });
+    console.log(list);
+    onEditSave(list);
     onFormChange({
       field: 'consentDetailList',
       value: list
     });
-    onEditSave(list);
   };
 
   componentDidMount() {
-    const { onFormChange, consentLanguage } = this.props.relaxProps;
-    this.setState({
-      consentTitleType:
-        this.state.editList.consentTitleType == 'Content' ? true : false
-    });
-    this.setState({ content: this.state.editList.consentDetailList });
+    const { onFormChange, consentLanguage, editId } = this.props.relaxProps;
+    if ( editId != '000') {
+      this.setState({
+        TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
+        content: this.state.editList.consentDetailList
+      });
+    }
+
     onFormChange({
       field: 'languageTypeId',
       value: consentLanguage[0] && consentLanguage[0].id
@@ -222,8 +225,7 @@ export default class StepConsentDetail extends Component<any, any> {
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-      //console.log('Html', htmlInfo);
-      //console.log('Raw', rawInfo);
+
       onFormChange({
         field: 'consentTitle',
         value: htmlInfo
@@ -260,18 +262,16 @@ export default class StepConsentDetail extends Component<any, any> {
     }
   };
 
-  onDelete = (e) => {
+  onDelete = (item,i) => {
     const { getConsentDetailDelete } = this.props.relaxProps;
     let content = this.state.content.filter((item, index) => {
-      console.log(index, e, item);
-      return index != e;
+      return index != i;
     });
-    console.log(content);
     this.setState({ content: content }, () => {
-      if (e.id) {
-        getConsentDetailDelete(e.id);
+      if (item.id) {
+        getConsentDetailDelete(item.id);
+        message.success('Deletion succeeded!');
       } else {
-        console.log('删除成功');
       }
     });
   };
@@ -314,6 +314,10 @@ export default class StepConsentDetail extends Component<any, any> {
       }
     };
 
+   /* setTimeout(()=>{
+      console.log(this.state.content,11111);
+      console.log(editList,22222);
+    },200)*/
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -440,7 +444,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <SelectGroup
                   defaultValue={
                     editList.consentTitleType
-                      ? editList.consentTitleType
+                      ?  editList.consentTitleType
                       : 'Content'
                   }
                   label="Consent title"
@@ -463,7 +467,7 @@ export default class StepConsentDetail extends Component<any, any> {
               </FormItem>
             </div>
             <div className="edit-content">
-              {this.state.consentTitleType == true ? (
+              {this.state.TitleType == true ? (
                 <FormItem>
                   <div className="editor-wrapper">
                     <BraftEditor
@@ -499,7 +503,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 <div className="edit-content">Consent detail</div>
               </div>
             ) : null}
-            {this.state.consentTitleType ? (
+            {this.state.TitleType ? (
               <Button
                 className="btn"
                 type="primary"
@@ -516,14 +520,14 @@ export default class StepConsentDetail extends Component<any, any> {
               this.state.content.map((item, i) => {
                 if (i <= 4) {
                   return (
-                    <div className="add" key={item}>
+                    <div className="add" key={item.id}>
                       <div className="add-content space-between">
                         <div className="add-title">Detail {i + 1}</div>
                         <div className="add-i">
                           <Input
                             placeholder="Please enter  keywords"
                             defaultValue={item.contentTitle}
-                            key={item.contentTitle + i}
+                            key={item.id +'a'+ i}
                             onChange={(e) => {
                               const value = (e.target as any).value;
                               content1 = value;
@@ -533,7 +537,7 @@ export default class StepConsentDetail extends Component<any, any> {
                         </div>
                         <div
                           className="iconfont iconDelete icon"
-                          onClick={(e) => this.onDelete(i)}
+                          onClick={(e) => this.onDelete(item,i)}
                         ></div>
                       </div>
                       <FormItem>
@@ -542,7 +546,7 @@ export default class StepConsentDetail extends Component<any, any> {
                             defaultValue={BraftEditor.createEditorState(
                               item.contentBody
                             )}
-                            key={item.contentBody + i}
+                            key={item.contentBody}
                             //value={editorState}
                             onChange={(e) => {
                               content2 = BraftEditor.createEditorState(

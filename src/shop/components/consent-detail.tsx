@@ -110,8 +110,13 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange, onEditSave, detailList, editId } = this.props.relaxProps;
-    editId == '000'?(detailList as any)=[]:detailList
+    const {
+      onFormChange,
+      onEditSave,
+      detailList,
+      editId
+    } = this.props.relaxProps;
+    editId == '000' ? ((detailList as any) = []) : detailList;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -316,11 +321,7 @@ export default class StepConsentDetail extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 label="Category"
-                defaultValue={
-                  editList.consentCategory
-                    ? editList.consentCategory
-                    : 'Prescriber'
-                }
+                defaultValue={'Prescriber'}
                 style={{ width: 280 }}
                 onChange={(value) => {
                   this.onCategory(value);

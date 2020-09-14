@@ -338,7 +338,7 @@ export default class homePrescriber extends Component<any, any> {
                       Prescriber Type: {this.state.prescriber.prescriberType}
                     </div>
                     <div style={{ marginTop: '15px', fontWeight: 700 }}>
-                         <Link
+                         <Link style={{ textDecoration: 'underline' }}
                           to={'/prescriber-edit/' + this.state.prescriber.id}
                          >Manage Prescriber</Link>
                     </div>

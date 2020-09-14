@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, cache } from 'qmkit';
 import ClinicForm from './components/prescriber-form';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, message } from 'antd';
 
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
@@ -33,6 +33,10 @@ export default class ClinicList extends Component<any, any> {
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers[0].id
         : null;
+    if(prescriberId && prescriberId !== this.props.match.params.id ) {
+      message.error("You don't have permission to access the prescriber")
+      return null
+    }
     return (
       <div>
         { prescriberId ? null :

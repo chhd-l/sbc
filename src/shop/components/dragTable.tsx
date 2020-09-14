@@ -93,6 +93,16 @@ class TabList extends React.Component<any, any> {
       dataIndex: 'consentType',
       key: 'consentType'
     },
+    {
+      title: 'Category',
+      dataIndex: 'consentCategory',
+      key: 'consentCategory'
+    },
+    {
+      title: 'Filed type',
+      dataIndex: 'filedType',
+      key: 'filedType'
+    },
     ,
     {
       title: 'Operation',

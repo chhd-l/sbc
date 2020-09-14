@@ -521,7 +521,7 @@ export default class StepConsentDetail extends Component<any, any> {
                         <div className="add-title">Detail {i + 1}</div>
                         <div className="add-i">
                           <Input
-                            placeholder="Please enter URL keywords"
+                            placeholder="Please enter  keywords"
                             defaultValue={item.contentTitle}
                             key={item.contentTitle + i}
                             onChange={(e) => {

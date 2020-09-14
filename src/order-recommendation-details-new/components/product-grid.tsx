@@ -151,11 +151,6 @@ export default class GoodsGrid extends React.Component<any, any> {
                     defaultValue="1"
                     style={{ width: 120 }}
                     onChange={(e, a) => {
-                      console.log(e);
-                      console.log(i);
-                      console.log(this.state.selectedRowKeys, '++++++++++');
-                      console.log(this.state.selectedRows.toJS(), '--------');
-
                       let obj = this.state.selectedRows.toJS();
                       for (let o = 0; o < obj.length; o++) {
                         obj[o].goodsInfoId === i['goodsInfoId']

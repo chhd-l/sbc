@@ -364,7 +364,7 @@ export default class StepNewConsent extends Component<any, any> {
                       <div className="add-title">Detail {i + 1}</div>
                       <div className="add-i">
                         <Input
-                          placeholder="Please enter URL keywords"
+                          placeholder="Please enter  keywords"
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             content1 = value;

@@ -91,7 +91,7 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   addDetail = () => {
-    this.state.content.push(new Array());
+    this.state.content.push(new Object());
     this.setState({ content: this.state.content, detailType: true });
   };
 
@@ -112,7 +112,7 @@ export default class StepConsentDetail extends Component<any, any> {
       detailList,
       editId
     } = this.props.relaxProps;
-    editId == '000' ? ((detailList as any) = []) : detailList;
+    editId === '000' ? ((detailList as any) = []) : detailList;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -179,12 +179,10 @@ export default class StepConsentDetail extends Component<any, any> {
       this.state.d,
       this.state.e
     );
-    console.log(list);
 
     list = list.filter(item =>{
       return item.contentTitle != '' || item.contentBody != ''
     });
-    console.log(list);
     onEditSave(list);
     onFormChange({
       field: 'consentDetailList',
@@ -229,7 +227,6 @@ export default class StepConsentDetail extends Component<any, any> {
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-      console.log(editorState,32223);
       onFormChange({
         field: 'consentTitle',
         value: htmlInfo

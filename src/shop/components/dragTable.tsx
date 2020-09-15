@@ -158,7 +158,7 @@ class TabList extends React.Component<any, any> {
         </Popconfirm>
         <div className="switch">
           <Popconfirm
-            title="Are you sure delete this task?"
+            title="Are you sure disable this consent?"
             onConfirm={() => this.confirm(check, rowInfo.get('id'))}
             onCancel={this.cancel}
             okText="Yes"

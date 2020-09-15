@@ -435,7 +435,7 @@ class SkuForm extends React.Component<any, any> {
                   ),
                   initialValue: rowInfo.subscriptionPrice || 0
                 })(
-                  <InputNumber
+                  <Input
                     style={{ width: '60px' }}
                     min={0}
                     max={9999999}

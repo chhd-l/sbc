@@ -47,18 +47,20 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
-  /*
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+  /*componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
     console.log(prevProps.selectedRows.toJS(),1111);
     if (prevState.goodsInfoPage.content) {
       prevState.goodsInfoPage.content = prevState.goodsInfoPage.content.map((item, index) => {
-        return { ...item, ...prevProps.selectedRows.toJS()[index] };
+        if(prevProps.selectedRows.toJS()[index]){
+          if(item.goodsInfoId == prevProps.selectedRows.toJS()[index].goodsInfoId) {
+            return { ...item, ...prevProps.selectedRows.toJS()[index] };
+          }
+        }
       });
       console.log(prevState);
     }
 
-  }
-*/
+  }*/
 
   render() {
     const {

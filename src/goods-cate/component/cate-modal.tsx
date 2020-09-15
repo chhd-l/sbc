@@ -86,6 +86,7 @@ export default class CateModal extends React.Component<any, any> {
         title={formData.get('storeCateId') ? 'Edit' : 'Add'}
         visible={modalVisible}
         zIndex={100}
+        width= {700}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
@@ -203,7 +204,7 @@ class CateModalForm extends React.Component<any, any> {
     } = this.props.relaxProps;
 
     return (
-      <Form className="login-form">
+      <Form className="login-form"  style={{ width: 550 }}>
         <FormItem
           {...formItemLayout}
           label={<FormattedMessage id="categoryName" />}
@@ -300,7 +301,7 @@ class CateModalForm extends React.Component<any, any> {
           {...formItemLayout}
           label={<FormattedMessage id="cateImage" />}
         >
-          <div style={{ width: 550 }}>
+          <div style={{width:'400px'}}>
             <ImageLibraryUpload
               images={images}
               modalVisible={modalVisibleFun}

@@ -112,7 +112,7 @@ export default class StepConsentDetail extends Component<any, any> {
       detailList,
       editId
     } = this.props.relaxProps;
-    editId === '000' ? ((detailList as any) = []) : detailList;
+    editId == '000' ? ((detailList as any) = []) : detailList;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -284,11 +284,11 @@ export default class StepConsentDetail extends Component<any, any> {
     const htmlString = editList.consentTitle ? editList.consentTitle : '';
     const editor = BraftEditor.createEditorState(htmlString);
     const controls = [
-      'bold',
+      /*'bold',
       'italic',
       'underline',
+      'separator',*/
       'text-color',
-      'separator',
       'link',
       'separator'
     ];

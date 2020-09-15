@@ -108,9 +108,9 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescriberDetail = async (id) => {
     if (id) {
-      var allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers
+      let allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers
       if(allPerscriber) {
-        var selectPerscriber = allPerscriber.find(x=>x.id === this.props.prescriberId)
+        let selectPerscriber = allPerscriber.find(x=>x.id === this.props.prescriberId)
         this.setState({
           prescriber:selectPerscriber
         });

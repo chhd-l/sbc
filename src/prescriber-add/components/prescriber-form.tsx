@@ -244,7 +244,7 @@ class ClinicForm extends React.Component<any, any> {
         url: url,
         prescriberForm: res.context
       });
-      var firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA)
+      let firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA)
       if(!firstPrescriberForm) {
         sessionStorage.setItem(cache.FIRST_PRESCRIBER_DATA, JSON.stringify(res.context))
       }

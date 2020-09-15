@@ -23,7 +23,8 @@ export default class GoodsGrid extends React.Component<any, any> {
       total: 0,
       goodsInfoPage: {},
       searchParams: props.searchParams ? props.searchParams : {},
-      showValidGood: props.showValidGood
+      showValidGood: props.showValidGood,
+      content: []
     };
   }
 
@@ -46,6 +47,19 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
+  /*
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    console.log(prevProps.selectedRows.toJS(),1111);
+    if (prevState.goodsInfoPage.content) {
+      prevState.goodsInfoPage.content = prevState.goodsInfoPage.content.map((item, index) => {
+        return { ...item, ...prevProps.selectedRows.toJS()[index] };
+      });
+      console.log(prevState);
+    }
+
+  }
+*/
+
   render() {
     const {
       loading,
@@ -55,6 +69,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       showValidGood
     } = this.state;
     const { rowChangeBackFun, visible } = this.props;
+    console.log(goodsInfoPage.content, 222222222);
     return (
       <div className="content">
         <DataGrid
@@ -90,8 +105,8 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRows: rows,
                 selectedRowKeys
               });
-              console.log(selectedRowKeys, 11111);
-              console.log(fromJS(rows), 2222222);
+              console.log(fromJS(selectedTableRows).toSet(), 11111);
+              console.log(fromJS(selectedRows), 2222222);
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
@@ -148,7 +163,7 @@ export default class GoodsGrid extends React.Component<any, any> {
               if (value) {
                 return (
                   <Select
-                    defaultValue="1"
+                    defaultValue={value}
                     style={{ width: 120 }}
                     onChange={(e, a) => {
                       let obj = this.state.selectedRows.toJS();

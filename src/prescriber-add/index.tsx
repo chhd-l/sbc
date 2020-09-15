@@ -34,7 +34,7 @@ export default class ClinicList extends Component<any, any> {
         ? employee.prescribers[0].id
         : null;
     if(prescriberId && prescriberId !== this.props.match.params.id ) {
-      message.error("You don't have permission to access the prescriber")
+      message.error('You don\'t have permission to access the prescriber')
       return null
     }
     return (

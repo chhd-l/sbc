@@ -792,5 +792,7 @@ export default {
   storeShipping: 'Store shipping',
   singleProductShipping: 'Single product shipping',
   firstName: 'First name',
-  lastName: 'Last name'
+  lastName: 'Last name',
+  footerConfig:'Footer Config'
+
 };

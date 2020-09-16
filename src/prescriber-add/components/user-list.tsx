@@ -16,7 +16,6 @@ import {
 import { SelectGroup, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
-import { Link } from 'react-router-dom';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
 const { confirm } = Modal;
@@ -322,6 +321,29 @@ class UserList extends Component<any, any> {
           if (record.accountState === 3 || record.accountState === 4) {
             return (
               <span className="operation-box">
+                {record.accountState === 3 ? 
+                  <Tooltip placement="top" title="Edit">
+                  <a
+                    onClick={() => this.editUser(record)}
+                    className="iconfont iconEdit"
+                  ></a>
+                </Tooltip>
+                : null
+                }
+                <Popconfirm
+                  title="Are you sure to remove the user?"
+                  onConfirm={() => {
+                    this.deleteUser(record.employeeId);
+                  }}
+                  okText="OK"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      className="iconfont iconDelete"
+                    ></a>
+                  </Tooltip>
+                </Popconfirm>
                 {record.accountState === 3 ? (
                   <Tooltip placement="top" title="Send">
                     <a
@@ -337,20 +359,6 @@ class UserList extends Component<any, any> {
                     ></a>
                   </Tooltip>
                 ) : null}
-                <Popconfirm
-                  title="Are you sure to remove the user?"
-                  onConfirm={() => {
-                    this.deleteUser(record.employeeId);
-                  }}
-                  okText="OK"
-                  cancelText="Cancel"
-                >
-                  <Tooltip placement="top" title="Delete">
-                    <a
-                      className="iconfont iconDelete"
-                    ></a>
-                  </Tooltip>
-                </Popconfirm>
               </span>
             );
           }

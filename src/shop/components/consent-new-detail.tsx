@@ -43,7 +43,7 @@ export default class StepNewConsent extends Component<any, any> {
       onFormChange: Function;
       consentLanguage: any;
       consentForm: any;
-      refDetailEditor: Function;
+      //refDetailEditor: Function;
       editList: any;
       editId: any;
       onDetailList: any;
@@ -56,7 +56,7 @@ export default class StepNewConsent extends Component<any, any> {
     onFormChange: noop,
     consentLanguage: 'consentLanguage',
     consentForm: 'consentForm',
-    refDetailEditor: noop,
+    //refDetailEditor: noop,
     editList: 'editList',
     editId: 'editId',
     onDetailList: noop

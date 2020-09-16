@@ -9,13 +9,15 @@ import StepTwo from './editcomponents/step-sso-edit';
 import StepThree from './editcomponents/step-signed-edit';
 import StepFour from './editcomponents/step-footer-edit';
 import StepConsentedit from './editcomponents/step-consent-edit';
+import StepFooterConfig from './infocomponents/step-footer-config';
 import BrandModal from './components/brand-modal';
 import SortsModal from './components/sort-modal';
 import { FormattedMessage } from 'react-intl';
+
 const StepOneForm = Form.create()(StepOne);
 const StepTwoForm = Form.create()(StepTwo);
 const StepFourForm = Form.create()(StepFour);
-const stepConsenteditForm = Form.create()(StepConsentedit);
+const StepConsenteditForm = Form.create()(StepConsentedit);
 const SortsForm = Form.create()(SortsModal);
 const BrandForm = Form.create()(BrandModal); //品牌弹框
 
@@ -24,7 +26,8 @@ const PAIN = {
   1: <StepTwoForm />,
   2: <StepThree />,
   3: <StepFourForm />,
-  4: <stepConsenteditForm />
+  4: <StepConsenteditForm />,
+  5: <StepFooterConfig />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -74,6 +77,10 @@ export default class ShopInfoEdit extends React.Component<any, any> {
             />
             <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
             <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
+            <Tabs.TabPane
+              tab={<FormattedMessage id="footerConfig" />}
+              key="5"
+            />
           </Tabs>
           <div className="steps-content" style={{ marginTop: 20 }}>
             {PAIN[currentTab]}

@@ -9,6 +9,7 @@ import StepTwo from './infocomponents/step-sso';
 import StepThree from './infocomponents/step-signed';
 import StepFour from './infocomponents/step-footer';
 import StepConsent from './infocomponents/step-consent';
+import StepFooterConfig from './infocomponents/step-footer-config';
 import { FormattedMessage } from 'react-intl';
 
 const StepOneForm = Form.create()(StepOne);
@@ -17,11 +18,12 @@ const StepFourForm = Form.create()(StepFour);
 const StepFiveForm = Form.create()(StepConsent);
 
 const PAIN = {
-  '0': <StepOneForm />,
+  '4': <StepOneForm />,
   '1': <StepTwoForm />,
   '2': <StepThree />,
   '3': <StepFourForm />,
-  '4': <StepFiveForm />
+  '0': <StepFiveForm />,
+  '5': <StepFooterConfig />
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -68,13 +70,17 @@ export default class ShopInfo extends React.Component<any, any> {
               />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
               <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
+              <Tabs.TabPane
+                tab={<FormattedMessage id="footerConfig" />}
+                key="5"
+              />
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}
             </div>
           </div>
           <AuthWrapper functionName="f_storeInfoEdit_0">
-            {currentTab != 4 ? (
+            {!(+currentTab === 0 || +currentTab === 5) ? (
               <div className="bar-button">
                 <Button type="primary" onClick={() => this._edit()}>
                   <FormattedMessage id="edit" />

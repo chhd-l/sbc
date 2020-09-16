@@ -255,9 +255,9 @@ export default class ListView extends React.Component<any, any> {
                           <FormattedMessage id="subscription.subscriptionDate" />
                           :
                           {v.createTime
-                            ? moment(new Date(v.createTime)).format(
-                                'YYYY/MM/DD HH:mm:ss'
-                              )
+                            ? moment(
+                                new Date(v.createTime.replace(/ /g, 'T'))
+                              ).format('YYYY-MM-DD HH:mm:ss')
                             : ''}
                         </span>
                       </div>

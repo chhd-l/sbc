@@ -139,6 +139,8 @@ export default class SearchForm extends React.Component<any, any> {
                 <Option value={null} key={null}>
                   {'All'}
                 </Option>
+                <Option value={'3'}>Inactivated</Option>
+                <Option value={'4'}>To be audit</Option>
                 <Option value={'0'}>Enable</Option>
                 <Option value={'1'}>Disabled</Option>
               </SelectGroup>

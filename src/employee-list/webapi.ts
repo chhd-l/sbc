@@ -210,3 +210,19 @@ export function getClinicsLites() {
     body: JSON.stringify({})
   });
 }
+
+export function getClinicById(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/getPrescriberById', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function sendEmail(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/sendEmail', {
+    method: 'POST',
+    body: JSON.stringify({ ...filterParams })
+  });
+}

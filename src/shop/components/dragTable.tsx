@@ -39,10 +39,13 @@ class TabList extends React.Component<any, any> {
     linkStatus: 'linkStatus'
   };
 
+  componentDidMount() {}
+
   render() {
     const { consentList } = this.props.relaxProps;
     return (
       <Table
+        id="consent"
         rowKey="tabId"
         columns={this._columns}
         dataSource={consentList.toJS()}
@@ -92,6 +95,16 @@ class TabList extends React.Component<any, any> {
       title: 'Consent type',
       dataIndex: 'consentType',
       key: 'consentType'
+    },
+    {
+      title: 'Category',
+      dataIndex: 'consentCategory',
+      key: 'consentCategory'
+    },
+    {
+      title: 'Filed type',
+      dataIndex: 'filedType',
+      key: 'filedType'
     },
     ,
     {
@@ -148,7 +161,7 @@ class TabList extends React.Component<any, any> {
         </Popconfirm>
         <div className="switch">
           <Popconfirm
-            title="Are you sure delete this task?"
+            title="Are you sure disable this consent?"
             onConfirm={() => this.confirm(check, rowInfo.get('id'))}
             onCancel={this.cancel}
             okText="Yes"

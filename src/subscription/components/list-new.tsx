@@ -256,7 +256,7 @@ export default class ListView extends React.Component<any, any> {
                           :
                           {v.createTime
                             ? moment(new Date(v.createTime)).format(
-                                'YYYY-MM-DD HH:mm:ss'
+                                'YYYY/MM/DD HH:mm:ss'
                               )
                             : ''}
                         </span>

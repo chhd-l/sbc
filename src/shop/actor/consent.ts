@@ -20,7 +20,7 @@ export default class ModalActor extends Actor {
         consentId: '',
         consentCode: '',
         consentType: 'Email in',
-        consentTitleType: true,
+        consentTitleType: 'Content',
         consentTitle: '',
         consentDetailList: []
       },
@@ -28,7 +28,7 @@ export default class ModalActor extends Actor {
       editList: {},
       detailList: [],
       editId: null,
-      formEdit: {}
+      formEdit: []
     };
   }
 

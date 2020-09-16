@@ -144,8 +144,6 @@ export default class StepNewConsent extends Component<any, any> {
     const { consentForm } = this.props.relaxProps;
     con = consentForm.toJS().consentCategory;
     //this.categoryRef.current.props =111
-    console.log(this.state.editList, 111111222222);
-    console.log(this.props.relaxProps.editList, 333333);
   }
 
   render() {
@@ -366,7 +364,7 @@ export default class StepNewConsent extends Component<any, any> {
                       <div className="add-title">Detail {i + 1}</div>
                       <div className="add-i">
                         <Input
-                          placeholder="Please enter URL keywords"
+                          placeholder="Please enter  keywords"
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             content1 = value;

@@ -75,19 +75,19 @@ export default async function Fetch<T>(
     }
 
     if (resJSON === 'Method Not Allowed') {
-      message.error('此功能您没有权限访问');
+      message.error('You do not have permission to access this feature');
       return;
     }
 
     // 账号禁用
     if (resJSON.code === 'K-000005') {
-      message.error('账号已被禁用');
+      message.error('Your account is disabled');
       util.logout();
       return;
     }
 
     if (resJSON.code === 'K-000015') {
-      message.error('获取授权失败');
+      message.error('Failed to obtain authorization');
       util.logout();
       return;
     }

@@ -191,7 +191,10 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { onFormChange, consentLanguage, editId } = this.props.relaxProps;
+    const { onFormChange, consentLanguage, editId, editList, consentForm } = this.props.relaxProps;
+    console.log(editList,11111111111)
+    console.log(consentForm,22222)
+
     if ( editId != '000') {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,

@@ -143,6 +143,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
               {orderPrice != null
                 ? `${
                     orderPrice.toFixed(2) +
+                    ' ' +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
                   }`
                 : '-'}

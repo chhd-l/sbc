@@ -1130,7 +1130,7 @@ export default class AppStore extends Store {
   //new
   consentSubmit = async (param?: any, type?: any) => {
     let v = param.toJS();
-    console.log(v,111111111);
+    console.log(v, 111111111);
     //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
     if (type != '000') {
       for (let key in v) {
@@ -1140,13 +1140,15 @@ export default class AppStore extends Store {
       }
       let form = Object.assign(this.state().get('editList'), v);
       let formEdit = this.state().get('formEdit');
-      console.log(this.state().get('editList'),'aaaaa');
-      console.log(v,'bbbbb');
+      console.log(this.state().get('editList'), 'aaaaa');
+      console.log(v, 'bbbbb');
 
-      console.log(formEdit,'ccccc');
-      console.log( this.state().get('detailList'),'ddddd');
+      console.log(formEdit, 'ccccc');
+      console.log(this.state().get('detailList'), 'ddddd');
 
-      let obj = this.state().get('detailList').map((item, index) => {
+      let obj = this.state()
+        .get('detailList')
+        .map((item, index) => {
           return { ...item, ...formEdit[index] };
         });
       form.consentDetailList = obj;
@@ -1161,6 +1163,7 @@ export default class AppStore extends Store {
           this.transaction(() => {
             message.success('Submit successful！');
             this.pageChange('List', null);
+            //this.dispatch('consent:editList',{});
             this.getConsentList();
           });
         } else {
@@ -1214,7 +1217,7 @@ export default class AppStore extends Store {
   };
 
   //onFormEdit
-  onEditSave =  (param?: any) => {
+  onEditSave = (param?: any) => {
     this.dispatch('consent:formEdit', param);
   };
 

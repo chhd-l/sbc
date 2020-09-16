@@ -1,14 +1,13 @@
 import React from 'react';
 import { Relax, Store } from 'plume2';
-import { DataGrid, noop, AuthWrapper, history } from 'qmkit';
+import { DataGrid, noop, AuthWrapper, history, cache } from 'qmkit';
 import { List } from 'immutable';
-import {  Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
 import momnet from 'moment';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 type TList = List<any>;
 const Column = DataGrid;
-
 
 /**
  * 订单收款单列表
@@ -73,7 +72,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
             onSelect(selectedRowKeys);
           }
         }}*/
-        rowKey={(record: any,i) => i}
+        rowKey={(record: any, i) => i}
         pagination={{
           pageSize,
           total,
@@ -90,7 +89,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         ]}*/
       >
         <Column
-          title = "Clinics CRM id"
+          title="Clinics CRM id"
           key="clientId"
           dataIndex="clientId"
           /*render={(invoiceTime) => (
@@ -102,22 +101,22 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           )}*/
         />
         <Column
-          title='Clinics name'
+          title="Clinics name"
           key="clinicsName"
           dataIndex="clinicsName"
         />
         <Column
-          title= 'Clinics region'
+          title="Clinics region"
           key="clinicsCity"
           dataIndex="clinicsCity"
         />
         <Column
-          title='Prescription id'
+          title="Prescription id"
           key="prescriptionId"
           dataIndex="prescriptionId"
         />
         <Column
-          title='Order time'
+          title="Order time"
           dataIndex="date"
           key="date"
           render={(text, _rowData: any) => {
@@ -126,34 +125,33 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         />
 
         <Column
-          title='Order number'
+          title="Order number"
           dataIndex="orderId"
           key="orderId"
           //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
+        <Column title="Product id" dataIndex="productId" key="productId" />
+        <Column title="Unit price" key="price" dataIndex="price" />
+        <Column title="Qty" key="quantity" dataIndex="quantity" />
         <Column
-          title='Product id'
-          dataIndex="productId"
-          key="productId"
-        />
-        <Column
-          title='Unit price'
-          key="price"
-          dataIndex="price"
-        />
-        <Column
-          title='Qty'
-          key="quantity"
-          dataIndex="quantity"
-        />
-        <Column
-          title='Order product amount'
+          title="Order product amount"
           key="totalIncome"
           dataIndex="totalIncome"
           width="12%"
+          render={(orderPrice) => (
+            <span>
+              {orderPrice != null
+                ? `${
+                    orderPrice.toFixed(2) +
+                    ' ' +
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
+                  }`
+                : '-'}
+            </span>
+          )}
         />
         <Column
-          title='Order status'
+          title="Order status"
           key="orderStatus"
           dataIndex="orderStatus"
         />

@@ -1203,7 +1203,7 @@ export default class AppStore extends Store {
       a[key] = '';
     }
     this.dispatch('consent:editId', null);
-    this.dispatch('consent:consentForm', a);
+    this.dispatch('consent:consentForm', param);
 
     this.dispatch('consent:pageChange', param);
     if (id) {
@@ -1242,7 +1242,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       let data = res.context.consentAndDetailVO;
       console.log(data.consentDetailList);
-      this.dispatch('consent:consentForm', data);
+      this.dispatch('consent:consentForm', { data });
 
       this.dispatch('consent:editList', data);
       this.dispatch('consent:detailList', data.consentDetailList);

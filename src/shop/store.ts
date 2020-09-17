@@ -1129,11 +1129,11 @@ export default class AppStore extends Store {
 
   //new
   consentSubmit = async (param?: any, type?: any) => {
-    let v = param.toJS();
-    console.log(v, 111111111);
+    //let v = param.toJS();
+    //console.log(v, 111111111);
     //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
     if (type != '000') {
-      for (let key in v) {
+      /*for (let key in v) {
         if (v[key] === '') {
           delete v[key];
         }
@@ -1151,14 +1151,14 @@ export default class AppStore extends Store {
         .map((item, index) => {
           return { ...item, ...formEdit[index] };
         });
-      form.consentDetailList = obj;
+      form.consentDetailList = obj;*/
       if (
-        form.consentId != '' &&
-        form.consentCode != '' &&
-        form.consentTitleType != '' &&
-        form.consentTitle != ''
+        param.consentId != '' &&
+        param.consentCode != '' &&
+        param.consentTitleType != '' &&
+        param.consentTitle != ''
       ) {
-        const { res } = await webApi.fetchEditSave(form);
+        const { res } = await webApi.fetchEditSave(param);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
@@ -1174,12 +1174,12 @@ export default class AppStore extends Store {
       }
     } else {
       if (
-        v.consentId != '' &&
-        v.consentCode != '' &&
-        v.consentTitleType != '' &&
-        v.consentTitle != ''
+        param.consentId != '' &&
+        param.consentCode != '' &&
+        param.consentTitleType != '' &&
+        param.consentTitle != ''
       ) {
-        const { res } = await webApi.fetchNewConsent(v);
+        const { res } = await webApi.fetchNewConsent(param);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
@@ -1198,12 +1198,12 @@ export default class AppStore extends Store {
 
   //pageChange
   pageChange = (param, id) => {
-    let a = this.state().get('consentForm').toJS();
+    let a = this.state().get('consentForm');
     for (let key in a) {
       a[key] = '';
     }
     this.dispatch('consent:editId', null);
-    this.dispatch('consent:consentForm', param);
+    this.dispatch('consent:consentForm', a);
 
     this.dispatch('consent:pageChange', param);
     if (id) {
@@ -1241,8 +1241,7 @@ export default class AppStore extends Store {
     const { res } = await webApi.fetchEditList(param);
     if (res.code == Const.SUCCESS_CODE) {
       let data = res.context.consentAndDetailVO;
-      console.log(data.consentDetailList);
-      this.dispatch('consent:consentForm', { data });
+      this.dispatch('consent:consentForm', data);
 
       this.dispatch('consent:editList', data);
       this.dispatch('consent:detailList', data.consentDetailList);

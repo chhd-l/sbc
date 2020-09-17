@@ -32,6 +32,39 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
       (this._store = ctx['_plume$Store']);
   }
 
+  async componentDidMount () {
+    document.getElementById('consents').addEventListener('click',(e)=>{     
+      if(e.target.localName === 'span'){
+          var parentId = Number(e.target.parentNode.parentNode.id)
+          let keyWords = e.target.innerText
+          var allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
+          var selectConsent = allList.find(x=>x.id === parentId);
+          if (selectConsent){
+            var detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
+            this.state.requiredConsents.map(requiredItem=>{
+              if(requiredItem.id === parentId) {
+                requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody
+              }
+            })
+            let tempRequiredConsents = [...this.state.requiredConsents]
+            this.setState({
+              requiredConsents: tempRequiredConsents
+            })
+            
+            this.state.optionalConsents.map(optionalItem=>{
+              if(optionalItem.id === parentId) {
+                optionalItem.detailHtml = optionalItem.detailHtml ? '' : detali.contentBody
+              }
+            })
+            let tempOptionalConsents= [...this.state.optionalConsents]
+            this.setState({
+              optionalConsents: tempOptionalConsents
+            })
+          }
+      }
+  })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const loginLogo = this._store.state().get('loginLogo');
@@ -74,16 +107,21 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
             style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
             onChange={this.consentChange}
           >
-            <Row>
+            <Row id="consents">
               {this.state.requiredConsents.map((x, index) => {
                 return (
                   <Col span={24} key={index}>
-                    <Checkbox value={x.id} key={x.id}>
-                      <span
-                        dangerouslySetInnerHTML={{ __html: x.consentTitle }}
-                      />
-                    </Checkbox>
-                    {this.renderReuired(x.id)}
+                    <Row>
+                      <Col span={2}>
+                        <Checkbox value={x.id} key={x.id}>
+                        </Checkbox>
+                      </Col>
+                      <Col span={22}>
+                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                        {this.renderReuired(x.id)}
+                      </Col>
+                    </Row>
                   </Col>
                 );
               })}
@@ -91,11 +129,16 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
               {this.state.optionalConsents.map((x, index) => {
                 return (
                   <Col span={24} key={index}>
-                    <Checkbox value={x.id} key={x.id}>
-                      <span
-                        dangerouslySetInnerHTML={{ __html: x.consentTitle }}
-                      />
-                    </Checkbox>
+                     <Row>
+                      <Col span={2}>
+                        <Checkbox value={x.id} key={x.id}>
+                        </Checkbox>
+                      </Col>
+                      <Col span={22}>
+                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                      </Col>
+                    </Row>
                   </Col>
                 );
               })}
@@ -139,6 +182,10 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
       checkContentIds: checkedValue
     });
   };
+
+  clickConsent (e) {
+     console.log(e)
+  }
 
   renderReuired(id) {
     return !this.state.checkContentIds.includes(id) &&
@@ -323,7 +370,6 @@ const styles = {
   },
   requiredLable: {
     color: '#e2001a',
-    fontSize: '12px',
-    marginLeft: '25px'
+    padding: '10px 0'
   }
 } as any;

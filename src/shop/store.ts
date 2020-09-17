@@ -1129,29 +1129,7 @@ export default class AppStore extends Store {
 
   //new
   consentSubmit = async (param?: any, type?: any) => {
-    //let v = param.toJS();
-    //console.log(v, 111111111);
-    //obj.languageTypeId?this.state().get('formEdit').languageTypeId:this.state().get('consentLanguage')[0].id
     if (type != '000') {
-      /*for (let key in v) {
-        if (v[key] === '') {
-          delete v[key];
-        }
-      }
-      let form = Object.assign(this.state().get('editList'), v);
-      let formEdit = this.state().get('formEdit');
-      console.log(this.state().get('editList'), 'aaaaa');
-      console.log(v, 'bbbbb');
-
-      console.log(formEdit, 'ccccc');
-      console.log(this.state().get('detailList'), 'ddddd');
-
-      let obj = this.state()
-        .get('detailList')
-        .map((item, index) => {
-          return { ...item, ...formEdit[index] };
-        });
-      form.consentDetailList = obj;*/
       if (
         param.consentId != '' &&
         param.consentCode != '' &&

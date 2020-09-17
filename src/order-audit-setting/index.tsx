@@ -43,7 +43,7 @@ class OrderSetting extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <AuthWrapper functionName="fOrderList001_prescriber">
+      <AuthWrapper functionName="f_order_audit_setting">
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">

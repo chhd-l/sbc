@@ -561,7 +561,7 @@ class MessageDetails extends Component<any, any> {
     });
     let params = {
       customerAccount: value,
-      customerLevelId: detailForm.consumerType,
+      customerLevelId: 234,
       pageSize: 30,
       pageNum: 0
     };

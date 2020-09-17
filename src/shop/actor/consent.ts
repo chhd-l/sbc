@@ -48,8 +48,11 @@ export default class ModalActor extends Actor {
 
   //new
   @Action('consent:consentForm')
-  consentForm(state: IMap, { field, value }) {
+ /* consentForm(state: IMap, { field, value }) {
     return state.setIn(['consentForm', field], value);
+  }*/
+  consentForm(state: IMap, res) {
+    return state.set('consentForm', res);
   }
 
   @Action('consent:detailList')

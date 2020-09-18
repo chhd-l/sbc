@@ -10,6 +10,7 @@ import {
   Popover,
   Row,
   Table,
+  Tag,
   Tooltip
 } from 'antd';
 import { AuthWrapper, Const, noop, util } from 'qmkit';
@@ -18,8 +19,6 @@ import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-
-
 
 const invoiceContent = (invoice) => {
   let invoiceContent = '';
@@ -95,8 +94,11 @@ class RejectForm extends React.Component<any, any> {
                     marginRight: '4px',
                     fontSize: '12px'
                   }}
-                >*</span>
-                Once rejected, we will return the payment for this order to the consumer
+                >
+                  *
+                </span>
+                Once rejected, we will return the payment for this order to the
+                consumer
               </p>
             </div>
           )}
@@ -149,7 +151,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       hideRejectModal: Function;
     };
   };
-  
 
   static relaxProps = {
     detail: 'detail',
@@ -170,19 +171,26 @@ export default class OrderDetailTab extends React.Component<any, any> {
     hideRejectModal: noop
   };
 
-  state ={
-    visiblePetDetails:false,
-    petInfo:{
-      petsName:'Echo123',
-      birthOfPets:'05/07/2020',
-      petsBreed: 'cat',
+  state = {
+    visiblePetDetails: false,
+    havePet: true,
+    currentPetInfo: {
+      petsName: 'Echo123',
+      birthOfPets: '05/07/2020',
+      petsBreed: 'American Shorthair',
       petsSex: 1,
       petsType: 'cat',
-      
+      petsSizeValueName: 'Medium',
+      specialNeeds: [
+        {
+          propName: 'Sensibilidades alimentarias'
+        },
+        {
+          propName: 'Soporte urinario'
+        }
+      ]
     }
-  }
-
-  
+  };
 
   render() {
     const {
@@ -195,6 +203,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       setSellerRemark,
       orderRejectModalVisible
     } = this.props.relaxProps;
+    const { currentPetInfo, havePet } = this.state;
     //当前的订单号
     const tid = detail.get('id');
     let orderSource = detail.get('orderSource');
@@ -237,19 +246,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
     //发票信息
     const invoice = detail.get('invoice')
       ? (detail.get('invoice').toJS() as {
-        open: boolean; //是否需要开发票
-        type: number; //发票类型
-        title: string; //发票抬头
-        projectName: string; //开票项目名称
-        generalInvoice: IMap; //普通发票
-        specialInvoice: IMap; //增值税专用发票
-        address: string;
-        contacts: string; //联系人
-        phone: string; //联系方式
-        provinceId: number;
-        cityId: number;
-        areaId: number;
-      })
+          open: boolean; //是否需要开发票
+          type: number; //发票类型
+          title: string; //发票抬头
+          projectName: string; //开票项目名称
+          generalInvoice: IMap; //普通发票
+          specialInvoice: IMap; //增值税专用发票
+          address: string;
+          contacts: string; //联系人
+          phone: string; //联系方式
+          provinceId: number;
+          cityId: number;
+          areaId: number;
+        })
       : null;
 
     //附件信息
@@ -320,13 +329,46 @@ export default class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'petDetails',
         key: 'petDetails',
         width: '10%',
-        render:(
-          (row)=>{    
-            <Button type="link" onClick={()=>this._openPetDetails(row)}>
-              view
-            </Button>
-          } 
+        render: (text, record) => (
+          <Button type="link" onClick={() => this._openPetDetails(record)}>
+            view
+          </Button>
         )
+      },
+      {
+        title: 'Price',
+        dataIndex: 'levelPrice',
+        key: 'levelPrice',
+        render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Subtotal',
+        render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
+      }
+    ];
+
+    const columnsNoPet = [
+      {
+        title: 'SKU Code',
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => text
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'skuName',
+        key: 'skuName',
+        width: '20%'
+      },
+      {
+        title: 'Weight',
+        dataIndex: 'specDetails',
+        key: 'specDetails'
       },
       {
         title: 'Price',
@@ -383,8 +425,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   {detail.get('subscribeId')}
                 </p>
               ) : (
-                  ''
-                )}
+                ''
+              )}
               <p style={styles.darkText}>
                 {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
               </p>
@@ -425,7 +467,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         >
           <Table
             rowKey={(_record, index) => index.toString()}
-            columns={columns}
+            columns={havePet ? columns : columnsNoPet}
             dataSource={tradeItems.concat(gifts)}
             pagination={false}
             bordered
@@ -627,14 +669,64 @@ export default class OrderDetailTab extends React.Component<any, any> {
         </Modal>
 
         <Modal
-          title="Basic Modal"
+          title={currentPetInfo.petsName}
           visible={this.state.visiblePetDetails}
-          // onOk={this.handleOk}
-          // onCancel={this.handleCancel}
+          onOk={() => {
+            this.setState({
+              visiblePetDetails: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visiblePetDetails: false
+            });
+          }}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Row>
+            <Col span={12}>
+              <p>
+                {currentPetInfo.petsType === 'dog' ? (
+                  <i className="iconfont icondog" style={styles.iconRight}></i>
+                ) : (
+                  <i className="iconfont iconcat" style={styles.iconRight}></i>
+                )}
+                {currentPetInfo.petsBreed}
+              </p>
+              <p>
+                <i
+                  className="iconfont iconbirthday"
+                  style={styles.iconRight}
+                ></i>
+                {currentPetInfo.birthOfPets}
+              </p>
+              <p>
+                {currentPetInfo.petsSex === 0 ? (
+                  <i className="iconfont iconman" style={styles.iconRight}></i>
+                ) : (
+                  <i
+                    className="iconfont iconwoman"
+                    style={styles.iconRight}
+                  ></i>
+                )}
+                {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
+              </p>
+              {currentPetInfo.petsSizeValueName ? (
+                <p>
+                  <i
+                    className="iconfont iconweight"
+                    style={styles.iconRight}
+                  ></i>
+                  {currentPetInfo.petsSizeValueName}
+                </p>
+              ) : null}
+            </Col>
+            <Col span={12}>
+              <h3>specialNeeds</h3>
+              {currentPetInfo.specialNeeds.map((item) => (
+                <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>
+              ))}
+            </Col>
+          </Row>
         </Modal>
       </div>
     );
@@ -697,9 +789,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   href="javascript:void(0)"
                   style={styles.pr20}
                   className="iconfont iconEdit"
-                >
-
-                </a>
+                ></a>
                 {/* <a
                   style={styles.pr20}
                   onClick={() => {
@@ -714,39 +804,39 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {payState === 'PAID'
             ? null
             : flowState === 'INIT' && (
-              <AuthWrapper functionName="fOrderList002_prescriber">
-                <Tooltip placement="top" title="Reject">
-                  <a
-                    onClick={() => showRejectModal()}
-                    href="javascript:void(0)"
-                    style={styles.pr20}
-                    className="iconfont iconbtn-cancelall"
-                  >
-                    {/*<FormattedMessage id="order.turnDown" />*/}
-                  </a>
-                </Tooltip>
-              </AuthWrapper>
-            )}
+                <AuthWrapper functionName="fOrderList002_prescriber">
+                  <Tooltip placement="top" title="Reject">
+                    <a
+                      onClick={() => showRejectModal()}
+                      href="javascript:void(0)"
+                      style={styles.pr20}
+                      className="iconfont iconbtn-cancelall"
+                    >
+                      {/*<FormattedMessage id="order.turnDown" />*/}
+                    </a>
+                  </Tooltip>
+                </AuthWrapper>
+              )}
           {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
               {!needAudit ||
-                payState === 'PAID' ||
-                payState === 'UNCONFIRMED' ? null : (
-                  <AuthWrapper functionName="fOrderList002_prescriber">
-                    <Tooltip placement="top" title="Re-review">
-                      <a
-                        onClick={() => {
-                          this._showRetrialConfirm(tid);
-                        }}
-                        href="javascript:void(0)"
-                        style={styles.pr20}
-                      >
-                        Re-review
+              payState === 'PAID' ||
+              payState === 'UNCONFIRMED' ? null : (
+                <AuthWrapper functionName="fOrderList002_prescriber">
+                  <Tooltip placement="top" title="Re-review">
+                    <a
+                      onClick={() => {
+                        this._showRetrialConfirm(tid);
+                      }}
+                      href="javascript:void(0)"
+                      style={styles.pr20}
+                    >
+                      Re-review
                     </a>
-                    </Tooltip>
-                  </AuthWrapper>
-                )}
+                  </Tooltip>
+                </AuthWrapper>
+              )}
               {/* {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
                   <a
@@ -861,7 +951,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         retrial(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
@@ -878,7 +968,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         onAudit(tid, 'CHECKED');
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
@@ -897,14 +987,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         confirm(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
-  _openPetDetails =(row)=>{
+  _openPetDetails = (row) => {
+    this.setState({
+      visiblePetDetails: true
+    });
     console.log(row);
-    
-  }
+  };
 }
 
 const styles = {
@@ -984,5 +1076,8 @@ const styles = {
     background: '#F56C1D',
     display: 'inline-block',
     marginLeft: 5
+  },
+  iconRight: {
+    marginRight: 5
   }
 } as any;

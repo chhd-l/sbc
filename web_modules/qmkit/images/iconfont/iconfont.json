@@ -6,6 +6,20 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "5205031",
+      "name": "狗",
+      "font_class": "dog",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "5205042",
+      "name": "猫",
+      "font_class": "cat",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
       "icon_id": "1220303",
       "name": "生日",
       "font_class": "birthday",
@@ -18,20 +32,6 @@
       "font_class": "weight",
       "unicode": "e620",
       "unicode_decimal": 58912
-    },
-    {
-      "icon_id": "6303455",
-      "name": "狗",
-      "font_class": "dog",
-      "unicode": "e690",
-      "unicode_decimal": 59024
-    },
-    {
-      "icon_id": "6303471",
-      "name": "猫",
-      "font_class": "cat",
-      "unicode": "e695",
-      "unicode_decimal": 59029
     },
     {
       "icon_id": "7084896",

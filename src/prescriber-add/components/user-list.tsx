@@ -9,14 +9,16 @@ import {
   message,
   Tooltip,
   Popconfirm,
-  Modal
+  Modal,
+  Row,
+  Col
 } from 'antd';
 import { SelectGroup, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
-import { Link } from 'react-router-dom';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
+const { confirm } = Modal;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -45,7 +47,8 @@ class UserList extends Component<any, any> {
       },
       userVisible: false,
       disabledModalVisible: false,
-      disabledReason: ''
+      disabledReason: '',
+      auditModalVisible: false
     }),
       (this.getUsers = this.getUsers.bind(this));
     this.deleteUser = this.deleteUser.bind(this);
@@ -124,14 +127,56 @@ class UserList extends Component<any, any> {
   };
 
   auditUser = async (record) => {
-    const { res } = await webapi.auditEmployee([record.employeeId]);
-    debugger;
-    if (res.code === 'K-000000') {
-      this.getUsers();
-    }
+    this.setState({
+      auditModalVisible: true,
+      userForm: Object.assign({
+        id: record.employeeId
+      })
+    })
   };
 
-  sendEmail = async (id) => {};
+  handleAudit = async (agree: Boolean) => {
+     if (agree) {
+      const { res } = await webapi.auditEmployee([this.state.userForm.id], 0);
+      if (res.code === 'K-000000') {
+        this.setState({
+          auditModalVisible: false
+        })
+        this.getUsers();
+      }
+     } else {
+      const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
+      if (res.code === 'K-000000') {
+        this.setState({
+          auditModalVisible: false
+        })
+        this.getUsers();
+      }
+     }
+  }
+
+  sendEmail = async (recored) => {
+    const { res: prescriberRes } = await webapi.getClinicById({
+      id: this.props.prescriberKeyId
+    });
+    let prescriberId = '';
+    if (prescriberRes.code === 'K-000000') {
+      prescriberId = prescriberRes.context.prescriberId
+    }
+    let employeeName = recored.employeeName.split(' ');
+    let paramter = {
+      baseUrl: window.origin,
+      email: recored.email,
+      firstName: employeeName && employeeName.length > 0 ?  recored.employeeName.split(' ')[0] : '',
+      prescriberId: prescriberId
+    }
+    const { res } = await webapi.sendEmail(paramter);
+    if(res.code === 'K-000000') {
+      message.success('send successful')
+    } else {
+      message.error(res.message || 'send failed')
+    }
+  };
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -250,7 +295,6 @@ class UserList extends Component<any, any> {
                 >
                   <Tooltip placement="top" title="Delete">
                     <a
-                      href="javascript:void(0);"
                       className="iconfont iconDelete"
                     ></a>
                   </Tooltip>
@@ -277,10 +321,33 @@ class UserList extends Component<any, any> {
           if (record.accountState === 3 || record.accountState === 4) {
             return (
               <span className="operation-box">
+                {record.accountState === 3 ? 
+                  <Tooltip placement="top" title="Edit">
+                  <a
+                    onClick={() => this.editUser(record)}
+                    className="iconfont iconEdit"
+                  ></a>
+                </Tooltip>
+                : null
+                }
+                <Popconfirm
+                  title="Are you sure to remove the user?"
+                  onConfirm={() => {
+                    this.deleteUser(record.employeeId);
+                  }}
+                  okText="OK"
+                  cancelText="Cancel"
+                >
+                  <Tooltip placement="top" title="Delete">
+                    <a
+                      className="iconfont iconDelete"
+                    ></a>
+                  </Tooltip>
+                </Popconfirm>
                 {record.accountState === 3 ? (
                   <Tooltip placement="top" title="Send">
                     <a
-                      onClick={() => this.sendEmail(record.employeeId)}
+                      onClick={() => this.sendEmail(record)}
                       className="iconfont iconemail"
                     ></a>
                   </Tooltip>
@@ -292,21 +359,6 @@ class UserList extends Component<any, any> {
                     ></a>
                   </Tooltip>
                 ) : null}
-                <Popconfirm
-                  title="Are you sure to remove the user?"
-                  onConfirm={() => {
-                    this.deleteUser(record.employeeId);
-                  }}
-                  okText="OK"
-                  cancelText="Cancel"
-                >
-                  <Tooltip placement="top" title="Delete">
-                    <a
-                      href="javascript:void(0);"
-                      className="iconfont iconDelete"
-                    ></a>
-                  </Tooltip>
-                </Popconfirm>
               </span>
             );
           }
@@ -413,7 +465,7 @@ class UserList extends Component<any, any> {
         />
         <Modal
           maskClosable={false}
-          title="Please input the reason for suspension"
+          title="Please input the reason for disabling"
           visible={this.state.disabledModalVisible}
           onCancel={this.cancelDisabled}
           onOk={this.handleDisabled}
@@ -447,6 +499,24 @@ class UserList extends Component<any, any> {
               )}
             </FormItem>
           </Form>
+        </Modal>
+        <Modal
+          maskClosable={false}
+          visible={this.state.auditModalVisible}
+          footer={null}
+          title="Agree or Reject?"
+          onCancel={()=>this.setState({
+            auditModalVisible: false
+          })}
+        > 
+          <Row>
+            <Col span={12}>
+            </Col>
+            <Col span={12} style={{textAlign: 'right'}}>
+               <Button onClick={()=> this.handleAudit(false)} style={{ marginRight: '10px' }}>Reject</Button>
+               <Button type="primary" onClick={()=> this.handleAudit(true)}>Agree</Button>
+            </Col>
+          </Row>       
         </Modal>
       </div>
     );

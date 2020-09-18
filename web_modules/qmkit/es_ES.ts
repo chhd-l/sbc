@@ -22,12 +22,14 @@ export default {
   total: 'Total',
   all: 'All',
   edit: 'Edit',
+  description: 'description',
   operation: 'Operation',
   details: 'Details',
   delete: 'Delete',
   editProduct: 'Edit product',
   basicInformation: 'Basic information',
   priceAndOrderAmount: 'Price and order amount',
+  basePrice:'Base price',
   operationInstruction: 'Operation instruction',
   allTheSame: 'All the same',
   'operationInstruction.first':
@@ -792,5 +794,7 @@ export default {
   storeShipping: 'Store shipping',
   singleProductShipping: 'Single product shipping',
   firstName: 'First name',
-  lastName: 'Last name'
+  lastName: 'Last name',
+  footerConfig:'Footer Config'
+
 };

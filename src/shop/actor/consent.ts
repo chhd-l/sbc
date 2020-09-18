@@ -1,5 +1,6 @@
 import { Actor, Action, IMap } from 'plume2';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
+
 import { IList } from 'typings/globalType';
 
 export default class ModalActor extends Actor {
@@ -12,10 +13,10 @@ export default class ModalActor extends Actor {
       consentLanguage: [],
       //new consent
       consentForm: {
-        languageTypeId: '2619',
+        languageTypeId: '',
         consentCategory: 'Prescriber',
         filedType: 'Optional',
-        consentPage: 'Landing page',
+        consentPage: ['Landing page'].toString(),
         consentId: '',
         consentCode: '',
         consentType: 'Email in',
@@ -24,8 +25,10 @@ export default class ModalActor extends Actor {
         consentDetailList: []
       },
       pageChangeType: 'List',
-      editList: null,
-      editId: null
+      editList: {},
+      detailList: [],
+      editId: null,
+      formEdit: []
     };
   }
 
@@ -45,8 +48,22 @@ export default class ModalActor extends Actor {
 
   //new
   @Action('consent:consentForm')
-  consentForm(state: IMap, { field, value }) {
+ /* consentForm(state: IMap, { field, value }) {
     return state.setIn(['consentForm', field], value);
+  }*/
+  consentForm(state: IMap, res) {
+    return state.set('consentForm', res);
+  }
+
+  @Action('consent:detailList')
+  detailList(state: IMap, res) {
+    return state.set('detailList', res);
+  }
+
+  //formEdit
+  @Action('consent:formEdit')
+  formEdit(state: IMap, res) {
+    return state.set('formEdit', res);
   }
 
   //pageChangeType
@@ -60,6 +77,7 @@ export default class ModalActor extends Actor {
   editList(state: IMap, res) {
     return state.set('editList', res);
   }
+
   @Action('consent:editId')
   editId(state: IMap, res) {
     return state.set('editId', res);

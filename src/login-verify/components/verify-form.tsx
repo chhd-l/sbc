@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Col, message } from 'antd';
+import { Form, Icon, Input, Button, Col, message, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
+import { withOktaAuth } from '@okta/okta-react';
 
-export default class VerifyForm extends React.Component<any, any> {
+export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   form;
 
   _store: Store;
@@ -20,7 +21,48 @@ export default class VerifyForm extends React.Component<any, any> {
 
   constructor(props, ctx) {
     super(props);
-    this._store = ctx['_plume$Store'];
+    (this.state = {
+      requiredConsents: [],
+      optionalConsents: [],
+      checkContentIds: [],
+      clickProcess: false,
+      prcessDisabled: true,
+      prcessLoadding: false
+    }),
+      (this._store = ctx['_plume$Store']);
+  }
+
+  async componentDidMount () {
+    document.getElementById('consents').addEventListener('click',(e)=>{     
+      if(e.target.localName === 'span'){
+          var parentId = Number(e.target.parentNode.parentNode.id)
+          let keyWords = e.target.innerText
+          var allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
+          var selectConsent = allList.find(x=>x.id === parentId);
+          if (selectConsent){
+            var detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
+            this.state.requiredConsents.map(requiredItem=>{
+              if(requiredItem.id === parentId) {
+                requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody
+              }
+            })
+            let tempRequiredConsents = [...this.state.requiredConsents]
+            this.setState({
+              requiredConsents: tempRequiredConsents
+            })
+            
+            this.state.optionalConsents.map(optionalItem=>{
+              if(optionalItem.id === parentId) {
+                optionalItem.detailHtml = optionalItem.detailHtml ? '' : detali.contentBody
+              }
+            })
+            let tempOptionalConsents= [...this.state.optionalConsents]
+            this.setState({
+              optionalConsents: tempOptionalConsents
+            })
+          }
+      }
+  })
   }
 
   render() {
@@ -46,7 +88,7 @@ export default class VerifyForm extends React.Component<any, any> {
           })(
             <Search
               size="large"
-              placeholder="Client ID"
+              placeholder="Please Search Client ID First"
               onSearch={(value, e) => this.search(value, e)}
             />
           )}
@@ -60,6 +102,49 @@ export default class VerifyForm extends React.Component<any, any> {
             rules: [{ required: false }]
           })(<Input size="large" disabled={true} placeholder="Client Name" />)}
         </FormItem>
+        <FormItem style={{ marginTop: 10 }}>
+          <Checkbox.Group
+            style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
+            onChange={this.consentChange}
+          >
+            <Row id="consents">
+              {this.state.requiredConsents.map((x, index) => {
+                return (
+                  <Col span={24} key={index}>
+                    <Row>
+                      <Col span={2}>
+                        <Checkbox value={x.id} key={x.id}>
+                        </Checkbox>
+                      </Col>
+                      <Col span={22}>
+                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                        {this.renderReuired(x.id)}
+                      </Col>
+                    </Row>
+                  </Col>
+                );
+              })}
+
+              {this.state.optionalConsents.map((x, index) => {
+                return (
+                  <Col span={24} key={index}>
+                     <Row>
+                      <Col span={2}>
+                        <Checkbox value={x.id} key={x.id}>
+                        </Checkbox>
+                      </Col>
+                      <Col span={22}>
+                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                      </Col>
+                    </Row>
+                  </Col>
+                );
+              })}
+            </Row>
+          </Checkbox.Group>
+        </FormItem>
         <FormItem>
           <Col span={10}>
             <OktaLogout type="button" text="Cancel" />
@@ -71,7 +156,9 @@ export default class VerifyForm extends React.Component<any, any> {
               size="large"
               htmlType="submit"
               style={styles.loginBtn}
-              onClick={(e) => this._handleLogin(e)}
+              onClick={(e) => this._handlePrcess(e)}
+              disabled={this.state.prcessDisabled}
+              loading={this.state.prcessLoadding}
             >
               Proceed
             </Button>
@@ -90,48 +177,148 @@ export default class VerifyForm extends React.Component<any, any> {
     );
   }
 
+  consentChange = (checkedValue) => {
+    this.setState({
+      checkContentIds: checkedValue
+    });
+  };
+
+  renderReuired(id) {
+    return !this.state.checkContentIds.includes(id) &&
+      this.state.clickProcess ? (
+      <div style={styles.requiredLable}>This is required field</div>
+    ) : null;
+  }
+
   search = async (value, e) => {
     e.preventDefault();
-    const { res } = await webApi.getPrescriberById(value);
     const form = this.props.form as WrappedFormUtils;
-    if (res.code === 'K-000000' && res.context.prescriberName) {
+    const ids = value.split('-');
+    if (ids && ids.length < 2) {
+      message.error('No Prescriber');
+      form.setFieldsValue({ prescriberName: '' });
+      return;
+    }
+    let param = {
+      storeId: ids[0],
+      prescriberId: ids[1]
+    };
+    const { res } = await webApi.getPrescriberByPrescriberIdAndStoreId(param);
+    if (res.code === 'K-000000' && res.context && res.context.prescriberName) {
       form.setFieldsValue({ prescriberName: res.context.prescriberName });
     } else {
       message.error('No Prescriber');
       form.setFieldsValue({ prescriberName: '' });
     }
+    const { res: consentRes } = await webApi.getStoreOpenConsentList(param);
+    if (consentRes.code === 'K-000000' && consentRes.context) {
+      this.setState({
+        requiredConsents: consentRes.context.requiredList,
+        optionalConsents: consentRes.context.optionalList
+      });
+    } else {
+      this.setState({
+        requiredConsents:[],
+        optionalConsents: []
+      });
+    }
+
+    if (res.code === 'K-000000' && consentRes.code === 'K-000000') {
+      this.setState({
+        prcessDisabled: false
+      })
+    }
   };
 
-  _handleLogin = async (e) => {
+  _handlePrcess = async (e) => {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
+    this.setState({
+      clickProcess: true,
+      prcessLoadding: true
+    });
+
+    let consentValid = true;
+    this.state.requiredConsents.map((x) => {
+      if (!this.state.checkContentIds.includes(x.id)) {
+        consentValid = false;
+        this.setState({
+          prcessLoadding: false
+        });
+        return;
+      }
+    });
     form.validateFields(null, async (errs, values) => {
-      //如果校验通过
-      if (!errs) {
-        const { res } = await webApi.verifyUser({ values });
+      if (!errs && consentValid) {
+        let ids = values.prescriberId.split('-');
+        if (ids && ids.length < 2) {
+          message.error('No Prescriber');
+          this.setState({
+            prcessLoadding: false
+          });
+          return;
+        }
+        let requiredList = [];
+        let optionalList = [];
+      
+        this.state.requiredConsents.map(x=>{
+          let isSelected = this.state.checkContentIds.includes(x.id)
+          requiredList.push({ id: x.id, selectedFlag: isSelected })
+        })
+
+        this.state.optionalConsents.map(x=>{
+          let isSelected = this.state.checkContentIds.includes(x.id)
+          optionalList.push({ id: x.id, selectedFlag: isSelected })
+        })
+
+        this.state.optionalConsents
+
+        let oktaToken = this.props.authState.accessToken;
+        if(!oktaToken) {
+          message.error('OKTA Token Expired');
+          this.props.authService.logout('/');
+          return
+        }
+        let param = {
+          storeId: ids[0],
+          prescriberId: ids[1],
+          userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
+          employeeName:sessionStorage.getItem(cache.LOGIN_EMPLOYEE_NAME),
+          oktaToken: 'Bearer ' +  oktaToken,
+          requiredList: requiredList,
+          optionalList: optionalList
+        };
+        const { res } = await webApi.verifyUser(param);
         if (res.code === 'K-000000') {
-          if (sessionStorage.getItem(cache.OKTA_TOKEN)) {
-            login({}, sessionStorage.getItem(cache.OKTA_TOKEN));
+          if(res.context === 'needAudit') {
+            message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
+          } else if(res.context === 'alreadyRegister') {
+            message.info('Email already exists in store portal, please check.')
           } else {
-            message.error('OKTA not logged in');
+            login({}, oktaToken);
           }
+          this.setState({
+            prcessLoadding: false
+          });
+        }
+        else {
+          message.error(res.message || 'Verify failed');
+          this.setState({
+            prcessLoadding: false
+          });
         }
       }
     });
   };
-}
+})
 
 const styles = {
   loginForm: {
-    // width: 370,
-    // minHeight: 325,
     width: 480,
     minHeight: 550,
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 30,
-    // marginTop: -50,
-    // marginLeft: -550
     marginTop: 0,
     marginLeft: 500,
     boxShadow: '0 2px 60px 0 rgba(167,167,167,0.28)'
@@ -154,11 +341,9 @@ const styles = {
   logo: {
     display: 'block',
     width: 'auto',
-    // height: 42
     height: 60
   },
   title: {
-    // fontSize: 18,
     fontSize: 25,
     color: '#333',
     lineHeight: 1,
@@ -168,15 +353,19 @@ const styles = {
     marginBottom: 30
   },
   label: {
-    fontFamily: 'DINPro-Medium',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '14px',
     color: '#B6B6B6',
     letterSpacing: 0
   },
   labelClientName: {
-    fontFamily: 'DINPro-Medium',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '12px',
     color: '#B6B6B6',
     letterSpacing: 0
+  },
+  requiredLable: {
+    color: '#e2001a',
+    padding: '10px 0'
   }
 } as any;

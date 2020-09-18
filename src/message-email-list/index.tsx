@@ -236,10 +236,17 @@ export default class ClinicList extends Component<any, any> {
         width: '10%'
       },
       {
+        title: 'Recipient',
+        dataIndex: 'recipient',
+        key: 'recipient',
+        width: '10%',
+        render: (text, record) => <span>{record.detailsResponse.email}</span>
+      },
+      {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        width: '10%',
+        width: '5%',
         render: (text) => (
           <span>
             {+text === 0
@@ -256,7 +263,7 @@ export default class ClinicList extends Component<any, any> {
       {
         title: 'Operation',
         key: 'operation',
-        width: '10%',
+        width: '8%',
         render: (text, record) => (
           <div>
             {+record.status === 0 ? (
@@ -472,7 +479,6 @@ export default class ClinicList extends Component<any, any> {
                     label={<p style={styles.label}>Status</p>}
                     style={{ width: 180 }}
                     onChange={(value) => {
-                      debugger;
                       value = value === '' ? null : value;
                       this.onFormChange({
                         field: 'status',

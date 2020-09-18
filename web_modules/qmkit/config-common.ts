@@ -132,12 +132,17 @@ const Common = {
 
   spuMaxSku: 50,
   
-  //Okta配置
-  REACT_APP_CLIENT_ID: "0oat6gv4fzPJk8B1q0h7",
-  REACT_APP_ISSUER : "https://accountdev.royalcanin.com/oauth2/default",
-  REACT_APP_RedirectURL: "http://localhost:3002/implicit/callback",
-  REACT_APP_RegisterPrefix : "https://prd-weu1-rc-df-ciam-app-webapp-uat.cloud-effem.com/?redirect_uri=",
-  REACT_APP_RegisterCallback : "https://shopuat.466920.com?origin=register",
+  // STG Okta配置
+  REACT_APP_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
+  REACT_APP_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
+  REACT_APP_RedirectURL: window.origin +  "/implicit/callback",
+
+  // DEV Okta配置
+  // REACT_APP_CLIENT_ID: "0oat6gv4fzPJk8B1q0h7",
+  // REACT_APP_ISSUER : "https://accountdev.royalcanin.com/oauth2/default",
+  // REACT_APP_RedirectURL: window.origin +  "/implicit/callback",
+  // REACT_APP_RegisterPrefix : "https://prd-weu1-rc-df-ciam-app-webapp-uat.cloud-effem.com/?redirect_uri=",
+  // REACT_APP_RegisterCallback : "https://shopuat.466920.com?origin=register",
 
 };
 export default Common;

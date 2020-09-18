@@ -17,7 +17,7 @@ const TableRow = styled.div`
     > .ant-table-tbody
     > tr
     > td {
-    padding: 8px 20px;
+    padding: 8px 8px;
   }
   .ant-table-thead > tr:first-child > th:last-child {
     text-align: left;
@@ -70,7 +70,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
 
   render() {
     const { productselect, detailProductList } = this.props.relaxProps;
-
     return (
       <TableRow>
         <DataGrid
@@ -86,6 +85,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="Image" dataIndex="Image" key="Image" render={(text) => {
             return <img src={text} alt="" width="20" height="25"/>
           }}/>*/}
+
           <Column
             title="Product Name"
             dataIndex="goodsInfoName"

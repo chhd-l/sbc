@@ -2,9 +2,10 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { AuthWrapper, DataGrid, noop } from 'qmkit';
 import { List } from 'immutable';
-import { Popconfirm, Tooltip, Divider } from 'antd';
+import { Popconfirm, Tooltip, Divider, message } from 'antd';
 import { checkMenu } from '../../../web_modules/qmkit/checkAuth';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from '../webapi';
 
 type TList = List<any>;
 import { Table } from 'antd';
@@ -148,9 +149,14 @@ export default class EmployeeList extends React.Component<any, any> {
                   <a href="javascript:void(0);">Reason</a>
                 </Tooltip>
               </div>
-            ) : (
+            ) : accountState == 3 ? (
               <div>
-                <span>Resignation</span>
+                <span>Inactivated</span>
+              </div>
+            )
+            : (
+              <div>
+                <span>To be audit</span>
               </div>
             )
           }
@@ -214,7 +220,7 @@ export default class EmployeeList extends React.Component<any, any> {
 
         {accountState != 2 && (
           <AuthWrapper functionName={'enableDisableEmployee'}>
-            {accountState == 0 ? (
+            {accountState === 0 ? (
               <Tooltip placement="top" title="Disabled">
                 <a
                   href="javascript:void(0);"
@@ -222,7 +228,7 @@ export default class EmployeeList extends React.Component<any, any> {
                   className="iconfont iconbtn-disable"
                 ></a>
               </Tooltip>
-            ) : (
+            ) : accountState === 1 ? (
               <Tooltip placement="top" title="Enabled">
                 <a
                   href="javascript:void(0);"
@@ -230,7 +236,15 @@ export default class EmployeeList extends React.Component<any, any> {
                   className="iconfont iconEnabled"
                 ></a>
               </Tooltip>
-            )}
+            ) : accountState === 3 ? (
+            <Tooltip placement="top" title="Send">
+              <a
+                onClick={() => this.sendEmail(rowInfo)}
+                className="iconfont iconemail"
+              ></a>
+            </Tooltip>
+            ) : null
+            }
           </AuthWrapper>
         )}
 
@@ -241,6 +255,34 @@ export default class EmployeeList extends React.Component<any, any> {
         )}
       </div>
     );
+  };
+
+  sendEmail = async (recored) => {
+    let prescriberIds = [];
+    recored.prescriberIds.map(async prescriberKeyId=>{
+      const { res: prescriberRes } = await webapi.getClinicById({
+        id: prescriberKeyId
+      });
+      if (prescriberRes.code === 'K-000000') {
+        prescriberIds.push(prescriberRes.context.prescriberId)
+        if(prescriberIds.length === recored.prescriberIds.length) {
+          let employeeName = recored.employeeName.split(' ');
+          let paramter = {
+            baseUrl: window.origin,
+            email: recored.email,
+            firstName: employeeName && employeeName.length > 0 ?  recored.employeeName.split(' ')[0] : '',
+            prescriberId: prescriberIds.join(',')
+          }
+          const { res } = await webapi.sendEmail(paramter);
+          if(res.code === 'K-000000') {
+            message.success('send successful')
+          } else {
+            message.error(res.message || 'send failed')
+          }
+        }
+      }
+    })
+
   };
 
   _renderRole = (rowInfo) => {

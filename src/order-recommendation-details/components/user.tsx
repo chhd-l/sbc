@@ -35,6 +35,20 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       <div className="user">
         <div className="text flex-start">
           <span>
+            Recommendation NO:{' '}
+            {detailProductList.recommendationId
+              ? detailProductList.recommendationId
+              : '--'}
+          </span>
+          <span>
+            Recommendation reasons:{' '}
+            {detailProductList.recommendationReasons
+              ? detailProductList.recommendationReasons
+              : '--'}
+          </span>
+        </div>
+        <div className="text flex-start">
+          <span>
             First name:{' '}
             {detailProductList.consumerFirstName
               ? detailProductList.consumerFirstName
@@ -61,6 +75,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               : '--'}
           </span>
         </div>
+
         <div className="text flex-start">
           <span>
             Create time:{' '}
@@ -69,14 +84,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               : '--'}
           </span>
           <span>
-            Recommendation reasons:{' '}
-            {detailProductList.recommendationReasons
-              ? detailProductList.recommendationReasons
-              : '--'}
-          </span>
-        </div>
-        <div className="text flex-start">
-          <span>
             Link:{' '}
             {
               JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
@@ -84,12 +91,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }
             recommendation/
             {detailProductList.base64Id ? detailProductList.base64Id : '--'}
-          </span>
-          <span>
-            Recommendation NO:{' '}
-            {detailProductList.recommendationId
-              ? detailProductList.recommendationId
-              : '--'}
           </span>
         </div>
       </div>

@@ -17,7 +17,7 @@ const TableRow = styled.div`
     > .ant-table-tbody
     > tr
     > td {
-    padding: 8px 20px;
+    padding: 8px 8px;
   }
   .ant-table-thead > tr:first-child > th:last-child {
     text-align: left;
@@ -55,25 +55,31 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     prevState: Readonly<any>,
     snapshot?: any
   ) {
+    localStorage.removeItem('productselect');
     const { productselect, onCreateLink } = this.props.relaxProps;
+    localStorage.setItem('productselect', String(productselect.length));
     let arr = productselect.map((v, i) => {
+      console.log('vvvvvvvvvvv', v);
       return {
         goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.quantity
+        recommendationNumber: v.recommendationNumber
       };
     });
+    console.log('onCreateLink', arr);
     onCreateLink({
       field: 'recommendationGoodsInfoRels',
       value: arr
     });
+    localStorage.setItem('productselect', String(productselect.length));
+  }
+
+  forceUpdate(callback?: () => void) {
+    super.forceUpdate(callback);
   }
 
   render() {
     const { productselect, detailProductList } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
-    setTimeout(() => {
-      console.log(detailProductList, 11111111111);
-    });
     return (
       <TableRow>
         <DataGrid
@@ -100,14 +106,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             dataIndex="goods.goodsCateName"
             key="goodsCateName"
             render={(text, record, i) => {
-              setTimeout(() => {
+              /*setTimeout(() => {
                 console.log(text, 11111111);
                 console.log(
                   detailProductList.recommendationGoodsInfoRels,
                   22222222
                 );
                 console.log(i, 33333333);
-              });
+              });*/
               return text;
               //return history.location.state?detailProductList.recommendationGoodsInfoRels[i].recommendationNumber:text
             }}
@@ -118,10 +124,12 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             key="quantity"
             dataIndex="quantity"
             render={(text, record, i) => {
-              return history.location.state
+              console.log(record, 22222);
+              /*return history.location.state
                 ? detailProductList.recommendationGoodsInfoRels[i]
                     .recommendationNumber
-                : text;
+                : text;*/
+              return record.recommendationNumber;
             }}
           />
         </DataGrid>

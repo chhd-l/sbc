@@ -187,7 +187,7 @@ export default class DetailPublish extends React.Component<any, any> {
           </div>
         </div>
         <div className="share">
-          <div className="title">
+          <div className="title" style={{ clear: 'left' }}>
             <span>*</span>E-mail
           </div>
           <Input
@@ -252,7 +252,6 @@ export default class DetailPublish extends React.Component<any, any> {
         <Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
-        ,
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
         </Button>

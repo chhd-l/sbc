@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -202,12 +202,12 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '11%' }}>
                         <FormattedMessage id="productFirstLetterUpperCase" />
                       </th>
-                      <th style={{ width: '13%' }}>Recipient name</th>
-                      <th style={{ width: '15%' }}>Recipient mail</th>
+                      <th style={{ width: '12%' }}>Recipient name</th>
+                      <th style={{ width: '13.5%' }}>Recipient mail</th>
                       <th style={{ width: '11%' }}>Amount</th>
-                      <th style={{ width: '11%' }}>Link status</th>
-                      <th style={{ width: '11%' }}>Perscriber</th>
-                      <th style={{ width: '11%' }}>Operation</th>
+                      <th style={{ width: '10.5%' }}>Link status</th>
+                      <th style={{ width: '12.5%' }}>Perscriber</th>
+                      <th style={{ width: '7.1%' }}>Operation</th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">
@@ -268,7 +268,7 @@ export default class ListView extends React.Component<any, any> {
   }
 
   onDetail(e) {
-    console.log(e, 11111111111);
+    //console.log(e, 11111111111);
   }
 
   _renderContent(dataList) {
@@ -279,6 +279,7 @@ export default class ListView extends React.Component<any, any> {
       needAudit,
       onFindById
     } = this.props.relaxProps;
+
     let list = dataList.toJS();
     return list.map((v, index) => {
       const id = v.recommendationId;
@@ -358,16 +359,12 @@ export default class ListView extends React.Component<any, any> {
                     {v.consumerEmail != null ? v.consumerEmail : '--'}
                   </td>
                   <td style={{ width: '14%' }}>
-                    {amount}
-                    {/* {img.map((item, index) => {
+                    {v.recommendationGoodsInfoRels.reduce((sum, item) => {
                       return (
-                        <div>
-                          {item.goodsInfo.marketPrice != null
-                          ? item.goodsInfo.marketPrice
-                          : '--'}
-                        </div>
+                        sum +
+                        item.goodsInfo.marketPrice * item.recommendationNumber
                       );
-                    })}*/}
+                    }, 0)}
                   </td>
                   <td style={{ width: '13%' }}>
                     {v.linkStatus != null
@@ -394,7 +391,9 @@ export default class ListView extends React.Component<any, any> {
                       })
                     }
                   >
-                    Details
+                    <Tooltip placement="top" title="See details">
+                      <span className="iconfont iconDetails"></span>
+                    </Tooltip>
                   </td>
                 </tr>
               </tbody>

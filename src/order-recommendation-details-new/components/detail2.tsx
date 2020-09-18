@@ -5,6 +5,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
+
 import { cache, history, noop, SelectGroup } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
@@ -73,7 +74,6 @@ export default class BillingDetailsNext extends React.Component<any, any> {
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
-
     setTimeout(() => {
       console.log(detailProductList.prescriberName);
     });

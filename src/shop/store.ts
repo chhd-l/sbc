@@ -1128,51 +1128,55 @@ export default class AppStore extends Store {
   };
 
   //new
-  consentSubmit = async (param?: any, type) => {
-    let v = param.toJS();
-    console.log(v, 333333);
-    console.log(type, 44444);
-    console.log(this.state().get('consentForm'), 55555);
-
-    if (
-      v.consentId != '' &&
-      v.consentCode != '' &&
-      v.consentTitleType != '' &&
-      v.consentTitle != ''
-    ) {
-      if (type != '000') {
-        const { res } = await webApi.fetchEditSave(v);
+  consentSubmit = async (param?: any, type?: any) => {
+    if (type != '000') {
+      if (
+        param.consentId != '' &&
+        param.consentCode != '' &&
+        param.consentTitleType != '' &&
+        param.consentTitle != ''
+      ) {
+        const { res } = await webApi.fetchEditSave(param);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
             this.pageChange('List', null);
+            //this.dispatch('consent:editList',{});
             this.getConsentList();
           });
         } else {
           message.error(res.message);
         }
       } else {
-        const { res } = await webApi.fetchNewConsent(v);
+        message.error('Submit Can not be empty！');
+      }
+    } else {
+      if (
+        param.consentId != '' &&
+        param.consentCode != '' &&
+        param.consentTitleType != '' &&
+        param.consentTitle != ''
+      ) {
+        const { res } = await webApi.fetchNewConsent(param);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
             this.pageChange('List', null);
             this.getConsentList();
           });
-
           //history.push('/shop-info');
         } else {
           message.error(res.message);
         }
+      } else {
+        message.error('Submit Can not be empty！');
       }
-    } else {
-      message.error('Submit Can not be empty！');
     }
   };
 
   //pageChange
   pageChange = (param, id) => {
-    let a = this.state().get('consentForm').toJS();
+    let a = this.state().get('consentForm');
     for (let key in a) {
       a[key] = '';
     }
@@ -1187,8 +1191,17 @@ export default class AppStore extends Store {
 
   //add FormChange
   onFormChange = (param) => {
-    console.log(param, 22222);
     this.dispatch('consent:consentForm', param);
+  };
+
+  //onFormEdit
+  onEditSave = (param?: any) => {
+    this.dispatch('consent:formEdit', param);
+  };
+
+  //onDetailList
+  onDetailList = async (param?: any) => {
+    this.dispatch('consent:detailList', param);
   };
 
   // Switch
@@ -1205,16 +1218,24 @@ export default class AppStore extends Store {
   onEditList = async (param?: any) => {
     const { res } = await webApi.fetchEditList(param);
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('consent:editList', res.context.consentAndDetailVO);
+      let data = res.context.consentAndDetailVO;
+      this.dispatch('consent:consentForm', data);
+
+      this.dispatch('consent:editList', data);
+      this.dispatch('consent:detailList', data.consentDetailList);
       this.dispatch('consent:editId', param);
     }
   };
 
-  //fetchEditSave
-  /*onEditSave = async (param?: any) => {
-    const { res } = await webApi.fetchEditSave(param);
+  //fetchConsentDetailDelete
+  getConsentDetailDelete = async (param?: any) => {
+    const { res } = await webApi.fetchConsentDetailDelete(param);
     if (res.code == Const.SUCCESS_CODE) {
-
+      this.transaction(() => {
+        //this.getConsentList();
+      });
+    } else {
+      message.error(res.message);
     }
-  };*/
+  };
 }

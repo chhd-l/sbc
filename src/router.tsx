@@ -719,6 +719,10 @@ const routes = [
   {
     path: '/message-edit/:id',
     asyncComponent: () => import('./message-detail')
+  },
+  {
+    path: '/order-setting',
+    asyncComponent: () => import('./order-setting')
   }
 ];
 

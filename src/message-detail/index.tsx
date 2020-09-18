@@ -69,7 +69,8 @@ class MessageDetails extends Component<any, any> {
         status: 0,
         sendType: '',
         sendTime: '',
-        objectNoDisable: true
+        objectNoDisable: true,
+        baseUrl: location.host
       },
       detailForm: {
         consumerAccount: '',
@@ -80,7 +81,9 @@ class MessageDetails extends Component<any, any> {
       detailsList: [],
       emailTemplateList: [],
       objectNoList: [],
-      fetching: false,
+      objectFetching: false,
+      templateFetching: false,
+      consumerFetching: false,
       customerTypeArr: [
         {
           value: 'Member',
@@ -156,15 +159,25 @@ class MessageDetails extends Component<any, any> {
     let data = this.state.basicForm;
 
     if (field === 'objectType' && data['objectType'] !== value) {
-      // if (value === 'Order' || value === 'Subscription') {
+      // if (value === 'Order' || value === 'Subscription' || value === 'Recommendation' ) {
       data['objectNoDisable'] = false;
+      data['objectNo'] = '';
+      this.setState({
+        objectNoList: []
+      });
       this.props.form.setFieldsValue({
-        objectNo: ''
+        objectNo: '',
+        objectNoList: []
       });
       // } else {
       //   data['objectNoDisable'] = true;
+      //   data['objectNo'] = ""
+      //   this.setState({
+      //     objectNoList: []
+      //   })
       //   this.props.form.setFieldsValue({
-      //     objectNo: ''
+      //     objectNo: '',
+      //     objectNoList: []
       //   });
       // }
     }
@@ -217,11 +230,15 @@ class MessageDetails extends Component<any, any> {
     });
   };
   getTemplateList = () => {
+    this.setState({
+      templateFetching: true
+    });
     webapi.getTemplateList().then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList
+          emailTemplateList: res.context.emailTemplateResponseList,
+          templateFetching: false
         });
       }
     });
@@ -246,6 +263,7 @@ class MessageDetails extends Component<any, any> {
           category: basicForm.emailCategory,
           status: +basicForm.status === 1 ? basicForm.status : 0,
           sendType: basicForm.sendType,
+          baseUrl: basicForm.baseUrl,
           sendTime:
             basicForm.sendTime ||
             sessionStorage.getItem('defaultLocalDateTime'),
@@ -274,6 +292,7 @@ class MessageDetails extends Component<any, any> {
           taskId: basicForm.taskId,
           objectType: basicForm.objectType,
           objectNo: basicForm.objectNo,
+          baseUrl: basicForm.baseUrl,
           templateId: basicForm.templateId,
           emailTemplate: basicForm.emailTemplate,
           category: basicForm.emailCategory,
@@ -364,7 +383,7 @@ class MessageDetails extends Component<any, any> {
   getObjectNoList = (value) => {
     const { basicForm } = this.state;
     this.setState({
-      fetching: true
+      objectFetching: true
     });
     if (basicForm.objectType === 'Order') {
       let params = {
@@ -375,11 +394,9 @@ class MessageDetails extends Component<any, any> {
       webapi.getOrderList(params).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
-
           this.setState({
             objectNoList: res.context.content,
-            fetching: false
+            objectFetching: false
           });
         }
       });
@@ -394,7 +411,7 @@ class MessageDetails extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             objectNoList: res.context.subscriptionResponses,
-            fetching: false
+            objectFetching: false
           });
         }
       });
@@ -409,7 +426,22 @@ class MessageDetails extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             objectNoList: res.context.recommendations,
-            fetching: false
+            objectFetching: false
+          });
+        }
+      });
+    } else if (basicForm.objectType === 'Prescriber creation') {
+      let params = {
+        prescriberId: value,
+        pageSize: 30,
+        pageNum: 0
+      };
+      webapi.getClinicList(params).then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            objectNoList: res.context.content,
+            objectFetching: false
           });
         }
       });
@@ -523,8 +555,13 @@ class MessageDetails extends Component<any, any> {
     };
   }
   getConsumerList = (value) => {
+    const { detailForm } = this.state;
+    this.setState({
+      consumerFetching: true
+    });
     let params = {
       customerAccount: value,
+      customerLevelId: 234,
       pageSize: 30,
       pageNum: 0
     };
@@ -533,7 +570,7 @@ class MessageDetails extends Component<any, any> {
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           consumerList: res.context.detailResponseList,
-          fetching: false
+          consumerFetching: false
         });
       }
     });
@@ -549,7 +586,9 @@ class MessageDetails extends Component<any, any> {
       emailTemplateList,
       basicForm,
       detailForm,
-      fetching,
+      objectFetching,
+      consumerFetching,
+      templateFetching,
       objectNoList,
       customerTypeArr,
       previewHtml,
@@ -690,6 +729,9 @@ class MessageDetails extends Component<any, any> {
                               value
                             });
                           }}
+                          notFoundContent={
+                            templateFetching ? <Spin size="small" /> : null
+                          }
                           disabled={this.state.isDetail}
                         >
                           {emailTemplateList &&
@@ -756,7 +798,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           notFoundContent={
-                            fetching ? <Spin size="small" /> : null
+                            objectFetching ? <Spin size="small" /> : null
                           }
                           onSearch={this.getObjectNoList}
                           filterOption={(input, option) =>
@@ -770,15 +812,25 @@ class MessageDetails extends Component<any, any> {
                             objectNoList.map((item, index) => (
                               <Option
                                 value={
-                                  item.recommendationId ||
-                                  item.subscribeId ||
-                                  item.id
+                                  basicForm.objectType === 'Order'
+                                    ? item.id
+                                    : basicForm.objectType === 'Subscription'
+                                    ? item.subscribeId
+                                    : basicForm.objectType === 'Recommendation'
+                                    ? item.recommendationId
+                                    : item.prescriberId
                                 }
                                 key={index}
                               >
-                                {item.subscribeId ||
-                                  item.recommendationId ||
-                                  item.id}
+                                {basicForm.objectType === 'Order'
+                                  ? item.id
+                                  : basicForm.objectType === 'Subscription'
+                                  ? item.subscribeId
+                                  : basicForm.objectType === 'Recommendation'
+                                  ? item.recommendationId
+                                  : item.prescriberId +
+                                    '-' +
+                                    item.prescriberName}
                               </Option>
                             ))}
                         </Select>
@@ -932,7 +984,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           notFoundContent={
-                            fetching ? <Spin size="small" /> : null
+                            consumerFetching ? <Spin size="small" /> : null
                           }
                           onSearch={this.getConsumerList}
                           filterOption={(input, option) =>

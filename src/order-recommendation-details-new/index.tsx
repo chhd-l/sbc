@@ -40,6 +40,7 @@ export default class BillingDetails extends React.Component<any, any> {
       this.store.init(state);
     }
     localStorage.removeItem('enable');
+    localStorage.removeItem('productselect');
   }
 
   onInput = (e) => {
@@ -49,8 +50,17 @@ export default class BillingDetails extends React.Component<any, any> {
     });
   };
   next() {
-    const current = this.state.current + 1;
-    this.setState({ current });
+    if (this.state.current == 1) {
+      if (Number(localStorage.getItem('productselect')) > 0) {
+        const current = this.state.current + 1;
+        this.setState({ current });
+      } else {
+        message.error('Recommended product cannot be empty !');
+      }
+    } else {
+      const current = this.state.current + 1;
+      this.setState({ current });
+    }
   }
 
   prev() {
@@ -102,7 +112,7 @@ export default class BillingDetails extends React.Component<any, any> {
             }
           />
         </div>
-        <div className="container" id="recommendation">
+        <div className="container step" id="recommendation">
           <Steps current={current}>
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
@@ -144,20 +154,25 @@ export default class BillingDetails extends React.Component<any, any> {
           </div>
           <div className="steps-action">
             {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => this.next()}>
+              <Button type="primary" shape="round" onClick={() => this.next()}>
                 Next
               </Button>
             )}
             {current === steps.length - 1 && (
               <Button
                 type="primary"
+                shape="round"
                 onClick={() => message.success('Processing complete!')}
               >
                 Done
               </Button>
             )}
             {current > 0 && (
-              <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
+              <Button
+                shape="round"
+                style={{ margin: '0 8px' }}
+                onClick={() => this.prev()}
+              >
                 Previous
               </Button>
             )}

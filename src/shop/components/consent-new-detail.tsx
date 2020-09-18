@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Select, Input, Icon, Form, Col, Button } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
+import 'braft-editor/dist/index.css';
+import BraftEditor from 'braft-editor';
 
 import { SelectGroup, UEditor, noop } from 'qmkit';
 //import { render } from 'react-dom';
@@ -41,9 +43,10 @@ export default class StepNewConsent extends Component<any, any> {
       onFormChange: Function;
       consentLanguage: any;
       consentForm: any;
-      refDetailEditor: Function;
+      //refDetailEditor: Function;
       editList: any;
       editId: any;
+      onDetailList: any;
     };
   };
 
@@ -53,9 +56,10 @@ export default class StepNewConsent extends Component<any, any> {
     onFormChange: noop,
     consentLanguage: 'consentLanguage',
     consentForm: 'consentForm',
-    refDetailEditor: noop,
+    //refDetailEditor: noop,
     editList: 'editList',
-    editId: 'editId'
+    editId: 'editId',
+    onDetailList: noop
   };
 
   handleChange = (value) => {
@@ -76,7 +80,7 @@ export default class StepNewConsent extends Component<any, any> {
   };
 
   handleContent = (m, n, o) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, onDetailList } = this.props.relaxProps;
     let list = [];
     if (o == 0) {
       this.setState({
@@ -115,6 +119,11 @@ export default class StepNewConsent extends Component<any, any> {
       field: 'consentDetailList',
       value: list
     });
+
+    onDetailList({
+      field: 'detailList',
+      value: list
+    });
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -135,8 +144,6 @@ export default class StepNewConsent extends Component<any, any> {
     const { consentForm } = this.props.relaxProps;
     con = consentForm.toJS().consentCategory;
     //this.categoryRef.current.props =111
-    console.log(this.state.editList, 111111222222);
-    console.log(this.props.relaxProps.editList, 333333);
   }
 
   render() {
@@ -146,6 +153,16 @@ export default class StepNewConsent extends Component<any, any> {
       editList,
       editId
     } = this.props.relaxProps;
+
+    const controls = [
+      'bold',
+      'italic',
+      'underline',
+      'text-color',
+      'separator',
+      'link',
+      'separator'
+    ];
     let defaultLanguage =
       consentLanguage == [] ? consentLanguage[0].description : '';
     return (
@@ -282,6 +299,14 @@ export default class StepNewConsent extends Component<any, any> {
                 </SelectGroup>
               </FormItem>
             </div>
+
+            <BraftEditor
+              className="my-editor"
+              controls={controls}
+              placeholder="请输入正文内容"
+            />
+
+            {/* 
             <div className="edit-content">
               {this.state.consentTitle == true ? (
                 <div>
@@ -310,7 +335,10 @@ export default class StepNewConsent extends Component<any, any> {
                 />
               )}
             </div>
+          
+           */}
           </div>
+
           <div className="edit-add">
             {this.state.detailType == true ? (
               <div className="edit-add-content space-between-align">
@@ -336,7 +364,7 @@ export default class StepNewConsent extends Component<any, any> {
                       <div className="add-title">Detail {i + 1}</div>
                       <div className="add-i">
                         <Input
-                          placeholder="Please enter URL keywords"
+                          placeholder="Please enter  keywords"
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             content1 = value;

@@ -21,8 +21,26 @@ export async function login(form, oktaToken: string) {
       const resOkta  = await webapi.getJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
       if ((res as any).code === Const.SUCCESS_CODE) {
-        if(res.context.checkState === 1) { // Not checked
+        if(res.context.checkState === 1) { // need checked
+          sessionStorage.setItem(
+            cache.LOGIN_ACCOUNT_NAME,
+            res.context.accountName
+          );
+          sessionStorage.setItem(
+            cache.LOGIN_EMPLOYEE_NAME,
+            res.context.employeeName
+          );
           history.push('login-verify')
+          return
+        }
+        if (res.context.accountState === 4 ) {
+            message.error('Your account need to audit, will notify you by email')
+            history.push('login-verify', {oktaLogout : true})
+            return
+        }
+        if(res.context.accountState === 1) {
+          message.error('Your account is disabled')
+          history.push('login-verify', {oktaLogout : true})
           return
         }
       }

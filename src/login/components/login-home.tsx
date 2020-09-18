@@ -21,7 +21,7 @@ const LoginHome = (props) => {
     }
   }, [authState, authService]);
 
-  return (
+  return authState.isAuthenticated || toOkta ? null : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
@@ -72,14 +72,14 @@ const styles = {
     cursor: 'pointer'
   } as any,
   welcomeFont: {
-    fontFamily: 'DINPro-Regular',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '40px',
     color: '#E1021A',
     letterSpacing: 0,
     marginTop: '30px'
   } as any,
   selectFont: {
-    fontFamily: 'DINPro-Regular',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '30px',
     color: '#898989',
     letterSpacing: 0,
@@ -91,7 +91,7 @@ const styles = {
     height: '80px'
   } as any,
   roleWord: {
-    fontFamily: 'DINPro-Regular',
+    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
     fontSize: '30px',
     color: '#898989',
     letterSpacing: 0,

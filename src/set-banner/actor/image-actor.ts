@@ -47,6 +47,12 @@ export default class ImageActor extends Actor {
   changeField(state: IMap, { field, value }) {
     return state.setIn(['imageForm', field], value);
   }
+  @Action('imageActor:imageForm')
+  changeImageForm(state: IMap, imageForm) {
+    debugger;
+    return state.set('imageForm', fromJS(imageForm));
+  }
+
   @Action('imageActor:setMFileList')
   setMFileList(state, mFileList) {
     return state.set('mFileList', mFileList);

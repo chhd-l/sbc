@@ -64,7 +64,7 @@ class RejectForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem>
+        <FormItem style={{marginBottom:0}}>
           {getFieldDecorator('comment', {
             rules: [
               {
@@ -74,12 +74,27 @@ class RejectForm extends React.Component<any, any> {
               { validator: this.checkComment }
             ]
           })(
-            <Input.TextArea
-              placeholder="comment"
-              autosize={{ minRows: 4, maxRows: 4 }}
-            />
+            <div>
+              <Input.TextArea
+                placeholder="comment"
+                autosize={{ minRows: 4, maxRows: 4 }}
+              />
+              <p>
+                <span
+                  style={{
+                    color: 'red',
+                    fontFamily: 'SimSun',
+                    marginRight: '4px',
+                    fontSize: '12px'
+                  }}
+                >*</span>
+                Once rejected, we will return the payment for this order to the consumer
+              </p>
+            </div>
+
           )}
         </FormItem>
+
       </Form>
     );
   }
@@ -261,6 +276,7 @@ export default class ListView extends React.Component<any, any> {
                 this._rejectForm = form;
               }}
             />
+
           </Modal>
         </div>
       </div>
@@ -372,8 +388,8 @@ export default class ListView extends React.Component<any, any> {
                                 {v.get('subscribeId')}
                               </span>
                             ) : (
-                              ''
-                            )}
+                                ''
+                              )}
                           </span>
                         </div>
 
@@ -381,8 +397,8 @@ export default class ListView extends React.Component<any, any> {
                           <FormattedMessage id="orderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
-                                .format(Const.TIME_FORMAT)
-                                .toString()
+                              .format(Const.TIME_FORMAT)
+                              .toString()
                             : ''}
                         </span>
                         <span style={{ marginRight: 0, float: 'right' }}>
@@ -390,7 +406,7 @@ export default class ListView extends React.Component<any, any> {
                           {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
                             v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
                             v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' &&
+                            'NOT_PAID' &&
                             v.get('tradeItems') &&
                             !v
                               .get('tradeItems')
@@ -412,7 +428,7 @@ export default class ListView extends React.Component<any, any> {
                             )}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
                             v.getIn(['tradeState', 'auditState']) ===
-                              'NON_CHECKED' && (
+                            'NON_CHECKED' && (
                               <AuthWrapper functionName="fOrderList002_prescriber">
                                 <Tooltip placement="top" title="Audit">
                                   <a
@@ -422,7 +438,7 @@ export default class ListView extends React.Component<any, any> {
                                     }}
                                     href="javascript:void(0)"
                                     style={{ marginLeft: 20 }}
-                                    className="iconfont iconbtn-audit"
+                                    className="iconfont iconaudit"
                                   >
                                     {/*<FormattedMessage id="order.audit" />*/}
                                   </a>
@@ -431,17 +447,17 @@ export default class ListView extends React.Component<any, any> {
                             )}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
                             v.getIn(['tradeState', 'auditState']) ===
-                              'NON_CHECKED' &&
+                            'NON_CHECKED' &&
                             v.getIn(['tradeState', 'payState']) != 'PAID' && (
                               <AuthWrapper functionName="fOrderList002_prescriber">
-                                <Tooltip placement="top" title="Turn down">
+                                <Tooltip placement="top" title="Reject">
                                   <a
                                     onClick={() =>
                                       this._showRejectedConfirm(id)
                                     }
                                     href="javascript:void(0)"
                                     style={{ marginLeft: 20 }}
-                                    className="iconfont iconbtn-turndown"
+                                    className="iconfont iconbtn-cancelall"
                                   >
                                     {/*<FormattedMessage id="order.turnDown" />*/}
                                   </a>
@@ -452,9 +468,9 @@ export default class ListView extends React.Component<any, any> {
                           {needAudit &&
                             v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) ===
-                              'NOT_YET_SHIPPED' &&
+                            'NOT_YET_SHIPPED' &&
                             v.getIn(['tradeState', 'payState']) ===
-                              'NOT_PAID' && (
+                            'NOT_PAID' && (
                               <AuthWrapper functionName="fOrderList002_prescriber">
                                 <Tooltip placement="top" title="Review">
                                   <a
@@ -504,19 +520,19 @@ export default class ListView extends React.Component<any, any> {
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) ===
                             'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003_prescriber">
-                              <Tooltip placement="top" title="Confirm receipt">
-                                <a
-                                  onClick={() => {
-                                    this._showConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                >
-                                  <FormattedMessage id="order.confirmReceipt" />
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
+                              <AuthWrapper functionName="fOrderList003_prescriber">
+                                <Tooltip placement="top" title="Confirm receipt">
+                                  <a
+                                    onClick={() => {
+                                      this._showConfirm(id);
+                                    }}
+                                    href="javascript:void(0)"
+                                  >
+                                    <FormattedMessage id="order.confirmReceipt" />
+                                  </a>
+                                </Tooltip>
+                              </AuthWrapper>
+                            )}
                           <AuthWrapper functionName="fOrderDetail001_prescriber">
                             <Tooltip placement="top" title="See details">
                               <Link
@@ -574,10 +590,10 @@ export default class ListView extends React.Component<any, any> {
                                   .get(3)
                                   .get('pic')
                                   ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
+                                    .get('tradeItems')
+                                    .concat(gifts)
+                                    .get(3)
+                                    .get('pic')
                                   : defaultImg
                               }
                               style={styles.imgFourth}
@@ -674,7 +690,7 @@ export default class ListView extends React.Component<any, any> {
       onOk() {
         onRetrial(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -697,12 +713,11 @@ export default class ListView extends React.Component<any, any> {
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm audit',
-      content: 'Confirm audit?',
+      content: 'Do you confirm that the order has been approved?',
       onOk() {
         onAudit(tid, 'CHECKED');
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -721,7 +736,7 @@ export default class ListView extends React.Component<any, any> {
       onOk() {
         onConfirm(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 

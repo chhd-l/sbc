@@ -6,6 +6,48 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "5205031",
+      "name": "狗",
+      "font_class": "dog",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "5205042",
+      "name": "猫",
+      "font_class": "cat",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "1220303",
+      "name": "生日",
+      "font_class": "birthday",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "4408994",
+      "name": "体重",
+      "font_class": "weight",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "7084896",
+      "name": "性别男",
+      "font_class": "man",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "7084898",
+      "name": "性别女",
+      "font_class": "woman",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
       "icon_id": "12255116",
       "name": "185078 - email mail streamline",
       "font_class": "email",

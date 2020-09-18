@@ -723,6 +723,10 @@ const routes = [
   {
     path: '/order-setting',
     asyncComponent: () => import('./order-setting')
+  },
+  {
+    path: '/order-audit-setting',
+    asyncComponent: () => import('./order-audit-setting')
   }
 ];
 

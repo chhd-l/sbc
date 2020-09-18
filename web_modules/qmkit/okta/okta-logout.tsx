@@ -1,6 +1,6 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
-import { Icon, Button } from 'antd';
+import { Icon, Button, message } from 'antd';
 import {  util } from 'qmkit';
 
 const OktaLogout = (props) => {
@@ -13,8 +13,14 @@ const OktaLogout = (props) => {
   }
 
   const clickLogoff = () => {
-    oktaLogout();
-    util.logout(authState.isAuthenticated);
+    try{
+      oktaLogout();
+    } catch (e) {
+      message.error(e.message)
+    }
+    finally {
+      util.logout(authState.isAuthenticated);
+    }
   }
 
   return (

@@ -19,6 +19,8 @@ let addContent = [];
 let content1 = '';
 let content2 = '';
 let consentDetailList = [];
+let list = [];
+
 @Relax
 export default class StepConsentDetail extends Component<any, any> {
   constructor(props) {
@@ -46,6 +48,8 @@ export default class StepConsentDetail extends Component<any, any> {
       },
       value: ['Landing page'],
       detailList: [],
+      consentForm: {},
+      _detailType: true
     };
   }
 
@@ -97,12 +101,12 @@ export default class StepConsentDetail extends Component<any, any> {
 
   handleConsentTitle = (e) => {
     //console.log(e.key);
-    this.setState(
-      { TitleType: e.key == 'Content' ? true : false },
-      () => {
+    const { editList } = this.props.relaxProps;
 
-      }
-    );
+    this.setState({
+      TitleType: e.key == 'Content' ? true : false,
+      _detailType: e.key == 'Content' ? true : false,
+    });
   };
 
   handleContent = (m, n, o) => {
@@ -110,10 +114,10 @@ export default class StepConsentDetail extends Component<any, any> {
       onFormChange,
       onEditSave,
       detailList,
-      editId
+      editId,
+      consentForm
     } = this.props.relaxProps;
     editId == '000' ? ((detailList as any) = []) : detailList;
-    let list = [];
     if (o == 0) {
       this.setState({
         a: {
@@ -172,26 +176,28 @@ export default class StepConsentDetail extends Component<any, any> {
       });
     }
 
-    list.push(
-      this.state.a,
-      this.state.b,
-      this.state.c,
-      this.state.d,
-      this.state.e
-    );
+    setTimeout(()=>{
+      list.push(
+        this.state.a,
+        this.state.b,
+        this.state.c,
+        this.state.d,
+        this.state.e
+      );
 
-    list = list.filter(item =>{
-      return item.contentTitle != '' || item.contentBody != ''
-    });
-    onEditSave(list);
-    onFormChange({
-      field: 'consentDetailList',
-      value: list
-    });
+      list = list.filter(item =>{
+        return item.contentTitle != '' || item.contentBody != ''
+      });
+      consentForm.consentDetailList = list
+      onFormChange(consentForm)
+    })
+
+
   };
 
   componentDidMount() {
-    const { onFormChange, consentLanguage, editId } = this.props.relaxProps;
+    const { editId, editList, consentForm } = this.props.relaxProps;
+
     if ( editId != '000') {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
@@ -200,19 +206,15 @@ export default class StepConsentDetail extends Component<any, any> {
 
       });
     }
-
-    onFormChange({
-      field: 'languageTypeId',
-      value: consentLanguage[0] && consentLanguage[0].id
-    });
-    //onEditSave(editList);
   }
+
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { editList } = nextProps;
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
       return {
+        consentForm: nextProps.relaxProps.consentTitleType,
         editList: nextProps.relaxProps.editList,
         detailList: nextProps.relaxProps.detailList,
         consentLanguage: nextProps.relaxProps.consentLanguage
@@ -222,15 +224,18 @@ export default class StepConsentDetail extends Component<any, any> {
     return null;
   }
 
+
   handleEditorChange = (editorState) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, consentForm } = this.props.relaxProps;
     this.setState({ editorState }, () => {
       let rawInfo = this.state.editorState.toRAW();
       let htmlInfo = BraftEditor.createEditorState(rawInfo).toHTML();
-      onFormChange({
+      consentForm.consentTitle = htmlInfo
+      onFormChange(consentForm)
+      /*onFormChange({
         field: 'consentTitle',
         value: htmlInfo
-      });
+      });*/
     });
   };
 
@@ -264,14 +269,21 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   onDelete = (item,i) => {
-    const { getConsentDetailDelete, onDetailList } = this.props.relaxProps;
+    const { getConsentDetailDelete, onDetailList, consentForm, onFormChange } = this.props.relaxProps;
     let content = this.state.content.filter((item, index) => {
       return index != i;
     });
+
     this.setState({ content: content }, () => {
       if (item.id) {
         getConsentDetailDelete(item.id);
         onDetailList(content)
+        consentForm.consentDetailList = consentForm.consentDetailList.filter(item =>{
+          return item.sort != i+1
+        });
+        onFormChange(consentForm)
+
+
         message.success('Deletion succeeded!');
       } else {
       }
@@ -279,7 +291,7 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   render() {
-    const { onFormChange, editId } = this.props.relaxProps;
+    const { onFormChange, editId, consentForm } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
     const htmlString = editList.consentTitle ? editList.consentTitle : '';
     const editor = BraftEditor.createEditorState(htmlString);
@@ -316,10 +328,6 @@ export default class StepConsentDetail extends Component<any, any> {
       }
     };
 
-   /* setTimeout(()=>{
-      console.log(this.state.content,11111);
-      console.log(editList,22222);
-    },200)*/
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -331,10 +339,12 @@ export default class StepConsentDetail extends Component<any, any> {
                 style={{ width: 280 }}
                 onChange={(value) => {
                   this.onCategory(value);
-                  onFormChange({
+                  consentForm.consentCategory = value
+                  onFormChange(consentForm)
+                  /*onFormChange({
                     field: 'consentCategory',
                     value
-                  });
+                  })*/;
                 }}
               >
                 <Option value="Prescriber">Prescriber</Option>
@@ -347,10 +357,8 @@ export default class StepConsentDetail extends Component<any, any> {
                 defaultValue={editList.consentId ? editList.consentId : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
-                  onFormChange({
-                    field: 'consentId',
-                    value: value
-                  });
+                  consentForm.consentId = value
+                  onFormChange(consentForm)
                 }}
               />
             </FormItem>
@@ -366,10 +374,8 @@ export default class StepConsentDetail extends Component<any, any> {
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;
-                  onFormChange({
-                    field: 'filedType',
-                    value
-                  });
+                  consentForm.filedType = value
+                  onFormChange(consentForm)
                 }}
               >
                 <Option value="Optional">Optional</Option>
@@ -382,10 +388,12 @@ export default class StepConsentDetail extends Component<any, any> {
                 defaultValue={editList.consentCode ? editList.consentCode : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
-                  onFormChange({
+                  consentForm.consentCode = value
+                  onFormChange(consentForm)
+                  /*onFormChange({
                     field: 'consentCode',
                     value: value
-                  });
+                  });*/
                 }}
               />
             </FormItem>
@@ -404,11 +412,9 @@ export default class StepConsentDetail extends Component<any, any> {
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
+                  consentForm.consentType = value
+                  onFormChange(consentForm)
 
-                  onFormChange({
-                    field: 'consentType',
-                    value
-                  });
                 }}
               >
                 <Option value="E-mail in">Email in</Option>
@@ -430,10 +436,9 @@ export default class StepConsentDetail extends Component<any, any> {
                   onChange={(value, index) => {
                     value = value === '' ? null : value;
                     this.handleConsentTitle(index);
-                    onFormChange({
-                      field: 'consentTitleType',
-                      value
-                    });
+                    consentForm.consentTitleType = value
+                    onFormChange(consentForm)
+
                   }}
                 >
                   <Option key="Content" value="Content">
@@ -466,10 +471,8 @@ export default class StepConsentDetail extends Component<any, any> {
                   }
                   onChange={(e) => {
                     const value = (e.target as any).value;
-                    onFormChange({
-                      field: 'consentTitle',
-                      value: value
-                    });
+                    consentForm.consentTitle = value
+                    onFormChange(consentForm)
                   }}
                 />
               )}
@@ -494,67 +497,58 @@ export default class StepConsentDetail extends Component<any, any> {
               </Button>
             ) : null}
           </div>
-          <div className="detail-add">
+          {this.state._detailType == true?<div className="detail-add">
             {this.state.content &&
-              this.state.content.map((item, i) => {
-                if (i <= 4) {
-                  return (
-                    <div className="add" key={i}>
-                      <div className="add-content space-between">
-                        <div className="add-title">Detail {i + 1}</div>
-                        <div className="add-i">
-                          <Input
-                            placeholder="Please enter  keywords"
-                            defaultValue={item.contentTitle}
-                            key={item.contentTitle}
-                            onChange={(e) => {
-                              const value = (e.target as any).value;
-                              content1 = value;
-                              this.handleContent(content1, content2, i);
-                            }}
-                          />
-                        </div>
-                        <div
-                          className="iconfont iconDelete icon"
-                          onClick={(e) => this.onDelete(item,i)}
-                        ></div>
+            this.state.content.map((item, i) => {
+              if (i <= 4) {
+                return (
+                  <div className="add" key={i}>
+                    <div className="add-content space-between">
+                      <div className="add-title">Detail {i + 1}</div>
+                      <div className="add-i">
+                        <Input
+                          placeholder="Please enter  keywords"
+                          defaultValue={item.contentTitle}
+                          key={item.contentTitle}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            content1 = value;
+                            this.handleContent(content1, content2, i);
+                          }}
+                        />
                       </div>
-                      <FormItem>
-                        <div className="editor-wrapper">
-                          <BraftEditor
-                            defaultValue={BraftEditor.createEditorState(
-                              item.contentBody
-                            )}
-                            key={item.contentBody}
-                            //value={editorState}
-                            onChange={(e) => {
-                              content2 = BraftEditor.createEditorState(
-                                e.toRAW()
-                              ).toHTML();
-                              this.handleContent(content1, content2, i);
-                            }}
-                            className="my-editor"
-                            controls={controls}
-                          />
-                        </div>
-                      </FormItem>
-                      {/*<UEditor
-                      id={'detail' + i}
-                      content=""
-                      height="320px"
-                      key={i}
-                      onContentChange={(UEditor) => {
-                        content2 = UEditor;
-                        this.handleContent(content1, content2, i);
-                      }}
-                    />*/}
+                      <div
+                        className="iconfont iconDelete icon"
+                        onClick={(e) => this.onDelete(item,i)}
+                      ></div>
                     </div>
-                  );
-                } else {
-                  return false;
-                }
-              })}
-          </div>
+                    <FormItem>
+                      <div className="editor-wrapper">
+                        <BraftEditor
+                          defaultValue={BraftEditor.createEditorState(
+                            item.contentBody
+                          )}
+                          key={item.contentBody}
+                          //value={editorState}
+                          onChange={(e) => {
+                            content2 = BraftEditor.createEditorState(
+                              e.toRAW()
+                            ).toHTML();
+                            this.handleContent(content1, content2, i);
+                          }}
+                          className="my-editor"
+                          controls={controls}
+                        />
+                      </div>
+                    </FormItem>
+                  </div>
+                );
+              } else {
+                return false;
+              }
+            })}
+          </div>:null}
+
         </div>
         <div className="language">
           <Select
@@ -568,10 +562,8 @@ export default class StepConsentDetail extends Component<any, any> {
             style={{ width: 120 }}
             onChange={(value) => {
               value = value === '' ? null : value;
-              onFormChange({
-                field: 'languageTypeId',
-                value
-              });
+              consentForm.languageTypeId = value
+              onFormChange(consentForm)
             }}
           >
             {consentLanguage[0] &&

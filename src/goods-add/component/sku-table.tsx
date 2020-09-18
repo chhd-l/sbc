@@ -101,6 +101,8 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
+    console.log(columns, 'columns', goods.toJS(), goodsSpecs.toJS());
+    console.log(goodsList.toJS(), 'columns', this.state);
     // if(this.state.count < 100) {
     //   let count = this.state.count + 1
     //   this.setState({count: count})
@@ -138,12 +140,14 @@ class SkuForm extends React.Component<any, any> {
       baseSpecId
     } = this.props.relaxProps;
 
+    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
+          console.log(item.get('specId'), 'specid....');
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -152,6 +156,7 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
+    console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -406,8 +411,21 @@ class SkuForm extends React.Component<any, any> {
                 {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
                   rules: [
                     {
-                      pattern: ValidConst.number,
-                      message: '0 or positive integer'
+                      required: true,
+                      message: 'Please input market price'
+                    },
+                    {
+                      pattern: ValidConst.zeroPrice,
+                      message:
+                        'Please input the legal amount with two decimal places'
+                    },
+                    {
+                      type: 'number',
+                      max: 9999999.99,
+                      message: 'The maximum value is 9999999.99',
+                      transform: function (value) {
+                        return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                      }
                     }
                   ],
                   onChange: this._editGoodsItem.bind(
@@ -417,7 +435,7 @@ class SkuForm extends React.Component<any, any> {
                   ),
                   initialValue: rowInfo.subscriptionPrice || 0
                 })(
-                  <InputNumber
+                  <Input
                     style={{ width: '60px' }}
                     min={0}
                     max={9999999}
@@ -430,15 +448,14 @@ class SkuForm extends React.Component<any, any> {
         )
       });
     }
+    console.log(goodsSpecs.toJS(), 'goodsSpecs');
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="basePrice" />
+          <FormattedMessage id="Base price" />
           <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item, i) => (
-              <Option key={i} value={item.get('specId')}>
-                {item.get('specName')}
-              </Option>
+            {goodsSpecs.map((item) => (
+              <Option value={item.get('specId')}>{item.get('specName')}</Option>
             ))}
           </Select>
         </div>

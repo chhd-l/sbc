@@ -1129,6 +1129,7 @@ export default class AppStore extends Store {
 
   //new
   consentSubmit = async (param?: any, type?: any) => {
+    let data = param
     if (type != '000') {
       if (
         param.consentId != '' &&
@@ -1141,7 +1142,7 @@ export default class AppStore extends Store {
           this.transaction(() => {
             message.success('Submit successful！');
             this.pageChange('List', null);
-            //this.dispatch('consent:editList',{});
+            this.dispatch('consent:editList',{});
             this.getConsentList();
           });
         } else {
@@ -1152,12 +1153,12 @@ export default class AppStore extends Store {
       }
     } else {
       if (
-        param.consentId != '' &&
-        param.consentCode != '' &&
-        param.consentTitleType != '' &&
-        param.consentTitle != ''
+        data.consentId != '' &&
+        data.consentCode != '' &&
+        data.consentTitleType != '' &&
+        data.consentTitle != ''
       ) {
-        const { res } = await webApi.fetchNewConsent(param);
+        const { res } = await webApi.fetchNewConsent(data);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
@@ -1175,17 +1176,34 @@ export default class AppStore extends Store {
   };
 
   //pageChange
-  pageChange = (param, id) => {
-    let a = this.state().get('consentForm');
+  pageChange  =  (param, id) => {
+
+    /*let a = this.state().get('consentForm');
     for (let key in a) {
       a[key] = '';
-    }
-    this.dispatch('consent:editId', null);
-    this.dispatch('consent:consentForm', a);
+    }*/
+    //param == 'List'? this.dispatch('consent:consentForm', {}):param
+    this.dispatch('consent:editId', id);
 
     this.dispatch('consent:pageChange', param);
-    if (id) {
+    if (id != '000' && param != 'List') {
       this.onEditList(id);
+    }else {
+      let consentForm = {
+        languageTypeId: '',
+        consentCategory: 'Prescriber',
+        filedType: 'Optional',
+        consentPage: ['Landing page'].toString(),
+        consentId: '',
+        consentCode: '',
+        consentType: 'Email in',
+        consentTitleType: 'Content',
+        consentTitle: '',
+        consentDetailList: []
+      }
+      this.dispatch('consent:editList', consentForm);
+      this.dispatch('consent:consentForm', consentForm);
+
     }
   };
 

@@ -21,6 +21,7 @@ let content2 = '';
 let consentDetailList = [];
 let list = [];
 
+
 @Relax
 export default class StepConsentDetail extends Component<any, any> {
   constructor(props) {
@@ -87,7 +88,6 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleChange = (value) => {
-    //console.log(`selected ${value}`);
   };
 
   pageChange = (e) => {
@@ -100,7 +100,6 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   handleConsentTitle = (e) => {
-    //console.log(e.key);
     const { editList } = this.props.relaxProps;
 
     this.setState({
@@ -197,7 +196,6 @@ export default class StepConsentDetail extends Component<any, any> {
 
   componentDidMount() {
     const { editId, editList, consentForm } = this.props.relaxProps;
-
     if ( editId != '000') {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
@@ -214,7 +212,7 @@ export default class StepConsentDetail extends Component<any, any> {
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {
       return {
-        consentForm: nextProps.relaxProps.consentTitleType,
+        consentForm: nextProps.relaxProps.consentForm,
         editList: nextProps.relaxProps.editList,
         detailList: nextProps.relaxProps.detailList,
         consentLanguage: nextProps.relaxProps.consentLanguage
@@ -240,30 +238,36 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   onTreeChange = (e) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, consentForm } = this.props.relaxProps;
     this.setState({ value: e }, () => {
-      onFormChange({
+      consentForm.consentPage = e.toString()
+      onFormChange(consentForm)
+     /* onFormChange({
         field: 'consentPage',
         value: e.toString()
-      });
+      });*/
     });
   };
 
   onCategory = (e) => {
-    const { onFormChange } = this.props.relaxProps;
+    const { onFormChange, consentForm } = this.props.relaxProps;
     if (e == 'Prescriber') {
       this.setState({ value: ['Landing page'] }, () => {
-        onFormChange({
+        consentForm.consentPage = this.state.value.toString()
+        onFormChange(consentForm)
+        /*onFormChange({
           field: 'consentPage',
           value: this.state.value.toString()
-        });
+        });*/
       });
     } else {
       this.setState({ value: ['Landing page', 'check out'] }, () => {
-        onFormChange({
+        consentForm.consentPage = this.state.value.toString()
+        onFormChange(consentForm)
+        /*onFormChange({
           field: 'consentPage',
           value: this.state.value.toString()
-        });
+        });*/
       });
     }
   };
@@ -289,6 +293,12 @@ export default class StepConsentDetail extends Component<any, any> {
       }
     });
   };
+
+  getDetailForm = (e) => {
+    this.setState({
+
+    })
+  }
 
   render() {
     const { onFormChange, editId, consentForm } = this.props.relaxProps;
@@ -327,6 +337,10 @@ export default class StepConsentDetail extends Component<any, any> {
         width: '100%'
       }
     };
+
+    setTimeout(()=>{
+      console.log(editList.consentId,22222);
+    })
 
     return (
       <div className="consent-detail">

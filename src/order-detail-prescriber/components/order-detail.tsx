@@ -10,6 +10,7 @@ import {
   Popover,
   Row,
   Table,
+  Tag,
   Tooltip
 } from 'antd';
 import { AuthWrapper, Const, noop, util } from 'qmkit';
@@ -18,41 +19,6 @@ import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-
-const columns = [
-  {
-    title: 'SKU Code',
-    dataIndex: 'skuNo',
-    key: 'skuNo',
-    render: (text) => text
-  },
-  {
-    title: 'Product Name',
-    dataIndex: 'skuName',
-    key: 'skuName',
-    width: '50%'
-  },
-  {
-    title: 'Weight',
-    dataIndex: 'specDetails',
-    key: 'specDetails'
-  },
-  {
-    title: 'Price',
-    dataIndex: 'levelPrice',
-    key: 'levelPrice',
-    render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'num',
-    key: 'num'
-  },
-  {
-    title: 'Subtotal',
-    render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
-  }
-];
 
 const invoiceContent = (invoice) => {
   let invoiceContent = '';
@@ -115,10 +81,26 @@ class RejectForm extends React.Component<any, any> {
               { validator: this.checkComment }
             ]
           })(
-            <Input.TextArea
-              placeholder="comment"
-              autosize={{ minRows: 4, maxRows: 4 }}
-            />
+            <div>
+              <Input.TextArea
+                placeholder="comment"
+                autosize={{ minRows: 4, maxRows: 4 }}
+              />
+              <p>
+                <span
+                  style={{
+                    color: 'red',
+                    fontFamily: 'SimSun',
+                    marginRight: '4px',
+                    fontSize: '12px'
+                  }}
+                >
+                  *
+                </span>
+                Once rejected, we will return the payment for this order to the
+                consumer
+              </p>
+            </div>
           )}
         </FormItem>
       </Form>
@@ -189,6 +171,27 @@ export default class OrderDetailTab extends React.Component<any, any> {
     hideRejectModal: noop
   };
 
+  state = {
+    visiblePetDetails: false,
+    havePet: true,
+    currentPetInfo: {
+      petsName: 'Echo123',
+      birthOfPets: '05/07/2020',
+      petsBreed: 'American Shorthair',
+      petsSex: 1,
+      petsType: 'cat',
+      petsSizeValueName: 'Medium',
+      specialNeeds: [
+        {
+          propName: 'Sensibilidades alimentarias'
+        },
+        {
+          propName: 'Soporte urinario'
+        }
+      ]
+    }
+  };
+
   render() {
     const {
       detail,
@@ -200,6 +203,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       setSellerRemark,
       orderRejectModalVisible
     } = this.props.relaxProps;
+    const { currentPetInfo, havePet } = this.state;
     //当前的订单号
     const tid = detail.get('id');
     let orderSource = detail.get('orderSource');
@@ -289,6 +293,100 @@ export default class OrderDetailTab extends React.Component<any, any> {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
+
+    const columns = [
+      {
+        title: 'SKU Code',
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => text
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'skuName',
+        key: 'skuName',
+        width: '20%'
+      },
+      {
+        title: 'Weight',
+        dataIndex: 'specDetails',
+        key: 'specDetails'
+      },
+      {
+        title: 'Pet category',
+        dataIndex: 'petCategory',
+        key: 'petCategory',
+        width: '10%'
+      },
+      {
+        title: 'Pet name',
+        dataIndex: 'petName',
+        key: 'petName',
+        width: '10%'
+      },
+      {
+        title: 'Pet details',
+        dataIndex: 'petDetails',
+        key: 'petDetails',
+        width: '10%',
+        render: (text, record) => (
+          <Button type="link" onClick={() => this._openPetDetails(record)}>
+            view
+          </Button>
+        )
+      },
+      {
+        title: 'Price',
+        dataIndex: 'levelPrice',
+        key: 'levelPrice',
+        render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Subtotal',
+        render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
+      }
+    ];
+
+    const columnsNoPet = [
+      {
+        title: 'SKU Code',
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => text
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'skuName',
+        key: 'skuName',
+        width: '20%'
+      },
+      {
+        title: 'Weight',
+        dataIndex: 'specDetails',
+        key: 'specDetails'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'levelPrice',
+        key: 'levelPrice',
+        render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Subtotal',
+        render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
+      }
+    ];
+
     return (
       <div>
         <div style={styles.headBox as any}>
@@ -369,7 +467,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         >
           <Table
             rowKey={(_record, index) => index.toString()}
-            columns={columns}
+            columns={havePet ? columns : columnsNoPet}
             dataSource={tradeItems.concat(gifts)}
             pagination={false}
             bordered
@@ -446,7 +544,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           </div>
         </div>
 
-        <Row>
+        {/* <Row>
           <Col span={8}>
             <p style={styles.inforItem}>
               {<FormattedMessage id="petCategory" />}:{' '}
@@ -469,7 +567,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {<FormattedMessage id="specialNeeds" />}:{' '}
             </p>
           </Col>
-        </Row>
+        </Row> */}
         {/* <div
           style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}
         >
@@ -569,6 +667,67 @@ export default class OrderDetailTab extends React.Component<any, any> {
             }}
           />
         </Modal>
+
+        <Modal
+          title={currentPetInfo.petsName}
+          visible={this.state.visiblePetDetails}
+          onOk={() => {
+            this.setState({
+              visiblePetDetails: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visiblePetDetails: false
+            });
+          }}
+        >
+          <Row>
+            <Col span={12}>
+              <p>
+                {currentPetInfo.petsType === 'dog' ? (
+                  <i className="iconfont icondog" style={styles.iconRight}></i>
+                ) : (
+                  <i className="iconfont iconcat" style={styles.iconRight}></i>
+                )}
+                {currentPetInfo.petsBreed}
+              </p>
+              <p>
+                <i
+                  className="iconfont iconbirthday"
+                  style={styles.iconRight}
+                ></i>
+                {currentPetInfo.birthOfPets}
+              </p>
+              <p>
+                {currentPetInfo.petsSex === 0 ? (
+                  <i className="iconfont iconman" style={styles.iconRight}></i>
+                ) : (
+                  <i
+                    className="iconfont iconwoman"
+                    style={styles.iconRight}
+                  ></i>
+                )}
+                {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
+              </p>
+              {currentPetInfo.petsSizeValueName ? (
+                <p>
+                  <i
+                    className="iconfont iconweight"
+                    style={styles.iconRight}
+                  ></i>
+                  {currentPetInfo.petsSizeValueName}
+                </p>
+              ) : null}
+            </Col>
+            <Col span={12}>
+              <h3>specialNeeds</h3>
+              {currentPetInfo.specialNeeds.map((item) => (
+                <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>
+              ))}
+            </Col>
+          </Row>
+        </Modal>
       </div>
     );
   }
@@ -624,13 +783,21 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <AuthWrapper functionName="edit_order_f_001">
               <Tooltip placement="top" title="Modify">
                 <a
+                  onClick={() => {
+                    verify(tid);
+                  }}
+                  href="javascript:void(0)"
+                  style={styles.pr20}
+                  className="iconfont iconEdit"
+                ></a>
+                {/* <a
                   style={styles.pr20}
                   onClick={() => {
                     verify(tid);
                   }}
                 >
                   Modify
-                </a>
+                </a> */}
               </Tooltip>
             </AuthWrapper>
           )}
@@ -638,12 +805,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
             ? null
             : flowState === 'INIT' && (
                 <AuthWrapper functionName="fOrderList002_prescriber">
-                  <Tooltip placement="top" title="Turn down">
+                  <Tooltip placement="top" title="Reject">
                     <a
                       onClick={() => showRejectModal()}
                       href="javascript:void(0)"
                       style={styles.pr20}
-                      className="iconfont iconbtn-turndown"
+                      className="iconfont iconbtn-cancelall"
                     >
                       {/*<FormattedMessage id="order.turnDown" />*/}
                     </a>
@@ -698,7 +865,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   }}
                   href="javascript:void(0)"
                   style={styles.pr20}
-                  className="iconfont iconbtn-audit"
+                  className="iconfont iconaudit"
                 >
                   {/*<FormattedMessage id="order.audit" />*/}
                 </a>
@@ -793,12 +960,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
    * @param tid
    */
   _showAuditConfirm = (tid: string) => {
-    const { confirm, onAudit } = this.props.relaxProps;
+    const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
     confirmModal({
-      title: 'Confirm audit',
-      content: 'Confirm audit?',
+      content: 'Do you confirm that the order has been approved?',
       onOk() {
         onAudit(tid, 'CHECKED');
       },
@@ -823,6 +989,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       onCancel() {}
     });
+  };
+
+  _openPetDetails = (row) => {
+    this.setState({
+      visiblePetDetails: true
+    });
+    console.log(row);
   };
 }
 
@@ -903,5 +1076,8 @@ const styles = {
     background: '#F56C1D',
     display: 'inline-block',
     marginLeft: 5
+  },
+  iconRight: {
+    marginRight: 5
   }
 } as any;

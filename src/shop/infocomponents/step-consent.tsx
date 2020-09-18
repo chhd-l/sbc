@@ -37,6 +37,7 @@ export default class StepConsent extends Component<any, any> {
       pageChange: Function;
       //getConsentListSelect: Function;
       editId: any;
+      editList: any;
     };
   };
 
@@ -50,7 +51,8 @@ export default class StepConsent extends Component<any, any> {
     getLanguage: noop,
     pageChange: noop,
     //getConsentListSelect: noop,
-    editId: 'editId'
+    editId: 'editId',
+    editList: 'editList',
   };
 
   componentDidMount() {
@@ -91,8 +93,10 @@ export default class StepConsent extends Component<any, any> {
       consentLanguage,
       pageChange,
       pageChangeType,
-      editId
+      editId,
+      editList
     } = this.props.relaxProps;
+
     return (
       <div className="consent">
         {pageChangeType == 'List' ? (
@@ -141,7 +145,9 @@ export default class StepConsent extends Component<any, any> {
                 <Icon type="left" /> Consent edit
               </div>
             </div>
-            {editId != null ? <Detail editId={editId} /> : null}
+            {/*{editList.id != null ? <Detail /> : <Detail />}*/}
+
+            {editList.id ||  editId == '000' ?<Detail />:null}
           </React.Fragment>
         )}
       </div>

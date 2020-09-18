@@ -465,7 +465,7 @@ class UserList extends Component<any, any> {
         />
         <Modal
           maskClosable={false}
-          title="Please input the reason for suspension"
+          title="Please input the reason for disabling"
           visible={this.state.disabledModalVisible}
           onCancel={this.cancelDisabled}
           onOk={this.handleDisabled}

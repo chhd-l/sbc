@@ -183,14 +183,10 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
     });
   };
 
-  clickConsent (e) {
-     console.log(e)
-  }
-
   renderReuired(id) {
     return !this.state.checkContentIds.includes(id) &&
       this.state.clickProcess ? (
-      <div style={styles.requiredLable}>This is required</div>
+      <div style={styles.requiredLable}>This is required field</div>
     ) : null;
   }
 

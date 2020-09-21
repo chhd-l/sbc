@@ -35,12 +35,12 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   async componentDidMount () {
     document.getElementById('consents').addEventListener('click',(e)=>{     
       if(e.target.localName === 'span'){
-          var parentId = Number(e.target.parentNode.parentNode.id)
+          let parentId = Number(e.target.parentNode.parentNode.id)
           let keyWords = e.target.innerText
-          var allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
-          var selectConsent = allList.find(x=>x.id === parentId);
+          let allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
+          let selectConsent = allList.find(x=>x.id === parentId);
           if (selectConsent){
-            var detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
+            let detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
             this.state.requiredConsents.map(requiredItem=>{
               if(requiredItem.id === parentId) {
                 requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody
@@ -183,14 +183,10 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
     });
   };
 
-  clickConsent (e) {
-     console.log(e)
-  }
-
   renderReuired(id) {
     return !this.state.checkContentIds.includes(id) &&
       this.state.clickProcess ? (
-      <div style={styles.requiredLable}>This is required</div>
+      <div style={styles.requiredLable}>This is required field</div>
     ) : null;
   }
 

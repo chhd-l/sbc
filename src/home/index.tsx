@@ -37,8 +37,8 @@ export default class HelloApp extends React.Component<any, any> {
         <div style={styles.container}>
           <Header />
           <TodoItems />
-          <StatisticalReport />
-          {/* <Ranking /> */}
+          {/*<StatisticalReport />
+          <Ranking /> */}
         </div>
       ) : (
         <div style={styles.container}>

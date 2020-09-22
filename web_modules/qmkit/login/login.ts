@@ -121,10 +121,16 @@ export async function login(form, oktaToken: string) {
             message.success('login successful');
             //登录成功之后，塞入baseConfig
             const config = (await webapi.getUserSiteInfo()) as any;
-            sessionStorage.setItem(
-              cache.SYSTEM_BASE_CONFIG,
-              JSON.stringify(config.res.context)
-            );
+            if (config.res.context) {
+              sessionStorage.setItem(
+                cache.SYSTEM_BASE_CONFIG,
+                JSON.stringify(config.res.context)
+              );
+            } else {
+              sessionStorage.removeItem(
+                cache.SYSTEM_BASE_CONFIG
+              );
+            }
             let hasHomeFunction = functionsRes.res.context.includes('f_home');
             if (hasHomeFunction) {
               history.push('/');

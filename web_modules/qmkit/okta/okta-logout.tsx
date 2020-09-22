@@ -2,8 +2,10 @@ import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
 import { Icon, Button, message } from 'antd';
 import {  util } from 'qmkit';
+import * as webapi from './webapi';
 
 const OktaLogout = (props) => {
+  const [userInfo, setUserInfo] = useState(null);
   const { authState, authService } = useOktaAuth();
 
   const oktaLogout = async () => {
@@ -12,15 +14,10 @@ const OktaLogout = (props) => {
     }
   }
 
-  const clickLogoff = () => {
-    try{
-      oktaLogout();
-    } catch (e) {
-      message.error(e.message)
-    }
-    finally {
-      util.logout(authState.isAuthenticated);
-    }
+  const clickLogoff = async () => {
+    util.logout(authState.isAuthenticated);
+    await webapi.logout()
+    await oktaLogout();
   }
 
   return (

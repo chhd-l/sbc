@@ -215,27 +215,37 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-r-top">
               <div className="top-text">Consumer</div>
               <div className="consumer flex-content">
-                <div className="mode">
-                  <div className="mode-text">Page view</div>
-                  <div className="mode-num">
-                    <span>$</span>
-                    <span>4,524</span>
+                <div className="consumer-top flex-start">
+                  <div className="mode">
+                    <div className="mode-text">Active consumers</div>
+                    <div className="mode-num">
+                      <span>$</span>
+                      <span>4,524</span>
+                    </div>
+                    <div className="mode-per">
+                      <img src={icon1} width="14" height="14" />
+                      <span>32%</span>
+                    </div>
                   </div>
-                  <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
+                  <div className="mode">
+                    <div className="mode-text">Active consumer rate</div>
+                    <div className="mode-num">
+                      <span>$</span>
+                      <span>4,524</span>
+                    </div>
+                    <div className="mode-per">
+                      <img src={icon1} width="14" height="14" />
+                      <span>32%</span>
+                    </div>
                   </div>
                 </div>
-                <div className="line num"></div>
-                <div className="mode">
-                  <div className="mode-text">Bounce rate</div>
-                  <div className="mode-num">
-                    <span>$</span>
-                    <span>4,524</span>
-                  </div>
-                  <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
+                <div className="consumer-btm flex-content">
+                  <div className="mode">
+                    <div className="mode-text">Total consumers</div>
+                    <div className="mode-num">
+                      <span>$</span>
+                      <span>4,524</span>
+                    </div>
                   </div>
                 </div>
               </div>

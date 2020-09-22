@@ -283,8 +283,15 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div>
         </div>
-        <div className="item-mid">1111111111111111111</div>
-        <div className="item-btm">1111111111111111111</div>
+        <div className="item-mid space-between">
+          <div className="item-mid-l"></div>
+          <div className="item-mid-r"></div>
+        </div>
+        <div className="item-btm space-between">
+          <div className="item-btm-l"></div>
+          <div className="item-btm-m"></div>
+          <div className="item-btm-r"></div>
+        </div>
       </div>
     );
   }

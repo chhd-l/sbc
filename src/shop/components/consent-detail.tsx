@@ -174,7 +174,7 @@ export default class StepConsentDetail extends Component<any, any> {
         }
       });
     }
-
+    list = []
     setTimeout(()=>{
       list.push(
         this.state.a,
@@ -338,9 +338,6 @@ export default class StepConsentDetail extends Component<any, any> {
       }
     };
 
-    setTimeout(()=>{
-      console.log(editList.consentId,22222);
-    })
 
     return (
       <div className="consent-detail">

@@ -284,7 +284,62 @@ export default class TodoItems extends React.Component<any, any> {
           </div>
         </div>
         <div className="item-mid space-between">
-          <div className="item-mid-l"></div>
+          <div className="item-mid-l">
+            <div className="top-text">Prescriber</div>
+            <div className="prescriber space-between">
+              <div className="item-mid-l-l flex-content">
+                <div className="mode">
+                  <div className="mode-text">Active prescriber rates</div>
+                  <div className="mode-num">
+                    <span>$</span>
+                    <span>4,524</span>
+                  </div>
+                  <div className="mode-per">
+                    <img src={icon1} width="14" height="14" />
+                    <span>32%</span>
+                  </div>
+                </div>
+                <div className="line-1 mode-line"></div>
+                <div className="mode">
+                  <div className="mode-text">Active prescribers</div>
+                  <div className="mode-num">
+                    <span>$</span>
+                    <span>4,524</span>
+                  </div>
+                  <div className="mode-per">
+                    <img src={icon1} width="14" height="14" />
+                    <span>32%</span>
+                  </div>
+                </div>
+              </div>
+              <div className="item-mid-l-r">
+                <div className="r-text">Prescriber reward Top 3</div>
+                <div className="r-content">
+                  <div className="r-content-list space-between-align">
+                    <span>1</span>
+                    <span>Velvet Pets</span>
+                    <span>$ 1213.00</span>
+                    <span>1 order</span>
+                  </div>
+                  <div className="line-1 r-content-line"></div>
+                  <div className="r-content-list space-between-align">
+                    <span>2</span>
+                    <span>Velvet Pets</span>
+                    <span>$ 1213.00</span>
+                    <span>1 order</span>
+                  </div>
+                  <div className="line-1 r-content-line"></div>
+                  <div className="r-content-list space-between-align">
+                    <span>3</span>
+                    <span>Velvet Pets</span>
+                    <span>$ 1213.00</span>
+                    <span>1 order</span>
+                  </div>
+                  <div className="line-1 r-content-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="item-mid-r"></div>
         </div>
         <div className="item-btm space-between">

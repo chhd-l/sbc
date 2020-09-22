@@ -113,9 +113,9 @@ export default class TodoItems extends React.Component<any, any> {
                   />
                 </div>
                 <div className="traffic-r flex-content">
-                  <div className="traffic-r-top space-between">
+                  <div className="traffic-r-top flex-start">
                     <div className="mode">
-                      <div className="mode-text">Traffic</div>
+                      <div className="mode-text">Page view</div>
                       <div className="mode-num">
                         <span>$</span>
                         <span>4,524</span>
@@ -125,9 +125,9 @@ export default class TodoItems extends React.Component<any, any> {
                         <span>32%</span>
                       </div>
                     </div>
-                    <div className="line"></div>
+                    <div className="line num"></div>
                     <div className="mode">
-                      <div className="mode-text">Traffic</div>
+                      <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span>$</span>
                         <span>4,524</span>
@@ -140,7 +140,7 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="traffic-r-btm flex-content">
                     <div className="mode">
-                      <div className="mode-text">Traffic</div>
+                      <div className="mode-text">VET traffic</div>
                       <div className="mode-num">
                         <span>$</span>
                         <span>4,524</span>
@@ -148,7 +148,7 @@ export default class TodoItems extends React.Component<any, any> {
                     </div>
                     <div className="line"></div>
                     <div className="mode">
-                      <div className="mode-text">Traffic</div>
+                      <div className="mode-text">VET traffic rate</div>
                       <div className="mode-num num">
                         <span>$</span>
                         <span>4,524</span>
@@ -163,12 +163,82 @@ export default class TodoItems extends React.Component<any, any> {
                 <span>Transaction</span>
                 <span>more ></span>
               </div>
-              <div className="transaction"></div>
+              <div className="m-content flex-content">
+                <div className="transaction space-between">
+                  <div className="transaction-l space-around">
+                    <div className="text">Order Number</div>
+                    <div className="num">
+                      <div className="num-l">1430</div>
+                      <div className="num-r">
+                        <img src={icon1} width="14" height="14" />
+                        <span>3.2%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="transaction-l space-around">
+                    <div className="text">Sales volume</div>
+                    <div className="num">
+                      <div className="num-l">1430</div>
+                      <div className="num-r">
+                        <img src={icon1} width="14" height="14" />
+                        <span>3.2%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="transaction space-between">
+                  <div className="transaction-l space-around">
+                    <div className="text">Units sold</div>
+                    <div className="num">
+                      <div className="num-l">1430</div>
+                      <div className="num-r">
+                        <img src={icon1} width="14" height="14" />
+                        <span>3.2%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="transaction-l space-around">
+                    <div className="text">Retention rate</div>
+                    <div className="num">
+                      <div className="num-l">1430</div>
+                      <div className="num-r">
+                        <img src={icon1} width="14" height="14" />
+                        <span>3.2%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="item-top-r flex-content">
             <div className="item-top-r-top">
               <div className="top-text">Consumer</div>
+              <div className="consumer flex-content">
+                <div className="mode">
+                  <div className="mode-text">Page view</div>
+                  <div className="mode-num">
+                    <span>$</span>
+                    <span>4,524</span>
+                  </div>
+                  <div className="mode-per">
+                    <img src={icon1} width="14" height="14" />
+                    <span>32%</span>
+                  </div>
+                </div>
+                <div className="line num"></div>
+                <div className="mode">
+                  <div className="mode-text">Bounce rate</div>
+                  <div className="mode-num">
+                    <span>$</span>
+                    <span>4,524</span>
+                  </div>
+                  <div className="mode-per">
+                    <img src={icon1} width="14" height="14" />
+                    <span>32%</span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="item-top-r-btm">
               <div className="top-text">Subscription</div>

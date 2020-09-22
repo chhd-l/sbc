@@ -33,7 +33,7 @@
 
   .item-top {
     width: 100%;
-    height: 520px;
+    height: 415px;
 
     .item-top-l {
       width: 38%;
@@ -41,14 +41,14 @@
 
       .item-top-l-top {
         width: 100%;
-        height: 28%;
+        height: 131px;
         background: #ffffff;
         box-shadow: 0 3px 5px #dddddd;
         border: 1px solid #eeeeee;
         border-radius: 5px;
 
         .top-text {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
           color: #000000;
           padding: 12px 0 0 20px;
@@ -56,7 +56,7 @@
 
         .content {
           width: 100%;
-          padding: 15px 0 0 20px;
+          padding: 12px 0 0 20px;
 
           .mode {
             width: 24%;
@@ -64,18 +64,20 @@
             padding-left: 10px;
 
             .mode-text {
-              color: #999999;
-              font-size: 14px;
+              color: #808285;
+              font-size: 12px;
             }
 
             .mode-num {
+              color: #000000;
+
               span:first-child {
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: bold;
               }
 
               span:last-child {
-                font-size: 22px;
+                font-size: 20px;
                 font-weight: bold;
                 padding-left: 2px;
                 color: #000000;
@@ -86,7 +88,7 @@
               span:first-child {
                 font-size: 12px;
                 font-weight: bold;
-                color: #f51f1f;
+                color: #e1021a;
               }
 
               span:last-child {
@@ -99,23 +101,23 @@
           }
 
           .line {
-            height: 75px;
-            background: #ccc;
+            height: 68px;
+            background: #d9d9d9;
             width: 1px;
-            margin-top: 1px;
+            margin-top: 0;
           }
         }
       }
 
       .item-top-l-btm {
         width: 100%;
-        height: 70%;
+        height: 274px;
         background: #ffffff;
         box-shadow: 0 3px 5px #dddddd;
         border-radius: 5px;
 
         .top-text {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
           color: #000000;
           padding: 12px 0 0 20px;
@@ -130,7 +132,7 @@
     }
 
     .item-top-m {
-      width: 30%;
+      width: 31%;
       height: 100%;
 
       .item-top-m-top {
@@ -145,16 +147,15 @@
           padding: 12px 0 0 20px;
 
           span:first-child {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #000000;
           }
 
           span:last-child {
             font-size: 12px;
-            font-weight: bold;
-            color: #cccccc;
-            padding-right: 15px;
+            color: #808285;
+            padding-right: 18px;
           }
         }
 
@@ -165,26 +166,34 @@
 
           .traffic-l {
             width: 15%;
-            padding-top: 35px;
+            padding-top: 20px;
             padding-left: 16px;
           }
 
           .traffic-r {
-            height: 78%;
+            height: 74%;
             width: 80%;
-            margin-right: 13px;
+            margin-right: 16px;
+            text-align: left;
 
             .traffic-r-top {
               width: 100%;
-              height: 45%;
-              background: #eeeeee;
-              padding: 15px;
+              height: 47%;
+              background: rgb(250, 250, 250);
+              padding: 6px 15px 0 10px;
+              line-height: 19px;
             }
 
             .traffic-r-btm {
               width: 100%;
-              height: 45%;
-              background: #eeeeee;
+              height: 47%;
+              background: rgb(250, 250, 250);
+              padding: 10px 10px 0 10px;
+              line-height: 24px;
+
+              .num {
+                height: 16px;
+              }
             }
           }
         }
@@ -202,23 +211,79 @@
           padding: 12px 0 0 20px;
 
           span:first-child {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #000000;
           }
 
           span:last-child {
             font-size: 12px;
-            font-weight: bold;
-            color: #cccccc;
-            padding-right: 15px;
+            color: #808285;
+            padding-right: 18px;
+          }
+        }
+
+        .m-content {
+          width: 100%;
+          height: 70%;
+          margin-top: 5px;
+          overflow: hidden;
+
+          .transaction {
+            width: 92%;
+            height: 59px;
+            margin: 0 auto;
+            background: rgb(250, 250, 250);
+            padding: 10px 20px 0 20px;
+            line-height: 19px;
+
+            .transaction-l {
+              width: 45%;
+
+              .text {
+                width: 45%;
+                font-size: 12px;
+                color: #808285;
+                letter-spacing: 0;
+              }
+
+              .num {
+                width: 45%;
+
+                .num-l {
+                  font-size: 17px;
+                  font-weight: bold;
+                  color: #000000;
+                }
+
+                .num-r {
+                  font-size: 12px;
+                  color: #44c4af;
+                  padding-top: 5px;
+
+                  span:first-child {
+                    font-size: 12px;
+                    color: #e1021a;
+                  }
+
+                  span:last-child {
+                    font-size: 12px;
+                    font-weight: bold;
+                    padding-left: 5px;
+                    vertical-align: middle;
+                    padding-top: 5px;
+                    color: #f51f1f;
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
 
     .item-top-r {
-      width: 30.5%;
+      width: 29.5%;
       height: 100%;
 
       .item-top-r-top {
@@ -230,10 +295,38 @@
         border-radius: 5px;
 
         .top-text {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
           color: #000000;
           padding: 12px 0 0 20px;
+        }
+
+        .consumer {
+          height: 76%;
+          width: 92%;
+          padding-top: 12px;
+          margin: 0 auto;
+          text-align: left;
+
+          .consumer-top {
+            width: 100%;
+            height: 47%;
+            background: rgb(250, 250, 250);
+            padding: 6px 15px 0 10px;
+            line-height: 20px;
+          }
+
+          .consumer-btm {
+            width: 100%;
+            height: 47%;
+            background: rgb(250, 250, 250);
+            padding: 10px 10px 0 10px;
+            line-height: 24px;
+
+            .num {
+              height: 16px;
+            }
+          }
         }
       }
 
@@ -246,12 +339,127 @@
         border-radius: 5px;
 
         .top-text {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: bold;
           color: #000000;
           padding: 12px 0 0 20px;
         }
+
+        .subscription {
+          width: 100%;
+          height: 73%;
+          margin-top: 5px;
+
+          .subscription-l {
+            width: 50%;
+            height: 100%;
+          }
+
+          .subscription-r {
+            width: 50%;
+            height: 76%;
+
+            .subscription-content {
+              width: 100%;
+              margin-top: 15px;
+
+              .text {
+                width: 32%;
+                font-size: 12px;
+                color: #808285;
+                letter-spacing: 0;
+                margin-top: 3px;
+              }
+
+              .num {
+                width: 45%;
+
+                .num-l {
+                  font-size: 17px;
+                  font-weight: bold;
+                  color: #000000;
+                }
+
+                .num-r {
+                  font-size: 12px;
+                  color: #44c4af;
+                  padding-top: 0;
+
+                  span:first-child {
+                    font-size: 12px;
+                    color: #e1021a;
+                  }
+
+                  span:last-child {
+                    font-size: 12px;
+                    font-weight: bold;
+                    padding-left: 5px;
+                    vertical-align: middle;
+                    color: #f51f1f;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+    }
+  }
+
+  .item-mid {
+    width: 100%;
+    height: 229px;
+    margin-top: 10px;
+
+    .item-mid-l {
+      width: 62%;
+      height: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      box-shadow: 0 3px 5px #dddddd;
+      border-radius: 5px;
+    }
+
+    .item-mid-r {
+      width: 37.5%;
+      height: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      box-shadow: 0 3px 5px #dddddd;
+      border-radius: 5px;
+    }
+  }
+
+  .item-btm {
+    width: 100%;
+    height: 291px;
+    margin-top: 10px;
+
+    .item-btm-l {
+      width: 33%;
+      height: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      box-shadow: 0 3px 5px #dddddd;
+      border-radius: 5px;
+    }
+
+    .item-btm-m {
+      width: 33%;
+      height: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      box-shadow: 0 3px 5px #dddddd;
+      border-radius: 5px;
+    }
+
+    .item-btm-r {
+      width: 33%;
+      height: 100%;
+      border: 1px solid #eeeeee;
+      background: #ffffff;
+      box-shadow: 0 3px 5px #dddddd;
+      border-radius: 5px;
     }
   }
 }
@@ -263,18 +471,18 @@
   padding-left: 10px;
 
   .mode-text {
-    color: #999999;
-    font-size: 14px;
+    color: #808285;
+    font-size: 12px;
   }
 
   .mode-num {
     span:first-child {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
     }
 
     span:last-child {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: bold;
       padding-left: 2px;
       color: #000000;
@@ -284,8 +492,7 @@
   .mode-per {
     span:first-child {
       font-size: 12px;
-      font-weight: bold;
-      color: #f51f1f;
+      color: #e1021a;
     }
 
     span:last-child {
@@ -298,8 +505,8 @@
 }
 
 .line {
-  height: 75px;
-  background: #ccc;
+  background: #d9d9d9;
   width: 1px;
-  margin-top: 1px;
+  margin-top: 0;
+  height: 90%;
 }

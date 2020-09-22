@@ -174,7 +174,7 @@ export default class StepConsentDetail extends Component<any, any> {
         }
       });
     }
-
+    list = []
     setTimeout(()=>{
       list.push(
         this.state.a,
@@ -183,7 +183,6 @@ export default class StepConsentDetail extends Component<any, any> {
         this.state.d,
         this.state.e
       );
-
       list = list.filter(item =>{
         return item.contentTitle != '' || item.contentBody != ''
       });

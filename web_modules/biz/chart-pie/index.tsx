@@ -17,20 +17,20 @@ export default class Line extends React.Component{
   getOption =()=> {
     let option = {
       title: [{
-        text: 'totalSKU',
+        text: 'Rate',
         x: 'center',
-        top: '36%',
+        top: '32%',
         textStyle: {
           color: '#808285',
-          fontSize: 16,
+          fontSize: 12,
           fontWeight: '100',
         }
       }, {
-        text: this.props.total,
+        text: this.props.shelves + '%',
         x: 'center',
-        top: '50%',
+        top: '47%',
         textStyle: {
-          fontSize: 26,
+          fontSize: 22,
           color: '#000000',
         },
       }],
@@ -83,7 +83,7 @@ export default class Line extends React.Component{
   render(){
     return(
       <div  style={{ height: '100%', width: '100%' }}>
-          <ReactEcharts option={this.getOption()}   style={{ height: '217px', width: '100%' }}/>
+          <ReactEcharts option={this.getOption()}   style={{ height: '100%', width: '100%' }}/>
       </div>
     )
   }

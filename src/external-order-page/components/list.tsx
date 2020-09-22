@@ -147,23 +147,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
             </span>
           )}
         />
-        <Column
-          title="Total Order Amount"
-          key="orderTotalIncome"
-          width="11%"
-          dataIndex="orderTotalIncome"
-          render={(orderTotalIncome) => (
-            <span>
-              {orderTotalIncome != null
-                ? `${
-                    orderTotalIncome.toFixed(2) +
-                    ' ' +
-                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
-                  }`
-                : '-'}
-            </span>
-          )}
-        />
 
         <Column title="Qty" width="3%" key="quantity" dataIndex="quantity" />
         <Column
@@ -183,6 +166,24 @@ export default class OrderInvoiceList extends React.Component<any, any> {
             </span>
           )}
         />
+        <Column
+          title="Total Order Amount"
+          key="orderTotalIncome"
+          width="11%"
+          dataIndex="orderTotalIncome"
+          render={(orderTotalIncome) => (
+            <span>
+              {orderTotalIncome != null
+                ? `${
+                    orderTotalIncome.toFixed(2) +
+                    ' ' +
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
+                  }`
+                : '-'}
+            </span>
+          )}
+        />
+
         <Column
           title="Order status"
           key="orderStatus"

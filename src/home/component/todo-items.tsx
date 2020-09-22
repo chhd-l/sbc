@@ -135,7 +135,23 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                   </div>
-                  <div className="traffic-r-btm">222</div>
+                  <div className="traffic-r-btm flex-content">
+                    <div className="mode">
+                      <div className="mode-text">Traffic</div>
+                      <div className="mode-num">
+                        <span>$</span>
+                        <span>4,524</span>
+                      </div>
+                    </div>
+                    <div className="line"></div>
+                    <div className="mode">
+                      <div className="mode-text">Traffic</div>
+                      <div className="mode-num num">
+                        <span>$</span>
+                        <span>4,524</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,6 +159,9 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="top-text space-between">
                 <span>Transaction</span>
                 <span>more></span>
+              </div>
+              <div className="transaction">
+
               </div>
             </div>
           </div>

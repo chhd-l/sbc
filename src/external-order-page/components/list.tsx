@@ -131,13 +131,46 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
         <Column title="Product id" dataIndex="productId" key="productId" />
-        <Column title="Unit price" key="price" dataIndex="price" />
-        <Column title="Qty" key="quantity" dataIndex="quantity" />
+        <Column
+          title="Unit price"
+          key="price"
+          dataIndex="price"
+          render={(orderPrice) => (
+            <span>
+              {orderPrice != null
+                ? `${
+                    orderPrice.toFixed(2) +
+                    ' ' +
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
+                  }`
+                : '-'}
+            </span>
+          )}
+        />
+        <Column
+          title="Total Order Amount"
+          key="orderTotalIncome"
+          width="11%"
+          dataIndex="orderTotalIncome"
+          render={(orderTotalIncome) => (
+            <span>
+              {orderTotalIncome != null
+                ? `${
+                    orderTotalIncome.toFixed(2) +
+                    ' ' +
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
+                  }`
+                : '-'}
+            </span>
+          )}
+        />
+
+        <Column title="Qty" width="3%" key="quantity" dataIndex="quantity" />
         <Column
           title="Order product amount"
           key="totalIncome"
           dataIndex="totalIncome"
-          width="12%"
+          width="11%"
           render={(orderPrice) => (
             <span>
               {orderPrice != null

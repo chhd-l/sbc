@@ -374,7 +374,19 @@ export default class ClinicList extends Component<any, any> {
               <Col span="8" id="select-group-width">
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem>
-                  <SelectGroup
+                  <Input
+                    addonBefore={
+                      <p className="PrescriberCity">Prescriber city</p>
+                    }
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'primaryCity',
+                        value
+                      });
+                    }}
+                  />
+                  {/*<SelectGroup
                     className="PrescriberCity"
                     defaultValue=""
                     label="Prescriber city"
@@ -394,7 +406,7 @@ export default class ClinicList extends Component<any, any> {
                         {item.name}
                       </Option>
                     ))}
-                  </SelectGroup>
+                  </SelectGroup>*/}
                 </FormItem>
               </Col>
               <Col span="8" id="select-group-width">

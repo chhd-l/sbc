@@ -7,7 +7,7 @@ import { history, noop } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
-import Funnel from 'web_modules/biz/funnel/index.tsx';
+import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from 'web_modules/biz/BarLine/index.tsx';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
@@ -98,6 +98,42 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="top-text">Conversion Funnel</div>
               <div className="Funnel">
                 <Funnel />
+                <div className="Funnel-l">
+                  <div className="Funnel-l-text align-items-center">
+                    <span>Landing page</span>
+                    <span>3200</span>
+                    <span className="Funnel-l-dash1"></span>
+                  </div>
+                  <div className="Funnel-l-text align-items-center">
+                    <span>Shopping cart</span>
+                    <span>700</span>
+                    <span className="Funnel-l-dash2"></span>
+                  </div>
+                  <div className="Funnel-l-text align-items-center">
+                    <span>Checkout</span>
+                    <span>500</span>
+                    <span className="Funnel-l-dash3"></span>
+                  </div>
+                  <div className="Funnel-l-text align-items-center">
+                    <span>Payment</span>
+                    <span>300</span>
+                    <span className="Funnel-l-dash4"></span>
+                  </div>
+                </div>
+                <div className="Funnel-r">
+                  <div className="Funnel-r-top"></div>
+                  <div className="Funnel-r-mid">
+                    <div className="text1">Conversion rate</div>
+                    <div className="text2">
+                      1.69<i>%</i>
+                    </div>
+                    <div className="text3">
+                      <img src={icon1} width="14" height="14" />
+                      <span>32%</span>
+                    </div>
+                  </div>
+                  <div className="Funnel-r-btm"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -390,18 +426,31 @@ export default class TodoItems extends React.Component<any, any> {
               </div>
             </div>
             <div className="line">
-              <BarLine yName={{ y1: 'affic', y2: 'Conversion rate' }} />
+              <BarLine
+                yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                unit={{ unit1: '', unit2: '%' }}
+              />
             </div>
           </div>
           <div className="item-btm-m">
             <div className="top-text">Prescribers Trend</div>
+            <div className="line">
+              <BarLine
+                yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
+                unit={{ unit1: '', unit2: '%' }}
+              />
+            </div>
           </div>
           <div className="item-btm-r">
-            <div className="top-text">
-              <div className="top-text space-between">
-                <span>Transaction Trend</span>
-                <span>more ></span>
-              </div>
+            <div className="top-text space-between">
+              <span>Transaction Trend</span>
+              <span>more ></span>
+            </div>
+            <div className="line">
+              <BarLine
+                yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                unit={{ unit1: '', unit2: '' }}
+              />
             </div>
           </div>
         </div>

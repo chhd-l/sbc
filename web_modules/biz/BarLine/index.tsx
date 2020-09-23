@@ -16,7 +16,7 @@ export default class Line extends React.Component{
   componentDidMount(){
   }
   getOption =()=> {
-    const {yName} = this.props
+    const { yName, unit } = this.props
     let option = {
       backgroundColor:'',
       tooltip: {
@@ -34,7 +34,13 @@ export default class Line extends React.Component{
           splitLine: {show: false},
           axisTick: { show: false },
           axisLine: { show: false },
-          axisLabel: { show:false},
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#999',
+              fontsize: '11'
+            }
+          },
           data: ['Week-1', 'Week-2', 'Week-3', 'WTD'],
         }
       ],
@@ -42,40 +48,72 @@ export default class Line extends React.Component{
         {
           type: 'value',
           name: yName.y1,
-          min: 0,
-          max: 250,
-          interval: 50,
+          nameTextStyle:{
+            color:"#C7C7C7",
+            fontSize:12,
+            padding: [0, 0, 0, -3]
+          },
+          /*min: 0,
+          max: 250,*/
+          //interval: 50,
           splitLine: {show: false},
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
-            formatter: '{value}'
-          }
+            formatter: '{value}'+ unit.unit1,
+            textStyle: {
+              color: '#999',
+              fontsize: '11'
+            }
+          },
+          color:'#C7C7C7',
         },
         {
           type: 'value',
           name: yName.y2,
-          min: 0,
-          max: 25,
-          interval: 5,
+          nameTextStyle:{
+            color:"#C7C7C7",
+            fontSize:12,
+          },
+          /*min: 0,
+          max: 25,*/
+          //interval: 5,
           splitLine: {show: false},
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
-            formatter: '{value}'
-          }
+            formatter: '{value}'+ unit.unit2,
+            textStyle: {
+              color: '#999',
+              fontsize: '11'
+            }
+          },
+          color: '#C7C7C7',
         }
       ],
       series: [
         {
-          name: '降水量',
+          name: yName.y1,
           type: 'bar',
-
+          barWidth: 25,
+          itemStyle: {
+            normal: {
+              color: '#F5828E',
+            }
+          },
           data: [2.6, 5.9, 9.0, 26.4]
         },
         {
-          name: '平均温度',
+          name: yName.y2,
           type: 'line',
+          itemStyle: {
+            normal: {
+              color: '#ED001B',
+              lineStyle:{
+                width:2//设置线条粗细
+              }
+            }
+          },
           yAxisIndex: 1,
           data: [2.0, 2.2, 3.3, 4.5]
         }

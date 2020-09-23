@@ -70,6 +70,7 @@ export default class Line extends React.Component{
         {
           name: '降水量',
           type: 'bar',
+
           data: [2.6, 5.9, 9.0, 26.4]
         },
         {

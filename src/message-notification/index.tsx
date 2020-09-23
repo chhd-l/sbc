@@ -29,7 +29,8 @@ class Notification extends Component<any, any> {
       orderAutomationData: [],
 
       subscriptionAutomationData: [],
-      RecommendationAutomationData: [],
+      recommendationAutomationData: [],
+      priscriberAutomationData: [],
 
       visible: false,
 
@@ -60,7 +61,8 @@ class Notification extends Component<any, any> {
         this.setState({
           orderAutomationData: res.context.orderList,
           subscriptionAutomationData: res.context.subscriptionList,
-          RecommendationAutomationData: res.context.recommendationList
+          recommendationAutomationData: res.context.recommendationList,
+          priscriberAutomationData: res.context.oktList
         });
       }
     });
@@ -215,7 +217,8 @@ class Notification extends Component<any, any> {
       title,
       orderAutomationData,
       subscriptionAutomationData,
-      RecommendationAutomationData,
+      recommendationAutomationData,
+      priscriberAutomationData,
       selectedForm,
       emailTemplateList,
       previewHtml
@@ -307,7 +310,28 @@ class Notification extends Component<any, any> {
               rowKey="id"
               style={{ marginTop: 20 }}
               columns={columns}
-              dataSource={RecommendationAutomationData}
+              dataSource={recommendationAutomationData}
+              pagination={false}
+            />
+          </div>
+          <div style={{ marginTop: 30 }}>
+            <div style={{ display: 'flex' }}>
+              <div style={{ margin: 'auto 0' }}>
+                <Icon type="mail" style={{ fontSize: 40 }} />
+              </div>
+              <div style={{ marginLeft: 10 }}>
+                <h3>Email Automation - Prescriber creation</h3>
+                <p>
+                  Sending Email automatically by the status of Prescriber
+                  creation
+                </p>
+              </div>
+            </div>
+            <Table
+              rowKey="id"
+              style={{ marginTop: 20 }}
+              columns={columns}
+              dataSource={priscriberAutomationData}
               pagination={false}
             />
           </div>

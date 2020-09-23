@@ -35,3 +35,9 @@ export function saveConsent(filterParams = {}) {
     body: JSON.stringify({ ...filterParams })
   });
 }
+
+export function logout() {
+  return Fetch<TResult>('/logout', {
+      method: 'GET'
+  });
+}

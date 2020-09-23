@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import Const from './config';
-import { util } from 'qmkit';
+import { util, history } from 'qmkit';
 import * as _ from 'lodash';
 import { message } from 'antd';
 
@@ -82,14 +82,19 @@ export default async function Fetch<T>(
     // 账号禁用
     if (resJSON.code === 'K-000005') {
       message.error('Your account is disabled');
-      util.logout();
+      history.push('login-verify', {oktaLogout : true})
       return;
     }
 
     if (resJSON.code === 'K-000015') {
       message.error('Failed to obtain authorization');
-      util.logout();
+      history.push('login-verify', {oktaLogout : true})
       return;
+    }
+
+    if(resJSON.code === 'K-000002') {
+      history.push('login-verify', {oktaLogout : true})
+      return
     }
 
     //TODO 和后端约定返回的数据格式, 然后再细分

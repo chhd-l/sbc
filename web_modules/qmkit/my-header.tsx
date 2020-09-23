@@ -9,7 +9,7 @@ import value from '*.json';
 const Option = Select.Option;
 import OktaLogout from './okta/okta-logout'
 
-export default class MyHeader extends React.PureComponent<any, any> {
+export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

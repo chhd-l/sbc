@@ -343,6 +343,7 @@ export function requireLocalSrc(srcPath) {
 export function logout(oktaLogined) {
   const accountName = sessionStorage.getItem(cache.LOGIN_DATA) ? JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
     .accountName : '';
+  window.token = null
   localStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.LOGIN_DATA);
   sessionStorage.removeItem(cache.SYSTEM_BASE_CONFIG);

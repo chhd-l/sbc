@@ -1,6 +1,6 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
-import { login } from 'qmkit';
+import { login, cache } from 'qmkit';
 import { Form, Icon, Input, Button, Row, Col } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
@@ -13,7 +13,12 @@ const LoginHome = (props) => {
 
   useEffect(() => {
     if (authState.isAuthenticated) {
-      login({}, authState.accessToken);
+      authService.getUser().then((info) => {
+        console.log(info)
+        if(info && info.name) {
+          login({}, authState.accessToken);
+        }
+      })
     } else {
       if (toOkta) {
         loginOkta();

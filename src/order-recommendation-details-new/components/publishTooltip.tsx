@@ -237,7 +237,7 @@ export default class DetailPublish extends React.Component<any, any> {
                 `${
                   JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
                     .supplierWebsite
-                }/recommendation/${getLink}`
+                }recommendation/${getLink}`
               )
             }
           >

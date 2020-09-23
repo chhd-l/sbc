@@ -134,6 +134,18 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="Funnel-r-btm"></div>
                 </div>
+                <div className="Funnel-per1">
+                  <span>88</span>
+                  <span>%</span>
+                </div>
+                <div className="Funnel-per2">
+                  <span>88</span>
+                  <span>%</span>
+                </div>
+                <div className="Funnel-per3">
+                  <span>88</span>
+                  <span>%</span>
+                </div>
               </div>
             </div>
           </div>

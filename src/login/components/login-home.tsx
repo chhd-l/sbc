@@ -2,7 +2,7 @@ import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
 import { login } from 'qmkit';
 import { Form, Icon, Input, Button, Row, Col } from 'antd';
-const bg_selectRole = require('../img/bg-SelelctRole.png');
+const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
 

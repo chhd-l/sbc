@@ -20,7 +20,8 @@ import {
   DatePicker,
   Spin,
   Alert,
-  InputNumber
+  InputNumber,
+  Tabs
 } from 'antd';
 
 import * as webapi from './webapi';
@@ -29,6 +30,7 @@ import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { TabPane } = Tabs;
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
@@ -62,19 +64,7 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticConfirmationStatus: false,
         orderAutomaticConfirmationValue: 1
       },
-      unlimitedOnlineForm: {
-        orderExpirationTimeStatus: false,
-        orderExpirationTimeValue: 3,
-        orderConfirmReceiptStatus: true,
-        orderConfirmReceiptValue: 3,
-        orderRefundsStatus: true,
-        orderRefundsValue: 3,
-        orderAutomaticReviewStatus: true,
-        orderAutomaticReviewValue: 3,
-        orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 3
-      },
-      unlimitedCashForm: {
+      unlimitedForm: {
         orderExpirationTimeStatus: false,
         orderExpirationTimeValue: 4,
         orderConfirmReceiptStatus: true,
@@ -88,14 +78,8 @@ class OrderSetting extends Component<any, any> {
       }
     };
   }
-  componentDidMount() { }
+  componentDidMount() {}
 
-  handleSequenceChange = (e) => {
-    console.log(e.target.value);
-    this.setState({
-      paymentSequence: e.target.value
-    });
-  };
   handleCategoryChange = (e) => {
     console.log(e.target.value);
     this.setState({
@@ -133,14 +117,14 @@ class OrderSetting extends Component<any, any> {
       unlimitedOnlineForm: data
     });
   };
-  unlimitedCashFormChange = ({ field, value }) => {
+  unlimitedFormChange = ({ field, value }) => {
     if (!value && value !== false) {
       value = 1;
     }
-    let data = this.state.unlimitedCashForm;
+    let data = this.state.unlimitedForm;
     data[field] = value;
     this.setState({
-      unlimitedCashForm: data
+      unlimitedForm: data
     });
   };
   save = () => {
@@ -156,9 +140,7 @@ class OrderSetting extends Component<any, any> {
       message,
       paymentOnlineForm,
       paymentCashForm,
-      unlimitedOnlineForm,
-      unlimitedCashForm,
-      paymentSequence,
+      unlimitedForm,
       paymentCategory
     } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -195,868 +177,703 @@ class OrderSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
           <Alert message={message} description={description} type="warning" />
-          <Form
-            style={{ marginTop: 20 }}
-            layout="horizontal"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 18 }}
-            labelAlign="right"
-          >
-            <FormItem label="Order payment sequence">
-              <div>
-                <Radio.Group
-                  onChange={this.handleSequenceChange}
-                  value={paymentSequence}
-                >
-                  <Radio.Button value="Payment before delivery">
-                    Payment before delivery
-                  </Radio.Button>
-                  <Radio.Button value="Unlimited">Unlimited</Radio.Button>
-                </Radio.Group>
-                <p style={{ fontSize: 12, lineHeight: 1 }}>
-                  Select "Payment before delivery", the customer must pay for
-                  the order before the merchant can ship, select "Unlimited",
-                  regardless of whether the customer pays or not
-                </p>
-              </div>
-            </FormItem>
 
-            <FormItem label="Payment category">
-              <div>
-                <Radio.Group
-                  onChange={this.handleCategoryChange}
-                  value={paymentCategory}
-                >
-                  <Radio.Button value="Online payment">
-                    Online payment
-                  </Radio.Button>
-                  <Radio.Button value="Cash">Cash</Radio.Button>
-                </Radio.Group>
-              </div>
-            </FormItem>
-            {
-              paymentSequence === 'Payment before delivery' && paymentCategory === 'Online payment' ?
-                <>
-                  <FormItem label="Order expiration time">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentOnlineForm.orderExpirationTimeStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderExpirationTimeStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentOnlineForm.orderExpirationTimeStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentOnlineForm.orderExpirationTimeValue}
-                              onChange={(value) =>
-                                this.paymentOnlineFormChange({
-                                  field: 'orderExpirationTimeValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After hours, if the customer fails to pay overdue, the
-                              order will be automatically voided.
-                      </span>
-                          </div>
+          <p style={styles.tipsStyle}>
+            Select "Payment before delivery", the customer must pay for the
+            order before the merchant can ship, select "Unlimited", regardless
+            of whether the customer pays or not
+          </p>
+          <Tabs defaultActiveKey="Payment before delivery">
+            <TabPane
+              tab="Payment before delivery"
+              key="Payment before delivery"
+            >
+              <Form
+                layout="horizontal"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
+                labelAlign="right"
+              >
+                <FormItem label="Payment category">
+                  <div>
+                    <Radio.Group
+                      onChange={this.handleCategoryChange}
+                      value={paymentCategory}
+                    >
+                      <Radio.Button
+                        style={{ width: 140, textAlign: 'center' }}
+                        value="Online payment"
+                      >
+                        Online payment
+                      </Radio.Button>
+                      <Radio.Button
+                        style={{ width: 140, textAlign: 'center' }}
+                        value="Cash"
+                      >
+                        Cash
+                      </Radio.Button>
+                    </Radio.Group>
+                  </div>
+                </FormItem>
+                {paymentCategory === 'Online payment' ? (
+                  <>
+                    <FormItem label="Order expiration time">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentOnlineForm.orderExpirationTimeStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentOnlineFormChange({
+                                field: 'orderExpirationTimeStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentOnlineForm.orderExpirationTimeStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentOnlineForm.orderExpirationTimeValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderExpirationTimeValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After hours, if the customer fails to pay
+                                overdue, the order will be automatically voided.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatically confirm receipt of order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentOnlineForm.orderConfirmReceiptStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderConfirmReceiptStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentOnlineForm.orderConfirmReceiptStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentOnlineForm.orderConfirmReceiptValue}
-                              onChange={(value) =>
-                                this.paymentOnlineFormChange({
-                                  field: 'orderConfirmReceiptValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the customer’s overdue and unprocessed
-                              pending orders will automatically confirm the receipt.
-                      </span>
-                          </div>
+                    <FormItem label="Automatically confirm receipt of order">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentOnlineForm.orderConfirmReceiptStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentOnlineFormChange({
+                                field: 'orderConfirmReceiptStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentOnlineForm.orderConfirmReceiptStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentOnlineForm.orderConfirmReceiptValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderConfirmReceiptValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After days, the customer’s overdue and
+                                unprocessed pending orders will automatically
+                                confirm the receipt.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Completed orders are allowed to apply for refunds">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentOnlineForm.orderRefundsStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderRefundsStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentOnlineForm.orderRefundsStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentOnlineForm.orderRefundsValue}
-                              onChange={(value) =>
-                                this.paymentOnlineFormChange({
-                                  field: 'orderRefundsValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              Within days, customers are allowed to initiate a return
-                              and refund application, and orders that have not been
-                              shipped can be returned at any time.
-                      </span>
-                          </div>
+                    <FormItem label="Completed orders are allowed to apply for refunds">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentOnlineForm.orderRefundsStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentOnlineFormChange({
+                                field: 'orderRefundsStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentOnlineForm.orderRefundsStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={paymentOnlineForm.orderRefundsValue}
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderRefundsValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                Within days, customers are allowed to initiate a
+                                return and refund application, and orders that
+                                have not been shipped can be returned at any
+                                time.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatic review of pending return orders">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentOnlineForm.orderAutomaticReviewStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderAutomaticReviewStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentOnlineForm.orderAutomaticReviewStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentOnlineForm.orderAutomaticReviewValue}
-                              onChange={(value) =>
-                                this.paymentOnlineFormChange({
-                                  field: 'orderAutomaticReviewValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the merchant’s overdue and pending refund
-                              orders will be automatically approved.
-                      </span>
-                          </div>
+                    <FormItem label="Automatic review of pending return orders">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentOnlineForm.orderAutomaticReviewStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentOnlineFormChange({
+                                field: 'orderAutomaticReviewStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentOnlineForm.orderAutomaticReviewStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentOnlineForm.orderAutomaticReviewValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderAutomaticReviewValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After days, the merchant’s overdue and pending
+                                refund orders will be automatically approved.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatic confirmation of receipt of return order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentOnlineForm.orderAutomaticConfirmationStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderAutomaticConfirmationStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentOnlineForm.orderAutomaticConfirmationStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentOnlineForm.orderAutomaticConfirmationValue}
-                              onChange={(value) =>
-                                this.paymentOnlineFormChange({
-                                  field: 'orderAutomaticConfirmationValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              {' '}
-                        After days, the merchant will automatically confirm the
-                        receipt of the pending return order that is not
-                        processed by the merchant overdue. The return order
-                        returned by the non-express will start to count after
-                        the review is passed.
-                      </span>
-                          </div>
+                    <FormItem label="Automatic confirmation of receipt of return order">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentOnlineForm.orderAutomaticConfirmationStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentOnlineFormChange({
+                                field: 'orderAutomaticConfirmationStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                </> : null
-            }
-            {
-              paymentSequence === 'Payment before delivery' && paymentCategory === 'Cash' ?
-                <>
-                  <FormItem label="Order expiration time">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentCashForm.orderExpirationTimeStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderExpirationTimeStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentCashForm.orderExpirationTimeStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentCashForm.orderExpirationTimeValue}
-                              onChange={(value) =>
-                                this.paymentCashFormChange({
-                                  field: 'orderExpirationTimeValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After hours, if the customer fails to pay overdue, the
-                              order will be automatically voided.
-                      </span>
-                          </div>
+                        {paymentOnlineForm.orderAutomaticConfirmationStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentOnlineForm.orderAutomaticConfirmationValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderAutomaticConfirmationValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                {' '}
+                                After days, the merchant will automatically
+                                confirm the receipt of the pending return order
+                                that is not processed by the merchant overdue.
+                                The return order returned by the non-express
+                                will start to count after the review is passed.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
+                  </>
+                ) : null}
+                {paymentCategory === 'Cash' ? (
+                  <>
+                    <FormItem label="Order expiration time">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentCashForm.orderExpirationTimeStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentCashFormChange({
+                                field: 'orderExpirationTimeStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentCashForm.orderExpirationTimeStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={paymentCashForm.orderExpirationTimeValue}
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderExpirationTimeValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After hours, if the customer fails to pay
+                                overdue, the order will be automatically voided.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatically confirm receipt of order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentCashForm.orderConfirmReceiptStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderConfirmReceiptStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentCashForm.orderConfirmReceiptStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentCashForm.orderConfirmReceiptValue}
-                              onChange={(value) =>
-                                this.paymentCashFormChange({
-                                  field: 'orderConfirmReceiptValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the customer’s overdue and unprocessed
-                              pending orders will automatically confirm the receipt.
-                      </span>
-                          </div>
+                    <FormItem label="Automatically confirm receipt of order">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentCashForm.orderConfirmReceiptStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentCashFormChange({
+                                field: 'orderConfirmReceiptStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentCashForm.orderConfirmReceiptStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={paymentCashForm.orderConfirmReceiptValue}
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderConfirmReceiptValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After days, the customer’s overdue and
+                                unprocessed pending orders will automatically
+                                confirm the receipt.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Completed orders are allowed to apply for refunds">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentCashForm.orderRefundsStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderRefundsStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentCashForm.orderRefundsStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentCashForm.orderRefundsValue}
-                              onChange={(value) =>
-                                this.paymentCashFormChange({
-                                  field: 'orderRefundsValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              Within days, customers are allowed to initiate a return
-                              and refund application, and orders that have not been
-                              shipped can be returned at any time.
-                      </span>
-                          </div>
+                    <FormItem label="Completed orders are allowed to apply for refunds">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={paymentCashForm.orderRefundsStatus}
+                            onChange={(value) =>
+                              this.paymentCashFormChange({
+                                field: 'orderRefundsStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentCashForm.orderRefundsStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={paymentCashForm.orderRefundsValue}
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderRefundsValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                Within days, customers are allowed to initiate a
+                                return and refund application, and orders that
+                                have not been shipped can be returned at any
+                                time.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatic review of pending return orders">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentCashForm.orderAutomaticReviewStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderAutomaticReviewStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentCashForm.orderAutomaticReviewStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentCashForm.orderAutomaticReviewValue}
-                              onChange={(value) =>
-                                this.paymentCashFormChange({
-                                  field: 'orderAutomaticReviewValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the merchant’s overdue and pending refund
-                              orders will be automatically approved.
-                      </span>
-                          </div>
+                    <FormItem label="Automatic review of pending return orders">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentCashForm.orderAutomaticReviewStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentCashFormChange({
+                                field: 'orderAutomaticReviewStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                        {paymentCashForm.orderAutomaticReviewStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentCashForm.orderAutomaticReviewValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderAutomaticReviewValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                After days, the merchant’s overdue and pending
+                                refund orders will be automatically approved.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
 
-                  <FormItem label="Automatic confirmation of receipt of return order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={paymentCashForm.orderAutomaticConfirmationStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderAutomaticConfirmationStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {paymentCashForm.orderAutomaticConfirmationStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={paymentCashForm.orderAutomaticConfirmationValue}
-                              onChange={(value) =>
-                                this.paymentCashFormChange({
-                                  field: 'orderAutomaticConfirmationValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              {' '}
-                        After days, the merchant will automatically confirm the
-                        receipt of the pending return order that is not
-                        processed by the merchant overdue. The return order
-                        returned by the non-express will start to count after
-                        the review is passed.
-                      </span>
-                          </div>
+                    <FormItem label="Automatic confirmation of receipt of return order">
+                      <Row>
+                        <Col span={1}>
+                          <Switch
+                            checkedChildren="On"
+                            unCheckedChildren="Off"
+                            defaultChecked={
+                              paymentCashForm.orderAutomaticConfirmationStatus
+                            }
+                            onChange={(value) =>
+                              this.paymentCashFormChange({
+                                field: 'orderAutomaticConfirmationStatus',
+                                value: value
+                              })
+                            }
+                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                </> : null
-            }
-            {
-              paymentSequence === 'Unlimited' && paymentCategory === 'Online payment' ?
-                <>
-                  <FormItem label="Order expiration time">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedOnlineForm.orderExpirationTimeStatus}
-                          onChange={(value) =>
-                            this.unlimitedOnlineFormChange({
-                              field: 'orderExpirationTimeStatus',
-                              value: value
-                            })
-                          }
-                        />
+                        {paymentCashForm.orderAutomaticConfirmationStatus ? (
+                          <Col span={20}>
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                min={1}
+                                max={9999}
+                                value={
+                                  paymentCashForm.orderAutomaticConfirmationValue
+                                }
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderAutomaticConfirmationValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}>
+                                {' '}
+                                After days, the merchant will automatically
+                                confirm the receipt of the pending return order
+                                that is not processed by the merchant overdue.
+                                The return order returned by the non-express
+                                will start to count after the review is passed.
+                              </span>
+                            </div>
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </FormItem>
+                  </>
+                ) : null}
+              </Form>
+            </TabPane>
+            <TabPane tab="Unlimited" key="Unlimited">
+              <Form
+                style={{ marginTop: 20 }}
+                layout="horizontal"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
+                labelAlign="right"
+              >
+                <FormItem label="Order expiration time">
+                  <Row>
+                    <Col span={1}>
+                      <Switch
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        defaultChecked={unlimitedForm.orderExpirationTimeStatus}
+                        onChange={(value) =>
+                          this.unlimitedFormChange({
+                            field: 'orderExpirationTimeStatus',
+                            value: value
+                          })
+                        }
+                      />
+                    </Col>
+                    {unlimitedForm.orderExpirationTimeStatus ? (
+                      <Col span={20}>
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            min={1}
+                            max={9999}
+                            value={unlimitedForm.orderExpirationTimeValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderExpirationTimeValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}>
+                            After hours, if the customer fails to pay overdue,
+                            the order will be automatically voided.
+                          </span>
+                        </div>
                       </Col>
-                      {unlimitedOnlineForm.orderExpirationTimeStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedOnlineForm.orderExpirationTimeValue}
-                              onChange={(value) =>
-                                this.unlimitedOnlineFormChange({
-                                  field: 'orderExpirationTimeValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After hours, if the customer fails to pay overdue, the
-                              order will be automatically voided.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                    ) : null}
+                  </Row>
+                </FormItem>
 
-                  <FormItem label="Automatically confirm receipt of order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedOnlineForm.orderConfirmReceiptStatus}
-                          onChange={(value) =>
-                            this.unlimitedOnlineFormChange({
-                              field: 'orderConfirmReceiptStatus',
-                              value: value
-                            })
-                          }
-                        />
+                <FormItem label="Automatically confirm receipt of order">
+                  <Row>
+                    <Col span={1}>
+                      <Switch
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        defaultChecked={unlimitedForm.orderConfirmReceiptStatus}
+                        onChange={(value) =>
+                          this.unlimitedFormChange({
+                            field: 'orderConfirmReceiptStatus',
+                            value: value
+                          })
+                        }
+                      />
+                    </Col>
+                    {unlimitedForm.orderConfirmReceiptStatus ? (
+                      <Col span={20}>
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            min={1}
+                            max={9999}
+                            value={unlimitedForm.orderConfirmReceiptValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderConfirmReceiptValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}>
+                            After days, the customer’s overdue and unprocessed
+                            pending orders will automatically confirm the
+                            receipt.
+                          </span>
+                        </div>
                       </Col>
-                      {unlimitedOnlineForm.orderConfirmReceiptStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedOnlineForm.orderConfirmReceiptValue}
-                              onChange={(value) =>
-                                this.unlimitedOnlineFormChange({
-                                  field: 'orderConfirmReceiptValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the customer’s overdue and unprocessed
-                              pending orders will automatically confirm the receipt.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                    ) : null}
+                  </Row>
+                </FormItem>
 
-                  <FormItem label="Completed orders are allowed to apply for refunds">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedOnlineForm.orderRefundsStatus}
-                          onChange={(value) =>
-                            this.unlimitedOnlineFormChange({
-                              field: 'orderRefundsStatus',
-                              value: value
-                            })
-                          }
-                        />
+                <FormItem label="Completed orders are allowed to apply for refunds">
+                  <Row>
+                    <Col span={1}>
+                      <Switch
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        defaultChecked={unlimitedForm.orderRefundsStatus}
+                        onChange={(value) =>
+                          this.unlimitedFormChange({
+                            field: 'orderRefundsStatus',
+                            value: value
+                          })
+                        }
+                      />
+                    </Col>
+                    {unlimitedForm.orderRefundsStatus ? (
+                      <Col span={20}>
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            min={1}
+                            max={9999}
+                            value={unlimitedForm.orderRefundsValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderRefundsValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}>
+                            Within days, customers are allowed to initiate a
+                            return and refund application, and orders that have
+                            not been shipped can be returned at any time.
+                          </span>
+                        </div>
                       </Col>
-                      {unlimitedOnlineForm.orderRefundsStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedOnlineForm.orderRefundsValue}
-                              onChange={(value) =>
-                                this.unlimitedOnlineFormChange({
-                                  field: 'orderRefundsValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              Within days, customers are allowed to initiate a return
-                              and refund application, and orders that have not been
-                              shipped can be returned at any time.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                    ) : null}
+                  </Row>
+                </FormItem>
 
-                  <FormItem label="Automatic review of pending return orders">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedOnlineForm.orderAutomaticReviewStatus}
-                          onChange={(value) =>
-                            this.unlimitedOnlineFormChange({
-                              field: 'orderAutomaticReviewStatus',
-                              value: value
-                            })
-                          }
-                        />
+                <FormItem label="Automatic review of pending return orders">
+                  <Row>
+                    <Col span={1}>
+                      <Switch
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        defaultChecked={
+                          unlimitedForm.orderAutomaticReviewStatus
+                        }
+                        onChange={(value) =>
+                          this.unlimitedFormChange({
+                            field: 'orderAutomaticReviewStatus',
+                            value: value
+                          })
+                        }
+                      />
+                    </Col>
+                    {unlimitedForm.orderAutomaticReviewStatus ? (
+                      <Col span={20}>
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            min={1}
+                            max={9999}
+                            value={unlimitedForm.orderAutomaticReviewValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderAutomaticReviewValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}>
+                            After days, the merchant’s overdue and pending
+                            refund orders will be automatically approved.
+                          </span>
+                        </div>
                       </Col>
-                      {unlimitedOnlineForm.orderAutomaticReviewStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedOnlineForm.orderAutomaticReviewValue}
-                              onChange={(value) =>
-                                this.unlimitedOnlineFormChange({
-                                  field: 'orderAutomaticReviewValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the merchant’s overdue and pending refund
-                              orders will be automatically approved.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
+                    ) : null}
+                  </Row>
+                </FormItem>
 
-                  <FormItem label="Automatic confirmation of receipt of return order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedOnlineForm.orderAutomaticConfirmationStatus}
-                          onChange={(value) =>
-                            this.unlimitedOnlineFormChange({
-                              field: 'orderAutomaticConfirmationStatus',
-                              value: value
-                            })
-                          }
-                        />
+                <FormItem label="Automatic confirmation of receipt of return order">
+                  <Row>
+                    <Col span={1}>
+                      <Switch
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        defaultChecked={
+                          unlimitedForm.orderAutomaticConfirmationStatus
+                        }
+                        onChange={(value) =>
+                          this.unlimitedFormChange({
+                            field: 'orderAutomaticConfirmationStatus',
+                            value: value
+                          })
+                        }
+                      />
+                    </Col>
+                    {unlimitedForm.orderAutomaticConfirmationStatus ? (
+                      <Col span={20}>
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            min={1}
+                            max={9999}
+                            value={
+                              unlimitedForm.orderAutomaticConfirmationValue
+                            }
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderAutomaticConfirmationValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}>
+                            {' '}
+                            After days, the merchant will automatically confirm
+                            the receipt of the pending return order that is not
+                            processed by the merchant overdue. The return order
+                            returned by the non-express will start to count
+                            after the review is passed.
+                          </span>
+                        </div>
                       </Col>
-                      {unlimitedOnlineForm.orderAutomaticConfirmationStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedOnlineForm.orderAutomaticConfirmationValue}
-                              onChange={(value) =>
-                                this.unlimitedOnlineFormChange({
-                                  field: 'orderAutomaticConfirmationValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              {' '}
-                        After days, the merchant will automatically confirm the
-                        receipt of the pending return order that is not
-                        processed by the merchant overdue. The return order
-                        returned by the non-express will start to count after
-                        the review is passed.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                </> : null
-            }
-            {
-              paymentSequence === 'Unlimited' && paymentCategory === 'Cash' ?
-                <>
-                  <FormItem label="Order expiration time">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedCashForm.orderExpirationTimeStatus}
-                          onChange={(value) =>
-                            this.unlimitedCashFormChange({
-                              field: 'orderExpirationTimeStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {unlimitedCashForm.orderExpirationTimeStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedCashForm.orderExpirationTimeValue}
-                              onChange={(value) =>
-                                this.unlimitedCashFormChange({
-                                  field: 'orderExpirationTimeValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After hours, if the customer fails to pay overdue, the
-                              order will be automatically voided.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                  <FormItem label="Automatically confirm receipt of order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedCashForm.orderConfirmReceiptStatus}
-                          onChange={(value) =>
-                            this.unlimitedCashFormChange({
-                              field: 'orderConfirmReceiptStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {unlimitedCashForm.orderConfirmReceiptStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedCashForm.orderConfirmReceiptValue}
-                              onChange={(value) =>
-                                this.unlimitedCashFormChange({
-                                  field: 'orderConfirmReceiptValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the customer’s overdue and unprocessed
-                              pending orders will automatically confirm the receipt.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                  <FormItem label="Completed orders are allowed to apply for refunds">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedCashForm.orderRefundsStatus}
-                          onChange={(value) =>
-                            this.unlimitedCashFormChange({
-                              field: 'orderRefundsStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {unlimitedCashForm.orderRefundsStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedCashForm.orderRefundsValue}
-                              onChange={(value) =>
-                                this.unlimitedCashFormChange({
-                                  field: 'orderRefundsValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              Within days, customers are allowed to initiate a return
-                              and refund application, and orders that have not been
-                              shipped can be returned at any time.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                  <FormItem label="Automatic review of pending return orders">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedCashForm.orderAutomaticReviewStatus}
-                          onChange={(value) =>
-                            this.unlimitedCashFormChange({
-                              field: 'orderAutomaticReviewStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {unlimitedCashForm.orderAutomaticReviewStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedCashForm.orderAutomaticReviewValue}
-                              onChange={(value) =>
-                                this.unlimitedCashFormChange({
-                                  field: 'orderAutomaticReviewValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              After days, the merchant’s overdue and pending refund
-                              orders will be automatically approved.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                  <FormItem label="Automatic confirmation of receipt of return order">
-                    <Row>
-                      <Col span={1}>
-                        <Switch
-                          checkedChildren="On"
-                          unCheckedChildren="Off"
-                          defaultChecked={unlimitedCashForm.orderAutomaticConfirmationStatus}
-                          onChange={(value) =>
-                            this.unlimitedCashFormChange({
-                              field: 'orderAutomaticConfirmationStatus',
-                              value: value
-                            })
-                          }
-                        />
-                      </Col>
-                      {unlimitedCashForm.orderAutomaticConfirmationStatus ? (
-                        <Col span={20}>
-                          <div style={styles.inputStyle}>
-                            <InputNumber
-                              min={1}
-                              max={9999}
-                              value={unlimitedCashForm.orderAutomaticConfirmationValue}
-                              onChange={(value) =>
-                                this.unlimitedCashFormChange({
-                                  field: 'orderAutomaticConfirmationValue',
-                                  value: value
-                                })
-                              }
-                            />
-                            <span style={{ marginLeft: 10 }}>
-                              {' '}
-                        After days, the merchant will automatically confirm the
-                        receipt of the pending return order that is not
-                        processed by the merchant overdue. The return order
-                        returned by the non-express will start to count after
-                        the review is passed.
-                      </span>
-                          </div>
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </FormItem>
-
-                </> : null
-            }
-
-
-          </Form>
+                    ) : null}
+                  </Row>
+                </FormItem>
+              </Form>
+            </TabPane>
+          </Tabs>
         </div>
         <div className="bar-button">
           <Button
@@ -1076,6 +893,11 @@ const styles = {
   inputStyle: {
     display: 'inline-block',
     marginLeft: '20px'
+  },
+  tipsStyle: {
+    fontSize: 16,
+    lineHeight: 1,
+    margin: '20px 0 10px 0'
   }
 } as any;
 

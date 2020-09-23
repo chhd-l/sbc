@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Icon, Input, Checkbox, Button, message } from 'antd';
-import { noop, util } from 'qmkit';
+import { cache, noop, util } from 'qmkit';
 import { Relax } from 'plume2';
 import copy from 'copy-to-clipboard'; //拷贝插件
 
@@ -222,7 +222,11 @@ export default class DetailPublish extends React.Component<any, any> {
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />
             <span style={{ marginLeft: 5, color: '#8f0101' }}>
-              https://shopuat.466920.com/recommendation/{getLink}
+              {
+                JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
+                  .supplierWebsite
+              }
+              recommendation/{getLink}
             </span>
           </div>
         </div>
@@ -230,7 +234,10 @@ export default class DetailPublish extends React.Component<any, any> {
           <Button
             onClick={() =>
               this.copyLink(
-                `https://shopuat.466920.com/recommendation/${getLink}`
+                `${
+                  JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
+                    .supplierWebsite
+                }/recommendation/${getLink}`
               )
             }
           >

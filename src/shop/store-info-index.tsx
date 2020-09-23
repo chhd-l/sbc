@@ -70,10 +70,10 @@ export default class ShopInfo extends React.Component<any, any> {
               />
               <Tabs.TabPane tab={<FormattedMessage id="footer" />} key="3" />
               <Tabs.TabPane tab={<FormattedMessage id="consent" />} key="4" />
-              <Tabs.TabPane
+              {/* <Tabs.TabPane
                 tab={<FormattedMessage id="footerConfig" />}
                 key="5"
-              />
+              /> */}
             </Tabs>
             <div className="steps-content" style={{ marginTop: 20 }}>
               {PAIN[currentTab]}

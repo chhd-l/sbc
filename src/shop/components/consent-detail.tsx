@@ -174,7 +174,7 @@ export default class StepConsentDetail extends Component<any, any> {
         }
       });
     }
-
+    list = []
     setTimeout(()=>{
       list.push(
         this.state.a,
@@ -195,7 +195,7 @@ export default class StepConsentDetail extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { editId, editList, consentForm } = this.props.relaxProps;
+    const { editId, consentLanguage, consentForm, onFormChange } = this.props.relaxProps;
     if ( editId != '000') {
       this.setState({
         TitleType: this.state.editList.consentTitleType == 'Content' ? true : false,
@@ -203,6 +203,9 @@ export default class StepConsentDetail extends Component<any, any> {
         value: this.state.editList.consentPage.split(',')
 
       });
+    }else {
+      consentForm.languageTypeId = consentLanguage[0].id
+      onFormChange(consentForm)
     }
   }
 
@@ -338,9 +341,6 @@ export default class StepConsentDetail extends Component<any, any> {
       }
     };
 
-    setTimeout(()=>{
-      console.log(editList.consentId,22222);
-    })
 
     return (
       <div className="consent-detail">

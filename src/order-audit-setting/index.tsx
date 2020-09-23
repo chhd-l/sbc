@@ -34,15 +34,122 @@ class OrderSetting extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Audit Setting',
+
       isAudit: false,
       isPetInfo: false,
+
+      configForm: {
+        autoAuditId: 0,
+        manualAuditId: 0,
+        petInfoId: 0
+      },
+
       visibleAuditConfig: false,
-      configData: []
+      configData: [],
+      loading: false
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getAuditConfig();
+  }
+
+  configFormChange = ({ field, value }) => {
+    const { configForm } = this.state;
+    configForm[field] = value;
+    this.setState({
+      configForm
+    });
+  };
+
+  getAuditConfig = () => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getAuditConfig()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let configList = res.context;
+          if (configList) {
+            const { configForm } = this.state;
+            let isAudit = false;
+            let isPetInfo = false;
+            for (let i = 0; i < configList.length; i++) {
+              if (
+                configList[i].configType &&
+                configList[i].configType === 'no_audit_required'
+              ) {
+                configForm.autoAuditId = configList[i].id;
+                isAudit = configList[i].status === 1 ? false : true;
+              }
+              if (
+                configList[i].configType &&
+                configList[i].configType ===
+                  'audit_according_to_product_category'
+              ) {
+                configForm.manualAuditId = configList[i].id;
+              }
+              if (
+                configList[i].configType &&
+                configList[i].configType === 'pet_information_as_reference'
+              ) {
+                configForm.petInfoId = configList[i].id;
+                isPetInfo = configList[i].status === 0 ? false : true;
+              }
+            }
+            this.setState({
+              isAudit,
+              isPetInfo,
+              configForm,
+              loading: false
+            });
+          }
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Get config failed');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err || 'Get config failed');
+      });
+  };
   save = () => {
-    console.log('save');
+    const { configForm, isAudit, isPetInfo } = this.state;
+    let params = {
+      requestList: [
+        {
+          id: configForm.autoAuditId,
+          status: isAudit ? 0 : 1
+        },
+        {
+          id: configForm.manualAuditId,
+          status: isAudit ? 1 : 0
+        },
+        {
+          id: configForm.petInfoId,
+          status: isPetInfo ? 1 : 0
+        }
+      ]
+    };
+    webapi
+      .saveAuditConfig(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Save successful');
+        } else {
+          message.error(res.message || 'Save config failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Save config failed');
+      });
   };
 
   render() {
@@ -50,6 +157,7 @@ class OrderSetting extends Component<any, any> {
       title,
       isAudit,
       isPetInfo,
+      configForm,
       visibleAuditConfig,
       configData
     } = this.state;
@@ -93,55 +201,62 @@ class OrderSetting extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
-          <Form layout="horizontal" {...formItemLayout} labelAlign="left">
-            <FormItem label="No audit required">
-              <Switch
-                size="small"
-                checked={!isAudit}
-                onClick={(checked) => {
-                  this.setState({
-                    isAudit: !checked
-                  });
-                }}
-              ></Switch>
-            </FormItem>
-            <FormItem label="Audit according to product category">
-              <Switch
-                size="small"
-                checked={isAudit}
-                onClick={(checked) => {
-                  this.setState({
-                    isAudit: checked
-                  });
-                }}
-              ></Switch>
-              {isAudit ? (
-                <Tooltip placement="top" title="Edit">
-                  <a
-                    onClick={() => {
-                      this.setState({
-                        visibleAuditConfig: true
-                      });
-                    }}
-                    style={{ marginLeft: 10 }}
-                    href="javascript:void(0)"
-                    className="iconfont iconEdit"
-                  ></a>
-                </Tooltip>
-              ) : null}
-            </FormItem>
-            <FormItem label="Pet information as a reference">
-              <Switch
-                size="small"
-                checked={isPetInfo}
-                onClick={(checked) => {
-                  this.setState({
-                    isPetInfo: checked
-                  });
-                }}
-              ></Switch>
-            </FormItem>
-          </Form>
+          <Spin spinning={this.state.loading}>
+            <Form layout="horizontal" {...formItemLayout} labelAlign="left">
+              <FormItem label="Auto audit">
+                <Switch
+                  size="small"
+                  checked={!isAudit}
+                  onClick={(checked) => {
+                    this.setState({
+                      isAudit: !checked,
+                      visibleAuditConfig: !checked,
+                      isPetInfo: false
+                    });
+                  }}
+                ></Switch>
+              </FormItem>
+              <FormItem label="Manual audit">
+                <Switch
+                  size="small"
+                  checked={isAudit}
+                  onClick={(checked) => {
+                    this.setState({
+                      isAudit: checked,
+                      visibleAuditConfig: checked,
+                      isPetInfo: false
+                    });
+                  }}
+                ></Switch>
+                {isAudit ? (
+                  <Tooltip placement="top" title="Edit">
+                    <a
+                      onClick={() => {
+                        this.setState({
+                          visibleAuditConfig: true
+                        });
+                      }}
+                      style={{ marginLeft: 10 }}
+                      href="javascript:void(0)"
+                      className="iconfont iconEdit"
+                    ></a>
+                  </Tooltip>
+                ) : null}
+              </FormItem>
+              <FormItem label="Pet information as a reference">
+                <Switch
+                  size="small"
+                  disabled={!isAudit}
+                  checked={isPetInfo}
+                  onClick={(checked) => {
+                    this.setState({
+                      isPetInfo: checked
+                    });
+                  }}
+                ></Switch>
+              </FormItem>
+            </Form>
+          </Spin>
         </div>
         <Modal
           width="800px"

@@ -52,7 +52,6 @@ export default class BillingDetails extends React.Component<any, any> {
     });
   };
   next() {
-    console.log(this.state.current);
     if (this.state.current == 1) {
       if (Number(localStorage.getItem('productselect')) > 0) {
         const current = this.state.current + 1;
@@ -91,7 +90,6 @@ export default class BillingDetails extends React.Component<any, any> {
     } else {
       message.error('Recommended product cannot be empty !');
     }
-    console.log(this.store.state().get('createLink').toJS(), 1111);
   };
 
   getEnableFlag() {

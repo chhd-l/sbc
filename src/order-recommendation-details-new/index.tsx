@@ -76,8 +76,8 @@ export default class BillingDetails extends React.Component<any, any> {
 
   handleSend = (e) => {
     this.child.handleOk();
-    console.log(this.child.handleOk, 2121);
   };
+
   onRef = (ref) => {
     this.child = ref;
   };

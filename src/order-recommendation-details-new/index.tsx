@@ -92,16 +92,6 @@ export default class BillingDetails extends React.Component<any, any> {
     }
   };
 
-  getEnableFlag() {
-    this.setState(
-      {
-        enableFlag: true
-      },
-      () => {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxx', this.state.enableFlag);
-      }
-    );
-  }
   render() {
     const { Step } = Steps;
     const { current, enableFlag } = this.state;

@@ -6,8 +6,17 @@ export default class HomeAuthActor extends Actor {
     return {
       session: {}, //授权信息
       isAuthVisible: false, //授权modal是否显示
-      isAuthTipVisible: false //授权tip是否显示
+      isAuthTipVisible: false, //授权tip是否显示
+      tradeCustomerView: null
     };
+  }
+
+  /**
+   * 初始化授权码信息
+   */
+  @Action('home:tradeCustomerView')
+  newInit(state: IMap, res) {
+    return state.set('tradeCustomerView', res);
   }
 
   /**

@@ -133,6 +133,16 @@ export default class AppStore extends Store {
     ];
   }
 
+  //新版
+
+  newInit = async (data) => {
+    const { res } = await webapi.getTradeCustomerView(data);
+    if (res.code == Const.SUCCESS_CODE) {
+      console.log(res);
+      this.dispatch('home:tradeCustomerView', res.context);
+    }
+  };
+
   /**
    * 初始化
    */

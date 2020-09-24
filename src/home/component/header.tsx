@@ -2,7 +2,8 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { DatePicker, Icon, Select } from 'antd';
 import '../index.less';
-
+import { cache, noop } from 'qmkit';
+import moment from 'moment';
 //import { Link } from 'react-router-dom';
 //import { FormattedMessage } from 'react-intl';
 const { WeekPicker } = DatePicker;
@@ -14,15 +15,30 @@ export default class Header extends React.Component<any, any> {
     relaxProps?: {
       header: IMap;
       storeEvaluateSum: IMap;
+      newInit: Function;
     };
   };
 
   static relaxProps = {
     header: 'header',
-    storeEvaluateSum: 'storeEvaluateSum'
+    storeEvaluateSum: 'storeEvaluateSum',
+    newInit: noop
   };
 
-  dateChange = () => {};
+  dateChange = (date, dateString) => {
+    const { newInit } = this.props.relaxProps as any;
+    console.log(date.week());
+    let year = moment(
+      new Date(sessionStorage.getItem('defaultLocalDateTime'))
+    ).format('YYYY');
+    //console.log(JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)));
+    let obj = {
+      companyId: 2,
+      weekNum: date.week(),
+      year: Number(year)
+    };
+    newInit(obj);
+  };
 
   prescriberChange = () => {};
 

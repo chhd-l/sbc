@@ -77,11 +77,11 @@ export default class Line extends React.Component{
             show: false,
             normal: {
               position: 'inside',
-              formatter: (e)=>{
+              /*formatter: function(e){
                 console.log(e);
 
-                return '<div>111111111</div>'
-              },
+                return (<div>111111111</div>)
+              },*/
             },
             /*emphasis: {
               formatter: '{b}: {c}({d}%)'

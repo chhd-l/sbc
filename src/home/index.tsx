@@ -18,7 +18,12 @@ export default class HelloApp extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.store.init();
+    this.store.newInit({
+      companyId: 2,
+      weekNum: 39,
+      year: 2020
+    });
+    //this.store.init();
   }
 
   render() {

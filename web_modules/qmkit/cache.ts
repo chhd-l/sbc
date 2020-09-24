@@ -23,5 +23,6 @@ export default {
   OKTA_TOKEN: 'okta-token',
   LOGIN_ACCOUNT_NAME: 'login-account-name',
   LOGIN_EMPLOYEE_NAME: 'login-employee-name',
-  FIRST_PRESCRIBER_DATA: 'first-prescriber-data'
+  FIRST_PRESCRIBER_DATA: 'first-prescriber-data',
+  OKTA_LOGOUT: 'okta_logout'
 };

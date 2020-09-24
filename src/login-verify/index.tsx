@@ -4,25 +4,14 @@ import { StoreProvider } from 'plume2';
 import verifyForm from './components/verify-form';
 const bg_login = require('../login/img/bg_login.png');
 import AppStore from '../login/store';
-import { withOktaAuth } from '@okta/okta-react';
-import { util } from 'qmkit';
-import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default withOktaAuth(class Login extends React.Component<any, any> {
+export default class LoginVerify extends React.Component<any, any> {
   store: AppStore;
 
   constructor(props: any) {
     super(props);
     this.state = {};
-  }
-
-  componentWillMount() {
-    if (this.props.location.state && this.props.location.state.oktaLogout) {
-      util.logout(this.props.authState.isAuthenticated)
-      webapi.logout()
-      this.props.authService.logout('/');
-    };
   }
 
   componentDidMount() {
@@ -37,7 +26,7 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
       </div>
     );
   }
-})
+}
 const styles = {
   container: {
     display: 'flex',

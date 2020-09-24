@@ -73,3 +73,9 @@ export function getJwtToken(oktaToken: string) {
     body: JSON.stringify({ oktaToken: oktaToken })
   });
 }
+
+export function logout() {
+  return Fetch<TResult>('/logout', {
+      method: 'GET'
+  });
+}

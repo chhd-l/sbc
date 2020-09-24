@@ -28,9 +28,6 @@ export default class Main extends React.Component<any, any> {
   UNSAFE_componentWillMount() {
     console.log(this.props.location);
     if (this.props.location.pathname != '/implicit/callback') {
-      if (this.state.matchedPath != '/login') {
-        this.checkLogin(this.state.matchedPath);
-      }
       Fetch('/baseConfig').then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {
           if ((resIco.res as any).defaultLocalDateTime) {
@@ -46,24 +43,6 @@ export default class Main extends React.Component<any, any> {
             const linkEle = document.getElementById('icoLink') as any;
             linkEle.href = ico[0].url;
             linkEle.type = 'image/x-icon';
-          }
-        }
-      });
-      Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
-        if (resIco.res.code == Const.SUCCESS_CODE) {
-          if ((resIco.res as any).context) {
-            sessionStorage.setItem(
-              cache.SYSTEM_GET_CONFIG,
-              (resIco.res as any).context.currency.valueEn
-            ); //货币符号
-            sessionStorage.setItem(
-              cache.SYSTEM_GET_CONFIG_NAME,
-              (resIco.res as any).context.currency.name
-            ); //货币名称
-            sessionStorage.setItem(
-              cache.MAP_MODE,
-              (resIco.res as any).context.storeVO.prescriberMap
-            ); //货币名称
           }
         }
       });
@@ -85,9 +64,6 @@ export default class Main extends React.Component<any, any> {
       this.setState({
         matchedPath: nextProps.location.pathname
       });
-
-      //这里统一做权限认证;
-      this.checkLogin(nextProps.location.pathname);
     }
   }
 
@@ -134,20 +110,6 @@ export default class Main extends React.Component<any, any> {
       </div>
     );
   }
-
-  checkLogin = (path) => {
-    //这里统一做权限认证;
-    if (!util.isLogin()) {
-      history.push('/login?from=' + encodeURIComponent(path));
-    } else {
-      const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
-      const auditState = loginInfo.auditState; // 商家登录审核状态 -1:未开店(没有审核状态)  0:未审核  1:已审核  2:审核未通过
-      if (auditState !== 1) {
-        // 商家登录后未审核通过的正常跳转到{auditDidNotPass}对应的页面
-        // history.push('/login?from=' + encodeURIComponent(path));
-      }
-    }
-  };
 
   /**
    * 头部的一级菜单刷新后,初始化左侧菜单的展开菜单状态

@@ -6,9 +6,12 @@ import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
 import LoginForm from './components/login-form';
+import { withOktaAuth } from '@okta/okta-react';
+import { util, cache } from 'qmkit';
+import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class Login extends React.Component<any, any> {
+export default withOktaAuth(class Login extends React.Component<any, any> {
   store: AppStore;
 
   constructor(props: any) {
@@ -25,6 +28,15 @@ export default class Login extends React.Component<any, any> {
     });
   };
 
+  componentWillMount() {
+    if (this.props.location.state && this.props.location.state.oktaLogout) {
+      util.logout()
+      sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
+      webapi.logout()
+      this.props.authService.logout('/');
+    };
+  }
+
   componentDidMount() {
     this.store.init();
   }
@@ -37,7 +49,7 @@ export default class Login extends React.Component<any, any> {
       <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
     );
   }
-}
+})
 const styles = {
   container: {
     display: 'flex',

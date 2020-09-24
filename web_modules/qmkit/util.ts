@@ -340,7 +340,7 @@ export function requireLocalSrc(srcPath) {
  * 清除缓存并跳转登录页
  */
 
-export function logout(oktaLogined) {
+export function logout() {
   const accountName = sessionStorage.getItem(cache.LOGIN_DATA) ? JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
     .accountName : '';
   window.token = null
@@ -355,9 +355,6 @@ export function logout(oktaLogined) {
   sessionStorage.removeItem(cache.THIRD_ACTIVE);
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
   sessionStorage.removeItem('PrescriberType');
-  if(!oktaLogined) {
-    history.push('/login');
-  }
 }
 
 

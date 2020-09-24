@@ -1,23 +1,23 @@
 import { useOktaAuth } from '@okta/okta-react';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Icon, Button, message } from 'antd';
-import {  util } from 'qmkit';
+import {  cache, util } from 'qmkit';
 import * as webapi from './webapi';
 
 const OktaLogout = (props) => {
-  const [userInfo, setUserInfo] = useState(null);
   const { authState, authService } = useOktaAuth();
 
   const oktaLogout = async () => {
     if(authState.isAuthenticated) {
+      sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
       await authService.logout('/')  
     }
   }
 
   const clickLogoff = async () => {
-    util.logout(authState.isAuthenticated);
+    util.logout()
     await webapi.logout()
-    await oktaLogout();
+    await oktaLogout()
   }
 
   return (

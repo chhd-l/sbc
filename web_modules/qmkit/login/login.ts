@@ -1,4 +1,4 @@
-import { cache, Const, history, util } from 'qmkit';
+import { cache, Const, history, util, Fetch } from 'qmkit';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { message } from 'antd';
@@ -35,12 +35,12 @@ export async function login(form, oktaToken: string) {
         }
         if (res.context.accountState === 4 ) {
             message.error('Your account need to audit, will notify you by email')
-            history.push('login-verify', {oktaLogout : true})
+            history.push('login', {oktaLogout : true})
             return
         }
         if(res.context.accountState === 1) {
           message.error('Your account is disabled')
-          history.push('login-verify', {oktaLogout : true})
+          history.push('login', {oktaLogout : true})
           return
         }
       }
@@ -106,6 +106,25 @@ export async function login(form, oktaToken: string) {
           //获取小程序码的地址，保存到本地
           localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
         }
+
+        Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
+          if (resIco.res.code == Const.SUCCESS_CODE) {
+            if ((resIco.res as any).context) {
+              sessionStorage.setItem(
+                cache.SYSTEM_GET_CONFIG,
+                (resIco.res as any).context.currency.valueEn
+              ); //货币符号
+              sessionStorage.setItem(
+                cache.SYSTEM_GET_CONFIG_NAME,
+                (resIco.res as any).context.currency.name
+              ); //货币名称
+              sessionStorage.setItem(
+                cache.MAP_MODE,
+                (resIco.res as any).context.storeVO.prescriberMap
+              ); //货币名称
+            }
+          }
+        });
 
         /**
          * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店

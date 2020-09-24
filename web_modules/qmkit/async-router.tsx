@@ -29,6 +29,7 @@ export default function AsyncRoute(props: Props) {
       render={props => {
         const unAuthRoutes = fromJS(homeRoutes);
         if (unAuthRoutes.some(route => route.get('path') == props.match.path)) {
+          sessionStorage.removeItem(cache.OKTA_LOGOUT)
           // 1.不需要登录权限,直接可以访问的页面
           return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
         } else {

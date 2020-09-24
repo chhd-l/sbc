@@ -79,6 +79,8 @@ class UserList extends Component<any, any> {
         userData: userData,
         loading: false
       });
+    } else {
+      message.error(res.message || 'search failed')
     }
   };
 
@@ -95,6 +97,8 @@ class UserList extends Component<any, any> {
     const { res } = await webapi.deleteEmployeeByIds(employeeIds);
     if (res.code === 'K-000000') {
       this.getUsers();
+    }  else {
+      message.error(res.message || 'delete failed')
     }
   };
 
@@ -123,6 +127,8 @@ class UserList extends Component<any, any> {
     const { res } = await webapi.enableEmployee([record.employeeId]);
     if (res.code === 'K-000000') {
       this.getUsers();
+    }  else {
+      message.error(res.message || 'enable failed')
     }
   };
 
@@ -143,6 +149,8 @@ class UserList extends Component<any, any> {
           auditModalVisible: false
         })
         this.getUsers();
+      }  else {
+        message.error(res.message || 'audit failed')
       }
      } else {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
@@ -151,6 +159,8 @@ class UserList extends Component<any, any> {
           auditModalVisible: false
         })
         this.getUsers();
+      } else {
+        message.error(res.message || 'audit failed')
       }
      }
   }

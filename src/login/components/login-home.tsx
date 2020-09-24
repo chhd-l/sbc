@@ -13,12 +13,9 @@ const LoginHome = (props) => {
 
   useEffect(() => {
     if (authState.isAuthenticated) {
-      authService.getUser().then((info) => {
-        console.log(info)
-        if(info && info.name) {
-          login({}, authState.accessToken);
-        }
-      })
+      setTimeout(() => {
+      }, 1000);
+      login({}, authState.accessToken);
     } else {
       if (toOkta) {
         loginOkta();

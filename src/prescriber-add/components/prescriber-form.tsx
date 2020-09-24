@@ -169,7 +169,7 @@ class ClinicForm extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          this.getDetail(this.props.prescriberId);
+          this.getDetail(this.state.prescriberKeyId);
           this.getClinicsReward(id);
           this.switchTab('users');
         } else {
@@ -252,7 +252,7 @@ class ClinicForm extends React.Component<any, any> {
         firstPrescriberForm : JSON.parse(sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA))
       })
       this.props.form.setFieldsValue({
-        // id: res.context.id,
+        id: res.context.id,
         prescriberId: res.context.prescriberId,
         prescriberName: res.context.prescriberName,
         phone: res.context.phone,

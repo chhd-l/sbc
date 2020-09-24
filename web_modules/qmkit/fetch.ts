@@ -82,18 +82,18 @@ export default async function Fetch<T>(
     // 账号禁用
     if (resJSON.code === 'K-000005') {
       message.error('Your account is disabled');
-      history.push('login-verify', {oktaLogout : true})
+      // history.push('login-verify', {oktaLogout : true})
       return;
     }
 
     if (resJSON.code === 'K-000015') {
       message.error('Failed to obtain authorization');
-      history.push('login-verify', {oktaLogout : true})
+      // history.push('login-verify', {oktaLogout : true})
       return;
     }
 
     if(resJSON.code === 'K-000002') {
-      history.push('login-verify', {oktaLogout : true})
+      // history.push('login-verify', {oktaLogout : true})
       return
     }
 

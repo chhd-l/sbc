@@ -14,6 +14,8 @@ import { Headline, BreadCrumb, history } from 'qmkit';
 import Detail from './components/detail';
 import Detail2 from './components/detail2';
 import PublishButton from './components/publishButton';
+import PublishTooltip from './components/publishTooltip';
+
 import User from './components/user';
 
 import AppStore from './store';
@@ -57,6 +59,10 @@ export default class BillingDetails extends React.Component<any, any> {
       } else {
         message.error('Recommended product cannot be empty !');
       }
+    } else if (this.state.current == 2) {
+      this.createLink();
+      const current = this.state.current + 1;
+      this.setState({ current });
     } else {
       const current = this.state.current + 1;
       this.setState({ current });
@@ -67,16 +73,25 @@ export default class BillingDetails extends React.Component<any, any> {
     const current = this.state.current - 1;
     this.setState({ current });
   }
-  getEnableFlag() {
-    this.setState(
-      {
-        enableFlag: true
-      },
-      () => {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxx', this.state.enableFlag);
-      }
-    );
-  }
+
+  handleSend = (e) => {
+    this.child.handleOk();
+  };
+
+  onRef = (ref) => {
+    this.child = ref;
+  };
+
+  createLink = (e) => {
+    let createLink = this.store.state().get('createLink').toJS();
+    if (createLink.recommendationGoodsInfoRels.length > 0) {
+      this.store.onCreate(createLink);
+      //localStorage.setItem('enable', 'true');
+    } else {
+      message.error('Recommended product cannot be empty !');
+    }
+  };
+
   render() {
     const { Step } = Steps;
     const { current, enableFlag } = this.state;
@@ -148,32 +163,38 @@ export default class BillingDetails extends React.Component<any, any> {
               </div>
             ) : current == 3 ? (
               <div className="btn">
-                <PublishButton />
+                <PublishTooltip onRef={this.onRef} />
               </div>
             ) : null}
           </div>
           <div className="steps-action">
-            {current < steps.length - 1 && (
+            {current < steps.length - 2 && (
               <Button type="primary" shape="round" onClick={() => this.next()}>
                 Next
+              </Button>
+            )}
+            {current === 2 && (
+              <Button type="primary" shape="round" onClick={() => this.next()}>
+                Create Link
+              </Button>
+            )}
+            {current > 0 && (
+              <Button
+                shape="round"
+                style={{ margin: '0 20px' }}
+                onClick={() => this.prev()}
+              >
+                Previous
               </Button>
             )}
             {current === steps.length - 1 && (
               <Button
                 type="primary"
                 shape="round"
-                onClick={() => message.success('Processing complete!')}
-              >
-                Done
-              </Button>
-            )}
-            {current > 0 && (
-              <Button
-                shape="round"
                 style={{ margin: '0 8px' }}
-                onClick={() => this.prev()}
+                onClick={this.handleSend}
               >
-                Previous
+                Send
               </Button>
             )}
           </div>

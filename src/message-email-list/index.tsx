@@ -254,7 +254,7 @@ export default class ClinicList extends Component<any, any> {
               : +text === 1
               ? 'To do'
               : +text === 2
-              ? 'Finsh'
+              ? 'Finish'
               : ''}
           </span>
         )

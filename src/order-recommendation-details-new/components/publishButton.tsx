@@ -46,7 +46,6 @@ export default class PublishButton extends React.Component<any, any> {
       this.setState({
         visible: res
       });
-      console.log('xxxxxxxxxxxxxxxxxxxxx');
       localStorage.setItem('enable', 'true');
     } else {
       message.error('Recommended product cannot be empty !');

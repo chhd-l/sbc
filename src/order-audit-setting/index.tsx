@@ -46,11 +46,13 @@ class OrderSetting extends Component<any, any> {
 
       visibleAuditConfig: false,
       configData: [],
-      loading: false
+      loading: false,
+      categoryLoading: false
     };
   }
   componentDidMount() {
     this.getAuditConfig();
+    this.getGoodsCategory();
   }
 
   configFormChange = ({ field, value }) => {
@@ -151,6 +153,55 @@ class OrderSetting extends Component<any, any> {
         message.error(err || 'Save config failed');
       });
   };
+  getGoodsCategory = () => {
+    webapi
+      .getGoodsCategory()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            configData: res.context,
+            categoryLoading: false
+          });
+        } else {
+          this.setState({
+            categoryLoading: false
+          });
+          message.error(res.message || 'Get goods category failed!');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          categoryLoading: false
+        });
+        message.error(err || 'Get goods category failed!');
+      });
+  };
+  updateCategoryStatus = (params) => {
+    this.setState({
+      categoryLoading: true
+    });
+    webapi
+      .updateCategoryStatus(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getGoodsCategory();
+          message.success(res.message || 'Update successful');
+        } else {
+          this.setState({
+            categoryLoading: false
+          });
+          message.error(res.message || 'Update failed');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          categoryLoading: false
+        });
+        message.error(err || 'Update failed');
+      });
+  };
 
   render() {
     const {
@@ -159,7 +210,8 @@ class OrderSetting extends Component<any, any> {
       isPetInfo,
       configForm,
       visibleAuditConfig,
-      configData
+      configData,
+      categoryLoading
     } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -175,23 +227,34 @@ class OrderSetting extends Component<any, any> {
     const columns = [
       {
         title: 'Category',
-        dataIndex: 'category',
-        key: 'category',
+        dataIndex: 'parentCateName',
+        key: 'parentCateName',
         width: '33%'
       },
       {
         title: 'Superior category',
-        dataIndex: 'superiorCategory',
-        key: 'superiorCategory',
+        dataIndex: 'cateName',
+        key: 'cateName',
         width: '33%'
       },
 
       {
         title: 'Need audit',
-        dataIndex: 'needAudit',
-        key: 'needAudit',
+        dataIndex: 'status',
+        key: 'status',
         width: '33%',
-        render: () => <Switch checked></Switch>
+        render: (text, record) => (
+          <Switch
+            checked={record.status}
+            onClick={(checked) => {
+              let params = {
+                cateId: record.cateId,
+                status: checked ? 1 : 0
+              };
+              this.updateCategoryStatus(params);
+            }}
+          ></Switch>
+        )
       }
     ];
 
@@ -288,6 +351,7 @@ class OrderSetting extends Component<any, any> {
             categories
           </p>
           <Table
+            loading={categoryLoading}
             rowKey="id"
             columns={columns}
             dataSource={configData}

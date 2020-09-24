@@ -34,6 +34,10 @@ export default class DetailPublish extends React.Component<any, any> {
     };
   }
 
+  componentDidMount() {
+    this.props.onRef(this);
+  }
+
   verification = () => {
     const { sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
@@ -256,12 +260,12 @@ export default class DetailPublish extends React.Component<any, any> {
             The share link has been generated and will be invalid after 7 days
           </span>
         </div>
-        <Button key="back" onClick={this.handleCancel}>
+        {/*<Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
-        </Button>
+        </Button>*/}
       </div>
     );
   }

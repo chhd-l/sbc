@@ -38,12 +38,14 @@ export default class AppStore extends Store {
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
-    let obj = { linkStatus: 2 };
+    let obj = {
+      linkStatus: 2,
+      prescriberId: JSON.parse(sessionStorage.getItem('PrescriberType')).value
+    };
 
     if (key != '0') {
       obj.linkStatus = key == 'Invalid' ? 1 : 0;
     }
-    console.log(obj);
 
     webapi
       .fetchOrderList({ ...obj, ...form, pageNum, pageSize })

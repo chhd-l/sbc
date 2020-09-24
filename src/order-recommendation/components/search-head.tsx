@@ -223,11 +223,24 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={this._renderClinicSelect()}
+                    disabled={
+                      JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                        .clinicsIds != null
+                        ? true
+                        : null
+                    }
                     onChange={(e) => {
                       this.setState({
                         clinicSelectValue: (e.target as any).value
                       });
                     }}
+                    value={
+                      JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                        .clinicsIds != null
+                        ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                            .children
+                        : this.state.clinicSelectValue
+                    }
                     /* onChange={(e) => {
                       let a = e.target.value.split(',');
                       console.log(a.map(Number), 111);
@@ -380,6 +393,12 @@ export default class SearchHead extends Component<any, any> {
   _renderClinicSelect = () => {
     return (
       <Select
+        disabled={
+          JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
+          null
+            ? true
+            : null
+        }
         onChange={(val, a) => {
           this.setState({
             clinicSelect: val

@@ -136,10 +136,30 @@ export default class AppStore extends Store {
   //新版
 
   newInit = async (data) => {
-    const { res } = await webapi.getTradeCustomerView(data);
-    if (res.code == Const.SUCCESS_CODE) {
-      console.log(res);
-      this.dispatch('home:tradeCustomerView', res.context);
+    const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(
+      data
+    );
+    const { res: getGoodsInfoTopView } = await webapi.getGoodsInfoTopView(data);
+    const { res: getPrescriberTrendView } = await webapi.getPrescriberTrendView(
+      data
+    );
+    const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(
+      data
+    );
+    const {
+      res: getTrafficDashboardView
+    } = await webapi.getTrafficDashboardView(data);
+
+    console.log(getGoodsInfoTopView, 1111111111);
+    if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
+      this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
+      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
+      this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
+      this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
+      this.dispatch(
+        'home:trafficDashboardView',
+        getTrafficDashboardView.context
+      );
     }
   };
 

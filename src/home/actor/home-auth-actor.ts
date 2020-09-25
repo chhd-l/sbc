@@ -7,7 +7,11 @@ export default class HomeAuthActor extends Actor {
       session: {}, //授权信息
       isAuthVisible: false, //授权modal是否显示
       isAuthTipVisible: false, //授权tip是否显示
-      tradeCustomerView: null
+      tradeCustomerView: null,
+      goodsInfoTopView: null,
+      prescriberTrendView: null,
+      prescriberTopView: null,
+      trafficDashboardView: null
     };
   }
 
@@ -15,8 +19,24 @@ export default class HomeAuthActor extends Actor {
    * 初始化授权码信息
    */
   @Action('home:tradeCustomerView')
-  newInit(state: IMap, res) {
+  tradeCustomerView(state: IMap, res) {
     return state.set('tradeCustomerView', res);
+  }
+  @Action('home:goodsInfoTopView')
+  goodsInfoTopView(state: IMap, res) {
+    return state.set('goodsInfoTopView', res);
+  }
+  @Action('home:prescriberTrendView')
+  prescriberTrendView(state: IMap, res) {
+    return state.set('prescriberTrendView', res);
+  }
+  @Action('home:prescriberTopView')
+  prescriberTopView(state: IMap, res) {
+    return state.set('prescriberTopView', res);
+  }
+  @Action('home:trafficDashboardView')
+  trafficDashboardView(state: IMap, res) {
+    return state.set('trafficDashboardView', res);
   }
 
   /**

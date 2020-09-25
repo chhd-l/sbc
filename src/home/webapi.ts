@@ -25,8 +25,22 @@ export const getTransactionTrendView = (params) => {
   });
 };
 
+export const getGoodsInfoTopView = (params) => {
+  return Fetch('/dashboard/goodsInfoTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
 export const getPrescriberTopView = (params) => {
   return Fetch('/dashboard/prescriberTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTrafficDashboardView = (params) => {
+  return Fetch('/dashboard/trafficDashboardView', {
     method: 'POST',
     body: JSON.stringify(params)
   });

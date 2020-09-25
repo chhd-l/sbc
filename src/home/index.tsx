@@ -7,6 +7,7 @@ import TodoItems from './component/todo-items';
 import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';
+
 import { cache } from 'qmkit';
 
 @StoreProvider(AppStore, { debug: __DEV__ })

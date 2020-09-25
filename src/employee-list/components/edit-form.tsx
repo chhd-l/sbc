@@ -298,7 +298,7 @@ export default class EditForm extends React.Component<any, any> {
                   }
                 }
               ]
-            })(<Input disabled={editDisable} placeholder="0-50 characters" />)}
+            })(<Input disabled={_state.get('edit')} placeholder="0-50 characters" />)}
           </FormItem>
 
           <FormItem
@@ -580,15 +580,15 @@ export default class EditForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem> */}
 
-          {_state.get('edit') ? (
+          {/* {_state.get('edit') ? (
             <FormItem {...formItemLayout} label="Reset Password">
               <Switch
                 onChange={(e) => this.setState({ changePassword: e.valueOf() })}
               />
             </FormItem>
-          ) : null}
+          ) : null} */}
 
-          {this.state.changePassword ? (
+          {/* {this.state.changePassword ? (
             <div>
               <FormItem
                 {...formItemLayout}
@@ -623,15 +623,8 @@ export default class EditForm extends React.Component<any, any> {
                   ]
                 })(<Input type="password" />)}
               </FormItem>
-              {/* <FormItem {...formItemLayout} colon={false} label=" ">
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    {getFieldDecorator('isSendPassword')(
-                      <Checkbox>发送账号到员工手机</Checkbox>
-                    )}
-                  </div>
-                </FormItem> */}
             </div>
-          ) : null}
+          ) : null} */}
 
           {/* {_state.get('edit') ? null : (
             <FormItem {...formItemLayout} colon={false} label=" ">
@@ -684,7 +677,7 @@ export default class EditForm extends React.Component<any, any> {
   _renderPerscirbersOption() {
     return this.state.clinicsLites.map((option) => {
       return (
-        <Option value={option.prescriberId} key={option.prescriberId}>
+        <Option value={option.id} key={option.id}>
           {option.prescriberId}-{option.prescriberName}
         </Option>
       );

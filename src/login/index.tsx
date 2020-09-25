@@ -30,10 +30,10 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   componentWillMount() {
     if (this.props.location.state && this.props.location.state.oktaLogout) {
+      this.props.authService.logout('/');
       util.logout()
       sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
       webapi.logout()
-      this.props.authService.logout('/');
     };
   }
 

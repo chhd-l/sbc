@@ -15,9 +15,9 @@ const OktaLogout = (props) => {
   }
 
   const clickLogoff = async () => {
+    await oktaLogout()
     util.logout()
     await webapi.logout()
-    await oktaLogout()
   }
 
   return (

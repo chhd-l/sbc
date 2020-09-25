@@ -153,7 +153,7 @@ class UserModal extends Component<any, any> {
                       }
                     }
                   ]
-                })(<Input placeholder="0-50 characters" />)}
+                })(<Input disabled={this.props.userForm.id} placeholder="0-50 characters" />)}
               </FormItem>
             </Col>
           </Row>

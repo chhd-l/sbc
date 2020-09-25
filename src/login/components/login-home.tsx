@@ -25,7 +25,7 @@ const LoginHome = (props) => {
     }
   }, [authState, authService]);
 
-  return authState.isAuthenticated || toOkta ? null : (
+  return authState.isAuthenticated || toOkta ||  sessionStorage.getItem(cache.OKTA_LOGOUT) === 'true' ? null : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>

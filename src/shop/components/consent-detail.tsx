@@ -384,7 +384,7 @@ export default class StepConsentDetail extends Component<any, any> {
                 defaultValue={
                   editList.filedType ? editList.filedType : 'Optional'
                 }
-                label="Filed type"
+                label="Field type"
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;

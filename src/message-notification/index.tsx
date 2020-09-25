@@ -364,7 +364,7 @@ class Notification extends Component<any, any> {
                 </FormItem>
                 <FormItem label="Email Template">
                   <Select
-                    defaultValue={selectedForm.selectedTemplateId}
+                    value={selectedForm.selectedTemplateId}
                     onChange={(value, option) =>
                       this.templateChange(value, option)
                     }

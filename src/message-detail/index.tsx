@@ -779,6 +779,10 @@ class MessageDetails extends Component<any, any> {
                       {getFieldDecorator('objectNo', {
                         rules: [
                           {
+                            required: true,
+                            message: 'Please Select Object No!'
+                          },
+                          {
                             max: 50,
                             message: 'Object No exceed the maximum length!'
                           }

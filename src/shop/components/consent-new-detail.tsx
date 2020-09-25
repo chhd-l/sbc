@@ -203,7 +203,7 @@ export default class StepNewConsent extends Component<any, any> {
             <FormItem>
               <SelectGroup
                 defaultValue="Optional"
-                label="Filed type"
+                label="Field type"
                 style={{ width: 280 }}
                 onChange={(value) => {
                   value = value === '' ? null : value;

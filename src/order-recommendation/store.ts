@@ -40,7 +40,9 @@ export default class AppStore extends Store {
     const key = this.state().getIn(['tab', 'key']);
     let obj = {
       linkStatus: 2,
-      prescriberId: JSON.parse(sessionStorage.getItem('PrescriberType')).value
+      prescriberId: sessionStorage.getItem('PrescriberType')
+        ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+        : ''
     };
 
     if (key != '0') {

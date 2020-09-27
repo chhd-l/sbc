@@ -9,14 +9,20 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
+
 export default class Line extends React.Component{
-  constructor(props, ctx) {
+
+  constructor(props) {
     super(props);
+    this.state = {
+      data: null
+    };
   }
-  componentDidMount(){
-  }
+
+
+
   getOption =()=> {
-    const { yName, unit } = this.props
+    const { yName, unit, data } = this.props
     let option = {
       backgroundColor:'',
       tooltip: {
@@ -41,7 +47,7 @@ export default class Line extends React.Component{
               fontsize: '11'
             }
           },
-          data: ['Week-1', 'Week-2', 'Week-3', 'WTD'],
+          data: data.weekNumList,
         }
       ],
       yAxis: [
@@ -101,7 +107,7 @@ export default class Line extends React.Component{
               color: '#F5828E',
             }
           },
-          data: [2.6, 5.9, 9.0, 26.4]
+          data: data.reward
         },
         {
           name: yName.y2,
@@ -115,7 +121,7 @@ export default class Line extends React.Component{
             }
           },
           yAxisIndex: 1,
-          data: [2.0, 2.2, 3.3, 4.5]
+          data: data.activeRate
         }
       ]
     }

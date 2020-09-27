@@ -11,6 +11,13 @@ const { Option } = Select;
 
 @Relax
 export default class Header extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      prescribers: ''
+    };
+  }
+
   props: {
     relaxProps?: {
       header: IMap;
@@ -25,9 +32,16 @@ export default class Header extends React.Component<any, any> {
     newInit: noop
   };
 
+  componentDidMount() {
+    //console.log(JSON.parse(sessionStorage.getItem('s2b-employee@data')),11111111111111111);
+    this.setState({
+      prescribers: JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+        .prescribers
+    });
+  }
+
   dateChange = (date, dateString) => {
     const { newInit } = this.props.relaxProps as any;
-    console.log(date.week());
     let year = moment(
       new Date(sessionStorage.getItem('defaultLocalDateTime'))
     ).format('YYYY');
@@ -56,13 +70,20 @@ export default class Header extends React.Component<any, any> {
         </div>
         <div className="home-prescriber flex-start-end">
           <div className="prescriber">Prescriber</div>
-          <Select
-            defaultValue="Prescriber"
-            style={{ width: 120 }}
-            onChange={this.prescriberChange}
-          >
-            <Option value="Prescriber">Prescriber</Option>
-          </Select>
+          {this.state.prescribers ? (
+            <Select
+              defaultValue={this.state.prescribers[0].prescriberName}
+              onChange={this.prescriberChange}
+            >
+              {this.state.prescribers.map((item, index) => {
+                return (
+                  <Option value={item.prescriberId}>
+                    {item.prescriberName}
+                  </Option>
+                );
+              })}
+            </Select>
+          ) : null}
         </div>
       </div>
     );

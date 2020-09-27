@@ -32,7 +32,9 @@ export default class TodoItems extends React.Component<any, any> {
       goodsInfoTopView: '',
       prescriberTrendView: '',
       prescriberTopView: '',
-      trafficDashboardView: ''
+      trafficDashboardView: '',
+      transactionTrendView: '',
+      trafficTrendDashboardView: ''
     };
   }
 
@@ -43,6 +45,8 @@ export default class TodoItems extends React.Component<any, any> {
       prescriberTrendView: any;
       prescriberTopView: any;
       trafficDashboardView: any;
+      transactionTrendView: any;
+      trafficTrendDashboardView: any;
     };
   };
 
@@ -51,12 +55,12 @@ export default class TodoItems extends React.Component<any, any> {
     goodsInfoTopView: 'goodsInfoTopView',
     prescriberTrendView: 'prescriberTrendView',
     prescriberTopView: 'prescriberTopView',
-    trafficDashboardView: 'trafficDashboardView'
+    trafficDashboardView: 'trafficDashboardView',
+    transactionTrendView: 'transactionTrendView',
+    trafficTrendDashboardView: 'trafficTrendDashboardView'
   };
 
-  componentWillUnmount() {
-    const { tradeCustomerView } = this.props.relaxProps as any;
-  }
+  componentWillUnmount() {}
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const {
@@ -64,7 +68,9 @@ export default class TodoItems extends React.Component<any, any> {
       goodsInfoTopView,
       prescriberTrendView,
       prescriberTopView,
-      trafficDashboardView
+      trafficDashboardView,
+      transactionTrendView,
+      trafficTrendDashboardView
     } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (tradeCustomerView !== prevState.tradeCustomerView) {
@@ -92,6 +98,16 @@ export default class TodoItems extends React.Component<any, any> {
         trafficDashboardView
       };
     }
+    if (transactionTrendView !== prevState.transactionTrendView) {
+      return {
+        transactionTrendView
+      };
+    }
+    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
+      return {
+        trafficTrendDashboardView
+      };
+    }
 
     // 否则，对于state不进行任何操作
     return null;
@@ -115,11 +131,13 @@ export default class TodoItems extends React.Component<any, any> {
       goodsInfoTopView,
       prescriberTrendView,
       prescriberTopView,
-      trafficDashboardView
+      trafficDashboardView,
+      transactionTrendView,
+      trafficTrendDashboardView
     } = this.state;
 
     setTimeout(() => {
-      console.log(trafficDashboardView);
+      console.log(prescriberTrendView);
     });
     return (
       <div className="item">
@@ -1188,19 +1206,25 @@ export default class TodoItems extends React.Component<any, any> {
               </div>
             </div>
             <div className="line">
-              <BarLine
-                yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
-                unit={{ unit1: '', unit2: '%' }}
-              />
+              {trafficTrendDashboardView && (
+                <BarLine
+                  yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                  unit={{ unit1: '', unit2: '%' }}
+                  data={trafficTrendDashboardView}
+                />
+              )}
             </div>
           </div>
           <div className="item-btm-m">
             <div className="top-text">Prescribers Trend</div>
             <div className="line">
-              <BarLine
-                yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
-                unit={{ unit1: '', unit2: '%' }}
-              />
+              {prescriberTrendView && (
+                <BarLine
+                  yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
+                  unit={{ unit1: '', unit2: '%' }}
+                  data={prescriberTrendView}
+                />
+              )}
             </div>
           </div>
           <div className="item-btm-r">
@@ -1209,10 +1233,13 @@ export default class TodoItems extends React.Component<any, any> {
               <span>more ></span>
             </div>
             <div className="line">
-              <BarLine
-                yName={{ y1: 'Revenue', y2: 'Transaction' }}
-                unit={{ unit1: '', unit2: '' }}
-              />
+              {transactionTrendView && (
+                <BarLine
+                  yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                  unit={{ unit1: '', unit2: '' }}
+                  data={transactionTrendView}
+                />
+              )}
             </div>
           </div>
         </div>

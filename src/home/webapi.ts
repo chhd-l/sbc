@@ -46,6 +46,13 @@ export const getTrafficDashboardView = (params) => {
   });
 };
 
+export const getTrafficTrendDashboardView = (params) => {
+  return Fetch('/dashboard/trafficTrendDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
 /* ================================================================================================================ */
 
 /**

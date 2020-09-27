@@ -11,7 +11,9 @@ export default class HomeAuthActor extends Actor {
       goodsInfoTopView: null,
       prescriberTrendView: null,
       prescriberTopView: null,
-      trafficDashboardView: null
+      trafficDashboardView: null,
+      transactionTrendView: null,
+      trafficTrendDashboardView: null
     };
   }
 
@@ -37,6 +39,14 @@ export default class HomeAuthActor extends Actor {
   @Action('home:trafficDashboardView')
   trafficDashboardView(state: IMap, res) {
     return state.set('trafficDashboardView', res);
+  }
+  @Action('home:transactionTrendView')
+  transactionTrendView(state: IMap, res) {
+    return state.set('transactionTrendView', res);
+  }
+  @Action('home:trafficTrendDashboardView')
+  trafficTrendDashboardView(state: IMap, res) {
+    return state.set('trafficTrendDashboardView', res);
   }
 
   /**

@@ -68,9 +68,7 @@ export default class SearchForm extends React.Component<any, any> {
       onSearch,
       rewardList
     } = this.props.relaxProps;
-    {
-      console.log(sessionStorage.getItem('s2b-employee@data'));
-    }
+
     return (
       <Form className="filter-content" layout="inline">
         <Row>

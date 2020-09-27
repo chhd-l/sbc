@@ -1,11 +1,11 @@
 import React from 'react';
-import { Relax } from 'plume2';
-/*import { Icon, Modal, Checkbox } from 'antd';
-import { fromJS } from 'immutable';*/
+import { IMap, Relax } from 'plume2';
+import { Icon, Modal, Checkbox } from 'antd';
+import { fromJS } from 'immutable';
 
 import { cache, history, noop } from 'qmkit';
-/*import { IList } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';*/
+import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
 import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from '/web_modules/biz/BarLine/index.tsx';
@@ -23,7 +23,7 @@ const countUpProps = {
   separator: ','
 };
 @Relax
-export default class TodoItems extends React.Component<any, any> {
+export default class Prescriber extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,11 +118,8 @@ export default class TodoItems extends React.Component<any, any> {
       trafficDashboardView
     } = this.state;
 
-    setTimeout(() => {
-      console.log(trafficDashboardView);
-    });
     return (
-      <div className="item">
+      <div className="prescriber-item">
         <div className="item-top space-between">
           <div className="item-top-l flex-content">
             <div className="item-top-l-top">
@@ -524,224 +521,100 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-btm">
               <div className="top-text space-between">
                 <span>Transaction</span>
-                <span>more ></span>
               </div>
               <div className="m-content flex-content">
-                <div className="transaction space-between">
-                  <div className="transaction-l space-around">
-                    <div className="text">Order Number</div>
-                    <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView && tradeCustomerView.orderNumber ? (
-                          <CountUp
-                            end={tradeCustomerView.orderNumber}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
+                <div className="prescriber space-between">
+                  <div className="item-mid-l-l flex-content">
+                    <div className="mode mid-l-l-content">
+                      <div className="mode-text">Active prescriber rates</div>
+                      <div className="mode-num">
+                        <span>$</span>
+                        <span>4,524</span>
                       </div>
-                      <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.orderNumberRate ? (
-                          <img
-                            src={
-                              tradeCustomerView.orderNumberRate > 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView &&
-                            tradeCustomerView.orderNumberRate
-                              ? tradeCustomerView.orderNumberRate > 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.orderNumberRate ? (
-                            <CountUp
-                              end={Math.abs(tradeCustomerView.orderNumberRate)}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                      <div className="mode-per">
+                        <img src={icon1} width="14" height="14" />
+                        <span>32%</span>
+                      </div>
+                    </div>
+                    <div className="line-1 mode-line"></div>
+                    <div className="mode mid-l-l-content">
+                      <div className="mode-text">Active prescribers</div>
+                      <div className="mode-num">
+                        <span>$</span>
+                        <span>4,524</span>
+                      </div>
+                      <div className="mode-per">
+                        <img src={icon1} width="14" height="14" />
+                        <span>32%</span>
                       </div>
                     </div>
                   </div>
-                  <div className="transaction-l space-around">
-                    <div className="text">Sales volume</div>
-                    <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView && tradeCustomerView.salesVolume ? (
-                          <CountUp
-                            end={tradeCustomerView.salesVolume}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </div>
-                      <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.salesVolumeRate ? (
-                          <img
-                            src={
-                              tradeCustomerView.salesVolumeRate > 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView &&
-                            tradeCustomerView.salesVolumeRate
-                              ? tradeCustomerView.salesVolumeRate > 0
-                                ? 'green'
-                                : 'red'
-                              : ''
+                  <div className="item-mid-l-r">
+                    <div className="r-text">Prescriber reward Top 3</div>
+                    <div className="r-content">
+                      {prescriberTopView &&
+                        prescriberTopView.prescriberDashboardViewItemList.map(
+                          (item, i) => {
+                            return (
+                              <React.Fragment key={i}>
+                                <div className="r-content-list space-between-align">
+                                  <p>{i + 1}</p>
+                                  <p>
+                                    {item.prescriberName
+                                      ? item.prescriberName
+                                      : '--'}
+                                  </p>
+                                  <p>
+                                    {sessionStorage.getItem(
+                                      cache.SYSTEM_GET_CONFIG
+                                    ) + ' '}{' '}
+                                    {item.rewardAmount ? (
+                                      <CountUp
+                                        end={item.rewardAmount}
+                                        {...countUpProps}
+                                      />
+                                    ) : (
+                                      '--'
+                                    )}
+                                  </p>
+                                  <p>
+                                    {item.orderNum ? (
+                                      <CountUp
+                                        end={item.orderNum}
+                                        {...countUpProps}
+                                      />
+                                    ) : (
+                                      '--'
+                                    )}{' '}
+                                    order
+                                  </p>
+                                </div>
+                                <div className="line-1 r-content-line"></div>
+                              </React.Fragment>
+                            );
                           }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.salesVolumeRate ? (
-                            <CountUp
-                              end={Math.abs(tradeCustomerView.salesVolumeRate)}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="transaction space-between">
-                  <div className="transaction-l space-around">
-                    <div className="text">Units sold</div>
-                    <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView && tradeCustomerView.unitsSold ? (
-                          <CountUp
-                            end={tradeCustomerView.unitsSold}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
                         )}
+                      {/*<div className="r-content-list space-between-align">
+                        <span>1</span>
+                        <span>Velvet Pets</span>
+                        <span>$ 1213.00</span>
+                        <span>1 order</span>
                       </div>
-                      <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.unitsSoldRate ? (
-                          <img
-                            src={
-                              tradeCustomerView.unitsSoldRate > 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView && tradeCustomerView.unitsSoldRate
-                              ? tradeCustomerView.unitsSoldRate > 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.unitsSoldRate ? (
-                            <CountUp
-                              end={Math.abs(tradeCustomerView.unitsSoldRate)}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                      <div className="line-1 r-content-line"></div>
+                      <div className="r-content-list space-between-align">
+                        <span>2</span>
+                        <span>Velvet Pets</span>
+                        <span>$ 1213.00</span>
+                        <span>1 order</span>
                       </div>
-                    </div>
-                  </div>
-                  <div className="transaction-l space-around">
-                    <div className="text">Retention rate</div>
-                    <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView &&
-                        tradeCustomerView.retentionRate ? (
-                          <CountUp
-                            end={tradeCustomerView.retentionRate}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
+                      <div className="line-1 r-content-line"></div>
+                      <div className="r-content-list space-between-align">
+                        <span>3</span>
+                        <span>Velvet Pets</span>
+                        <span>$ 1213.00</span>
+                        <span>1 order</span>
                       </div>
-                      <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.retentionRateRate ? (
-                          <img
-                            src={
-                              tradeCustomerView.retentionRateRate > 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView &&
-                            tradeCustomerView.retentionRateRate
-                              ? tradeCustomerView.retentionRateRate > 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.retentionRateRate ? (
-                            <CountUp
-                              end={Math.abs(
-                                tradeCustomerView.retentionRateRate
-                              )}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
-                      </div>
+                      <div className="line-1 r-content-line"></div>*/}
                     </div>
                   </div>
                 </div>
@@ -1020,165 +893,6 @@ export default class TodoItems extends React.Component<any, any> {
             </div>
           </div>
         </div>
-        <div className="item-mid space-between">
-          <div className="item-mid-l">
-            <div className="top-text">Prescriber</div>
-            <div className="prescriber space-between">
-              <div className="item-mid-l-l flex-content">
-                <div className="mode mid-l-l-content">
-                  <div className="mode-text">Active prescriber rates</div>
-                  <div className="mode-num">
-                    <span>$</span>
-                    <span>4,524</span>
-                  </div>
-                  <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
-                  </div>
-                </div>
-                <div className="line-1 mode-line"></div>
-                <div className="mode mid-l-l-content">
-                  <div className="mode-text">Active prescribers</div>
-                  <div className="mode-num">
-                    <span>$</span>
-                    <span>4,524</span>
-                  </div>
-                  <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item-mid-l-r">
-                <div className="r-text">Prescriber reward Top 3</div>
-                <div className="r-content">
-                  {prescriberTopView &&
-                    prescriberTopView.prescriberDashboardViewItemList.map(
-                      (item, i) => {
-                        return (
-                          <React.Fragment key={i}>
-                            <div className="r-content-list space-between-align">
-                              <p>{i + 1}</p>
-                              <p>
-                                {item.prescriberName
-                                  ? item.prescriberName
-                                  : '--'}
-                              </p>
-                              <p>
-                                {sessionStorage.getItem(
-                                  cache.SYSTEM_GET_CONFIG
-                                ) + ' '}{' '}
-                                {item.rewardAmount ? (
-                                  <CountUp
-                                    end={item.rewardAmount}
-                                    {...countUpProps}
-                                  />
-                                ) : (
-                                  '--'
-                                )}
-                              </p>
-                              <p>
-                                {item.orderNum ? (
-                                  <CountUp
-                                    end={item.orderNum}
-                                    {...countUpProps}
-                                  />
-                                ) : (
-                                  '--'
-                                )}{' '}
-                                order
-                              </p>
-                            </div>
-                            <div className="line-1 r-content-line"></div>
-                          </React.Fragment>
-                        );
-                      }
-                    )}
-                  {/*<div className="r-content-list space-between-align">
-                        <span>1</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>
-                      <div className="r-content-list space-between-align">
-                        <span>2</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>
-                      <div className="r-content-list space-between-align">
-                        <span>3</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>*/}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="item-mid-r">
-            <div className="top-text">
-              <div className="top-text space-between">
-                <span>Best seller</span>
-                <span>more ></span>
-              </div>
-            </div>
-            <div className="seller space-between">
-              {goodsInfoTopView &&
-                goodsInfoTopView.goodsInfoTopViewItemList.map((item, i) => {
-                  return (
-                    <div className="seller-pro flex-start" key={i}>
-                      <div className="text">TOP {i}</div>
-                      <div className="seller-content flex-content-start">
-                        <img src={item.goodsInfoImg} alt="" />
-                        <div className="content-text1 font-line1">
-                          {item.goodsInfoName}
-                        </div>
-                        <div className="content-text2">
-                          {item.marketPrice +
-                            ' ' +
-                            sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                        </div>
-                        <div className="content-text3">
-                          {item.salesVolume + ' units'}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              {/*<div className="seller-pro flex-start">
-                    <div className="text">TOP 1</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>
-                  <div className="seller-pro flex-start">
-                    <div className="text">TOP 2</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>
-                  <div className="seller-pro flex-start">
-                    <div className="text">TOP 3</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>*/}
-            </div>
-          </div>
-        </div>
         <div className="item-btm space-between">
           <div className="item-btm-l">
             <div className="top-text">
@@ -1190,15 +904,6 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="line">
               <BarLine
                 yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
-                unit={{ unit1: '', unit2: '%' }}
-              />
-            </div>
-          </div>
-          <div className="item-btm-m">
-            <div className="top-text">Prescribers Trend</div>
-            <div className="line">
-              <BarLine
-                yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
                 unit={{ unit1: '', unit2: '%' }}
               />
             </div>

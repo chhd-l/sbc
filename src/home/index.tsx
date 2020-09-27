@@ -4,9 +4,11 @@ import { StoreProvider } from 'plume2';
 import AppStore from './store';
 import Header from './component/header';
 import TodoItems from './component/todo-items';
-import StatisticalReport from './component/statistical-report';
+import Prescriber from './component/prescriber';
+
+/*import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
-import HomePrescriber from './component/home-prescriber';
+import HomePrescriber from './component/home-prescriber';*/
 
 import { cache } from 'qmkit';
 
@@ -48,7 +50,9 @@ export default class HelloApp extends React.Component<any, any> {
         </div>
       ) : (
         <div style={styles.container}>
-          <HomePrescriber prescriberId={prescriberId} />
+          {/*<HomePrescriber prescriberId={prescriberId} />*/}
+          <Header />
+          <Prescriber prescriberId={prescriberId} />
         </div>
       );
     } else {

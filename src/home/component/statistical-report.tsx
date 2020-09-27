@@ -165,6 +165,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         {/* 流量统计报表查看 */}
         {
           // <AuthWrapper functionName="f_flow_watch_1">
+          /*
           <div className="homeItem todayData">
             <h3>
               <FormattedMessage id="visitsToday" />
@@ -193,7 +194,7 @@ export default class StatisticalReport extends React.Component<any, any> {
               </div>
             </div>
 
-            {/* <div className="dateBg">
+            {/!* <div className="dateBg">
                 <div className="dataItem">
                   <label>Product visitor number</label>
                   <strong>{trafficNum.get('skuTotalUv') || 0}</strong>
@@ -202,12 +203,14 @@ export default class StatisticalReport extends React.Component<any, any> {
                   <label>Products page view</label>
                   <strong>{trafficNum.get('skuTotalPv') || 0}</strong>
                 </div>
-              </div> */}
+              </div> *!/}
           </div>
+*/
           // </AuthWrapper>}
         }
         {/* {tradeOview ? (
           <AuthWrapper functionName="f_trade_watch_1"> */}
+        {/*
         <div className="homeItem todayData">
           <h3>
             <FormattedMessage id="transactionToday" />
@@ -247,6 +250,48 @@ export default class StatisticalReport extends React.Component<any, any> {
             </div>
           </div>
         </div>
+*/}
+        {/*
+        <div className="homeItem todayData">
+          <h3>
+            <FormattedMessage id="transactionToday" />
+          </h3>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>
+                <FormattedMessage id="orderNumber" />
+              </label>
+              <strong>{tradeNum && (tradeNum.get('orderCount') || 0)}</strong>
+            </div>
+            <div className="dataItem">
+              <label>
+                <FormattedMessage id="orderAmount" />
+              </label>
+              <strong>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {tradeNum ? (tradeNum.get('orderAmt') || 0).toFixed(2) : 0.0}
+              </strong>
+            </div>
+          </div>
+          <div className="dateBg">
+            <div className="dataItem">
+              <label>Payment orders</label>
+              <strong>
+                {tradeNum && (tradeNum.get('payOrderCount') || 0)}
+              </strong>
+            </div>
+            <div className="dataItem">
+              <label>
+                <FormattedMessage id="paymentAmount" />
+              </label>
+              <strong>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {tradeNum ? (tradeNum.get('payOrderAmt') || 0).toFixed(2) : 0.0}
+              </strong>
+            </div>
+          </div>
+        </div>
+*/}
         {/* </AuthWrapper>
         ) : null} */}
         {/* {customerOview ? (
@@ -317,7 +362,7 @@ export default class StatisticalReport extends React.Component<any, any> {
         ) : null} */}
         {/* {trafficReport ? (
           <AuthWrapper functionName="f_flow_watch_1"> */}
-        <div className="homeItem lastTenData">
+        {/*<div className="homeItem lastTenData">
           <h3>
             <FormattedMessage id="visitsReportNearly10Days" />
           </h3>
@@ -327,17 +372,17 @@ export default class StatisticalReport extends React.Component<any, any> {
             size="middle"
             pagination={false}
           />
-        </div>
+        </div>*/}
         {/* </AuthWrapper>
         ) : null} */}
         {/* {trafficTrends ? (
           <AuthWrapper functionName="f_flow_watch_1"> */}
-        <div className="homeItem lastTenData">
+        {/*<div className="homeItem lastTenData">
           <h3>
             <FormattedMessage id="visitsTrendNearly10Days" />
           </h3>
           <FlowTrendsCharts />
-        </div>
+        </div>*/}
         {/* </AuthWrapper>
         ) : null} */}
         {/* {tradeReport ? (

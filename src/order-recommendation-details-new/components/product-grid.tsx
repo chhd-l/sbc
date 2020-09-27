@@ -9,7 +9,7 @@ import { Select, Table } from 'antd';
 const { Option } = Select;
 
 const Column = Table.Column;
-let selectedRowsList = [];
+let recommendationNumber = 1;
 /**
  * 商品添加
  */
@@ -33,11 +33,15 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {}
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
+    }
+    if (this.props.goodsInfoPage !== nextProps.goodsInfoPage) {
+      console.log(123);
     }
     this.setState({
       selectedRows: nextProps.selectedRows
@@ -47,20 +51,25 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
-  /*componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-    console.log(prevProps.selectedRows.toJS(),1111);
+  componentDidUpdate(
+    prevProps: Readonly<any>,
+    prevState: Readonly<any>,
+    snapshot?: any
+  ) {
+    /* console.log(this.state.selectedRows.toJS(),11111111111);
+    console.log(this.state.selectedRowKeys,2222222222222);*/
+
+    //console.log(a,555555555555)
     if (prevState.goodsInfoPage.content) {
-      prevState.goodsInfoPage.content = prevState.goodsInfoPage.content.map((item, index) => {
+      /*prevState.goodsInfoPage.content = prevState.goodsInfoPage.content.map((item, index) => {
         if(prevProps.selectedRows.toJS()[index]){
           if(item.goodsInfoId == prevProps.selectedRows.toJS()[index].goodsInfoId) {
             return { ...item, ...prevProps.selectedRows.toJS()[index] };
           }
         }
-      });
-      console.log(prevState);
+      });*/
     }
-
-  }*/
+  }
 
   render() {
     const {
@@ -71,7 +80,6 @@ export default class GoodsGrid extends React.Component<any, any> {
       showValidGood
     } = this.state;
     const { rowChangeBackFun, visible } = this.props;
-    console.log(goodsInfoPage.content, 222222222);
     return (
       <div className="content">
         <DataGrid
@@ -107,8 +115,6 @@ export default class GoodsGrid extends React.Component<any, any> {
                 selectedRows: rows,
                 selectedRowKeys
               });
-              console.log(fromJS(selectedTableRows).toSet(), 11111);
-              console.log(fromJS(selectedRows), 2222222);
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
@@ -161,11 +167,27 @@ export default class GoodsGrid extends React.Component<any, any> {
             title="Quantity"
             key="recommendationNumber"
             dataIndex="recommendationNumber"
-            render={(value, i) => {
+            render={(value, i, e) => {
+              /*  console.log(this.state.selectedRows.toJS(),111111);
+              console.log(i,222222);
+              console.log(value,333333);
+              console.log(e,444444444444);
+              console.log(goodsInfoPage.content,555555);*/
+
               if (value) {
+                /*this.state.selectedRows.toJS().map((item,index)=>{
+                  if (item.goodsId == i.goodsId) {
+                    console.log(555555555)
+
+                    recommendationNumber = item.recommendationNumber
+                  }else {
+                    recommendationNumber = 1
+                  }
+                })*/
                 return (
                   <Select
                     defaultValue={value}
+                    //value={recommendationNumber}
                     style={{ width: 120 }}
                     onChange={(e, a) => {
                       let obj = this.state.selectedRows.toJS();

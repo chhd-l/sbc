@@ -106,7 +106,7 @@ class MessageSetting extends Component<any, any> {
               type="primary"
               onClick={this.handleOk}
             >
-              Cofirm
+              Confirm
             </Button>
           ]}
         >

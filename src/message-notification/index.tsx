@@ -352,7 +352,7 @@ class Notification extends Component<any, any> {
               type="primary"
               onClick={this.updateNotification}
             >
-              Cofirm
+              Confirm
             </Button>
           ]}
         >

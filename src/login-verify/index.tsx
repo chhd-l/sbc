@@ -14,10 +14,6 @@ export default class LoginVerify extends React.Component<any, any> {
     this.state = {};
   }
 
-  componentDidMount() {
-    this.store.init();
-  }
-
   render() {
     const VerifyFormDetail = Form.create({})(verifyForm);
     return (

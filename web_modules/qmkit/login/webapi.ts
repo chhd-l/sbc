@@ -74,3 +74,10 @@ export function getJwtToken(oktaToken: string) {
   });
 }
 
+export function getRCJwtToken(oktaToken: string) {
+  return Fetch<TResult>('/oktaStore/getRCJwtToken', {
+    method: 'POST',
+    body: JSON.stringify({ oktaToken: 'Bearer ' +  oktaToken })
+  });
+}
+

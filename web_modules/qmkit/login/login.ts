@@ -10,169 +10,136 @@ type TResult = {
 };
 
 
-export async function login(form, oktaToken: string) {
-    let base64 = new util.Base64();
-    var res = {} as TResult;
-    if (oktaToken) {
-      sessionStorage.setItem(
-        cache.OKTA_TOKEN,
-        oktaToken
-      );
+export async function login(routerType, oktaToken: string) {
+  var res = {} as TResult;
+  if (oktaToken) {
+    sessionStorage.setItem(
+      cache.OKTA_TOKEN,
+      oktaToken
+    );
+    if (routerType === 'prescriber') {
       const resOkta  = await webapi.getJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
-      if ((res as any).code === Const.SUCCESS_CODE) {
-        if(res.context.checkState === 1) { // need checked
-          sessionStorage.setItem(
-            cache.LOGIN_ACCOUNT_NAME,
-            res.context.accountName
-          );
-          sessionStorage.setItem(
-            cache.LOGIN_EMPLOYEE_NAME,
-            res.context.employeeName
-          );
-          history.push('login-verify')
-          return
-        }
-        if (res.context.accountState === 4 ) {
-            message.error('Your account need to audit, will notify you by email')
-            history.push('login', {oktaLogout : true})
-            return
-        }
-        if(res.context.accountState === 1) {
-          message.error('Your account is disabled')
-          history.push('login', {oktaLogout : true})
-          return
-        }
-      }
-
-    } else {
-      const account = form.account;
-      const password = form.password;
-      const resLocal  = await webapi.login(
-        base64.urlEncode(account),
-        base64.urlEncode(password)
-      ) as any ;
-      res = resLocal.res as TResult;
+      
+    } else if (routerType === 'staff') {
+      const resOkta  = await webapi.getRCJwtToken(oktaToken) as any;
+      res = resOkta.res as TResult;
     }
-    
-    if ((res as any).code === Const.SUCCESS_CODE) {
-      if (form.isRemember) {
-        localStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
+  }
+
+  
+  if ((res as any).code === Const.SUCCESS_CODE) {
+    if(res.context.checkState === 1) { // need checked
+      sessionStorage.setItem(
+        cache.LOGIN_ACCOUNT_NAME,
+        res.context.accountName
+      );
+      sessionStorage.setItem(
+        cache.LOGIN_EMPLOYEE_NAME,
+        res.context.employeeName
+      );
+      history.push('login-verify')
+      return
+    }
+    if (res.context.accountState === 4 ) {
+        message.error('Your account need to audit, will notify you by email')
+        history.push('login-verify', {oktaLogout : true})
+        return
+    }
+    if(res.context.accountState === 1) {
+      message.error('Your account is disabled')
+      history.push('login-verify', {oktaLogout : true})
+      return
+    }
+    window.token = res.context.token;
+    window.companyType = res.context.companyType;
+    sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
+    sessionStorage.setItem('employeeId', res.context.employeeId);
+
+    // 获取登录人拥有的菜单
+    const menusRes = (await webapi.fetchMenus()) as any;
+    if (menusRes.res.code === Const.SUCCESS_CODE) {
+      let dataList = fromJS(menusRes.res.context);
+      if (window.companyType == 0) {
+        dataList = dataList.filterNot(
+          (item) => item.get('title') == '业务员统计'
+        );
       }
-      window.token = res.context.token;
-      window.companyType = res.context.companyType;
-      sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
-      sessionStorage.setItem('employeeId', res.context.employeeId);
 
-      // 获取登录人拥有的菜单
-      const menusRes = (await webapi.fetchMenus()) as any;
-      if (menusRes.res.code === Const.SUCCESS_CODE) {
-        let dataList = fromJS(menusRes.res.context);
-        if (window.companyType == 0) {
-          dataList = dataList.filterNot(
-            (item) => item.get('title') == '业务员统计'
+      let allGradeMenus = _getChildren(
+        dataList.filter((item) => item.get('grade') === 1),
+        dataList
+      );
+
+      sessionStorage.setItem(
+        cache.LOGIN_MENUS,
+        JSON.stringify(allGradeMenus)
+      );
+      const functionsRes = (await webapi.fetchFunctions()) as any;
+      sessionStorage.setItem(
+        cache.LOGIN_FUNCTIONS,
+        JSON.stringify(functionsRes.res.context)
+      );
+      //获取店铺ID
+      const storeId = res.context.storeId;
+      //获取店铺主页的小程序码
+      const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
+        storeId
+      )) as any;
+
+      //Perscriber used
+      const employee = (await webapi.employee()) as any;
+      sessionStorage.setItem(
+        cache.EMPLOYEE_DATA,
+        JSON.stringify(employee.res)
+      );
+
+      if (qrcode.code == Const.SUCCESS_CODE) {
+        //获取小程序码的地址，保存到本地
+        localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
+      }
+
+      /**
+       * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
+       */
+      switch ((res.context as any).auditState) {
+        /**待审核*/
+        case 0:
+          //将审核中的店铺信息存入本地缓存
+          history.push('/shop-info');
+          break;
+        /**审核通过，成功登录*/
+        case 1:
+          message.success('login successful');
+          //登录成功之后，塞入baseConfig
+          const config = (await webapi.getUserSiteInfo()) as any;
+          sessionStorage.setItem(
+            cache.SYSTEM_BASE_CONFIG,
+            JSON.stringify(config.res.context)
           );
-        }
-
-        let allGradeMenus = _getChildren(
-          dataList.filter((item) => item.get('grade') === 1),
-          dataList
-        );
-
-        sessionStorage.setItem(
-          cache.LOGIN_MENUS,
-          JSON.stringify(allGradeMenus)
-        );
-        const functionsRes = (await webapi.fetchFunctions()) as any;
-        sessionStorage.setItem(
-          cache.LOGIN_FUNCTIONS,
-          JSON.stringify(functionsRes.res.context)
-        );
-        //获取店铺ID
-        const storeId = res.context.storeId;
-        //获取店铺主页的小程序码
-        const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
-          storeId
-        )) as any;
-
-        //Perscriber used
-        const employee = (await webapi.employee()) as any;
-        sessionStorage.setItem(
-          cache.EMPLOYEE_DATA,
-          JSON.stringify(employee.res)
-        );
-
-        if (qrcode.code == Const.SUCCESS_CODE) {
-          //获取小程序码的地址，保存到本地
-          localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
-        }
-
-        Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
-          if (resIco.res.code == Const.SUCCESS_CODE) {
-            if ((resIco.res as any).context) {
-              sessionStorage.setItem(
-                cache.SYSTEM_GET_CONFIG,
-                (resIco.res as any).context.currency.valueEn
-              ); //货币符号
-              sessionStorage.setItem(
-                cache.SYSTEM_GET_CONFIG_NAME,
-                (resIco.res as any).context.currency.name
-              ); //货币名称
-              sessionStorage.setItem(
-                cache.MAP_MODE,
-                (resIco.res as any).context.storeVO.prescriberMap
-              ); //货币名称
-            }
+          let hasHomeFunction = functionsRes.res.context.includes('f_home');
+          if (hasHomeFunction) {
+            history.push('/');
+          } else {
+            let url = _getUrl(allGradeMenus);
+            history.push(url);
           }
-        });
-
-        /**
-         * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
-         */
-        switch ((res.context as any).auditState) {
-          /**待审核*/
-          case 0:
-            //将审核中的店铺信息存入本地缓存
-            history.push('/shop-info');
-            break;
-          /**审核通过，成功登录*/
-          case 1:
-            message.success('login successful');
-            //登录成功之后，塞入baseConfig
-            const config = (await webapi.getUserSiteInfo()) as any;
-            if (config.res.context) {
-              sessionStorage.setItem(
-                cache.SYSTEM_BASE_CONFIG,
-                JSON.stringify(config.res.context)
-              );
-            } else {
-              sessionStorage.removeItem(
-                cache.SYSTEM_BASE_CONFIG
-              );
-            }
-            let hasHomeFunction = functionsRes.res.context.includes('f_home');
-            if (hasHomeFunction) {
-              history.push('/');
-            } else {
-              let url = _getUrl(allGradeMenus);
-              history.push(url);
-            }
-            break;
-          /**审核未通过*/
-          case 2:
-            history.push('/shop-info');
-            break;
-          default:
-            //申请开店
-            history.push('/shop-process');
-        }
-      } else {
-        message.error(menusRes.res.message);
+          break;
+        /**审核未通过*/
+        case 2:
+          history.push('/shop-info');
+          break;
+        default:
+          //申请开店
+          history.push('/shop-process');
       }
     } else {
-      message.error(res.message);
+      message.error(menusRes.res.message);
     }
-  };
+  } else {
+    message.error(res.message);
+  }
+};
 
  function _getChildren (list, dataList) {
     return list.map((data) => {

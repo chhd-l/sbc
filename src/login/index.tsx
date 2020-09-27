@@ -16,23 +16,12 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      isRcLogin: false
-    };
-    this.loginRc = this.loginRc.bind(this);
   }
-
-  loginRc = () => {
-    this.setState({
-      isRcLogin: true
-    });
-  };
 
   componentWillMount() {
     if (this.props.location.state && this.props.location.state.oktaLogout) {
-      this.props.authService.logout('/');
+      this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
       util.logout()
-      sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
       webapi.logout()
     };
   }
@@ -42,12 +31,13 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   }
 
   render() {
-    const LoginFormDetail = Form.create({})(LoginForm);
-    return this.state.isRcLogin ? (
-      <div style={styles.container}>{<LoginFormDetail />}</div>
-    ) : (
-      <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
-    );
+    // const LoginFormDetail = Form.create({})(LoginForm);
+    // return this.state.isRcLogin ? (
+    //   <div style={styles.container}>{<LoginFormDetail />}</div>
+    // ) : (
+    //   <LoginHome parent={this.props} />
+    // );
+    return (<LoginHome parent={this.props} />)
   }
 })
 const styles = {

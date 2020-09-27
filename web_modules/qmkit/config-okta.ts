@@ -1,21 +1,32 @@
 import Config from './config';
 
-const CLIENT_ID = Config.REACT_APP_CLIENT_ID
-const ISSUER = Config.REACT_APP_ISSUER
+const CLIENT_PRESCRIBER_ID = Config.REACT_APP_PRESCRIBER_CLIENT_ID
+const PRESCRIBER_ISSUER = Config.REACT_APP_PRESCRIBER_ISSUER
+const REACT_APP_PRESCRIBER_RedirectURL = Config.REACT_APP_PRESCRIBER_RedirectURL
+
+const CLIENT_RC_ID = Config.REACT_APP_RC_CLIENT_ID
+const RC_ISSUER = Config.REACT_APP_RC_ISSUER
+const REACT_APP_RC_RedirectURL = Config.REACT_APP_RC_RedirectURL
+
 const OKTA_TESTING_DISABLEHTTPSCHECK = false;
-const REACT_APP_RedirectURL = Config.REACT_APP_RedirectURL
 
 const configOkta = {
-  oidc: {
-    clientId: CLIENT_ID,
-    issuer: ISSUER,
-    redirectUri: REACT_APP_RedirectURL || 'http://localhost:3002/implicit/callback',
+  prescrberOidc: {
+    clientId: CLIENT_PRESCRIBER_ID,
+    issuer: PRESCRIBER_ISSUER,
+    redirectUri: REACT_APP_PRESCRIBER_RedirectURL,
     scopes: ['openid', 'profile', 'email','user.consent:read','user.profile:write','user.consent:delete','user.consent:collect'],
     pkce: true,
     disableHttpsCheck: OKTA_TESTING_DISABLEHTTPSCHECK,
   },
-  resourceServer: {
-    messagesUrl: 'https://shopuat.466920.com/api/messages',
+
+  RcOidc: {
+    clientId: CLIENT_RC_ID,
+    issuer: RC_ISSUER,
+    redirectUri: REACT_APP_RC_RedirectURL,
+    scopes: ['openid', 'profile', 'email'],
+    pkce: true,
+    disableHttpsCheck: OKTA_TESTING_DISABLEHTTPSCHECK,
   },
-};
+};;
 export default configOkta;

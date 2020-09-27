@@ -5,27 +5,55 @@ import { Form, Icon, Input, Button, Row, Col } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
+let switchedRouter = false
+import { switchRouter } from '@/index'
 
-const LoginHome = (props) => {
-  const { authState, authService } = useOktaAuth();
-  const toOkta = props.parent.location.search === '?toOkta=true';
-  const loginOkta = async () => authService.login('/');
+let LoginHome = (props) => {
+  let { authState, authService } = useOktaAuth();
+  let toOkta = props.parent.location.search === '?toOkta=true';
+  let loginpPercriberOkta =  () => { 
+    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber')
+    switchRouter(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    switchedRouter = true
+  } 
+
+  let loginpRcOkta = () => { 
+    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'staff')
+    switchRouter(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    switchedRouter = true
+  }
 
   useEffect(() => {
-    var clickOktaLogout = sessionStorage.getItem(cache.OKTA_LOGOUT)
-    if(clickOktaLogout === 'true') {
-      return
-    }
-    if (authState.isAuthenticated) {
-      login({}, authState.accessToken);
-    } else {
-      if (toOkta) {
-        loginOkta();
+    if (!authState.isAuthenticated) {
+      if(switchedRouter) {
+        let loginType = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)
+        if(loginType === 'staff') {
+          authService.login('/login?type=staff');
+        } else if(loginType === 'prescriber'){
+          authService.login('/login?type=prescriber');
+        }
+        return
       }
+      if(toOkta) {
+        loginpPercriberOkta()
+      }
+    }
+
+    if (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) {
+      let callbackUrl = props.parent.location.search
+      let callBackType = ''
+      if(callbackUrl === '?type=staff') {
+        callBackType = 'staff'
+      } else if (callbackUrl === '?type=prescriber') {
+        callBackType = 'prescriber'
+      }
+      sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, callBackType)
+      console.log(authState.accessToken)
+      login(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE), authState.accessToken);
     }
   }, [authState, authService]);
 
-  return authState.isAuthenticated || toOkta ||  sessionStorage.getItem(cache.OKTA_LOGOUT) === 'true' ? null : (
+  return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? null : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
@@ -39,13 +67,13 @@ const LoginHome = (props) => {
             <Col
               span={9}
               style={styles.buttonContainer}
-              onClick={props.clickLoginRc}
+              onClick={loginpRcOkta}
             >
               <img style={styles.roleImg} src={role_RC} />
               <div style={styles.roleWord}>RC Staff</div>
             </Col>
             <Col span={2}></Col>
-            <Col span={9} style={styles.buttonContainer} onClick={loginOkta}>
+            <Col span={9} style={styles.buttonContainer} onClick={loginpPercriberOkta}>
               <img style={styles.roleImg} src={role_Perscriber} />
               <div style={styles.roleWord}>Presriber</div>
             </Col>

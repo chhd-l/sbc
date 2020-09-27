@@ -1112,27 +1112,6 @@ export default class TodoItems extends React.Component<any, any> {
                         );
                       }
                     )}
-                  {/*<div className="r-content-list space-between-align">
-                        <span>1</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>
-                      <div className="r-content-list space-between-align">
-                        <span>2</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>
-                      <div className="r-content-list space-between-align">
-                        <span>3</span>
-                        <span>Velvet Pets</span>
-                        <span>$ 1213.00</span>
-                        <span>1 order</span>
-                      </div>
-                      <div className="line-1 r-content-line"></div>*/}
                 </div>
               </div>
             </div>
@@ -1167,33 +1146,6 @@ export default class TodoItems extends React.Component<any, any> {
                     </div>
                   );
                 })}
-              {/*<div className="seller-pro flex-start">
-                    <div className="text">TOP 1</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>
-                  <div className="seller-pro flex-start">
-                    <div className="text">TOP 2</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>
-                  <div className="seller-pro flex-start">
-                    <div className="text">TOP 3</div>
-                    <div className="seller-content flex-content-start">
-                      <img src={img1} alt="" />
-                      <div className="content-text1">MINI PUPPY</div>
-                      <div className="content-text2">2.692€</div>
-                      <div className="content-text3">85 units</div>
-                    </div>
-                  </div>*/}
             </div>
           </div>
         </div>

@@ -32,7 +32,9 @@ export default class Prescriber extends React.Component<any, any> {
       goodsInfoTopView: '',
       prescriberTrendView: '',
       prescriberTopView: '',
-      trafficDashboardView: ''
+      trafficDashboardView: '',
+      transactionTrendView: '',
+      trafficTrendDashboardView: ''
     };
   }
 
@@ -43,6 +45,8 @@ export default class Prescriber extends React.Component<any, any> {
       prescriberTrendView: any;
       prescriberTopView: any;
       trafficDashboardView: any;
+      transactionTrendView: any;
+      trafficTrendDashboardView: any;
     };
   };
 
@@ -51,7 +55,9 @@ export default class Prescriber extends React.Component<any, any> {
     goodsInfoTopView: 'goodsInfoTopView',
     prescriberTrendView: 'prescriberTrendView',
     prescriberTopView: 'prescriberTopView',
-    trafficDashboardView: 'trafficDashboardView'
+    trafficDashboardView: 'trafficDashboardView',
+    transactionTrendView: 'transactionTrendView',
+    trafficTrendDashboardView: 'trafficTrendDashboardView'
   };
 
   componentWillUnmount() {
@@ -64,7 +70,9 @@ export default class Prescriber extends React.Component<any, any> {
       goodsInfoTopView,
       prescriberTrendView,
       prescriberTopView,
-      trafficDashboardView
+      trafficDashboardView,
+      transactionTrendView,
+      trafficTrendDashboardView
     } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (tradeCustomerView !== prevState.tradeCustomerView) {
@@ -92,6 +100,21 @@ export default class Prescriber extends React.Component<any, any> {
         trafficDashboardView
       };
     }
+    if (trafficDashboardView !== prevState.trafficDashboardView) {
+      return {
+        trafficDashboardView
+      };
+    }
+    if (transactionTrendView !== prevState.transactionTrendView) {
+      return {
+        transactionTrendView
+      };
+    }
+    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
+      return {
+        trafficTrendDashboardView
+      };
+    }
 
     // 否则，对于state不进行任何操作
     return null;
@@ -112,10 +135,11 @@ export default class Prescriber extends React.Component<any, any> {
   render() {
     const {
       tradeCustomerView,
-      goodsInfoTopView,
       prescriberTrendView,
       prescriberTopView,
-      trafficDashboardView
+      trafficDashboardView,
+      transactionTrendView,
+      trafficTrendDashboardView
     } = this.state;
 
     return (
@@ -902,10 +926,25 @@ export default class Prescriber extends React.Component<any, any> {
               </div>
             </div>
             <div className="line">
-              <BarLine
-                yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
-                unit={{ unit1: '', unit2: '%' }}
-              />
+              {trafficTrendDashboardView && (
+                <BarLine
+                  yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                  unit={{ unit1: '', unit2: '%' }}
+                  data={trafficTrendDashboardView}
+                />
+              )}
+            </div>
+          </div>
+          <div className="item-btm-m">
+            <div className="top-text">Prescribers Trend</div>
+            <div className="line">
+              {prescriberTrendView && (
+                <BarLine
+                  yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
+                  unit={{ unit1: '', unit2: '%' }}
+                  data={prescriberTrendView}
+                />
+              )}
             </div>
           </div>
           <div className="item-btm-r">
@@ -914,10 +953,13 @@ export default class Prescriber extends React.Component<any, any> {
               <span>more ></span>
             </div>
             <div className="line">
-              <BarLine
-                yName={{ y1: 'Revenue', y2: 'Transaction' }}
-                unit={{ unit1: '', unit2: '' }}
-              />
+              {transactionTrendView && (
+                <BarLine
+                  yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                  unit={{ unit1: '', unit2: '' }}
+                  data={transactionTrendView}
+                />
+              )}
             </div>
           </div>
         </div>

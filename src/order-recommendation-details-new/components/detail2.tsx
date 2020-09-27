@@ -45,7 +45,7 @@ export default class BillingDetailsNext extends React.Component<any, any> {
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     onSharing({
       field: 'prescriberId',
-      value: employee.clinicsIds[0]
+      value: employee.prescribers[0].id
     });
   }
 
@@ -74,9 +74,6 @@ export default class BillingDetailsNext extends React.Component<any, any> {
       employee && employee.prescribers && employee.prescribers.length > 0
         ? employee.prescribers
         : [];
-    setTimeout(() => {
-      console.log(detailProductList.prescriberName);
-    });
     return (
       <div style={styles.main}>
         <div style={styles.nav}>

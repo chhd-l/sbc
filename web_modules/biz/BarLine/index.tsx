@@ -45,7 +45,8 @@ export default class Line extends React.Component{
             textStyle: {
               color: '#999',
               fontsize: '11'
-            }
+            },
+            formatter:'Week-{value}'
           },
           data: data.weekNumList,
         }

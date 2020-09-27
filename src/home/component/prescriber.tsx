@@ -935,18 +935,6 @@ export default class Prescriber extends React.Component<any, any> {
               )}
             </div>
           </div>
-          <div className="item-btm-m">
-            <div className="top-text">Prescribers Trend</div>
-            <div className="line">
-              {prescriberTrendView && (
-                <BarLine
-                  yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
-                  unit={{ unit1: '', unit2: '%' }}
-                  data={prescriberTrendView}
-                />
-              )}
-            </div>
-          </div>
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>

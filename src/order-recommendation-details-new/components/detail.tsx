@@ -44,7 +44,7 @@ export default class BillingDetails extends React.Component<any, any> {
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     onSharing({
       field: 'prescriberId',
-      value: employee.clinicsIds[0]
+      value: employee.prescribers[0].id
     });
   }
 
@@ -74,9 +74,6 @@ export default class BillingDetails extends React.Component<any, any> {
         ? employee.prescribers
         : [];
 
-    setTimeout(() => {
-      console.log(detailProductList.prescriberName);
-    });
     return (
       <div style={styles.main}>
         <div
@@ -104,7 +101,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 onChange={(value, name) => this._prescriberChange(value, name)}
               >
                 {allPrescribers.map((item) => (
-                  <Option value={item.prescriberId} key={item.prescriberId}>
+                  <Option value={item.id} key={item.id}>
                     {item.prescriberName}
                   </Option>
                 ))}

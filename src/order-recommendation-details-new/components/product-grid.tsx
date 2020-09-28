@@ -33,15 +33,11 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {}
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
-    }
-    if (this.props.goodsInfoPage !== nextProps.goodsInfoPage) {
-      console.log(123);
     }
     this.setState({
       selectedRows: nextProps.selectedRows
@@ -51,25 +47,18 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>,
-    snapshot?: any
-  ) {
-    /* console.log(this.state.selectedRows.toJS(),11111111111);
-    console.log(this.state.selectedRowKeys,2222222222222);*/
-
-    //console.log(a,555555555555)
-    if (prevState.goodsInfoPage.content) {
-      /*prevState.goodsInfoPage.content = prevState.goodsInfoPage.content.map((item, index) => {
-        if(prevProps.selectedRows.toJS()[index]){
-          if(item.goodsInfoId == prevProps.selectedRows.toJS()[index].goodsInfoId) {
-            return { ...item, ...prevProps.selectedRows.toJS()[index] };
-          }
-        }
-      });*/
+  /*static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(nextProps.selectedRows.toJS(),1111122);
+    const { visible } = nextProps;
+    // 当传入的type发生变化的时候，更新state
+    if (visible !== prevState.visible) {
+      return {
+        visible
+      };
     }
-  }
+    // 否则，对于state不进行任何操作
+    return null;
+  }*/
 
   render() {
     const {
@@ -173,7 +162,7 @@ export default class GoodsGrid extends React.Component<any, any> {
               console.log(value,333333);
               console.log(e,444444444444);
               console.log(goodsInfoPage.content,555555);*/
-
+              console.log(value, 333333);
               if (value) {
                 /*this.state.selectedRows.toJS().map((item,index)=>{
                   if (item.goodsId == i.goodsId) {
@@ -187,7 +176,6 @@ export default class GoodsGrid extends React.Component<any, any> {
                 return (
                   <Select
                     defaultValue={value}
-                    //value={recommendationNumber}
                     style={{ width: 120 }}
                     onChange={(e, a) => {
                       let obj = this.state.selectedRows.toJS();
@@ -267,6 +255,34 @@ export default class GoodsGrid extends React.Component<any, any> {
 
         return goodInfo;
       });*/
+
+      let arr = res.content;
+      let a = arr;
+      let b = this.state.selectedRows.toJS();
+      let list = [];
+      list = b.reduce((pre, cur) => {
+        let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
+        if (target) {
+          Object.assign(target, cur);
+        } else {
+          console.log(cur);
+          pre.push(cur);
+        }
+        return pre;
+      }, a);
+      // console.log(list)
+      /* a.map((item,index)=>{
+         console.log(b[index]&&b[index].goodsInfoId);
+         console.log(item&&item.goodsInfoId);
+         if (b[index] && item.goodsInfoId  ==  b[index].goodsInfoId ) {
+           console.log(11111)
+           arr.push(b[index])
+         }else {
+           arr.push(item)
+         }
+       })*/
+
+      // res.content = combined
 
       this.setState({
         goodsInfoPage: res,

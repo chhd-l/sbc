@@ -83,16 +83,16 @@ export default class SearchForm extends React.Component<any, any> {
                 style={{ width: 180 }}
                 onChange={(e) => {
                   onFormChange({
-                    field: 'payOrderStatus',
+                    field: 'period',
                     value: e
                   });
                 }}
-                defaultValue={'2'}
+                defaultValue={'60'}
               >
                 <Option value={null}></Option>
-                <Option value="0">Last 180 days</Option>
-                <Option value="1">Last 90 days</Option>
-                <Option value="2">Last 60 days</Option>
+                <Option value="180">Last 180 days</Option>
+                <Option value="90">Last 90 days</Option>
+                <Option value="60">Last 60 days</Option>
               </Select>
             </FormItem>
           </Col>

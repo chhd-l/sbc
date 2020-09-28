@@ -42,7 +42,6 @@ export async function login(routerType, oktaToken: string) {
     } 
   } else {
       let base64 = new util.Base64();
-      debugger
       const account = routerType.account;
       const password = routerType.password;
       const resLocal  = await webapi.login(

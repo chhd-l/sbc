@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
 import { Provider } from 'react-redux';
-import { routeWithSubRoutes, history, noop, cache } from 'qmkit';
+import { routeWithSubRoutes, history, noop, cache, getRoutType } from 'qmkit';
 import { homeRoutes } from './router';
 import 'regenerator-runtime/runtime';
 import store from './redux/store';
@@ -63,9 +63,11 @@ const RcRouter = () => (
   </IntlProvider>
 );
 
-switchRouter(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+switchRouter()
 
-export function switchRouter (type: string) {
+export function switchRouter () {
+  var type = getRoutType(window.location.search)
+  console.log(type)
   ReactDOM.unmountComponentAtNode(document.getElementById('root'))
   if(type === 'staff') {
     ReactDOM.render(<RcRouter />, document.getElementById('root'));

@@ -9,6 +9,21 @@ type TResult = {
   context: any;
 };
 
+export function getRoutType(callbackUrl: string) {
+  var callBackType = ''
+  if(callbackUrl === '?type=staff') {
+    callBackType = 'staff'
+  } else if (callbackUrl === '?type=prescriber') {
+    callBackType = 'prescriber'
+  }
+
+  if(callBackType) {
+    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, callBackType)
+    return callBackType
+  } else {
+    return sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)
+  }
+}
 
 export async function login(routerType, oktaToken: string) {
   var res = {} as TResult;
@@ -42,13 +57,19 @@ export async function login(routerType, oktaToken: string) {
       return
     }
     if (res.context.accountState === 4 ) {
-        message.error('Your account need to audit, will notify you by email')
-        history.push('login-verify', {oktaLogout : true})
+        message.error('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
+        history.push('/login', {oktaLogout : true})
         return
     }
     if(res.context.accountState === 1) {
       message.error('Your account is disabled')
-      history.push('login-verify', {oktaLogout : true})
+      history.push('/login', {oktaLogout : true})
+      return
+    }
+
+    if(res.context.accountState === 3) {
+      message.error('Your account is inactivated')
+      history.push('/login', {oktaLogout : true})
       return
     }
     window.token = res.context.token;

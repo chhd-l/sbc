@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
+import { withOktaAuth } from '@okta/okta-react';
 
-export default class VerifyForm extends React.Component<any, any> {
+export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   form;
 
   _store: Store;
@@ -274,6 +275,11 @@ export default class VerifyForm extends React.Component<any, any> {
         this.state.optionalConsents
 
         let oktaToken = this.props.authState.accessToken;
+        console.log(this.props.authState)
+        sessionStorage.setItem(
+          cache.OKTA_TOKEN,
+          oktaToken
+        );
         if(!oktaToken) {
           message.error('OKTA Token Expired');
           this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
@@ -310,7 +316,7 @@ export default class VerifyForm extends React.Component<any, any> {
       }
     });
   };
-}
+})
 
 const styles = {
   loginForm: {

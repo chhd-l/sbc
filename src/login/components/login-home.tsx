@@ -1,6 +1,6 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useState, useEffect } from 'react';
-import { login, cache, util } from 'qmkit';
+import { login, cache, util, getRoutType } from 'qmkit';
 import { Form, Icon, Input, Button, Row, Col } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
@@ -13,13 +13,13 @@ let LoginHome = (props) => {
   let toOkta = props.parent.location.search === '?toOkta=true';
   let loginpPercriberOkta =  () => { 
     sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber')
-    switchRouter(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    switchRouter()
     switchedRouter = true
   } 
 
   let loginpRcOkta = () => { 
     sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'staff')
-    switchRouter(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    switchRouter()
     switchedRouter = true
   }
 
@@ -39,17 +39,10 @@ let LoginHome = (props) => {
       }
     }
 
-    if (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) {
-      let callbackUrl = props.parent.location.search
-      let callBackType = ''
-      if(callbackUrl === '?type=staff') {
-        callBackType = 'staff'
-      } else if (callbackUrl === '?type=prescriber') {
-        callBackType = 'prescriber'
-      }
-      sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, callBackType)
+    if (authState.isAuthenticated) {
+      var routerType = getRoutType(props.parent.location.search)
       console.log(authState.accessToken)
-      login(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE), authState.accessToken);
+      login(routerType, authState.accessToken);
     }
   }, [authState, authService]);
 

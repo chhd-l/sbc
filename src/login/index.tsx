@@ -7,7 +7,7 @@ const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
 import LoginForm from './components/login-form';
 import { withOktaAuth } from '@okta/okta-react';
-import { util, cache } from 'qmkit';
+import { util, cache, history } from 'qmkit';
 import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -20,9 +20,11 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   componentWillMount() {
     if (this.props.location.state && this.props.location.state.oktaLogout) {
-      this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
-      util.logout()
-      webapi.logout()
+      if(this.props.authState.isAuthenticated) {
+        this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
+      } else {
+        history.push('/logout')
+      }
     };
   }
 

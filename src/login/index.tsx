@@ -39,7 +39,8 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
     // ) : (
     //   <LoginHome parent={this.props} />
     // );
-    return (<LoginHome parent={this.props} />)
+    return (this.props.location.state && this.props.location.state.oktaLogout) ? null
+          : <LoginHome parent={this.props} />
   }
 })
 const styles = {

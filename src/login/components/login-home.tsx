@@ -26,17 +26,12 @@ const LoginHome = (props) => {
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
           <Row style={styles.welcomeFont}>
-            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store
-            portal
+            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store portal
           </Row>
           <Row style={styles.selectFont}>Please select your role:</Row>
           <Row style={{ marginTop: '40px' }}>
             <Col span={2}></Col>
-            <Col
-              span={9}
-              style={styles.buttonContainer}
-              onClick={props.clickLoginRc}
-            >
+            <Col span={9} style={styles.buttonContainer} onClick={props.clickLoginRc}>
               <img style={styles.roleImg} src={role_RC} />
               <div style={styles.roleWord}>RC Staff</div>
             </Col>

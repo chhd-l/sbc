@@ -4,10 +4,7 @@ import { Relax } from 'plume2';
 import { IList } from 'typings/globalType';
 
 @Relax
-export default class CustomerGrowTrendsCharts extends React.Component<
-  any,
-  any
-> {
+export default class CustomerGrowTrendsCharts extends React.Component<any, any> {
   props: {
     relaxProps?: {
       customerGrowTrendData: IList;

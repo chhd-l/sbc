@@ -38,9 +38,7 @@ const skuSalesColumns = [
     title: 'Order amount',
     dataIndex: 'skuOrderAmt',
     key: 'skuOrderAmt',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.skuOrderAmt || 0).toFixed(2)
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.skuOrderAmt || 0).toFixed(2)
   },
   {
     title: 'The quantity of order',
@@ -69,9 +67,7 @@ const customerOrderColumns = [
     title: 'Order amount',
     dataIndex: 'tradeAmount',
     key: 'tradeAmount',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.tradeAmount || 0).toFixed(2)
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.tradeAmount || 0).toFixed(2)
   }
 ];
 
@@ -95,9 +91,7 @@ const employeeSaleColumns = [
     title: '下单金额',
     dataIndex: 'amount',
     key: 'amount',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.amount || 0).toFixed(2)
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.amount || 0).toFixed(2)
   },
   {
     title: '付款订单数',
@@ -108,9 +102,7 @@ const employeeSaleColumns = [
     title: '付款金额',
     dataIndex: 'payAmount',
     key: 'payAmount',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.payAmount || 0).toFixed(2)
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.payAmount || 0).toFixed(2)
   }
 ];
 
@@ -137,14 +129,7 @@ export default class Ranking extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      skuSaleRanking,
-      customerOrderRanking,
-      employeeAchieve,
-      skuRanking,
-      customerRanking,
-      employeeRanking
-    } = this.props.relaxProps;
+    const { skuSaleRanking, customerOrderRanking, employeeAchieve, skuRanking, customerRanking, employeeRanking } = this.props.relaxProps;
 
     return (
       <div>
@@ -153,12 +138,7 @@ export default class Ranking extends React.Component<any, any> {
             <div className="flowBox">
               <div className="homeItem" style={{ flex: 1 }}>
                 <h3>Top10 products by sales</h3>
-                <Table
-                  dataSource={skuRanking ? skuRanking : null}
-                  columns={skuSalesColumns}
-                  size="middle"
-                  pagination={false}
-                />
+                <Table dataSource={skuRanking ? skuRanking : null} columns={skuSalesColumns} size="middle" pagination={false} />
               </div>
             </div>
           </AuthWrapper>
@@ -168,12 +148,7 @@ export default class Ranking extends React.Component<any, any> {
             <AuthWrapper functionName="f_customer_watch_1">
               <div className="homeItem" style={{ flex: 1 }}>
                 <h3>Customer order Top10</h3>
-                <Table
-                  dataSource={customerRanking.toJS()}
-                  columns={customerOrderColumns}
-                  size="middle"
-                  pagination={false}
-                />
+                <Table dataSource={customerRanking.toJS()} columns={customerOrderColumns} size="middle" pagination={false} />
               </div>
             </AuthWrapper>
           ) : null}
@@ -181,12 +156,7 @@ export default class Ranking extends React.Component<any, any> {
             <AuthWrapper functionName="f_employee_watch_1">
               <div className="homeItem" style={{ flex: 1, marginLeft: 10 }}>
                 <h3>业务员业绩排行Top10</h3>
-                <Table
-                  dataSource={employeeRanking.toJS()}
-                  columns={employeeSaleColumns}
-                  size="middle"
-                  pagination={false}
-                />
+                <Table dataSource={employeeRanking.toJS()} columns={employeeSaleColumns} size="middle" pagination={false} />
               </div>
             </AuthWrapper>
           ) : null}

@@ -1,8 +1,8 @@
 import React from 'react';
 //下面是按需加载
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
 //导入饼图
-import 'echarts/lib/chart/line';  //折线图是line,饼图改为pie,柱形图改为bar
+import 'echarts/lib/chart/line'; //折线图是line,饼图改为pie,柱形图改为bar
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
@@ -10,8 +10,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 
-export default class Line extends React.Component{
-
+export default class Line extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,14 +18,12 @@ export default class Line extends React.Component{
     };
   }
 
-
-
-  getOption =()=> {
-    const { yName, unit, data } = this.props as any
+  getOption = () => {
+    const { yName, unit, data } = this.props as any;
     let option = {
-      backgroundColor:'',
+      backgroundColor: '',
       tooltip: {
-        trigger: 'axis',
+        trigger: 'axis'
         /*formatter:function(params) {
           let relVal = params[0].name;
           for (let i = 0, l = params.length; i < l; i++) {
@@ -34,18 +31,17 @@ export default class Line extends React.Component{
           }
           return relVal;
         }*/
-
       },
       grid: {
         top: '13%',
 
-        bottom: '10%',
+        bottom: '10%'
       },
       xAxis: [
         {
           type: 'category',
           boundaryGap: true,
-          splitLine: {show: false},
+          splitLine: { show: false },
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
@@ -54,56 +50,56 @@ export default class Line extends React.Component{
               color: '#999',
               fontsize: '11'
             },
-            formatter:'Week-{value}'
+            formatter: 'Week-{value}'
           },
-          data: data.x,
+          data: data.x
         }
       ],
       yAxis: [
         {
           type: 'value',
           name: yName.y1,
-          nameTextStyle:{
-            color:"#C7C7C7",
-            fontSize:12,
+          nameTextStyle: {
+            color: '#C7C7C7',
+            fontSize: 12,
             padding: [0, 0, 0, -3]
           },
           /*min: 0,
           max: 250,*/
           //interval: 50,
-          splitLine: {show: false},
+          splitLine: { show: false },
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
-            formatter: '{value}'+ unit.unit1,
+            formatter: '{value}' + unit.unit1,
             textStyle: {
               color: '#999',
               fontsize: '11'
             }
           },
-          color:'#C7C7C7',
+          color: '#C7C7C7'
         },
         {
           type: 'value',
           name: yName.y2,
-          nameTextStyle:{
-            color:"#C7C7C7",
-            fontSize:12,
+          nameTextStyle: {
+            color: '#C7C7C7',
+            fontSize: 12
           },
           /*min: 0,
           max: 25,*/
           //interval: 5,
-          splitLine: {show: false},
+          splitLine: { show: false },
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
-            formatter: '{value}'+ unit.unit2,
+            formatter: '{value}' + unit.unit2,
             textStyle: {
               color: '#999',
               fontsize: '11'
             }
           },
-          color: '#C7C7C7',
+          color: '#C7C7C7'
         }
       ],
       series: [
@@ -117,7 +113,8 @@ export default class Line extends React.Component{
               label: {
                 show: true, //开启显示
                 position: 'top', //在上方显示
-                textStyle: { //数值样式
+                textStyle: {
+                  //数值样式
                   color: '#999',
                   fontSize: 12
                 }
@@ -132,25 +129,24 @@ export default class Line extends React.Component{
           itemStyle: {
             normal: {
               color: '#ED001B',
-              lineStyle:{
-                width:2//设置线条粗细
-              },
-
+              lineStyle: {
+                width: 2 //设置线条粗细
+              }
             }
           },
           yAxisIndex: 1,
           data: data.y2
         }
       ]
-    }
-    return option
-  }
+    };
+    return option;
+  };
 
-  render(){
-    return(
-      <div  style={{ height: '100%', width: '100%' }}>
-        <ReactEcharts option={this.getOption()}   style={{ height: '100%', width: '100%' }}/>
+  render() {
+    return (
+      <div style={{ height: '100%', width: '100%' }}>
+        <ReactEcharts option={this.getOption()} style={{ height: '100%', width: '100%' }} />
       </div>
-    )
+    );
   }
 }

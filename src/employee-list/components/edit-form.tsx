@@ -1,17 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
-import {
-  Row,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Switch,
-  DatePicker,
-  TreeSelect,
-  message
-} from 'antd';
+import { Row, Form, Input, Select, Radio, Switch, DatePicker, TreeSelect, message } from 'antd';
 import { List } from 'immutable';
 import { Const } from 'qmkit';
 import moment from 'moment';
@@ -90,11 +80,7 @@ export default class EditForm extends React.Component<any, any> {
     }
     this.setState({
       prescriberIds: {
-        initialValue: Array.isArray(employeeForm.get('prescriberIds'))
-          ? employeeForm.get('prescriberIds')
-          : employeeForm.get('prescriberIds')
-          ? employeeForm.get('prescriberIds').toJS()
-          : []
+        initialValue: Array.isArray(employeeForm.get('prescriberIds')) ? employeeForm.get('prescriberIds') : employeeForm.get('prescriberIds') ? employeeForm.get('prescriberIds').toJS() : []
       }
     });
   }
@@ -139,15 +125,11 @@ export default class EditForm extends React.Component<any, any> {
       };
 
       firstName = {
-        initialValue: employeeForm.get('employeeName')
-          ? employeeForm.get('employeeName').split(' ')[0]
-          : ''
+        initialValue: employeeForm.get('employeeName') ? employeeForm.get('employeeName').split(' ')[0] : ''
       };
 
       lastName = {
-        initialValue: employeeForm.get('employeeName')
-          ? employeeForm.get('employeeName').split(' ')[1]
-          : ''
+        initialValue: employeeForm.get('employeeName') ? employeeForm.get('employeeName').split(' ')[1] : ''
       };
 
       employeeMobile = {
@@ -167,9 +149,7 @@ export default class EditForm extends React.Component<any, any> {
       };
 
       birthday = {
-        initialValue: employeeForm.get('birthday')
-          ? moment(employeeForm.get('birthday'))
-          : null
+        initialValue: employeeForm.get('birthday') ? moment(employeeForm.get('birthday')) : null
       };
 
       departmentIdList = {
@@ -199,11 +179,7 @@ export default class EditForm extends React.Component<any, any> {
     return (
       <Form>
         <Row>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="firstName" />}
-            hasFeedback
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" />} hasFeedback>
             {getFieldDecorator('firstName', {
               ...firstName,
               rules: [
@@ -219,28 +195,14 @@ export default class EditForm extends React.Component<any, any> {
                 },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorWhiteSpace(
-                      rule,
-                      value,
-                      callback,
-                      'firstName'
-                    );
+                    QMMethod.validatorWhiteSpace(rule, value, callback, 'firstName');
                   }
                 }
               ]
-            })(
-              <Input
-                disabled={editDisable}
-                placeholder="Only 1-20 characters"
-              />
-            )}
+            })(<Input disabled={editDisable} placeholder="Only 1-20 characters" />)}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="lastName" />}
-            hasFeedback
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="lastName" />} hasFeedback>
             {getFieldDecorator('lastName', {
               ...lastName,
               rules: [
@@ -256,29 +218,14 @@ export default class EditForm extends React.Component<any, any> {
                 },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorWhiteSpace(
-                      rule,
-                      value,
-                      callback,
-                      'lastName'
-                    );
+                    QMMethod.validatorWhiteSpace(rule, value, callback, 'lastName');
                   }
                 }
               ]
-            })(
-              <Input
-                disabled={editDisable}
-                placeholder="Only 1-20 characters"
-              />
-            )}
+            })(<Input disabled={editDisable} placeholder="Only 1-20 characters" />)}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="email" />}
-            required={true}
-            hasFeedback
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="email" />} required={true} hasFeedback>
             {getFieldDecorator('email', {
               ...email,
               rules: [
@@ -289,24 +236,14 @@ export default class EditForm extends React.Component<any, any> {
                 },
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorWhiteSpace(
-                      rule,
-                      value,
-                      callback,
-                      'Email'
-                    );
+                    QMMethod.validatorWhiteSpace(rule, value, callback, 'Email');
                   }
                 }
               ]
             })(<Input disabled={editDisable} placeholder="0-50 characters" />)}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="employeePhone" />}
-            hasFeedback
-            required={false}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="employeePhone" />} hasFeedback required={false}>
             {getFieldDecorator('employeeMobile', {
               ...employeeMobile,
               rules: [
@@ -314,37 +251,20 @@ export default class EditForm extends React.Component<any, any> {
                 // { pattern: ValidConst.phone, message: '请输入正确的手机号码' }
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      'Phone',
-                      8,
-                      20
-                    );
+                    QMMethod.validatorMinAndMax(rule, value, callback, 'Phone', 8, 20);
                   }
                 }
               ]
             })(<Input disabled={editDisable} />)}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="employeeNo" />}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="employeeNo" />}>
             {getFieldDecorator('jobNo', {
               ...jobNo,
               rules: [
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      'User No',
-                      0,
-                      20
-                    );
+                    QMMethod.validatorMinAndMax(rule, value, callback, 'User No', 0, 20);
                   }
                 }
               ]
@@ -374,29 +294,13 @@ export default class EditForm extends React.Component<any, any> {
             })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
           </FormItem> */}
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="birthday" />}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="birthday" />}>
             {getFieldDecorator('birthday', {
               ...birthday
-            })(
-              <DatePicker
-                disabled={editDisable}
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
-                allowClear={true}
-                format={Const.DAY_FORMAT}
-                placeholder={'birthday'}
-              />
-            )}
+            })(<DatePicker disabled={editDisable} getCalendarContainer={() => document.getElementById('page-content')} allowClear={true} format={Const.DAY_FORMAT} placeholder={'birthday'} />)}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="gender" />}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="gender" />}>
             {getFieldDecorator('sex', {
               ...sex
             })(
@@ -419,18 +323,12 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="attributionDepartment" />}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="attributionDepartment" />}>
             {getFieldDecorator('departmentIdList', {
               ...departmentIdList
             })(
               <TreeSelect
-                disabled={
-                  editDisable ||
-                  (isMaster == 0 && manageDepartmentIdList.size == 0)
-                }
+                disabled={editDisable || (isMaster == 0 && manageDepartmentIdList.size == 0)}
                 // treeData = {treeData.toJS()}
                 showSearch={false}
                 style={{ width: '100%' }}
@@ -447,12 +345,7 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="systemRole" />}
-            hasFeedback
-            required={true}
-          >
+          <FormItem {...formItemLayout} label={<FormattedMessage id="systemRole" />} hasFeedback required={true}>
             {getFieldDecorator('roleIdList', {
               ...roleIdList,
               rules: [
@@ -469,11 +362,7 @@ export default class EditForm extends React.Component<any, any> {
                 // mode="multiple"
                 showSearch
                 onChange={this.roleChange}
-                filterOption={(input, option: { props }) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
+                filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
                 {this._renderOption(roles)}
                 {/* {
@@ -485,18 +374,11 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          {this.state.selectRoleNames &&
-          this.state.selectRoleNames.indexOf('Prescriber') > -1 ? (
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="Prescriber" />}
-              hasFeedback
-            >
+          {this.state.selectRoleNames && this.state.selectRoleNames.indexOf('Prescriber') > -1 ? (
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber" />} hasFeedback>
               {getFieldDecorator('prescriberIds', {
                 ...this.state.prescriberIds,
-                rules: [
-                  { required: true, message: 'Please Select Prescribers!' }
-                ]
+                rules: [{ required: true, message: 'Please Select Prescribers!' }]
               })(
                 <Select
                   mode="tags"
@@ -582,20 +464,13 @@ export default class EditForm extends React.Component<any, any> {
 
           {_state.get('edit') ? (
             <FormItem {...formItemLayout} label="Reset Password">
-              <Switch
-                onChange={(e) => this.setState({ changePassword: e.valueOf() })}
-              />
+              <Switch onChange={(e) => this.setState({ changePassword: e.valueOf() })} />
             </FormItem>
           ) : null}
 
           {this.state.changePassword ? (
             <div>
-              <FormItem
-                {...formItemLayout}
-                label="Password"
-                hasFeedback
-                required={true}
-              >
+              <FormItem {...formItemLayout} label="Password" hasFeedback required={true}>
                 {getFieldDecorator('accountPassword', {
                   rules: [
                     { required: true, message: 'Please enter the password' },
@@ -607,12 +482,7 @@ export default class EditForm extends React.Component<any, any> {
                 })(<Input type="password" />)}
               </FormItem>
 
-              <FormItem
-                {...formItemLayout}
-                label="Confirm Password"
-                hasFeedback
-                required={true}
-              >
+              <FormItem {...formItemLayout} label="Confirm Password" hasFeedback required={true}>
                 {getFieldDecorator('accountPasswordConfirm', {
                   rules: [
                     {
@@ -656,10 +526,7 @@ export default class EditForm extends React.Component<any, any> {
   _renderOption(roles: List<any>) {
     return roles.map((option) => {
       return (
-        <Option
-          value={option.get('roleInfoId').toString()}
-          key={option.get('roleInfoId')}
-        >
+        <Option value={option.get('roleInfoId').toString()} key={option.get('roleInfoId')}>
           {option.get('roleName')}
         </Option>
       );
@@ -667,12 +534,7 @@ export default class EditForm extends React.Component<any, any> {
   }
 
   filterOption = (input, option: { props }) => {
-    return (
-      option.props.children
-        .toString()
-        .toLowerCase()
-        .indexOf(input.toLowerCase()) >= 0
-    );
+    return option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
   /**
@@ -750,30 +612,12 @@ export default class EditForm extends React.Component<any, any> {
       if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-          <TreeNode
-            disabled={
-              isMaster == 0 &&
-              !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))
-            }
-            value={dep.get('departmentId')}
-            title={dep.get('departmentName')}
-            key={index}
-          >
+          <TreeNode disabled={isMaster == 0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))} value={dep.get('departmentId')} title={dep.get('departmentName')} key={index}>
             {this._loop(childDeparts)}
           </TreeNode>
         );
       }
-      return (
-        <TreeNode
-          disabled={
-            isMaster == 0 &&
-            !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))
-          }
-          value={dep.get('departmentId')}
-          title={dep.get('departmentName')}
-          key={index}
-        />
-      );
+      return <TreeNode disabled={isMaster == 0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))} value={dep.get('departmentId')} title={dep.get('departmentName')} key={index} />;
     });
   };
 }

@@ -70,42 +70,22 @@ export default class BillingDetailsNext extends React.Component<any, any> {
   render() {
     const { detailProductList } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const allPrescribers =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers
-        : [];
+    const allPrescribers = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers : [];
     setTimeout(() => {
       console.log(detailProductList.prescriberName);
     });
     return (
       <div style={styles.main}>
-        <div style={styles.nav}>
-          {history.location.state
-            ? 'Recommended Product List'
-            : 'Select Recommended Product'}
-        </div>
+        <div style={styles.nav}>{history.location.state ? 'Recommended Product List' : 'Select Recommended Product'}</div>
         <div style={styles.btn}>
           {history.location.state ? null : (
-            <Button
-              type="primary"
-              shape="round"
-              icon="edit"
-              onClick={() => this.showProduct(true)}
-              disabled={localStorage.getItem('enable') ? true : false}
-            >
+            <Button type="primary" shape="round" icon="edit" onClick={() => this.showProduct(true)} disabled={localStorage.getItem('enable') ? true : false}>
               Add Product
             </Button>
           )}
         </div>
         <DetailList />
-        {this.state.visible == true ? (
-          <ProductTooltip
-            visible={this.state.visible}
-            showModal={this.showProduct}
-          />
-        ) : (
-          <React.Fragment />
-        )}
+        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
       </div>
     );
   }

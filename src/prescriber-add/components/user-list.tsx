@@ -1,18 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Tooltip,
-  Popconfirm,
-  Modal,
-  Row,
-  Col
-} from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
 import { SelectGroup, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
@@ -132,28 +119,28 @@ class UserList extends Component<any, any> {
       userForm: Object.assign({
         id: record.employeeId
       })
-    })
+    });
   };
 
   handleAudit = async (agree: Boolean) => {
-     if (agree) {
+    if (agree) {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 0);
       if (res.code === 'K-000000') {
         this.setState({
           auditModalVisible: false
-        })
+        });
         this.getUsers();
       }
-     } else {
+    } else {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
       if (res.code === 'K-000000') {
         this.setState({
           auditModalVisible: false
-        })
+        });
         this.getUsers();
       }
-     }
-  }
+    }
+  };
 
   sendEmail = async (recored) => {
     const { res: prescriberRes } = await webapi.getClinicById({
@@ -161,20 +148,20 @@ class UserList extends Component<any, any> {
     });
     let prescriberId = '';
     if (prescriberRes.code === 'K-000000') {
-      prescriberId = prescriberRes.context.prescriberId
+      prescriberId = prescriberRes.context.prescriberId;
     }
     let employeeName = recored.employeeName.split(' ');
     let paramter = {
       baseUrl: window.origin,
       email: recored.email,
-      firstName: employeeName && employeeName.length > 0 ?  recored.employeeName.split(' ')[0] : '',
+      firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
       prescriberId: prescriberId
-    }
+    };
     const { res } = await webapi.sendEmail(paramter);
-    if(res.code === 'K-000000') {
-      message.success('send successful')
+    if (res.code === 'K-000000') {
+      message.success('send successful');
     } else {
-      message.error(res.message || 'send failed')
+      message.error(res.message || 'send failed');
     }
   };
 
@@ -237,10 +224,7 @@ class UserList extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const prescriberId =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers[0].id
-        : null;
+    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
         title: 'User name',
@@ -280,10 +264,7 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 <Tooltip placement="top" title="Edit">
-                  <a
-                    onClick={() => this.editUser(record)}
-                    className="iconfont iconEdit"
-                  ></a>
+                  <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
                   title="Are you sure to remove the user?"
@@ -294,24 +275,16 @@ class UserList extends Component<any, any> {
                   cancelText="Cancel"
                 >
                   <Tooltip placement="top" title="Delete">
-                    <a
-                      className="iconfont iconDelete"
-                    ></a>
+                    <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
                   <Tooltip placement="top" title="Disabled">
-                    <a
-                      onClick={() => this.disabledUser(record)}
-                      className="iconfont iconbtn-disable"
-                    ></a>
+                    <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
                   <Tooltip placement="top" title="Enabled">
-                    <a
-                      onClick={() => this.enableUser(record)}
-                      className="iconfont iconEnabled"
-                    ></a>
+                    <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
               </span>
@@ -321,15 +294,11 @@ class UserList extends Component<any, any> {
           if (record.accountState === 3 || record.accountState === 4) {
             return (
               <span className="operation-box">
-                {record.accountState === 3 ? 
+                {record.accountState === 3 ? (
                   <Tooltip placement="top" title="Edit">
-                  <a
-                    onClick={() => this.editUser(record)}
-                    className="iconfont iconEdit"
-                  ></a>
-                </Tooltip>
-                : null
-                }
+                    <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
+                  </Tooltip>
+                ) : null}
                 <Popconfirm
                   title="Are you sure to remove the user?"
                   onConfirm={() => {
@@ -339,24 +308,16 @@ class UserList extends Component<any, any> {
                   cancelText="Cancel"
                 >
                   <Tooltip placement="top" title="Delete">
-                    <a
-                      className="iconfont iconDelete"
-                    ></a>
+                    <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
                   <Tooltip placement="top" title="Send">
-                    <a
-                      onClick={() => this.sendEmail(record)}
-                      className="iconfont iconemail"
-                    ></a>
+                    <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
                   <Tooltip placement="top" title="Audit">
-                    <a
-                      onClick={() => this.auditUser(record)}
-                      className="iconfont iconaudit"
-                    ></a>
+                    <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
               </span>
@@ -367,9 +328,7 @@ class UserList extends Component<any, any> {
     ];
     return (
       <div>
-        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>
-          *New added user still needs to register before logging in store portal
-        </p>
+        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
         <div className="container-search">
           <Form layout="inline">
             <FormItem>
@@ -437,53 +396,22 @@ class UserList extends Component<any, any> {
               </Button>
             </Form.Item>
           </Form>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={this.addUser}
-            style={{ marginBottom: '10px', marginTop: '10px' }}
-          >
+          <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
             <FormattedMessage id="add" />
           </Button>
         </div>
         <div className="container">
-          <Table
-            rowKey={(record, index) => index}
-            dataSource={this.state.userData}
-            columns={columns}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            onChange={this.handleTableChange}
-          />
+          <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
         </div>
-        <UserModal
-          userForm={this.state.userForm}
-          visible={this.state.userVisible}
-          parent={this}
-          prescriberKeyId={this.props.prescriberKeyId}
-          reflash={() => this.getUsers()}
-        />
-        <Modal
-          maskClosable={false}
-          title="Please input the reason for disabling"
-          visible={this.state.disabledModalVisible}
-          onCancel={this.cancelDisabled}
-          onOk={this.handleDisabled}
-        >
+        <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
+        <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
           <Form>
             <FormItem>
               {getFieldDecorator('reason', {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        'Reason for disabling',
-                        1,
-                        100
-                      );
+                      QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Reason for disabling', 1, 100);
                     }
                   }
                 ]
@@ -505,18 +433,23 @@ class UserList extends Component<any, any> {
           visible={this.state.auditModalVisible}
           footer={null}
           title="Agree or Reject?"
-          onCancel={()=>this.setState({
-            auditModalVisible: false
-          })}
-        > 
+          onCancel={() =>
+            this.setState({
+              auditModalVisible: false
+            })
+          }
+        >
           <Row>
-            <Col span={12}>
+            <Col span={12}></Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
+                Reject
+              </Button>
+              <Button type="primary" onClick={() => this.handleAudit(true)}>
+                Agree
+              </Button>
             </Col>
-            <Col span={12} style={{textAlign: 'right'}}>
-               <Button onClick={()=> this.handleAudit(false)} style={{ marginRight: '10px' }}>Reject</Button>
-               <Button type="primary" onClick={()=> this.handleAudit(true)}>Agree</Button>
-            </Col>
-          </Row>       
+          </Row>
         </Modal>
       </div>
     );

@@ -1,26 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
-import {
-  Form,
-  Input,
-  Select,
-  Button,
-  Menu,
-  Dropdown,
-  DatePicker,
-  Row,
-  Col,
-  message,
-  Cascader
-} from 'antd';
-import {
-  noop,
-  AuthWrapper,
-  checkAuth,
-  Headline,
-  history,
-  SelectGroup
-} from 'qmkit';
+import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, message, Cascader } from 'antd';
+import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
@@ -88,19 +69,11 @@ export default class SearchHead extends Component<any, any> {
   }
 
   render() {
-    const {
-      onSearch,
-      tab,
-      exportModalData,
-      onExportModalHide
-    } = this.props.relaxProps;
+    const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
     const { tradeState } = this.state;
     let hasMenu = false;
-    if (
-      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
-      checkAuth('fOrderList004')
-    ) {
+    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
     }
 
@@ -109,11 +82,7 @@ export default class SearchHead extends Component<any, any> {
         {tab.get('key') == 'flowState-INIT' && (
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
-              <a
-                target="_blank"
-                href="javascript:;"
-                onClick={() => this._showBatchAudit()}
-              >
+              <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
                 <FormattedMessage id="order.batchReview" />
               </a>
             </AuthWrapper>
@@ -253,30 +222,13 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center', marginTop: '20px' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const {
-                        recommendationId,
-                        buyerOptions,
-                        goodsOptions,
-                        receiverSelect,
-                        clinicSelect,
-                        linkStatus,
-                        buyerOptionsValue,
-                        goodsOptionsValue,
-                        receiverSelectValue,
-                        clinicSelectValue
-                      } = this.state;
+                      const { recommendationId, buyerOptions, goodsOptions, receiverSelect, clinicSelect, linkStatus, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue } = this.state;
                       const params = {
                         recommendationId,
-                        [buyerOptions == 'Recipient name'
-                          ? 'consumerName'
-                          : 'consumerEmail']: buyerOptionsValue,
-                        [goodsOptions == 'Product name'
-                          ? 'goodsInfoName'
-                          : 'goodsInfoNo']: goodsOptionsValue,
+                        [buyerOptions == 'Recipient name' ? 'consumerName' : 'consumerEmail']: buyerOptionsValue,
+                        [goodsOptions == 'Product name' ? 'goodsInfoName' : 'goodsInfoNo']: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
-                        [clinicSelect == 'clinicsName'
-                          ? 'prescriberName'
-                          : 'prescriberId']: clinicSelectValue,
+                        [clinicSelect == 'clinicsName' ? 'prescriberName' : 'prescriberId']: clinicSelectValue,
                         linkStatus
                       };
                       onSearch(params);

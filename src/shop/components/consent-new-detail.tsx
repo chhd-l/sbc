@@ -108,13 +108,7 @@ export default class StepNewConsent extends Component<any, any> {
       });
     }
 
-    list.push(
-      this.state.a,
-      this.state.b,
-      this.state.c,
-      this.state.d,
-      this.state.e
-    );
+    list.push(this.state.a, this.state.b, this.state.c, this.state.d, this.state.e);
     onFormChange({
       field: 'consentDetailList',
       value: list
@@ -147,24 +141,10 @@ export default class StepNewConsent extends Component<any, any> {
   }
 
   render() {
-    const {
-      onFormChange,
-      consentLanguage,
-      editList,
-      editId
-    } = this.props.relaxProps;
+    const { onFormChange, consentLanguage, editList, editId } = this.props.relaxProps;
 
-    const controls = [
-      'bold',
-      'italic',
-      'underline',
-      'text-color',
-      'separator',
-      'link',
-      'separator'
-    ];
-    let defaultLanguage =
-      consentLanguage == [] ? consentLanguage[0].description : '';
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator'];
+    let defaultLanguage = consentLanguage == [] ? consentLanguage[0].description : '';
     return (
       <div className="consent-detail">
         <div className="detail space-between">
@@ -300,11 +280,7 @@ export default class StepNewConsent extends Component<any, any> {
               </FormItem>
             </div>
 
-            <BraftEditor
-              className="my-editor"
-              controls={controls}
-              placeholder="请输入正文内容"
-            />
+            <BraftEditor className="my-editor" controls={controls} placeholder="请输入正文内容" />
 
             {/* 
             <div className="edit-content">
@@ -345,13 +321,7 @@ export default class StepNewConsent extends Component<any, any> {
                 <div className="edit-content">Consent detail</div>
               </div>
             ) : null}
-            <Button
-              className="btn"
-              type="primary"
-              shape="round"
-              icon="plus"
-              onClick={this.addDetail}
-            >
+            <Button className="btn" type="primary" shape="round" icon="plus" onClick={this.addDetail}>
               New detail
             </Button>
           </div>

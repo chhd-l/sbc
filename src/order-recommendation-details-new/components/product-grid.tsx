@@ -40,9 +40,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
     this.setState({
-      selectedRows: nextProps.selectedRows
-        ? nextProps.selectedRows
-        : fromJS([]),
+      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
       selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
@@ -63,13 +61,7 @@ export default class GoodsGrid extends React.Component<any, any> {
   }*/
 
   render() {
-    const {
-      loading,
-      goodsInfoPage,
-      selectedRowKeys,
-      selectedRows,
-      showValidGood
-    } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible } = this.props;
     console.log(goodsInfoPage.content, 222222222);
     return (
@@ -95,14 +87,8 @@ export default class GoodsGrid extends React.Component<any, any> {
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
               const sRows = fromJS(selectedRows).filter((f) => f);
-              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet())
-                .concat(fromJS(selectedTableRows).toSet())
-                .toList();
-              rows = selectedRowKeys
-                .map((key) =>
-                  rows.filter((row) => row.get('goodsInfoId') == key).first()
-                )
-                .filter((f) => f);
+              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
+              rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsInfoId') == key).first()).filter((f) => f);
               this.setState({
                 selectedRows: rows,
                 selectedRowKeys
@@ -119,18 +105,11 @@ export default class GoodsGrid extends React.Component<any, any> {
               // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
               // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
               // 因此判断等于2的失效状态下禁用
-              disabled: showValidGood
-                ? !showValidGood
-                : record.goodsStatus === 2
+              disabled: showValidGood ? !showValidGood : record.goodsStatus === 2
             })
           }}
         >
-          <Column
-            title="Product Name"
-            dataIndex="goodsInfoName"
-            key="goodsInfoName"
-            width="15%"
-          />
+          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" width="15%" />
 
           <Column
             title="SKU"
@@ -170,9 +149,7 @@ export default class GoodsGrid extends React.Component<any, any> {
                     onChange={(e, a) => {
                       let obj = this.state.selectedRows.toJS();
                       for (let o = 0; o < obj.length; o++) {
-                        obj[o].goodsInfoId === i['goodsInfoId']
-                          ? (obj[o].recommendationNumber = Number(e))
-                          : this.state.selectedRows.toJS();
+                        obj[o].goodsInfoId === i['goodsInfoId'] ? (obj[o].recommendationNumber = Number(e)) : this.state.selectedRows.toJS();
                       }
                       this.setState({
                         selectedRows: fromJS(obj)
@@ -220,8 +197,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
-    params.subscriptionFlag =
-      sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
+    params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
 
     let { res } = await webapi.fetchproductTooltip({ ...params });
 

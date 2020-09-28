@@ -117,9 +117,7 @@ export default class TodoItems extends React.Component<any, any> {
           title={
             <div>
               <p>Configure home control panel</p>
-              <p style={{ color: '#666', fontSize: 12, marginTop: 10 }}>
-                Data Kanban
-              </p>
+              <p style={{ color: '#666', fontSize: 12, marginTop: 10 }}>Data Kanban</p>
             </div>
           }
           visible={this.state.visible}
@@ -131,10 +129,7 @@ export default class TodoItems extends React.Component<any, any> {
           {dataBoard && dataBoard.size > 0 ? (
             dataBoard.map((board, index) => {
               board = fromJS(board);
-              if (
-                window.companyType == 0 &&
-                board.get('label') == '业务员业绩排行'
-              ) {
+              if (window.companyType == 0 && board.get('label') == '业务员业绩排行') {
                 return null;
               } else {
                 return (
@@ -298,13 +293,8 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="homeItem pending">
               <h3>To do list</h3>
               <div className="empty">
-                <img
-                  src="http://kstoreimages.b0.upaiyun.com/1506413955650.jpg"
-                  alt=""
-                />
-                <p style={{ marginTop: 20 }}>
-                  You haven't added to do items yet
-                </p>
+                <img src="http://kstoreimages.b0.upaiyun.com/1506413955650.jpg" alt="" />
+                <p style={{ marginTop: 20 }}>You haven't added to do items yet</p>
               </div>
             </div>
           )}

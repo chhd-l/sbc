@@ -1,22 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import * as webapi from './webapi';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  message,
-  Select,
-  Spin
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -211,15 +196,7 @@ class Notification extends Component<any, any> {
   };
 
   render() {
-    const {
-      title,
-      orderAutomationData,
-      subscriptionAutomationData,
-      RecommendationAutomationData,
-      selectedForm,
-      emailTemplateList,
-      previewHtml
-    } = this.state;
+    const { title, orderAutomationData, subscriptionAutomationData, RecommendationAutomationData, selectedForm, emailTemplateList, previewHtml } = this.state;
     const columns = [
       {
         title: 'Status',
@@ -241,12 +218,7 @@ class Notification extends Component<any, any> {
           <span>
             <a onClick={() => this.openSetting(record)}>setting</a>
             <Divider type="vertical" />
-            <Switch
-              checkedChildren="on"
-              unCheckedChildren="off"
-              defaultChecked={+record.status === 1 ? true : false}
-              onChange={() => this.changeAutoStatus(record.id, record.status)}
-            />
+            <Switch checkedChildren="on" unCheckedChildren="off" defaultChecked={+record.status === 1 ? true : false} onChange={() => this.changeAutoStatus(record.id, record.status)} />
           </span>
         )
       }
@@ -267,12 +239,7 @@ class Notification extends Component<any, any> {
                 <p>Sending Email automatically by the status of Order</p>
               </div>
             </div>
-            <Table
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={orderAutomationData}
-              pagination={false}
-            />
+            <Table style={{ marginTop: 20 }} columns={columns} dataSource={orderAutomationData} pagination={false} />
           </div>
           <div style={{ marginTop: 30 }}>
             <div style={{ display: 'flex' }}>
@@ -284,12 +251,7 @@ class Notification extends Component<any, any> {
                 <p>Sending Email automatically by the status of Subscription</p>
               </div>
             </div>
-            <Table
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={subscriptionAutomationData}
-              pagination={false}
-            />
+            <Table style={{ marginTop: 20 }} columns={columns} dataSource={subscriptionAutomationData} pagination={false} />
           </div>
           <div style={{ marginTop: 30 }}>
             <div style={{ display: 'flex' }}>
@@ -298,18 +260,10 @@ class Notification extends Component<any, any> {
               </div>
               <div style={{ marginLeft: 10 }}>
                 <h3>Email Automation - Recommendation</h3>
-                <p>
-                  Sending Email automatically by the status of Recommendation
-                </p>
+                <p>Sending Email automatically by the status of Recommendation</p>
               </div>
             </div>
-            <Table
-              rowKey="id"
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={RecommendationAutomationData}
-              pagination={false}
-            />
+            <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={RecommendationAutomationData} pagination={false} />
           </div>
         </div>
         <Modal
@@ -322,12 +276,7 @@ class Notification extends Component<any, any> {
             <Button key="back" shape="round" onClick={this.handleCancel}>
               Cancel
             </Button>,
-            <Button
-              key="submit"
-              shape="round"
-              type="primary"
-              onClick={this.updateNotification}
-            >
+            <Button key="submit" shape="round" type="primary" onClick={this.updateNotification}>
               Cofirm
             </Button>
           ]}
@@ -339,12 +288,7 @@ class Notification extends Component<any, any> {
                   <p>{selectedForm.selectedStatus}</p>
                 </FormItem>
                 <FormItem label="Email Template">
-                  <Select
-                    defaultValue={selectedForm.selectedTemplateId}
-                    onChange={(value, option) =>
-                      this.templateChange(value, option)
-                    }
-                  >
+                  <Select defaultValue={selectedForm.selectedTemplateId} onChange={(value, option) => this.templateChange(value, option)}>
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
                         <Option value={item.templateId} key={index}>
@@ -356,14 +300,7 @@ class Notification extends Component<any, any> {
               </Form>
             </Col>
             <Col span={18}>
-              <Spin spinning={this.state.loading}>
-                {previewHtml ? (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: previewHtml }}
-                    style={{ zoom: '0.5' }}
-                  ></div>
-                ) : null}
-              </Spin>
+              <Spin spinning={this.state.loading}>{previewHtml ? <div dangerouslySetInnerHTML={{ __html: previewHtml }} style={{ zoom: '0.5' }}></div> : null}</Spin>
             </Col>
           </Row>
         </Modal>

@@ -21,12 +21,7 @@ export default class HomeBody extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      tradeTodo,
-      returnTodo,
-      customerTodo,
-      employee
-    } = this.props.relaxProps;
+    const { tradeTodo, returnTodo, customerTodo, employee } = this.props.relaxProps;
     const phone = employee.get('phone');
     const phone1 = phone ? phone.slice(0, 3) + '****' + phone.slice(7) : '无';
 
@@ -36,92 +31,53 @@ export default class HomeBody extends React.Component<any, any> {
           <div className="homeItem pending">
             <h3>Pending matters</h3>
             <div className="dateBg">
-              <a
-                onClick={() => this._toOrderList({ key: 'flowState-INIT' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toOrderList({ key: 'flowState-INIT' })} className="dataItem">
                 <label>Pending approval orders</label>
                 <strong>{tradeTodo.get('waitAudit')}</strong>
               </a>
-              <a
-                onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toOrderList({ payStatus: 'NOT_PAID' })} className="dataItem">
                 <label>Pending payment orders</label>
                 <strong>{tradeTodo.get('waitPay')}</strong>
               </a>
-              <a
-                onClick={() => this._toOrderList({ key: 'flowState-AUDIT' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toOrderList({ key: 'flowState-AUDIT' })} className="dataItem">
                 <label>Pending delivery orders</label>
                 <strong>{tradeTodo.get('waitDeliver')}</strong>
               </a>
-              <a
-                onClick={() =>
-                  this._toOrderList({ key: 'flowState-DELIVERED' })
-                }
-                className="dataItem"
-              >
+              <a onClick={() => this._toOrderList({ key: 'flowState-DELIVERED' })} className="dataItem">
                 <label>Pending receive orders</label>
                 <strong>{tradeTodo.get('waitReceiving')}</strong>
               </a>
             </div>
 
             <div className="dateBg">
-              <a
-                onClick={() => this._toReturnList({ key: 'flowState-INIT' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toReturnList({ key: 'flowState-INIT' })} className="dataItem">
                 <label>Pending Refund Orders</label>
                 <strong>{returnTodo.get('waitAudit')}</strong>
               </a>
-              <a
-                onClick={() => this._toReturnList({ key: 'flowState-AUDIT' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toReturnList({ key: 'flowState-AUDIT' })} className="dataItem">
                 <label>Pending fill logistics return</label>
                 <strong>{returnTodo.get('waitFillLogistics')}</strong>
               </a>
-              <a
-                onClick={() =>
-                  this._toReturnList({ key: 'flowState-DELIVERED' })
-                }
-                className="dataItem"
-              >
+              <a onClick={() => this._toReturnList({ key: 'flowState-DELIVERED' })} className="dataItem">
                 <label>Pending receive chargeback</label>
                 <strong>{returnTodo.get('waitReceiving')}</strong>
               </a>
-              <a
-                onClick={() =>
-                  this._toReturnList({ key: 'flowState-RECEIVED' })
-                }
-                className="dataItem"
-              >
+              <a onClick={() => this._toReturnList({ key: 'flowState-RECEIVED' })} className="dataItem">
                 <label>Pending refund chargeback</label>
                 <strong>{returnTodo.get('waitRefund')}</strong>
               </a>
             </div>
 
             <div className="dateBg">
-              <a
-                onClick={() => this._toCustomerList({ key: '0' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toCustomerList({ key: '0' })} className="dataItem">
                 <label>待审核客户</label>
                 <strong>{customerTodo.get('waitAuditCustomer')}</strong>
               </a>
-              <a
-                onClick={() => this._toFinanceTax({ key: '0' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toFinanceTax({ key: '0' })} className="dataItem">
                 <label>待审核增票资质</label>
                 <strong>{customerTodo.get('waitAuditCustomerInvoice')}</strong>
               </a>
-              <a
-                onClick={() => this._toOrderTicket({ invoiceState: '0' })}
-                className="dataItem"
-              >
+              <a onClick={() => this._toOrderTicket({ invoiceState: '0' })} className="dataItem">
                 <label>Pending Invoice Orders</label>
                 <strong>{customerTodo.get('waitAuditOrderInvoice')}</strong>
               </a>
@@ -145,11 +101,7 @@ export default class HomeBody extends React.Component<any, any> {
               </div>
               <div className="peopleDetails">
                 <label>员工角色</label>
-                <strong>
-                  {employee.get('accountName') === 'system'
-                    ? '超级管理员'
-                    : employee.get('roleName')}
-                </strong>
+                <strong>{employee.get('accountName') === 'system' ? '超级管理员' : employee.get('roleName')}</strong>
               </div>
             </div>
           </div>

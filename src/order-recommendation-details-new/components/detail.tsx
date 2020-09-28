@@ -69,37 +69,21 @@ export default class BillingDetails extends React.Component<any, any> {
   render() {
     const { detailProductList } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const allPrescribers =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers
-        : [];
+    const allPrescribers = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers : [];
 
     setTimeout(() => {
       console.log(detailProductList.prescriberName);
     });
     return (
       <div style={styles.main}>
-        <div
-          className="space-between"
-          style={{ marginTop: 15, marginBottom: 10 }}
-        >
+        <div className="space-between" style={{ marginTop: 15, marginBottom: 10 }}>
           <div style={{ width: 150, margin: '0 auto' }}>
             {history.location.state ? (
-              <SelectGroup
-                label="Prescriber"
-                disabled={true}
-                value={detailProductList.prescriberName}
-                disabled={localStorage.getItem('enable') ? true : false}
-              ></SelectGroup>
+              <SelectGroup label="Prescriber" disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
             ) : (
               <SelectGroup
                 label="Prescriber"
-                defaultValue={
-                  sessionStorage.getItem('PrescriberType')
-                    ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                        .children
-                    : null
-                }
+                defaultValue={sessionStorage.getItem('PrescriberType') ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : null}
                 disabled={localStorage.getItem('enable') ? true : false}
                 onChange={(value, name) => this._prescriberChange(value, name)}
               >
@@ -111,17 +95,7 @@ export default class BillingDetails extends React.Component<any, any> {
               </SelectGroup>
             )}
           </div>
-          <div style={{ marginTop: 12, marginRight: 15 }}>
-            {history.location.state ? (
-              <Switch
-                checkedChildren=" Valid "
-                unCheckedChildren=" Invalid "
-                defaultChecked
-                onClick={this.onValid}
-                disabled={localStorage.getItem('enable') ? true : false}
-              />
-            ) : null}
-          </div>
+          <div style={{ marginTop: 12, marginRight: 15 }}>{history.location.state ? <Switch checkedChildren=" Valid " unCheckedChildren=" Invalid " defaultChecked onClick={this.onValid} disabled={localStorage.getItem('enable') ? true : false} /> : null}</div>
         </div>
       </div>
     );

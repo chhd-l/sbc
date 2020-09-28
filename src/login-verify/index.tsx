@@ -6,34 +6,35 @@ const bg_login = require('../login/img/bg_login.png');
 import AppStore from '../login/store';
 import { withOktaAuth } from '@okta/okta-react';
 
-@StoreProvider(AppStore, { debug: __DEV__ })
-export default withOktaAuth(class Login extends React.Component<any, any> {
-  store: AppStore;
+export default withOktaAuth(
+  class Login extends React.Component<any, any> {
+    store: AppStore;
 
-  constructor(props: any) {
-    super(props);
-    this.state = {};
-  }
+    constructor(props: any) {
+      super(props);
+      this.state = {};
+    }
 
-  componentWillMount() {
-    if (this.props.location.state && this.props.location.state.oktaLogout) {
-      this.props.authService.logout('/');
-    };
-  }
+    componentWillMount() {
+      if (this.props.location.state && this.props.location.state.oktaLogout) {
+        this.props.authService.logout('/');
+      }
+    }
 
-  componentDidMount() {
-    this.store.init();
-  }
+    componentDidMount() {
+      this.store.init();
+    }
 
-  render() {
-    const VerifyFormDetail = Form.create({})(verifyForm);
-    return (
-      <div style={styles.container}>
-        <VerifyFormDetail/>
-      </div>
-    );
+    render() {
+      const VerifyFormDetail = Form.create({})(verifyForm);
+      return (
+        <div style={styles.container}>
+          <VerifyFormDetail />
+        </div>
+      );
+    }
   }
-})
+);
 const styles = {
   container: {
     display: 'flex',

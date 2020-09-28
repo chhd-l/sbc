@@ -46,9 +46,7 @@ const tradeColumns = [
   {
     title: 'Order amount',
     dataIndex: 'orderAmt',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.orderAmt || 0).toFixed(2),
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
@@ -59,9 +57,7 @@ const tradeColumns = [
   {
     title: 'Payment amount',
     dataIndex: 'payOrderAmt',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.payOrderAmt || 0).toFixed(2),
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
   }
 ];
@@ -139,26 +135,7 @@ export default class StatisticalReport extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      trafficReport,
-      tradeReport,
-      customerGrowthReport,
-      trafficTrends,
-      tradeTrends,
-      customerGrowthTrends,
-      tradeData,
-      flowData,
-      customerData,
-      trafficOview,
-      tradeOview,
-      skuOview,
-      customerOview,
-      skuNum,
-      tradeNum,
-      oViewNum,
-      customerNum,
-      trafficNum
-    } = this.props.relaxProps;
+    const { trafficReport, tradeReport, customerGrowthReport, trafficTrends, tradeTrends, customerGrowthTrends, tradeData, flowData, customerData, trafficOview, tradeOview, skuOview, customerOview, skuNum, tradeNum, oViewNum, customerNum, trafficNum } = this.props.relaxProps;
 
     return (
       <div className={oviewUi[4]} style={{ marginLeft: -5, marginRight: -5 }}>
@@ -232,9 +209,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           <div className="dateBg">
             <div className="dataItem">
               <label>Payment orders</label>
-              <strong>
-                {tradeNum && (tradeNum.get('payOrderCount') || 0)}
-              </strong>
+              <strong>{tradeNum && (tradeNum.get('payOrderCount') || 0)}</strong>
             </div>
             <div className="dataItem">
               <label>
@@ -282,10 +257,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           </h3>
           <div className="align-items-center">
             <div className="dateBg1">
-              <PieChart
-                total={skuNum && (skuNum.get('total') || 0)}
-                shelves={skuNum && (skuNum.get('addedTotal') || 0)}
-              />
+              <PieChart total={skuNum && (skuNum.get('total') || 0)} shelves={skuNum && (skuNum.get('addedTotal') || 0)} />
               {/*<div className="dataItem">
               <label>
                 <FormattedMessage id="totalSKU" />
@@ -321,12 +293,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           <h3>
             <FormattedMessage id="visitsReportNearly10Days" />
           </h3>
-          <Table
-            dataSource={flowData.size > 0 ? flowData.toJS() : null}
-            columns={trafficColumns}
-            size="middle"
-            pagination={false}
-          />
+          <Table dataSource={flowData.size > 0 ? flowData.toJS() : null} columns={trafficColumns} size="middle" pagination={false} />
         </div>
         {/* </AuthWrapper>
         ) : null} */}
@@ -346,12 +313,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           <h3>
             <FormattedMessage id="transactionReportNearly10Days" />
           </h3>
-          <Table
-            dataSource={tradeData.size > 0 ? tradeData.toJS() : null}
-            columns={tradeColumns}
-            size="middle"
-            pagination={false}
-          />
+          <Table dataSource={tradeData.size > 0 ? tradeData.toJS() : null} columns={tradeColumns} size="middle" pagination={false} />
         </div>
         {/* </AuthWrapper>
         ) : null} */}
@@ -371,12 +333,7 @@ export default class StatisticalReport extends React.Component<any, any> {
           <h3>
             <FormattedMessage id="consumerReportNearly10Days" />
           </h3>
-          <Table
-            dataSource={customerData.size > 0 ? customerData.toJS() : null}
-            columns={customerColumns}
-            size="middle"
-            pagination={false}
-          />
+          <Table dataSource={customerData.size > 0 ? customerData.toJS() : null} columns={customerColumns} size="middle" pagination={false} />
         </div>
         {/* </AuthWrapper>
         ) : null} */}

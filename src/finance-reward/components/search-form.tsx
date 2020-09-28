@@ -41,9 +41,7 @@ export default class SearchForm extends React.Component<any, any> {
   componentDidMount() {
     console.log(JSON.parse(sessionStorage.getItem('PrescriberType')), 22122);
     if (sessionStorage.getItem('s2b-supplier@employee')) {
-      let employee = JSON.parse(
-        sessionStorage.getItem('s2b-supplier@employee')
-      );
+      let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
 
       if (employee.roleName.indexOf('Prescriber') !== -1) {
         let prescribers = this.state.listData;
@@ -62,12 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
     });*/
   };
   render() {
-    const {
-      onFormChange,
-      searchForm,
-      onSearch,
-      rewardList
-    } = this.props.relaxProps;
+    const { onFormChange, searchForm, onSearch, rewardList } = this.props.relaxProps;
 
     return (
       <Form className="filter-content" layout="inline">
@@ -75,9 +68,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="4" style={{ marginTop: '3px' }}>
             <FormItem>
               <Select
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 style={{ width: 180 }}
                 onChange={(e) => {
                   onFormChange({
@@ -98,12 +89,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="PrescriberID" />}
-                disabled={
-                  JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                    .clinicsIds != null
-                    ? true
-                    : null
-                }
+                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -111,12 +97,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={
-                  JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                    .clinicsIds != null
-                    ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
-                    : searchForm.get('prescriberId')
-                }
+                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : searchForm.get('prescriberId')}
               />
             </FormItem>
           </Col>
@@ -124,12 +105,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="prescriberName" />}
-                disabled={
-                  JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                    .clinicsIds != null
-                    ? true
-                    : null
-                }
+                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -137,13 +113,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={
-                  JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                    .clinicsIds != null
-                    ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                        .children
-                    : searchForm.get('prescriberName')
-                }
+                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : searchForm.get('prescriberName')}
               />
             </FormItem>
           </Col>

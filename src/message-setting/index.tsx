@@ -8,13 +8,11 @@ class MessageSetting extends Component<any, any> {
     super(props);
     this.state = {
       visible: false,
-      tips:
-        'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
+      tips: 'Please go to SendGrid to activate Email,and set up your AccessKeyId and AccessKeySecret in the SendGrid.',
       emailApiList: [
         {
           apiName: 'SendGrid',
-          imgUrl:
-            'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
+          imgUrl: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008140907121972.png'
         }
       ],
       settingForm: {
@@ -100,12 +98,7 @@ class MessageSetting extends Component<any, any> {
             <Button key="back" shape="round" onClick={this.handleCancel}>
               Cancel
             </Button>,
-            <Button
-              key="submit"
-              shape="round"
-              type="primary"
-              onClick={this.handleOk}
-            >
+            <Button key="submit" shape="round" type="primary" onClick={this.handleOk}>
               Cofirm
             </Button>
           ]}
@@ -131,9 +124,7 @@ class MessageSetting extends Component<any, any> {
             </FormItem>
             <FormItem label="Access Key ID" style={styles.formItem}>
               {getFieldDecorator('accessKeyId', {
-                rules: [
-                  { required: true, message: 'Please input Access Key ID!' }
-                ]
+                rules: [{ required: true, message: 'Please input Access Key ID!' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -148,9 +139,7 @@ class MessageSetting extends Component<any, any> {
             </FormItem>
             <FormItem label="Access Key Secret" style={styles.formItem}>
               {getFieldDecorator('accessKeySecret', {
-                rules: [
-                  { required: true, message: 'Please input Access Key Secret!' }
-                ]
+                rules: [{ required: true, message: 'Please input Access Key Secret!' }]
               })(
                 <Input
                   onChange={(e) => {

@@ -51,16 +51,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      selected,
-      dataList,
-      onSelect,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
     //console.log(this.props.relaxProps.searchForm.toJS(),'--------===');
     return (
       <DataGrid
@@ -100,21 +91,9 @@ export default class OrderInvoiceList extends React.Component<any, any> {
             </span>
           )}*/
         />
-        <Column
-          title="Clinics name"
-          key="clinicsName"
-          dataIndex="clinicsName"
-        />
-        <Column
-          title="Clinics region"
-          key="clinicsCity"
-          dataIndex="clinicsCity"
-        />
-        <Column
-          title="Prescription id"
-          key="prescriptionId"
-          dataIndex="prescriptionId"
-        />
+        <Column title="Clinics name" key="clinicsName" dataIndex="clinicsName" />
+        <Column title="Clinics region" key="clinicsCity" dataIndex="clinicsCity" />
+        <Column title="Prescription id" key="prescriptionId" dataIndex="prescriptionId" />
         <Column
           title="Order time"
           dataIndex="date"
@@ -133,28 +112,8 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         <Column title="Product id" dataIndex="productId" key="productId" />
         <Column title="Unit price" key="price" dataIndex="price" />
         <Column title="Qty" key="quantity" dataIndex="quantity" />
-        <Column
-          title="Order product amount"
-          key="totalIncome"
-          dataIndex="totalIncome"
-          width="12%"
-          render={(orderPrice) => (
-            <span>
-              {orderPrice != null
-                ? `${
-                    orderPrice.toFixed(2) +
-                    ' ' +
-                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
-                  }`
-                : '-'}
-            </span>
-          )}
-        />
-        <Column
-          title="Order status"
-          key="orderStatus"
-          dataIndex="orderStatus"
-        />
+        <Column title="Order product amount" key="totalIncome" dataIndex="totalIncome" width="12%" render={(orderPrice) => <span>{orderPrice != null ? `${orderPrice.toFixed(2) + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` : '-'}</span>} />
+        <Column title="Order status" key="orderStatus" dataIndex="orderStatus" />
         {/*<Column
           title='Unit price'
           width="8%"
@@ -215,20 +174,14 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={
-              invoiceState == 0
-                ? 'Do you confirm to bill？'
-                : 'Do you confirm to cancel bill record？'
-            }
+            title={invoiceState == 0 ? 'Do you confirm to bill？' : 'Do you confirm to cancel bill record？'}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
             okText="Confirm"
             cancelText="Cancel"
           >
-            <a href="javascript:void(0);">
-              {invoiceState == 0 ? 'Billing' : 'Cancellation'}
-            </a>
+            <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>
         </AuthWrapper>
       </div>

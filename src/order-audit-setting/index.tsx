@@ -1,27 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history, AuthWrapper } from 'qmkit';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Breadcrumb,
-  Tag,
-  message,
-  Select,
-  Radio,
-  DatePicker,
-  Spin,
-  Alert,
-  InputNumber
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -46,13 +25,7 @@ class OrderSetting extends Component<any, any> {
   };
 
   render() {
-    const {
-      title,
-      isAudit,
-      isPetInfo,
-      visibleAuditConfig,
-      configData
-    } = this.state;
+    const { title, isAudit, isPetInfo, visibleAuditConfig, configData } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -169,23 +142,12 @@ class OrderSetting extends Component<any, any> {
             >
               *
             </span>
-            Signed category 2 categories have been signed then maximum is 200
-            categories
+            Signed category 2 categories have been signed then maximum is 200 categories
           </p>
-          <Table
-            rowKey="id"
-            columns={columns}
-            dataSource={configData}
-            pagination={false}
-          ></Table>
+          <Table rowKey="id" columns={columns} dataSource={configData} pagination={false}></Table>
         </Modal>
         <div className="bar-button">
-          <Button
-            type="primary"
-            shape="round"
-            style={{ marginRight: 10 }}
-            onClick={() => this.save()}
-          >
+          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
             {<FormattedMessage id="save" />}
           </Button>
         </div>

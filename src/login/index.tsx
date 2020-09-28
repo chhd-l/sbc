@@ -31,11 +31,7 @@ export default class Login extends React.Component<any, any> {
 
   render() {
     const LoginFormDetail = Form.create({})(LoginForm);
-    return this.state.isRcLogin ? (
-      <div style={styles.container}>{<LoginFormDetail />}</div>
-    ) : (
-      <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
-    );
+    return this.state.isRcLogin ? <div style={styles.container}>{<LoginFormDetail />}</div> : <LoginHome parent={this.props} clickLoginRc={this.loginRc} />;
   }
 }
 const styles = {

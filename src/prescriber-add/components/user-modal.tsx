@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  Button,
-  message,
-  Input,
-  Modal,
-  Switch,
-  Select
-} from 'antd';
+import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
 import * as webapi from '../webapi';
 import { FormattedMessage } from 'react-intl';
 import { QMMethod, ValidConst } from 'qmkit';
@@ -38,9 +28,7 @@ class UserModal extends Component<any, any> {
 
   getPrescriberRole = async () => {
     const { res: roleRes } = await webapi.getAllRoles();
-    let prescriberRole = fromJS(roleRes).find(
-      (x) => x.get('roleName') === 'Prescriber'
-    );
+    let prescriberRole = fromJS(roleRes).find((x) => x.get('roleName') === 'Prescriber');
     this.setState({
       prescriberRoleId: prescriberRole.get('roleInfoId')
     });
@@ -50,21 +38,11 @@ class UserModal extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Modal
-        maskClosable={false}
-        title={this.props.userForm.id ? 'Edit User' : 'Add User'}
-        visible={this.props.visible}
-        onOk={this.onSave}
-        onCancel={() => this.cancel()}
-      >
+      <Modal maskClosable={false} title={this.props.userForm.id ? 'Edit User' : 'Add User'} visible={this.props.visible} onOk={this.onSave} onCancel={() => this.cancel()}>
         <Form>
           <Row>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="firstName" />}
-                hasFeedback
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" />} hasFeedback>
                 {getFieldDecorator('firstName', {
                   initialValue: this.props.userForm.firstName,
                   rules: [
@@ -80,12 +58,7 @@ class UserModal extends Component<any, any> {
                     },
                     {
                       validator: (rule, value, callback) => {
-                        QMMethod.validatorWhiteSpace(
-                          rule,
-                          value,
-                          callback,
-                          'firstName'
-                        );
+                        QMMethod.validatorWhiteSpace(rule, value, callback, 'firstName');
                       }
                     }
                   ]
@@ -93,11 +66,7 @@ class UserModal extends Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="lastName" />}
-                hasFeedback
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="lastName" />} hasFeedback>
                 {getFieldDecorator('lastName', {
                   initialValue: this.props.userForm.lastName,
                   rules: [
@@ -113,12 +82,7 @@ class UserModal extends Component<any, any> {
                     },
                     {
                       validator: (rule, value, callback) => {
-                        QMMethod.validatorWhiteSpace(
-                          rule,
-                          value,
-                          callback,
-                          'lastName'
-                        );
+                        QMMethod.validatorWhiteSpace(rule, value, callback, 'lastName');
                       }
                     }
                   ]
@@ -126,12 +90,7 @@ class UserModal extends Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="email" />}
-                required={true}
-                hasFeedback
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="email" />} required={true} hasFeedback>
                 {getFieldDecorator('email', {
                   initialValue: this.props.userForm.email,
                   rules: [
@@ -142,14 +101,7 @@ class UserModal extends Component<any, any> {
                     },
                     {
                       validator: (rule, value, callback) => {
-                        QMMethod.validatorMinAndMax(
-                          rule,
-                          value,
-                          callback,
-                          'Email',
-                          0,
-                          50
-                        );
+                        QMMethod.validatorMinAndMax(rule, value, callback, 'Email', 0, 50);
                       }
                     }
                   ]

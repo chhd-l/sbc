@@ -9,14 +9,7 @@ declare type IList = List<any>;
 
 import moment from 'moment';
 const TableRow = styled.div`
-  .ant-table-small
-    > .ant-table-content
-    > .ant-table-scroll
-    > .ant-table-body
-    > table
-    > .ant-table-tbody
-    > tr
-    > td {
+  .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-tbody > tr > td {
     padding: 8px 8px;
   }
   .ant-table-thead > tr:first-child > th:last-child {
@@ -50,11 +43,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     onCreateLink: noop
   };
 
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<any>,
-    snapshot?: any
-  ) {
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
     localStorage.removeItem('productselect');
     const { productselect, onCreateLink } = this.props.relaxProps;
     localStorage.setItem('productselect', String(productselect.length));
@@ -82,24 +71,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     //const pageNum = productForm && productForm.pageNum;
     return (
       <TableRow>
-        <DataGrid
-          scroll={{ y: 500 }}
-          size="small"
-          rowKey={(record, index) => index}
-          dataSource={productselect instanceof Array ? productselect : []}
-          pagination={false}
-        >
+        <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
           {/*<Column title="No" dataIndex="No" key="No" render={(text,record,index) => {
             return <span>{(pageNum)*10+index+1}</span>
           }}/>
           <Column title="Image" dataIndex="Image" key="Image" render={(text) => {
             return <img src={text} alt="" width="20" height="25"/>
           }}/>*/}
-          <Column
-            title="Product Name"
-            dataIndex="goodsInfoName"
-            key="goodsInfoName"
-          />
+          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column
             title="Signed classification"

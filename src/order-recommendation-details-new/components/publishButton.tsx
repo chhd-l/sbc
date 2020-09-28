@@ -34,12 +34,7 @@ export default class PublishButton extends React.Component<any, any> {
     };
   }
   showModal = (res) => {
-    const {
-      createLink,
-      productselect,
-      onCreateLink,
-      onCreate
-    } = this.props.relaxProps;
+    const { createLink, productselect, onCreateLink, onCreate } = this.props.relaxProps;
 
     if (createLink.toJS().recommendationGoodsInfoRels.length > 0) {
       onCreate(createLink.toJS());
@@ -66,20 +61,13 @@ export default class PublishButton extends React.Component<any, any> {
             Cancel
           </Button>
           {history.location.state ? null : (
-            <Button
-              type="primary"
-              shape="round"
-              onClick={() => this.showModal(true)}
-            >
+            <Button type="primary" shape="round" onClick={() => this.showModal(true)}>
               Create Link
             </Button>
           )}
         </div>
         <div className={this.state.visible ? 'show' : 'hide'}>
-          <PublishTooltip
-            visible={this.state.visible}
-            showModal={this.showModal}
-          />
+          <PublishTooltip visible={this.state.visible} showModal={this.showModal} />
         </div>
       </div>
     );

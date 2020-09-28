@@ -37,12 +37,7 @@ export default class DetailPublish extends React.Component<any, any> {
   verification = () => {
     const { sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
-    if (
-      sharingObj.consumerFirstName != '' &&
-      sharingObj.consumerLastName != '' &&
-      sharingObj.consumerEmail != '' &&
-      sharingObj.emailConsent != ''
-    ) {
+    if (sharingObj.consumerFirstName != '' && sharingObj.consumerLastName != '' && sharingObj.consumerEmail != '' && sharingObj.emailConsent != '') {
       if (util.checkEmail(sharingObj.consumerEmail) == true) {
         return sharingObj;
         //onSend(Object.assign({}, sharingObj, {id:getLink}))
@@ -59,17 +54,8 @@ export default class DetailPublish extends React.Component<any, any> {
   handleOk = (e) => {
     const { onSend, getLink, sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
-    if (
-      sharingObj.consumerFirstName != '' &&
-      sharingObj.consumerLastName != '' &&
-      sharingObj.consumerEmail != '' &&
-      sharingObj.emailConsent != '' &&
-      util.checkEmail(sharingObj.consumerEmail) == true
-    ) {
-      onSend(
-        'send',
-        Object.assign({}, this.verification(), { base64Id: getLink })
-      );
+    if (sharingObj.consumerFirstName != '' && sharingObj.consumerLastName != '' && sharingObj.consumerEmail != '' && sharingObj.emailConsent != '' && util.checkEmail(sharingObj.consumerEmail) == true) {
+      onSend('send', Object.assign({}, this.verification(), { base64Id: getLink }));
     } else {
       this.verification();
     }
@@ -82,10 +68,7 @@ export default class DetailPublish extends React.Component<any, any> {
   handleSendAnother = async (param?: any) => {
     const { onSend, getLink, send, onSharing, sharing } = this.props.relaxProps;
     Promise.all([
-      onSend(
-        'addSend',
-        Object.assign({}, this.verification(), { base64Id: getLink })
-      ),
+      onSend('addSend', Object.assign({}, this.verification(), { base64Id: getLink })),
       onSharing({ field: 'consumerFirstName', value: '' }),
       onSharing({ field: 'consumerLastName', value: '' }),
       onSharing({ field: 'emailConsent', value: 0 }),
@@ -221,21 +204,11 @@ export default class DetailPublish extends React.Component<any, any> {
         <div className="link space-between">
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />
-            <span style={{ marginLeft: 5, color: '#8f0101' }}>
-              https://shopuat.466920.com/recommendation/{getLink}
-            </span>
+            <span style={{ marginLeft: 5, color: '#8f0101' }}>https://shopuat.466920.com/recommendation/{getLink}</span>
           </div>
         </div>
         <div style={{ display: 'flex', marginTop: '1rem' }}>
-          <Button
-            onClick={() =>
-              this.copyLink(
-                `https://shopuat.466920.com/recommendation/${getLink}`
-              )
-            }
-          >
-            Copy the link
-          </Button>
+          <Button onClick={() => this.copyLink(`https://shopuat.466920.com/recommendation/${getLink}`)}>Copy the link</Button>
         </div>
         <div style={{ paddingTop: 4, marginTop: '1rem' }}>
           <span

@@ -1,16 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
-import {
-  routeWithSubRoutes,
-  MyHeader,
-  MyLeftLevel1,
-  MyLeftMenu,
-  Fetch,
-  util,
-  history,
-  Const,
-  cache
-} from 'qmkit';
+import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
 const { Content } = Layout;
 import { routes, auditDidNotPass } from './router';
 
@@ -34,14 +24,9 @@ export default class Main extends React.Component<any, any> {
       Fetch('/baseConfig').then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {
           if ((resIco.res as any).defaultLocalDateTime) {
-            sessionStorage.setItem(
-              'defaultLocalDateTime',
-              (resIco.res as any).defaultLocalDateTime
-            );
+            sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
           }
-          const ico = (resIco.res.context as any).pcIco
-            ? JSON.parse((resIco.res.context as any).pcIco)
-            : null;
+          const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
           if (ico) {
             const linkEle = document.getElementById('icoLink') as any;
             linkEle.href = ico[0].url;
@@ -52,18 +37,9 @@ export default class Main extends React.Component<any, any> {
       Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {
           if ((resIco.res as any).context) {
-            sessionStorage.setItem(
-              cache.SYSTEM_GET_CONFIG,
-              (resIco.res as any).context.currency.valueEn
-            ); //货币符号
-            sessionStorage.setItem(
-              cache.SYSTEM_GET_CONFIG_NAME,
-              (resIco.res as any).context.currency.name
-            ); //货币名称
-            sessionStorage.setItem(
-              cache.MAP_MODE,
-              (resIco.res as any).context.storeVO.prescriberMap
-            ); //货币名称
+            sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (resIco.res as any).context.currency.valueEn); //货币符号
+            sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (resIco.res as any).context.currency.name); //货币名称
+            sessionStorage.setItem(cache.MAP_MODE, (resIco.res as any).context.storeVO.prescriberMap); //货币名称
           }
         }
       });
@@ -77,10 +53,7 @@ export default class Main extends React.Component<any, any> {
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.location !== this.props.location &&
-      this.props.location.pathname != '/implicit/callback'
-    ) {
+    if (nextProps.location !== this.props.location && this.props.location.pathname != '/implicit/callback') {
       // navigated!
       this.setState({
         matchedPath: nextProps.location.pathname
@@ -107,15 +80,9 @@ export default class Main extends React.Component<any, any> {
           <div className="layout-header"></div>
           <Layout className="ant-layout-has-sider">
             {/*左侧一级菜单*/}
-            <MyLeftLevel1
-              matchedPath={this.state.matchedPath}
-              onFirstActiveChange={this._onFirstActiveChange}
-            />
+            <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
             {/*左侧二三级菜单*/}
-            <MyLeftMenu
-              matchedPath={this.state.matchedPath}
-              ref={(menu) => (this._menu = menu)}
-            />
+            <MyLeftMenu matchedPath={this.state.matchedPath} ref={(menu) => (this._menu = menu)} />
             {/*右侧主操作区域*/}
             <Content>
               <div style={styles.wrapper} id="page-content">

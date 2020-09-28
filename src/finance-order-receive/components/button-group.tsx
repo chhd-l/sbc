@@ -25,12 +25,10 @@ export default class ButtonGroup extends React.Component<any, any> {
   render() {
     return (
       <div className="handle-bar">
-        <Dropdown
-          overlay={this._menu()}
-          getPopupContainer={() => document.getElementById('page-content')}
-        >
+        <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
           <Button>
-            批量操作<Icon type="down" />
+            批量操作
+            <Icon type="down" />
           </Button>
         </Dropdown>
       </div>

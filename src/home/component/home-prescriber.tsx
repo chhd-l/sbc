@@ -24,9 +24,7 @@ const tradeColumns = [
   {
     title: 'Order amount',
     dataIndex: 'orderAmt',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.orderAmt || 0).toFixed(2),
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.orderAmt || 0).toFixed(2),
     key: 'orderAmt'
   },
   {
@@ -37,9 +35,7 @@ const tradeColumns = [
   {
     title: 'Payment amount',
     dataIndex: 'payOrderAmt',
-    render: (_text, record) =>
-      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-      (record.payOrderAmt || 0).toFixed(2),
+    render: (_text, record) => sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (record.payOrderAmt || 0).toFixed(2),
     key: 'payOrderAmt'
   }
 ];
@@ -67,8 +63,7 @@ export default class homePrescriber extends Component<any, any> {
     super(props);
     this.state = {
       tradeInfo: {},
-      prescriber: {
-      },
+      prescriber: {},
       tradeData: [],
       flowTrendData: [],
       customerData: [],
@@ -93,12 +88,10 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerGrowTrendData(id);
   };
   componentWillMount() {
-    this.getPrescriberDetail(this.props.prescriberId)
+    this.getPrescriberDetail(this.props.prescriberId);
     let o = {
-      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
-        .prescribers[0].id,
-      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
-        .prescribers[0].prescriberName
+      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].id,
+      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].prescriberName
     };
     let act = JSON.stringify(o);
     if (sessionStorage.getItem('PrescriberType') === null) {
@@ -108,16 +101,13 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescriberDetail = async (id) => {
     if (id) {
-      let allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers
-      if(allPerscriber) {
-        let selectPerscriber = allPerscriber.find(x=>x.id === this.props.prescriberId)
+      let allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers;
+      if (allPerscriber) {
+        let selectPerscriber = allPerscriber.find((x) => x.id === this.props.prescriberId);
         this.setState({
-          prescriber:selectPerscriber
+          prescriber: selectPerscriber
         });
-        sessionStorage.setItem(
-          cache.PRESCRIBER_DATA,
-          JSON.stringify(selectPerscriber)
-        );
+        sessionStorage.setItem(cache.PRESCRIBER_DATA, JSON.stringify(selectPerscriber));
       } else {
         sessionStorage.removeItem(cache.PRESCRIBER_DATA);
       }
@@ -219,20 +209,11 @@ export default class homePrescriber extends Component<any, any> {
 
   render() {
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const allPrescribers =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers
-        : [];
+    const allPrescribers = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers : [];
     return (
       <div>
-        <div
-          className="flowBox todayDataFour"
-          style={{ marginLeft: -5, marginRight: -5 }}
-        >
-          <div
-            className="homeItem todayData"
-            style={{ width: 'calc(50% - 10px)' }}
-          >
+        <div className="flowBox todayDataFour" style={{ marginLeft: -5, marginRight: -5 }}>
+          <div className="homeItem todayData" style={{ width: 'calc(50% - 10px)' }}>
             <h3>
               <FormattedMessage id="transactionToday" />
             </h3>
@@ -248,10 +229,7 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="orderAmount" />
                 </label>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
-                  {this.state.tradeInfo.orderAmt
-                    ? (this.state.tradeInfo.orderAmt || 0).toFixed(2)
-                    : 0.0}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {this.state.tradeInfo.orderAmt ? (this.state.tradeInfo.orderAmt || 0).toFixed(2) : 0.0}
                 </strong>
               </div>
               <div className="dataItem" style={{ flex: 'inherit' }}>
@@ -265,19 +243,13 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="paymentAmount" />
                 </label>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
-                  {this.state.tradeInfo.payOrderAmt
-                    ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2)
-                    : 0.0}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {this.state.tradeInfo.payOrderAmt ? (this.state.tradeInfo.payOrderAmt || 0).toFixed(2) : 0.0}
                 </strong>
               </div>
             </div>
           </div>
 
-          <div
-            className="homeItem todayData"
-            style={{ width: 'calc(27% - 10px)' }}
-          >
+          <div className="homeItem todayData" style={{ width: 'calc(27% - 10px)' }}>
             <h3>
               <FormattedMessage id="rewardSummary" />
             </h3>
@@ -293,19 +265,13 @@ export default class homePrescriber extends Component<any, any> {
                   <FormattedMessage id="rewardAmount" />
                 </label>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
-                  {this.state.tradeInfo.orderCount
-                    ? (this.state.tradeInfo.rewardCount || 0).toFixed(2)
-                    : 0.0}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {this.state.tradeInfo.orderCount ? (this.state.tradeInfo.rewardCount || 0).toFixed(2) : 0.0}
                 </strong>
               </div>
             </div>
           </div>
 
-          <div
-            className="homeItem todayData prescriberInfo"
-            style={{ width: 'calc(23% - 10px)', paddingLeft: '0px' }}
-          >
+          <div className="homeItem todayData prescriberInfo" style={{ width: 'calc(23% - 10px)', paddingLeft: '0px' }}>
             <div>
               <Row>
                 <Col span={10}>
@@ -316,31 +282,19 @@ export default class homePrescriber extends Component<any, any> {
                 </Col>
                 <Col span={12}>
                   <div className="prescriberWord">
-                    <Select
-                      onChange={(value, name) =>
-                        this._prescriberChange(value, name)
-                      }
-                      defaultValue={
-                        this.props.prescriberId
-                      }
-                      style={{ width: '140px', marginBottom: '10px' }}
-                    >
+                    <Select onChange={(value, name) => this._prescriberChange(value, name)} defaultValue={this.props.prescriberId} style={{ width: '140px', marginBottom: '10px' }}>
                       {allPrescribers.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.prescriberName}
                         </Option>
                       ))}
                     </Select>
-                    <div className="prescriberLable">
-                      Prescriber ID: {this.state.prescriber.prescriberId}
-                    </div>
-                    <div className="prescriberLable">
-                      Prescriber Type: {this.state.prescriber.prescriberType}
-                    </div>
+                    <div className="prescriberLable">Prescriber ID: {this.state.prescriber.prescriberId}</div>
+                    <div className="prescriberLable">Prescriber Type: {this.state.prescriber.prescriberType}</div>
                     <div style={{ marginTop: '15px', fontWeight: 700 }}>
-                         <Link style={{ textDecoration: 'underline' }}
-                          to={'/prescriber-edit/' + this.state.prescriber.id}
-                         >Manage Prescriber</Link>
+                      <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+                        Manage Prescriber
+                      </Link>
                     </div>
                   </div>
                 </Col>
@@ -351,12 +305,7 @@ export default class homePrescriber extends Component<any, any> {
             <h3>
               <FormattedMessage id="transactionReportNearly10Days" />
             </h3>
-            <Table
-              dataSource={this.state.tradeData}
-              columns={tradeColumns}
-              size="middle"
-              pagination={false}
-            />
+            <Table dataSource={this.state.tradeData} columns={tradeColumns} size="middle" pagination={false} />
           </div>
 
           <div className="homeItem lastTenData">
@@ -369,12 +318,7 @@ export default class homePrescriber extends Component<any, any> {
             <h3>
               <FormattedMessage id="consumerReportNearly10Days" />
             </h3>
-            <Table
-              dataSource={this.state.customerData}
-              columns={customerColumns}
-              size="middle"
-              pagination={false}
-            />
+            <Table dataSource={this.state.customerData} columns={customerColumns} size="middle" pagination={false} />
           </div>
           <div className="homeItem lastTenData">
             <h3>
@@ -382,9 +326,7 @@ export default class homePrescriber extends Component<any, any> {
             </h3>
             <WMChart
               title=""
-              startTime={
-                new Date(sessionStorage.getItem('defaultLocalDateTime'))
-              }
+              startTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
               endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
               dataDesc={[
                 { title: 'Total active consumer number', key: 'cusAllCount' },

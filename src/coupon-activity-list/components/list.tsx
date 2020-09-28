@@ -37,13 +37,7 @@ export default class List extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      total,
-      pageNum,
-      pageSize,
-      couponActivityList,
-      init
-    } = this.props.relaxProps;
+    const { total, pageNum, pageSize, couponActivityList, init } = this.props.relaxProps;
     return (
       <DataGrid
         rowKey={(record) => record.activityId}
@@ -57,11 +51,7 @@ export default class List extends React.Component<any, any> {
           }
         }}
       >
-        <DataGrid.Column
-          title="优惠券活动名称"
-          dataIndex="activityName"
-          key="activityName"
-        />
+        <DataGrid.Column title="优惠券活动名称" dataIndex="activityName" key="activityName" />
         <DataGrid.Column
           title="活动类型"
           dataIndex="couponActivityType"
@@ -71,17 +61,19 @@ export default class List extends React.Component<any, any> {
           }}
         />
         <DataGrid.Column
-          title={<p>开始<br/>结束时间</p>}
+          title={
+            <p>
+              开始
+              <br />
+              结束时间
+            </p>
+          }
           dataIndex="startTime"
           key="startTime"
           render={(text, record) => {
             return (
               <div>
-                <p>
-                  {moment(text)
-                    .format(Const.TIME_FORMAT)
-                    .toString()}
-                </p>
+                <p>{moment(text).format(Const.TIME_FORMAT).toString()}</p>
                 <p>
                   {moment((record as any).endTime)
                     .format(Const.TIME_FORMAT)
@@ -132,7 +124,7 @@ export default class List extends React.Component<any, any> {
       return util.isThirdStore() ? '全部客户' : '全平台客户';
     } else if (0 == text) {
       return '全部等级';
-    } else if(-2 == text){
+    } else if (-2 == text) {
       return '指定客户';
     } else {
       let str = '';
@@ -157,66 +149,43 @@ export default class List extends React.Component<any, any> {
    * @returns {any}
    */
   private operator(text, record: any) {
-    const {
-      startActivity,
-      pauseActivity,
-      deleteActivity
-    } = this.props.relaxProps;
+    const { startActivity, pauseActivity, deleteActivity } = this.props.relaxProps;
     let activityType = 'all-present';
     if (record.couponActivityType == 1) {
       activityType = 'specify';
     } else if (record.couponActivityType == 2) {
       activityType = 'store';
     }
-    const url = `/coupon-activity-${activityType}/${
-      (record as any).activityId
-    }`;
+    const url = `/coupon-activity-${activityType}/${(record as any).activityId}`;
     return (
       <div className="operation-box">
         <AuthWrapper functionName={'f_coupon_activity_detail'}>
-          <Link
-            to={`/coupon-activity-detail/${record.activityId}/${
-              record.couponActivityType
-            }`}
-          >
-            查看
-          </Link>
+          <Link to={`/coupon-activity-detail/${record.activityId}/${record.couponActivityType}`}>查看</Link>
         </AuthWrapper>
         <AuthWrapper functionName={'f_coupon_activity_editor'}>
-          {activityType != 'specify' &&
-            text == 1 && (
-              <a
-                href="javascript:void(0);"
-                onClick={() => {
-                  pauseActivity(record.activityId);
-                }}
-              >
-                暂停
-              </a>
-            )}
-          {activityType != 'specify' &&
-            text == 2 && (
-              <a
-                href="javascript:void(0);"
-                onClick={() => {
-                  startActivity(record.activityId);
-                }}
-              >
-                开始
-              </a>
-            )}
-          {text == 3 && (
-            <Link to={url}>
-              编辑
-            </Link>
-          )}
-          {text == 3 && (
-            <Popconfirm
-              title="确定删除该活动？"
-              onConfirm={() => deleteActivity(record.activityId)}
-              okText="确定"
-              cancelText="取消"
+          {activityType != 'specify' && text == 1 && (
+            <a
+              href="javascript:void(0);"
+              onClick={() => {
+                pauseActivity(record.activityId);
+              }}
             >
+              暂停
+            </a>
+          )}
+          {activityType != 'specify' && text == 2 && (
+            <a
+              href="javascript:void(0);"
+              onClick={() => {
+                startActivity(record.activityId);
+              }}
+            >
+              开始
+            </a>
+          )}
+          {text == 3 && <Link to={url}>编辑</Link>}
+          {text == 3 && (
+            <Popconfirm title="确定删除该活动？" onConfirm={() => deleteActivity(record.activityId)} okText="确定" cancelText="取消">
               <a href="javascript:void(0);">删除</a>
             </Popconfirm>
           )}

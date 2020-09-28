@@ -52,7 +52,7 @@ export default class StepConsent extends Component<any, any> {
     pageChange: noop,
     //getConsentListSelect: noop,
     editId: 'editId',
-    editList: 'editList',
+    editList: 'editList'
   };
 
   componentDidMount() {
@@ -89,13 +89,7 @@ export default class StepConsent extends Component<any, any> {
   };
 
   render() {
-    const {
-      consentLanguage,
-      pageChange,
-      pageChangeType,
-      editId,
-      editList
-    } = this.props.relaxProps;
+    const { consentLanguage, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
 
     return (
       <div className="consent">
@@ -104,20 +98,12 @@ export default class StepConsent extends Component<any, any> {
             <div className="consent-select space-between">
               <div className="consent-select-text">Category</div>
               <div className="consent-select-data space-between">
-                <Select
-                  defaultValue="All"
-                  style={{ width: 120 }}
-                  onChange={this.handleChange}
-                >
+                <Select defaultValue="All" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value="">All</Option>
                   <Option value="Prescriber">Prescriber</Option>
                   <Option value="Consumer">Consumer</Option>
                 </Select>
-                <Select
-                  style={{ width: 120 }}
-                  defaultValue="All"
-                  onChange={(e, v) => this.onDescription(e, v)}
-                >
+                <Select style={{ width: 120 }} defaultValue="All" onChange={(e, v) => this.onDescription(e, v)}>
                   <Option value="">All</Option>
                   {consentLanguage.map((item) => {
                     return <Option value={item.id}>{item.description}</Option>;
@@ -125,13 +111,7 @@ export default class StepConsent extends Component<any, any> {
                 </Select>
               </div>
             </div>
-            <Button
-              className="btn"
-              type="primary"
-              shape="round"
-              icon="plus"
-              onClick={() => pageChange('Detail', '000')}
-            >
+            <Button className="btn" type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
               New consent
             </Button>
             <div id="consent" className="consent-table">
@@ -147,7 +127,7 @@ export default class StepConsent extends Component<any, any> {
             </div>
             {/*{editList.id != null ? <Detail /> : <Detail />}*/}
 
-            {editList.id ||  editId == '000' ?<Detail />:null}
+            {editList.id || editId == '000' ? <Detail /> : null}
           </React.Fragment>
         )}
       </div>

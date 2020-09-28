@@ -9,308 +9,280 @@ import * as webApi from '../webapi';
 const { Search } = Input;
 import { withOktaAuth } from '@okta/okta-react';
 
-export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
-  form;
+export default withOktaAuth(
+  class VerifyForm extends React.Component<any, any> {
+    form;
 
-  _store: Store;
+    _store: Store;
 
-  //声明上下文依赖
-  static contextTypes = {
-    _plume$Store: PropTypes.object
-  };
+    //声明上下文依赖
+    static contextTypes = {
+      _plume$Store: PropTypes.object
+    };
 
-  constructor(props, ctx) {
-    super(props);
-    (this.state = {
-      requiredConsents: [],
-      optionalConsents: [],
-      checkContentIds: [],
-      clickProcess: false,
-      prcessDisabled: true,
-      prcessLoadding: false
-    }),
-      (this._store = ctx['_plume$Store']);
-  }
+    constructor(props, ctx) {
+      super(props);
+      (this.state = {
+        requiredConsents: [],
+        optionalConsents: [],
+        checkContentIds: [],
+        clickProcess: false,
+        prcessDisabled: true,
+        prcessLoadding: false
+      }),
+        (this._store = ctx['_plume$Store']);
+    }
 
-  async componentDidMount () {
-    document.getElementById('consents').addEventListener('click',(e)=>{     
-      if(e.target.localName === 'span'){
-          let parentId = Number(e.target.parentNode.parentNode.id)
-          let keyWords = e.target.innerText
-          let allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
-          let selectConsent = allList.find(x=>x.id === parentId);
-          if (selectConsent){
-            let detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
-            this.state.requiredConsents.map(requiredItem=>{
-              if(requiredItem.id === parentId) {
-                requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody
+    async componentDidMount() {
+      document.getElementById('consents').addEventListener('click', (e) => {
+        if (e.target.localName === 'span') {
+          let parentId = Number(e.target.parentNode.parentNode.id);
+          let keyWords = e.target.innerText;
+          let allList = [...this.state.requiredConsents, ...this.state.optionalConsents];
+          let selectConsent = allList.find((x) => x.id === parentId);
+          if (selectConsent) {
+            let detali = selectConsent.detailList ? selectConsent.detailList.find((x) => x.contentTitle === keyWords) : '';
+            this.state.requiredConsents.map((requiredItem) => {
+              if (requiredItem.id === parentId) {
+                requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody;
               }
-            })
-            let tempRequiredConsents = [...this.state.requiredConsents]
+            });
+            let tempRequiredConsents = [...this.state.requiredConsents];
             this.setState({
               requiredConsents: tempRequiredConsents
-            })
-            
-            this.state.optionalConsents.map(optionalItem=>{
-              if(optionalItem.id === parentId) {
-                optionalItem.detailHtml = optionalItem.detailHtml ? '' : detali.contentBody
+            });
+
+            this.state.optionalConsents.map((optionalItem) => {
+              if (optionalItem.id === parentId) {
+                optionalItem.detailHtml = optionalItem.detailHtml ? '' : detali.contentBody;
               }
-            })
-            let tempOptionalConsents= [...this.state.optionalConsents]
+            });
+            let tempOptionalConsents = [...this.state.optionalConsents];
             this.setState({
               optionalConsents: tempOptionalConsents
-            })
+            });
           }
-      }
-  })
-  }
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const loginLogo = this._store.state().get('loginLogo');
-
-    return (
-      <Form style={styles.loginForm}>
-        <FormItem style={{ marginBottom: 15 }}>
-          <div style={styles.header}>
-            <img style={styles.logo} src={loginLogo} />
-          </div>
-          <strong style={styles.title}>Store portal</strong>
-        </FormItem>
-        <label style={styles.label}>
-          This service is dedicated to our customers only.
-          <br />
-          Please complete the information below to confirm your access
-        </label>
-        <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('prescriberId', {
-            rules: [{ required: true, message: 'Client ID cannot be empty' }]
-          })(
-            <Search
-              size="large"
-              placeholder="Please Search Client ID First"
-              onSearch={(value, e) => this.search(value, e)}
-            />
-          )}
-        </FormItem>
-        <label style={styles.labelClientName}>
-          * Your client ID is specified on your Royal Canin invoice. It can be
-          an e-mail address or a client number
-        </label>
-        <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('prescriberName', {
-            rules: [{ required: false }]
-          })(<Input size="large" disabled={true} placeholder="Client Name" />)}
-        </FormItem>
-        <FormItem style={{ marginTop: 10 }}>
-          <Checkbox.Group
-            style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
-            onChange={this.consentChange}
-          >
-            <Row id="consents">
-              {this.state.requiredConsents.map((x, index) => {
-                return (
-                  <Col span={24} key={index}>
-                    <Row>
-                      <Col span={2}>
-                        <Checkbox value={x.id} key={x.id}>
-                        </Checkbox>
-                      </Col>
-                      <Col span={22}>
-                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
-                        {this.renderReuired(x.id)}
-                      </Col>
-                    </Row>
-                  </Col>
-                );
-              })}
-
-              {this.state.optionalConsents.map((x, index) => {
-                return (
-                  <Col span={24} key={index}>
-                     <Row>
-                      <Col span={2}>
-                        <Checkbox value={x.id} key={x.id}>
-                        </Checkbox>
-                      </Col>
-                      <Col span={22}>
-                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
-                      </Col>
-                    </Row>
-                  </Col>
-                );
-              })}
-            </Row>
-          </Checkbox.Group>
-        </FormItem>
-        <FormItem>
-          <Col span={10}>
-            <OktaLogout type="button" text="Cancel" />
-          </Col>
-          <Col span={4}></Col>
-          <Col span={10}>
-            <Button
-              type="primary"
-              size="large"
-              htmlType="submit"
-              style={styles.loginBtn}
-              onClick={(e) => this._handlePrcess(e)}
-              disabled={this.state.prcessDisabled}
-              loading={this.state.prcessLoadding}
-            >
-              Proceed
-            </Button>
-          </Col>
-        </FormItem>
-        <FormItem style={{ marginBottom: 0 }}>
-          <div>
-            <p
-              style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
-            >
-              © Royal Canin SAS 2020
-            </p>
-          </div>
-        </FormItem>
-      </Form>
-    );
-  }
-
-  consentChange = (checkedValue) => {
-    this.setState({
-      checkContentIds: checkedValue
-    });
-  };
-
-  renderReuired(id) {
-    return !this.state.checkContentIds.includes(id) &&
-      this.state.clickProcess ? (
-      <div style={styles.requiredLable}>This is required field</div>
-    ) : null;
-  }
-
-  search = async (value, e) => {
-    e.preventDefault();
-    const form = this.props.form as WrappedFormUtils;
-    const ids = value.split('-');
-    if (ids && ids.length < 2) {
-      message.error('No Prescriber');
-      form.setFieldsValue({ prescriberName: '' });
-      return;
+        }
+      });
     }
-    let param = {
-      storeId: ids[0],
-      prescriberId: ids[1]
+
+    render() {
+      const { getFieldDecorator } = this.props.form;
+      const loginLogo = this._store.state().get('loginLogo');
+
+      return (
+        <Form style={styles.loginForm}>
+          <FormItem style={{ marginBottom: 15 }}>
+            <div style={styles.header}>
+              <img style={styles.logo} src={loginLogo} />
+            </div>
+            <strong style={styles.title}>Store portal</strong>
+          </FormItem>
+          <label style={styles.label}>
+            This service is dedicated to our customers only.
+            <br />
+            Please complete the information below to confirm your access
+          </label>
+          <FormItem style={{ marginTop: 10 }}>
+            {getFieldDecorator('prescriberId', {
+              rules: [{ required: true, message: 'Client ID cannot be empty' }]
+            })(<Search size="large" placeholder="Please Search Client ID First" onSearch={(value, e) => this.search(value, e)} />)}
+          </FormItem>
+          <label style={styles.labelClientName}>* Your client ID is specified on your Royal Canin invoice. It can be an e-mail address or a client number</label>
+          <FormItem style={{ marginTop: 10 }}>
+            {getFieldDecorator('prescriberName', {
+              rules: [{ required: false }]
+            })(<Input size="large" disabled={true} placeholder="Client Name" />)}
+          </FormItem>
+          <FormItem style={{ marginTop: 10 }}>
+            <Checkbox.Group style={{ width: '100%', maxHeight: '200px', overflowY: 'auto' }} onChange={this.consentChange}>
+              <Row id="consents">
+                {this.state.requiredConsents.map((x, index) => {
+                  return (
+                    <Col span={24} key={index}>
+                      <Row>
+                        <Col span={2}>
+                          <Checkbox value={x.id} key={x.id}></Checkbox>
+                        </Col>
+                        <Col span={22}>
+                          <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                          {x.detailHtml ? <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null}
+                          {this.renderReuired(x.id)}
+                        </Col>
+                      </Row>
+                    </Col>
+                  );
+                })}
+
+                {this.state.optionalConsents.map((x, index) => {
+                  return (
+                    <Col span={24} key={index}>
+                      <Row>
+                        <Col span={2}>
+                          <Checkbox value={x.id} key={x.id}></Checkbox>
+                        </Col>
+                        <Col span={22}>
+                          <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                          {x.detailHtml ? <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null}
+                        </Col>
+                      </Row>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </Checkbox.Group>
+          </FormItem>
+          <FormItem>
+            <Col span={10}>
+              <OktaLogout type="button" text="Cancel" />
+            </Col>
+            <Col span={4}></Col>
+            <Col span={10}>
+              <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} onClick={(e) => this._handlePrcess(e)} disabled={this.state.prcessDisabled} loading={this.state.prcessLoadding}>
+                Proceed
+              </Button>
+            </Col>
+          </FormItem>
+          <FormItem style={{ marginBottom: 0 }}>
+            <div>
+              <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>© Royal Canin SAS 2020</p>
+            </div>
+          </FormItem>
+        </Form>
+      );
+    }
+
+    consentChange = (checkedValue) => {
+      this.setState({
+        checkContentIds: checkedValue
+      });
     };
-    const { res } = await webApi.getPrescriberByPrescriberIdAndStoreId(param);
-    if (res.code === 'K-000000' && res.context && res.context.prescriberName) {
-      form.setFieldsValue({ prescriberName: res.context.prescriberName });
-    } else {
-      message.error('No Prescriber');
-      form.setFieldsValue({ prescriberName: '' });
-    }
-    const { res: consentRes } = await webApi.getStoreOpenConsentList(param);
-    if (consentRes.code === 'K-000000' && consentRes.context) {
-      this.setState({
-        requiredConsents: consentRes.context.requiredList,
-        optionalConsents: consentRes.context.optionalList
-      });
-    } else {
-      this.setState({
-        requiredConsents:[],
-        optionalConsents: []
-      });
+
+    renderReuired(id) {
+      return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? <div style={styles.requiredLable}>This is required field</div> : null;
     }
 
-    if (res.code === 'K-000000' && consentRes.code === 'K-000000') {
-      this.setState({
-        prcessDisabled: false
-      })
-    }
-  };
-
-  _handlePrcess = async (e) => {
-    e.preventDefault();
-    const form = this.props.form as WrappedFormUtils;
-    this.setState({
-      clickProcess: true,
-      prcessLoadding: true
-    });
-
-    let consentValid = true;
-    this.state.requiredConsents.map((x) => {
-      if (!this.state.checkContentIds.includes(x.id)) {
-        consentValid = false;
-        this.setState({
-          prcessLoadding: false
-        });
+    search = async (value, e) => {
+      e.preventDefault();
+      const form = this.props.form as WrappedFormUtils;
+      const ids = value.split('-');
+      if (ids && ids.length < 2) {
+        message.error('No Prescriber');
+        form.setFieldsValue({ prescriberName: '' });
         return;
       }
-    });
-    form.validateFields(null, async (errs, values) => {
-      if (!errs && consentValid) {
-        let ids = values.prescriberId.split('-');
-        if (ids && ids.length < 2) {
-          message.error('No Prescriber');
+      let param = {
+        storeId: ids[0],
+        prescriberId: ids[1]
+      };
+      const { res } = await webApi.getPrescriberByPrescriberIdAndStoreId(param);
+      if (res.code === 'K-000000' && res.context && res.context.prescriberName) {
+        form.setFieldsValue({ prescriberName: res.context.prescriberName });
+      } else {
+        message.error('No Prescriber');
+        form.setFieldsValue({ prescriberName: '' });
+      }
+      const { res: consentRes } = await webApi.getStoreOpenConsentList(param);
+      if (consentRes.code === 'K-000000' && consentRes.context) {
+        this.setState({
+          requiredConsents: consentRes.context.requiredList,
+          optionalConsents: consentRes.context.optionalList
+        });
+      } else {
+        this.setState({
+          requiredConsents: [],
+          optionalConsents: []
+        });
+      }
+
+      if (res.code === 'K-000000' && consentRes.code === 'K-000000') {
+        this.setState({
+          prcessDisabled: false
+        });
+      }
+    };
+
+    _handlePrcess = async (e) => {
+      e.preventDefault();
+      const form = this.props.form as WrappedFormUtils;
+      this.setState({
+        clickProcess: true,
+        prcessLoadding: true
+      });
+
+      let consentValid = true;
+      this.state.requiredConsents.map((x) => {
+        if (!this.state.checkContentIds.includes(x.id)) {
+          consentValid = false;
           this.setState({
             prcessLoadding: false
           });
           return;
         }
-        let requiredList = [];
-        let optionalList = [];
-      
-        this.state.requiredConsents.map(x=>{
-          let isSelected = this.state.checkContentIds.includes(x.id)
-          requiredList.push({ id: x.id, selectedFlag: isSelected })
-        })
-
-        this.state.optionalConsents.map(x=>{
-          let isSelected = this.state.checkContentIds.includes(x.id)
-          optionalList.push({ id: x.id, selectedFlag: isSelected })
-        })
-
-        this.state.optionalConsents
-
-        let oktaToken = this.props.authState.accessToken;
-        if(!oktaToken) {
-          message.error('OKTA Token Expired');
-          this.props.authService.logout('/');
-          return
-        }
-        let param = {
-          storeId: ids[0],
-          prescriberId: ids[1],
-          userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
-          employeeName:sessionStorage.getItem(cache.LOGIN_EMPLOYEE_NAME),
-          oktaToken: 'Bearer ' +  oktaToken,
-          requiredList: requiredList,
-          optionalList: optionalList
-        };
-        const { res } = await webApi.verifyUser(param);
-        if (res.code === 'K-000000') {
-          if(res.context === 'needAudit') {
-            message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
-          } else if(res.context === 'alreadyRegister') {
-            message.info('Email already exists in store portal, please check.')
-          } else {
-            login({}, oktaToken);
+      });
+      form.validateFields(null, async (errs, values) => {
+        if (!errs && consentValid) {
+          let ids = values.prescriberId.split('-');
+          if (ids && ids.length < 2) {
+            message.error('No Prescriber');
+            this.setState({
+              prcessLoadding: false
+            });
+            return;
           }
-          this.setState({
-            prcessLoadding: false
+          let requiredList = [];
+          let optionalList = [];
+
+          this.state.requiredConsents.map((x) => {
+            let isSelected = this.state.checkContentIds.includes(x.id);
+            requiredList.push({ id: x.id, selectedFlag: isSelected });
           });
-        }
-        else {
-          message.error(res.message || 'Verify failed');
-          this.setState({
-            prcessLoadding: false
+
+          this.state.optionalConsents.map((x) => {
+            let isSelected = this.state.checkContentIds.includes(x.id);
+            optionalList.push({ id: x.id, selectedFlag: isSelected });
           });
+
+          this.state.optionalConsents;
+
+          let oktaToken = this.props.authState.accessToken;
+          if (!oktaToken) {
+            message.error('OKTA Token Expired');
+            this.props.authService.logout('/');
+            return;
+          }
+          let param = {
+            storeId: ids[0],
+            prescriberId: ids[1],
+            userId: sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME),
+            employeeName: sessionStorage.getItem(cache.LOGIN_EMPLOYEE_NAME),
+            oktaToken: 'Bearer ' + oktaToken,
+            requiredList: requiredList,
+            optionalList: optionalList
+          };
+          const { res } = await webApi.verifyUser(param);
+          if (res.code === 'K-000000') {
+            if (res.context === 'needAudit') {
+              message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.');
+            } else if (res.context === 'alreadyRegister') {
+              message.info('Email already exists in store portal, please check.');
+            } else {
+              login({}, oktaToken);
+            }
+            this.setState({
+              prcessLoadding: false
+            });
+          } else {
+            message.error(res.message || 'Verify failed');
+            this.setState({
+              prcessLoadding: false
+            });
+          }
         }
-      }
-    });
-  };
-})
+      });
+    };
+  }
+);
 
 const styles = {
   loginForm: {

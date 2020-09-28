@@ -3,8 +3,8 @@ import { Icon } from 'antd';
 
 export default class Tips extends React.PureComponent<any, any> {
   props: {
-    title?: string,
-    style?: any,
+    title?: string;
+    style?: any;
   };
 
   render() {

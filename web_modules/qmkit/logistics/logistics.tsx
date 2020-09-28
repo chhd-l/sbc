@@ -8,10 +8,7 @@ interface LogisticProps {
   deliveryTime?: any;
 }
 
-export default class LogisticPopover extends React.Component<
-  LogisticProps,
-  any
-> {
+export default class LogisticPopover extends React.Component<LogisticProps, any> {
   props: {
     companyInfo: any;
     deliveryTime: any;
@@ -25,10 +22,7 @@ export default class LogisticPopover extends React.Component<
 
   showLogistics = async (logistics) => {
     this.setState({ showAll: false });
-    const { res } = await webapi.fetchDeliveryDetail(
-      logistics.get('logisticStandardCode'),
-      logistics.get('logisticNo')
-    );
+    const { res } = await webapi.fetchDeliveryDetail(logistics.get('logisticStandardCode'), logistics.get('logisticNo'));
     if (res.code == Const.SUCCESS_CODE) {
       if (res.context.length > 3) {
         this.setState({ showMore: true });
@@ -46,21 +40,10 @@ export default class LogisticPopover extends React.Component<
         placement="bottomLeft"
         content={
           <div className="order-delivery" style={{ maxWidth: 560 }}>
-            <div
-              className="order-delivery-head clearfix"
-              style={{ marginBottom: 15 }}
-            >
+            <div className="order-delivery-head clearfix" style={{ marginBottom: 15 }}>
               <ul className="pull-left">
-                <li>
-                  Logistics company：{companyInfo.get('logisticCompanyName')
-                    ? companyInfo.get('logisticCompanyName')
-                    : '无'}
-                </li>
-                <li>
-                  Logistics number：{companyInfo.get('logisticNo')
-                    ? companyInfo.get('logisticNo')
-                    : '无'}
-                </li>
+                <li>Logistics company：{companyInfo.get('logisticCompanyName') ? companyInfo.get('logisticCompanyName') : '无'}</li>
+                <li>Logistics number：{companyInfo.get('logisticNo') ? companyInfo.get('logisticNo') : '无'}</li>
                 <li>delivery date：{deliveryTime ? deliveryTime : '无'}</li>
               </ul>
             </div>
@@ -69,10 +52,8 @@ export default class LogisticPopover extends React.Component<
                 pending={
                   this.state.showMore ? (
                     <p>
-                      以上为最新跟踪信息<a
-                        href="javascript:void(0)"
-                        onClick={() => this._showAll()}
-                      >
+                      以上为最新跟踪信息
+                      <a href="javascript:void(0)" onClick={() => this._showAll()}>
                         查看全部
                       </a>
                     </p>

@@ -24,45 +24,18 @@ export default class BreadCrumb extends React.Component<any, any> {
     //选中的三级菜单索引
     const thirdIndex = sessionStorage.getItem(cache.THIRD_ACTIVE);
     //所有菜单
-    const allGradeMenus = fromJS(
-      JSON.parse(sessionStorage.getItem(cache.LOGIN_MENUS))
-    );
+    const allGradeMenus = fromJS(JSON.parse(sessionStorage.getItem(cache.LOGIN_MENUS)));
     let first = allGradeMenus.get(firstIndex).get('title') || '';
-    let firstUrl = allGradeMenus.getIn([
-      firstIndex,
-      'children',
-      0,
-      'children',
-      0,
-      'url'
-    ]) || '';
+    let firstUrl = allGradeMenus.getIn([firstIndex, 'children', 0, 'children', 0, 'url']) || '';
 
-    let second =
-      allGradeMenus
-        .get(firstIndex)
-        .get('children')
-        .get(secondIndex)
-        .get('title') || '';
-    let third =
-      allGradeMenus
-        .get(firstIndex)
-        .get('children')
-        .get(secondIndex)
-        .get('children')
-        .get(thirdIndex)
-        .get('title') || '';
-    let thirdUrl =
-      allGradeMenus.getIn([
-        firstIndex,
-        'children',
-        secondIndex,
-        'children',
-        thirdIndex,
-        'url'
-      ]) || '';
+    let second = allGradeMenus.get(firstIndex).get('children').get(secondIndex).get('title') || '';
+    let third = allGradeMenus.get(firstIndex).get('children').get(secondIndex).get('children').get(thirdIndex).get('title') || '';
+    let thirdUrl = allGradeMenus.getIn([firstIndex, 'children', secondIndex, 'children', thirdIndex, 'url']) || '';
     return (
       <Breadcrumb>
-        <Breadcrumb.Item><a href={firstUrl}>{first}</a></Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href={firstUrl}>{first}</a>
+        </Breadcrumb.Item>
         <Breadcrumb.Item>{this.props.thirdLevel ? <a href={thirdUrl}>{third}</a> : third}</Breadcrumb.Item>
         {this.props.children}
       </Breadcrumb>

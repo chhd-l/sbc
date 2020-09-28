@@ -15,10 +15,7 @@ interface HeaderProps {
   noTitle?: boolean; // 没有统计说明，用于客户统计页面
 }
 
-export default class StatisticsHeader extends React.Component<
-  HeaderProps,
-  any
-  > {
+export default class StatisticsHeader extends React.Component<HeaderProps, any> {
   constructor(props: HeaderProps) {
     super(props);
     this.state = {
@@ -57,55 +54,30 @@ export default class StatisticsHeader extends React.Component<
           <ul style={styles.box}>
             {!this.props.todayDisabled && (
               <li>
-                <a
-                  onClick={() => this._change(0)}
-                  className={clickKey == 0 ? 'statisticsItemCur'
-                    : 'statisticsItem'}
-                  href="#"
-                >
+                <a onClick={() => this._change(0)} className={clickKey == 0 ? 'statisticsItemCur' : 'statisticsItem'} href="#">
                   今天
                 </a>
               </li>
             )}
             <li>
-              <a
-                onClick={() => this._change(-1)}
-                className={clickKey == -1 ? 'statisticsItemCur'
-                  : 'statisticsItem'}
-                href="#"
-              >
+              <a onClick={() => this._change(-1)} className={clickKey == -1 ? 'statisticsItemCur' : 'statisticsItem'} href="#">
                 昨天
               </a>
             </li>
             <li>
-              <a
-                onClick={() => this._change(1)}
-                className={clickKey == 1 ? 'statisticsItemCur'
-                  : 'statisticsItem'}
-                href="#"
-              >
+              <a onClick={() => this._change(1)} className={clickKey == 1 ? 'statisticsItemCur' : 'statisticsItem'} href="#">
                 最近7天
               </a>
             </li>
             <li>
-              <a
-                onClick={() => this._change(2)}
-                className={clickKey == 2 ? 'statisticsItemCur'
-                  : 'statisticsItem'}
-                href="#"
-              >
+              <a onClick={() => this._change(2)} className={clickKey == 2 ? 'statisticsItemCur' : 'statisticsItem'} href="#">
                 最近30天
               </a>
             </li>
           </ul>
-          <Select
-            dropdownMatchSelectWidth={false}
-            defaultValue="自然月"
-            value={clickKey != 3 ? '0' : this.state.selectDate}
-            onChange={value => this._selectOnChange(value)}
-          >
+          <Select dropdownMatchSelectWidth={false} defaultValue="自然月" value={clickKey != 3 ? '0' : this.state.selectDate} onChange={(value) => this._selectOnChange(value)}>
             <Option key={0}>自然月</Option>
-            {this.state.menuList.map(menu => (
+            {this.state.menuList.map((menu) => (
               <Option key={menu}>{menu}</Option>
             ))}
           </Select>
@@ -115,7 +87,8 @@ export default class StatisticsHeader extends React.Component<
           <div style={{ textAlign: 'right' }}>
             <Tooltip placement="left" title={this._renderTitle}>
               <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />&nbsp;&nbsp;统计说明
+                <Icon type="question-circle-o" />
+                &nbsp;&nbsp;统计说明
               </a>
             </Tooltip>
           </div>
@@ -134,37 +107,27 @@ export default class StatisticsHeader extends React.Component<
           <span>2、当前统计不区分订货端和管理端；</span>
         </p>
         <p>
-          <span>
-            3、订单在提交成功后纳入统计，订单金额以订单提交成功时为准；
-          </span>
+          <span>3、订单在提交成功后纳入统计，订单金额以订单提交成功时为准；</span>
         </p>
         <p>
           <span>4、退单在完成后纳入统计，退货金额以退单完成时为准；</span>
         </p>
         <p>
-          <span>
-            5、统计时间内商品没有销售/退货，客户没有订单/退单，则不在报表中体现；
-          </span>
+          <span>5、统计时间内商品没有销售/退货，客户没有订单/退单，则不在报表中体现；</span>
         </p>
       </div>
     );
   };
 
-  _selectOnChange = value => {
+  _selectOnChange = (value) => {
     if (value === '0') return;
     const { onClick } = this.props;
     const thisMonth = moment(value, 'YYYY年MM月');
     this.setState({ clickKey: 3, selectDate: value });
     const rangeDate = new Array();
-    rangeDate.push(
-      util.formateDate(thisMonth.startOf('month').toDate()),
-      util.formateDate(thisMonth.endOf('month').toDate())
-    );
+    rangeDate.push(util.formateDate(thisMonth.startOf('month').toDate()), util.formateDate(thisMonth.endOf('month').toDate()));
     //拼接
-    const yearMonth =
-      util.formateDate(thisMonth.startOf('month').toDate()).split('-')[0] +
-      '-' +
-      util.formateDate(thisMonth.startOf('month').toDate()).split('-')[1];
+    const yearMonth = util.formateDate(thisMonth.startOf('month').toDate()).split('-')[0] + '-' + util.formateDate(thisMonth.startOf('month').toDate()).split('-')[1];
     rangeDate.push(yearMonth);
     onClick(rangeDate);
   };
@@ -175,7 +138,7 @@ export default class StatisticsHeader extends React.Component<
    * @returns {any[]}
    * @private
    */
-  _change = key => {
+  _change = (key) => {
     this.setState({
       clickKey: key
     });
@@ -189,32 +152,16 @@ export default class StatisticsHeader extends React.Component<
     const monthago = new Date(new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime() - 24 * 30 * 60 * 60 * 1000);
     if (key == '-1') {
       //获取昨天的日期,再加一个索引标识，方便兼容各个模块的接口调用入参
-      rangeDate.push(
-        util.formateDate(yesterday),
-        util.formateDate(yesterday),
-        1
-      );
+      rangeDate.push(util.formateDate(yesterday), util.formateDate(yesterday), 1);
     } else if (key == '0') {
       //获取当天的日期
-      rangeDate.push(
-        util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))),
-        util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))),
-        0
-      );
+      rangeDate.push(util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))), util.formateDate(new Date(sessionStorage.getItem('defaultLocalDateTime'))), 0);
     } else if (key == '1') {
       //获取七天前的日期范围
-      rangeDate.push(
-        util.formateDate(sevenago),
-        util.formateDate(yesterday),
-        2
-      );
+      rangeDate.push(util.formateDate(sevenago), util.formateDate(yesterday), 2);
     } else {
       //最近30天的日期范围
-      rangeDate.push(
-        util.formateDate(monthago),
-        util.formateDate(yesterday),
-        3
-      );
+      rangeDate.push(util.formateDate(monthago), util.formateDate(yesterday), 3);
     }
     //将返回日期的返回通过外部的onClick事件获取
     onClick(rangeDate);
@@ -250,7 +197,7 @@ const styles = {
     justifyContent: 'space-between',
     position: 'sticky',
     top: 0,
-    zIndex: 10,
+    zIndex: 10
   } as any,
   timeBox: {
     width: '80%',
@@ -274,7 +221,7 @@ const styles = {
   } as any,
   itemCur: {
     color: '#F56C1D',
-    backgroundColor:'rgba(245,108,29,0.06)',
+    backgroundColor: 'rgba(245,108,29,0.06)',
     fontSize: 14,
     borderBottom: '2px solid #F56C1D',
     padding: 5,

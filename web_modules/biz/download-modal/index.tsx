@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  DatePicker,
-  Form,
-  Radio,
-  message,
-  Alert,
-  Button,
-  Icon
-} from 'antd';
+import { Modal, DatePicker, Form, Radio, message, Alert, Button, Icon } from 'antd';
 import { noop, util, Const, history, cache } from 'qmkit';
 import * as weapi from './webapi';
 import moment from 'moment';
@@ -51,20 +42,12 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
 
     return (
       <div>
-        <Button
-          style={{ marginLeft: 10 }}
-          onClick={() => this.setState({ visible: true })}
-        >
-          <Icon type="download" />下载报表
+        <Button style={{ marginLeft: 10 }} onClick={() => this.setState({ visible: true })}>
+          <Icon type="download" />
+          下载报表
         </Button>
 
-        <Modal
-          maskClosable={false}
-          title="下载报表"
-          visible={visible}
-          onOk={() => this._handleOK()}
-          onCancel={() => this._hideModal()}
-        >
+        <Modal maskClosable={false} title="下载报表" visible={visible} onOk={() => this._handleOK()} onCancel={() => this._hideModal()}>
           <div
             style={{
               display: 'flex',
@@ -75,9 +58,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
             <FormItem>
               <RangePicker
                 onChange={(param) => this._changeCalender(param)}
-                getCalendarContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getCalendarContainer={() => document.getElementById('page-content')}
                 format="YYYY-MM-DD"
                 placeholder={['起始时间', '结束时间']}
                 onOk={noop}
@@ -85,11 +66,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
                 disabledDate={this.disabledDate}
               />
             </FormItem>
-            <RadioGroup
-              style={{ marginBottom: '24px', width: 230, marginLeft: 10 }}
-              value={this.state.checkedValue}
-              onChange={(e) => this._onChange(e)}
-            >
+            <RadioGroup style={{ marginBottom: '24px', width: 230, marginLeft: 10 }} value={this.state.checkedValue} onChange={(e) => this._onChange(e)}>
               <Radio value={30}>最近30天</Radio>
               <Radio value={90}>最近90天</Radio>
             </RadioGroup>
@@ -113,9 +90,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
           onOk={() => this.setState({ infoVisible: false })}
         >
           <div>
-            <p>
-              下载任务已进入队列,可能需要花费一些时间,请稍后在报表下载中心查看!
-            </p>
+            <p>下载任务已进入队列,可能需要花费一些时间,请稍后在报表下载中心查看!</p>
           </div>
         </Modal>
       </div>
@@ -129,11 +104,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
    */
   disabledDate(current) {
     //当天日期往后（包括当天）及当天日期一年前，禁选
-    return (
-      current &&
-      (current.valueOf() > Date.now() - 24 * 60 * 60 ||
-        current < moment().subtract(366, 'days'))
-    );
+    return current && (current.valueOf() > Date.now() - 24 * 60 * 60 || current < moment().subtract(366, 'days'));
   }
 
   /**
@@ -160,8 +131,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
    */
   _handleOK = async () => {
     //获取当前的companyId
-    const companyId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-      .companyInfoId;
+    const companyId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).companyInfoId;
     //报表类型，开始时间和结束时间
     const { reportType } = this.props;
     let beginDate = this.state.dateRange[0];

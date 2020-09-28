@@ -59,7 +59,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     const { productselect, onCreateLink } = this.props.relaxProps;
     localStorage.setItem('productselect', String(productselect.length));
     let arr = productselect.map((v, i) => {
-      console.log('vvvvvvvvvvv', v);
       return {
         goodsInfoId: v.goodsInfoId,
         recommendationNumber: v.recommendationNumber
@@ -124,7 +123,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             key="quantity"
             dataIndex="quantity"
             render={(text, record, i) => {
-              console.log(record, 22222);
               /*return history.location.state
                 ? detailProductList.recommendationGoodsInfoRels[i]
                     .recommendationNumber

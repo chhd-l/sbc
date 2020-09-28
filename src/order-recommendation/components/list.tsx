@@ -360,10 +360,12 @@ export default class ListView extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '14%' }}>
                     {v.recommendationGoodsInfoRels.reduce((sum, item) => {
-                      return (
-                        sum +
-                        item.goodsInfo.marketPrice * item.recommendationNumber
-                      );
+                      let a =
+                        Number(sum) +
+                        Number(
+                          item.goodsInfo.marketPrice * item.recommendationNumber
+                        );
+                      return a.toFixed(2);
                     }, 0)}
                   </td>
                   <td style={{ width: '13%' }}>

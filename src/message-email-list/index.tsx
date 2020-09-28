@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const InputGroup = Input.Group;
 
 export default class ClinicList extends Component<any, any> {
   constructor(props: any) {
@@ -421,10 +422,42 @@ export default class ClinicList extends Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <SelectGroup
+                  <InputGroup compact>
+                    <Input
+                      style={{
+                        width: 143,
+                        textAlign: 'center',
+                        color: 'rgba(0, 0, 0, 0.65)',
+                        backgroundColor: '#fff'
+                      }}
+                      disabled
+                      defaultValue="Email Template"
+                    />
+                    <Select
+                      style={{ width: 180 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'templateId',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {emailTemplateList &&
+                        emailTemplateList.map((item, index) => (
+                          <Option value={item.templateId} key={index}>
+                            {item.emailTemplate}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
+
+                  {/* <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Email Template</p>}
-                    style={{ width: 180 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -443,6 +476,7 @@ export default class ClinicList extends Component<any, any> {
                         </Option>
                       ))}
                   </SelectGroup>
+                 */}
                 </FormItem>
               </Col>
 

@@ -39,7 +39,17 @@ export async function login(routerType, oktaToken: string) {
     } else if (routerType === 'staff') {
       const resOkta  = await webapi.getRCJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
-    }
+    } 
+  } else {
+      let base64 = new util.Base64();
+      debugger
+      const account = routerType.account;
+      const password = routerType.password;
+      const resLocal  = await webapi.login(
+        base64.urlEncode(account),
+        base64.urlEncode(password)
+      ) as any ;
+      res = resLocal.res as TResult;
   }
 
   

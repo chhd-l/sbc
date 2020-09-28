@@ -732,6 +732,7 @@ const routes = [
 
 const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
+  { path: '/login-admin', asyncComponent: () => import('./login-admin') },
   { path: '/logout', asyncComponent: () => import('./logout') },
   { path: '/login-verify', asyncComponent: () => import('./login-verify') },
   { path: '/implicit/callback', component: LoginCallback },

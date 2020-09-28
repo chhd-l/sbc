@@ -5,7 +5,6 @@ import LoginHome from './components/login-home';
 import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
-import LoginForm from './components/login-form';
 import { withOktaAuth } from '@okta/okta-react';
 import { util, cache, history } from 'qmkit';
 import * as webapi from './webapi';

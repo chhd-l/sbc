@@ -22,11 +22,19 @@ export default class Line extends React.Component{
 
 
   getOption =()=> {
-    const { yName, unit, data } = this.props
+    const { yName, unit, data } = this.props as any
     let option = {
       backgroundColor:'',
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        /*formatter:function(params) {
+          let relVal = params[0].name;
+          for (let i = 0, l = params.length; i < l; i++) {
+            i === 2 ? relVal += '<br/>' +params[i].marker+ params[i].seriesName  + params[i].value +"%" : relVal += '<br/>' +params[i].marker+ params[i].seriesName  + params[i].value;
+          }
+          return relVal;
+        }*/
+
       },
       grid: {
         top: '13%',
@@ -106,6 +114,14 @@ export default class Line extends React.Component{
           itemStyle: {
             normal: {
               color: '#F5828E',
+              label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: { //数值样式
+                  color: '#999',
+                  fontSize: 12
+                }
+              }
             }
           },
           data: data.reward
@@ -118,7 +134,8 @@ export default class Line extends React.Component{
               color: '#ED001B',
               lineStyle:{
                 width:2//设置线条粗细
-              }
+              },
+
             }
           },
           yAxisIndex: 1,

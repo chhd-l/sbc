@@ -35,7 +35,8 @@ export default class TodoItems extends React.Component<any, any> {
       prescriberTopView: '',
       trafficDashboardView: '',
       transactionTrendView: '',
-      trafficTrendDashboardView: ''
+      trafficTrendDashboardView: '',
+      conversionFunnelDashboardView: ''
     };
   }
 
@@ -48,6 +49,7 @@ export default class TodoItems extends React.Component<any, any> {
       trafficDashboardView: any;
       transactionTrendView: any;
       trafficTrendDashboardView: any;
+      conversionFunnelDashboardView: any;
     };
   };
 
@@ -58,13 +60,14 @@ export default class TodoItems extends React.Component<any, any> {
     prescriberTopView: 'prescriberTopView',
     trafficDashboardView: 'trafficDashboardView',
     transactionTrendView: 'transactionTrendView',
-    trafficTrendDashboardView: 'trafficTrendDashboardView'
+    trafficTrendDashboardView: 'trafficTrendDashboardView',
+    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
   };
 
   componentWillUnmount() {}
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView } = nextProps.relaxProps;
+    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (tradeCustomerView !== prevState.tradeCustomerView) {
       return {
@@ -101,6 +104,11 @@ export default class TodoItems extends React.Component<any, any> {
         trafficTrendDashboardView
       };
     }
+    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
+      return {
+        conversionFunnelDashboardView
+      };
+    }
 
     // 否则，对于state不进行任何操作
     return null;
@@ -119,7 +127,7 @@ export default class TodoItems extends React.Component<any, any> {
   };
 
   render() {
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView } = this.state;
+    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
 
     setTimeout(() => {
       console.log(trafficDashboardView, 111111111);
@@ -176,7 +184,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode-text">Traffic</div>
                   <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
                   <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate > 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                     <span className={tradeCustomerView && tradeCustomerView.trafficRate != null ? (tradeCustomerView.trafficRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.trafficRate != null ? <CountUp end={Math.abs(tradeCustomerView.trafficRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
@@ -187,26 +195,26 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-l-btm">
               <div className="top-text">Conversion Funnel</div>
               <div className="Funnel">
-                <Funnel />
+                <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
                 <div className="Funnel-l">
                   <div className="Funnel-l-text align-items-center">
                     <span>Landing page</span>
-                    <span>3200</span>
+                    <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</span>
                     <span className="Funnel-l-dash1"></span>
                   </div>
                   <div className="Funnel-l-text align-items-center">
                     <span>Shopping cart</span>
-                    <span>700</span>
+                    <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</span>
                     <span className="Funnel-l-dash2"></span>
                   </div>
                   <div className="Funnel-l-text align-items-center">
                     <span>Checkout</span>
-                    <span>500</span>
+                    <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</span>
                     <span className="Funnel-l-dash3"></span>
                   </div>
                   <div className="Funnel-l-text align-items-center">
                     <span>Payment</span>
-                    <span>300</span>
+                    <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</span>
                     <span className="Funnel-l-dash4"></span>
                   </div>
                 </div>
@@ -215,26 +223,29 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r-mid">
                     <div className="text1">Conversion rate</div>
                     <div className="text2">
-                      1.69<i>%</i>
+                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} {...countUpProps} /> : '--'}
+                      <i>%</i>
                     </div>
                     <div className="text3">
-                      <img src={icon1} width="14" height="14" />
-                      <span>32%</span>
+                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <img src={conversionFunnelDashboardView.payLoginRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? (conversionFunnelDashboardView.payLoginRateRate >= 0 ? 'green' : 'red') : ''}>
+                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <CountUp end={Math.abs(conversionFunnelDashboardView.payLoginRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                      </span>
                     </div>
                   </div>
                   <div className="Funnel-r-btm"></div>
                 </div>
-                <div className="Funnel-per1">
-                  <span>88</span>
-                  <span>%</span>
+                <div className="Funnel-per1 flex-start-align">
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} {...countUpProps} /> : '--'}</p>
+                  <p>%</p>
                 </div>
-                <div className="Funnel-per2">
-                  <span>88</span>
-                  <span>%</span>
+                <div className="Funnel-per2 flex-start-align">
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} {...countUpProps} /> : '--'}</p>
+                  <p>%</p>
                 </div>
-                <div className="Funnel-per3">
-                  <span>88</span>
-                  <span>%</span>
+                <div className="Funnel-per3 flex-start-align">
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} {...countUpProps} /> : '--'}</p>
+                  <p>%</p>
                 </div>
               </div>
             </div>
@@ -316,8 +327,8 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="num">
                       <div className="num-l">{tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
-                        {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate > 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate > 0 ? 'green' : 'red') : ''}>
+                        {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate >= 0 ? 'green' : 'red') : ''}>
                           {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
@@ -453,11 +464,13 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode-text">Active prescriber rates</div>
                   <div className="mode-num">
                     <span>$</span>
-                    <span>4,524</span>
+                    {prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}
                   </div>
                   <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
+                    {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={prescriberTopView && tradeCustomerView.activePrescribersRate != null ? (prescriberTopView.activePrescribersRate >= 0 ? 'green' : 'red') : ''}>
+                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                    </span>
                   </div>
                 </div>
                 <div className="line-1 mode-line"></div>
@@ -465,11 +478,13 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode-text">Active prescribers</div>
                   <div className="mode-num">
                     <span>$</span>
-                    <span>4,524</span>
+                    {prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} {...countUpProps} /> : '--'}
                   </div>
                   <div className="mode-per">
-                    <img src={icon1} width="14" height="14" />
-                    <span>32%</span>
+                    {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={prescriberTopView && tradeCustomerView.activePrescriberRatesRate != null ? (prescriberTopView.activePrescriberRatesRate >= 0 ? 'green' : 'red') : ''}>
+                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                    </span>
                   </div>
                 </div>
               </div>

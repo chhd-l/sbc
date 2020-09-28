@@ -53,6 +53,13 @@ export const getTrafficTrendDashboardView = (params) => {
   });
 };
 
+export const getConversionFunnelDashboardView = (params) => {
+  return Fetch('/dashboard/conversionFunnelDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
 /* ================================================================================================================ */
 
 /**
@@ -93,20 +100,7 @@ export const employee = () => {
 export const todoAuth = () => {
   return Fetch<Array<string>>('/functions', {
     method: 'POST',
-    body: JSON.stringify([
-      'fOrderList002',
-      'fOrderList001',
-      'fOrderDetail002',
-      'fOrderList003',
-      'rolf002',
-      'rolf003',
-      'rolf004',
-      'rolf005',
-      'f_customer_3',
-      'changeInvoice',
-      'f_goods_check_1',
-      'destoryOpenOrderInvoice'
-    ])
+    body: JSON.stringify(['fOrderList002', 'fOrderList001', 'fOrderDetail002', 'fOrderList003', 'rolf002', 'rolf003', 'rolf004', 'rolf005', 'f_customer_3', 'changeInvoice', 'f_goods_check_1', 'destoryOpenOrderInvoice'])
   });
 };
 
@@ -116,13 +110,7 @@ export const todoAuth = () => {
 export const statisticsAuth = () => {
   return Fetch<Array<string>>('/functions', {
     method: 'POST',
-    body: JSON.stringify([
-      'f_flow_watch_1',
-      'f_trade_watch_1',
-      'f_goods_watch_1',
-      'f_customer_watch_1',
-      'f_employee_watch_1'
-    ])
+    body: JSON.stringify(['f_flow_watch_1', 'f_trade_watch_1', 'f_goods_watch_1', 'f_customer_watch_1', 'f_employee_watch_1'])
   });
 };
 

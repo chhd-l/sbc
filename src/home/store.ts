@@ -125,6 +125,7 @@ export default class AppStore extends Store {
   newInit = async (data) => {
     const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(data);
     const { res: getGoodsInfoTopView } = await webapi.getGoodsInfoTopView(data);
+    const { res: getConversionFunnelDashboardView } = await webapi.getConversionFunnelDashboardView(data);
     const { res: getPrescriberTrendView } = await webapi.getPrescriberTrendView(data);
     const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);
     const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
@@ -134,6 +135,7 @@ export default class AppStore extends Store {
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
       this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
+      this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
       this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
       this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
       this.dispatch('home:trafficDashboardView', getTrafficDashboardView.context);

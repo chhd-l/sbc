@@ -7,13 +7,13 @@ export default class HomeAuthActor extends Actor {
       session: {}, //授权信息
       isAuthVisible: false, //授权modal是否显示
       isAuthTipVisible: false, //授权tip是否显示
-      tradeCustomerView: null,
-      goodsInfoTopView: null,
-      prescriberTrendView: null,
-      prescriberTopView: null,
-      trafficDashboardView: null,
-      transactionTrendView: null,
-      trafficTrendDashboardView: null
+      tradeCustomerView: '',
+      goodsInfoTopView: '',
+      prescriberTrendView: '',
+      prescriberTopView: '',
+      trafficDashboardView: '',
+      transactionTrendView: '',
+      trafficTrendDashboardView: ''
     };
   }
 

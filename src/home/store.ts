@@ -117,62 +117,28 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new TodoItemsActor(),
-      new DataBoardActor(),
-      new ShowBoardActor(),
-      new ShowTodoActor(),
-      new OverViewBoardActor(),
-      new RankingActor(),
-      new ReportActor(),
-      new TrendActor(),
-      new HomeAuthActor(),
-      new HeaderActor(),
-      new SettlementActor(),
-      new EvaluateSumActor()
-    ];
+    return [new TodoItemsActor(), new DataBoardActor(), new ShowBoardActor(), new ShowTodoActor(), new OverViewBoardActor(), new RankingActor(), new ReportActor(), new TrendActor(), new HomeAuthActor(), new HeaderActor(), new SettlementActor(), new EvaluateSumActor()];
   }
 
   //新版
 
   newInit = async (data) => {
-    const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(
-      data
-    );
+    const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(data);
     const { res: getGoodsInfoTopView } = await webapi.getGoodsInfoTopView(data);
-    const { res: getPrescriberTrendView } = await webapi.getPrescriberTrendView(
-      data
-    );
-    const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(
-      data
-    );
-    const {
-      res: getTrafficDashboardView
-    } = await webapi.getTrafficDashboardView(data);
-    const {
-      res: getTransactionTrendView
-    } = await webapi.getTransactionTrendView(data);
-    const {
-      res: getTrafficTrendDashboardView
-    } = await webapi.getTrafficTrendDashboardView(data);
+    const { res: getPrescriberTrendView } = await webapi.getPrescriberTrendView(data);
+    const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);
+    const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
+    const { res: getTransactionTrendView } = await webapi.getTransactionTrendView(data);
+    const { res: getTrafficTrendDashboardView } = await webapi.getTrafficTrendDashboardView(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
       this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
       this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
       this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
-      this.dispatch(
-        'home:trafficDashboardView',
-        getTrafficDashboardView.context
-      );
-      this.dispatch(
-        'home:transactionTrendView',
-        getTransactionTrendView.context
-      );
-      this.dispatch(
-        'home:trafficTrendDashboardView',
-        getTrafficTrendDashboardView.context
-      );
+      this.dispatch('home:trafficDashboardView', getTrafficDashboardView.context);
+      this.dispatch('home:transactionTrendView', getTransactionTrendView.context);
+      this.dispatch('home:trafficTrendDashboardView', getTrafficTrendDashboardView.context);
     }
   };
 
@@ -208,11 +174,7 @@ export default class AppStore extends Store {
       webapi.fetchStoreEvaluateSum(param), //20
       webapi.getPrescribersTotal() //21
     ])) as any;
-    if (
-      results[0] &&
-      results[0].res &&
-      results[0].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[0] && results[0].res && results[0].res.code === Const.SUCCESS_CODE) {
       const result = results[0].res.context;
       const overDueDay = result.overDueDay;
       /**
@@ -224,9 +186,7 @@ export default class AppStore extends Store {
         postTxt: '',
         midErr: '',
         lastTxt: '',
-        text: `Store valid until ${moment(result.contractEndDate).format(
-          Const.TIME_FORMAT
-        )}`
+        text: `Store valid until ${moment(result.contractEndDate).format(Const.TIME_FORMAT)}`
       };
       switch (result.storeState) {
         /**开启*/
@@ -238,8 +198,7 @@ export default class AppStore extends Store {
             if (overDueDay >= 0) {
               header.preTxt = '店铺还有';
               header.errTxt = overDueDay + 1;
-              header.postTxt =
-                '天过期，过期后，您将无法再销售商品，您的店铺也将无法正常展示，请尽快联系平台续签';
+              header.postTxt = '天过期，过期后，您将无法再销售商品，您的店铺也将无法正常展示，请尽快联系平台续签';
             } else {
               header.errTxt = '店铺已过期';
               header.postTxt = '，请尽快联系平台续签';
@@ -259,32 +218,17 @@ export default class AppStore extends Store {
     }
 
     //员工信息
-    this.dispatch(
-      'home-actor:setEmployee',
-      JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
-    );
+    this.dispatch('home-actor:setEmployee', JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)));
     //订单todo
-    if (
-      results[2] &&
-      results[2].res &&
-      results[2].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[2] && results[2].res && results[2].res.code === Const.SUCCESS_CODE) {
       this.dispatch('home-todo-actor:setTradeTodo', results[2].res.context);
     }
     //退单todo
-    if (
-      results[3] &&
-      results[3].res &&
-      results[3].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[3] && results[3].res && results[3].res.code === Const.SUCCESS_CODE) {
       this.dispatch('home-todo-actor:setReturnTodo', results[3].res.context);
     }
     //商品todo
-    if (
-      results[4] &&
-      results[4].res &&
-      results[4].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[4] && results[4].res && results[4].res.code === Const.SUCCESS_CODE) {
       this.dispatch('home-todo-actor:setGoodsTodo', results[4].res.context);
     }
     //待处理事项业务权限
@@ -297,14 +241,8 @@ export default class AppStore extends Store {
     }
     this.dispatch('show-todo-actor:mergeShowTodo', fromJS(todoItems));
     //流量概况
-    if (
-      results[6] &&
-      results[6].res &&
-      results[6].res.code === Const.SUCCESS_CODE
-    ) {
-      let flow = results[6].res.context.content
-        ? results[6].res.context.content[0]
-        : [];
+    if (results[6] && results[6].res && results[6].res.code === Const.SUCCESS_CODE) {
+      let flow = results[6].res.context.content ? results[6].res.context.content[0] : [];
       if (flow) {
         let flowOview = {
           trafficNum: {
@@ -318,11 +256,7 @@ export default class AppStore extends Store {
       }
     }
     //交易概况
-    if (
-      results[7] &&
-      results[7].res &&
-      results[7].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[7] && results[7].res && results[7].res.code === Const.SUCCESS_CODE) {
       let trade = results[7].res.context;
       this.dispatch('overview-board-actor:mergeBoards', {
         tradeNum: {
@@ -334,24 +268,14 @@ export default class AppStore extends Store {
       });
     }
     //商品概况数据
-    if (
-      results[8] &&
-      results[8].res &&
-      results[8].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[8] && results[8].res && results[8].res.code === Const.SUCCESS_CODE) {
       this.dispatch('overview-board-actor:mergeBoards', {
         skuNum: results[8].res.context
       });
     }
     //客户概况
-    if (
-      results[9] &&
-      results[9].res &&
-      results[9].res.code === Const.SUCCESS_CODE
-    ) {
-      let data = results[9].res.context.data
-        ? results[9].res.context.data[0]
-        : [];
+    if (results[9] && results[9].res && results[9].res.code === Const.SUCCESS_CODE) {
+      let data = results[9].res.context.data ? results[9].res.context.data[0] : [];
       if (data) {
         this.dispatch('overview-board-actor:mergeBoards', {
           customerNum: {
@@ -363,14 +287,8 @@ export default class AppStore extends Store {
       }
     }
     //流量报表 近10日
-    if (
-      results[10] &&
-      results[10].res &&
-      results[10].res.code === Const.SUCCESS_CODE
-    ) {
-      let content = results[10].res.context.content
-        ? results[10].res.context.content
-        : [];
+    if (results[10] && results[10].res && results[10].res.code === Const.SUCCESS_CODE) {
+      let content = results[10].res.context.content ? results[10].res.context.content : [];
       let flowData = content.map((flow, index) => {
         return {
           key: index,
@@ -384,41 +302,24 @@ export default class AppStore extends Store {
       this.dispatch('report-actor:mergeReport', fromJS({ flowData: flowData }));
     }
     //流量趋势 近10日
-    if (
-      results[11] &&
-      results[11].res &&
-      results[11].res.code === Const.SUCCESS_CODE
-    ) {
-      let flowList = results[11].res.context.flowList
-        ? results[11].res.context.flowList
-        : [];
+    if (results[11] && results[11].res && results[11].res.code === Const.SUCCESS_CODE) {
+      let flowList = results[11].res.context.flowList ? results[11].res.context.flowList : [];
       const length = flowList.length;
-      let flowTrendData = flowList
-        .slice(length >= 10 ? length - 10 : 0, length)
-        .map((flow, index) => {
-          return {
-            key: index,
-            totalPv: flow.totalPv,
-            totalUv: flow.totalUv,
-            skuTotalPv: flow.skuTotalPv,
-            skuTotalUv: flow.skuTotalUv,
-            title: flow.title
-          };
-        });
-      this.dispatch(
-        'trend-actor:mergeTrend',
-        fromJS({ flowTrendData: flowTrendData })
-      );
+      let flowTrendData = flowList.slice(length >= 10 ? length - 10 : 0, length).map((flow, index) => {
+        return {
+          key: index,
+          totalPv: flow.totalPv,
+          totalUv: flow.totalUv,
+          skuTotalPv: flow.skuTotalPv,
+          skuTotalUv: flow.skuTotalUv,
+          title: flow.title
+        };
+      });
+      this.dispatch('trend-actor:mergeTrend', fromJS({ flowTrendData: flowTrendData }));
     }
     //交易报表 近10日
-    if (
-      results[12] &&
-      results[12].res &&
-      results[12].res.code === Const.SUCCESS_CODE
-    ) {
-      let content = results[12].res.context.content
-        ? results[12].res.context.content
-        : [];
+    if (results[12] && results[12].res && results[12].res.code === Const.SUCCESS_CODE) {
+      let content = results[12].res.context.content ? results[12].res.context.content : [];
       let tradeData = content
         ? content.map((order, index) => {
             return {
@@ -431,45 +332,27 @@ export default class AppStore extends Store {
             };
           })
         : [];
-      this.dispatch(
-        'report-actor:mergeReport',
-        fromJS({ tradeData: tradeData })
-      );
+      this.dispatch('report-actor:mergeReport', fromJS({ tradeData: tradeData }));
     }
     //交易趋势 近10日
-    if (
-      results[13] &&
-      results[13].res &&
-      results[13].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[13] && results[13].res && results[13].res.code === Const.SUCCESS_CODE) {
       let context = results[13].res.context ? results[13].res.context : [];
       const length = context.length;
-      let tradeTrendData = context
-        .slice(length >= 10 ? length - 10 : 0, length)
-        .map((order, index) => {
-          return {
-            key: index,
-            orderCount: order.orderCount,
-            orderAmt: order.orderAmt,
-            payOrderCount: order.PayOrderCount,
-            payOrderAmt: order.payOrderAmt,
-            title: order.title
-          };
-        });
-      this.dispatch(
-        'trend-actor:mergeTrend',
-        fromJS({ tradeTrendData: tradeTrendData })
-      );
+      let tradeTrendData = context.slice(length >= 10 ? length - 10 : 0, length).map((order, index) => {
+        return {
+          key: index,
+          orderCount: order.orderCount,
+          orderAmt: order.orderAmt,
+          payOrderCount: order.PayOrderCount,
+          payOrderAmt: order.payOrderAmt,
+          title: order.title
+        };
+      });
+      this.dispatch('trend-actor:mergeTrend', fromJS({ tradeTrendData: tradeTrendData }));
     }
     //客户增长报表
-    if (
-      results[14] &&
-      results[14].res &&
-      results[14].res.code === Const.SUCCESS_CODE
-    ) {
-      let data = results[14].res.context.data
-        ? results[14].res.context.data
-        : [];
+    if (results[14] && results[14].res && results[14].res.code === Const.SUCCESS_CODE) {
+      let data = results[14].res.context.data ? results[14].res.context.data : [];
       let customerData = data.map((cus, index) => {
         return {
           key: index,
@@ -479,55 +362,33 @@ export default class AppStore extends Store {
           baseDate: cus.baseDate
         };
       });
-      this.dispatch(
-        'report-actor:mergeReport',
-        fromJS({ customerData: customerData })
-      );
+      this.dispatch('report-actor:mergeReport', fromJS({ customerData: customerData }));
     }
     //客户增长趋势图
-    if (
-      results[15] &&
-      results[15].res &&
-      results[15].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[15] && results[15].res && results[15].res.code === Const.SUCCESS_CODE) {
       let context = results[15].res.context ? results[15].res.context : [];
       const length = context.length;
-      let customerTrendData = context
-        .slice(length >= 10 ? length - 10 : 0, length)
-        .map((cus, index) => {
-          return {
-            key: index,
-            title: cus.xValue,
-            cusAllCount: cus.customerAllCount,
-            cusDayGrowthCount: cus.customerDayGrowthCount,
-            cusDayRegisterCount: cus.customerDayRegisterCount
-          };
-        });
-      this.dispatch(
-        'trend-actor:mergeTrend',
-        fromJS({ customerGrowTrendData: customerTrendData })
-      );
+      let customerTrendData = context.slice(length >= 10 ? length - 10 : 0, length).map((cus, index) => {
+        return {
+          key: index,
+          title: cus.xValue,
+          cusAllCount: cus.customerAllCount,
+          cusDayGrowthCount: cus.customerDayGrowthCount,
+          cusDayRegisterCount: cus.customerDayRegisterCount
+        };
+      });
+      this.dispatch('trend-actor:mergeTrend', fromJS({ customerGrowTrendData: customerTrendData }));
     }
     //商品销售排行Top10
-    if (
-      results[16] &&
-      results[16].res &&
-      results[16].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[16] && results[16].res && results[16].res.code === Const.SUCCESS_CODE) {
       this.dispatch('ranking-actor:setSkuRanking', {
         goodsSkuViewList: results[16].res.context.goodsSkuViewList,
         goodsReportList: results[16].res.context.goodsReportList
       });
     }
     //客户订货排行TOP10
-    if (
-      results[17] &&
-      results[17].res &&
-      results[17].res.code === Const.SUCCESS_CODE
-    ) {
-      let data = results[17].res.context.data
-        ? results[17].res.context.data
-        : [];
+    if (results[17] && results[17].res && results[17].res.code === Const.SUCCESS_CODE) {
+      let data = results[17].res.context.data ? results[17].res.context.data : [];
       let customerRanking = data.map((cus, index) => {
         return {
           key: index,
@@ -540,14 +401,8 @@ export default class AppStore extends Store {
       this.dispatch('ranking-actor:setCustomerRanking', customerRanking);
     }
     //业务员业绩排行TOP10
-    if (
-      results[18] &&
-      results[18].res &&
-      results[18].res.code === Const.SUCCESS_CODE
-    ) {
-      let viewList = results[18].res.context.viewList
-        ? results[18].res.context.viewList
-        : [];
+    if (results[18] && results[18].res && results[18].res.code === Const.SUCCESS_CODE) {
+      let viewList = results[18].res.context.viewList ? results[18].res.context.viewList : [];
       viewList = viewList.map((employee, index) => {
         return {
           key: index,
@@ -561,35 +416,17 @@ export default class AppStore extends Store {
       });
       this.dispatch('ranking-actor:setEmployeeRanking', viewList);
     }
-    if (
-      results[19] &&
-      results[19].res &&
-      results[19].res.code === Const.SUCCESS_CODE
-    ) {
+    if (results[19] && results[19].res && results[19].res.code === Const.SUCCESS_CODE) {
       let settlement = results[19].res.context;
       this.dispatch('settlement: set', settlement);
     }
 
-    if (
-      results[20] &&
-      results[20].res &&
-      results[20].res.code === Const.SUCCESS_CODE
-    ) {
-      this.dispatch(
-        'storeEvaluateSum:init',
-        results[20].res.context.storeEvaluateSumVO || {}
-      );
+    if (results[20] && results[20].res && results[20].res.code === Const.SUCCESS_CODE) {
+      this.dispatch('storeEvaluateSum:init', results[20].res.context.storeEvaluateSumVO || {});
     }
 
-    if (
-      results[21] &&
-      results[21].res &&
-      results[21].res.code === Const.SUCCESS_CODE
-    ) {
-      this.dispatch(
-        'home-todo-actor:prescribers',
-        results[21].res.context || {}
-      );
+    if (results[21] && results[21].res && results[21].res.code === Const.SUCCESS_CODE) {
+      this.dispatch('home-todo-actor:prescribers', results[21].res.context || {});
     }
     this.freshDataBoard();
   };
@@ -598,11 +435,8 @@ export default class AppStore extends Store {
    * 刷新主页控制看板
    */
   freshDataBoard = async () => {
-    const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-      .accountName;
-    const cacheData = JSON.parse(
-      localStorage.getItem(cache.DATA_BOARD.concat(accountName))
-    );
+    const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).accountName;
+    const cacheData = JSON.parse(localStorage.getItem(cache.DATA_BOARD.concat(accountName)));
     //看板是否生效数据结构{看板key:true/false}
     let showBoards = {};
 
@@ -628,18 +462,12 @@ export default class AppStore extends Store {
       });
     } else {
       //invalid业务权限
-      let oldAuth = cacheData['oldServiceAuth'].filter(
-        (service) => newServiceAuth.indexOf(service) < 0
-      );
+      let oldAuth = cacheData['oldServiceAuth'].filter((service) => newServiceAuth.indexOf(service) < 0);
       //新增的业务权限
-      let newAuth = newServiceAuth.filter(
-        (service) => cacheData['oldServiceAuth'].indexOf(service) < 0
-      );
+      let newAuth = newServiceAuth.filter((service) => cacheData['oldServiceAuth'].indexOf(service) < 0);
       if (oldAuth.length == 0 && newAuth.length == 0) {
         //sort by 看板展示优先等级
-        cacheData['dataAuth'] = cacheData['dataAuth'].sort(
-          (board, board1) => board.priority - board1.priority
-        );
+        cacheData['dataAuth'] = cacheData['dataAuth'].sort((board, board1) => board.priority - board1.priority);
         //build index
         cacheData['dataAuth'].forEach((board, i) => {
           boardIndex[board.dataKey] = i;
@@ -663,18 +491,7 @@ export default class AppStore extends Store {
       } else {
         //update 数据面板
         oldAuth.forEach((auth) => {
-          cacheData['dataAuth']
-            .filter((data) =>
-              (dataBoardUi[auth] || fromJS([])).some(
-                (data1) => data1['dataKey'] === data['dataKey']
-              )
-            )
-            .forEach((data) =>
-              cacheData['dataAuth'].splice(
-                cacheData['dataAuth'].indexOf(data),
-                1
-              )
-            );
+          cacheData['dataAuth'].filter((data) => (dataBoardUi[auth] || fromJS([])).some((data1) => data1['dataKey'] === data['dataKey'])).forEach((data) => cacheData['dataAuth'].splice(cacheData['dataAuth'].indexOf(data), 1));
         });
 
         newAuth.forEach((auth) => {
@@ -686,9 +503,7 @@ export default class AppStore extends Store {
     }
 
     //sort by 看板展示优先等级
-    updateCache['dataAuth'] = updateCache['dataAuth'].sort(
-      (board, board1) => board.priority - board1.priority
-    );
+    updateCache['dataAuth'] = updateCache['dataAuth'].sort((board, board1) => board.priority - board1.priority);
     //build index
     updateCache['dataAuth'].forEach((board, i) => {
       boardIndex[board.dataKey] = i;
@@ -707,10 +522,7 @@ export default class AppStore extends Store {
       this.dispatch('data-board-actor:setOViewNum', oViewNum);
     });
     //重置主页控制面板
-    localStorage.setItem(
-      cache.DATA_BOARD.concat(accountName),
-      JSON.stringify(updateCache)
-    );
+    localStorage.setItem(cache.DATA_BOARD.concat(accountName), JSON.stringify(updateCache));
   };
 
   /**
@@ -726,21 +538,15 @@ export default class AppStore extends Store {
     });
 
     //数据看板
-    const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-      .accountName;
-    const cacheData = fromJS(
-      JSON.parse(localStorage.getItem(cache.DATA_BOARD.concat(accountName)))
-    ).updateIn(['dataAuth', index], (val) => {
+    const accountName = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).accountName;
+    const cacheData = fromJS(JSON.parse(localStorage.getItem(cache.DATA_BOARD.concat(accountName)))).updateIn(['dataAuth', index], (val) => {
       if (val.get('isOview') == true) {
         this.dispatch('data-board-actor:updateOViewNum', checked);
       }
       return val.set('onOff', checked);
     });
 
-    localStorage.setItem(
-      cache.DATA_BOARD.concat(accountName),
-      JSON.stringify(cacheData)
-    );
+    localStorage.setItem(cache.DATA_BOARD.concat(accountName), JSON.stringify(cacheData));
 
     //
     this.dispatch('show-board-actor:switchBoard', key);
@@ -759,12 +565,7 @@ export default class AppStore extends Store {
         this.dispatch('home-auth-actor:setAuthTipVisible', true);
         this.dispatch('home-auth-actor:init', res.context);
       });
-      const periodOfValidity = this.state().getIn([
-        'session',
-        'sessionInfo',
-        'snInfo',
-        'periodOfValidity'
-      ]);
+      const periodOfValidity = this.state().getIn(['session', 'sessionInfo', 'snInfo', 'periodOfValidity']);
       const content = `当前有效期为:${periodOfValidity}`;
       SUCCESS({
         title: '您的授权码验证成功！',

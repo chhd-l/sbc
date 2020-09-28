@@ -1,28 +1,25 @@
 import { useOktaAuth } from '@okta/okta-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Button, message } from 'antd';
-import {  cache, util } from 'qmkit';
+import {  cache, util, history } from 'qmkit';
 import * as webapi from './webapi';
+import Fetch from '../fetch';
 
 const OktaLogout = (props) => {
   const { authState, authService } = useOktaAuth();
 
   const oktaLogout = async () => {
+    console.log(authState.isAuthenticated)
     if(authState.isAuthenticated) {
-      sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
-      await authService.logout('/')  
+      authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))  
+    } else {
+      history.push('/logout')
     }
-  }
-
-  const clickLogoff = async () => {
-    await oktaLogout()
-    util.logout()
-    await webapi.logout()
   }
 
   return (
     props.type === 'link' ? 
-   <a href="#" onClick={clickLogoff}>
+   <a style={{ cursor: 'pointer' }} onClick={oktaLogout}>
       <Icon type="logout" /> {props.text}
    </a> :  
   <Button
@@ -30,7 +27,7 @@ const OktaLogout = (props) => {
        size="large"
        htmlType="submit"
        style={styles.loginCancel}
-       onClick={clickLogoff}
+       onClick={oktaLogout}
   >
        {props.text}
   </Button>

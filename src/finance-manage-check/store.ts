@@ -28,8 +28,10 @@ export default class AppStore extends Store {
     const { res3 } = await webapi.getTradeGateWays();
     let i;
     for (i = 0; i < res3.context.length; ++i) {
-      if (res3.context[i].isOpen == 1) {
-        this.dispatch('finance:payWay', res3.context[i].name);
+      if (res3.context[i].storeId == '123456858') {
+        this.dispatch('finance:payWay', 'PAYU');
+      } else if (res3.context[i].storeId == '123457908') {
+        this.dispatch('finance:payWay', 'ADYEN');
       }
     }
     /*if (res3.context[0].isOpen == 1) {

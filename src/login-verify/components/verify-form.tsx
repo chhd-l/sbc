@@ -32,6 +32,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
       (this._store = ctx['_plume$Store']);
   }
 
+ 
   async componentDidMount () {
     document.getElementById('consents').addEventListener('click',(e)=>{     
       if(e.target.localName === 'span'){
@@ -40,7 +41,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
           let allList = [...this.state.requiredConsents, ...this.state.optionalConsents]
           let selectConsent = allList.find(x=>x.id === parentId);
           if (selectConsent){
-            let detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : ''
+            let detali = selectConsent.detailList ? selectConsent.detailList.find(x=>x.contentTitle === keyWords) : {contentBody: ''}
             this.state.requiredConsents.map(requiredItem=>{
               if(requiredItem.id === parentId) {
                 requiredItem.detailHtml = requiredItem.detailHtml ? '' : detali.contentBody
@@ -62,7 +63,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
             })
           }
       }
-  })
+    })
   }
 
   render() {
@@ -274,9 +275,14 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         this.state.optionalConsents
 
         let oktaToken = this.props.authState.accessToken;
+        console.log(this.props.authState)
+        sessionStorage.setItem(
+          cache.OKTA_TOKEN,
+          oktaToken
+        );
         if(!oktaToken) {
           message.error('OKTA Token Expired');
-          this.props.authService.logout('/');
+          this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
           return
         }
         let param = {

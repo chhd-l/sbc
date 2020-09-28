@@ -70,14 +70,12 @@ export const getUserSiteInfo = () => {
 export function getJwtToken(oktaToken: string) {
   return Fetch<TResult>('/oktaStore/getJwtToken', {
     method: 'POST',
-    body: JSON.stringify({ oktaToken: 'Bearer ' +  oktaToken })
+    body: JSON.stringify({ oktaToken: oktaToken })
   });
 }
 
-export function getRCJwtToken(oktaToken: string) {
-  return Fetch<TResult>('/oktaStore/getRCJwtToken', {
-    method: 'POST',
-    body: JSON.stringify({ oktaToken: 'Bearer ' +  oktaToken })
+export function logout() {
+  return Fetch<TResult>('/logout', {
+      method: 'GET'
   });
 }
-

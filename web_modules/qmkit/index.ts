@@ -35,7 +35,7 @@ import DatePickerLaber from './date-picker-laber';
 import * as Resource from './resource';
 import BreadCrumb from './bread-crumb';
 import VASConst from './VAS-Const';
-import { login } from './login/login';
+import { login, getRoutType } from './login/login';
 import OktaLogout from './okta/okta-logout'
 
 export {
@@ -79,5 +79,6 @@ export {
   VASConst,
   FindBusiness,
   login,
-  OktaLogout
+  OktaLogout,
+  getRoutType
 };

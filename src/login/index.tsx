@@ -5,9 +5,8 @@ import LoginHome from './components/login-home';
 import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
-import LoginForm from './components/login-form';
 import { withOktaAuth } from '@okta/okta-react';
-import { util, cache } from 'qmkit';
+import { util, cache, history } from 'qmkit';
 import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -16,24 +15,15 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      isRcLogin: false
-    };
-    this.loginRc = this.loginRc.bind(this);
   }
-
-  loginRc = () => {
-    this.setState({
-      isRcLogin: true
-    });
-  };
 
   componentWillMount() {
     if (this.props.location.state && this.props.location.state.oktaLogout) {
-      this.props.authService.logout('/');
-      util.logout()
-      sessionStorage.setItem(cache.OKTA_LOGOUT, 'true')
-      webapi.logout()
+      if(this.props.authState.isAuthenticated) {
+        this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
+      } else {
+        history.push('/logout')
+      }
     };
   }
 
@@ -42,12 +32,14 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   }
 
   render() {
-    const LoginFormDetail = Form.create({})(LoginForm);
-    return this.state.isRcLogin ? (
-      <div style={styles.container}>{<LoginFormDetail />}</div>
-    ) : (
-      <LoginHome parent={this.props} clickLoginRc={this.loginRc} />
-    );
+    // const LoginFormDetail = Form.create({})(LoginForm);
+    // return this.state.isRcLogin ? (
+    //   <div style={styles.container}>{<LoginFormDetail />}</div>
+    // ) : (
+    //   <LoginHome parent={this.props} />
+    // );
+    return (this.props.location.state && this.props.location.state.oktaLogout) ? null
+          : <LoginHome parent={this.props} />
   }
 })
 const styles = {

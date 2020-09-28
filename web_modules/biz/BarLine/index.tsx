@@ -56,7 +56,7 @@ export default class Line extends React.Component{
             },
             formatter:'Week-{value}'
           },
-          data: data.weekNumList,
+          data: data.x,
         }
       ],
       yAxis: [
@@ -124,7 +124,7 @@ export default class Line extends React.Component{
               }
             }
           },
-          data: data.reward
+          data: data.y1
         },
         {
           name: yName.y2,
@@ -139,7 +139,7 @@ export default class Line extends React.Component{
             }
           },
           yAxisIndex: 1,
-          data: data.activeRate
+          data: data.y2
         }
       ]
     }

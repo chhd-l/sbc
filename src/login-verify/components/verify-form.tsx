@@ -4,7 +4,7 @@ const FormItem = Form.Item;
 import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const, login, cache, OktaLogout } from 'qmkit';
+import { history, Const, login, cache, OktaLogout, getRoutType } from 'qmkit';
 import * as webApi from '../webapi';
 const { Search } = Input;
 import { withOktaAuth } from '@okta/okta-react';
@@ -301,7 +301,8 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
           } else if(res.context === 'alreadyRegister') {
             message.info('Email already exists in store portal, please check.')
           } else {
-            login({}, oktaToken);
+            var type = getRoutType(window.location.search)
+            login(type, oktaToken);
           }
           this.setState({
             prcessLoadding: false

@@ -18,7 +18,7 @@ const icon2 =
 
 const countUpProps = {
   start: 0,
-  duration: 1.5,
+  duration: 1.3,
   useEasing: false,
   useGrouping: true,
   separator: ','

@@ -160,7 +160,7 @@ export default class MyHeader extends React.Component {
           </Menu.Item>
         ) : null} */}
 
-        <Menu.Item key="1">
+        {/* <Menu.Item key="1">
           <a
             href="#"
             onClick={() =>
@@ -174,7 +174,7 @@ export default class MyHeader extends React.Component {
           >
             <Icon type="lock" /> Change My Password
           </a>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="2">
            <OktaLogout type="link" text="Exit"/>
         </Menu.Item>

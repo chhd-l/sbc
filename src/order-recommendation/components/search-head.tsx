@@ -289,7 +289,7 @@ export default class SearchHead extends Component<any, any> {
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect == 'clinicsName'
                           ? 'prescriberName'
-                          : 'prescriberId']: clinicSelectValue,
+                          : 'prescriberBusinessId']: clinicSelectValue,
                         linkStatus
                       };
                       onSearch(params);

@@ -8,7 +8,7 @@ import { AuthWrapper, Const, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage } from 'react-intl';
-
+import { cache } from 'qmkit';
 const defaultImg = require('../img/none.png');
 
 const confirm = Modal.confirm;
@@ -569,7 +569,8 @@ export default class SearchList extends React.Component<any, any> {
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
                   <td style={{ width: '12%' }}>
-                    {'$' + parseFloat(payPrice).toFixed(2)}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      parseFloat(payPrice).toFixed(2)}
                   </td>
                   {/*应退积分*/}
                   <td style={{ width: '10%' }}>{applyPoints}</td>
@@ -587,7 +588,8 @@ export default class SearchList extends React.Component<any, any> {
                   {/*实退金额*/}
                   <td style={{ width: '12%' }}>
                     {returnFlowState == 'COMPLETED'
-                      ? '$' + parseFloat(actualReturnPrice).toFixed(2)
+                      ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                        parseFloat(actualReturnPrice).toFixed(2)
                       : '-'}
                   </td>
                   {/*实退积分*/}

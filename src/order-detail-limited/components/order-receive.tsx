@@ -5,7 +5,7 @@ import { noop, Const, util } from 'qmkit';
 import { IList } from 'typings/globalType';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-
+import { cache } from 'qmkit';
 const payTypeDic = {
   0: 'Online Payment',
   1: 'Offline Payment'
@@ -76,7 +76,10 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'payOrderPrice',
       key: 'payOrderPrice',
       render: (text, record) =>
-        record.payOrderStatus == 1 ? '' : '$' + (text || 0).toFixed(2)
+        record.payOrderStatus == 1
+          ? ''
+          : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+            (text || 0).toFixed(2)
     },
     {
       title: 'Payment Method',

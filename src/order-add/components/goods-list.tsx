@@ -17,6 +17,7 @@ import { noop, ValidConst, QMFloat, QMMethod } from 'qmkit';
 import './goods-list-style.css';
 import { FormattedMessage } from 'react-intl';
 // import UUID from 'uuid-js';
+import { cache } from 'qmkit';
 
 import styled from 'styled-components';
 const TableSet = styled.div`
@@ -305,14 +306,20 @@ export default class GoodsList extends React.Component<any, any> {
               if (this.props.edit) return rowInfo.levelPrice.toFixed(2);
               const goodsIntervalPrices = this.props.relaxProps
                 .goodsIntervalPrices;
-              let price = '$' + rowInfo.salePrice.toFixed(2);
+              let price =
+                sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                rowInfo.salePrice.toFixed(2);
               if (rowInfo.priceType === 1) {
                 const buyCount = rowInfo.buyCount;
                 if (buyCount == 0) {
                   const minPrice = rowInfo.intervalMinPrice;
                   const maxPrice = rowInfo.intervalMaxPrice;
                   price =
-                    '$' + minPrice.toFixed(2) + '-' + '$' + maxPrice.toFixed(2);
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    minPrice.toFixed(2) +
+                    '-' +
+                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    maxPrice.toFixed(2);
                 } else {
                   const prices = fromJS(rowInfo.intervalPriceIds || [])
                     .map((id) =>
@@ -323,7 +330,9 @@ export default class GoodsList extends React.Component<any, any> {
                     .filter((f) => f && f.get('count') <= buyCount)
                     .maxBy((f) => f.get('count'));
                   if (prices) {
-                    price = '$' + prices.get('price').toFixed(2);
+                    price =
+                      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      prices.get('price').toFixed(2);
                   }
                 }
               }

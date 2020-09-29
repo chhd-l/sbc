@@ -732,6 +732,7 @@ const routes = [
 
 const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
+
   { path: '/login-admin', asyncComponent: () => import('./login-admin') },
   { path: '/logout', asyncComponent: () => import('./logout') },
   { path: '/login-verify', asyncComponent: () => import('./login-verify') },
@@ -768,6 +769,10 @@ const homeRoutes = [
     path: '/supplier-agreement',
     asyncComponent: () =>
       System.import('./company-register/component/agreement')
+  },
+  {
+    path: '/generalTermsAndConditions',
+    asyncComponent: () => import('./general-terms-and-conditions')
   }
 ];
 

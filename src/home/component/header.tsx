@@ -55,7 +55,6 @@ export default class Header extends React.Component<any, any> {
 
   render() {
     //const { header, storeEvaluateSum } = this.props.relaxProps as any;
-
     return (
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">

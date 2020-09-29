@@ -1,6 +1,6 @@
 {
   "rules": {
-    "indentation": 4,
+    "indentation": 2,
     "number-leading-zero": "never",
     "string-quotes": "double",
     "declaration-block-trailing-semicolon": "always",

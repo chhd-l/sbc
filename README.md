@@ -45,3 +45,4 @@ yarn build:all:online 部署线上环境原来的 yarn start 和 build:all 依�
 /data/nginx/conf/athena.conf
 /data/www/s2b/supplier/dist_supplier
 
+https://blog.csdn.net/yichensheng/article/details/79425275

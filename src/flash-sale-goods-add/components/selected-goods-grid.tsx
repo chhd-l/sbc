@@ -54,12 +54,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     onCateInputChange: noop
   };
   render() {
-    const {
-      goodsRows,
-      deleteSelectedSku,
-      onGoodsChange,
-      onCateInputChange
-    } = this.props.relaxProps;
+    const { goodsRows, deleteSelectedSku, onGoodsChange, onCateInputChange } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     return (
       <TableSet className="resetTable">
@@ -67,30 +62,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           添加商品
         </Button>
         &nbsp;&nbsp;
-        <Table
-          rowKey={(record: any) => record.goodsInfoId}
-          dataSource={goodsRows ? goodsRows.toJS() : []}
-          pagination={false}
-          style={{ width: '100%' }}
-        >
-          <Column
-            title="商品名称"
-            dataIndex="goodsInfoName"
-            key="goodsInfoName"
-            width={100}
-          />
-          <Column
-            title="规格"
-            dataIndex="specText"
-            key="specText"
-            width={100}
-          />
-          <Column
-            title="SKU code"
-            dataIndex="goodsInfoNo"
-            key="goodsInfoNo"
-            width={100}
-          />
+        <Table rowKey={(record: any) => record.goodsInfoId} dataSource={goodsRows ? goodsRows.toJS() : []} pagination={false} style={{ width: '100%' }}>
+          <Column title="商品名称" dataIndex="goodsInfoName" key="goodsInfoName" width={100} />
+          <Column title="规格" dataIndex="specText" key="specText" width={100} />
+          <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" width={100} />
           <Column title="现有库存" dataIndex="stock" key="stock" width={80} />
           <Column
             title="市场价"
@@ -167,33 +142,28 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               return (
                 <div>
                   <FormItem>
-                    {getFieldDecorator(
-                      record.goodsInfoId + '_settlementPrice',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: '请填写抢购价'
-                          },
-                          {
-                            pattern: ValidConst.price,
-                            message: '请填写大于0的两位小数的合法金额'
-                          },
-                          {
-                            type: 'number',
-                            max: 9999999.99,
-                            message: '最大值为9999999.99',
-                            transform: function(value) {
-                              return isNaN(parseFloat(value))
-                                ? 0
-                                : parseFloat(value);
-                            }
+                    {getFieldDecorator(record.goodsInfoId + '_settlementPrice', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请填写抢购价'
+                        },
+                        {
+                          pattern: ValidConst.price,
+                          message: '请填写大于0的两位小数的合法金额'
+                        },
+                        {
+                          type: 'number',
+                          max: 9999999.99,
+                          message: '最大值为9999999.99',
+                          transform: function (value) {
+                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                           }
-                        ],
-                        initialValue: null,
-                        validateFirst: true
-                      }
-                    )(
+                        }
+                      ],
+                      initialValue: null,
+                      validateFirst: true
+                    })(
                       <Input
                         onChange={(e) =>
                           onGoodsChange({
@@ -360,9 +330,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
                 <div>
                   <FormItem>
                     <Select
-                      getPopupContainer={() =>
-                        document.getElementById('page-content')
-                      }
+                      getPopupContainer={() => document.getElementById('page-content')}
                       defaultValue="否"
                       onChange={(value) => {
                         onGoodsChange({
@@ -385,9 +353,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             key="operate"
             width={60}
             render={(row) => {
-              return (
-                <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>
-              );
+              return <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>;
             }}
           />
         </Table>

@@ -46,12 +46,7 @@ export default class OrderInvoiceAddModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal  maskClosable={false}
-        title="新增开票记录"
-        visible={visible}
-        onOk={() => this._handleOk()}
-        onCancel={() => onHide()}
-      >
+      <Modal maskClosable={false} title="新增开票记录" visible={visible} onOk={() => this._handleOk()} onCancel={() => onHide()}>
         <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );

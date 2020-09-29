@@ -94,10 +94,7 @@ export default class GoodsStatistics extends React.Component<any, any> {
   }
 
   render() {
-    const goodsTotal = this.store
-      .state()
-      .get('GoodsTotal')
-      .toJS();
+    const goodsTotal = this.store.state().get('GoodsTotal').toJS();
     //获取日期类型，决定商品概况中商品总数和上架商品数显示"-"还是真实的
     const dateFlag = this.store.state().get('dateFlag');
     return (
@@ -111,83 +108,59 @@ export default class GoodsStatistics extends React.Component<any, any> {
         <div className="newContent">
           <StatisticsHeader onClick={(param) => this.store.getGoodsInfo(param)} />
           <div style={styles.content}>
-            <div >
+            <div>
               <h4 style={styles.h4}>商品概况</h4>
               <div style={styles.static}>
                 <Row>
                   <Col span={4}>
                     <p style={styles.nav}>
-                      <Tooltip
-                        placement="rightBottom"
-                        title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。"
-                      >
+                      <Tooltip placement="rightBottom" title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。">
                         <span style={{ fontSize: 14 }}>
-                          商品总数(SKU)<Icon type="question-circle-o" />
+                          商品总数(SKU)
+                          <Icon type="question-circle-o" />
                         </span>
                       </Tooltip>
                     </p>
-                    <p style={styles.num}>
-                      {dateFlag != 0 && dateFlag != 1 ? '-' : goodsTotal.total}
-                    </p>
+                    <p style={styles.num}>{dateFlag != 0 && dateFlag != 1 ? '-' : goodsTotal.total}</p>
                   </Col>
                   <Col span={4}>
                     <p style={styles.nav}>
-                      <Tooltip
-                        placement="rightBottom"
-                        title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。"
-                      >
+                      <Tooltip placement="rightBottom" title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。">
                         <span style={{ fontSize: 14 }}>
-                          已审核商品(SKU)<Icon type="question-circle-o" />
+                          已审核商品(SKU)
+                          <Icon type="question-circle-o" />
                         </span>
                       </Tooltip>
                     </p>
-                    <p style={styles.num}>
-                      {dateFlag != 0 && dateFlag != 1
-                        ? '-'
-                        : goodsTotal.checkedTotal}
-                    </p>
+                    <p style={styles.num}>{dateFlag != 0 && dateFlag != 1 ? '-' : goodsTotal.checkedTotal}</p>
                   </Col>
                   <Col span={4}>
                     <p style={styles.nav}>
-                      <Tooltip
-                        placement="rightBottom"
-                        title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。"
-                      >
+                      <Tooltip placement="rightBottom" title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。">
                         <span style={{ fontSize: 14 }}>
-                          上架商品数(SKU)<Icon type="question-circle-o" />
+                          上架商品数(SKU)
+                          <Icon type="question-circle-o" />
                         </span>
                       </Tooltip>
                     </p>
-                    <p style={styles.num}>
-                      {dateFlag != 0 && dateFlag != 1
-                        ? '-'
-                        : goodsTotal.addedTotal}
-                    </p>
+                    <p style={styles.num}>{dateFlag != 0 && dateFlag != 1 ? '-' : goodsTotal.addedTotal}</p>
                   </Col>
                   <Col span={4}>
                     <p style={styles.nav}>
-                      <Tooltip
-                        placement="rightBottom"
-                        title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。"
-                      >
+                      <Tooltip placement="rightBottom" title="只支持按今天、昨天查看，当点击最近7天、最近30天、自然月时查询不生效。">
                         <span style={{ fontSize: 14 }}>
-                          销售中商品(SKU)<Icon type="question-circle-o" />
+                          销售中商品(SKU)
+                          <Icon type="question-circle-o" />
                         </span>
                       </Tooltip>
                     </p>
-                    <p style={styles.num}>
-                      {dateFlag != 0 && dateFlag != 1
-                        ? '-'
-                        : goodsTotal.saleTotal}
-                    </p>
+                    <p style={styles.num}>{dateFlag != 0 && dateFlag != 1 ? '-' : goodsTotal.saleTotal}</p>
                   </Col>
                   <Col span={4}>
                     <p style={styles.nav}>
                       <span style={{ fontSize: 14 }}>商品详情转化率</span>
                     </p>
-                    <p style={styles.num}>
-                      {parseFloat(goodsTotal.orderConversion).toFixed(2) + '%'}
-                    </p>
+                    <p style={styles.num}>{parseFloat(goodsTotal.orderConversion).toFixed(2) + '%'}</p>
                   </Col>
                 </Row>
               </div>
@@ -204,15 +177,8 @@ export default class GoodsStatistics extends React.Component<any, any> {
               <h4 style={styles.title}>商品销售报表</h4>
             </div>
             <SearchForm />
-            {this.store.state().get('tableFlag') == 0 ? (
-              <SkuTable />
-            ) : this.store.state().get('tableFlag') == 1 ? (
-              <CateTable />
-            ) : (
-                  <BrandTable />
-                )}
+            {this.store.state().get('tableFlag') == 0 ? <SkuTable /> : this.store.state().get('tableFlag') == 1 ? <CateTable /> : <BrandTable />}
           </div>
-
         </div>
 
         <DataModal />

@@ -54,27 +54,15 @@ export default class SearchForm extends React.Component<any, any> {
       .toSeq()
       .filter((cate) => cate.get('cateParentId') === parentCateId)
       .map((item) => {
-        const childCates = oldCateList.filter(
-          (cate) => cate.get('cateParentId') == item.get('cateId')
-        );
+        const childCates = oldCateList.filter((cate) => cate.get('cateParentId') == item.get('cateId'));
         if (childCates && childCates.count()) {
           return (
-            <TreeNode
-              key={item.get('cateId').toString()}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName').toString()}
-            >
+            <TreeNode key={item.get('cateId').toString()} value={item.get('cateId').toString()} title={item.get('cateName').toString()}>
               {this.loop(oldCateList, childCates, item.get('cateId'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId').toString()}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName').toString()}
-          />
-        );
+        return <TreeNode key={item.get('cateId').toString()} value={item.get('cateId').toString()} title={item.get('cateName').toString()} />;
       });
 
   render() {
@@ -86,34 +74,16 @@ export default class SearchForm extends React.Component<any, any> {
         <Form className="filter-content" layout="inline">
           <FormItem>
             <div style={{ marginBottom: 16 }}>
-              <Input
-                addonBefore={this.goodsOptionSelect()}
-                value={searchParams.likeValue}
-                onChange={(e) =>
-                  this.paramsOnChange('likeValue', e.target.value)
-                }
-              />
+              <Input addonBefore={this.goodsOptionSelect()} value={searchParams.likeValue} onChange={(e) => this.paramsOnChange('likeValue', e.target.value)} />
             </div>
           </FormItem>
 
           <FormItem>
-            <Input
-              addonBefore="Product Name"
-              value={searchParams.likeGoodsName}
-              onChange={(e) =>
-                this.paramsOnChange('likeGoodsName', e.target.value)
-              }
-            />
+            <Input addonBefore="Product Name" value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
           </FormItem>
 
           <FormItem>
-            <TreeSelectGroup
-              getPopupContainer={() => document.getElementById('modal-head')}
-              label="Category"
-              dropdownStyle={{ zIndex: 1053 }}
-              onChange={(value) => this.paramsOnChange('cateId', value)}
-              value={searchParams.cateId.toString()}
-            >
+            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
               <TreeNode key="0" value="0" title="All">
                 {this.loop(fromJS(cates), fromJS(cates), 0)}
               </TreeNode>
@@ -121,13 +91,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <SelectGroup
-              getPopupContainer={() => document.getElementById('modal-head')}
-              label="Brand"
-              dropdownStyle={{ zIndex: 1053 }}
-              onChange={(val) => this.paramsOnChange('brandId', val)}
-              value={searchParams.brandId.toString()}
-            >
+            <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Brand" dropdownStyle={{ zIndex: 1053 }} onChange={(val) => this.paramsOnChange('brandId', val)} value={searchParams.brandId.toString()}>
               <Option key="0" value="0">
                 All
               </Option>
@@ -141,7 +105,7 @@ export default class SearchForm extends React.Component<any, any> {
 
           <FormItem>
             <Button
-              style={{'marginTop': '6px'}}
+              style={{ marginTop: '6px' }}
               type="primary"
               icon="search"
               shape="round"
@@ -180,11 +144,7 @@ export default class SearchForm extends React.Component<any, any> {
   searchBackFun = () => {
     const { searchParams, likeType } = this.state;
     let { likeValue, ...rest } = searchParams;
-    rest[
-      likeType == LIKE_TYPE.LIKE_GOODS_INFO_NO
-        ? LIKE_TYPE.LIKE_GOODS_INFO_NO
-        : LIKE_TYPE.LIKE_GOODS_NO
-    ] = likeValue;
+    rest[likeType == LIKE_TYPE.LIKE_GOODS_INFO_NO ? LIKE_TYPE.LIKE_GOODS_INFO_NO : LIKE_TYPE.LIKE_GOODS_NO] = likeValue;
     this.props.searchBackFun(rest);
   };
 

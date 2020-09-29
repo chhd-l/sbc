@@ -42,13 +42,7 @@ export default class InfoForm extends React.Component<any, any> {
       initialValue: infoForm.get('companyName')
     };
 
-    const area = infoForm.get('provinceId')
-      ? [
-          infoForm.get('provinceId').toString(),
-          infoForm.get('cityId').toString(),
-          infoForm.get('areaId').toString()
-        ]
-      : [];
+    const area = infoForm.get('provinceId') ? [infoForm.get('provinceId').toString(), infoForm.get('cityId').toString(), infoForm.get('areaId').toString()] : [];
 
     let detailAddress = {
       initialValue: infoForm.get('detailAddress')
@@ -67,32 +61,16 @@ export default class InfoForm extends React.Component<any, any> {
     };
 
     return (
-      <Form
-        className="login-form"
-        style={{ paddingBottom: 50, maxWidth: 950 }}
-        onSubmit={this._handleSubmit}
-      >
+      <Form className="login-form" style={{ paddingBottom: 50, maxWidth: 950 }} onSubmit={this._handleSubmit}>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              label="公司名称"
-              hasFeedback
-              required={true}
-            >
+            <FormItem {...formItemLayout} label="公司名称" hasFeedback required={true}>
               {getFieldDecorator('companyName', {
                 ...companyName,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '公司名称',
-                        1,
-                        20
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '公司名称', 1, 20);
                     }
                   }
                 ]
@@ -101,10 +79,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="公司名称既是您前台商城（包括PC商城、移动商城）的名称也是您管理后台的名称。"
-              >
+              <Tooltip placement="right" title="公司名称既是您前台商城（包括PC商城、移动商城）的名称也是您管理后台的名称。">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -112,29 +87,15 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              required={false}
-              label="所在地区"
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} required={false} label="所在地区" hasFeedback>
               {getFieldDecorator('area', {
                 initialValue: area
-              })(
-                <AreaSelect
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
-                />
-              )}
+              })(<AreaSelect getPopupContainer={() => document.getElementById('page-content')} />)}
             </FormItem>
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的地址信息将会在您的PC商城底部展示"
-              >
+              <Tooltip placement="right" title="您的地址信息将会在您的PC商城底部展示">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -142,25 +103,13 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              label="详细地址"
-              required={false}
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} label="详细地址" required={false} hasFeedback>
               {getFieldDecorator('detailAddress', {
                 ...detailAddress,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '详细地址',
-                        1,
-                        20
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '详细地址', 1, 20);
                     }
                   }
                 ]
@@ -169,10 +118,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的地址信息将会在您的PC商城底部展示"
-              >
+              <Tooltip placement="right" title="您的地址信息将会在您的PC商城底部展示">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -180,25 +126,13 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              label="联系人"
-              required={false}
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} label="联系人" required={false} hasFeedback>
               {getFieldDecorator('contactName', {
                 ...contactName,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '联系人',
-                        1,
-                        200
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '联系人', 1, 200);
                     }
                   }
                 ]
@@ -207,10 +141,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的联系信息将会在您的PC商城底部展示"
-              >
+              <Tooltip placement="right" title="您的联系信息将会在您的PC商城底部展示">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -218,25 +149,13 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              label="联系方式"
-              required={false}
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} label="联系方式" required={false} hasFeedback>
               {getFieldDecorator('contactPhone', {
                 ...contactPhone,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '联系方式',
-                        1,
-                        200
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '联系方式', 1, 200);
                     }
                   }
                 ]
@@ -245,10 +164,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的联系信息将会在您的PC商城底部展示"
-              >
+              <Tooltip placement="right" title="您的联系信息将会在您的PC商城底部展示">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -256,25 +172,13 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              label="版权信息"
-              required={false}
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} label="版权信息" required={false} hasFeedback>
               {getFieldDecorator('copyright', {
                 ...copyright,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '版权信息',
-                        1,
-                        100
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '版权信息', 1, 100);
                     }
                   }
                 ]
@@ -283,10 +187,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的版权信息将会在您的PC商城底部展示"
-              >
+              <Tooltip placement="right" title="您的版权信息将会在您的PC商城底部展示">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -294,25 +195,13 @@ export default class InfoForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={10}>
-            <FormItem
-              {...formItemLayout}
-              required={false}
-              label="公司简介"
-              hasFeedback
-            >
+            <FormItem {...formItemLayout} required={false} label="公司简介" hasFeedback>
               {getFieldDecorator('companyDescript', {
                 ...companyDescript,
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '公司简介',
-                        1,
-                        200
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '公司简介', 1, 200);
                     }
                   }
                 ]
@@ -321,10 +210,7 @@ export default class InfoForm extends React.Component<any, any> {
           </Col>
           <Col span={14}>
             <div style={styles.toolBox}>
-              <Tooltip
-                placement="right"
-                title="您的公司简介将会在您的PC商城底部展示输入字数限制200字以内"
-              >
+              <Tooltip placement="right" title="您的公司简介将会在您的PC商城底部展示输入字数限制200字以内">
                 <Icon style={{ color: '#999' }} type="exclamation-circle" />
               </Tooltip>
             </div>
@@ -344,7 +230,7 @@ export default class InfoForm extends React.Component<any, any> {
    * @param e
    * @private
    */
-  _handleSubmit = e => {
+  _handleSubmit = (e) => {
     e.preventDefault();
     const form = this.props.form as WrappedFormUtils;
     form.validateFields(null, (errs, values) => {

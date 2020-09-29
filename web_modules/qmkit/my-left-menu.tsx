@@ -11,9 +11,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
   constructor(props) {
     super(props);
     // 1.登陆后获取的菜单信息列表
-    const allGradeMenus = fromJS(
-      JSON.parse(sessionStorage.getItem(cache.LOGIN_MENUS)) || []
-    );
+    const allGradeMenus = fromJS(JSON.parse(sessionStorage.getItem(cache.LOGIN_MENUS)) || []);
     // 2.初始化信息
     this.state = {
       allGradeMenus: allGradeMenus,
@@ -23,7 +21,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       firstInitFlag: true,
       // 能不能申请退单
       applyReturnOrder: false,
-      showSubMenu:true
+      showSubMenu: true
     };
   }
 
@@ -32,7 +30,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       // 如果链接改变,恢复为第一次加载
       this.setState({ firstInitFlag: true });
       this.setState({
-        level2OpenedKeys: Object.keys(Array.from({ length: this.state.allGradeMenus.size })),
+        level2OpenedKeys: Object.keys(Array.from({ length: this.state.allGradeMenus.size }))
       });
     }
   }
@@ -48,8 +46,6 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     if (path == '/account-manage') {
       return (
         <Sider width={200} className="leftSideNav">
-          
-          
           <Menu
             mode="inline"
             // theme="dark"
@@ -112,12 +108,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
 
     // 展开的二级菜单
     let level2OpenedKeys = this.state.level2OpenedKeys;
-    if (
-      this.state.firstInitFlag &&
-      level2OpenedKeys.length == 1 &&
-      level2OpenedKeys[0] == '0' &&
-      secondActive != 0
-    ) {
+    if (this.state.firstInitFlag && level2OpenedKeys.length == 1 && level2OpenedKeys[0] == '0' && secondActive != 0) {
       //展开的只有第1个菜单,并且当前选中的菜单不是第1个 --> 则默认展开选中的菜单(解决刷新页面时,未展开选中菜单)
       level2OpenedKeys = [secondActive.toString()];
     }
@@ -128,16 +119,11 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     const currFirstMenu = this.state.allGradeMenus.get(firstActive);
     //console.log( this.state.allGradeMenus,'++++++++++++++++');
 
-    if (
-      currFirstMenu &&
-      currFirstMenu.get('children') &&
-      currFirstMenu.get('children').size > 0
-    ) {
+    if (currFirstMenu && currFirstMenu.get('children') && currFirstMenu.get('children').size > 0) {
       return (
         <div>
-        {
-          this.state.showSubMenu?(
-            <Sider width={200} className="leftSideNav" >
+          {this.state.showSubMenu ? (
+            <Sider width={200} className="leftSideNav">
               <Menu
                 mode="inline"
                 // theme="dark"
@@ -145,18 +131,19 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
                 openKeys={level2OpenedKeys}
                 selectedKeys={level3SelectKeys}
                 onOpenChange={this._openKeysChange}
-                style={{ height: '100%',  }}
+                style={{ height: '100%' }}
               >
-                <div style={styles.showBtnLeft} onClick={()=>{
-                  this.setState({
-                    showSubMenu:!this.state.showSubMenu
-                  })
-                }}>
-                  
-                    <Icon type="left" />
-                  
+                <div
+                  style={styles.showBtnLeft}
+                  onClick={() => {
+                    this.setState({
+                      showSubMenu: !this.state.showSubMenu
+                    });
+                  }}
+                >
+                  <Icon type="left" />
                 </div>
-                
+
                 {currFirstMenu
                   .get('children')
                   .toJS()
@@ -182,16 +169,19 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
                     );
                   })}
               </Menu>
-            </Sider>):(<div style={styles.showBtnRight} onClick={()=>{
-                  this.setState({
-                    showSubMenu:!this.state.showSubMenu
-                  })
-                }}>
-                  
-                    <Icon type="right" />
-                  
-                </div>)
-        }
+            </Sider>
+          ) : (
+            <div
+              style={styles.showBtnRight}
+              onClick={() => {
+                this.setState({
+                  showSubMenu: !this.state.showSubMenu
+                });
+              }}
+            >
+              <Icon type="right" />
+            </div>
+          )}
         </div>
       );
     } else {
@@ -220,10 +210,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
         <Route
           path={v.url}
           children={() => (
-            <a
-              href="#"
-              onClick={() => this._goThirdMenu(v.url, index, i)}
-            >
+            <a href="#" onClick={() => this._goThirdMenu(v.url, index, i)}>
               {v.title}
             </a>
           )}
@@ -258,9 +245,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
    * 处理代客退单是否展示
    */
   _handleReturnOrder = async () => {
-    const canApply = await Fetch(
-      '/tradeSetting/order_configs/return_order_apply'
-    );
+    const canApply = await Fetch('/tradeSetting/order_configs/return_order_apply');
     this.setState({ applyReturnOrder: (canApply.res as any).context == true });
   };
 }
@@ -275,10 +260,9 @@ const styles = {
     position: 'absolute',
     top: '50%',
     left: '186px',
-    zIndex:2,
+    zIndex: 2
   },
-  showBtnRight:
-  {
+  showBtnRight: {
     borderRadius: '0 5px 5px 0',
     width: '14px',
     height: '30px',
@@ -286,6 +270,6 @@ const styles = {
     backgroundColor: '#ffe7e6',
     position: 'absolute',
     top: '50%',
-    zIndex:2,
+    zIndex: 2
   }
 } as any;

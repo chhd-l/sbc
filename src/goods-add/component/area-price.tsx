@@ -1,17 +1,5 @@
 import * as React from 'react';
-import {
-  Form,
-  Input,
-  Checkbox,
-  Table,
-  Button,
-  Row,
-  Col,
-  message,
-  Switch,
-  Popover,
-  Icon
-} from 'antd';
+import { Form, Input, Checkbox, Table, Button, Row, Col, message, Switch, Popover, Icon } from 'antd';
 import { Relax } from 'plume2';
 import { noop, ValidConst } from 'qmkit';
 import { IMap } from 'typings/globalType';
@@ -69,12 +57,7 @@ export default class AreaPrice extends React.Component<any, any> {
     const WrapperForm = this.WrapperForm;
     const relaxProps = this.props.relaxProps;
     const { updateAreaPriceForm } = relaxProps;
-    return (
-      <WrapperForm
-        ref={(form) => updateAreaPriceForm(form)}
-        {...{ relaxProps: relaxProps }}
-      />
-    );
+    return <WrapperForm ref={(form) => updateAreaPriceForm(form)} {...{ relaxProps: relaxProps }} />;
   }
 }
 
@@ -82,10 +65,7 @@ class AreaPriceForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { levelDiscountFlag, areaPrice, goods } = this.props.relaxProps;
-    const areaPriceData = areaPrice
-      .valueSeq()
-      .toList()
-      .toJS();
+    const areaPriceData = areaPrice.valueSeq().toList().toJS();
 
     // 允许独立设价
     const content1 = (
@@ -105,41 +85,18 @@ class AreaPriceForm extends React.Component<any, any> {
                 alignItems: 'center'
               }}
             >
-              <Checkbox
-                onChange={this._editPriceSetting.bind(
-                  this,
-                  'levelDiscountFlag'
-                )}
-                checked={levelDiscountFlag}
-              >
+              <Checkbox onChange={this._editPriceSetting.bind(this, 'levelDiscountFlag')} checked={levelDiscountFlag}>
                 叠加客户等级折扣
               </Checkbox>
-              <Switch
-                checked={goods.get('allowPriceSet')}
-                onChange={(e) => this._toggleSetAlonePrice(e ? 1 : 0)}
-              />
+              <Switch checked={goods.get('allowPriceSet')} onChange={(e) => this._toggleSetAlonePrice(e ? 1 : 0)} />
               <span>&nbsp;&nbsp;允许独立设价&nbsp;&nbsp;</span>
-              <Popover
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                content={content1}
-                placement="top"
-              >
+              <Popover getPopupContainer={() => document.getElementById('page-content')} content={content1} placement="top">
                 <Icon type="question-circle-o" style={{ color: '#1890ff' }} />
               </Popover>
             </div>
 
             {/*区间价价table*/}
-            <Table
-              style={{ paddingTop: '10px' }}
-              dataSource={areaPriceData}
-              pagination={false}
-              rowKey="intervalPriceId"
-              footer={() => (
-                <Button onClick={this._addAreaPrice}>+ 新增区间</Button>
-              )}
-            >
+            <Table style={{ paddingTop: '10px' }} dataSource={areaPriceData} pagination={false} rowKey="intervalPriceId" footer={() => <Button onClick={this._addAreaPrice}>+ 新增区间</Button>}>
               <Column
                 title={
                   <div>
@@ -152,7 +109,8 @@ class AreaPriceForm extends React.Component<any, any> {
                       }}
                     >
                       *
-                    </span>订货区间
+                    </span>
+                    订货区间
                   </div>
                 }
                 key="area"
@@ -162,48 +120,37 @@ class AreaPriceForm extends React.Component<any, any> {
                     <Row>
                       <Col span={10}>
                         <FormItem>
-                          {getFieldDecorator(
-                            'areacount_' + rowInfo.intervalPriceId,
-                            {
-                              rules: [
-                                {
-                                  required: true,
-                                  message: '请填写订货区间'
-                                },
-                                {
-                                  validator: (_rule, value, callback) => {
-                                    if (!value || index == 0) {
-                                      // 第一行的值固定是1，不校验
-                                      callback();
-                                      return;
-                                    }
-
-                                    if (
-                                      isNaN(value) ||
-                                      value.toString().indexOf('.') > -1 ||
-                                      value < 2
-                                    ) {
-                                      callback(new Error('请输入大于1的整数'));
-                                      return;
-                                    }
-
-                                    if (value > 9999999) {
-                                      callback(new Error('最大值为9999999'));
-                                      return;
-                                    }
-
+                          {getFieldDecorator('areacount_' + rowInfo.intervalPriceId, {
+                            rules: [
+                              {
+                                required: true,
+                                message: '请填写订货区间'
+                              },
+                              {
+                                validator: (_rule, value, callback) => {
+                                  if (!value || index == 0) {
+                                    // 第一行的值固定是1，不校验
                                     callback();
+                                    return;
                                   }
+
+                                  if (isNaN(value) || value.toString().indexOf('.') > -1 || value < 2) {
+                                    callback(new Error('请输入大于1的整数'));
+                                    return;
+                                  }
+
+                                  if (value > 9999999) {
+                                    callback(new Error('最大值为9999999'));
+                                    return;
+                                  }
+
+                                  callback();
                                 }
-                              ],
-                              onChange: this._editPriceItem.bind(
-                                this,
-                                rowInfo.intervalPriceId,
-                                'count'
-                              ),
-                              initialValue: rowInfo.count
-                            }
-                          )(<Input addonBefore=" ≥ " disabled={index == 0} />)}
+                              }
+                            ],
+                            onChange: this._editPriceItem.bind(this, rowInfo.intervalPriceId, 'count'),
+                            initialValue: rowInfo.count
+                          })(<Input addonBefore=" ≥ " disabled={index == 0} />)}
                         </FormItem>
                       </Col>
                     </Row>
@@ -222,7 +169,8 @@ class AreaPriceForm extends React.Component<any, any> {
                       }}
                     >
                       *
-                    </span>订货价
+                    </span>
+                    订货价
                   </div>
                 }
                 key="price"
@@ -232,37 +180,28 @@ class AreaPriceForm extends React.Component<any, any> {
                     <Row>
                       <Col span={10}>
                         <FormItem>
-                          {getFieldDecorator(
-                            'areaprice_' + rowInfo.intervalPriceId,
-                            {
-                              rules: [
-                                {
-                                  required: true,
-                                  message: '请填写价格'
-                                },
-                                {
-                                  pattern: ValidConst.zeroPrice,
-                                  message: '请填写两位小数的合法金额'
-                                },
-                                {
-                                  type: 'number',
-                                  max: 9999999.99,
-                                  message: '最大值为9999999.99',
-                                  transform: function(value) {
-                                    return isNaN(parseFloat(value))
-                                      ? 0
-                                      : parseFloat(value);
-                                  }
+                          {getFieldDecorator('areaprice_' + rowInfo.intervalPriceId, {
+                            rules: [
+                              {
+                                required: true,
+                                message: '请填写价格'
+                              },
+                              {
+                                pattern: ValidConst.zeroPrice,
+                                message: '请填写两位小数的合法金额'
+                              },
+                              {
+                                type: 'number',
+                                max: 9999999.99,
+                                message: '最大值为9999999.99',
+                                transform: function (value) {
+                                  return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                                 }
-                              ],
-                              onChange: this._editPriceItem.bind(
-                                this,
-                                rowInfo.intervalPriceId,
-                                'price'
-                              ),
-                              initialValue: rowInfo.price
-                            }
-                          )(<Input />)}
+                              }
+                            ],
+                            onChange: this._editPriceItem.bind(this, rowInfo.intervalPriceId, 'price'),
+                            initialValue: rowInfo.price
+                          })(<Input />)}
                         </FormItem>
                       </Col>
                     </Row>
@@ -274,16 +213,7 @@ class AreaPriceForm extends React.Component<any, any> {
                 key="opt"
                 width={80}
                 render={(rowInfo, _x, i) => {
-                  return i > 0 ? (
-                    <Button
-                      onClick={this._deleteAreaPrice.bind(
-                        this,
-                        rowInfo.intervalPriceId
-                      )}
-                    >
-                      删除
-                    </Button>
-                  ) : null;
+                  return i > 0 ? <Button onClick={this._deleteAreaPrice.bind(this, rowInfo.intervalPriceId)}>删除</Button> : null;
                 }}
               />
             </Table>

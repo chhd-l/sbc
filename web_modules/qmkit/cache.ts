@@ -24,5 +24,6 @@ export default {
   LOGIN_ACCOUNT_NAME: 'login-account-name',
   LOGIN_EMPLOYEE_NAME: 'login-employee-name',
   FIRST_PRESCRIBER_DATA: 'first-prescriber-data',
-  OKTA_ROUTER_TYPE: 'okta_router_type'
+  OKTA_ROUTER_TYPE: 'okta_router_type',
+  CURRENT_YEAR: 'current_year'
 };

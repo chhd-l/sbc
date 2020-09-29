@@ -35,16 +35,13 @@ export default class Header extends React.Component<any, any> {
 
   componentDidMount() {
     this.setState({
-      prescribers: JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-        .prescribers
+      prescribers: JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers
     });
   }
 
   dateChange = (date, dateString) => {
     const { newInit } = this.props.relaxProps as any;
-    let year = moment(
-      new Date(sessionStorage.getItem('defaultLocalDateTime'))
-    ).format('YYYY');
+    let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
     //console.log(JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)));
     let obj = {
       companyId: 2,
@@ -57,36 +54,21 @@ export default class Header extends React.Component<any, any> {
   prescriberChange = () => {};
 
   render() {
-    const { header, storeEvaluateSum } = this.props.relaxProps as any;
+    //const { header, storeEvaluateSum } = this.props.relaxProps as any;
 
     return (
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
           <Icon type="clock-circle" className="Header-date-icon" />
-          <WeekPicker
-            defaultValue={moment(
-              JSON.parse(sessionStorage.getItem(cache.CURRENT_YEAR))
-            )}
-            onChange={this.dateChange}
-            placeholder="Select week"
-          />
-          <div className="Header-date-text">
-            * The data is updated every 15 minutes
-          </div>
+          <WeekPicker defaultValue={moment(JSON.parse(sessionStorage.getItem(cache.CURRENT_YEAR)))} onChange={this.dateChange} placeholder="Select week" />
+          <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">
           <div className="prescriber">Prescriber</div>
           {this.state.prescribers ? (
-            <Select
-              defaultValue={this.state.prescribers[0].prescriberName}
-              onChange={this.prescriberChange}
-            >
+            <Select defaultValue={this.state.prescribers[0].prescriberName} onChange={this.prescriberChange}>
               {this.state.prescribers.map((item, index) => {
-                return (
-                  <Option value={item.prescriberId}>
-                    {item.prescriberName}
-                  </Option>
-                );
+                return <Option value={item.prescriberId}>{item.prescriberName}</Option>;
               })}
             </Select>
           ) : (

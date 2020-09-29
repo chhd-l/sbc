@@ -6,6 +6,7 @@ import * as webapi from '../webapi';
 import { fromJS, Set } from 'immutable';
 
 import Store from '../store';
+import { cache } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

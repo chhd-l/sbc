@@ -1,6 +1,68 @@
 import { Fetch } from 'qmkit';
 
 /**
+ * 首页1
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const getTradeCustomerView = (params) => {
+  return Fetch('/dashboard/tradeCustomerView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getPrescriberTrendView = (params) => {
+  return Fetch('/dashboard/prescriberTrendView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTransactionTrendView = (params) => {
+  return Fetch('/dashboard/transactionTrendView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getGoodsInfoTopView = (params) => {
+  return Fetch('/dashboard/goodsInfoTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getPrescriberTopView = (params) => {
+  return Fetch('/dashboard/prescriberTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTrafficDashboardView = (params) => {
+  return Fetch('/dashboard/trafficDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTrafficTrendDashboardView = (params) => {
+  return Fetch('/dashboard/trafficTrendDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getConversionFunnelDashboardView = (params) => {
+  return Fetch('/dashboard/conversionFunnelDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+/* ================================================================================================================ */
+
+/**
  * 订单todo
  * @returns {Promise<IAsyncResult<T>>}
  */

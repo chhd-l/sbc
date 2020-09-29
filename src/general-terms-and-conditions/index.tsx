@@ -9,10 +9,9 @@ export default class GeneralTerms extends Component<any, any> {
         textAlign: 'justify'
       },
       style2: {
+        fontFamily: 'Times New Roman',
         fontSize: '12pt',
-        lineHeight: '108%',
-        margin: '0pt 0pt 8pt',
-        textAlign: 'justify'
+        fontWeight: 'bold'
       },
       style3: {
         fontFamily: 'Times New Roman',
@@ -32,7 +31,7 @@ export default class GeneralTerms extends Component<any, any> {
     } as any;
     return (
       <div style={{ height: '100vh', overflowY: 'auto' }}>
-        <div style={{ width: 900, margin: '50px auto' }}>
+        <div style={{ width: 900, margin: '50px auto', color: '#000' }}>
           <p style={styles.style1}>
             <span style={styles.style2}>TÉRMINOS Y </span>
             <span style={styles.style2}>CONDICIONES GENERALES</span>

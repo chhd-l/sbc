@@ -9610,7 +9610,7 @@
   
   
                      }else{
-                         var attrs = val['$'];
+                         var attrs = val[sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)];
                          if(attrs && node.attrs){
                              var tmpAttrs = {},tmpVal;
                              for(var a in attrs){
@@ -22861,7 +22861,7 @@
           if(!rng.collapsed){
               rng.select();
               var rngText = me.selection.getText();
-              if(new RegExp('^' + opt.searchStr + '$',(opt.casesensitive ? '' : 'i')).test(rngText)){
+              if(new RegExp('^' + opt.searchStr + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG),(opt.casesensitive ? '' : 'i')).test(rngText)){
                   if(opt.replaceStr != undefined){
                       replaceText(rng,opt.replaceStr);
                       rng.select();

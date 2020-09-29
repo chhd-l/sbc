@@ -78,7 +78,10 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'payOrderPrice',
       key: 'payOrderPrice',
       render: (text, record) =>
-        record.payOrderStatus == 1 ? '' : '$' + (text || 0).toFixed(2)
+        record.payOrderStatus == 1
+          ? ''
+          : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+            (text || 0).toFixed(2)
     },
     {
       title: 'Accounts Receivable',

@@ -7,6 +7,7 @@ import { fromJS, Set } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 
 import Store from '../store';
+import { cache } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -406,11 +407,12 @@ export default class GoodsAdd extends React.Component<any, any> {
                 .first()
                 .get('priceType');
               return priceType === 1
-                ? '$' +
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
                     (rowInfo.intervalMinPrice || 0).toFixed(2) +
                     '-' +
                     (rowInfo.intervalMaxPrice || 0).toFixed(2)
-                : '$' + (rowInfo.salePrice || 0).toFixed(2);
+                : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                    (rowInfo.salePrice || 0).toFixed(2);
             }}
           />
         </DataGrid>

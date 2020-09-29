@@ -164,7 +164,11 @@ export async function login(routerType, oktaToken: string) {
           history.push('/shop-process');
       }
     } else {
-      message.error(menusRes.res.message);
+      if((res as any).code === 'E-000052') {
+        history.push('/403')
+      } else {
+        message.error(menusRes.res.message);
+      }
     }
   } else {
     message.error(res.message);

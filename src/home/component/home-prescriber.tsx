@@ -67,8 +67,7 @@ export default class homePrescriber extends Component<any, any> {
     super(props);
     this.state = {
       tradeInfo: {},
-      prescriber: {
-      },
+      prescriber: {},
       tradeData: [],
       flowTrendData: [],
       customerData: [],
@@ -93,7 +92,7 @@ export default class homePrescriber extends Component<any, any> {
     this.getCustomerGrowTrendData(id);
   };
   componentWillMount() {
-    this.getPrescriberDetail(this.props.prescriberId)
+    this.getPrescriberDetail(this.props.prescriberId);
     let o = {
       value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))
         .prescribers[0].id,
@@ -108,11 +107,15 @@ export default class homePrescriber extends Component<any, any> {
 
   getPrescriberDetail = async (id) => {
     if (id) {
-      let allPerscriber = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers
-      if(allPerscriber) {
-        let selectPerscriber = allPerscriber.find(x=>x.id === this.props.prescriberId)
+      let allPerscriber = JSON.parse(
+        sessionStorage.getItem(cache.EMPLOYEE_DATA)
+      ).prescribers;
+      if (allPerscriber) {
+        let selectPerscriber = allPerscriber.find(
+          (x) => x.id === this.props.prescriberId
+        );
         this.setState({
-          prescriber:selectPerscriber
+          prescriber: selectPerscriber
         });
         sessionStorage.setItem(
           cache.PRESCRIBER_DATA,
@@ -320,9 +323,7 @@ export default class homePrescriber extends Component<any, any> {
                       onChange={(value, name) =>
                         this._prescriberChange(value, name)
                       }
-                      defaultValue={
-                        this.props.prescriberId
-                      }
+                      defaultValue={this.props.prescriberId}
                       style={{ width: '140px', marginBottom: '10px' }}
                     >
                       {allPrescribers.map((item) => (
@@ -338,9 +339,12 @@ export default class homePrescriber extends Component<any, any> {
                       Prescriber Type: {this.state.prescriber.prescriberType}
                     </div>
                     <div style={{ marginTop: '15px', fontWeight: 700 }}>
-                         <Link style={{ textDecoration: 'underline' }}
-                          to={'/prescriber-edit/' + this.state.prescriber.id}
-                         >Manage Prescriber</Link>
+                      <Link
+                        style={{ textDecoration: 'underline' }}
+                        to={'/prescriber-edit/' + this.state.prescriber.id}
+                      >
+                        Manage Prescriber
+                      </Link>
                     </div>
                   </div>
                 </Col>

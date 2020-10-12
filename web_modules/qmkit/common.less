@@ -53,8 +53,13 @@ ol {
 
 html {
   overflow: hidden;
+
+
 }
 
+body {
+  font-family: Arial, Helvetica, Tahoma, Verdana, Sans-Serif !important;
+}
 /*::-webkit-scrollbar {
   width: 6px;
   background-color: rgba(0, 0, 0, .3);
@@ -3054,6 +3059,17 @@ form .ant-input-group-compact {
   justify-content: space-around;
 }
 
+
+/*flex居左垂直居中布局*/
+.flex-start-align {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content:flex-start;
+  align-items: center
+}
+
 /*flex居两端垂直居中布局*/
 .space-between-align {
   display: -webkit-box;
@@ -3061,6 +3077,16 @@ form .ant-input-group-compact {
   display: -ms-flexbox;
   display: flex;
   justify-content:space-between;
+  align-items: center
+}
+
+/*flex居右垂直居中布局*/
+.flex-start-end {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content:flex-end;
   align-items: center
 }
 
@@ -3276,3 +3302,4 @@ form .ant-input-group-compact {
 #consents span {
   cursor: pointer;
 }
+

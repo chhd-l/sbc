@@ -1,25 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Breadcrumb,
-  Tag,
-  message,
-  Select,
-  Radio,
-  DatePicker,
-  Spin
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -41,20 +22,10 @@ class MessageDetails extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title:
-        this.props.location.pathname === '/message-quick-send'
-          ? 'Quick Send'
-          : 'Message Details',
-      isDetail:
-        this.props.location.pathname.indexOf('/message-detail') !== -1
-          ? true
-          : false,
-      isEdit:
-        this.props.location.pathname.indexOf('/message-edit') !== -1
-          ? true
-          : false,
-      isAdd:
-        this.props.location.pathname === '/message-quick-send' ? true : false,
+      title: this.props.location.pathname === '/message-quick-send' ? 'Quick Send' : 'Message Details',
+      isDetail: this.props.location.pathname.indexOf('/message-detail') !== -1 ? true : false,
+      isEdit: this.props.location.pathname.indexOf('/message-edit') !== -1 ? true : false,
+      isAdd: this.props.location.pathname === '/message-quick-send' ? true : false,
       emailStatus: 'Draft',
       loading: false,
       objectTypeList: [],
@@ -264,9 +235,7 @@ class MessageDetails extends Component<any, any> {
           status: +basicForm.status === 1 ? basicForm.status : 0,
           sendType: basicForm.sendType,
           baseUrl: basicForm.baseUrl,
-          sendTime:
-            basicForm.sendTime ||
-            sessionStorage.getItem('defaultLocalDateTime'),
+          sendTime: basicForm.sendTime || sessionStorage.getItem('defaultLocalDateTime'),
           detailsRequest: {
             consumerAccount: detailForm.consumerAccount,
             consumerName: detailForm.consumerName,
@@ -297,9 +266,7 @@ class MessageDetails extends Component<any, any> {
           emailTemplate: basicForm.emailTemplate,
           category: basicForm.emailCategory,
           sendType: basicForm.sendType,
-          sendTime:
-            basicForm.sendTime ||
-            sessionStorage.getItem('defaultLocalDateTime'),
+          sendTime: basicForm.sendTime || sessionStorage.getItem('defaultLocalDateTime'),
           status: 1,
           detailsRequest: {
             consumerAccount: detailForm.consumerAccount,
@@ -463,11 +430,7 @@ class MessageDetails extends Component<any, any> {
           status: taskDetail.status,
           sendType: taskDetail.sendType,
           sendTime: taskDetail.sendTime,
-          objectNoDisable:
-            taskDetail.objectType === 'Order' ||
-            taskDetail.objectType === 'Subscription'
-              ? false
-              : true
+          objectNoDisable: taskDetail.objectType === 'Order' || taskDetail.objectType === 'Subscription' ? false : true
         };
         let detailForm = {
           consumerAccount: consumerDetail.consumerAccount,
@@ -480,14 +443,7 @@ class MessageDetails extends Component<any, any> {
             basicForm,
             detailForm,
             previewHtml: taskDetail.emailTemplateHtml,
-            emailStatus:
-              +taskDetail.status === 0
-                ? 'Draft'
-                : +taskDetail.status === 1
-                ? 'To do'
-                : +taskDetail.status === 2
-                ? 'Finsh'
-                : ''
+            emailStatus: +taskDetail.status === 0 ? 'Draft' : +taskDetail.status === 1 ? 'To do' : +taskDetail.status === 2 ? 'Finsh' : ''
           },
           () => {
             if (basicForm.sendType === 'Timing') {
@@ -526,11 +482,7 @@ class MessageDetails extends Component<any, any> {
 
   //限制日期
   disabledDate(current) {
-    return (
-      current &&
-      moment(current).startOf('day') <
-        moment(sessionStorage.getItem('defaultLocalDateTime')).startOf('day')
-    );
+    return current && moment(current).startOf('day') < moment(sessionStorage.getItem('defaultLocalDateTime')).startOf('day');
   }
   //限制时间
   disabledDateTime(data) {
@@ -538,12 +490,8 @@ class MessageDetails extends Component<any, any> {
 
     return {
       disabledHours: () => {
-        let currentDay = moment(
-          sessionStorage.getItem('defaultLocalDateTime')
-        ).date();
-        let currentHours = moment(
-          sessionStorage.getItem('defaultLocalDateTime')
-        ).hours();
+        let currentDay = moment(sessionStorage.getItem('defaultLocalDateTime')).date();
+        let currentHours = moment(sessionStorage.getItem('defaultLocalDateTime')).hours();
         let selectedDay = moment(data).date();
         console.log(currentDay, currentHours, selectedDay);
         if (selectedDay > currentDay) {
@@ -577,23 +525,7 @@ class MessageDetails extends Component<any, any> {
   };
 
   render() {
-    const {
-      title,
-      emailStatus,
-      objectTypeList,
-      categoryList,
-      detailsList,
-      emailTemplateList,
-      basicForm,
-      detailForm,
-      objectFetching,
-      consumerFetching,
-      templateFetching,
-      objectNoList,
-      customerTypeArr,
-      previewHtml,
-      consumerList
-    } = this.state;
+    const { title, emailStatus, objectTypeList, categoryList, detailsList, emailTemplateList, basicForm, detailForm, objectFetching, consumerFetching, templateFetching, objectNoList, customerTypeArr, previewHtml, consumerList } = this.state;
     const { getFieldDecorator } = this.props.form;
 
     const columns = [
@@ -655,19 +587,10 @@ class MessageDetails extends Component<any, any> {
               <div style={styles.title}>
                 <span style={styles.titleText}>Basic Information</span>
                 {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
-                {emailStatus === 'Finish' ? (
-                  <Tag color="#87d068">{emailStatus}</Tag>
-                ) : null}
-                {emailStatus === 'To do' ? (
-                  <Tag color="#108ee9">{emailStatus}</Tag>
-                ) : null}
+                {emailStatus === 'Finish' ? <Tag color="#87d068">{emailStatus}</Tag> : null}
+                {emailStatus === 'To do' ? <Tag color="#108ee9">{emailStatus}</Tag> : null}
               </div>
-              <Form
-                layout="horizontal"
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}
-                labelAlign="right"
-              >
+              <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
                     <FormItem label="Task ID">
@@ -729,9 +652,7 @@ class MessageDetails extends Component<any, any> {
                               value
                             });
                           }}
-                          notFoundContent={
-                            templateFetching ? <Spin size="small" /> : null
-                          }
+                          notFoundContent={templateFetching ? <Spin size="small" /> : null}
                           disabled={this.state.isDetail}
                         >
                           {emailTemplateList &&
@@ -789,9 +710,7 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Select
-                          disabled={
-                            basicForm.objectNoDisable || this.state.isDetail
-                          }
+                          disabled={basicForm.objectNoDisable || this.state.isDetail}
                           showSearch
                           placeholder="Select a Object No"
                           optionFilterProp="children"
@@ -801,40 +720,14 @@ class MessageDetails extends Component<any, any> {
                               value
                             });
                           }}
-                          notFoundContent={
-                            objectFetching ? <Spin size="small" /> : null
-                          }
+                          notFoundContent={objectFetching ? <Spin size="small" /> : null}
                           onSearch={this.getObjectNoList}
-                          filterOption={(input, option) =>
-                            option.props.children
-                              .toString()
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
+                          filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           {objectNoList &&
                             objectNoList.map((item, index) => (
-                              <Option
-                                value={
-                                  basicForm.objectType === 'Order'
-                                    ? item.id
-                                    : basicForm.objectType === 'Subscription'
-                                    ? item.subscribeId
-                                    : basicForm.objectType === 'Recommendation'
-                                    ? item.recommendationId
-                                    : item.prescriberId
-                                }
-                                key={index}
-                              >
-                                {basicForm.objectType === 'Order'
-                                  ? item.id
-                                  : basicForm.objectType === 'Subscription'
-                                  ? item.subscribeId
-                                  : basicForm.objectType === 'Recommendation'
-                                  ? item.recommendationId
-                                  : item.prescriberId +
-                                    '-' +
-                                    item.prescriberName}
+                              <Option value={basicForm.objectType === 'Order' ? item.id : basicForm.objectType === 'Subscription' ? item.subscribeId : basicForm.objectType === 'Recommendation' ? item.recommendationId : item.prescriberId} key={index}>
+                                {basicForm.objectType === 'Order' ? item.id : basicForm.objectType === 'Subscription' ? item.subscribeId : basicForm.objectType === 'Recommendation' ? item.recommendationId : item.prescriberId + '-' + item.prescriberName}
                               </Option>
                             ))}
                         </Select>
@@ -872,9 +765,7 @@ class MessageDetails extends Component<any, any> {
                     <Col span={8}>
                       <FormItem label="Select Time">
                         {getFieldDecorator('sendTime', {
-                          rules: [
-                            { required: true, message: 'Please select Time!' }
-                          ]
+                          rules: [{ required: true, message: 'Please select Time!' }]
                         })(
                           <DatePicker
                             showTime
@@ -916,12 +807,7 @@ class MessageDetails extends Component<any, any> {
                 <span style={styles.titleText}>Recipient details</span>
               </div>
 
-              <Form
-                layout="horizontal"
-                labelCol={{ span: 10 }}
-                wrapperCol={{ span: 14 }}
-                labelAlign="right"
-              >
+              <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
                     <FormItem label="Consumer Type">
@@ -959,10 +845,7 @@ class MessageDetails extends Component<any, any> {
                         {}
                       )(
                         <Select
-                          disabled={
-                            detailForm.consumerType !== 'Member' ||
-                            this.state.isDetail
-                          }
+                          disabled={detailForm.consumerType !== 'Member' || this.state.isDetail}
                           showSearch
                           placeholder="Select a consumer"
                           optionFilterProp="children"
@@ -987,24 +870,13 @@ class MessageDetails extends Component<any, any> {
                               email: email
                             });
                           }}
-                          notFoundContent={
-                            consumerFetching ? <Spin size="small" /> : null
-                          }
+                          notFoundContent={consumerFetching ? <Spin size="small" /> : null}
                           onSearch={this.getConsumerList}
-                          filterOption={(input, option) =>
-                            option.props.children
-                              .toString()
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
+                          filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           {consumerList &&
                             consumerList.map((item, index) => (
-                              <Option
-                                value={item.customerAccount}
-                                data-consumer={item}
-                                key={index}
-                              >
+                              <Option value={item.customerAccount} data-consumer={item} key={index}>
                                 {item.customerAccount}
                               </Option>
                             ))}
@@ -1027,10 +899,7 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={
-                            detailForm.consumerType === 'Member' ||
-                            this.state.isDetail
-                          }
+                          disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onDetailsFormChange({
@@ -1055,10 +924,7 @@ class MessageDetails extends Component<any, any> {
                         ]
                       })(
                         <Input
-                          disabled={
-                            detailForm.consumerType === 'Member' ||
-                            this.state.isDetail
-                          }
+                          disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onDetailsFormChange({
@@ -1087,31 +953,17 @@ class MessageDetails extends Component<any, any> {
 
         <div className="bar-button">
           {!this.state.isDetail ? (
-            <Button
-              type="primary"
-              shape="round"
-              onClick={() => this.submit()}
-              style={{ marginRight: 10 }}
-            >
+            <Button type="primary" shape="round" onClick={() => this.submit()} style={{ marginRight: 10 }}>
               Submit
             </Button>
           ) : null}
           {!this.state.isDetail ? (
-            <Button
-              type="primary"
-              shape="round"
-              style={{ marginRight: 10 }}
-              onClick={() => this.save()}
-            >
+            <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
               {<FormattedMessage id="save" />}
             </Button>
           ) : null}
 
-          <Button
-            shape="round"
-            onClick={() => (history as any).go(-1)}
-            style={{ marginRight: 10 }}
-          >
+          <Button shape="round" onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
             {<FormattedMessage id="cancel" />}
           </Button>
         </div>

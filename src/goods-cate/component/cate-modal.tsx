@@ -81,19 +81,8 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title={formData.get('storeCateId') ? 'Edit' : 'Add'}
-        visible={modalVisible}
-        zIndex={100}
-        width= {700}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={(form) => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title={formData.get('storeCateId') ? 'Edit' : 'Add'} visible={modalVisible} zIndex={100} width={700} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -175,41 +164,18 @@ class CateModalForm extends React.Component<any, any> {
         if (item.get('children') && item.get('children').count()) {
           // 一二级类目不允许选择
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              disabled={true}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} disabled={true} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
-    const {
-      sourceCateList,
-      goods,
-      cateList,
-      images,
-      modalVisibleFun,
-      clickImg,
-      removeImg
-    } = this.props.relaxProps;
+    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } = this.props.relaxProps;
 
     return (
-      <Form className="login-form"  style={{ width: 550 }}>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="categoryName" />}
-          hasFeedback
-        >
+      <Form className="login-form" style={{ width: 550 }}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="categoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               {
@@ -220,12 +186,7 @@ class CateModalForm extends React.Component<any, any> {
               { max: 100, message: 'Up to 100 characters' },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(
-                    rule,
-                    value,
-                    callback,
-                    'Category Name'
-                  );
+                  QMMethod.validatorEmoji(rule, value, callback, 'Category Name');
                 }
               }
             ],
@@ -233,18 +194,10 @@ class CateModalForm extends React.Component<any, any> {
             onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="subCategory" />}
-        >
-          {formData.get('cateParentName')
-            ? formData.get('cateParentName')
-            : 'none'}
+        <FormItem {...formItemLayout} label={<FormattedMessage id="subCategory" />}>
+          {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="product.platformCategory" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
           {getFieldDecorator('cateId', {
             rules: [
               {
@@ -265,11 +218,7 @@ class CateModalForm extends React.Component<any, any> {
                   });
 
                   if (overLen) {
-                    callback(
-                      new Error(
-                        'Please select the last level of classification'
-                      )
-                    );
+                    callback(new Error('Please select the last level of classification'));
                     return;
                   }
 
@@ -281,11 +230,7 @@ class CateModalForm extends React.Component<any, any> {
             initialValue: goodsCateId
           })(
             <TreeSelect
-              disabled={
-                (formData.get('cateParentId') &&
-                  formData.get('cateParentId') !== 0) ||
-                formData.get('children')
-              }
+              disabled={(formData.get('cateParentId') && formData.get('cateParentId') !== 0) || formData.get('children')}
               getPopupContainer={() => document.getElementById('page-content')}
               placeholder="Please select classification"
               notFoundContent="No classification"
@@ -297,49 +242,24 @@ class CateModalForm extends React.Component<any, any> {
             </TreeSelect>
           )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="cateImage" />}
-        >
-          <div style={{width:'400px'}}>
-            <ImageLibraryUpload
-              images={images}
-              modalVisible={modalVisibleFun}
-              clickImg={clickImg}
-              removeImg={removeImg}
-              imgType={0}
-              imgCount={10}
-              skuId=""
-            />
+        <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
+          <div style={{ width: '400px' }}>
+            <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
           <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
         </FormItem>
-        <FormItem
-          labelCol={2}
-          {...formItemLayout}
-          label={<FormattedMessage id="cateDsc" />}
-        >
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(
-                    rule,
-                    value,
-                    callback,
-                    'Product Description'
-                  );
+                  QMMethod.validatorEmoji(rule, value, callback, 'Product Description');
                 }
               }
             ],
             onChange: this._editGoods.bind(this, 'cateDescription'),
             initialValue: goodsDescription
-          })(
-            <TextArea
-              rows={4}
-              placeholder="Please input the product description"
-            />
-          )}
+          })(<TextArea rows={4} placeholder="Please input the product description" />)}
         </FormItem>
       </Form>
     );
@@ -363,15 +283,7 @@ class CateModalForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const {
-      editGoods,
-      showBrandModal,
-      showCateModal,
-      checkFlag,
-      enterpriseFlag,
-      flashsaleGoods,
-      updateGoodsForm
-    } = this.props.relaxProps;
+    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     if (e && e.target) {
       e = e.target.value;
@@ -400,17 +312,14 @@ class CateModalForm extends React.Component<any, any> {
         if (checkFlag) {
           if (enterpriseFlag) {
             //分销商品和企业购商品
-            message =
-              '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
+            message = '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
           } else {
             //分销商品
-            message =
-              '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
+            message = '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
           }
         } else {
           if (enterpriseFlag) {
-            message =
-              '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
+            message = '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
           }
         }
         if (message != '') {

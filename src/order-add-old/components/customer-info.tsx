@@ -65,11 +65,7 @@ const formItemLayoutTwo = {
  * @returns {any}
  */
 function renderOption(item) {
-  return (
-    <Option key={item.get('customerAccount')}>
-      {item.get('customerAccount')}
-    </Option>
-  );
+  return <Option key={item.get('customerAccount')}>{item.get('customerAccount')}</Option>;
 }
 
 @Relax
@@ -157,17 +153,7 @@ class CustomerInfo extends Component<any, any> {
   }
 
   render() {
-    const {
-      customers,
-      addrs,
-      selected,
-      showType,
-      onSelectAddress,
-      customerTempAddressVisiable,
-      showMore,
-      settingTempAddress,
-      consignee
-    } = this.props.relaxProps;
+    const { customers, addrs, selected, showType, onSelectAddress, customerTempAddressVisiable, showMore, settingTempAddress, consignee } = this.props.relaxProps;
 
     const { getFieldDecorator } = this.props.form;
     const customerAccountList = (customers || fromJS([]))
@@ -178,19 +164,10 @@ class CustomerInfo extends Component<any, any> {
     //地址数组
     let addsArray = [];
     //根据地质id是否存在来判断是否是临时地址
-    if (
-      consignee.get('provinceId') != null &&
-      consignee.get('id') == 'tempId'
-    ) {
-      addsArray.push(
-        consignee.get('provinceId') && consignee.get('provinceId').toString()
-      );
-      addsArray.push(
-        consignee.get('cityId') && consignee.get('cityId').toString()
-      );
-      addsArray.push(
-        consignee.get('areaId') && consignee.get('areaId').toString()
-      );
+    if (consignee.get('provinceId') != null && consignee.get('id') == 'tempId') {
+      addsArray.push(consignee.get('provinceId') && consignee.get('provinceId').toString());
+      addsArray.push(consignee.get('cityId') && consignee.get('cityId').toString());
+      addsArray.push(consignee.get('areaId') && consignee.get('areaId').toString());
     }
 
     const addressInit = {
@@ -198,18 +175,15 @@ class CustomerInfo extends Component<any, any> {
     };
 
     const phone = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('phone') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('phone') : null
     };
 
     const name = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('name') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('name') : null
     };
 
     const detailAddress = {
-      initialValue:
-        consignee.get('id') == 'tempId' ? consignee.get('address') : null
+      initialValue: consignee.get('id') == 'tempId' ? consignee.get('address') : null
     };
 
     return (
@@ -224,16 +198,7 @@ class CustomerInfo extends Component<any, any> {
                 getFieldDecorator('customerInfo', {
                   initialValue: this.props.selectedCustomerInfo,
                   rules: [{ required: true, message: '必须选择一个会员' }]
-                })(
-                  <AutoComplete
-                    size="large"
-                    style={{ width: '100%' }}
-                    dataSource={customerAccountList}
-                    onSelect={(value) => this._selectCustomerName(value)}
-                    onChange={(value) => this.handleSearch(value)}
-                    allowClear={true}
-                  />
-                )
+                })(<AutoComplete size="large" style={{ width: '100%' }} dataSource={customerAccountList} onSelect={(value) => this._selectCustomerName(value)} onChange={(value) => this.handleSearch(value)} allowClear={true} />)
               )}
             </FormItem>
           </Col>
@@ -256,25 +221,17 @@ class CustomerInfo extends Component<any, any> {
                     });
                   }}
                 >
-                  {addrs.toSeq().map(
-                    (v, k) =>
-                      showType === 2 || k < 10 ? (
-                        <div key={k} className="addressDisplay">
-                          <Radio value={v.get('deliveryAddressId')}>
-                            收货人：{v.get('consigneeName')}&nbsp; 联系电话：{v.get(
-                              'consigneeNumber'
-                            )}&nbsp; 收货信息：{FindArea.addressInfo(
-                              v.get('provinceId')
-                                ? v.get('provinceId').toString()
-                                : '',
-                              v.get('cityId') ? v.get('cityId').toString() : '',
-                              v.get('areaId') ? v.get('areaId').toString() : ''
-                            )}
-                            {v.get('deliveryAddress')}&nbsp;
-                            {v.get('isDefaltAddress') === 1 ? '默认地址' : ''}
-                          </Radio>
-                        </div>
-                      ) : null
+                  {addrs.toSeq().map((v, k) =>
+                    showType === 2 || k < 10 ? (
+                      <div key={k} className="addressDisplay">
+                        <Radio value={v.get('deliveryAddressId')}>
+                          收货人：{v.get('consigneeName')}&nbsp; 联系电话：{v.get('consigneeNumber')}&nbsp; 收货信息：
+                          {FindArea.addressInfo(v.get('provinceId') ? v.get('provinceId').toString() : '', v.get('cityId') ? v.get('cityId').toString() : '', v.get('areaId') ? v.get('areaId').toString() : '')}
+                          {v.get('deliveryAddress')}&nbsp;
+                          {v.get('isDefaltAddress') === 1 ? '默认地址' : ''}
+                        </Radio>
+                      </div>
+                    ) : null
                   )}
                   {showType === 1 ? (
                     <a
@@ -290,9 +247,7 @@ class CustomerInfo extends Component<any, any> {
                   )}
                   <div className="addressDisplay">
                     <Radio value="tempId">
-                      <span style={{ color: '#F56C1D' }}>
-                        没有可用地址，请填写临时地址
-                      </span>
+                      <span style={{ color: '#F56C1D' }}>没有可用地址，请填写临时地址</span>
                     </Radio>
                   </div>
                 </Radio.Group>
@@ -347,10 +302,7 @@ class CustomerInfo extends Component<any, any> {
                     <Input
                       onChange={(val) => {
                         this.forceUpdate();
-                        settingTempAddress(
-                          'address',
-                          (val.target as any).value
-                        );
+                        settingTempAddress('address', (val.target as any).value);
                       }}
                     />
                   )}
@@ -362,14 +314,7 @@ class CustomerInfo extends Component<any, any> {
                       { required: true, message: '请填写收货人' },
                       {
                         validator: (rule, value, callback) => {
-                          QMMethod.validatorMinAndMax(
-                            rule,
-                            value,
-                            callback,
-                            '收货人',
-                            2,
-                            15
-                          );
+                          QMMethod.validatorMinAndMax(rule, value, callback, '收货人', 2, 15);
                         }
                       }
                     ]

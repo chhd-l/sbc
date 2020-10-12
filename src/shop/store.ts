@@ -20,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new ModalActor(),
-      new CommonActor(),
-      new CompanyActor(),
-      new Consent()
-    ];
+    return [new ModalActor(), new CommonActor(), new CompanyActor(), new Consent()];
   }
 
   /**
@@ -120,34 +115,13 @@ export default class AppStore extends Store {
    * 保存工商信息
    */
   saveCompanyInfo = async (info) => {
-    const businessLicence =
-      info.get('businessLicence') && JSON.parse(info.get('businessLicence'));
-    const frontIDCard =
-      info.get('frontIDCard') && JSON.parse(info.get('frontIDCard'));
-    const backIDCard =
-      info.get('backIDCard') && JSON.parse(info.get('backIDCard'));
+    const businessLicence = info.get('businessLicence') && JSON.parse(info.get('businessLicence'));
+    const frontIDCard = info.get('frontIDCard') && JSON.parse(info.get('frontIDCard'));
+    const backIDCard = info.get('backIDCard') && JSON.parse(info.get('backIDCard'));
     info = info
-      .set(
-        'businessLicence',
-        (businessLicence
-          ? businessLicence.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      )
-      .set(
-        'frontIDCard',
-        (frontIDCard
-          ? frontIDCard.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      )
-      .set(
-        'backIDCard',
-        (backIDCard
-          ? backIDCard.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      );
+      .set('businessLicence', (businessLicence ? businessLicence.map((b) => b.thumbUrl || b.url) : []).toString())
+      .set('frontIDCard', (frontIDCard ? frontIDCard.map((b) => b.thumbUrl || b.url) : []).toString())
+      .set('backIDCard', (backIDCard ? backIDCard.map((b) => b.thumbUrl || b.url) : []).toString());
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('save successful!');
@@ -216,21 +190,12 @@ export default class AppStore extends Store {
     infos = infos
       .map((info) => {
         // 二级分类
-        const secondLevelInfo = secondLevel.find(
-          (f) => f.get('cateId') == info.get('cateParentId')
-        );
+        const secondLevelInfo = secondLevel.find((f) => f.get('cateId') == info.get('cateParentId'));
         // 一级分类
-        const firstLevelInfo = firstLevel.find(
-          (f) => f.get('cateId') == secondLevelInfo.get('cateParentId')
-        );
+        const firstLevelInfo = firstLevel.find((f) => f.get('cateId') == secondLevelInfo.get('cateParentId'));
         // 设置后台返回的格式类型
         info = info
-          .set(
-            'parentGoodCateNames',
-            firstLevelInfo.get('cateName') +
-              '/' +
-              secondLevelInfo.get('cateName')
-          )
+          .set('parentGoodCateNames', firstLevelInfo.get('cateName') + '/' + secondLevelInfo.get('cateName'))
           .set('platformCateRate', info.get('cateRate'))
           .set('cateRate', '');
         return info;
@@ -277,16 +242,8 @@ export default class AppStore extends Store {
     const cates = this.state()
       .get('cates')
       .map((info) => {
-        const qualificationPics =
-          info.get('qualificationPics') &&
-          JSON.parse(info.get('qualificationPics'));
-        info = info.set(
-          'qualificationPics',
-          (qualificationPics
-            ? qualificationPics.map((b) => b.thumbUrl || b.url)
-            : []
-          ).toString()
-        );
+        const qualificationPics = info.get('qualificationPics') && JSON.parse(info.get('qualificationPics'));
+        info = info.set('qualificationPics', (qualificationPics ? qualificationPics.map((b) => b.thumbUrl || b.url) : []).toString());
         return info;
       });
     const delCateIds = this.state().get('delCateIds');
@@ -325,10 +282,7 @@ export default class AppStore extends Store {
     //获取签约分类和品牌分类
     const { res: cateList } = await webApi.getCateList();
     const { res: brandList } = await webApi.getBrandList();
-    if (
-      cateList.code == Const.SUCCESS_CODE &&
-      brandList.code == Const.SUCCESS_CODE
-    ) {
+    if (cateList.code == Const.SUCCESS_CODE && brandList.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('detail:cate', fromJS(cateList.context));
         this.dispatch('detail:twoBrandKinds', fromJS(brandList.context));
@@ -410,18 +364,14 @@ export default class AppStore extends Store {
       if (contractId) {
         //当删除了已签约品牌时，所做的删除要存放
         deleteBrandIdArray.push(contractId);
-        const newOtherBrands = otherBrands.filter(
-          (v) => (v.contractBrandId && v.contractBrandId != contractId) || v.key
-        );
+        const newOtherBrands = otherBrands.filter((v) => (v.contractBrandId && v.contractBrandId != contractId) || v.key);
         this.transaction(() => {
           this.dispatch('detail:deleteBrand', fromJS(deleteBrandIdArray));
           this.dispatch('detail:addNewBrand', fromJS(newOtherBrands));
         });
       } else {
         const otherBrands = this.state().get('otherBrands').toJS();
-        const newOtherBrands = otherBrands.filter(
-          (v) => (v.key && v.key != id) || v.contractBrandId
-        );
+        const newOtherBrands = otherBrands.filter((v) => (v.key && v.key != id) || v.contractBrandId);
         this.dispatch('detail:addNewBrand', fromJS(newOtherBrands));
       }
     }
@@ -459,10 +409,7 @@ export default class AppStore extends Store {
         .map((v) => {
           if (v.get('contractBrandId') == contractId) {
             //做删除时，清空
-            v = v.set(
-              'authorizePic',
-              JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs)
-            );
+            v = v.set('authorizePic', JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs));
           }
           return v;
         });
@@ -472,10 +419,7 @@ export default class AppStore extends Store {
         .get('brandList')
         .map((v) => {
           if (v.get('brandId') == brandId) {
-            v = v.set(
-              'authorizePic',
-              JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs)
-            );
+            v = v.set('authorizePic', JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs));
           }
           return v;
         });
@@ -526,10 +470,7 @@ export default class AppStore extends Store {
         .get('otherBrands')
         .map((v) => {
           if (v.get('contractBrandId') == contractId) {
-            v = v.set(
-              'logo',
-              JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs)
-            );
+            v = v.set('logo', JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs));
           }
           return v;
         });
@@ -538,10 +479,7 @@ export default class AppStore extends Store {
         .get('otherBrands')
         .map((v) => {
           if (v.get('key') == brandId) {
-            v = v.set(
-              'logo',
-              JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs)
-            );
+            v = v.set('logo', JSON.parse(imgs).length == 0 ? '' : JSON.parse(imgs));
           }
           return v;
         });
@@ -746,17 +684,9 @@ export default class AppStore extends Store {
       let a = zone.match(/\d+/g);
       let b = Number(a[0] + '.' + a[1]);
       if (zone.substring(4, 5) == '+') {
-        sessionStorage.setItem(
-          'zoneDate',
-          moment(this.GMTToStr(b))
-            .subtract(1, 'days')
-            .format('YYYY-MM-DD hh:mm:ss')
-        );
+        sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).subtract(1, 'days').format('YYYY-MM-DD hh:mm:ss'));
       } else {
-        sessionStorage.setItem(
-          'zoneDate',
-          moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss')
-        );
+        sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss'));
       }
     }
   };
@@ -769,9 +699,7 @@ export default class AppStore extends Store {
     let timezone = time; //目标时区时间，东八区
     let offset_GMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
     let nowDate = new Date().getTime(); // 本地时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数
-    let targetDate = new Date(
-      nowDate + offset_GMT * 60 * 1000 + timezone * 60 * 60 * 1000
-    );
+    let targetDate = new Date(nowDate + offset_GMT * 60 * 1000 + timezone * 60 * 60 * 1000);
     return targetDate;
   }
   /**
@@ -818,34 +746,13 @@ export default class AppStore extends Store {
    * 店铺信息编辑
    */
   editCompanyInfo = async (info) => {
-    const businessLicence =
-      info.get('businessLicence') && JSON.parse(info.get('businessLicence'));
-    const frontIDCard =
-      info.get('frontIDCard') && JSON.parse(info.get('frontIDCard'));
-    const backIDCard =
-      info.get('backIDCard') && JSON.parse(info.get('backIDCard'));
+    const businessLicence = info.get('businessLicence') && JSON.parse(info.get('businessLicence'));
+    const frontIDCard = info.get('frontIDCard') && JSON.parse(info.get('frontIDCard'));
+    const backIDCard = info.get('backIDCard') && JSON.parse(info.get('backIDCard'));
     info = info
-      .set(
-        'businessLicence',
-        (businessLicence
-          ? businessLicence.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      )
-      .set(
-        'frontIDCard',
-        (frontIDCard
-          ? frontIDCard.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      )
-      .set(
-        'backIDCard',
-        (backIDCard
-          ? backIDCard.map((b) => b.thumbUrl || b.url)
-          : []
-        ).toString()
-      );
+      .set('businessLicence', (businessLicence ? businessLicence.map((b) => b.thumbUrl || b.url) : []).toString())
+      .set('frontIDCard', (frontIDCard ? frontIDCard.map((b) => b.thumbUrl || b.url) : []).toString())
+      .set('backIDCard', (backIDCard ? backIDCard.map((b) => b.thumbUrl || b.url) : []).toString());
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('save successful!');
@@ -903,9 +810,7 @@ export default class AppStore extends Store {
    * 新增银行结算账户
    */
   addNewAccounts = () => {
-    const newAccounts = this.state()
-      .getIn(['company', 'offlineAccount'])
-      .toJS();
+    const newAccounts = this.state().getIn(['company', 'offlineAccount']).toJS();
     if (newAccounts.length >= 5) {
       message.error('最多可添加5个结算账户');
       return;
@@ -938,9 +843,7 @@ export default class AppStore extends Store {
     const bank = banks.filter((bank) => bank.get('bankCode') == value).first();
     let bankName = '';
     if (bank && bank.get('bankName')) {
-      bankName = banks
-        .find((bank) => bank.get('bankCode') == value)
-        .get('bankName');
+      bankName = banks.find((bank) => bank.get('bankCode') == value).get('bankName');
     }
     this.transaction(() => {
       this.dispatch('company: account: merge', {
@@ -978,9 +881,7 @@ export default class AppStore extends Store {
    */
   saveNewAccount = async () => {
     const deleteIds = this.state().getIn(['company', 'delAccountIds']).toJS();
-    const offlineAccounts = this.state()
-      .getIn(['company', 'offlineAccount'])
-      .toJS();
+    const offlineAccounts = this.state().getIn(['company', 'offlineAccount']).toJS();
     let canAdd = true;
     offlineAccounts.forEach((account) => {
       if (account.bankName == '') {
@@ -1086,10 +987,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('loading:end');
-        this.dispatch(
-          'consent:consentList',
-          fromJS(res.context != null ? res.context.consentVOList : [])
-        );
+        this.dispatch('consent:consentList', fromJS(res.context != null ? res.context.consentVOList : []));
       });
     }
   };
@@ -1129,21 +1027,17 @@ export default class AppStore extends Store {
 
   //new
   consentSubmit = async (param?: any, type?: any) => {
-    let data = param
+    let data = param;
     if (type != '000') {
-      if (
-        param.consentId != '' &&
-        param.consentCode != '' &&
-        param.consentTitleType != '' &&
-        param.consentTitle != ''
-      ) {
+      if (param.consentId != '' && param.consentCode != '' && param.consentTitleType != '' && param.consentTitle != '') {
         const { res } = await webApi.fetchEditSave(param);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             message.success('Submit successful！');
             this.pageChange('List', null);
-            this.dispatch('consent:editList',{});
+            this.dispatch('consent:editList', {});
             this.getConsentList();
+            form = this.state().get('detailList');
           });
         } else {
           message.error(res.message);
@@ -1152,12 +1046,7 @@ export default class AppStore extends Store {
         message.error('Submit Can not be empty！');
       }
     } else {
-      if (
-        data.consentId != '' &&
-        data.consentCode != '' &&
-        data.consentTitleType != '' &&
-        data.consentTitle != ''
-      ) {
+      if (data.consentId != '' && data.consentCode != '' && data.consentTitleType != '' && data.consentTitle != '') {
         const { res } = await webApi.fetchNewConsent(data);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
@@ -1176,8 +1065,7 @@ export default class AppStore extends Store {
   };
 
   //pageChange
-  pageChange  =  (param, id) => {
-
+  pageChange = (param, id) => {
     /*let a = this.state().get('consentForm');
     for (let key in a) {
       a[key] = '';
@@ -1188,7 +1076,7 @@ export default class AppStore extends Store {
     this.dispatch('consent:pageChange', param);
     if (id != '000' && param != 'List') {
       this.onEditList(id);
-    }else {
+    } else {
       let consentForm = {
         languageTypeId: '',
         consentCategory: 'Prescriber',
@@ -1200,10 +1088,9 @@ export default class AppStore extends Store {
         consentTitleType: 'Content',
         consentTitle: '',
         consentDetailList: []
-      }
+      };
       this.dispatch('consent:editList', consentForm);
       this.dispatch('consent:consentForm', consentForm);
-
     }
   };
 

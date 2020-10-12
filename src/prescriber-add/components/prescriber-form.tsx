@@ -1,18 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Divider,
-  Icon
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon } from 'antd';
 import { history, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
@@ -105,13 +92,10 @@ class ClinicForm extends React.Component<any, any> {
     //   });
     // }
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const prescriberId =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers[0].id
-        : null;
+    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     this.setState({
       isPrescriber: prescriberId !== null
-    })
+    });
     this.querySysDictionary('city');
     this.queryClinicsDictionary('clinicType');
     this.getClinicsLites();
@@ -244,13 +228,13 @@ class ClinicForm extends React.Component<any, any> {
         url: url,
         prescriberForm: res.context
       });
-      let firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA)
-      if(!firstPrescriberForm) {
-        sessionStorage.setItem(cache.FIRST_PRESCRIBER_DATA, JSON.stringify(res.context))
+      let firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA);
+      if (!firstPrescriberForm) {
+        sessionStorage.setItem(cache.FIRST_PRESCRIBER_DATA, JSON.stringify(res.context));
       }
       this.setState({
-        firstPrescriberForm : JSON.parse(sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA))
-      })
+        firstPrescriberForm: JSON.parse(sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA))
+      });
       this.props.form.setFieldsValue({
         id: res.context.id,
         prescriberId: res.context.prescriberId,
@@ -397,9 +381,7 @@ class ClinicForm extends React.Component<any, any> {
       if (!err) {
         this.switchTab('reward');
       } else {
-        message.error(
-          'Prescriber basic infomation is not verified. Please modify!'
-        );
+        message.error('Prescriber basic infomation is not verified. Please modify!');
       }
     });
   };
@@ -412,9 +394,7 @@ class ClinicForm extends React.Component<any, any> {
           this.onCreate();
         }
       } else {
-        message.error(
-          'Prescriber basic infomation is not verified. Please modify!'
-        );
+        message.error('Prescriber basic infomation is not verified. Please modify!');
       }
     });
   };
@@ -468,11 +448,7 @@ class ClinicForm extends React.Component<any, any> {
       callback();
     }
     const { form } = this.props;
-    if (
-      isNaN(form.getFieldValue('longitude')) ||
-      form.getFieldValue('longitude') < -180 ||
-      form.getFieldValue('longitude') > 180
-    ) {
+    if (isNaN(form.getFieldValue('longitude')) || form.getFieldValue('longitude') < -180 || form.getFieldValue('longitude') > 180) {
       callback('Please enter the correct longitude!');
     } else {
       callback();
@@ -485,11 +461,7 @@ class ClinicForm extends React.Component<any, any> {
     }
     const { form } = this.props;
 
-    if (
-      isNaN(form.getFieldValue('latitude')) ||
-      form.getFieldValue('latitude') < -90 ||
-      form.getFieldValue('latitude') > 90
-    ) {
+    if (isNaN(form.getFieldValue('latitude')) || form.getFieldValue('latitude') < -90 || form.getFieldValue('latitude') > 90) {
       callback('Please enter the correct latitude!');
     } else {
       callback();
@@ -531,9 +503,9 @@ class ClinicForm extends React.Component<any, any> {
       message.error('Reward Rate can not be empty!');
       return;
     }
-    debugger
-    if(!this.state.isPrescriber) {
-      sessionStorage.removeItem(cache.FIRST_PRESCRIBER_DATA)
+    debugger;
+    if (!this.state.isPrescriber) {
+      sessionStorage.removeItem(cache.FIRST_PRESCRIBER_DATA);
     }
     this.handleVerify();
   };
@@ -565,12 +537,7 @@ class ClinicForm extends React.Component<any, any> {
   };
 
   filterOption = (input, option: { props }) => {
-    return (
-      option.props.children
-        .toString()
-        .toLowerCase()
-        .indexOf(input.toLowerCase()) >= 0
-    );
+    return option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
   _renderPerscirbersOption() {
@@ -682,31 +649,14 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
                  */}
 
-                {!this.state.isMapMode ? (
-                  <FormItem label="Recommendation code">
-                    {getFieldDecorator(
-                      'prescriberCode',
-                      {}
-                    )(
-                      <Input
-                        addonAfter={
-                          <Icon
-                            onClick={() => this.reloadCode()}
-                            type="reload"
-                          />
-                        }
-                        disabled
-                      />
-                    )}
-                  </FormItem>
-                ) : null}
+                {!this.state.isMapMode ? <FormItem label="Recommendation code">{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
 
                 <FormItem label="Prescriber phone number">
                   {getFieldDecorator('phone', {
                     rules: [{ validator: this.comparePhone }]
                   })(
                     <Input
-                      disabled={ firstPrescriberForm && firstPrescriberForm.phone && this.state.isPrescriber}
+                      disabled={firstPrescriberForm && firstPrescriberForm.phone && this.state.isPrescriber}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -852,22 +802,13 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
               </Form>
             </Col>
-            <Col
-              span={12}
-              style={{ display: !this.state.isEdit ? 'none' : null }}
-            >
+            <Col span={12} style={{ display: !this.state.isEdit ? 'none' : null }}>
               <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                {this.state.qrCodeLink ? (
-                  <img src={this.state.qrCodeLink} alt="" />
-                ) : null}
+                {this.state.qrCodeLink ? <img src={this.state.qrCodeLink} alt="" /> : null}
                 {this.state.url ? (
                   <div>
                     {this.state.url}
-                    <Button
-                      style={{ marginLeft: '10px' }}
-                      onClick={() => this.handleCopy(this.state.url)}
-                      size="small"
-                    >
+                    <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.state.url)} size="small">
                       copy
                     </Button>
                   </div>
@@ -900,12 +841,7 @@ class ClinicForm extends React.Component<any, any> {
                 Period:
               </label>
               Every
-              <Select
-                disabled={this.state.isPrescriber}
-                value={this.state.timeZone}
-                onChange={(value) => this.selectTimeZone(value)}
-                style={{ minWidth: '200px', marginLeft: '10px' }}
-              >
+              <Select disabled={this.state.isPrescriber} value={this.state.timeZone} onChange={(value) => this.selectTimeZone(value)} style={{ minWidth: '200px', marginLeft: '10px' }}>
                 <Option value="Year" key="year">
                   Year
                 </Option>
@@ -961,12 +897,7 @@ class ClinicForm extends React.Component<any, any> {
                 </Radio.Group>
               </div>
               <Divider type="horizontal" /> */}
-              <Table
-                style={{ paddingTop: '10px' }}
-                pagination={false}
-                rowKey="id"
-                dataSource={this.state.sectionList}
-              >
+              <Table style={{ paddingTop: '10px' }} pagination={false} rowKey="id" dataSource={this.state.sectionList}>
                 <Column
                   title="Unique customer order type"
                   key="orderType"
@@ -1037,11 +968,7 @@ class ClinicForm extends React.Component<any, any> {
               </Table>
             </Col>
             <Col span={24} style={{ marginTop: '20px' }}>
-              <Button
-                type="primary"
-                loading={this.state.saveLoading}
-                onClick={() => this.savePrescriber()}
-              >
+              <Button type="primary" loading={this.state.saveLoading} onClick={() => this.savePrescriber()}>
                 Save
               </Button>
               <Button style={{ marginLeft: '20px' }}>
@@ -1054,10 +981,7 @@ class ClinicForm extends React.Component<any, any> {
           </Row>
         </TabPane>
         <TabPane tab="User List" key="users">
-          <UserList
-            prescriberKeyId={this.state.prescriberKeyId}
-            alreadyHasPrescriber={this.state.isEdit}
-          />
+          <UserList prescriberKeyId={this.state.prescriberKeyId} alreadyHasPrescriber={this.state.isEdit} />
         </TabPane>
       </Tabs>
     );

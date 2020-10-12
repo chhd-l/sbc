@@ -66,62 +66,33 @@ export default class CustomerStatistics extends React.Component<any, any> {
                 <div style={styles.headBox}>
                   <ul style={styles.box}>
                     <li>
-                      <a
-                        className={currentDayChoice == dayChoice.today
-                          ? 'statisticsItemCur'
-                          : 'statisticsItem'}
-                        onClick={() => this._changeChoice('day', dayChoice.today)}
-                      >
+                      <a className={currentDayChoice == dayChoice.today ? 'statisticsItemCur' : 'statisticsItem'} onClick={() => this._changeChoice('day', dayChoice.today)}>
                         今天
-                    </a>
+                      </a>
                     </li>
                     <li>
-                      <a
-                        className={
-                          currentDayChoice == dayChoice.yesterday
-                            ? 'statisticsItemCur'
-                            : 'statisticsItem'}
-
-                        onClick={() =>
-                          this._changeChoice('day', dayChoice.yesterday)
-                        }
-                      >
+                      <a className={currentDayChoice == dayChoice.yesterday ? 'statisticsItemCur' : 'statisticsItem'} onClick={() => this._changeChoice('day', dayChoice.yesterday)}>
                         昨天
-                    </a>
+                      </a>
                     </li>
                     <li>
-                      <a
-                        className={
-                          currentDayChoice == dayChoice.sevenDays
-                            ? 'statisticsItemCur'
-                            : 'statisticsItem'}
-                        onClick={() =>
-                          this._changeChoice('day', dayChoice.sevenDays)
-                        }
-                      >
+                      <a className={currentDayChoice == dayChoice.sevenDays ? 'statisticsItemCur' : 'statisticsItem'} onClick={() => this._changeChoice('day', dayChoice.sevenDays)}>
                         7天前
-                    </a>
+                      </a>
                     </li>
                     <li>
-                      <a
-                        className={
-                          currentDayChoice == dayChoice.thirtyDays
-                            ? 'statisticsItemCur'
-                            : 'statisticsItem'}
-                        onClick={() =>
-                          this._changeChoice('day', dayChoice.thirtyDays)
-                        }
-                      >
+                      <a className={currentDayChoice == dayChoice.thirtyDays ? 'statisticsItemCur' : 'statisticsItem'} onClick={() => this._changeChoice('day', dayChoice.thirtyDays)}>
                         30天前
-                    </a>
+                      </a>
                     </li>
                   </ul>
 
                   <div style={{ textAlign: 'right' }}>
                     <Tooltip placement="left" title={this._renderTitle}>
                       <a style={{ fontSize: 14 }}>
-                        <Icon type="question-circle-o" />&nbsp;&nbsp;统计说明
-                    </a>
+                        <Icon type="question-circle-o" />
+                        &nbsp;&nbsp;统计说明
+                      </a>
                     </Tooltip>
                   </div>
                 </div>
@@ -129,74 +100,30 @@ export default class CustomerStatistics extends React.Component<any, any> {
                 <div style={styles.rowAway}>
                   <div>
                     <p style={styles.total}>客户总数</p>
-                    <h2 style={styles.h2}>
-                      {viewData.get('total') ? viewData.get('total') : 0}
-                    </h2>
+                    <h2 style={styles.h2}>{viewData.get('total') ? viewData.get('total') : 0}</h2>
                   </div>
                   <div>
-                    <RadioGroup
-                      value={currentChart}
-                      onChange={(e) =>
-                        this._changeChoice('chart', (e as any).target.value)
-                      }
-                    >
-                      <RadioButton value={chartType.level}>
-                        等级分布
-                    </RadioButton>
-                      <RadioButton value={chartType.area}>
-                        地区分布
-                    </RadioButton>
+                    <RadioGroup value={currentChart} onChange={(e) => this._changeChoice('chart', (e as any).target.value)}>
+                      <RadioButton value={chartType.level}>等级分布</RadioButton>
+                      <RadioButton value={chartType.area}>地区分布</RadioButton>
                     </RadioGroup>
                   </div>
                 </div>
 
-                {viewData &&
-                  viewData.get('viewList') &&
-                  viewData.get('viewList').size > 0 ? (
-                    <div style={{ height: 400 }}>
-                      {currentChart == 0 ? (
-                        <WMPieChart
-                          content={viewData.get('viewList').toJS()}
-                          height={400}
-                        />
-                      ) : (
-                          <ChinaMap
-                            title="客户地区分布"
-                            style={{ height: '400px' }}
-                            dataJson={viewData.get('viewList').toJS()}
-                            height={400}
-                            showProvince={false}
-                          />
-                        )}
-                    </div>
-                  ) : (
-                    <div style={{ height: 400 }}>
-                      {currentChart == 0 ? (
-                        <WMPieChart
-                          content={[{ "levelId": "-1", "levelName": "无", "centage": "100.00%", "num": 0 }]}
-                          height={400}
-                        />
-                      ) : (
-                          <ChinaMap
-                            title="客户地区分布"
-                            style={{ height: '400px' }}
-                            dataJson={[]}
-                            height={400}
-                            showProvince={false}
-                          />
-                        )}
-                    </div>
-                  )}
+                {viewData && viewData.get('viewList') && viewData.get('viewList').size > 0 ? (
+                  <div style={{ height: 400 }}>
+                    {currentChart == 0 ? <WMPieChart content={viewData.get('viewList').toJS()} height={400} /> : <ChinaMap title="客户地区分布" style={{ height: '400px' }} dataJson={viewData.get('viewList').toJS()} height={400} showProvince={false} />}
+                  </div>
+                ) : (
+                  <div style={{ height: 400 }}>
+                    {currentChart == 0 ? <WMPieChart content={[{ levelId: '-1', levelName: '无', centage: '100.00%', num: 0 }]} height={400} /> : <ChinaMap title="客户地区分布" style={{ height: '400px' }} dataJson={[]} height={400} showProvince={false} />}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <StatisticsHeader
-            noTitle={true}
-            onClick={(param) =>
-              this.store.setDateRange(param[0], param[1], param[2])
-            }
-          />
+          <StatisticsHeader noTitle={true} onClick={(param) => this.store.setDateRange(param[0], param[1], param[2])} />
 
           {chartData && (
             <WMChart
@@ -239,7 +166,6 @@ export default class CustomerStatistics extends React.Component<any, any> {
             <h4 style={styles.h4}>客户订货报表</h4>
             <CustomerStatisticsMultiList />
           </div>
-
         </div>
 
         <DataModal />
@@ -275,17 +201,13 @@ export default class CustomerStatistics extends React.Component<any, any> {
           <span>2、当前统计不区分订货端和管理端；</span>
         </p>
         <p>
-          <span>
-            3、订单在提交成功后纳入统计，订单金额以订单提交成功时为准；
-          </span>
+          <span>3、订单在提交成功后纳入统计，订单金额以订单提交成功时为准；</span>
         </p>
         <p>
           <span>4、退单在完成后纳入统计，退货金额以退单完成时为准；</span>
         </p>
         <p>
-          <span>
-            5、统计时间内商品没有销售/退货，客户没有订单/退单，则不在报表中体现；
-          </span>
+          <span>5、统计时间内商品没有销售/退货，客户没有订单/退单，则不在报表中体现；</span>
         </p>
       </div>
     );

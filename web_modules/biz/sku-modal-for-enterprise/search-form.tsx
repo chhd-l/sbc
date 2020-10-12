@@ -44,28 +44,31 @@ export default class SearchForm extends React.Component<any, any> {
 
   UNSAFE_componentWillReceiveProps(nextProps: any) {
     if (!this.props.visible && nextProps.visible) {
-      this.setState({
-        searchParams: {
-          // 模糊条件-商品名称
-          likeGoodsName: '',
-          // 模糊条件-SKU编码
-          likeGoodsInfoNo: '',
-          // 店铺分类
-          storeCateId: 0,
-          // 上下架状态
-          addedFlag: null,
-          // 市场价范围参数1
-          salePriceFirst: null,
-          // 市场价范围参数2
-          salePriceLast: null,
-          // 库存范围参数1
-          stockFirst: null,
-          // 库存范围参数2
-          stockLast: null,
-          // 销售类型
-          saleType: 1
-        }
-      }, () => this.searchBackFun());
+      this.setState(
+        {
+          searchParams: {
+            // 模糊条件-商品名称
+            likeGoodsName: '',
+            // 模糊条件-SKU编码
+            likeGoodsInfoNo: '',
+            // 店铺分类
+            storeCateId: 0,
+            // 上下架状态
+            addedFlag: null,
+            // 市场价范围参数1
+            salePriceFirst: null,
+            // 市场价范围参数2
+            salePriceLast: null,
+            // 库存范围参数1
+            stockFirst: null,
+            // 库存范围参数2
+            stockLast: null,
+            // 销售类型
+            saleType: 1
+          }
+        },
+        () => this.searchBackFun()
+      );
     }
   }
 
@@ -74,27 +77,15 @@ export default class SearchForm extends React.Component<any, any> {
     cateList
       .filter((cate) => cate.get('cateParentId') === cateParentId)
       .map((item) => {
-        const childCates = cateList.filter(
-          (cate) => cate.get('cateParentId') == item.get('storeCateId')
-        );
+        const childCates = cateList.filter((cate) => cate.get('cateParentId') == item.get('storeCateId'));
         if (childCates && childCates.count()) {
           return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
               {this.loop(childCates, item.get('storeCateId'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('storeCateId')}
-            value={item.get('storeCateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
       });
 
   render() {
@@ -102,100 +93,73 @@ export default class SearchForm extends React.Component<any, any> {
     const { cates } = this.state;
 
     return (
-      this.props.visible && <div id="modal-head">
-        <Form className="filter-content" layout="inline">
-          <FormItem>
-            <Input
-              addonBefore="商品名称"
-              placeholder="商品名称"
-              value={searchParams.likeGoodsName}
-              onChange={(e) =>
-                this.paramsOnChange('likeGoodsName', e.target.value)
-              }
-            />
-          </FormItem>
-          <FormItem>
-            <Input
-              addonBefore="SKU code"
-              placeholder="SKU code"
-              value={searchParams.likeGoodsInfoNo}
-              onChange={(e) =>
-                this.paramsOnChange('likeGoodsInfoNo', e.target.value)
-              }
-            />
-          </FormItem>
-          <FormItem>
-            <TreeSelectGroup
-              getPopupContainer={() => document.getElementById('modal-head')}
-              label="店铺分类"
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              treeDefaultExpandAll
-              onChange={(value) => this.paramsOnChange('storeCateId', value)}
-              value={searchParams.storeCateId}
-            >
-              <TreeNode key="0" value="0" title="全部">
-                {this.loop(fromJS(cates), 0)}
-              </TreeNode>
-            </TreeSelectGroup>
-          </FormItem>
-          <FormItem>
-            <SelectGroup
-              getPopupContainer={() => document.getElementById('modal-head')}
-              label="上下架"
-              defaultValue="全部"
-              onChange={(value) => this.paramsOnChange('addedFlag', value)}
-            >
-              <Option key="" value="">
-                全部
-              </Option>
-              <Option key="0" value="0">
-                下架
-              </Option>
-              <Option key="1" value="1">
-                上架
-              </Option>
-            </SelectGroup>
-          </FormItem>
-          <FormItem>
-            <InputGroupCompact
-              title="市场价"
-              precision={2}
-              startMin={0}
-              start={searchParams.salePriceFirst}
-              onStartChange={(val) =>
-                this.paramsOnChange('salePriceFirst', val)
-              }
-              endMin={0}
-              end={searchParams.salePriceLast}
-              onEndChange={(val) => this.paramsOnChange('salePriceLast', val)}
-            />
-          </FormItem>
-          <FormItem>
-            <InputGroupCompact
-              title="库存"
-              startMin={0}
-              start={searchParams.stockFirst}
-              onStartChange={(val) => this.paramsOnChange('stockFirst', val)}
-              endMin={0}
-              end={searchParams.stockLast}
-              onEndChange={(val) => this.paramsOnChange('stockLast', val)}
-            />
-          </FormItem>
+      this.props.visible && (
+        <div id="modal-head">
+          <Form className="filter-content" layout="inline">
+            <FormItem>
+              <Input addonBefore="商品名称" placeholder="商品名称" value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
+            </FormItem>
+            <FormItem>
+              <Input addonBefore="SKU code" placeholder="SKU code" value={searchParams.likeGoodsInfoNo} onChange={(e) => this.paramsOnChange('likeGoodsInfoNo', e.target.value)} />
+            </FormItem>
+            <FormItem>
+              <TreeSelectGroup
+                getPopupContainer={() => document.getElementById('modal-head')}
+                label="店铺分类"
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeDefaultExpandAll
+                onChange={(value) => this.paramsOnChange('storeCateId', value)}
+                value={searchParams.storeCateId}
+              >
+                <TreeNode key="0" value="0" title="全部">
+                  {this.loop(fromJS(cates), 0)}
+                </TreeNode>
+              </TreeSelectGroup>
+            </FormItem>
+            <FormItem>
+              <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="上下架" defaultValue="全部" onChange={(value) => this.paramsOnChange('addedFlag', value)}>
+                <Option key="" value="">
+                  全部
+                </Option>
+                <Option key="0" value="0">
+                  下架
+                </Option>
+                <Option key="1" value="1">
+                  上架
+                </Option>
+              </SelectGroup>
+            </FormItem>
+            <FormItem>
+              <InputGroupCompact
+                title="市场价"
+                precision={2}
+                startMin={0}
+                start={searchParams.salePriceFirst}
+                onStartChange={(val) => this.paramsOnChange('salePriceFirst', val)}
+                endMin={0}
+                end={searchParams.salePriceLast}
+                onEndChange={(val) => this.paramsOnChange('salePriceLast', val)}
+              />
+            </FormItem>
+            <FormItem>
+              <InputGroupCompact title="库存" startMin={0} start={searchParams.stockFirst} onStartChange={(val) => this.paramsOnChange('stockFirst', val)} endMin={0} end={searchParams.stockLast} onEndChange={(val) => this.paramsOnChange('stockLast', val)} />
+            </FormItem>
 
-          <Button
-            type="primary"
-            icon="search"
-            shape="round"
-            htmlType="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              this.searchBackFun();
-            }}
-          >
-            搜索
-          </Button>
-        </Form>
-      </div>
+            <Button
+              type="primary"
+              icon="search"
+              shape="round"
+              htmlType="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                this.searchBackFun();
+              }}
+            >
+              搜索
+            </Button>
+          </Form>
+        </div>
+      )
     );
   }
 
@@ -208,7 +172,7 @@ export default class SearchForm extends React.Component<any, any> {
 
     const { res: catesRes } = fetchCates as any;
     const { context: cates } = catesRes;
-    this.setState({ cates: cates});
+    this.setState({ cates: cates });
   };
 
   /**
@@ -237,12 +201,7 @@ export default class SearchForm extends React.Component<any, any> {
    */
   checkSwapInputGroupCompact = () => {
     const { searchParams } = this.state;
-    const {
-      salePriceFirst,
-      salePriceLast,
-      stockFirst,
-      stockLast
-    } = searchParams;
+    const { salePriceFirst, salePriceLast, stockFirst, stockLast } = searchParams;
 
     if (parseFloat(salePriceFirst) > parseFloat(salePriceLast)) {
       searchParams['salePriceFirst'] = salePriceLast;

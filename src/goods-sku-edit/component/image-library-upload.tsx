@@ -16,46 +16,25 @@ export default class ImageLibraryUpload extends Component<any, any> {
   };
 
   render() {
-    const {
-      images,
-      modalVisible,
-      clickImg,
-      removeImg,
-      imgCount,
-      imgType,
-      skuId
-    } = this.props;
+    const { images, modalVisible, clickImg, removeImg, imgCount, imgType, skuId } = this.props;
 
     return (
       <div>
-        {images.map(v => {
+        {images.map((v) => {
           return (
             <div key={v.get('imageId')}>
               <div className="ant-upload-list ant-upload-list-picture-card">
                 <div className="ant-upload-list-item ant-upload-list-item-done">
                   <div className="ant-upload-list-item-info">
                     <span>
-                      <a
-                        className="ant-upload-list-item-thumbnail"
-                        href=""
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={v.get('artworkUrl') || v.get('url')}
-                          alt={v.get('imageName')}
-                        />
+                      <a className="ant-upload-list-item-thumbnail" href="" target="_blank" rel="noopener noreferrer">
+                        <img src={v.get('artworkUrl') || v.get('url')} alt={v.get('imageName')} />
                       </a>
                     </span>
                   </div>
                   <span className="ant-upload-list-item-actions">
-                    <i
-                      className="anticon anticon-eye-o"
-                      onClick={() =>
-                        clickImg(v.get('artworkUrl') || v.get('url'))
-                      }
-                    >
-                       <Icon type="eye" />
+                    <i className="anticon anticon-eye-o" onClick={() => clickImg(v.get('artworkUrl') || v.get('url'))}>
+                      <Icon type="eye" />
                     </i>
                     <i
                       title="Remove file"
@@ -76,10 +55,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
           );
         })}
         {images.count() < imgCount ? (
-          <div
-            onClick={() => modalVisible(imgCount, imgType, skuId)}
-            style={styles.addImg}
-          >
+          <div onClick={() => modalVisible(imgCount, imgType, skuId)} style={styles.addImg}>
             <div style={styles.imgBox}>
               <Icon type="plus" style={styles.plus} />
             </div>

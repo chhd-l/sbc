@@ -734,6 +734,7 @@ const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
 
   { path: '/login-admin', asyncComponent: () => import('./login-admin') },
+  { path: '/403', asyncComponent: () => import('./403') },
   { path: '/logout', asyncComponent: () => import('./logout') },
   { path: '/login-verify', asyncComponent: () => import('./login-verify') },
   { path: '/implicit/callback', component: LoginCallback },
@@ -767,8 +768,7 @@ const homeRoutes = [
   //商家注册协议
   {
     path: '/supplier-agreement',
-    asyncComponent: () =>
-      System.import('./company-register/component/agreement')
+    asyncComponent: () => System.import('./company-register/component/agreement')
   },
   {
     path: '/generalTermsAndConditions',

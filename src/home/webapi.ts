@@ -1,6 +1,68 @@
 import { Fetch } from 'qmkit';
 
 /**
+ * 首页1
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const getTradeCustomerView = (params) => {
+  return Fetch('/dashboard/tradeCustomerView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getPrescriberTrendView = (params) => {
+  return Fetch('/dashboard/prescriberTrendView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTransactionTrendView = (params) => {
+  return Fetch('/dashboard/transactionTrendView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getGoodsInfoTopView = (params) => {
+  return Fetch('/dashboard/goodsInfoTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getPrescriberTopView = (params) => {
+  return Fetch('/dashboard/prescriberTopView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTrafficDashboardView = (params) => {
+  return Fetch('/dashboard/trafficDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getTrafficTrendDashboardView = (params) => {
+  return Fetch('/dashboard/trafficTrendDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getConversionFunnelDashboardView = (params) => {
+  return Fetch('/dashboard/conversionFunnelDashboardView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+/* ================================================================================================================ */
+
+/**
  * 订单todo
  * @returns {Promise<IAsyncResult<T>>}
  */
@@ -38,20 +100,7 @@ export const employee = () => {
 export const todoAuth = () => {
   return Fetch<Array<string>>('/functions', {
     method: 'POST',
-    body: JSON.stringify([
-      'fOrderList002',
-      'fOrderList001',
-      'fOrderDetail002',
-      'fOrderList003',
-      'rolf002',
-      'rolf003',
-      'rolf004',
-      'rolf005',
-      'f_customer_3',
-      'changeInvoice',
-      'f_goods_check_1',
-      'destoryOpenOrderInvoice'
-    ])
+    body: JSON.stringify(['fOrderList002', 'fOrderList001', 'fOrderDetail002', 'fOrderList003', 'rolf002', 'rolf003', 'rolf004', 'rolf005', 'f_customer_3', 'changeInvoice', 'f_goods_check_1', 'destoryOpenOrderInvoice'])
   });
 };
 
@@ -61,13 +110,7 @@ export const todoAuth = () => {
 export const statisticsAuth = () => {
   return Fetch<Array<string>>('/functions', {
     method: 'POST',
-    body: JSON.stringify([
-      'f_flow_watch_1',
-      'f_trade_watch_1',
-      'f_goods_watch_1',
-      'f_customer_watch_1',
-      'f_employee_watch_1'
-    ])
+    body: JSON.stringify(['f_flow_watch_1', 'f_trade_watch_1', 'f_goods_watch_1', 'f_customer_watch_1', 'f_employee_watch_1'])
   });
 };
 

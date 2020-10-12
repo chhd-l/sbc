@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Modal,
-  Tooltip,
-  Row,
-  Col
-} from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -61,12 +49,7 @@ export default class ClinicList extends Component<any, any> {
       loading: true
     });
     const query = this.state.searchForm;
-    query.enabled =
-      query.enabled.toString() === 'true'
-        ? true
-        : query.enabled.toString() === 'false'
-        ? false
-        : '';
+    query.enabled = query.enabled.toString() === 'true' ? true : query.enabled.toString() === 'false' ? false : '';
     pageNum = pageNum - 1;
     const { res } = await webapi.fetchClinicList({
       ...query,
@@ -210,8 +193,7 @@ export default class ClinicList extends Component<any, any> {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
+          const exportHref = Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('Unsuccessful');
@@ -308,9 +290,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'enabled',
         key: 'enabled',
         width: '10%',
-        render: (text, record) => (
-          <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
-        )
+        render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
       },
       {
         title: 'Action',
@@ -319,20 +299,11 @@ export default class ClinicList extends Component<any, any> {
         render: (text, record) => (
           <span>
             <Tooltip placement="top" title="Details">
-              <Link
-                to={'/prescriber-edit/' + record.id}
-                className="iconfont iconDetails"
-              ></Link>
+              <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             <Divider type="vertical" />
-            <Tooltip
-              placement="top"
-              title={record.enabled ? 'Disable' : 'Enable'}
-            >
-              <a
-                onClick={() => this.enableAndDisable(record.id)}
-                className="iconfont iconbtn-disable"
-              >
+            <Tooltip placement="top" title={record.enabled ? 'Disable' : 'Enable'}>
+              <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable">
                 {/*{record.enabled ? 'Disable' : 'Enable'}*/}
               </a>
             </Tooltip>
@@ -375,9 +346,7 @@ export default class ClinicList extends Component<any, any> {
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem>
                   <Input
-                    addonBefore={
-                      <p className="PrescriberCity">Prescriber city</p>
-                    }
+                    addonBefore={<p className="PrescriberCity">Prescriber city</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -525,11 +494,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span="8">
                 <FormItem>
                   <Input
-                    addonBefore={
-                      <p className="prescriber-iput-lable">
-                        Recommendation code
-                      </p>
-                    }
+                    addonBefore={<p className="prescriber-iput-lable">Recommendation code</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -593,15 +558,7 @@ export default class ClinicList extends Component<any, any> {
           </div>
         </div>
         <div className="container">
-          <Table
-            rowKey="id"
-            columns={columns}
-            dataSource={this.state.prescriberList}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            scroll={{ x: '100%' }}
-            onChange={this.handleTableChange}
-          />
+          <Table rowKey="id" columns={columns} dataSource={this.state.prescriberList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
       </div>
     );

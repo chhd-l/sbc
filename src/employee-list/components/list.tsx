@@ -50,16 +50,7 @@ export default class EmployeeList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      selected,
-      dataList,
-      onSelect,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
     return (
       <DataGrid
         loading={loading}
@@ -96,32 +87,10 @@ export default class EmployeeList extends React.Component<any, any> {
             </div>
           )}
         />
-        <Column
-          title={<FormattedMessage id="email" />}
-          key="email"
-          dataIndex="email"
-        />
-        <Column
-          title={<FormattedMessage id="employeeNo" />}
-          key="jobNo"
-          dataIndex="jobNo"
-          render={(rowInfo) => (
-            <span>{rowInfo && rowInfo.jobNo ? rowInfo.jobNo : '-'}</span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="position" />}
-          key="position"
-          dataIndex="position"
-          render={(rowInfo) => (
-            <span>{rowInfo && rowInfo.position ? rowInfo.position : '-'}</span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="roles" />}
-          key="roleId"
-          render={(rowInfo) => <span>{this._renderRole(rowInfo)}</span>}
-        />
+        <Column title={<FormattedMessage id="email" />} key="email" dataIndex="email" />
+        <Column title={<FormattedMessage id="employeeNo" />} key="jobNo" dataIndex="jobNo" render={(rowInfo) => <span>{rowInfo && rowInfo.jobNo ? rowInfo.jobNo : '-'}</span>} />
+        <Column title={<FormattedMessage id="position" />} key="position" dataIndex="position" render={(rowInfo) => <span>{rowInfo && rowInfo.position ? rowInfo.position : '-'}</span>} />
+        <Column title={<FormattedMessage id="roles" />} key="roleId" render={(rowInfo) => <span>{this._renderRole(rowInfo)}</span>} />
         {/* <Column
           title="是否业务员"
           key="isEmployee"
@@ -142,10 +111,7 @@ export default class EmployeeList extends React.Component<any, any> {
                 <p>
                   <FormattedMessage id="disabled" />
                 </p>
-                <Tooltip
-                  placement="top"
-                  title={rowData['accountDisableReason']}
-                >
+                <Tooltip placement="top" title={rowData['accountDisableReason']}>
                   <a href="javascript:void(0);">Reason</a>
                 </Tooltip>
               </div>
@@ -153,8 +119,7 @@ export default class EmployeeList extends React.Component<any, any> {
               <div>
                 <span>Inactivated</span>
               </div>
-            )
-            : (
+            ) : (
               <div>
                 <span>To be audit</span>
               </div>
@@ -170,13 +135,7 @@ export default class EmployeeList extends React.Component<any, any> {
             if (rowInfo.isMasterAccount == 1) {
               return <span>-</span>;
             }
-            return checkMenu(
-              'updateEmployee,enableDisableEmployee,deleteEmployee'
-            ) ? (
-              this._renderMenu(rowInfo)
-            ) : (
-              <span>-</span>
-            );
+            return checkMenu('updateEmployee,enableDisableEmployee,deleteEmployee') ? this._renderMenu(rowInfo) : <span>-</span>;
           }}
         />
       </DataGrid>
@@ -191,11 +150,7 @@ export default class EmployeeList extends React.Component<any, any> {
         {accountState != 2 && (
           <AuthWrapper functionName={'updateEmployee'}>
             <Tooltip placement="top" title="Edit">
-              <a
-                href="javascript:void(0);"
-                onClick={() => onEdit(employeeId)}
-                className="iconfont iconEdit"
-              >
+              <a href="javascript:void(0);" onClick={() => onEdit(employeeId)} className="iconfont iconEdit">
                 {/* <FormattedMessage id="edit" />*/}
               </a>
             </Tooltip>
@@ -222,29 +177,17 @@ export default class EmployeeList extends React.Component<any, any> {
           <AuthWrapper functionName={'enableDisableEmployee'}>
             {accountState === 0 ? (
               <Tooltip placement="top" title="Disabled">
-                <a
-                  href="javascript:void(0);"
-                  onClick={() => switchModal(employeeId)}
-                  className="iconfont iconbtn-disable"
-                ></a>
+                <a href="javascript:void(0);" onClick={() => switchModal(employeeId)} className="iconfont iconbtn-disable"></a>
               </Tooltip>
             ) : accountState === 1 ? (
               <Tooltip placement="top" title="Enabled">
-                <a
-                  href="javascript:void(0);"
-                  onClick={() => onEnable(employeeId)}
-                  className="iconfont iconEnabled"
-                ></a>
+                <a href="javascript:void(0);" onClick={() => onEnable(employeeId)} className="iconfont iconEnabled"></a>
               </Tooltip>
             ) : accountState === 3 ? (
-            <Tooltip placement="top" title="Send">
-              <a
-                onClick={() => this.sendEmail(rowInfo)}
-                className="iconfont iconemail"
-              ></a>
-            </Tooltip>
-            ) : null
-            }
+              <Tooltip placement="top" title="Send">
+                <a onClick={() => this.sendEmail(rowInfo)} className="iconfont iconemail"></a>
+              </Tooltip>
+            ) : null}
           </AuthWrapper>
         )}
 
@@ -259,30 +202,29 @@ export default class EmployeeList extends React.Component<any, any> {
 
   sendEmail = async (recored) => {
     let prescriberIds = [];
-    recored.prescriberIds.map(async prescriberKeyId=>{
+    recored.prescriberIds.map(async (prescriberKeyId) => {
       const { res: prescriberRes } = await webapi.getClinicById({
         id: prescriberKeyId
       });
       if (prescriberRes.code === 'K-000000') {
-        prescriberIds.push(prescriberRes.context.prescriberId)
-        if(prescriberIds.length === recored.prescriberIds.length) {
+        prescriberIds.push(prescriberRes.context.prescriberId);
+        if (prescriberIds.length === recored.prescriberIds.length) {
           let employeeName = recored.employeeName.split(' ');
           let paramter = {
             baseUrl: window.origin,
             email: recored.email,
-            firstName: employeeName && employeeName.length > 0 ?  recored.employeeName.split(' ')[0] : '',
+            firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
             prescriberId: prescriberIds.join(',')
-          }
+          };
           const { res } = await webapi.sendEmail(paramter);
-          if(res.code === 'K-000000') {
-            message.success('send successful')
+          if (res.code === 'K-000000') {
+            message.success('send successful');
           } else {
-            message.error(res.message || 'send failed')
+            message.error(res.message || 'send failed');
           }
         }
       }
-    })
-
+    });
   };
 
   _renderRole = (rowInfo) => {

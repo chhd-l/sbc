@@ -43,9 +43,7 @@ export default class EditForm extends React.Component<any, any> {
     const _state = this._store.state();
 
     // 默认退款金额
-    let refundAmount = _state.get('returnAmount')
-      ? _state.get('returnAmount').toString()
-      : '';
+    let refundAmount = _state.get('returnAmount') ? _state.get('returnAmount').toString() : '';
     if (refundAmount) {
       refundAmount = parseFloat(refundAmount).toFixed(2);
     }
@@ -65,11 +63,7 @@ export default class EditForm extends React.Component<any, any> {
           {getFieldDecorator('customerAccountId', {
             ...customerAccountId,
             rules: [{ required: true, message: '请选择收款账户' }]
-          })(
-            <Select onSelect={e => this.onCustomerAccountSelect(e)}>
-              {this._renderBank()}
-            </Select>
-          )}
+          })(<Select onSelect={(e) => this.onCustomerAccountSelect(e)}>{this._renderBank()}</Select>)}
         </FormItem>
         {this.state.isAddCustomerAccount ? (
           <div>
@@ -82,14 +76,7 @@ export default class EditForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '账户名',
-                        1,
-                        50
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '账户名', 1, 50);
                     }
                   }
                 ]
@@ -113,14 +100,7 @@ export default class EditForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorMinAndMax(
-                        rule,
-                        value,
-                        callback,
-                        '开户行',
-                        1,
-                        50
-                      );
+                      QMMethod.validatorMinAndMax(rule, value, callback, '开户行', 1, 50);
                     }
                   }
                 ]
@@ -150,12 +130,7 @@ export default class EditForm extends React.Component<any, any> {
           {getFieldDecorator('createTime', {
             ...createTime,
             rules: [{ required: true, message: '请选择收款日期' }]
-          })(
-            <DatePicker
-              format={'YYYY-MM-DD'}
-              disabledDate={this.disabledDate}
-            />
-          )}
+          })(<DatePicker format={'YYYY-MM-DD'} disabledDate={this.disabledDate} />)}
         </FormItem>
 
         <FormItem {...formItemLayout} label="备注">
@@ -171,12 +146,9 @@ export default class EditForm extends React.Component<any, any> {
   _renderBank() {
     const customerAccounts = this._store.state().get('customerAccounts');
 
-    let accounts = customerAccounts.map(customerAccount => {
+    let accounts = customerAccounts.map((customerAccount) => {
       return (
-        <Option
-          value={customerAccount.get('customerAccountId')}
-          key={customerAccount.get('customerAccountId')}
-        >
+        <Option value={customerAccount.get('customerAccountId')} key={customerAccount.get('customerAccountId')}>
           {this._renderBankName(customerAccount)}
         </Option>
       );
@@ -198,9 +170,7 @@ export default class EditForm extends React.Component<any, any> {
    * @private
    */
   _renderBankName(customerAccount) {
-    return `${customerAccount.get('customerBankName')} ${customerAccount.get(
-      'customerAccountNo'
-    )}`;
+    return `${customerAccount.get('customerBankName')} ${customerAccount.get('customerAccountNo')}`;
   }
 
   /**
@@ -210,12 +180,9 @@ export default class EditForm extends React.Component<any, any> {
    */
   _renderOfflineBank() {
     const offlineAccounts = this._store.state().get('offlineAccounts');
-    return offlineAccounts.map(offlineAccount => {
+    return offlineAccounts.map((offlineAccount) => {
       return (
-        <Option
-          value={offlineAccount.get('accountId').toString()}
-          key={offlineAccount.get('accountId')}
-        >
+        <Option value={offlineAccount.get('accountId').toString()} key={offlineAccount.get('accountId')}>
           {this._renderOfflineBankName(offlineAccount)}
         </Option>
       );

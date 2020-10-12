@@ -25,35 +25,22 @@ export default function AsyncRoute(props: Props) {
   return (
     <Route
       {...rest}
-      render={props => {
+      render={(props) => {
         const unAuthRoutes = fromJS(homeRoutes);
-        if (unAuthRoutes.some(route => route.get('path') == props.match.path)) {
+        if (unAuthRoutes.some((route) => route.get('path') == props.match.path)) {
           // 1.不需要登录权限,直接可以访问的页面
           return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
         } else {
           if (util.isLogin()) {
             //console.log(cache.LOGIN_DATA, 'loginData')
-            const loginInfo = JSON.parse(
-              sessionStorage.getItem(cache.LOGIN_DATA)
-            );
+            const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
             const auditState = loginInfo.auditState; // 商家登录审核状态 -1:未开店(没有审核状态)  0:未审核  1:已审核  2:审核未通过
             // console.log(auditState, 'audit', routes, props.match.path)
             if (auditState == 1) {
               // return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
               // 2.1.审核通过状态下, 只能访问路由中定义的页面(入驻流程无法查看)
-              if (
-                fromJS(routes).some(
-                  route => route.get('path') == props.match.path
-                )
-              ) {
-                return (
-                  <AsyncLoader
-                    {...props}
-                    load={load}
-                    subRoutes={subRoutes}
-                    handlePathMatched={handlePathMatched}
-                  />
-                );
+              if (fromJS(routes).some((route) => route.get('path') == props.match.path)) {
+                return <AsyncLoader {...props} load={load} subRoutes={subRoutes} handlePathMatched={handlePathMatched} />;
               } else {
                 return (
                   <Redirect
@@ -66,14 +53,8 @@ export default function AsyncRoute(props: Props) {
               }
             } else {
               // 2.2.非审核成功状态下, 只能看到入驻流程页面(其他页面无法查看)
-              if (
-                fromJS(auditDidNotPass).some(
-                  route => route.get('path') == props.match.path
-                )
-              ) {
-                return (
-                  <AsyncLoader {...props} load={load} subRoutes={subRoutes} />
-                );
+              if (fromJS(auditDidNotPass).some((route) => route.get('path') == props.match.path)) {
+                return <AsyncLoader {...props} load={load} subRoutes={subRoutes} />;
               } else {
                 return (
                   <Redirect
@@ -87,11 +68,7 @@ export default function AsyncRoute(props: Props) {
             }
           } else {
             // 2.3.需要登录的,跳转到登录页面
-            return (
-              <Redirect
-                to={{ pathname: '/login', state: { from: props.location } }}
-              />
-            );
+            return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />;
           }
         }
       }}
@@ -133,7 +110,7 @@ class AsyncLoader extends React.Component<any, any> {
     handlePathMatched(this.props.match.path);
 
     load()
-      .then(Component =>
+      .then((Component) =>
         this.setState({
           Component: Component.default || Component
         })

@@ -84,7 +84,8 @@ export default class Line extends React.Component {
           name: yName.y2,
           nameTextStyle: {
             color: '#C7C7C7',
-            fontSize: 12
+            fontSize: 12,
+            textAlign: 'left'
           },
           /*min: 0,
           max: 25,*/
@@ -96,7 +97,7 @@ export default class Line extends React.Component {
             formatter: '{value}' + unit.unit2,
             textStyle: {
               color: '#999',
-              fontsize: '11'
+              fontsize: '11',
             }
           },
           color: '#C7C7C7'
@@ -116,7 +117,7 @@ export default class Line extends React.Component {
                 textStyle: {
                   //数值样式
                   color: '#999',
-                  fontSize: 12
+                  fontSize: 12,
                 }
               }
             }

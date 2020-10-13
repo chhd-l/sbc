@@ -114,15 +114,8 @@ export default class StepOneEdit extends React.Component<any, any> {
       <div>
         <Row>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              required={false}
-              label={<FormattedMessage id="shopLogo" />}
-            >
-              <img
-                src={storeInfo.get('storeLogo')}
-                style={{ width: '100px' }}
-              ></img>
+            <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="shopLogo" />}>
+              <img src={storeInfo.get('storeLogo')} style={{ width: '100px' }}></img>
             </FormItem>
           </Col>
         </Row>
@@ -132,56 +125,41 @@ export default class StepOneEdit extends React.Component<any, any> {
               <span>
                 <FormattedMessage id="reviewStatus" />：
               </span>{' '}
-              {storeInfo.get('auditState') != null
-                ? AUDIT_STATE[storeInfo.get('auditState')]
-                : '-'}
+              {storeInfo.get('auditState') != null ? AUDIT_STATE[storeInfo.get('auditState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
                 <FormattedMessage id="accountStatus" />：
               </span>{' '}
-              {storeInfo.get('accountState') != null
-                ? ACCOUNT_STATE[storeInfo.get('accountState')]
-                : '-'}
+              {storeInfo.get('accountState') != null ? ACCOUNT_STATE[storeInfo.get('accountState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
                 <FormattedMessage id="storeStatus" />：
               </span>{' '}
-              {storeInfo.get('storeState') != null
-                ? STORE_STATE[storeInfo.get('storeState')]
-                : '-'}
+              {storeInfo.get('storeState') != null ? STORE_STATE[storeInfo.get('storeState')] : '-'}
             </Col>
-            {storeInfo.get('auditState') != null &&
-            storeInfo.get('auditState') == 2 ? (
+            {storeInfo.get('auditState') != null && storeInfo.get('auditState') == 2 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for review rejection:</span>
-                  {storeInfo.get('auditReason')
-                    ? storeInfo.get('auditReason')
-                    : '-'}
+                  {storeInfo.get('auditReason') ? storeInfo.get('auditReason') : '-'}
                 </p>
               </Col>
             ) : null}
-            {storeInfo.get('accountState') != null &&
-            storeInfo.get('accountState') == 1 ? (
+            {storeInfo.get('accountState') != null && storeInfo.get('accountState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for disabling the account:</span>
-                  {storeInfo.get('accountDisableReason')
-                    ? storeInfo.get('accountDisableReason')
-                    : '-'}
+                  {storeInfo.get('accountDisableReason') ? storeInfo.get('accountDisableReason') : '-'}
                 </p>
               </Col>
             ) : null}
-            {storeInfo.get('storeState') != null &&
-            storeInfo.get('storeState') == 1 ? (
+            {storeInfo.get('storeState') != null && storeInfo.get('storeState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for store closure:</span>
-                  {storeInfo.get('storeClosedReason')
-                    ? storeInfo.get('storeClosedReason')
-                    : '-'}
+                  {storeInfo.get('storeClosedReason') ? storeInfo.get('storeClosedReason') : '-'}
                 </p>
               </Col>
             ) : null}
@@ -191,122 +169,59 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Form>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="storeLanguage" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.getVaulesByData(
-                      languageData,
-                      storeInfo.get('languageId')
-                    )}
-                  </p>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
+                  <p style={{ color: '#333' }}>{this.getVaulesByData(languageData, storeInfo.get('languageId'))}</p>
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="timeZone" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.getVauleByData(
-                      timeZoneData,
-                      storeInfo.get('timeZoneId')
-                    )}
-                  </p>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="timeZone" />}>
+                  <p style={{ color: '#333' }}>{this.getVauleByData(timeZoneData, storeInfo.get('timeZoneId'))}</p>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="targetCountry" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.getVauleByData(
-                      countryData,
-                      storeInfo.get('countryId')
-                    )}
-                  </p>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="targetCountry" />}>
+                  <p style={{ color: '#333' }}>{this.getVauleByData(countryData, storeInfo.get('countryId'))}</p>
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="targetCity" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.getVaulesByData(cityData, storeInfo.get('cityIds'))}
-                  </p>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="targetCity" />}>
+                  <p style={{ color: '#333' }}>{this.getVaulesByData(cityData, storeInfo.get('cityIds'))}</p>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="currency" />}
-                >
-                  <p style={{ color: '#333' }}>
-                    {this.getVauleByData(
-                      currencyData,
-                      storeInfo.get('currencyId')
-                    )}
-                  </p>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="currency" />}>
+                  <p style={{ color: '#333' }}>{this.getVauleByData(currencyData, storeInfo.get('currencyId'))}</p>
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="taxRate" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="taxRate" />}>
                   <p style={{ color: '#333' }}>{storeInfo.get('taxRate')}%</p>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="domainName" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="domainName" />}>
                   <p style={{ color: '#333' }}>{storeInfo.get('domainName')}</p>
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="miniCharge" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="miniCharge" />}>
                   <p style={{ color: '#333' }}>{storeInfo.get('miniCharge')}</p>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="prescriberMap" />}
-                >
-                  <Switch
-                    disabled={true}
-                    checked={
-                      storeInfo.get('prescriberMap') === '1' ? true : false
-                    }
-                  />
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="prescriberMap" />}>
+                  <Switch disabled={true} checked={storeInfo.get('prescriberMap') === '1' ? true : false} />
                 </FormItem>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
@@ -320,6 +235,12 @@ export default class StepOneEdit extends React.Component<any, any> {
                         : false
                     }
                   />
+                </FormItem>
+              </Col> */}
+
+              <Col span={12}>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="onePageCheckout" />}>
+                  <Switch disabled={true} checked={storeInfo.get('onePageCheckout') === '1' ? true : false} />
                 </FormItem>
               </Col>
             </Row>

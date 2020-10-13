@@ -299,6 +299,7 @@ export default {
   miniCharge: 'Minimum charge',
   prescriberMap: 'Prescriber Map',
   profilePaymentMethod: 'Profile-Payment Method',
+  onePageCheckout:'One-Page Checkout',
   taxRate: 'Tax rate',
   detailAddress: 'Detail address',
   selectAddress: 'Please select an address',

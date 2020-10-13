@@ -66,15 +66,7 @@ export default class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const {
-      tradeCustomerView,
-      goodsInfoTopView,
-      prescriberTrendView,
-      prescriberTopView,
-      trafficDashboardView,
-      transactionTrendView,
-      trafficTrendDashboardView
-    } = nextProps.relaxProps;
+    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (tradeCustomerView !== prevState.tradeCustomerView) {
       return {
@@ -134,14 +126,7 @@ export default class Prescriber extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      tradeCustomerView,
-      prescriberTrendView,
-      prescriberTopView,
-      trafficDashboardView,
-      transactionTrendView,
-      trafficTrendDashboardView
-    } = this.state;
+    const { tradeCustomerView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView } = this.state;
 
     return (
       <div className="prescriber-item">
@@ -154,50 +139,12 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode-text">Revenue</div>
                   <div className="mode-num">
                     <span>$</span>
-                    <span>
-                      {tradeCustomerView &&
-                      tradeCustomerView.revenue != null ? (
-                        <CountUp
-                          end={tradeCustomerView.revenue}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
-                    </span>
+                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
-                    {tradeCustomerView &&
-                    tradeCustomerView.revenueRate != null ? (
-                      <img
-                        src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2}
-                        width="14"
-                        height="14"
-                      />
-                    ) : (
-                      ''
-                    )}
-                    <span
-                      className={
-                        tradeCustomerView &&
-                        tradeCustomerView.revenueRate != null
-                          ? tradeCustomerView.revenueRate >= 0
-                            ? 'green'
-                            : 'red'
-                          : ''
-                      }
-                    >
-                      {tradeCustomerView &&
-                      tradeCustomerView.revenue != null ? (
-                        <CountUp
-                          end={Math.abs(tradeCustomerView.revenueRate)}
-                          decimals={2}
-                          suffix={'%'}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
+                    {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={tradeCustomerView && tradeCustomerView.revenueRate != null ? (tradeCustomerView.revenueRate >= 0 ? 'green' : 'red') : ''}>
+                      {tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={Math.abs(tradeCustomerView.revenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
@@ -206,54 +153,12 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode-text">Average basket</div>
                   <div className="mode-num">
                     <span>$</span>
-                    <span>
-                      {tradeCustomerView &&
-                      tradeCustomerView.averageBasket != null ? (
-                        <CountUp
-                          end={tradeCustomerView.averageBasket}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
-                    </span>
+                    <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
-                    {tradeCustomerView &&
-                    tradeCustomerView.averageBasketRate != null ? (
-                      <img
-                        src={
-                          tradeCustomerView.averageBasketRate >= 0
-                            ? icon1
-                            : icon2
-                        }
-                        width="14"
-                        height="14"
-                      />
-                    ) : (
-                      ''
-                    )}
-                    <span
-                      className={
-                        tradeCustomerView &&
-                        tradeCustomerView.averageBasketRate != null
-                          ? tradeCustomerView.averageBasketRate >= 0
-                            ? 'green'
-                            : 'red'
-                          : ''
-                      }
-                    >
-                      {tradeCustomerView &&
-                      tradeCustomerView.averageBasketRate != null ? (
-                        <CountUp
-                          end={Math.abs(tradeCustomerView.averageBasketRate)}
-                          decimals={2}
-                          suffix={'%'}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
+                    {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={tradeCustomerView && tradeCustomerView.averageBasketRate != null ? (tradeCustomerView.averageBasketRate >= 0 ? 'green' : 'red') : ''}>
+                      {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <CountUp end={Math.abs(tradeCustomerView.averageBasketRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
@@ -261,52 +166,12 @@ export default class Prescriber extends React.Component<any, any> {
                 <div className="mode">
                   <div className="mode-text">Conversion</div>
                   <div className="mode-num">
-                    <span>
-                      {tradeCustomerView &&
-                      tradeCustomerView.conversion != null ? (
-                        <CountUp
-                          end={tradeCustomerView.conversion}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
-                    </span>
+                    <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
-                    {tradeCustomerView &&
-                    tradeCustomerView.conversionRate != null ? (
-                      <img
-                        src={
-                          tradeCustomerView.conversionRate >= 0 ? icon1 : icon2
-                        }
-                        width="14"
-                        height="14"
-                      />
-                    ) : (
-                      ''
-                    )}
-                    <span
-                      className={
-                        tradeCustomerView &&
-                        tradeCustomerView.conversionRate != null
-                          ? tradeCustomerView.conversionRate >= 0
-                            ? 'green'
-                            : 'red'
-                          : ''
-                      }
-                    >
-                      {tradeCustomerView &&
-                      tradeCustomerView.conversionRate != null ? (
-                        <CountUp
-                          end={Math.abs(tradeCustomerView.conversionRate)}
-                          decimals={2}
-                          suffix={'%'}
-                          {...countUpProps}
-                        />
-                      ) : (
-                        '--'
-                      )}
+                    {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
+                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <CountUp end={Math.abs(tradeCustomerView.conversionRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
@@ -399,55 +264,12 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode-text">Page view</div>
                       <div className="mode-num">
                         <span>$</span>
-                        <span>
-                          {' '}
-                          {trafficDashboardView &&
-                          trafficDashboardView.conversion != null ? (
-                            <CountUp
-                              end={trafficDashboardView.pageView}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                        <span> {trafficDashboardView && trafficDashboardView.conversion != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
-                        {trafficDashboardView &&
-                        trafficDashboardView.pageViewRate != null ? (
-                          <img
-                            src={
-                              trafficDashboardView.pageViewRate >= 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            trafficDashboardView &&
-                            trafficDashboardView.pageViewRate
-                              ? trafficDashboardView.pageViewRate >= 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {trafficDashboardView &&
-                          trafficDashboardView.pageViewRate != null ? (
-                            <CountUp
-                              end={Math.abs(trafficDashboardView.pageViewRate)}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
+                        {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
+                          {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -456,57 +278,12 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span>$</span>
-                        <span>
-                          {' '}
-                          {trafficDashboardView &&
-                          trafficDashboardView.bounceRate != null ? (
-                            <CountUp
-                              end={trafficDashboardView.bounceRate}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                        <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
-                        {trafficDashboardView &&
-                        trafficDashboardView.bounceRateRate != null ? (
-                          <img
-                            src={
-                              trafficDashboardView.bounceRateRate >= 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            trafficDashboardView &&
-                            trafficDashboardView.bounceRateRate != null
-                              ? trafficDashboardView.bounceRateRate >= 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {trafficDashboardView &&
-                          trafficDashboardView.bounceRateRate != null ? (
-                            <CountUp
-                              end={Math.abs(
-                                trafficDashboardView.bounceRateRate
-                              )}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
+                        {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <img src={trafficDashboardView.bounceRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
+                          {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -516,18 +293,7 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode-text">VET traffic</div>
                       <div className="mode-num">
                         <span>$</span>
-                        <span>
-                          {' '}
-                          {trafficDashboardView &&
-                          trafficDashboardView.vetTraffic != null ? (
-                            <CountUp
-                              end={trafficDashboardView.vetTraffic}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                        <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                     <div className="line"></div>
@@ -535,18 +301,7 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode-text">VET traffic rate</div>
                       <div className="mode-num num">
                         <span>$</span>
-                        <span>
-                          {' '}
-                          {trafficDashboardView &&
-                          trafficDashboardView.vetTrafficRate != null ? (
-                            <CountUp
-                              end={trafficDashboardView.vetTrafficRate}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
-                        </span>
+                        <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                   </div>
@@ -588,47 +343,21 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="r-text">Prescriber reward Top 3</div>
                     <div className="r-content">
                       {prescriberTopView &&
-                        prescriberTopView.prescriberDashboardViewItemList.map(
-                          (item, i) => {
-                            return (
-                              <React.Fragment key={i}>
-                                <div className="r-content-list space-between-align">
-                                  <p>{i + 1}</p>
-                                  <p>
-                                    {item.prescriberName
-                                      ? item.prescriberName
-                                      : '--'}
-                                  </p>
-                                  <p>
-                                    {sessionStorage.getItem(
-                                      cache.SYSTEM_GET_CONFIG
-                                    ) + ' '}{' '}
-                                    {item.rewardAmount ? (
-                                      <CountUp
-                                        end={item.rewardAmount}
-                                        {...countUpProps}
-                                      />
-                                    ) : (
-                                      '--'
-                                    )}
-                                  </p>
-                                  <p>
-                                    {item.orderNum ? (
-                                      <CountUp
-                                        end={item.orderNum}
-                                        {...countUpProps}
-                                      />
-                                    ) : (
-                                      '--'
-                                    )}{' '}
-                                    order
-                                  </p>
-                                </div>
-                                <div className="line-1 r-content-line"></div>
-                              </React.Fragment>
-                            );
-                          }
-                        )}
+                        prescriberTopView.prescriberDashboardViewItemList.map((item, i) => {
+                          return (
+                            <React.Fragment key={i}>
+                              <div className="r-content-list space-between-align">
+                                <p>{i + 1}</p>
+                                <p>{item.prescriberName ? item.prescriberName : '--'}</p>
+                                <p>
+                                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' '} {item.rewardAmount ? <CountUp end={item.rewardAmount} {...countUpProps} /> : '--'}
+                                </p>
+                                <p>{item.orderNum ? <CountUp end={item.orderNum} {...countUpProps} /> : '--'} order</p>
+                              </div>
+                              <div className="line-1 r-content-line"></div>
+                            </React.Fragment>
+                          );
+                        })}
                       {/*<div className="r-content-list space-between-align">
                         <span>1</span>
                         <span>Velvet Pets</span>
@@ -665,56 +394,12 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode-text">Active consumers</div>
                     <div className="mode-num">
                       <span>$</span>
-                      <span>
-                        {tradeCustomerView &&
-                        tradeCustomerView.activeConsumers != null ? (
-                          <CountUp
-                            end={tradeCustomerView.activeConsumers}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </span>
+                      <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
-                      {tradeCustomerView &&
-                      tradeCustomerView.activeConsumersRate != null ? (
-                        <img
-                          src={
-                            tradeCustomerView.activeConsumersRate >= 0
-                              ? icon1
-                              : icon2
-                          }
-                          width="14"
-                          height="14"
-                        />
-                      ) : (
-                        ''
-                      )}
-                      <span
-                        className={
-                          tradeCustomerView &&
-                          tradeCustomerView.activeConsumersRate != null
-                            ? tradeCustomerView.activeConsumersRate >= 0
-                              ? 'green'
-                              : 'red'
-                            : ''
-                        }
-                      >
-                        {tradeCustomerView &&
-                        tradeCustomerView.activeConsumersRate != null ? (
-                          <CountUp
-                            end={Math.abs(
-                              tradeCustomerView.activeConsumersRate
-                            )}
-                            decimals={2}
-                            suffix={'%'}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
+                      {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
+                        {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
                     </div>
                   </div>
@@ -722,56 +407,12 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode-text">Active consumer rate</div>
                     <div className="mode-num">
                       <span>$</span>
-                      <span>
-                        {tradeCustomerView &&
-                        tradeCustomerView.activeConsumerRate != null ? (
-                          <CountUp
-                            end={tradeCustomerView.activeConsumerRate}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </span>
+                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
-                      {tradeCustomerView &&
-                      tradeCustomerView.activeConsumerRateRate != null ? (
-                        <img
-                          src={
-                            tradeCustomerView.activeConsumerRateRate >= 0
-                              ? icon1
-                              : icon2
-                          }
-                          width="14"
-                          height="14"
-                        />
-                      ) : (
-                        ''
-                      )}
-                      <span
-                        className={
-                          tradeCustomerView &&
-                          tradeCustomerView.activeConsumerRateRate != null
-                            ? tradeCustomerView.activeConsumerRateRate >= 0
-                              ? 'green'
-                              : 'red'
-                            : ''
-                        }
-                      >
-                        {tradeCustomerView &&
-                        tradeCustomerView.activeConsumerRateRate != null ? (
-                          <CountUp
-                            end={Math.abs(
-                              tradeCustomerView.activeConsumerRateRate
-                            )}
-                            decimals={2}
-                            suffix={'%'}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
+                      {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
+                        {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
                     </div>
                   </div>
@@ -781,17 +422,7 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode-text">Total consumers</div>
                     <div className="mode-num">
                       <span>$</span>
-                      <span>
-                        {tradeCustomerView &&
-                        tradeCustomerView.totalConsumers != null ? (
-                          <CountUp
-                            end={tradeCustomerView.totalConsumers}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </span>
+                      <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                   </div>
                 </div>
@@ -801,69 +432,17 @@ export default class Prescriber extends React.Component<any, any> {
               <div className="top-text">Subscription</div>
               <div className="subscription space-between">
                 <div className="subscription-l">
-                  <PieChart
-                    total="100"
-                    shelves={
-                      tradeCustomerView &&
-                      tradeCustomerView.subscriptionRate != null
-                        ? tradeCustomerView.subscriptionRate
-                        : 0
-                    }
-                  />
+                  <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
                 </div>
                 <div className="subscription-r flex-content">
                   <div className="subscription-content space-around">
                     <div className="text">Order Number</div>
                     <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView &&
-                        tradeCustomerView.subscriptionNumber != null ? (
-                          <CountUp
-                            end={tradeCustomerView.subscriptionNumber}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </div>
+                      <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.subscriptionNumberRate != null ? (
-                          <img
-                            src={
-                              tradeCustomerView.subscriptionNumberRate >= 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView &&
-                            tradeCustomerView.subscriptionNumberRate != null
-                              ? tradeCustomerView.subscriptionNumberRate >= 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.subscriptionNumberRate != null ? (
-                            <CountUp
-                              end={Math.abs(
-                                tradeCustomerView.subscriptionNumberRate
-                              )}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
+                        {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -871,55 +450,11 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="subscription-content space-around">
                     <div className="text">Sales volume</div>
                     <div className="num">
-                      <div className="num-l">
-                        {tradeCustomerView &&
-                        tradeCustomerView.subscriptionRevenue != null ? (
-                          <CountUp
-                            end={tradeCustomerView.subscriptionRevenue}
-                            {...countUpProps}
-                          />
-                        ) : (
-                          '--'
-                        )}
-                      </div>
+                      <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
-                        {tradeCustomerView &&
-                        tradeCustomerView.subscriptionRevenueRate != null ? (
-                          <img
-                            src={
-                              tradeCustomerView.subscriptionRevenueRate >= 0
-                                ? icon1
-                                : icon2
-                            }
-                            width="14"
-                            height="14"
-                          />
-                        ) : (
-                          ''
-                        )}
-                        <span
-                          className={
-                            tradeCustomerView &&
-                            tradeCustomerView.subscriptionRevenueRate != null
-                              ? tradeCustomerView.subscriptionRevenueRate >= 0
-                                ? 'green'
-                                : 'red'
-                              : ''
-                          }
-                        >
-                          {tradeCustomerView &&
-                          tradeCustomerView.subscriptionRevenueRate != null ? (
-                            <CountUp
-                              end={Math.abs(
-                                tradeCustomerView.subscriptionRevenueRate
-                              )}
-                              decimals={2}
-                              suffix={'%'}
-                              {...countUpProps}
-                            />
-                          ) : (
-                            '--'
-                          )}
+                        {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
+                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>

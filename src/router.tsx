@@ -768,8 +768,7 @@ const homeRoutes = [
   //商家注册协议
   {
     path: '/supplier-agreement',
-    asyncComponent: () =>
-      System.import('./company-register/component/agreement')
+    asyncComponent: () => System.import('./company-register/component/agreement')
   },
   {
     path: '/generalTermsAndConditions',

@@ -2,18 +2,7 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import PropTypes from 'prop-types';
 
-import {
-  Form,
-  Input,
-  Button,
-  Col,
-  Row,
-  Select,
-  InputNumber,
-  message,
-  Icon,
-  Switch
-} from 'antd';
+import { Form, Input, Button, Col, Row, Select, InputNumber, message, Icon, Switch } from 'antd';
 import { noop, Const, QMUpload, Tips, cache } from 'qmkit';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -165,20 +154,13 @@ export default class StepOneEdit extends React.Component<any, any> {
         <Form>
           <Row className="storeLogoUpdate">
             <Col span={8}>
-              <FormItem
-                required={false}
-                {...formItemLayout}
-                label={<FormattedMessage id="shopLogo" />}
-              >
+              <FormItem required={false} {...formItemLayout} label={<FormattedMessage id="shopLogo" />}>
                 <Row>
                   <Col span={6}>
                     <div className="clearfix logoImg">
                       <QMUpload
                         style={styles.box}
-                        action={
-                          Const.HOST +
-                          `/store/uploadStoreResource?storeId=${storeInfo.storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`
-                        }
+                        action={Const.HOST + `/store/uploadStoreResource?storeId=${storeInfo.storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`}
                         listType="picture-card"
                         name="uploadFile"
                         onChange={this._editStoreLogo}
@@ -211,56 +193,41 @@ export default class StepOneEdit extends React.Component<any, any> {
               <span>
                 <FormattedMessage id="reviewStatus" />：
               </span>{' '}
-              {storeInfo.get('auditState') != null
-                ? AUDIT_STATE[storeInfo.get('auditState')]
-                : '-'}
+              {storeInfo.get('auditState') != null ? AUDIT_STATE[storeInfo.get('auditState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
                 <FormattedMessage id="accountStatus" />：
               </span>{' '}
-              {storeInfo.get('accountState') != null
-                ? ACCOUNT_STATE[storeInfo.get('accountState')]
-                : '-'}
+              {storeInfo.get('accountState') != null ? ACCOUNT_STATE[storeInfo.get('accountState')] : '-'}
             </Col>
             <Col span={8}>
               <span>
                 <FormattedMessage id="storeStatus" />：
               </span>{' '}
-              {storeInfo.get('storeState') != null
-                ? STORE_STATE[storeInfo.get('storeState')]
-                : '-'}
+              {storeInfo.get('storeState') != null ? STORE_STATE[storeInfo.get('storeState')] : '-'}
             </Col>
-            {storeInfo.get('auditState') != null &&
-            storeInfo.get('auditState') == 2 ? (
+            {storeInfo.get('auditState') != null && storeInfo.get('auditState') == 2 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for review rejection:</span>
-                  {storeInfo.get('auditReason')
-                    ? storeInfo.get('auditReason')
-                    : '-'}
+                  {storeInfo.get('auditReason') ? storeInfo.get('auditReason') : '-'}
                 </p>
               </Col>
             ) : null}
-            {storeInfo.get('accountState') != null &&
-            storeInfo.get('accountState') == 1 ? (
+            {storeInfo.get('accountState') != null && storeInfo.get('accountState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for disabling the account:</span>
-                  {storeInfo.get('accountDisableReason')
-                    ? storeInfo.get('accountDisableReason')
-                    : '-'}
+                  {storeInfo.get('accountDisableReason') ? storeInfo.get('accountDisableReason') : '-'}
                 </p>
               </Col>
             ) : null}
-            {storeInfo.get('storeState') != null &&
-            storeInfo.get('storeState') == 1 ? (
+            {storeInfo.get('storeState') != null && storeInfo.get('storeState') == 1 ? (
               <Col span={8}>
                 <p className="reason">
                   <span>Reasons for store closure:</span>
-                  {storeInfo.get('storeClosedReason')
-                    ? storeInfo.get('storeClosedReason')
-                    : '-'}
+                  {storeInfo.get('storeClosedReason') ? storeInfo.get('storeClosedReason') : '-'}
                 </p>
               </Col>
             ) : null}
@@ -270,20 +237,10 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Form>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="storeLanguage" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
                   {getFieldDecorator('languageId', {
-                    initialValue: Array.isArray(storeInfo.get('languageId'))
-                      ? storeInfo.get('languageId')
-                      : storeInfo.get('languageId')
-                      ? storeInfo.get('languageId').toJS()
-                      : [],
-                    rules: [
-                      { required: false, message: 'Please select Language!' }
-                    ]
+                    initialValue: Array.isArray(storeInfo.get('languageId')) ? storeInfo.get('languageId') : storeInfo.get('languageId') ? storeInfo.get('languageId').toJS() : [],
+                    rules: [{ required: false, message: 'Please select Language!' }]
                   })(
                     // <Input
                     //   placeholder="商家名称不得超过20字符"
@@ -297,11 +254,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                     <Select
                       mode="multiple"
                       showSearch
-                      filterOption={(input, option: { props }) =>
-                        option.props.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
+                      filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={(value) =>
                         onChange({
                           field: 'languageId',
@@ -311,10 +264,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {languageData.map((item) => (
-                        <Option
-                          value={item.id.toString()}
-                          key={item.id.toString()}
-                        >
+                        <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.valueEn}
                         </Option>
                       ))}
@@ -323,24 +273,14 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="timeZone" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="timeZone" />}>
                   {getFieldDecorator('timeZoneId', {
                     initialValue: storeInfo.get('timeZoneId'),
-                    rules: [
-                      { required: false, message: 'Please select TimeZone!' }
-                    ]
+                    rules: [{ required: false, message: 'Please select TimeZone!' }]
                   })(
                     <Select
                       showSearch
-                      filterOption={(input, option: { props }) =>
-                        option.props.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
+                      filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={(value, zone) =>
                         onChange({
                           field: 'timeZoneId',
@@ -361,16 +301,10 @@ export default class StepOneEdit extends React.Component<any, any> {
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="targetCountry" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="targetCountry" />}>
                   {getFieldDecorator('countryId', {
                     initialValue: storeInfo.get('countryId'),
-                    rules: [
-                      { required: false, message: 'Please select Country!' }
-                    ]
+                    rules: [{ required: false, message: 'Please select Country!' }]
                   })(
                     <Select
                       onChange={(value) => {
@@ -390,27 +324,15 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="targetCity" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="targetCity" />}>
                   {getFieldDecorator('cityIds', {
-                    initialValue: Array.isArray(storeInfo.get('cityIds'))
-                      ? storeInfo.get('cityIds')
-                      : storeInfo.get('cityIds')
-                      ? storeInfo.get('cityIds').toJS()
-                      : [],
+                    initialValue: Array.isArray(storeInfo.get('cityIds')) ? storeInfo.get('cityIds') : storeInfo.get('cityIds') ? storeInfo.get('cityIds').toJS() : [],
                     rules: [{ required: false, message: 'Please select City!' }]
                   })(
                     <Select
                       mode="multiple"
                       showSearch
-                      filterOption={(input, option: { props }) =>
-                        option.props.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
+                      filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={(value) =>
                         onChange({
                           field: 'cityIds',
@@ -419,10 +341,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                       }
                     >
                       {cityData.map((item) => (
-                        <Option
-                          value={item.id.toString()}
-                          key={item.id.toString()}
-                        >
+                        <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.valueEn}
                         </Option>
                       ))}
@@ -433,16 +352,10 @@ export default class StepOneEdit extends React.Component<any, any> {
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="currency" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="currency" />}>
                   {getFieldDecorator('currencyId', {
                     initialValue: storeInfo.get('currencyId'),
-                    rules: [
-                      { required: false, message: 'Please select Currency!' }
-                    ]
+                    rules: [{ required: false, message: 'Please select Currency!' }]
                   })(
                     <Select
                       onChange={(value) =>
@@ -462,16 +375,10 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="taxRate" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="taxRate" />}>
                   {getFieldDecorator('taxRate', {
                     initialValue: parseInt(storeInfo.get('taxRate')),
-                    rules: [
-                      { required: false, message: 'Please input Tax Rate!' }
-                    ]
+                    rules: [{ required: false, message: 'Please input Tax Rate!' }]
                   })(
                     <InputNumber
                       min={0}
@@ -489,16 +396,10 @@ export default class StepOneEdit extends React.Component<any, any> {
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="domainName" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="domainName" />}>
                   {getFieldDecorator('domainName', {
                     initialValue: storeInfo.get('domainName'),
-                    rules: [
-                      { required: false, message: 'Please input Domain Name!' }
-                    ]
+                    rules: [{ required: false, message: 'Please input Domain Name!' }]
                   })(
                     <Input
                       addonBefore="URL"
@@ -513,11 +414,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="miniCharge" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="miniCharge" />}>
                   {getFieldDecorator('miniCharge', {
                     initialValue: storeInfo.get('miniCharge'),
                     rules: [
@@ -540,14 +437,9 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem
-                  {...formItemLayout}
-                  required={false}
-                  label={<FormattedMessage id="prescriberMap" />}
-                >
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="prescriberMap" />}>
                   {getFieldDecorator('prescriberMap', {
-                    initialValue:
-                      storeInfo.get('prescriberMap') === '1' ? true : false,
+                    initialValue: storeInfo.get('prescriberMap') === '1' ? true : false,
                     rules: [
                       {
                         required: false,
@@ -556,9 +448,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                     ]
                   })(
                     <Switch
-                      checked={
-                        storeInfo.get('prescriberMap') === '1' ? true : false
-                      }
+                      checked={storeInfo.get('prescriberMap') === '1' ? true : false}
                       onChange={(value) =>
                         onChange({
                           field: 'prescriberMap',
@@ -569,7 +459,7 @@ export default class StepOneEdit extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem
                   {...formItemLayout}
                   required={false}
@@ -596,6 +486,24 @@ export default class StepOneEdit extends React.Component<any, any> {
                       onChange={(value) =>
                         onChange({
                           field: 'profilePaymentMethod',
+                          value: value ? '1' : '0'
+                        })
+                      }
+                    />
+                  )}
+                </FormItem>
+              </Col> */}
+
+              <Col span={12}>
+                <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="onePageCheckout" />}>
+                  {getFieldDecorator('onePageCheckout', {
+                    initialValue: storeInfo.get('onePageCheckout') === '1' ? true : false
+                  })(
+                    <Switch
+                      checked={storeInfo.get('onePageCheckout') === '1' ? true : false}
+                      onChange={(value) =>
+                        onChange({
+                          field: 'onePageCheckout',
                           value: value ? '1' : '0'
                         })
                       }
@@ -678,12 +586,7 @@ export default class StepOneEdit extends React.Component<any, any> {
   _checkUploadFile = (size: number, file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= size * 1024 * 1024) {
         return true;
       } else {

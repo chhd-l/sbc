@@ -33,7 +33,7 @@ export default class Tool extends React.Component<any, any> {
         <Button type="primary" onClick={this._showCateModal}>
           <FormattedMessage id="product.addFirstLeverCate" />
         </Button>
-        {departments.count() === 0 ? (
+        {/* {departments.count() === 0 ? (
           <Link to="/department-import">
             <Button type="primary">
               <FormattedMessage id="addDetachDepartments" />
@@ -43,7 +43,7 @@ export default class Tool extends React.Component<any, any> {
           <Button disabled={true} type="primary">
             <FormattedMessage id="addDetachDepartments" />
           </Button>
-        )}
+        )}*/}
       </div>
     );
   }

@@ -40,14 +40,8 @@ export default class MarketingRule extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      fullReductionLevelList,
-      fullDiscountLevelList,
-      subType,
-      marketingType
-    } = this.props.relaxProps;
-    const list =
-      marketingType == 1 ? fullDiscountLevelList : fullReductionLevelList;
+    const { fullReductionLevelList, fullDiscountLevelList, subType, marketingType } = this.props.relaxProps;
+    const list = marketingType == 1 ? fullDiscountLevelList : fullReductionLevelList;
     return (
       <div>
         {list.toJS().map((level) => (
@@ -58,43 +52,26 @@ export default class MarketingRule extends React.Component<any, any> {
                   <span>Rules:</span>
                   {subType === 0 ? ( // full amount reduction
                     <span className="rule-span">
-                      Full{' '}
-                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}{' '}
-                      reduction {level.reduction}{' '}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                      Full {level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 1 ? ( // full quantity reduction
                     <span className="rule-span">
-                      Full{' '}
-                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      items reduction {level.reduction}{' '}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                      Full {level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 2 ? ( //full amount discount
                     <span className="rule-span">
-                      Full{' '}
-                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}{' '}
-                      discount {level.discount * 10} discount
+                      Full {level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 10} discount
                     </span>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">
-                      Full{' '}
-                      {level.fullAmount ? level.fullAmount : level.fullCount}{' '}
-                      items discount {level.discount * 10} discount
+                      Full {level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 10} discount
                     </span>
                   ) : subType === 6 ? ( // subsctiption reduction
                     <span className="rule-span">
-                      For the first subscription order, reduction{' '}
-                      {level.reduction}{' '}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                      For the first subscription order, reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 7 ? ( // subsctiption discount
-                    <span className="rule-span">
-                      For the first subscription order, discount{' '}
-                      {level.discount * 10} discount
-                    </span>
+                    <span className="rule-span">For the first subscription order, discount {level.discount * 10} discount</span>
                   ) : null}
                 </Col>
               </Row>

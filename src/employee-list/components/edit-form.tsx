@@ -258,7 +258,7 @@ export default class EditForm extends React.Component<any, any> {
             })(<Input disabled={editDisable} />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="employeeNo" />}>
+          {/*<FormItem {...formItemLayout} label={<FormattedMessage id="employeeNo" />}>
             {getFieldDecorator('jobNo', {
               ...jobNo,
               rules: [
@@ -269,7 +269,7 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input disabled={editDisable} placeholder="0-20 characters" />)}
-          </FormItem>
+          </FormItem>*/}
 
           {/* <FormItem
             {...formItemLayout}

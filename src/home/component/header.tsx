@@ -34,9 +34,6 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      console.log(JSON.parse(sessionStorage.getItem(cache.CURRENT_YEAR)), 11111111111);
-    }, 0);
     this.setState({
       prescribers: JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers
     });

@@ -24,17 +24,12 @@ export default class DiscountLevels extends React.Component<any, any> {
     this.state = {
       isFullCount: props.isFullCount,
       isNormal: true,
-      fullDiscountLevelList: props.fullDiscountLevelList
-        ? props.fullDiscountLevelList
-        : []
+      fullDiscountLevelList: props.fullDiscountLevelList ? props.fullDiscountLevelList : []
     };
   }
 
   componentDidMount() {
-    if (
-      !this.props.fullDiscountLevelList ||
-      this.props.fullDiscountLevelList.length == 0
-    ) {
+    if (!this.props.fullDiscountLevelList || this.props.fullDiscountLevelList.length == 0) {
       this.initLevel();
     }
   }
@@ -56,15 +51,10 @@ export default class DiscountLevels extends React.Component<any, any> {
       this.initLevel();
       this.setState({ isFullCount: nextProps.isFullCount });
     } else {
-      if (
-        fullDiscountLevelList &&
-        fullDiscountLevelList.length != nextProps.fullDiscountLevelList.length
-      ) {
+      if (fullDiscountLevelList && fullDiscountLevelList.length != nextProps.fullDiscountLevelList.length) {
         nextProps.fullDiscountLevelList.forEach((level, index) => {
           if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
-            resetFields[`level_rule_value_${index}`] = !isFullCount
-              ? level.fullAmount
-              : level.fullCount;
+            resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
             resetFields[`level_rule_discount_${index}`] = level.discount;
           }
         });
@@ -104,17 +94,11 @@ export default class DiscountLevels extends React.Component<any, any> {
                                 validator: (_rule, value, callback) => {
                                   if (value) {
                                     if (!isFullCount) {
-                                      if (
-                                        !ValidConst.price.test(value) ||
-                                        !(value < 100000000 && value > 0)
-                                      ) {
+                                      if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                         callback('0.01-99999999.99');
                                       }
                                     } else {
-                                      if (
-                                        !ValidConst.noZeroNumber.test(value) ||
-                                        !(value < 10000 && value > 0)
-                                      ) {
+                                      if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
                                         callback('1-9999');
                                       }
                                     }
@@ -123,15 +107,11 @@ export default class DiscountLevels extends React.Component<any, any> {
                                 }
                               }
                             ],
-                            initialValue: !isFullCount
-                              ? level.fullAmount
-                              : level.fullCount
+                            initialValue: !isFullCount ? level.fullAmount : level.fullCount
                           })(
                             <Input
                               style={{ width: 200 }}
-                              placeholder={
-                                !isFullCount ? '0.01-99999999.99' : '1-9999'
-                              }
+                              placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
                               onChange={(e) => {
                                 this.ruleValueChange(index, e.target.value);
                               }}
@@ -141,11 +121,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                         <span>
                           {' '}
                           &nbsp;
-                          {!isFullCount
-                            ? sessionStorage.getItem(
-                                cache.SYSTEM_GET_CONFIG_NAME
-                              )
-                            : 'items'}
+                          {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
                           ，&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;&nbsp;
                         </span>
                       </div>
@@ -161,9 +137,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                             validator: (_rule, value, callback) => {
                               if (value) {
                                 if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                  callback(
-                                    'The number between 0.1-9.9 supports one decimal'
-                                  );
+                                  callback('The number between 0.1-9.9 supports one decimal');
                                 }
                               }
                               callback();
@@ -174,9 +148,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                       })(
                         <Input
                           style={{ width: 200 }}
-                          placeholder={
-                            'The number between 0.1-9.9 supports one decimal'
-                          }
+                          placeholder={'The number between 0.1-9.9 supports one decimal'}
                           onChange={(e) => {
                             this.onChange(index, 'discount', e.target.value);
                           }}
@@ -184,9 +156,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                       )}
                     </FormItem>
                     <span>&nbsp;discount&nbsp;&nbsp;</span>
-                    {index > 0 && (
-                      <a onClick={() => this.deleteLevels(index)}>Delete</a>
-                    )}
+                    {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                   </HasError>
                 )}
               </FormItem>
@@ -195,10 +165,7 @@ export default class DiscountLevels extends React.Component<any, any> {
         })}
         {this.state.isNormal ? (
           <div>
-            <Button
-              onClick={this.addLevels}
-              disabled={fullDiscountLevelList.length >= 5}
-            >
+            <Button onClick={this.addLevels} disabled={fullDiscountLevelList.length >= 5}>
               Add multi-level promotions
             </Button>
             &nbsp;&nbsp;up to 5 levels can be set

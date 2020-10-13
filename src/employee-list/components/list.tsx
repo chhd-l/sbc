@@ -88,7 +88,7 @@ export default class EmployeeList extends React.Component<any, any> {
           )}
         />
         <Column title={<FormattedMessage id="email" />} key="email" dataIndex="email" />
-        <Column title={<FormattedMessage id="employeeNo" />} key="jobNo" dataIndex="jobNo" render={(rowInfo) => <span>{rowInfo && rowInfo.jobNo ? rowInfo.jobNo : '-'}</span>} />
+        {/*<Column title={<FormattedMessage id="employeeNo" />} key="jobNo" dataIndex="jobNo" render={(rowInfo) => <span>{rowInfo && rowInfo.jobNo ? rowInfo.jobNo : '-'}</span>} />*/}
         <Column title={<FormattedMessage id="position" />} key="position" dataIndex="position" render={(rowInfo) => <span>{rowInfo && rowInfo.position ? rowInfo.position : '-'}</span>} />
         <Column title={<FormattedMessage id="roles" />} key="roleId" render={(rowInfo) => <span>{this._renderRole(rowInfo)}</span>} />
         {/* <Column

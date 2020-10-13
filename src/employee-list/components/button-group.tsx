@@ -48,12 +48,7 @@ export default class ButtonGroup extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onAdd,
-      toggleHide,
-      onFormChange,
-      searchForm
-    } = this.props.relaxProps;
+    const { onAdd, toggleHide, onFormChange, searchForm } = this.props.relaxProps;
 
     return (
       <div
@@ -68,10 +63,7 @@ export default class ButtonGroup extends React.Component<any, any> {
           </AuthWrapper>
 
           {checkMenu('enableDisableEmployee,deleteEmployee') && (
-            <Dropdown
-              overlay={this._menu()}
-              getPopupContainer={() => document.getElementById('page-content')}
-            >
+            <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
               <Button style={{ marginLeft: 10 }}>
                 <FormattedMessage id="product.batchOperation" />
                 <Icon type="down" />
@@ -126,13 +118,13 @@ export default class ButtonGroup extends React.Component<any, any> {
           </AuthWrapper>
         </Menu.Item>
 
-        <Menu.Item key={3}>
+        {/*<Menu.Item key={3}>
           <AuthWrapper functionName={'f_batch_ajust_department'}>
             <a href="javascript:void(0);" onClick={() => this._batchAdjust()}>
               Adjust group
             </a>
           </AuthWrapper>
-        </Menu.Item>
+        </Menu.Item>*/}
 
         {/* <Menu.Item key={4}>
           <AuthWrapper functionName={'f_batch_set_employee'}>
@@ -187,11 +179,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm(
-      'Batch Activation',
-      'Are you sure to activate the selected employee?',
-      onBatchEnable
-    );
+    this.showConfirm('Batch Activation', 'Are you sure to activate the selected employee?', onBatchEnable);
   };
 
   _batchDisable = () => {
@@ -209,11 +197,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm(
-      'Batch Deletion',
-      'Are you sure to delete the selected employee and his account? Cannot log in after deleting。',
-      onBatchDelete
-    );
+    this.showConfirm('Batch Deletion', 'Are you sure to delete the selected employee and his account? Cannot log in after deleting。', onBatchDelete);
   };
 
   _batchAdjust = () => {
@@ -242,11 +226,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm(
-      'Set as salesperson in batch',
-      'Salespersons can bind members, and can only view the data related to their members to determine as salespersons?',
-      onBatchSetEmployee
-    );
+    this.showConfirm('Set as salesperson in batch', 'Salespersons can bind members, and can only view the data related to their members to determine as salespersons?', onBatchSetEmployee);
   };
 
   _batchSetLeave = () => {
@@ -255,11 +235,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm(
-      'Bulk set to leave',
-      'After set to leave, employees can only view and delete, if you need to hand over, please operate in advance',
-      onBatchDissmiss
-    );
+    this.showConfirm('Bulk set to leave', 'After set to leave, employees can only view and delete, if you need to hand over, please operate in advance', onBatchDissmiss);
   };
 
   _batchActive = () => {
@@ -268,11 +244,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       message.error('Please select the row to operate');
       return;
     }
-    this.showConfirm(
-      'Member account activation',
-      'Activating a member account will create a mall account for the selected employee based on the employee’s mobile phone number, and send a text message to confirm activation?',
-      onBatchActivateAccount
-    );
+    this.showConfirm('Member account activation', 'Activating a member account will create a mall account for the selected employee based on the employee’s mobile phone number, and send a text message to confirm activation?', onBatchActivateAccount);
   };
 
   showConfirm(title: string, content: string, onOk: Function) {

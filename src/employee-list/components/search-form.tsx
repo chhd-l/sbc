@@ -61,7 +61,7 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="8">
+          {/*<Col span="8">
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="employeeNo" />}
@@ -74,7 +74,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               />
             </FormItem>
-          </Col>
+          </Col>*/}
 
           {/* <FormItem>
           <Input
@@ -123,9 +123,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label={<FormattedMessage id="status" />}
                 // style={{ width: 300 }}
                 defaultValue={null}
@@ -205,13 +203,7 @@ export default class SearchForm extends React.Component<any, any> {
 
           <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
-              <Button
-                icon="search"
-                type="primary"
-                shape="round"
-                onClick={() => onSearch()}
-                htmlType="submit"
-              >
+              <Button icon="search" type="primary" shape="round" onClick={() => onSearch()} htmlType="submit">
                 <span>
                   <FormattedMessage id="search" />
                 </span>

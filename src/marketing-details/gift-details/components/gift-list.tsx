@@ -45,13 +45,7 @@ export default class GiftList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      levelList,
-      giftList,
-      brands,
-      cates,
-      subType
-    } = this.props.relaxProps;
+    const { levelList, giftList, brands, cates, subType } = this.props.relaxProps;
 
     let skuList = fromJS(giftList);
     let brandList = fromJS(brands ? brands : []);
@@ -60,9 +54,7 @@ export default class GiftList extends React.Component<any, any> {
       level = level.set(
         'fullGiftDetailList',
         level.get('fullGiftDetailList').map((gift) => {
-          const sku = skuList.find(
-            (s) => s.get('goodsInfoId') === gift.get('productId')
-          );
+          const sku = skuList.find((s) => s.get('goodsInfoId') === gift.get('productId'));
           gift = gift.set('sku', sku);
 
           const cId = sku.get('cateId');
@@ -86,75 +78,20 @@ export default class GiftList extends React.Component<any, any> {
                 <Col span={24}>
                   <span>Rules:</span>Full
                   {level.fullAmount ? level.fullAmount : level.fullCount}
-                  {subType == '4'
-                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)
-                    : 'Items'}{' '}
-                  {level.giftType == '1'
-                    ? 'An optional one'
-                    : 'The default all give'}
+                  {subType == '4' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'Items'} {level.giftType == '1' ? 'An optional one' : 'The default all give'}
                 </Col>
               </Row>
             </GreyBg>
 
-            <Table
-              dataSource={level.fullGiftDetailList}
-              pagination={false}
-              rowKey="giftDetailId"
-            >
-              <Column
-                width="10%"
-                title="SKU Code"
-                key="goodsInfoNo"
-                render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>}
-              />
-              <Column
-                width="25%"
-                title="Product Name"
-                key="goodsInfoName"
-                render={(rowInfo) => <div>{rowInfo.sku.goodsInfoName}</div>}
-              />
-              <Column
-                width="10%"
-                title="Specification"
-                key="specText"
-                render={(rowInfo) => (
-                  <div>{rowInfo.sku.specText ? rowInfo.sku.specText : '-'}</div>
-                )}
-              />
-              <Column
-                width="12%"
-                title="Category"
-                key="cateName"
-                render={(rowInfo) => (
-                  <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>
-                )}
-              />
-              <Column
-                width="10%"
-                title="Brand"
-                key="brandName"
-                render={(rowInfo) => (
-                  <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>
-                )}
-              />
-              <Column
-                width="12%"
-                key="priceType"
-                title={'Price'}
-                render={(rowInfo) => <div>{rowInfo.sku.salePrice}</div>}
-              />
-              <Column
-                width="8%"
-                title="Inventory"
-                key="stock"
-                render={(rowInfo) => <div>{rowInfo.sku.stock}</div>}
-              />
-              <Column
-                width="15%"
-                title="Give the number"
-                key="productNum"
-                dataIndex="productNum"
-              />
+            <Table dataSource={level.fullGiftDetailList} pagination={false} rowKey="giftDetailId">
+              <Column width="10%" title="SKU Code" key="goodsInfoNo" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>} />
+              <Column width="25%" title="Product Name" key="goodsInfoName" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoName}</div>} />
+              <Column width="10%" title="Specification" key="specText" render={(rowInfo) => <div>{rowInfo.sku.specText ? rowInfo.sku.specText : '-'}</div>} />
+              <Column width="12%" title="Category" key="cateName" render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>} />
+              <Column width="10%" title="Brand" key="brandName" render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>} />
+              <Column width="12%" key="priceType" title={'Price'} render={(rowInfo) => <div>{rowInfo.sku.salePrice}</div>} />
+              <Column width="8%" title="Inventory" key="stock" render={(rowInfo) => <div>{rowInfo.sku.stock}</div>} />
+              <Column width="15%" title="Give the number" key="productNum" dataIndex="productNum" />
             </Table>
           </div>
         ))}

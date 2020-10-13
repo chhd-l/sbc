@@ -16,7 +16,6 @@ export default class Main extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillMount() {
-    console.log(this.props.location);
     if (this.props.location.pathname != '/implicit/callback') {
       Fetch('/baseConfig').then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {

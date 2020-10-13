@@ -13,6 +13,7 @@ import EmployeeConnectModal from './components/employee-connect-modal';
 import EmployeeAdjustModal from './components/employee-adjust-modal';
 import DepartTree from './components/depart-tree';
 import { FormattedMessage } from 'react-intl';
+import { bool } from 'prop-types';
 
 const WrapperForm = Form.create()(SearchForm as any);
 const ModalForm = Form.create()(OperateModal as any);
@@ -48,21 +49,11 @@ export default class EmployeeList extends React.Component<any, any> {
           </div>
           <div className="container">
             <Row>
-              <Col span={3} className="userDepartTree">
-                <p
-                  style={Object.assign(
-                    { cursor: 'pointer' },
-                    this.state.click ? { color: '#F56C1D' } : {}
-                  )}
-                  onClick={() => this._showAll()}
-                >
-                  <FormattedMessage id="allDepartment" />{' '}
-                  {`${totolEmployeeNum}`}
+              <Col span={3} className="userDepartTree" style={{ paddingTop: 15, fontSize: 16, color: '#666666', fontWeight: 'bold' }}>
+                <p style={Object.assign({ cursor: 'pointer' }, this.state.click ? { color: '#F56C1D' } : {})} onClick={() => this._showAll()}>
+                  <FormattedMessage id="allDepartment" /> {`${totolEmployeeNum}`}
                 </p>
-                {this.store.state().get('departTree').size > 0 &&
-                  this.store.state().get('defaultExpandedKeys').length > 0 && (
-                    <DepartTree />
-                  )}
+                {this.store.state().get('departTree').size > 0 && this.store.state().get('defaultExpandedKeys').length > 0 && <DepartTree />}
               </Col>
               <Col span={21}>
                 <List />
@@ -100,9 +91,7 @@ export default class EmployeeList extends React.Component<any, any> {
       () => {
         this.store.toggleClick();
         if (this.state.click) {
-          this.store.lastDepartmentIds(
-            this.store.state().get('searchForm').get('departmentIds')
-          );
+          this.store.lastDepartmentIds(this.store.state().get('searchForm').get('departmentIds'));
           this.store.onFormChange({
             field: 'departmentIds',
             value: []

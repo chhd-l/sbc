@@ -23,11 +23,7 @@ export default class DepartTree extends React.Component<any, any> {
     const { departTree, defaultExpandedKeys } = this.props.relaxProps;
     return (
       <div id="organization">
-        <Tree
-          defaultExpandedKeys={defaultExpandedKeys}
-          style={{}}
-          onSelect={this.onChange}
-        >
+        <Tree defaultExpandedKeys={defaultExpandedKeys} style={{ padding: 6, fontWeight: 100 }} onSelect={this.onChange}>
           {this._loop(departTree)}
         </Tree>
       </div>
@@ -63,9 +59,7 @@ export default class DepartTree extends React.Component<any, any> {
       pre.push(current);
       //筛选出目标的子部门
       departList
-        .filter((vo) =>
-          vo.get('parentDepartmentIds').split('|').includes(current)
-        )
+        .filter((vo) => vo.get('parentDepartmentIds').split('|').includes(current))
         .map((target) => {
           pre.push(target.get('departmentId').toString());
         });
@@ -79,11 +73,7 @@ export default class DepartTree extends React.Component<any, any> {
       if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-          <TreeNode
-            value={dep.get('departmentId')}
-            key={dep.get('departmentId')}
-            title={`${dep.get('departmentName')} (${dep.get('employeeNum')})`}
-          >
+          <TreeNode value={dep.get('departmentId')} key={dep.get('departmentId')} title={`${dep.get('departmentName')} (${dep.get('employeeNum')})`}>
             {this._loop(childDeparts)}
           </TreeNode>
         );

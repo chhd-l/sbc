@@ -73,35 +73,30 @@ class RejectForm extends React.Component<any, any> {
                 required: true,
                 message: <FormattedMessage id="order.rejectionReasonTip" />
               },
-              { validator: this.checkComment }
+              {
+                max: 100,
+                message: 'Please input less than 100 characters'
+              }
+              // { validator: this.checkComment }
             ]
-          })(
-            <FormattedMessage id="order.rejectionReasonTip">
-              {(txt) => (
-                <Input.TextArea
-                  placeholder={txt.toString()}
-                  autosize={{ minRows: 4, maxRows: 4 }}
-                />
-              )}
-            </FormattedMessage>
-          )}
+          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
   }
 
-  checkComment = (_rule, value, callback) => {
-    if (!value) {
-      callback();
-      return;
-    }
+  // checkComment = (_rule, value, callback) => {
+  //   if (!value) {
+  //     callback();
+  //     return;
+  //   }
 
-    if (value.length > 100) {
-      callback(new Error('Please input less than 100 characters'));
-      return;
-    }
-    callback();
-  };
+  //   if (value.length > 100) {
+  //     callback(new Error('Please input less than 100 characters'));
+  //     return;
+  //   }
+  //   callback();
+  // };
 }
 
 const WrappedRejectForm = Form.create({})(RejectForm);
@@ -165,18 +160,7 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      onCheckedAll,
-      allChecked,
-      init,
-      currentPage,
-      orderRejectModalVisible,
-      onFindById
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, onFindById } = this.props.relaxProps;
 
     return (
       <div>
@@ -184,9 +168,7 @@ export default class ListView extends React.Component<any, any> {
           <div className="ant-table ant-table-large ant-table-scroll-position-left">
             <div className="ant-table-content">
               <div className="ant-table-body">
-                <table
-                  style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}
-                >
+                <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
                       {/*<th style={{ width: '5%' }}>
@@ -210,11 +192,7 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '7.1%' }}>Operation</th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {!loading && total == 0 ? (
@@ -238,14 +216,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal
-            maskClosable={false}
-            title={<FormattedMessage id="order.rejectionReasonTip" />}
-            visible={orderRejectModalVisible}
-            okText={<FormattedMessage id="save" />}
-            onOk={() => this._handleOK()}
-            onCancel={() => this._handleCancel()}
-          >
+          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -272,21 +243,13 @@ export default class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const {
-      onChecked,
-      onAudit,
-      verify,
-      needAudit,
-      onFindById
-    } = this.props.relaxProps;
+    const { onChecked, onAudit, verify, needAudit, onFindById } = this.props.relaxProps;
 
     let list = dataList.toJS();
     return list.map((v, index) => {
       const id = v.recommendationId;
       const createTime = v.createTime;
-      const img = v.recommendationGoodsInfoRels
-        ? v.recommendationGoodsInfoRels
-        : [];
+      const img = v.recommendationGoodsInfoRels ? v.recommendationGoodsInfoRels : [];
       const a = [{ a: 1 }, { b: 2 }];
       let amount = 0;
       for (let i = 0; i < img.length; ++i) {
@@ -297,10 +260,7 @@ export default class ListView extends React.Component<any, any> {
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={id}>
           <td colSpan={9} style={{ padding: 0 }}>
-            <table
-              className="ant-table-self"
-              style={{ border: '1px solid #ddd' }}
-            >
+            <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>
                 <tr>
                   <td colSpan={9} style={{ padding: 0, color: '#999' }}>
@@ -317,11 +277,7 @@ export default class ListView extends React.Component<any, any> {
                         <span> {id}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span>
-                          {' '}
-                          Created Time:{' '}
-                          {moment(v.createTime).format('YYYY-MM-DD')}
-                        </span>
+                        <span> Created Time: {moment(v.createTime).format('YYYY-MM-DD')}</span>
                       </div>
                     </div>
                   </td>
@@ -341,43 +297,19 @@ export default class ListView extends React.Component<any, any> {
                     }}
                   >
                     {img.map((item, index) => {
-                      return (
-                        <img
-                          key={index}
-                          src={item.goodsInfo.goodsInfoImg}
-                          width="40"
-                        />
-                      );
+                      return <img key={index} src={item.goodsInfo.goodsInfoImg} width="40" />;
                     })}
                   </td>
-                  <td style={{ width: '15.4%' }}>
-                    {v.consumerLastName != null
-                      ? v.consumerFirstName + ' ' + v.consumerLastName
-                      : '--'}
-                  </td>
-                  <td style={{ width: '18%' }}>
-                    {v.consumerEmail != null ? v.consumerEmail : '--'}
-                  </td>
+                  <td style={{ width: '15.4%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
+                  <td style={{ width: '18%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
                   <td style={{ width: '14%' }}>
                     {v.recommendationGoodsInfoRels.reduce((sum, item) => {
-                      let a =
-                        Number(sum) +
-                        Number(
-                          item.goodsInfo.marketPrice * item.recommendationNumber
-                        );
+                      let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);
                       return a.toFixed(2);
                     }, 0)}
                   </td>
-                  <td style={{ width: '13%' }}>
-                    {v.linkStatus != null
-                      ? v.linkStatus == 0
-                        ? 'Valid'
-                        : 'Invalid'
-                      : '--'}
-                  </td>
-                  <td style={{ width: '15.4%' }}>
-                    {v.prescriberId != null ? v.prescriberName : '--'}
-                  </td>
+                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
+                  <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>
                   <td
                     style={{
                       width: '10.2%',

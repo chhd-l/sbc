@@ -75,11 +75,11 @@ class DepartmentList extends React.Component<any, any> {
       key: 'departmentName',
       className: 'namerow'
     },
-    {
+    /*{
       title: <FormattedMessage id="supervivor" />,
       key: 'employeeName',
       render: (rowInfo) => this._setDirector(rowInfo)
-    },
+    },*/
     {
       title: <FormattedMessage id="employeeNumber" />,
       dataIndex: 'employeeNum',
@@ -97,16 +97,7 @@ class DepartmentList extends React.Component<any, any> {
       <AuthWrapper functionName={'f_department_modify_leader'}>
         <a
           style={styles.edit}
-          onClick={this._showLeadrModal.bind(
-            this,
-            rowInfo.get('departmentId'),
-            rowInfo.get('departmentName'),
-            rowInfo.get('parentDepartmentId'),
-            rowInfo.get('parentDepartmentIds'),
-            rowInfo.get('employeeId'),
-            rowInfo.get('employeeName'),
-            rowInfo.get('employeeNum')
-          )}
+          onClick={this._showLeadrModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'), rowInfo.get('parentDepartmentIds'), rowInfo.get('employeeId'), rowInfo.get('employeeName'), rowInfo.get('employeeNum'))}
         >
           <Icon type="edit" />
           {rowInfo.get('employeeName')}
@@ -115,19 +106,7 @@ class DepartmentList extends React.Component<any, any> {
     ) : (
       <AuthWrapper functionName={'f_department_modify_leader'}>
         <Tooltip placement="top" title="Set supervisor">
-          <a
-            style={styles.edit}
-            onClick={this._showLeadrModal.bind(
-              this,
-              rowInfo.get('departmentId'),
-              rowInfo.get('departmentName'),
-              rowInfo.get('parentDepartmentId'),
-              rowInfo.get('parentDepartmentIds'),
-              '',
-              '',
-              rowInfo.get('employeeNum')
-            )}
-          >
+          <a style={styles.edit} onClick={this._showLeadrModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'), rowInfo.get('parentDepartmentIds'), '', '', rowInfo.get('employeeNum'))}>
             <Icon type="edit" />
           </a>
         </Tooltip>
@@ -144,44 +123,19 @@ class DepartmentList extends React.Component<any, any> {
       <div>
         <AuthWrapper functionName={'f_department_add_node'}>
           <Tooltip placement="top" title="Add subdivisions">
-            <a
-              style={styles.edit}
-              onClick={this._addChildrenCate.bind(
-                this,
-                rowInfo.get('departmentId'),
-                rowInfo.get('departmentName'),
-                rowInfo.get('departmentGrade')
-              )}
-              className="iconfont iconbtn-addsubvisionsaddcategory"
-            ></a>
+            <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('departmentGrade'))} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>
           <Tooltip placement="top" title="Edit">
-            <a
-              style={styles.edit}
-              onClick={this._showEditModal.bind(
-                this,
-                rowInfo.get('departmentId'),
-                rowInfo.get('departmentName'),
-                rowInfo.get('parentDepartmentId')
-              )}
-              className="iconfont iconEdit"
-            >
+            <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'))} className="iconfont iconEdit">
               {/*<FormattedMessage id="edit" />*/}
             </a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_delete'}>
           <Tooltip placement="top" title="Delete">
-            <a
-              onClick={this._delete.bind(
-                this,
-                rowInfo.get('departmentId'),
-                rowInfo.get('employeeNum')
-              )}
-              className="iconfont iconDelete"
-            >
+            <a onClick={this._delete.bind(this, rowInfo.get('departmentId'), rowInfo.get('employeeNum'))} className="iconfont iconDelete">
               {/*<FormattedMessage id="delete" />*/}
             </a>
           </Tooltip>
@@ -193,15 +147,7 @@ class DepartmentList extends React.Component<any, any> {
   /**
    * 显示修改弹窗
    */
-  _showLeadrModal = (
-    departmentId: string,
-    departmentName: string,
-    parentDepartmentId: string,
-    parentDepartmentIds: string,
-    oldEmployeeId: string,
-    oldEmployeeName: string,
-    employeeNum: number
-  ) => {
+  _showLeadrModal = (departmentId: string, departmentName: string, parentDepartmentId: string, parentDepartmentIds: string, oldEmployeeId: string, oldEmployeeName: string, employeeNum: number) => {
     if (employeeNum > 0) {
       const { showLeaderModal, allDepartments } = this.props.relaxProps;
       let departmentParentName = '';
@@ -209,25 +155,17 @@ class DepartmentList extends React.Component<any, any> {
         let parentIds = parentDepartmentIds.split('|');
         for (let i = 1; i < parentIds.length; i++) {
           if (parentIds[i] != '0' && parentIds[i] != '') {
-            const parent = allDepartments
-              .filter((item) => item.get('departmentId') == parentIds[i])
-              .get(0);
-            departmentParentName = departmentParentName
-              ? departmentParentName + '-' + parent.get('departmentName')
-              : parent.get('departmentName');
+            const parent = allDepartments.filter((item) => item.get('departmentId') == parentIds[i]).get(0);
+            departmentParentName = departmentParentName ? departmentParentName + '-' + parent.get('departmentName') : parent.get('departmentName');
           }
         }
       }
 
-      departmentParentName = departmentParentName
-        ? departmentParentName + '-' + departmentName
-        : departmentName;
+      departmentParentName = departmentParentName ? departmentParentName + '-' + departmentName : departmentName;
 
       parentDepartmentIds = parentDepartmentIds + departmentId + '|';
 
-      let nodeDepartmentIds = allDepartments.filter((item) =>
-        item.get('parentDepartmentIds').startsWith(parentDepartmentIds)
-      );
+      let nodeDepartmentIds = allDepartments.filter((item) => item.get('parentDepartmentIds').startsWith(parentDepartmentIds));
 
       let department = Map({
         departmentId,
@@ -240,8 +178,7 @@ class DepartmentList extends React.Component<any, any> {
     } else {
       Modal.warning({
         title: 'Prompt',
-        content:
-          'If there is no employee in the current department or sub-department, no supervisor can be appointed.',
+        content: 'If there is no employee in the current department or sub-department, no supervisor can be appointed.',
         okText: 'Shut Down'
       });
     }
@@ -250,18 +187,12 @@ class DepartmentList extends React.Component<any, any> {
   /**
    * 显示修改弹窗
    */
-  _showEditModal = (
-    departmentId: string,
-    departmentName: string,
-    parentDepartmentId: string
-  ) => {
+  _showEditModal = (departmentId: string, departmentName: string, parentDepartmentId: string) => {
     const { showEditModal, allDepartments } = this.props.relaxProps;
     let departmentParentName = '';
     let departmentGrade = 0;
     if (parentDepartmentId != '0') {
-      const parent = allDepartments
-        .filter((item) => item.get('departmentId') === parentDepartmentId)
-        .get(0);
+      const parent = allDepartments.filter((item) => item.get('departmentId') === parentDepartmentId).get(0);
       departmentParentName = parent.get('departmentName');
       departmentGrade = parent.get('departmentGrade');
     }
@@ -282,8 +213,7 @@ class DepartmentList extends React.Component<any, any> {
     if (employeeNum > 0) {
       Modal.warning({
         title: 'Prompt',
-        content:
-          'The existing staff in the current department and sub-department cannot be deleted.',
+        content: 'The existing staff in the current department and sub-department cannot be deleted.',
         okText: 'Shut Down'
       });
     } else {
@@ -299,8 +229,7 @@ class DepartmentList extends React.Component<any, any> {
 
     confirm({
       title: 'Prompt',
-      content:
-        'Delete the current department, and all subdepartments under that department will also be deleted. Are you sure you want to delete?',
+      content: 'Delete the current department, and all subdepartments under that department will also be deleted. Are you sure you want to delete?',
       okText: 'Confirm',
       cancelText: 'Close',
       iconType: 'exclamation-circle',
@@ -313,16 +242,9 @@ class DepartmentList extends React.Component<any, any> {
   /**
    * 添加子类目
    */
-  _addChildrenCate = (
-    parentDepartmentId: string,
-    departmentParentName: string,
-    departmentGrade: number
-  ) => {
+  _addChildrenCate = (parentDepartmentId: string, departmentParentName: string, departmentGrade: number) => {
     const { showEditModal } = this.props.relaxProps;
-    showEditModal(
-      Map({ parentDepartmentId, departmentParentName, departmentGrade }),
-      true
-    );
+    showEditModal(Map({ parentDepartmentId, departmentParentName, departmentGrade }), true);
   };
 
   /**
@@ -337,13 +259,7 @@ class DepartmentList extends React.Component<any, any> {
   };
 }
 
-let _dragDirection = (
-  dragIndex,
-  hoverIndex,
-  initialClientOffset,
-  clientOffset,
-  sourceClientOffset
-) => {
+let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) => {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
@@ -355,27 +271,11 @@ let _dragDirection = (
 };
 
 let _BodyRow = (props) => {
-  const {
-    isOver,
-    connectDragSource,
-    connectDropTarget,
-    moveRow,
-    dragRow,
-    clientOffset,
-    sourceClientOffset,
-    initialClientOffset,
-    ...restProps
-  } = props;
+  const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = props;
   const style = { ...restProps.style, cursor: 'move' };
   let className = restProps.className;
   if (isOver && initialClientOffset) {
-    const direction = _dragDirection(
-      dragRow.index,
-      restProps.index,
-      initialClientOffset,
-      clientOffset,
-      sourceClientOffset
-    );
+    const direction = _dragDirection(dragRow.index, restProps.index, initialClientOffset, clientOffset, sourceClientOffset);
     if (direction === 'downward') {
       className += ' drop-over-downward';
     }
@@ -383,9 +283,7 @@ let _BodyRow = (props) => {
       className += ' drop-over-upward';
     }
   }
-  return connectDragSource(
-    connectDropTarget(<tr {...restProps} className={className} style={style} />)
-  );
+  return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
 };
 
 const _rowSource = {

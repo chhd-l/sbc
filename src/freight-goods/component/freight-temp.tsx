@@ -1,31 +1,7 @@
 import React from 'react';
-import {
-  goodsFreeSaveRequestsQL,
-  goodsExpressSaveRequestsQL,
-  goodsExpressFormQL,
-  goodsFreeFormQL
-} from '../ql';
-import {
-  Form,
-  Input,
-  Radio,
-  TreeSelect,
-  Button,
-  Table,
-  Checkbox,
-  Icon,
-  Select,
-  Modal
-} from 'antd';
-import {
-  QMMethod,
-  FindArea,
-  ValidConst,
-  AreaSelect,
-  noop,
-  history,
-  cache
-} from 'qmkit';
+import { goodsFreeSaveRequestsQL, goodsExpressSaveRequestsQL, goodsExpressFormQL, goodsFreeFormQL } from '../ql';
+import { Form, Input, Radio, TreeSelect, Button, Table, Checkbox, Icon, Select, Modal } from 'antd';
+import { QMMethod, FindArea, ValidConst, AreaSelect, noop, history, cache } from 'qmkit';
 import { fromJS } from 'immutable';
 import styled from 'styled-components';
 const FormDiv = styled.div`
@@ -285,14 +261,7 @@ export default class FreightTemp extends React.Component<any, any> {
               rules: [
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorTrimMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      'Template name',
-                      2,
-                      20
-                    );
+                    QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Template name', 2, 20);
                   }
                 }
               ]
@@ -312,11 +281,7 @@ export default class FreightTemp extends React.Component<any, any> {
             )}
           </FormItem>
           <div className="areaBox">
-            <FormItem
-              {...formItemLayout}
-              required={true}
-              label="Delivery address"
-            >
+            <FormItem {...formItemLayout} required={true} label="Delivery address">
               {getFieldDecorator('area', {
                 initialValue: aIds,
                 rules: [
@@ -329,39 +294,22 @@ export default class FreightTemp extends React.Component<any, any> {
                 <AreaSelect
                   // placeholder="请选择发货地址"
                   placeholder="Please select the shipping address"
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
+                  getPopupContainer={() => document.getElementById('page-content')}
                   onChange={(value) => areaSave(value)}
                 />
               )}
             </FormItem>
           </div>
 
-          <FormItem
-            {...formItemLayout}
-            label="Who pay the freight"
-            required={true}
-          >
-            <RadioGroup
-              onChange={(e: any) => this._changeFreightFreeFlag(e.target.value)}
-              value={freightFreeFlag}
-            >
+          <FormItem {...formItemLayout} label="Who pay the freight" required={true}>
+            <RadioGroup onChange={(e: any) => this._changeFreightFreeFlag(e.target.value)} value={freightFreeFlag}>
               <Radio value={0}>Buyer</Radio>
               <Radio value={1}>Seller</Radio>
             </RadioGroup>
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label="Pricing based on"
-            required={true}
-          >
-            <RadioGroup
-              disabled={freightFreeFlag == 1}
-              value={valuationType}
-              onChange={(e: any) => this._changeFieldValue(e.target.value)}
-            >
+          <FormItem {...formItemLayout} label="Pricing based on" required={true}>
+            <RadioGroup disabled={freightFreeFlag == 1} value={valuationType} onChange={(e: any) => this._changeFieldValue(e.target.value)}>
               <Radio value={0}>Quantity</Radio>
               <Radio value={1}>Weight</Radio>
               <Radio value={2}>Volume</Radio>
@@ -370,9 +318,7 @@ export default class FreightTemp extends React.Component<any, any> {
 
           <FormItem {...formItemLayout} label="Shipping method" required={true}>
             <Radio defaultChecked>Express delivery</Radio>
-            <label style={{ color: '#b5b5b5' }}>
-              Please set shipping template for express delivery
-            </label>
+            <label style={{ color: '#b5b5b5' }}>Please set shipping template for express delivery</label>
             <Table
               rowKey="id"
               bordered={true}
@@ -387,10 +333,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     return record.defaultFlag == 1 || index == 0 ? (
                       <div>
                         {/* 默认 */}
-                        <span style={{ color: '#b5b5b5' }}>
-                          Except for designated regions, the freight rates in
-                          the rest of the regions are "default freight rates".
-                        </span>
+                        <span style={{ color: '#b5b5b5' }}>Except for designated regions, the freight rates in the rest of the regions are "default freight rates".</span>
                       </div>
                     ) : (
                       <div className="treeSelectBox">
@@ -410,11 +353,7 @@ export default class FreightTemp extends React.Component<any, any> {
                               onChange={(value, label) => {
                                 changeAreaIds(record.id, value, label);
                               }}
-                              filterTreeNode={(input, treeNode) =>
-                                treeNode.props.title
-                                  .toLowerCase()
-                                  .indexOf(input.toLowerCase()) >= 0
-                              }
+                              filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             />
                           )}
                         </FormItem>
@@ -430,58 +369,26 @@ export default class FreightTemp extends React.Component<any, any> {
                   render: (text, record) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(
-                          `freightStartNum${record.id}${freightFreeFlag}`,
-                          {
-                            initialValue: text,
-                            rules: this._rules(valuationType, 'first', false)
-                          }
-                        )(
-                          <Input
-                            disabled={freightFreeFlag == 1}
-                            placeholder={PLACE_HOLDER[valuationType].unit}
-                            onChange={(e) =>
-                              goodsExpressSaveRequestsFieldValue(
-                                record.id,
-                                'freightStartNum',
-                                e.target.value
-                              )
-                            }
-                          />
-                        )}
+                        {getFieldDecorator(`freightStartNum${record.id}${freightFreeFlag}`, {
+                          initialValue: text,
+                          rules: this._rules(valuationType, 'first', false)
+                        })(<Input disabled={freightFreeFlag == 1} placeholder={PLACE_HOLDER[valuationType].unit} onChange={(e) => goodsExpressSaveRequestsFieldValue(record.id, 'freightStartNum', e.target.value)} />)}
                       </FormItem>
                     );
                   }
                 },
                 {
-                  title: `Down payment (${sessionStorage.getItem(
-                    cache.SYSTEM_GET_CONFIG_NAME
-                  )})`,
+                  title: `Down payment (${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`,
                   dataIndex: 'freightStartPrice',
                   key: 'freightStartPrice',
                   width: '13%',
                   render: (text, record) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(
-                          `freightStartPrice${record.id}${freightFreeFlag}`,
-                          {
-                            initialValue: text,
-                            rules: this._rules(valuationType, '', true)
-                          }
-                        )(
-                          <Input
-                            disabled={freightFreeFlag == 1}
-                            placeholder={PLACE_HOLDER[valuationType].money}
-                            onChange={(e) =>
-                              goodsExpressSaveRequestsFieldValue(
-                                record.id,
-                                'freightStartPrice',
-                                e.target.value
-                              )
-                            }
-                          />
-                        )}
+                        {getFieldDecorator(`freightStartPrice${record.id}${freightFreeFlag}`, {
+                          initialValue: text,
+                          rules: this._rules(valuationType, '', true)
+                        })(<Input disabled={freightFreeFlag == 1} placeholder={PLACE_HOLDER[valuationType].money} onChange={(e) => goodsExpressSaveRequestsFieldValue(record.id, 'freightStartPrice', e.target.value)} />)}
                       </FormItem>
                     );
                   }
@@ -494,58 +401,26 @@ export default class FreightTemp extends React.Component<any, any> {
                   render: (text, record) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(
-                          `freightPlusNum${record.id}${freightFreeFlag}`,
-                          {
-                            initialValue: text,
-                            rules: this._rules(valuationType, 'Renewal', false)
-                          }
-                        )(
-                          <Input
-                            disabled={freightFreeFlag == 1}
-                            placeholder={PLACE_HOLDER[valuationType].unit}
-                            onChange={(e) =>
-                              goodsExpressSaveRequestsFieldValue(
-                                record.id,
-                                'freightPlusNum',
-                                e.target.value
-                              )
-                            }
-                          />
-                        )}
+                        {getFieldDecorator(`freightPlusNum${record.id}${freightFreeFlag}`, {
+                          initialValue: text,
+                          rules: this._rules(valuationType, 'Renewal', false)
+                        })(<Input disabled={freightFreeFlag == 1} placeholder={PLACE_HOLDER[valuationType].unit} onChange={(e) => goodsExpressSaveRequestsFieldValue(record.id, 'freightPlusNum', e.target.value)} />)}
                       </FormItem>
                     );
                   }
                 },
                 {
-                  title: `Renewal fee (${sessionStorage.getItem(
-                    cache.SYSTEM_GET_CONFIG_NAME
-                  )})`,
+                  title: `Renewal fee (${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`,
                   dataIndex: 'freightPlusPrice',
                   key: 'freightPlusPrice',
                   width: '15%',
                   render: (text, record) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(
-                          `freightPlusPrice${record.id}${freightFreeFlag}`,
-                          {
-                            initialValue: text,
-                            rules: this._rules(valuationType, '', true)
-                          }
-                        )(
-                          <Input
-                            disabled={freightFreeFlag == 1}
-                            placeholder={PLACE_HOLDER[valuationType].money}
-                            onChange={(e) =>
-                              goodsExpressSaveRequestsFieldValue(
-                                record.id,
-                                'freightPlusPrice',
-                                e.target.value
-                              )
-                            }
-                          />
-                        )}
+                        {getFieldDecorator(`freightPlusPrice${record.id}${freightFreeFlag}`, {
+                          initialValue: text,
+                          rules: this._rules(valuationType, '', true)
+                        })(<Input disabled={freightFreeFlag == 1} placeholder={PLACE_HOLDER[valuationType].money} onChange={(e) => goodsExpressSaveRequestsFieldValue(record.id, 'freightPlusPrice', e.target.value)} />)}
                       </FormItem>
                     );
                   }
@@ -557,34 +432,16 @@ export default class FreightTemp extends React.Component<any, any> {
                   width: '13%',
                   render: (_text, record, index) => {
                     return record.defaultFlag == 1 || index == 0 ? (
-                      <Icon
-                        type="plus"
-                        onClick={() =>
-                          freightFreeFlag == 1 ? noop : this._shippingTypeAdd()
-                        }
-                        style={
-                          freightFreeFlag == 1
-                            ? styles.disabledIcon
-                            : styles.icon
-                        }
-                      />
+                      <Icon type="plus" onClick={() => (freightFreeFlag == 1 ? noop : this._shippingTypeAdd())} style={freightFreeFlag == 1 ? styles.disabledIcon : styles.icon} />
                     ) : (
-                      <Icon
-                        type="minus"
-                        onClick={() => shippingTypeSub(record.id)}
-                        style={styles.icon}
-                      />
+                      <Icon type="minus" onClick={() => shippingTypeSub(record.id)} style={styles.icon} />
                     );
                   }
                 }
               ]}
               dataSource={goodsExpressSaveRequests}
             />
-            <Checkbox
-              disabled={freightFreeFlag == 1}
-              checked={specifyTermFlag == 1}
-              onChange={(e) => changeSpecifyTermFlag(e.target.checked ? 1 : 0)}
-            >
+            <Checkbox disabled={freightFreeFlag == 1} checked={specifyTermFlag == 1} onChange={(e) => changeSpecifyTermFlag(e.target.checked ? 1 : 0)}>
               Free shipping under certain shipping conditions
             </Checkbox>
             <Table
@@ -616,11 +473,7 @@ export default class FreightTemp extends React.Component<any, any> {
                               onChange={(value, label) => {
                                 changeFreeAreaIds(record.id, value, label);
                               }}
-                              filterTreeNode={(input, treeNode) =>
-                                treeNode.props.title
-                                  .toLowerCase()
-                                  .indexOf(input.toLowerCase()) >= 0
-                              }
+                              filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             />
                           )}
                         </FormItem>
@@ -657,13 +510,9 @@ export default class FreightTemp extends React.Component<any, any> {
                           }}
                           style={{ width: 110, marginTop: 3 }}
                         >
-                          <Option value="0">
-                            {FREIGHT_TEMP[valuationType].options}
-                          </Option>
+                          <Option value="0">{FREIGHT_TEMP[valuationType].options}</Option>
                           <Option value="1">Amount</Option>
-                          <Option value="2">
-                            {FREIGHT_TEMP[valuationType].options}+Amount
-                          </Option>
+                          <Option value="2">{FREIGHT_TEMP[valuationType].options}+Amount</Option>
                         </Select>
                         {this._freeConditions(valuationType, record)}
                       </div>
@@ -676,19 +525,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   key: 'operation',
                   width: '13%',
                   render: (_text, record, index) => {
-                    return index == 0 ? (
-                      <Icon
-                        type="plus"
-                        onClick={() => goodsFreeAdd()}
-                        style={styles.icon}
-                      />
-                    ) : (
-                      <Icon
-                        type="minus"
-                        onClick={() => goodsFreeSub(record.id)}
-                        style={styles.icon}
-                      />
-                    );
+                    return index == 0 ? <Icon type="plus" onClick={() => goodsFreeAdd()} style={styles.icon} /> : <Icon type="minus" onClick={() => goodsFreeSub(record.id)} style={styles.icon} />;
                   }
                 }
               ]}
@@ -696,11 +533,7 @@ export default class FreightTemp extends React.Component<any, any> {
             />
           </FormItem>
           <div className="bar-button">
-            <Button
-              onClick={() => this._save()}
-              type="primary"
-              style={{ marginRight: 10, marginLeft: 22 }}
-            >
+            <Button onClick={() => this._save()} type="primary" style={{ marginRight: 10, marginLeft: 22 }}>
               Save
             </Button>
             <Button onClick={() => history.push('/freight')}>Cancel</Button>
@@ -740,21 +573,8 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionOne',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
-              <span className="pl3">
-                {FREIGHT_TEMP[valuationType].unit} Free shipping
-              </span>
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionOne', e.target.value)} />)}
+              <span className="pl3">{FREIGHT_TEMP[valuationType].unit} Free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
@@ -766,21 +586,8 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionTwo',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
-              <span className="pl3">
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free shipping
-              </span>
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionTwo', e.target.value)} />)}
+              <span className="pl3">{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
@@ -792,42 +599,15 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionOne',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionOne', e.target.value)} />)}
             </FormItem>
-            <span className="pl3 pr3">
-              {FREIGHT_TEMP[valuationType].unit}, And full
-            </span>
+            <span className="pl3 pr3">{FREIGHT_TEMP[valuationType].unit}, And full</span>
             <FormItem>
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionTwo',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
-              <span className="pl3 pr3">
-                More than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free
-                shipping
-              </span>
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionTwo', e.target.value)} />)}
+              <span className="pl3 pr3">More than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} Free shipping</span>
             </FormItem>
           </div>
         );
@@ -842,21 +622,8 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionOne',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
-              <span className="pl3">
-                {FREIGHT_TEMP[valuationType].unit}Within free shipping
-              </span>
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionOne', e.target.value)} />)}
+              <span className="pl3">{FREIGHT_TEMP[valuationType].unit}Within free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
@@ -868,21 +635,8 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionTwo',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
-              <span>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free shipping
-              </span>
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionTwo', e.target.value)} />)}
+              <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free shipping</span>
             </InlineBDiv>
           </FormItem>
         );
@@ -894,44 +648,16 @@ export default class FreightTemp extends React.Component<any, any> {
               {getFieldDecorator(`conditionOne${record.id}`, {
                 initialValue: record.conditionOne,
                 rules: this._freeConditionRules(valuationType, false)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionOne',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionOne', e.target.value)} />)}
             </FormItem>
-            <span className="pl3 pr3">
-              {FREIGHT_TEMP[valuationType].unit} Within and full
-            </span>
+            <span className="pl3 pr3">{FREIGHT_TEMP[valuationType].unit} Within and full</span>
             <FormItem>
               {getFieldDecorator(`conditionTwo${record.id}`, {
                 initialValue: record.conditionTwo,
                 rules: this._freeConditionRules(valuationType, true)
-              })(
-                <Input
-                  style={{ width: 80, textAlign: 'center' }}
-                  onChange={(e) =>
-                    goodsFreeSaveRequestsFieldValue(
-                      record.id,
-                      'conditionTwo',
-                      e.target.value
-                    )
-                  }
-                />
-              )}
+              })(<Input style={{ width: 80, textAlign: 'center' }} onChange={(e) => goodsFreeSaveRequestsFieldValue(record.id, 'conditionTwo', e.target.value)} />)}
             </FormItem>
-            <span className="pl3">
-              {' '}
-              more than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free
-              shipping
-            </span>
+            <span className="pl3"> more than {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} free shipping</span>
           </div>
         );
       }
@@ -950,9 +676,7 @@ export default class FreightTemp extends React.Component<any, any> {
             validator: (_rule, value, callback) => {
               if (value || value == '0') {
                 if (!ValidConst.zeroPrice.test(value)) {
-                  callback(
-                    'Please fill in the legal amount with two decimal places'
-                  );
+                  callback('Please fill in the legal amount with two decimal places');
                 }
                 if (!(value < 10000 && value >= 0)) {
                   callback('The maximum value is 9999.99');
@@ -1128,8 +852,7 @@ export default class FreightTemp extends React.Component<any, any> {
     const { goodsExpressForm } = this.props.relaxProps;
     Confirm({
       title: 'prompt',
-      content:
-        'Switching the pricing method, the original freight setting cannot be restored, are you sure to continue?',
+      content: 'Switching the pricing method, the original freight setting cannot be restored, are you sure to continue?',
       iconType: 'exclamation-circle',
       onOk() {
         self.props.relaxProps.changeValuationType(value);
@@ -1142,11 +865,7 @@ export default class FreightTemp extends React.Component<any, any> {
    * 包邮条件更改
    */
   _conditionTypeChange = (id, value) => {
-    this.props.relaxProps.goodsFreeSaveRequestsFieldValue(
-      id,
-      'conditionType',
-      value
-    );
+    this.props.relaxProps.goodsFreeSaveRequestsFieldValue(id, 'conditionType', value);
     const { goodsFreeForm } = this.props.relaxProps;
     this.props.form.resetFields(goodsFreeForm);
   };
@@ -1156,18 +875,11 @@ export default class FreightTemp extends React.Component<any, any> {
    */
   _changeFreightFreeFlag = (value) => {
     const self = this;
-    const {
-      changeFieldValue,
-      changeFreightFree,
-      goodsExpressForm
-    } = this.props.relaxProps;
+    const { changeFieldValue, changeFreightFree, goodsExpressForm } = this.props.relaxProps;
     if (value == 1) {
       Confirm({
         title: 'prompt',
-        content:
-          'Switch the seller to bear the freight. The freight in all areas will be set to 0 ' +
-          `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` +
-          'and the original freight setting cannot be restored. Are you sure to continue?',
+        content: 'Switch the seller to bear the freight. The freight in all areas will be set to 0 ' + `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}` + 'and the original freight setting cannot be restored. Are you sure to continue?',
         iconType: 'exclamation-circle',
         onOk() {
           changeFieldValue({ field: 'freightFreeFlag', value });

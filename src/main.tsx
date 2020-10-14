@@ -16,7 +16,6 @@ export default class Main extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillMount() {
-    console.log(this.props.location);
     if (this.props.location.pathname != '/implicit/callback') {
       Fetch('/baseConfig').then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {
@@ -38,7 +37,7 @@ export default class Main extends React.Component<any, any> {
               sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (resIco.res as any).context.currency.valueEn); //货币符号
               sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (resIco.res as any).context.currency.name); //货币名称
               sessionStorage.setItem(cache.MAP_MODE, (resIco.res as any).context.storeVO.prescriberMap); //货币名称
-              sessionStorage.setItem(cache.CURRENT_YEAR, (resIco.res as any).context.currentYear); //年
+              sessionStorage.setItem(cache.CURRENT_YEAR, (resIco.res as any).context.currentDate); //年
             }
           }
         });

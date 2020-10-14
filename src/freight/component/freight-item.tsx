@@ -87,15 +87,7 @@ export default class FreightItem extends React.Component<any, any> {
   }
 
   render() {
-    let {
-      data,
-      title,
-      isDefault,
-      typeFlag,
-      valuationType,
-      freightId,
-      isStore
-    } = this.props;
+    let { data, title, isDefault, typeFlag, valuationType, freightId, isStore } = this.props;
     let columns = [
       {
         title: 'Courier',
@@ -123,9 +115,7 @@ export default class FreightItem extends React.Component<any, any> {
           width: '15%'
         },
         {
-          title: `Down Payment(${sessionStorage.getItem(
-            cache.SYSTEM_GET_CONFIG_NAME
-          )})`,
+          title: `Down Payment(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`,
           dataIndex: 'freightStartPrice',
           width: '15%'
         },
@@ -151,17 +141,13 @@ export default class FreightItem extends React.Component<any, any> {
             if (text == 0) {
               return (
                 <div>
-                  Order less than {QMFloat.addZero(record.satisfyPrice)}{' '}
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)},
-                  Shipping fee is {QMFloat.addZero(record.satisfyFreight)}{' '}
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                  Order less than {QMFloat.addZero(record.satisfyPrice)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, Shipping fee is {QMFloat.addZero(record.satisfyFreight)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </div>
               );
             } else {
               return (
                 <div>
-                  Fixed freight {QMFloat.addZero(record.fixedFreight)}{' '}
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}
+                  Fixed freight {QMFloat.addZero(record.fixedFreight)} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </div>
               );
             }
@@ -179,57 +165,36 @@ export default class FreightItem extends React.Component<any, any> {
         return (
           <div className="table-title-box">
             {title}
-            {!isStore &&
-              isDefault &&
-              '(The default template is used for products without freight template)'}
+            {!isStore && isDefault && '(The default template is used for products without freight template)'}
             <div className="operat-box">
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_temp_copy">
                   <Tooltip placement="top" title="Copy">
-                    <a
-                      href="javascript:void(0);"
-                      onClick={() => this._copy(freightId)}
-                    >
+                    <a href="javascript:void(0);" onClick={() => this._copy(freightId)}>
                       Copy
                     </a>
                   </Tooltip>
                 </AuthWrapper>
               )}
-              {((checkAuth('f_store_temp_edit') && isStore) ||
-                (checkAuth('f_goods_temp_edit') && !isStore)) && (
+              {((checkAuth('f_store_temp_edit') && isStore) || (checkAuth('f_goods_temp_edit') && !isStore)) && (
                 <Tooltip placement="top" title="Edit">
-                  <a
-                    href="#!"
-                    onClick={() => this._edit(freightId, isStore)}
-                    className="iconfont iconEdit"
-                  ></a>
+                  <a href="#!" onClick={() => this._edit(freightId, isStore)} className="iconfont iconEdit"></a>
                 </Tooltip>
               )}
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_rela_list">
                   <Tooltip placement="top" title="Related">
-                    <a
-                      href="#!"
-                      onClick={() =>
-                        history.push(`/freight-with-goods/${freightId}`)
-                      }
-                    >
+                    <a href="#!" onClick={() => history.push(`/freight-with-goods/${freightId}`)}>
                       Related
                     </a>
                   </Tooltip>
                 </AuthWrapper>
               )}
-              {!isDefault &&
-                ((checkAuth('f_store_temp_del') && isStore) ||
-                  (checkAuth('f_goods_temp_del') && !isStore)) && (
-                  <Tooltip placement="top" title="Delete">
-                    <a
-                      href="#!"
-                      onClick={() => this._del(freightId, isStore)}
-                      className="iconfont iconDelete"
-                    ></a>
-                  </Tooltip>
-                )}
+              {!isDefault && ((checkAuth('f_store_temp_del') && isStore) || (checkAuth('f_goods_temp_del') && !isStore)) && (
+                <Tooltip placement="top" title="Delete">
+                  <a href="#!" onClick={() => this._del(freightId, isStore)} className="iconfont iconDelete"></a>
+                </Tooltip>
+              )}
             </div>
           </div>
         );
@@ -237,10 +202,7 @@ export default class FreightItem extends React.Component<any, any> {
     } as any;
     return (
       <TableDiv>
-        <Table
-          rowKey={(record: any) => record.id || record.freightTempId}
-          {...params}
-        />
+        <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
       </TableDiv>
     );
   }

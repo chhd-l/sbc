@@ -122,20 +122,7 @@ export default class FreightTemp extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      freightTempName,
-      destinationArea,
-      freightType,
-      satisfyPrice,
-      satisfyFreight,
-      fixedFreight,
-      minimumDeliveryFee,
-      storeFreightFieldsValue,
-      selectedAreas,
-      destinationAreaName,
-      defaultFlag,
-      treeNode
-    } = this.props.relaxProps;
+    const { freightTempName, destinationArea, freightType, satisfyPrice, satisfyFreight, fixedFreight, minimumDeliveryFee, storeFreightFieldsValue, selectedAreas, destinationAreaName, defaultFlag, treeNode } = this.props.relaxProps;
     let treeData = treeNode ? treeNode.toJS() : [];
 
     const tProps = {
@@ -143,10 +130,7 @@ export default class FreightTemp extends React.Component<any, any> {
       onChange: this._changeArea,
       treeCheckable: true,
       showCheckedStrategy: SHOW_PARENT,
-      searchPlaceholder:
-        defaultFlag == 1
-          ? destinationAreaName.toJS().toString()
-          : 'Please select the region',
+      searchPlaceholder: defaultFlag == 1 ? destinationAreaName.toJS().toString() : 'Please select the region',
       dropdownStyle: { maxHeight: 400, overflow: 'auto' },
       disabled: defaultFlag == 1,
       style: {
@@ -164,14 +148,7 @@ export default class FreightTemp extends React.Component<any, any> {
               rules: [
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorTrimMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      'Template name',
-                      2,
-                      20
-                    );
+                    QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Template name', 2, 20);
                   }
                 }
               ]
@@ -203,23 +180,10 @@ export default class FreightTemp extends React.Component<any, any> {
                   message: 'Please select the city'
                 }
               ]
-            })(
-              <TreeSelect
-                {...tProps}
-                filterTreeNode={(input, treeNode) =>
-                  treeNode.props.title
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
-              />
-            )}
+            })(<TreeSelect {...tProps} filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="Charging rule" required={true}>
-            <RadioGroup
-              defaultValue={freightType}
-              value={freightType}
-              onChange={(e) => this._changeFreightType(e.target.value)}
-            >
+            <RadioGroup defaultValue={freightType} value={freightType} onChange={(e) => this._changeFreightType(e.target.value)}>
               <div className="radio-item">
                 <Radio value={0}>If orders less than </Radio>
                 <FormItem>
@@ -246,8 +210,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}, the
-                  freight would be
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, the freight would be
                 </span>
                 <FormItem>
                   {getFieldDecorator('satisfyFreight', {
@@ -265,12 +228,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
-                  Freight after meeting the conditions will be free.Order is
-                  judged whether it meets the free shipping conditions according
-                  to the amount after excluding the discount.
-                </span>
+                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}. Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount.</span>
               </div>
 
               <div className="radio-item">
@@ -301,9 +259,7 @@ export default class FreightTemp extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
-                </span>
+                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.</span>
                 <span
                   style={{
                     paddingLeft: 23,
@@ -338,17 +294,13 @@ export default class FreightTemp extends React.Component<any, any> {
                     display: 'inline-block'
                   }}
                 >
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG_NAME)}.
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.
                 </span>
               </div>
             </RadioGroup>
           </FormItem>
           <div className="bar-button">
-            <Button
-              onClick={() => this._save()}
-              type="primary"
-              style={{ marginRight: 20, marginLeft: 22 }}
-            >
+            <Button onClick={() => this._save()} type="primary" style={{ marginRight: 20, marginLeft: 22 }}>
               Save
             </Button>
             <Button onClick={() => history.goBack()}>Cancel</Button>
@@ -369,16 +321,9 @@ export default class FreightTemp extends React.Component<any, any> {
    * 保存
    */
   _save = () => {
-    const {
-      saveStoreFreight,
-      freightType,
-      defaultFlag
-    } = this.props.relaxProps;
-    let validStr =
-      defaultFlag == 1 ? [] : ['freightTempName', 'destinationArea'];
-    validStr = validStr.concat(
-      freightType == 0 ? ['satisfyPrice', 'satisfyFreight'] : ['fixedFreight']
-    );
+    const { saveStoreFreight, freightType, defaultFlag } = this.props.relaxProps;
+    let validStr = defaultFlag == 1 ? [] : ['freightTempName', 'destinationArea'];
+    validStr = validStr.concat(freightType == 0 ? ['satisfyPrice', 'satisfyFreight'] : ['fixedFreight']);
     this.props.form.validateFieldsAndScroll(validStr, (errs) => {
       //如果校验通过
       if (!errs) {

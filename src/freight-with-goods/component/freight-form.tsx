@@ -23,30 +23,18 @@ export default class FreightForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { freightTempId, selectTemp } = this.props.relaxProps;
-    const provinceId = selectTemp.get('provinceId')
-      ? selectTemp.get('provinceId').toString()
-      : '';
-    const cityId = selectTemp.get('cityId')
-      ? selectTemp.get('cityId').toString()
-      : '';
-    const areaId = selectTemp.get('areaId')
-      ? selectTemp.get('areaId').toString()
-      : '';
-    const deliveryAddress = provinceId
-      ? FindArea.addressInfo(provinceId, cityId, areaId)
-      : '-';
+    const provinceId = selectTemp.get('provinceId') ? selectTemp.get('provinceId').toString() : '';
+    const cityId = selectTemp.get('cityId') ? selectTemp.get('cityId').toString() : '';
+    const areaId = selectTemp.get('areaId') ? selectTemp.get('areaId').toString() : '';
+    const deliveryAddress = provinceId ? FindArea.addressInfo(provinceId, cityId, areaId) : '-';
     const express = this._freightExpress();
     return (
       <Form>
         <FormItem {...formItemLayout} label="Freight template">
           <div>
             {getFieldDecorator('freightTempId', {
-              initialValue: freightTempId
-                ? freightTempId.toString()
-                : freightTempId,
-              rules: [
-                { required: true, message: 'Please select shipping template' }
-              ],
+              initialValue: freightTempId ? freightTempId.toString() : freightTempId,
+              rules: [{ required: true, message: 'Please select shipping template' }],
               onChange: this._editFreightTemp.bind(this, 'freightTempId')
             })(this._getFreightSelect())}
           </div>
@@ -56,16 +44,10 @@ export default class FreightForm extends React.Component<any, any> {
                 <Alert
                   message={
                     <ul>
-                      {(selectTemp.get('deliverWay') as number) == 1 ? (
-                        <li>Express delivery</li>
-                      ) : null}
+                      {(selectTemp.get('deliverWay') as number) == 1 ? <li>Express delivery</li> : null}
                       <li>
                         Default shipping cost:{express}&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a
-                          style={{ textDecoration: 'none' }}
-                          href={`/goods-freight-edit/${freightTempId}`}
-                          target="view_window"
-                        >
+                        <a style={{ textDecoration: 'none' }} href={`/goods-freight-edit/${freightTempId}`} target="view_window">
                           See details
                         </a>
                       </li>
@@ -96,13 +78,7 @@ export default class FreightForm extends React.Component<any, any> {
    */
   _freightExpress = () => {
     const { selectTempExpress } = this.props.relaxProps;
-    const {
-      valuationType,
-      freightStartNum,
-      freightStartPrice,
-      freightPlusNum,
-      freightPlusPrice
-    } = selectTempExpress.toJS();
+    const { valuationType, freightStartNum, freightStartPrice, freightPlusNum, freightPlusPrice } = selectTempExpress.toJS();
     let express = '';
     if ((valuationType as number) == 0) {
       express =
@@ -115,11 +91,7 @@ export default class FreightForm extends React.Component<any, any> {
         // '件，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} within ${freightStartNum} pieces, plus ${freightPlusNum} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} for every additional ${freightPlusNum} pieces`;
+        `${freightStartPrice} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} within ${freightStartNum} pieces, plus ${freightPlusNum} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} for every additional ${freightPlusNum} pieces`;
     } else if ((valuationType as number) == 1) {
       express =
         // freightStartNum +
@@ -131,11 +103,7 @@ export default class FreightForm extends React.Component<any, any> {
         // 'kg，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} within ${freightStartNum} kg, plus ${freightPlusNum} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} for every additional ${freightPlusNum} kg`;
+        `${freightStartPrice} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} within ${freightStartNum} kg, plus ${freightPlusNum} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} for every additional ${freightPlusNum} kg`;
     } else if ((valuationType as number) == 2) {
       express =
         // freightStartNum +
@@ -147,11 +115,7 @@ export default class FreightForm extends React.Component<any, any> {
         // 'm³，加' +
         // freightPlusPrice +
         // '元';
-        `${freightStartPrice} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} within ${freightStartNum} m³, plus ${freightPlusNum} ${sessionStorage.getItem(
-          cache.SYSTEM_GET_CONFIG_NAME
-        )} for every additional ${freightPlusNum} m³`;
+        `${freightStartPrice} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} within ${freightStartNum} m³, plus ${freightPlusNum} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} for every additional ${freightPlusNum} m³`;
     }
     return express;
   };
@@ -161,17 +125,10 @@ export default class FreightForm extends React.Component<any, any> {
   _getFreightSelect = () => {
     const { freightList } = this.props.relaxProps;
     return (
-      <Select
-        showSearch
-        placeholder="Please select a shipping template"
-        notFoundContent="No shipping template"
-      >
+      <Select showSearch placeholder="Please select a shipping template" notFoundContent="No shipping template">
         {freightList.map((item) => {
           return (
-            <Option
-              key={item.get('freightTempId')}
-              value={item.get('freightTempId') + ''}
-            >
+            <Option key={item.get('freightTempId')} value={item.get('freightTempId') + ''}>
               {item.get('freightTempName')}
             </Option>
           );

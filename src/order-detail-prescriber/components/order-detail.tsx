@@ -1,18 +1,6 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import {
-  Button,
-  Col,
-  Form,
-  Icon,
-  Input,
-  Modal,
-  Popover,
-  Row,
-  Table,
-  Tag,
-  Tooltip
-} from 'antd';
+import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
 import { AuthWrapper, Const, noop, util } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
@@ -78,14 +66,14 @@ class RejectForm extends React.Component<any, any> {
                 required: true,
                 message: <FormattedMessage id="order.rejectionReasonTip" />
               },
-              { validator: this.checkComment }
+              {
+                max: 100,
+                message: 'Please input less than 100 characters'
+              }
             ]
           })(
             <div>
-              <Input.TextArea
-                placeholder="comment"
-                autosize={{ minRows: 4, maxRows: 4 }}
-              />
+              <Input.TextArea placeholder="comment" autosize={{ minRows: 4, maxRows: 4 }} />
               <p>
                 <span
                   style={{
@@ -97,8 +85,7 @@ class RejectForm extends React.Component<any, any> {
                 >
                   *
                 </span>
-                Once rejected, we will return the payment for this order to the
-                consumer
+                Once rejected, we will return the payment for this order to the consumer
               </p>
             </div>
           )}
@@ -107,18 +94,18 @@ class RejectForm extends React.Component<any, any> {
     );
   }
 
-  checkComment = (_rule, value, callback) => {
-    if (!value) {
-      callback();
-      return;
-    }
+  // checkComment = (_rule, value, callback) => {
+  //   if (!value) {
+  //     callback();
+  //     return;
+  //   }
 
-    if (value.length > 100) {
-      callback(new Error('Enter up to 100 characters'));
-      return;
-    }
-    callback();
-  };
+  //   if (value.length > 100) {
+  //     callback(new Error('Enter up to 100 characters'));
+  //     return;
+  //   }
+  //   callback();
+  // };
 }
 
 const WrappedRejectForm = Form.create()(RejectForm);
@@ -193,16 +180,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      detail,
-      countryDict,
-      cityDict,
-      sellerRemarkVisible,
-      setSellerRemarkVisible,
-      remedySellerRemark,
-      setSellerRemark,
-      orderRejectModalVisible
-    } = this.props.relaxProps;
+    const { detail, countryDict, cityDict, sellerRemarkVisible, setSellerRemarkVisible, remedySellerRemark, setSellerRemark, orderRejectModalVisible } = this.props.relaxProps;
     const { currentPetInfo, havePet } = this.state;
     //当前的订单号
     const tid = detail.get('id');
@@ -222,13 +200,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const tradeItems = detail.get('tradeItems').toJS();
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts
-      .map((gift) =>
-        gift
-          .set('skuName', '【赠品】' + gift.get('skuName'))
-          .set('levelPrice', 0)
-      )
-      .toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
     const tradePrice = detail.get('tradePrice').toJS() as any;
 
     //收货人信息
@@ -262,9 +234,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       : null;
 
     //附件信息
-    const encloses = detail.get('encloses')
-      ? detail.get('encloses').split(',')
-      : [];
+    const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
     const enclo = fromJS(
       encloses.map((url, index) =>
         Map({
@@ -280,14 +250,9 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const tradeState = detail.get('tradeState');
 
     //满减、满折金额
-    tradePrice.discountsPriceDetails =
-      tradePrice.discountsPriceDetails || fromJS([]);
-    const reduction = tradePrice.discountsPriceDetails.find(
-      (item) => item.marketingType == 0
-    );
-    const discount = tradePrice.discountsPriceDetails.find(
-      (item) => item.marketingType == 1
-    );
+    tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
+    const reduction = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 0);
+    const discount = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 1);
     tradeItems.forEach((tradeItems) => {
       if (tradeItems.isFlashSaleGoods) {
         tradeItems.levelPrice = tradeItems.price;
@@ -397,32 +362,25 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>
-              {flowState(detail.getIn(['tradeState', 'flowState']))}
-            </label>
+            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
 
             {this._renderBtnAction(tid)}
           </div>
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')}{' '}
-                {/*{detail.get('platform') != 'CUSTOMER' && (*/}
+                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
                 {/*<span style={styles.platform}>代下单</span>*/}
                 {/* <span style={styles.platform}>{orderType}</span> */}
-                {detail.get('grouponFlag') && (
-                  <span style={styles.platform}>拼团</span>
-                )}
+                {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}:{' '}
-                {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> :{' '}
-                  {detail.get('subscribeId')}
+                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''
@@ -431,18 +389,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}:{' '}
-                {detail.get('clinicsName')}
+                {<FormattedMessage id="clinicName" />}: {detail.get('clinicsName')}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumer" />}:{' '}
-                {detail.getIn(['buyer', 'name'])}
+                {<FormattedMessage id="consumer" />}: {detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}:{' '}
-                {detail.getIn(['buyer', 'account'])}
+                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
@@ -465,22 +420,14 @@ export default class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table
-            rowKey={(_record, index) => index.toString()}
-            columns={havePet ? columns : columnsNoPet}
-            dataSource={tradeItems.concat(gifts)}
-            pagination={false}
-            bordered
-          />
+          <Table rowKey={(_record, index) => index.toString()} columns={havePet ? columns : columnsNoPet} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
 
           <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
 
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="productAmount" />}:
-                </span>
+                <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
                 <strong>${(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
               </label>
               {/* <label style={styles.priceItem as any}>
@@ -498,9 +445,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {discount && (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {<FormattedMessage id="promotionAmount" />}:
-                  </span>
+                  <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
                   <strong>-${discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
@@ -528,16 +473,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null} */}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="shippingFees" />}:{' '}
-                </span>
+                <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
                 <strong>${(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
               </label>
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="total" />}:{' '}
-                </span>
+                <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
                 <strong>${(tradePrice.totalPrice || 0).toFixed(2)}</strong>
               </label>
             </div>
@@ -653,14 +594,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
          */}
-        <Modal
-          maskClosable={false}
-          title={<FormattedMessage id="order.rejectionReasonTip" />}
-          visible={orderRejectModalVisible}
-          okText={<FormattedMessage id="save" />}
-          onOk={() => this._handleOK(tid)}
-          onCancel={() => this._handleCancel()}
-        >
+        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -685,37 +619,20 @@ export default class OrderDetailTab extends React.Component<any, any> {
           <Row>
             <Col span={12}>
               <p>
-                {currentPetInfo.petsType === 'dog' ? (
-                  <i className="iconfont icondog" style={styles.iconRight}></i>
-                ) : (
-                  <i className="iconfont iconcat" style={styles.iconRight}></i>
-                )}
+                {currentPetInfo.petsType === 'dog' ? <i className="iconfont icondog" style={styles.iconRight}></i> : <i className="iconfont iconcat" style={styles.iconRight}></i>}
                 {currentPetInfo.petsBreed}
               </p>
               <p>
-                <i
-                  className="iconfont iconbirthday"
-                  style={styles.iconRight}
-                ></i>
+                <i className="iconfont iconbirthday" style={styles.iconRight}></i>
                 {currentPetInfo.birthOfPets}
               </p>
               <p>
-                {currentPetInfo.petsSex === 0 ? (
-                  <i className="iconfont iconman" style={styles.iconRight}></i>
-                ) : (
-                  <i
-                    className="iconfont iconwoman"
-                    style={styles.iconRight}
-                  ></i>
-                )}
+                {currentPetInfo.petsSex === 0 ? <i className="iconfont iconman" style={styles.iconRight}></i> : <i className="iconfont iconwoman" style={styles.iconRight}></i>}
                 {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
               </p>
               {currentPetInfo.petsSizeValueName ? (
                 <p>
-                  <i
-                    className="iconfont iconweight"
-                    style={styles.iconRight}
-                  ></i>
+                  <i className="iconfont iconweight" style={styles.iconRight}></i>
                   {currentPetInfo.petsSizeValueName}
                 </p>
               ) : null}
@@ -740,19 +657,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     return encloses.map((v, k) => {
       return (
-        <Popover
-          key={'pp-' + k}
-          placement="topRight"
-          title={''}
-          trigger="click"
-          content={
-            <img
-              key={'p-' + k}
-              style={styles.attachmentView}
-              src={v.get('url')}
-            />
-          }
-        >
+        <Popover key={'pp-' + k} placement="topRight" title={''} trigger="click" content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}>
           <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
@@ -762,14 +667,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   }
 
   _renderBtnAction(tid: string) {
-    const {
-      detail,
-      onAudit,
-      verify,
-      needAudit,
-      onDelivery,
-      showRejectModal
-    } = this.props.relaxProps;
+    const { detail, onAudit, verify, needAudit, onDelivery, showRejectModal } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const paymentOrder = detail.get('paymentOrder');
@@ -806,12 +704,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             : flowState === 'INIT' && (
                 <AuthWrapper functionName="fOrderList002_prescriber">
                   <Tooltip placement="top" title="Reject">
-                    <a
-                      onClick={() => showRejectModal()}
-                      href="javascript:void(0)"
-                      style={styles.pr20}
-                      className="iconfont iconbtn-cancelall"
-                    >
+                    <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-cancelall">
                       {/*<FormattedMessage id="order.turnDown" />*/}
                     </a>
                   </Tooltip>
@@ -820,9 +713,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
-              {!needAudit ||
-              payState === 'PAID' ||
-              payState === 'UNCONFIRMED' ? null : (
+              {!needAudit || payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002_prescriber">
                   <Tooltip placement="top" title="Re-review">
                     <a

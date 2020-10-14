@@ -71,7 +71,10 @@ class RejectForm extends React.Component<any, any> {
                 required: true,
                 message: <FormattedMessage id="order.rejectionReasonTip" />
               },
-              { validator: this.checkComment }
+              {
+                max: 100,
+                message: 'Please input less than 100 characters'
+              }
             ]
           })(
             <div>
@@ -96,18 +99,18 @@ class RejectForm extends React.Component<any, any> {
     );
   }
 
-  checkComment = (_rule, value, callback) => {
-    if (!value) {
-      callback();
-      return;
-    }
+  // checkComment = (_rule, value, callback) => {
+  //   if (!value) {
+  //     callback();
+  //     return;
+  //   }
 
-    if (value.length > 100) {
-      callback(new Error('Please input less than 100 characters'));
-      return;
-    }
-    callback();
-  };
+  //   if (value.length > 100) {
+  //     callback(new Error('Please input less than 100 characters'));
+  //     return;
+  //   }
+  //   callback();
+  // };
 }
 
 const WrappedRejectForm = Form.create({})(RejectForm);

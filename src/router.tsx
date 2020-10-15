@@ -746,6 +746,7 @@ const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
 
   { path: '/login-admin', asyncComponent: () => import('./login-admin') },
+  { path: '/login-test', asyncComponent: () => import('./login-admin') },
   { path: '/403', asyncComponent: () => import('./403') },
   { path: '/logout', asyncComponent: () => import('./logout') },
   { path: '/login-verify', asyncComponent: () => import('./login-verify') },

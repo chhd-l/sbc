@@ -9,7 +9,10 @@ import { cache} from 'qmkit';
 
 const FormItem = Form.Item;
 
+@StoreProvider(AppStore, { debug: __DEV__ })
 export default withOktaAuth(class LoginNotify extends React.Component<any, any> {
+  store: AppStore;
+  
   constructor(props: any) {
     super(props);
     this.state = {};

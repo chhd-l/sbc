@@ -9,7 +9,7 @@ import { cache} from 'qmkit';
 
 const FormItem = Form.Item;
 
-@StoreProvider(AppStore, { debug: __DEV__ })
+StoreProvider(AppStore, { debug: __DEV__ })
 export default withOktaAuth(class LoginNotify extends React.Component<any, any> {
   store: AppStore;
   
@@ -23,27 +23,27 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
       <div style={styles.container}>
           <Form style={styles.notify}>
           <FormItem style={{ marginBottom: 30 }}>
-          <img style={styles.reviewLogo} src={img_review} />
-              </FormItem>
-              <FormItem style={{ marginBottom: 30 }}>
-                  <div style={styles.reviewWord}>Under Review</div>
-              </FormItem>
-              <FormItem style={{ marginBottom: 40 }}>
-                  <div style={styles.notifyWord}>
-                    Your application has been sent to the related prescriber and the user account is under audit.
-                    We will notify you of the result by email.
-                  </div>
-              </FormItem>
-              <FormItem style={{ marginBottom: 30 }}>
+            <img style={styles.reviewLogo} src={img_review} />
+          </FormItem>
+            <FormItem style={{ marginBottom: 30 }}>
+                <div style={styles.reviewWord}>Under Review</div>
+            </FormItem>
+            <FormItem style={{ marginBottom: 40 }}>
+                <div style={styles.notifyWord}>
+                  Your application has been sent to the related prescriber and the user account is under audit.
+                  We will notify you of the result by email.
+                </div>
+            </FormItem>
+            <FormItem style={{ marginBottom: 30 }}>
               <Button
                 type="primary"
                 size="large"
                 style={styles.returnBtn}
                 onClick={(e) => this._handleReturn(e)}
               >
-               <Icon type="arrow-left" /> Return
+                <Icon type="arrow-left" /> Return
               </Button>
-              </FormItem>
+            </FormItem>
           </Form>
       </div>
     );

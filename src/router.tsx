@@ -727,6 +727,18 @@ const routes = [
   {
     path: '/order-audit-setting',
     asyncComponent: () => import('./order-audit-setting')
+  },
+  {
+    path: '/report-product',
+    asyncComponent: () => import('./report-product')
+  },
+  {
+    path: '/order-transaction',
+    asyncComponent: () => import('./report-transaction')
+  },
+  {
+    path: '/report-traffic',
+    asyncComponent: () => import('./report-traffic')
   }
 ];
 
@@ -734,9 +746,11 @@ const homeRoutes = [
   { path: '/login', asyncComponent: () => import('./login') },
 
   { path: '/login-admin', asyncComponent: () => import('./login-admin') },
+  { path: '/login-test', asyncComponent: () => import('./login-admin') },
   { path: '/403', asyncComponent: () => import('./403') },
   { path: '/logout', asyncComponent: () => import('./logout') },
   { path: '/login-verify', asyncComponent: () => import('./login-verify') },
+  { path: '/login-notify', asyncComponent: () => import('./login-notify') },
   { path: '/implicit/callback', component: LoginCallback },
   {
     path: '/find-password',

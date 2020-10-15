@@ -38,8 +38,11 @@ export default OktaLogout;
 
 const styles = {
   loginCancel: {
+    fontFamily: 'DINPro-Bold',
     width: '100%',
-    background: '#fff',
-    color: '#e2001a'
+    color: ' #444444',
+    background: '#EFEFEF',
+    borderRadius: '22px',
+    borderColor: '#EFEFEF'
   }
 }

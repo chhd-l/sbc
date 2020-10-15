@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Col, message, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
-import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login, cache, OktaLogout, getRoutType } from 'qmkit';
@@ -12,8 +11,6 @@ import { withOktaAuth } from '@okta/okta-react';
 export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
   form;
 
-  _store: Store;
-
   //声明上下文依赖
   static contextTypes = {
     _plume$Store: PropTypes.object
@@ -21,15 +18,14 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
 
   constructor(props, ctx) {
     super(props);
-    (this.state = {
+    this.state = {
       requiredConsents: [],
       optionalConsents: [],
       checkContentIds: [],
       clickProcess: false,
       prcessDisabled: true,
       prcessLoadding: false
-    }),
-      (this._store = ctx['_plume$Store']);
+    }
   }
 
  
@@ -68,113 +64,113 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const loginLogo = this._store.state().get('loginLogo');
+    const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);
 
     return (
-      <Form style={styles.loginForm}>
-        <FormItem style={{ marginBottom: 15 }}>
-          <div style={styles.header}>
-            <img style={styles.logo} src={loginLogo} />
-          </div>
-          <strong style={styles.title}>Store portal</strong>
-        </FormItem>
-        <label style={styles.label}>
-          This service is dedicated to our customers only.
-          <br />
-          Please complete the information below to confirm your access
-        </label>
-        <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('prescriberId', {
-            rules: [{ required: true, message: 'Client ID cannot be empty' }]
-          })(
-            <Search
-              size="large"
-              placeholder="Please Search Client ID First"
-              onSearch={(value, e) => this.search(value, e)}
-            />
-          )}
-        </FormItem>
-        <label style={styles.labelClientName}>
-          * Your client ID is specified on your Royal Canin invoice. It can be
-          an e-mail address or a client number
-        </label>
-        <FormItem style={{ marginTop: 10 }}>
-          {getFieldDecorator('prescriberName', {
-            rules: [{ required: false }]
-          })(<Input size="large" disabled={true} placeholder="Client Name" />)}
-        </FormItem>
-        <FormItem style={{ marginTop: 10 }}>
-          <Checkbox.Group
-            style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
-            onChange={this.consentChange}
-          >
-            <Row id="consents">
-              {this.state.requiredConsents.map((x, index) => {
-                return (
-                  <Col span={24} key={index}>
-                    <Row>
-                      <Col span={2}>
-                        <Checkbox value={x.id} key={x.id}>
-                        </Checkbox>
-                      </Col>
-                      <Col span={22}>
-                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
-                        {this.renderReuired(x.id)}
-                      </Col>
-                    </Row>
-                  </Col>
-                );
-              })}
-
-              {this.state.optionalConsents.map((x, index) => {
-                return (
-                  <Col span={24} key={index}>
-                     <Row>
-                      <Col span={2}>
-                        <Checkbox value={x.id} key={x.id}>
-                        </Checkbox>
-                      </Col>
-                      <Col span={22}>
-                        <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
-                        { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
-                      </Col>
-                    </Row>
-                  </Col>
-                );
-              })}
-            </Row>
-          </Checkbox.Group>
-        </FormItem>
-        <FormItem>
-          <Col span={10}>
-            <OktaLogout type="button" text="Cancel" />
-          </Col>
-          <Col span={4}></Col>
-          <Col span={10}>
-            <Button
-              type="primary"
-              size="large"
-              htmlType="submit"
-              style={styles.loginBtn}
-              onClick={(e) => this._handlePrcess(e)}
-              disabled={this.state.prcessDisabled}
-              loading={this.state.prcessLoadding}
-            >
-              Proceed
-            </Button>
-          </Col>
-        </FormItem>
-        <FormItem style={{ marginBottom: 0 }}>
+      <div>
+        <div style={styles.header}>
+          <img style={styles.logo} src={loginLogo} />
           <div>
-            <p
-              style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
-            >
-              © Royal Canin SAS 2020
-            </p>
+            <label style={styles.labelService}>This service is dedicated to our customers only.</label>
           </div>
-        </FormItem>
-      </Form>
+        </div>
+        <Form style={styles.loginForm}>
+          <FormItem style={{ marginBottom: 15 }}>
+            <strong style={styles.title}>Store portal</strong>
+          </FormItem>
+          <FormItem style={{ marginTop: 10 }}>
+            {getFieldDecorator('prescriberId', {
+              rules: [{ required: true, message: 'Client ID cannot be empty' }]
+            })(
+              <Search
+                size="large"
+                placeholder="Please Search Client ID First"
+                onSearch={(value, e) => this.search(value, e)}
+              />
+            )}
+          </FormItem>
+          <label style={styles.labelClientName}>
+            <span style={{ color: '#E1021A' }}>*</span> Your client ID is specified on your Royal Canin invoice. It can be
+            an e-mail address or a client number
+          </label>
+          <FormItem style={{ marginTop: 10 }}>
+            {getFieldDecorator('prescriberName', {
+              rules: [{ required: false }]
+            })(<Input size="large" disabled={true} placeholder="Client Name" />)}
+          </FormItem>
+          <FormItem style={{ marginTop: 10 }}>
+            <Checkbox.Group
+              style={{ width: '100%',maxHeight: '200px', overflowY: 'auto' }}
+              onChange={this.consentChange}
+            >
+              <Row id="consents">
+                {this.state.requiredConsents.map((x, index) => {
+                  return (
+                    <Col span={24} key={index}>
+                      <Row>
+                        <Col span={2}>
+                          <Checkbox value={x.id} key={x.id}>
+                          </Checkbox>
+                        </Col>
+                        <Col span={22}>
+                          <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                          { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                          {this.renderReuired(x.id)}
+                        </Col>
+                      </Row>
+                    </Col>
+                  );
+                })}
+
+                {this.state.optionalConsents.map((x, index) => {
+                  return (
+                    <Col span={24} key={index}>
+                      <Row>
+                        <Col span={2}>
+                          <Checkbox value={x.id} key={x.id}>
+                          </Checkbox>
+                        </Col>
+                        <Col span={22}>
+                          <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
+                          { x.detailHtml ?  <div style={{ padding: '10px 0' }} dangerouslySetInnerHTML={{ __html: x.detailHtml }}></div> : null } 
+                        </Col>
+                      </Row>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </Checkbox.Group>
+          </FormItem>
+          <FormItem>
+            <Col span={10}>
+              <OktaLogout type="button" text="Cancel" />
+            </Col>
+            <Col span={4}></Col>
+            <Col span={10}>
+              <Button
+                type="primary"
+                size="large"
+                htmlType="submit"
+                style={styles.loginBtn}
+                onClick={(e) => this._handlePrcess(e)}
+                disabled={this.state.prcessDisabled}
+                loading={this.state.prcessLoadding}
+              >
+                Proceed
+              </Button>
+            </Col>
+          </FormItem>
+          <FormItem style={{ marginBottom: 0 }}>
+            <div>
+              <p
+                style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
+              >
+                © Royal Canin SAS 2020
+              </p>
+            </div>
+          </FormItem>
+        </Form>
+      </div>
     );
   }
 
@@ -282,6 +278,9 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         );
         if(!oktaToken) {
           message.error('OKTA Token Expired');
+          this.setState({
+            prcessLoadding: false
+          });
           this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
           return
         }
@@ -297,11 +296,11 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         const { res } = await webApi.verifyUser(param);
         if (res.code === 'K-000000') {
           if(res.context === 'needAudit') {
-            message.info('The user account need to be audit and application has be submitted to relevant prescriber, we will notify you the result by email.')
+            history.push('/login-notify')
           } else if(res.context === 'alreadyRegister') {
             message.info('Email already exists in store portal, please check.')
           } else {
-            var type = getRoutType(window.location.search)
+            let type = getRoutType(window.location.search)
             login(type, oktaToken);
           }
           this.setState({
@@ -322,7 +321,6 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
 const styles = {
   loginForm: {
     width: 480,
-    minHeight: 550,
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 30,
@@ -331,7 +329,11 @@ const styles = {
     boxShadow: '0 2px 60px 0 rgba(167,167,167,0.28)'
   },
   loginBtn: {
-    width: '100%'
+    fontFamily: 'DINPro-Bold',
+    width: '100%',
+    color: ' #FFFFFF',
+    borderRadius: '22px',
+    background: '#D81E06',
   },
   loginCancel: {
     width: '100%',
@@ -339,37 +341,38 @@ const styles = {
     color: '#e2001a'
   },
   header: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10
+    width: 480,
+    padding: 30,
+    marginTop: 0,
+    marginLeft: 500,
+    textAlign: 'center'
   },
   logo: {
-    display: 'block',
     width: 'auto',
-    height: 60
+    height: 60,
+    marginBottom: '15px'
   },
   title: {
-    fontSize: 25,
-    color: '#333',
+    fontSize: 32,
+    color: '#222222',
     lineHeight: 1,
     textAlign: 'center',
     display: 'block',
-
     marginBottom: 30
   },
-  label: {
-    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
-    fontSize: '14px',
-    color: '#B6B6B6',
-    letterSpacing: 0
+  labelService: {
+    fontFamily: 'DINPro-Regular',
+    fontSize: '16px',
+    color: '#2E2E2E',
+    letterSpacing: 0,
+    lineHeight: '20px',
   },
   labelClientName: {
-    fontFamily: '"RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif',
+    fontFamily: 'DINPro-Medium',
     fontSize: '12px',
-    color: '#B6B6B6',
-    letterSpacing: 0
+    color: '#444444',
+    letterSpacing: 0,
+    lineHeight: '20px'
   },
   requiredLable: {
     color: '#e2001a',

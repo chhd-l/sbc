@@ -727,6 +727,18 @@ const routes = [
   {
     path: '/order-audit-setting',
     asyncComponent: () => import('./order-audit-setting')
+  },
+  {
+    path: '/report-product',
+    asyncComponent: () => import('./report-product')
+  },
+  {
+    path: '/order-transaction',
+    asyncComponent: () => import('./report-transaction')
+  },
+  {
+    path: '/report-traffic',
+    asyncComponent: () => import('./report-traffic')
   }
 ];
 

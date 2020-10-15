@@ -2,15 +2,12 @@ import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 const FormItem = Form.Item;
 const logo = require('../img/logo.png');
-import { Store } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
-import { history, Const, login } from 'qmkit';
+import { history, Const, login, cache } from 'qmkit';
 
 export default class LoginForm extends React.Component<any, any> {
   form;
-
-  _store: Store;
 
   //声明上下文依赖
   static contextTypes = {
@@ -19,12 +16,11 @@ export default class LoginForm extends React.Component<any, any> {
 
   constructor(props, ctx) {
     super(props);
-    this._store = ctx['_plume$Store'];
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const loginLogo = this._store.state().get('loginLogo');
+    const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);
 
     return (
       <Form style={styles.loginForm}>
@@ -112,7 +108,6 @@ export default class LoginForm extends React.Component<any, any> {
     form.validateFields(null, (errs, values) => {
       //如果校验通过
       if (!errs) {
-        // (this._store as any).login(values);
         login(values, '');
       }
     });

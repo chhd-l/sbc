@@ -12,9 +12,10 @@ export function getCustomerList(filterParams = {}) {
   // console.log(JSON.stringify({
   //   ...filterParams
   // }), 'hahahaha')
-  filterParams['clinicsId'] = JSON.parse(
-    sessionStorage.getItem('s2b-supplier@employee')
-  )['clinicsId'];
+  if (sessionStorage.getItem('s2b-employee@data')) {
+    filterParams['clinicsIds'] = JSON.parse(sessionStorage.getItem('s2b-employee@data'))['clinicsIds'];
+  }
+
   // filterParams['clinicsId'] = 123;
   return Fetch<TResult>('/customer/pageBySupplierAndClinics', {
     method: 'POST',

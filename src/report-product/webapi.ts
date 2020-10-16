@@ -8,6 +8,11 @@ type TResult = {
 
 export function getOverview() {
   return Fetch<TResult>('/message/listSendGridOverview', {
-    method: 'POST'
+    method: 'GET'
+  });
+}
+export function getAllProductList() {
+  return Fetch<TResult>('/message/getAllProductList', {
+    method: 'GET'
   });
 }

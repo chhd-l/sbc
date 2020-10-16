@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Tooltip
-} from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Tooltip } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -38,9 +29,9 @@ export default class DitionaryList extends Component<any, any> {
           key: 'value'
         },
         {
-          title: 'Discription',
+          title: 'Description',
           dataIndex: 'description',
-          key: 'discription'
+          key: 'description'
         },
         {
           title: 'Priority',
@@ -54,17 +45,11 @@ export default class DitionaryList extends Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Edit">
-                <Link
-                  to={'/dictionary-edit/' + record.id}
-                  className="iconfont iconEdit"
-                ></Link>
+                <Link to={'/dictionary-edit/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
               <Divider type="vertical" />
               <Tooltip placement="top" title="Delete">
-                <a
-                  onClick={() => this.deleteDictionary(record.id)}
-                  className="iconfont iconDelete"
-                ></a>
+                <a onClick={() => this.deleteDictionary(record.id)} className="iconfont iconDelete"></a>
               </Tooltip>
             </span>
           )
@@ -88,9 +73,7 @@ export default class DitionaryList extends Component<any, any> {
     this.queryClinicsDictionary();
     this.getDictionary();
   }
-  getDictionary = async (
-    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
-  ) => {
+  getDictionary = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
     this.setState({
       loading: true
@@ -212,23 +195,12 @@ export default class DitionaryList extends Component<any, any> {
               </Button>
             </Form.Item>
           </Form>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ marginBottom: '10px' }}
-          >
+          <Button type="primary" htmlType="submit" style={{ marginBottom: '10px' }}>
             <Link to="/dictionary-add">Add</Link>
           </Button>
         </div>
         <div className="container">
-          <Table
-            rowKey={(record, index) => index}
-            dataSource={this.state.dictionaryData}
-            columns={columns}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            onChange={this.handleTableChange}
-          />
+          <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
         </div>
       </div>
     );

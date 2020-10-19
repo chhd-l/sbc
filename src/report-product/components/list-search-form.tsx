@@ -9,7 +9,8 @@ export default class ListSearchForm extends Component<any, any> {
     super(props);
     this.state = {
       beginTime: '',
-      endTime: ''
+      endTime: '',
+      skuText: ''
     };
   }
 
@@ -26,7 +27,23 @@ export default class ListSearchForm extends Component<any, any> {
       endTime
     });
   }
+  sukOnChange(e) {
+    const value = e.target.value;
+    this.setState({
+      skuText: value
+    });
+  }
+  onSearch() {
+    const { beginTime, endTime, skuText } = this.state;
+    const params = {
+      beginTime,
+      endTime,
+      skuText
+    };
+    this.props.onSearch(params);
+  }
   render() {
+    const { skuText } = this.state;
     return (
       <div className="list-head-container">
         <h4>Product Report</h4>
@@ -36,10 +53,10 @@ export default class ListSearchForm extends Component<any, any> {
               <RangePicker size="default" onChange={(e) => this.datePickerChange(e)} />
             </Form.Item>
             <Form.Item>
-              <Search placeholder="input search text" onSearch={(value) => console.log(value)} style={{ width: 200 }} />
+              <Search placeholder="Search single SKU" style={{ width: 200 }} value={skuText} onChange={(e) => this.sukOnChange(e)} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" shape="round">
+              <Button type="primary" shape="round" onClick={() => this.onSearch()}>
                 Search
               </Button>
             </Form.Item>

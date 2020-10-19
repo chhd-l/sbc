@@ -6,13 +6,15 @@ type TResult = {
   context: any;
 };
 
-export function getOverview() {
+export function getOverview(params) {
   return Fetch<TResult>('/message/listSendGridOverview', {
-    method: 'GET'
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 }
-export function getAllProductList() {
+export function getAllProductList(params) {
   return Fetch<TResult>('/message/getAllProductList', {
-    method: 'GET'
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 }

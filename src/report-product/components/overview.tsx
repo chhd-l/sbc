@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Const } from 'qmkit';
-import { Form, Rate, DatePicker, Spin } from 'antd';
+import { Form, Rate, DatePicker, Spin, Button } from 'antd';
 import '../index.less';
 const { RangePicker } = DatePicker;
 import * as webapi from '../webapi';
@@ -84,13 +84,19 @@ export default class ProductOverView extends Component<any, any> {
       bestSellers: mock,
       highPraiseProducts: mock
     });
-    webapi.getOverview().then((res) => {
+    this.getOverviewInfo();
+  }
+
+  getOverviewInfo(params = {}) {
+    this.setState({
+      loading: true
+    });
+    webapi.getOverview(params).then((res) => {
       this.setState({
         loading: false
       });
     });
   }
-
   datePickerChange(e) {
     let beginTime = '';
     let endTime = '';
@@ -102,6 +108,16 @@ export default class ProductOverView extends Component<any, any> {
       beginTime,
       endTime
     });
+    debugger;
+  }
+  onSearch() {
+    const { beginTime, endTime } = this.state;
+    const params = {
+      beginTime,
+      endTime
+    };
+    console.log(params, 'overview params');
+    this.getOverviewInfo(params);
   }
   render() {
     const { loading, overview, bestSellers, highPraiseProducts } = this.state;
@@ -115,6 +131,9 @@ export default class ProductOverView extends Component<any, any> {
                 <Form.Item>
                   <RangePicker size="default" onChange={(e) => this.datePickerChange(e)} />
                 </Form.Item>
+                <Button type="primary" shape="round" onClick={() => this.onSearch()}>
+                  Search
+                </Button>
               </Form>
             </div>
           </div>

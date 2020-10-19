@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ListSearchForm from './list-search-form';
 import ReportList from './report-list';
-import { Const } from 'qmkit';
+import * as webapi from '@/report-product/webapi';
 export default class ProductReportList extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       productList: [],
       productColumn: []
     };
@@ -104,14 +105,29 @@ export default class ProductReportList extends Component<any, any> {
       productList: dataSource,
       productColumn: columns
     });
+    this.getProductList();
+  }
+  onSearch(params) {
+    this.getProductList(params);
   }
 
+  getProductList(params = {}) {
+    console.log(params, '------params------');
+    this.setState({
+      loading: true
+    });
+    webapi.getAllProductList(params).then((res) => {
+      this.setState({
+        loading: false
+      });
+    });
+  }
   render() {
-    const { productList, productColumn } = this.state;
+    const { loading, productList, productColumn } = this.state;
     return (
       <div className="container">
-        <ListSearchForm />
-        <ReportList list={productList} columns={productColumn} />
+        <ListSearchForm onSearch={(params) => this.onSearch(params)} />
+        <ReportList loading={loading} list={productList} columns={productColumn} />
       </div>
     );
   }

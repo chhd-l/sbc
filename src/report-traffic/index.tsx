@@ -6,6 +6,11 @@ import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import CountUp from 'react-countup';
+import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import 'echarts/lib/component/toolbox';
 import './index.less';
 
 const FormItem = Form.Item;
@@ -26,7 +31,7 @@ const countUpProps = {
   separator: ','
 };
 
-export default class ProductReport extends Component<any, any> {
+export default class TrafficReport extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -87,13 +92,171 @@ export default class ProductReport extends Component<any, any> {
           value: 4524,
           rate: -3.2
         }
-      ]
+      ],
+      tableData: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 20
+      }
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.chartInit();
+  }
+
+  chartInit = () => {
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main'));
+    // 绘制图表
+    myChart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(0, 0, 0, 0.30)'
+      },
+      xAxis: {
+        type: 'category',
+        axisLine: {
+          lineStyle: {
+            color: 'rgba(0, 0, 0, 0.45)'
+          }
+        },
+        data: ['week-3', 'week-2', 'week-1', 'WTD']
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: {
+          lineStyle: {
+            color: 'rgba(0, 0, 0, 0.45)'
+          }
+        }
+      },
+      legend: {
+        data: ['Traffic', 'Page view', 'Product visitors', 'Product view'],
+        top: 20
+      },
+
+      series: [
+        {
+          name: 'Traffic',
+          type: 'line',
+          lineStyle: {
+            color: '#E1021A'
+          },
+          itemStyle: {
+            color: '#E1021A'
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: '#E1021A',
+              borderWidth: 2
+            }
+          },
+          data: [1, 2, 3, 5]
+        },
+        {
+          name: 'Page view',
+          type: 'line',
+          lineStyle: {
+            color: '#15B1AB'
+          },
+          itemStyle: {
+            color: '#15B1AB'
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: '#15B1AB',
+              borderWidth: 2
+            }
+          },
+          data: [4, 5, 6, 3]
+        },
+        {
+          name: 'Product visitors',
+          type: 'line',
+          lineStyle: {
+            color: '#F8D46E'
+          },
+          itemStyle: {
+            color: '#F8D46E'
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: '#F8D46E',
+              borderWidth: 2
+            }
+          },
+          data: [7, 8, 9, 6]
+        },
+        {
+          name: 'Product view',
+          type: 'line',
+          lineStyle: {
+            color: '#4D98D3'
+          },
+          itemStyle: {
+            color: '#4D98D3'
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: '#4D98D3',
+              borderWidth: 2
+            }
+          },
+          data: [3, 6, 9, 15]
+        }
+      ]
+    });
+  };
+
+  handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
+  handleTableChange = (params) => {
+    console.log(params);
+  };
 
   render() {
-    const { title, overviewList, productTrafficList, trafficSourceList } = this.state;
+    const { title, overviewList, productTrafficList, trafficSourceList, tableData, pagination } = this.state;
+
+    const columns = [
+      {
+        title: 'Date',
+        dataIndex: 'date',
+        key: 'date'
+      },
+      {
+        title: 'Traffic',
+        dataIndex: 'traffic',
+        key: 'traffic'
+      },
+      {
+        title: 'Page view',
+        dataIndex: 'pageView',
+        key: 'pageView'
+      },
+      {
+        title: 'Product visitors',
+        dataIndex: 'productVisitors',
+        key: 'productVisitors'
+      },
+      {
+        title: 'Product view',
+        dataIndex: 'productView',
+        key: 'productView'
+      },
+      {
+        title: 'Avg site visit duration',
+        dataIndex: 'avgSiteVisitDuration',
+        key: 'avgSiteVisitDuration'
+      },
+      {
+        title: 'Bounce rate',
+        dataIndex: 'bounceRate',
+        key: 'bounceRate'
+      }
+    ];
 
     return (
       <div>
@@ -110,10 +273,10 @@ export default class ProductReport extends Component<any, any> {
           />
           <div>
             <h4>Overview</h4>
-            <div className="data-statistics">
+            <div className="data-statistics" style={{ width: 1200 }}>
               {overviewList &&
-                overviewList.map((item) => (
-                  <div className="mode">
+                overviewList.map((item, index) => (
+                  <div className="mode" key={index}>
                     <div className="mode-text" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
                       {item.name}
                     </div>
@@ -141,8 +304,8 @@ export default class ProductReport extends Component<any, any> {
             <h4>Product traffic</h4>
             <div className="data-statistics">
               {productTrafficList &&
-                productTrafficList.map((item) => (
-                  <div className="mode">
+                productTrafficList.map((item, index) => (
+                  <div className="mode" key={index}>
                     <div className="mode-text" style={item.name === 'Product view' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
@@ -170,8 +333,8 @@ export default class ProductReport extends Component<any, any> {
             <h4>Traffic source</h4>
             <div className="data-statistics">
               {trafficSourceList &&
-                trafficSourceList.map((item) => (
-                  <div className="mode">
+                trafficSourceList.map((item, index) => (
+                  <div className="mode" key={index}>
                     <div className="mode-text" style={item.name === 'VET traffic' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
@@ -195,15 +358,43 @@ export default class ProductReport extends Component<any, any> {
             </div>
           </div>
         </div>
+
         <div className="container-search">
           <Headline
             title="Traffic trend"
             extra={
               <div>
-                <RangePicker defaultValue={[moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon="setting"
+                  style={{
+                    marginRight: 10
+                  }}
+                >
+                  <span style={{ color: '#ffffff' }}>Setting</span>
+                </Button>
+                <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
+                  <Option value="Week trend">Week trend</Option>
+                </Select>
               </div>
             }
           />
+          <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
+        </div>
+
+        <div className="container-search">
+          <Headline
+            title="Traffic report"
+            extra={
+              <div>
+                <Button type="primary" shape="round" icon="download">
+                  <span style={{ color: '#ffffff' }}>Download the report</span>
+                </Button>
+              </div>
+            }
+          />
+          <Table columns={columns} rowKey="id" dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
         </div>
       </div>
     );

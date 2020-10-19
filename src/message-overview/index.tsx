@@ -1,20 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import * as webapi from './webapi';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Breadcrumb
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb } from 'antd';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
@@ -76,14 +63,7 @@ class Overview extends Component<any, any> {
         }
       },
       legend: {
-        data: [
-          'requests',
-          'delivered',
-          'opened',
-          'clicked',
-          'bounces',
-          'spam reports'
-        ],
+        data: ['requests', 'delivered', 'opened', 'clicked', 'bounces', 'spam reports'],
         bottom: 20
       },
 
@@ -297,10 +277,7 @@ class Overview extends Component<any, any> {
               </div>
             </Col>
             <Col span={24}>
-              <div
-                id="main"
-                style={{ width: 800, height: 400, margin: '0 auto' }}
-              ></div>
+              <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
             </Col>
           </Row>
         </div>

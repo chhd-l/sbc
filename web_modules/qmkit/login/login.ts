@@ -106,27 +106,34 @@ export async function login(routerType, oktaToken: string) {
         JSON.stringify(allGradeMenus)
       );
       const functionsRes = (await webapi.fetchFunctions()) as any;
-      sessionStorage.setItem(
-        cache.LOGIN_FUNCTIONS,
-        JSON.stringify(functionsRes.res.context)
-      );
+      if (functionsRes.res.code === Const.SUCCESS_CODE) {
+        sessionStorage.setItem(
+          cache.LOGIN_FUNCTIONS,
+          JSON.stringify(functionsRes.res.context)
+        );
+      } else {
+        message.error(functionsRes.res.message)
+      }
       //获取店铺ID
       const storeId = res.context.storeId;
       //获取店铺主页的小程序码
       const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
         storeId
       )) as any;
-
-      //Perscriber used
-      const employee = (await webapi.employee()) as any;
-      sessionStorage.setItem(
-        cache.EMPLOYEE_DATA,
-        JSON.stringify(employee.res)
-      );
-
       if (qrcode.code == Const.SUCCESS_CODE) {
         //获取小程序码的地址，保存到本地
         localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
+      }
+
+      //Perscriber used
+      const employee = (await webapi.employee()) as any;
+      if (employee.res) {
+        sessionStorage.setItem(
+          cache.EMPLOYEE_DATA,
+          JSON.stringify(employee.res)
+        );
+      } else {
+        message.error(employee.res.message)
       }
 
       /**
@@ -143,10 +150,14 @@ export async function login(routerType, oktaToken: string) {
           message.success('login successful');
           //登录成功之后，塞入baseConfig
           const config = (await webapi.getUserSiteInfo()) as any;
-          sessionStorage.setItem(
-            cache.SYSTEM_BASE_CONFIG,
-            JSON.stringify(config.res.context)
-          );
+          if (config.res.code === Const.SUCCESS_CODE) {
+            sessionStorage.setItem(
+              cache.SYSTEM_BASE_CONFIG,
+              JSON.stringify(config.res.context)
+            );
+          } else {
+            message.error(config.res.message)
+          }
           let hasHomeFunction = functionsRes.res.context.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');

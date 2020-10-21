@@ -738,7 +738,7 @@ const routes = [
     asyncComponent: () => import('./report-product')
   },
   {
-    path: '/order-transaction',
+    path: '/report-transaction',
     asyncComponent: () => import('./report-transaction')
   },
   {

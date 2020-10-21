@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
-import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
-import { FormattedMessage } from 'react-intl';
-import * as webapi from './webapi';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { BreadCrumb } from 'qmkit';
 import './index.less';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const InputGroup = Input.Group;
-const { RangePicker } = DatePicker;
-
+import ProductOverView from './components/overview';
+import ProductReportList from './components/product-report';
+import { Spin } from 'antd';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -21,71 +13,30 @@ export default class ProductReport extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Product',
-      loading: false,
       overview: {
         onShelfSkuValue: 130,
         onShelfSkuRate: -3.2,
         totalSkuValue: 136,
-        totalSkuRate: 3.1
-      }
+        totalSkuRate: 3.1,
+        logisticsRatingValue: 8.7,
+        logisticsRatingRate: -3.2,
+        otifValue: '96.5%',
+        otifRate: -3.6
+      },
+      bestSellers: [],
+      highPraiseProducts: []
     };
   }
   componentDidMount() {}
 
   render() {
-    const { title, overview } = this.state;
-
+    const { overview, bestSellers, highPraiseProducts } = this.state;
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline
-            title={title}
-            extra={
-              <div>
-                <RangePicker defaultValue={[moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
-              </div>
-            }
-          />
-          <h4>Overview</h4>
-          <div className="data-statistics">
-            <div className="mode" style={{}}>
-              <div className="mode-text">On shelf SKU</div>
-              <div className="mode-num">
-                <span> {overview && overview.onShelfSkuValue ? overview.onShelfSkuValue : '--'}</span>
-              </div>
-              <div className="mode-per">
-                {overview && overview.onShelfSkuRate ? (
-                  <>
-                    <img src={overview.onShelfSkuRate >= 0 ? icon1 : icon2} width="14" height="14" />
-                    <span>{overview.onShelfSkuRate}</span>
-                  </>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
-            <div className="mode">
-              <div className="mode-text">Total SKU</div>
-              <div className="mode-num">
-                <span> {overview && overview.totalSkuValue ? overview.totalSkuValue : '--'}</span>
-              </div>
-              <div className="mode-per">
-                {overview && overview.totalSkuRate ? (
-                  <>
-                    <img src={overview.totalSkuRate >= 0 ? icon1 : icon2} width="14" height="14" />
-                    <span>{overview.totalSkuRate}</span>
-                  </>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="container"></div>
+        <ProductOverView />
+        <ProductReportList />
       </div>
     );
   }

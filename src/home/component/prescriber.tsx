@@ -62,7 +62,7 @@ export default class Prescriber extends React.Component<any, any> {
   };
 
   componentWillUnmount() {
-    const { tradeCustomerView } = this.props.relaxProps as any;
+    //const { tradeCustomerView } = this.props.relaxProps as any;
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

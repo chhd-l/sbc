@@ -8,28 +8,14 @@ import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
 
 import * as webapi from './webapi';
-import {
-  addPay,
-  fetchLogistics,
-  fetchOrderDetail,
-  payRecord,
-  queryDictionary
-} from './webapi';
+import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
 import { Const, history, ValidConst } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new DetailActor(),
-      new LoadingActor(),
-      new TidActor(),
-      new TabActor(),
-      new PayRecordActor(),
-      new LogisticActor(),
-      new dictActor()
-    ];
+    return [new DetailActor(), new LoadingActor(), new TidActor(), new TabActor(), new PayRecordActor(), new LogisticActor(), new dictActor()];
   }
 
   constructor(props) {
@@ -49,7 +35,7 @@ export default class AppStore extends Store {
     const { res } = (await fetchOrderDetail(tid)) as any;
     let { code, context: orderInfo, message: errorInfo } = res;
     if (code == Const.SUCCESS_CODE) {
-      const payRecordResult = (await payRecord(tid)) as any;
+      const payRecordResult = (await payRecord(orderInfo.totalTid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
       const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
       const { res: cityDictRes } = (await queryDictionary({
@@ -62,18 +48,12 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
-        this.dispatch(
-          'receive-record-actor:init',
-          payRecordResult.res.payOrderResponses
-        );
+        this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
         this.dispatch('dict:initCity', cityDictRes.context.sysDictionaryVOS);
-        this.dispatch(
-          'dict:initCountry',
-          countryDictRes.context.sysDictionaryVOS
-        );
+        this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
       });
     } else {
       message.error(errorInfo);
@@ -166,12 +146,7 @@ export default class AppStore extends Store {
           };
         })
         .toJS();
-      if (
-        shippingItemList.length <= 0 ||
-        fromJS(shippingItemList).some(
-          (val) => !ValidConst.noZeroNumber.test(val.get('itemNum'))
-        )
-      ) {
+      if (shippingItemList.length <= 0 || fromJS(shippingItemList).some((val) => !ValidConst.noZeroNumber.test(val.get('itemNum')))) {
         message.error('Please input the delivery quantity');
       } else {
         this.showDeliveryModal();
@@ -238,14 +213,8 @@ export default class AppStore extends Store {
     //
 
     let tradeDelivery = Map();
-    tradeDelivery = tradeDelivery.set(
-      'shippingItemList',
-      this.handleShippingItems(this.state().getIn(['detail', 'tradeItems']))
-    );
-    tradeDelivery = tradeDelivery.set(
-      'giftItemList',
-      this.handleShippingItems(this.state().getIn(['detail', 'gifts']))
-    );
+    tradeDelivery = tradeDelivery.set('shippingItemList', this.handleShippingItems(this.state().getIn(['detail', 'tradeItems'])));
+    tradeDelivery = tradeDelivery.set('giftItemList', this.handleShippingItems(this.state().getIn(['detail', 'gifts'])));
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
@@ -402,10 +371,7 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   fetchOffLineAccounts = async () => {
-    const { res } = await webapi.checkFunctionAuth(
-      '/account/receivable',
-      'POST'
-    );
+    const { res } = await webapi.checkFunctionAuth('/account/receivable', 'POST');
     if (!res.context) {
       message.error('此功能您没有权限访问');
       return;

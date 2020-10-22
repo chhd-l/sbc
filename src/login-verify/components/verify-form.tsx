@@ -300,7 +300,7 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
           } else if(res.context === 'alreadyRegister') {
             message.info('Email already exists in store portal, please check.')
           } else {
-            var type = getRoutType(window.location.search)
+            let type = getRoutType(window.location.search)
             login(type, oktaToken);
           }
           this.setState({

@@ -35,7 +35,7 @@ export default class Header extends React.Component<any, any> {
 
   componentDidMount() {
     this.setState({
-      prescribers: JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers
+      prescribers: sessionStorage.getItem('s2b-employee@data') ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers : ''
     });
   }
 

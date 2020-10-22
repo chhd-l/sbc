@@ -225,6 +225,11 @@ const routes = [
     path: '/goods-edit/:gid',
     asyncComponent: () => import('./goods-add')
   },
+  //Related product
+  {
+    path: '/related-product',
+    asyncComponent: () => import('./related-product')
+  },
   // 审核不通过的商品编辑
   {
     path: '/goods-check-edit/:gid',

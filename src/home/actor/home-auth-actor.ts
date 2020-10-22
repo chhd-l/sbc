@@ -14,7 +14,9 @@ export default class HomeAuthActor extends Actor {
       trafficDashboardView: '',
       transactionTrendView: '',
       trafficTrendDashboardView: '',
-      conversionFunnelDashboardView: ''
+      conversionFunnelDashboardView: '',
+      search: '',
+      searchData: ''
     };
   }
 
@@ -52,6 +54,22 @@ export default class HomeAuthActor extends Actor {
   @Action('home:conversionFunnelDashboardView')
   conversionFunnelDashboardView(state: IMap, res) {
     return state.set('conversionFunnelDashboardView', res);
+  }
+
+  /*Prescriber*/
+  @Action('prescriber:prescriberConversionFunnelDashboardView')
+  prescriberConversionFunnelDashboardView(state: IMap, res) {
+    return state.set('prescriberConversionFunnelDashboardView', res);
+  }
+
+  @Action('home:search')
+  search(state: IMap, res) {
+    return state.set('search', res);
+  }
+
+  @Action('home:searchData')
+  searchData(state: IMap, res) {
+    return state.set('searchData', res);
   }
 
   /**

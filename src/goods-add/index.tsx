@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StoreProvider } from 'plume2';
+import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import Goods from './component/goods';
+import RelatedProduct from './related-product';
 import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
@@ -21,6 +22,12 @@ import { FormattedMessage } from 'react-intl';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsAdd extends React.Component<any, any> {
   store: AppStore;
+  constructor(props: IOptions) {
+    super(props);
+    this.state = {
+      tabType: ''
+    };
+  }
 
   componentDidMount() {
     const { gid } = this.props.match.params;
@@ -41,7 +48,11 @@ export default class GoodsAdd extends React.Component<any, any> {
       this.store.onMainTabChange(this.props.location.state.tab, false);
     }
   }
-
+  onMainTabChange = (res) => {
+    this.setState({
+      tabType: res
+    });
+  };
   render() {
     const { gid } = this.props.match.params;
     //默认添加商品的编辑与设价权限
@@ -61,18 +72,11 @@ export default class GoodsAdd extends React.Component<any, any> {
     }
 
     const path = this.props.match.path || '';
-    const parentPath =
-      path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
+    const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>
-            {gid ? (
-              <FormattedMessage id="product.editProduct" />
-            ) : (
-              <FormattedMessage id="newProduct" />
-            )}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />}</Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
@@ -81,27 +85,17 @@ export default class GoodsAdd extends React.Component<any, any> {
           <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container-search">
-          <Headline
-            title={
-              gid ? (
-                <FormattedMessage id="product.editProduct" />
-              ) : (
-                <FormattedMessage id="newProduct" />
-              )
-            }
-            state={this._getState(gid)}
-          />
+          <Headline title={gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs
-            activeKey={this.store.state().get('activeTabKey')}
-            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            /*activeKey={this.store.state().get('activeTabKey')}
+            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}*/
+            defaultActiveKey="related"
+            onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane
-                tab={<FormattedMessage id="product.basicInformation" />}
-                key="main"
-              >
+              <Tabs.TabPane tab={<FormattedMessage id="product.basicInformation" />} key="main">
                 {/*商品基本信息*/}
                 <Goods />
                 {/*商品属性信息*/}
@@ -120,20 +114,17 @@ export default class GoodsAdd extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-
-            {/* {checkAuth(priceFuncName) && (
-              <Tabs.TabPane
-                tab={<FormattedMessage id="product.priceAndOrderAmount" />}
-                key="price"
-                // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
-              >
-                <Price />
-              </Tabs.TabPane>
-            )} */}
+            <Tabs.TabPane
+              tab="Related product"
+              key="related"
+              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+            >
+              <RelatedProduct />
+            </Tabs.TabPane>
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} />
+          {this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}
 
           {/*品牌*/}
           <BrandModal />

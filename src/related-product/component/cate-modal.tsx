@@ -9,6 +9,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormattedMessage } from 'react-intl';
 import { IList, IMap } from 'typings/globalType';
 import ImageLibraryUpload from './image-library-upload';
+import ProductGrid from './product-grid';
 const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
 
@@ -82,7 +83,7 @@ export default class CateModal extends React.Component<any, any> {
     }
     return (
       <Modal maskClosable={false} title="Choose product" visible={modalVisible} zIndex={100} width={800} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
-        11111111111111
+        <ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />
       </Modal>
     );
   }

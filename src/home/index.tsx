@@ -18,25 +18,38 @@ export default class HelloApp extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      prescriberId: null
+    };
   }
 
   componentDidMount() {
-    this.store.newInit({
-      companyId: 2,
-      weekNum: 39,
-      year: 2020
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
+    this.setState({
+      prescriberId: prescriberId
     });
+    if (prescriberId == null) {
+      this.store.newInit({
+        companyId: 2,
+        weekNum: 39,
+        year: 2020
+      });
+    } else {
+      this.store.prescriberInit({
+        companyId: 2,
+        weekNum: 39,
+        year: 2020
+      });
+    }
     //this.store.init();
   }
 
   render() {
-    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
-
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
 
     if (allFunctions.includes('f_home')) {
-      return !prescriberId ? (
+      return !this.state.prescriberId ? (
         <div style={styles.container}>
           <Header />
           <TodoItems />
@@ -47,7 +60,7 @@ export default class HelloApp extends React.Component<any, any> {
         <div style={styles.container}>
           {/*<HomePrescriber prescriberId={prescriberId} />*/}
           <Header />
-          <Prescriber prescriberId={prescriberId} />
+          <Prescriber prescriberId={this.state.prescriberId} />
         </div>
       );
     } else {

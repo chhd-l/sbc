@@ -139,7 +139,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="mode">
                   <div className="mode-text">Revenue</div>
                   <div className="mode-num">
-                    <span>$</span>
+                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
@@ -153,7 +153,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="mode">
                   <div className="mode-text">Average basket</div>
                   <div className="mode-num">
-                    <span>$</span>
+                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
@@ -267,12 +267,12 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">Page view</div>
                       <div className="mode-num">
-                        <span>$</span>
+                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                         <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
                         {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={trafficDashboardView && trafficDashboardView.pageViewRate != null ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
+                        <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
                           {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
@@ -281,8 +281,8 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
-                        <span>$</span>
-                        <span>{trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} {...countUpProps} /> : '--'}</span>
+                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                        <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
                         {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <img src={trafficDashboardView.bounceRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -296,16 +296,16 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">VET traffic</div>
                       <div className="mode-num">
-                        <span>$</span>
-                        <span>{trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
+                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                        <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                     <div className="line"></div>
                     <div className="mode">
                       <div className="mode-text">VET traffic rate</div>
                       <div className="mode-num num">
-                        <span>$</span>
-                        <span>{trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} {...countUpProps} /> : '--'}</span>
+                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                        <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                   </div>
@@ -381,7 +381,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Active consumers</div>
                     <div className="mode-num">
-                      <span>$</span>
+                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
@@ -394,7 +394,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Active consumer rate</div>
                     <div className="mode-num">
-                      <span>$</span>
+                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
@@ -409,7 +409,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Total consumers</div>
                     <div className="mode-num">
-                      <span>$</span>
+                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                   </div>
@@ -460,7 +460,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescriber rates</div>
                   <div className="mode-num">
-                    <span>$</span>
+                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     {prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}
                   </div>
                   <div className="mode-per">
@@ -474,7 +474,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescribers</div>
                   <div className="mode-num">
-                    <span>$</span>
+                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                     {prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} {...countUpProps} /> : '--'}
                   </div>
                   <div className="mode-per">

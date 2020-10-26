@@ -4,7 +4,7 @@ import { DatePicker, Icon, Select, Input, Button } from 'antd';
 import '../index.less';
 import { cache, noop } from 'qmkit';
 import moment from 'moment';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 //import { FormattedMessage } from 'react-intl';
 const { WeekPicker } = DatePicker;
 const { Option } = Select;
@@ -15,7 +15,10 @@ export default class Header extends React.Component<any, any> {
     super(props);
     this.state = {
       prescribers: '',
-      rc: ''
+      rc: '',
+      searchData: '',
+      prescriber: 'prescriberId',
+      prescriberInput: ''
     };
   }
 
@@ -24,18 +27,26 @@ export default class Header extends React.Component<any, any> {
       header: IMap;
       storeEvaluateSum: IMap;
       newInit: Function;
+      search: any;
+      searchData: any;
+      onSearchData: Function;
     };
   };
 
   static relaxProps = {
     header: 'header',
     storeEvaluateSum: 'storeEvaluateSum',
-    newInit: noop
+    newInit: noop,
+    search: 'search',
+    searchData: 'searchData',
+    onSearchData: noop
   };
 
   componentDidMount() {
+    let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     this.setState({
-      prescribers: sessionStorage.getItem('s2b-employee@data') ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers : ''
+      prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
+      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : {}
     });
   }
 
@@ -51,11 +62,31 @@ export default class Header extends React.Component<any, any> {
     newInit(obj);
   };
 
-  prescriberChange = () => {};
+  onSearch = () => {
+    if (this.state.prescriberInput == '') {
+      return;
+    } else {
+      const { onSearchData } = this.props.relaxProps as any;
+      if (this.state.prescriber == 'prescriberId') {
+        onSearchData({ prescriberId: this.state.prescriberInput });
+      } else {
+        onSearchData({ prescriberName: this.state.prescriberInput });
+      }
+    }
+  };
 
+  onSearch1 = (res) => {
+    this.setState({
+      prescriber: res
+    });
+  };
+
+  onSearch2 = (res) => {
+    this.setState({
+      prescriberInput: res
+    });
+  };
   render() {
-    //const { header, storeEvaluateSum } = this.props.relaxProps as any;
-
     return (
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
@@ -64,7 +95,6 @@ export default class Header extends React.Component<any, any> {
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">
-          <div className="prescriber">Prescriber</div>
           {this.state.prescribers ? (
             <Select defaultValue={this.state.prescribers[0].prescriberName} onChange={this.prescriberChange}>
               {this.state.prescribers.map((item, index) => {
@@ -73,10 +103,39 @@ export default class Header extends React.Component<any, any> {
             </Select>
           ) : (
             <div className="flex-start-align search">
-              <Input /> <Button shape="circle" icon="search" />
+              <Input
+                style={{ width: 290 }}
+                addonBefore={
+                  <Select
+                    defaultValue="prescribers Id"
+                    style={{ width: 150 }}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onSearch1(value);
+                    }}
+                  >
+                    <Option value="prescribersId">prescribers Id</Option>
+                    <Option value="prescribersName">prescribers Name</Option>
+                  </Select>
+                }
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onSearch2(value);
+                }}
+              />
             </div>
           )}
+          <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
+        {this.state.prescriber.id ? (
+          <div>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+              Manage Prescriber
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     );
   }

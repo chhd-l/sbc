@@ -215,9 +215,7 @@ export const freightList = () => {
  * @param freightTempId
  */
 export const goodsFreight = (freightTempId) => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateGoods/${freightTempId}`
-  );
+  return Fetch<TResult>(`/freightTemplate/freightTemplateGoods/${freightTempId}`);
 };
 
 /**
@@ -225,9 +223,7 @@ export const goodsFreight = (freightTempId) => {
  * @param freightTempId
  */
 export const goodsFreightExpress = (freightTempId) => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateExpress/${freightTempId}`
-  );
+  return Fetch<TResult>(`/freightTemplate/freightTemplateExpress/${freightTempId}`);
 };
 
 /**
@@ -333,5 +329,20 @@ export function getStoreCode() {
   return Fetch<TResult>('/goods/getStoreCode', {
     method: 'POST',
     body: JSON.stringify({})
+  });
+}
+
+/* ---------------------- related  -------------------*/
+export const getRelatedList = () => {
+  return Fetch('/goodsRelation/2c91808574d8e87f0175251dd4a90028', {
+    method: 'GET'
+  });
+};
+
+//排序
+export function fetchPropSort(param = {}) {
+  return Fetch<TResult>('/goodsRelation/exchangeSort', {
+    method: 'PUT',
+    body: JSON.stringify(param)
   });
 }

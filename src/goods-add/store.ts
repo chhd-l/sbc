@@ -15,6 +15,7 @@ import CateActor from './actor/cate-actor';
 import ModalActor from './actor/modal-actor';
 import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
+import relatedActor from './actor/related';
 
 import {
   addAll,
@@ -49,9 +50,12 @@ import {
   checkEnterpriseType,
   enterpriseToGeneralgoods,
   getDetailTab,
-  getStoreCode
+  getStoreCode,
+  getRelatedList,
+  fetchPropSort
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
+import * as webApi from '@/shop/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -62,7 +66,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor()];
+    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor()];
   }
 
   /**
@@ -78,7 +82,6 @@ export default class AppStore extends Store {
       isFlashsele(goodsId),
       getDetailTab()
     ]).then((results) => {
-      console.log(results, 'results');
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       // this.dispatch(
       //   'goodsActor: initStoreCateList',
@@ -1962,5 +1965,31 @@ export default class AppStore extends Store {
       }
     }
     return cateIdList;
+  };
+
+  onRelatedList = async (param?: any) => {
+    this.dispatch('loading:start');
+    const { res } = await getRelatedList();
+
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('loading:end');
+        this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  propSort = async (param?: any) => {
+    const { res } = await fetchPropSort(param);
+    console.log(1111111111111);
+
+    if (res.code == Const.SUCCESS_CODE) {
+      console.log(2222222222);
+      this.transaction(() => {
+        this.onRelatedList();
+      });
+    }
   };
 }

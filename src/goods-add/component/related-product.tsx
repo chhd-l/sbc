@@ -83,11 +83,11 @@ class RelatedProduct extends React.Component<any, any> {
     {
       title: 'SPU',
       dataIndex: 'goodsNo',
-      key: 'goodsNo',
-      render: (text) => {
+      key: 'goodsNo'
+      /*render: (text) => {
         let html = { __html: text };
         return <div dangerouslySetInnerHTML={html}></div>;
-      }
+      }*/
     },
     {
       title: 'Product name',
@@ -95,9 +95,9 @@ class RelatedProduct extends React.Component<any, any> {
       key: 'goodsName'
     },
     {
-      title: 'Specification',
-      dataIndex: 'goodsCateId',
-      key: 'goodsCateId'
+      title: 'Sales category',
+      dataIndex: 'storeCateName',
+      key: 'storeCateName'
     },
     {
       title: 'Product category',
@@ -105,9 +105,9 @@ class RelatedProduct extends React.Component<any, any> {
       key: 'goodsCateName'
     },
     {
-      title: 'Price',
-      dataIndex: 'consentCategory',
-      key: 'consentCategory'
+      title: 'Brand',
+      dataIndex: 'brandName',
+      key: 'brandName'
     },
 
     {
@@ -177,9 +177,6 @@ class RelatedProduct extends React.Component<any, any> {
     }*/
     const { relatedList, propSort } = this.props.relaxProps;
     const dragRow = relatedList.toJS()[dragIndex];
-    console.log(dragIndex, 1111);
-    console.log(hoverIndex, 2222);
-
     let sortList = update(relatedList.toJS(), {
       $splice: [
         [dragIndex, 1],
@@ -195,7 +192,6 @@ class RelatedProduct extends React.Component<any, any> {
       });
     });
     obj.exchangeSortList = sort;
-    console.log(obj, 3333);
 
     propSort(obj);
   };

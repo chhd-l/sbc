@@ -8,7 +8,9 @@ export default class BrandActor extends Actor {
       // 弹框是否显示
       modalBrandVisible: false,
       // 表单内容
-      relatedList: []
+      relatedList: [],
+      id: '',
+      productselect: ''
     };
   }
 
@@ -37,5 +39,11 @@ export default class BrandActor extends Actor {
   @Action('brandActor: closeModal')
   close(state) {
     return state.set('modalBrandVisible', false).set('brandData', Map());
+  }
+
+  //product select
+  @Action('product:productselect')
+  productselect(state: IMap, res) {
+    return state.set('productselect', res);
   }
 }

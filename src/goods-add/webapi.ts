@@ -346,3 +346,17 @@ export function fetchPropSort(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+//删除
+export const fetchConsentDelete = (params) => {
+  return Fetch(`/goodsRelation/${params}`, {
+    method: 'DELETE'
+  });
+};
+
+export function fetchproductTooltip(param) {
+  return Fetch<TResult>('/goodsRelation/goods', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

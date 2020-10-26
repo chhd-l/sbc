@@ -52,7 +52,8 @@ import {
   getDetailTab,
   getStoreCode,
   getRelatedList,
-  fetchPropSort
+  fetchPropSort,
+  fetchConsentDelete
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -1983,13 +1984,26 @@ export default class AppStore extends Store {
 
   propSort = async (param?: any) => {
     const { res } = await fetchPropSort(param);
-    console.log(1111111111111);
-
     if (res.code == Const.SUCCESS_CODE) {
-      console.log(2222222222);
       this.transaction(() => {
         this.onRelatedList();
       });
     }
+  };
+
+  //删除
+  getConsentDelete = async (param?: any) => {
+    const { res } = await fetchConsentDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.onRelatedList();
+      });
+    }
+  };
+
+  //productselect
+  onProductselect = (addProduct) => {
+    console.log(addProduct, 111111111111111111111);
+    this.dispatch('product:productselect', addProduct);
   };
 }

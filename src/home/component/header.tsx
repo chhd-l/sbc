@@ -127,11 +127,15 @@ export default class Header extends React.Component<any, any> {
           )}
           <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
-        <div>
-          <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
-            Manage Prescriber
-          </Link>
-        </div>
+        {this.state.prescriber.id ? (
+          <div>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+              Manage Prescriber
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     );
   }

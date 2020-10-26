@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon, Switch } from 'antd';
 import { history, cache } from 'qmkit';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
@@ -40,7 +40,8 @@ class ClinicForm extends React.Component<any, any> {
         delFlag: 0,
         // auditStatus: '1',
         prescriberCode: '',
-        partneredShop: ''
+        partneredShop: '',
+        auditAuthority: false
       },
       firstPrescriberForm: {},
       cityArr: [],
@@ -248,7 +249,8 @@ class ClinicForm extends React.Component<any, any> {
         prescriberType: res.context.prescriberType,
         // auditStatus: res.context.auditStatus,
         prescriberCode: res.context.prescriberCode,
-        parentPrescriberId: res.context.parentPrescriberId
+        parentPrescriberId: res.context.parentPrescriberId,
+        auditAuthority: res.context.auditAuthority
       });
       this.getClinicsReward(res.context.prescriberId);
     } else {
@@ -503,7 +505,6 @@ class ClinicForm extends React.Component<any, any> {
       message.error('Reward Rate can not be empty!');
       return;
     }
-    debugger;
     if (!this.state.isPrescriber) {
       sessionStorage.removeItem(cache.FIRST_PRESCRIBER_DATA);
     }
@@ -788,6 +789,22 @@ class ClinicForm extends React.Component<any, any> {
                           value
                         });
                       }}
+                    />
+                  )}
+                </FormItem>
+                <FormItem label="Audit Authority">
+                  {getFieldDecorator(
+                    'auditAuthority',
+                    {}
+                  )(
+                    <Switch
+                      checked={this.state.prescriberForm.auditAuthority}
+                      onChange={(value) =>
+                        this.onFormChange({
+                          field: 'auditAuthority',
+                          value: value
+                        })
+                      }
                     />
                   )}
                 </FormItem>

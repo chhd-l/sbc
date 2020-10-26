@@ -293,6 +293,13 @@ export default class ClinicList extends Component<any, any> {
         render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
       },
       {
+        title: 'Audit Authority',
+        dataIndex: 'auditAuthority',
+        key: 'auditAuthority',
+        width: '10%',
+        render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
+      },
+      {
         title: 'Action',
         key: 'action',
         width: '10%',

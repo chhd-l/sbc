@@ -92,7 +92,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           <Tabs
             /*activeKey={this.store.state().get('activeTabKey')}
             onChange={(activeKey) => this.store.onMainTabChange(activeKey)}*/
-            defaultActiveKey="related"
+            defaultActiveKey="main"
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (

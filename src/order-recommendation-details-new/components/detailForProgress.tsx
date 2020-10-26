@@ -78,9 +78,7 @@ export default class BillingDetailsForProgress extends React.Component<
         ? employee.prescribers
         : [];
 
-    setTimeout(() => {
-      console.log(detailProductList.prescriberName);
-    });
+
     return (
       <div style={styles.main}>
         {/* <div

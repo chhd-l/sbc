@@ -10,7 +10,9 @@ export default class BrandActor extends Actor {
       // 表单内容
       relatedList: [],
       id: '',
-      productselect: ''
+      productselect: '',
+      addRelated: '',
+      goodsId: ''
     };
   }
 
@@ -21,6 +23,7 @@ export default class BrandActor extends Actor {
   relatedList(state, data: IMap) {
     return state.set('relatedList', data);
   }
+
 
   /**
    * 显示弹窗
@@ -46,4 +49,16 @@ export default class BrandActor extends Actor {
   productselect(state: IMap, res) {
     return state.set('productselect', res);
   }
+
+  //add related
+  @Action('related:addRelated')
+  addRelated(state: IMap, res) {
+    return state.set('addRelated', res);
+  }
+
+  @Action('related:goodsId')
+  goodsId(state: IMap, res) {
+    return state.set('goodsId', res);
+  }
+
 }

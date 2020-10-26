@@ -19,8 +19,6 @@ klaw(join(basePath,"public/icon"))
 
     for (let i = 0, ilen = items.length; i < ilen; i++) {
       let item = items[i];
-      console.log(item);
       let result  = await ossClient.putObject(item,item.replace(join(basePath,'public'),""));
-      console.log(result);
     }
   });

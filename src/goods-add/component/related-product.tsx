@@ -27,6 +27,7 @@ class RelatedProduct extends React.Component<any, any> {
       pageChange: Function;
       linkStatus: any;
       onRelatedList: Function;
+      enterpriseFlag: any
     };
   };
 
@@ -38,16 +39,18 @@ class RelatedProduct extends React.Component<any, any> {
     onSwitch: noop,
     pageChange: noop,
     linkStatus: 'linkStatus',
-    onRelatedList: noop
+    onRelatedList: noop,
+    enterpriseFlag: 'enterpriseFlag'
   };
 
   componentDidMount() {
     const { onRelatedList } = this.props.relaxProps;
-    onRelatedList();
+    //onRelatedList();
   }
 
   render() {
-    const { relatedList } = this.props.relaxProps;
+    const { relatedList, enterpriseFlag } = this.props.relaxProps;
+
     return (
       <Table
         id="consent"
@@ -77,7 +80,7 @@ class RelatedProduct extends React.Component<any, any> {
       key: 'goodsImg',
       /*render: (text, record, index) => `${index + 1}` + <img src={text.goodsImg} alt=""/>*/
       render: (text, record, index) => {
-        return <img src={record.goodsImg} width="20" />;
+        return <img src={record.goodsImg} width="24" />;
       }
     },
     {

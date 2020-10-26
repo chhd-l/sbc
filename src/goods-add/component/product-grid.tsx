@@ -45,6 +45,10 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+
+  }
+
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible } = this.props;
@@ -72,9 +76,13 @@ export default class GoodsGrid extends React.Component<any, any> {
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsInfoId') == key).first()).filter((f) => f);
+              let rowsArr = []
+              rows.toJS().map((item)=>{
+                rowsArr.push(item.goodsId)
+              })
+              //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
               this.setState({
-                selectedRows: rows,
+                selectedRows: rowsArr,
                 selectedRowKeys
               });
 

@@ -71,7 +71,6 @@ export default class DetailPublish extends React.Component<any, any> {
   };
   handleOk = (e) => {
     const { onProductselect } = this.props.relaxProps;
-    console.log(this.state.addProduct, 111111);
     onProductselect(this.state.addProduct);
     this.props.showModal(false);
   };

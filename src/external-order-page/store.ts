@@ -311,7 +311,6 @@ export default class AppStore extends Store {
 
   bulkExport = async () => {
     const queryParams = this.state().get('form').toJS();
-    console.log(this.state().get('form').toJS(), 111122222);
     const {
       clientId,
       clinicsName,

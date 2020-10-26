@@ -15,7 +15,51 @@ class PeoductCategory extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Product category',
-      productCategoryList: []
+      productCategoryList: [
+        {
+          id: 1,
+          productName: 'John Brown1',
+          categoryImages: 32,
+          categoryDiscount: 0,
+          children: [
+            {
+              id: 4,
+              productName: 'John Brown1',
+              categoryImages: 32,
+              categoryDiscount: 0,
+              children: []
+            },
+            {
+              id: 5,
+              productName: 'John Brown2',
+              categoryImages: 32,
+              categoryDiscount: 0,
+              children: []
+            },
+            {
+              id: 6,
+              productName: 'John Brown3',
+              categoryImages: 32,
+              categoryDiscount: 0,
+              children: []
+            }
+          ]
+        },
+        {
+          id: 2,
+          productName: 'John Brown2',
+          categoryImages: 32,
+          categoryDiscount: 0,
+          children: []
+        },
+        {
+          id: 3,
+          productName: 'John Brown3',
+          categoryImages: 32,
+          categoryDiscount: 0,
+          children: []
+        }
+      ]
     };
   }
   componentDidMount() {}

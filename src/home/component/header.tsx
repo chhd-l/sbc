@@ -4,7 +4,7 @@ import { DatePicker, Icon, Select, Input, Button } from 'antd';
 import '../index.less';
 import { cache, noop } from 'qmkit';
 import moment from 'moment';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 //import { FormattedMessage } from 'react-intl';
 const { WeekPicker } = DatePicker;
 const { Option } = Select;
@@ -43,8 +43,10 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
+    let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     this.setState({
-      prescribers: sessionStorage.getItem('s2b-employee@data') ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers : ''
+      prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
+      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : {}
     });
   }
 
@@ -125,6 +127,15 @@ export default class Header extends React.Component<any, any> {
           )}
           <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
+        {this.state.prescriber.id ? (
+          <div>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+              Manage Prescriber
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     );
   }

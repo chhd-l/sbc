@@ -92,15 +92,23 @@ export default class TransactionReport extends Component<any, any> {
         }
       ],
       tableData: [],
+      startDate: '',
+      endDate: '',
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 20
-      }
+        total: 0
+      },
+      xData: [],
+      averageBasketData: [],
+      consumersData: [],
+      revenueData: [],
+      salesVolumeData: []
     };
   }
   componentDidMount() {
-    this.chartInit();
+    this.getDefaultDate();
+    this.transactionTrend();
   }
 
   chartInit = () => {
@@ -119,7 +127,7 @@ export default class TransactionReport extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: ['week-3', 'week-2', 'week-1', 'WTD']
+        data: this.state.xData
       },
       yAxis: {
         type: 'value',
@@ -150,7 +158,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 2, 3, 5]
+          data: this.state.salesVolumeData
         },
         {
           name: 'Revenue',
@@ -167,7 +175,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [4, 5, 6, 3]
+          data: this.state.revenueData
         },
         {
           name: 'Consumers',
@@ -184,7 +192,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [7, 8, 9, 6]
+          data: this.state.consumersData
         },
         {
           name: 'Average basket',
@@ -201,7 +209,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [3, 6, 9, 15]
+          data: this.state.averageBasketData
         }
       ]
     });
@@ -211,8 +219,117 @@ export default class TransactionReport extends Component<any, any> {
     console.log(`selected ${value}`);
   };
 
-  handleTableChange = (params) => {
-    console.log(params);
+  handleTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.transactionReportPage()
+    );
+  };
+  dateCalculate = (n) => {
+    let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
+    return date.setDate(date.getDate() - n);
+  };
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
+
+  onChangeDate = (date, dateString) => {
+    let startDate = dateString[0];
+    let endDate = dateString[1];
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.transactionStatistics();
+        this.transactionReportPage();
+      }
+    );
+  };
+  getDefaultDate = () => {
+    let startDate = new Date(this.dateCalculate(7)).toLocaleDateString().replaceAll('/', '-');
+    let endDate = new Date(this.dateCalculate(0)).toLocaleDateString().replaceAll('/', '-');
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.transactionStatistics();
+        this.transactionReportPage();
+      }
+    );
+  };
+
+  transactionStatistics = () => {
+    const { startDate, endDate } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate
+    };
+    webapi.transactionStatistics(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+      }
+    });
+  };
+  transactionTrend = () => {
+    webapi.transactionTrend().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData = [];
+        let averageBasketData = [];
+        let consumersData = [];
+        let revenueData = [];
+        let salesVolumeData = [];
+        for (let i = 0; i < context.length; i++) {
+          xData.unshift('week-' + context[i].weekNum);
+          averageBasketData.unshift(context[i].averageBasket);
+          consumersData.unshift(context[i].consumers);
+          revenueData.unshift(context[i].revenue);
+          salesVolumeData.unshift(context[i].salesVolume);
+        }
+        debugger;
+        this.setState(
+          {
+            xData,
+            averageBasketData,
+            consumersData,
+            revenueData,
+            salesVolumeData
+          },
+          () => {
+            this.chartInit();
+          }
+        );
+      }
+    });
+  };
+  transactionReportPage = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.pageNum
+    };
+    webapi.transactionReportPage(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+        pagination.total = res.context.totalElements;
+        let tableData = res.context.transactionReport;
+        this.setState({
+          pagination,
+          tableData
+        });
+      }
+    });
   };
 
   render() {
@@ -260,7 +377,7 @@ export default class TransactionReport extends Component<any, any> {
             title={title}
             extra={
               <div>
-                <RangePicker defaultValue={[moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
               </div>
             }
           />
@@ -328,16 +445,6 @@ export default class TransactionReport extends Component<any, any> {
             title="Transaction trend"
             extra={
               <div>
-                <Button
-                  type="primary"
-                  shape="round"
-                  icon="setting"
-                  style={{
-                    marginRight: 10
-                  }}
-                >
-                  <span style={{ color: '#ffffff' }}>Setting</span>
-                </Button>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value="Week trend">Week trend</Option>
                 </Select>

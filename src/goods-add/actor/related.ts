@@ -12,7 +12,34 @@ export default class BrandActor extends Actor {
       id: '',
       productselect: '',
       addRelated: '',
-      goodsId: ''
+      goodsId: '',
+      SPU: '',
+      productName: '',
+      signedClassification: '',
+      Brand: '',
+      // 已审核状态的商品列表
+      auditStatus: 1,
+      // 模糊条件-商品名称
+      likeGoodsName: '',
+      // 模糊条件-SKU编码
+      likeGoodsInfoNo: '',
+      // 模糊条件-SPU编码
+      likeGoodsNo: '',
+      // 商品店铺分类
+      storeCateId: '-1',
+      // 品牌编号
+      brandId: '-1',
+      // 上下架状态-也是tab页的下标
+      addedFlag: '-1',
+      // 销售类别 批发or零售
+      saleType: '-1',
+
+      pageNum: 0,
+      pageSize: 10,
+      cateList: [], //层级结构的分类列表
+      allCateList: [], //扁平的分类列表
+      field: '',
+      productTooltip: ''
     };
   }
 
@@ -23,7 +50,6 @@ export default class BrandActor extends Actor {
   relatedList(state, data: IMap) {
     return state.set('relatedList', data);
   }
-
 
   /**
    * 显示弹窗
@@ -61,4 +87,34 @@ export default class BrandActor extends Actor {
     return state.set('goodsId', res);
   }
 
+  /*筛选*/
+  @Action('related:SPU')
+  SPU(state: IMap, res) {
+    return state.set('SPU', res);
+  }
+
+  @Action('related:productName')
+  productName(state: IMap, res) {
+    return state.set('productName', res);
+  }
+
+  @Action('related:signedClassification')
+  signedClassification(state: IMap, res) {
+    return state.set('signedClassification', res);
+  }
+
+  @Action('related:Brand')
+  Brand(state: IMap, res) {
+    return state.set('Brand', res);
+  }
+
+  @Action('form:field')
+  formFieldChange(state: IMap, { key, value }) {
+    return state.set(key, value);
+  }
+
+  @Action('related:productTooltip')
+  productTooltip(state: IMap, res) {
+    return state.set('productTooltip', res);
+  }
 }

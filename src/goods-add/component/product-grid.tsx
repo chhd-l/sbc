@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid, SelectGroup } from 'qmkit';
+import { Const, DataGrid, noop, SelectGroup } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
+import { Relax } from 'plume2';
 const { Option } = Select;
 
 const Column = Table.Column;
@@ -13,6 +14,8 @@ let recommendationNumber = 1;
 /**
  * 商品添加
  */
+
+@Relax
 export default class GoodsGrid extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -28,6 +31,16 @@ export default class GoodsGrid extends React.Component<any, any> {
     };
   }
 
+  /* props: {
+    relaxProps?: {
+      productTooltip: any;
+    };
+  };
+
+  static relaxProps = {
+    productTooltip: 'productTooltip',
+  };
+*/
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
   }
@@ -35,7 +48,8 @@ export default class GoodsGrid extends React.Component<any, any> {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
-        searchParams: nextProps.searchParams ? nextProps.searchParams : {}
+        searchParams: nextProps.searchParams ? nextProps.searchParams : {},
+        goodsInfoPage: nextProps.productTooltip
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
@@ -45,9 +59,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-
-  }
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {}
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
@@ -76,10 +88,10 @@ export default class GoodsGrid extends React.Component<any, any> {
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              let rowsArr = []
-              rows.toJS().map((item)=>{
-                rowsArr.push(item.goodsId)
-              })
+              let rowsArr = [];
+              rows.toJS().map((item) => {
+                rowsArr.push(item.goodsId);
+              });
               //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
               this.setState({
                 selectedRows: rowsArr,
@@ -124,6 +136,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
 
           <Column title="Product category" key="goodsCateName" dataIndex="goodsCateName" />
+          <Column title="Brand" key="brandName" dataIndex="brandName" />
         </DataGrid>
       </div>
     );
@@ -177,6 +190,7 @@ export default class GoodsGrid extends React.Component<any, any> {
    * @param searchParams
    */
   searchBackFun = (searchParams) => {
+    console.log(searchParams, 223332);
     if (this.props.searchParams) {
       searchParams = { ...searchParams, ...this.props.searchParams };
     }

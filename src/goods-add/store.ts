@@ -54,10 +54,12 @@ import {
   getRelatedList,
   fetchPropSort,
   fetchConsentDelete,
-  fetchAdd
+  fetchAdd,
+  fetchproductTooltip
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
+import { goodsList } from '@/goods-list/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -1966,7 +1968,6 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
-
       });
     } else {
       message.error(res.message);
@@ -1977,7 +1978,7 @@ export default class AppStore extends Store {
     const { res } = await fetchPropSort(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.onRelatedList();
+        this.onRelatedList(this.state().get('goodsId'));
       });
     }
   };
@@ -1987,7 +1988,7 @@ export default class AppStore extends Store {
     const { res } = await fetchConsentDelete(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.onRelatedList();
+        this.onRelatedList(this.state().get('goodsId'));
       });
     }
   };
@@ -1998,14 +1999,50 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
-        this.onRelatedList();
+        this.onRelatedList(this.state().get('goodsId'));
       });
     } else {
       message.error(res.message);
     }
   };
 
+  onSPU = (res) => {
+    this.dispatch('related:SPU', res);
+  };
 
+  onProductName = (res) => {
+    this.dispatch('related:productName', res);
+  };
 
+  onSignedClassification = (res) => {
+    this.dispatch('related:signedClassification', res);
+  };
 
+  onBrand = (res) => {
+    this.dispatch('related:Brand', res);
+  };
+
+  onSearch = async () => {
+    let request: any = {
+      goodsName: this.state().get('likeGoodsName'),
+      goodsNo: this.state().get('likeGoodsNo'),
+      goodsCateName: this.state().get('storeCateId'),
+      brandName: this.state().get('brandId')
+    };
+
+    const { res } = await fetchproductTooltip(request);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('related:productTooltip', res.context.goods);
+    } else {
+      message.error(res.message);
+    }
+
+    //this.onPageSearch();
+  };
+  onFormFieldChange = ({ key, value }) => {
+    console.log(key, 1111111111111111111);
+
+    console.log(value, 2222222222222);
+    this.dispatch('form:field', { key, value });
+  };
 }

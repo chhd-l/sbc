@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { message, Modal } from 'antd';
-
+import RelatedForm from './related-form';
 import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
@@ -20,7 +20,8 @@ export default class GoodsModal extends React.Component<any, any> {
       onProductForm: Function;
       loading: boolean;
       createLink: any;
-      goodsId: any
+      goodsId: any;
+      productTooltip: any;
     };
     showModal: Function;
     selectedSkuIds: IList;
@@ -46,7 +47,8 @@ export default class GoodsModal extends React.Component<any, any> {
     loading: 'loading',
     productList: 'productList',
     createLink: 'createLink',
-    goodsId: 'goodsId'
+    goodsId: 'goodsId',
+    productTooltip: 'productTooltip'
   };
   constructor(props) {
     super(props);
@@ -82,12 +84,12 @@ export default class GoodsModal extends React.Component<any, any> {
         visible={visible}
         onOk={() => {
           console.log(goodsId);
-          let targetGoodsIds = []
-          this.state.selectedRows.toJS().map(item=>targetGoodsIds.push(item.goodsId))
+          let targetGoodsIds = [];
+          this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsId));
           let obj = {
             sourceGoodsId: goodsId,
             targetGoodsIds: targetGoodsIds
-          }
+          };
           onProductselect(obj);
           this.props.showModal(false);
         }}
@@ -98,6 +100,7 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
+        <RelatedForm />
         {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );

@@ -35,6 +35,14 @@ export function updateCategoryStatus(filterParams = {}) {
     })
   });
 }
+export function updateCategoryPrescriber(filterParams = {}) {
+  return Fetch<TResult>('/goods/cate/prescriberEnableAndDisable', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 /**
  * get Dict

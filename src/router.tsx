@@ -744,6 +744,22 @@ const routes = [
   {
     path: '/report-traffic',
     asyncComponent: () => import('./report-traffic')
+  },
+  {
+    path: '/sales-category',
+    asyncComponent: () => import('./sales-category')
+  },
+  {
+    path: '/product-category',
+    asyncComponent: () => import('./product-category')
+  },
+  {
+    path: '/attribute-library',
+    asyncComponent: () => import('./attribute-library')
+  },
+  {
+    path: '/filter-sort-setting',
+    asyncComponent: () => import('./filter-sort-setting')
   }
 ];
 

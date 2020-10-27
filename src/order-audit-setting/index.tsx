@@ -1,27 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history, AuthWrapper } from 'qmkit';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Breadcrumb,
-  Tag,
-  message,
-  Select,
-  Radio,
-  DatePicker,
-  Spin,
-  Alert,
-  InputNumber
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -45,6 +24,7 @@ class OrderSetting extends Component<any, any> {
       },
 
       visibleAuditConfig: false,
+      visiblePrescriberConfig: false,
       configData: [],
       loading: false,
       categoryLoading: false
@@ -78,24 +58,14 @@ class OrderSetting extends Component<any, any> {
             let isAudit = false;
             let isPetInfo = false;
             for (let i = 0; i < configList.length; i++) {
-              if (
-                configList[i].configType &&
-                configList[i].configType === 'no_audit_required'
-              ) {
+              if (configList[i].configType && configList[i].configType === 'no_audit_required') {
                 configForm.autoAuditId = configList[i].id;
                 isAudit = configList[i].status === 1 ? false : true;
               }
-              if (
-                configList[i].configType &&
-                configList[i].configType ===
-                  'audit_according_to_product_category'
-              ) {
+              if (configList[i].configType && configList[i].configType === 'audit_according_to_product_category') {
                 configForm.manualAuditId = configList[i].id;
               }
-              if (
-                configList[i].configType &&
-                configList[i].configType === 'pet_information_as_reference'
-              ) {
+              if (configList[i].configType && configList[i].configType === 'pet_information_as_reference') {
                 configForm.petInfoId = configList[i].id;
                 isPetInfo = configList[i].status === 0 ? false : true;
               }
@@ -203,16 +173,34 @@ class OrderSetting extends Component<any, any> {
       });
   };
 
+  updateCategoryPrescriber = (params) => {
+    this.setState({
+      categoryLoading: true
+    });
+    webapi
+      .updateCategoryPrescriber(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getGoodsCategory();
+          message.success(res.message || 'Update successful');
+        } else {
+          this.setState({
+            categoryLoading: false
+          });
+          message.error(res.message || 'Update failed');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          categoryLoading: false
+        });
+        message.error(err || 'Update failed');
+      });
+  };
+
   render() {
-    const {
-      title,
-      isAudit,
-      isPetInfo,
-      configForm,
-      visibleAuditConfig,
-      configData,
-      categoryLoading
-    } = this.state;
+    const { title, isAudit, isPetInfo, configForm, visibleAuditConfig, visiblePrescriberConfig, configData, categoryLoading } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -245,13 +233,47 @@ class OrderSetting extends Component<any, any> {
         width: '33%',
         render: (text, record) => (
           <Switch
-            checked={record.status}
+            checked={+record.status ? true : false}
             onClick={(checked) => {
               let params = {
                 cateId: record.cateId,
                 status: checked ? 1 : 0
               };
               this.updateCategoryStatus(params);
+            }}
+          ></Switch>
+        )
+      }
+    ];
+
+    const columnsPresciber = [
+      {
+        title: 'Category',
+        dataIndex: 'parentCateName',
+        key: 'parentCateName',
+        width: '33%'
+      },
+      {
+        title: 'Superior category',
+        dataIndex: 'cateName',
+        key: 'cateName',
+        width: '33%'
+      },
+
+      {
+        title: 'Need prescriber',
+        dataIndex: 'prescriberFlag',
+        key: 'prescriberFlag',
+        width: '33%',
+        render: (text, record) => (
+          <Switch
+            checked={+record.prescriberFlag ? true : false}
+            onClick={(checked) => {
+              let params = {
+                cateId: record.cateId,
+                prescriberFlag: checked ? 1 : 0
+              };
+              this.updateCategoryPrescriber(params);
             }}
           ></Switch>
         )
@@ -274,10 +296,24 @@ class OrderSetting extends Component<any, any> {
                     this.setState({
                       isAudit: !checked,
                       visibleAuditConfig: !checked,
+                      visiblePrescriberConfig: checked,
                       isPetInfo: false
                     });
                   }}
                 ></Switch>
+                {!isAudit ? (
+                  <Tooltip placement="top" title="Edit">
+                    <span
+                      onClick={() => {
+                        this.setState({
+                          visiblePrescriberConfig: true
+                        });
+                      }}
+                      style={{ marginLeft: 10, color: '#e2001a' }}
+                      className="iconfont iconEdit"
+                    ></span>
+                  </Tooltip>
+                ) : null}
               </FormItem>
               <FormItem label="Manual audit">
                 <Switch
@@ -287,22 +323,22 @@ class OrderSetting extends Component<any, any> {
                     this.setState({
                       isAudit: checked,
                       visibleAuditConfig: checked,
+                      visiblePrescriberConfig: !checked,
                       isPetInfo: false
                     });
                   }}
                 ></Switch>
                 {isAudit ? (
                   <Tooltip placement="top" title="Edit">
-                    <a
+                    <span
                       onClick={() => {
                         this.setState({
                           visibleAuditConfig: true
                         });
                       }}
-                      style={{ marginLeft: 10 }}
-                      href="javascript:void(0)"
+                      style={{ marginLeft: 10, color: '#e2001a' }}
                       className="iconfont iconEdit"
-                    ></a>
+                    ></span>
                   </Tooltip>
                 ) : null}
               </FormItem>
@@ -321,6 +357,42 @@ class OrderSetting extends Component<any, any> {
             </Form>
           </Spin>
         </div>
+        {/* prescriber */}
+        <Modal
+          width="800px"
+          title="Please select whether the product category requires prescriber"
+          visible={visiblePrescriberConfig}
+          onOk={() => {
+            this.setState({
+              visiblePrescriberConfig: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visiblePrescriberConfig: false
+            });
+          }}
+        >
+          {/* <p>
+            <span
+              style={{
+                color: 'red',
+                fontFamily: 'SimSun',
+                marginRight: '4px',
+                fontSize: '12px'
+              }}
+            >
+              *
+            </span>
+            {
+              "Signed category" + configData.length + "categories have been signed then maximum is 200categories"
+            }
+            
+          </p> */}
+          <Table loading={categoryLoading} rowKey="id" columns={columnsPresciber} dataSource={configData} pagination={false}></Table>
+        </Modal>
+
+        {/* audit */}
         <Modal
           width="800px"
           title="Please select the product category to be reviewed."
@@ -347,24 +419,13 @@ class OrderSetting extends Component<any, any> {
             >
               *
             </span>
-            Signed category 2 categories have been signed then maximum is 200
-            categories
+            {'Signed category' + configData.length + 'categories have been signed then maximum is 200categories'}
           </p>
-          <Table
-            loading={categoryLoading}
-            rowKey="id"
-            columns={columns}
-            dataSource={configData}
-            pagination={false}
-          ></Table>
+          <Table loading={categoryLoading} rowKey="id" columns={columns} dataSource={configData} pagination={false}></Table>
         </Modal>
+
         <div className="bar-button">
-          <Button
-            type="primary"
-            shape="round"
-            style={{ marginRight: 10 }}
-            onClick={() => this.save()}
-          >
+          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
             {<FormattedMessage id="save" />}
           </Button>
         </div>

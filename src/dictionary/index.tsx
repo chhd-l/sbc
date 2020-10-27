@@ -161,6 +161,7 @@ export default class DitionaryList extends Component<any, any> {
               <SelectGroup
                 defaultValue="All"
                 label="Type"
+                showSearch
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   this.onFormChange({

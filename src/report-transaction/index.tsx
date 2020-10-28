@@ -37,60 +37,8 @@ export default class TransactionReport extends Component<any, any> {
     this.state = {
       title: 'Transaction',
       loading: false,
-      overviewList: [
-        {
-          name: 'Revenue',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Conversion',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Units sold',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Sales volume',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average basket',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Sales per visitor',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
-      SubscriptionList: [
-        {
-          name: 'Subscription rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Subscription number',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Subscription transaction amount',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average subscription length',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
+      overviewList: [],
+      subscriptionList: [],
       tableData: [],
       startDate: '',
       endDate: '',
@@ -273,7 +221,65 @@ export default class TransactionReport extends Component<any, any> {
     webapi.transactionStatistics(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
+        let context = res.context;
+        let overviewList = [
+          {
+            name: 'Revenue',
+            value: context.revenue,
+            rate: context.revenueQoQ
+          },
+          {
+            name: 'Conversion',
+            value: context.conversion,
+            rate: context.conversionQoQ
+          },
+          {
+            name: 'Units sold',
+            value: context.unitsSold,
+            rate: context.unitsSoldQoQ
+          },
+          {
+            name: 'Sales volume',
+            value: context.salesVolume,
+            rate: context.salesVolumeQoQ
+          },
+          {
+            name: 'Average basket',
+            value: context.averageBasket,
+            rate: context.averageBasketQoQ
+          },
+          {
+            name: 'Sales per visitor',
+            value: context.salesPerVisitor,
+            rate: context.salesPerVisitorQoQ
+          }
+        ];
+        let subscriptionList = [
+          {
+            name: 'Subscription rate',
+            value: context.subscriptionRate,
+            rate: context.subscriptionRateQoQ
+          },
+          {
+            name: 'Subscription number',
+            value: context.subscriptionNumber,
+            rate: context.subscriptionNumberQoQ
+          },
+          {
+            name: 'Subscription transaction amount',
+            value: context.subscriptionAmount,
+            rate: context.subscriptionAmountQoQ
+          },
+          {
+            name: 'Average subscription length',
+            value: context.averageSubscriptionLength,
+            rate: context.averageSubscriptionLengthQoQ
+          }
+        ];
+        this.setState({
+          overviewList,
+          subscriptionList
+        });
       }
     });
   };
@@ -294,7 +300,6 @@ export default class TransactionReport extends Component<any, any> {
           revenueData.unshift(context[i].revenue);
           salesVolumeData.unshift(context[i].salesVolume);
         }
-        debugger;
         this.setState(
           {
             xData,
@@ -316,13 +321,14 @@ export default class TransactionReport extends Component<any, any> {
       beginDate: startDate,
       endDate: endDate,
       pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum
+      pageNum: pagination.current
     };
     webapi.transactionReportPage(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         console.log(res);
         pagination.total = res.context.totalElements;
+        pagination.current = res.context.totalPages;
         let tableData = res.context.transactionReport;
         this.setState({
           pagination,
@@ -333,7 +339,7 @@ export default class TransactionReport extends Component<any, any> {
   };
 
   render() {
-    const { title, overviewList, SubscriptionList, tableData, pagination } = this.state;
+    const { title, overviewList, subscriptionList, tableData, pagination } = this.state;
 
     const columns = [
       {
@@ -391,10 +397,10 @@ export default class TransactionReport extends Component<any, any> {
                       {item.name}
                     </div>
                     <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      {item && item.rate ? (
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>
@@ -413,17 +419,17 @@ export default class TransactionReport extends Component<any, any> {
           <div style={styles.itemDisplay}>
             <h4>Subscription</h4>
             <div className="data-statistics">
-              {SubscriptionList &&
-                SubscriptionList.map((item, index) => (
+              {subscriptionList &&
+                subscriptionList.map((item, index) => (
                   <div className="mode" key={index}>
                     <div className="mode-text" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
                     <div className="mode-num" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
-                      {item && item.rate ? (
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>

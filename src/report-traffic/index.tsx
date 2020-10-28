@@ -37,33 +37,7 @@ export default class TrafficReport extends Component<any, any> {
     this.state = {
       title: 'Traffic',
       loading: false,
-      overviewList: [
-        {
-          name: 'Page view',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average site visit duration',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Bounce rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Active visitor rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Return visitor rate',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
+      overviewList: [],
       // productTrafficList: [
       // ],
       // trafficSourceList: [
@@ -249,7 +223,27 @@ export default class TrafficReport extends Component<any, any> {
     webapi.trafficStatistics(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
+        let context = res.context;
+        let overviewList = [
+          {
+            name: 'Page view',
+            value: context.pageView,
+            rate: context.pageViewQoQ
+          },
+          {
+            name: 'Traffic',
+            value: context.traffic,
+            rate: context.trafficQoQ
+          },
+          {
+            name: 'Vet traffic',
+            value: context.vetTraffic,
+            rate: context.vetTrafficQoQ
+          }
+        ];
+        this.setState({
+          overviewList
+        });
       }
     });
   };
@@ -285,13 +279,13 @@ export default class TrafficReport extends Component<any, any> {
       beginDate: startDate,
       endDate: endDate,
       pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum
+      pageNum: pagination.current
     };
     webapi.trafficReportPage(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
         pagination.total = res.context.totalElements;
+        pagination.current = res.context.totalPages;
         let tableData = res.context.trafficReport;
         this.setState({
           pagination,
@@ -368,14 +362,14 @@ export default class TrafficReport extends Component<any, any> {
               {overviewList &&
                 overviewList.map((item, index) => (
                   <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
+                    <div className="mode-text" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
                       {item.name}
                     </div>
-                    <div className="mode-num" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                    <div className="mode-num" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                     </div>
-                    <div className="mode-per" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
-                      {item && item.rate ? (
+                    <div className="mode-per" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>

@@ -412,15 +412,18 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
-                            <AuthWrapper functionName="fOrderDetail002">
-                              <Tooltip placement="top" title="Ship">
-                                <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
-                                  {/*<FormattedMessage id="order.ship" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
+                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                            v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
+                            // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
+                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
+                              <AuthWrapper functionName="fOrderDetail002">
+                                <Tooltip placement="top" title="Ship">
+                                  <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
+                              </AuthWrapper>
+                            )}
                           {/*部分发货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
                             <AuthWrapper functionName="fOrderDetail002">

@@ -73,7 +73,6 @@ export default class GoodsSpecActor extends Actor {
     if (!goodsSpecs.isEmpty()) {
       state = state.set('goodsSpecs', goodsSpecs);
     }
-    console.log(baseSpecId, 'baseSpecId');
     state = state.set('baseSpecId', baseSpecId);
     return state.set('goodsList', goodsList);
   }

@@ -22,11 +22,9 @@ export default class SearchList extends React.Component<any, any> {
 
   render() {
     const { onTabChange, tab, total } = this.props.relaxProps;
-    //console.log('search Table:' + total);
     const key = tab.get('key');
     const totalCount = total ? total : '0';
     const countMessage = '共' + totalCount + '条';
-    //console.log(this.props.relaxProps);
     return (
       <div>
         <Tabs

@@ -84,7 +84,6 @@ export default class GoodsActor extends Actor {
         if (!children.isEmpty()) {
           data = data.set('children', children);
         }
-        console.log(data, 'data--------------');
         return data;
       });
     return state.set('cateList', newDataList).set('sourceCateList', dataList);

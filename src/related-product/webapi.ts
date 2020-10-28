@@ -1,5 +1,10 @@
 import { Fetch } from 'qmkit';
 import { IMap } from 'typings/globalType';
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
 
 /**
  * 获取类目列表
@@ -97,5 +102,12 @@ export function fetchImages(params = {}) {
   return Fetch('/store/resources', {
     method: 'POST',
     body: JSON.stringify(params)
+  });
+}
+
+export function fetchproductTooltip(param) {
+  return Fetch<TResult>('/recommendation/listGoodsInfo', {
+    method: 'POST',
+    body: JSON.stringify(param)
   });
 }

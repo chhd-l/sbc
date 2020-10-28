@@ -53,7 +53,6 @@ export default class TicketModal extends React.Component<any, any> {
     const { onSave } = this.props.relaxProps;
     form.validateFields(null, (errs, value) => {
       if (!errs) {
-        // console.log('1318283385513182833855------------>',value.toString())
         onSave(value);
       }
     });

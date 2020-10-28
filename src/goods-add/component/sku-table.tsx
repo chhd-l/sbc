@@ -101,8 +101,6 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    console.log(columns, 'columns', goods.toJS(), goodsSpecs.toJS());
-    console.log(goodsList.toJS(), 'columns', this.state);
     // if(this.state.count < 100) {
     //   let count = this.state.count + 1
     //   this.setState({count: count})

@@ -66,6 +66,14 @@ export default class Prescriber extends React.Component<any, any> {
 
   componentWillUnmount() {
     //const { tradeCustomerView } = this.props.relaxProps as any;
+    let o = {
+      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].id,
+      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].prescriberName
+    };
+    let act = JSON.stringify(o);
+    if (sessionStorage.getItem('PrescriberType') === null) {
+      sessionStorage.setItem('PrescriberType', act);
+    }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

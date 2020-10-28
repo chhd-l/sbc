@@ -384,7 +384,6 @@ export default class SpecifyAddForm extends React.Component<any, any> {
           });
           joinLevel = joinLevel.substring(0, joinLevel.length - 1);
         }
-        // console.log(joinLevel);
         store.save(joinLevel);
       }
     });

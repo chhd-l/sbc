@@ -75,7 +75,6 @@ export function getActionProxy <T> (action):T {
             //TODO 这里把所有方法都变为异步的了.
             methodProxy[keyStr] =async (...param) => {
               let _arguments =param;
-              console.log('开始调用代理方法,',_arguments);
 
               let result  = await handelEnhance({methodName:keyStr,arguments:_arguments,target:proxyAction},(next)=>{
                 return realAction[key].apply(proxyAction,_arguments);

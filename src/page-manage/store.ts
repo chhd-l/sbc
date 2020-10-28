@@ -203,7 +203,6 @@ export default class AppStore extends Store {
   };
 
   onSetEdit = async (inputEdit) => {
-    console.log('edit-----------------------------------------start');
     this.dispatch('edit:set', inputEdit);
     if (!inputEdit.isShow) {
       let dataList = this.state().get('dataList');
@@ -232,8 +231,5 @@ export default class AppStore extends Store {
       }
     }
 
-    console.log(
-      'edit-----------------------------------------------------------------end'
-    );
   };
 }

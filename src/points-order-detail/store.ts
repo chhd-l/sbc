@@ -66,7 +66,6 @@ export default class AppStore extends Store {
   deliver = async () => {
     await this.fetchLogistics();
     const detail = this.state().get('detail');
-    console.log(detail);
     const tradeItems = this.state().getIn(['detail', 'tradeItems']);
 
     const shippingItemList = tradeItems

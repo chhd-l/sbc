@@ -16,39 +16,47 @@ const styles = {
 };
 
 @Relax
-class TabList extends React.Component<any, any> {
+class RelatedProduct extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      consentList: IList;
+      relatedList: IList;
       getConsentDelete: Function;
       propSort: Function;
       showEditModal: Function;
       onSwitch: Function;
       pageChange: Function;
       linkStatus: any;
+      onRelatedList: Function;
+      enterpriseFlag: any
     };
   };
 
   static relaxProps = {
-    consentList: 'consentList',
+    relatedList: 'relatedList',
     getConsentDelete: noop,
     showEditModal: noop,
     propSort: noop,
     onSwitch: noop,
     pageChange: noop,
-    linkStatus: 'linkStatus'
+    linkStatus: 'linkStatus',
+    onRelatedList: noop,
+    enterpriseFlag: 'enterpriseFlag'
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { onRelatedList } = this.props.relaxProps;
+    //onRelatedList();
+  }
 
   render() {
-    const { consentList } = this.props.relaxProps;
+    const { relatedList, enterpriseFlag } = this.props.relaxProps;
+
     return (
       <Table
         id="consent"
         rowKey="tabId"
         columns={this._columns}
-        dataSource={consentList.toJS()}
+        dataSource={relatedList.toJS()}
         onRow={(_record, index) => ({
           index,
           moveRow: this.moveRow
@@ -67,46 +75,44 @@ class TabList extends React.Component<any, any> {
   };
   _columns = [
     {
-      title: 'No',
-      dataIndex: 'id',
-      key: 'id',
-      render: (text, record, index) => `${index + 1}`
-    },
-    {
-      title: 'Consent title',
-      dataIndex: 'consentTitle',
-      key: 'consentTitle',
-      render: (text) => {
-        let html = { __html: text };
-        return <div dangerouslySetInnerHTML={html}></div>;
+      title: 'Image',
+      dataIndex: 'goodsImg',
+      key: 'goodsImg',
+      /*render: (text, record, index) => `${index + 1}` + <img src={text.goodsImg} alt=""/>*/
+      render: (text, record, index) => {
+        return <img src={record.goodsImg} width="24" />;
       }
     },
     {
-      title: 'Consent Id',
-      dataIndex: 'consentId',
-      key: 'consentId'
+      title: 'SPU',
+      dataIndex: 'goodsNo',
+      key: 'goodsNo'
+      /*render: (text) => {
+        let html = { __html: text };
+        return <div dangerouslySetInnerHTML={html}></div>;
+      }*/
     },
     {
-      title: 'Consent code',
-      dataIndex: 'consentCode',
-      key: 'consentCode'
+      title: 'Product name',
+      dataIndex: 'goodsName',
+      key: 'goodsName'
     },
     {
-      title: 'Consent type',
-      dataIndex: 'consentType',
-      key: 'consentType'
+      title: 'Sales category',
+      dataIndex: 'storeCateName',
+      key: 'storeCateName'
     },
     {
-      title: 'Category',
-      dataIndex: 'consentCategory',
-      key: 'consentCategory'
+      title: 'Product category',
+      dataIndex: 'goodsCateName',
+      key: 'goodsCateName'
     },
     {
-      title: 'Field type',
-      dataIndex: 'filedType',
-      key: 'filedType'
+      title: 'Brand',
+      dataIndex: 'brandName',
+      key: 'brandName'
     },
-    ,
+
     {
       title: 'Operation',
       dataIndex: 'operation',
@@ -140,9 +146,6 @@ class TabList extends React.Component<any, any> {
 
     return (
       <div className="operation flex-end">
-        <Tooltip placement="top" title="Edit">
-          <a href="javascript:void(0)" onClick={() => pageChange('Detail', rowInfo.get('id'))} className="iconfont iconEdit"></a>
-        </Tooltip>
         <Popconfirm
           className="deleted"
           title="Confirm deletion?"
@@ -155,22 +158,6 @@ class TabList extends React.Component<any, any> {
             <a href="javascript:void(0)" className="iconfont iconDelete"></a>
           </Tooltip>
         </Popconfirm>
-        <div className="switch">
-          <Popconfirm title={check ? 'Are you sure disable this consent?' : 'Are you sure able this consent?'} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
-            <Switch
-              //loading={loading}
-              checked={check}
-              // onChange={this.onValid}
-            />
-          </Popconfirm>
-          {/*<Switch
-            checked={rowInfo.get('openFlag') == 0}
-            onChange={(e) => onSwitch({id:rowInfo.get('id'), openFlag:e.valueOf()})}
-          />*/}
-          {/*<Switch checked={
-            rowInfo.get('openFlag') == '1' ? false : true
-          } onChange={(e) => this.onChange(e, rowInfo.get('id'))} />*/}
-        </div>
       </div>
     );
   };
@@ -191,10 +178,9 @@ class TabList extends React.Component<any, any> {
     /*if (hoverIndex == 0 || dragIndex == 0) {
       return;
     }*/
-    const { consentList, propSort } = this.props.relaxProps;
-    const dragRow = consentList.toJS()[dragIndex];
-
-    let sortList = update(consentList.toJS(), {
+    const { relatedList, propSort } = this.props.relaxProps;
+    const dragRow = relatedList.toJS()[dragIndex];
+    let sortList = update(relatedList.toJS(), {
       $splice: [
         [dragIndex, 1],
         [hoverIndex, 0, dragRow]
@@ -269,4 +255,4 @@ let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, 
     return 'upward';
   }
 };
-export default DragDropContext(HTML5Backend)(TabList);
+export default DragDropContext(HTML5Backend)(RelatedProduct);

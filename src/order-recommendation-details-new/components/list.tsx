@@ -53,7 +53,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         recommendationNumber: v.recommendationNumber
       };
     });
-    console.log('onCreateLink', arr);
     onCreateLink({
       field: 'recommendationGoodsInfoRels',
       value: arr

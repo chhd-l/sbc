@@ -307,7 +307,6 @@ export default class EditForm extends React.Component<any, any> {
               <RadioGroup
                 disabled={editDisable}
                 value={employeeForm.get('sex')}
-                //onChange={(e) => console.log(e.target.value)}
               >
                 <Radio value={0}>
                   <span style={styles.darkColor}>Secret</span>

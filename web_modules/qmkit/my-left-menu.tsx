@@ -117,7 +117,6 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
     // 选中的一级菜单详情
 
     const currFirstMenu = this.state.allGradeMenus.get(firstActive);
-    //console.log( this.state.allGradeMenus,'++++++++++++++++');
 
     if (currFirstMenu && currFirstMenu.get('children') && currFirstMenu.get('children').size > 0) {
       return (

@@ -131,7 +131,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         this.setState({
           timeZone: res.defaultLocalDateTime
         });
-        console.log(this.state.timeZone, 2222);
       } else {
         message.error(res.message);
         return;

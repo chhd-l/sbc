@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { message, Modal } from 'antd';
-
+import RelatedForm from './related-form';
 import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
@@ -20,6 +20,8 @@ export default class GoodsModal extends React.Component<any, any> {
       onProductForm: Function;
       loading: boolean;
       createLink: any;
+      goodsId: any;
+      productTooltip: any;
     };
     showModal: Function;
     selectedSkuIds: IList;
@@ -44,7 +46,9 @@ export default class GoodsModal extends React.Component<any, any> {
     onProductselect: noop,
     loading: 'loading',
     productList: 'productList',
-    createLink: 'createLink'
+    createLink: 'createLink',
+    goodsId: 'goodsId',
+    productTooltip: 'productTooltip'
   };
   constructor(props) {
     super(props);
@@ -56,25 +60,15 @@ export default class GoodsModal extends React.Component<any, any> {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
-      selectedRows: nextProps.selectedRows
-        ? nextProps.selectedRows
-        : fromJS([]),
+      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
       selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
   render() {
-    const {
-      visible,
-      onOkBackFun,
-      onCancelBackFun,
-      skuLimit,
-      showValidGood,
-      searchParams,
-      application
-    } = this.props;
+    const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselect } = this.props.relaxProps;
+    const { onProductselect, goodsId } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
@@ -82,23 +76,22 @@ export default class GoodsModal extends React.Component<any, any> {
           <div>
             Choose goods&nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
-              items have been selected
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
             </small>
           </div>
         }
         width={1100}
         visible={visible}
         onOk={() => {
-          onProductselect(this.state.selectedRows.toJS());
+          console.log(goodsId);
+          let targetGoodsIds = [];
+          this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsId));
+          let obj = {
+            sourceGoodsId: goodsId,
+            targetGoodsIds: targetGoodsIds
+          };
+          onProductselect(obj);
           this.props.showModal(false);
-          /* if (application === 'saleType') {
-                   // onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
-                 } else if (skuLimit && selectedSkuIds.length > skuLimit) {
-                   message.error('Choose up to 20 items');
-                 } else {
-                 //  onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
-                 }*/
         }}
         onCancel={() => {
           this.props.showModal(false);
@@ -107,18 +100,8 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {
-          <ProductGrid
-            visible={visible}
-            showValidGood={showValidGood}
-            skuLimit={skuLimit}
-            isScroll={false}
-            selectedSkuIds={selectedSkuIds}
-            selectedRows={selectedRows}
-            rowChangeBackFun={this.rowChangeBackFun}
-            searchParams={searchParams}
-          />
-        }
+        <RelatedForm />
+        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }
@@ -129,8 +112,7 @@ export default class GoodsModal extends React.Component<any, any> {
         selectedSkuIds: selectedSkuIds,
         selectedRows: selectedRows
       },
-      () => {
-      }
+      () => {}
     );
   };
 }

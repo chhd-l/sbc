@@ -62,57 +62,70 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   genID() {
-    return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
+    let date = moment().format('YYYYMMDDHHmmssSSS');
+    return 'AV' + date;
   }
 
   renderForm = (obj) => {
     const { getFieldDecorator, getFieldValue } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
+    };
+    const formItemLayoutWithOutLabel = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 16, offset: 6 }
+      }
+    };
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
         <div key={k.id}>
-          <FormItem required={false} key={'value' + k.id}>
+          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value' + k.id}>
             {getFieldDecorator(`value[${k.id}]`, {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input value.'
+                  message: 'Please input Attribute value.'
                 }
               ]
             })(
               <Input
-                placeholder="value"
-                style={{ width: '100%', marginRight: 8 }}
+                placeholder="Attribute value"
+                style={{ width: '80%', marginRight: 8 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onChangeValue(k.id, value);
                 }}
               />
             )}
-          </FormItem>
+            <span>
+              {obj.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k.id)} /> : null}
 
-          {obj.list.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(obj.id, k.id)} /> : null}
-          <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add(obj.id)} />
-          {index === 0 ? <i className="iconfont iconDelete" onClick={() => this.deleteCategory(obj.id)} style={{ fontSize: 20, marginTop: 8, marginLeft: 8 }}></i> : null}
+              <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
+            </span>
+          </FormItem>
         </div>
       ));
-    } else {
+      return formItems;
     }
-
-    return formItems;
   };
 
-  remove = (parentId, subId) => {
+  remove = (id) => {
     const { attributeValueList } = this.state;
-    attributeValueList.map((item, index) => {
-      if (item.id === parentId) {
-        item.list = item.list.filter((obj) => obj.id !== subId);
-        return item;
-      }
-    });
+    let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
+    console.log('temp', attributeValueListTemp);
+    console.log('org', attributeValueList);
     this.setState({
-      attributeValueList
+      attributeValueList: attributeValueListTemp
     });
   };
   deleteCategory = (id) => {
@@ -123,17 +136,19 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
 
-  add = (id) => {
+  add = () => {
     const { attributeValueList } = this.state;
     let obj = {
-      id: attributeValueId,
+      id: this.genID(),
       value: ''
     };
-    attributeValueList.list.push(obj);
-    attributeValueId++;
+    attributeValueList.push(obj);
     this.setState({
       attributeValueList
     });
+    // this.props.form.setFieldsValue({
+
+    // })
   };
   onChangeValue = (id, value) => {
     const { attributeValueList } = this.state;
@@ -146,6 +161,33 @@ class AttributeLibrary extends Component<any, any> {
 
     this.setState({
       attributeValueList
+    });
+  };
+  openAddPage = () => {
+    const { attributeValueList } = this.state;
+    if (attributeValueList.length < 1) {
+      this.add();
+    }
+
+    this.setState({
+      visibleAttribute: true
+    });
+  };
+  handleSubmit = (e) => {
+    debugger;
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const { keys, names } = values;
+        console.log('Received values of form: ', values);
+        console.log(
+          'Merged values:',
+          keys.map((key) => names[key])
+        );
+        this.setState({
+          visibleAttribute: false
+        });
+      }
     });
   };
 
@@ -189,7 +231,7 @@ class AttributeLibrary extends Component<any, any> {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12 }
+        sm: { span: 16 }
       }
     };
 
@@ -250,16 +292,7 @@ class AttributeLibrary extends Component<any, any> {
         </div>
 
         <div className="container">
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ margin: '10px 0 10px 0' }}
-            onClick={() => {
-              this.setState({
-                visibleAttribute: true
-              });
-            }}
-          >
+          <Button type="primary" htmlType="submit" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
             <span>Add new attribute</span>
           </Button>
           <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
@@ -269,11 +302,7 @@ class AttributeLibrary extends Component<any, any> {
           width="600px"
           title="Add new attribute"
           visible={visibleAttribute}
-          onOk={() => {
-            this.setState({
-              visibleAttribute: false
-            });
-          }}
+          onOk={(e) => this.handleSubmit(e)}
           onCancel={() => {
             this.setState({
               visibleAttribute: false
@@ -292,6 +321,7 @@ class AttributeLibrary extends Component<any, any> {
                 ]
               })(
                 <Input
+                  style={{ width: '80%' }}
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onAttributeFormChange({
@@ -321,6 +351,7 @@ class AttributeLibrary extends Component<any, any> {
                     });
                   }}
                   value={this.state.value}
+                  style={{ width: '80%' }}
                 >
                   <Radio value="Single choice">Single choice</Radio>
                   <Radio value="Multiple choice">Multiple choice</Radio>

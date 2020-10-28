@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -294,6 +294,33 @@ export default class TrafficReport extends Component<any, any> {
       }
     });
   };
+  onExport = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current
+    };
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref = Const.HOST + `/digitalStrategy/trafficReportPage/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+
+        resolve();
+      }, 500);
+    });
+  };
 
   render() {
     const {
@@ -464,7 +491,7 @@ export default class TrafficReport extends Component<any, any> {
             title="Traffic report"
             extra={
               <div>
-                <Button type="primary" shape="round" icon="download">
+                <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
                   <span style={{ color: '#ffffff' }}>Download the report</span>
                 </Button>
               </div>

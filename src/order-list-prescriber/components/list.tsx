@@ -389,7 +389,7 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && this.isPrescriber() && (
+                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) != 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002_prescriber">
                               <Tooltip placement="top" title="Audit">
                                 <a
@@ -406,6 +406,7 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
+                          {console.log(v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) != 'PAID' && this.isPrescriber())}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) != 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002_prescriber">
                               <Tooltip placement="top" title="Reject">

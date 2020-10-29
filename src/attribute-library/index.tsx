@@ -24,12 +24,25 @@ class AttributeLibrary extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      attributeList: []
+      attributeList: [],
+      visibleAttribute: false,
+      attributeForm: {
+        attributeName: '',
+        attributeType: ''
+      },
+      attributeValueList: []
     };
   }
   componentDidMount() {}
 
-  onFormChange = ({ field, value }) => {
+  onSearchFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+  onAttributeFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
     data[field] = value;
     this.setState({
@@ -48,8 +61,99 @@ class AttributeLibrary extends Component<any, any> {
     );
   };
 
+  genID() {
+    return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
+  }
+
+  renderForm = (obj) => {
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+    if (obj && obj.length > 0) {
+      const formItems = obj.map((k, index) => (
+        <div key={k.id}>
+          <FormItem required={false} key={'value' + k.id}>
+            {getFieldDecorator(`value[${k.id}]`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please input value.'
+                }
+              ]
+            })(
+              <Input
+                placeholder="value"
+                style={{ width: '100%', marginRight: 8 }}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onChangeValue(k.id, value);
+                }}
+              />
+            )}
+          </FormItem>
+
+          {obj.list.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(obj.id, k.id)} /> : null}
+          <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add(obj.id)} />
+          {index === 0 ? <i className="iconfont iconDelete" onClick={() => this.deleteCategory(obj.id)} style={{ fontSize: 20, marginTop: 8, marginLeft: 8 }}></i> : null}
+        </div>
+      ));
+    } else {
+    }
+
+    return formItems;
+  };
+
+  remove = (parentId, subId) => {
+    const { attributeValueList } = this.state;
+    attributeValueList.map((item, index) => {
+      if (item.id === parentId) {
+        item.list = item.list.filter((obj) => obj.id !== subId);
+        return item;
+      }
+    });
+    this.setState({
+      attributeValueList
+    });
+  };
+  deleteCategory = (id) => {
+    const { attributeValueList } = this.state;
+    let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
+    this.setState({
+      attributeValueList: attributeValueListTemp
+    });
+  };
+
+  add = (id) => {
+    const { attributeValueList } = this.state;
+    let obj = {
+      id: attributeValueId,
+      value: ''
+    };
+    attributeValueList.list.push(obj);
+    attributeValueId++;
+    this.setState({
+      attributeValueList
+    });
+  };
+  onChangeValue = (id, value) => {
+    const { attributeValueList } = this.state;
+    attributeValueList.map((item) => {
+      if (item.id === id) {
+        item.value = value;
+        return item;
+      }
+    });
+
+    this.setState({
+      attributeValueList
+    });
+  };
+
   render() {
-    const { title, attributeList } = this.state;
+    const { title, attributeList, visibleAttribute, attributeValueList } = this.state;
+
+    const { getFieldDecorator } = this.props.form;
+
     const columns = [
       {
         title: 'Attribute name',
@@ -78,6 +182,17 @@ class AttributeLibrary extends Component<any, any> {
       }
     ];
 
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 }
+      }
+    };
+
     return (
       <div>
         <BreadCrumb />
@@ -92,7 +207,7 @@ class AttributeLibrary extends Component<any, any> {
                     addonBefore="Attribute name"
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onFormChange({
+                      this.onSearchFormChange({
                         field: 'attributeName',
                         value
                       });
@@ -106,7 +221,7 @@ class AttributeLibrary extends Component<any, any> {
                     addonBefore="Attribute value"
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onFormChange({
+                      this.onSearchFormChange({
                         field: 'attributeValue',
                         value
                       });
@@ -138,15 +253,83 @@ class AttributeLibrary extends Component<any, any> {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              this.onSearch();
+            style={{ margin: '10px 0 10px 0' }}
+            onClick={() => {
+              this.setState({
+                visibleAttribute: true
+              });
             }}
           >
             <span>Add new attribute</span>
           </Button>
           <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
+
+        <Modal
+          width="600px"
+          title="Add new attribute"
+          visible={visibleAttribute}
+          onOk={() => {
+            this.setState({
+              visibleAttribute: false
+            });
+          }}
+          onCancel={() => {
+            this.setState({
+              visibleAttribute: false
+            });
+          }}
+        >
+          <Form {...formItemLayout}>
+            <FormItem label="Attribute Name">
+              {getFieldDecorator('attributeName', {
+                rules: [
+                  { required: true },
+                  {
+                    max: 50,
+                    message: 'Exceed maximum length!'
+                  }
+                ]
+              })(
+                <Input
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onAttributeFormChange({
+                      field: 'attributeName',
+                      value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+            <FormItem label="Choose type">
+              {getFieldDecorator('attributeType', {
+                rules: [
+                  { required: true },
+                  {
+                    max: 50,
+                    message: 'Exceed maximum length!'
+                  }
+                ]
+              })(
+                <Radio.Group
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onAttributeFormChange({
+                      field: 'attributeType',
+                      value
+                    });
+                  }}
+                  value={this.state.value}
+                >
+                  <Radio value="Single choice">Single choice</Radio>
+                  <Radio value="Multiple choice">Multiple choice</Radio>
+                </Radio.Group>
+              )}
+            </FormItem>
+            {this.renderForm(attributeValueList)}
+          </Form>
+        </Modal>
       </div>
     );
   }

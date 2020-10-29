@@ -468,7 +468,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       }),
       new WebpackBar(
         {
-          name: 'Stor Portal',
+          name: 'Store Portal',
           color: '#e2001a'
         }
       ),

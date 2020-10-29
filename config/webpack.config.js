@@ -23,6 +23,7 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const WebpackBar = require('webpackbar');
 
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -376,6 +377,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
     },
     plugins: [
+
       new HtmlWebpackPlugin(
         Object.assign(
           {},
@@ -464,6 +466,12 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         silent: true,
         formatter: typescriptFormatter,
       }),
+      new WebpackBar(
+        {
+          name: 'Stor Portal',
+          color: '#e2001a'
+        }
+      ),
     ].filter(Boolean),
     node: {
       module: 'empty',

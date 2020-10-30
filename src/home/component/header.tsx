@@ -17,8 +17,9 @@ export default class Header extends React.Component<any, any> {
       prescribers: '',
       rc: '',
       searchData: '',
-      prescriber: 'prescriberId',
-      prescriberInput: ''
+      prescriber: 'prescribersId',
+      prescriberInput: '',
+      aa: '11'
     };
   }
 
@@ -43,6 +44,8 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
+    console.log(this.state.prescriber, 11111);
+
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
@@ -67,7 +70,8 @@ export default class Header extends React.Component<any, any> {
       return;
     } else {
       const { onSearchData } = this.props.relaxProps as any;
-      if (this.state.prescriber == 'prescriberId') {
+      console.log(this.state.aa, 222222);
+      if (this.state.prescriber == 'prescribersId') {
         onSearchData({ prescriberId: this.state.prescriberInput });
       } else {
         onSearchData({ prescriberName: this.state.prescriberInput });

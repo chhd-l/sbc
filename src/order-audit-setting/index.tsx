@@ -13,8 +13,7 @@ class OrderSetting extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Audit Setting',
-
-      isAudit: false,
+      auditMethod: '',
       isPetInfo: false,
 
       configForm: {
@@ -55,12 +54,13 @@ class OrderSetting extends Component<any, any> {
           let configList = res.context;
           if (configList) {
             const { configForm } = this.state;
-            let isAudit = false;
             let isPetInfo = false;
+            let auditMethod = '';
             for (let i = 0; i < configList.length; i++) {
               if (configList[i].configType && configList[i].configType === 'no_audit_required') {
                 configForm.autoAuditId = configList[i].id;
-                isAudit = configList[i].status === 1 ? false : true;
+                //判断自动审核是否开启
+                auditMethod = configList[i].status === 1 ? 'Auto audit' : 'Manual audit';
               }
               if (configList[i].configType && configList[i].configType === 'audit_according_to_product_category') {
                 configForm.manualAuditId = configList[i].id;
@@ -71,7 +71,7 @@ class OrderSetting extends Component<any, any> {
               }
             }
             this.setState({
-              isAudit,
+              auditMethod,
               isPetInfo,
               configForm,
               loading: false
@@ -91,24 +91,7 @@ class OrderSetting extends Component<any, any> {
         message.error(err || 'Get config failed');
       });
   };
-  save = () => {
-    const { configForm, isAudit, isPetInfo } = this.state;
-    let params = {
-      requestList: [
-        {
-          id: configForm.autoAuditId,
-          status: isAudit ? 0 : 1
-        },
-        {
-          id: configForm.manualAuditId,
-          status: isAudit ? 1 : 0
-        },
-        {
-          id: configForm.petInfoId,
-          status: isPetInfo ? 1 : 0
-        }
-      ]
-    };
+  save = (params) => {
     webapi
       .saveAuditConfig(params)
       .then((data) => {
@@ -199,8 +182,83 @@ class OrderSetting extends Component<any, any> {
       });
   };
 
+  onAuditMethodChange = (e) => {
+    const { configForm, isPetInfo } = this.state;
+
+    if (e.target.value === 'Auto audit') {
+      this.setState({
+        auditMethod: e.target.value,
+        visiblePrescriberConfig: true
+      });
+
+      let params = {
+        requestList: [
+          {
+            id: configForm.autoAuditId,
+            status: 1
+          },
+          {
+            id: configForm.manualAuditId,
+            status: 0
+          },
+          {
+            id: configForm.petInfoId,
+            status: 0
+          }
+        ]
+      };
+      this.save(params);
+    }
+    if (e.target.value === 'Manual audit') {
+      this.setState({
+        auditMethod: e.target.value,
+        visibleAuditConfig: true
+      });
+      let params = {
+        requestList: [
+          {
+            id: configForm.autoAuditId,
+            status: 1
+          },
+          {
+            id: configForm.manualAuditId,
+            status: 0
+          },
+          {
+            id: configForm.petInfoId,
+            status: isPetInfo ? 1 : 0
+          }
+        ]
+      };
+      this.save(params);
+    }
+  };
+  onPetInfoChange = (checked) => {
+    const { configForm } = this.state;
+    this.setState({
+      isPetInfo: checked ? 1 : 0
+    });
+    let params = {
+      requestList: [
+        {
+          id: configForm.autoAuditId,
+          status: 1
+        },
+        {
+          id: configForm.manualAuditId,
+          status: 0
+        },
+        {
+          id: configForm.petInfoId,
+          status: checked ? 1 : 0
+        }
+      ]
+    };
+    this.save(params);
+  };
+
   render() {
-    const { title, isAudit, isPetInfo, configForm, visibleAuditConfig, visiblePrescriberConfig, configData, categoryLoading } = this.state;
+    const { title, auditMethod, isPetInfo, configForm, visibleAuditConfig, visiblePrescriberConfig, configData, categoryLoading } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -287,21 +345,11 @@ class OrderSetting extends Component<any, any> {
         <div className="container-search">
           <Headline title={title} />
           <Spin spinning={this.state.loading}>
-            <Form layout="horizontal" {...formItemLayout} labelAlign="left">
-              <FormItem label="Auto audit">
-                <Switch
-                  size="small"
-                  checked={!isAudit}
-                  onClick={(checked) => {
-                    this.setState({
-                      isAudit: !checked,
-                      visibleAuditConfig: !checked,
-                      visiblePrescriberConfig: checked,
-                      isPetInfo: false
-                    });
-                  }}
-                ></Switch>
-                {!isAudit ? (
+            <div style={{ margin: 20 }}>
+              <span style={{ marginRight: 20 }}>Audit method:</span>
+              <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
+                <Radio value="Auto audit">Auto audit</Radio>
+                {auditMethod === 'Auto audit' ? (
                   <Tooltip placement="top" title="Edit">
                     <span
                       onClick={() => {
@@ -309,26 +357,13 @@ class OrderSetting extends Component<any, any> {
                           visiblePrescriberConfig: true
                         });
                       }}
-                      style={{ marginLeft: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: '#e2001a' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>
                 ) : null}
-              </FormItem>
-              <FormItem label="Manual audit">
-                <Switch
-                  size="small"
-                  checked={isAudit}
-                  onClick={(checked) => {
-                    this.setState({
-                      isAudit: checked,
-                      visibleAuditConfig: checked,
-                      visiblePrescriberConfig: !checked,
-                      isPetInfo: false
-                    });
-                  }}
-                ></Switch>
-                {isAudit ? (
+                <Radio value="Manual audit">Manual audit</Radio>
+                {auditMethod === 'Manual audit' ? (
                   <Tooltip placement="top" title="Edit">
                     <span
                       onClick={() => {
@@ -336,25 +371,13 @@ class OrderSetting extends Component<any, any> {
                           visibleAuditConfig: true
                         });
                       }}
-                      style={{ marginLeft: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: '#e2001a' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>
                 ) : null}
-              </FormItem>
-              <FormItem label="Pet information as a reference">
-                <Switch
-                  size="small"
-                  disabled={!isAudit}
-                  checked={isPetInfo}
-                  onClick={(checked) => {
-                    this.setState({
-                      isPetInfo: checked
-                    });
-                  }}
-                ></Switch>
-              </FormItem>
-            </Form>
+              </Radio.Group>
+            </div>
           </Spin>
         </div>
         {/* prescriber */}
@@ -362,6 +385,18 @@ class OrderSetting extends Component<any, any> {
           width="800px"
           title="Please select whether the product category requires prescriber"
           visible={visiblePrescriberConfig}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  visiblePrescriberConfig: false
+                });
+              }}
+            >
+              Close
+            </Button>
+          ]}
           onOk={() => {
             this.setState({
               visiblePrescriberConfig: false
@@ -373,30 +408,29 @@ class OrderSetting extends Component<any, any> {
             });
           }}
         >
-          {/* <p>
-            <span
-              style={{
-                color: 'red',
-                fontFamily: 'SimSun',
-                marginRight: '4px',
-                fontSize: '12px'
-              }}
-            >
-              *
-            </span>
-            {
-              "Signed category" + configData.length + "categories have been signed then maximum is 200categories"
-            }
-            
-          </p> */}
           <Table loading={categoryLoading} rowKey="id" columns={columnsPresciber} dataSource={configData} pagination={false}></Table>
+          <div style={{ marginTop: 20 }}>
+            <span style={{ marginRight: 20 }}>Pet information as a reference</span>
+            <Switch size="small" disabled={true} checked={isPetInfo}></Switch>
+          </div>
         </Modal>
-
         {/* audit */}
         <Modal
           width="800px"
           title="Please select the product category to be reviewed."
           visible={visibleAuditConfig}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  visibleAuditConfig: false
+                });
+              }}
+            >
+              Close
+            </Button>
+          ]}
           onOk={() => {
             this.setState({
               visibleAuditConfig: false
@@ -419,16 +453,20 @@ class OrderSetting extends Component<any, any> {
             >
               *
             </span>
-            {'Signed category' + configData.length + 'categories have been signed then maximum is 200categories'}
+            {'Signed category ' + configData.length + ' categories have been signed then maximum is 200 categories'}
           </p>
           <Table loading={categoryLoading} rowKey="id" columns={columns} dataSource={configData} pagination={false}></Table>
+          <div style={{ marginTop: 20 }}>
+            <span style={{ marginRight: 20 }}>Pet information as a reference:</span>
+            <Switch size="small" disabled={false} checked={isPetInfo} onClick={(checked) => this.onPetInfoChange(checked)}></Switch>
+          </div>
         </Modal>
 
-        <div className="bar-button">
+        {/* <div className="bar-button">
           <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
             {<FormattedMessage id="save" />}
           </Button>
-        </div>
+        </div> */}
       </AuthWrapper>
     );
   }

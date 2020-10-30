@@ -47,19 +47,43 @@ export default class TransactionReport extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      xData: [],
-      averageBasketData: [],
-      consumersData: [],
-      revenueData: [],
-      salesVolumeData: []
+
+      currentTrend: 'Week trend',
+
+      xData_week: [],
+      averageBasketData_week: [],
+      consumersData_week: [],
+      revenueData_week: [],
+      salesVolumeData_week: [],
+
+      xData_day: [],
+      averageBasketData_day: [],
+      consumersData_day: [],
+      revenueData_day: [],
+      salesVolumeData_day: []
     };
   }
   componentDidMount() {
     this.getDefaultDate();
     this.transactionTrend();
+    this.transactionTrendDay();
   }
 
   chartInit = () => {
+    const {
+      currentTrend,
+      xData_week,
+      averageBasketData_week,
+      consumersData_week,
+      revenueData_week,
+      salesVolumeData_week,
+
+      xData_day,
+      averageBasketData_day,
+      consumersData_day,
+      revenueData_day,
+      salesVolumeData_day
+    } = this.state;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById('main'));
     // 绘制图表
@@ -75,7 +99,7 @@ export default class TransactionReport extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: this.state.xData
+        data: currentTrend === 'Week trend' ? xData_week : xData_day
       },
       yAxis: {
         type: 'value',
@@ -106,7 +130,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: this.state.salesVolumeData
+          data: currentTrend === 'Week trend' ? salesVolumeData_week : salesVolumeData_day
         },
         {
           name: 'Revenue',
@@ -123,7 +147,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: this.state.revenueData
+          data: currentTrend === 'Week trend' ? revenueData_week : revenueData_day
         },
         {
           name: 'Consumers',
@@ -140,7 +164,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: this.state.consumersData
+          data: currentTrend === 'Week trend' ? consumersData_week : consumersData_day
         },
         {
           name: 'Average basket',
@@ -157,14 +181,19 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: this.state.averageBasketData
+          data: currentTrend === 'Week trend' ? averageBasketData_week : averageBasketData_day
         }
       ]
     });
   };
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    this.setState(
+      {
+        currentTrend: value
+      },
+      () => this.chartInit()
+    );
   };
 
   handleTableChange = (pagination) => {
@@ -288,30 +317,57 @@ export default class TransactionReport extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let context = res.context;
-        let xData = [];
-        let averageBasketData = [];
-        let consumersData = [];
-        let revenueData = [];
-        let salesVolumeData = [];
+        let xData_week = [];
+        let averageBasketData_week = [];
+        let consumersData_week = [];
+        let revenueData_week = [];
+        let salesVolumeData_week = [];
         for (let i = 0; i < context.length; i++) {
-          xData.unshift('week-' + context[i].weekNum);
-          averageBasketData.unshift(context[i].averageBasket);
-          consumersData.unshift(context[i].consumers);
-          revenueData.unshift(context[i].revenue);
-          salesVolumeData.unshift(context[i].salesVolume);
+          xData_week.unshift('week-' + context[i].weekNum);
+          averageBasketData_week.unshift(context[i].averageBasket);
+          consumersData_week.unshift(context[i].consumers);
+          revenueData_week.unshift(context[i].revenue);
+          salesVolumeData_week.unshift(context[i].salesVolume);
         }
         this.setState(
           {
-            xData,
-            averageBasketData,
-            consumersData,
-            revenueData,
-            salesVolumeData
+            xData_week,
+            averageBasketData_week,
+            consumersData_week,
+            revenueData_week,
+            salesVolumeData_week
           },
           () => {
             this.chartInit();
           }
         );
+      }
+    });
+  };
+  transactionTrendDay = () => {
+    webapi.transactionTrendDay().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData_day = [];
+        let averageBasketData_day = [];
+        let consumersData_day = [];
+        let revenueData_day = [];
+        let salesVolumeData_day = [];
+        for (let i = 0; i < context.length; i++) {
+          xData_day.unshift(context[i].date);
+          averageBasketData_day.unshift(context[i].averageBasket);
+          consumersData_day.unshift(context[i].consumers);
+          revenueData_day.unshift(context[i].revenue);
+          salesVolumeData_day.unshift(context[i].salesVolume);
+        }
+        this.setState({
+          xData_day,
+          averageBasketData_day,
+          consumersData_day,
+          revenueData_day,
+          salesVolumeData_day
+        });
       }
     });
   };
@@ -480,6 +536,7 @@ export default class TransactionReport extends Component<any, any> {
               <div>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value="Week trend">Week trend</Option>
+                  <Option value="Day trend">Day trend</Option>
                 </Select>
               </div>
             }

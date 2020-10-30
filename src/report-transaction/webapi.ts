@@ -27,3 +27,8 @@ export function transactionTrend() {
     method: 'POST'
   });
 }
+export function transactionTrendDay() {
+  return Fetch<TResult>('/digitalStrategy/transactionTrendDay', {
+    method: 'POST'
+  });
+}

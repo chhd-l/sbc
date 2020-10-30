@@ -520,7 +520,7 @@ export default class TodoItems extends React.Component<any, any> {
                 goodsInfoTopView.goodsInfoTopViewItemList.map((item, i) => {
                   return (
                     <div className="seller-pro flex-start" key={i}>
-                      <div className="text">TOP {i}</div>
+                      <div className="text">TOP {i + 1}</div>
                       <div className="seller-content flex-content-start">
                         <img src={item.goodsInfoImg} alt="" />
                         <div className="content-text1 font-line1">{item.goodsInfoName}</div>

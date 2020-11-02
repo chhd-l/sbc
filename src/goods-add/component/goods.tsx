@@ -1,18 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {
-  Alert,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Radio,
-  Row,
-  Select,
-  Tree,
-  TreeSelect
-} from 'antd';
+import { Alert, Col, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
 import { fromJS, Map } from 'immutable';
@@ -200,22 +188,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {
-      goods,
-      images,
-      sourceCateList,
-      cateList,
-      isEditGoods,
-      modalVisible,
-      showCateModal,
-      storeCateList,
-      clickImg,
-      removeImg,
-      brandList,
-      cateDisabled,
-      removeVideo,
-      video
-    } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -230,23 +203,12 @@ class GoodsForm extends React.Component<any, any> {
         if (item.get('children') && item.get('children').count()) {
           // 一二级类目不允许选择
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              disabled={true}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} disabled={true} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
     let brandExists = false;
     if (goods.get('brandId') != null) {
@@ -261,10 +223,7 @@ class GoodsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.productName" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
               {getFieldDecorator('goodsName', {
                 rules: [
                   {
@@ -279,29 +238,19 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(
-                        rule,
-                        value,
-                        callback,
-                        'product name'
-                      );
+                      QMMethod.validatorEmoji(rule, value, callback, 'product name');
                     }
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsName'),
                 initialValue: goods.get('goodsName')
-              })(
-                <Input placeholder="Please input product name，no more than 225 words" />
-              )}
+              })(<Input placeholder="Please input product name，no more than 225 words" />)}
             </FormItem>
           </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.SPU" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
@@ -316,12 +265,7 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(
-                        rule,
-                        value,
-                        callback,
-                        'SPU encoding'
-                      );
+                      QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
                     }
                   }
                 ],
@@ -331,10 +275,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.InternalSPU" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
                 rules: [
                   {
@@ -349,12 +290,7 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(
-                        rule,
-                        value,
-                        callback,
-                        'SPU encoding'
-                      );
+                      QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
                     }
                   }
                 ],
@@ -366,22 +302,14 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.subscriptionStatus" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') === 0 ? 'N' : 'Y'
               })(
-                <Select
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
-                  placeholder="please select status"
-                >
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
                   <Option value="1">Y</Option>
                   <Option value="0">N</Option>
                 </Select>
@@ -391,10 +319,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.platformCategory" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -410,8 +335,7 @@ class GoodsForm extends React.Component<any, any> {
 
                       let overLen = false;
                       sourceCateList.forEach((val) => {
-                        if (val.get('cateParentId') + '' == value)
-                          overLen = true;
+                        if (val.get('cateParentId') + '' == value) overLen = true;
                         return;
                       });
 
@@ -425,15 +349,10 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'cateId'),
-                initialValue:
-                  goods.get('cateId') && goods.get('cateId') != ''
-                    ? goods.get('cateId')
-                    : undefined
+                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
               })(
                 <TreeSelect
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
+                  getPopupContainer={() => document.getElementById('page-content')}
                   placeholder="Please select category"
                   notFoundContent="No classification"
                   // disabled={cateDisabled}
@@ -446,10 +365,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.storeCategory" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.storeCategory" />}>
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
@@ -461,9 +377,7 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: storeCateValues
               })(
                 <TreeSelect
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
+                  getPopupContainer={() => document.getElementById('page-content')}
                   treeCheckable={true}
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
@@ -492,10 +406,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.brand" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
               {getFieldDecorator(
                 'brandId',
                 brandExists
@@ -512,10 +423,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.unitMeasurement" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.unitMeasurement" />}>
               {getFieldDecorator('goodsUnit', {
                 rules: [
                   {
@@ -523,17 +431,11 @@ class GoodsForm extends React.Component<any, any> {
                     min: 1,
                     max: 10,
                     message: '1-10 character'
-                  },
-                  {
-                    pattern: ValidConst.noNumber,
-                    message: 'Can only enter Chinese or English'
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsUnit'),
                 initialValue: goods.get('goodsUnit')
-              })(
-                <Input placeholder="Please fill in the unit of measurement，no more than 10 words" />
-              )}
+              })(<Input placeholder="Please fill in the unit of measurement，no more than 10 words" />)}
             </FormItem>
           </Col>
         </Row>
@@ -562,35 +464,24 @@ class GoodsForm extends React.Component<any, any> {
                   },
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(
-                        rule,
-                        value,
-                        callback,
-                        'Product Subtitle'
-                      );
+                      QMMethod.validatorEmoji(rule, value, callback, 'Product Subtitle');
                     }
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(
-                <Input placeholder="Please select the item subtitle, no more than 225 words" />
-              )}
+              })(<Input placeholder="Please select the item subtitle, no more than 225 words" />)}
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="price" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="price" />}>
               {getFieldDecorator('linePrice', {
                 rules: [
                   {
                     pattern: ValidConst.zeroPrice,
-                    message:
-                      'Please fill in the legal amount with two decimal places'
+                    message: 'Please fill in the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
@@ -627,23 +518,13 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(
-                        rule,
-                        value,
-                        callback,
-                        'product description'
-                      );
+                      QMMethod.validatorEmoji(rule, value, callback, 'product description');
                     }
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsDescription'),
                 initialValue: goods.get('goodsDescription')
-              })(
-                <TextArea
-                  rows={4}
-                  placeholder="Please fill in the description of the item"
-                />
-              )}
+              })(<TextArea rows={4} placeholder="Please fill in the description of the item" />)}
             </FormItem>
           </Col>
         </Row>
@@ -720,10 +601,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row> */}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.onOrOffShelves" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
                   {
@@ -772,40 +650,19 @@ class GoodsForm extends React.Component<any, any> {
               }
             >
               <div style={{ width: 550 }}>
-                <ImageLibraryUpload
-                  images={images}
-                  modalVisible={modalVisible}
-                  clickImg={clickImg}
-                  removeImg={removeImg}
-                  imgType={0}
-                  imgCount={10}
-                  skuId=""
-                />
+                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
               </div>
-              <Tips
-                title={<FormattedMessage id="product.recommendedSizeImg" />}
-              />
+              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
             </FormItem>
           </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.productVideo" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
               <div style={{ width: 550 }}>
-                <VideoLibraryUpload
-                  modalVisible={modalVisible}
-                  video={video}
-                  removeVideo={removeVideo}
-                  imgType={3}
-                  skuId=""
-                />
+                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
               </div>
-              <Tips
-                title={<FormattedMessage id="product.recommendedSizeVideo" />}
-              />
+              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
             </FormItem>
           </Col>
         </Row>
@@ -825,15 +682,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const {
-      editGoods,
-      showBrandModal,
-      showCateModal,
-      checkFlag,
-      enterpriseFlag,
-      flashsaleGoods,
-      updateGoodsForm
-    } = this.props.relaxProps;
+    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     if (e && e.target) {
       e = e.target.value;
@@ -849,34 +698,27 @@ class GoodsForm extends React.Component<any, any> {
 
     if (key === 'saleType' && e == 0) {
       if (!flashsaleGoods.isEmpty()) {
-        message.error(
-          'This product is participating in a spike event, and the sales type cannot be changed!',
-          3,
-          () => {
-            let goods = Map({
-              [key]: fromJS(1)
-            });
-            editGoods(goods);
-            setFieldsValue({ saleType: 1 });
-          }
-        );
+        message.error('This product is participating in a spike event, and the sales type cannot be changed!', 3, () => {
+          let goods = Map({
+            [key]: fromJS(1)
+          });
+          editGoods(goods);
+          setFieldsValue({ saleType: 1 });
+        });
       } else {
         let message = '';
         //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
         if (checkFlag == 'true') {
           if (enterpriseFlag) {
             //分销商品和企业购商品
-            message =
-              'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?';
+            message = 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?';
           } else {
             //分销商品
-            message =
-              'The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?';
+            message = 'The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?';
           }
         } else {
           if (enterpriseFlag) {
-            message =
-              'The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?';
+            message = 'The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?';
           }
         }
         if (message != '') {
@@ -923,8 +765,7 @@ class GoodsForm extends React.Component<any, any> {
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
 
     // 店铺分类列表
-    const sourceStoreCateList =
-      this.props.relaxProps.sourceStoreCateList || fromJS([]);
+    const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
 
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
@@ -933,18 +774,11 @@ class GoodsForm extends React.Component<any, any> {
     if (extra.clear || !extra.checked) {
       sourceStoreCateList.forEach((cate) => {
         // 删的是某个一级的
-        if (
-          extra.triggerValue == cate.get('storeCateId') &&
-          cate.get('cateParentId') == 0
-        ) {
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
           // 找到此一级节点下的二级节点
-          const children = sourceStoreCateList.filter(
-            (ss) => ss.get('cateParentId') == extra.triggerValue
-          );
+          const children = sourceStoreCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
           // 把一级的子节点也都删了
-          originValues = originValues.filter(
-            (v) => children.findIndex((c) => c.get('storeCateId') == v) == -1
-          );
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
         }
       });
     }
@@ -996,11 +830,7 @@ class GoodsForm extends React.Component<any, any> {
         allowClear={true}
         optionFilterProp="children"
         filterOption={(input, option: any) => {
-          return typeof option.props.children == 'string'
-            ? option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            : true;
+          return typeof option.props.children == 'string' ? option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 : true;
         }}
       >
         {brandList.map((item) => {
@@ -1020,12 +850,7 @@ class GoodsForm extends React.Component<any, any> {
   _checkUploadFile = (file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
@@ -1046,24 +871,12 @@ class GoodsForm extends React.Component<any, any> {
     return storeCateList.map((item) => {
       if (item.get('children') && item.get('children').count()) {
         return (
-          <TreeNode
-            key={item.get('storeCateId')}
-            value={item.get('storeCateId')}
-            title={item.get('cateName')}
-            disabled
-            checkable={false}
-          >
+          <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
             {this.generateStoreCateTree(item.get('children'))}
           </TreeNode>
         );
       }
-      return (
-        <TreeNode
-          key={item.get('storeCateId')}
-          value={item.get('storeCateId')}
-          title={item.get('cateName')}
-        />
-      );
+      return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
     });
   };
 }

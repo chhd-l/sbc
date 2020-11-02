@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs } from 'antd';
+import { Table, Tooltip, Switch, Form, Select, Spin, Alert, Tabs } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -123,7 +123,7 @@ class SalesCategory extends Component<any, any> {
           <Headline title={title} />
           <Alert message={description} type="error" />
 
-          <SalesCategoryModal></SalesCategoryModal>
+          <SalesCategoryModal />
         </div>
         <div className="container-search">
           <Table rowKey="id" columns={columns} dataSource={this.removeChildrenIsNull(salesCategoryList)} />

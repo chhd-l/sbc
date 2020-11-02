@@ -63,6 +63,7 @@ export default class TrafficReport extends Component<any, any> {
   componentDidMount() {
     this.getDefaultDate();
     this.trafficTrend();
+    this.trafficTrendDay();
   }
 
   chartInit = () => {
@@ -206,8 +207,8 @@ export default class TrafficReport extends Component<any, any> {
   }
 
   onChangeDate = (date, dateString) => {
-    let startDate = dateString[0];
-    let endDate = dateString[1];
+    let startDate = moment(dateString[0]).format('YYYY-MM-DD');
+    let endDate = moment(dateString[1]).format('YYYY-MM-DD');
     this.setState(
       {
         startDate,
@@ -220,8 +221,8 @@ export default class TrafficReport extends Component<any, any> {
     );
   };
   getDefaultDate = () => {
-    let startDate = new Date(this.dateCalculate(7)).toLocaleDateString().replaceAll('/', '-');
-    let endDate = new Date(this.dateCalculate(0)).toLocaleDateString().replaceAll('/', '-');
+    let startDate = moment(new Date(this.dateCalculate(7)).toLocaleDateString()).format('YYYY-MM-DD');
+    let endDate = moment(new Date(this.dateCalculate(0)).toLocaleDateString()).format('YYYY-MM-DD');
     this.setState(
       {
         startDate,

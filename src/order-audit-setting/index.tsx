@@ -188,7 +188,8 @@ class OrderSetting extends Component<any, any> {
     if (e.target.value === 'Auto audit') {
       this.setState({
         auditMethod: e.target.value,
-        visiblePrescriberConfig: true
+        visiblePrescriberConfig: true,
+        isPetInfo: false
       });
 
       let params = {
@@ -218,11 +219,11 @@ class OrderSetting extends Component<any, any> {
         requestList: [
           {
             id: configForm.autoAuditId,
-            status: 1
+            status: 0
           },
           {
             id: configForm.manualAuditId,
-            status: 0
+            status: 1
           },
           {
             id: configForm.petInfoId,

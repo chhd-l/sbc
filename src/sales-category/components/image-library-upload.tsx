@@ -4,12 +4,21 @@ import { List } from 'immutable';
 import { Icon } from 'antd';
 
 export default class ImageLibraryUpload extends Component<any, any> {
-  props: {
-    images: List<any>;
-    imgCount: number;
-    imgType: number;
-    skuId: String;
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      images: [],
+      imgCount: 0,
+      imgType: 0,
+      skuId: ''
+    };
+  }
+  // props: {
+  //   images: List<any>;
+  //   imgCount: number;
+  //   imgType: number;
+  //   skuId: String;
+  // };
   clickImg = (url) => {};
   removeImg = (obj) => {};
   modalVisible = (imgCount, imgType, skuId) => {};
@@ -53,7 +62,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
               </div>
             );
           })}
-        {images && images.count() < 10 ? (
+        {images && images.length < 10 ? (
           <div onClick={() => this.modalVisible(imgCount, imgType, skuId)} style={styles.addImg}>
             <div style={styles.imgBox}>
               <Icon type="plus" style={styles.plus} />

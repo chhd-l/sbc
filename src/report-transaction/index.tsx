@@ -382,7 +382,6 @@ export default class TransactionReport extends Component<any, any> {
     webapi.transactionReportPage(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
         pagination.total = res.context.totalElements;
         pagination.current = res.context.totalPages;
         let tableData = res.context.transactionReport;
@@ -487,11 +486,11 @@ export default class TransactionReport extends Component<any, any> {
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
@@ -508,19 +507,25 @@ export default class TransactionReport extends Component<any, any> {
                     <div className="mode-text" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
-                    <div className="mode-num" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
-                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
-                    </div>
+                    {item.name === 'Subscription rate' ? (
+                      <div className="mode-num" style={styles.borderRight}>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                      </div>
+                    ) : (
+                      <div className="mode-num" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      </div>
+                    )}
                     <div className="mode-per" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
                       {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
@@ -555,7 +560,7 @@ export default class TransactionReport extends Component<any, any> {
               </div>
             }
           />
-          <Table columns={columns} rowKey="id" dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
         </div>
       </div>
     );

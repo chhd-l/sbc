@@ -27,3 +27,8 @@ export function trafficTrend() {
     method: 'POST'
   });
 }
+export function trafficTrendDay() {
+  return Fetch<TResult>('/digitalStrategy/trafficTrendDay', {
+    method: 'POST'
+  });
+}

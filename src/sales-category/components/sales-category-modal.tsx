@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Input, Modal, Select } from 'antd';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import { Tips } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +17,7 @@ class SalesCategoryModal extends Component<any, any> {
       categoryForm: {
         categoryName: '',
         parentCategory: '',
-        categoryImg: '',
+        categoryImg: [],
         categoryDescription: ''
       },
       parentCategoryList: []
@@ -51,13 +52,25 @@ class SalesCategoryModal extends Component<any, any> {
   render() {
     const { categoryForm, parentCategoryList } = this.state;
     const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        span: 2,
+        xs: { span: 24 },
+        sm: { span: 10 }
+      },
+      wrapperCol: {
+        span: 24,
+        xs: { span: 24 },
+        sm: { span: 10 }
+      }
+    };
     return (
       <div>
         <Button type="primary" style={{ margin: '20px 0' }} onClick={() => this.openModal()}>
           Add Category
         </Button>
-        <Modal title="Add Category" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
-          <Form className="login-form">
+        <Modal width={700} title="Add Category" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+          <Form {...formItemLayout} className="login-form" style={{ width: 550 }}>
             <FormItem label="Category name">
               {getFieldDecorator('categoryName', {
                 rules: [
@@ -103,7 +116,8 @@ class SalesCategoryModal extends Component<any, any> {
             </FormItem>
 
             <FormItem label={<FormattedMessage id="cateImage" />}>
-              <ImageLibraryUpload images={categoryForm.images} imgType={0} imgCount={10} skuId="" />
+              <ImageLibraryUpload images={categoryForm.categoryImg} imgType={0} imgCount={10} skuId="" />
+              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
             </FormItem>
 
             <FormItem label={<FormattedMessage id="cateDsc" />}>

@@ -442,11 +442,11 @@ export default class TrafficReport extends Component<any, any> {
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
                           <span>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
@@ -540,7 +540,7 @@ export default class TrafficReport extends Component<any, any> {
               </div>
             }
           />
-          <Table columns={columns} rowKey="id" dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
         </div>
       </div>
     );

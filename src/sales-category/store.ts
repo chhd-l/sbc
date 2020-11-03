@@ -58,10 +58,7 @@ export default class AppStore extends Store {
   showEditModal = (formData: IMap, images: IMap) => {
     this.transaction(() => {
       this.dispatch('cateActor: editFormData', formData);
-      if (images) {
-        debugger;
-        this.dispatch('cateActor: editImages', images);
-      }
+      this.dispatch('cateActor: editImages', images);
       this.dispatch('cateActor: showModal');
     });
   };

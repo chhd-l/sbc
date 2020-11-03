@@ -51,11 +51,11 @@ export default class CateList extends React.Component<any, any> {
 
     return (
       <Table
-        rowKey={(record, index) => index.toString()}
+        rowKey="storeCateId"
         columns={this._columns}
         dataSource={dataList.toJS()}
         // components={this.components}
-        // pagination={false}
+        pagination={false}
         // onRow={(_record, index) => ({
         //   index,
         //   moveRow: this._moveRow
@@ -100,7 +100,7 @@ export default class CateList extends React.Component<any, any> {
    */
   _getOption = (rowInfo) => {
     if (rowInfo.cateImg) {
-      if (!rowInfo.cateImg.length) {
+      if (typeof rowInfo.cateImg == 'string') {
         rowInfo.cateImg = JSON.parse(rowInfo.cateImg);
       }
     } else {
@@ -158,7 +158,7 @@ export default class CateList extends React.Component<any, any> {
    */
   _addChildrenCate = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
     const { showEditModal } = this.props.relaxProps;
-    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }));
+    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }), Map({}));
   };
 
   /**
@@ -182,7 +182,7 @@ export default class CateList extends React.Component<any, any> {
       children,
       cateDescription
     });
-    // let images = Map(cateImg)
+
     showEditModal(cateInfo, cateImg);
   };
 

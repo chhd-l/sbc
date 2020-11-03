@@ -376,6 +376,7 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
+                          {/*审核按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002">
                               <a
@@ -389,6 +390,7 @@ export default class ListView extends React.Component<any, any> {
                               </a>
                             </AuthWrapper>
                           )}
+                          {/*驳回按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002">
                               <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }}>
@@ -396,22 +398,8 @@ export default class ListView extends React.Component<any, any> {
                               </a>
                             </AuthWrapper>
                           )}
+
                           {/*待发货状态显示*/}
-                          {needAudit && v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
-                            <AuthWrapper functionName="fOrderList002">
-                              <Tooltip placement="top" title="Review">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  className="iconfont iconbtn-review"
-                                >
-                                  {/*<FormattedMessage id="order.review" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
                           {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
                             // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
@@ -425,7 +413,7 @@ export default class ListView extends React.Component<any, any> {
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'PAID' && (
                             <AuthWrapper functionName="fOrderDetail002">
                               <Tooltip placement="top" title="Ship">
                                 <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">

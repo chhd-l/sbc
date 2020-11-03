@@ -567,17 +567,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </Tooltip>
             </AuthWrapper>
           )}
-          {payState === 'PAID'
-            ? null
-            : flowState === 'INIT' && (
-                <AuthWrapper functionName="fOrderList002">
-                  <Tooltip placement="top" title="Turn down">
-                    <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-turndown">
-                      {/*<FormattedMessage id="order.turnDown" />*/}
-                    </a>
-                  </Tooltip>
-                </AuthWrapper>
-              )}
+          {
+            // payState === 'PAID'
+            //   ? null
+            //   : flowState === 'INIT' && (
+            //       <AuthWrapper functionName="fOrderList002">
+            //         <Tooltip placement="top" title="Turn down">
+            //           <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-turndown">
+            //             {/*<FormattedMessage id="order.turnDown" />*/}
+            //           </a>
+            //         </Tooltip>
+            //       </AuthWrapper>
+            //     )
+          }
           {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
@@ -615,21 +617,23 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </div>
           )}
           {/*未审核需要处理的*/}
-          {flowState === 'INIT' && (
-            <AuthWrapper functionName="fOrderList002">
-              <Tooltip placement="top" title="Review">
-                <a
-                  onClick={() => {
-                    onAudit(tid, 'CHECKED');
-                  }}
-                  style={{ fontSize: 14 }}
-                  className="iconfont iconbtn-review"
-                >
-                  {/*Review*/}
-                </a>
-              </Tooltip>
-            </AuthWrapper>
-          )}
+          {
+            // flowState === 'INIT' && (
+            //   <AuthWrapper functionName="fOrderList002">
+            //     <Tooltip placement="top" title="Review">
+            //       <a
+            //         onClick={() => {
+            //           onAudit(tid, 'CHECKED');
+            //         }}
+            //         style={{ fontSize: 14 }}
+            //         className="iconfont iconbtn-review"
+            //       >
+            //         {/*Review*/}
+            //       </a>
+            //     </Tooltip>
+            //   </AuthWrapper>
+            // )
+          }
         </div>
       );
     } else if (flowState === 'DELIVERED_PART') {

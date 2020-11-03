@@ -243,11 +243,11 @@ class OrderSetting extends Component<any, any> {
       requestList: [
         {
           id: configForm.autoAuditId,
-          status: 1
+          status: 0
         },
         {
           id: configForm.manualAuditId,
-          status: 0
+          status: 1
         },
         {
           id: configForm.petInfoId,

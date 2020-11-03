@@ -21,7 +21,7 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "@babel/plugin-transform-runtime",
+    "dynamic-import-node",
     [
       "@babel/plugin-proposal-decorators",
       {

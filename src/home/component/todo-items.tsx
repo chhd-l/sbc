@@ -233,15 +233,15 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r-btm"></div>
                 </div>
                 <div className="Funnel-per1 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
                 <div className="Funnel-per2 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
                 <div className="Funnel-per3 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default class TodoItems extends React.Component<any, any> {
                       <div className="mode-per">
                         {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
-                          {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} prefix={trafficDashboardView.pageViewRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -285,7 +285,7 @@ export default class TodoItems extends React.Component<any, any> {
                       <div className="mode-per">
                         {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <img src={trafficDashboardView.bounceRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
-                          {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} prefix={trafficDashboardView.bounceRateRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -294,7 +294,6 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">VET traffic</div>
                       <div className="mode-num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                         <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
@@ -302,7 +301,7 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">VET traffic rate</div>
                       <div className="mode-num num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                        {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                         <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
@@ -324,7 +323,7 @@ export default class TodoItems extends React.Component<any, any> {
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} prefix={tradeCustomerView.orderNumberRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -336,7 +335,7 @@ export default class TodoItems extends React.Component<any, any> {
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <img src={tradeCustomerView.salesVolumeRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? (tradeCustomerView.salesVolumeRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <CountUp end={Math.abs(tradeCustomerView.salesVolumeRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <CountUp end={Math.abs(tradeCustomerView.salesVolumeRate)} decimals={2} suffix={'%'} prefix={tradeCustomerView.salesVolumeRate < 0 ? '-' : ''} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -350,7 +349,7 @@ export default class TodoItems extends React.Component<any, any> {
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <img src={tradeCustomerView.unitsSoldRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? (tradeCustomerView.unitsSoldRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <CountUp end={Math.abs(tradeCustomerView.unitsSoldRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <CountUp end={Math.abs(tradeCustomerView.unitsSoldRate)} decimals={2} prefix={tradeCustomerView.unitsSoldRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -358,11 +357,11 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="transaction-l space-around">
                     <div className="text">Retention rate</div>
                     <div className="num">
-                      <div className="num-l">{tradeCustomerView && tradeCustomerView.retentionRate != null ? <CountUp end={tradeCustomerView.retentionRate} {...countUpProps} /> : '--'}</div>
+                      <div className="num-l">{tradeCustomerView && tradeCustomerView.retentionRate != null ? <CountUp end={tradeCustomerView.retentionRate} suffix={'%'} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <img src={tradeCustomerView.retentionRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.retentionRateRate != null ? (tradeCustomerView.retentionRateRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.retentionRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.retentionRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.retentionRateRate)} decimals={2} prefix={tradeCustomerView.retentionRateRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>
                     </div>
@@ -379,26 +378,29 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Active consumers</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                      {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                       <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
                       {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                       <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
-                        {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} prefix={tradeCustomerView.activeConsumersRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
                     </div>
                   </div>
                   <div className="mode">
                     <div className="mode-text">Active consumer rate</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
+                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} suffix={'%'} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
                       {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                       <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
-                        {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                        {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (
+                          <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} prefix={tradeCustomerView.activeConsumerRateRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} />
+                        ) : (
+                          '--'
+                        )}
                       </span>
                     </div>
                   </div>
@@ -422,25 +424,33 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
                 <div className="subscription-r flex-content">
                   <div className="subscription-content space-around">
-                    <div className="text">Order Number</div>
+                    <div className="text">Order</div>
                     <div className="num">
                       <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (
+                            <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} prefix={tradeCustomerView.subscriptionNumberRate < 0 ? '-' : ''} decimals={2} suffix={'%'} {...countUpProps} />
+                          ) : (
+                            '--'
+                          )}
                         </span>
                       </div>
                     </div>
                   </div>
                   <div className="subscription-content space-around">
-                    <div className="text">Sales volume</div>
+                    <div className="text">Sales</div>
                     <div className="num">
                       <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
-                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (
+                            <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} prefix={tradeCustomerView.subscriptionRevenueRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} />
+                          ) : (
+                            '--'
+                          )}
                         </span>
                       </div>
                     </div>
@@ -457,28 +467,26 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="item-mid-l-l flex-content">
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescriber rates</div>
-                  <div className="mode-num">
-                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    {prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}
-                  </div>
+                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} suffix={'%'} {...countUpProps} /> : '--'}</div>
                   <div className="mode-per">
                     {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                     <span className={prescriberTopView && tradeCustomerView.activePrescribersRate != null ? (prescriberTopView.activePrescribersRate >= 0 ? 'green' : 'red') : ''}>
-                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} prefix={prescriberTopView.activePrescribersRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
                 <div className="line-1 mode-line"></div>
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescribers</div>
-                  <div className="mode-num">
-                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    {prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} {...countUpProps} /> : '--'}
-                  </div>
+                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} {...countUpProps} /> : '--'}</div>
                   <div className="mode-per">
                     {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                     <span className={prescriberTopView && tradeCustomerView.activePrescriberRatesRate != null ? (prescriberTopView.activePrescriberRatesRate >= 0 ? 'green' : 'red') : ''}>
-                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? (
+                        <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} prefix={prescriberTopView.activePrescriberRatesRate < 0 ? '-' : ''} suffix={'%'} {...countUpProps} />
+                      ) : (
+                        '--'
+                      )}
                     </span>
                   </div>
                 </div>

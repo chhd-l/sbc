@@ -19,7 +19,8 @@ export default class HelloApp extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      prescriberId: null
+      prescriberId: null,
+      changeMode: false
     };
   }
 
@@ -30,7 +31,6 @@ export default class HelloApp extends React.Component<any, any> {
       prescriberId: prescriberId
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
-    console.log(moment(date).year(), 11111111111);
     if (prescriberId == null) {
       this.store.newInit({
         companyId: 2,
@@ -46,6 +46,11 @@ export default class HelloApp extends React.Component<any, any> {
     }
     //this.store.init();
   }
+  changePage(res) {
+    this.setState({
+      changeMode: true
+    });
+  }
 
   render() {
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
@@ -53,7 +58,8 @@ export default class HelloApp extends React.Component<any, any> {
     if (allFunctions.includes('f_home')) {
       return !this.state.prescriberId ? (
         <div style={styles.container}>
-          <Header />
+          <Header changePage={(mode) => this.changePage(mode)} />
+          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.prescriberId} />}
           <TodoItems />
           {/*<StatisticalReport />
           <Ranking /> */}

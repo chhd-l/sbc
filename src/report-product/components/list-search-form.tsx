@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { DatePicker, Input, Form, Icon, Button } from 'antd';
-import { Const } from 'qmkit';
+import {AuthWrapper, Const, noop} from 'qmkit';
+import {Relax} from "plume2";
 const { RangePicker } = DatePicker;
 const { Search } = Input;
+
+@Relax
 export default class ListSearchForm extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -13,6 +16,15 @@ export default class ListSearchForm extends Component<any, any> {
       skuText: ''
     };
   }
+  props: {
+    relaxProps?: {
+      handleBatchExport: Function;
+    };
+  };
+
+  static relaxProps = {
+    handleBatchExport: noop
+  };
 
   componentDidMount() {}
   datePickerChange(e) {
@@ -42,6 +54,7 @@ export default class ListSearchForm extends Component<any, any> {
     };
     this.props.onSearch(params);
   }
+
   render() {
     const { skuText } = this.state;
     return (
@@ -61,9 +74,11 @@ export default class ListSearchForm extends Component<any, any> {
               </Button>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" shape="round">
-                Download the report
-              </Button>
+              <AuthWrapper functionName="digital_trategy_export">
+                <Button type="primary" shape="round" onClick={() => this._handleBatchExport()}>
+                  Download the report
+                </Button>
+              </AuthWrapper>
             </Form.Item>
           </Form>
         </div>

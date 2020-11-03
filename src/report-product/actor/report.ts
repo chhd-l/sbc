@@ -43,4 +43,5 @@ export default class BrandActor extends Actor {
   current(state: IMap, current) {
     return state.set('current', current);
   }
+
 }

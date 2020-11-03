@@ -60,7 +60,7 @@ export default class HelloApp extends React.Component<any, any> {
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
           {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.prescriberId} />}
-          <TodoItems />
+
           {/*<StatisticalReport />
           <Ranking /> */}
         </div>

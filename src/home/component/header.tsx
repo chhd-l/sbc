@@ -44,8 +44,6 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    console.log(this.state.prescriber, 11111);
-
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',

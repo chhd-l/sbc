@@ -57,7 +57,7 @@
           "biz": "./web_modules/biz",
           "wmservice": "./web_modules/wmservice",
           "wmui": "./web_modules/wmui",
-           "@": "./src"
+          "@": "./src"
         }
       }
     ],

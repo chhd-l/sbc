@@ -6,14 +6,21 @@ type TResult = {
   context: any;
 };
 
-export function getProductReportPage(params) {
-  return Fetch<TResult>('digitalStrategy/productReportPage', {
+export function getProductStatistics(params) {
+  return Fetch<TResult>('/digitalStrategy/productStatistics', {
     method: 'POST',
     body: JSON.stringify(params)
   });
 }
 
-export function getOverview(params) {
+export function getProductReportPage(params) {
+  return Fetch<TResult>('/digitalStrategy/productReportPage', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+/*export function getOverview(params) {
   return Fetch<TResult>('/message/listSendGridOverview', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -25,4 +32,4 @@ export function getAllProductList(params) {
     method: 'POST',
     body: JSON.stringify(params)
   });
-}
+}*/

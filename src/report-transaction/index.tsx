@@ -485,8 +485,8 @@ export default class TransactionReport extends Component<any, any> {
                       {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
-                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
+                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
@@ -520,8 +520,8 @@ export default class TransactionReport extends Component<any, any> {
                       {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
-                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
+                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (

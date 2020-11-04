@@ -216,7 +216,6 @@ export default class List extends React.Component<any, any> {
    */
   _handleBatchOption = (settleId, status) => {
     const { changeSettleStatus } = this.props.relaxProps;
-    console.log(settleId);
     changeSettleStatus([settleId], status);
   };
 }

@@ -445,8 +445,9 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
-                                min={1}
-                                max={9999}
+                                precision={1}
+                                min={0.1}
+                                max={9999.9}
                                 value={paymentOnlineForm.orderExpirationTimeValue}
                                 onChange={(value) =>
                                   this.paymentOnlineFormChange({
@@ -481,6 +482,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentOnlineForm.orderConfirmReceiptValue}
@@ -517,6 +519,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentOnlineForm.orderRefundsValue}
@@ -553,6 +556,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentOnlineForm.orderAutomaticReviewValue}
@@ -589,6 +593,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentOnlineForm.orderAutomaticConfirmationValue}
@@ -631,8 +636,9 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
-                                min={1}
-                                max={9999}
+                                precision={1}
+                                min={0.1}
+                                max={9999.9}
                                 value={paymentCashForm.orderExpirationTimeValue}
                                 onChange={(value) =>
                                   this.paymentCashFormChange({
@@ -667,6 +673,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentCashForm.orderConfirmReceiptValue}
@@ -703,6 +710,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentCashForm.orderRefundsValue}
@@ -739,6 +747,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentCashForm.orderAutomaticReviewValue}
@@ -775,6 +784,7 @@ class OrderSetting extends Component<any, any> {
                           <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
+                                precision={0}
                                 min={1}
                                 max={9999}
                                 value={paymentCashForm.orderAutomaticConfirmationValue}
@@ -819,8 +829,9 @@ class OrderSetting extends Component<any, any> {
                       <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
-                            min={1}
-                            max={9999}
+                            precision={1}
+                            min={0.1}
+                            max={9999.9}
                             value={unlimitedForm.orderExpirationTimeValue}
                             onChange={(value) =>
                               this.unlimitedFormChange({
@@ -855,6 +866,7 @@ class OrderSetting extends Component<any, any> {
                       <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
+                            precision={0}
                             min={1}
                             max={9999}
                             value={unlimitedForm.orderConfirmReceiptValue}
@@ -891,6 +903,7 @@ class OrderSetting extends Component<any, any> {
                       <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
+                            precision={0}
                             min={1}
                             max={9999}
                             value={unlimitedForm.orderRefundsValue}
@@ -927,6 +940,7 @@ class OrderSetting extends Component<any, any> {
                       <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
+                            precision={0}
                             min={1}
                             max={9999}
                             value={unlimitedForm.orderAutomaticReviewValue}
@@ -963,6 +977,7 @@ class OrderSetting extends Component<any, any> {
                       <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
+                            precision={0}
                             min={1}
                             max={9999}
                             value={unlimitedForm.orderAutomaticConfirmationValue}

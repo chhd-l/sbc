@@ -5,7 +5,7 @@ import AppStore from './store';
 import Header from './component/header';
 import TodoItems from './component/todo-items';
 import Prescriber from './component/prescriber';
-
+import moment from 'moment';
 /*import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';*/
@@ -19,7 +19,9 @@ export default class HelloApp extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      prescriberId: null
+      prescriberId: null,
+      changeMode: false,
+      getPrescriberId: ''
     };
   }
 
@@ -29,30 +31,38 @@ export default class HelloApp extends React.Component<any, any> {
     this.setState({
       prescriberId: prescriberId
     });
+    let date = sessionStorage.getItem(cache.CURRENT_YEAR);
     if (prescriberId == null) {
       this.store.newInit({
         companyId: 2,
-        weekNum: 39,
-        year: 2020
+        weekNum: moment(date).week(),
+        year: moment(date).year()
       });
     } else {
       this.store.prescriberInit({
         companyId: 2,
-        weekNum: 39,
-        year: 2020
+        weekNum: moment(date).week(),
+        year: moment(date).year()
       });
     }
-    //this.store.init();
+  }
+
+  changePage(res) {
+    console.log(res, 1111);
+    this.setState({
+      changeMode: res.type,
+      getPrescriberId: res.prescriberId
+    });
   }
 
   render() {
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
-
     if (allFunctions.includes('f_home')) {
       return !this.state.prescriberId ? (
         <div style={styles.container}>
-          <Header />
-          <TodoItems />
+          <Header changePage={(mode) => this.changePage(mode)} />
+          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+
           {/*<StatisticalReport />
           <Ranking /> */}
         </div>

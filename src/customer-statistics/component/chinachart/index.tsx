@@ -250,7 +250,6 @@ export default class ChinaMap extends React.Component<ChinaMapProps, IState> {
       cityProvinceReal[city.code] = city.parent_code;
     });
 
-    //console.log('cityProvinceReal',cityProvinceReal)
     //省和值之间关系Json
     let provinceValueJson = {};
     dataJson.forEach((dataItem) => {
@@ -270,7 +269,6 @@ export default class ChinaMap extends React.Component<ChinaMapProps, IState> {
         maxValue =
           provinceItem.value > maxValue ? provinceItem.value : maxValue;
       } else {
-        // console.log(5743927594327)
         provinceItem.value = 0;
       }
       if (param.data.code == provinceItem.code) {

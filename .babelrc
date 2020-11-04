@@ -21,7 +21,8 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "@babel/plugin-transform-runtime",
+    "dynamic-import-node",
+    //"@babel/plugin-transform-runtime",
     [
       "@babel/plugin-proposal-decorators",
       {
@@ -57,10 +58,10 @@
           "biz": "./web_modules/biz",
           "wmservice": "./web_modules/wmservice",
           "wmui": "./web_modules/wmui",
-           "@": "./src"
+          "@": "./src"
         }
       }
     ],
-    "@babel/plugin-syntax-dynamic-import"
+    "@babel/plugin-transform-runtime"
   ]
 }

@@ -23,7 +23,11 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
-
+const WebpackBar = require('webpackbar');
+const HappyPack = require('happypack');
+const os = require('os');
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
@@ -210,6 +214,13 @@ module.exports = function (webpackEnv, envCode = 'prod') {
     module: {
       strictExportPresence: true,
       rules: [
+        {
+          test: /\.js$/,
+          //把对.js 的文件处理交给id为happyBabel 的HappyPack 的实例执行
+          loader: 'happypack/loader?id=happyBabel',
+          //排除node_modules 目录下的文件
+          exclude: /node_modules/
+        },
         { parser: { requireEnsure: false } },
         // {
         //      test: /\.(js|mjs|jsx)$/,
@@ -376,6 +387,18 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
     },
     plugins: [
+      new HappyPack({
+        //用id来标识 happypack处理那里类文件
+        id: 'happyBabel',
+        //如何处理  用法和loader 的配置一样
+        loaders: [{
+          loader: 'babel-loader?cacheDirectory=true',
+        }],
+        //共享进程池
+        threadPool: happyThreadPool,
+        //允许 HappyPack 输出日志
+        verbose: true,
+      }),
       new HtmlWebpackPlugin(
         Object.assign(
           {},
@@ -464,6 +487,12 @@ module.exports = function (webpackEnv, envCode = 'prod') {
         silent: true,
         formatter: typescriptFormatter,
       }),
+      new WebpackBar(
+        {
+          name: 'Store Portal',
+          color: '#e2001a'
+        }
+      ),
     ].filter(Boolean),
     node: {
       module: 'empty',

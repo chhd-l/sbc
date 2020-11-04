@@ -122,7 +122,6 @@ export default class StepNewConsent extends Component<any, any> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { editList } = nextProps;
-    console.log(editList !== prevState.editList);
 
     // 当传入的type发生变化的时候，更新state
     if (editList !== prevState.editList) {

@@ -15,6 +15,7 @@ import CateActor from './actor/cate-actor';
 import ModalActor from './actor/modal-actor';
 import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
+import relatedActor from './actor/related';
 
 import {
   addAll,
@@ -49,9 +50,16 @@ import {
   checkEnterpriseType,
   enterpriseToGeneralgoods,
   getDetailTab,
-  getStoreCode
+  getStoreCode,
+  getRelatedList,
+  fetchPropSort,
+  fetchConsentDelete,
+  fetchAdd,
+  fetchproductTooltip
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
+import * as webApi from '@/shop/webapi';
+import { goodsList } from '@/goods-list/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -62,7 +70,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor()];
+    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor()];
   }
 
   /**
@@ -76,9 +84,9 @@ export default class AppStore extends Store {
       getBrandList(),
       checkSalesType(goodsId),
       isFlashsele(goodsId),
-      getDetailTab()
+      getDetailTab(),
+      this.onRelatedList(goodsId)
     ]).then((results) => {
-      console.log(results, 'results');
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       // this.dispatch(
       //   'goodsActor: initStoreCateList',
@@ -88,6 +96,7 @@ export default class AppStore extends Store {
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
+      this.dispatch('related:goodsId', goodsId);
     });
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
@@ -293,7 +302,6 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-      console.log(goods.toJS(), 'goods');
 
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
@@ -350,7 +358,6 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: goodsTabs', tabs);
       // 属性信息
       this.showGoodsPropDetail(goodsDetail.getIn(['goods', 'cateId']), goodsDetail.get('goodsPropDetailRels'));
-      console.log(goodsDetail.toJS(), 'goodsDetail');
       // 是否为多规格
       if (goodsDetail.getIn(['goods', 'moreSpecFlag']) == 1) {
         // 规格，按照id升序排列
@@ -533,13 +540,10 @@ export default class AppStore extends Store {
     if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
       this.editPriceSetting('priceOpt', 2);
     }
-    console.log(goods.toJS(), 'haha');
     if (goods.get('goodsNo')) {
-      console.log(1);
       goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
     }
-    console.log(2);
-    console.log(goods.toJS(), 'haha');
+
     this.dispatch('goodsActor: editGoods', goods);
   };
 
@@ -716,14 +720,12 @@ export default class AppStore extends Store {
   };
 
   updateGoodsForm = (goodsForm) => {
-    console.log(goodsForm, goodsForm, 'goodsForm');
     this.dispatch('formActor:goods', goodsForm);
   };
   updateLogisticsForm = (logisticsForm) => {
     this.dispatch('formActor:logistics', logisticsForm);
   };
   updateSkuForm = (skuForm) => {
-    console.log(skuForm, 'skuform');
     this.dispatch('formActor:sku', skuForm);
   };
 
@@ -860,7 +862,6 @@ export default class AppStore extends Store {
     let goods = data.get('goods');
 
     let goodsDetailTab = data.get('goodsDetailTab');
-    console.log(goods.toJS(), goodsDetailTab.toJS());
 
     // const detailEditor1 = data.get('detailEditor1') || {};
     // const detailEditor2 = data.get('detailEditor2') || {};
@@ -878,7 +879,6 @@ export default class AppStore extends Store {
     goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
     goodsDetailTab.map((item, i) => {
       // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
-      console.log(data.get('detailEditor_' + i), 'detailEditor_' + i);
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
     goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
@@ -1132,7 +1132,6 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
-    console.log(result, 'result');
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -1199,7 +1198,6 @@ export default class AppStore extends Store {
     const detailEditor = data.get('detailEditor') || {};
 
     goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
-    console.log(goods.toJS(), 'goods111');
     const tabs = [];
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       tabs.push({
@@ -1819,7 +1817,6 @@ export default class AppStore extends Store {
    * @param executeValid 是否执行基本信息校验
    */
   onMainTabChange = (activeKey, executeValid: boolean = true) => {
-    console.log(activeKey, 11111111111);
     if (executeValid) {
       // 基本信息校验不通过，不允许进行切换
       if ('related' === activeKey && !this._validMainForms()) {
@@ -1962,5 +1959,90 @@ export default class AppStore extends Store {
       }
     }
     return cateIdList;
+  };
+
+  onRelatedList = async (param?: any) => {
+    this.dispatch('loading:start');
+    const { res } = await getRelatedList(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('loading:end');
+        this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  propSort = async (param?: any) => {
+    const { res } = await fetchPropSort(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.onRelatedList(this.state().get('goodsId'));
+      });
+    }
+  };
+
+  //删除
+  getConsentDelete = async (param?: any) => {
+    const { res } = await fetchConsentDelete(param);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.onRelatedList(this.state().get('goodsId'));
+      });
+    }
+  };
+
+  //productselect
+  onProductselect = async (addProduct) => {
+    const { res } = await fetchAdd(addProduct);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
+        this.onRelatedList(this.state().get('goodsId'));
+      });
+    } else {
+      message.error(res.message);
+    }
+  };
+
+  onSPU = (res) => {
+    this.dispatch('related:SPU', res);
+  };
+
+  onProductName = (res) => {
+    this.dispatch('related:productName', res);
+  };
+
+  onSignedClassification = (res) => {
+    this.dispatch('related:signedClassification', res);
+  };
+
+  onBrand = (res) => {
+    this.dispatch('related:Brand', res);
+  };
+
+  onSearch = async () => {
+    let request: any = {
+      goodsName: this.state().get('likeGoodsName'),
+      goodsNo: this.state().get('likeGoodsNo'),
+      goodsCateName: this.state().get('storeCateId'),
+      brandName: this.state().get('brandId')
+    };
+
+    const { res } = await fetchproductTooltip(request);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('related:productTooltip', res.context.goods);
+    } else {
+      message.error(res.message);
+    }
+
+    //this.onPageSearch();
+  };
+  onFormFieldChange = ({ key, value }) => {
+    console.log(key, 1111111111111111111);
+
+    console.log(value, 2222222222222);
+    this.dispatch('form:field', { key, value });
   };
 }

@@ -1,12 +1,11 @@
 //财务-资金管理-订单开票
 import React from 'react';
-//import { Breadcrumb } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 
 import AppStore from './store';
 
 import SearchForm from './components/search-form';
-import ButtonGroup from './components/button-group';
+//import ButtonGroup from './components/button-group';
 import DetailsList from './components/list';
 import OrderInvoiceAddModal from './components/order-invoice-modal';
 import OrderInvoiceViewModal from './components/order-invoice-view-modal';
@@ -49,13 +48,8 @@ export default class FinanceOrderReceive extends React.Component<any, any> {
             <Headline title={<FormattedMessage id="Reward" />} />
             <SearchForm />
             <AuthWrapper functionName={'financeRewardExport'}>
-              <div
-                style={{ paddingBottom: '16px' }}
-                className="ant-form-inline filter-content"
-              >
-                <Button onClick={() => this.store.bulkExport()}>
-                  {<FormattedMessage id="bulkExport" />}
-                </Button>
+              <div style={{ paddingBottom: '16px' }} className="ant-form-inline filter-content">
+                <Button onClick={() => this.store.bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
               </div>
             </AuthWrapper>
           </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -37,75 +37,46 @@ export default class TrafficReport extends Component<any, any> {
     this.state = {
       title: 'Traffic',
       loading: false,
-      overviewList: [
-        {
-          name: 'Traffic',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Page view',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average site visit duration',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Bounce rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Active visitor rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Return visitor rate',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
-      productTrafficList: [
-        {
-          name: 'Product visitors',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Product view',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
-      trafficSourceList: [
-        {
-          name: 'Traffic through paid media',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'VET traffic',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
+      overviewList: [],
+      // productTrafficList: [
+      // ],
+      // trafficSourceList: [
+      // ],
       tableData: [],
+      startDate: '',
+      endDate: '',
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 20
-      }
+        total: 0
+      },
+      currentTrend: 'Week trend',
+      xData_week: [],
+      trafficData_week: [],
+      pageViewData_week: [],
+
+      xData_day: [],
+      trafficData_day: [],
+      pageViewData_day: []
     };
   }
   componentDidMount() {
-    this.chartInit();
+    this.getDefaultDate();
+    this.trafficTrend();
+    this.trafficTrendDay();
   }
 
   chartInit = () => {
+    const {
+      currentTrend,
+      xData_week,
+      trafficData_week,
+      pageViewData_week,
+
+      xData_day,
+      trafficData_day,
+      pageViewData_day
+    } = this.state;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById('main'));
     // 绘制图表
@@ -121,7 +92,7 @@ export default class TrafficReport extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: ['week-3', 'week-2', 'week-1', 'WTD']
+        data: currentTrend === 'Week trend' ? xData_week : xData_day
       },
       yAxis: {
         type: 'value',
@@ -132,7 +103,8 @@ export default class TrafficReport extends Component<any, any> {
         }
       },
       legend: {
-        data: ['Traffic', 'Page view', 'Product visitors', 'Product view'],
+        // data: ['Traffic', 'Page view', 'Product visitors', 'Product view'],
+        data: ['Traffic', 'Page view'],
         top: 20
       },
 
@@ -152,7 +124,7 @@ export default class TrafficReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 2, 3, 5]
+          data: currentTrend === 'Week trend' ? trafficData_week : trafficData_day
         },
         {
           name: 'Page view',
@@ -169,56 +141,238 @@ export default class TrafficReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [4, 5, 6, 3]
-        },
-        {
-          name: 'Product visitors',
-          type: 'line',
-          lineStyle: {
-            color: '#F8D46E'
-          },
-          itemStyle: {
-            color: '#F8D46E'
-          },
-          emphasis: {
-            itemStyle: {
-              borderColor: '#F8D46E',
-              borderWidth: 2
-            }
-          },
-          data: [7, 8, 9, 6]
-        },
-        {
-          name: 'Product view',
-          type: 'line',
-          lineStyle: {
-            color: '#4D98D3'
-          },
-          itemStyle: {
-            color: '#4D98D3'
-          },
-          emphasis: {
-            itemStyle: {
-              borderColor: '#4D98D3',
-              borderWidth: 2
-            }
-          },
-          data: [3, 6, 9, 15]
+          data: currentTrend === 'Week trend' ? pageViewData_week : pageViewData_day
         }
+        // {
+        //   name: 'Product visitors',
+        //   type: 'line',
+        //   lineStyle: {
+        //     color: '#F8D46E'
+        //   },
+        //   itemStyle: {
+        //     color: '#F8D46E'
+        //   },
+        //   emphasis: {
+        //     itemStyle: {
+        //       borderColor: '#F8D46E',
+        //       borderWidth: 2
+        //     }
+        //   },
+        //   data: [7, 8, 9, 6]
+        // },
+        // {
+        //   name: 'Product view',
+        //   type: 'line',
+        //   lineStyle: {
+        //     color: '#4D98D3'
+        //   },
+        //   itemStyle: {
+        //     color: '#4D98D3'
+        //   },
+        //   emphasis: {
+        //     itemStyle: {
+        //       borderColor: '#4D98D3',
+        //       borderWidth: 2
+        //     }
+        //   },
+        //   data: [3, 6, 9, 15]
+        // }
       ]
     });
   };
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    this.setState(
+      {
+        currentTrend: value
+      },
+      () => this.chartInit()
+    );
   };
 
-  handleTableChange = (params) => {
-    console.log(params);
+  handleTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.trafficReportPage()
+    );
+  };
+  dateCalculate = (n) => {
+    let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
+    return date.setDate(date.getDate() - n);
+  };
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
+
+  onChangeDate = (date, dateString) => {
+    let startDate = moment(dateString[0]).format('YYYY-MM-DD');
+    let endDate = moment(dateString[1]).format('YYYY-MM-DD');
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.trafficStatistics();
+        this.trafficReportPage();
+      }
+    );
+  };
+  getDefaultDate = () => {
+    let startDate = moment(new Date(this.dateCalculate(7)).toLocaleDateString()).format('YYYY-MM-DD');
+    let endDate = moment(new Date(this.dateCalculate(0)).toLocaleDateString()).format('YYYY-MM-DD');
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.trafficStatistics();
+        this.trafficReportPage();
+      }
+    );
+  };
+
+  trafficStatistics = () => {
+    const { startDate, endDate } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate
+    };
+    webapi.trafficStatistics(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let overviewList = [
+          {
+            name: 'Page view',
+            value: context.pageView,
+            rate: context.pageViewQoQ
+          },
+          {
+            name: 'Traffic',
+            value: context.traffic,
+            rate: context.trafficQoQ
+          },
+          {
+            name: 'Vet traffic',
+            value: context.vetTraffic,
+            rate: context.vetTrafficQoQ
+          }
+        ];
+        this.setState({
+          overviewList
+        });
+      }
+    });
+  };
+  trafficTrend = () => {
+    webapi.trafficTrend().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData_week = [];
+        let trafficData_week = [];
+        let pageViewData_week = [];
+        for (let i = 0; i < context.length; i++) {
+          xData_week.unshift('week-' + context[i].weekNum);
+          trafficData_week.unshift(context[i].traffic);
+          pageViewData_week.unshift(context[i].pageView);
+        }
+        this.setState(
+          {
+            xData_week,
+            trafficData_week,
+            pageViewData_week
+          },
+          () => {
+            this.chartInit();
+          }
+        );
+      }
+    });
+  };
+  trafficTrendDay = () => {
+    webapi.trafficTrendDay().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData_day = [];
+        let trafficData_day = [];
+        let pageViewData_day = [];
+        for (let i = 0; i < context.length; i++) {
+          xData_day.unshift(context[i].date);
+          trafficData_day.unshift(context[i].traffic);
+          pageViewData_day.unshift(context[i].pageView);
+        }
+        this.setState({
+          xData_day,
+          trafficData_day,
+          pageViewData_day
+        });
+      }
+    });
+  };
+  trafficReportPage = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current
+    };
+    webapi.trafficReportPage(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        pagination.total = res.context.totalElements;
+        pagination.current = res.context.totalPages;
+        let tableData = res.context.trafficReport;
+        this.setState({
+          pagination,
+          tableData
+        });
+      }
+    });
+  };
+  onExport = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current
+    };
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref = Const.HOST + `/digitalStrategy/trafficReportPage/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+
+        resolve();
+      }, 500);
+    });
   };
 
   render() {
-    const { title, overviewList, productTrafficList, trafficSourceList, tableData, pagination } = this.state;
+    const {
+      title,
+      overviewList,
+      // productTrafficList,
+      // trafficSourceList,
+      tableData,
+      pagination
+    } = this.state;
 
     const columns = [
       {
@@ -235,27 +389,27 @@ export default class TrafficReport extends Component<any, any> {
         title: 'Page view',
         dataIndex: 'pageView',
         key: 'pageView'
-      },
-      {
-        title: 'Product visitors',
-        dataIndex: 'productVisitors',
-        key: 'productVisitors'
-      },
-      {
-        title: 'Product view',
-        dataIndex: 'productView',
-        key: 'productView'
-      },
-      {
-        title: 'Avg site visit duration',
-        dataIndex: 'avgSiteVisitDuration',
-        key: 'avgSiteVisitDuration'
-      },
-      {
-        title: 'Bounce rate',
-        dataIndex: 'bounceRate',
-        key: 'bounceRate'
       }
+      // {
+      //   title: 'Product visitors',
+      //   dataIndex: 'productVisitors',
+      //   key: 'productVisitors'
+      // },
+      // {
+      //   title: 'Product view',
+      //   dataIndex: 'productView',
+      //   key: 'productView'
+      // },
+      // {
+      //   title: 'Avg site visit duration',
+      //   dataIndex: 'avgSiteVisitDuration',
+      //   key: 'avgSiteVisitDuration'
+      // },
+      // {
+      //   title: 'Bounce rate',
+      //   dataIndex: 'bounceRate',
+      //   key: 'bounceRate'
+      // }
     ];
 
     return (
@@ -267,7 +421,7 @@ export default class TrafficReport extends Component<any, any> {
             title={title}
             extra={
               <div>
-                <RangePicker defaultValue={[moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
               </div>
             }
           />
@@ -277,29 +431,29 @@ export default class TrafficReport extends Component<any, any> {
               {overviewList &&
                 overviewList.map((item, index) => (
                   <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
+                    <div className="mode-text" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
                       {item.name}
                     </div>
-                    <div className="mode-num" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                    <div className="mode-num" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                     </div>
-                    <div className="mode-per" style={item.name === 'Return visitor rate' ? {} : styles.borderRight}>
-                      {item && item.rate ? (
+                    <div className="mode-per" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
                             <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
                 ))}
             </div>
           </div>
-
+          {/* 
           <div style={styles.itemDisplay}>
             <h4>Product traffic</h4>
             <div className="data-statistics">
@@ -357,6 +511,7 @@ export default class TrafficReport extends Component<any, any> {
                 ))}
             </div>
           </div>
+         */}
         </div>
 
         <div className="container-search">
@@ -364,18 +519,9 @@ export default class TrafficReport extends Component<any, any> {
             title="Traffic trend"
             extra={
               <div>
-                <Button
-                  type="primary"
-                  shape="round"
-                  icon="setting"
-                  style={{
-                    marginRight: 10
-                  }}
-                >
-                  <span style={{ color: '#ffffff' }}>Setting</span>
-                </Button>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value="Week trend">Week trend</Option>
+                  <Option value="Day trend">Day trend</Option>
                 </Select>
               </div>
             }
@@ -388,13 +534,13 @@ export default class TrafficReport extends Component<any, any> {
             title="Traffic report"
             extra={
               <div>
-                <Button type="primary" shape="round" icon="download">
+                <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
                   <span style={{ color: '#ffffff' }}>Download the report</span>
                 </Button>
               </div>
             }
           />
-          <Table columns={columns} rowKey="id" dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
         </div>
       </div>
     );

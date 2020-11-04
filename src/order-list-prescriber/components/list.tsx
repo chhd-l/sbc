@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
+import { noop, Const, AuthWrapper, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -389,7 +389,8 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && (
+                          {/* 审核按钮显示 */}
+                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002_prescriber">
                               <Tooltip placement="top" title="Audit">
                                 <a
@@ -406,7 +407,8 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) != 'PAID' && (
+                          {/* 驳回按钮显示 */}
+                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
                             <AuthWrapper functionName="fOrderList002_prescriber">
                               <Tooltip placement="top" title="Reject">
                                 <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }} className="iconfont iconbtn-cancelall">
@@ -416,22 +418,24 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*待发货状态显示*/}
-                          {needAudit && v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
-                            <AuthWrapper functionName="fOrderList002_prescriber">
-                              <Tooltip placement="top" title="Review">
-                                <a
-                                  style={{ marginLeft: 20 }}
-                                  onClick={() => {
-                                    this._showRetrialConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                  className="iconfont iconbtn-review"
-                                >
-                                  {/*<FormattedMessage id="order.review" />*/}
-                                </a>
-                              </Tooltip>
-                            </AuthWrapper>
-                          )}
+                          {
+                            // needAudit && v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
+                            //   <AuthWrapper functionName="fOrderList002_prescriber">
+                            //     <Tooltip placement="top" title="Review">
+                            //       <a
+                            //         style={{ marginLeft: 20 }}
+                            //         onClick={() => {
+                            //           this._showRetrialConfirm(id);
+                            //         }}
+                            //         href="javascript:void(0)"
+                            //         className="iconfont iconbtn-review"
+                            //       >
+                            //         {/*<FormattedMessage id="order.review" />*/}
+                            //       </a>
+                            //     </Tooltip>
+                            //   </AuthWrapper>
+                            // )
+                          }
                           {/* {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) ===
                             'NOT_YET_SHIPPED' &&
@@ -668,6 +672,15 @@ export default class ListView extends React.Component<any, any> {
     const { hideRejectModal } = this.props.relaxProps;
     hideRejectModal();
     this._rejectForm.setFieldsValue({ comment: '' });
+  };
+  isPrescriber = () => {
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    let roleName = employee.roleName;
+    if (roleName.indexOf('Prescriber') !== -1) {
+      return true;
+    } else {
+      return false;
+    }
   };
 }
 

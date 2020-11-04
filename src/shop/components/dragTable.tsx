@@ -141,11 +141,7 @@ class TabList extends React.Component<any, any> {
     return (
       <div className="operation flex-end">
         <Tooltip placement="top" title="Edit">
-          <a
-            href="javascript:void(0)"
-            onClick={() => pageChange('Detail', rowInfo.get('id'))}
-            className="iconfont iconEdit"
-          ></a>
+          <a href="javascript:void(0)" onClick={() => pageChange('Detail', rowInfo.get('id'))} className="iconfont iconEdit"></a>
         </Tooltip>
         <Popconfirm
           className="deleted"
@@ -160,13 +156,7 @@ class TabList extends React.Component<any, any> {
           </Tooltip>
         </Popconfirm>
         <div className="switch">
-          <Popconfirm
-            title={check?'Are you sure disable this consent?':'Are you sure able this consent?'}
-            onConfirm={() => this.confirm(check, rowInfo.get('id'))}
-            onCancel={this.cancel}
-            okText="Yes"
-            cancelText="No"
-          >
+          <Popconfirm title={check ? 'Are you sure disable this consent?' : 'Are you sure able this consent?'} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
             <Switch
               //loading={loading}
               checked={check}
@@ -203,8 +193,6 @@ class TabList extends React.Component<any, any> {
     }*/
     const { consentList, propSort } = this.props.relaxProps;
     const dragRow = consentList.toJS()[dragIndex];
-    console.log(dragIndex, 1111);
-    console.log(hoverIndex, 2222);
 
     let sortList = update(consentList.toJS(), {
       $splice: [
@@ -221,7 +209,6 @@ class TabList extends React.Component<any, any> {
       });
     });
     obj.exchangeSortList = sort;
-    console.log(obj, 3333);
 
     propSort(obj);
   };
@@ -238,27 +225,11 @@ const _rowTarget = {
   }
 };
 let _BodyRow = (props) => {
-  const {
-    isOver,
-    connectDragSource,
-    connectDropTarget,
-    moveRow,
-    dragRow,
-    clientOffset,
-    sourceClientOffset,
-    initialClientOffset,
-    ...restProps
-  } = props;
+  const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = props;
   const style = { ...restProps.style, cursor: 'move' };
   let className = restProps.className;
   if (isOver && initialClientOffset) {
-    const direction = _dragDirection(
-      dragRow.index,
-      restProps.index,
-      initialClientOffset,
-      clientOffset,
-      sourceClientOffset
-    );
+    const direction = _dragDirection(dragRow.index, restProps.index, initialClientOffset, clientOffset, sourceClientOffset);
     if (direction === 'downward') {
       className += ' drop-over-downward';
     }
@@ -266,9 +237,7 @@ let _BodyRow = (props) => {
       className += ' drop-over-upward';
     }
   }
-  return connectDragSource(
-    connectDropTarget(<tr {...restProps} className={className} style={style} />)
-  );
+  return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
 };
 
 const _rowSource = {
@@ -290,13 +259,7 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
     initialClientOffset: monitor.getInitialClientOffset()
   }))(_BodyRow)
 );
-let _dragDirection = (
-  dragIndex,
-  hoverIndex,
-  initialClientOffset,
-  clientOffset,
-  sourceClientOffset
-) => {
+let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) => {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {

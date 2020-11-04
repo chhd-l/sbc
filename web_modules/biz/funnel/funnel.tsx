@@ -25,6 +25,10 @@ export default class Line extends React.Component {
   componentDidMount() {}
   getOption = () => {
     const { data } = this.props as any;
+    let sum = 0;
+    for (let i = 0, len = data.length; i < len; i++) {
+      sum += data[i]
+    }
     let option = {
       color: colors,
       legendHoverLink: false,
@@ -86,7 +90,7 @@ export default class Line extends React.Component {
               formatter: '{b}: {c}({d}%)'
             }*/
           },
-          data: data
+          data: sum == 0 ?[{ value: 100 }, { value: 75 }, { value: 50 }, { value: 25 }] : data
         }
       ]
     };

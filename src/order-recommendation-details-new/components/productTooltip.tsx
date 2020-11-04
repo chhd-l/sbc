@@ -130,7 +130,6 @@ export default class GoodsModal extends React.Component<any, any> {
         selectedRows: selectedRows
       },
       () => {
-        console.log('gggggggggg', selectedSkuIds, selectedRows.toJS());
       }
     );
   };

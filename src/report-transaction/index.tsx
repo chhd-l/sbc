@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -37,73 +37,53 @@ export default class TransactionReport extends Component<any, any> {
     this.state = {
       title: 'Transaction',
       loading: false,
-      overviewList: [
-        {
-          name: 'Revenue',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Conversion',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Units sold',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Sales volume',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average basket',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Sales per visitor',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
-      SubscriptionList: [
-        {
-          name: 'Subscription rate',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Subscription number',
-          value: 4524,
-          rate: -3.2
-        },
-        {
-          name: 'Subscription transaction amount',
-          value: 4524,
-          rate: 3.2
-        },
-        {
-          name: 'Average subscription length',
-          value: 4524,
-          rate: -3.2
-        }
-      ],
+      overviewList: [],
+      subscriptionList: [],
       tableData: [],
+      startDate: '',
+      endDate: '',
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 20
-      }
+        total: 0
+      },
+
+      currentTrend: 'Week trend',
+
+      xData_week: [],
+      averageBasketData_week: [],
+      consumersData_week: [],
+      revenueData_week: [],
+      salesVolumeData_week: [],
+
+      xData_day: [],
+      averageBasketData_day: [],
+      consumersData_day: [],
+      revenueData_day: [],
+      salesVolumeData_day: []
     };
   }
   componentDidMount() {
-    this.chartInit();
+    this.getDefaultDate();
+    this.transactionTrend();
+    this.transactionTrendDay();
   }
 
   chartInit = () => {
+    const {
+      currentTrend,
+      xData_week,
+      averageBasketData_week,
+      consumersData_week,
+      revenueData_week,
+      salesVolumeData_week,
+
+      xData_day,
+      averageBasketData_day,
+      consumersData_day,
+      revenueData_day,
+      salesVolumeData_day
+    } = this.state;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById('main'));
     // 绘制图表
@@ -119,7 +99,7 @@ export default class TransactionReport extends Component<any, any> {
             color: 'rgba(0, 0, 0, 0.45)'
           }
         },
-        data: ['week-3', 'week-2', 'week-1', 'WTD']
+        data: currentTrend === 'Week trend' ? xData_week : xData_day
       },
       yAxis: {
         type: 'value',
@@ -150,7 +130,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [1, 2, 3, 5]
+          data: currentTrend === 'Week trend' ? salesVolumeData_week : salesVolumeData_day
         },
         {
           name: 'Revenue',
@@ -167,7 +147,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [4, 5, 6, 3]
+          data: currentTrend === 'Week trend' ? revenueData_week : revenueData_day
         },
         {
           name: 'Consumers',
@@ -184,7 +164,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [7, 8, 9, 6]
+          data: currentTrend === 'Week trend' ? consumersData_week : consumersData_day
         },
         {
           name: 'Average basket',
@@ -201,22 +181,247 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
-          data: [3, 6, 9, 15]
+          data: currentTrend === 'Week trend' ? averageBasketData_week : averageBasketData_day
         }
       ]
     });
   };
 
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    this.setState(
+      {
+        currentTrend: value
+      },
+      () => this.chartInit()
+    );
   };
 
-  handleTableChange = (params) => {
-    console.log(params);
+  handleTableChange = (pagination) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.transactionReportPage()
+    );
+  };
+  dateCalculate = (n) => {
+    let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
+    return date.setDate(date.getDate() - n);
+  };
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
+
+  onChangeDate = (date, dateString) => {
+    let startDate = moment(dateString[0]).format('YYYY-MM-DD');
+    let endDate = moment(dateString[1]).format('YYYY-MM-DD');
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.transactionStatistics();
+        this.transactionReportPage();
+      }
+    );
+  };
+  getDefaultDate = () => {
+    let startDate = moment(new Date(this.dateCalculate(7)).toLocaleDateString()).format('YYYY-MM-DD');
+    let endDate = moment(new Date(this.dateCalculate(0)).toLocaleDateString()).format('YYYY-MM-DD');
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => {
+        this.transactionStatistics();
+        this.transactionReportPage();
+      }
+    );
+  };
+
+  transactionStatistics = () => {
+    const { startDate, endDate } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate
+    };
+    webapi.transactionStatistics(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let overviewList = [
+          {
+            name: 'Revenue',
+            value: context.revenue,
+            rate: context.revenueQoQ
+          },
+          {
+            name: 'Conversion',
+            value: context.conversion,
+            rate: context.conversionQoQ
+          },
+          {
+            name: 'Units sold',
+            value: context.unitsSold,
+            rate: context.unitsSoldQoQ
+          },
+          {
+            name: 'Sales volume',
+            value: context.salesVolume,
+            rate: context.salesVolumeQoQ
+          },
+          {
+            name: 'Average basket',
+            value: context.averageBasket,
+            rate: context.averageBasketQoQ
+          },
+          {
+            name: 'Sales per visitor',
+            value: context.salesPerVisitor,
+            rate: context.salesPerVisitorQoQ
+          }
+        ];
+        let subscriptionList = [
+          {
+            name: 'Subscription rate',
+            value: context.subscriptionRate,
+            rate: context.subscriptionRateQoQ
+          },
+          {
+            name: 'Subscription number',
+            value: context.subscriptionNumber,
+            rate: context.subscriptionNumberQoQ
+          },
+          {
+            name: 'Subscription transaction amount',
+            value: context.subscriptionAmount,
+            rate: context.subscriptionAmountQoQ
+          }
+          // {
+          //   name: 'Average subscription length',
+          //   value: context.averageSubscriptionLength,
+          //   rate: context.averageSubscriptionLengthQoQ
+          // }
+        ];
+        this.setState({
+          overviewList,
+          subscriptionList
+        });
+      }
+    });
+  };
+  transactionTrend = () => {
+    webapi.transactionTrend().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData_week = [];
+        let averageBasketData_week = [];
+        let consumersData_week = [];
+        let revenueData_week = [];
+        let salesVolumeData_week = [];
+        for (let i = 0; i < context.length; i++) {
+          xData_week.unshift('week-' + context[i].weekNum);
+          averageBasketData_week.unshift(context[i].averageBasket);
+          consumersData_week.unshift(context[i].consumers);
+          revenueData_week.unshift(context[i].revenue);
+          salesVolumeData_week.unshift(context[i].salesVolume);
+        }
+        this.setState(
+          {
+            xData_week,
+            averageBasketData_week,
+            consumersData_week,
+            revenueData_week,
+            salesVolumeData_week
+          },
+          () => {
+            this.chartInit();
+          }
+        );
+      }
+    });
+  };
+  transactionTrendDay = () => {
+    webapi.transactionTrendDay().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let context = res.context;
+        let xData_day = [];
+        let averageBasketData_day = [];
+        let consumersData_day = [];
+        let revenueData_day = [];
+        let salesVolumeData_day = [];
+        for (let i = 0; i < context.length; i++) {
+          xData_day.unshift(context[i].date);
+          averageBasketData_day.unshift(context[i].averageBasket);
+          consumersData_day.unshift(context[i].consumers);
+          revenueData_day.unshift(context[i].revenue);
+          salesVolumeData_day.unshift(context[i].salesVolume);
+        }
+        this.setState({
+          xData_day,
+          averageBasketData_day,
+          consumersData_day,
+          revenueData_day,
+          salesVolumeData_day
+        });
+      }
+    });
+  };
+  transactionReportPage = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current
+    };
+    webapi.transactionReportPage(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        pagination.total = res.context.totalElements;
+        pagination.current = res.context.totalPages;
+        let tableData = res.context.transactionReport;
+        this.setState({
+          pagination,
+          tableData
+        });
+      }
+    });
+  };
+  onExport = () => {
+    const { startDate, endDate, pagination } = this.state;
+    let params = {
+      beginDate: startDate,
+      endDate: endDate,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current
+    };
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
+
+          // 新窗口下载
+          const exportHref = Const.HOST + `/digitalStrategy/transactionReportPage/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+
+        resolve();
+      }, 500);
+    });
   };
 
   render() {
-    const { title, overviewList, SubscriptionList, tableData, pagination } = this.state;
+    const { title, overviewList, subscriptionList, tableData, pagination } = this.state;
 
     const columns = [
       {
@@ -260,7 +465,7 @@ export default class TransactionReport extends Component<any, any> {
             title={title}
             extra={
               <div>
-                <RangePicker defaultValue={[moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
               </div>
             }
           />
@@ -274,18 +479,18 @@ export default class TransactionReport extends Component<any, any> {
                       {item.name}
                     </div>
                     <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      {item && item.rate ? (
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
                             <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
@@ -296,25 +501,31 @@ export default class TransactionReport extends Component<any, any> {
           <div style={styles.itemDisplay}>
             <h4>Subscription</h4>
             <div className="data-statistics">
-              {SubscriptionList &&
-                SubscriptionList.map((item, index) => (
+              {subscriptionList &&
+                subscriptionList.map((item, index) => (
                   <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
+                    <div className="mode-text" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
-                    <div className="mode-num" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
-                      <span> {item && item.value ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
-                      {item && item.rate ? (
+                    {item.name === 'Subscription rate' ? (
+                      <div className="mode-num" style={styles.borderRight}>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                      </div>
+                    ) : (
+                      <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      </div>
+                    )}
+                    <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
+                      {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
                             <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
-                        ''
+                        '--'
                       )}
                     </div>
                   </div>
@@ -328,18 +539,9 @@ export default class TransactionReport extends Component<any, any> {
             title="Transaction trend"
             extra={
               <div>
-                <Button
-                  type="primary"
-                  shape="round"
-                  icon="setting"
-                  style={{
-                    marginRight: 10
-                  }}
-                >
-                  <span style={{ color: '#ffffff' }}>Setting</span>
-                </Button>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value="Week trend">Week trend</Option>
+                  <Option value="Day trend">Day trend</Option>
                 </Select>
               </div>
             }
@@ -352,13 +554,13 @@ export default class TransactionReport extends Component<any, any> {
             title="Transaction report"
             extra={
               <div>
-                <Button type="primary" shape="round" icon="download">
+                <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
                   <span style={{ color: '#ffffff' }}>Download the report</span>
                 </Button>
               </div>
             }
           />
-          <Table columns={columns} rowKey="id" dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
         </div>
       </div>
     );

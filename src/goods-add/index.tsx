@@ -2,9 +2,10 @@ import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
+import './index.less';
 import AppStore from './store';
 import Goods from './component/goods';
-import RelatedProduct from './related-product';
+import Related from './component/related';
 import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
@@ -91,7 +92,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           <Tabs
             /*activeKey={this.store.state().get('activeTabKey')}
             onChange={(activeKey) => this.store.onMainTabChange(activeKey)}*/
-            defaultActiveKey="related"
+            defaultActiveKey="main"
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
@@ -119,12 +120,13 @@ export default class GoodsAdd extends React.Component<any, any> {
               key="related"
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
-              <RelatedProduct />
+              <Related />
             </Tabs.TabPane>
           </Tabs>
 
           {/*页脚*/}
-          {this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}
+          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.state.tabType} />
+          {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}
           <BrandModal />

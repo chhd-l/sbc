@@ -104,7 +104,6 @@ export const getStoreGoodsTab = () => {
  * 保存商品基本信息
  */
 export const save = (param: any) => {
-  console.log(param, 'save');
   return Fetch('/goods/spu', {
     method: 'POST',
     body: JSON.stringify(param)
@@ -115,7 +114,6 @@ export const save = (param: any) => {
  * 修改商品基本信息
  */
 export const edit = (param: any) => {
-  console.log(param.goods.subscriptionStatus, 'save');
   return Fetch('/goods/spu', {
     method: 'PUT',
     body: JSON.stringify(param)
@@ -215,9 +213,7 @@ export const freightList = () => {
  * @param freightTempId
  */
 export const goodsFreight = (freightTempId) => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateGoods/${freightTempId}`
-  );
+  return Fetch<TResult>(`/freightTemplate/freightTemplateGoods/${freightTempId}`);
 };
 
 /**
@@ -225,9 +221,7 @@ export const goodsFreight = (freightTempId) => {
  * @param freightTempId
  */
 export const goodsFreightExpress = (freightTempId) => {
-  return Fetch<TResult>(
-    `/freightTemplate/freightTemplateExpress/${freightTempId}`
-  );
+  return Fetch<TResult>(`/freightTemplate/freightTemplateExpress/${freightTempId}`);
 };
 
 /**
@@ -333,5 +327,43 @@ export function getStoreCode() {
   return Fetch<TResult>('/goods/getStoreCode', {
     method: 'POST',
     body: JSON.stringify({})
+  });
+}
+
+/* ---------------------- related  -------------------*/
+export const getRelatedList = (params) => {
+  return Fetch(`/goodsRelation/${params}`, {
+    method: 'GET'
+  });
+};
+
+//排序
+export function fetchPropSort(param = {}) {
+  return Fetch<TResult>('/goodsRelation/exchangeSort', {
+    method: 'PUT',
+    body: JSON.stringify(param)
+  });
+}
+
+//删除
+export const fetchConsentDelete = (params) => {
+  return Fetch(`/goodsRelation/${params}`, {
+    method: 'DELETE'
+  });
+};
+
+export function fetchproductTooltip(param) {
+  return Fetch<TResult>('/goodsRelation/goods', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+
+
+export function fetchAdd(param) {
+  return Fetch<TResult>('/goodsRelation/add', {
+    method: 'POST',
+    body: JSON.stringify(param)
   });
 }

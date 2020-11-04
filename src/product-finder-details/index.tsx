@@ -4,6 +4,8 @@ import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row,
 import './index.less';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+const img_productNo = require('./img/productNo.png');
+const img_question = require('./img/question.png');
 
 export default class ProductFinderDetails extends React.Component<any, any> {
   static propTypes = {};
@@ -54,6 +56,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
           <div id="productFindeDetails" className="container" style={{ padding: '30px' }}>
             <div className="garyContainer">
               <Row>
+                <img className="productNo-Image" src={img_productNo} alt="Product No" />
                 <strong>Product Finder NO. {details.number}</strong>
               </Row>
               <Row>
@@ -166,9 +169,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
             <div className="garyContainer" style={{ marginTop: '20px' }}>
               {chartRecords &&
                 chartRecords.map((item, index) => (
-                  <Row>
+                  <Row key={index}>
                     <Col span={1}>
-                      <Icon type="bold" />
+                      <img src={img_question} alt="Question" />
                     </Col>
                     <Col span={23}>
                       <strong>{item.question}</strong>

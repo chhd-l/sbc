@@ -50,4 +50,33 @@ export default class AppStore extends Store {
       }
     }
   };
+
+
+  handleBatchExport = async () => {
+    const queryParams = this.state().get('searchForm').toJS();
+    const { period, prescriberId, prescriberName } = queryParams;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 参数加密
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            period: period,
+            prescriberId: prescriberId,
+            prescriberName: prescriberName,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref = Const.HOST + `/digitalStrategy/productReportPage/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
+  };
+
 }

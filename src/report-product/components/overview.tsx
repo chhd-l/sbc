@@ -129,9 +129,6 @@ export default class ProductOverView extends Component<any, any> {
   }
   render() {
     const { productStatistics, loading } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(productStatistics, 11111);
-    });
     let loadinga = false;
     return (
       <Spin spinning={loadinga}>
@@ -212,12 +209,12 @@ export default class ProductOverView extends Component<any, any> {
           <div className="head-container mgt20 mgb20">
             <h4>Best sellers</h4>
             <div className="row-flex mgt20">
-              {productStatistics.evaluationTopProduct &&
-                productStatistics.evaluationTopProduct.map((item, index) => {
+              {productStatistics.salesVolumeTopProduct &&
+                productStatistics.salesVolumeTopProduct.map((item, index) => {
                   return (
                     <div className="sellers-container row-flex" key={index}>
                       <div>
-                        <img src={item.goodsImg} />
+                        <img src={item.skuImg} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
@@ -237,21 +234,21 @@ export default class ProductOverView extends Component<any, any> {
           <div className="head-container mgt20 mgb20">
             <h4 className="title">High praise products</h4>
             <div className="row-flex mgt20">
-              {productStatistics.salesVolumeTopProduct &&
-                productStatistics.salesVolumeTopProduct.map((item, index) => {
+              {productStatistics.evaluationTopProduct &&
+                productStatistics.evaluationTopProduct.map((item, index) => {
                   return (
                     <div className="sellers-container row-flex" key={item.topNum}>
                       <div>
-                        <img src={item.goodsImg} />
+                        <img src={item.skuImg} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName">{item.skuName}</span>
+                          <span className="goodsName line-clamp">{item.skuName}</span>
                           <span className="price">{item.marketPrice}</span>
                           <div>
-                            <Rate value={item.goodsRate} className="RedRate" disabled={true} />
-                            <span className="price">({item.goodsEvaluateNum})</span>
+                            <Rate value={item.marketPrice} className="RedRate" disabled={true} />
+                            <span className="price">({item.marketPrice})</span>
                           </div>
                         </div>
                       </div>

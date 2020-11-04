@@ -44,8 +44,6 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    console.log(this.state.prescriber, 11111);
-
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
@@ -70,12 +68,8 @@ export default class Header extends React.Component<any, any> {
       return;
     } else {
       const { onSearchData } = this.props.relaxProps as any;
-      console.log(this.state.aa, 222222);
-      if (this.state.prescriber == 'prescribersId') {
-        onSearchData({ prescriberId: this.state.prescriberInput });
-      } else {
-        onSearchData({ prescriberName: this.state.prescriberInput });
-      }
+      onSearchData({ prescriberName: this.state.prescriberInput });
+      this.props.changePage(true);
     }
   };
 
@@ -90,6 +84,7 @@ export default class Header extends React.Component<any, any> {
       prescriberInput: res
     });
   };
+
   render() {
     return (
       <div className="shopHeader home space-between">
@@ -99,36 +94,14 @@ export default class Header extends React.Component<any, any> {
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">
-          {this.state.prescribers && this.state.prescribers.length > 0 ? (
-            <Select defaultValue={this.state.prescribers[0].prescriberName}>
-              {this.state.prescribers.map((item, index) => {
-                return <Option value={item.prescriberId}>{item.prescriberName}</Option>;
-              })}
-            </Select>
-          ) : (
-            <div className="flex-start-align search">
-              <Input
-                style={{ width: 290 }}
-                addonBefore={
-                  <Select
-                    defaultValue="prescribers Id"
-                    style={{ width: 150 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onSearch1(value);
-                    }}
-                  >
-                    <Option value="prescribersId">prescribers Id</Option>
-                    <Option value="prescribersName">prescribers Name</Option>
-                  </Select>
-                }
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onSearch2(value);
-                }}
-              />
-            </div>
-          )}
+          <span style={{ marginRight: 8 }}>Prescriber: </span>
+          <Input
+            style={{ width: 200, marginRight: 8 }}
+            onChange={(e) => {
+              const value = (e.target as any).value;
+              this.onSearch2(value);
+            }}
+          />
           <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
         {this.state.prescriber.id ? (

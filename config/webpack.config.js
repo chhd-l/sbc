@@ -26,8 +26,8 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
-//const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const happyThreadPool = HappyPack.ThreadPool({ size: 10 });
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';

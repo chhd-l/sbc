@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, util } from 'qmkit';
+import { AuthWrapper, cache, Const, noop, util } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -670,6 +670,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { detail, onAudit, verify, needAudit, onDelivery, showRejectModal } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const auditState = detail.getIn(['tradeState', 'auditState']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
@@ -699,17 +700,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </Tooltip>
             </AuthWrapper>
           )}
-          {payState === 'PAID'
-            ? null
-            : flowState === 'INIT' && (
-                <AuthWrapper functionName="fOrderList002_prescriber">
-                  <Tooltip placement="top" title="Reject">
-                    <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-cancelall">
-                      {/*<FormattedMessage id="order.turnDown" />*/}
-                    </a>
-                  </Tooltip>
-                </AuthWrapper>
-              )}
+
           {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
@@ -744,7 +735,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
             </div>
           )}
           {/*未审核需要处理的*/}
-          {flowState === 'INIT' && (
+          {flowState === 'INIT' && payState === 'PAID' && auditState === 'NON_CHECKED' && this.isPrescriber() && (
             <AuthWrapper functionName="fOrderList002_prescriber">
               <Tooltip placement="top" title="Audit">
                 <a
@@ -759,6 +750,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   className="iconfont iconaudit"
                 >
                   {/*<FormattedMessage id="order.audit" />*/}
+                </a>
+              </Tooltip>
+            </AuthWrapper>
+          )}
+          {/*驳回*/}
+          {flowState === 'INIT' && payState === 'PAID' && auditState === 'NON_CHECKED' && this.isPrescriber() && (
+            <AuthWrapper functionName="fOrderList002_prescriber">
+              <Tooltip placement="top" title="Reject">
+                <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-cancelall">
+                  {/*<FormattedMessage id="order.turnDown" />*/}
                 </a>
               </Tooltip>
             </AuthWrapper>
@@ -887,6 +888,16 @@ export default class OrderDetailTab extends React.Component<any, any> {
       visiblePetDetails: true
     });
     console.log(row);
+  };
+  // 是否是Prescriber
+  isPrescriber = () => {
+    let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    let roleName = employee.roleName;
+    if (roleName.indexOf('Prescriber') !== -1) {
+      return true;
+    } else {
+      return false;
+    }
   };
 }
 

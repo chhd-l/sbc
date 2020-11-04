@@ -15,6 +15,7 @@ class PeoductCategory extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Product category',
+      visible: false,
       productCategoryList: [
         {
           id: 1,
@@ -68,14 +69,17 @@ class PeoductCategory extends Component<any, any> {
     let returnString = tempString.replaceAll(',"children":[]', '');
     return JSON.parse(returnString);
   };
+  handleOk = () => {
+    console.log('ok');
+  };
+  handleCancel = () => {
+    this.setState({
+      visible: false
+    });
+  };
 
   render() {
     const { title, productCategoryList } = this.state;
-    const description = (
-      <div>
-        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
-      </div>
-    );
     const columns = [
       {
         title: 'Product name',
@@ -98,7 +102,7 @@ class PeoductCategory extends Component<any, any> {
         key: 'x',
         render: (rowInfo) => (
           <div>
-            <Tooltip placement="top" title="Attribute">
+            <Tooltip placement="top" title="Bind attribute">
               <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
             </Tooltip>
           </div>
@@ -115,6 +119,7 @@ class PeoductCategory extends Component<any, any> {
 
           <Table rowKey="id" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
+        <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}></Modal>
       </div>
     );
   }

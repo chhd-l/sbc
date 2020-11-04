@@ -45,15 +45,23 @@ export default class ReportList extends Component<any, any> {
         <DataGrid
           loading={loading}
           rowKey="serialNum"
+          /*  pagination={{
+            current: selfCurrentPage,
+            pageSize: selfPageSize,
+            total: selfTotal,
+            onChange: (pageNum, pageSize) => {
+              initForSelf({ pageNum: pageNum - 1, pageSize });
+            }
+          }}*/
           pagination={{
             pageSize,
             total,
-            current: current,
+            current: current - 1,
             onChange: (pageNum, pageSize) => {
-              onProductReportPage({ pageNum: pageNum - 1, pageSize });
+              onProductReportPage({ pageNum: pageNum, pageSize });
             }
           }}
-          dataSource={productReportPage && productReportPage}
+          dataSource={productReportPage && productReportPage.toJS()}
         >
           <Column title="No" key="serialNum" dataIndex="serialNum" width="5%" />
           <Column title="Product" key="skuName" dataIndex="skuName" width="200px" />

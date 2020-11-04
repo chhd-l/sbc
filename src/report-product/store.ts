@@ -38,11 +38,11 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res } = await webapi.getProductReportPage(param);
     if (res.code === Const.SUCCESS_CODE) {
-      this.transaction(() => {
-        this.dispatch('loading:end');
-        this.dispatch('report:productReportPage', res.context);
-        this.dispatch('current', param && param.pageNum + 1);
-      });
+      this.dispatch('loading:end');
+      this.dispatch('report:productReportPage', res.context);
+      this.dispatch('current', param && param.pageNum + 1);
+      this.dispatch('report:getDate', { beginDate: param.beginDate, endDate: param.endDate });
+      this.dispatch('report:getForm', param);
     } else {
       message.error(res.message);
       if (res.code === 'K-110001') {
@@ -51,10 +51,9 @@ export default class AppStore extends Store {
     }
   };
 
-
   handleBatchExport = async () => {
-    const queryParams = this.state().get('searchForm').toJS();
-    const { period, prescriberId, prescriberName } = queryParams;
+    const queryParams = this.state().get('getForm');
+    const { beginDate, endDate, skuCode } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {
         // 参数加密
@@ -62,9 +61,10 @@ export default class AppStore extends Store {
         const token = (window as any).token;
         if (token) {
           const result = JSON.stringify({
-            period: period,
-            prescriberId: prescriberId,
-            prescriberName: prescriberName,
+            beginDate: beginDate,
+            endDate: endDate,
+            skuCode: skuCode,
+            sortName: 'revenue',
             token: token
           });
           const encrypted = base64.urlEncode(result);
@@ -78,5 +78,4 @@ export default class AppStore extends Store {
       }, 500);
     });
   };
-
 }

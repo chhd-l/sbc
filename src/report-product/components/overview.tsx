@@ -37,68 +37,17 @@ export default class ProductOverView extends Component<any, any> {
       loading: boolean;
       productStatistics: any;
       onProductStatistics: Function;
+      onProductReportPage: Function;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     productStatistics: 'productStatistics',
-    onProductStatistics: noop
+    onProductStatistics: noop,
+    onProductReportPage: noop
   };
-  componentDidMount() {
-    const mock = [
-      {
-        goodsName: 'MINI PUPPY',
-        linePrice: 2692,
-        goodsWeight: '85',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 4,
-        goodsEvaluateNum: 22,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      }
-    ];
-    /* this.setState({
-      bestSellers: mock,
-      highPraiseProducts: mock
-    });*/
-    /*this.getOverviewInfo();*/
-  }
+  componentDidMount() {}
 
   getOverviewInfo(params = {}) {
     this.setState({
@@ -118,14 +67,21 @@ export default class ProductOverView extends Component<any, any> {
     });
   }
   onSearch() {
-    const { onProductStatistics } = this.props.relaxProps;
+    const { onProductStatistics, onProductReportPage } = this.props.relaxProps;
     const { beginTime, endTime } = this.state;
-    const params = {
+    const params1 = {
       beginTime,
       endTime
     };
-    console.log(params, 'overview params');
-    onProductStatistics(params);
+    const params2 = {
+      beginTime,
+      endTime,
+      sortName: 'revenue',
+      pageSize: 10,
+      pageNum: 1
+    };
+    onProductStatistics(params1);
+    onProductReportPage(params2);
   }
   render() {
     const { productStatistics, loading } = this.props.relaxProps;
@@ -188,15 +144,15 @@ export default class ProductOverView extends Component<any, any> {
               <h4>Logistics</h4>
               <div className="data-statistics">
                 <div className="mode">
-                  <div className="mode-text">Logistics rating</div>
+                  <div className="mode-text">Product rating</div>
                   <div className="mode-num">
-                    <span> {productStatistics && productStatistics.logisticsRating ? productStatistics.logisticsRating : '--'}</span>
+                    <span> {productStatistics && productStatistics.skuRating ? productStatistics.skuRating : '--'}</span>
                   </div>
                   <div className="mode-per">
-                    {productStatistics && productStatistics.logisticsRatingQoQ ? (
+                    {productStatistics && productStatistics.skuRatingQoQ ? (
                       <>
-                        <img src={productStatistics.logisticsRatingQoQ >= 0 ? icon1 : icon2} width="14" height="14" />
-                        <span>{productStatistics.logisticsRatingQoQ}</span>
+                        <img src={productStatistics.skuRatingQoQ >= 0 ? icon1 : icon2} width="14" height="14" />
+                        <span>{productStatistics.skuRatingQoQ}</span>
                       </>
                     ) : (
                       ''

@@ -298,12 +298,12 @@ export default class TransactionReport extends Component<any, any> {
             name: 'Subscription transaction amount',
             value: context.subscriptionAmount,
             rate: context.subscriptionAmountQoQ
-          },
-          {
-            name: 'Average subscription length',
-            value: context.averageSubscriptionLength,
-            rate: context.averageSubscriptionLengthQoQ
           }
+          // {
+          //   name: 'Average subscription length',
+          //   value: context.averageSubscriptionLength,
+          //   rate: context.averageSubscriptionLengthQoQ
+          // }
         ];
         this.setState({
           overviewList,
@@ -485,8 +485,8 @@ export default class TransactionReport extends Component<any, any> {
                       {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
-                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
+                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (
@@ -504,7 +504,7 @@ export default class TransactionReport extends Component<any, any> {
               {subscriptionList &&
                 subscriptionList.map((item, index) => (
                   <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
+                    <div className="mode-text" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
                       {item.name}
                     </div>
                     {item.name === 'Subscription rate' ? (
@@ -512,16 +512,16 @@ export default class TransactionReport extends Component<any, any> {
                         <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
                     ) : (
-                      <div className="mode-num" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
+                      <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
                         <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
                       </div>
                     )}
-                    <div className="mode-per" style={item.name === 'Average subscription length' ? styles.paddingRightZero : styles.borderRight}>
+                    <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
                       {item && (item.rate || item.rate === 0) ? (
                         <>
                           <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span>
-                            <CountUp end={item.rate} decimals={2} suffix={'%'} {...countUpProps} />
+                          <span className={item.rate > 0 ? 'green' : 'red'}>
+                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
                           </span>
                         </>
                       ) : (

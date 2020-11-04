@@ -99,8 +99,8 @@ export default class Header extends React.Component<any, any> {
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">
-          {this.state.prescribers ? (
-            <Select defaultValue={this.state.prescribers[0].prescriberName} onChange={this.prescriberChange}>
+          {this.state.prescribers && this.state.prescribers.length > 0 ? (
+            <Select defaultValue={this.state.prescribers[0].prescriberName}>
               {this.state.prescribers.map((item, index) => {
                 return <Option value={item.prescriberId}>{item.prescriberName}</Option>;
               })}

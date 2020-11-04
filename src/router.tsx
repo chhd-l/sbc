@@ -754,6 +754,14 @@ const routes = [
     asyncComponent: () => import('./product-category')
   },
   {
+    path: '/product-finder-list',
+    asyncComponent: () => import('./product-finder-list')
+  },
+  {
+    path: '/product-finder-details/:id',
+    asyncComponent: () => import('./product-finder-details')
+  },
+  {
     path: '/attribute-library',
     asyncComponent: () => import('./attribute-library')
   },

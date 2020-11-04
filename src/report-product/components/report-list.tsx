@@ -66,7 +66,7 @@ export default class ReportList extends Component<any, any> {
           <Column title="No" key="serialNum" dataIndex="serialNum" width="5%" />
           <Column title="Product" key="skuName" dataIndex="skuName" width="200px" />
           <Column title="SKU" key="SKU" dataIndex="skuCode" />
-          <Column title="skuCode" key="salesVolume" dataIndex="salesVolume" />
+          <Column title="Sales volume" key="salesVolume" dataIndex="salesVolume" />
           <Column title="Revenue" dataIndex="revenue" key="revenue" />
 
           <Column

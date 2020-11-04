@@ -63,7 +63,7 @@ export default class ListSearchForm extends Component<any, any> {
 
   render() {
     const { skuText } = this.state;
-    const { handleBatchExport } = this.props.relaxProps;
+    const { handleBatchExport, getDate } = this.props.relaxProps;
     return (
       <div className="list-head-container">
         <h4>Product Report</h4>

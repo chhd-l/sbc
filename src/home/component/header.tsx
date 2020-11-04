@@ -19,7 +19,8 @@ export default class Header extends React.Component<any, any> {
       searchData: '',
       prescriber: 'prescribersId',
       prescriberInput: '',
-      aa: '11'
+      searchType: false,
+      selectList: []
     };
   }
 
@@ -51,6 +52,15 @@ export default class Header extends React.Component<any, any> {
     });
   }
 
+  componentDidUpdate(prevProps, prevState: Readonly<any>, snapshot?: any) {
+    const { searchData } = this.props.relaxProps;
+    if (prevProps.relaxProps.searchData != searchData) {
+      this.setState({
+        selectList: searchData
+      });
+    }
+  }
+
   dateChange = (date, dateString) => {
     const { newInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
@@ -63,13 +73,37 @@ export default class Header extends React.Component<any, any> {
     newInit(obj);
   };
 
-  onSearch = () => {
+  onSearch = (res) => {
     if (this.state.prescriberInput == '') {
       return;
     } else {
+      this.setState({
+        searchType: true
+      });
       const { onSearchData } = this.props.relaxProps as any;
       onSearchData({ prescriberName: this.state.prescriberInput });
-      this.props.changePage(true);
+    }
+  };
+
+  selectSearch = (res) => {
+    this.setState({
+      prescriberInput: res
+    });
+  };
+
+  onBlur = (res) => {
+    this.setState({
+      prescriberInput: res
+    });
+  };
+
+  onFocus = (res) => {};
+
+  onChange = (res) => {
+    if (res == 'all') {
+      this.props.changePage({ type: false, getPrescriberId: null });
+    } else {
+      this.props.changePage({ type: true, getPrescriberId: res });
     }
   };
 
@@ -95,13 +129,42 @@ export default class Header extends React.Component<any, any> {
         </div>
         <div className="home-prescriber flex-start-end">
           <span style={{ marginRight: 8 }}>Prescriber: </span>
-          <Input
-            style={{ width: 200, marginRight: 8 }}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              this.onSearch2(value);
-            }}
-          />
+          {this.state.searchType == false ? (
+            <Input
+              style={{ width: 200, marginRight: 8 }}
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onSearch2(value);
+              }}
+            />
+          ) : (
+            <Select
+              showArrow={false}
+              autoFocus={false}
+              style={{ width: 200, marginRight: 8 }}
+              placeholder="Select Prescriber Data"
+              defaultValue="All"
+              //optionFilterProp="children"
+              onChange={this.onChange}
+              //onFocus={this.onFocus}
+              //onBlur={this.onBlur}
+              //onSearch={this.selectSearch}
+              /*filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }*/
+            >
+              <Option value="all">All</Option>
+              {this.state.selectList.length !== 0
+                ? this.state.selectList.map((item, index) => {
+                    return (
+                      <Option value={item.prescriberId} key={index}>
+                        {item.prescriberName}
+                      </Option>
+                    );
+                  })
+                : null}
+            </Select>
+          )}
           <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
         {this.state.prescriber.id ? (

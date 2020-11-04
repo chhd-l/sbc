@@ -29,6 +29,7 @@ export default class Prescriber extends React.Component<any, any> {
     super(props);
     this.state = {
       visible: false,
+      prescriberId: '',
       tradeCustomerView: {},
       goodsInfoTopView: '',
       prescriberTrendView: '',
@@ -66,17 +67,20 @@ export default class Prescriber extends React.Component<any, any> {
 
   componentWillUnmount() {
     //const { tradeCustomerView } = this.props.relaxProps as any;
-    let o = {
-      value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].id,
-      children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].prescriberName
-    };
-    let act = JSON.stringify(o);
-    if (sessionStorage.getItem('PrescriberType') === null) {
-      sessionStorage.setItem('PrescriberType', act);
+    if (JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers) {
+      let o = {
+        value: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].id,
+        children: JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA)).prescribers[0].prescriberName
+      };
+      let act = JSON.stringify(o);
+      if (sessionStorage.getItem('PrescriberType') === null) {
+        sessionStorage.setItem('PrescriberType', act);
+      }
     }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    const { prescriberId } = nextProps;
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (tradeCustomerView !== prevState.tradeCustomerView) {
@@ -122,6 +126,11 @@ export default class Prescriber extends React.Component<any, any> {
     if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
       return {
         conversionFunnelDashboardView
+      };
+    }
+    if (prescriberId !== prevState.prescriberId) {
+      return {
+        prescriberId
       };
     }
 
@@ -286,7 +295,6 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode">
                         <div className="mode-text">Number</div>
                         <div className="mode-num">
-                          <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                         </div>
                         <div className="mode-per">
@@ -299,7 +307,6 @@ export default class Prescriber extends React.Component<any, any> {
                       <div className="mode">
                         <div className="mode-text">Revenue</div>
                         <div className="mode-num">
-                          <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
                         </div>
                         <div className="mode-per">
@@ -328,7 +335,6 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">Page view</div>
                       <div className="mode-num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                         <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
@@ -341,8 +347,7 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                        <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} {...countUpProps} /> : '--'}</span>
+                        <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
                       <div className="mode-per">
                         {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <img src={trafficDashboardView.bounceRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -356,15 +361,13 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="mode">
                       <div className="mode-text">VET traffic</div>
                       <div className="mode-num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                         <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                     <div className="mode">
                       <div className="mode-text">VET traffic rate</div>
                       <div className="mode-num num">
-                        <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                        <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} {...countUpProps} /> : '--'}</span>
+                        <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
                   </div>
@@ -378,7 +381,6 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Active consumers</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
@@ -391,8 +393,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Active consumer rate</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
+                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
                       {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -406,7 +407,6 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Total consumers</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                   </div>

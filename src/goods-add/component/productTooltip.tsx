@@ -83,7 +83,6 @@ export default class GoodsModal extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
-          console.log(goodsId);
           let targetGoodsIds = [];
           this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsId));
           let obj = {

@@ -131,7 +131,7 @@ export default class AppStore extends Store {
     const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
     const { res: getTransactionTrendView } = await webapi.getTransactionTrendView(data);
     const { res: getTrafficTrendDashboardView } = await webapi.getTrafficTrendDashboardView(data);
-    const { res: getListAll } = await webapi.getListAll(data);
+    //const { res: getListAll } = await webapi.getListAll(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
@@ -142,7 +142,7 @@ export default class AppStore extends Store {
       this.dispatch('home:trafficDashboardView', getTrafficDashboardView.context);
       this.dispatch('home:transactionTrendView', getTransactionTrendView.context);
       this.dispatch('home:trafficTrendDashboardView', getTrafficTrendDashboardView.context);
-      this.dispatch('home:searchData', getListAll.context);
+      //this.dispatch('home:searchData', getListAll.context);
     }
   };
 
@@ -167,5 +167,10 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('home:searchData', res.context);
     }
+  };
+
+  selectSearch = (data) => {
+    console.log(data);
+    this.dispatch('home:selectSearchData', data);
   };
 }

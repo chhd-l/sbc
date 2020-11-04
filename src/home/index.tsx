@@ -20,7 +20,8 @@ export default class HelloApp extends React.Component<any, any> {
     super(props);
     this.state = {
       prescriberId: null,
-      changeMode: false
+      changeMode: false,
+      getPrescriberId: ''
     };
   }
 
@@ -44,11 +45,13 @@ export default class HelloApp extends React.Component<any, any> {
         year: moment(date).year()
       });
     }
-    //this.store.init();
   }
+
   changePage(res) {
+    console.log(res, 1111);
     this.setState({
-      changeMode: true
+      changeMode: res.type,
+      getPrescriberId: res.prescriberId
     });
   }
 
@@ -58,7 +61,8 @@ export default class HelloApp extends React.Component<any, any> {
       return !this.state.prescriberId ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.prescriberId} />}
+          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+
           {/*<StatisticalReport />
           <Ranking /> */}
         </div>

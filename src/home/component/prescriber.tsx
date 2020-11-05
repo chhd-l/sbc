@@ -115,9 +115,6 @@ export default class Prescriber extends React.Component<any, any> {
 
   render() {
     const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-    setTimeout(() => {
-      console.log(trafficTrendDashboardView, 2222);
-    });
     return (
       <div className="prescriber-item">
         <div className="item-top space-between">

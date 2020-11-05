@@ -9,6 +9,7 @@ export default class Foot extends React.Component<any, any> {
   props: {
     goodsFuncName: string;
     priceFuncName: string;
+    tabType: string;
     relaxProps?: {
       validMain: Function;
       saveMain: Function;
@@ -35,12 +36,7 @@ export default class Foot extends React.Component<any, any> {
         {activeTabKey === 'main' ? (
           [
             <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
-              <Button
-                type="primary"
-                onClick={this._save}
-                style={{ marginRight: 10 }}
-                loading={saveLoading}
-              >
+              <Button type="primary" onClick={this._save} style={{ marginRight: 10 }} loading={saveLoading}>
                 <FormattedMessage id="product.saveDirectly" />
               </Button>
             </AuthWrapper>
@@ -56,12 +52,7 @@ export default class Foot extends React.Component<any, any> {
           ]
         ) : (
           <AuthWrapper functionName={this.props.priceFuncName}>
-            <Button
-              type="primary"
-              onClick={this._savePrice}
-              style={{ marginRight: 10 }}
-              loading={saveLoading}
-            >
+            <Button type="primary" onClick={this._savePrice} style={{ marginRight: 10 }} loading={saveLoading}>
               Save
             </Button>
           </AuthWrapper>

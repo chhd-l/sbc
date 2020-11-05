@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { DatePicker, Input, Form, Icon, Button } from 'antd';
-import {AuthWrapper, Const, noop} from 'qmkit';
-import {Relax} from "plume2";
+import { AuthWrapper, Const, noop } from 'qmkit';
+import { Relax } from 'plume2';
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 
@@ -11,19 +11,21 @@ export default class ListSearchForm extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      beginTime: '',
-      endTime: '',
+      beginDate: '',
+      endDate: '',
       skuText: ''
     };
   }
   props: {
     relaxProps?: {
       handleBatchExport: Function;
+      getDate: any;
     };
   };
 
   static relaxProps = {
-    handleBatchExport: noop
+    handleBatchExport: noop,
+    getDate: 'getDate'
   };
 
   componentDidMount() {}
@@ -35,8 +37,8 @@ export default class ListSearchForm extends Component<any, any> {
       endTime = e[1].format(Const.DAY_FORMAT);
     }
     this.setState({
-      beginTime,
-      endTime
+      beginDate: beginTime,
+      endDate: endTime
     });
   }
   sukOnChange(e) {
@@ -46,25 +48,27 @@ export default class ListSearchForm extends Component<any, any> {
     });
   }
   onSearch() {
-    const { beginTime, endTime, skuText } = this.state;
+    const { skuText } = this.state;
+    const { getDate } = this.props.relaxProps;
     const params = {
-      beginTime,
-      endTime,
-      skuText
+      beginDate: getDate.beginDate,
+      endDate: getDate.endDate,
+      skuCode: skuText,
+      pageNum: 1,
+      pageSize: 10,
+      sortName: 'revenue'
     };
     this.props.onSearch(params);
   }
 
   render() {
     const { skuText } = this.state;
+    const { handleBatchExport, getDate } = this.props.relaxProps;
     return (
       <div className="list-head-container">
         <h4>Product Report</h4>
         <div>
           <Form layout="inline">
-            <Form.Item>
-              <RangePicker size="default" onChange={(e) => this.datePickerChange(e)} />
-            </Form.Item>
             <Form.Item>
               <Search placeholder="Search single SKU" style={{ width: 200 }} value={skuText} onChange={(e) => this.sukOnChange(e)} />
             </Form.Item>
@@ -75,7 +79,7 @@ export default class ListSearchForm extends Component<any, any> {
             </Form.Item>
             <Form.Item>
               <AuthWrapper functionName="digital_trategy_export">
-                <Button type="primary" shape="round" onClick={() => this._handleBatchExport()}>
+                <Button type="primary" shape="round" onClick={() => handleBatchExport()}>
                   Download the report
                 </Button>
               </AuthWrapper>

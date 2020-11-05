@@ -13,13 +13,15 @@ export default class BrandActor extends Actor {
     return {
       productStatistics: '',
       productReportPage: [],
-      pageNum: 0,
+      pageNum: 1,
       // 数据总条数
       total: 0,
       // 每页显示条数
       pageSize: 10,
       // 当前页码
-      current: 1
+      current: 1,
+      getDate: {},
+      getForm: ''
     };
   }
 
@@ -32,7 +34,7 @@ export default class BrandActor extends Actor {
   productReportPage(state: IMap, res: IPageResponse) {
     const { productReport, size, totalElements } = res;
     return state.withMutations((state) => {
-      state.set('total', totalElements).set('pageSize', size).set('productReportPage', productReport);
+      state.set('total', totalElements).set('pageSize', size).set('productReportPage', fromJS(productReport));
     });
   }
 
@@ -44,4 +46,13 @@ export default class BrandActor extends Actor {
     return state.set('current', current);
   }
 
+  @Action('report:getDate')
+  getDate(state, data: IMap) {
+    return state.set('getDate', data);
+  }
+
+  @Action('report:getForm')
+  getForm(state, data: IMap) {
+    return state.set('getForm', data);
+  }
 }

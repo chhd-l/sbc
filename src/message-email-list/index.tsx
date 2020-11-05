@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
-import {
-  Form,
-  Spin,
-  Row,
-  Col,
-  Select,
-  Input,
-  Button,
-  message,
-  Tooltip,
-  Divider,
-  Table,
-  Popconfirm
-} from 'antd';
+import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -194,15 +181,7 @@ export default class ClinicList extends Component<any, any> {
   };
 
   render() {
-    const {
-      title,
-      searchForm,
-      objectTypeList,
-      categoryList,
-      statusList,
-      taskList,
-      emailTemplateList
-    } = this.state;
+    const { title, searchForm, objectTypeList, categoryList, statusList, taskList, emailTemplateList } = this.state;
 
     const columns = [
       {
@@ -248,17 +227,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '5%',
-        render: (text) => (
-          <span>
-            {+text === 0
-              ? 'Draft'
-              : +text === 1
-              ? 'To do'
-              : +text === 2
-              ? 'Finish'
-              : ''}
-          </span>
-        )
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
       },
 
       {
@@ -270,21 +239,12 @@ export default class ClinicList extends Component<any, any> {
             {+record.status === 0 ? (
               <div>
                 <Tooltip placement="top" title="Edit">
-                  <Link
-                    to={'/message-edit/' + record.id}
-                    className="iconfont iconEdit"
-                  ></Link>
+                  <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm
-                  placement="topLeft"
-                  title="Are you sure to delete this item?"
-                  onConfirm={() => this.deleteTask(record.id)}
-                  okText="Confirm"
-                  cancelText="Cancel"
-                >
+                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title="Delete">
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
@@ -294,21 +254,12 @@ export default class ClinicList extends Component<any, any> {
             {+record.status === 1 ? (
               <div>
                 <Tooltip placement="top" title="Details">
-                  <Link
-                    to={'/message-detail/' + record.id}
-                    className="iconfont iconDetails"
-                  ></Link>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm
-                  placement="topLeft"
-                  title="Are you sure to delete this item?"
-                  onConfirm={() => this.deleteTask(record.id)}
-                  okText="Confirm"
-                  cancelText="Cancel"
-                >
+                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title="Delete">
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
@@ -318,10 +269,7 @@ export default class ClinicList extends Component<any, any> {
             {+record.status === 2 ? (
               <div>
                 <Tooltip placement="top" title="Details">
-                  <Link
-                    to={'/message-detail/' + record.id}
-                    className="iconfont iconDetails"
-                  ></Link>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
               </div>
             ) : null}
@@ -385,7 +333,7 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Object Type</p>}
-                    style={{ width: 180 }}
+                    style={{ width: 200 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -434,7 +382,7 @@ export default class ClinicList extends Component<any, any> {
                       defaultValue="Email Template"
                     />
                     <Select
-                      style={{ width: 180 }}
+                      style={{ width: 200 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -485,7 +433,7 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Category</p>}
-                    style={{ width: 180 }}
+                    style={{ width: 200 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -511,7 +459,7 @@ export default class ClinicList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Status</p>}
-                    style={{ width: 180 }}
+                    style={{ width: 200 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -554,15 +502,7 @@ export default class ClinicList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Table
-            rowKey="id"
-            columns={columns}
-            dataSource={taskList}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            scroll={{ x: '100%' }}
-            onChange={this.handleTableChange}
-          />
+          <Table rowKey="id" columns={columns} dataSource={taskList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
       </div>
     );

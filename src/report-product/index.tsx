@@ -34,16 +34,16 @@ export default class ProductReport extends Component<any, any> {
     };
   }
   componentDidMount() {
-    let startDate = moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
+    let beginDate = moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
       .subtract(7, 'days')
       .format('YYYY-MM-DD');
     let endDate = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY-MM-DD');
     let data1 = {
-      beginDate: startDate,
+      beginDate: beginDate,
       endDate: endDate
     };
     let data2 = {
-      beginDate: startDate,
+      beginDate: beginDate,
       endDate: endDate,
       //sortName: "revenue",
       sortName: 'revenue',

@@ -238,12 +238,13 @@
           .Funnel-per1 {
             position: absolute;
             width: 38.2%;
-            top: 41px;
+            top: 36px;
             right: 0;
 
             p:first-child {
-              width: 32px;
-              height: 32px;
+              min-width: 32px;
+              min-height: 32px;
+              padding: 5px;
               text-align: center;
               line-height: 32px;
               background: #ffffff;
@@ -265,12 +266,13 @@
           .Funnel-per2 {
             position: absolute;
             width: 38.2%;
-            top: 98px;
+            top: 92px;
             right: 5%;
 
             p:first-child {
-              width: 32px;
-              height: 32px;
+              min-width: 32px;
+              min-height: 32px;
+              padding: 5px;
               text-align: center;
               line-height: 32px;
               background: #ffffff;
@@ -291,13 +293,14 @@
 
           .Funnel-per3 {
             position: absolute;
-            top: 153px;
+            top: 145px;
             width: 38.2%;
             right: 10%;
 
             p:first-child {
-              width: 32px;
-              height: 32px;
+              min-width: 32px;
+              min-height: 32px;
+              padding: 5px;
               text-align: center;
               line-height: 32px;
               background: #ffffff;
@@ -931,7 +934,7 @@
     height: 465px;
 
     .item-top-l {
-      width: 38%;
+      width: 65.5%;
       height: 100%;
 
       .item-top-l-top {
@@ -1002,209 +1005,253 @@
         }
       }
 
-      .item-top-l-btm {
+      .conversion {
         width: 100%;
-        height: 324px;
-        background: #ffffff;
-        box-shadow: 0 3px 5px #dddddd;
-        border-radius: 5px;
 
-        .top-text {
-          font-size: 16px;
-          font-weight: bold;
-          color: #000000;
-          padding: 12px 0 0 20px;
-        }
+        .item-top-l-btm-l {
+          width: 60%;
+          height: 324px;
+          background: #ffffff;
+          box-shadow: 0 3px 5px #dddddd;
+          border-radius: 5px;
 
-        .Funnel {
-          width: 100%;
-          height: 100%;
-          margin-top: 10px;
-          margin-left: 10px;
-          position: relative;
-
-          .Funnel-l {
-            width: 40%;
-            position: absolute;
-            left: 6%;
-            top: 5%;
-            line-height: 50px;
-
-            .Funnel-l-text {
-              width: 100%;
-
-              span:nth-child(1) {
-                font-size: 10px;
-                color: #808285;
-                width: 28%;
-              }
-
-              span:nth-child(2) {
-                font-size: 12px;
-                color: #000000;
-                font-weight: bold;
-                width: 17%;
-              }
-
-              span:nth-child(3) {
-                color: #808285;
-                border-top: 1px #cccccc dashed;
-              }
-
-              .Funnel-l-dash1 {
-                width: 11%;
-              }
-
-              .Funnel-l-dash2 {
-                width: 21%;
-              }
-
-              .Funnel-l-dash3 {
-                width: 31%;
-              }
-
-              .Funnel-l-dash4 {
-                width: 41%;
-              }
-            }
+          .top-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
+            padding: 12px 0 0 20px;
           }
 
-          .Funnel-r {
-            width: 40%;
-            position: absolute;
-            right: 5%;
-            top: 10%;
+          .Funnel {
+            width: 100%;
+            height: 100%;
+            margin-top: 10px;
+            margin-left: 10px;
+            position: relative;
 
-            .Funnel-r-top {
-              width: 70px;
-              height: 20px;
-              color: #808285;
-              margin-left: 112px;
-              border-top: 1px #cccccc dashed;
-              border-right: 1px #cccccc dashed;
-            }
+            .Funnel-l {
+              width: 40%;
+              position: absolute;
+              left: 6%;
+              top: 5%;
+              line-height: 50px;
 
-            .Funnel-r-mid {
-              padding-left: 150px;
-              padding-top: 24px;
+              .Funnel-l-text {
+                width: 100%;
 
-              .text1 {
-                font-size: 12px;
-                color: #808285;
-              }
+                span:nth-child(1) {
+                  font-size: 10px;
+                  color: #808285;
+                  width: 28%;
+                }
 
-              .text2 {
-                font-size: 20px;
-                color: #000000;
-                font-weight: bold;
-
-                i {
-                  font-style: normal;
+                span:nth-child(2) {
                   font-size: 12px;
                   color: #000000;
-                  margin-left: 4px;
-                }
-              }
-
-              .text3 {
-                font-size: 12px;
-                vertical-align: middle;
-
-                span {
-                  margin-left: 5px;
                   font-weight: bold;
+                  width: 17%;
+                }
+
+                span:nth-child(3) {
+                  color: #808285;
+                  border-top: 1px #cccccc dashed;
+                }
+
+                .Funnel-l-dash1 {
+                  width: 11%;
+                }
+
+                .Funnel-l-dash2 {
+                  width: 21%;
+                }
+
+                .Funnel-l-dash3 {
+                  width: 31%;
+                }
+
+                .Funnel-l-dash4 {
+                  width: 41%;
                 }
               }
             }
 
-            .Funnel-r-btm {
-              width: 180px;
-              height: 23px;
-              color: #808285;
-              border-bottom: 1px #cccccc dashed;
-              border-right: 1px #cccccc dashed;
-              margin-top: 32px;
+            .Funnel-r {
+              width: 40%;
+              position: absolute;
+              right: 5%;
+              top: 10%;
+
+              .Funnel-r-top {
+                width: 70px;
+                height: 20px;
+                color: #808285;
+                margin-left: 112px;
+                border-top: 1px #cccccc dashed;
+                border-right: 1px #cccccc dashed;
+              }
+
+              .Funnel-r-mid {
+                padding-left: 150px;
+                padding-top: 24px;
+
+                .text1 {
+                  font-size: 12px;
+                  color: #808285;
+                }
+
+                .text2 {
+                  font-size: 20px;
+                  color: #000000;
+                  font-weight: bold;
+
+                  i {
+                    font-style: normal;
+                    font-size: 12px;
+                    color: #000000;
+                    margin-left: 4px;
+                  }
+                }
+
+                .text3 {
+                  font-size: 12px;
+                  vertical-align: middle;
+
+                  span {
+                    margin-left: 5px;
+                    font-weight: bold;
+                  }
+                }
+              }
+
+              .Funnel-r-btm {
+                width: 180px;
+                height: 23px;
+                color: #808285;
+                border-bottom: 1px #cccccc dashed;
+                border-right: 1px #cccccc dashed;
+                margin-top: 32px;
+              }
+            }
+
+            .Funnel-per1 {
+              position: absolute;
+              width: 38.2%;
+              top: 48px;
+              right: 0;
+
+              p:first-child {
+                width: 32px;
+                height: 32px;
+                text-align: center;
+                line-height: 32px;
+                background: #ffffff;
+                border-radius: 50%;
+                box-shadow: 3px 3px 3px #dddcdc;
+                font-size: 12px;
+                color: #e1021a;
+                font-weight: bold;
+                letter-spacing: 1px;
+              }
+
+              p:last-child {
+                color: #e1021a;
+                font-size: 11px;
+                margin-left: 2px;
+              }
+            }
+
+            .Funnel-per2 {
+              position: absolute;
+              width: 38.2%;
+              top: 115px;
+              right: 5%;
+
+              p:first-child {
+                width: 32px;
+                height: 32px;
+                text-align: center;
+                line-height: 32px;
+                background: #ffffff;
+                border-radius: 50%;
+                box-shadow: 3px 3px 3px #dddcdc;
+                font-size: 12px;
+                color: #e1021a;
+                font-weight: bold;
+                letter-spacing: 1px;
+              }
+
+              p:last-child {
+                color: #e1021a;
+                font-size: 11px;
+                margin-left: 2px;
+              }
+            }
+
+            .Funnel-per3 {
+              position: absolute;
+              top: 180px;
+              width: 38.2%;
+              right: 10%;
+
+              p:first-child {
+                width: 32px;
+                height: 32px;
+                text-align: center;
+                line-height: 32px;
+                background: #ffffff;
+                border-radius: 50%;
+                box-shadow: 3px 3px 3px #dddcdc;
+                font-size: 12px;
+                color: #e1021a;
+                font-weight: bold;
+                letter-spacing: 1px;
+              }
+
+              p:last-child {
+                color: #e1021a;
+                font-size: 11px;
+                margin-left: 2px;
+              }
             }
           }
+        }
 
-          .Funnel-per1 {
-            position: absolute;
-            width: 38.2%;
-            top: 48px;
-            right: 0;
+        .item-top-l-btm-r {
+          width: 39%;
+          height: 324px;
+          background: #ffffff;
+          box-shadow: 0 3px 5px #dddddd;
+          border-radius: 5px;
 
-            p:first-child {
-              width: 32px;
-              height: 32px;
-              text-align: center;
-              line-height: 32px;
-              background: #ffffff;
-              border-radius: 50%;
-              box-shadow: 3px 3px 3px #dddcdc;
-              font-size: 12px;
-              color: #e1021a;
-              font-weight: bold;
-              letter-spacing: 1px;
-            }
-
-            p:last-child {
-              color: #e1021a;
-              font-size: 11px;
-              margin-left: 2px;
-            }
+          .top-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
+            padding: 12px 0 0 20px;
           }
 
-          .Funnel-per2 {
-            position: absolute;
-            width: 38.2%;
-            top: 115px;
-            right: 5%;
+          .subscription {
+            width: 100%;
+            height: 100%;
 
-            p:first-child {
-              width: 32px;
-              height: 32px;
-              text-align: center;
-              line-height: 32px;
-              background: #ffffff;
-              border-radius: 50%;
-              box-shadow: 3px 3px 3px #dddcdc;
-              font-size: 12px;
-              color: #e1021a;
-              font-weight: bold;
-              letter-spacing: 1px;
+            .subscription-top {
+              width: 100%;
+              height: 56%;
             }
 
-            p:last-child {
-              color: #e1021a;
-              font-size: 11px;
-              margin-left: 2px;
-            }
-          }
+            .subscription-btm {
+              height: 40%;
+              width: 90%;
+              margin: 0 auto;
+              text-align: left;
 
-          .Funnel-per3 {
-            position: absolute;
-            top: 180px;
-            width: 38.2%;
-            right: 10%;
-
-            p:first-child {
-              width: 32px;
-              height: 32px;
-              text-align: center;
-              line-height: 32px;
-              background: #ffffff;
-              border-radius: 50%;
-              box-shadow: 3px 3px 3px #dddcdc;
-              font-size: 12px;
-              color: #e1021a;
-              font-weight: bold;
-              letter-spacing: 1px;
-            }
-
-            p:last-child {
-              color: #e1021a;
-              font-size: 11px;
-              margin-left: 2px;
+              .consumer-top {
+                width: 100%;
+                height: 52%;
+                background: rgb(250, 250, 250);
+                padding: 6px 15px 0 10px;
+                line-height: 20px;
+              }
             }
           }
         }
@@ -1244,15 +1291,9 @@
           height: 100%;
           padding: 12px 0 0 12px;
 
-          .traffic-l {
-            width: 15%;
-            padding-top: 20px;
-            padding-left: 16px;
-          }
-
           .traffic-r {
             height: 74%;
-            width: 80%;
+            width: 100%;
             margin-right: 16px;
             text-align: left;
 
@@ -1378,7 +1419,7 @@
     }
 
     .item-top-r {
-      width: 29.5%;
+      width: 33.8%;
       height: 100%;
 
       .item-top-r-top {
@@ -1434,65 +1475,49 @@
         border-radius: 5px;
 
         .top-text {
-          font-size: 16px;
-          font-weight: bold;
-          color: #000000;
           padding: 12px 0 0 20px;
-        }
 
-        .subscription {
-          width: 100%;
-          height: 73%;
-          margin-top: 5px;
-
-          .subscription-l {
-            width: 50%;
-            height: 100%;
+          span:first-child {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
           }
 
-          .subscription-r {
-            width: 50%;
-            height: 76%;
+          span:last-child {
+            font-size: 12px;
+            color: #808285;
+            padding-right: 18px;
+          }
+        }
 
-            .subscription-content {
+        .traffic {
+          width: 100%;
+          height: 100%;
+          padding: 12px 0 0 12px;
+
+          .traffic-r {
+            height: 74%;
+            width: 100%;
+            margin-right: 16px;
+            text-align: left;
+
+            .traffic-r-top {
               width: 100%;
-              margin-top: 15px;
+              height: 47%;
+              background: rgb(250, 250, 250);
+              padding: 6px 15px 0 10px;
+              line-height: 19px;
+            }
 
-              .text {
-                width: 32%;
-                font-size: 12px;
-                color: #808285;
-                letter-spacing: 0;
-                margin-top: 3px;
-              }
+            .traffic-r-btm {
+              width: 100%;
+              height: 47%;
+              background: rgb(250, 250, 250);
+              padding: 10px 10px 0 10px;
+              line-height: 24px;
 
               .num {
-                width: 45%;
-
-                .num-l {
-                  font-size: 17px;
-                  font-weight: bold;
-                  color: #000000;
-                }
-
-                .num-r {
-                  font-size: 12px;
-                  color: #44c4af;
-                  padding-top: 0;
-
-                  span:first-child {
-                    font-size: 12px;
-                    color: #e1021a;
-                  }
-
-                  span:last-child {
-                    font-size: 12px;
-                    font-weight: bold;
-                    padding-left: 5px;
-                    vertical-align: middle;
-                    color: #f51f1f;
-                  }
-                }
+                height: 16px;
               }
             }
           }

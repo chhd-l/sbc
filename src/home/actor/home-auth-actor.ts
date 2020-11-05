@@ -17,7 +17,12 @@ export default class HomeAuthActor extends Actor {
       conversionFunnelDashboardView: '',
       search: '',
       searchData: '',
-      selectSearchData: ''
+      selectSearchData: '',
+      p_tradeCustomerView: '',
+      p_prescriberTopView: '',
+      p_conversionFunnelDashboardView: '',
+      p_trafficTrendDashboardView: '',
+      p_transactionTrendView: ''
     };
   }
 
@@ -58,9 +63,27 @@ export default class HomeAuthActor extends Actor {
   }
 
   /*Prescriber*/
-  @Action('prescriber:prescriberConversionFunnelDashboardView')
-  prescriberConversionFunnelDashboardView(state: IMap, res) {
-    return state.set('prescriberConversionFunnelDashboardView', res);
+
+  @Action('prescriber:p_tradeCustomerView')
+  p_tradeCustomerView(state: IMap, res) {
+    return state.set('p_tradeCustomerView', res);
+  }
+  @Action('prescriber:p_prescriberTopView')
+  p_prescriberTopView(state: IMap, res) {
+    return state.set('p_prescriberTopView', res);
+  }
+  @Action('prescriber:p_conversionFunnelDashboardView')
+  p_conversionFunnelDashboardView(state: IMap, res) {
+    return state.set('p_conversionFunnelDashboardView', res);
+  }
+  @Action('prescriber:p_trafficTrendDashboardView')
+  p_trafficTrendDashboardView(state: IMap, res) {
+    return state.set('p_trafficTrendDashboardView', res);
+  }
+
+  @Action('prescriber:p_transactionTrendView')
+  p_transactionTrendView(state: IMap, res) {
+    return state.set('p_transactionTrendView', res);
   }
 
   @Action('home:search')

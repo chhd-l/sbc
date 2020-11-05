@@ -43,26 +43,20 @@ export default class Prescriber extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      tradeCustomerView: any;
-      goodsInfoTopView: any;
-      prescriberTrendView: any;
-      prescriberTopView: any;
-      trafficDashboardView: any;
-      transactionTrendView: any;
-      trafficTrendDashboardView: any;
-      conversionFunnelDashboardView: any;
+      p_tradeCustomerView: any;
+      p_prescriberTopView: any;
+      p_transactionTrendView: any;
+      p_trafficTrendDashboardView: any;
+      p_conversionFunnelDashboardView: any;
     };
   };
 
   static relaxProps = {
-    tradeCustomerView: 'tradeCustomerView',
-    goodsInfoTopView: 'goodsInfoTopView',
-    prescriberTrendView: 'prescriberTrendView',
-    prescriberTopView: 'prescriberTopView',
-    trafficDashboardView: 'trafficDashboardView',
-    transactionTrendView: 'transactionTrendView',
-    trafficTrendDashboardView: 'trafficTrendDashboardView',
-    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
+    p_tradeCustomerView: 'p_tradeCustomerView',
+    p_prescriberTopView: 'p_prescriberTopView',
+    p_transactionTrendView: 'p_transactionTrendView',
+    p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
+    p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView'
   };
 
   componentWillUnmount() {
@@ -81,46 +75,31 @@ export default class Prescriber extends React.Component<any, any> {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { prescriberId } = nextProps;
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
+    const { p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (tradeCustomerView !== prevState.tradeCustomerView) {
+    if (p_tradeCustomerView !== prevState.tradeCustomerView) {
       return {
-        tradeCustomerView
+        tradeCustomerView: p_tradeCustomerView
       };
     }
-    if (goodsInfoTopView !== prevState.goodsInfoTopView) {
+    if (p_prescriberTopView !== prevState.prescriberTopView) {
       return {
-        goodsInfoTopView
+        prescriberTopView: p_prescriberTopView
       };
     }
-    if (prescriberTrendView !== prevState.prescriberTrendView) {
+    if (p_transactionTrendView !== prevState.transactionTrendView) {
       return {
-        prescriberTrendView
+        transactionTrendView: p_transactionTrendView
       };
     }
-    if (prescriberTopView !== prevState.prescriberTopView) {
+    if (p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
       return {
-        prescriberTopView
+        trafficTrendDashboardView: p_trafficTrendDashboardView
       };
     }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
+    if (p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
       return {
-        trafficDashboardView
-      };
-    }
-    if (transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView
-      };
-    }
-    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView
-      };
-    }
-    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
-        conversionFunnelDashboardView
+        conversionFunnelDashboardView: p_conversionFunnelDashboardView
       };
     }
     if (prescriberId !== prevState.prescriberId) {
@@ -148,7 +127,7 @@ export default class Prescriber extends React.Component<any, any> {
   render() {
     const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     setTimeout(() => {
-      console.log(trafficDashboardView, 2222);
+      console.log(trafficTrendDashboardView, 2222);
     });
     return (
       <div className="prescriber-item">
@@ -323,7 +302,7 @@ export default class Prescriber extends React.Component<any, any> {
           <div className="item-top-r flex-content">
             <div className="item-top-r-btm">
               <div className="top-text space-between">
-                <span>Traffiction</span>
+                <span>Traffic</span>
                 <span>more ></span>
               </div>
               <div className="traffic space-between">

@@ -22,7 +22,8 @@ export default class Header extends React.Component<any, any> {
       searchType: false,
       selectList: [],
       buttonType: false,
-      openType: false
+      openType: false,
+      prescriberId: ''
     };
   }
 
@@ -31,6 +32,7 @@ export default class Header extends React.Component<any, any> {
       header: IMap;
       storeEvaluateSum: IMap;
       newInit: Function;
+      prescriberInit: Function;
       search: any;
       searchData: any;
       onSearchData: Function;
@@ -41,6 +43,7 @@ export default class Header extends React.Component<any, any> {
     header: 'header',
     storeEvaluateSum: 'storeEvaluateSum',
     newInit: noop,
+    prescriberInit: noop,
     search: 'search',
     searchData: 'searchData',
     onSearchData: noop
@@ -64,14 +67,24 @@ export default class Header extends React.Component<any, any> {
   }
 
   dateChange = (date, dateString) => {
-    const { newInit } = this.props.relaxProps as any;
+    const { newInit, prescriberInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
-    let obj = {
-      companyId: 2,
-      weekNum: date.week(),
-      year: Number(year)
-    };
-    newInit(obj);
+    if (this.state.searchType == true) {
+      let obj = {
+        companyId: 2,
+        weekNum: date.week(),
+        year: Number(year),
+        prescribersId: this.state.prescriberId
+      };
+      prescriberInit(obj);
+    } else {
+      let obj = {
+        companyId: 2,
+        weekNum: date.week(),
+        year: Number(year)
+      };
+      newInit(obj);
+    }
   };
 
   onSearch = (res) => {
@@ -114,7 +127,8 @@ export default class Header extends React.Component<any, any> {
       this.props.changePage({ type: true, getPrescriberId: res });
     }
     this.setState({
-      openType: false
+      openType: false,
+      prescriberId: res
     });
   };
 
@@ -123,6 +137,9 @@ export default class Header extends React.Component<any, any> {
       searchType: false,
       buttonType: false
     });
+    if (this.state.searchType == true) {
+      this.props.changePage({ type: false, getPrescriberId: null });
+    }
   };
 
   selectClick = (res) => {

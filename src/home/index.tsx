@@ -50,7 +50,6 @@ export default class HelloApp extends React.Component<any, any> {
   onInit() {}
 
   changePage(res) {
-    console.log(res, 1111);
     this.setState({
       changeMode: res.type,
       getPrescriberId: res.getPrescriberId
@@ -79,7 +78,7 @@ export default class HelloApp extends React.Component<any, any> {
       return !this.state.prescriberId ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+          {this.state.changeMode == false ? <TodoItems key={this.state.getPrescriberId} /> : <Prescriber key={this.state.getPrescriberId} prescriberId={this.state.getPrescriberId} />}
 
           {/*<StatisticalReport />
           <Ranking /> */}

@@ -154,11 +154,11 @@ export default class AppStore extends Store {
     const { res: getTransactionTrendView } = await webapi.getPrescriberTransactionTrendView(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
-      this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
-      this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
-      this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
-      this.dispatch('home:trafficTrendDashboardView', getTrafficTrendDashboardView.context);
-      this.dispatch('home:transactionTrendView', getTransactionTrendView.context);
+      this.dispatch('prescriber:p_tradeCustomerView', getTradeCustomerView.context);
+      this.dispatch('prescriber:p_prescriberTopView', getPrescriberTopView.context);
+      this.dispatch('prescriber:p_conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
+      this.dispatch('prescriber:p_trafficTrendDashboardView', getTrafficTrendDashboardView.context);
+      this.dispatch('prescriber:p_transactionTrendView', getTransactionTrendView.context);
     }
   };
 

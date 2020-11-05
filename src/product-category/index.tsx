@@ -16,54 +16,15 @@ class PeoductCategory extends Component<any, any> {
     this.state = {
       title: 'Product category',
       visible: false,
-      productCategoryList: [
-        {
-          id: 1,
-          productName: 'John Brown1',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: [
-            {
-              id: 4,
-              productName: 'John Brown1',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            },
-            {
-              id: 5,
-              productName: 'John Brown2',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            },
-            {
-              id: 6,
-              productName: 'John Brown3',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            }
-          ]
-        },
-        {
-          id: 2,
-          productName: 'John Brown2',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: []
-        },
-        {
-          id: 3,
-          productName: 'John Brown3',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: []
-        }
-      ]
+      firstCount: 0,
+      secondCount: 0,
+      thirdCount: 3,
+      productCategoryList: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getGoodsCates();
+  }
   removeChildrenIsNull = (objArr) => {
     let tempString = JSON.stringify(objArr);
     let returnString = tempString.replaceAll(',"children":[]', '');
@@ -77,6 +38,62 @@ class PeoductCategory extends Component<any, any> {
       visible: false
     });
   };
+  getGoodsCates = () => {
+    webapi.getGoodsCates().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.init(res.context);
+      }
+    });
+  };
+  init(cates) {
+    // const firstCount = cates.reduce((obj,item)=>{
+    //   debugger
+    //   if (!obj[item]) {
+    //     obj[item] = 0;
+    //   }
+    //   obj[item]++;
+    //   return obj;
+    // });
+    // const firstCount = cates.count((f) => f.get('cateGrade') == 1);
+    // const secondCount = cates.count((f) => f.get('cateGrade') == 2);
+    // const thirdCount = cates.count((f) => f.get('cateGrade') == 3);
+    // 改变数据形态，变为层级结构
+
+    const newDataList = cates
+      .filter((item) => item.cateParentId == 0)
+      .map((data) => {
+        const children = cates
+          .filter((item) => item.cateParentId == data.cateId)
+          .map((childrenData) => {
+            const lastChildren = cates
+              .filter((item) => item.cateParentId == childrenData.cateId)
+              .sort((c1, c2) => {
+                return c1.sort - c2.sort;
+              });
+            if (lastChildren.length > 0) {
+              childrenData.children = lastChildren;
+            }
+            return childrenData;
+          })
+          .sort((c1, c2) => {
+            return c1.sort - c2.sort;
+          });
+        if (children.length > 0) {
+          data.children = children;
+        }
+        return data;
+      })
+      .sort((c1, c2) => {
+        return c1.sort - c2.sort;
+      });
+    this.setState({
+      // firstCount,
+      // secondCount,
+      // thirdCount,
+      productCategoryList: newDataList
+    });
+  }
 
   render() {
     const { title, productCategoryList } = this.state;
@@ -90,11 +107,6 @@ class PeoductCategory extends Component<any, any> {
         title: 'Category images',
         dataIndex: 'categoryImages',
         key: 'categoryImages'
-      },
-      {
-        title: 'categoryDiscount',
-        dataIndex: 'categoryDiscount',
-        key: 'categoryDiscount'
       },
       {
         title: 'Operation',

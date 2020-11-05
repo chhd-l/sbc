@@ -327,7 +327,6 @@ export default class TrafficReport extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         pagination.total = res.context.totalElements;
-        pagination.current = res.context.totalPages;
         let tableData = res.context.trafficReport;
         this.setState({
           pagination,
@@ -418,7 +417,7 @@ export default class TrafficReport extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline
-            title={title}
+            title={<p style={styles.blodFont}> {title}</p>}
             extra={
               <div>
                 <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
@@ -426,8 +425,8 @@ export default class TrafficReport extends Component<any, any> {
             }
           />
           <div>
-            <h4>Overview</h4>
-            <div className="data-statistics" style={{ width: 1200 }}>
+            <h4 style={styles.blodFont}>Overview</h4>
+            <div className="data-statistics-traffic" style={{ width: 1200 }}>
               {overviewList &&
                 overviewList.map((item, index) => (
                   <div className="mode" key={index}>
@@ -516,7 +515,8 @@ export default class TrafficReport extends Component<any, any> {
 
         <div className="container-search">
           <Headline
-            title="Traffic trend"
+            // title= {"Traffic trend"}
+            title={<p style={styles.blodFont}>Traffic trend</p>}
             extra={
               <div>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
@@ -531,7 +531,8 @@ export default class TrafficReport extends Component<any, any> {
 
         <div className="container-search">
           <Headline
-            title="Traffic report"
+            title={<p style={styles.blodFont}>Traffic report</p>}
+            // title="Traffic report"
             extra={
               <div>
                 <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
@@ -557,5 +558,8 @@ const styles = {
   },
   paddingRightZero: {
     paddingRight: 0
+  },
+  blodFont: {
+    fontWeight: 600
   }
 } as any;

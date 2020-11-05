@@ -47,19 +47,6 @@ class PeoductCategory extends Component<any, any> {
     });
   };
   init(cates) {
-    // const firstCount = cates.reduce((obj,item)=>{
-    //   debugger
-    //   if (!obj[item]) {
-    //     obj[item] = 0;
-    //   }
-    //   obj[item]++;
-    //   return obj;
-    // });
-    // const firstCount = cates.count((f) => f.get('cateGrade') == 1);
-    // const secondCount = cates.count((f) => f.get('cateGrade') == 2);
-    // const thirdCount = cates.count((f) => f.get('cateGrade') == 3);
-    // 改变数据形态，变为层级结构
-
     const newDataList = cates
       .filter((item) => item.cateParentId == 0)
       .map((data) => {
@@ -88,9 +75,6 @@ class PeoductCategory extends Component<any, any> {
         return c1.sort - c2.sort;
       });
     this.setState({
-      // firstCount,
-      // secondCount,
-      // thirdCount,
       productCategoryList: newDataList
     });
   }
@@ -99,14 +83,15 @@ class PeoductCategory extends Component<any, any> {
     const { title, productCategoryList } = this.state;
     const columns = [
       {
-        title: 'Product name',
-        dataIndex: 'productName',
-        key: 'productName'
+        title: 'Category name',
+        dataIndex: 'cateName',
+        key: 'cateName'
       },
       {
         title: 'Category images',
-        dataIndex: 'categoryImages',
-        key: 'categoryImages'
+        dataIndex: 'cateImg',
+        key: 'cateImg',
+        render: (text) => <div>{text ? <img src={text} alt="" style={{ width: 30 }} /> : '-'}</div>
       },
       {
         title: 'Operation',
@@ -121,6 +106,11 @@ class PeoductCategory extends Component<any, any> {
         )
       }
     ];
+    const description = (
+      <div>
+        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
+      </div>
+    );
 
     return (
       <div>
@@ -128,8 +118,9 @@ class PeoductCategory extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
+          <Alert message={description} type="info" />
 
-          <Table rowKey="id" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
+          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
         <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}></Modal>
       </div>

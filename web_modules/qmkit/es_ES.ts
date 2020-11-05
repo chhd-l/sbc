@@ -44,6 +44,7 @@ export default {
   'product.SPU': 'SPU',
   'product.SKU': 'SKU',
   'product.storeCategory': 'Store category',
+  'product.salesCategory': 'Sales category',
   'product.brand': 'Brand',
   'product.search': 'Search',
   'product.batchOperation': 'Batch operation',
@@ -96,6 +97,8 @@ export default {
   'product.chooseAPublishingMethod': 'Choose a publishing method',
   'product.storeCategoryInfo':
     'Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification',
+  'product.salesCategoryInfo':
+    'Sales category is the classification of products within the scope of your store. Up to 3 levels can be added. When there is No categories, all products will be classified into the default classification',
   'product.addFirstLeverCate': 'Add the first group',
   categoryName: 'Category name',
   addSubcategory: 'Add subcategory',

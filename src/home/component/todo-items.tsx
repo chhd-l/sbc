@@ -69,43 +69,24 @@ export default class TodoItems extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (tradeCustomerView !== prevState.tradeCustomerView) {
+    if (
+      tradeCustomerView !== prevState.tradeCustomerView ||
+      goodsInfoTopView !== prevState.goodsInfoTopView ||
+      prescriberTrendView !== prevState.prescriberTrendView ||
+      prescriberTopView !== prevState.prescriberTopView ||
+      trafficDashboardView !== prevState.trafficDashboardView ||
+      transactionTrendView !== prevState.transactionTrendView ||
+      trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
+      conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView
+    ) {
       return {
-        tradeCustomerView
-      };
-    }
-    if (goodsInfoTopView !== prevState.goodsInfoTopView) {
-      return {
-        goodsInfoTopView
-      };
-    }
-    if (prescriberTrendView !== prevState.prescriberTrendView) {
-      return {
-        prescriberTrendView
-      };
-    }
-    if (prescriberTopView !== prevState.prescriberTopView) {
-      return {
-        prescriberTopView
-      };
-    }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
-      return {
-        trafficDashboardView
-      };
-    }
-    if (transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView
-      };
-    }
-    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView
-      };
-    }
-    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
+        tradeCustomerView,
+        goodsInfoTopView,
+        prescriberTrendView,
+        prescriberTopView,
+        trafficDashboardView,
+        transactionTrendView,
+        trafficTrendDashboardView,
         conversionFunnelDashboardView
       };
     }

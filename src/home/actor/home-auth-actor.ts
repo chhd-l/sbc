@@ -22,7 +22,8 @@ export default class HomeAuthActor extends Actor {
       p_prescriberTopView: '',
       p_conversionFunnelDashboardView: '',
       p_trafficTrendDashboardView: '',
-      p_transactionTrendView: ''
+      p_transactionTrendView: '',
+      p_trafficDashboardView: ''
     };
   }
 
@@ -84,6 +85,10 @@ export default class HomeAuthActor extends Actor {
   @Action('prescriber:p_transactionTrendView')
   p_transactionTrendView(state: IMap, res) {
     return state.set('p_transactionTrendView', res);
+  }
+  @Action('prescriber:p_trafficDashboardView')
+  p_trafficDashboardView(state: IMap, res) {
+    return state.set('p_trafficDashboardView', res);
   }
 
   @Action('home:search')

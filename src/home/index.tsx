@@ -57,6 +57,7 @@ export default class HelloApp extends React.Component<any, any> {
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
     if (res.getPrescriberId != null) {
+      console.log(res.getPrescriberId);
       this.store.prescriberInit({
         companyId: 2,
         weekNum: moment(date).week(),

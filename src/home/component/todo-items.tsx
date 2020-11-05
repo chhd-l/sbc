@@ -220,7 +220,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r-mid">
                     <div className="text1">Conversion rate</div>
                     <div className="text2">
-                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} {...countUpProps} /> : '--'}
+                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
                       <i>%</i>
                     </div>
                     <div className="text3">
@@ -276,9 +276,8 @@ export default class TodoItems extends React.Component<any, any> {
                         </span>
                       </div>
                     </div>
-                    <div className="line num"></div>
                     <div className="mode">
-                      <div className="mode-text">Bounce rate</div>
+                      {/* <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -287,7 +286,7 @@ export default class TodoItems extends React.Component<any, any> {
                         <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
                           {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                   <div className="traffic-r-btm flex-content">
@@ -405,7 +404,6 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Total consumers</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                   </div>

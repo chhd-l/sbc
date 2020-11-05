@@ -32,7 +32,7 @@ export default class ProductReportList extends Component<any, any> {
 
   render() {
     return (
-      <div className="container">
+      <div className="container statistics">
         <ListSearchForm onSearch={(params) => this.onSearch(params)} />
         <ReportList />
       </div>

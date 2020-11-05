@@ -108,11 +108,6 @@ export default class Prescriber extends React.Component<any, any> {
         trafficDashboardView
       };
     }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
-      return {
-        trafficDashboardView
-      };
-    }
     if (transactionTrendView !== prevState.transactionTrendView) {
       return {
         transactionTrendView
@@ -151,8 +146,10 @@ export default class Prescriber extends React.Component<any, any> {
   };
 
   render() {
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-
+    const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+    setTimeout(() => {
+      console.log(trafficDashboardView, 2222);
+    });
     return (
       <div className="prescriber-item">
         <div className="item-top space-between">
@@ -258,7 +255,7 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="Funnel-r-mid">
                       <div className="text1">Conversion rate</div>
                       <div className="text2">
-                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} {...countUpProps} /> : '--'}
+                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
                         <i>%</i>
                       </div>
                       <div className="text3">
@@ -271,15 +268,15 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="Funnel-r-btm"></div>
                   </div>
                   <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                 </div>
@@ -345,7 +342,7 @@ export default class Prescriber extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="mode">
-                      <div className="mode-text">Bounce rate</div>
+                      {/*<div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -354,7 +351,7 @@ export default class Prescriber extends React.Component<any, any> {
                         <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
                           {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                   <div className="traffic-r-btm flex-content">

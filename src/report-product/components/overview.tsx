@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Const, noop } from 'qmkit';
+import { cache, Const, noop } from 'qmkit';
 import { Form, Rate, DatePicker, Spin, Button } from 'antd';
 import '../index.less';
 const { RangePicker } = DatePicker;
@@ -16,8 +16,8 @@ export default class ProductOverView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      beginTime: '',
-      endTime: '',
+      beginDate: '',
+      endDate: '',
       overview: {
         onShelfSkuValue: 130,
         onShelfSkuRate: -3.2,
@@ -64,8 +64,8 @@ export default class ProductOverView extends Component<any, any> {
       endTime = e[1].format(Const.DAY_FORMAT);
     }
     this.setState({
-      beginTime,
-      endTime
+      beginDate: beginTime,
+      endDate: endTime
     });
   }
   dateCalculate = (n) => {
@@ -77,14 +77,14 @@ export default class ProductOverView extends Component<any, any> {
   }
   onSearch() {
     const { onProductStatistics, onProductReportPage } = this.props.relaxProps;
-    const { beginTime, endTime } = this.state;
+    const { beginDate, endDate } = this.state;
     const params1 = {
-      beginTime,
-      endTime
+      beginDate,
+      endDate
     };
     const params2 = {
-      beginTime,
-      endTime,
+      beginDate,
+      endDate,
       sortName: 'revenue',
       pageSize: 10,
       pageNum: 1
@@ -97,7 +97,7 @@ export default class ProductOverView extends Component<any, any> {
     let loadinga = false;
     return (
       <Spin spinning={loadinga}>
-        <div className="container">
+        <div className="container statistics">
           <div className="list-head-container">
             <h4>Product</h4>
             <div>
@@ -188,7 +188,7 @@ export default class ProductOverView extends Component<any, any> {
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName">{item.skuName}</span>
+                          <span className="goodsName line-clamp">{item.skuName}</span>
                           <span className="price">{item.marketPrice}</span>
                           <span className="price">
                             {item.goodsWeight} {item.goodsUnit}
@@ -214,10 +214,12 @@ export default class ProductOverView extends Component<any, any> {
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
                           <span className="goodsName line-clamp">{item.skuName}</span>
-                          <span className="price">{item.marketPrice}</span>
+                          <span className="price">
+                            {item.marketPrice} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                          </span>
                           <div>
                             <Rate value={item.marketPrice} className="RedRate" disabled={true} />
-                            <span className="price">({item.marketPrice})</span>
+                            <span className="price">({item.averageScore})</span>
                           </div>
                         </div>
                       </div>

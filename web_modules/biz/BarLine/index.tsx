@@ -31,7 +31,7 @@ export default class Line extends React.Component {
               res += '<div style=" "> '+ item.seriesName + "：" + item.value + "<br>"
               '</div>';
             }else {
-              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value)*100+unit.unit2
+              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value) +unit.unit2
               '</div>';
             }
           })

@@ -11,8 +11,8 @@ export default class ListSearchForm extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      beginTime: '',
-      endTime: '',
+      beginDate: '',
+      endDate: '',
       skuText: ''
     };
   }
@@ -37,8 +37,8 @@ export default class ListSearchForm extends Component<any, any> {
       endTime = e[1].format(Const.DAY_FORMAT);
     }
     this.setState({
-      beginTime,
-      endTime
+      beginDate: beginTime,
+      endDate: endTime
     });
   }
   sukOnChange(e) {

@@ -16,7 +16,8 @@ export default class HomeAuthActor extends Actor {
       trafficTrendDashboardView: '',
       conversionFunnelDashboardView: '',
       search: '',
-      searchData: ''
+      searchData: '',
+      selectSearchData: ''
     };
   }
 
@@ -94,5 +95,10 @@ export default class HomeAuthActor extends Actor {
   @Action('home-auth-actor:setAuthTipVisible')
   setAuthTipVisible(state: IMap, res: boolean) {
     return state.set('isAuthTipVisible', res);
+  }
+
+  @Action('home:selectSearchData')
+  selectSearchData(state: IMap, res) {
+    return state.set('selectSearchData', res);
   }
 }

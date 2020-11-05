@@ -79,7 +79,7 @@ body {
 .container {
   background: #fff;
   margin    : 12px 12px 0 12px;
-  padding   : 0px 0px 6px 12px;
+  padding   : 0px;
   min-height: calc(100vh - 330px);
 }
 
@@ -505,7 +505,6 @@ body {
 /* select-group */
 
 .select-group {
-  margin-top: 3.5px;
 
   .ant-input-group-addon {
     min-width: 63px;
@@ -3347,7 +3346,13 @@ form .ant-input-group-compact {
 }
 
 
-
+.line-clamp {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+}
 
 
 

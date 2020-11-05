@@ -125,7 +125,8 @@ export default class GoodsAdd extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          {this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}
+          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.state.tabType} />
+          {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}
           <BrandModal />

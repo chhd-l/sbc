@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Const, noop } from 'qmkit';
+import { cache, Const, noop } from 'qmkit';
 import { Form, Rate, DatePicker, Spin, Button } from 'antd';
 import '../index.less';
 const { RangePicker } = DatePicker;
 import * as webapi from '../webapi';
 import { Relax } from 'plume2';
-
+import moment from 'moment';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -16,8 +16,8 @@ export default class ProductOverView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      beginTime: '',
-      endTime: '',
+      beginDate: '',
+      endDate: '',
       overview: {
         onShelfSkuValue: 130,
         onShelfSkuRate: -3.2,
@@ -37,68 +37,19 @@ export default class ProductOverView extends Component<any, any> {
       loading: boolean;
       productStatistics: any;
       onProductStatistics: Function;
+      onProductReportPage: Function;
+      getDate: any;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     productStatistics: 'productStatistics',
-    onProductStatistics: noop
+    onProductStatistics: noop,
+    onProductReportPage: noop,
+    getDate: 'getDate'
   };
-  componentDidMount() {
-    const mock = [
-      {
-        goodsName: 'MINI PUPPY',
-        linePrice: 2692,
-        goodsWeight: '85',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 5,
-        goodsEvaluateNum: 30,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      },
-      {
-        goodsName: 'MINI PUPPY1',
-        linePrice: 2300,
-        goodsWeight: '81',
-        goodsUnit: 'units',
-        goodsRate: 4,
-        goodsEvaluateNum: 22,
-        goodsImg: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007280743135522.png'
-      }
-    ];
-    /* this.setState({
-      bestSellers: mock,
-      highPraiseProducts: mock
-    });*/
-    /*this.getOverviewInfo();*/
-  }
+  componentDidMount() {}
 
   getOverviewInfo(params = {}) {
     this.setState({
@@ -113,35 +64,51 @@ export default class ProductOverView extends Component<any, any> {
       endTime = e[1].format(Const.DAY_FORMAT);
     }
     this.setState({
-      beginTime,
-      endTime
+      beginDate: beginTime,
+      endDate: endTime
     });
   }
+  dateCalculate = (n) => {
+    let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
+    return date.setDate(date.getDate() - n);
+  };
+  disabledDate(current) {
+    return current && current > moment().endOf('day');
+  }
   onSearch() {
-    const { onProductStatistics } = this.props.relaxProps;
-    const { beginTime, endTime } = this.state;
-    const params = {
-      beginTime,
-      endTime
+    const { onProductStatistics, onProductReportPage } = this.props.relaxProps;
+    const { beginDate, endDate } = this.state;
+    const params1 = {
+      beginDate,
+      endDate
     };
-    console.log(params, 'overview params');
-    onProductStatistics(params);
+    const params2 = {
+      beginDate,
+      endDate,
+      sortName: 'revenue',
+      pageSize: 10,
+      pageNum: 1
+    };
+    onProductStatistics(params1);
+    onProductReportPage(params2);
   }
   render() {
     const { productStatistics, loading } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(productStatistics, 11111);
-    });
     let loadinga = false;
     return (
       <Spin spinning={loadinga}>
-        <div className="container">
+        <div className="container statistics">
           <div className="list-head-container">
             <h4>Product</h4>
             <div>
               <Form layout="inline">
                 <Form.Item>
-                  <RangePicker size="default" onChange={(e) => this.datePickerChange(e)} />
+                  <RangePicker
+                    onChange={(e) => this.datePickerChange(e)}
+                    disabledDate={this.disabledDate}
+                    defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]}
+                    format={'YYYY-MM-DD'}
+                  />
                 </Form.Item>
                 <Button type="primary" shape="round" onClick={() => this.onSearch()}>
                   Search
@@ -185,21 +152,16 @@ export default class ProductOverView extends Component<any, any> {
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
-            <div>
-              <h4>Logistics</h4>
-              <div className="data-statistics">
                 <div className="mode">
-                  <div className="mode-text">Logistics rating</div>
+                  <div className="mode-text">Product rating</div>
                   <div className="mode-num">
-                    <span> {productStatistics && productStatistics.logisticsRating ? productStatistics.logisticsRating : '--'}</span>
+                    <span> {productStatistics && productStatistics.skuRating ? productStatistics.skuRating : '--'}</span>
                   </div>
                   <div className="mode-per">
-                    {productStatistics && productStatistics.logisticsRatingQoQ ? (
+                    {productStatistics && productStatistics.skuRatingQoQ ? (
                       <>
-                        <img src={productStatistics.logisticsRatingQoQ >= 0 ? icon1 : icon2} width="14" height="14" />
-                        <span>{productStatistics.logisticsRatingQoQ}</span>
+                        <img src={productStatistics.skuRatingQoQ >= 0 ? icon1 : icon2} width="14" height="14" />
+                        <span>{productStatistics.skuRatingQoQ}</span>
                       </>
                     ) : (
                       ''
@@ -208,21 +170,25 @@ export default class ProductOverView extends Component<any, any> {
                 </div>
               </div>
             </div>
+            <div>
+              <h4> </h4>
+              <div className="data-statistics"></div>
+            </div>
           </div>
           <div className="head-container mgt20 mgb20">
             <h4>Best sellers</h4>
             <div className="row-flex mgt20">
-              {productStatistics.evaluationTopProduct &&
-                productStatistics.evaluationTopProduct.map((item, index) => {
+              {productStatistics.salesVolumeTopProduct &&
+                productStatistics.salesVolumeTopProduct.map((item, index) => {
                   return (
                     <div className="sellers-container row-flex" key={index}>
                       <div>
-                        <img src={item.goodsImg} />
+                        <img src={item.skuImg} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName">{item.skuName}</span>
+                          <span className="goodsName line-clamp">{item.skuName}</span>
                           <span className="price">{item.marketPrice}</span>
                           <span className="price">
                             {item.goodsWeight} {item.goodsUnit}
@@ -237,21 +203,23 @@ export default class ProductOverView extends Component<any, any> {
           <div className="head-container mgt20 mgb20">
             <h4 className="title">High praise products</h4>
             <div className="row-flex mgt20">
-              {productStatistics.salesVolumeTopProduct &&
-                productStatistics.salesVolumeTopProduct.map((item, index) => {
+              {productStatistics.evaluationTopProduct &&
+                productStatistics.evaluationTopProduct.map((item, index) => {
                   return (
                     <div className="sellers-container row-flex" key={item.topNum}>
                       <div>
-                        <img src={item.goodsImg} />
+                        <img src={item.skuImg} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName">{item.skuName}</span>
-                          <span className="price">{item.marketPrice}</span>
+                          <span className="goodsName line-clamp">{item.skuName}</span>
+                          <span className="price">
+                            {item.marketPrice} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                          </span>
                           <div>
-                            <Rate value={item.goodsRate} className="RedRate" disabled={true} />
-                            <span className="price">({item.goodsEvaluateNum})</span>
+                            <Rate value={item.marketPrice} className="RedRate" disabled={true} />
+                            <span className="price">({item.averageScore})</span>
                           </div>
                         </div>
                       </div>

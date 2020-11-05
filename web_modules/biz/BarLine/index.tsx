@@ -23,14 +23,21 @@ export default class Line extends React.Component {
     let option = {
       backgroundColor: '',
       tooltip: {
-        trigger: 'axis'
-        /*formatter:function(params) {
-          let relVal = params[0].name;
-          for (let i = 0, l = params.length; i < l; i++) {
-            i === 2 ? relVal += '<br/>' +params[i].marker+ params[i].seriesName  + params[i].value +"%" : relVal += '<br/>' +params[i].marker+ params[i].seriesName  + params[i].value;
-          }
-          return relVal;
-        }*/
+        trigger: 'axis',
+        formatter:function(params) {
+          let res = ""
+          params&&params.map((item,index)=>{
+            if(index == 0) {
+              res += '<div style=" "> '+ item.seriesName + "：" + item.value + "<br>"
+              '</div>';
+            }else {
+              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value) +unit.unit2
+              '</div>';
+            }
+          })
+          return res
+
+        }
       },
       grid: {
         top: '13%',
@@ -94,7 +101,9 @@ export default class Line extends React.Component {
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: {
-            formatter: '{value}' + unit.unit2,
+            formatter:  function (params) {
+              return unit.unit2 == '%'? params + unit.unit2:params
+            },
             textStyle: {
               color: '#999',
               fontsize: '11',

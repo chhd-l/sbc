@@ -20,7 +20,9 @@ export default class Header extends React.Component<any, any> {
       prescriber: 'prescribersId',
       prescriberInput: '',
       searchType: false,
-      selectList: []
+      selectList: [],
+      buttonType: false,
+      openType: false
     };
   }
 
@@ -77,7 +79,9 @@ export default class Header extends React.Component<any, any> {
       return;
     } else {
       this.setState({
-        searchType: true
+        searchType: true,
+        buttonType: true,
+        openType: true
       });
       const { onSearchData } = this.props.relaxProps as any;
       onSearchData({ prescriberName: this.state.prescriberInput });
@@ -92,11 +96,16 @@ export default class Header extends React.Component<any, any> {
 
   onBlur = (res) => {
     this.setState({
-      prescriberInput: res
+      prescriberInput: res,
+      openType: false
     });
   };
 
-  onFocus = (res) => {};
+  onFocus = (res) => {
+    this.setState({
+      openType: true
+    });
+  };
 
   onChange = (res) => {
     if (res == 'all') {
@@ -104,11 +113,21 @@ export default class Header extends React.Component<any, any> {
     } else {
       this.props.changePage({ type: true, getPrescriberId: res });
     }
+    this.setState({
+      openType: false
+    });
   };
 
-  onSearch1 = (res) => {
+  onClean = (res) => {
     this.setState({
-      prescriber: res
+      searchType: false,
+      buttonType: false
+    });
+  };
+
+  selectClick = (res) => {
+    this.setState({
+      openType: true
     });
   };
 
@@ -140,6 +159,7 @@ export default class Header extends React.Component<any, any> {
             <Select
               showArrow={false}
               autoFocus={false}
+              open={this.state.openType}
               style={{ width: 200, marginRight: 8 }}
               placeholder="Select Prescriber Data"
               defaultValue="All"
@@ -147,7 +167,8 @@ export default class Header extends React.Component<any, any> {
               onChange={this.onChange}
               //onFocus={this.onFocus}
               //onBlur={this.onBlur}
-              //onSearch={this.selectSearch}
+              onSearch={this.selectSearch}
+              onDropdownVisibleChange={this.selectClick}
               /*filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }*/
@@ -164,8 +185,7 @@ export default class Header extends React.Component<any, any> {
                 : null}
             </Select>
           )}
-          <Icon type="close-circle" />
-          <Button shape="circle" icon="search" onClick={this.onSearch} />
+          {this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} />}
         </div>
         {this.state.prescriber.id ? (
           <div>

@@ -102,7 +102,7 @@ export default class Line extends React.Component {
           axisLine: { show: false },
           axisLabel: {
             formatter:  function (params) {
-              return unit.unit2 == '%'? params*100 + unit.unit2:params
+              return unit.unit2 == '%'? params + unit.unit2:params
             },
             textStyle: {
               color: '#999',

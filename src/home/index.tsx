@@ -47,12 +47,29 @@ export default class HelloApp extends React.Component<any, any> {
     }
   }
 
+  onInit() {}
+
   changePage(res) {
     console.log(res, 1111);
     this.setState({
       changeMode: res.type,
-      getPrescriberId: res.prescriberId
+      getPrescriberId: res.getPrescriberId
     });
+    let date = sessionStorage.getItem(cache.CURRENT_YEAR);
+    if (res.getPrescriberId != null) {
+      this.store.prescriberInit({
+        companyId: 2,
+        weekNum: moment(date).week(),
+        year: moment(date).year(),
+        prescriberId: res.getPrescriberId
+      });
+    } else {
+      this.store.newInit({
+        companyId: 2,
+        weekNum: moment(date).week(),
+        year: moment(date).year()
+      });
+    }
   }
 
   render() {

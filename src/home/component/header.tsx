@@ -64,7 +64,6 @@ export default class Header extends React.Component<any, any> {
   dateChange = (date, dateString) => {
     const { newInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
-    //console.log(JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)));
     let obj = {
       companyId: 2,
       weekNum: date.week(),
@@ -165,6 +164,7 @@ export default class Header extends React.Component<any, any> {
                 : null}
             </Select>
           )}
+          <Icon type="close-circle" />
           <Button shape="circle" icon="search" onClick={this.onSearch} />
         </div>
         {this.state.prescriber.id ? (

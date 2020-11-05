@@ -35,7 +35,6 @@ export default async function Fetch<T>(
         input.indexOf('?') == -1 ? '?reqId=' : '&reqId='
       }${Math.random()}`;
     }
-
     const request = {
       method: 'GET',
       mode: 'cors',

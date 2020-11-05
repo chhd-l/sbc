@@ -1,27 +1,27 @@
-import { Table } from 'antd';
-import { sortableContainer, sortableElement, sortableHandle, Icon } from 'react-sortable-hoc';
+import { Table, Icon, Switch } from 'antd';
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import React, { Component } from 'react';
 
-const DragHandle = sortableHandle(() => <p style={{ cursor: 'pointer', color: '#999' }}>sort</p>);
+const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
 const data = [
   {
     key: '1',
-    name: 'John Brown',
+    filterName: 'John Brown',
     age: 32,
     address: 'New York No. 1 Lake Park',
     index: 0
   },
   {
     key: '2',
-    name: 'Jim Green',
+    filterName: 'Jim Green',
     age: 42,
     address: 'London No. 1 Lake Park',
     index: 1
   },
   {
     key: '3',
-    name: 'Joe Black',
+    filterName: 'Joe Black',
     age: 32,
     address: 'Sidney No. 1 Lake Park',
     index: 2
@@ -55,24 +55,20 @@ export default class SortableTable extends React.Component {
     const { dataSource } = this.state;
     const columns = [
       {
-        title: 'Sort',
-        dataIndex: 'sort',
-        width: 30,
-        className: 'drag-visible',
-        render: () => <DragHandle />
-      },
-      {
-        title: 'Name',
-        dataIndex: 'name',
+        title: 'Filter name',
+        dataIndex: 'filterName',
         className: 'drag-visible'
       },
       {
-        title: 'Age',
-        dataIndex: 'age'
-      },
-      {
-        title: 'Address',
-        dataIndex: 'address'
+        title: 'Operation',
+        dataIndex: 'operation',
+        className: 'drag-visible',
+        render: () => (
+          <div>
+            <Switch></Switch>
+            <DragHandle />
+          </div>
+        )
       }
     ];
 

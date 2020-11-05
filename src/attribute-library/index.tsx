@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs } from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs, Popconfirm } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -33,7 +33,9 @@ class AttributeLibrary extends Component<any, any> {
       attributeValueList: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getAttributes();
+  }
 
   onSearchFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -65,8 +67,8 @@ class AttributeLibrary extends Component<any, any> {
     const { attributeValueList } = this.state;
     const { form } = this.props;
     let obj = {
-      id: this.genID(),
-      value: ''
+      attributeId: this.genID(),
+      attributeDetailName: ''
     };
 
     attributeValueList.push(obj);
@@ -76,8 +78,8 @@ class AttributeLibrary extends Component<any, any> {
       },
       () => {
         let setObj = {};
-        let valueName = 'value_' + obj.id;
-        setObj[valueName] = obj.value;
+        let valueName = 'value_' + obj.attributeId;
+        setObj[valueName] = obj.attributeDetailName;
         form.setFieldsValue(setObj);
       }
     );
@@ -90,9 +92,7 @@ class AttributeLibrary extends Component<any, any> {
 
   remove = (id) => {
     const { attributeValueList } = this.state;
-    let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
-    console.log('temp', attributeValueListTemp);
-    console.log('org', attributeValueList);
+    let attributeValueListTemp = attributeValueList.filter((item) => item.attributeId !== id);
     this.setState({
       attributeValueList: attributeValueListTemp
     });
@@ -101,8 +101,8 @@ class AttributeLibrary extends Component<any, any> {
   onChangeValue = (id, value) => {
     const { attributeValueList } = this.state;
     attributeValueList.map((item) => {
-      if (item.id === id) {
-        item.value = value;
+      if (item.attributeId === id) {
+        item.attributeDetailName = value;
         return item;
       }
     });
@@ -112,21 +112,24 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   openAddPage = () => {
+    const { attributeForm } = this.state;
     const { form } = this.props;
 
+    (attributeForm.attributeName = ''), (attributeForm.attributeType = 'Single choice');
     this.setState(
       {
         attributeValueList: [],
-        visibleAttribute: true
+        visibleAttribute: true,
+        attributeForm
       },
       () => {
         this.add();
-        form.setFieldsValue({
-          attributeName: '',
-          attributeType: 'Single choice'
-        });
+        form.setFieldsValue(attributeForm);
       }
     );
+  };
+  openEditPage = (row) => {
+    console.log(row);
   };
   handleSubmit = () => {
     const { attributeForm, attributeValueList } = this.state;
@@ -134,16 +137,93 @@ class AttributeLibrary extends Component<any, any> {
       if (!err) {
         console.log(attributeForm);
         console.log(attributeValueList);
-        const { keys, names } = values;
-        console.log(
-          'Merged values:',
-          keys.map((key) => names[key])
-        );
+        debugger;
+        let params = {
+          attributeName: attributeForm.attributeName,
+          attributeType: attributeForm.attributeType,
+          attributesValueList: attributeValueList
+        };
+        console.log(params);
         this.setState({
           visibleAttribute: false
         });
       }
     });
+  };
+  getAttributes = () => {
+    const { searchForm, pagination } = this.state;
+    let params = {
+      attributeName: searchForm.attributeName,
+      attributeValue: searchForm.attributeValue,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current - 1
+    };
+    webapi
+      .getAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const attributeList = res.context.attributesList;
+          this.setState({ attributeList });
+        } else {
+          message.error(res.message || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  };
+  addAttributes = (params: object) => {
+    webapi
+      .postAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  };
+  deleteAttributes = (id) => {
+    let params = {
+      id: id
+    };
+    webapi
+      .deleteAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  };
+
+  updateAttributeStatus = (id) => {
+    let params = {
+      id: id
+    };
+    webapi
+      .putAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
 
   renderForm = (obj) => {
@@ -166,9 +246,9 @@ class AttributeLibrary extends Component<any, any> {
     };
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
-        <div key={k.id}>
+        <div key={k.attributeId}>
           <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value' + k.id}>
-            {getFieldDecorator('value_' + k.id, {
+            {getFieldDecorator('value_' + k.attributeId, {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
@@ -183,12 +263,12 @@ class AttributeLibrary extends Component<any, any> {
                 style={{ width: '80%', marginRight: 8 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
-                  this.onChangeValue(k.id, value);
+                  this.onChangeValue(k.attributeId, value);
                 }}
               />
             )}
             <span>
-              {obj.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k.id)} /> : null}
+              {obj.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k.attributeId)} /> : null}
 
               <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
             </span>
@@ -213,20 +293,23 @@ class AttributeLibrary extends Component<any, any> {
       {
         title: 'Status',
         dataIndex: 'status',
-        key: 'status'
+        key: 'status',
+        render: (text, record) => <Switch checked={+text ? true : false} onClick={() => this.updateAttributeStatus(record.id)}></Switch>
       },
       {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
-        render: (rowInfo) => (
+        render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Edit">
-              <a style={styles.edit} className="iconfont iconEdit"></a>
+              <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Tooltip placement="top" title="Delete">
-              <a className="iconfont iconDelete">{/*<FormattedMessage id="delete" />*/}</a>
-            </Tooltip>
+            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteAttributes(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Delete">
+                <a className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
           </div>
         )
       }

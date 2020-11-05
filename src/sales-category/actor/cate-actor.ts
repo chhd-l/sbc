@@ -166,14 +166,11 @@ export default class CateActor extends Actor {
 
   @Action('cateActor: editImages')
   editImages(state, images) {
-    return state.set(
-      'images',
-      images.map((i, index) => {
-        debugger;
-        i = i.set('imageId', index);
-        return i;
-      })
-    );
+    images = images.map((i, index) => {
+      i = i.set('imageId', index);
+      return i;
+    });
+    return state.set('images', images);
   }
 
   /**

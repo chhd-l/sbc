@@ -162,20 +162,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
     visiblePetDetails: false,
     havePet: true,
     currentPetInfo: {
-      petsName: 'Echo123',
-      birthOfPets: '05/07/2020',
-      petsBreed: 'American Shorthair',
-      petsSex: 1,
-      petsType: 'cat',
-      petsSizeValueName: 'Medium',
-      specialNeeds: [
-        {
-          propName: 'Sensibilidades alimentarias'
-        },
-        {
-          propName: 'Soporte urinario'
-        }
-      ]
+      petsName: '',
+      birthOfPets: '',
+      petsBreed: '',
+      petsSex: 0,
+      petsType: '',
+      petsSizeValueName: '',
+      customerPetsPropRelations: []
     }
   };
 
@@ -281,13 +274,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
         title: 'Pet category',
         dataIndex: 'petCategory',
         key: 'petCategory',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
       },
       {
         title: 'Pet name',
         dataIndex: 'petName',
         key: 'petName',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
       },
       {
         title: 'Pet details',
@@ -295,9 +290,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
         key: 'petDetails',
         width: '10%',
         render: (text, record) => (
-          <Button type="link" onClick={() => this._openPetDetails(record)}>
-            view
-          </Button>
+          <>
+            {record.petsInfo ? (
+              <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
+                view
+              </Button>
+            ) : null}
+          </>
         )
       },
       {
@@ -638,10 +637,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
               ) : null}
             </Col>
             <Col span={12}>
-              <h3>specialNeeds</h3>
-              {currentPetInfo.specialNeeds.map((item) => (
-                <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>
-              ))}
+              <h3>special Needs</h3>
+              {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
             </Col>
           </Row>
         </Modal>
@@ -883,11 +880,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
     });
   };
 
-  _openPetDetails = (row) => {
+  _openPetDetails = (petInfo) => {
     this.setState({
-      visiblePetDetails: true
+      visiblePetDetails: true,
+      currentPetInfo: petInfo
     });
-    console.log(row);
+    console.log(petInfo);
   };
   // 是否是Prescriber
   isPrescriber = () => {

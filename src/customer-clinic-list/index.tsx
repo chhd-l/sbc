@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Breadcrumb,
-  Table,
-  Form,
-  Button,
-  Input,
-  Divider,
-  Select,
-  Spin,
-  message,
-  Row,
-  Col
-} from 'antd';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Row, Col } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -61,20 +49,7 @@ export default class Customer extends React.Component<any, any> {
           key: 'operation',
           render: (text, record) => (
             <span>
-              <Link
-                to={
-                  '/customer-clinic-details/' +
-                  (record.customerLevelName
-                    ? record.customerLevelName
-                    : 'Visitor') +
-                  '/' +
-                  record.customerId +
-                  '/' +
-                  record.customerAccount
-                }
-              >
-                Details
-              </Link>
+              <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Visitor') + '/' + record.customerId + '/' + record.customerAccount}>Details</Link>
             </span>
           )
         }
@@ -138,10 +113,9 @@ export default class Customer extends React.Component<any, any> {
   }
 
   init = ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
-    const prescriberId =
-      JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null
-        ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
-        : null;
+    let employeeData = JSON.parse(sessionStorage.getItem('s2b-employee@data'));
+
+    const prescriberId = employeeData.clinicsIds != null && Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0 ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
 
     this.setState({
       loading: true
@@ -205,9 +179,7 @@ export default class Customer extends React.Component<any, any> {
     customerIds.push(constomerId);
     let params = {
       customerIds: customerIds,
-      userId: sessionStorage.getItem('employeeId')
-        ? sessionStorage.getItem('employeeId')
-        : ''
+      userId: sessionStorage.getItem('employeeId') ? sessionStorage.getItem('employeeId') : ''
     };
     webapi
       .delCustomer(params)
@@ -360,14 +332,7 @@ export default class Customer extends React.Component<any, any> {
             </Form>
           </div>
           <div className="container">
-            <Table
-              columns={columns}
-              rowKey="id"
-              dataSource={this.state.searchList}
-              pagination={this.state.pagination}
-              loading={this.state.loading}
-              onChange={this.handleTableChange}
-            />
+            <Table columns={columns} rowKey="id" dataSource={this.state.searchList} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
           </div>
         </div>
       </AuthWrapper>

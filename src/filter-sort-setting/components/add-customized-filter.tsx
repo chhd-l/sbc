@@ -3,7 +3,7 @@ import moment from 'moment';
 import React from 'react';
 
 const FormItem = Form.Item;
-class AddCustomizedfilter extends React.Component {
+class AddCustomizedfilter extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {

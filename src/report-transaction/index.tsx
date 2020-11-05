@@ -44,7 +44,7 @@ export default class TransactionReport extends Component<any, any> {
       endDate: '',
       pagination: {
         current: 1,
-        pageSize: 2,
+        pageSize: 10,
         total: 0
       },
 
@@ -372,7 +372,6 @@ export default class TransactionReport extends Component<any, any> {
     });
   };
   transactionReportPage = () => {
-    debugger;
     const { startDate, endDate, pagination } = this.state;
     let params = {
       beginDate: startDate,
@@ -479,7 +478,7 @@ export default class TransactionReport extends Component<any, any> {
                       {item.name}
                     </div>
                     <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
                       {item && (item.rate || item.rate === 0) ? (
@@ -513,7 +512,7 @@ export default class TransactionReport extends Component<any, any> {
                       </div>
                     ) : (
                       <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
-                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
                       </div>
                     )}
                     <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>

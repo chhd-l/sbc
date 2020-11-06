@@ -100,6 +100,7 @@ class AttributeLibrary extends Component<any, any> {
   }
 
   removeTemp = (id) => {
+    debugger;
     const { attributeValueList } = this.state;
     let attributeValueListTemp = attributeValueList.filter((item) => item.tempId !== id);
     this.setState({
@@ -107,9 +108,10 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   removeRemote = (id) => {
+    debugger;
     const { attributeValueList } = this.state;
     webapi
-      .deleteAttributesValue({ id })
+      .deleteAttributesValue({ id: id })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -329,7 +331,19 @@ class AttributeLibrary extends Component<any, any> {
               />
             )}
             <span>
-              {obj.length > 1 ? <>{k.id ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.removeTemp(k.tempId)} /> : <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.removeRemote(k.id)} />}</> : null}
+              {obj.length > 1 ? (
+                <>
+                  {k.id ? (
+                    <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                    </Popconfirm>
+                  ) : (
+                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                    </Popconfirm>
+                  )}
+                </>
+              ) : null}
               <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
             </span>
           </FormItem>
@@ -452,6 +466,11 @@ class AttributeLibrary extends Component<any, any> {
           width="600px"
           title="Add new attribute"
           visible={visibleAttribute}
+          onCancel={() =>
+            this.setState({
+              visibleAttribute: false
+            })
+          }
           footer={[
             <Button
               key="back"

@@ -43,6 +43,7 @@ export default class GoodsGrid extends React.Component<any, any> {
 */
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
+    console.log(11111111111);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -59,11 +60,12 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   }
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {}
-
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible } = this.props;
+    setTimeout(() => {
+      console.log(goodsInfoPage, 22222222);
+    });
     return (
       <div className="content">
         <DataGrid

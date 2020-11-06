@@ -289,7 +289,7 @@ export default class Prescriber extends React.Component<any, any> {
             <div className="item-top-r-btm">
               <div className="top-text space-between">
                 <span>Traffic</span>
-                <span>more ></span>
+                {/*<span>more ></span>*/}
               </div>
               <div className="traffic space-between">
                 <div className="traffic-r flex-content">
@@ -382,7 +382,7 @@ export default class Prescriber extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Traffic Trend</span>
-                <span>more ></span>
+                {/*<span>more ></span>*/}
               </div>
             </div>
             <div className="line">
@@ -402,7 +402,7 @@ export default class Prescriber extends React.Component<any, any> {
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>
-              <span>more ></span>
+              {/*<span>more ></span>*/}
             </div>
             <div className="line">
               {transactionTrendView && (

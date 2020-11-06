@@ -175,4 +175,15 @@ export default class AppStore extends Store {
     console.log(data);
     this.dispatch('home:selectSearchData', data);
   };
+
+  cleanRedux = () => {
+    this.dispatch('home:tradeCustomerView', '');
+    this.dispatch('home:goodsInfoTopView', '');
+    this.dispatch('home:conversionFunnelDashboardView', '');
+    this.dispatch('home:prescriberTrendView', '');
+    this.dispatch('home:prescriberTopView', '');
+    this.dispatch('home:trafficDashboardView', '');
+    this.dispatch('home:transactionTrendView', '');
+    this.dispatch('home:trafficTrendDashboardView', '');
+  };
 }

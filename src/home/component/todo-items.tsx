@@ -1,5 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
+import { Link } from 'react-router-dom';
+
 /*import { Icon, Modal, Checkbox } from 'antd';
 import { fromJS } from 'immutable';*/
 
@@ -50,6 +52,7 @@ export default class TodoItems extends React.Component<any, any> {
       transactionTrendView: any;
       trafficTrendDashboardView: any;
       conversionFunnelDashboardView: any;
+      cleanRedux: Function;
     };
   };
 
@@ -61,10 +64,16 @@ export default class TodoItems extends React.Component<any, any> {
     trafficDashboardView: 'trafficDashboardView',
     transactionTrendView: 'transactionTrendView',
     trafficTrendDashboardView: 'trafficTrendDashboardView',
-    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
+    conversionFunnelDashboardView: 'conversionFunnelDashboardView',
+    cleanRedux: noop
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    const { cleanRedux } = this.props.relaxProps;
+
+    cleanRedux();
+    console.log(221212121);
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
@@ -233,7 +242,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-top">
               <div className="top-text space-between">
                 <span>Traffic</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
               <div className="traffic space-between">
                 <div className="traffic-l">
@@ -293,7 +304,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-btm">
               <div className="top-text space-between">
                 <span>Transaction</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-transaction">more ></Link>
+                </span>
               </div>
               <div className="m-content flex-content">
                 <div className="transaction space-between">
@@ -482,7 +495,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Best seller</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-product">more ></Link>
+                </span>
               </div>
             </div>
             <div className="seller space-between">
@@ -508,7 +523,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Traffic Trend</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
             </div>
             <div className="line">
@@ -544,7 +561,9 @@ export default class TodoItems extends React.Component<any, any> {
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>
-              <span>more ></span>
+              <span>
+                <Link to="/report-transaction">more ></Link>
+              </span>
             </div>
             <div className="line">
               {transactionTrendView && (

@@ -21,7 +21,8 @@ export default class HelloApp extends React.Component<any, any> {
     this.state = {
       prescriberId: null,
       changeMode: false,
-      getPrescriberId: ''
+      getPrescriberId: '',
+      week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week()
     };
   }
 
@@ -48,25 +49,30 @@ export default class HelloApp extends React.Component<any, any> {
   }
 
   changePage(res) {
-    this.setState({
-      changeMode: res.type,
-      getPrescriberId: res.getPrescriberId
-    });
-    let date = sessionStorage.getItem(cache.CURRENT_YEAR);
-    if (res.getPrescriberId != null) {
-      this.store.prescriberInit({
-        companyId: 2,
-        weekNum: moment(date).week(),
-        year: moment(date).year(),
-        prescriberId: res.getPrescriberId
-      });
-    } else {
-      this.store.newInit({
-        companyId: 2,
-        weekNum: moment(date).week(),
-        year: moment(date).year()
-      });
-    }
+    this.setState(
+      {
+        changeMode: res.type,
+        getPrescriberId: res.getPrescriberId,
+        week: res.week
+      },
+      () => {
+        let date = sessionStorage.getItem(cache.CURRENT_YEAR);
+        if (res.getPrescriberId != null) {
+          this.store.prescriberInit({
+            companyId: 2,
+            weekNum: this.state.week,
+            year: moment(date).year(),
+            prescriberId: res.getPrescriberId
+          });
+        } else {
+          this.store.newInit({
+            companyId: 2,
+            weekNum: this.state.week,
+            year: moment(date).year()
+          });
+        }
+      }
+    );
   }
 
   render() {

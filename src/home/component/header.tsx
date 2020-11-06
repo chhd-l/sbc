@@ -17,13 +17,14 @@ export default class Header extends React.Component<any, any> {
       prescribers: '',
       rc: '',
       searchData: '',
-      prescriber: 'prescribersId',
+      prescriber: 'prescriberId',
       prescriberInput: '',
       searchType: false,
       selectList: [],
       buttonType: false,
       openType: false,
-      prescriberId: ''
+      prescriberId: '',
+      week: ''
     };
   }
 
@@ -69,12 +70,13 @@ export default class Header extends React.Component<any, any> {
   dateChange = (date, dateString) => {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
+    this.setState({ week: date.week() });
     if (this.state.searchType == true) {
       let obj = {
         companyId: 2,
         weekNum: date.week(),
         year: Number(year),
-        prescribersId: this.state.prescriberId
+        prescriberId: this.state.prescriberId
       };
       prescriberInit(obj);
     } else {
@@ -138,7 +140,7 @@ export default class Header extends React.Component<any, any> {
       buttonType: false
     });
     if (this.state.searchType == true) {
-      this.props.changePage({ type: false, getPrescriberId: null });
+      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week });
     }
   };
 

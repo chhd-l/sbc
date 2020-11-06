@@ -48,6 +48,7 @@ export default class Prescriber extends React.Component<any, any> {
       p_transactionTrendView: any;
       p_trafficTrendDashboardView: any;
       p_conversionFunnelDashboardView: any;
+      p_trafficDashboardView: any;
     };
   };
 
@@ -56,7 +57,8 @@ export default class Prescriber extends React.Component<any, any> {
     p_prescriberTopView: 'p_prescriberTopView',
     p_transactionTrendView: 'p_transactionTrendView',
     p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
-    p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView'
+    p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView',
+    p_trafficDashboardView: 'p_trafficDashboardView'
   };
 
   componentWillUnmount() {
@@ -74,45 +76,27 @@ export default class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { prescriberId } = nextProps;
-    const { p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView } = nextProps.relaxProps;
+    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    /*if (p_tradeCustomerView !== prevState.tradeCustomerView) {
+    if (
+      prescriberId !== prevState.prescriberId ||
+      p_tradeCustomerView !== prevState.tradeCustomerView ||
+      p_prescriberTopView !== prevState.prescriberTopView ||
+      p_transactionTrendView !== prevState.transactionTrendView ||
+      p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
+      p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
+      p_trafficDashboardView !== prevState.trafficDashboardView
+    ) {
       return {
-        tradeCustomerView: p_tradeCustomerView
-      };
-    }
-    if (p_prescriberTopView !== prevState.prescriberTopView) {
-      return {
-        prescriberTopView: p_prescriberTopView
-      };
-    }
-    if (p_transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView: p_transactionTrendView
-      };
-    }
-    if (p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView: p_trafficTrendDashboardView
-      };
-    }
-    if (p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
-        conversionFunnelDashboardView: p_conversionFunnelDashboardView
-      };
-    }*/
-    if (prescriberId !== prevState.prescriberId) {
-      return {
-        prescriberId,
         tradeCustomerView: p_tradeCustomerView,
         prescriberTopView: p_prescriberTopView,
         transactionTrendView: p_transactionTrendView,
         trafficTrendDashboardView: p_trafficTrendDashboardView,
-        conversionFunnelDashboardView: p_conversionFunnelDashboardView
+        conversionFunnelDashboardView: p_conversionFunnelDashboardView,
+        trafficDashboardView: p_trafficDashboardView,
+        prescriberId
       };
     }
-
     // 否则，对于state不进行任何操作
     return null;
   }
@@ -131,9 +115,6 @@ export default class Prescriber extends React.Component<any, any> {
 
   render() {
     const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-    setTimeout(() => {
-      console.log(trafficTrendDashboardView, 2222);
-    });
     return (
       <div className="prescriber-item">
         <div className="item-top space-between">
@@ -145,7 +126,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode-text">Revenue</div>
                   <div className="mode-num">
                     <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} {...countUpProps} /> : '--'}</span>
+                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
                     {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -252,15 +233,15 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="Funnel-r-btm"></div>
                   </div>
                   <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                 </div>

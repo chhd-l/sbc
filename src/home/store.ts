@@ -152,8 +152,10 @@ export default class AppStore extends Store {
     const { res: getConversionFunnelDashboardView } = await webapi.getPrescriberConversionFunnelDashboardView(data);
     const { res: getTrafficTrendDashboardView } = await webapi.getPrescriberTrafficTrendDashboardView(data);
     const { res: getTransactionTrendView } = await webapi.getPrescriberTransactionTrendView(data);
+    const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
+      this.dispatch('prescriber:p_trafficDashboardView', getTrafficDashboardView.context);
       this.dispatch('prescriber:p_tradeCustomerView', getTradeCustomerView.context);
       this.dispatch('prescriber:p_prescriberTopView', getPrescriberTopView.context);
       this.dispatch('prescriber:p_conversionFunnelDashboardView', getConversionFunnelDashboardView.context);

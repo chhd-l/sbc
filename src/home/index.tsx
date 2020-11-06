@@ -47,8 +47,6 @@ export default class HelloApp extends React.Component<any, any> {
     }
   }
 
-  onInit() {}
-
   changePage(res) {
     this.setState({
       changeMode: res.type,
@@ -56,7 +54,6 @@ export default class HelloApp extends React.Component<any, any> {
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
     if (res.getPrescriberId != null) {
-      console.log(res.getPrescriberId);
       this.store.prescriberInit({
         companyId: 2,
         weekNum: moment(date).week(),
@@ -78,7 +75,7 @@ export default class HelloApp extends React.Component<any, any> {
       return !this.state.prescriberId ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {this.state.changeMode == false ? <TodoItems key={this.state.getPrescriberId} /> : <Prescriber key={this.state.getPrescriberId} prescriberId={this.state.getPrescriberId} />}
+          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
 
           {/*<StatisticalReport />
           <Ranking /> */}

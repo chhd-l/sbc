@@ -78,7 +78,7 @@ export default class ListSearchForm extends Component<any, any> {
               </Button>
             </Form.Item>
             <Form.Item>
-              <AuthWrapper functionName="digital_trategy_export">
+              <AuthWrapper functionName="f_export_product_data">
                 <Button type="primary" shape="round" onClick={() => handleBatchExport()}>
                   Download the report
                 </Button>

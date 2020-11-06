@@ -30,7 +30,9 @@ class AttributeLibrary extends Component<any, any> {
         attributeName: '',
         attributeType: ''
       },
-      attributeValueList: []
+      attributeValueList: [],
+      isEdit: false,
+      currentEditAttribute: {}
     };
   }
   componentDidMount() {
@@ -46,7 +48,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   onSearch = () => {
-    console.log('search');
+    this.getAttributes();
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -147,11 +149,13 @@ class AttributeLibrary extends Component<any, any> {
 
     attributeForm.attributeName = '';
     attributeForm.attributeType = 'Single choice';
+
     this.setState(
       {
         attributeValueList: [],
         visibleAttribute: true,
-        attributeForm
+        attributeForm,
+        isEdit: false
       },
       () => {
         this.add();
@@ -169,7 +173,9 @@ class AttributeLibrary extends Component<any, any> {
       {
         attributeValueList: row.attributesValuesVOList,
         visibleAttribute: true,
-        attributeForm
+        attributeForm,
+        isEdit: true,
+        currentEditAttribute: row
       },
       () => {
         form.setFieldsValue(attributeForm);
@@ -178,10 +184,9 @@ class AttributeLibrary extends Component<any, any> {
     );
   };
   handleSubmit = () => {
-    const { attributeForm, attributeValueList } = this.state;
+    const { attributeForm, attributeValueList, isEdit, currentEditAttribute } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        debugger;
         let tempAttributeValueList = [];
         for (let i = 0; i < attributeValueList.length; i++) {
           if (attributeValueList[i].id) {
@@ -197,12 +202,25 @@ class AttributeLibrary extends Component<any, any> {
             tempAttributeValueList.push(attributeValue);
           }
         }
-        let params = {
-          attributeName: attributeForm.attributeName,
-          attributeType: attributeForm.attributeType,
-          attributesValueList: tempAttributeValueList
-        };
-        this.addAttributes(params);
+
+        if (isEdit) {
+          let params = {
+            attributeName: attributeForm.attributeName,
+            attributeType: attributeForm.attributeType,
+            attributesValueList: tempAttributeValueList,
+            attributeStatus: currentEditAttribute.attributeStatus ? true : false,
+            id: currentEditAttribute.id,
+            sort: currentEditAttribute.sort
+          };
+          this.updateAttributes(params);
+        } else {
+          let params = {
+            attributeName: attributeForm.attributeName,
+            attributeType: attributeForm.attributeType,
+            attributesValueList: tempAttributeValueList
+          };
+          this.addAttributes(params);
+        }
       }
     });
   };
@@ -219,8 +237,9 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
-          this.setState({ attributeList });
+          this.setState({ attributeList, pagination });
         } else {
           message.error(res.message || 'Operation failed');
         }
@@ -260,7 +279,8 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          this.getAttributes();
+          message.success(res.message || 'Operation success');
         } else {
           message.error(res.message.toString() || 'Operation failed');
         }
@@ -270,16 +290,26 @@ class AttributeLibrary extends Component<any, any> {
       });
   };
 
-  updateAttributeStatus = (id) => {
+  updateAttributeStatus = (checked, row) => {
     let params = {
-      id: id
+      attributeName: row.attributeName,
+      attributeStatus: checked ? true : false,
+      attributeType: row.attributeType,
+      id: row.id,
+      sort: row.sort,
+      attributesValueList: row.attributesValueList
     };
+    this.updateAttributes(params);
+  };
+
+  updateAttributes = (params) => {
     webapi
       .putAttributes(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          this.getAttributes();
+          message.success(res.message || 'Operation success');
         } else {
           message.error(res.message.toString() || 'Operation failed');
         }
@@ -334,7 +364,7 @@ class AttributeLibrary extends Component<any, any> {
               {obj.length > 1 ? (
                 <>
                   {k.id ? (
-                    <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
                       <Icon className="dynamic-delete-button" type="minus-circle-o" />
                     </Popconfirm>
                   ) : (
@@ -366,9 +396,9 @@ class AttributeLibrary extends Component<any, any> {
       },
       {
         title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        render: (text, record) => <Switch checked={+text ? true : false} onClick={() => this.updateAttributeStatus(record.id)}></Switch>
+        dataIndex: 'attributeStatus',
+        key: 'attributeStatus',
+        render: (text, record) => <Switch checked={+text ? true : false} onClick={(checked) => this.updateAttributeStatus(checked, record)}></Switch>
       },
       {
         title: 'Operation',

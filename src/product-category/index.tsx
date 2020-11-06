@@ -16,19 +16,27 @@ class PeoductCategory extends Component<any, any> {
     this.state = {
       title: 'Product category',
       visible: false,
-      firstCount: 0,
-      secondCount: 0,
-      thirdCount: 3,
-      productCategoryList: []
+      productCategoryList: [],
+      selectedRowKeys: [],
+      attributeList: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
+      }
     };
   }
   componentDidMount() {
     this.getGoodsCates();
+    this.getAttributes();
   }
   removeChildrenIsNull = (objArr) => {
     let tempString = JSON.stringify(objArr);
     let returnString = tempString.replaceAll(',"children":[]', '');
     return JSON.parse(returnString);
+  };
+  openBindAttribute = (id) => {
+    this.getSelectedListById(id);
   };
   handleOk = () => {
     console.log('ok');
@@ -38,6 +46,30 @@ class PeoductCategory extends Component<any, any> {
       visible: false
     });
   };
+  getAttributes = () => {
+    const { pagination } = this.state;
+    let params = {
+      attributeStatus: true,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current - 1
+    };
+    webapi
+      .getAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          pagination.total = res.context.total;
+          const attributeList = res.context.attributesList;
+          this.setState({ attributeList, pagination });
+        } else {
+          message.error(res.message || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
+  };
+
   getGoodsCates = () => {
     webapi.getGoodsCates().then((data) => {
       const { res } = data;
@@ -79,8 +111,39 @@ class PeoductCategory extends Component<any, any> {
     });
   }
 
+  start = () => {
+    this.setState({
+      selectedRowKeys: []
+    });
+  };
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys });
+  };
+
+  getSelectedListById = (id) => {
+    webapi.getSelectedListById(id).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let selectedRowKeys = res.context;
+        this.setState({
+          selectedRowKeys,
+          visible: true
+        });
+      }
+    });
+  };
+  relationAttributes = () => {
+    let params = {};
+    webapi.relationAttributes(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+      }
+    });
+  };
+
   render() {
-    const { title, productCategoryList } = this.state;
+    const { title, productCategoryList, selectedRowKeys, attributeList } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -97,20 +160,37 @@ class PeoductCategory extends Component<any, any> {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
-        render: (rowInfo) => (
+        render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Bind attribute">
-              <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
-            </Tooltip>
+            {record.cateGrade === 3 ? (
+              <Tooltip placement="top" title="Bind attribute">
+                <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
+              </Tooltip>
+            ) : (
+              '-'
+            )}
           </div>
         )
       }
     ];
+    const columns_attribute = [
+      {
+        title: 'Attribute name',
+        dataIndex: 'attributeName',
+        key: 'attributeName'
+      }
+    ];
     const description = (
       <div>
-        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
+        <p>Product category is set by RC staff, you can associate attribute to product category.</p>
       </div>
     );
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange
+    };
+    const hasSelected = selectedRowKeys.length > 0;
 
     return (
       <div>
@@ -122,7 +202,17 @@ class PeoductCategory extends Component<any, any> {
 
           <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
-        <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}></Modal>
+        <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+          <div>
+            <div style={{ marginBottom: 16 }}>
+              <Button type="primary" onClick={this.start} disabled={!hasSelected}>
+                Reload
+              </Button>
+              <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
+            </div>
+            <Table rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} />
+          </div>
+        </Modal>
       </div>
     );
   }

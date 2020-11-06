@@ -1,5 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
+import { Link } from 'react-router-dom';
+
 /*import { Icon, Modal, Checkbox } from 'antd';
 import { fromJS } from 'immutable';*/
 
@@ -10,7 +12,7 @@ import PieChart from 'web_modules/biz/chart-pie/index.tsx';
 import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from '/web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
-
+import NoData from '/web_modules/qmkit/images/icon/no_data.svg';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -50,6 +52,7 @@ export default class TodoItems extends React.Component<any, any> {
       transactionTrendView: any;
       trafficTrendDashboardView: any;
       conversionFunnelDashboardView: any;
+      cleanRedux: Function;
     };
   };
 
@@ -61,51 +64,38 @@ export default class TodoItems extends React.Component<any, any> {
     trafficDashboardView: 'trafficDashboardView',
     transactionTrendView: 'transactionTrendView',
     trafficTrendDashboardView: 'trafficTrendDashboardView',
-    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
+    conversionFunnelDashboardView: 'conversionFunnelDashboardView',
+    cleanRedux: noop
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    const { cleanRedux } = this.props.relaxProps;
+
+    cleanRedux();
+    console.log(221212121);
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (tradeCustomerView !== prevState.tradeCustomerView) {
+    if (
+      tradeCustomerView !== prevState.tradeCustomerView ||
+      goodsInfoTopView !== prevState.goodsInfoTopView ||
+      prescriberTrendView !== prevState.prescriberTrendView ||
+      prescriberTopView !== prevState.prescriberTopView ||
+      trafficDashboardView !== prevState.trafficDashboardView ||
+      transactionTrendView !== prevState.transactionTrendView ||
+      trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
+      conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView
+    ) {
       return {
-        tradeCustomerView
-      };
-    }
-    if (goodsInfoTopView !== prevState.goodsInfoTopView) {
-      return {
-        goodsInfoTopView
-      };
-    }
-    if (prescriberTrendView !== prevState.prescriberTrendView) {
-      return {
-        prescriberTrendView
-      };
-    }
-    if (prescriberTopView !== prevState.prescriberTopView) {
-      return {
-        prescriberTopView
-      };
-    }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
-      return {
-        trafficDashboardView
-      };
-    }
-    if (transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView
-      };
-    }
-    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView
-      };
-    }
-    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
+        tradeCustomerView,
+        goodsInfoTopView,
+        prescriberTrendView,
+        prescriberTopView,
+        trafficDashboardView,
+        transactionTrendView,
+        trafficTrendDashboardView,
         conversionFunnelDashboardView
       };
     }
@@ -131,6 +121,7 @@ export default class TodoItems extends React.Component<any, any> {
 
     return (
       <div className="item">
+        <img src={NoData} width={50}></img>
         <div className="item-top space-between">
           <div className="item-top-l flex-content">
             <div className="item-top-l-top">
@@ -251,7 +242,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-top">
               <div className="top-text space-between">
                 <span>Traffic</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
               <div className="traffic space-between">
                 <div className="traffic-l">
@@ -311,7 +304,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-btm">
               <div className="top-text space-between">
                 <span>Transaction</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-transaction">more ></Link>
+                </span>
               </div>
               <div className="m-content flex-content">
                 <div className="transaction space-between">
@@ -500,7 +495,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Best seller</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-product">more ></Link>
+                </span>
               </div>
             </div>
             <div className="seller space-between">
@@ -526,7 +523,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Traffic Trend</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
             </div>
             <div className="line">
@@ -562,7 +561,9 @@ export default class TodoItems extends React.Component<any, any> {
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>
-              <span>more ></span>
+              <span>
+                <Link to="/report-transaction">more ></Link>
+              </span>
             </div>
             <div className="line">
               {transactionTrendView && (

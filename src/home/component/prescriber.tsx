@@ -43,26 +43,22 @@ export default class Prescriber extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
-      tradeCustomerView: any;
-      goodsInfoTopView: any;
-      prescriberTrendView: any;
-      prescriberTopView: any;
-      trafficDashboardView: any;
-      transactionTrendView: any;
-      trafficTrendDashboardView: any;
-      conversionFunnelDashboardView: any;
+      p_tradeCustomerView: any;
+      p_prescriberTopView: any;
+      p_transactionTrendView: any;
+      p_trafficTrendDashboardView: any;
+      p_conversionFunnelDashboardView: any;
+      p_trafficDashboardView: any;
     };
   };
 
   static relaxProps = {
-    tradeCustomerView: 'tradeCustomerView',
-    goodsInfoTopView: 'goodsInfoTopView',
-    prescriberTrendView: 'prescriberTrendView',
-    prescriberTopView: 'prescriberTopView',
-    trafficDashboardView: 'trafficDashboardView',
-    transactionTrendView: 'transactionTrendView',
-    trafficTrendDashboardView: 'trafficTrendDashboardView',
-    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
+    p_tradeCustomerView: 'p_tradeCustomerView',
+    p_prescriberTopView: 'p_prescriberTopView',
+    p_transactionTrendView: 'p_transactionTrendView',
+    p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
+    p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView',
+    p_trafficDashboardView: 'p_trafficDashboardView'
   };
 
   componentWillUnmount() {
@@ -80,55 +76,27 @@ export default class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { prescriberId } = nextProps;
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
+    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (tradeCustomerView !== prevState.tradeCustomerView) {
+    if (
+      prescriberId !== prevState.prescriberId ||
+      p_tradeCustomerView !== prevState.tradeCustomerView ||
+      p_prescriberTopView !== prevState.prescriberTopView ||
+      p_transactionTrendView !== prevState.transactionTrendView ||
+      p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
+      p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
+      p_trafficDashboardView !== prevState.trafficDashboardView
+    ) {
       return {
-        tradeCustomerView
-      };
-    }
-    if (goodsInfoTopView !== prevState.goodsInfoTopView) {
-      return {
-        goodsInfoTopView
-      };
-    }
-    if (prescriberTrendView !== prevState.prescriberTrendView) {
-      return {
-        prescriberTrendView
-      };
-    }
-    if (prescriberTopView !== prevState.prescriberTopView) {
-      return {
-        prescriberTopView
-      };
-    }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
-      return {
-        trafficDashboardView
-      };
-    }
-    if (transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView
-      };
-    }
-    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView
-      };
-    }
-    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
-        conversionFunnelDashboardView
-      };
-    }
-    if (prescriberId !== prevState.prescriberId) {
-      return {
+        tradeCustomerView: p_tradeCustomerView,
+        prescriberTopView: p_prescriberTopView,
+        transactionTrendView: p_transactionTrendView,
+        trafficTrendDashboardView: p_trafficTrendDashboardView,
+        conversionFunnelDashboardView: p_conversionFunnelDashboardView,
+        trafficDashboardView: p_trafficDashboardView,
         prescriberId
       };
     }
-
     // 否则，对于state不进行任何操作
     return null;
   }
@@ -147,9 +115,6 @@ export default class Prescriber extends React.Component<any, any> {
 
   render() {
     const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
-    setTimeout(() => {
-      console.log(trafficDashboardView, 2222);
-    });
     return (
       <div className="prescriber-item">
         <div className="item-top space-between">
@@ -161,7 +126,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="mode-text">Revenue</div>
                   <div className="mode-num">
                     <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} {...countUpProps} /> : '--'}</span>
+                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
                     {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -268,15 +233,15 @@ export default class Prescriber extends React.Component<any, any> {
                     <div className="Funnel-r-btm"></div>
                   </div>
                   <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                   <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
+                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
                     <p>%</p>
                   </div>
                 </div>
@@ -323,8 +288,8 @@ export default class Prescriber extends React.Component<any, any> {
           <div className="item-top-r flex-content">
             <div className="item-top-r-btm">
               <div className="top-text space-between">
-                <span>Traffiction</span>
-                <span>more ></span>
+                <span>Traffic</span>
+                {/*<span>more ></span>*/}
               </div>
               <div className="traffic space-between">
                 <div className="traffic-r flex-content">
@@ -417,7 +382,7 @@ export default class Prescriber extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Traffic Trend</span>
-                <span>more ></span>
+                {/*<span>more ></span>*/}
               </div>
             </div>
             <div className="line">
@@ -437,7 +402,7 @@ export default class Prescriber extends React.Component<any, any> {
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>
-              <span>more ></span>
+              {/*<span>more ></span>*/}
             </div>
             <div className="line">
               {transactionTrendView && (

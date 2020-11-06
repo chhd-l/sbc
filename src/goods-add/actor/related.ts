@@ -25,21 +25,24 @@ export default class BrandActor extends Actor {
       likeGoodsInfoNo: '',
       // 模糊条件-SPU编码
       likeGoodsNo: '',
+
+      likeProductCategory: '',
       // 商品店铺分类
-      storeCateId: '-1',
+      storeCateId: '',
       // 品牌编号
-      brandId: '-1',
+      brandId: '',
       // 上下架状态-也是tab页的下标
-      addedFlag: '-1',
+      addedFlag: '',
       // 销售类别 批发or零售
-      saleType: '-1',
+      saleType: '',
 
       pageNum: 0,
       pageSize: 10,
       cateList: [], //层级结构的分类列表
       allCateList: [], //扁平的分类列表
       field: '',
-      productTooltip: ''
+      productTooltip: '',
+      searchType: false
     };
   }
 
@@ -116,5 +119,10 @@ export default class BrandActor extends Actor {
   @Action('related:productTooltip')
   productTooltip(state: IMap, res) {
     return state.set('productTooltip', res);
+  }
+
+  @Action(' related:searchType')
+  searchType(state: IMap, res) {
+    return state.set('searchType', res);
   }
 }

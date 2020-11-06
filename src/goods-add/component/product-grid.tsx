@@ -7,6 +7,7 @@ import { Const, DataGrid, noop, SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
 import { Relax } from 'plume2';
+import RelatedForm from '@/goods-add/component/related-form';
 const { Option } = Select;
 
 const Column = Table.Column;
@@ -43,7 +44,6 @@ export default class GoodsGrid extends React.Component<any, any> {
 */
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
-    console.log(11111111111);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -68,6 +68,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
     return (
       <div className="content">
+        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
           rowKey={(record) => record.goodsInfoId}

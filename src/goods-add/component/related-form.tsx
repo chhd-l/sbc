@@ -1,10 +1,11 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect } from 'antd';
+import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
 import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
+import { fromJS, Map } from 'immutable';
 
 const SelectBox = styled.div`
   .ant-select-dropdown-menu-item,
@@ -29,11 +30,13 @@ export default class SearchForm extends React.Component<any, any> {
       storeCateId: string;
       brandId: string;
       addedFlag: string;
+      likeProductCategory: string;
       onSearch: Function;
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
       cateList: IList;
+      sourceCateList: IList;
     };
   };
 
@@ -47,6 +50,7 @@ export default class SearchForm extends React.Component<any, any> {
     // 商品分类
     storeCateId: 'storeCateId',
     // 品牌编号
+    likeProductCategory: 'likeProductCategory',
     brandId: 'brandId',
     onSearch: noop,
     onFormFieldChange: noop,
@@ -54,12 +58,26 @@ export default class SearchForm extends React.Component<any, any> {
     //品牌列表
     brandList: 'brandList',
     //分类列表
-    cateList: 'cateList'
+    cateList: 'cateList',
+    sourceCateList: 'sourceCateList'
+  };
+
+  searchBackFun = () => {
+    const { likeGoodsName, likeGoodsNo, storeCateId } = this.props.relaxProps;
+    console.log(storeCateId, 222222222);
+    let from = {
+      goodsName: likeGoodsName,
+      goodsNo: likeGoodsNo,
+      storeCateId: storeCateId
+    };
+    console.log(from, 111);
+
+    this.props.searchBackFun(from);
   };
 
   render() {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
-
+    const { likeGoodsName, likeProductCategory, likeGoodsNo, sourceCateList, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
+    const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -127,29 +145,66 @@ export default class SearchForm extends React.Component<any, any> {
           </Col>
 
           <Col span={8}>
-            <FormItem>
-              <TreeSelectGroup
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={
-                  <p style={styles.label}>
-                    <FormattedMessage id="product.storeCategory" />
-                  </p>
-                }
-                /* defaultValue="全部"*/
-                // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCateId', value });
-                }}
-              >
-                <TreeNode key="-1" value="-1" title="All">
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
+              {getFieldDecorator('cateId', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select platform product category'
+                  },
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (!value) {
+                        callback();
+                        return;
+                      }
+
+                      let overLen = false;
+                      sourceCateList.forEach((val) => {
+                        if (val.get('cateParentId') + '' == value) overLen = true;
+                        return;
+                      });
+
+                      if (overLen) {
+                        callback(new Error('Please select the last category'));
+                        return;
+                      }
+
+                      callback();
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'cateId'),
+                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  placeholder="Please select category"
+                  notFoundContent="No classification"
+                  // disabled={cateDisabled}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                >
                   {loop(cateList)}
-                </TreeNode>
-              </TreeSelectGroup>
+                </TreeSelect>
+              )}
             </FormItem>
           </Col>
-
+          <Col span={8}>
+            <FormItem>
+              <Input
+                addonBefore={<p style={styles.label}>Product category</p>}
+                value={likeProductCategory}
+                style={{ width: 300 }}
+                onChange={(e: any) => {
+                  onFormFieldChange({
+                    key: 'likeProductCategory',
+                    value: e.target.value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
           <Col span={8}>
             <FormItem>
               <SelectBox>
@@ -182,26 +237,6 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectBox>
             </FormItem>
           </Col>
-
-          {/* <FormItem>
-            <SelectBox>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="销售类型"
-                defaultValue="全部"
-                showSearch
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'saleType', value });
-                }}
-              >
-                <Option value="-1">全部</Option>
-                <Option value="0">批发</Option>
-                <Option value="1">零售</Option>
-              </SelectGroup>
-            </SelectBox>
-          </FormItem> */}
           <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
@@ -211,7 +246,7 @@ export default class SearchForm extends React.Component<any, any> {
                 shape="round"
                 onClick={(e) => {
                   e.preventDefault();
-                  onSearch();
+                  this.searchBackFun();
                 }}
               >
                 <span>

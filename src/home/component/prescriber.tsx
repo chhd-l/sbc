@@ -77,7 +77,7 @@ export default class Prescriber extends React.Component<any, any> {
     const { prescriberId } = nextProps;
     const { p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (p_tradeCustomerView !== prevState.tradeCustomerView) {
+    /*if (p_tradeCustomerView !== prevState.tradeCustomerView) {
       return {
         tradeCustomerView: p_tradeCustomerView
       };
@@ -101,10 +101,15 @@ export default class Prescriber extends React.Component<any, any> {
       return {
         conversionFunnelDashboardView: p_conversionFunnelDashboardView
       };
-    }
+    }*/
     if (prescriberId !== prevState.prescriberId) {
       return {
-        prescriberId
+        prescriberId,
+        tradeCustomerView: p_tradeCustomerView,
+        prescriberTopView: p_prescriberTopView,
+        transactionTrendView: p_transactionTrendView,
+        trafficTrendDashboardView: p_trafficTrendDashboardView,
+        conversionFunnelDashboardView: p_conversionFunnelDashboardView
       };
     }
 

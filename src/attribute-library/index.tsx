@@ -67,7 +67,7 @@ class AttributeLibrary extends Component<any, any> {
     const { attributeValueList } = this.state;
     const { form } = this.props;
     let obj = {
-      attributeId: this.genID(),
+      tempId: this.genID(),
       attributeDetailName: ''
     };
 
@@ -77,12 +77,21 @@ class AttributeLibrary extends Component<any, any> {
         attributeValueList
       },
       () => {
-        let setObj = {};
-        let valueName = 'value_' + obj.attributeId;
-        setObj[valueName] = obj.attributeDetailName;
-        form.setFieldsValue(setObj);
+        this.setAttributeFieldsValue(attributeValueList);
       }
     );
+  };
+  setAttributeFieldsValue = (arr) => {
+    const { form } = this.props;
+    let setObj = {};
+    for (let i = 0; i < arr.length; i++) {
+      let valueName = 'value_' + (arr[i].id || arr[i].tempId);
+      let tempObj = {};
+
+      tempObj[valueName] = arr[i].attributeDetailName;
+      setObj = Object.assign(setObj, tempObj);
+    }
+    form.setFieldsValue(setObj);
   };
 
   genID() {
@@ -90,18 +99,37 @@ class AttributeLibrary extends Component<any, any> {
     return 'AV' + date;
   }
 
-  remove = (id) => {
+  removeTemp = (id) => {
     const { attributeValueList } = this.state;
-    let attributeValueListTemp = attributeValueList.filter((item) => item.attributeId !== id);
+    let attributeValueListTemp = attributeValueList.filter((item) => item.tempId !== id);
     this.setState({
       attributeValueList: attributeValueListTemp
     });
+  };
+  removeRemote = (id) => {
+    const { attributeValueList } = this.state;
+    webapi
+      .deleteAttributesValue({ id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
+          this.setState({
+            attributeValueList: attributeValueListTemp
+          });
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
 
   onChangeValue = (id, value) => {
     const { attributeValueList } = this.state;
     attributeValueList.map((item) => {
-      if (item.attributeId === id) {
+      if (item.id === id || item.tempId === id) {
         item.attributeDetailName = value;
         return item;
       }
@@ -115,7 +143,8 @@ class AttributeLibrary extends Component<any, any> {
     const { attributeForm } = this.state;
     const { form } = this.props;
 
-    (attributeForm.attributeName = ''), (attributeForm.attributeType = 'Single choice');
+    attributeForm.attributeName = '';
+    attributeForm.attributeType = 'Single choice';
     this.setState(
       {
         attributeValueList: [],
@@ -129,24 +158,49 @@ class AttributeLibrary extends Component<any, any> {
     );
   };
   openEditPage = (row) => {
-    console.log(row);
+    const { attributeForm } = this.state;
+    const { form } = this.props;
+
+    attributeForm.attributeName = row.attributeName;
+    attributeForm.attributeType = row.attributeType;
+    this.setState(
+      {
+        attributeValueList: row.attributesValuesVOList,
+        visibleAttribute: true,
+        attributeForm
+      },
+      () => {
+        form.setFieldsValue(attributeForm);
+        this.setAttributeFieldsValue(this.state.attributeValueList);
+      }
+    );
   };
   handleSubmit = () => {
     const { attributeForm, attributeValueList } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(attributeForm);
-        console.log(attributeValueList);
         debugger;
+        let tempAttributeValueList = [];
+        for (let i = 0; i < attributeValueList.length; i++) {
+          if (attributeValueList[i].id) {
+            let attributeValue = {
+              id: attributeValueList[i].id,
+              attributeDetailName: attributeValueList[i].attributeDetailName
+            };
+            tempAttributeValueList.push(attributeValue);
+          } else {
+            let attributeValue = {
+              attributeDetailName: attributeValueList[i].attributeDetailName
+            };
+            tempAttributeValueList.push(attributeValue);
+          }
+        }
         let params = {
           attributeName: attributeForm.attributeName,
           attributeType: attributeForm.attributeType,
-          attributesValueList: attributeValueList
+          attributesValueList: tempAttributeValueList
         };
-        console.log(params);
-        this.setState({
-          visibleAttribute: false
-        });
+        this.addAttributes(params);
       }
     });
   };
@@ -179,7 +233,14 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          message.success(res.message || 'Operation success');
+
+          this.setState(
+            {
+              visibleAttribute: false
+            },
+            () => this.getAttributes()
+          );
         } else {
           message.error(res.message || 'Operation failed');
         }
@@ -246,9 +307,9 @@ class AttributeLibrary extends Component<any, any> {
     };
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
-        <div key={k.attributeId}>
-          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value' + k.id}>
-            {getFieldDecorator('value_' + k.attributeId, {
+        <div key={k.tempId}>
+          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value_' + (k.id || k.tempId)}>
+            {getFieldDecorator('value_' + (k.id || k.tempId), {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
@@ -263,13 +324,12 @@ class AttributeLibrary extends Component<any, any> {
                 style={{ width: '80%', marginRight: 8 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
-                  this.onChangeValue(k.attributeId, value);
+                  this.onChangeValue(k.id || k.tempId, value);
                 }}
               />
             )}
             <span>
-              {obj.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k.attributeId)} /> : null}
-
+              {obj.length > 1 ? <>{k.id ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.removeTemp(k.tempId)} /> : <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.removeRemote(k.id)} />}</> : null}
               <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
             </span>
           </FormItem>
@@ -381,7 +441,7 @@ class AttributeLibrary extends Component<any, any> {
           </Form>
         </div>
 
-        <div className="container">
+        <div className="container-search">
           <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
             <span>Add new attribute</span>
           </Button>

@@ -383,7 +383,6 @@ export default class TransactionReport extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         pagination.total = res.context.totalElements;
-        pagination.current = res.context.totalPages;
         let tableData = res.context.transactionReport;
         this.setState({
           pagination,
@@ -462,7 +461,7 @@ export default class TransactionReport extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline
-            title={title}
+            title={<p style={styles.blodFont}> {title}</p>}
             extra={
               <div>
                 <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
@@ -470,8 +469,8 @@ export default class TransactionReport extends Component<any, any> {
             }
           />
           <div>
-            <h4>Sales Overview</h4>
-            <div className="data-statistics" style={{ width: 1200 }}>
+            <h4 style={styles.blodFont}>Sales Overview</h4>
+            <div className="data-statistics-transaction" style={{ width: 1200 }}>
               {overviewList &&
                 overviewList.map((item, index) => (
                   <div className="mode" key={index}>
@@ -479,7 +478,7 @@ export default class TransactionReport extends Component<any, any> {
                       {item.name}
                     </div>
                     <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
                       {item && (item.rate || item.rate === 0) ? (
@@ -499,8 +498,8 @@ export default class TransactionReport extends Component<any, any> {
           </div>
 
           <div style={styles.itemDisplay}>
-            <h4>Subscription</h4>
-            <div className="data-statistics">
+            <h4 style={styles.blodFont}>Subscription</h4>
+            <div className="data-statistics-transaction">
               {subscriptionList &&
                 subscriptionList.map((item, index) => (
                   <div className="mode" key={index}>
@@ -513,7 +512,7 @@ export default class TransactionReport extends Component<any, any> {
                       </div>
                     ) : (
                       <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
-                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
                       </div>
                     )}
                     <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
@@ -536,7 +535,8 @@ export default class TransactionReport extends Component<any, any> {
 
         <div className="container-search">
           <Headline
-            title="Transaction trend"
+            title={<p style={styles.blodFont}>Transaction trend</p>}
+            // title= "Transaction trend"
             extra={
               <div>
                 <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
@@ -551,7 +551,8 @@ export default class TransactionReport extends Component<any, any> {
 
         <div className="container-search">
           <Headline
-            title="Transaction report"
+            title={<p style={styles.blodFont}>Transaction report</p>}
+            // title="Transaction report"
             extra={
               <div>
                 <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
@@ -577,5 +578,8 @@ const styles = {
   },
   paddingRightZero: {
     paddingRight: 0
+  },
+  blodFont: {
+    fontWeight: 600
   }
 } as any;

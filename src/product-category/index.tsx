@@ -15,82 +15,83 @@ class PeoductCategory extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Product category',
-      productCategoryList: [
-        {
-          id: 1,
-          productName: 'John Brown1',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: [
-            {
-              id: 4,
-              productName: 'John Brown1',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            },
-            {
-              id: 5,
-              productName: 'John Brown2',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            },
-            {
-              id: 6,
-              productName: 'John Brown3',
-              categoryImages: 32,
-              categoryDiscount: 0,
-              children: []
-            }
-          ]
-        },
-        {
-          id: 2,
-          productName: 'John Brown2',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: []
-        },
-        {
-          id: 3,
-          productName: 'John Brown3',
-          categoryImages: 32,
-          categoryDiscount: 0,
-          children: []
-        }
-      ]
+      visible: false,
+      firstCount: 0,
+      secondCount: 0,
+      thirdCount: 3,
+      productCategoryList: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getGoodsCates();
+  }
   removeChildrenIsNull = (objArr) => {
     let tempString = JSON.stringify(objArr);
     let returnString = tempString.replaceAll(',"children":[]', '');
     return JSON.parse(returnString);
   };
+  handleOk = () => {
+    console.log('ok');
+  };
+  handleCancel = () => {
+    this.setState({
+      visible: false
+    });
+  };
+  getGoodsCates = () => {
+    webapi.getGoodsCates().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.init(res.context);
+      }
+    });
+  };
+  init(cates) {
+    const newDataList = cates
+      .filter((item) => item.cateParentId == 0)
+      .map((data) => {
+        const children = cates
+          .filter((item) => item.cateParentId == data.cateId)
+          .map((childrenData) => {
+            const lastChildren = cates
+              .filter((item) => item.cateParentId == childrenData.cateId)
+              .sort((c1, c2) => {
+                return c1.sort - c2.sort;
+              });
+            if (lastChildren.length > 0) {
+              childrenData.children = lastChildren;
+            }
+            return childrenData;
+          })
+          .sort((c1, c2) => {
+            return c1.sort - c2.sort;
+          });
+        if (children.length > 0) {
+          data.children = children;
+        }
+        return data;
+      })
+      .sort((c1, c2) => {
+        return c1.sort - c2.sort;
+      });
+    this.setState({
+      productCategoryList: newDataList
+    });
+  }
 
   render() {
     const { title, productCategoryList } = this.state;
-    const description = (
-      <div>
-        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
-      </div>
-    );
     const columns = [
       {
-        title: 'Product name',
-        dataIndex: 'productName',
-        key: 'productName'
+        title: 'Category name',
+        dataIndex: 'cateName',
+        key: 'cateName'
       },
       {
         title: 'Category images',
-        dataIndex: 'categoryImages',
-        key: 'categoryImages'
-      },
-      {
-        title: 'categoryDiscount',
-        dataIndex: 'categoryDiscount',
-        key: 'categoryDiscount'
+        dataIndex: 'cateImg',
+        key: 'cateImg',
+        render: (text) => <div>{text ? <img src={text} alt="" style={{ width: 30 }} /> : '-'}</div>
       },
       {
         title: 'Operation',
@@ -98,13 +99,18 @@ class PeoductCategory extends Component<any, any> {
         key: 'x',
         render: (rowInfo) => (
           <div>
-            <Tooltip placement="top" title="Attribute">
+            <Tooltip placement="top" title="Bind attribute">
               <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
             </Tooltip>
           </div>
         )
       }
     ];
+    const description = (
+      <div>
+        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
+      </div>
+    );
 
     return (
       <div>
@@ -112,9 +118,11 @@ class PeoductCategory extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
+          <Alert message={description} type="info" />
 
-          <Table rowKey="id" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
+          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
+        <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}></Modal>
       </div>
     );
   }

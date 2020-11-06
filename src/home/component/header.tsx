@@ -17,10 +17,14 @@ export default class Header extends React.Component<any, any> {
       prescribers: '',
       rc: '',
       searchData: '',
-      prescriber: 'prescribersId',
+      prescriber: 'prescriberId',
       prescriberInput: '',
       searchType: false,
-      selectList: []
+      selectList: [],
+      buttonType: false,
+      openType: false,
+      prescriberId: '',
+      week: ''
     };
   }
 
@@ -29,6 +33,7 @@ export default class Header extends React.Component<any, any> {
       header: IMap;
       storeEvaluateSum: IMap;
       newInit: Function;
+      prescriberInit: Function;
       search: any;
       searchData: any;
       onSearchData: Function;
@@ -39,6 +44,7 @@ export default class Header extends React.Component<any, any> {
     header: 'header',
     storeEvaluateSum: 'storeEvaluateSum',
     newInit: noop,
+    prescriberInit: noop,
     search: 'search',
     searchData: 'searchData',
     onSearchData: noop
@@ -62,15 +68,25 @@ export default class Header extends React.Component<any, any> {
   }
 
   dateChange = (date, dateString) => {
-    const { newInit } = this.props.relaxProps as any;
+    const { newInit, prescriberInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
-    //console.log(JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)));
-    let obj = {
-      companyId: 2,
-      weekNum: date.week(),
-      year: Number(year)
-    };
-    newInit(obj);
+    this.setState({ week: date.week() });
+    if (this.state.searchType == true) {
+      let obj = {
+        companyId: 2,
+        weekNum: date.week(),
+        year: Number(year),
+        prescriberId: this.state.prescriberId
+      };
+      prescriberInit(obj);
+    } else {
+      let obj = {
+        companyId: 2,
+        weekNum: date.week(),
+        year: Number(year)
+      };
+      newInit(obj);
+    }
   };
 
   onSearch = (res) => {
@@ -78,7 +94,9 @@ export default class Header extends React.Component<any, any> {
       return;
     } else {
       this.setState({
-        searchType: true
+        searchType: true,
+        buttonType: true,
+        openType: true
       });
       const { onSearchData } = this.props.relaxProps as any;
       onSearchData({ prescriberName: this.state.prescriberInput });
@@ -93,11 +111,16 @@ export default class Header extends React.Component<any, any> {
 
   onBlur = (res) => {
     this.setState({
-      prescriberInput: res
+      prescriberInput: res,
+      openType: false
     });
   };
 
-  onFocus = (res) => {};
+  onFocus = (res) => {
+    this.setState({
+      openType: true
+    });
+  };
 
   onChange = (res) => {
     if (res == 'all') {
@@ -105,11 +128,25 @@ export default class Header extends React.Component<any, any> {
     } else {
       this.props.changePage({ type: true, getPrescriberId: res });
     }
+    this.setState({
+      openType: false,
+      prescriberId: res
+    });
   };
 
-  onSearch1 = (res) => {
+  onClean = (res) => {
     this.setState({
-      prescriber: res
+      searchType: false,
+      buttonType: false
+    });
+    if (this.state.searchType == true) {
+      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week });
+    }
+  };
+
+  selectClick = (res) => {
+    this.setState({
+      openType: true
     });
   };
 
@@ -141,6 +178,7 @@ export default class Header extends React.Component<any, any> {
             <Select
               showArrow={false}
               autoFocus={false}
+              open={this.state.openType}
               style={{ width: 200, marginRight: 8 }}
               placeholder="Select Prescriber Data"
               defaultValue="All"
@@ -148,7 +186,8 @@ export default class Header extends React.Component<any, any> {
               onChange={this.onChange}
               //onFocus={this.onFocus}
               //onBlur={this.onBlur}
-              //onSearch={this.selectSearch}
+              onSearch={this.selectSearch}
+              onDropdownVisibleChange={this.selectClick}
               /*filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }*/
@@ -165,7 +204,7 @@ export default class Header extends React.Component<any, any> {
                 : null}
             </Select>
           )}
-          <Button shape="circle" icon="search" onClick={this.onSearch} />
+          {this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} />}
         </div>
         {this.state.prescriber.id ? (
           <div>

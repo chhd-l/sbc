@@ -1,141 +1,55 @@
-import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Table, Tooltip, Switch, Form, Select, Spin, Alert, Tabs } from 'antd';
+import React from 'react';
+import { Breadcrumb, Alert } from 'antd';
+import { StoreProvider } from 'plume2';
 
-import * as webapi from './webapi';
+import { Headline, BreadCrumb } from 'qmkit';
+import AppStore from './store';
+import CateList from './component/cate-list';
+import CateModal from './component/cate-modal';
+import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
-import SalesCategoryModal from './components/sales-category-modal';
+import PicModal from './component/pic-modal';
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { TabPane } = Tabs;
+@StoreProvider(AppStore, { debug: __DEV__ })
+export default class GoodsCate extends React.Component<any, any> {
+  store: AppStore;
 
-class SalesCategory extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: 'Sales Category',
-      salesCategoryList: [
-        {
-          id: 1,
-          categoryName: 'John Brown1',
-          productNumber: 32,
-          dispalyInShop: 0,
-          children: [
-            {
-              id: 4,
-              categoryName: 'John Brown1',
-              productNumber: 32,
-              dispalyInShop: 0,
-              children: []
-            },
-            {
-              id: 5,
-              categoryName: 'John Brown2',
-              productNumber: 32,
-              dispalyInShop: 0,
-              children: []
-            },
-            {
-              id: 6,
-              categoryName: 'John Brown3',
-              productNumber: 32,
-              dispalyInShop: 0,
-              children: []
-            }
-          ]
-        },
-        {
-          id: 2,
-          categoryName: 'John Brown2',
-          productNumber: 32,
-          dispalyInShop: 0,
-          children: []
-        },
-        {
-          id: 3,
-          categoryName: 'John Brown3',
-          productNumber: 32,
-          dispalyInShop: 0,
-          children: []
-        }
-      ]
-    };
+  componentDidMount() {
+    this.store.init();
+    //初始化素材
+    this.store.initImg({
+      pageNum: 0,
+      cateId: -1,
+      successCount: 0
+    });
   }
-  componentDidMount() {}
-
-  removeChildrenIsNull = (objArr) => {
-    let tempString = JSON.stringify(objArr);
-    let returnString = tempString.replaceAll(',"children":[]', '');
-    return JSON.parse(returnString);
-  };
 
   render() {
-    const { title, salesCategoryList } = this.state;
-    const description = (
-      <div>
-        <p>Store category is the classification of products within the scope of your store. Up to 2 levels can be added. When there is No categories, all products will be classified into the default classification.</p>
-      </div>
-    );
-    const columns = [
-      {
-        title: 'Category name',
-        dataIndex: 'categoryName',
-        key: 'categoryName'
-      },
-      {
-        title: 'Number of product',
-        dataIndex: 'productNumber',
-        key: 'productNumber'
-      },
-      {
-        title: 'Display in shop',
-        dataIndex: 'dispalyInShop',
-        key: 'dispalyInShop',
-        render: () => <Switch></Switch>
-      },
-      {
-        title: 'Operation',
-        dataIndex: '',
-        key: 'x',
-        render: (rowInfo) => (
-          <div>
-            <Tooltip placement="top" title="Add subcategory">
-              <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
-            </Tooltip>
-            <Tooltip placement="top" title="Edit">
-              <a style={styles.edit} className="iconfont iconEdit"></a>
-            </Tooltip>
-            <Tooltip placement="top" title="Delete">
-              <a className="iconfont iconDelete">{/*<FormattedMessage id="delete" />*/}</a>
-            </Tooltip>
-          </div>
-        )
-      }
-    ];
-
     return (
       <div>
         <BreadCrumb />
-        {/*导航面包屑*/}
+        {/* <Breadcrumb separator=">">
+          <Breadcrumb.Item>商品</Breadcrumb.Item>
+          <Breadcrumb.Item>商品管理</Breadcrumb.Item>
+          <Breadcrumb.Item>店铺分类</Breadcrumb.Item>
+        </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={title} />
-          <Alert message={description} type="error" />
+          <Headline title={<FormattedMessage id="product.salesCategory" />} />
+          <Alert message={<FormattedMessage id="product.salesCategoryInfo" />} type="info" />
 
-          <SalesCategoryModal />
+          {/*工具条*/}
+          <Tool />
         </div>
-        <div className="container-search">
-          <Table rowKey="id" columns={columns} dataSource={this.removeChildrenIsNull(salesCategoryList)} />
+        <div className="container">
+          {/*列表*/}
+          <CateList />
+
+          {/*弹框*/}
+          <CateModal />
+
+          <PicModal />
         </div>
       </div>
     );
   }
 }
-const styles = {
-  edit: {
-    paddingRight: 10
-  }
-} as any;
-
-export default Form.create()(SalesCategory);

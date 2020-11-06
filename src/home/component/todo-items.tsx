@@ -1,5 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
+import { Link } from 'react-router-dom';
+
 /*import { Icon, Modal, Checkbox } from 'antd';
 import { fromJS } from 'immutable';*/
 
@@ -10,7 +12,7 @@ import PieChart from 'web_modules/biz/chart-pie/index.tsx';
 import Funnel from 'web_modules/biz/funnel/funnel.tsx';
 import BarLine from '/web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
-
+import NoData from '/web_modules/qmkit/images/icon/no_data.svg';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -50,6 +52,7 @@ export default class TodoItems extends React.Component<any, any> {
       transactionTrendView: any;
       trafficTrendDashboardView: any;
       conversionFunnelDashboardView: any;
+      cleanRedux: Function;
     };
   };
 
@@ -61,51 +64,38 @@ export default class TodoItems extends React.Component<any, any> {
     trafficDashboardView: 'trafficDashboardView',
     transactionTrendView: 'transactionTrendView',
     trafficTrendDashboardView: 'trafficTrendDashboardView',
-    conversionFunnelDashboardView: 'conversionFunnelDashboardView'
+    conversionFunnelDashboardView: 'conversionFunnelDashboardView',
+    cleanRedux: noop
   };
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    const { cleanRedux } = this.props.relaxProps;
+
+    cleanRedux();
+    console.log(221212121);
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
-    if (tradeCustomerView !== prevState.tradeCustomerView) {
+    if (
+      tradeCustomerView !== prevState.tradeCustomerView ||
+      goodsInfoTopView !== prevState.goodsInfoTopView ||
+      prescriberTrendView !== prevState.prescriberTrendView ||
+      prescriberTopView !== prevState.prescriberTopView ||
+      trafficDashboardView !== prevState.trafficDashboardView ||
+      transactionTrendView !== prevState.transactionTrendView ||
+      trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
+      conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView
+    ) {
       return {
-        tradeCustomerView
-      };
-    }
-    if (goodsInfoTopView !== prevState.goodsInfoTopView) {
-      return {
-        goodsInfoTopView
-      };
-    }
-    if (prescriberTrendView !== prevState.prescriberTrendView) {
-      return {
-        prescriberTrendView
-      };
-    }
-    if (prescriberTopView !== prevState.prescriberTopView) {
-      return {
-        prescriberTopView
-      };
-    }
-    if (trafficDashboardView !== prevState.trafficDashboardView) {
-      return {
-        trafficDashboardView
-      };
-    }
-    if (transactionTrendView !== prevState.transactionTrendView) {
-      return {
-        transactionTrendView
-      };
-    }
-    if (trafficTrendDashboardView !== prevState.trafficTrendDashboardView) {
-      return {
-        trafficTrendDashboardView
-      };
-    }
-    if (conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView) {
-      return {
+        tradeCustomerView,
+        goodsInfoTopView,
+        prescriberTrendView,
+        prescriberTopView,
+        trafficDashboardView,
+        transactionTrendView,
+        trafficTrendDashboardView,
         conversionFunnelDashboardView
       };
     }
@@ -131,6 +121,7 @@ export default class TodoItems extends React.Component<any, any> {
 
     return (
       <div className="item">
+        <img src={NoData} width={50}></img>
         <div className="item-top space-between">
           <div className="item-top-l flex-content">
             <div className="item-top-l-top">
@@ -140,7 +131,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode-text">Revenue</div>
                   <div className="mode-num">
                     <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} {...countUpProps} /> : '--'}</span>
+                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
                     {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -154,7 +145,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode-text">Average basket</div>
                   <div className="mode-num">
                     <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
+                    <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} decimals={2} {...countUpProps} /> : '--'}</span>
                   </div>
                   <div className="mode-per">
                     {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
@@ -220,7 +211,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r-mid">
                     <div className="text1">Conversion rate</div>
                     <div className="text2">
-                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} {...countUpProps} /> : '--'}
+                      {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
                       <i>%</i>
                     </div>
                     <div className="text3">
@@ -233,15 +224,15 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="Funnel-r-btm"></div>
                 </div>
                 <div className="Funnel-per1 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
                 <div className="Funnel-per2 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
                 <div className="Funnel-per3 flex-start-align">
-                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} {...countUpProps} /> : '--'}</p>
+                  <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
                   <p>%</p>
                 </div>
               </div>
@@ -251,7 +242,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-top">
               <div className="top-text space-between">
                 <span>Traffic</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
               <div className="traffic space-between">
                 <div className="traffic-l">
@@ -276,9 +269,8 @@ export default class TodoItems extends React.Component<any, any> {
                         </span>
                       </div>
                     </div>
-                    <div className="line num"></div>
                     <div className="mode">
-                      <div className="mode-text">Bounce rate</div>
+                      {/* <div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -287,7 +279,7 @@ export default class TodoItems extends React.Component<any, any> {
                         <span className={trafficDashboardView && trafficDashboardView.bounceRateRate != null ? (trafficDashboardView.bounceRateRate >= 0 ? 'green' : 'red') : ''}>
                           {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                   <div className="traffic-r-btm flex-content">
@@ -312,7 +304,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-top-m-btm">
               <div className="top-text space-between">
                 <span>Transaction</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-transaction">more ></Link>
+                </span>
               </div>
               <div className="m-content flex-content">
                 <div className="transaction space-between">
@@ -345,7 +339,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="transaction-l space-around">
                     <div className="text">Units sold</div>
                     <div className="num">
-                      <div className="num-l">{tradeCustomerView && tradeCustomerView.unitsSold != null ? <CountUp end={tradeCustomerView.unitsSold} {...countUpProps} /> : '--'}</div>
+                      <div className="num-l">{tradeCustomerView && tradeCustomerView.unitsSold != null ? <CountUp end={tradeCustomerView.unitsSold} decimals={2} {...countUpProps} /> : '--'}</div>
                       <div className="num-r">
                         {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <img src={tradeCustomerView.unitsSoldRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
                         <span className={tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? (tradeCustomerView.unitsSoldRate >= 0 ? 'green' : 'red') : ''}>
@@ -405,7 +399,6 @@ export default class TodoItems extends React.Component<any, any> {
                   <div className="mode">
                     <div className="mode-text">Total consumers</div>
                     <div className="mode-num">
-                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                       <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                     </div>
                   </div>
@@ -455,22 +448,22 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="item-mid-l-l flex-content">
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescriber rates</div>
-                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</div>
+                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</div>
                   <div className="mode-per">
-                    {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={prescriberTopView && tradeCustomerView.activePrescribersRate != null ? (prescriberTopView.activePrescribersRate >= 0 ? 'green' : 'red') : ''}>
-                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                    {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={prescriberTopView && tradeCustomerView.activePrescriberRatesRate != null ? (prescriberTopView.activePrescriberRatesRate >= 0 ? 'green' : 'red') : ''}>
+                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
                 <div className="line-1 mode-line"></div>
                 <div className="mode mid-l-l-content">
                   <div className="mode-text">Active prescribers</div>
-                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} {...countUpProps} /> : '--'}</div>
+                  <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}</div>
                   <div className="mode-per">
-                    {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={prescriberTopView && tradeCustomerView.activePrescriberRatesRate != null ? (prescriberTopView.activePrescriberRatesRate >= 0 ? 'green' : 'red') : ''}>
-                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                    {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                    <span className={prescriberTopView && tradeCustomerView.activePrescribersRate != null ? (prescriberTopView.activePrescribersRate >= 0 ? 'green' : 'red') : ''}>
+                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
                   </div>
                 </div>
@@ -502,7 +495,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Best seller</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-product">more ></Link>
+                </span>
               </div>
             </div>
             <div className="seller space-between">
@@ -528,7 +523,9 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="top-text">
               <div className="top-text space-between">
                 <span>Traffic Trend</span>
-                <span>more ></span>
+                <span>
+                  <Link to="/report-traffic">more ></Link>
+                </span>
               </div>
             </div>
             <div className="line">
@@ -564,7 +561,9 @@ export default class TodoItems extends React.Component<any, any> {
           <div className="item-btm-r">
             <div className="top-text space-between">
               <span>Transaction Trend</span>
-              <span>more ></span>
+              <span>
+                <Link to="/report-transaction">more ></Link>
+              </span>
             </div>
             <div className="line">
               {transactionTrendView && (

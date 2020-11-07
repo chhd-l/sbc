@@ -116,7 +116,8 @@ class PeoductCategory extends Component<any, any> {
       selectedRowKeys: []
     });
   };
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (selectedRowKeys, selectedRows) => {
+    debugger;
     this.setState({ selectedRowKeys });
   };
 
@@ -124,7 +125,11 @@ class PeoductCategory extends Component<any, any> {
     webapi.getSelectedListById(id).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let selectedRowKeys = res.context;
+        let selectedRows = res.context;
+        let selectedRowKeys = [];
+        for (let i = 0; i < selectedRows.length; i++) {
+          selectedRowKeys.push(selectedRows[i].id);
+        }
         this.setState({
           selectedRowKeys,
           visible: true
@@ -210,7 +215,7 @@ class PeoductCategory extends Component<any, any> {
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-            <Table rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} />
+            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} />
           </div>
         </Modal>
       </div>

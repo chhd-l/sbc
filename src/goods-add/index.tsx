@@ -26,7 +26,7 @@ export default class GoodsAdd extends React.Component<any, any> {
   constructor(props: IOptions) {
     super(props);
     this.state = {
-      tabType: ''
+      tabType: 'main'
     };
   }
 
@@ -54,6 +54,35 @@ export default class GoodsAdd extends React.Component<any, any> {
       tabType: res
     });
   };
+
+  onPrev = (res) => {
+    let type = '';
+    if (res == 'price') {
+      type = 'main';
+    } else if (res == 'inventory') {
+      type = 'price';
+    } else if (res == 'related') {
+      type = 'inventory';
+    }
+    this.setState({
+      tabType: type
+    });
+  };
+
+  onNext = (res) => {
+    let type = 'main';
+    if (res == 'main') {
+      type = 'price';
+    } else if (res == 'price') {
+      type = 'inventory';
+    } else if (res == 'inventory') {
+      type = 'related';
+    }
+    this.setState({
+      tabType: type
+    });
+  };
+
   render() {
     const { gid } = this.props.match.params;
     //默认添加商品的编辑与设价权限
@@ -90,13 +119,14 @@ export default class GoodsAdd extends React.Component<any, any> {
         </div>
         <div className="container">
           <Tabs
-            /*activeKey={this.store.state().get('activeTabKey')}
-            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}*/
-            defaultActiveKey="main"
+            activeKey={this.state.tabType}
+            //onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            //defaultActiveKey="main"
+            //ref={(e) => { this._Tabs = e }}
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab={<FormattedMessage id="product.basicInformation" />} key="main">
+              <Tabs.TabPane tab="Product information" key="main">
                 {/*商品基本信息*/}
                 <Goods />
                 {/*商品属性信息*/}
@@ -115,6 +145,13 @@ export default class GoodsAdd extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
+            <Tabs.TabPane tab="Product price" key="price">
+              1111
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Product inventory" key="inventory">
+              222
+            </Tabs.TabPane>
+
             <Tabs.TabPane
               tab="Related product"
               key="related"
@@ -125,7 +162,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.state.tabType} />
+          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.state.tabType} onNext={this.onNext} onPrev={this.onPrev} />
           {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}

@@ -2057,7 +2057,6 @@ export default class AppStore extends Store {
     //this.onPageSearch();
   };
   onFormFieldChange = ({ key, value }) => {
-    console.log(value, 1111111);
     this.dispatch('form:field', { key, value });
   };
 

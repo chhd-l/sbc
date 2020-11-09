@@ -16,3 +16,12 @@ export function getCustomerList(filterParams = {}) {
     })
   });
 }
+// 获取Attributes 列表
+export function getAttributes(filterParams = {}) {
+  return Fetch<TResult>('/attribute_library/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

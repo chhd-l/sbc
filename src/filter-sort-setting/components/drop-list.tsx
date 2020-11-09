@@ -7,21 +7,21 @@ const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20,
 const data = [
   {
     key: '1',
-    filterName: 'John Brown',
+    attributeName: 'John Brown',
     age: 32,
     address: 'New York No. 1 Lake Park',
     index: 0
   },
   {
     key: '2',
-    filterName: 'Jim Green',
+    attributeName: 'Jim Green',
     age: 42,
     address: 'London No. 1 Lake Park',
     index: 1
   },
   {
     key: '3',
-    filterName: 'Joe Black',
+    attributeName: 'Joe Black',
     age: 32,
     address: 'Sidney No. 1 Lake Park',
     index: 2
@@ -55,8 +55,8 @@ export default class SortableTable extends React.Component {
     const { dataSource } = this.state;
     const columns = [
       {
-        title: 'Filter name',
-        dataIndex: 'filterName',
+        title: 'Attribute name',
+        dataIndex: 'attributeName',
         className: 'drag-visible'
       },
       {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util, AuthWrapper } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -554,11 +554,11 @@ export default class TransactionReport extends Component<any, any> {
             title={<p style={styles.blodFont}>Transaction report</p>}
             // title="Transaction report"
             extra={
-              <div>
+              <AuthWrapper functionName="f_export_transaction_data">
                 <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
                   <span style={{ color: '#ffffff' }}>Download the report</span>
                 </Button>
-              </div>
+              </AuthWrapper>
             }
           />
           <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />

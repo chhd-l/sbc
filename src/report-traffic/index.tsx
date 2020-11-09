@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util, AuthWrapper } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -535,9 +535,11 @@ export default class TrafficReport extends Component<any, any> {
             // title="Traffic report"
             extra={
               <div>
-                <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                  <span style={{ color: '#ffffff' }}>Download the report</span>
-                </Button>
+                <AuthWrapper functionName="f_export_traffic_data">
+                  <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
+                    <span style={{ color: '#ffffff' }}>Download the report</span>
+                  </Button>
+                </AuthWrapper>
               </div>
             }
           />

@@ -43,3 +43,13 @@ export function deleteAttributes(filterParams = {}) {
     })
   });
 }
+
+// 删除 attributesValue
+export function deleteAttributesValue(filterParams = {}) {
+  return Fetch<TResult>('/attribute_library/attributes_value', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

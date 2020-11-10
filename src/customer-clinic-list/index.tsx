@@ -115,7 +115,7 @@ export default class Customer extends React.Component<any, any> {
   init = ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     let employeeData = JSON.parse(sessionStorage.getItem('s2b-employee@data'));
 
-    const prescriberId = employeeData.clinicsIds != null && Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0 ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
+    const prescriberId = employeeData.clinicsIds != null && Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length > 0 ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
 
     this.setState({
       loading: true

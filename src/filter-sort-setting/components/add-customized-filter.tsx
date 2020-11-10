@@ -1,6 +1,8 @@
-import { Button, Form, Icon, Input, Modal, Radio } from 'antd';
+import { Button, Form, Icon, Input, message, Modal, Radio } from 'antd';
 import moment from 'moment';
+import { Const } from 'qmkit';
 import React from 'react';
+import * as webapi from './../webapi';
 
 const FormItem = Form.Item;
 class AddCustomizedfilter extends React.Component<any, any> {
@@ -87,20 +89,76 @@ class AddCustomizedfilter extends React.Component<any, any> {
       }
     );
   };
+  addCustomizeFilter = (params) => {
+    webapi
+      .addCustomizeToFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+  updateCustomizeFilter = (params) => {
+    webapi
+      .updateFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
   handleSubmit = () => {
-    const { attributeForm, attributeValueList } = this.state;
+    const { attributeForm, attributeValueList, isEdit, currentEditAttribute } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(attributeForm);
-        console.log(attributeValueList);
-        const { keys, names } = values;
-        console.log(
-          'Merged values:',
-          keys.map((key) => names[key])
-        );
-        this.setState({
-          visibleAttribute: false
-        });
+        let tempAttributeValueList = [];
+        for (let i = 0; i < attributeValueList.length; i++) {
+          if (attributeValueList[i].id) {
+            let attributeValue = {
+              id: attributeValueList[i].id,
+              attributeDetailName: attributeValueList[i].attributeDetailName
+            };
+            tempAttributeValueList.push(attributeValue);
+          } else {
+            let attributeValue = {
+              attributeDetailName: attributeValueList[i].attributeDetailName
+            };
+            tempAttributeValueList.push(attributeValue);
+          }
+        }
+
+        if (isEdit) {
+          let params = {
+            attributeName: attributeForm.attributeName,
+            attributeType: attributeForm.attributeType,
+            attributesValueList: tempAttributeValueList,
+            attributeStatus: currentEditAttribute.attributeStatus ? true : false,
+            id: currentEditAttribute.id,
+            sort: currentEditAttribute.sort
+          };
+          this.updateCustomizeFilter(params);
+        } else {
+          let params = {
+            attributeName: attributeForm.attributeName,
+            attributeType: attributeForm.attributeType,
+            attributesValueList: tempAttributeValueList,
+            filterStatus: '1',
+            filterType: '1'
+          };
+          this.addCustomizeFilter(params);
+        }
       }
     });
   };

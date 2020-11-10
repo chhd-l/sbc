@@ -22,6 +22,7 @@ class FilterSortSetting extends Component<any, any> {
   componentDidMount() {
     this.findAttributeFilterList();
     this.findCustomizeFilterList();
+    this.findSortList();
   }
 
   findAttributeFilterList = () => {
@@ -33,7 +34,9 @@ class FilterSortSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          this.setState({
+            attributeFilterList: res.context
+          });
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -47,7 +50,70 @@ class FilterSortSetting extends Component<any, any> {
     let params = {
       filterType: '1'
     };
-    webapi.findFilterList(params);
+    webapi
+      .findFilterList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            customizedFilterList: res.context
+          });
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  findSortList = () => {
+    webapi
+      .findSortList()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            sortByList: res.context
+          });
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  switchFilter = (params) => {
+    webapi
+      .updateFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+  switchSort = (params) => {
+    webapi
+      .updateFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
   };
 
   render() {
@@ -87,15 +153,15 @@ class FilterSortSetting extends Component<any, any> {
         <div className="container-search">
           <Tabs defaultActiveKey="attributeFilter">
             <TabPane tab="Attribute filter" key="attributeFilter">
-              <SelectAttribute></SelectAttribute>
-              <DropList></DropList>
+              <SelectAttribute refreshList={this.findAttributeFilterList}></SelectAttribute>
+              <DropList switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
             </TabPane>
             <TabPane tab="Customized filter" key="customizedFilter">
               <AddCustomizedFilter></AddCustomizedFilter>
-              <DropList></DropList>
+              <DropList switchFunction={this.switchFilter} type="filter" dataSource={customizedFilterList}></DropList>
             </TabPane>
             <TabPane tab="Sort by" key="sortBy">
-              <DropList></DropList>
+              <DropList switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
             </TabPane>
           </Tabs>
         </div>

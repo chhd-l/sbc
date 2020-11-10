@@ -11,11 +11,12 @@ class SelectAttribute extends React.Component<any, any> {
     this.state = {
       visible: false,
       selectedRowKeys: [],
+      selectedRow: [],
       attributeList: [],
       confirmLoading: false,
       pagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 8,
         total: 0
       }
     };
@@ -76,6 +77,44 @@ class SelectAttribute extends React.Component<any, any> {
     this.setState({
       confirmLoading: true
     });
+    const { selectedRow } = this.state;
+    let storeGoodsFilterList = [];
+    for (let i = 0; i < selectedRow.length; i++) {
+      let item = {
+        attributeId: selectedRow[i].id,
+        attributeName: selectedRow[i].attributeName,
+        filterType: '0',
+        filterStatus: '1'
+      };
+      storeGoodsFilterList.push(item);
+    }
+    let params = {
+      storeGoodsFilterList: storeGoodsFilterList
+    };
+    webapi
+      .addAttributeToFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operate successfully');
+          this.setState({
+            confirmLoading: false,
+            visible: false
+          });
+          this.props.refreshList();
+        } else {
+          this.setState({
+            confirmLoading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          confirmLoading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
   };
   handleCancel = () => {
     this.setState({
@@ -85,15 +124,16 @@ class SelectAttribute extends React.Component<any, any> {
 
   start = () => {
     this.setState({
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      selectedRow: []
     });
   };
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
+  onSelectChange = (selectedRowKeys, selectedRow) => {
+    this.setState({ selectedRowKeys, selectedRow });
   };
 
   render() {
-    const { confirmLoading, selectedRowKeys, attributeList } = this.state;
+    const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
     const columns_attribute = [
       {
         title: 'Attribute name',
@@ -111,7 +151,7 @@ class SelectAttribute extends React.Component<any, any> {
         <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openSelectAttribute()}>
           <span>Select attribute</span>
         </Button>
-        <Modal title="Bind attribute" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title="Select attribute" visible={this.state.visible} width="600px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
@@ -119,7 +159,7 @@ class SelectAttribute extends React.Component<any, any> {
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} />
+            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
       </div>

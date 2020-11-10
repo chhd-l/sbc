@@ -69,3 +69,12 @@ export function addCustomizeToFilter(filterParams = {}) {
     })
   });
 }
+
+export function updateFilter(filterParams = {}) {
+  return Fetch<TResult>('/goods_filter/update', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

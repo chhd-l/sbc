@@ -19,7 +19,36 @@ class FilterSortSetting extends Component<any, any> {
       sortByList: []
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.findAttributeFilterList();
+    this.findCustomizeFilterList();
+  }
+
+  findAttributeFilterList = () => {
+    let params = {
+      filterType: '0'
+    };
+    webapi
+      .findFilterList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  findCustomizeFilterList = () => {
+    let params = {
+      filterType: '1'
+    };
+    webapi.findFilterList(params);
+  };
 
   render() {
     const { title, attributeFilterList, customizedFilterList, sortByList } = this.state;

@@ -19,13 +19,9 @@ export function querySysDictionary(filterParams = {}) {
   });
 }
 
-/**
- * get list
- * @param filterParams
- */
-export function getProductFinderList(filterParams = {}) {
-  return Fetch<TResult>('/productFinder/list', {
-    method: 'POST',
+export function updateNavigation(filterParams) {
+  return Fetch<TResult>('/navigations/' + filterParams.id, {
+    method: 'PUT',
     body: JSON.stringify({
       ...filterParams
     })

@@ -237,6 +237,9 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Form>
             <Row>
               <Col span={12}>
+                <span style={{ position: 'absolute', left: '86px', top: '35px' }} className="ant-form-item-required">
+                  The first is the default language
+                </span>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
                   {getFieldDecorator('languageId', {
                     initialValue: Array.isArray(storeInfo.get('languageId')) ? storeInfo.get('languageId') : storeInfo.get('languageId') ? storeInfo.get('languageId').toJS() : [],

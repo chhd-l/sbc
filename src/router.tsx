@@ -691,6 +691,10 @@ const routes = [
     path: '/navigation-update/:id',
     asyncComponent: () => import('./navigation-update')
   },
+  {
+    path: '/navigation-update',
+    asyncComponent: () => import('./navigation-update')
+  },
   //商品评价
   {
     path: '/nps-list',

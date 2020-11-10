@@ -23,11 +23,46 @@ export function querySysDictionary(filterParams = {}) {
  * get list
  * @param filterParams
  */
-export function getProductFinderList(filterParams = {}) {
-  return Fetch<TResult>('/productFinder/list', {
+export function getNavigations(language) {
+  return Fetch<TResult>('/navigations' + (language ? '?language=' + language : ''), {
+    method: 'GET'
+  });
+}
+
+export function addNavigation(filterParams = {}) {
+  return Fetch<TResult>('/navigations', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
+  });
+}
+
+export function updateNavigation(filterParams) {
+  return Fetch<TResult>('/navigations/' + filterParams.id, {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * get list
+ * @param filterParams
+ */
+export function deleteNavigations(filterParams = {}) {
+  return Fetch<TResult>('/navigations/fields', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function sortNavigations(sortList) {
+  return Fetch<TResult>('/navigations', {
+    method: 'PUT',
+    body: JSON.stringify(sortList)
   });
 }

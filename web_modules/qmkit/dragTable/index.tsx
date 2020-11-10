@@ -1,130 +1,192 @@
 import React, { Component } from 'react';
-import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
-import * as PropTypes from 'prop-types';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { Table } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import PropTypes from 'prop-types';
 
+let dragingIndex = -1;
+
+// Must have id, parentId and sort in object
+class BodyRow extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = this.props;
+    const style = { ...restProps.style, cursor: 'move' };
+
+    let { className } = restProps;
+    if (isOver) {
+      if (restProps.index > dragingIndex) {
+        className += ' drop-over-downward';
+      }
+      if (restProps.index < dragingIndex) {
+        className += ' drop-over-upward';
+      }
+    }
+
+    return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
+  }
+}
+
+const rowSource = {
+  beginDrag(props) {
+    dragingIndex = props.index;
+    return {
+      index: props.index,
+      record: props.children[0].props.record
+    };
+  }
+};
+
+const rowTarget = {
+  drop(props, monitor) {
+    const sourceRow = monitor.getItem().record;
+    const targetRow = props.children[0].props.record;
+
+    // check same level
+    if (sourceRow.parentId != targetRow.parentId) {
+      return;
+    }
+
+    const dragIndex = monitor.getItem().index;
+    const hoverIndex = props.index;
+
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Time to actually perform the action
+    props.moveRow(sourceRow, dragIndex, hoverIndex);
+
+    // Note: we're mutating the monitor item here!
+    // Generally it's better to avoid mutations,
+    // but it's good here for the sake of performance
+    // to avoid expensive index searches.
+    monitor.getItem().index = hoverIndex;
+  }
+};
+
+const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  sourceClientOffset: monitor.getSourceClientOffset()
+}))(
+  DragSource('row', rowSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    dragRow: monitor.getItem(),
+    clientOffset: monitor.getClientOffset(),
+    initialClientOffset: monitor.getInitialClientOffset()
+  }))(BodyRow)
+);
 
 class DragTable extends React.Component<any, any> {
   static propTypes = {
-    columns: PropTypes.object,
-    dataSource: PropTypes.array
+    columns: PropTypes.array,
+    source: PropTypes.array
   };
   static defaultProps = {
-     columns: {},
-     dataSource : []
+    columns: {},
+    source: []
   };
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      source: [],
+      loading: false
+    };
+    this.setChildrenData = this.setChildrenData.bind(this);
+    this.cycleBuild = this.cycleBuild.bind(this);
   }
 
-  render() {
-    return (
-      <Table
-        id="consent"
-        rowKey="tabId"
-        columns={this.props.columns}
-        dataSource={this.props.dataSource}
-        onRow={(_record, index) => ({
-          index,
-          moveRow: this.moveRow
-        })}
-        components={this.components}
-        pagination={false}
-        size="middle"
-      />
-    );
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { loading, dataSource } = nextProps;
+
+    if (dataSource !== prevState.dataSource) {
+      return {
+        source: dataSource,
+        loading: loading
+      };
+    }
+
+    return null;
   }
 
   components = {
     body: {
-      row: _BodyRow
+      row: DragableBodyRow
     }
   };
-  moveRow = (dragIndex, hoverIndex) => {
-    /*if (hoverIndex == 0 || dragIndex == 0) {
-      return;
-    }*/
-    const { consentList, propSort } = this.props.relaxProps;
-    const dragRow = consentList.toJS()[dragIndex];
 
-    let sortList = update(consentList.toJS(), {
+  moveRow = (sourceRow, dragIndex, hoverIndex) => {
+    var parentRows = this.state.source.filter((x) => (sourceRow.parentId ? x.parentId === sourceRow.parentId : !x.parentId))
+    .sort((x1, x2) => x1.sort - x2.sort);
+    const dragRow = parentRows[dragIndex];
+
+    var sortList = update(parentRows, {
       $splice: [
         [dragIndex, 1],
         [hoverIndex, 0, dragRow]
       ]
     });
-    let sort = [];
-    let obj = { exchangeSortList: [] };
-    sortList.map((item, index) => {
-      sort.push({
-        id: item.id,
-        sort: index
-      });
+    var newDatasource = this.state.source.map((item, index) => {
+      if (item.parentId === sourceRow.parentId ? item.parentId === sourceRow.parentId : !item.parentId) {
+        sortList.map((sItem, sIndex) => {
+          if (item.id === sItem.id) {
+            item.sort = sIndex;
+            return;
+          }
+        });
+      }
+      return item;
     });
-    obj.exchangeSortList = sort;
-
-    propSort(obj);
+    this.setState({
+      source: newDatasource
+    });
+    this.setChildrenData(newDatasource);
+    var sortListToUpdate = sortList.map(x=>({id:x.id, sort: x.sort}))
+    this.props.sort(sortListToUpdate)
   };
+
+  setChildrenData(source) {
+    var rootParnets = source.filter((x) => !x.parentId);
+    var cycleData = this.cycleBuild(rootParnets);
+    return cycleData;
+  }
+
+  cycleBuild(list) {
+    var sortList = list.sort((x1, x2) => x1.sort - x2.sort);
+    sortList.map((item, index) => {
+      var children = this.props.dataSource.filter((x) => x.parentId === item.id);
+      if (children.length > 0) {
+        item.children = children;
+        this.cycleBuild(children);
+      } else {
+        return item;
+      }
+    });
+    return sortList;
+  }
+
+  render() {
+    const {source}= this.state
+    var data = this.setChildrenData(source)
+    return (
+      <Table
+        columns={this.props.columns}
+        dataSource={data}
+        components={this.components}
+        loading={this.state.loading}
+        onRow={(record, index) => ({
+          index,
+          moveRow: this.moveRow
+        })}
+      />
+    );
+  }
 }
-const _rowTarget = {
-  drop(props, monitor) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
-    if (dragIndex === hoverIndex) {
-      return;
-    }
-    props.moveRow(dragIndex, hoverIndex);
-    monitor.getItem().index = hoverIndex;
-  }
-};
-let _BodyRow = (props) => {
-  const { isOver, connectDragSource, connectDropTarget, moveRow, dragRow, clientOffset, sourceClientOffset, initialClientOffset, ...restProps } = props;
-  const style = { ...restProps.style, cursor: 'move' };
-  let className = restProps.className;
-  if (isOver && initialClientOffset) {
-    const direction = _dragDirection(dragRow.index, restProps.index, initialClientOffset, clientOffset, sourceClientOffset);
-    if (direction === 'downward') {
-      className += ' drop-over-downward';
-    }
-    if (direction === 'upward') {
-      className += ' drop-over-upward';
-    }
-  }
-  return connectDragSource(connectDropTarget(<tr {...restProps} className={className} style={style} />));
-};
-
-const _rowSource = {
-  beginDrag(props) {
-    return {
-      index: props.index
-    };
-  }
-};
-_BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  sourceClientOffset: monitor.getSourceClientOffset()
-}))(
-  DragSource('row', _rowSource, (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    dragRow: monitor.getItem(),
-    clientOffset: monitor.getClientOffset(),
-    initialClientOffset: monitor.getInitialClientOffset()
-  }))(_BodyRow)
-);
-let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) => {
-  const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
-  const hoverClientY = clientOffset.y - sourceClientOffset.y;
-  if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
-    return 'downward';
-  }
-  if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
-    return 'upward';
-  }
-};
-
 export default DragDropContext(HTML5Backend)(DragTable);

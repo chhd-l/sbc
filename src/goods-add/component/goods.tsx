@@ -122,28 +122,6 @@ export default class Info extends React.Component<any, any> {
     const relaxProps = this.props.relaxProps;
     return (
       <div>
-        <Alert
-          message={
-            <div>
-              <p>
-                <FormattedMessage id="operationInstruction" />：
-              </p>
-              <p>
-                1、
-                <FormattedMessage id="operationInstruction.first" />
-              </p>
-              <p>
-                2、
-                <FormattedMessage id="operationInstruction.second" />
-              </p>
-              <p>
-                3、
-                <FormattedMessage id="operationInstruction.third" />
-              </p>
-            </div>
-          }
-          type="info"
-        />
         <div
           style={{
             fontSize: 16,

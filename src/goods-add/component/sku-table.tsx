@@ -1,19 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {
-  Table,
-  Input,
-  Row,
-  Col,
-  Checkbox,
-  InputNumber,
-  Form,
-  Button,
-  message,
-  Tooltip,
-  Icon,
-  Select
-} from 'antd';
+import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
@@ -110,13 +97,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
-          <Table
-            size="small"
-            rowKey="id"
-            dataSource={goodsList.toJS()}
-            columns={columns}
-            pagination={false}
-          />
+          <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
       </div>
     );
@@ -124,21 +105,8 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const {
-      goodsSpecs,
-      stockChecked,
-      marketPriceChecked,
-      modalVisible,
-      clickImg,
-      removeImg,
-      specSingleFlag,
-      spuMarketPrice,
-      priceOpt,
-      goods,
-      baseSpecId
-    } = this.props.relaxProps;
+    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
-    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -175,17 +143,7 @@ class SkuForm extends React.Component<any, any> {
       className: 'goodsImg',
       render: (rowInfo) => {
         const images = fromJS(rowInfo.images ? rowInfo.images : []);
-        return (
-          <ImageLibraryUpload
-            images={images}
-            modalVisible={modalVisible}
-            clickImg={clickImg}
-            removeImg={removeImg}
-            imgCount={1}
-            imgType={1}
-            skuId={rowInfo.id}
-          />
-        );
+        return <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
       }
     });
 
@@ -232,11 +190,7 @@ class SkuForm extends React.Component<any, any> {
                       message: '1-20 characters'
                     }
                   ],
-                  onChange: this._editGoodsItem.bind(
-                    this,
-                    rowInfo.id,
-                    'goodsInfoNo'
-                  ),
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
                   initialValue: rowInfo.goodsInfoNo
                 })(<Input style={{ width: '115px' }} />)}
               </FormItem>
@@ -246,7 +200,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    columns = columns.push({
+    /* columns = columns.push({
       title: (
         <div>
           <FormattedMessage id="product.listPrice" />
@@ -277,7 +231,7 @@ class SkuForm extends React.Component<any, any> {
           </Col>
         </Row>
       )
-    });
+    });*/
     columns = columns.push({
       title: (
         <div>
@@ -293,17 +247,10 @@ class SkuForm extends React.Component<any, any> {
           </span>
           <FormattedMessage id="product.marketPrice" />
           <br />
-          <Checkbox
-            disabled={priceOpt === 0}
-            checked={marketPriceChecked}
-            onChange={(e) => this._synchValue(e, 'marketPrice')}
-          >
+          <Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip
-              placement="top"
-              title={'After checking, all SKUs use the same market price'}
-            >
+            <Tooltip placement="top" title={'After checking, all SKUs use the same market price'}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -324,8 +271,7 @@ class SkuForm extends React.Component<any, any> {
                   },
                   {
                     pattern: ValidConst.zeroPrice,
-                    message:
-                      'Please input the legal amount with two decimal places'
+                    message: 'Please input the legal amount with two decimal places'
                   },
                   {
                     type: 'number',
@@ -336,27 +282,15 @@ class SkuForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'marketPrice'
-                ),
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
                 initialValue: rowInfo.marketPrice || 0
-              })(
-                <Input
-                  style={{ width: '60px' }}
-                  disabled={
-                    (rowInfo.index > 1 && marketPriceChecked) ||
-                    (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)
-                  }
-                />
-              )}
+              })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
             </FormItem>
           </Col>
         </Row>
       )
     });
-    if (goods.get('subscriptionStatus') !== '0') {
+    /*if (goods.get('subscriptionStatus') !== '0') {
       columns = columns.push({
         title: (
           <div>
@@ -395,7 +329,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )
       });
-      columns = columns.push({
+      /!*columns = columns.push({
         title: (
           <div>
             <FormattedMessage id="product.subscriptionPrice" />
@@ -444,10 +378,9 @@ class SkuForm extends React.Component<any, any> {
             </Col>
           </Row>
         )
-      });
-    }
-    console.log(goodsSpecs.toJS(), 'goodsSpecs');
-    columns = columns.push({
+      });*!/
+    }*/
+    /*columns = columns.push({
       title: (
         <div>
           <FormattedMessage id="Base price" />
@@ -502,7 +435,7 @@ class SkuForm extends React.Component<any, any> {
                             parseFloat(rowInfo['specId-' + baseSpecId])
                           ).toFixed(2)}
                     </p>
-                    {/* <InputNumber
+                    {/!* <InputNumber
                     style={{ width: '60px' }}
                     min={0}
                     max={9999999}
@@ -513,7 +446,7 @@ class SkuForm extends React.Component<any, any> {
                     min={0}
                     max={9999999}
                     disabled={rowInfo.subscriptionStatus === 0}
-                  /> */}
+                  /> *!/}
                   </div>
                 )}
               </FormItem>
@@ -521,7 +454,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
-    });
+    });*/
     columns = columns.push({
       title: (
         <div>
@@ -540,20 +473,9 @@ class SkuForm extends React.Component<any, any> {
                   //   message: '0 or positive integer'
                   // }
                 ],
-                onChange: this._editGoodsItem.bind(
-                  this,
-                  rowInfo.id,
-                  'description'
-                ),
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
                 initialValue: rowInfo.description
-              })(
-                <Input
-                  style={{ width: '100px' }}
-                  min={0}
-                  max={9999999}
-                  disabled={rowInfo.description === 0}
-                />
-              )}
+              })(<Input style={{ width: '100px' }} min={0} max={9999999} disabled={rowInfo.description === 0} />)}
             </FormItem>
           </Col>
         </Row>
@@ -574,16 +496,10 @@ class SkuForm extends React.Component<any, any> {
           </span>
           <FormattedMessage id="product.inventory" />
           <br />
-          <Checkbox
-            checked={stockChecked}
-            onChange={(e) => this._synchValue(e, 'stock')}
-          >
+          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
-            <Tooltip
-              placement="top"
-              title={'After checking, all SKUs use the same inventory'}
-            >
+            <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
               <a style={{ fontSize: 14 }}>
                 <Icon type="question-circle-o" />
               </a>
@@ -605,14 +521,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
                 initialValue: rowInfo.stock
-              })(
-                <InputNumber
-                  style={{ width: '60px' }}
-                  min={0}
-                  max={9999999}
-                  disabled={rowInfo.index > 1 && stockChecked}
-                />
-              )}
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
             </FormItem>
           </Col>
         </Row>
@@ -661,10 +570,7 @@ class SkuForm extends React.Component<any, any> {
             title="Delete"
             style={{ marginRight: 5 }}
           >
-            <span
-              className="icon iconfont iconDelete"
-              style={{ fontSize: 20 }}
-            ></span>
+            <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
           </a>
         )
     });
@@ -687,12 +593,7 @@ class SkuForm extends React.Component<any, any> {
   _checkUploadFile = (file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif') ||
-      fileName.endsWith('.jpeg')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.jpeg')) {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
@@ -744,11 +645,7 @@ class SkuForm extends React.Component<any, any> {
     let msg = null;
     if (fileList != null) {
       fileList.forEach((file) => {
-        if (
-          file.status == 'done' &&
-          file.response != null &&
-          file.response.message != null
-        ) {
+        if (file.status == 'done' && file.response != null && file.response.message != null) {
           msg = file.response.message;
         }
       });
@@ -756,12 +653,7 @@ class SkuForm extends React.Component<any, any> {
       if (msg != null) {
         //如果上传失败，只过滤成功的图片
         message.error(msg);
-        fileList = fileList.filter(
-          (file) =>
-            file.status == 'done' &&
-            file.response != null &&
-            file.response.message == null
-        );
+        fileList = fileList.filter((file) => file.status == 'done' && file.response != null && file.response.message == null);
       }
     }
     const { editGoodsItem } = this.props.relaxProps;

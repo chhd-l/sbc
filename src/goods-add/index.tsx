@@ -9,7 +9,7 @@ import Related from './component/related';
 import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
-import Price from './component/price';
+//import Price from './component/price';
 import Detail from './component/detail';
 import Foot from './component/foot';
 import BrandModal from './component/brand-modal';
@@ -19,6 +19,9 @@ import ImgModal from './component/img-modal';
 import Logistics from './component/logistics';
 import VideoModal from './component/video-modal';
 import { FormattedMessage } from 'react-intl';
+import AlertInfo from './component/alret';
+import ProductPrice from './component/productPrice';
+import ProductInventory from './component/productInventory';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsAdd extends React.Component<any, any> {
@@ -127,6 +130,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
               <Tabs.TabPane tab="Product information" key="main">
+                <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
                 {/*商品属性信息*/}
@@ -146,10 +150,14 @@ export default class GoodsAdd extends React.Component<any, any> {
               </Tabs.TabPane>
             )}
             <Tabs.TabPane tab="Product price" key="price">
-              1111
+              <AlertInfo />
+
+              <ProductPrice />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Product inventory" key="inventory">
-              222
+              <AlertInfo />
+
+              <ProductInventory />
             </Tabs.TabPane>
 
             <Tabs.TabPane
@@ -157,6 +165,8 @@ export default class GoodsAdd extends React.Component<any, any> {
               key="related"
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
+              <AlertInfo />
+
               <Related />
             </Tabs.TabPane>
           </Tabs>

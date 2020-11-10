@@ -13,7 +13,8 @@ export default class FormActor extends Actor {
       //分销 切换类型是否要提示
       checkFlag: false,
       //企业购提示按钮
-      enterpriseFlag: false
+      enterpriseFlag: false,
+      AlertInfo: ''
     };
   }
 

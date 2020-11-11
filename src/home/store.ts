@@ -123,6 +123,7 @@ export default class AppStore extends Store {
   //新版
 
   newInit = async (data) => {
+    this.dispatch('loading:start');
     const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(data);
     const { res: getGoodsInfoTopView } = await webapi.getGoodsInfoTopView(data);
     const { res: getConversionFunnelDashboardView } = await webapi.getConversionFunnelDashboardView(data);
@@ -134,6 +135,7 @@ export default class AppStore extends Store {
     //const { res: getListAll } = await webapi.getListAll(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
       this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
       this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);

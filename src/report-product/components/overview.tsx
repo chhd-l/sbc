@@ -110,7 +110,7 @@ export default class ProductOverView extends Component<any, any> {
                     format={'YYYY-MM-DD'}
                   />
                 </Form.Item>
-                <Button type="primary" shape="round" onClick={() => this.onSearch()}>
+                <Button type="primary" style={{ marginTop: '5px' }} shape="round" onClick={() => this.onSearch()}>
                   Search
                 </Button>
               </Form>

@@ -1,4 +1,4 @@
-import { Button, Form, Icon, Input, message, Modal, Radio } from 'antd';
+import { Button, Form, Icon, Input, message, Modal, Popconfirm, Radio, Tooltip } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
 import React from 'react';
@@ -11,10 +11,12 @@ class AddCustomizedfilter extends React.Component<any, any> {
     this.state = {
       attributeForm: {
         attributeName: '',
-        attributeType: ''
+        choiceStatus: ''
       },
       visibleAttribute: false,
-      attributeValueList: []
+      attributeValueList: [],
+      isEdit: this.props.type === 'edit' ? true : false,
+      currentEditAttribute: {}
     };
   }
   onAttributeFormChange = ({ field, value }) => {
@@ -24,12 +26,13 @@ class AddCustomizedfilter extends React.Component<any, any> {
       attributeForm: data
     });
   };
+
   add = () => {
     const { attributeValueList } = this.state;
     const { form } = this.props;
     let obj = {
-      id: this.genID(),
-      value: ''
+      tempId: this.genID(),
+      attributeDetailName: ''
     };
 
     attributeValueList.push(obj);
@@ -38,12 +41,21 @@ class AddCustomizedfilter extends React.Component<any, any> {
         attributeValueList
       },
       () => {
-        let setObj = {};
-        let valueName = 'value_' + obj.id;
-        setObj[valueName] = obj.value;
-        form.setFieldsValue(setObj);
+        this.setAttributeFieldsValue(attributeValueList);
       }
     );
+  };
+  setAttributeFieldsValue = (arr) => {
+    const { form } = this.props;
+    let setObj = {};
+    for (let i = 0; i < arr.length; i++) {
+      let valueName = 'value_' + (arr[i].id || arr[i].tempId);
+      let tempObj = {};
+
+      tempObj[valueName] = arr[i].attributeDetailName;
+      setObj = Object.assign(setObj, tempObj);
+    }
+    form.setFieldsValue(setObj);
   };
 
   genID() {
@@ -51,19 +63,40 @@ class AddCustomizedfilter extends React.Component<any, any> {
     return 'CV' + date;
   }
 
-  remove = (id) => {
+  removeTemp = (id) => {
+    debugger;
     const { attributeValueList } = this.state;
-    let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
+    let attributeValueListTemp = attributeValueList.filter((item) => item.tempId !== id);
     this.setState({
       attributeValueList: attributeValueListTemp
     });
+  };
+  removeRemote = (id) => {
+    debugger;
+    const { attributeValueList } = this.state;
+    webapi
+      .deleteFilterValue({ id: id })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
+          this.setState({
+            attributeValueList: attributeValueListTemp
+          });
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
 
   onChangeValue = (id, value) => {
     const { attributeValueList } = this.state;
     attributeValueList.map((item) => {
-      if (item.id === id) {
-        item.value = value;
+      if (item.id === id || item.tempId === id) {
+        item.attributeDetailName = value;
         return item;
       }
     });
@@ -72,30 +105,57 @@ class AddCustomizedfilter extends React.Component<any, any> {
       attributeValueList
     });
   };
+
   openAddPage = () => {
+    const { attributeForm } = this.state;
     const { form } = this.props;
+
+    attributeForm.attributeName = '';
+    attributeForm.choiceStatus = 'Single choice';
 
     this.setState(
       {
         attributeValueList: [],
-        visibleAttribute: true
+        visibleAttribute: true,
+        attributeForm,
+        isEdit: false
       },
       () => {
         this.add();
-        form.setFieldsValue({
-          attributeName: '',
-          attributeType: 'Single choice'
-        });
+        form.setFieldsValue(attributeForm);
       }
     );
   };
+  openEditPage = () => {
+    const { attributeForm } = this.state;
+    const { form, currentSelected } = this.props;
+    debugger;
+
+    attributeForm.attributeName = currentSelected.attributeName;
+    attributeForm.choiceStatus = currentSelected.choiceStatus;
+    this.setState(
+      {
+        attributeValueList: currentSelected.storeGoodsFilterValueVOList,
+        visibleAttribute: true,
+        attributeForm,
+        isEdit: true,
+        currentEditAttribute: currentSelected
+      },
+      () => {
+        form.setFieldsValue(attributeForm);
+        this.setAttributeFieldsValue(this.state.attributeValueList);
+      }
+    );
+  };
+
   addCustomizeFilter = (params) => {
     webapi
       .addCustomizeToFilter(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          message.success(res.message || 'operation seccessful');
+          this.setState({ visibleAttribute: false });
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -110,7 +170,8 @@ class AddCustomizedfilter extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          message.success(res.message || 'operation seccessful');
+          this.setState({ visibleAttribute: false });
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -142,7 +203,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
         if (isEdit) {
           let params = {
             attributeName: attributeForm.attributeName,
-            attributeType: attributeForm.attributeType,
+            choiceStatus: attributeForm.choiceStatus,
             attributesValueList: tempAttributeValueList,
             attributeStatus: currentEditAttribute.attributeStatus ? true : false,
             id: currentEditAttribute.id,
@@ -152,8 +213,8 @@ class AddCustomizedfilter extends React.Component<any, any> {
         } else {
           let params = {
             attributeName: attributeForm.attributeName,
-            attributeType: attributeForm.attributeType,
-            attributesValueList: tempAttributeValueList,
+            choiceStatus: attributeForm.choiceStatus,
+            storeGoodsFilterValueVOList: tempAttributeValueList,
             filterStatus: '1',
             filterType: '1'
           };
@@ -183,9 +244,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
     };
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
-        <div key={k.id}>
-          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value' + k.id}>
-            {getFieldDecorator('value_' + k.id, {
+        <div key={k.tempId}>
+          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value_' + (k.id || k.tempId)}>
+            {getFieldDecorator('value_' + (k.id || k.tempId), {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
@@ -200,13 +261,24 @@ class AddCustomizedfilter extends React.Component<any, any> {
                 style={{ width: '80%', marginRight: 8 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
-                  this.onChangeValue(k.id, value);
+                  this.onChangeValue(k.id || k.tempId, value);
                 }}
               />
             )}
             <span>
-              {obj.length > 1 ? <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k.id)} /> : null}
-
+              {obj.length > 1 ? (
+                <>
+                  {k.id ? (
+                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                    </Popconfirm>
+                  ) : (
+                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                    </Popconfirm>
+                  )}
+                </>
+              ) : null}
               <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
             </span>
           </FormItem>
@@ -215,8 +287,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
       return formItems;
     }
   };
+
   render() {
-    const { visibleAttribute, attributeValueList } = this.state;
+    const { visibleAttribute, attributeValueList, isEdit } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -229,14 +302,26 @@ class AddCustomizedfilter extends React.Component<any, any> {
       }
     };
     return (
-      <div>
-        <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-          <span>Add customized filter</span>
-        </Button>
+      <div style={{ display: 'inline-block' }}>
+        {isEdit ? (
+          <Tooltip placement="top" title="Edit">
+            <a style={styles.edit} onClick={() => this.openEditPage()} className="iconfont iconEdit"></a>
+          </Tooltip>
+        ) : (
+          <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
+            <span>Add customized filter</span>
+          </Button>
+        )}
+
         <Modal
           width="600px"
-          title="Add new attribute"
+          title={isEdit ? 'Edit customized filter' : 'Add customized filter'}
           visible={visibleAttribute}
+          onCancel={() =>
+            this.setState({
+              visibleAttribute: false
+            })
+          }
           footer={[
             <Button
               key="back"
@@ -254,7 +339,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
           ]}
         >
           <Form {...formItemLayout}>
-            <FormItem label="Attribute Name">
+            <FormItem label="Filter Name">
               {getFieldDecorator('attributeName', {
                 rules: [
                   { required: true },
@@ -277,14 +362,14 @@ class AddCustomizedfilter extends React.Component<any, any> {
               )}
             </FormItem>
             <FormItem label="Choose type">
-              {getFieldDecorator('attributeType', {
+              {getFieldDecorator('choiceStatus', {
                 rules: [{ required: true }]
               })(
                 <Radio.Group
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onAttributeFormChange({
-                      field: 'attributeType',
+                      field: 'choiceStatus',
                       value
                     });
                   }}
@@ -302,4 +387,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
     );
   }
 }
+const styles = {
+  edit: {
+    paddingRight: 20
+  }
+} as any;
 export default Form.create()(AddCustomizedfilter);

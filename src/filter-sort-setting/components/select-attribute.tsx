@@ -3,37 +3,39 @@ import moment from 'moment';
 import { Const } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
+import { IList } from 'typings/globalType';
 
-const FormItem = Form.Item;
-class SelectAttribute extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      visible: false,
-      selectedRowKeys: [],
-      selectedRow: [],
-      attributeList: [],
-      confirmLoading: false,
-      pagination: {
-        current: 1,
-        pageSize: 8,
-        total: 0
-      }
-    };
-  }
+export default class SelectAttribute extends React.Component<any, any> {
+  props = {
+    refreshList: Function,
+    selectedRowKeys: Array
+  };
+  state = {
+    visible: false,
+    selectedRowKeys: [],
+    prevPropSelectedRowKeys: [],
+    selectedRow: [],
+    attributeList: [],
+    confirmLoading: false,
+    pagination: {
+      current: 1,
+      pageSize: 8,
+      total: 0
+    }
+  };
   componentDidMount() {
     this.getAttributes();
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // const {type} = nextProps;
-    // // 当传入的值发生变化的时候，更新state
-    // if (type !== prevState.type) {
-    //     return {
-    //         type,
-    //     };
-    // }
-    // // 否则，对于state不进行任何操作
+  static getDerivedStateFromProps(props, state) {
+    // 当传入的值发生变化的时候，更新state
+    if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
+      return {
+        selectedRowKeys: props.selectedRowKeys,
+        prevPropSelectedRowKeys: props.selectedRowKeys
+      };
+    }
+
     return null;
   }
   getAttributes = () => {
@@ -58,14 +60,6 @@ class SelectAttribute extends React.Component<any, any> {
       .catch((err) => {
         message.error(err.toString() || 'Operation failed');
       });
-  };
-
-  onAttributeFormChange = ({ field, value }) => {
-    let data = this.state.attributeForm;
-    data[field] = value;
-    this.setState({
-      attributeForm: data
-    });
   };
 
   openSelectAttribute = () => {
@@ -131,6 +125,14 @@ class SelectAttribute extends React.Component<any, any> {
   onSelectChange = (selectedRowKeys, selectedRow) => {
     this.setState({ selectedRowKeys, selectedRow });
   };
+  handleTableChange = (pagination: any) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getAttributes()
+    );
+  };
 
   render() {
     const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
@@ -159,11 +161,10 @@ class SelectAttribute extends React.Component<any, any> {
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} onChange={this.handleTableChange} pagination={pagination} />
           </div>
         </Modal>
       </div>
     );
   }
 }
-export default Form.create()(SelectAttribute);

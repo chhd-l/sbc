@@ -1,8 +1,9 @@
-import { Table, Icon, Switch } from 'antd';
+import { Table, Icon, Switch, Popconfirm, Tooltip } from 'antd';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import React, { Component } from 'react';
 import { IList } from 'typings/globalType';
+import AddCustomizedFilter from './add-customized-filter';
 
 const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
 // const data = [
@@ -36,6 +37,9 @@ export default class SortableTable extends React.Component {
     dataSource?: IList;
     type: String;
     switchFunction: Function;
+    deleteFunction?: Function;
+    sortFunction: Function;
+    refreshListFunction?: Function;
   };
   state = {
     dataSource: [],
@@ -59,10 +63,29 @@ export default class SortableTable extends React.Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.state;
+
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter((el) => !!el);
-      console.log('Sorted items: ', newData);
-      this.setState({ dataSource: newData });
+      for (let i = 0; i < newData.length; i++) {
+        newData[i].sort = i + 1;
+      }
+      if (oldIndex > newIndex) {
+        let tempIndex = oldIndex;
+        oldIndex = newIndex;
+        newIndex = tempIndex;
+      }
+      let newSortList = [];
+      for (let index = oldIndex; index <= newIndex; index++) {
+        let param = {
+          id: newData[index].id,
+          sort: newData[index].sort
+        };
+        newSortList.push(param);
+      }
+      let params = {
+        storeGoodsFilterList: newSortList
+      };
+      this.props.sortFunction(params, newData[0].filterStatus);
     }
   };
 
@@ -71,6 +94,36 @@ export default class SortableTable extends React.Component {
     // function findIndex base on Table rowKey props and should always be a right array index
     const index = dataSource.findIndex((x) => x.index === restProps['data-row-key']);
     return <SortableItem index={index} {...restProps} />;
+  };
+  updateFilterStatus = (checked, row) => {
+    let params = {
+      attributeId: row.attributeId,
+      attributeName: row.attributeName,
+      filterStatus: checked ? '1' : '0',
+      filterType: row.filterType,
+      id: row.id,
+      sort: row.sort
+    };
+    this.props.switchFunction(params);
+  };
+
+  deleteFilter = (id, filterType) => {
+    this.props.deleteFunction(id, filterType);
+  };
+
+  refreshList = () => {
+    this.props.refreshListFunction();
+  };
+  updateSortStatus = (checked, row) => {
+    let params = {
+      field: row.field,
+      id: row.id,
+      sortStatus: checked ? '1' : '0',
+      sortName: row.sortName,
+      sortType: row.sortType,
+      sort: row.sort
+    };
+    this.props.switchFunction(params);
   };
 
   render() {
@@ -82,12 +135,27 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible'
       },
       {
+        title: 'Filter status',
+        dataIndex: 'filterStatus',
+        className: 'drag-visible',
+        render: (text, record) => (
+          <div>
+            <Switch checked={+text ? true : false} onClick={(checked) => this.updateFilterStatus(checked, record)}></Switch>
+          </div>
+        )
+      },
+      {
         title: 'Operation',
         dataIndex: 'operation',
         className: 'drag-visible',
-        render: () => (
+        render: (text, record) => (
           <div>
-            <Switch></Switch>
+            {record.filterType === '1' ? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null}
+            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Delete">
+                <a className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
             <DragHandle />
           </div>
         )
@@ -95,9 +163,19 @@ export default class SortableTable extends React.Component {
     ];
     const columnsSort = [
       {
-        title: 'Sort name',
+        title: 'Sort filed name',
         dataIndex: 'field',
         className: 'drag-visible'
+      },
+      {
+        title: 'Sort filed status',
+        dataIndex: 'sortStatus',
+        className: 'drag-visible',
+        render: (text, record) => (
+          <div>
+            <Switch checked={+text ? true : false} onClick={(checked) => this.updateSortStatus(checked, record)}></Switch>
+          </div>
+        )
       },
       {
         title: 'Operation',
@@ -105,7 +183,6 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible',
         render: () => (
           <div>
-            <Switch></Switch>
             <DragHandle />
           </div>
         )
@@ -118,7 +195,7 @@ export default class SortableTable extends React.Component {
         pagination={false}
         dataSource={dataSource}
         columns={type === 'sort' ? columnsSort : columnsFilter}
-        rowKey="id"
+        rowKey="index"
         components={{
           body: {
             wrapper: DraggableContainer,

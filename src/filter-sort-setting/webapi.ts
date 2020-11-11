@@ -78,3 +78,48 @@ export function updateFilter(filterParams = {}) {
     })
   });
 }
+export function updateSort(filterParams = {}) {
+  return Fetch<TResult>('/goods_sort/updateSort', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function updateFilterSort(filterParams = {}) {
+  return Fetch<TResult>('/goods_filter/updateList', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function updateSortList(filterParams = {}) {
+  return Fetch<TResult>('/goods_sort/updateSortList', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function deleteFilter(filterParams = {}) {
+  return Fetch<TResult>('/goods_filter/delete', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 删除 attributesValue
+export function deleteFilterValue(filterParams = {}) {
+  return Fetch<TResult>('/attribute_library/attributes_value', {
+    method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -16,7 +16,8 @@ class FilterSortSetting extends Component<any, any> {
       title: 'Filter & Sort setting',
       attributeFilterList: [],
       customizedFilterList: [],
-      sortByList: []
+      sortByList: [],
+      selectedRowKeys: []
     };
   }
   componentDidMount() {
@@ -34,8 +35,15 @@ class FilterSortSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          let attributeFilterList = res.context;
+          let selectedRowKeys = [];
+          for (let i = 0; i < attributeFilterList.length; i++) {
+            attributeFilterList[i].index = i;
+            selectedRowKeys.push(attributeFilterList[i].attributeId);
+          }
           this.setState({
-            attributeFilterList: res.context
+            attributeFilterList: attributeFilterList,
+            selectedRowKeys: selectedRowKeys
           });
         } else {
           message.error(res.message || 'operation failure');
@@ -55,8 +63,12 @@ class FilterSortSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          let customizedFilterList = res.context;
+          for (let i = 0; i < customizedFilterList.length; i++) {
+            customizedFilterList[i].index = i;
+          }
           this.setState({
-            customizedFilterList: res.context
+            customizedFilterList: customizedFilterList
           });
         } else {
           message.error(res.message || 'operation failure');
@@ -85,13 +97,19 @@ class FilterSortSetting extends Component<any, any> {
       });
   };
 
+  //开关filter
   switchFilter = (params) => {
     webapi
       .updateFilter(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          if (params.filterType === '0') {
+            this.findAttributeFilterList();
+          }
+          if (params.filterType === '1') {
+            this.findCustomizeFilterList();
+          }
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -100,13 +118,61 @@ class FilterSortSetting extends Component<any, any> {
         message.error(err.toString() || 'operation failure');
       });
   };
+
+  //开关sort
   switchSort = (params) => {
     webapi
-      .updateFilter(params)
+      .updateSort(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          console.log(res);
+          this.findSortList();
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  //filter删除
+  deleteFilter = (id, filterType) => {
+    let params = {
+      id: id
+    };
+    webapi
+      .deleteFilter(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (filterType === '0') {
+            this.findAttributeFilterList();
+          }
+          if (filterType === '1') {
+            this.findCustomizeFilterList();
+          }
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  //filter排序
+  updateFilterSort = (params, filterType) => {
+    webapi
+      .updateFilterSort(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (filterType === '0') {
+            this.findAttributeFilterList();
+          } else {
+            this.findCustomizeFilterList();
+          }
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -117,30 +183,13 @@ class FilterSortSetting extends Component<any, any> {
   };
 
   render() {
-    const { title, attributeFilterList, customizedFilterList, sortByList } = this.state;
+    const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys } = this.state;
     const description = (
       <div>
         <p>The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.</p>
         <p>The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.</p>
       </div>
     );
-    const columns = [
-      {
-        title: 'Filter name',
-        dataIndex: 'filterName',
-        key: 'filterName'
-      },
-      {
-        title: 'Operation',
-        dataIndex: '',
-        key: 'x',
-        render: (rowInfo) => (
-          <div>
-            <Switch></Switch>
-          </div>
-        )
-      }
-    ];
 
     return (
       <div>
@@ -153,15 +202,15 @@ class FilterSortSetting extends Component<any, any> {
         <div className="container-search">
           <Tabs defaultActiveKey="attributeFilter">
             <TabPane tab="Attribute filter" key="attributeFilter">
-              <SelectAttribute refreshList={this.findAttributeFilterList}></SelectAttribute>
-              <DropList switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
+              <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys}></SelectAttribute>
+              <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
             </TabPane>
             <TabPane tab="Customized filter" key="customizedFilter">
-              <AddCustomizedFilter></AddCustomizedFilter>
-              <DropList switchFunction={this.switchFilter} type="filter" dataSource={customizedFilterList}></DropList>
+              <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter>
+              <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
             </TabPane>
             <TabPane tab="Sort by" key="sortBy">
-              <DropList switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
+              <DropList sortFunction={this.updateFilterSort} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
             </TabPane>
           </Tabs>
         </div>

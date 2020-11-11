@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Form, Alert, Tabs } from 'antd';
+import { Switch, Form, Alert, Tabs, message } from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import DropList from './components/drop-list';
 import AddCustomizedFilter from './components/add-customized-filter';
+import SelectAttribute from './components/select-attribute';
 
 const { TabPane } = Tabs;
 
@@ -57,6 +58,7 @@ class FilterSortSetting extends Component<any, any> {
         <div className="container-search">
           <Tabs defaultActiveKey="attributeFilter">
             <TabPane tab="Attribute filter" key="attributeFilter">
+              <SelectAttribute></SelectAttribute>
               <DropList></DropList>
             </TabPane>
             <TabPane tab="Customized filter" key="customizedFilter">

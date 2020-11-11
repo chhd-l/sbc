@@ -22,6 +22,7 @@ export default class CateList extends React.Component<any, any> {
     relaxProps?: {
       dataList: IList;
       allDataList: IList;
+      images: IList;
       doDelete: Function;
       showEditModal: Function;
       childFlag: boolean;
@@ -42,7 +43,8 @@ export default class CateList extends React.Component<any, any> {
     validChild: noop,
     validGoods: noop,
     //拖拽排序
-    cateSort: noop
+    cateSort: noop,
+    images: 'images'
   };
 
   render() {
@@ -78,14 +80,14 @@ export default class CateList extends React.Component<any, any> {
     },
     {
       title: 'Number of product',
-      dataIndex: 'productNumber',
-      key: 'productNumber'
+      dataIndex: 'productNo',
+      key: 'productNo'
     },
     {
       title: 'Display in shop',
-      dataIndex: 'dispalyInShop',
-      key: 'dispalyInShop',
-      render: () => <Switch></Switch>
+      dataIndex: 'displayStatus',
+      key: 'displayStatus',
+      render: (text, record) => <Switch checked={text}></Switch>
     },
     {
       title: <FormattedMessage id="operation" />,
@@ -119,7 +121,7 @@ export default class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
-              rowInfo.get('cateGrade') < 2 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
                 <Tooltip placement="top" title="Add subcategory">
                   <a key="item1" style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">
                     {/*<FormattedMessage id="addSubcategory" />*/}
@@ -157,8 +159,8 @@ export default class CateList extends React.Component<any, any> {
    * 添加子类目
    */
   _addChildrenCate = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
-    const { showEditModal } = this.props.relaxProps;
-    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }), Map({}));
+    const { showEditModal, images } = this.props.relaxProps;
+    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }), images);
   };
 
   /**

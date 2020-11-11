@@ -15,10 +15,12 @@ class PeoductCategory extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Product category',
+      currentId: '',
       visible: false,
       productCategoryList: [],
       selectedRowKeys: [],
       attributeList: [],
+      confirmLoading: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -36,10 +38,16 @@ class PeoductCategory extends Component<any, any> {
     return JSON.parse(returnString);
   };
   openBindAttribute = (id) => {
+    this.setState({
+      currentId: id
+    });
     this.getSelectedListById(id);
   };
   handleOk = () => {
-    console.log('ok');
+    this.setState({
+      confirmLoading: true
+    });
+    this.relationAttributes();
   };
   handleCancel = () => {
     this.setState({
@@ -116,8 +124,7 @@ class PeoductCategory extends Component<any, any> {
       selectedRowKeys: []
     });
   };
-  onSelectChange = (selectedRowKeys, selectedRows) => {
-    debugger;
+  onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
   };
 
@@ -138,17 +145,38 @@ class PeoductCategory extends Component<any, any> {
     });
   };
   relationAttributes = () => {
-    let params = {};
-    webapi.relationAttributes(params).then((data) => {
-      const { res } = data;
-      if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
-      }
-    });
+    const { currentId, selectedRowKeys } = this.state;
+    let params = {
+      attributesIdList: selectedRowKeys,
+      goodsCateId: currentId
+    };
+    webapi
+      .relationAttributes(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'Operate successfully');
+          this.setState({
+            visible: false,
+            confirmLoading: false
+          });
+        } else {
+          this.setState({
+            confirmLoading: false
+          });
+          message.error(res.message || 'Operate failed');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          confirmLoading: false
+        });
+        message.error(err.toString() || 'Operate failed');
+      });
   };
 
   render() {
-    const { title, productCategoryList, selectedRowKeys, attributeList } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -207,7 +235,7 @@ class PeoductCategory extends Component<any, any> {
 
           <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
-        <Modal title="Bind attribute" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title="Bind attribute" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>

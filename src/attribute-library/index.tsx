@@ -297,7 +297,7 @@ class AttributeLibrary extends Component<any, any> {
       attributeType: row.attributeType,
       id: row.id,
       sort: row.sort,
-      attributesValueList: row.attributesValueList
+      attributesValueList: row.attributesValuesVOList
     };
     this.updateAttributes(params);
   };

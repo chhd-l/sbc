@@ -66,3 +66,7 @@ export function sortNavigations(sortList) {
     body: JSON.stringify(sortList)
   });
 }
+
+export const getStoreInfo = () => {
+  return Fetch<TResult>('/store/storeInfo');
+};

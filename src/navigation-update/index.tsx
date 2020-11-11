@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, history } from 'qmkit';
-import { Breadcrumb, message, Steps, Button, Icon } from 'antd';
+import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import NavigationLanguage from './components/navigationLanguage';
 import BasicInformation from './components/basicInformation';
@@ -9,7 +9,7 @@ import * as webapi from './webapi';
 
 const { Step } = Steps;
 
-export default class NavigationUpdate extends Component<any, any> {
+class NavigationUpdate extends Component<any, any> {
   static propTypes = {};
   static defaultProps = {};
   constructor(props) {
@@ -18,16 +18,21 @@ export default class NavigationUpdate extends Component<any, any> {
       id: this.props.match.params.id,
       title: this.props.match.params.id ? 'Edit Navigation Item' : 'Create Navigation Item',
       current: 0,
-      navigation: {}
+      navigation: {},
+      store: {}
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
     this.addField = this.addField.bind(this);
   }
-
-  next() {
-    const current = this.state.current + 1;
-    this.setState({ current });
+  next(e) {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        const current = this.state.current + 1;
+        this.setState({ current });
+      }
+    });
   }
 
   prev() {
@@ -43,37 +48,43 @@ export default class NavigationUpdate extends Component<any, any> {
     });
     console.log(data);
   }
-  updateNavigation() {
-    const { navigation } = this.state;
-    webapi
-      .updateNavigation(navigation)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          message.success(res.message || 'Update successful');
-          history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
-        } else {
-          message.error(res.message || 'Update Failed');
-        }
-      })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-      });
+  updateNavigation(e) {
+    e.preventDefault();
+    this.props.form.validateFields((err) => {
+      if (!err) {
+        const { navigation } = this.state;
+        console.log(navigation);
+        webapi
+          .updateNavigation(navigation)
+          .then((data) => {
+            const { res } = data;
+            if (res.code === 'K-000000') {
+              message.success(res.message || 'Update successful');
+              history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
+            } else {
+              message.error(res.message || 'Update Failed');
+            }
+          })
+          .catch((err) => {
+            message.error(err || 'Update Failed');
+          });
+      }
+    });
   }
   render() {
-    const { id, current, title, navigation } = this.state;
+    const { id, current, title, navigation, store } = this.state;
     const steps = [
-      {
-        title: 'Navigation language',
-        controller: <NavigationLanguage navigation={navigation} addField={this.addField} />
-      },
-      {
-        title: 'Basic information',
-        controller: <BasicInformation navigation={navigation} addField={this.addField} />
-      },
+      // {
+      //   title: 'Navigation language',
+      //   controller: <NavigationLanguage navigation={navigation} addField={this.addField} store={store}/>
+      // },
+      // {
+      //   title: 'Basic information',
+      //   controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} store={store}/>
+      // },
       {
         title: 'Interaction',
-        controller: <Interaction navigation={navigation} addField={this.addField} />
+        controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} />
       }
     ];
     return (
@@ -97,12 +108,12 @@ export default class NavigationUpdate extends Component<any, any> {
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => this.next()}>
+              <Button type="primary" onClick={(e) => this.next(e)}>
                 Next step <Icon type="right" />
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
+              <Button type="primary" onClick={(e) => this.updateNavigation(e)}>
                 Submit <Icon type="right" />
               </Button>
             )}
@@ -112,3 +123,5 @@ export default class NavigationUpdate extends Component<any, any> {
     );
   }
 }
+
+export default Form.create()(NavigationUpdate);

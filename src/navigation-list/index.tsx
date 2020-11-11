@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, DragTable } from 'qmkit';
-import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch } from 'antd';
+import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
+import { getStoreLanguages } from './storeLanguage';
 
 const Option = Select.Option;
+const FormItem = Form.Item;
 
-export default class NavigationList extends Component<any, any> {
+class NavigationList extends Component<any, any> {
   static propTypes = {};
   static defaultProps = {};
   constructor(props) {
@@ -16,10 +18,9 @@ export default class NavigationList extends Component<any, any> {
       languages: [],
       selectLanguage: '',
       loading: false,
-      defaultLanguage: 'English',
+      defaultLanguage: '',
       dataSource: []
     };
-    this.getLanguages = this.getLanguages.bind(this);
     this.getNavigationList = this.getNavigationList.bind(this);
     this.updateNavigation = this.updateNavigation.bind(this);
     this.sortNavigation = this.sortNavigation.bind(this);
@@ -27,31 +28,20 @@ export default class NavigationList extends Component<any, any> {
   }
 
   componentDidMount() {
-    if (this.props.location.state && this.props.location.state.language) {
+    getStoreLanguages().then((res) => {
       this.setState({
-        defaultLanguage: this.props.location.state.language
+        languages: res,
+        defaultLanguage: res[0].valueEn
       });
-    }
-    this.getLanguages();
-    this.getNavigationList(this.state.defaultLanguage);
+      if (this.props.location.state && this.props.location.state.language) {
+        this.setState({
+          defaultLanguage: this.props.location.state.language
+        });
+      }
+      this.getNavigationList(res[0].valueEn);
+    });
   }
 
-  getLanguages() {
-    webapi
-      .querySysDictionary({ type: 'Language' })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          let languages = [...res.context.sysDictionaryVOS];
-          this.setState({
-            languages
-          });
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
-  }
   getNavigationList(language) {
     webapi
       .getNavigations(language)
@@ -142,7 +132,7 @@ export default class NavigationList extends Component<any, any> {
       });
   }
   render() {
-    const { title, languages, dataSource, loading } = this.state;
+    const { title, languages, dataSource, loading, defaultLanguage } = this.state;
     const columns = [
       {
         title: 'ID',
@@ -197,33 +187,42 @@ export default class NavigationList extends Component<any, any> {
         )
       }
     ];
+    const { getFieldDecorator } = this.props.form;
     return (
       <div>
         <BreadCrumb />
         <div className="container-search">
           <Headline title={title} />
-          <Row style={{ marginTop: '30px', marginBottom: '30px' }}>
+          <Row style={{ marginTop: '30px' }}>
             <Col span={12}>
               <Button type="primary" htmlType="submit">
                 <Link to="/navigation-update">Add New Navigation Item</Link>
               </Button>
             </Col>
             <Col span={12} style={{ textAlign: 'end' }}>
-              <Select
-                defaultValue={this.state.defaultLanguage}
-                style={{ width: 200 }}
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.getNavigationList(value);
-                }}
-              >
-                {languages &&
-                  languages.map((item, index) => (
-                    <Option value={item.valueEn} key={index}>
-                      <img style={{ height: '20px', width: '20px' }} src={item.description} alt="Image" /> {item.name}
-                    </Option>
-                  ))}
-              </Select>
+              <Form>
+                <FormItem>
+                  {getFieldDecorator('language', {
+                    initialValue: defaultLanguage,
+                    rules: [{ required: true, message: 'Please input Navigation Name' }]
+                  })(
+                    <Select
+                      style={{ width: 200 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.getNavigationList(value);
+                      }}
+                    >
+                      {languages &&
+                        languages.map((item, index) => (
+                          <Option value={item.valueEn} key={index}>
+                            <img style={{ height: '20px', width: '20px' }} src={item.description} alt="Image" /> {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Form>
             </Col>
           </Row>
           <Row>
@@ -234,3 +233,4 @@ export default class NavigationList extends Component<any, any> {
     );
   }
 }
+export default Form.create()(NavigationList);

@@ -972,7 +972,7 @@ export default class AppStore extends Store {
         // const propValue = goodsPropDetails.find(
         //   (i) => i.get('select') == 'select'
         // );
-        // let detailId = propValue.get('detailId');
+        // let detailId = propValue.get('detailId')propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {
@@ -1251,7 +1251,7 @@ export default class AppStore extends Store {
         goodsPropDetails = fromJS(goodsPropDetails);
         let goodsId = goods.get('goodsId');
         const propValue = goodsPropDetails.find((i) => i.get('select') == 'select');
-        let detailId = propValue.get('detailId');
+        //let detailId = propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {

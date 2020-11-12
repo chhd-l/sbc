@@ -64,20 +64,18 @@ export default class SearchForm extends React.Component<any, any> {
 
   searchBackFun = () => {
     const { likeGoodsName, likeGoodsNo, storeCateId } = this.props.relaxProps;
-    console.log(storeCateId, 222222222);
     let from = {
       goodsName: likeGoodsName,
       goodsNo: likeGoodsNo,
       storeCateId: storeCateId
     };
-    console.log(from, 111);
 
-    this.props.searchBackFun(from);
+    //this.props.searchBackFun(from);
   };
 
   render() {
     const { likeGoodsName, likeProductCategory, likeGoodsNo, sourceCateList, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
-    const { getFieldDecorator } = this.props.form;
+    //const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -145,7 +143,7 @@ export default class SearchForm extends React.Component<any, any> {
           </Col>
 
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
+            {/*<FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -174,8 +172,8 @@ export default class SearchForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoods.bind(this, 'cateId'),
-                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
+               //onChange: this._editGoods.bind(this, 'cateId'),
+                //initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
@@ -188,7 +186,7 @@ export default class SearchForm extends React.Component<any, any> {
                   {loop(cateList)}
                 </TreeSelect>
               )}
-            </FormItem>
+            </FormItem>*/}
           </Col>
           <Col span={8}>
             <FormItem>

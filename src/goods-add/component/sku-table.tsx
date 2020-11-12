@@ -6,6 +6,7 @@ import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
+import ProductTooltip from './productTooltip';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -61,6 +62,9 @@ export default class SkuTable extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
+    this.state = {
+      visible: false
+    };
   }
 
   render() {
@@ -80,7 +84,8 @@ class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0
+      count: 0,
+      visible: false
     };
   }
 
@@ -96,6 +101,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
+        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -103,6 +109,11 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
+  showProduct = (res) => {
+    this.setState({
+      visible: res
+    });
+  };
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
@@ -122,7 +133,7 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-    console.log(columns.toJS(), 'columns');
+    //console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -152,6 +163,37 @@ class SkuForm extends React.Component<any, any> {
       key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
+      }
+    });
+
+    columns = columns.push({
+      title: <div>Product name</div>,
+      key: 'goodsName',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsName' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input Product name code'
+                    },
+                    {
+                      min: 1,
+                      max: 20,
+                      message: '1-20 characters'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsName'),
+                  initialValue: rowInfo.goodsName
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
       }
     });
 
@@ -193,6 +235,66 @@ class SkuForm extends React.Component<any, any> {
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
                   initialValue: rowInfo.goodsInfoNo
                 })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //Sub-SKU
+    columns = columns.push({
+      title: (
+        <div>
+          <p>Sub-SKU</p>
+          <p style={{ fontSize: '12px', color: '#ccc' }}>Maximum 10 products</p>
+        </div>
+      ),
+      key: 'subSKU',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subSKU' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input SKU code'
+                    },
+                    {
+                      min: 1,
+                      max: 20,
+                      message: '1-20 characters'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subSKU'),
+                  initialValue: rowInfo.subSKU
+                })(
+                  <div className="space-between-align">
+                    <div style={{ paddingTop: 6 }}>
+                      {' '}
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={() => this.showProduct(true)} />
+                    </div>
+                    <div style={{ lineHeight: 2 }}>
+                      <div className="space-between-align" style={{ paddingLeft: 5 }}>
+                        <span style={{ paddingLeft: 5 }}>856436788</span>
+                        <Icon style={{ paddingLeft: 5, paddingRight: 5 }} type="minus" />
+                        <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
+                        <Icon style={{ paddingLeft: 5 }} type="plus" />
+                        <Icon style={{ fontSize: '18px', color: 'red', paddingLeft: 5 }} type="delete" />
+                      </div>
+                      <div className="space-between-align" style={{ paddingLeft: 5 }}>
+                        <span style={{ paddingLeft: 5 }}>856436788</span>
+                        <Icon style={{ paddingLeft: 5, paddingRight: 5 }} type="minus" />
+                        <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
+                        <Icon style={{ paddingLeft: 5 }} type="plus" />
+                        <Icon style={{ fontSize: '18px', color: 'red', paddingLeft: 5 }} type="delete" />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -245,46 +347,23 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          <FormattedMessage id="product.marketPrice" />
-          <br />
-          <Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
-            <FormattedMessage id="allTheSame" />
-            &nbsp;
-            <Tooltip placement="top" title={'After checking, all SKUs use the same market price'}>
-              <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />
-              </a>
-            </Tooltip>
-          </Checkbox>
+          UOM
         </div>
       ),
-      key: 'marketPrice',
+      key: 'UOM',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('marketPrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input market price'
-                  },
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: 'Please input the legal amount with two decimal places'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                initialValue: rowInfo.marketPrice || 0
-              })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+              {getFieldDecorator('UOM' + rowInfo.id, {
+                onChange: (e) => this._editGoodsItem(rowInfo.id, 'UOM', e),
+                initialValue: goods.get('UOM') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
+              })(
+                <Select disabled={goods.get('UOM') === '0'} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                  <Option value="1">UOM1</Option>
+                  <Option value="0">UOM2</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -455,12 +534,9 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });*/
+
     columns = columns.push({
-      title: (
-        <div>
-          <FormattedMessage id="description" />
-        </div>
-      ),
+      title: <div>Description</div>,
       key: 'description',
       render: (rowInfo) => (
         <Row>
@@ -481,6 +557,7 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
+
     columns = columns.push({
       title: (
         <div>
@@ -494,9 +571,41 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          <FormattedMessage id="product.inventory" />
+          Subscription
+        </div>
+      ),
+      key: 'subscription',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('subscription' + rowInfo.id, {
+                rules: [],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscription'),
+                initialValue: rowInfo.subscription
+              })(<Input style={{ width: '100px' }} min={0} max={9999999} disabled={rowInfo.subscription === 0} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+
+    columns = columns.push({
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          Tax Rate
           <br />
-          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
+          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'taxRate')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
             <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
@@ -507,20 +616,20 @@ class SkuForm extends React.Component<any, any> {
           </Checkbox>
         </div>
       ),
-      key: 'stock',
+      key: 'taxRate',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('stock_' + rowInfo.id, {
+              {getFieldDecorator('taxRate' + rowInfo.id, {
                 rules: [
                   {
                     pattern: ValidConst.number,
                     message: '0 or positive integer'
                   }
                 ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                initialValue: rowInfo.stock
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'taxRate'),
+                initialValue: rowInfo.taxRate
               })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
             </FormItem>
           </Col>

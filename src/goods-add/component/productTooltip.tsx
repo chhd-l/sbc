@@ -7,7 +7,6 @@ import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
-
 @Relax
 export default class GoodsModal extends React.Component<any, any> {
   props: {
@@ -21,7 +20,6 @@ export default class GoodsModal extends React.Component<any, any> {
       loading: boolean;
       createLink: any;
       goodsId: any;
-      productTooltip: any;
       productTooltip: any;
     };
     showModal: Function;

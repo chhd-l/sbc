@@ -38,7 +38,9 @@ export default class GoodsActor extends Actor {
         goodsVideo: '',
         //是否允许独立设价
         allowPriceSet: 0,
-        saleType: 0
+        saleType: 0,
+        saleableFlag: 1,
+        displayFlag: 1
       },
       // 是否编辑商品
       isEditGoods: false,

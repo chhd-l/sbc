@@ -64,7 +64,6 @@ class AddCustomizedfilter extends React.Component<any, any> {
   }
 
   removeTemp = (id) => {
-    debugger;
     const { attributeValueList } = this.state;
     let attributeValueListTemp = attributeValueList.filter((item) => item.tempId !== id);
     this.setState({
@@ -72,7 +71,6 @@ class AddCustomizedfilter extends React.Component<any, any> {
     });
   };
   removeRemote = (id) => {
-    debugger;
     const { attributeValueList } = this.state;
     webapi
       .deleteFilterValue({ id: id })
@@ -129,8 +127,6 @@ class AddCustomizedfilter extends React.Component<any, any> {
   openEditPage = () => {
     const { attributeForm } = this.state;
     const { form, currentSelected } = this.props;
-    debugger;
-
     attributeForm.attributeName = currentSelected.attributeName;
     attributeForm.choiceStatus = currentSelected.choiceStatus;
     this.setState(

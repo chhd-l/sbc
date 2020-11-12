@@ -123,3 +123,12 @@ export function deleteFilterValue(filterParams = {}) {
     })
   });
 }
+
+export function getProductList(filterParams = {}) {
+  return Fetch<TResult>('/goodsRelation/goods', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

@@ -155,6 +155,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'operation seccessful');
+          this.props.refreshList();
           this.setState({ visibleAttribute: false });
         } else {
           message.error(res.message || 'operation failure');
@@ -171,6 +172,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || 'operation seccessful');
+          this.props.refreshList();
           this.setState({ visibleAttribute: false });
         } else {
           message.error(res.message || 'operation failure');

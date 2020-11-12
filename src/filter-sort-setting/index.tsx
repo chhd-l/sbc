@@ -85,8 +85,12 @@ class FilterSortSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          let sortByList = res.context;
+          for (let i = 0; i < sortByList.length; i++) {
+            sortByList[i].index = i;
+          }
           this.setState({
-            sortByList: res.context
+            sortByList: sortByList
           });
         } else {
           message.error(res.message || 'operation failure');
@@ -182,6 +186,23 @@ class FilterSortSetting extends Component<any, any> {
       });
   };
 
+  //filter排序
+  updateSortList = (params) => {
+    webapi
+      .updateSortList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.findSortList();
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
   render() {
     const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys } = this.state;
     const description = (
@@ -210,7 +231,7 @@ class FilterSortSetting extends Component<any, any> {
               <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
             </TabPane>
             <TabPane tab="Sort by" key="sortBy">
-              <DropList sortFunction={this.updateFilterSort} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
+              <DropList sortFunction={this.updateSortList} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
             </TabPane>
           </Tabs>
         </div>
@@ -218,6 +239,5 @@ class FilterSortSetting extends Component<any, any> {
     );
   }
 }
-const styles = {} as any;
 
 export default Form.create()(FilterSortSetting);

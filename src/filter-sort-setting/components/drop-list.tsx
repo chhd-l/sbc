@@ -62,7 +62,7 @@ export default class SortableTable extends React.Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    const { dataSource } = this.state;
+    const { dataSource, type } = this.state;
 
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter((el) => !!el);
@@ -82,10 +82,17 @@ export default class SortableTable extends React.Component {
         };
         newSortList.push(param);
       }
-      let params = {
-        storeGoodsFilterList: newSortList
-      };
-      this.props.sortFunction(params, newData[0].filterStatus);
+      if (type === 'sort') {
+        let params = {
+          storeGoodsSortList: newSortList
+        };
+        this.props.sortFunction(params);
+      } else {
+        let params = {
+          storeGoodsFilterList: newSortList
+        };
+        this.props.sortFunction(params, newData[0].filterType);
+      }
     }
   };
 

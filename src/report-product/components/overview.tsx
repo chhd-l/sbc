@@ -49,7 +49,14 @@ export default class ProductOverView extends Component<any, any> {
     onProductReportPage: noop,
     getDate: 'getDate'
   };
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({
+      beginDate: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
+        .subtract(7, 'days')
+        .format('YYYY-MM-DD'),
+      endDate: sessionStorage.getItem(cache.CURRENT_YEAR)
+    });
+  }
 
   getOverviewInfo(params = {}) {
     this.setState({

@@ -556,6 +556,81 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Sales status">
+              {getFieldDecorator('saleableFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select the status'
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'saleableFlag'),
+                initialValue: goods.get('saleableFlag')
+              })(
+                <RadioGroup>
+                  <Radio value={0}>Not–Saleable</Radio>
+                  <Radio value={1}>Saleable</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
+          {this.state.saleableType == true ? (
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="Display on shop">
+                {getFieldDecorator('displayFlag', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select the status'
+                    }
+                  ],
+                  onChange: this._editGoods.bind(this, 'displayFlag'),
+                  initialValue: goods.get('displayFlag')
+                })(
+                  <RadioGroup>
+                    <p>
+                      {' '}
+                      <Radio value={1}>Yes</Radio>
+                    </p>
+                    <p>
+                      <Radio value={0}>No</Radio>
+                    </p>
+                  </RadioGroup>
+                )}
+              </FormItem>
+            </Col>
+          ) : null}
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem
+              {...formItemLayout}
+              label={
+                <span>
+                  <FormattedMessage id="product.productImage" />
+                </span>
+              }
+            >
+              <div style={{ width: 550 }}>
+                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
+              </div>
+              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
+              <div style={{ width: 550 }}>
+                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
+              </div>
+              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
+            </FormItem>
+          </Col>
+        </Row>
         {/* <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="销售类型">
@@ -627,90 +702,6 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row> */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="Sales status">
-              {getFieldDecorator('saleableFlag', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select the status'
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'saleableFlag'),
-                initialValue: goods.get('saleableFlag')
-              })(
-                <RadioGroup>
-                  <Radio value={0}>Not–Saleable</Radio>
-                  <Radio value={1}>Saleable</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-          </Col>
-          {this.state.saleableType == true ? (
-            <Col span={8}>
-              <FormItem {...formItemLayout} label="Display on shop">
-                {getFieldDecorator('displayFlag', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select the status'
-                    }
-                  ],
-                  onChange: this._editGoods.bind(this, 'displayFlag'),
-                  initialValue: goods.get('displayFlag')
-                })(
-                  <RadioGroup>
-                    <p>
-                      {' '}
-                      <Radio value={1}>Yes</Radio>
-                    </p>
-                    <p>
-                      <Radio value={0}>No</Radio>
-                    </p>
-                  </RadioGroup>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
-        </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  {/* <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span> */}
-                  <FormattedMessage id="product.productImage" />
-                </span>
-              }
-            >
-              <div style={{ width: 550 }}>
-                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
-              </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
-              <div style={{ width: 550 }}>
-                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
-              </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
-            </FormItem>
-          </Col>
-        </Row>
       </Form>
     );
   }

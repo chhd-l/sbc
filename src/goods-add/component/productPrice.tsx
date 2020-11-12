@@ -204,6 +204,57 @@ class SkuForm extends React.Component<any, any> {
       )
     });
     columns = columns.push({
+      title: (
+        <div>
+          <FormattedMessage id="Base price" />
+          <Select value={baseSpecId || null} onChange={this._handleChange}>
+            {goodsSpecs.map((item) => (
+              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+            ))}
+          </Select>
+        </div>
+      ),
+      key: 'basePrice',
+      render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo');
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('basePrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      pattern: ValidConst.number,
+                      message: '0 or positive integer'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
+                  initialValue: rowInfo.basePrice || 0
+                })(
+                  <div>
+                    <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                    <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                    {/* <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled
+                  />
+                  <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled={rowInfo.subscriptionStatus === 0}
+                  /> */}
+                  </div>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+    columns = columns.push({
       title: '',
       key: 'linePrice',
       render: (rowInfo) => (

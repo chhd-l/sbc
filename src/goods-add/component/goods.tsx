@@ -591,13 +591,8 @@ class GoodsForm extends React.Component<any, any> {
                   initialValue: goods.get('displayFlag')
                 })(
                   <RadioGroup>
-                    <p>
-                      {' '}
-                      <Radio value={1}>Yes</Radio>
-                    </p>
-                    <p>
-                      <Radio value={0}>No</Radio>
-                    </p>
+                    <Radio value={1}>Yes</Radio>
+                    <Radio value={0}>No</Radio>
                   </RadioGroup>
                 )}
               </FormItem>

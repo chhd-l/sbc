@@ -280,17 +280,17 @@ class SkuForm extends React.Component<any, any> {
                     <div style={{ lineHeight: 2 }}>
                       <div className="space-between-align" style={{ paddingLeft: 5 }}>
                         <span style={{ paddingLeft: 5 }}>856436788</span>
-                        <Icon style={{ paddingLeft: 5, paddingRight: 5 }} type="minus" />
+                        <Icon style={{ paddingLeft: 5, paddingRight: 5, color: 'red', cursor: 'pointer' }} type="minus" />
                         <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
-                        <Icon style={{ paddingLeft: 5 }} type="plus" />
-                        <Icon style={{ fontSize: '18px', color: 'red', paddingLeft: 5 }} type="delete" />
+                        <Icon style={{ paddingLeft: 5, color: 'red', cursor: 'pointer' }} type="plus" />
+                        <a style={{ paddingLeft: 5 }} key="item3" className="iconfont iconDelete"></a>
                       </div>
                       <div className="space-between-align" style={{ paddingLeft: 5 }}>
                         <span style={{ paddingLeft: 5 }}>856436788</span>
-                        <Icon style={{ paddingLeft: 5, paddingRight: 5 }} type="minus" />
+                        <Icon style={{ paddingLeft: 5, paddingRight: 5, color: 'red', cursor: 'pointer' }} type="minus" />
                         <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
-                        <Icon style={{ paddingLeft: 5 }} type="plus" />
-                        <Icon style={{ fontSize: '18px', color: 'red', paddingLeft: 5 }} type="delete" />
+                        <Icon style={{ paddingLeft: 5, color: 'red', cursor: 'pointer' }} type="plus" />
+                        <a style={{ paddingLeft: 5 }} key="item3" className="iconfont iconDelete"></a>
                       </div>
                     </div>
                   </div>
@@ -351,7 +351,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )
       });
-      columns = columns.push({
+      /*columns = columns.push({
         title: (
           <div>
             <FormattedMessage id="product.subscriptionPrice" />
@@ -388,10 +388,10 @@ class SkuForm extends React.Component<any, any> {
             </Col>
           </Row>
         )
-      });
+      });*/
     }
 
-    columns = columns.push({
+    /*columns = columns.push({
       // title: <FormattedMessage id="operation" />,
       key: 'opt',
       render: (rowInfo) =>
@@ -410,7 +410,7 @@ class SkuForm extends React.Component<any, any> {
             <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
           </a>
         )
-    });
+    });*/
     /*columns = columns.push({
       title: (
         <div>
@@ -606,81 +606,7 @@ class SkuForm extends React.Component<any, any> {
         )
       });*!/
     }*/
-    /*columns = columns.push({
-      title: (
-        <div>
-          <FormattedMessage id="Base price" />
-          <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item) => (
-              <Option value={item.get('specId')}>{item.get('specName')}</Option>
-            ))}
-          </Select>
-        </div>
-      ),
-      key: 'basePrice',
-      render: (rowInfo) => {
-        console.log(rowInfo, 'rowInfo');
-        return (
-          <Row>
-            <Col span={12}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('basePrice_' + rowInfo.id, {
-                  rules: [
-                    {
-                      pattern: ValidConst.number,
-                      message: '0 or positive integer'
-                    }
-                  ],
-                  onChange: this._editGoodsItem.bind(
-                    this,
-                    rowInfo.id,
-                    'basePrice'
-                  ),
-                  initialValue: rowInfo.basePrice || 0
-                })(
-                  <div>
-                    <p>
-                      {isNaN(
-                        parseFloat(rowInfo.marketPrice) /
-                          parseFloat(rowInfo['specId-' + baseSpecId])
-                      )
-                        ? '0'
-                        : (
-                            parseFloat(rowInfo.marketPrice) /
-                            parseFloat(rowInfo['specId-' + baseSpecId])
-                          ).toFixed(2)}
-                    </p>
-                    <p>
-                      {isNaN(
-                        parseFloat(rowInfo.subscriptionPrice) /
-                          parseFloat(rowInfo['specId-' + baseSpecId])
-                      )
-                        ? '0'
-                        : (
-                            parseFloat(rowInfo.subscriptionPrice) /
-                            parseFloat(rowInfo['specId-' + baseSpecId])
-                          ).toFixed(2)}
-                    </p>
-                    {/!* <InputNumber
-                    style={{ width: '60px' }}
-                    min={0}
-                    max={9999999}
-                    disabled
-                  />
-                  <InputNumber
-                    style={{ width: '60px' }}
-                    min={0}
-                    max={9999999}
-                    disabled={rowInfo.subscriptionStatus === 0}
-                  /> *!/}
-                  </div>
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });*/
+
     return columns.toJS();
   };
   _handleChange = (value) => {

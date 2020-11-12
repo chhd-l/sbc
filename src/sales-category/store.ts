@@ -93,6 +93,7 @@ export default class AppStore extends Store {
     if (formData.get('storeCateId')) {
       result = await editCate(formDataJs);
     } else {
+      formDataJs.displayStatus = false;
       result = await addCate(formDataJs);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -429,8 +430,6 @@ export default class AppStore extends Store {
     if (imgType === 0) {
       let images = this.state().get('images');
       images = images.concat(chooseImgs);
-      console.log(chooseImgs.toJS());
-
       this.dispatch('cateActor: editImages', images);
     } else if (imgType === 1) {
       const skuId = this.state().get('skuId');

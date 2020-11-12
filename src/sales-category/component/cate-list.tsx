@@ -22,6 +22,7 @@ export default class CateList extends React.Component<any, any> {
     relaxProps?: {
       dataList: IList;
       allDataList: IList;
+      images: IList;
       doDelete: Function;
       showEditModal: Function;
       childFlag: boolean;
@@ -42,7 +43,8 @@ export default class CateList extends React.Component<any, any> {
     validChild: noop,
     validGoods: noop,
     //拖拽排序
-    cateSort: noop
+    cateSort: noop,
+    images: 'images'
   };
 
   render() {
@@ -78,15 +80,15 @@ export default class CateList extends React.Component<any, any> {
     },
     {
       title: 'Number of product',
-      dataIndex: 'productNumber',
-      key: 'productNumber'
+      dataIndex: 'productNo',
+      key: 'productNo'
     },
-    {
-      title: 'Display in shop',
-      dataIndex: 'dispalyInShop',
-      key: 'dispalyInShop',
-      render: () => <Switch></Switch>
-    },
+    // {
+    //   title: 'Display in shop',
+    //   dataIndex: 'displayStatus',
+    //   key: 'displayStatus',
+    //   render: (text, record) => <Switch checked={text}></Switch>
+    // },
     {
       title: <FormattedMessage id="operation" />,
       key: 'option',
@@ -119,7 +121,7 @@ export default class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
-              rowInfo.get('cateGrade') < 2 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
                 <Tooltip placement="top" title="Add subcategory">
                   <a key="item1" style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">
                     {/*<FormattedMessage id="addSubcategory" />*/}
@@ -157,8 +159,8 @@ export default class CateList extends React.Component<any, any> {
    * 添加子类目
    */
   _addChildrenCate = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
-    const { showEditModal } = this.props.relaxProps;
-    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }), Map({}));
+    const { showEditModal, images } = this.props.relaxProps;
+    showEditModal(Map({ cateParentId, cateParentName, goodsCateId }), images);
   };
 
   /**
@@ -203,35 +205,45 @@ export default class CateList extends React.Component<any, any> {
 
     if (goodsFlag) {
       //该分类下有商品
-      confirm({
+      Modal.info({
         title: 'Prompt',
-        content: 'The current classification has been associated with the product, it is recommended to delete it after modification.',
-        onOk() {
-          if (childFlag) {
-            //有子分类
-            confirm({
-              title: 'Prompt',
-              content: 'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
-              onOk() {
-                doDelete(storeCateId);
-              }
-            });
-          } else {
-            doDelete(storeCateId);
-          }
-        },
-        okText: 'Continue to delete',
-        cancelText: 'Cancel'
+        content: 'The current category is associated with the product, please modify and then delete.',
+        okText: 'OK'
       });
+      // confirm({
+      // title: 'Prompt',
+      // content: 'The current category is associated with the product, please modify and then delete.',
+      // onOk() {
+      //   if (childFlag) {
+      //     //有子分类
+      //     confirm({
+      //       title: 'Prompt',
+      //       content: 'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
+      //       onOk() {
+      //         doDelete(storeCateId);
+      //       }
+      //     });
+      //   } else {
+      //     doDelete(storeCateId);
+      //   }
+      // },
+      // okText: 'Continue to delete',
+      // cancelText: 'Cancel'
+      // });
     } else if (childFlag) {
       //有子分类
-      confirm({
+      Modal.info({
         title: 'Prompt',
-        content: 'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
-        onOk() {
-          doDelete(storeCateId);
-        }
+        content: 'Please delete all categories under this category first.',
+        okText: 'OK'
       });
+      // confirm({
+      //   title: 'Prompt',
+      //   content: 'Please delete all categories under this category first.',
+      //   onOk() {
+      //     doDelete(storeCateId);
+      //   }
+      // });
     } else {
       //没有子分类
       confirm({

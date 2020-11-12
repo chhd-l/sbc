@@ -55,15 +55,41 @@ export default class CateActor extends Actor {
   @Action('cateActor: init')
   init(state, dataList: IList) {
     // 改变数据形态，变为层级结构
+
     const newDataList = dataList
       .filter((item) => item.get('cateParentId') == 0)
       .map((data) => {
-        const children = dataList.filter((item) => item.get('cateParentId') == data.get('storeCateId'));
+        const children = dataList
+          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
+          .map((childrenData) => {
+            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
+            if (!lastChildren.isEmpty()) {
+              const sum = lastChildren.reduce(function (prev, cur) {
+                return cur.get('productNo') + prev;
+              }, 0);
+              childrenData = childrenData.set('children', lastChildren).set('productNo', sum);
+            }
+            return childrenData;
+          });
+
         if (!children.isEmpty()) {
-          data = data.set('children', children);
+          const sum = children.reduce(function (prev, cur) {
+            return cur.get('productNo') + prev;
+          }, 0);
+          data = data.set('children', children).set('productNo', sum);
         }
         return data;
       });
+
+    // const newDataList = dataList
+    //   .filter((item) => item.get('cateParentId') == 0)
+    //   .map((data) => {
+    //     const children = dataList.filter((item) => item.get('cateParentId') == data.get('storeCateId'));
+    //     if (!children.isEmpty()) {
+    //       data = data.set('children', children);
+    //     }
+    //     return data;
+    //   });
     return state.set('dataList', newDataList).set('allDataList', dataList);
   }
 

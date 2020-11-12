@@ -10,7 +10,7 @@ type TResult = {
 // 获取customer list
 export function getGoodsCates() {
   return Fetch<TResult>('/goods_cate/goodsCates', {
-    method: 'POST'
+    method: 'GET'
   });
 }
 

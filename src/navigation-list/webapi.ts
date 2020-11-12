@@ -29,34 +29,13 @@ export function getNavigations(language) {
   });
 }
 
-export function addNavigation(filterParams = {}) {
-  return Fetch<TResult>('/navigations', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-
-export function updateNavigation(filterParams) {
-  return Fetch<TResult>('/navigations/' + filterParams.id, {
-    method: 'PUT',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
-
 /**
  * get list
  * @param filterParams
  */
-export function deleteNavigations(filterParams = {}) {
-  return Fetch<TResult>('/navigations/fields', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function deleteNavigation(id) {
+  return Fetch<TResult>('/navigation/' + id, {
+    method: 'DELETE'
   });
 }
 
@@ -64,6 +43,12 @@ export function sortNavigations(sortList) {
   return Fetch<TResult>('/navigations', {
     method: 'PUT',
     body: JSON.stringify(sortList)
+  });
+}
+
+export function updateNavigationStatus(id, status) {
+  return Fetch<TResult>('/navigation/' + id + '/' + status, {
+    method: 'PUT'
   });
 }
 

@@ -32,7 +32,7 @@ export default class NavigationLanguage extends React.Component<any, any> {
 
   componentDidMount() {
     this.state.languages.map((item, index) => {
-      if (item.valueEn === this.state.selectLanguage) {
+      if (item.name === this.state.selectLanguage) {
         this.setState({
           current: index
         });
@@ -74,8 +74,8 @@ export default class NavigationLanguage extends React.Component<any, any> {
             {languages &&
               languages.map((item, index) =>
                 index >= current && index < current + defaultNumber ? (
-                  <Col key={index} span={spanLength} className="language" onClick={() => this.clickLanguage(item.valueEn)}>
-                    <div className={selectLanguage === item.valueEn ? 'selected' : null}>
+                  <Col key={index} span={spanLength} className="language" onClick={() => this.clickLanguage(item.name)}>
+                    <div className={selectLanguage === item.name ? 'selected' : null}>
                       <img src={item.description} alt="Image" />
                     </div>
                     <div className="languageName">{item.name}</div>

@@ -18,6 +18,7 @@ class NavigationUpdate extends Component<any, any> {
       id: this.props.match.params.id,
       title: this.props.match.params.id ? 'Edit Navigation Item' : 'Create Navigation Item',
       current: 0,
+      type: this.props.location.state ? this.props.location.state.type : 'add',
       navigation: {},
       store: {}
     };
@@ -52,36 +53,55 @@ class NavigationUpdate extends Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
-        const { navigation } = this.state;
+        const { navigation, type, id } = this.state;
         console.log(navigation);
-        webapi
-          .updateNavigation(navigation)
-          .then((data) => {
-            const { res } = data;
-            if (res.code === 'K-000000') {
-              message.success(res.message || 'Update successful');
-              history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
-            } else {
-              message.error(res.message || 'Update Failed');
-            }
-          })
-          .catch((err) => {
-            message.error(err || 'Update Failed');
-          });
+        if (type === 'edit') {
+          navigation.id = id; // edit by id
+          webapi
+            .updateNavigation(navigation)
+            .then((data) => {
+              const { res } = data;
+              if (res.code === 'K-000000') {
+                message.success(res.message || 'Update successful');
+                history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
+              } else {
+                message.error(res.message || 'Update Failed');
+              }
+            })
+            .catch((err) => {
+              message.error(err || 'Update Failed');
+            });
+        } else if (type === 'add') {
+          navigation.parentId = id; // add by parentId
+          webapi
+            .addNavigation(navigation)
+            .then((data) => {
+              const { res } = data;
+              if (res.code === 'K-000000') {
+                message.success(res.message || 'Add successful');
+                history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
+              } else {
+                message.error(res.message || 'Add Failed');
+              }
+            })
+            .catch((err) => {
+              message.error(err || 'Add Failed');
+            });
+        }
       }
     });
   }
   render() {
     const { id, current, title, navigation, store } = this.state;
     const steps = [
-      // {
-      //   title: 'Navigation language',
-      //   controller: <NavigationLanguage navigation={navigation} addField={this.addField} store={store}/>
-      // },
-      // {
-      //   title: 'Basic information',
-      //   controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} store={store}/>
-      // },
+      {
+        title: 'Navigation language',
+        controller: <NavigationLanguage navigation={navigation} addField={this.addField} store={store} />
+      },
+      {
+        title: 'Basic information',
+        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} store={store} />
+      },
       {
         title: 'Interaction',
         controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} />

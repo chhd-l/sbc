@@ -9,8 +9,8 @@ class upload extends React.Component<any, any> {
     super(props);
     this.state = {
       storeInfo: sessionStorage.getItem(cache.STORE_INFRO) ? JSON.parse(sessionStorage.getItem(cache.STORE_INFRO)) : {},
-      imageLinks: [],
-      imageLinkLogo: ''
+      imageList: [],
+      imageLogo: ''
     };
   }
   _checkUploadFile = (size: number, file) => {
@@ -29,12 +29,11 @@ class upload extends React.Component<any, any> {
     }
   };
   _editStoreLogo = ({ file, fileList }) => {
-    this.setState({ imageLinks: fileList });
+    this.setState({ imageList: fileList });
 
     //当所有图片都被删除时
     if (fileList.length == 0) {
-      this.setState({ imageLinkLogo: '' });
-      this.props.form.setFieldsValue({ imageLinkLogo: '' });
+      this.setState({ imageLogo: '' });
       this.props.setUrl('');
       return;
     }
@@ -47,9 +46,8 @@ class upload extends React.Component<any, any> {
     //当上传完成的时候设置
     fileList = this._buildFileList(fileList);
     if (fileList && fileList.length > 0) {
-      this.setState({ imageLinkLogo: fileList[0].url });
-      this.props.form.setFieldsValue({ imageLinkLogo: this.state.imageLinkLogo });
-      this.props.setUrl(this.state.imageLinkLogo);
+      this.setState({ imageLogo: fileList[0].url });
+      this.props.setUrl(fileList[0].url);
     }
   };
 
@@ -64,9 +62,27 @@ class upload extends React.Component<any, any> {
         };
       });
   };
+
+  componentDidMount() {
+    let defaultValue = this.props.defaultValue;
+    if (defaultValue) {
+      this.setState({
+        imageLogo: defaultValue,
+        imageList: [
+          {
+            uid: 'navigation-logo',
+            name: defaultValue,
+            size: 1,
+            status: 'done',
+            url: defaultValue
+          }
+        ]
+      });
+    }
+  }
+
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { storeInfo } = this.state;
+    const { storeInfo, imageList } = this.state;
     return (
       <div className="clearfix logoImg">
         <QMUpload
@@ -75,19 +91,16 @@ class upload extends React.Component<any, any> {
           listType="picture-card"
           name="uploadFile"
           onChange={this._editStoreLogo}
-          fileList={this.state.imageLinks}
+          fileList={imageList}
           accept={'.jpg,.jpeg,.png,.gif'}
           beforeUpload={this._checkUploadFile.bind(this, 1)}
         >
-          {this.state.imageLinks.length >= 1 ? null : (
+          {imageList.length >= 1 ? null : (
             <div>
               <Icon type="plus" style={styles.plus} />
             </div>
           )}
         </QMUpload>
-        {getFieldDecorator('imageLinkLogo', {
-          initialValue: this.props.defaultValue
-        })(<Input type="hidden" />)}
       </div>
     );
   }

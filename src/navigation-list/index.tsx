@@ -22,7 +22,7 @@ class NavigationList extends Component<any, any> {
       dataSource: []
     };
     this.getNavigationList = this.getNavigationList.bind(this);
-    this.updateNavigation = this.updateNavigation.bind(this);
+    this.updateNavigationStatus = this.updateNavigationStatus.bind(this);
     this.sortNavigation = this.sortNavigation.bind(this);
     this.deleteNavigation = this.deleteNavigation.bind(this);
   }
@@ -31,14 +31,15 @@ class NavigationList extends Component<any, any> {
     getStoreLanguages().then((res) => {
       this.setState({
         languages: res,
-        defaultLanguage: res[0].valueEn
+        defaultLanguage: res[0].name
       });
+      debugger;
       if (this.props.location.state && this.props.location.state.language) {
         this.setState({
           defaultLanguage: this.props.location.state.language
         });
       }
-      this.getNavigationList(res[0].valueEn);
+      this.getNavigationList(this.state.defaultLanguage);
     });
   }
 
@@ -71,10 +72,10 @@ class NavigationList extends Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   }
-  updateNavigation(record, checked) {
-    record.enable = checked ? 1 : 0;
+  updateNavigationStatus(record, checked) {
+    let enable = checked ? 1 : 0;
     webapi
-      .updateNavigation({ navigationRequest: record })
+      .updateNavigationStatus(record.id, enable)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
@@ -109,9 +110,13 @@ class NavigationList extends Component<any, any> {
         message.error(err || 'Sort Failed');
       });
   }
-  deleteNavigation(id) {
+  deleteNavigation(record) {
+    if (record.children && record.children.length > 0) {
+      message.warning('You must delete children of the navigation firstly');
+      return;
+    }
     webapi
-      .deleteNavigations({ id: id })
+      .deleteNavigation(record.id)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
@@ -166,18 +171,19 @@ class NavigationList extends Component<any, any> {
         render: (text, record) => (
           <div>
             <div>
-              <Tooltip placement="top" title="Edit">
-                <Link to={'/navigation-update/' + record.id} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
-              </Tooltip>
-              <Divider type="vertical" />
-
-              <Tooltip placement="top" title="Edit">
-                <Link to={'/navigation-update/' + record.id} className="iconfont iconEdit"></Link>
+              <Tooltip placement="top" title="Add">
+                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'add' } }} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
               </Tooltip>
 
               <Divider type="vertical" />
 
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteNavigation(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Edit">
+                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'edit' } }} className="iconfont iconEdit"></Link>
+              </Tooltip>
+
+              <Divider type="vertical" />
+
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteNavigation(record)} okText="Confirm" cancelText="Cancel">
                 <Tooltip placement="top" title="Delete">
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -196,7 +202,7 @@ class NavigationList extends Component<any, any> {
           <Row style={{ marginTop: '30px' }}>
             <Col span={12}>
               <Button type="primary" htmlType="submit">
-                <Link to="/navigation-update">Add New Navigation Item</Link>
+                <Link to={{ pathname: '/navigation-add', state: { type: 'add' } }}>Add New Navigation Item</Link>
               </Button>
             </Col>
             <Col span={12} style={{ textAlign: 'end' }}>
@@ -215,7 +221,7 @@ class NavigationList extends Component<any, any> {
                     >
                       {languages &&
                         languages.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.name} key={index}>
                             <img style={{ height: '20px', width: '20px' }} src={item.description} alt="Image" /> {item.name}
                           </Option>
                         ))}

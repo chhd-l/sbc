@@ -692,7 +692,7 @@ const routes = [
     asyncComponent: () => import('./navigation-update')
   },
   {
-    path: '/navigation-update',
+    path: '/navigation-add',
     asyncComponent: () => import('./navigation-update')
   },
   //商品评价

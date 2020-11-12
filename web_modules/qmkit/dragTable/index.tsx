@@ -4,6 +4,7 @@ import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
+import { util }  from 'qmkit'
 
 let dragingIndex = -1;
 
@@ -99,8 +100,6 @@ class DragTable extends React.Component<any, any> {
       source: [],
       loading: false
     };
-    this.setChildrenData = this.setChildrenData.bind(this);
-    this.cycleBuild = this.cycleBuild.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -147,34 +146,13 @@ class DragTable extends React.Component<any, any> {
     this.setState({
       source: newDatasource
     });
-    this.setChildrenData(newDatasource);
     var sortListToUpdate = sortList.map(x=>({id:x.id, sort: x.sort}))
     this.props.sort(sortListToUpdate)
   };
 
-  setChildrenData(source) {
-    var rootParnets = source.filter((x) => !x.parentId);
-    var cycleData = this.cycleBuild(rootParnets);
-    return cycleData;
-  }
-
-  cycleBuild(list) {
-    var sortList = list.sort((x1, x2) => x1.sort - x2.sort);
-    sortList.map((item, index) => {
-      var children = this.props.dataSource.filter((x) => x.parentId === item.id);
-      if (children.length > 0) {
-        item.children = children;
-        this.cycleBuild(children);
-      } else {
-        return item;
-      }
-    });
-    return sortList;
-  }
-
   render() {
     const {source}= this.state
-    var data = this.setChildrenData(source)
+    var data = util.setChildrenData(source)
     return (
       <Table
         columns={this.props.columns}

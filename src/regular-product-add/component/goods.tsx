@@ -81,6 +81,7 @@ export default class Info extends React.Component<any, any> {
       checkFlag: boolean;
       enterpriseFlag: boolean;
       flashsaleGoods: IList;
+      getGoodsCate: IList;
     };
   };
 
@@ -120,7 +121,8 @@ export default class Info extends React.Component<any, any> {
     cateDisabled: 'cateDisabled',
     checkFlag: 'checkFlag',
     enterpriseFlag: 'enterpriseFlag',
-    flashsaleGoods: 'flashsaleGoods'
+    flashsaleGoods: 'flashsaleGoods',
+    getGoodsCate: 'getGoodsCate'
   };
 
   constructor(props) {
@@ -348,7 +350,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Sales category">
+            <FormItem {...formItemLayout} label="Product category">
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -394,12 +396,12 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product category">
+            <FormItem {...formItemLayout} label="Sales category">
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select store category'
+                    message: 'Please select sales category'
                   }
                 ],
 
@@ -407,14 +409,13 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
+                  //treeCheckable={true}
+                  //showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  //treeCheckStrictly={true}
                   placeholder="Please select store category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  showSearch={false}
-                  disabled={!goods.get('cateId')}
+                  //showSearch={false}
                   onChange={this.storeCateChange}
                 >
                   {this.generateStoreCateTree(storeCateList)}

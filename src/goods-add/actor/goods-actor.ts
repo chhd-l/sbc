@@ -57,7 +57,8 @@ export default class GoodsActor extends Actor {
       //正在进行或将要进行的抢购商品
       flashsaleGoods: [],
       goodsDetailTab: [],
-      nextType: ''
+      nextType: '',
+      getGoodsCate: ''
     };
   }
 
@@ -127,6 +128,11 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initBrandList')
   initBrandList(state, brandList: IList) {
     return state.set('brandList', brandList);
+  }
+
+  @Action('goodsActor: getGoodsCate')
+  getGoodsCate(state, brandList: IList) {
+    return state.set('getGoodsCate', brandList);
   }
 
   @Action('goodsActor: isEditGoods')

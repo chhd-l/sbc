@@ -41,6 +41,10 @@ export const getStoreCateList = (goodsCateId?) => {
   });
 };
 
+export const getGoodsCate = () => {
+  return Fetch('/store_cate/cates/total');
+};
+
 /**
  * 获取品牌列表
  */

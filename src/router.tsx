@@ -224,8 +224,12 @@ const routes = [
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
   // 审核通过的商品编辑
   {
-    path: '/goods-edit/:gid',
-    asyncComponent: () => import('./goods-add')
+    path: '/goods-regular-edit/:gid',
+    asyncComponent: () => import('./regular-product-add/main')
+  },
+  {
+    path: '/goods-bundle-edit/:gid',
+    asyncComponent: () => import('./goods-add/main')
   },
   //Related product
   {

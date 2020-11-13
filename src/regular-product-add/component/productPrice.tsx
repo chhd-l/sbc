@@ -144,7 +144,7 @@ class SkuForm extends React.Component<any, any> {
     });
     columns = columns.push({
       title: '',
-      key: 'linePrice',
+      key: 'index',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>

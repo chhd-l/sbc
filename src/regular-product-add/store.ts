@@ -55,7 +55,8 @@ import {
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
-  fetchproductTooltip
+  fetchproductTooltip,
+  getGoodsCate
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -84,6 +85,7 @@ export default class AppStore extends Store {
       getBrandList(),
       checkSalesType(goodsId),
       isFlashsele(goodsId),
+      getGoodsCate(),
       getDetailTab(),
       this.onRelatedList(goodsId)
     ]).then((results) => {
@@ -96,6 +98,7 @@ export default class AppStore extends Store {
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
+      this.dispatch('goodsActor: getGoodsCate', results);
       this.dispatch('related:goodsId', goodsId);
     });
     // 如果是编辑则判断是否有企业购商品

@@ -1,14 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {
-  DataGrid,
-  noop,
-  history,
-  AuthWrapper,
-  Const,
-  cache,
-  checkAuth
-} from 'qmkit';
+import { DataGrid, noop, history, AuthWrapper, Const, cache, checkAuth } from 'qmkit';
 import { List, fromJS } from 'immutable';
 import { Menu, Dropdown, Icon, Modal, Tooltip } from 'antd';
 import { withRouter } from 'react-router';
@@ -67,24 +59,10 @@ export default class CateList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      goodsBrandList,
-      goodsPageContent,
-      selectedSpuKeys,
-      onSelectChange,
-      total,
-      pageNum,
-      expandedRowKeys,
-      onShowSku
-    } = this.props.relaxProps;
+    const { goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, onShowSku } = this.props.relaxProps;
 
     let hasMenu = false;
-    if (
-      checkAuth('f_goods_sku_edit_2') ||
-      checkAuth('f_goods_sku_edit_3') ||
-      checkAuth('f_goods_up_down') ||
-      checkAuth('f_goods_6')
-    ) {
+    if (checkAuth('f_goods_sku_edit_2') || checkAuth('f_goods_sku_edit_3') || checkAuth('f_goods_up_down') || checkAuth('f_goods_6')) {
       hasMenu = true;
     }
     return (
@@ -110,18 +88,7 @@ export default class CateList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
-        <Column
-          title={<FormattedMessage id="product.image" />}
-          dataIndex="goodsImg"
-          key="goodsImg"
-          render={(img) =>
-            img ? (
-              <img src={img} style={styles.imgItem} />
-            ) : (
-              <img src={defaultImg} style={styles.imgItem} />
-            )
-          }
-        />
+        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column
           // title="商品名称"
           title={<FormattedMessage id="product.productName" />}
@@ -144,11 +111,7 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column
-          title={<FormattedMessage id="product.SPU" />}
-          dataIndex="goodsNo"
-          key="goodsNo"
-        />
+        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
         {/* <Column
           title="销售类型"
           key="saleType"
@@ -241,13 +204,7 @@ export default class CateList extends React.Component<any, any> {
   _renderStoreCateList = (rowInfo) => {
     const { allCateList } = this.props.relaxProps;
     if (rowInfo && rowInfo.length) {
-      const strInfo = rowInfo
-        .map((info) =>
-          allCateList
-            .filter((v) => v.get('storeCateId') == info)
-            .getIn([0, 'cateName'])
-        )
-        .join(',');
+      const strInfo = rowInfo.map((info) => allCateList.filter((v) => v.get('storeCateId') == info).getIn([0, 'cateName'])).join(',');
       if (strInfo.length > 20) {
         return (
           <Tooltip placement="top" title={strInfo}>
@@ -267,26 +224,40 @@ export default class CateList extends React.Component<any, any> {
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale } = this.props.relaxProps;
+    console.log(rowInfo, 11111111);
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
           <Tooltip placement="top" title="Edit">
-            <a
-              href="#!"
-              onClick={() =>
-                history.push({
-                  pathname: `/goods-edit/${rowInfo.goodsId}`,
-                  state: { tab: 'main' }
-                })
-              }
-              style={{ marginRight: 5 }}
-            >
-              <span
-                className="icon iconfont iconEdit"
-                style={{ fontSize: 20 }}
-              ></span>
-              {/* <FormattedMessage id="edit" /> */}
-            </a>
+            {rowInfo.goodsType != 2 ? (
+              <a
+                href="#!"
+                onClick={() =>
+                  history.push({
+                    pathname: `/goods-regular-edit/${rowInfo.goodsId}`,
+                    state: { tab: 'main' }
+                  })
+                }
+                style={{ marginRight: 5 }}
+              >
+                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+                {/* <FormattedMessage id="edit" /> */}
+              </a>
+            ) : (
+              <a
+                href="#!"
+                onClick={() =>
+                  history.push({
+                    pathname: `/goods-bundle-edit/${rowInfo.goodsId}`,
+                    state: { tab: 'main' }
+                  })
+                }
+                style={{ marginRight: 5 }}
+              >
+                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+                {/* <FormattedMessage id="edit" /> */}
+              </a>
+            )}
           </Tooltip>
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -312,10 +283,7 @@ export default class CateList extends React.Component<any, any> {
                 }}
                 style={{ marginRight: 5 }}
               >
-                <span
-                  className="icon iconfont iconOnShelves"
-                  style={{ fontSize: 20 }}
-                ></span>
+                <span className="icon iconfont iconOnShelves" style={{ fontSize: 20 }}></span>
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -330,10 +298,7 @@ export default class CateList extends React.Component<any, any> {
                 }}
                 style={{ marginRight: 5 }}
               >
-                <span
-                  className="icon iconfont iconOffShelves"
-                  style={{ fontSize: 20 }}
-                ></span>
+                <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -347,10 +312,7 @@ export default class CateList extends React.Component<any, any> {
               }}
               style={{ marginRight: 5 }}
             >
-              <span
-                className="icon iconfont iconDelete"
-                style={{ fontSize: 20 }}
-              ></span>
+              <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
             </a>
           </Tooltip>
         </AuthWrapper>
@@ -368,11 +330,7 @@ export default class CateList extends React.Component<any, any> {
     return currentGoods
       .map((goods, i) => {
         const currentGoodsSpecDetails = goodsInfoSpecDetails
-          .filter(
-            (v) =>
-              goods.get('specDetailRelIds').indexOf(v.get('specDetailRelId')) !=
-              -1
-          )
+          .filter((v) => goods.get('specDetailRelIds').indexOf(v.get('specDetailRelId')) != -1)
           .map((v) => {
             return v.get('detailName');
           })
@@ -381,14 +339,7 @@ export default class CateList extends React.Component<any, any> {
         return (
           <div key={`${index}_${i}`} style={styles.item}>
             <div style={{ marginLeft: 17 }}>
-              <img
-                src={
-                  goods.get('goodsInfoImg')
-                    ? goods.get('goodsInfoImg')
-                    : defaultImg
-                }
-                style={styles.imgItem}
-              />
+              <img src={goods.get('goodsInfoImg') ? goods.get('goodsInfoImg') : defaultImg} style={styles.imgItem} />
               <AuthWrapper functionName="f_goods_sku_edit_2">
                 <a
                   href="#!"
@@ -437,9 +388,7 @@ export default class CateList extends React.Component<any, any> {
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>Market price：</label>
-                {goods.get('marketPrice') || goods.get('marketPrice') === 0
-                  ? goods.get('marketPrice').toFixed(2)
-                  : 0}
+                {goods.get('marketPrice') || goods.get('marketPrice') === 0 ? goods.get('marketPrice').toFixed(2) : 0}
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>On/Off shelve：</label>
@@ -449,9 +398,7 @@ export default class CateList extends React.Component<any, any> {
             <div>
               <div style={styles.cell}>
                 <label style={styles.label}>Bar code：</label>
-                {goods.get('goodsInfoBarcode')
-                  ? goods.get('goodsInfoBarcode')
-                  : '-'}
+                {goods.get('goodsInfoBarcode') ? goods.get('goodsInfoBarcode') : '-'}
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>In stock：</label>

@@ -47,7 +47,7 @@ export function sortNavigations(sortList) {
 }
 
 export function updateNavigationStatus(id, status) {
-  return Fetch<TResult>('/navigation/' + id + '/' + status, {
+  return Fetch<TResult>('/navigation/' + id + '/status?' + 'enable=' + status, {
     method: 'PUT'
   });
 }

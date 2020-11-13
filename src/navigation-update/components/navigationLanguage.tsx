@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { message, Row, Col, Icon } from 'antd';
+import React from 'react';
+import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import { cache } from 'qmkit';
 const img_left = require('./img/left.png');
@@ -7,14 +7,10 @@ const img_right = require('./img/right.png');
 
 export default class NavigationLanguage extends React.Component<any, any> {
   static propTypes = {
-    navigation: PropTypes.object,
-    store: PropTypes.object
+    navigation: PropTypes.object
   };
   static defaultProps = {
-    navigation: {},
-    store: {
-      languageId: []
-    }
+    navigation: {}
   };
 
   constructor(props) {
@@ -23,7 +19,7 @@ export default class NavigationLanguage extends React.Component<any, any> {
       languages: sessionStorage.getItem(cache.STORE_LANGUAGES) ? JSON.parse(sessionStorage.getItem(cache.STORE_LANGUAGES)) : [],
       current: 0,
       defaultNumber: 3,
-      selectLanguage: this.props.navigation.language ? this.props.navigation.language : sessionStorage.getItem(cache.DEFAULT_LANGUAGE)
+      selectLanguage: ''
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -39,6 +35,17 @@ export default class NavigationLanguage extends React.Component<any, any> {
       }
     });
     this.props.addField('language', this.state.selectLanguage);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { navigation } = nextProps;
+    if (navigation !== prevState.navigation) {
+      return {
+        selectLanguage: navigation.language ? navigation.language : sessionStorage.getItem(cache.DEFAULT_LANGUAGE)
+      };
+    }
+
+    return null;
   }
 
   next() {

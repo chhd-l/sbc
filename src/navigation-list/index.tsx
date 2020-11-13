@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, DragTable } from 'qmkit';
-import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form } from 'antd';
+import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { getStoreLanguages } from './storeLanguage';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 class NavigationList extends Component<any, any> {
   static propTypes = {};
@@ -33,7 +34,6 @@ class NavigationList extends Component<any, any> {
         languages: res,
         defaultLanguage: res[0].name
       });
-      debugger;
       if (this.props.location.state && this.props.location.state.language) {
         this.setState({
           defaultLanguage: this.props.location.state.language
@@ -58,7 +58,8 @@ class NavigationList extends Component<any, any> {
               navigationName: item.navigationName,
               sort: item.sort,
               enable: item.enable,
-              paramsField: item.paramsField
+              paramsField: item.paramsField,
+              language: item.language
             };
             dataSource.push(navigation);
           });
@@ -73,27 +74,35 @@ class NavigationList extends Component<any, any> {
       });
   }
   updateNavigationStatus(record, checked) {
-    let enable = checked ? 1 : 0;
-    webapi
-      .updateNavigationStatus(record.id, enable)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          message.success(res.message || 'Update successful');
-          this.getNavigationList(this.state.selectLanguage);
-        } else {
-          message.error(res.message || 'Update Failed');
-          this.setState({
-            loading: false
+    let tipMessage = checked ? 'enable' : 'disable';
+    let that = this;
+    confirm({
+      title: 'Prompt',
+      content: 'Are you sure ' + tipMessage + ' the navigation',
+      onOk() {
+        let enable = checked ? 1 : 0;
+        webapi
+          .updateNavigationStatus(record.id, enable)
+          .then((data) => {
+            const { res } = data;
+            if (res.code === 'K-000000') {
+              message.success(res.message || 'Update successful');
+              that.getNavigationList(that.state.selectLanguage);
+            } else {
+              message.error(res.message || 'Update Failed');
+              that.setState({
+                loading: false
+              });
+            }
+          })
+          .catch((err) => {
+            message.error(err || 'Update Failed');
+            that.setState({
+              loading: false
+            });
           });
-        }
-      })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-        this.setState({
-          loading: false
-        });
-      });
+      }
+    });
   }
   sortNavigation(sortList) {
     webapi
@@ -162,7 +171,7 @@ class NavigationList extends Component<any, any> {
         dataIndex: 'enable',
         key: 'enable',
         width: '10%',
-        render: (text, record) => <Switch checked={text === 1 ? true : false} onClick={(e) => this.updateNavigation(record, e)}></Switch>
+        render: (text, record) => <Switch checked={text === 1 ? true : false} onClick={(e) => this.updateNavigationStatus(record, e)}></Switch>
       },
       {
         title: 'Operation',
@@ -172,7 +181,7 @@ class NavigationList extends Component<any, any> {
           <div>
             <div>
               <Tooltip placement="top" title="Add">
-                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'add' } }} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
+                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'add', language: record.language } }} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
               </Tooltip>
 
               <Divider type="vertical" />

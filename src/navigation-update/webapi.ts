@@ -19,8 +19,13 @@ export function querySysDictionary(filterParams = {}) {
   });
 }
 
+export function getNavigationById(id) {
+  return Fetch<TResult>('/navigation/' + id, {
+    method: 'GET'
+  });
+}
+
 export function addNavigation(filterParams) {
-  debugger;
   return Fetch<TResult>('/navigation', {
     method: 'POST',
     body: JSON.stringify({
@@ -39,20 +44,20 @@ export function updateNavigation(filterParams) {
 }
 
 export function getCategories() {
-  return Fetch<TResult>('/store_cate', {
+  return Fetch<TResult>('/store_cate/batch/cate', {
     method: 'GET'
   });
 }
 
 export function getFilters() {
-  return Fetch<TResult>('/goods_filter/findFilterList', {
+  return Fetch<TResult>('/goods_filter/filters/total', {
     method: 'POST',
     body: JSON.stringify({})
   });
 }
 
 export function getSorts() {
-  return Fetch<TResult>('/goods_sort/findSortList', {
+  return Fetch<TResult>('/goods_sort/sorts/total', {
     method: 'POST',
     body: JSON.stringify({})
   });

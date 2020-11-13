@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { Alert, Col, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
+import React from 'react';
+import { Form, Input, message, Radio, Select, TreeSelect } from 'antd';
 import * as webapi from '../webapi';
 import { util } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { SHOW_PARENT } = TreeSelect;
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 10 }
@@ -17,7 +16,7 @@ export default class Interaction extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      interaction: 0,
+      interaction: null,
       pageList: [],
       // Product List Page --PLP
       // Product Detail Page -- PDP
@@ -25,8 +24,7 @@ export default class Interaction extends React.Component<any, any> {
       // Subscription Page --SP
       // Contact Us Page--CUP
       // Home Page--HP
-      pageTypeCode: 'PLP',
-      defaultPageId: null,
+      pageTypeCode: '',
       treeData: [],
       filterList: [],
       sortList: []
@@ -39,9 +37,13 @@ export default class Interaction extends React.Component<any, any> {
     this.radioChange = this.radioChange.bind(this);
     this.pageChange = this.pageChange.bind(this);
     this.onSalesCategoryChange = this.onSalesCategoryChange.bind(this);
+    this.clearFields = this.clearFields.bind(this);
   }
 
   componentDidMount() {
+    this.setState({
+      interaction: this.props.navigation.interaction ? this.props.navigation.interaction : 0
+    });
     this.props.addField('interaction', this.state.interaction);
     this.getPageTypes();
     this.getCategories();
@@ -56,16 +58,20 @@ export default class Interaction extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let pageList = res.context.sysDictionaryVOS;
-          let defaultPage = pageList.find((x) => x.valueEn === 'PLP');
           this.setState({
-            pageList,
-            defaultPageId: defaultPage ? defaultPage.id : null
+            pageList
           });
+          let selectPage = pageList.find((x) => x.id === this.props.navigation.pageId);
+          if (selectPage) {
+            this.setState({
+              pageTypeCode: selectPage.valueEn
+            });
+          }
         } else {
           message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
+      .catch(() => {
         message.error('Get data failed');
       });
   }
@@ -92,7 +98,7 @@ export default class Interaction extends React.Component<any, any> {
           message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
+      .catch(() => {
         message.error('Get data failed');
       });
   }
@@ -115,7 +121,7 @@ export default class Interaction extends React.Component<any, any> {
           message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
+      .catch(() => {
         message.error('Get data failed');
       });
   }
@@ -138,17 +144,37 @@ export default class Interaction extends React.Component<any, any> {
           message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
+      .catch(() => {
         message.error('Get data failed');
       });
   }
 
   radioChange(e) {
-    this.props.addField('interaction', e.target.value);
+    let value = e.target.value;
+    this.props.addField('interaction', value);
     this.setState({
-      interaction: e.target.value
+      interaction: value
+    });
+    if (value === 0) {
+      this.clearFields(['target']);
+    }
+
+    if (value === 1) {
+      this.clearFields(['pageId', 'navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
+    }
+
+    if (value === 2) {
+      this.clearFields(['target']);
+      this.clearFields(['pageId', 'navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
+    }
+  }
+
+  clearFields(fields) {
+    fields.map((item) => {
+      this.props.addField(item, null);
     });
   }
+
   pageChange(value) {
     value = value === '' ? null : value;
     this.props.addField('pageId', value);
@@ -165,11 +191,12 @@ export default class Interaction extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation } = this.props;
-    const { pageList, interaction, defaultPageId, pageTypeCode, treeData, filterList, sortList } = this.state;
+    const { pageList, interaction, pageTypeCode, treeData, filterList, sortList } = this.state;
     const targetList = ['_blank', '_self', '_parent', '_top', 'framename'];
+    let defaultCategoryIds = navigation.navigationCateIds ? navigation.navigationCateIds.split(',').map((x) => parseInt(x)) : [];
     const tProps = {
       treeData,
-      value: navigation.navigationCateIds ? navigation.navigationCateIds.split(',') : [],
+      value: defaultCategoryIds,
       onChange: this.onSalesCategoryChange,
       treeCheckable: true,
       searchPlaceholder: 'Please select',
@@ -186,17 +213,21 @@ export default class Interaction extends React.Component<any, any> {
         <div className="interaction">
           <Form>
             <FormItem>
-              <Radio.Group onChange={this.radioChange} size="large" defaultValue={interaction}>
-                <Radio value={0}>Page</Radio>
-                <Radio value={1}>External URL</Radio>
-                <Radio value={2}>Text</Radio>
-              </Radio.Group>
+              {getFieldDecorator('interaction', {
+                initialValue: interaction
+              })(
+                <Radio.Group onChange={this.radioChange} size="large">
+                  <Radio value={0}>Page</Radio>
+                  <Radio value={1}>External URL</Radio>
+                  <Radio value={2}>Text</Radio>
+                </Radio.Group>
+              )}
             </FormItem>
             {interaction === 0 ? (
               <div>
                 <FormItem {...layout} label="Page">
                   {getFieldDecorator('pageId', {
-                    initialValue: navigation.pageId ? navigation.pageId : defaultPageId,
+                    initialValue: navigation.pageId,
                     rules: [{ required: true, message: 'Please select page' }]
                   })(
                     <Select onChange={this.pageChange}>
@@ -212,7 +243,7 @@ export default class Interaction extends React.Component<any, any> {
                 {pageTypeCode === 'PLP' ? (
                   <FormItem {...layout} label="Sales Category">
                     {getFieldDecorator('navigationCateIds', {
-                      initialValue: navigation.navigationCateIds,
+                      initialValue: defaultCategoryIds,
                       rules: [{ required: true, message: 'Please select sales category' }]
                     })(<TreeSelect {...tProps} />)}
                   </FormItem>
@@ -272,7 +303,7 @@ export default class Interaction extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </div>
-                ) : (
+                ) : pageTypeCode !== '' ? (
                   <FormItem {...layout} label="Paramter">
                     {getFieldDecorator('paramsField', {
                       initialValue: navigation.paramsField
@@ -286,7 +317,7 @@ export default class Interaction extends React.Component<any, any> {
                       />
                     )}
                   </FormItem>
-                )}
+                ) : null}
               </div>
             ) : null}
             {interaction === 1 ? (

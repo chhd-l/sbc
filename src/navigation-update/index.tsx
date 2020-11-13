@@ -19,7 +19,9 @@ class NavigationUpdate extends Component<any, any> {
       title: this.props.match.params.id ? 'Edit Navigation Item' : 'Create Navigation Item',
       current: 0,
       type: this.props.location.state ? this.props.location.state.type : 'add',
-      navigation: {},
+      navigation: {
+        language: this.props.location.state ? this.props.location.state.language : ''
+      },
       store: {}
     };
     this.next = this.next.bind(this);
@@ -39,6 +41,26 @@ class NavigationUpdate extends Component<any, any> {
   prev() {
     const current = this.state.current - 1;
     this.setState({ current });
+  }
+
+  componentWillMount() {
+    if (this.state.type === 'edit') {
+      webapi
+        .getNavigationById(this.state.id)
+        .then((data) => {
+          const { res } = data;
+          if (res.code === 'K-000000') {
+            this.setState({
+              navigation: res.context
+            });
+          } else {
+            message.error(res.message || 'Get Data Failed');
+          }
+        })
+        .catch((err) => {
+          message.error(err || 'Get Data Failed');
+        });
+    }
   }
 
   addField(field, value) {

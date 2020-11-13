@@ -47,15 +47,21 @@ class AddCustomizedfilter extends React.Component<any, any> {
   };
   setAttributeFieldsValue = (arr) => {
     const { form } = this.props;
-    let setObj = {};
-    for (let i = 0; i < arr.length; i++) {
-      let valueName = 'value_' + (arr[i].id || arr[i].tempId);
-      let tempObj = {};
+    if(arr&&arr.length>0){
+      let setObj = {};
+      for (let i = 0; i < arr.length; i++) {
+        let valueName = 'value_' + (arr[i].id || arr[i].tempId);
+        let tempObj = {};
 
-      tempObj[valueName] = arr[i].attributeDetailName;
-      setObj = Object.assign(setObj, tempObj);
+        tempObj[valueName] = arr[i].attributeDetailName;
+        setObj = Object.assign(setObj, tempObj);
+      }
+      form.setFieldsValue(setObj);
     }
-    form.setFieldsValue(setObj);
+    else{
+      this.add()
+    }
+    
   };
 
   genID() {
@@ -131,7 +137,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
     attributeForm.choiceStatus = currentSelected.choiceStatus;
     this.setState(
       {
-        attributeValueList: currentSelected.storeGoodsFilterValueVOList,
+        attributeValueList: currentSelected.storeGoodsFilterValueVOList||[],
         visibleAttribute: true,
         attributeForm,
         isEdit: true,

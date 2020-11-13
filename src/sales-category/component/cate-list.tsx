@@ -121,6 +121,13 @@ export default class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
+              // rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              //   <Tooltip placement="top" title="Add subcategory">
+              //     <a key="item1" style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconicon">
+              //       {/*<FormattedMessage id="addSubcategory" />*/}
+              //     </a>
+              //   </Tooltip>
+              // ),
               rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
                 <Tooltip placement="top" title="Add subcategory">
                   <a key="item1" style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconbtn-addsubvisionsaddcategory">

@@ -685,6 +685,18 @@ const routes = [
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
   },
+  {
+    path: '/navigation-list',
+    asyncComponent: () => import('./navigation-list')
+  },
+  {
+    path: '/navigation-update/:id',
+    asyncComponent: () => import('./navigation-update')
+  },
+  {
+    path: '/navigation-add',
+    asyncComponent: () => import('./navigation-update')
+  },
   //商品评价
   {
     path: '/nps-list',

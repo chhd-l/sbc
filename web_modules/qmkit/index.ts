@@ -37,6 +37,7 @@ import BreadCrumb from './bread-crumb';
 import VASConst from './VAS-Const';
 import { login, getRoutType } from './login/login';
 import OktaLogout from './okta/okta-logout'
+import DragTable from './dragTable';
 
 export {
   noop,
@@ -80,5 +81,6 @@ export {
   FindBusiness,
   login,
   OktaLogout,
-  getRoutType
+  getRoutType,
+  DragTable
 };

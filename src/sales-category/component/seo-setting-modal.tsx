@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 const FormItem = Form.Item;
-const UploadImageModalForm = Form.create({})(UploadImageModal);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SeoSettingModal extends Component<any, any> {
@@ -28,11 +27,11 @@ export default class SeoSettingModal extends Component<any, any> {
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
-        1111111
+        111111111111
+        {/*<AuthWrapper functionName="fOrderList001">*/}
+        {/*  <UploadImageModalForm />*/}
+        {/*</AuthWrapper>*/}
       </Modal>
-      // <AuthWrapper functionName="fOrderList001">
-      //   <UploadImageModalForm />
-      // </AuthWrapper>
     );
   }
 }

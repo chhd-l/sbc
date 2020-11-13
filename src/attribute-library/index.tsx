@@ -85,15 +85,19 @@ class AttributeLibrary extends Component<any, any> {
   };
   setAttributeFieldsValue = (arr) => {
     const { form } = this.props;
-    let setObj = {};
-    for (let i = 0; i < arr.length; i++) {
-      let valueName = 'value_' + (arr[i].id || arr[i].tempId);
-      let tempObj = {};
+    if (arr && arr.length > 0) {
+      let setObj = {};
+      for (let i = 0; i < arr.length; i++) {
+        let valueName = 'value_' + (arr[i].id || arr[i].tempId);
+        let tempObj = {};
 
-      tempObj[valueName] = arr[i].attributeDetailName;
-      setObj = Object.assign(setObj, tempObj);
+        tempObj[valueName] = arr[i].attributeDetailName;
+        setObj = Object.assign(setObj, tempObj);
+      }
+      form.setFieldsValue(setObj);
+    } else {
+      this.add();
     }
-    form.setFieldsValue(setObj);
   };
 
   genID() {
@@ -171,7 +175,7 @@ class AttributeLibrary extends Component<any, any> {
     attributeForm.attributeType = row.attributeType;
     this.setState(
       {
-        attributeValueList: row.attributesValuesVOList,
+        attributeValueList: row.attributesValuesVOList || [],
         visibleAttribute: true,
         attributeForm,
         isEdit: true,
@@ -308,6 +312,9 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            visibleAttribute: false
+          });
           this.getAttributes();
           message.success(res.message || 'Operation success');
         } else {

@@ -1,0 +1,147 @@
+#navigationStep {
+  .ant-steps {
+    padding: 30px 150px;
+  }
+
+  .steps-action {
+    margin: 24px 0;
+    text-align: center;
+
+    .ant-btn {
+      border-radius: 20px;
+      width: 100px;
+
+      .anticon {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .ant-steps-item-title::after {
+    border-bottom: 3px dashed #e8e8e8;
+    background: #fff;
+  }
+
+  .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+    border-bottom: 3px dashed #e2001a;
+  }
+
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+    color: #e2001a;
+  }
+
+  .steps-content {
+    min-height: 320px;
+
+    h3 {
+      color: #e2001a;
+      font-weight: 700;
+    }
+
+    h4 {
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .selectLanguage {
+      border-top: 2px solid #e8e8e8;
+      border-bottom: 2px solid #e8e8e8;
+      margin-top: 15px;
+      padding: 40px 0;
+
+      .circleBtn {
+        cursor: pointer;
+      }
+
+      .language {
+        text-align: center;
+        cursor: pointer;
+
+        img {
+          height: 40px;
+          width: 40px;
+        }
+
+        .selected {
+          color: #e2001a;
+          border: 1px solid #e2001a;
+          border-radius: 29px;
+          padding: 5px;
+          display: inline-block;
+          background: pink;
+
+          img {
+            height: 30px;
+            width: 30px;
+          }
+        }
+
+        .selected + .languageName {
+          color: #e2001a;
+        }
+
+        .languageName {
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .basicInformation {
+      margin-top: 15px;
+
+      .ant-form-item-label {
+        text-align: left;
+      }
+
+      .uploadTip {
+        font-family: PingFang-SC-Medium;
+        font-size: 12px;
+        color: #a8a8a8;
+        letter-spacing: 0;
+        position: absolute;
+        top: 40px;
+      }
+
+      .checkBoxTip {
+        font-family: PingFang-SC-Medium;
+        font-size: 14px;
+        color: #a8a8a8;
+        display: inline;
+        margin-left: 15px;
+      }
+
+      .ant-checkbox + span {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      .logoImg .ant-upload-list-picture-card .ant-upload-list-item {
+        width: 100%;
+      }
+    }
+
+    .interaction {
+      margin-top: 30px;
+
+      .ant-form-item-label {
+        text-align: left;
+      }
+
+      .ant-radio-wrapper {
+        margin-right: 115px;
+      }
+
+      .ant-radio-inner {
+        width: 25px;
+        height: 25px;
+      }
+
+      .ant-radio-inner::after {
+        top: 5.5px;
+        left: 5.5px;
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}

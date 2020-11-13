@@ -169,7 +169,7 @@ export default class DitionaryList extends Component<any, any> {
                     value
                   });
                 }}
-                style={{ width: 80 }}
+                style={{ width: 300 }}
               >
                 <Option value="">All</Option>
                 {dictionaryTypes.map((item) => (

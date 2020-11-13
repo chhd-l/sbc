@@ -169,6 +169,9 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Form>
             <Row>
               <Col span={12}>
+                <span style={{ position: 'absolute', left: '86px', top: '30px' }} className="ant-form-item-required">
+                  The first is the default language
+                </span>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
                   <p style={{ color: '#333' }}>{this.getVaulesByData(languageData, storeInfo.get('languageId'))}</p>
                 </FormItem>

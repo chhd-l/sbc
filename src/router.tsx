@@ -221,6 +221,7 @@ const routes = [
   // 商品添加
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
+  { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
   // 审核通过的商品编辑
   {
     path: '/goods-edit/:gid',

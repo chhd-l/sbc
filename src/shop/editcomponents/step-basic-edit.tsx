@@ -237,6 +237,9 @@ export default class StepOneEdit extends React.Component<any, any> {
           <Form>
             <Row>
               <Col span={12}>
+                <span style={{ position: 'absolute', left: '86px', top: '35px' }} className="ant-form-item-required">
+                  The first is the default language
+                </span>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="storeLanguage" />}>
                   {getFieldDecorator('languageId', {
                     initialValue: Array.isArray(storeInfo.get('languageId')) ? storeInfo.get('languageId') : storeInfo.get('languageId') ? storeInfo.get('languageId').toJS() : [],
@@ -573,6 +576,7 @@ export default class StepOneEdit extends React.Component<any, any> {
     if (fileList && fileList.length > 0) {
       this.setState({ storeLogo: fileList[0].url });
       this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
+      console.log(this.state.storeLogo);
       onChange({
         field: 'storeLogo',
         value: this.state.storeLogo

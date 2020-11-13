@@ -221,10 +221,15 @@ const routes = [
   // 商品添加
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
+  { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
   // 审核通过的商品编辑
   {
-    path: '/goods-edit/:gid',
-    asyncComponent: () => import('./goods-add')
+    path: '/goods-regular-edit/:gid',
+    asyncComponent: () => import('./regular-product-add/main')
+  },
+  {
+    path: '/goods-bundle-edit/:gid',
+    asyncComponent: () => import('./goods-add/main')
   },
   //Related product
   {
@@ -683,6 +688,18 @@ const routes = [
   {
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
+  },
+  {
+    path: '/navigation-list',
+    asyncComponent: () => import('./navigation-list')
+  },
+  {
+    path: '/navigation-update/:id',
+    asyncComponent: () => import('./navigation-update')
+  },
+  {
+    path: '/navigation-add',
+    asyncComponent: () => import('./navigation-update')
   },
   //商品评价
   {

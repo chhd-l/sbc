@@ -1,4 +1,5 @@
 import { Actor, Action } from 'plume2';
+import { IMap } from '../../../typings/globalType';
 
 export default class FormActor extends Actor {
   defaultState() {
@@ -10,6 +11,11 @@ export default class FormActor extends Actor {
       userPriceForm: {},
       areaPriceForm: {},
       logisticsForm: {},
+      seoForm: {
+        title: '{name}-Royal Canin}',
+        metaKeywords: '{name}, {subtitle}, {sales category}, {tagging}',
+        description: '{description}'
+      },
       //分销 切换类型是否要提示
       checkFlag: false,
       //企业购提示按钮
@@ -31,6 +37,12 @@ export default class FormActor extends Actor {
   @Action('formActor:sku')
   updateSkuForm(state, skuForm) {
     return state.set('skuForm', skuForm);
+  }
+
+  //seo
+  @Action('formActor:seo')
+  updateSeoForm(state: IMap, { field, value }) {
+    return state.setIn(['seoForm', field], value);
   }
 
   @Action('formActor:spec')

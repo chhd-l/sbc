@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Form, Tabs } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import './index.less';
 import AppStore from './store';
@@ -22,6 +22,8 @@ import { FormattedMessage } from 'react-intl';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
+import SeoForm from './component/seoForm';
+const SeoFormModel = Form.create({})(SeoForm);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -66,6 +68,8 @@ export default class Main extends React.Component<any, any> {
       type = 'price';
     } else if (res == 'related') {
       type = 'inventory';
+    } else if (res == 'seo') {
+      type = 'related';
     }
     this.setState({
       tabType: type
@@ -80,6 +84,8 @@ export default class Main extends React.Component<any, any> {
       type = 'inventory';
     } else if (res == 'inventory') {
       type = 'related';
+    } else if (res == 'related') {
+      type = 'seo';
     }
     this.setState({
       tabType: type
@@ -168,6 +174,14 @@ export default class Main extends React.Component<any, any> {
               <AlertInfo />
 
               <Related />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="SEO Setting"
+              key="seo"
+              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+            >
+              <AlertInfo />
+              <SeoFormModel />
             </Tabs.TabPane>
           </Tabs>
 

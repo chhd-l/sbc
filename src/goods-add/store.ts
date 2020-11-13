@@ -719,6 +719,10 @@ export default class AppStore extends Store {
     this.dispatch('priceActor: addAreaPrice');
   };
 
+  updateSeoForm = ({ field, value }) => {
+    this.dispatch('formActor:seo', { field, value });
+  };
+
   updateGoodsForm = (goodsForm) => {
     this.dispatch('formActor:goods', goodsForm);
   };

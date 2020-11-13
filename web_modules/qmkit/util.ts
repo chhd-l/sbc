@@ -370,3 +370,24 @@ export function checkEmail (str) {
   }
 }
 
+//set children data, 递归取Childre
+export function setChildrenData(source) {
+  var rootParnets = source.filter((x) => !x.parentId);
+  var cycleData = this.cycleBuild(rootParnets, source);
+  return cycleData;
+}
+
+export function cycleBuild(list, source) {
+  var sortList = list.sort((x1, x2) => x1.sort - x2.sort);
+  sortList.map((item, index) => {
+    var children = source.filter((x) => x.parentId === item.id);
+    if (children.length > 0) {
+      item.children = children;
+      this.cycleBuild(children, source);
+    } else {
+      return item;
+    }
+  });
+  return sortList;
+}
+

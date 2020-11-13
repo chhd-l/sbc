@@ -25,13 +25,13 @@ export default class ReleaseProducts extends React.Component<any, any> {
 
             <div className="release-content space-around">
               <AuthWrapper functionName="f_goods_add_1">
-                <Link to="/goods-main">
+                <Link to="/regular-product-add">
                   <img src={Reg} alt="" />
                 </Link>
               </AuthWrapper>
 
               <AuthWrapper functionName="f_goods_import_2">
-                <Link to="/goods-library">
+                <Link to="/goods-main">
                   <img src={Bur} alt="" />
                 </Link>
               </AuthWrapper>

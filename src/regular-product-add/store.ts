@@ -79,13 +79,14 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getStoreCateList(), getDetailTab(), this.onRelatedList(goodsId)]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
-      this.dispatch('goodsActor: getGoodsCate', fromJS((results[5].res as any).context.storeCateResponseVOList));
+      console.log(results, 1111);
+      //this.dispatch('goodsActor: getGoodsCate', fromJS((results[5].res as any).context.storeCateResponseVOList));
 
       this.dispatch('related:goodsId', goodsId);
     });

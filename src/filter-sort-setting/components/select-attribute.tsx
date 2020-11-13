@@ -1,9 +1,12 @@
-import { Button, Form, Icon, Input, message, Modal, Radio, Table } from 'antd';
+import { Button, Col, Form, Icon, Input, message, Modal, Radio, Row, Table } from 'antd';
 import moment from 'moment';
 import { Const } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
 import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
+
+const FormItem = Form.Item;
 
 export default class SelectAttribute extends React.Component<any, any> {
   props = {
@@ -14,17 +17,20 @@ export default class SelectAttribute extends React.Component<any, any> {
     visible: false,
     selectedRowKeys: [],
     prevPropSelectedRowKeys: [],
-    selectedRow: [],
     attributeList: [],
+    selectedRowList:[],
     confirmLoading: false,
     pagination: {
       current: 1,
       pageSize: 8,
       total: 0
+    },
+    searchForm:{
+      attributeName:'',
+      attributeValue:''
     }
   };
   componentDidMount() {
-    this.getAttributes();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -39,8 +45,10 @@ export default class SelectAttribute extends React.Component<any, any> {
     return null;
   }
   getAttributes = () => {
-    const { pagination } = this.state;
+    const { pagination,searchForm } = this.state;
     let params = {
+      attributeName:searchForm.attributeName,
+      attributeValue:searchForm.attributeValue,
       attributeStatus: true,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
@@ -63,20 +71,30 @@ export default class SelectAttribute extends React.Component<any, any> {
   };
 
   openSelectAttribute = () => {
+    this.getAttributes();
     this.setState({
-      visible: true
+      visible: true,
+      pagination: {
+        current: 1,
+        pageSize: 8,
+        total: 0
+      },
+      searchForm:{
+        attributeName:'',
+        attributeValue:''
+      }
     });
   };
   handleOk = () => {
     this.setState({
       confirmLoading: true
     });
-    const { selectedRow } = this.state;
+    const { selectedRowList } = this.state;
     let storeGoodsFilterList = [];
-    for (let i = 0; i < selectedRow.length; i++) {
+    for (let i = 0; i < selectedRowList.length; i++) {
       let item = {
-        attributeId: selectedRow[i].id,
-        attributeName: selectedRow[i].attributeName,
+        attributeId: selectedRowList[i].id,
+        attributeName: selectedRowList[i].attributeName,
         filterType: '0',
         filterStatus: '1'
       };
@@ -119,12 +137,24 @@ export default class SelectAttribute extends React.Component<any, any> {
   start = () => {
     this.setState({
       selectedRowKeys: [],
-      selectedRow: []
+      selectedRowList: []
     });
   };
   onSelectChange = (selectedRowKeys, selectedRow) => {
-    this.setState({ selectedRowKeys, selectedRow });
+    let { selectedRowList } = this.state
+    selectedRowList=selectedRowList.concat(selectedRow)
+    selectedRowList = this.arrayFilter(selectedRowList)
+    this.setState({ selectedRowKeys, selectedRowList });
   };
+  arrayFilter = (arr) => {
+    let obj = {};
+    arr = arr.reduce(function (item, next) {
+      obj[next.goodsId] ? '' : obj[next.goodsId] = true && item.push(next);
+      return item;
+    }, []);
+    console.log(arr);
+    return arr
+  }
   handleTableChange = (pagination: any) => {
     this.setState(
       {
@@ -133,6 +163,22 @@ export default class SelectAttribute extends React.Component<any, any> {
       () => this.getAttributes()
     );
   };
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+  onSearch=()=>{
+    this.setState({
+      pagination: {
+        current: 1,
+        pageSize: 8,
+        total: 0
+      },
+    },()=>this.getAttributes())
+  }
 
   render() {
     const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
@@ -153,9 +199,59 @@ export default class SelectAttribute extends React.Component<any, any> {
         <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openSelectAttribute()}>
           <span>Select attribute</span>
         </Button>
-        <Modal title="Select attribute" visible={this.state.visible} width="600px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title="Select attribute" visible={this.state.visible} width="800px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
+            <Form className="filter-content" layout="inline">
+                  <Row>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input
+                          addonBefore={<p style={styles.label}>Attribute name</p>}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'attributeName',
+                              value
+                            });
+                          }}
+                        />
+                      </FormItem>
+                    </Col>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input
+                          addonBefore={<p style={styles.label}>Attribute value</p>}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'attributeValue',
+                              value
+                            });
+                          }}
+                        />
+                      </FormItem>
+                    </Col>
+                    <Col span={4} style={{ textAlign: 'center' }}>
+                      <FormItem>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          icon="search"
+                          shape="round"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.onSearch();
+                          }}
+                        >
+                          <span>
+                            <FormattedMessage id="search" />
+                          </span>
+                        </Button>
+                      </FormItem>
+                    </Col>
+                  </Row>
+                </Form>
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                 Reload
               </Button>
@@ -168,3 +264,10 @@ export default class SelectAttribute extends React.Component<any, any> {
     );
   }
 }
+const styles = {
+  label: {
+    width: 120,
+    textAlign: 'center'
+  }
+} as any;
+

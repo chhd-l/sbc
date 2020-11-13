@@ -85,6 +85,7 @@ class AttributeLibrary extends Component<any, any> {
   };
   setAttributeFieldsValue = (arr) => {
     const { form } = this.props;
+    if(arr&&arr.length>0){
     let setObj = {};
     for (let i = 0; i < arr.length; i++) {
       let valueName = 'value_' + (arr[i].id || arr[i].tempId);
@@ -94,6 +95,10 @@ class AttributeLibrary extends Component<any, any> {
       setObj = Object.assign(setObj, tempObj);
     }
     form.setFieldsValue(setObj);
+  }
+  else{
+    this.add()
+  }
   };
 
   genID() {
@@ -171,7 +176,7 @@ class AttributeLibrary extends Component<any, any> {
     attributeForm.attributeType = row.attributeType;
     this.setState(
       {
-        attributeValueList: row.attributesValuesVOList,
+        attributeValueList: row.attributesValuesVOList||[],
         visibleAttribute: true,
         attributeForm,
         isEdit: true,

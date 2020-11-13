@@ -1,36 +1,59 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
-import AppStore from '../store';
 import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
+import SeoSettingForm from './seo-setting-form';
 const FormItem = Form.Item;
+const _SeoSettingForm = Form.create({})(SeoSettingForm);
 
-@StoreProvider(AppStore, { debug: __DEV__ })
+@Relax
 export default class SeoSettingModal extends Component<any, any> {
-  store: AppStore;
   state: {};
+  props: {
+    relaxProps?: {
+      seoModalVisible: any;
+      seoForm: any;
+      setSeoModalVisible: Function;
+    };
+  };
 
+  static relaxProps = {
+    seoModalVisible: 'seoModalVisible',
+    seoForm: 'seoForm',
+    setSeoModalVisible: noop
+  };
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {}
-  _handleModelCancel() {}
-  _handleSubmit() {}
+  _handleModelCancel = () => {
+    const { setSeoModalVisible } = this.props.relaxProps;
+    setSeoModalVisible(false);
+  };
+  _handleSubmit = () => {
+    const { seoForm, setSeoModalVisible } = this.props.relaxProps;
+    const seoObj = seoForm.toJS();
+    console.log(seoObj, '传递的参数------------');
+    setSeoModalVisible(false);
+  };
   uploadImage() {}
   render() {
+    const { seoModalVisible, setSeoModalVisible } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="upload" />}
-        visible={this.props.seoModalVisible}
+        title={<FormattedMessage id="seoSetting" />}
+        visible={seoModalVisible}
         width={920}
         // confirmLoading={true}
         onCancel={this._handleModelCancel}
         onOk={this._handleSubmit}
       >
-        111111111111
-        {/*<AuthWrapper functionName="fOrderList001">*/}
-        {/*  <UploadImageModalForm />*/}
-        {/*</AuthWrapper>*/}
+        <AuthWrapper functionName="fOrderList001">
+          <_SeoSettingForm />
+        </AuthWrapper>
       </Modal>
     );
   }

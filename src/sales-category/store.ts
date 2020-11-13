@@ -8,6 +8,7 @@ import CateActor from './actor/cate-actor';
 import ModalActor from './actor/modal-actor';
 import SpecActor from './actor/spec-actor';
 import ImageActor from './actor/image-actor';
+import SeoActor from './actor/seo-actor';
 
 import { getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
 
@@ -20,7 +21,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new CateActor(), new ModalActor(), new SpecActor(), new ImageActor()];
+    return [new CateActor(), new ModalActor(), new SpecActor(), new ImageActor(), new SeoActor()];
   }
 
   /**
@@ -483,5 +484,13 @@ export default class AppStore extends Store {
    */
   cleanChooseImgs = () => {
     this.dispatch('modal: cleanChooseImg');
+  };
+
+  setSeoModalVisible = (visible) => {
+    this.dispatch('seoActor: seoModal', visible);
+  };
+
+  updateSeoForm = ({ field, value }) => {
+    this.dispatch('seoActor: seoForm', { field, value });
   };
 }

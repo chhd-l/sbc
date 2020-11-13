@@ -799,6 +799,7 @@ export default {
   singleProductShipping: 'Single product shipping',
   firstName: 'First name',
   lastName: 'Last name',
-  footerConfig:'Footer Config'
+  footerConfig:'Footer Config',
+  seoSetting: 'SEO Setting'
 
 };

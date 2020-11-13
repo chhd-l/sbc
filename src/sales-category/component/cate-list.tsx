@@ -30,6 +30,7 @@ export default class CateList extends React.Component<any, any> {
       validChild: Function;
       validGoods: Function;
       cateSort: Function;
+      setSeoModalVisible: Function;
     };
   };
 
@@ -44,6 +45,7 @@ export default class CateList extends React.Component<any, any> {
     validGoods: noop,
     //拖拽排序
     cateSort: noop,
+    setSeoModalVisible: noop,
     images: 'images'
   };
 
@@ -162,7 +164,10 @@ export default class CateList extends React.Component<any, any> {
     );
   };
 
-  _editSEOSetting = (cateParentId: string, cateParentName: string, goodsCateId: number) => {};
+  _editSEOSetting = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
+    const { setSeoModalVisible } = this.props.relaxProps;
+    setSeoModalVisible(true);
+  };
   /**
    * 添加子类目
    */

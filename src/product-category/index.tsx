@@ -23,7 +23,7 @@ class PeoductCategory extends Component<any, any> {
       confirmLoading: false,
       pagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 8,
         total: 0
       }
     };
@@ -155,7 +155,7 @@ class PeoductCategory extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operate successfully');
+          message.success('Operate successfully');
           this.setState({
             visible: false,
             confirmLoading: false
@@ -173,6 +173,32 @@ class PeoductCategory extends Component<any, any> {
         });
         message.error(err.toString() || 'Operate failed');
       });
+  };
+  getAttributeValue = (attributeValueList) => {
+    let attributeValue = [];
+    for (let i = 0; i < attributeValueList.length; i++) {
+      attributeValue.push(attributeValueList[i].attributeDetailName);
+    }
+    return attributeValue.join(';');
+  };
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+  onSearch = () => {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 8,
+          total: 0
+        }
+      },
+      () => this.getAttributes()
+    );
   };
 
   render() {
@@ -211,6 +237,13 @@ class PeoductCategory extends Component<any, any> {
         title: 'Attribute name',
         dataIndex: 'attributeName',
         key: 'attributeName'
+      },
+      {
+        title: 'Attribute value',
+        dataIndex: 'attributeValue',
+        key: 'attributeValue',
+        width: '30%',
+        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}</p>
       }
     ];
     const description = (
@@ -235,9 +268,60 @@ class PeoductCategory extends Component<any, any> {
 
           <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
         </div>
-        <Modal title="Bind attribute" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
+              <Form className="filter-content" layout="inline">
+                <Row>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeName',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeValue',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                    <FormItem>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.onSearch();
+                        }}
+                      >
+                        <span>
+                          <FormattedMessage id="search" />
+                        </span>
+                      </Button>
+                    </FormItem>
+                  </Col>
+                </Row>
+              </Form>
+
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                 Reload
               </Button>

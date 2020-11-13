@@ -711,6 +711,10 @@ export default class AppStore extends Store {
   updateSeoForm = ({ field, value }) => {
     this.dispatch('formActor:seo', { field, value });
   };
+  saveSeoSetting = () => {
+    const form = this.state().get('seoForm').toJS();
+    //调接口
+  };
 
   updateGoodsForm = (goodsForm) => {
     this.dispatch('formActor:goods', goodsForm);

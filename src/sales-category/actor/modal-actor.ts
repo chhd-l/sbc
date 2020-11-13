@@ -1,5 +1,5 @@
 import { Actor, Action } from 'plume2';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 export default class ModalActor extends Actor {
   defaultState() {
@@ -29,7 +29,6 @@ export default class ModalActor extends Actor {
       imgType: 0, // 0: spu图片  1: sku图片   2: 详情
       skuId: '', // spu中该字段无
       videoList: [] //视频集合
-      // modal
     };
   }
 

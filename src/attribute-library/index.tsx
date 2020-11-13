@@ -32,7 +32,8 @@ class AttributeLibrary extends Component<any, any> {
       },
       attributeValueList: [],
       isEdit: false,
-      currentEditAttribute: {}
+      currentEditAttribute: {},
+      modalName: ''
     };
   }
   componentDidMount() {
@@ -156,6 +157,7 @@ class AttributeLibrary extends Component<any, any> {
 
     this.setState(
       {
+        modalName: 'Add new attribute',
         attributeValueList: [],
         visibleAttribute: true,
         attributeForm,
@@ -175,6 +177,7 @@ class AttributeLibrary extends Component<any, any> {
     attributeForm.attributeType = row.attributeType;
     this.setState(
       {
+        modalName: 'Edit attribute',
         attributeValueList: row.attributesValuesVOList || [],
         visibleAttribute: true,
         attributeForm,
@@ -258,7 +261,7 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation success');
+          message.success('Operate successfully');
 
           this.setState(
             {
@@ -284,7 +287,7 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getAttributes();
-          message.success(res.message || 'Operation success');
+          message.success('Operate successfully');
         } else {
           message.error(res.message.toString() || 'Operation failed');
         }
@@ -316,7 +319,7 @@ class AttributeLibrary extends Component<any, any> {
             visibleAttribute: false
           });
           this.getAttributes();
-          message.success(res.message || 'Operation success');
+          message.success('Operate successfully');
         } else {
           message.error(res.message.toString() || 'Operation failed');
         }
@@ -324,6 +327,14 @@ class AttributeLibrary extends Component<any, any> {
       .catch((err) => {
         message.error(err.toString() || 'Operation failed');
       });
+  };
+
+  getAttributeValue = (attributeValueList) => {
+    let attributeValue = [];
+    for (let i = 0; i < attributeValueList.length; i++) {
+      attributeValue.push(attributeValueList[i].attributeDetailName);
+    }
+    return attributeValue.join(';');
   };
 
   renderForm = (obj) => {
@@ -391,7 +402,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { title, attributeList, visibleAttribute, attributeValueList } = this.state;
+    const { title, attributeList, visibleAttribute, attributeValueList, modalName } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -402,10 +413,22 @@ class AttributeLibrary extends Component<any, any> {
         key: 'attributeName'
       },
       {
+        title: 'Attribute value',
+        dataIndex: 'attributeValue',
+        key: 'attributeValue',
+        width: '30%',
+        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}</p>
+      },
+      {
         title: 'Status',
         dataIndex: 'attributeStatus',
         key: 'attributeStatus',
-        render: (text, record) => <Switch checked={+text ? true : false} onClick={(checked) => this.updateAttributeStatus(checked, record)}></Switch>
+        width: '10%',
+        render: (text, record) => (
+          <Popconfirm placement="topLeft" title={'Are you sure to' + (+text ? 'disable' : 'enable') + 'this attribute?'} onConfirm={() => this.updateAttributeStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+            <Switch checked={+text ? true : false}></Switch>
+          </Popconfirm>
+        )
       },
       {
         title: 'Operation',
@@ -501,7 +524,7 @@ class AttributeLibrary extends Component<any, any> {
 
         <Modal
           width="600px"
-          title="Add new attribute"
+          title={modalName}
           visible={visibleAttribute}
           onCancel={() =>
             this.setState({

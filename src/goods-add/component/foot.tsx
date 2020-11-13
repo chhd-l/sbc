@@ -14,6 +14,7 @@ export default class Foot extends React.Component<any, any> {
       validMain: Function;
       saveMain: Function;
       saveAll: Function;
+      saveSeoSetting: Function;
       saveLoading: boolean;
       activeTabKey: string;
       onMainTabChange: Function;
@@ -24,11 +25,15 @@ export default class Foot extends React.Component<any, any> {
     validMain: noop,
     saveMain: noop,
     saveAll: noop,
+    saveSeoSetting: noop,
     saveLoading: 'saveLoading',
     activeTabKey: 'activeTabKey',
     onMainTabChange: noop
   };
-
+  _saveSeoSetting = () => {
+    const { saveSeoSetting } = this.props.relaxProps;
+    saveSeoSetting();
+  };
   render() {
     const { saveLoading, activeTabKey } = this.props.relaxProps;
     return (
@@ -71,7 +76,7 @@ export default class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
               Prev
             </Button>
-            <Button type="primary" onClick={this._savePrice} style={{ marginRight: 10 }} loading={saveLoading}>
+            <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }} loading={saveLoading}>
               Save
             </Button>
           </AuthWrapper>

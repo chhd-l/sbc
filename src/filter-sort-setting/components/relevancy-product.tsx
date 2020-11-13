@@ -8,7 +8,6 @@ import { FormattedMessage } from 'react-intl';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
@@ -18,7 +17,6 @@ const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20,
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 export default class RelevancyProduct extends React.Component<any, any> {
-
   props = {
     sortId: String
   };
@@ -40,9 +38,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
       total: 0
     }
   };
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   static getDerivedStateFromProps(props, state) {
     // 当传入的值发生变化的时候，更新state
@@ -56,13 +52,12 @@ export default class RelevancyProduct extends React.Component<any, any> {
     return null;
   }
   openModal = () => {
-    this.getProductList()
-    this.getSelectedProductList()
-
+    this.getProductList();
+    this.getSelectedProductList();
   };
   handleOk = () => {
-    const { step, selectedRowList } = this.state
-    const { sortId } = this.props
+    const { step, selectedRowList } = this.state;
+    const { sortId } = this.props;
     if (step === 1) {
       for (let i = 0; i < selectedRowList.length; i++) {
         selectedRowList[i].index = i;
@@ -70,33 +65,32 @@ export default class RelevancyProduct extends React.Component<any, any> {
       this.setState({
         selectedRowList,
         step: 2
-      })
+      });
     } else {
-      let goodsSortRelList = []
+      let goodsSortRelList = [];
       for (let i = 0; i < selectedRowList.length; i++) {
-        selectedRowList[i].sort = (i + 1);
+        selectedRowList[i].sort = i + 1;
         let param = {
           goodsId: selectedRowList[i].goodsId,
           sort: selectedRowList[i].sort,
           sortId: sortId,
-          id: selectedRowList[i] || ''
-        }
-        goodsSortRelList.push(param)
+          id: selectedRowList[i].id || ''
+        };
+        goodsSortRelList.push(param);
       }
       let params = {
         sortId: sortId,
         goodsSortRelList: goodsSortRelList
-      }
-      this.updateOverridedProduct(params)
+      };
+      this.updateOverridedProduct(params);
     }
-
   };
   handleCancel = () => {
-    const { step } = this.state
+    const { step } = this.state;
     if (step === 2) {
       this.setState({
         step: 1
-      })
+      });
     } else {
       this.setState({
         visible: false
@@ -107,7 +101,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
     this.setState({
       visible: false
     });
-  }
+  };
   start = () => {
     this.setState({
       selectedRowKeys: [],
@@ -115,27 +109,27 @@ export default class RelevancyProduct extends React.Component<any, any> {
     });
   };
   onSelectChange = (selectedRowKeys, selectedRow) => {
-    let { selectedRowList } = this.state
-    selectedRowList=selectedRowList.concat(selectedRow)
-    selectedRowList = this.arrayFilter(selectedRowList)
+    let { selectedRowList } = this.state;
+    selectedRowList = selectedRowList.concat(selectedRow);
+    selectedRowList = this.arrayFilter(selectedRowKeys, selectedRowList);
     this.setState({ selectedRowKeys, selectedRowList });
   };
 
-  arrayFilter = (arr) => {
-    let obj = {};
-    arr = arr.reduce(function (item, next) {
-      obj[next.goodsId] ? '' : obj[next.goodsId] = true && item.push(next);
-      return item;
-    }, []);
-    console.log(arr);
-    return arr
-  }
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsId === item));
+    });
+    return tempList;
+  };
 
   handleTableChange = (pagination: any) => {
-    this.setState({
-      pagination: pagination
-    }, () => this.getProductList());
-
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getProductList()
+    );
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -145,15 +139,18 @@ export default class RelevancyProduct extends React.Component<any, any> {
     });
   };
   onSearch = () => {
-    this.setState({
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
-    },()=>this.getProductList())
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getProductList()
+    );
   };
-  getProductList =()=>{
+  getProductList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
       pageNum: pagination.current - 1,
@@ -166,12 +163,12 @@ export default class RelevancyProduct extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          let prpductList = res.context.goods.content
-          pagination.total = res.context.goods.total
+          let prpductList = res.context.goods.content;
+          pagination.total = res.context.goods.total;
           this.setState({
             prpductList,
             pagination
-          })
+          });
         } else {
           message.error(res.message || 'operation failure');
         }
@@ -179,43 +176,69 @@ export default class RelevancyProduct extends React.Component<any, any> {
       .catch((err) => {
         message.error(err.toString() || 'operation failure');
       });
-  }
+  };
 
   getSelectedProductList = () => {
-    let sortIdList = []
-    sortIdList.push(this.props.sortId)
+    let sortIdList = [];
+    sortIdList.push(this.props.sortId);
     let params = {
       sortIdList: sortIdList
-    }
-    webapi.getSelectedProductList(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          step: 1,
-          visible: true
-        });
-      } else {
-        message.error(res.message || 'operation failure')
-      }
-    }).catch(err => {
-      message.error(err.toString() || 'operation failure')
-    })
-  }
+    };
+    webapi
+      .getSelectedProductList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let selectedRowKeys = [];
+          let selectedRowList = [];
+          let selectedRow = res.context;
+          for (let i = 0; i < selectedRow.length; i++) {
+            selectedRowKeys.push(selectedRow[i].goodsId);
+            let item = {
+              id: selectedRow[i].id,
+              goodsId: selectedRow[i].goodsId,
+              goodsImg: selectedRow[i].goods.goodsImg,
+              goodsName: selectedRow[i].goods.goodsName,
+              brandName: selectedRow[i].goods.brandName,
+              goodsCateName: selectedRow[i].goods.goodsCateName,
+              goodsNo: selectedRow[i].goods.goodsNo,
+              selectedFlag: false,
+              storeCateName: selectedRow[i].goods.storeCateName
+            };
+            selectedRowList.push(item);
+          }
+          this.setState({
+            step: 1,
+            visible: true,
+            selectedRowKeys,
+            selectedRowList
+          });
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
   updateOverridedProduct = (params) => {
-    webapi.updateOverridedProduct(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        message.success(res.message || 'operation successful')
-        this.setState({
-          visible: false
-        });
-      } else {
-        message.error(res.message || 'operation failure')
-      }
-    }).catch(err => {
-      message.error(err.toString() || 'operation failure')
-    })
-  }
+    webapi
+      .updateOverridedProduct(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message || 'operation successful');
+          this.setState({
+            visible: false
+          });
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { selectedRowList } = this.state;
@@ -227,7 +250,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
       }
       this.setState({
         selectedRowList: newData
-      })
+      });
     }
   };
 
@@ -245,7 +268,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
         title: 'Image',
         dataIndex: 'goodsImg',
         key: 'goodsImg',
-        render: (text) => (<img src={text} alt="" style={{ width: 20 }} />)
+        render: (text) => <img src={text} alt="" style={{ width: 20 }} />
       },
       {
         title: 'SPU',
@@ -279,7 +302,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
         title: 'Image',
         dataIndex: 'goodsImg',
         key: 'goodsImg',
-        render: (text) => (<img src={text} alt="" style={{ width: 20 }} />)
+        render: (text) => <img src={text} alt="" style={{ width: 20 }} />
       },
       {
         title: 'SPU',
@@ -330,7 +353,8 @@ export default class RelevancyProduct extends React.Component<any, any> {
         <Tooltip placement="top" title="Overrided product">
           <a style={styles.edit} onClick={() => this.openModal()} className="iconfont iconEdit"></a>
         </Tooltip>
-        <Modal title="Overrided Product"
+        <Modal
+          title="Overrided Product"
           visible={this.state.visible}
           width="1200px"
           onOk={this.handleOk}
@@ -341,11 +365,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
             </Button>,
             <Button key="submit" type="primary" onClick={this.handleOk}>
               {step === 1 ? 'Next' : 'Save'}
-            </Button>,
+            </Button>
           ]}
         >
-          {
-            step === 1 ? <div>
+          {step === 1 ? (
+            <div>
               <div style={{ marginBottom: 16 }}>
                 <Form className="filter-content" layout="inline">
                   <Row>
@@ -400,24 +424,25 @@ export default class RelevancyProduct extends React.Component<any, any> {
 
                 <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                   Reload
-              </Button>
+                </Button>
                 <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
               </div>
               <Table rowKey="goodsId" rowSelection={rowSelection} columns={columns_product} dataSource={prpductList} onChange={this.handleTableChange} pagination={pagination} />
-            </div> : <Table
-                pagination={false}
-                dataSource={selectedRowList}
-                columns={columns_product_sort}
-                rowKey="index"
-                components={{
-                  body: {
-                    wrapper: DraggableContainer,
-                    row: this.DraggableBodyRow
-                  }
-                }}
-              />
-          }
-
+            </div>
+          ) : (
+            <Table
+              pagination={false}
+              dataSource={selectedRowList}
+              columns={columns_product_sort}
+              rowKey="index"
+              components={{
+                body: {
+                  wrapper: DraggableContainer,
+                  row: this.DraggableBodyRow
+                }
+              }}
+            />
+          )}
         </Modal>
       </div>
     );
@@ -432,5 +457,3 @@ const styles = {
     textAlign: 'center'
   }
 } as any;
-
-

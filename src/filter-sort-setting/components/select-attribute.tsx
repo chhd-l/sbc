@@ -18,20 +18,19 @@ export default class SelectAttribute extends React.Component<any, any> {
     selectedRowKeys: [],
     prevPropSelectedRowKeys: [],
     attributeList: [],
-    selectedRowList:[],
+    selectedRowList: [],
     confirmLoading: false,
     pagination: {
       current: 1,
       pageSize: 8,
       total: 0
     },
-    searchForm:{
-      attributeName:'',
-      attributeValue:''
+    searchForm: {
+      attributeName: '',
+      attributeValue: ''
     }
   };
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   static getDerivedStateFromProps(props, state) {
     // 当传入的值发生变化的时候，更新state
@@ -45,10 +44,10 @@ export default class SelectAttribute extends React.Component<any, any> {
     return null;
   }
   getAttributes = () => {
-    const { pagination,searchForm } = this.state;
+    const { pagination, searchForm } = this.state;
     let params = {
-      attributeName:searchForm.attributeName,
-      attributeValue:searchForm.attributeValue,
+      attributeName: searchForm.attributeName,
+      attributeValue: searchForm.attributeValue,
       attributeStatus: true,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
@@ -79,9 +78,9 @@ export default class SelectAttribute extends React.Component<any, any> {
         pageSize: 8,
         total: 0
       },
-      searchForm:{
-        attributeName:'',
-        attributeValue:''
+      searchForm: {
+        attributeName: '',
+        attributeValue: ''
       }
     });
   };
@@ -141,20 +140,18 @@ export default class SelectAttribute extends React.Component<any, any> {
     });
   };
   onSelectChange = (selectedRowKeys, selectedRow) => {
-    let { selectedRowList } = this.state
-    selectedRowList=selectedRowList.concat(selectedRow)
-    selectedRowList = this.arrayFilter(selectedRowList)
+    let { selectedRowList } = this.state;
+    selectedRowList = selectedRowList.concat(selectedRow);
+    selectedRowList = this.arrayFilter(selectedRowKeys, selectedRowList);
     this.setState({ selectedRowKeys, selectedRowList });
   };
-  arrayFilter = (arr) => {
-    let obj = {};
-    arr = arr.reduce(function (item, next) {
-      obj[next.goodsId] ? '' : obj[next.goodsId] = true && item.push(next);
-      return item;
-    }, []);
-    console.log(arr);
-    return arr
-  }
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsId === item));
+    });
+    return tempList;
+  };
   handleTableChange = (pagination: any) => {
     this.setState(
       {
@@ -170,15 +167,18 @@ export default class SelectAttribute extends React.Component<any, any> {
       searchForm: data
     });
   };
-  onSearch=()=>{
-    this.setState({
-      pagination: {
-        current: 1,
-        pageSize: 8,
-        total: 0
+  onSearch = () => {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 8,
+          total: 0
+        }
       },
-    },()=>this.getAttributes())
-  }
+      () => this.getAttributes()
+    );
+  };
 
   render() {
     const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
@@ -202,56 +202,56 @@ export default class SelectAttribute extends React.Component<any, any> {
         <Modal title="Select attribute" visible={this.state.visible} width="800px" confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
-            <Form className="filter-content" layout="inline">
-                  <Row>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input
-                          addonBefore={<p style={styles.label}>Attribute name</p>}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'attributeName',
-                              value
-                            });
-                          }}
-                        />
-                      </FormItem>
-                    </Col>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input
-                          addonBefore={<p style={styles.label}>Attribute value</p>}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'attributeValue',
-                              value
-                            });
-                          }}
-                        />
-                      </FormItem>
-                    </Col>
-                    <Col span={4} style={{ textAlign: 'center' }}>
-                      <FormItem>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          icon="search"
-                          shape="round"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            this.onSearch();
-                          }}
-                        >
-                          <span>
-                            <FormattedMessage id="search" />
-                          </span>
-                        </Button>
-                      </FormItem>
-                    </Col>
-                  </Row>
-                </Form>
+              <Form className="filter-content" layout="inline">
+                <Row>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeName',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeValue',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                    <FormItem>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.onSearch();
+                        }}
+                      >
+                        <span>
+                          <FormattedMessage id="search" />
+                        </span>
+                      </Button>
+                    </FormItem>
+                  </Col>
+                </Row>
+              </Form>
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                 Reload
               </Button>
@@ -270,4 +270,3 @@ const styles = {
     textAlign: 'center'
   }
 } as any;
-

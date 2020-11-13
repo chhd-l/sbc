@@ -4,31 +4,10 @@ import arrayMove from 'array-move';
 import React, { Component } from 'react';
 import { IList } from 'typings/globalType';
 import AddCustomizedFilter from './add-customized-filter';
+import RelevancyProduct from './relevancy-product';
 
 const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
-// const data = [
-//   {
-//     key: '1',
-//     attributeName: 'John Brown',
-//     age: 32,
-//     address: 'New York No. 1 Lake Park',
-//     index: 0
-//   },
-//   {
-//     key: '2',
-//     attributeName: 'Jim Green',
-//     age: 42,
-//     address: 'London No. 1 Lake Park',
-//     index: 1
-//   },
-//   {
-//     key: '3',
-//     attributeName: 'Joe Black',
-//     age: 32,
-//     address: 'Sidney No. 1 Lake Park',
-//     index: 2
-//   }
-// ];
+
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
@@ -188,8 +167,9 @@ export default class SortableTable extends React.Component {
         title: 'Operation',
         dataIndex: 'operation',
         className: 'drag-visible',
-        render: () => (
+        render: (text, record) => (
           <div>
+            <RelevancyProduct sortId={record.id} />
             <DragHandle />
           </div>
         )

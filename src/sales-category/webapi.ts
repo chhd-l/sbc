@@ -5,14 +5,16 @@ import { IMap } from 'typings/globalType';
  * 获取类目列表
  */
 export const getCateList = () => {
-  return Fetch('/store_cate');
+  return Fetch('/store_cate/batch/cate',{
+    method: 'GET',
+  });
 };
 
 /**
  * 添加
  */
 export const addCate = (formData = {}) => {
-  return Fetch('/store_cate', {
+  return Fetch('/store_cate/cate', {
     method: 'POST',
     body: JSON.stringify({ ...formData })
   });
@@ -31,7 +33,7 @@ export const deleteCate = (storeCateId: string) => {
  * 修改
  */
 export const editCate = (formData = {}) => {
-  return Fetch('/store_cate', {
+  return Fetch('/store_cate/cate', {
     method: 'PUT',
     body: JSON.stringify({ ...formData })
   });

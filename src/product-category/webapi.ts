@@ -9,14 +9,14 @@ type TResult = {
 
 // 获取customer list
 export function getGoodsCates() {
-  return Fetch<TResult>('/goods_cate/goodsCates', {
+  return Fetch<TResult>('/goods_cate/cates/total', {
     method: 'GET'
   });
 }
 
 // 获取Attributes 列表
 export function getAttributes(filterParams = {}) {
-  return Fetch<TResult>('/attribute_library/findPage', {
+  return Fetch<TResult>('/attribute_library/attributes', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -25,13 +25,13 @@ export function getAttributes(filterParams = {}) {
 }
 //获取已绑定的Attributes list
 export function getSelectedListById(goodsCateId) {
-  return Fetch<TResult>(`/attribute_library/attributes_list/${goodsCateId}`, {
+  return Fetch<TResult>(`/attribute_library/attribute/${goodsCateId}`, {
     method: 'GET'
   });
 }
 // 绑定 Attributes 列表
 export function relationAttributes(filterParams = {}) {
-  return Fetch<TResult>('/goods_cate/relationAttributes', {
+  return Fetch<TResult>('/goods_cate/attributes', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

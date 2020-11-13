@@ -3,10 +3,11 @@ import { fromJS, Set } from 'immutable';
 
 import { Const, DataGrid, noop, SelectGroup } from 'qmkit';
 
-//import SearchForm from './search-form';
+import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
 import { Relax } from 'plume2';
+
 const { Option } = Select;
 
 const Column = Table.Column;
@@ -43,7 +44,6 @@ export default class GoodsGrid extends React.Component<any, any> {
 */
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
-    console.log(11111111111);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -63,11 +63,10 @@ export default class GoodsGrid extends React.Component<any, any> {
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible } = this.props;
-    setTimeout(() => {
-      console.log(goodsInfoPage, 22222222);
-    });
+
     return (
       <div className="content">
+        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
           rowKey={(record) => record.goodsInfoId}
@@ -192,7 +191,6 @@ export default class GoodsGrid extends React.Component<any, any> {
    * @param searchParams
    */
   searchBackFun = (searchParams) => {
-    console.log(searchParams, 223332);
     if (this.props.searchParams) {
       searchParams = { ...searchParams, ...this.props.searchParams };
     }

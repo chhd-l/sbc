@@ -972,7 +972,7 @@ export default class AppStore extends Store {
         // const propValue = goodsPropDetails.find(
         //   (i) => i.get('select') == 'select'
         // );
-        // let detailId = propValue.get('detailId');
+        // let detailId = propValue.get('detailId')propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {
@@ -1251,7 +1251,7 @@ export default class AppStore extends Store {
         goodsPropDetails = fromJS(goodsPropDetails);
         let goodsId = goods.get('goodsId');
         const propValue = goodsPropDetails.find((i) => i.get('select') == 'select');
-        let detailId = propValue.get('detailId');
+        //let detailId = propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {
@@ -2022,6 +2022,22 @@ export default class AppStore extends Store {
     this.dispatch('related:Brand', res);
   };
 
+  productInit = async () => {
+    let request: any = {
+      goodsName: this.state().get('likeGoodsName'),
+      goodsNo: this.state().get('likeGoodsNo'),
+      goodsCateName: this.state().get('storeCateId'),
+      brandName: this.state().get('brandId')
+    };
+    const { res } = await fetchproductTooltip(request);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('related:productTooltip', res.context.goods);
+      this.dispatch('related:searchType', true);
+    } else {
+      message.error(res.message);
+    }
+  };
+
   onSearch = async () => {
     let request: any = {
       goodsName: this.state().get('likeGoodsName'),
@@ -2033,6 +2049,7 @@ export default class AppStore extends Store {
     const { res } = await fetchproductTooltip(request);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('related:productTooltip', res.context.goods);
+      this.dispatch('related:searchType', true);
     } else {
       message.error(res.message);
     }
@@ -2040,9 +2057,14 @@ export default class AppStore extends Store {
     //this.onPageSearch();
   };
   onFormFieldChange = ({ key, value }) => {
-    console.log(key, 1111111111111111111);
-
-    console.log(value, 2222222222222);
     this.dispatch('form:field', { key, value });
   };
+
+  showEditModal = ({ key, value }) => {};
+  onSwitch = ({ key, value }) => {};
+  pageChange = ({ key, value }) => {};
+  doAdd = ({ key, value }) => {};
+  editFormData = ({ key, value }) => {};
+  closeModal = ({ key, value }) => {};
+  modalVisibleFun = ({ key, value }) => {};
 }

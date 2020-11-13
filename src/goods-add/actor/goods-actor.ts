@@ -38,7 +38,9 @@ export default class GoodsActor extends Actor {
         goodsVideo: '',
         //是否允许独立设价
         allowPriceSet: 0,
-        saleType: 0
+        saleType: 0,
+        saleableFlag: 1,
+        displayFlag: 1
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -54,7 +56,8 @@ export default class GoodsActor extends Actor {
       goodsTabs: [],
       //正在进行或将要进行的抢购商品
       flashsaleGoods: [],
-      goodsDetailTab: []
+      goodsDetailTab: [],
+      nextType: ''
     };
   }
 
@@ -72,9 +75,7 @@ export default class GoodsActor extends Actor {
         const children = dataList
           .filter((item) => item.get('cateParentId') == data.get('cateId'))
           .map((childrenData) => {
-            const lastChildren = dataList.filter(
-              (item) => item.get('cateParentId') == childrenData.get('cateId')
-            );
+            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
             if (!lastChildren.isEmpty()) {
               childrenData = childrenData.set('children', lastChildren);
             }
@@ -103,10 +104,7 @@ export default class GoodsActor extends Actor {
         const children = dataList
           .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
           .map((childrenData) => {
-            const lastChildren = dataList.filter(
-              (item) =>
-                item.get('cateParentId') == childrenData.get('storeCateId')
-            );
+            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
             if (!lastChildren.isEmpty()) {
               childrenData = childrenData.set('children', lastChildren);
             }
@@ -118,9 +116,7 @@ export default class GoodsActor extends Actor {
         }
         return data;
       });
-    return state
-      .set('storeCateList', newDataList)
-      .set('sourceStoreCateList', dataList);
+    return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
   /**
@@ -171,16 +167,8 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:randomGoodsNo')
   randomGoodsNo(state, prefix) {
-    let number =
-      new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        .getTime()
-        .toString()
-        .slice(4, 10) + Math.random().toString().slice(2, 5);
-    return state.update('goods', (goods) =>
-      goods
-        .set('goodsNo', 'P' + number)
-        .set('internalGoodsNo', prefix + '_P' + number)
-    );
+    let number = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
+    return state.update('goods', (goods) => goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number));
   }
 
   /**
@@ -220,5 +208,10 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: setGoodsDetailTab')
   setGoodsDetailTab(state, dataList) {
     return state.set('goodsDetailTab', dataList);
+  }
+
+  @Action('product:nextType')
+  activeTabKey(state, dataList) {
+    return state.set('activeTabKey', dataList);
   }
 }

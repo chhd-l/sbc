@@ -7,7 +7,6 @@ import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
-
 @Relax
 export default class GoodsModal extends React.Component<any, any> {
   props: {
@@ -21,7 +20,6 @@ export default class GoodsModal extends React.Component<any, any> {
       loading: boolean;
       createLink: any;
       goodsId: any;
-      productTooltip: any;
       productTooltip: any;
     };
     showModal: Function;
@@ -49,7 +47,6 @@ export default class GoodsModal extends React.Component<any, any> {
     productList: 'productList',
     createLink: 'createLink',
     goodsId: 'goodsId',
-    productTooltip: 'productTooltip',
     productTooltip: 'productTooltip'
   };
   constructor(props) {
@@ -71,9 +68,7 @@ export default class GoodsModal extends React.Component<any, any> {
     const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     const { onProductselect, goodsId, productTooltip } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(productTooltip, 11111);
-    });
+
     return (
       <Modal
         maskClosable={false}
@@ -104,7 +99,6 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        <RelatedForm />
         {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );

@@ -33,11 +33,45 @@ export default class Foot extends React.Component<any, any> {
     const { saveLoading, activeTabKey } = this.props.relaxProps;
     return (
       <div className="bar-button">
-        {activeTabKey === 'main' ? (
+        {this.props.tabType == 'main' ? (
+          <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Next
+            </Button>
+          </AuthWrapper>
+        ) : this.props.tabType == 'price' ? (
+          <AuthWrapper key="002" functionName={this.props.goodsFuncName}>
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Prev
+            </Button>
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Next
+            </Button>
+          </AuthWrapper>
+        ) : this.props.tabType == 'inventory' ? (
+          <AuthWrapper key="003" functionName={this.props.goodsFuncName}>
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Prev
+            </Button>
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Next
+            </Button>
+          </AuthWrapper>
+        ) : (
+          <AuthWrapper key="004" functionName={this.props.priceFuncName}>
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+              Prev
+            </Button>
+            <Button type="primary" onClick={this._savePrice} style={{ marginRight: 10 }} loading={saveLoading}>
+              Save
+            </Button>
+          </AuthWrapper>
+        )}
+        {/*{activeTabKey === 'main' || activeTabKey === 'price' || activeTabKey === 'inventory' ? (
           [
             <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
-              <Button type="primary" onClick={this._save} style={{ marginRight: 10 }} loading={saveLoading}>
-                <FormattedMessage id="product.saveDirectly" />
+              <Button type="primary" onClick={this._next} style={{ marginRight: 10 }} loading={saveLoading}>
+               Next
               </Button>
             </AuthWrapper>
             // <AuthWrapper key="002" functionName={this.props.priceFuncName}>
@@ -56,7 +90,7 @@ export default class Foot extends React.Component<any, any> {
               Save
             </Button>
           </AuthWrapper>
-        )}
+        )}*/}
       </div>
     );
   }
@@ -74,11 +108,16 @@ export default class Foot extends React.Component<any, any> {
     saveAll();
   };
 
-  _next = () => {
-    const { validMain } = this.props.relaxProps;
-    const result = validMain();
+  _prev = (res) => {
+    this.props.onPrev(res);
+  };
+
+  _next = (res) => {
+    this.props.onNext(res);
+    // const { activeTabKey, onNext} = this.props.relaxProps;
+    /*const result = validMain();
     if (result) {
       this.props.relaxProps.onMainTabChange('price');
-    }
+    }*/
   };
 }

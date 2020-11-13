@@ -116,7 +116,11 @@ export default class Line extends React.Component {
         {
           name: yName.y1,
           type: 'bar',
+          yAxisIndex: 0,
           barWidth: 25,
+          left: 0,
+          nameGap: 5,
+          nameLoaction: "left",
           itemStyle: {
             normal: {
               color: '#F5828E',

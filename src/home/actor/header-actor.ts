@@ -20,7 +20,8 @@ export default class HeaderActor extends Actor {
         text: '',
         // 底部蓝色
         bottomErrTxt: ''
-      }
+      },
+      loading: true
     };
   }
 
@@ -32,5 +33,15 @@ export default class HeaderActor extends Actor {
   @Action('common: header')
   onHeaderChange(state: IMap, header) {
     return state.set('header', fromJS(header));
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

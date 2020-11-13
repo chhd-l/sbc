@@ -44,7 +44,6 @@ export default class GoodsPropDetail extends React.Component<any, any> {
 
   render() {
     const { propList } = this.props.relaxProps;
-    console.log(propList.toJS(), 'proplist');
     return (
       <div>
         <div
@@ -65,28 +64,15 @@ export default class GoodsPropDetail extends React.Component<any, any> {
             {propList &&
               propList.map((detList) => {
                 return (
-                  <Row
-                    type="flex"
-                    justify="start"
-                    key={detList.get(0).get('propId')}
-                  >
+                  <Row type="flex" justify="start" key={detList.get(0).get('propId')}>
                     {detList.map((det) => (
-                      <Col
-                        span={10}
-                        key={det.get('propId') + det.get('cateId')}
-                      >
-                        <FormItem
-                          {...formItemLayout}
-                          label={det.get('propName')}
-                        >
+                      <Col span={10} key={det.get('propId') + det.get('cateId')}>
+                        <FormItem {...formItemLayout} label={det.get('propName')}>
                           {/* {this._getPropSelect(
                             det.get('goodsPropDetails'),
                             det.get('propId')
                           )} */}
-                          {this._getPropTree(
-                            det.get('goodsPropDetails'),
-                            det.get('propId')
-                          )}
+                          {this._getPropTree(det.get('goodsPropDetails'), det.get('propId'))}
                         </FormItem>
                       </Col>
                     ))}
@@ -107,11 +93,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     const selected = propVal ? propVal.get('detailId') : '0';
     console.log(selected, 'selected');
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue={selected}
-        onChange={(value) => this._onChange(propId, value)}
-      >
+      <Select getPopupContainer={() => document.getElementById('page-content')} defaultValue={selected} onChange={(value) => this._onChange(propId, value)}>
         {propValues.map((item) => {
           return (
             <Option key={item.get('detailId')} value={item.get('detailId')}>
@@ -124,9 +106,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
   };
 
   _getPropTree = (propValues, propId) => {
-    const propVals = propValues.filter(
-      (item) => item.get('select') === 'select'
-    );
+    const propVals = propValues.filter((item) => item.get('select') === 'select');
     const selected = propVals.length
       ? propVals.toJS().map((item) => {
           return {
@@ -163,22 +143,12 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     return propValues.map((item) => {
       if (item.get('children') && item.get('children').count()) {
         return (
-          <TreeNode
-            key={item.get('detailId')}
-            value={item.get('detailId')}
-            title={item.get('detailName')}
-          >
+          <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')}>
             {this.generateStoreCateTree(item.get('children'))}
           </TreeNode>
         );
       }
-      return (
-        <TreeNode
-          key={item.get('detailId')}
-          value={item.get('detailId')}
-          title={item.get('detailName')}
-        />
-      );
+      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} />;
     });
   };
 

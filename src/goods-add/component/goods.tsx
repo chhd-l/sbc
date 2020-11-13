@@ -33,7 +33,18 @@ const formItemLayout = {
 const tProps = {
   treeCheckable: 'true'
 };
-
+const treeData = [
+  {
+    title: 'Node1',
+    value: '0-0',
+    key: '0-0'
+  },
+  {
+    title: 'Node2',
+    value: '0-1',
+    key: '0-1'
+  }
+];
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
 
@@ -115,6 +126,9 @@ export default class Info extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(GoodsForm);
+    this.state = {
+      saleableType: 1
+    };
   }
 
   render() {
@@ -122,28 +136,6 @@ export default class Info extends React.Component<any, any> {
     const relaxProps = this.props.relaxProps;
     return (
       <div>
-        <Alert
-          message={
-            <div>
-              <p>
-                <FormattedMessage id="operationInstruction" />：
-              </p>
-              <p>
-                1、
-                <FormattedMessage id="operationInstruction.first" />
-              </p>
-              <p>
-                2、
-                <FormattedMessage id="operationInstruction.second" />
-              </p>
-              <p>
-                3、
-                <FormattedMessage id="operationInstruction.third" />
-              </p>
-            </div>
-          }
-          type="info"
-        />
         <div
           style={{
             fontSize: 16,
@@ -223,33 +215,6 @@ class GoodsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
-              {getFieldDecorator('goodsName', {
-                rules: [
-                  {
-                    required: true,
-                    whitespace: true,
-                    message: 'Please input product name'
-                  },
-                  {
-                    min: 1,
-                    max: 225,
-                    message: '1-225 characters'
-                  },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(rule, value, callback, 'product name');
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'goodsName'),
-                initialValue: goods.get('goodsName')
-              })(<Input placeholder="Please input product name，no more than 225 words" />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
@@ -302,6 +267,61 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
+              {getFieldDecorator('goodsName', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: 'Please input product name'
+                  },
+                  {
+                    min: 1,
+                    max: 225,
+                    message: '1-225 characters'
+                  },
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(rule, value, callback, 'product name');
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsName'),
+                initialValue: goods.get('goodsName')
+              })(<Input placeholder="Please input product name，no more than 225 words" />)}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
+              {getFieldDecorator('addedFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select the status'
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'addedFlag'),
+                initialValue: goods.get('addedFlag')
+              })(
+                <RadioGroup>
+                  <Radio value={1}>
+                    <FormattedMessage id="product.onShelves" />
+                  </Radio>
+                  <Radio value={0}>
+                    <FormattedMessage id="product.offShelves" />
+                  </Radio>
+                  {/* {isEditGoods && (
+                    <Radio value={2} disabled={true}>
+                      <FormattedMessage id="product.partialOnShelves" />
+                    </Radio>
+                  )} */}
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
@@ -316,10 +336,19 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Product tagging">
+              {getFieldDecorator('tagging', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'tagging')
+                // initialValue: 'Y'
+              })(<TreeSelect getPopupContainer={() => document.getElementById('page-content')} treeData={treeData} treeCheckable="true" placeholder="please select status"></TreeSelect>)}
+            </FormItem>
+          </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
+            <FormItem {...formItemLayout} label="Product classification">
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -365,7 +394,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.storeCategory" />}>
+            <FormItem {...formItemLayout} label="Product category">
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
@@ -378,15 +407,14 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
+                  //treeCheckable={true}
+                  //showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  //treeCheckStrictly={true}
                   placeholder="Please select store category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  treeDefaultExpandAll
-                  showSearch={false}
-                  disabled={!goods.get('cateId')}
+                  //showSearch={false}
+                  //disabled={!goods.get('cateId')}
                   onChange={this.storeCateChange}
                 >
                   {this.generateStoreCateTree(storeCateList)}
@@ -528,6 +556,76 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Sales status">
+              {getFieldDecorator('saleableFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select the status'
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'saleableFlag'),
+                initialValue: goods.get('saleableFlag')
+              })(
+                <RadioGroup>
+                  <Radio value={0}>Not–Saleable</Radio>
+                  <Radio value={1}>Saleable</Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
+          {this.state.saleableType == true ? (
+            <Col span={8}>
+              <FormItem {...formItemLayout} label="Display on shop">
+                {getFieldDecorator('displayFlag', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select the status'
+                    }
+                  ],
+                  onChange: this._editGoods.bind(this, 'displayFlag'),
+                  initialValue: goods.get('displayFlag')
+                })(
+                  <RadioGroup>
+                    <Radio value={1}>Yes</Radio>
+                    <Radio value={0}>No</Radio>
+                  </RadioGroup>
+                )}
+              </FormItem>
+            </Col>
+          ) : null}
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem
+              {...formItemLayout}
+              label={
+                <span>
+                  <FormattedMessage id="product.productImage" />
+                </span>
+              }
+            >
+              <div style={{ width: 550 }}>
+                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
+              </div>
+              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
+              <div style={{ width: 550 }}>
+                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
+              </div>
+              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
+            </FormItem>
+          </Col>
+        </Row>
         {/* <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="销售类型">
@@ -599,73 +697,6 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row> */}
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
-              {getFieldDecorator('addedFlag', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select the status'
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'addedFlag'),
-                initialValue: goods.get('addedFlag')
-              })(
-                <RadioGroup>
-                  <Radio value={1}>
-                    <FormattedMessage id="product.onShelves" />
-                  </Radio>
-                  <Radio value={0}>
-                    <FormattedMessage id="product.offShelves" />
-                  </Radio>
-                  {/* {isEditGoods && (
-                    <Radio value={2} disabled={true}>
-                      <FormattedMessage id="product.partialOnShelves" />
-                    </Radio>
-                  )} */}
-                </RadioGroup>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  {/* <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    *
-                  </span> */}
-                  <FormattedMessage id="product.productImage" />
-                </span>
-              }
-            >
-              <div style={{ width: 550 }}>
-                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
-              </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
-              <div style={{ width: 550 }}>
-                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
-              </div>
-              <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
-            </FormItem>
-          </Col>
-        </Row>
       </Form>
     );
   }
@@ -684,6 +715,20 @@ class GoodsForm extends React.Component<any, any> {
   _editGoods = (key: string, e) => {
     const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
+
+    if (key === 'saleableFlag') {
+      console.log(e.target.value, 112344555);
+      if (e.target.value == 0) {
+        this.setState({
+          saleableType: true
+        });
+      } else {
+        this.setState({
+          saleableType: false
+        });
+      }
+    }
+
     if (e && e.target) {
       e = e.target.value;
     }

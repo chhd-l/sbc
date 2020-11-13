@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
-import AppStore from '../store';
 import { fromJS, Map } from 'immutable';
 import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -12,9 +11,9 @@ const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    span: 4,
-    xs: { span: 4 },
-    sm: { span: 4 }
+    span: 6,
+    xs: { span: 6 },
+    sm: { span: 6 }
   },
   wrapperCol: {
     span: 10,
@@ -22,26 +21,24 @@ const formItemLayout = {
     sm: { span: 10 }
   }
 };
+
 @Relax
-export default class seoSettingForm extends Component<any, any> {
+export default class SeoSettingForm extends Component<any, any> {
   _rejectForm;
 
   WrapperForm: any;
 
-  state: {
-    operation: 'new'; //edit
-    isEdit: false;
-  };
+  state: {};
   props: {
     form: any;
-    seoForm: IMap;
     relaxProps?: {
-      seoForm: 'seoForm';
+      seoForm: any;
       updateSeoForm: Function;
     };
   };
 
   static relaxProps = {
+    seoForm: 'seoForm',
     updateSeoForm: noop
   };
   componentDidMount() {}
@@ -49,23 +46,12 @@ export default class seoSettingForm extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { seoForm, updateSeoForm } = this.props.relaxProps;
-    debugger;
+    const seoObj = seoForm.toJS();
     return (
       <Form {...formItemLayout} className="login-form">
-        {/*<Form.Item>*/}
-        {/*  {getFieldDecorator('title', {*/}
-        {/*    rules: [{ required: true, message: 'Please input your username!' }],*/}
-        {/*  })*/}
-        {/*  (*/}
-        {/*    <Input*/}
-        {/*      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
-        {/*      placeholder="Username"*/}
-        {/*    />,*/}
-        {/*  )}*/}
-        {/*</Form.Item>*/}
         <Form.Item label="Title">
           {getFieldDecorator('title', {
-            initialValue: '{name}-Royal Canin}'
+            initialValue: seoObj.title
           })(
             <Input
               onChange={(e) =>
@@ -79,7 +65,7 @@ export default class seoSettingForm extends Component<any, any> {
         </Form.Item>
         <Form.Item label="Meta Keywords">
           {getFieldDecorator('metaKeywords', {
-            initialValue: '{name}, {subtitle}, {sales category}, {tagging}'
+            initialValue: seoObj.metaKeywords
           })(
             <TextArea
               rows={4}
@@ -94,7 +80,7 @@ export default class seoSettingForm extends Component<any, any> {
         </Form.Item>
         <Form.Item label="Meta Description">
           {getFieldDecorator('description', {
-            initialValue: '{description}'
+            initialValue: seoObj.description
           })(
             <TextArea
               rows={4}

@@ -35,25 +35,22 @@ export default class SeoForm extends Component<any, any> {
   };
   props: {
     form: any;
-    seoForm: IMap;
     relaxProps?: {
-      seoForm: 'seoForm';
+      seoForm: any;
       updateSeoForm: Function;
     };
   };
 
   static relaxProps = {
-    updateSeoForm: noop
+    updateSeoForm: noop,
+    seoForm: 'seoForm'
   };
   componentDidMount() {}
-  onSearch = () => {
-    console.log('search------------');
-  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
     const { seoForm, updateSeoForm } = this.props.relaxProps;
-    debugger;
+    const seoObj = seoForm.toJS();
     return (
       <Form {...formItemLayout} className="login-form">
         {/*<Form.Item>*/}
@@ -69,7 +66,7 @@ export default class SeoForm extends Component<any, any> {
         {/*</Form.Item>*/}
         <Form.Item label="Title">
           {getFieldDecorator('title', {
-            initialValue: '{name}-Royal Canin}'
+            initialValue: seoObj.title
           })(
             <Input
               onChange={(e) =>
@@ -83,7 +80,7 @@ export default class SeoForm extends Component<any, any> {
         </Form.Item>
         <Form.Item label="Meta Keywords">
           {getFieldDecorator('metaKeywords', {
-            initialValue: '{name}, {subtitle}, {sales category}, {tagging}'
+            initialValue: seoObj.metaKeywords
           })(
             <TextArea
               rows={4}
@@ -98,7 +95,7 @@ export default class SeoForm extends Component<any, any> {
         </Form.Item>
         <Form.Item label="Meta Description">
           {getFieldDecorator('description', {
-            initialValue: '{description}'
+            initialValue: seoObj.description
           })(
             <TextArea
               rows={4}

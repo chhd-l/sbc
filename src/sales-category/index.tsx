@@ -49,7 +49,7 @@ export default class GoodsCate extends React.Component<any, any> {
 
           <PicModal />
 
-          {/*<SeoSettingModal visible={true} />*/}
+          <SeoSettingModal />
         </div>
       </div>
     );

@@ -25,7 +25,7 @@ export function findSortList(filterParams = {}) {
     })
   });
 }
-export function findFilterpage(filterParams = {}) {
+export function findFilterPage(filterParams = {}) {
   return Fetch<TResult>('/goods_filter/filters', {
     method: 'POST',
     body: JSON.stringify({
@@ -124,8 +124,6 @@ export function deleteFilterValue(filterParams = {}) {
   });
 }
 
-
-
 export function getProductList(filterParams = {}) {
   return Fetch<TResult>('/goodsRelation/goods', {
     method: 'POST',
@@ -151,6 +149,3 @@ export function updateOverridedProduct(filterParams = {}) {
     })
   });
 }
-
-
-

@@ -179,6 +179,13 @@ export default class SelectAttribute extends React.Component<any, any> {
       () => this.getAttributes()
     );
   };
+  getAttributeValue = (attributeValueList) => {
+    let attributeValue = [];
+    for (let i = 0; i < attributeValueList.length; i++) {
+      attributeValue.push(attributeValueList[i].attributeDetailName);
+    }
+    return attributeValue.join(';');
+  };
 
   render() {
     const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
@@ -187,6 +194,13 @@ export default class SelectAttribute extends React.Component<any, any> {
         title: 'Attribute name',
         dataIndex: 'attributeName',
         key: 'attributeName'
+      },
+      {
+        title: 'Attribute value',
+        dataIndex: 'attributeValue',
+        key: 'attributeValue',
+        width: '30%',
+        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}</p>
       }
     ];
     const rowSelection = {
@@ -252,6 +266,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                   </Col>
                 </Row>
               </Form>
+
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                 Reload
               </Button>

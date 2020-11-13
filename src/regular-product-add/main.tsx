@@ -10,6 +10,7 @@ import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
 //import Price from './component/price';
+import { Router } from 'react-router-dom';
 import Detail from './component/detail';
 import Foot from './component/foot';
 import BrandModal from './component/brand-modal';
@@ -35,6 +36,7 @@ export default class Main extends React.Component<any, any> {
 
   componentDidMount() {
     const { gid } = this.props.match.params;
+
     this.store.init(gid);
     this.store.setFreightList();
     //初始化素材
@@ -88,6 +90,7 @@ export default class Main extends React.Component<any, any> {
 
   render() {
     const { gid } = this.props.match.params;
+    const goodsType = this.props.location.state && this.props.location.state.goodsType;
     //默认添加商品的编辑与设价权限
     let goodsFuncName = 'f_goods_add_1';
     let priceFuncName = 'f_goods_add_2';
@@ -109,7 +112,7 @@ export default class Main extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{goodsType == 'edit' ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
         {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
@@ -118,7 +121,7 @@ export default class Main extends React.Component<any, any> {
           <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />} state={this._getState(gid)} />
+          <Headline title={goodsType == 'edit' ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs

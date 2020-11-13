@@ -7,9 +7,9 @@ import { fromJS, Map } from 'immutable';
 
 import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
-import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
+//import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
 import { FormattedMessage } from 'react-intl';
-import { consoleTestResultHandler } from 'tslint/lib/test';
+//import { consoleTestResultHandler } from 'tslint/lib/test';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -47,6 +47,7 @@ const treeData = [
 ];
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
+const { SHOW_PARENT } = TreeSelect;
 
 @Relax
 export default class Info extends React.Component<any, any> {
@@ -182,7 +183,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -409,16 +410,18 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  //treeCheckable={true}
-                  //showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  //treeCheckStrictly={true}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={getGoodsCate}
+                  // showCheckedStrategy = {SHOW_PARENT}
                   placeholder="Please select store category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  //showSearch={false}
+                  showSearch={false}
                   onChange={this.storeCateChange}
                 >
-                  {this.generateStoreCateTree(storeCateList)}
+                  {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -718,7 +721,6 @@ class GoodsForm extends React.Component<any, any> {
     const { setFieldsValue } = this.props.form;
 
     if (key === 'saleableFlag') {
-      console.log(e.target.value, 112344555);
       if (e.target.value == 0) {
         this.setState({
           saleableType: true
@@ -811,7 +813,6 @@ class GoodsForm extends React.Component<any, any> {
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
     // 店铺分类列表
     const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
-    console.log(sourceStoreCateList, 111111111111111);
 
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
@@ -914,15 +915,18 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
-    return storeCateList.map((item) => {
-      if (item.get('children') && item.get('children').count()) {
-        return (
-          <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
-            {this.generateStoreCateTree(item.get('children'))}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
-    });
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
   };
 }

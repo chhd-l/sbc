@@ -130,9 +130,33 @@ export default class GoodsActor extends Actor {
     return state.set('brandList', brandList);
   }
 
-  @Action('goodsActor: getGoodsCate')
-  getGoodsCate(state, brandList: IList) {
-    return state.set('getGoodsCate', brandList);
+  @Action('goodsActor:getGoodsCate')
+  getGoodsCate(state, getGoodsCate) {
+    const newDataList = getGoodsCate
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
+        const children = getGoodsCate
+          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
+          .map((childrenData) => {
+            const lastChildren = getGoodsCate.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
+            if (!lastChildren.isEmpty()) {
+              const sum = lastChildren.reduce(function (prev, cur) {
+                return cur.get('productNo') + prev;
+              }, 0);
+              childrenData = childrenData.set('children', lastChildren).set('productNo', sum);
+            }
+            return childrenData;
+          });
+
+        if (!children.isEmpty()) {
+          const sum = children.reduce(function (prev, cur) {
+            return cur.get('productNo') + prev;
+          }, 0);
+          data = data.set('children', children).set('productNo', sum);
+        }
+        return data;
+      });
+    return state.set('getGoodsCate', newDataList);
   }
 
   @Action('goodsActor: isEditGoods')

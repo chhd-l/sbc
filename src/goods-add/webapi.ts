@@ -31,10 +31,7 @@ export const getCateList = () => {
 export const getStoreCateList = (goodsCateId?) => {
   // return Fetch('/storeCate');
   let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-  let params = {
-    goodsCateId: goodsCateId,
-    storeId: loginInfo.storeId
-  };
+  let params = {};
   return Fetch('/storeCate/storeCateByCondition', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -358,8 +355,6 @@ export function fetchproductTooltip(param) {
     body: JSON.stringify(param)
   });
 }
-
-
 
 export function fetchAdd(param) {
   return Fetch<TResult>('/goodsRelation/add', {

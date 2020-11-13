@@ -81,6 +81,7 @@ export default class Info extends React.Component<any, any> {
       checkFlag: boolean;
       enterpriseFlag: boolean;
       flashsaleGoods: IList;
+      getGoodsCate: IList;
     };
   };
 
@@ -120,7 +121,8 @@ export default class Info extends React.Component<any, any> {
     cateDisabled: 'cateDisabled',
     checkFlag: 'checkFlag',
     enterpriseFlag: 'enterpriseFlag',
-    flashsaleGoods: 'flashsaleGoods'
+    flashsaleGoods: 'flashsaleGoods',
+    getGoodsCate: 'getGoodsCate'
   };
 
   constructor(props) {
@@ -180,7 +182,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -348,7 +350,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product classification">
+            <FormItem {...formItemLayout} label="Product category">
               {getFieldDecorator('cateId', {
                 rules: [
                   {
@@ -394,12 +396,12 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product category">
+            <FormItem {...formItemLayout} label="Sales category">
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select store category'
+                    message: 'Please select sales category'
                   }
                 ],
 
@@ -407,17 +409,18 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  //treeCheckable={true}
-                  //showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  //treeCheckStrictly={true}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={getGoodsCate}
+                  // showCheckedStrategy = {SHOW_PARENT}
                   placeholder="Please select store category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  //showSearch={false}
-                  //disabled={!goods.get('cateId')}
+                  showSearch={false}
                   onChange={this.storeCateChange}
                 >
-                  {this.generateStoreCateTree(storeCateList)}
+                  {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -913,15 +916,18 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
-    return storeCateList.map((item) => {
-      if (item.get('children') && item.get('children').count()) {
-        return (
-          <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
-            {this.generateStoreCateTree(item.get('children'))}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
-    });
+    return (
+      storeCateList &&
+      storeCateList.map((item) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
   };
 }

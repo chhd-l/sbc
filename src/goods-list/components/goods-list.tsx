@@ -224,7 +224,6 @@ export default class CateList extends React.Component<any, any> {
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale } = this.props.relaxProps;
-    console.log(rowInfo, 11111111);
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
@@ -235,7 +234,7 @@ export default class CateList extends React.Component<any, any> {
                 onClick={() =>
                   history.push({
                     pathname: `/goods-regular-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main' }
+                    state: { tab: 'main', goodsType: 'edit' }
                   })
                 }
                 style={{ marginRight: 5 }}
@@ -249,7 +248,7 @@ export default class CateList extends React.Component<any, any> {
                 onClick={() =>
                   history.push({
                     pathname: `/goods-bundle-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main' }
+                    state: { tab: 'main', goodsType: 'edit' }
                   })
                 }
                 style={{ marginRight: 5 }}

@@ -786,6 +786,10 @@ const routes = [
   {
     path: '/filter-sort-setting',
     asyncComponent: () => import('./filter-sort-setting')
+  },
+  {
+    path: '/product-tagging',
+    asyncComponent: () => import('./product-tagging')
   }
 ];
 

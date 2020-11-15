@@ -200,6 +200,12 @@ export function queryDictionary(filterParams = {}) {
   });
 }
 
+export function refresh(settleId) {
+  return Fetch<TResult>(`/trade/logistics/refresh/${settleId}`, {
+    method: 'GET'
+  });
+}
+
 export function getPaymentInfo(tid: string) {
   return Fetch(`/trade/record/${tid}`);
 }

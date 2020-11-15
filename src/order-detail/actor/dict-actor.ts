@@ -5,7 +5,8 @@ export default class DictActor extends Actor {
   defaultState() {
     return {
       countryDict: [],
-      cityDict: []
+      cityDict: [],
+      refresh: []
     };
   }
 
@@ -17,5 +18,10 @@ export default class DictActor extends Actor {
   @Action('dict:initCountry')
   initCountry(state: IMap, list: List<any>) {
     return state.set('countryDict', list);
+  }
+
+  @Action('dict:refresh')
+  refresh(state: IMap, list: List<any>) {
+    return state.set('refresh', list);
   }
 }

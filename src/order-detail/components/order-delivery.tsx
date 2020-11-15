@@ -32,6 +32,7 @@ export default class OrderDelivery extends React.Component<any, any> {
       hideDeliveryModal: Function;
       saveDelivery: Function;
       obsoleteDeliver: Function;
+      refresh: IMap;
     };
   };
 
@@ -45,30 +46,27 @@ export default class OrderDelivery extends React.Component<any, any> {
     formData: 'formData',
     hideDeliveryModal: noop,
     saveDelivery: noop,
-    obsoleteDeliver: noop
+    obsoleteDeliver: noop,
+    refresh: 'refresh'
   };
 
   render() {
-    const {
-      detail,
-      deliver,
-      modalVisible,
-      saveDelivery
-    } = this.props.relaxProps;
+    const { detail, deliver, modalVisible, saveDelivery, refresh } = this.props.relaxProps;
     const tradeDelivers = detail.get('tradeDelivers') as IList;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const paymentOrder = detail.get('paymentOrder');
 
     //处理赠品
-    const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map(
-      (gift) =>
-        gift
-          .set('skuName', `【赠品】${gift.get('skuName')}`)
-          .set('levelPrice', 0)
-          .set('isGift', true)
+    const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
+      gift
+        .set('skuName', `【赠品】${gift.get('skuName')}`)
+        .set('levelPrice', 0)
+        .set('isGift', true)
     );
-
+    setTimeout(() => {
+      console.log(refresh, 11111);
+    });
     const DeliveryFormDetail = Form.create({})(DeliveryForm);
     return (
       <div>
@@ -79,15 +77,8 @@ export default class OrderDelivery extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table
-            rowKey={(_record, index) => index.toString()}
-            columns={this._deliveryColumns()}
-            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
-            pagination={false}
-            bordered
-          />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') &&
-          !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
+          <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
+          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') && !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" onClick={() => deliver()}>
@@ -100,34 +91,13 @@ export default class OrderDelivery extends React.Component<any, any> {
         {tradeDelivers.count() > 0
           ? tradeDelivers.map((v, i) => {
               const logistic = v.get('logistics');
-              const deliverTime = v.get('deliverTime')
-                ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT)
-                : null;
+              const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
               //处理赠品
-              const deliversGifts = (v.get('giftItemList')
-                ? v.get('giftItemList')
-                : fromJS([])
-              ).map((gift) =>
-                gift.set('itemName', `【赠品】${gift.get('itemName')}`)
-              );
+              const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
               return (
-                <div
-                  key={i}
-                  style={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  <label style={styles.title}>
-                    {<FormattedMessage id="deliveryRecord" />}
-                  </label>
-                  <Table
-                    rowKey={(_record, index) => index.toString()}
-                    columns={this._deliveryRecordColumns()}
-                    dataSource={v
-                      .get('shippingItems')
-                      .concat(deliversGifts)
-                      .toJS()}
-                    pagination={false}
-                    bordered
-                  />
+                <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <label style={styles.title}>{<FormattedMessage id="deliveryRecord" />}</label>
+                  <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryRecordColumns()} dataSource={v.get('shippingItems').concat(deliversGifts).toJS()} pagination={false} bordered />
 
                   <div style={styles.expressBox as any}>
                     <div style={styles.stateBox}>
@@ -135,33 +105,34 @@ export default class OrderDelivery extends React.Component<any, any> {
                         <label style={styles.information}>
                           【Logistics information】delivery date：{deliverTime}
                           &nbsp;&nbsp; Logistics company：
-                          {logistic.get('logisticCompanyName')}{' '}
-                          &nbsp;&nbsp;Logistics single number：
+                          {logistic.get('logisticCompanyName')} &nbsp;&nbsp;Logistics single number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
-                          <Logistics
-                            companyInfo={logistic}
-                            deliveryTime={deliverTime}
-                          />
+                          <Logistics companyInfo={logistic} deliveryTime={deliverTime} />
                         </label>
                       ) : (
                         'none'
                       )}
                     </div>
-                    {flowState === 'CONFIRMED' ||
-                    flowState === 'COMPLETED' ||
-                    flowState === 'VOID' ? null : (
+                    {flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
-                        <a
-                          style={{ color: 'blue' }}
-                          href="#"
-                          onClick={() =>
-                            this._showCancelConfirm(v.get('deliverId'))
-                          }
-                        >
+                        <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
                           Invalid
                         </a>
                       </AuthWrapper>
                     )}
+                  </div>
+
+                  <div style={{ marginTop: 0, marginBottom: 20, marginLeft: 15 }}>
+                    {refresh[i].syncLogisticsInfo.originInfo.trackInfo &&
+                      refresh[i].syncLogisticsInfo.originInfo.trackInfo.map((item, o) => {
+                        return (
+                          <div key={o} className="flex-start-align">
+                            <span>{item.date},</span>
+                            <span>{item.statusDescription},</span>
+                            <span>{item.details}</span>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               );
@@ -195,17 +166,13 @@ export default class OrderDelivery extends React.Component<any, any> {
             this['_receiveAdd'].validateFields(null, (errs, values) => {
               //如果校验通过
               if (!errs) {
-                values.deliverTime = values.deliverTime.format(
-                  Const.DAY_FORMAT
-                );
+                values.deliverTime = values.deliverTime.format(Const.DAY_FORMAT);
                 saveDelivery(values);
               }
             });
           }}
         >
-          <DeliveryFormDetail
-            ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)}
-          />
+          <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />
         </Modal>
       </div>
     );

@@ -8,7 +8,7 @@ import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
 
 import * as webapi from './webapi';
-import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary } from './webapi';
+import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
 import { Const, history, ValidConst } from 'qmkit';
@@ -44,6 +44,7 @@ export default class AppStore extends Store {
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
       })) as any;
+      const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
 
       this.transaction(() => {
         this.dispatch('loading:end');
@@ -55,6 +56,7 @@ export default class AppStore extends Store {
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
         this.dispatch('dict:initCity', cityDictRes.context.sysDictionaryVOS);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
+        this.dispatch('dict:refresh', refresh.context.tradeDelivers);
       });
     } else {
       message.error(errorInfo);

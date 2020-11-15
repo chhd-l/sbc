@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import { BreadCrumb, SelectGroup, history, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table } from 'antd';
+import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const InputGroup = Input.Group;
 
 class ProductFinderList extends Component<any, any> {
   static propTypes = {};
@@ -90,7 +88,7 @@ class ProductFinderList extends Component<any, any> {
         dataIndex: 'image',
         key: 'image',
         width: '10%',
-        render: (text, record) => <img src={text} alt="Image" />
+        render: (text) => <img src={text} alt="Image" />
       },
       {
         title: 'Product Finder Number',

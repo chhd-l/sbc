@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { Table, Button, InputNumber, Modal, Form } from 'antd';
+import { Table, Button, InputNumber, Modal, Form, Spin } from 'antd';
 import { IMap, IList } from 'typings/globalType';
 import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
 import DeliveryForm from './delivery-form';
@@ -16,7 +16,8 @@ export default class OrderDelivery extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      logistics: []
+      logistics: [],
+      loading: false
     };
   }
 
@@ -33,6 +34,7 @@ export default class OrderDelivery extends React.Component<any, any> {
       saveDelivery: Function;
       obsoleteDeliver: Function;
       refresh: IMap;
+      onRefresh: Function;
     };
   };
 
@@ -47,11 +49,25 @@ export default class OrderDelivery extends React.Component<any, any> {
     hideDeliveryModal: noop,
     saveDelivery: noop,
     obsoleteDeliver: noop,
-    refresh: 'refresh'
+    refresh: 'refresh',
+    onRefresh: noop
   };
 
+  /*static getDerivedStateFromProps(nextProps, prevState) {
+    const { refresh } = nextProps.relaxProps;
+    // 当传入的type发生变化的时候，更新state
+    if (refresh != prevState.loading) {
+      return {
+
+      };
+    }
+
+    // 否则，对于state不进行任何操作
+    return null;
+  }*/
+
   render() {
-    const { detail, deliver, modalVisible, saveDelivery, refresh } = this.props.relaxProps;
+    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh } = this.props.relaxProps;
     const tradeDelivers = detail.get('tradeDelivers') as IList;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
@@ -64,9 +80,6 @@ export default class OrderDelivery extends React.Component<any, any> {
         .set('levelPrice', 0)
         .set('isGift', true)
     );
-    setTimeout(() => {
-      console.log(refresh, 11111);
-    });
     const DeliveryFormDetail = Form.create({})(DeliveryForm);
     return (
       <div>
@@ -102,12 +115,15 @@ export default class OrderDelivery extends React.Component<any, any> {
                   <div style={styles.expressBox as any}>
                     <div style={styles.stateBox}>
                       {logistic ? (
-                        <label style={styles.information}>
+                        <label style={styles.information} className="flex-start-align">
                           【Logistics information】delivery date：{deliverTime}
                           &nbsp;&nbsp; Logistics company：
                           {logistic.get('logisticCompanyName')} &nbsp;&nbsp;Logistics single number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
                           <Logistics companyInfo={logistic} deliveryTime={deliverTime} />
+                          <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                            Refresh
+                          </Button>
                         </label>
                       ) : (
                         'none'
@@ -122,18 +138,22 @@ export default class OrderDelivery extends React.Component<any, any> {
                     )}
                   </div>
 
-                  <div style={{ marginTop: 0, marginBottom: 20, marginLeft: 15 }}>
-                    {refresh[i].syncLogisticsInfo.originInfo.trackInfo &&
-                      refresh[i].syncLogisticsInfo.originInfo.trackInfo.map((item, o) => {
-                        return (
-                          <div key={o} className="flex-start-align">
-                            <span>{item.date},</span>
-                            <span>{item.statusDescription},</span>
-                            <span>{item.details}</span>
-                          </div>
-                        );
-                      })}
-                  </div>
+                  <Spin spinning={this.state.loading} delay={0}>
+                    <div style={{ marginTop: 0, marginBottom: 20, marginLeft: 15 }}>
+                      {refresh.length != 0
+                        ? refresh[i].syncLogisticsInfo.originInfo.trackInfo &&
+                          refresh[i].syncLogisticsInfo.originInfo.trackInfo.map((item, o) => {
+                            return (
+                              <div key={o} className="flex-start-align">
+                                <span>{item.date},</span>
+                                <span>{item.statusDescription},</span>
+                                <span>{item.details}</span>
+                              </div>
+                            );
+                          })
+                        : null}
+                    </div>
+                  </Spin>
                 </div>
               );
             })

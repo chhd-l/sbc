@@ -45,7 +45,6 @@ export default class AppStore extends Store {
         type: 'country'
       })) as any;
       const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
-
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
@@ -60,6 +59,17 @@ export default class AppStore extends Store {
       });
     } else {
       message.error(errorInfo);
+    }
+  };
+
+  /* 刷新物流信息*/
+  onRefresh = async (params) => {
+    const tid = this.state().get('tid');
+    const { res } = (await webapi.refresh(tid)) as any;
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('dict:refresh', res.context.tradeDelivers);
+    } else {
+      message.error(res.message);
     }
   };
 

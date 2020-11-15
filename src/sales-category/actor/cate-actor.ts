@@ -65,8 +65,8 @@ export default class CateActor extends Actor {
             const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
             if (!lastChildren.isEmpty()) {
               const sum = lastChildren.reduce(function (prev, cur) {
-                return cur.productNo + prev;
-              }, 1);
+                return cur.get('productNo') + prev;
+              }, 0);
               childrenData = childrenData.set('children', lastChildren).set('productNo', sum);
             }
             return childrenData;
@@ -74,8 +74,8 @@ export default class CateActor extends Actor {
 
         if (!children.isEmpty()) {
           const sum = children.reduce(function (prev, cur) {
-            return cur.productNo + prev;
-          }, 2);
+            return cur.get('productNo') + prev;
+          }, 0);
           data = data.set('children', children).set('productNo', sum);
         }
         return data;
@@ -106,6 +106,7 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: showModal')
   show(state, needClear: boolean) {
+    debugger;
     if (needClear) {
       state = state.set('formData', Map());
     }

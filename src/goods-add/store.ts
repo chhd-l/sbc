@@ -78,24 +78,13 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([
-      getCateList(),
-      // getStoreCateList(),
-      getBrandList(),
-      checkSalesType(goodsId),
-      isFlashsele(goodsId),
-      getDetailTab(),
-      this.onRelatedList(goodsId)
-    ]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
-      // this.dispatch(
-      //   'goodsActor: initStoreCateList',
-      //   fromJS((results[1].res as any).context.storeCateResponseVOList)
-      // );
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
+      this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
       this.dispatch('related:goodsId', goodsId);
     });
     // 如果是编辑则判断是否有企业购商品
@@ -719,6 +708,14 @@ export default class AppStore extends Store {
     this.dispatch('priceActor: addAreaPrice');
   };
 
+  updateSeoForm = ({ field, value }) => {
+    this.dispatch('formActor:seo', { field, value });
+  };
+  saveSeoSetting = () => {
+    const form = this.state().get('seoForm').toJS();
+    //调接口
+  };
+
   updateGoodsForm = (goodsForm) => {
     this.dispatch('formActor:goods', goodsForm);
   };
@@ -972,7 +969,7 @@ export default class AppStore extends Store {
         // const propValue = goodsPropDetails.find(
         //   (i) => i.get('select') == 'select'
         // );
-        // let detailId = propValue.get('detailId');
+        // let detailId = propValue.get('detailId')propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {
@@ -1251,7 +1248,7 @@ export default class AppStore extends Store {
         goodsPropDetails = fromJS(goodsPropDetails);
         let goodsId = goods.get('goodsId');
         const propValue = goodsPropDetails.find((i) => i.get('select') == 'select');
-        let detailId = propValue.get('detailId');
+        //let detailId = propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {

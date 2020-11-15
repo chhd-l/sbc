@@ -1,5 +1,5 @@
 import { Actor, Action } from 'plume2';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 export default class ModalActor extends Actor {
   defaultState() {

@@ -6,6 +6,20 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "18201958",
+      "name": "icon",
+      "font_class": "icon",
+      "unicode": "e6b6",
+      "unicode_decimal": 59062
+    },
+    {
+      "icon_id": "18067878",
+      "name": "Content",
+      "font_class": "Content",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
       "icon_id": "5205031",
       "name": "狗",
       "font_class": "dog",

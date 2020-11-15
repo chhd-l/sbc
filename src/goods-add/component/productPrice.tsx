@@ -203,71 +203,57 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    if (goods.get('subscriptionStatus') !== '0') {
-      columns = columns.push({
-        title: (
-          <div>
-            <FormattedMessage id="product.subscriptionStatus" />
-          </div>
-        ),
-        key: 'subscriptionStatus',
-        render: (rowInfo) => (
+    columns = columns.push({
+      title: (
+        <div>
+          <FormattedMessage id="Base price" />
+          <Select value={baseSpecId || null} onChange={this._handleChange}>
+            {goodsSpecs.map((item) => (
+              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+            ))}
+          </Select>
+        </div>
+      ),
+      key: 'basePrice',
+      render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo');
+        return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                  initialValue: goods.get('subscriptionStatus') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
+                {getFieldDecorator('basePrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      pattern: ValidConst.number,
+                      message: '0 or positive integer'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
+                  initialValue: rowInfo.basePrice || 0
                 })(
-                  <Select disabled={goods.get('subscriptionStatus') === '0'} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '150px' }} placeholder="please select status">
-                    <Option value="1">Y</Option>
-                    <Option value="0">N</Option>
-                  </Select>
+                  <div>
+                    <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                    <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                    {/* <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled
+                  />
+                  <InputNumber
+                    style={{ width: '60px' }}
+                    min={0}
+                    max={9999999}
+                    disabled={rowInfo.subscriptionStatus === 0}
+                  /> */}
+                  </div>
                 )}
               </FormItem>
             </Col>
           </Row>
-        )
-      });
-      columns = columns.push({
-        title: (
-          <div>
-            <FormattedMessage id="product.subscriptionPrice" />
-          </div>
-        ),
-        key: 'subscriptionPrice',
-        render: (rowInfo) => (
-          <Row>
-            <Col span={12}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input market price'
-                    },
-                    {
-                      pattern: ValidConst.zeroPrice,
-                      message: 'Please input the legal amount with two decimal places'
-                    },
-                    {
-                      type: 'number',
-                      max: 9999999.99,
-                      message: 'The maximum value is 9999999.99',
-                      transform: function (value) {
-                        return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                      }
-                    }
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                  initialValue: rowInfo.subscriptionPrice || 0
-                })(<Input style={{ width: '150px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        )
-      });
-    }
+        );
+      }
+    });
     columns = columns.push({
       title: '',
       key: 'linePrice',

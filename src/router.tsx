@@ -268,6 +268,11 @@ const routes = [
     path: '/goods-check',
     asyncComponent: () => import('./goods-check')
   },
+  {
+    path: '/goods-inventory',
+    asyncComponent: () => import('./goods-inventory')
+  },
+
   // 客户列表
   {
     path: '/customer-list',

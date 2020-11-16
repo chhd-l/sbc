@@ -17,7 +17,6 @@ export async function getStoreLanguages() {
         languages.push(language);
       });
       sessionStorage.setItem(cache.STORE_LANGUAGES, JSON.stringify(languages));
-      debugger;
       if (languages && languages.length > 0) {
         sessionStorage.setItem(cache.DEFAULT_LANGUAGE, languages[0].name);
       }

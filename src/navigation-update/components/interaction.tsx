@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, message, Radio, Select, TreeSelect } from 'antd';
 import * as webapi from '../webapi';
 import { util } from 'qmkit';
+const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,10 +42,11 @@ export default class Interaction extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    let defaultInteraction = this.props.navigation.interaction ? this.props.navigation.interaction : 0;
     this.setState({
-      interaction: this.props.navigation.interaction ? this.props.navigation.interaction : 0
+      interaction: defaultInteraction
     });
-    this.props.addField('interaction', this.state.interaction);
+    this.props.addField('interaction', defaultInteraction);
     this.getPageTypes();
     this.getCategories();
     this.getFilters();
@@ -190,15 +192,19 @@ export default class Interaction extends React.Component<any, any> {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { navigation } = this.props;
+    const { navigation, hasLanguage } = this.props;
     const { pageList, interaction, pageTypeCode, treeData, filterList, sortList } = this.state;
-    const targetList = ['_blank', '_self', '_parent', '_top', 'framename'];
+    const targetList = [
+      { name: 'external', value: '_blank' },
+      { name: 'self', value: '_self' }
+    ];
     let defaultCategoryIds = navigation.navigationCateIds ? navigation.navigationCateIds.split(',').map((x) => parseInt(x)) : [];
     const tProps = {
       treeData,
       value: defaultCategoryIds,
       onChange: this.onSalesCategoryChange,
       treeCheckable: true,
+      showCheckedStrategy: SHOW_PARENT,
       searchPlaceholder: 'Please select',
       style: {
         width: '100%'
@@ -206,7 +212,7 @@ export default class Interaction extends React.Component<any, any> {
     };
     return (
       <div>
-        <h3>Step3</h3>
+        <h3>{hasLanguage ? 'Step2' : 'Step3'}</h3>
         <h4>
           Interaction Type<span className="ant-form-item-required"></span>
         </h4>
@@ -333,8 +339,8 @@ export default class Interaction extends React.Component<any, any> {
                     }}
                   >
                     {targetList.map((item, index) => (
-                      <Option value={item} key={index}>
-                        {item}
+                      <Option value={item.value} key={index}>
+                        {item.name}
                       </Option>
                     ))}
                   </Select>

@@ -1,11 +1,13 @@
 import React from 'react';
-import { Form, Input, message, Radio, Select, TreeSelect } from 'antd';
+import { Form, Input, message, Radio, Select, Tree, TreeSelect } from 'antd';
 import * as webapi from '../webapi';
 import { util } from 'qmkit';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TreeNode = Tree.TreeNode;
+
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 10 }
@@ -26,6 +28,7 @@ export default class Interaction extends React.Component<any, any> {
       // Contact Us Page--CUP
       // Home Page--HP
       pageTypeCode: '',
+      treeSource: [],
       treeData: [],
       filterList: [],
       sortList: []
@@ -39,6 +42,8 @@ export default class Interaction extends React.Component<any, any> {
     this.pageChange = this.pageChange.bind(this);
     this.onSalesCategoryChange = this.onSalesCategoryChange.bind(this);
     this.clearFields = this.clearFields.bind(this);
+    this.getAllChildredIds = this.getAllChildredIds.bind(this);
+    this.generateFilterTree = this.generateFilterTree.bind(this);
   }
 
   componentDidMount() {
@@ -83,7 +88,7 @@ export default class Interaction extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let source = res.context.map((item) => {
+          let treeSource = res.context.map((item) => {
             return {
               id: item.storeCateId,
               title: item.cateName,
@@ -92,8 +97,9 @@ export default class Interaction extends React.Component<any, any> {
               key: item.storeCateId
             };
           });
-          let treeData = util.setChildrenData(source);
+          let treeData = util.setChildrenData(treeSource);
           this.setState({
+            treeSource,
             treeData
           });
         } else {
@@ -110,11 +116,27 @@ export default class Interaction extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let filterList = res.context.map((item) => {
-            return {
-              id: item.id,
-              name: item.attributeName
-            };
+          let filterList = [];
+          res.context.map((item) => {
+            let childrenNodes = [];
+            if (item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0) {
+              childrenNodes = item.storeGoodsFilterValueVOList.map((child) => {
+                return {
+                  title: child.attributeDetailName,
+                  value: child.id,
+                  key: child.id,
+                  isSingle: item.choiceStatus === 'Single choice',
+                  parentId: item.id
+                };
+              });
+              filterList.push({
+                title: item.attributeName,
+                value: item.id,
+                key: item.id,
+                children: childrenNodes
+              });
+            }
+            return item;
           });
           this.setState({
             filterList
@@ -188,15 +210,55 @@ export default class Interaction extends React.Component<any, any> {
     }
   }
   onSalesCategoryChange = (value) => {
-    this.props.addField('navigationCateIds', value.join(','));
+    let treeLowestIds = [];
+    value.map((item) => {
+      let childrenIds = this.getAllChildredIds(item, []);
+      treeLowestIds.push(childrenIds);
+      return item;
+    });
+    this.props.addField('navigationCateIds', treeLowestIds.join(','));
   };
+  getAllChildredIds(id, chilidrenIds) {
+    let children = this.state.treeSource.filter((x) => x.parentId === id);
+    if (children && children.length > 0) {
+      children.map((x) => {
+        this.getAllChildredIds(x.id, chilidrenIds);
+      });
+    } else {
+      chilidrenIds.push(id);
+    }
+    return chilidrenIds;
+  }
+
+  generateFilterTree(filterList) {
+    console.log(filterList);
+    return (
+      filterList &&
+      filterList.map((item) => {
+        let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
+        let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
+        let selectedFilters = this.props.navigation.filter ? this.props.navigation.filter.split(',') : [];
+        let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
+        let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
+        debugger;
+        if (item.children && item.children.length > 0) {
+          return (
+            <TreeNode key={item.key} value={item.value} title={item.title} disabled checkable={false}>
+              {this.generateFilterTree(item.children)}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.key} value={item.value} title={item.title} disabled={singleDisabled} />;
+      })
+    );
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation, hasLanguage } = this.props;
     const { pageList, interaction, pageTypeCode, treeData, filterList, sortList } = this.state;
     const targetList = [
-      { name: 'external', value: '_blank' },
-      { name: 'self', value: '_self' }
+      { name: 'External', value: '_blank' },
+      { name: 'Self', value: '_self' }
     ];
     let defaultCategoryIds = navigation.navigationCateIds ? navigation.navigationCateIds.split(',').map((x) => parseInt(x)) : [];
     const tProps = {
@@ -276,18 +338,19 @@ export default class Interaction extends React.Component<any, any> {
                       {getFieldDecorator('filter', {
                         initialValue: navigation.filter ? navigation.filter.split(',') : []
                       })(
-                        <Select
-                          mode="multiple"
+                        <TreeSelect
+                          treeCheckable={true}
+                          showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                          treeDefaultExpandAll
+                          placeholder="Please select"
+                          style={{ width: '100%' }}
                           onChange={(value: any) => {
                             this.props.addField('filter', value.join(','));
+                            this.generateFilterTree(filterList);
                           }}
                         >
-                          {filterList.map((item, index) => (
-                            <Option value={item.id} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
+                          {this.generateFilterTree(filterList)}
+                        </TreeSelect>
                       )}
                     </FormItem>
                     <FormItem {...layout} label="Sort">

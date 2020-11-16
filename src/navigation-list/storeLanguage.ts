@@ -3,7 +3,7 @@ import { cache, Const, history, util, Fetch } from 'qmkit';
 
 export async function getStoreLanguages() {
   const { res } = await webapi.querySysDictionary({ type: 'Language' });
-  let allLanguages = [...res.context.sysDictionaryVOS];
+  let allLanguages = res.context ? [...res.context.sysDictionaryVOS] : [];
 
   const { res: storeRes } = await webapi.getStoreInfo();
   let store = storeRes.context;
@@ -17,7 +17,6 @@ export async function getStoreLanguages() {
         languages.push(language);
       });
       sessionStorage.setItem(cache.STORE_LANGUAGES, JSON.stringify(languages));
-      debugger;
       if (languages && languages.length > 0) {
         sessionStorage.setItem(cache.DEFAULT_LANGUAGE, languages[0].name);
       }

@@ -143,7 +143,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     columns = columns.push({
-      title: '',
+      title: 'Purchase type',
       key: 'index',
       render: (rowInfo) => (
         <Row>
@@ -250,7 +250,22 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
                 initialValue: rowInfo.marketPrice || 0
-              })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+              })(
+                <div>
+                  {goods.toJS().subscriptionStatus != 0 ? (
+                    <div>
+                      <p>
+                        <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                      </p>
+                      <p>
+                        <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                      </p>
+                    </div>
+                  ) : (
+                    <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                  )}
+                </div>
+              )}
             </FormItem>
           </Col>
         </Row>

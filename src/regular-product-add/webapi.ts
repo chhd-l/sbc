@@ -198,8 +198,11 @@ export function fetchResource(params = {}) {
  * 获取对应类目下所有的属性信息
  */
 export const getCateIdsPropDetail = (cateId: string) => {
-  return Fetch(`/goods/goodsProp/${cateId}`);
+  return Fetch(`/attribute_library/attribute/${cateId}`);
 };
+/*export const getCateIdsPropDetail = (cateId: string) => {
+  return Fetch(`/goods/goodsProp/${cateId}`);
+};*/
 
 /**
  * 查询店铺运费模板

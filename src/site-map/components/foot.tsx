@@ -8,22 +8,24 @@ import { FormattedMessage } from 'react-intl';
 export default class Foot extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      saveSeo: Function;
-      savePage: Function;
+      content: any;
+      save: Function;
     };
   };
 
   static relaxProps = {
-    saveSeo: noop,
-    savePage: noop
+    content: 'content',
+    save: noop
   };
 
   render() {
-    const { saveSeo, savePage } = this.props.relaxProps;
+    const { content, save } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
-        <Button type="primary">Save</Button>
+        <Button type="primary" onClick={save({ content: content })}>
+          Save
+        </Button>
         {/*</AuthWrapper>*/}
       </div>
     );

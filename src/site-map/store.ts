@@ -23,7 +23,17 @@ export default class AppStore extends Store {
   updateSeoForm = ({ field, value }) => {
     this.dispatch('seoActor: seoForm', { field, value });
   };
-  setSeoModalVisible = (visible) => {
-    this.dispatch('seoActor: seoModal', visible);
+
+  getContent = async () => {
+    const res = await webapi.getContent();
+    if (res) {
+      this.updateSeoForm({
+        field: 'content',
+        value: res
+      });
+    }
+  };
+  save = async (params) => {
+    const res = await webapi.save(params);
   };
 }

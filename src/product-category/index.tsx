@@ -25,12 +25,15 @@ class PeoductCategory extends Component<any, any> {
         current: 1,
         pageSize: 8,
         total: 0
+      },
+      searchForm: {
+        attributeName: '',
+        attributeValue: ''
       }
     };
   }
   componentDidMount() {
     this.getGoodsCates();
-    this.getAttributes();
   }
   removeChildrenIsNull = (objArr) => {
     let tempString = JSON.stringify(objArr);
@@ -38,9 +41,21 @@ class PeoductCategory extends Component<any, any> {
     return JSON.parse(returnString);
   };
   openBindAttribute = (id) => {
-    this.setState({
-      currentId: id
-    });
+    this.setState(
+      {
+        currentId: id,
+        pagination: {
+          current: 1,
+          pageSize: 8,
+          total: 0
+        },
+        searchForm: {
+          attributeName: '',
+          attributeValue: ''
+        }
+      },
+      () => this.getAttributes()
+    );
     this.getSelectedListById(id);
   };
   handleOk = () => {
@@ -55,8 +70,10 @@ class PeoductCategory extends Component<any, any> {
     });
   };
   getAttributes = () => {
-    const { pagination } = this.state;
+    const { pagination, searchForm } = this.state;
     let params = {
+      attributeName: searchForm.attributeName,
+      attributeValue: searchForm.attributeValue,
       attributeStatus: true,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
@@ -204,7 +221,7 @@ class PeoductCategory extends Component<any, any> {
   };
 
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -279,6 +296,7 @@ class PeoductCategory extends Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={<p style={styles.label}>Attribute name</p>}
+                        value={searchForm.attributeName}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
@@ -293,6 +311,7 @@ class PeoductCategory extends Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={<p style={styles.label}>Attribute value</p>}
+                        value={searchForm.attributeValue}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({

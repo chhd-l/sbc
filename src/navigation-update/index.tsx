@@ -16,7 +16,7 @@ class NavigationUpdate extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.match.params.id ? 'Edit Navigation Item' : 'Create Navigation Item',
+      title: '',
       current: 0,
       type: this.props.location.state ? this.props.location.state.type : 'add',
       navigation: {
@@ -46,6 +46,9 @@ class NavigationUpdate extends Component<any, any> {
   }
 
   componentWillMount() {
+    this.setState({
+      title: this.state.type === 'edit' ? 'Edit Navigation Item' : 'Create Navigation Item'
+    });
     if (this.state.type === 'edit') {
       webapi
         .getNavigationById(this.state.id)

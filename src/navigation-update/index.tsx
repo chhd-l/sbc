@@ -16,12 +16,14 @@ class NavigationUpdate extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.match.params.id ? 'Edit Navigation Item' : 'Create Navigation Item',
+      title: '',
       current: 0,
       type: this.props.location.state ? this.props.location.state.type : 'add',
       navigation: {
-        language: this.props.location.state ? this.props.location.state.language : ''
+        language: this.props.location.state ? this.props.location.state.language : '',
+        enable: 1
       },
+      hasLanguage: this.props.location.state && this.props.location.state.language,
       store: {}
     };
     this.next = this.next.bind(this);
@@ -44,6 +46,9 @@ class NavigationUpdate extends Component<any, any> {
   }
 
   componentWillMount() {
+    this.setState({
+      title: this.state.type === 'edit' ? 'Edit Navigation Item' : 'Create Navigation Item'
+    });
     if (this.state.type === 'edit') {
       webapi
         .getNavigationById(this.state.id)
@@ -114,21 +119,24 @@ class NavigationUpdate extends Component<any, any> {
     });
   }
   render() {
-    const { id, current, title, navigation, store } = this.state;
+    const { id, current, title, navigation, store, hasLanguage } = this.state;
     const steps = [
       {
         title: 'Navigation language',
-        controller: <NavigationLanguage navigation={navigation} addField={this.addField} store={store} />
+        controller: <NavigationLanguage navigation={navigation} addField={this.addField} />
       },
       {
         title: 'Basic information',
-        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} store={store} />
+        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} hasLanguage={hasLanguage} store={store} />
       },
       {
         title: 'Interaction',
-        controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} />
+        controller: <Interaction navigation={navigation} addField={this.addField} form={this.props.form} hasLanguage={hasLanguage} />
       }
     ];
+    if (hasLanguage) {
+      steps.shift();
+    }
     return (
       <div>
         <BreadCrumb thirdLevel={true}>

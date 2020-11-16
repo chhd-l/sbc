@@ -111,6 +111,13 @@ export default class SortableTable extends React.Component {
     };
     this.props.switchFunction(params);
   };
+  // getAttributeValue = (attributeValueList) => {
+  //   let attributeValue = [];
+  //   for (let i = 0; i < attributeValueList.length; i++) {
+  //     attributeValue.push(attributeValueList[i].attributeDetailName);
+  //   }
+  //   return attributeValue.join(';');
+  // };
 
   render() {
     const { dataSource, type } = this.state;
@@ -120,6 +127,13 @@ export default class SortableTable extends React.Component {
         dataIndex: 'attributeName',
         className: 'drag-visible'
       },
+      // {
+      //   title: 'Attribute value',
+      //   dataIndex: 'attributeValue',
+      //   key: 'attributeValue',
+      //   width: '30%',
+      //   render: (text, record) => <p>{record.storeGoodsFilterValueVOList ? this.getAttributeValue(record.storeGoodsFilterValueVOList) : ''}</p>
+      // },
       {
         title: 'Filter status',
         dataIndex: 'filterStatus',
@@ -149,12 +163,12 @@ export default class SortableTable extends React.Component {
     ];
     const columnsSort = [
       {
-        title: 'Sort filed name',
+        title: 'Sort field name',
         dataIndex: 'field',
         className: 'drag-visible'
       },
       {
-        title: 'Sort filed status',
+        title: 'Sort field status',
         dataIndex: 'sortStatus',
         className: 'drag-visible',
         render: (text, record) => (

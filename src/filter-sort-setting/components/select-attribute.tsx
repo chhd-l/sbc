@@ -16,6 +16,7 @@ export default class SelectAttribute extends React.Component<any, any> {
   state = {
     visible: false,
     selectedRowKeys: [],
+    oldSelectedRowKeys: [],
     prevPropSelectedRowKeys: [],
     attributeList: [],
     selectedRowList: [],
@@ -36,8 +37,9 @@ export default class SelectAttribute extends React.Component<any, any> {
     // 当传入的值发生变化的时候，更新state
     if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
       return {
-        selectedRowKeys: props.selectedRowKeys,
-        prevPropSelectedRowKeys: props.selectedRowKeys
+        oldSelectedRowKeys: props.selectedRowKeys.concat(),
+        selectedRowKeys: props.selectedRowKeys.concat(),
+        prevPropSelectedRowKeys: props.selectedRowKeys.concat()
       };
     }
 
@@ -70,19 +72,21 @@ export default class SelectAttribute extends React.Component<any, any> {
   };
 
   openSelectAttribute = () => {
-    this.getAttributes();
-    this.setState({
-      visible: true,
-      pagination: {
-        current: 1,
-        pageSize: 8,
-        total: 0
+    this.setState(
+      {
+        visible: true,
+        pagination: {
+          current: 1,
+          pageSize: 8,
+          total: 0
+        },
+        searchForm: {
+          attributeName: '',
+          attributeValue: ''
+        }
       },
-      searchForm: {
-        attributeName: '',
-        attributeValue: ''
-      }
-    });
+      () => this.getAttributes()
+    );
   };
   handleOk = () => {
     this.setState({
@@ -133,12 +137,12 @@ export default class SelectAttribute extends React.Component<any, any> {
     });
   };
 
-  start = () => {
-    this.setState({
-      selectedRowKeys: [],
-      selectedRowList: []
-    });
-  };
+  // start = () => {
+  //   this.setState({
+  //     selectedRowKeys: [],
+  //     selectedRowList: []
+  //   });
+  // };
   onSelectChange = (selectedRowKeys, selectedRow) => {
     let { selectedRowList } = this.state;
     selectedRowList = selectedRowList.concat(selectedRow);
@@ -148,7 +152,7 @@ export default class SelectAttribute extends React.Component<any, any> {
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
     arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.goodsId === item));
+      tempList.push(arrList.find((el) => el.id === item));
     });
     return tempList;
   };
@@ -188,7 +192,7 @@ export default class SelectAttribute extends React.Component<any, any> {
   };
 
   render() {
-    const { confirmLoading, selectedRowKeys, attributeList, pagination } = this.state;
+    const { confirmLoading, selectedRowKeys, oldSelectedRowKeys, attributeList, pagination, searchForm } = this.state;
     const columns_attribute = [
       {
         title: 'Attribute name',
@@ -205,9 +209,13 @@ export default class SelectAttribute extends React.Component<any, any> {
     ];
     const rowSelection = {
       selectedRowKeys,
-      onChange: this.onSelectChange
+      onChange: this.onSelectChange,
+      getCheckboxProps: (record) => ({
+        disabled: JSON.stringify(oldSelectedRowKeys).indexOf(record.id) !== -1, // Column configuration not to be checked
+        name: record.id
+      })
     };
-    const hasSelected = selectedRowKeys.length > 0;
+    // const hasSelected = selectedRowKeys.length > 0;
     return (
       <div>
         <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openSelectAttribute()}>
@@ -222,6 +230,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={<p style={styles.label}>Attribute name</p>}
+                        value={searchForm.attributeName}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
@@ -236,6 +245,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={<p style={styles.label}>Attribute value</p>}
+                        value={searchForm.attributeValue}
                         onChange={(e) => {
                           const value = (e.target as any).value;
                           this.onFormChange({
@@ -267,10 +277,10 @@ export default class SelectAttribute extends React.Component<any, any> {
                 </Row>
               </Form>
 
-              <Button type="primary" onClick={this.start} disabled={!hasSelected}>
+              {/* <Button type="primary" onClick={this.start} disabled={!hasSelected}>
                 Reload
               </Button>
-              <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
+              <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span> */}
             </div>
             <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} onChange={this.handleTableChange} pagination={pagination} />
           </div>

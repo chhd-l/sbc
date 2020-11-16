@@ -22,13 +22,10 @@ export default class BasicInformation extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { navigation } = this.props;
-    if (!navigation.enable) {
-      this.props.addField('enable', 1);
-    }
+    const { navigation, hasLanguage } = this.props;
     return (
       <div>
-        <h3>Step2</h3>
+        <h3>{hasLanguage ? 'Step1' : 'Step2'}</h3>
         <h4>
           Basic Information<span className="ant-form-item-required"></span>
         </h4>
@@ -81,7 +78,7 @@ export default class BasicInformation extends React.Component<any, any> {
             </FormItem>
             <FormItem>
               <Checkbox
-                checked={navigation.enable === 1 || !navigation.enable ? true : false}
+                checked={navigation.enable === 1 ? true : false}
                 onChange={(e) => {
                   navigation.enable = e.target.checked ? 1 : 0;
                   this.props.addField('enable', navigation.enable);
@@ -91,18 +88,20 @@ export default class BasicInformation extends React.Component<any, any> {
               </Checkbox>
               <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
             </FormItem>
-            <FormItem>
-              <Checkbox
-                checked={navigation.expanded === 1 ? true : false}
-                onChange={(e) => {
-                  navigation.expanded = e.target.checked ? 1 : 0;
-                  this.props.addField('expanded', navigation.expanded);
-                }}
-              >
-                Expanded
-              </Checkbox>
-              <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
-            </FormItem>
+            {this.props.hasLanguage ? null : (
+              <FormItem>
+                <Checkbox
+                  checked={navigation.expanded === 1 ? true : false}
+                  onChange={(e) => {
+                    navigation.expanded = e.target.checked ? 1 : 0;
+                    this.props.addField('expanded', navigation.expanded);
+                  }}
+                >
+                  Expanded
+                </Checkbox>
+                <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
+              </FormItem>
+            )}
           </Form>
         </div>
       </div>

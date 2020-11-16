@@ -18,7 +18,7 @@ const formItemLayout = {
   wrapperCol: {
     span: 10,
     xs: { span: 10 },
-    sm: { span: 10 }
+    sm: { span: 12 }
   }
 };
 
@@ -54,7 +54,7 @@ export default class SeoSettingForm extends Component<any, any> {
             initialValue: seoObj.title
           })(
             <TextArea
-              rows={10}
+              rows={12}
               onChange={(e) =>
                 updateSeoForm({
                   field: 'title',

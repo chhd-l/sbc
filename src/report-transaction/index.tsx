@@ -63,11 +63,11 @@ export default class TransactionReport extends Component<any, any> {
       salesVolumeData_day: []
     };
   }
-  componentDidMount() {
+  componentDidMount = () => {
     this.getDefaultDate();
     this.transactionTrend();
     this.transactionTrendDay();
-  }
+  };
 
   chartInit = () => {
     const {
@@ -101,14 +101,24 @@ export default class TransactionReport extends Component<any, any> {
         },
         data: currentTrend === 'Week trend' ? xData_week : xData_day
       },
-      yAxis: {
-        type: 'value',
-        axisLine: {
-          lineStyle: {
-            color: 'rgba(0, 0, 0, 0.45)'
+      yAxis: [
+        {
+          type: 'value',
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(0, 0, 0, 0.45)'
+            }
+          }
+        },
+        {
+          type: 'value',
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(0, 0, 0, 0.45)'
+            }
           }
         }
-      },
+      ],
       legend: {
         data: ['Sales volume', 'Revenue', 'Consumers', 'Average basket'],
         top: 20
@@ -130,6 +140,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
+          yAxisIndex: 1,
           data: currentTrend === 'Week trend' ? salesVolumeData_week : salesVolumeData_day
         },
         {
@@ -164,6 +175,7 @@ export default class TransactionReport extends Component<any, any> {
               borderWidth: 2
             }
           },
+          yAxisIndex: 1,
           data: currentTrend === 'Week trend' ? consumersData_week : consumersData_day
         },
         {
@@ -213,6 +225,7 @@ export default class TransactionReport extends Component<any, any> {
   }
 
   onChangeDate = (date, dateString) => {
+    debugger;
     let startDate = moment(dateString[0]).format('YYYY-MM-DD');
     let endDate = moment(dateString[1]).format('YYYY-MM-DD');
     this.setState(

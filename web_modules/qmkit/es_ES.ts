@@ -800,6 +800,7 @@ export default {
   firstName: 'First name',
   lastName: 'Last name',
   footerConfig:'Footer Config',
-  seoSetting: 'SEO Setting'
+  seoSetting: 'SEO Setting',
+  siteMap: 'Site map'
 
 };

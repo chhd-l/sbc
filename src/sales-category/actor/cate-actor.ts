@@ -106,7 +106,6 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: showModal')
   show(state, needClear: boolean) {
-    debugger;
     if (needClear) {
       state = state.set('formData', Map());
     }

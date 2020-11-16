@@ -52,7 +52,20 @@ export default class RelevancyProduct extends React.Component<any, any> {
     return null;
   }
   openModal = () => {
-    this.getProductList();
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        },
+        searchForm: {
+          productName: '',
+          spu: ''
+        }
+      },
+      () => this.getProductList()
+    );
     this.getSelectedProductList();
   };
   handleOk = () => {
@@ -262,7 +275,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
   };
 
   render() {
-    const { confirmLoading, selectedRowKeys, prpductList, pagination, step, selectedRowList } = this.state;
+    const { confirmLoading, selectedRowKeys, prpductList, pagination, step, selectedRowList, searchForm } = this.state;
     const columns_product = [
       {
         title: 'Image',
@@ -377,6 +390,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                       <FormItem>
                         <Input
                           addonBefore={<p style={styles.label}>Product name</p>}
+                          value={searchForm.productName}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({
@@ -391,6 +405,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                       <FormItem>
                         <Input
                           addonBefore={<p style={styles.label}>SPU</p>}
+                          value={searchForm.spu}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onFormChange({

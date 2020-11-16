@@ -7,13 +7,13 @@ type TResult = {
 };
 
 export function getAuditConfig() {
-  return Fetch<TResult>('/system/config/listSystemConfig', {
+  return Fetch<TResult>('/order/config/listSystemConfig', {
     method: 'GET'
   });
 }
 
 export function saveAuditConfig(filterParams = {}) {
-  return Fetch<TResult>('/system/config/batchEnableAndDisable', {
+  return Fetch<TResult>('/order/config/batchEnableAndDisable', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

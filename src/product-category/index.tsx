@@ -87,6 +87,8 @@ class PeoductCategory extends Component<any, any> {
     });
   };
   init(cates) {
+    console.log(cates.filter((item) => item.cateParentId == 0));
+
     const newDataList = cates
       .filter((item) => item.cateParentId == 0)
       .map((data) => {

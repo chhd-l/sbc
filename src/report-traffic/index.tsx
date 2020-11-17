@@ -60,11 +60,11 @@ export default class TrafficReport extends Component<any, any> {
       pageViewData_day: []
     };
   }
-  componentDidMount() {
+  componentDidMount = () => {
     this.getDefaultDate();
     this.trafficTrend();
     this.trafficTrendDay();
-  }
+  };
 
   chartInit = () => {
     const {

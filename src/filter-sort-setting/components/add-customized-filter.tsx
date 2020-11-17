@@ -47,7 +47,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
   };
   setAttributeFieldsValue = (arr) => {
     const { form } = this.props;
-    if(arr&&arr.length>0){
+    if (arr && arr.length > 0) {
       let setObj = {};
       for (let i = 0; i < arr.length; i++) {
         let valueName = 'value_' + (arr[i].id || arr[i].tempId);
@@ -57,11 +57,9 @@ class AddCustomizedfilter extends React.Component<any, any> {
         setObj = Object.assign(setObj, tempObj);
       }
       form.setFieldsValue(setObj);
+    } else {
+      this.add();
     }
-    else{
-      this.add()
-    }
-    
   };
 
   genID() {
@@ -137,7 +135,7 @@ class AddCustomizedfilter extends React.Component<any, any> {
     attributeForm.choiceStatus = currentSelected.choiceStatus;
     this.setState(
       {
-        attributeValueList: currentSelected.storeGoodsFilterValueVOList||[],
+        attributeValueList: currentSelected.storeGoodsFilterValueVOList || [],
         visibleAttribute: true,
         attributeForm,
         isEdit: true,
@@ -208,10 +206,11 @@ class AddCustomizedfilter extends React.Component<any, any> {
           let params = {
             attributeName: attributeForm.attributeName,
             choiceStatus: attributeForm.choiceStatus,
-            attributesValueList: tempAttributeValueList,
-            attributeStatus: currentEditAttribute.attributeStatus ? true : false,
+            storeGoodsFilterValueVOList: tempAttributeValueList,
             id: currentEditAttribute.id,
-            sort: currentEditAttribute.sort
+            sort: currentEditAttribute.sort,
+            filterStatus: currentEditAttribute.filterStatus,
+            filterType: '1'
           };
           this.updateCustomizeFilter(params);
         } else {

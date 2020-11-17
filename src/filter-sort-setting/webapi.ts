@@ -116,7 +116,7 @@ export function deleteFilter(filterParams = {}) {
 
 // 删除 attributesValue
 export function deleteFilterValue(filterParams = {}) {
-  return Fetch<TResult>('/goods_filter/filter_value', {
+  return Fetch<TResult>('/goods_filter/filterValue', {
     method: 'DELETE',
     body: JSON.stringify({
       ...filterParams

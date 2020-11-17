@@ -17,9 +17,9 @@ export default class FormActor extends Actor {
       enterpriseFlag: false,
       AlertInfo: '',
       seoForm: {
-        title: '{name}-Royal Canin}',
-        metaKeywords: '{name}, {subtitle}, {sales category}, {tagging}',
-        description: '{description}'
+        titleSource: '{name}-Royal Canin}',
+        metaKeywordsSource: '{name}, {subtitle}, {sales category}, {tagging}',
+        metaDescriptionSource: '{description}'
       }
     };
   }
@@ -28,6 +28,10 @@ export default class FormActor extends Actor {
   @Action('formActor:seo')
   updateSeoForm(state: IMap, { field, value }) {
     return state.setIn(['seoForm', field], value);
+  }
+  @Action('seoActor: setSeoForm')
+  setSeoForm(state: IMap, form) {
+    return state.set('seoForm', form);
   }
 
   @Action('formActor:goods')

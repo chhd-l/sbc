@@ -22,10 +22,10 @@ export default class BasicInformation extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { navigation, hasLanguage } = this.props;
+    const { navigation, noLanguageSelect } = this.props;
     return (
       <div>
-        <h3>{hasLanguage ? 'Step1' : 'Step2'}</h3>
+        <h3>{noLanguageSelect ? 'Step1' : 'Step2'}</h3>
         <h4>
           Basic Information<span className="ant-form-item-required"></span>
         </h4>
@@ -88,7 +88,7 @@ export default class BasicInformation extends React.Component<any, any> {
               </Checkbox>
               <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
             </FormItem>
-            {this.props.hasLanguage ? null : (
+            {this.props.noLanguageSelect ? null : (
               <FormItem>
                 <Checkbox
                   checked={navigation.expanded === 1 ? true : false}

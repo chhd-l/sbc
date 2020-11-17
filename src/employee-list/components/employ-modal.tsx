@@ -37,13 +37,7 @@ export default class EmployeeModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal
-        maskClosable={false}
-        title={editDisable ? 'User Detail' : edit ? 'Edit User' : 'Add User'}
-        visible={visible}
-        onOk={() => this._handleOK()}
-        onCancel={() => onCancel()}
-      >
+      <Modal maskClosable={false} title={editDisable ? 'User Detail' : edit ? 'Edit User' : 'Add User'} visible={visible} onOk={() => this._handleOK()} onCancel={() => onCancel()}>
         <WrapperForm ref={(form) => (this._form = form)} />
       </Modal>
     );
@@ -57,13 +51,12 @@ export default class EmployeeModal extends React.Component<any, any> {
       if (!errs) {
         if (values.accountPassword) {
           values.accountPassword = base64.urlEncode(values.accountPassword);
-          values.accountPasswordConfirm = base64.urlEncode(
-            values.accountPasswordConfirm
-          );
+          values.accountPasswordConfirm = base64.urlEncode(values.accountPasswordConfirm);
         }
         values.roleIdList = values.roleIdList ? [values.roleIdList] : null;
         values.employeeName = values.firstName + ' ' + values.lastName;
         values.accountState = 0;
+        console.log(values.roleIdList, 1111111);
         this.props.relaxProps.onSave(values);
       }
     });

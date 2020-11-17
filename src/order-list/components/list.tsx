@@ -33,6 +33,8 @@ const payStatus = (status) => {
     return <FormattedMessage id="order.paid" />;
   } else if (status == 'REFUND') {
     return <FormattedMessage id="Refund" />;
+  } else if (status == 'PAYING') {
+    return 'Paying';
   } else {
     return <FormattedMessage id="order.unknown" />;
   }

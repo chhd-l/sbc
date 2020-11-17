@@ -366,12 +366,12 @@ export function fetchAdd(param) {
     body: JSON.stringify(param)
   });
 }
-export const getSeo = (params) => {
-  return Fetch<TResult>('/seo/setting');
+export const getSeo = (goodsId, type = 1) => {
+  return Fetch(`/seo/setting?type=${type}&goodsId=${goodsId}`);
 };
 
 export const editSeo = (params) => {
-  return Fetch<TResult>('/seo/setting', {
+  return Fetch('/seo/setting', {
     method: 'PUT',
     body: JSON.stringify(params)
   });

@@ -31,6 +31,9 @@ export default class CateList extends React.Component<any, any> {
       validGoods: Function;
       cateSort: Function;
       setSeoModalVisible: Function;
+      getSeo: Function;
+      setCurrentStoreCateId: Function;
+      clear: Function;
     };
   };
 
@@ -46,7 +49,10 @@ export default class CateList extends React.Component<any, any> {
     //拖拽排序
     cateSort: noop,
     setSeoModalVisible: noop,
-    images: 'images'
+    images: 'images',
+    getSeo: noop,
+    setCurrentStoreCateId: noop,
+    clear: noop
   };
 
   render() {
@@ -123,7 +129,7 @@ export default class CateList extends React.Component<any, any> {
           : hasAuth
           ? // 一级分类(非默认分类)可添加子分类
             [
-              rowInfo.get('cateGrade') < 3 && rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
+              rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
                 <Tooltip placement="top" title="Edit SEO Setting">
                   <a key="item1" style={styles.edit} onClick={this._editSEOSetting.bind(this, rowInfo.get('storeCateId'), rowInfo.get('cateName'), rowInfo.get('goodsCateId'))} className="iconfont iconicon">
                     {/*<FormattedMessage id="addSubcategory" />*/}
@@ -165,8 +171,8 @@ export default class CateList extends React.Component<any, any> {
   };
 
   _editSEOSetting = (cateParentId: string, cateParentName: string, goodsCateId: number) => {
-    const { setSeoModalVisible } = this.props.relaxProps;
-    setSeoModalVisible(true);
+    const { getSeo } = this.props.relaxProps;
+    getSeo(cateParentId);
   };
   /**
    * 添加子类目

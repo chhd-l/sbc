@@ -12,9 +12,9 @@ export default class FormActor extends Actor {
       areaPriceForm: {},
       logisticsForm: {},
       seoForm: {
-        title: '{name}-Royal Canin}',
-        metaKeywords: '{name}, {subtitle}, {sales category}, {tagging}',
-        description: '{description}'
+        titleSource: '{name}-Royal Canin}',
+        metaKeywordsSource: '{name}, {subtitle}, {sales category}, {tagging}',
+        metaDescriptionSource: '{description}'
       },
       //分销 切换类型是否要提示
       checkFlag: false,
@@ -44,7 +44,10 @@ export default class FormActor extends Actor {
   updateSeoForm(state: IMap, { field, value }) {
     return state.setIn(['seoForm', field], value);
   }
-
+  @Action('seoActor: setSeoForm')
+  setSeoForm(state: IMap, form) {
+    return state.set('seoForm', form);
+  }
   @Action('formActor:spec')
   updateSpecForm(state, specForm) {
     return state.set('specForm', specForm);

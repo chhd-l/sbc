@@ -40,7 +40,7 @@ export default class SeoActor extends Actor {
   setSeoForm(state: IMap, form) {
     return state.set('seoForm', form);
   }
-  //seo
+
   @Action('seoActor: seoForm')
   updateSeoForm(state: IMap, { field, value }) {
     return state.setIn(['seoForm', field], value);

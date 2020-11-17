@@ -55,11 +55,12 @@ import {
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
-  fetchproductTooltip
+  fetchproductTooltip,
+  getSeo,
+  editSeo
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
-import { goodsList } from '@/goods-list/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -2051,11 +2052,32 @@ export default class AppStore extends Store {
   updateSeoForm = ({ field, value }) => {
     this.dispatch('formActor:seo', { field, value });
   };
-  saveSeoSetting = () => {
-    const form = this.state().get('seoForm').toJS();
+
+  getSeo = async (goodsId, type = 1) => {
+    const { res } = (await getSeo(goodsId, type)) as any;
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      this.dispatch(
+        'seoActor: setSeoForm',
+        fromJS({
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
+        })
+      );
+    }
+  };
+  saveSeoSetting = async (goodsId) => {
+    const seoObj = this.state().get('seoForm').toJS();
+    const params = {
+      type: 1,
+      goodsId,
+      metaDescriptionSource: seoObj.metaDescriptionSource,
+      metaKeywordsSource: seoObj.metaKeywordsSource,
+      titleSource: seoObj.titleSource
+    };
+    const res = await editSeo(params);
     //调接口
   };
-
   showEditModal = ({ key, value }) => {};
   onSwitch = ({ key, value }) => {};
   pageChange = ({ key, value }) => {};

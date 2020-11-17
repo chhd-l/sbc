@@ -21,7 +21,7 @@ export const getContent = () => {
  */
 export const save = (params) => {
   return Fetch<TResult>(api.saveContent, {
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify(params)
   });
 };

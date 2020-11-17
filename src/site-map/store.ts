@@ -6,6 +6,7 @@ import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { cache, Const, history, util } from 'qmkit';
+import { getEquitiesList } from '@/role-list/webapi';
 
 const confirm = Modal.confirm;
 export default class AppStore extends Store {
@@ -25,11 +26,11 @@ export default class AppStore extends Store {
   };
 
   getContent = async () => {
-    const res = await webapi.getContent();
-    if (res) {
+    const { res } = (await webapi.getContent()) as any;
+    if (res && res.code === Const.SUCCESS_CODE && res.context.siteMapVO) {
       this.updateSeoForm({
         field: 'content',
-        value: res
+        value: res.context.siteMapVO.content
       });
     }
   };

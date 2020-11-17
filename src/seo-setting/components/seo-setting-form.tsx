@@ -34,14 +34,19 @@ export default class SeoSettingForm extends Component<any, any> {
     relaxProps?: {
       seoForm: any;
       updateSeoForm: Function;
+      getSeo: Function;
     };
   };
 
   static relaxProps = {
     seoForm: 'seoForm',
-    updateSeoForm: noop
+    updateSeoForm: noop,
+    getSeo: noop
   };
-  componentDidMount() {}
+  componentDidMount() {
+    const { getSeo } = this.props.relaxProps;
+    getSeo(4);
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;

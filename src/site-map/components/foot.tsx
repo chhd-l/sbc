@@ -8,26 +8,29 @@ import { FormattedMessage } from 'react-intl';
 export default class Foot extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      content: any;
+      seoForm: any;
       save: Function;
     };
   };
 
   static relaxProps = {
-    content: 'content',
+    seoForm: 'seoForm',
     save: noop
   };
 
   render() {
-    const { content, save } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
-        <Button type="primary" onClick={save({ content: content })}>
+        <Button type="primary" onClick={this._save}>
           Save
         </Button>
         {/*</AuthWrapper>*/}
       </div>
     );
   }
+  _save = () => {
+    const { seoForm, save } = this.props.relaxProps;
+    save({ content: seoForm.toJS().content });
+  };
 }

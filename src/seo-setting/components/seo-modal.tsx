@@ -13,16 +13,20 @@ export default class SeoModal extends Component<any, any> {
   state: {};
   props: {
     relaxProps?: {
+      currentPage: any;
       seoModalVisible: any;
       seoForm: any;
       setSeoModalVisible: Function;
+      addSeo: Function;
     };
   };
 
   static relaxProps = {
     seoModalVisible: 'seoModalVisible',
     seoForm: 'seoForm',
-    setSeoModalVisible: noop
+    currentPage: 'currentPage',
+    setSeoModalVisible: noop,
+    addSeo: noop
   };
   constructor(props) {
     super(props);
@@ -33,18 +37,24 @@ export default class SeoModal extends Component<any, any> {
     setSeoModalVisible(false);
   };
   _handleSubmit = () => {
-    const { seoForm, setSeoModalVisible } = this.props.relaxProps;
+    const { seoForm, currentPage, setSeoModalVisible, addSeo } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-    console.log(seoObj, '传递的参数------------');
-    setSeoModalVisible(false);
+    const params = {
+      type: 3,
+      metaDescriptionSource: seoObj.description,
+      metaKeywordsSource: seoObj.metaKeywords,
+      titleSource: seoObj.title,
+      pageName: currentPage
+    };
+    addSeo(params);
   };
   uploadImage() {}
   render() {
-    const { seoModalVisible, setSeoModalVisible } = this.props.relaxProps;
+    const { seoModalVisible, currentPage, setSeoModalVisible } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="seoSetting" />}
+        title={`${currentPage} SEO Setting`}
         visible={seoModalVisible}
         width={920}
         // confirmLoading={true}

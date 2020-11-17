@@ -51,12 +51,12 @@ export default class SeoSettingForm extends Component<any, any> {
       <Form {...formItemLayout} className="login-form">
         <Form.Item label="Title">
           {getFieldDecorator('title', {
-            initialValue: seoObj.title
+            initialValue: seoObj.titleSource
           })(
             <Input
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'title',
+                  field: 'titleSource',
                   value: e.target.value
                 })
               }
@@ -65,13 +65,13 @@ export default class SeoSettingForm extends Component<any, any> {
         </Form.Item>
         <Form.Item label="Meta Keywords">
           {getFieldDecorator('metaKeywords', {
-            initialValue: seoObj.metaKeywords
+            initialValue: seoObj.metaKeywordsSource
           })(
             <TextArea
               rows={4}
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'metaKeywords',
+                  field: 'metaKeywordsSource',
                   value: e.target.value
                 })
               }
@@ -79,8 +79,8 @@ export default class SeoSettingForm extends Component<any, any> {
           )}
         </Form.Item>
         <Form.Item label="Meta Description">
-          {getFieldDecorator('description', {
-            initialValue: seoObj.description
+          {getFieldDecorator('metaDescriptionSource', {
+            initialValue: seoObj.metaDescriptionSource
           })(
             <TextArea
               rows={4}

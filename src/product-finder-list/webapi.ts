@@ -24,7 +24,7 @@ export function querySysDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getProductFinderList(filterParams = {}) {
-  return Fetch<TResult>('/productFinder/list', {
+  return Fetch<TResult>('/product/finder/page', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

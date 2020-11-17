@@ -23,11 +23,8 @@ export function querySysDictionary(filterParams = {}) {
  * get list
  * @param filterParams
  */
-export function getProductFinderList(filterParams = {}) {
-  return Fetch<TResult>('/productFinder/list', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function getProductFinderDetail(finderNumber) {
+  return Fetch<TResult>('/product/finder/' + finderNumber, {
+    method: 'GET'
   });
 }

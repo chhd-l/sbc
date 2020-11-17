@@ -17,16 +17,12 @@ const { TabPane } = Tabs;
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class SetBanner extends Component<any, any> {
   store: AppStore;
-  state: {
-    operation: 'new'; //edit
-    isEdit: false;
-  };
+  state: {};
 
   componentDidMount() {}
-  callback(key) {
-    console.log(key);
+  changeTab(key) {
+    this.store.changeTab(key);
   }
-
   render() {
     return (
       <AuthWrapper functionName="fOrderList001">
@@ -36,7 +32,7 @@ export default class SetBanner extends Component<any, any> {
             <Headline title={<FormattedMessage id="seoSetting" />} />
           </div>
           <div className="container">
-            <Tabs defaultActiveKey="1" onChange={this.callback}>
+            <Tabs defaultActiveKey="1" onChange={(key) => this.changeTab(key)}>
               <TabPane tab="Site SEO" key="siteSeo">
                 <_SeoSettingForm />
               </TabPane>
@@ -44,7 +40,7 @@ export default class SetBanner extends Component<any, any> {
                 <PageSeo />
               </TabPane>
             </Tabs>
-            <Foot tabType="1" />
+            <Foot />
           </div>
         </div>
       </AuthWrapper>

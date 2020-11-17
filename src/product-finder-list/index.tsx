@@ -26,13 +26,21 @@ class ProductFinderList extends Component<any, any> {
         total: 0
       },
       loading: false,
-      consumerTypeList: [],
+      consumerTypeList: [
+        { name: 'Member', value: 0 },
+        { name: 'Guest', value: 1 }
+      ],
       petTypeList: []
     };
     // 事先声明方法绑定
     this.handleTableChange = this.handleTableChange.bind(this);
     this.getProductFinderList = this.getProductFinderList.bind(this);
   }
+
+  componentDidMount() {
+    this.getProductFinderList();
+  }
+
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
     data[field] = value;
@@ -44,6 +52,18 @@ class ProductFinderList extends Component<any, any> {
     this.setState(
       {
         pagination: pagination
+      },
+      () => this.getProductFinderList()
+    );
+  };
+  onSearch = () => {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
       },
       () => this.getProductFinderList()
     );
@@ -64,7 +84,8 @@ class ProductFinderList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            productFinderList: res.context.content,
+            productFinderList: res.context.detailsList,
+            petTypeList: res.context.petTypeList,
             pagination: pagination,
             loading: false
           });
@@ -87,15 +108,15 @@ class ProductFinderList extends Component<any, any> {
     const columns = [
       {
         title: 'Image',
-        dataIndex: 'image',
-        key: 'image',
+        dataIndex: 'productImage',
+        key: 'productImage',
         width: '10%',
-        render: (text, record) => <img src={text} alt="Image" />
+        render: (text, record) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
       },
       {
         title: 'Product Finder Number',
-        dataIndex: 'productFinderNumber',
-        key: 'productFinderNumber',
+        dataIndex: 'finderNumber',
+        key: 'finderNumber',
         width: '15%'
       },
       {
@@ -118,8 +139,8 @@ class ProductFinderList extends Component<any, any> {
       },
       {
         title: 'Order Number',
-        dataIndex: 'recipient',
-        key: 'recipient',
+        dataIndex: 'orderNumber',
+        key: 'orderNumber',
         width: '10%'
       },
       {
@@ -135,7 +156,7 @@ class ProductFinderList extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={'/product-finder-details/' + record.id} className="iconfont iconDetails"></Link>
+              <Link to={'/product-finder-details/' + record.finderNumber} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )
@@ -155,7 +176,7 @@ class ProductFinderList extends Component<any, any> {
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'productFinderNumber',
+                        field: 'finderNumber',
                         value
                       });
                     }}
@@ -195,7 +216,7 @@ class ProductFinderList extends Component<any, any> {
                     </Option>
                     {consumerTypeList &&
                       consumerTypeList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
+                        <Option value={item.value} key={index}>
                           {item.name}
                         </Option>
                       ))}
@@ -237,8 +258,8 @@ class ProductFinderList extends Component<any, any> {
                     </Option>
                     {petTypeList &&
                       petTypeList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
+                        <Option value={item} key={index}>
+                          {item}
                         </Option>
                       ))}
                   </SelectGroup>
@@ -269,7 +290,7 @@ class ProductFinderList extends Component<any, any> {
                     shape="round"
                     onClick={(e) => {
                       e.preventDefault();
-                      this.getProductFinderList();
+                      this.onSearch();
                     }}
                   >
                     <span>
@@ -298,5 +319,12 @@ const styles = {
   },
   wrapper: {
     width: 157
+  },
+  tableImage: {
+    width: '60px',
+    height: '60px',
+    padding: '5px',
+    border: '1px solid rgb(221, 221, 221)',
+    background: 'rgb(255, 255, 255)'
   }
 } as any;

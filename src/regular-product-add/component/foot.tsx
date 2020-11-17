@@ -53,7 +53,7 @@ export default class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
               Prev
             </Button>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+            <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
               Next
             </Button>
           </AuthWrapper>
@@ -62,7 +62,7 @@ export default class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
               Prev
             </Button>
-            <Button type="primary" onClick={this._savePrice} style={{ marginRight: 10 }} loading={saveLoading}>
+            <Button type="primary" style={{ marginRight: 10 }} loading={saveLoading}>
               Save
             </Button>
           </AuthWrapper>
@@ -106,6 +106,7 @@ export default class Foot extends React.Component<any, any> {
   _savePrice = async () => {
     const { saveAll } = this.props.relaxProps;
     saveAll();
+    this._next('');
   };
 
   _prev = (res) => {

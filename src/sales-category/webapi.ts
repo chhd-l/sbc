@@ -5,8 +5,8 @@ import { IMap } from 'typings/globalType';
  * 获取类目列表
  */
 export const getCateList = () => {
-  return Fetch('/store_cate/batch/cate',{
-    method: 'GET',
+  return Fetch('/store_cate/batch/cate', {
+    method: 'GET'
   });
 };
 
@@ -101,3 +101,14 @@ export function fetchImages(params = {}) {
     body: JSON.stringify(params)
   });
 }
+
+export const getSeo = (storeCateId, type = 2) => {
+  return Fetch(`/seo/setting?type=${type}&cateParentId=${storeCateId}`);
+};
+
+export const editSeo = (params) => {
+  return Fetch('/seo/setting', {
+    method: 'PUT',
+    body: JSON.stringify(params)
+  });
+};

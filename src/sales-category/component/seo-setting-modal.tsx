@@ -14,15 +14,19 @@ export default class SeoSettingModal extends Component<any, any> {
   props: {
     relaxProps?: {
       seoModalVisible: any;
+      currentStoreCateId: any;
       seoForm: any;
       setSeoModalVisible: Function;
+      editSeo: Function;
     };
   };
 
   static relaxProps = {
     seoModalVisible: 'seoModalVisible',
+    currentStoreCateId: 'currentStoreCateId',
     seoForm: 'seoForm',
-    setSeoModalVisible: noop
+    setSeoModalVisible: noop,
+    editSeo: noop
   };
   constructor(props) {
     super(props);
@@ -33,9 +37,17 @@ export default class SeoSettingModal extends Component<any, any> {
     setSeoModalVisible(false);
   };
   _handleSubmit = () => {
-    const { seoForm, setSeoModalVisible } = this.props.relaxProps;
+    const { seoForm, setSeoModalVisible, editSeo, currentStoreCateId } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
     console.log(seoObj, '传递的参数------------');
+    const params = {
+      type: 2,
+      storeCateId: currentStoreCateId,
+      metaDescriptionSource: seoObj.metaDescriptionSource,
+      metaKeywordsSource: seoObj.metaKeywordsSource,
+      titleSource: seoObj.titleSource
+    };
+    editSeo(params);
     setSeoModalVisible(false);
   };
   uploadImage() {}

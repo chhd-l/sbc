@@ -232,7 +232,7 @@ export const goodsFreightExpress = (freightTempId) => {
  * 获取素材类目列表
  */
 export const getResourceCates = () => {
-  return Fetch('/store/resourceCates');
+  return Fetch('/store_cate/cates/total');
 };
 
 /**

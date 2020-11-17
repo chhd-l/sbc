@@ -1826,6 +1826,7 @@ export default class AppStore extends Store {
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetail = fromJS(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
+
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
             fromJS({

@@ -2048,6 +2048,13 @@ export default class AppStore extends Store {
   onFormFieldChange = ({ key, value }) => {
     this.dispatch('form:field', { key, value });
   };
+  updateSeoForm = ({ field, value }) => {
+    this.dispatch('formActor:seo', { field, value });
+  };
+  saveSeoSetting = () => {
+    const form = this.state().get('seoForm').toJS();
+    //调接口
+  };
 
   showEditModal = ({ key, value }) => {};
   onSwitch = ({ key, value }) => {};

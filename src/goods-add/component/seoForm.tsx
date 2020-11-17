@@ -53,17 +53,6 @@ export default class SeoForm extends Component<any, any> {
     const seoObj = seoForm.toJS();
     return (
       <Form {...formItemLayout} className="login-form">
-        {/*<Form.Item>*/}
-        {/*  {getFieldDecorator('title', {*/}
-        {/*    rules: [{ required: true, message: 'Please input your username!' }],*/}
-        {/*  })*/}
-        {/*  (*/}
-        {/*    <Input*/}
-        {/*      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
-        {/*      placeholder="Username"*/}
-        {/*    />,*/}
-        {/*  )}*/}
-        {/*</Form.Item>*/}
         <Form.Item label="Title">
           {getFieldDecorator('title', {
             initialValue: seoObj.title

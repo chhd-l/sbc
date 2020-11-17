@@ -9,75 +9,55 @@ import SeoModal from './seo-modal';
 export default class PageSeo extends React.Component<any, any> {
   props: {
     relaxProps?: {
+      loading: any;
+      allPages: any;
       saveSeo: Function;
       savePage: Function;
       setSeoModalVisible: Function;
+      getSeo: Function;
+      changeCurrentPage: Function;
+      getPages: Function;
     };
   };
 
   static relaxProps = {
+    allPages: 'allPages',
+    loading: 'loading',
     saveSeo: noop,
     savePage: noop,
-    setSeoModalVisible: noop
+    setSeoModalVisible: noop,
+    getSeo: noop,
+    changeCurrentPage: noop,
+    getPages: noop
   };
-  editSeo() {
-    const { setSeoModalVisible } = this.props.relaxProps;
-    setSeoModalVisible(true);
+  componentDidMount() {
+    // const { getPages } = this.props.relaxProps;
+    // getPages()
+  }
+  _handelOk() {}
+  editSeo(text, record) {
+    const { setSeoModalVisible, getSeo, changeCurrentPage } = this.props.relaxProps;
+    getSeo(3, record.name);
   }
   render() {
-    const { saveSeo, savePage, setSeoModalVisible } = this.props.relaxProps;
-
-    const dataSource = [
-      {
-        key: '1',
-        pageName: 'Homepage'
-      },
-      {
-        key: '2',
-        pageName: 'Product List Page'
-      },
-      {
-        key: '3',
-        pageName: 'Product Detail Page'
-      },
-      {
-        key: '4',
-        pageName: 'Search Page'
-      },
-      {
-        key: '5',
-        pageName: 'Checkout Page'
-      },
-      {
-        key: '6',
-        pageName: 'Payment Page'
-      },
-      {
-        key: '7',
-        pageName: 'Subscription page'
-      },
-      {
-        key: '8',
-        pageName: 'Help us page'
-      }
-    ];
-
+    const { loading, allPages, saveSeo, savePage, setSeoModalVisible } = this.props.relaxProps;
+    const dataSource = allPages.toJS();
     const columns = [
       {
         title: 'Page',
-        dataIndex: 'pageName',
-        key: 'pageName'
+        dataIndex: 'name',
+        key: 'name'
       },
       {
         title: 'Operation',
         dataIndex: 'Operation',
         key: 'Operation',
-        render: () => <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => this.editSeo()} className="iconfont iconicon"></a>
+        render: (text, record) => <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>
       }
     ];
     return (
       <div>
-        <Table dataSource={dataSource} columns={columns} />
+        <Table dataSource={dataSource} columns={columns} loading={loading} />
         <SeoModal />
       </div>
     );

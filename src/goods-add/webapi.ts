@@ -362,3 +362,20 @@ export function fetchAdd(param) {
     body: JSON.stringify(param)
   });
 }
+export const getSeo = (params) => {
+  return Fetch<TResult>('/seo/setting');
+};
+
+export const editSeo = (params) => {
+  return Fetch<TResult>('/seo/setting', {
+    method: 'PUT',
+    body: JSON.stringify(params)
+  });
+};
+
+export const addSeo = (params) => {
+  return Fetch<TResult>('/seo/setting', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};

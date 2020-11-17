@@ -373,7 +373,7 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                   </div>
                 ) : pageTypeCode !== '' ? (
-                  <FormItem {...layout} label="Paramter">
+                  <FormItem {...layout} label="Parameter">
                     {getFieldDecorator('paramsField', {
                       initialValue: navigation.paramsField
                     })(

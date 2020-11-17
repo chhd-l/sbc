@@ -58,7 +58,8 @@ export default class GoodsActor extends Actor {
       flashsaleGoods: [],
       goodsDetailTab: [],
       nextType: '',
-      getGoodsCate: ''
+      getGoodsCate: '',
+      filtersTotal: ''
     };
   }
 
@@ -156,6 +157,9 @@ export default class GoodsActor extends Actor {
     return state.set('goodsTabs', goodsTabs);
   }
 
+
+
+
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
     const newDataList = getGoodsCate
@@ -185,6 +189,13 @@ export default class GoodsActor extends Actor {
     return state.set('getGoodsCate', newDataList);
   }
 
+
+
+
+  @Action('goodsActor:filtersTotal')
+  filtersTotal(state, filtersTotal) {
+    return state.set('filtersTotal', filtersTotal);
+  }
   /**
    * 修改商品信息
    * @param state

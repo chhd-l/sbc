@@ -55,7 +55,8 @@ import {
   fetchPropSort,
   fetchConsentDelete,
   fetchAdd,
-  fetchproductTooltip
+  fetchproductTooltip,
+  fetchFiltersTotal
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -78,14 +79,17 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList()]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
       this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
+      this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('related:goodsId', goodsId);
+
+      fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
@@ -1455,7 +1459,7 @@ export default class AppStore extends Store {
         }
       }
       message.success('save successful');
-      history.push('/goods-list');
+      //history.push('/goods-list');
     } else {
       message.error(result.res.message);
     }

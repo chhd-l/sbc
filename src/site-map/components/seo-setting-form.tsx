@@ -18,7 +18,7 @@ const formItemLayout = {
   wrapperCol: {
     span: 10,
     xs: { span: 10 },
-    sm: { span: 10 }
+    sm: { span: 12 }
   }
 };
 
@@ -34,14 +34,19 @@ export default class SeoSettingForm extends Component<any, any> {
     relaxProps?: {
       seoForm: any;
       updateSeoForm: Function;
+      getContent: Function;
     };
   };
 
   static relaxProps = {
     seoForm: 'seoForm',
-    updateSeoForm: noop
+    updateSeoForm: noop,
+    getContent: noop
   };
-  componentDidMount() {}
+  componentDidMount() {
+    const { getContent } = this.props.relaxProps;
+    getContent();
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -50,14 +55,14 @@ export default class SeoSettingForm extends Component<any, any> {
     return (
       <Form {...formItemLayout} className="login-form">
         <Form.Item label="Site Map">
-          {getFieldDecorator('title', {
-            initialValue: seoObj.title
+          {getFieldDecorator('content', {
+            initialValue: seoObj.content
           })(
             <TextArea
-              rows={10}
+              rows={12}
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'title',
+                  field: 'content',
                   value: e.target.value
                 })
               }

@@ -7,26 +7,44 @@ import { FormattedMessage } from 'react-intl';
 @Relax
 export default class Foot extends React.Component<any, any> {
   props: {
-    tabType: string;
     relaxProps?: {
-      saveSeo: Function;
-      savePage: Function;
+      currentTab: any;
+      seoForm: any;
+      currentPage: any;
+      editSeo: Function;
     };
   };
 
   static relaxProps = {
-    saveSeo: noop,
-    savePage: noop
+    currentTab: 'currentTab',
+    seoForm: 'seoForm',
+    currentPage: 'currentPage',
+    editSeo: noop
   };
 
   render() {
-    const { saveSeo, savePage } = this.props.relaxProps;
+    const { currentTab, editSeo } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
-        <Button type="primary">Save</Button>
+        <Button type="primary" onClick={this._save}>
+          Save
+        </Button>
         {/*</AuthWrapper>*/}
       </div>
     );
   }
+  _save = () => {
+    const { currentTab, seoForm, editSeo, currentPage } = this.props.relaxProps;
+    const seoObj = seoForm.toJS();
+    const params = {
+      id: '',
+      type: 4,
+      metaDescriptionSource: seoObj.description,
+      metaKeywordsSource: seoObj.metaKeywords,
+      titleSource: seoObj.title,
+      pageName: currentTab === 'pageSeo' ? currentPage : null
+    };
+    editSeo(params);
+  };
 }

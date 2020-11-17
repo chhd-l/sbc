@@ -8,23 +8,27 @@ export default class AlertInfo extends React.Component<any, any> {
     return (
       <Alert
         message={
-          <div>
-            <p>
-              <FormattedMessage id="operationInstruction" />：
-            </p>
-            <p>
-              1、
-              <FormattedMessage id="operationInstruction.first" />
-            </p>
-            <p>
-              2、
-              <FormattedMessage id="operationInstruction.second" />
-            </p>
-            <p>
-              3、
-              <FormattedMessage id="operationInstruction.third" />
-            </p>
-          </div>
+          !this.props.message ? (
+            <div>
+              <p>
+                <FormattedMessage id="operationInstruction" />：
+              </p>
+              <p>
+                1、
+                <FormattedMessage id="operationInstruction.first" />
+              </p>
+              <p>
+                2、
+                <FormattedMessage id="operationInstruction.second" />
+              </p>
+              <p>
+                3、
+                <FormattedMessage id="operationInstruction.third" />
+              </p>
+            </div>
+          ) : (
+            this.props.message
+          )
         }
         type="info"
       />

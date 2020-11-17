@@ -174,44 +174,48 @@ export default class MyHeader extends React.Component {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
 
     return (
-      <Header className="header" style={{ paddingLeft: '0' }}>
-        <div style={styles.headerLeft}>
-          <a href="/" style={styles.logoBg}>
-            <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
-          </a>
-          {baseConfig &&
-            (!prescriberId ? (
-              <a className="ant-dropdown-link" href={`${baseConfig.pcWebsite}`} target="_blank">
-                <Icon type="eye-o" />
-                <span style={styles.dropdownText}>Preview</span>
-                {/* <Icon type="down" /> */}
-              </a>
-            ) : (
-              <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#" onClick={() => this._handlePreview()}>
+      <div className="my-header" >
+        <Header className="header" style={{ paddingLeft: '0' }}>
+          <div style={styles.headerLeft}>
+            <a href="/" style={styles.logoBg}>
+              <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
+            </a>
+            {baseConfig &&
+              (!prescriberId ? (
+                <a className="ant-dropdown-link" href={`${baseConfig.pcWebsite}`} target="_blank">
                   <Icon type="eye-o" />
                   <span style={styles.dropdownText}>Preview</span>
+                  {/* <Icon type="down" /> */}
+                </a>
+              ) : (
+                  <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
+                    <a className="ant-dropdown-link" href="#" onClick={() => this._handlePreview()}>
+                      <Icon type="eye-o" />
+                      <span style={styles.dropdownText}>Preview</span>
+                      <Icon type="down" />
+                    </a>
+                  </Dropdown>
+                ))}
+          </div>
+          <div style={styles.headerRight} className="flex-content-right">
+            <div style={{ height: 20 }}>
+              <Dropdown overlay={menu} trigger={['click']}>
+                <a className="ant-dropdown-link" href="#">
+                  {/* <Icon type="user" /> */}
+                  {/* <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
+                  ? sessionStorage.getItem(cache.SITE_LOGO)
+                  : util.requireLocalSrc('sys/02.jpg')} alt="" /> */}
+                  <span style={styles.dropdownText}>{accountName}</span>
                   <Icon type="down" />
                 </a>
               </Dropdown>
-            ))}
-        </div>
-        <div style={styles.headerRight} className="flex-content-right">
-          <div style={{ height: 20 }}>
-            <Dropdown overlay={menu} trigger={['click']}>
-              <a className="ant-dropdown-link" href="#">
-                {/* <Icon type="user" /> */}
-                {/* <img style={{width: '60px'}} src={sessionStorage.getItem(cache.SITE_LOGO)
-                  ? sessionStorage.getItem(cache.SITE_LOGO)
-                  : util.requireLocalSrc('sys/02.jpg')} alt="" /> */}
-                <span style={styles.dropdownText}>{accountName}</span>
-                <Icon type="down" />
-              </a>
-            </Dropdown>
+            </div>
+            <div>{storeName}</div>
           </div>
-          <div>{storeName}</div>
-        </div>
-      </Header>
+        </Header>
+
+      </div>
+
     );
   }
 

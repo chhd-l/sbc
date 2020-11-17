@@ -111,13 +111,15 @@ export default class SortableTable extends React.Component {
     };
     this.props.switchFunction(params);
   };
-  // getAttributeValue = (attributeValueList) => {
-  //   let attributeValue = [];
-  //   for (let i = 0; i < attributeValueList.length; i++) {
-  //     attributeValue.push(attributeValueList[i].attributeDetailName);
-  //   }
-  //   return attributeValue.join(';');
-  // };
+  getAttributeValue = (attributeValueList) => {
+    let attributeValue = [];
+    if (attributeValueList && attributeValueList.length > 0) {
+      for (let i = 0; i < attributeValueList.length; i++) {
+        attributeValue.push(attributeValueList[i].attributeDetailName);
+      }
+    }
+    return attributeValue.join(';');
+  };
 
   render() {
     const { dataSource, type } = this.state;
@@ -127,13 +129,13 @@ export default class SortableTable extends React.Component {
         dataIndex: 'attributeName',
         className: 'drag-visible'
       },
-      // {
-      //   title: 'Attribute value',
-      //   dataIndex: 'attributeValue',
-      //   key: 'attributeValue',
-      //   width: '30%',
-      //   render: (text, record) => <p>{record.storeGoodsFilterValueVOList ? this.getAttributeValue(record.storeGoodsFilterValueVOList) : ''}</p>
-      // },
+      {
+        title: 'Attribute value',
+        dataIndex: 'attributeValue',
+        key: 'attributeValue',
+        width: '30%',
+        render: (text, record) => <p>{record.filterType === '1' ? this.getAttributeValue(record.storeGoodsFilterValueVOList) : this.getAttributeValue(record.attributesValueList)}</p>
+      },
       {
         title: 'Filter status',
         dataIndex: 'filterStatus',

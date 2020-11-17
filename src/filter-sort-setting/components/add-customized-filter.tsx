@@ -248,7 +248,31 @@ class AddCustomizedfilter extends React.Component<any, any> {
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
         <div key={k.tempId}>
-          <FormItem label={index === 0 ? 'Attribute value' : ''} {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)} required={false} key={'value_' + (k.id || k.tempId)}>
+          <FormItem
+            label={
+              index === 0 ? (
+                <span>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px'
+                    }}
+                  >
+                    {' '}
+                    *
+                  </span>
+                  Attribute value
+                </span>
+              ) : (
+                ''
+              )
+            }
+            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+            required={false}
+            key={'value_' + (k.id || k.tempId)}
+          >
             {getFieldDecorator('value_' + (k.id || k.tempId), {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [

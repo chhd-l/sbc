@@ -3,19 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
 import { cache, noop } from 'qmkit';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Checkbox,
-  Pagination,
-  Spin,
-  Tooltip
-} from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { AuthWrapper, Const } from 'qmkit';
 import { IMap } from 'plume2';
@@ -78,11 +66,7 @@ export default class SetBannerList extends Component<any, any> {
     deleteRow({ bannerId: bannerId });
   }
   async editRow({ bannerId }) {
-    const {
-      setModalVisible,
-      getBannerById,
-      onImageFormChange
-    } = this.props.relaxProps;
+    const { setModalVisible, getBannerById, onImageFormChange } = this.props.relaxProps;
     onImageFormChange({ field: 'bannerId', value: null });
     await getBannerById({ bannerId: bannerId, storeId: this.state.storeId });
     setModalVisible(true);
@@ -111,22 +95,12 @@ export default class SetBannerList extends Component<any, any> {
         const mobileImage = item.get('mobiUrl');
         let pcType = 'image';
         let mobileType = 'image';
-        if (
-          pcImage.endsWith('.jpg') ||
-          pcImage.endsWith('.jpeg') ||
-          pcImage.endsWith('.png') ||
-          pcImage.endsWith('.gif')
-        ) {
+        if (pcImage.endsWith('.jpg') || pcImage.endsWith('.jpeg') || pcImage.endsWith('.png') || pcImage.endsWith('.gif')) {
           pcType = 'image';
         } else {
           pcType = 'video';
         }
-        if (
-          mobileImage.endsWith('.jpg') ||
-          mobileImage.endsWith('.jpeg') ||
-          mobileImage.endsWith('.png') ||
-          mobileImage.endsWith('.gif')
-        ) {
+        if (mobileImage.endsWith('.jpg') || mobileImage.endsWith('.jpeg') || mobileImage.endsWith('.png') || mobileImage.endsWith('.gif')) {
           mobileType = 'image';
         } else {
           mobileType = 'video';
@@ -165,13 +139,7 @@ export default class SetBannerList extends Component<any, any> {
             <td>{mobiSkipUrl}</td>
             <td>
               <Tooltip placement="top" title="Delete">
-                <span
-                  style={{ color: 'red', paddingRight: 10 }}
-                  /*className="red"*/ onClick={() =>
-                    this.deleteRow(item.toJS())
-                  }
-                  className="iconfont iconDelete"
-                >
+                <span style={{ color: 'red', paddingRight: 10 }} /*className="red"*/ onClick={() => this.deleteRow(item.toJS())} className="iconfont iconDelete">
                   {/*<FormattedMessage id="delete" />*/}
                 </span>
               </Tooltip>
@@ -193,13 +161,7 @@ export default class SetBannerList extends Component<any, any> {
   }
 
   render() {
-    const {
-      loading,
-      tableDatas,
-      setModalVisible,
-      onImageFormChange,
-      resetForm
-    } = this.props.relaxProps;
+    const { loading, tableDatas, setModalVisible, onImageFormChange, resetForm } = this.props.relaxProps;
     return (
       <div>
         <div>
@@ -233,43 +195,27 @@ export default class SetBannerList extends Component<any, any> {
                           <th style={{ width: '10%' }}>
                             <FormattedMessage id="bannerNo" />
                           </th>
-                          <th style={{ width: '10%' }}>
+                          {/*<th style={{ width: '10%' }}>
                             <FormattedMessage id="resourceName" />
+                          </th>*/}
+                          <th style={{ width: '20%' }}>
+                            <FormattedMessage id="resource" values={{ type: 'Pc' }} />
                           </th>
                           <th style={{ width: '20%' }}>
-                            <FormattedMessage
-                              id="resource"
-                              values={{ type: 'Pc' }}
-                            />
-                          </th>
-                          <th style={{ width: '20%' }}>
-                            <FormattedMessage
-                              id="resourceName"
-                              values={{ type: 'Mobile' }}
-                            />
+                            <FormattedMessage id="resourceName" values={{ type: 'Mobile' }} />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage
-                              id="bannerUrl"
-                              values={{ type: 'Pc' }}
-                            />
+                            <FormattedMessage id="bannerUrl" values={{ type: 'Pc' }} />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage
-                              id="bannerUrl"
-                              values={{ type: 'Mobile' }}
-                            />
+                            <FormattedMessage id="bannerUrl" values={{ type: 'Mobile' }} />
                           </th>
                           <th style={{ width: '10%' }}>
                             <FormattedMessage id="operator" />
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="ant-table-tbody">
-                        {loading
-                          ? this._renderLoading()
-                          : this._renderContent(tableDatas)}
-                      </tbody>
+                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(tableDatas)}</tbody>
                     </table>
                   </div>
                 </div>

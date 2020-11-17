@@ -122,7 +122,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                           {' '}
                           &nbsp;
                           {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                          ，&nbsp;&nbsp;&nbsp;&nbsp;discount&nbsp;&nbsp;
+                          ，&nbsp;&nbsp;&nbsp;&nbsp;discounted price&nbsp;&nbsp;
                         </span>
                       </div>
                     ) : null}
@@ -137,7 +137,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                             validator: (_rule, value, callback) => {
                               if (value) {
                                 if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                                  callback('The number between 0.1-9.9 supports one decimal');
+                                  callback('Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off');
                                 }
                               }
                               callback();
@@ -148,14 +148,14 @@ export default class DiscountLevels extends React.Component<any, any> {
                       })(
                         <Input
                           style={{ width: 200 }}
-                          placeholder={'The number between 0.1-9.9 supports one decimal'}
+                          placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
                             this.onChange(index, 'discount', e.target.value);
                           }}
                         />
                       )}
                     </FormItem>
-                    <span>&nbsp;discount&nbsp;&nbsp;</span>
+                    <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
                     {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                   </HasError>
                 )}

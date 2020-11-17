@@ -115,13 +115,13 @@ export default class GoodsAdd extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane
+            {/*<Tabs.TabPane
               tab="Related product"
               key="related"
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <Related />
-            </Tabs.TabPane>
+            </Tabs.TabPane>*/}
           </Tabs>
 
           {/*页脚*/}

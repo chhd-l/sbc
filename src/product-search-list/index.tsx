@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Tabs, DatePicker } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
+import './index.less';
 
 const TabPane = Tabs.TabPane;
-const { RangePicker } = DatePicker;
+const { WeekPicker } = DatePicker;
 
 export default class ProductSearchList extends React.Component<any, any> {
   static propTypes = {};
@@ -29,15 +30,65 @@ export default class ProductSearchList extends React.Component<any, any> {
         total: 0
       },
       noResultLoading: false,
-      dateRange: []
+      dateRange: [],
+      tabKey: '1',
+      statistics: {}
     };
     this.dateRangeChange = this.dateRangeChange.bind(this);
     this.allTableChange = this.allTableChange.bind(this);
     this.getAllSearchResult = this.getAllSearchResult.bind(this);
     this.noResultTableChange = this.noResultTableChange.bind(this);
     this.getNoSearchResults = this.getNoSearchResults.bind(this);
+    this.onTabChange = this.onTabChange.bind(this);
+    this.onAllSerch = this.onAllSerch.bind(this);
+    this.onNoResultSerch = this.onNoResultSerch.bind(this);
+    this.getStatisticsResult = this.getStatisticsResult.bind(this);
   }
-  dateRangeChange(dateRange) {}
+
+  componentDidMount() {
+    this.dateRangeChange(moment(sessionStorage.getItem(cache.CURRENT_YEAR)));
+  }
+
+  onTabChange(key) {
+    this.setState({
+      tabKey: key
+    });
+    if (key === '1') {
+      this.onAllSerch();
+    } else if (key === '2') {
+      this.onNoResultSerch();
+    }
+  }
+  dateRangeChange(date) {
+    this.setState({
+      dateRange: [moment().week(moment(date).week()).startOf('week').add(1, 'days').format('YYYY-MM-DD'), moment().week(moment(date).week()).endOf('week').add(1, 'days').format('YYYY-MM-DD')]
+    });
+    this.setState({}, () => this.getStatisticsResult());
+    if (this.state.tabKey === '1') {
+      this.onAllSerch();
+    } else if (this.state.tabKey === '2') {
+      this.onNoResultSerch();
+    }
+  }
+
+  getStatisticsResult() {
+    const { dateRange } = this.state;
+    webapi
+      .getStatisticsData(dateRange[0], dateRange[1])
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            statistics: res.context
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+      });
+  }
 
   allTableChange = (pagination: any) => {
     this.setState(
@@ -47,11 +98,24 @@ export default class ProductSearchList extends React.Component<any, any> {
       () => this.getAllSearchResult()
     );
   };
+  onAllSerch() {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getAllSearchResult()
+    );
+  }
   getAllSearchResult = () => {
     const { dateRange, allPagination } = this.state;
     let params = {
       startDate: dateRange[0],
       endDate: dateRange[1],
+      isNoResults: 0,
       pageNum: allPagination.current - 1,
       pageSize: allPagination.pageSize
     };
@@ -63,9 +127,9 @@ export default class ProductSearchList extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          allPagination.total = res.context.total;
+          allPagination.total = res.context.totalElements;
           this.setState({
-            allSerchResults: res.context.content,
+            allSerchResults: res.context.searchTermStatisticsViews,
             allPagination: allPagination,
             allLoading: false
           });
@@ -92,11 +156,24 @@ export default class ProductSearchList extends React.Component<any, any> {
       () => this.getNoSearchResults()
     );
   };
+  onNoResultSerch() {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getNoSearchResults()
+    );
+  }
   getNoSearchResults = () => {
     const { dateRange, noResultPagination } = this.state;
     let params = {
       startDate: dateRange[0],
       endDate: dateRange[1],
+      isNoResults: 1,
       pageNum: noResultPagination.current - 1,
       pageSize: noResultPagination.pageSize
     };
@@ -108,9 +185,9 @@ export default class ProductSearchList extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          noResultPagination.total = res.context.total;
+          noResultPagination.total = res.context.totalElements;
           this.setState({
-            noSearchResult: res.context.content,
+            noSearchResult: res.context.searchTermStatisticsViews,
             noResultPagination: noResultPagination,
             noResultLoading: false
           });
@@ -129,7 +206,7 @@ export default class ProductSearchList extends React.Component<any, any> {
       });
   };
   render() {
-    const { title, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
+    const { title, tabKey, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
     const columnsAll = [
       {
         title: 'Search Term',
@@ -139,8 +216,8 @@ export default class ProductSearchList extends React.Component<any, any> {
       },
       {
         title: 'Searches With Results',
-        dataIndex: 'searchesWithResults',
-        key: 'searchesWithResults',
+        dataIndex: 'resultCount',
+        key: 'resultCount',
         width: '15%'
       },
       {
@@ -183,8 +260,8 @@ export default class ProductSearchList extends React.Component<any, any> {
       },
       {
         title: 'Searches With No-Result',
-        dataIndex: 'searchesWithResults',
-        key: 'searchesWithResults',
+        dataIndex: 'resultCount',
+        key: 'resultCount',
         width: '15%'
       },
       {
@@ -219,14 +296,119 @@ export default class ProductSearchList extends React.Component<any, any> {
       }
     ];
     return (
-      <div>
+      <div id="productSearch">
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={title} />
-          <RangePicker renderExtraFooter={() => 'extra footer'} onChange={this.dateRangeChange} />
+          <Row>
+            <Col span={12}>
+              <Headline title={title} />
+            </Col>
+            <Col span={12} style={{ textAlign: 'end' }}>
+              <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR))} onChange={this.dateRangeChange} placeholder="Select week" />
+            </Col>
+          </Row>
+          <Row className="searchHeader">
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>Searches With Results</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.searchesWithResults}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>Result No.</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.resultNo}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>Result count</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.resultCount}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Row className="searchHeader">
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>Searches With No-Result</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.searchesWithNoResults}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>No-result Rate</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.noResultRate}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <Row>
+                <Col span={1}>
+                  <div className="redTag"></div>
+                </Col>
+                <Col span={23}>
+                  <div className="resultTitle">
+                    <strong>No-Result Term Count</strong>
+                  </div>
+                  <div className="resultValue">
+                    <strong>{statistics.noResultTermCount}</strong>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </div>
         <div className="container">
-          <Tabs defaultActiveKey="1">
+          <Tabs
+            defaultActiveKey={tabKey}
+            onChange={(key) => {
+              this.onTabChange(key);
+            }}
+          >
             <TabPane tab="All" key="1">
               <Table rowKey="id" columns={columnsAll} dataSource={allSerchResults} pagination={allPagination} loading={allLoading} scroll={{ x: '100%' }} onChange={this.allTableChange} />
             </TabPane>

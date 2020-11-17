@@ -1,14 +1,16 @@
 import { Actor, Action, IMap } from 'plume2';
+import { fromJS } from 'immutable';
 
 export default class SeoActor extends Actor {
   defaultState() {
     return {
       seoForm: {
-        title: '{name}',
-        metaKeywords: '{name}',
-        description: '{description}'
+        titleSource: '{name}',
+        metaKeywordsSource: '{name}',
+        metaDescriptionSource: '{description}'
       },
-      seoModalVisible: false
+      seoModalVisible: false,
+      currentStoreCateId: null
     };
   }
 
@@ -21,5 +23,26 @@ export default class SeoActor extends Actor {
   @Action('seoActor: seoForm')
   updateSeoForm(state: IMap, { field, value }) {
     return state.setIn(['seoForm', field], value);
+  }
+
+  @Action('seoActor: setSeoForm')
+  setSeoForm(state: IMap, form) {
+    return state.set('seoForm', form);
+  }
+  @Action('seoActor: currentStoreCateId')
+  setCurrentStoreCateId(state: IMap, currentStoreCateId) {
+    return state.set('currentStoreCateId', currentStoreCateId);
+  }
+
+  @Action('seoActor: clear')
+  clear(state) {
+    return state.set(
+      'seoForm',
+      fromJS({
+        titleSource: '{name}',
+        metaKeywordsSource: '{name}',
+        metaDescriptionSource: '{description}'
+      })
+    );
   }
 }

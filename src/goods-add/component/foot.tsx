@@ -32,7 +32,8 @@ export default class Foot extends React.Component<any, any> {
   };
   _saveSeoSetting = () => {
     const { saveSeoSetting } = this.props.relaxProps;
-    saveSeoSetting();
+    const goodsId = 'ff80808175b1a9b80175b50910f10004';
+    saveSeoSetting(goodsId);
   };
   render() {
     const { saveLoading, activeTabKey } = this.props.relaxProps;

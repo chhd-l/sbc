@@ -26,4 +26,58 @@ export default class AppStore extends Store {
   setSeoModalVisible = (visible) => {
     this.dispatch('seoActor: seoModal', visible);
   };
+  changeTab = (tab) => {
+    this.dispatch('seoActor: currentTab', tab);
+    if (tab === 'siteSeo') {
+      this.getSeo(4);
+    } else {
+      this.getPages();
+    }
+  };
+  getSeo = async (type, pageName = null) => {
+    this.clear();
+    if (pageName) {
+      this.changeCurrentPage(pageName);
+      this.setSeoModalVisible(true);
+    }
+    const { res } = (await webapi.getSeo(type, pageName)) as any;
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      this.dispatch(
+        'seoActor: setSeoForm',
+        fromJS({
+          title: res.context.seoSettingVO.titleSource,
+          metaKeywords: res.context.seoSettingVO.metaKeywordsSource,
+          description: res.context.seoSettingVO.metaDescriptionSource
+        })
+      );
+    }
+  };
+  clear = () => {
+    this.dispatch('seoActor: clear');
+  };
+  editSeo = async (params) => {
+    const res = await webapi.editSeo(params);
+  };
+  addSeo = async (params) => {
+    const res = await webapi.addSeo(params);
+    this.setSeoModalVisible(false);
+  };
+
+  changeCurrentPage = (currentPage) => {
+    this.dispatch('seoActor: currentPage', currentPage);
+  };
+
+  getPages = async (pageNum = 0, pageSize = 10) => {
+    this.dispatch('loading:start');
+    const { res } = (await webapi.getPages({
+      pageNum,
+      pageSize,
+      type: 'pageType'
+    })) as any;
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.sysDictionaryPage.content) {
+      const pages = res.context.sysDictionaryPage.content;
+      this.dispatch('loading:end');
+      this.dispatch('seoActor: allPages', fromJS(pages));
+    }
+  };
 }

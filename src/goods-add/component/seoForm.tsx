@@ -38,14 +38,19 @@ export default class SeoForm extends Component<any, any> {
     relaxProps?: {
       seoForm: any;
       updateSeoForm: Function;
+      getSeo: Function;
     };
   };
 
   static relaxProps = {
     updateSeoForm: noop,
+    getSeo: noop,
     seoForm: 'seoForm'
   };
-  componentDidMount() {}
+  componentDidMount() {
+    const { getSeo } = this.props.relaxProps;
+    getSeo('ff80808175b1a9b80175b50910f10004');
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -53,25 +58,14 @@ export default class SeoForm extends Component<any, any> {
     const seoObj = seoForm.toJS();
     return (
       <Form {...formItemLayout} className="login-form">
-        {/*<Form.Item>*/}
-        {/*  {getFieldDecorator('title', {*/}
-        {/*    rules: [{ required: true, message: 'Please input your username!' }],*/}
-        {/*  })*/}
-        {/*  (*/}
-        {/*    <Input*/}
-        {/*      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
-        {/*      placeholder="Username"*/}
-        {/*    />,*/}
-        {/*  )}*/}
-        {/*</Form.Item>*/}
         <Form.Item label="Title">
-          {getFieldDecorator('title', {
-            initialValue: seoObj.title
+          {getFieldDecorator('titleSource', {
+            initialValue: seoObj.titleSource
           })(
             <Input
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'title',
+                  field: 'titleSource',
                   value: e.target.value
                 })
               }
@@ -79,14 +73,14 @@ export default class SeoForm extends Component<any, any> {
           )}
         </Form.Item>
         <Form.Item label="Meta Keywords">
-          {getFieldDecorator('metaKeywords', {
-            initialValue: seoObj.metaKeywords
+          {getFieldDecorator('metaKeywordsSource', {
+            initialValue: seoObj.metaKeywordsSource
           })(
             <TextArea
               rows={4}
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'metaKeywords',
+                  field: 'metaKeywordsSource',
                   value: e.target.value
                 })
               }
@@ -94,14 +88,14 @@ export default class SeoForm extends Component<any, any> {
           )}
         </Form.Item>
         <Form.Item label="Meta Description">
-          {getFieldDecorator('description', {
-            initialValue: seoObj.description
+          {getFieldDecorator('metaDescriptionSource', {
+            initialValue: seoObj.metaDescriptionSource
           })(
             <TextArea
               rows={4}
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'description',
+                  field: 'metaDescriptionSource',
                   value: e.target.value
                 })
               }

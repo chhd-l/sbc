@@ -23,6 +23,7 @@ class AttributeLibrary extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
+      taggingList: [],
 
       visible: false,
       taggingForm: {
@@ -32,10 +33,12 @@ class AttributeLibrary extends Component<any, any> {
       },
       isEdit: false,
       currentEditTagging: {},
-      modalName: ''
+      modalName: '',
+      colourList: []
     };
   }
   componentDidMount() {
+    this.querySysDictionary('colour');
     this.getTagging();
   }
 
@@ -86,25 +89,51 @@ class AttributeLibrary extends Component<any, any> {
   openEditPage = (row) => {
     const { form } = this.props;
     let taggingForm = {
-      taggingName: '',
-      taggingFontColor: '',
-      taggingFillColor: ''
+      taggingName: row.taggingName,
+      taggingFontColor: row.taggingFontColor,
+      taggingFillColor: row.taggingFillColor
     };
     this.setState(
       {
-        modalName: 'Edit attribute',
+        modalName: 'Edit tagging',
         visible: true,
         taggingForm,
         isEdit: true,
-        currentEditAttribute: row
+        currentEditTagging: row
       },
       () => {
-        form.setFieldsValue(taggingForm);
+        form.setFieldsValue({
+          taggingName: row.taggingName,
+          taggingFillColor: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : '',
+          taggingFontColor: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : ''
+        });
       }
     );
   };
   handleSubmit = () => {
-    console.log('submit');
+    const { taggingForm, isEdit, currentEditTagging } = this.state;
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        if (isEdit) {
+          let params = {
+            taggingFillColor: taggingForm.taggingFillColor,
+            taggingFontColor: taggingForm.taggingFontColor,
+            taggingName: taggingForm.taggingName,
+            displayStatus: currentEditTagging.displayStatus ? true : false,
+            id: currentEditTagging.id
+          };
+          this.updateTagging(params);
+        } else {
+          debugger;
+          let params = {
+            taggingFillColor: taggingForm.taggingFillColor,
+            taggingFontColor: taggingForm.taggingFontColor,
+            taggingName: taggingForm.taggingName
+          };
+          this.addTagging(params);
+        }
+      }
+    });
   };
   getTagging = () => {
     const { searchForm, pagination } = this.state;
@@ -119,8 +148,8 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
-          const attributeList = res.context.attributesList;
-          this.setState({ attributeList, pagination });
+          const taggingList = res.context.taggingList;
+          this.setState({ taggingList, pagination });
         } else {
           message.error(res.message || 'Operation failed');
         }
@@ -129,94 +158,151 @@ class AttributeLibrary extends Component<any, any> {
         message.error(err.toString() || 'Operation failed');
       });
   };
+  querySysDictionary = (type: String) => {
+    webapi
+      .querySysDictionary({ type: type })
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            colourList: res.context.sysDictionaryVOS
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
   addTagging = (params: object) => {
-    // webapi
-    //   .postTagging(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       message.success('Operate successfully');
-    //       this.setState(
-    //         {
-    //           visible: false
-    //         },
-    //         () => this.getTagging()
-    //       );
-    //     } else {
-    //       message.error(res.message || 'Operation failed');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     message.error(err.toString() || 'Operation failed');
-    //   });
+    webapi
+      .addTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
+          this.setState(
+            {
+              visible: false
+            },
+            () => this.getTagging()
+          );
+        } else {
+          message.error(res.message || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
   deleteTagging = (id) => {
-    // let params = {
-    //   id: id
-    // };
-    // webapi
-    //   .deleteTagging(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       this.getTagging();
-    //       message.success('Operate successfully');
-    //     } else {
-    //       message.error(res.message.toString() || 'Operation failed');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     message.error(err.toString() || 'Operation failed');
-    //   });
+    let idList = [];
+    idList.push(id);
+    let params = {
+      idList: idList
+    };
+    webapi
+      .deleteTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getTagging();
+          message.success('Operate successfully');
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
 
   updateTagging = (params) => {
-    // webapi
-    //   .putTagging(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       this.setState({
-    //         visible: false
-    //       });
-    //       this.getTagging();
-    //       message.success('Operate successfully');
-    //     } else {
-    //       message.error(res.message.toString() || 'Operation failed');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     message.error(err.toString() || 'Operation failed');
-    //   });
+    webapi
+      .updateTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            visible: false
+          });
+          this.getTagging();
+          message.success('Operate successfully');
+        } else {
+          message.error(res.message.toString() || 'Operation failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failed');
+      });
   };
-  updateTaggingStatus = (checked, row) => {};
+  updateTaggingStatus = (checked, row) => {
+    let params = {
+      taggingFillColor: row.taggingFillColor,
+      taggingFontColor: row.taggingFontColor,
+      taggingName: row.taggingName,
+      displayStatus: checked ? true : false,
+      id: row.id
+    };
+    this.updateTagging(params);
+  };
+
+  getColour = (id) => {
+    const { colourList } = this.state;
+    let colour = colourList.find((item) => +item.id === +id);
+    return colour;
+  };
 
   render() {
-    const { title, taggingList, visible, modalName } = this.state;
+    const { title, taggingList, visible, modalName, colourList, taggingForm } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
         title: 'Tagging name',
-        dataIndex: 'attributeName',
-        key: 'attributeName'
+        dataIndex: 'taggingName',
+        key: 'taggingName'
       },
       {
         title: 'Tagging fill color',
-        dataIndex: 'attributeValue',
-        key: 'attributeValue'
+        dataIndex: 'taggingFillColor',
+        key: 'taggingFillColor',
+        render: (text) => (
+          <div>
+            {this.getColour(text) ? (
+              <>
+                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
+                {this.getColour(text).name}
+              </>
+            ) : (
+              <p>{text}</p>
+            )}
+          </div>
+        )
       },
       {
         title: 'Tagging font color',
-        dataIndex: 'attributeValue',
-        key: 'attributeValue'
+        dataIndex: 'taggingFontColor',
+        key: 'taggingFontColor',
+        render: (text) => (
+          <div>
+            {this.getColour(text) ? (
+              <>
+                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
+                {this.getColour(text).name}
+              </>
+            ) : (
+              <p>{text}</p>
+            )}
+          </div>
+        )
       },
       {
         title: 'Display in shop',
-        dataIndex: 'attributeStatus',
-        key: 'attributeStatus',
-        width: '10%',
+        dataIndex: 'displayStatus',
+        key: 'displayStatus',
         render: (text, record) => (
           <Popconfirm placement="topLeft" title={'Are you sure to' + (+text ? 'disable' : 'enable') + 'this attribute?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
@@ -225,8 +311,8 @@ class AttributeLibrary extends Component<any, any> {
       },
       {
         title: 'Product count',
-        dataIndex: 'attributeValue',
-        key: 'attributeValue'
+        dataIndex: 'productNum',
+        key: 'productNum'
       },
       {
         title: 'Operation',
@@ -347,7 +433,7 @@ class AttributeLibrary extends Component<any, any> {
                   onChange={(e) => {
                     const value = (e.target as any).value;
                     this.onTaggingFormChange({
-                      field: 'attributeName',
+                      field: 'taggingName',
                       value
                     });
                   }}
@@ -358,32 +444,44 @@ class AttributeLibrary extends Component<any, any> {
               {getFieldDecorator('taggingFontColor', {
                 rules: [{ required: true }]
               })(
-                <Input
+                <Select
                   style={{ width: '80%' }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
                     this.onTaggingFormChange({
                       field: 'taggingFontColor',
                       value
                     });
                   }}
-                />
+                >
+                  {colourList.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
+                    </Option>
+                  ))}
+                </Select>
               )}
             </FormItem>
             <FormItem label="Tagging fill color">
               {getFieldDecorator('taggingFillColor', {
                 rules: [{ required: true }]
               })(
-                <Input
+                <Select
                   style={{ width: '80%' }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
                     this.onTaggingFormChange({
                       field: 'taggingFillColor',
                       value
                     });
                   }}
-                />
+                >
+                  {colourList.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
+                    </Option>
+                  ))}
+                </Select>
               )}
             </FormItem>
           </Form>

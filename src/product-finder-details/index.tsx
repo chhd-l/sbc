@@ -6,6 +6,8 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 const img_productNo = require('./img/productNo.png');
 const img_question = require('./img/question.png');
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 export default class ProductFinderDetails extends React.Component<any, any> {
   static propTypes = {};
@@ -17,28 +19,29 @@ export default class ProductFinderDetails extends React.Component<any, any> {
       id: this.props.match.params.id,
       title: 'Product Finder Details',
       loading: false,
-      details: {
-        number: '12121212',
-        generatedDate: '2020-10-29',
-        orderNumber: '01234341313935',
-        consumerType: 'Member',
-        petType: 'Cat',
-        consumerAccount: '0000',
-        petAge: 10,
-        consumerName: 'Yumi',
-        breed: 'Persian',
-        image: 'https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007290640033485.jpg',
-        productName: 'Kitten thin slices in Gravy Canned',
-        productSku: '87289776'
-      },
-      chartRecords: [
-        {
-          question: 'Which of the following best describes your cat?',
-          answer: 'My cat is aging'
-        }
-      ]
+      details: {},
+      chartRecords: []
     };
     // 事先声明方法绑定
+  }
+
+  componentDidMount() {
+    webapi
+      .getProductFinderDetail(this.state.id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            details: res.context.details,
+            chartRecords: res.context.stepList.map((x) => ({ question: x.question, answer: x.answer }))
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+      });
   }
 
   render() {
@@ -57,7 +60,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
             <div className="garyContainer">
               <Row>
                 <img className="productNo-Image" src={img_productNo} alt="Product No" />
-                <strong>Product Finder NO. {details.number}</strong>
+                <strong>Product Finder NO. {details.finderNumber}</strong>
               </Row>
               <Row>
                 <Col span={8}>
@@ -66,18 +69,19 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                       <p>Generated data</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.generatedDate}</strong>
+                      <strong>{moment(details.createTime).format('YYYY-MM-DD')}</strong>
                     </Col>
                   </Row>
                 </Col>
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      {' '}
                       <p>Order number</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.orderNumber}</strong>
+                      <Link to={`/order-detail/${details.orderNumber}`}>
+                        <span style={{ textDecoration: 'underline' }}>{details.orderNumber}</span>
+                      </Link>
                     </Col>
                   </Row>
                 </Col>
@@ -89,7 +93,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                       <p>Consumer type</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.consumerType}</strong>
+                      <strong>{details.consumerType === 0 ? 'Member' : 'Guest'}</strong>
                     </Col>
                   </Row>
                 </Col>
@@ -155,7 +159,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <div className="imageContainer">
                   <Row style={{ marginBottom: '0px' }}>
                     <Col span={4} style={{ textAlign: 'center' }}>
-                      <img className="productImage" src={details.image} alt="image" />
+                      <img className="productImage" src={details.productImage} alt="productImage" />
                     </Col>
                     <Col span={20}>
                       <h4 style={{ marginBottom: '10px' }}>{details.productName}</h4>
@@ -182,6 +186,11 @@ export default class ProductFinderDetails extends React.Component<any, any> {
             </div>
           </div>
         </Spin>
+        <div className="bar-button">
+          <Button type="primary" onClick={() => (history as any).go(-1)}>
+            {<FormattedMessage id="back" />}
+          </Button>
+        </div>
       </div>
     );
   }

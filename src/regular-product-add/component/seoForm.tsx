@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
+import AppStore from '../store';
+import '../index.less';
 import { fromJS, Map } from 'immutable';
 import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -11,9 +13,9 @@ const FormItem = Form.Item;
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
-    xs: { span: 6 },
-    sm: { span: 6 }
+    span: 4,
+    xs: { span: 4 },
+    sm: { span: 4 }
   },
   wrapperCol: {
     span: 10,
@@ -21,14 +23,16 @@ const formItemLayout = {
     sm: { span: 10 }
   }
 };
-
 @Relax
-export default class SeoSettingForm extends Component<any, any> {
+export default class SeoForm extends Component<any, any> {
   _rejectForm;
 
   WrapperForm: any;
 
-  state: {};
+  state: {
+    operation: 'new'; //edit
+    isEdit: false;
+  };
   props: {
     form: any;
     relaxProps?: {
@@ -39,13 +43,13 @@ export default class SeoSettingForm extends Component<any, any> {
   };
 
   static relaxProps = {
-    seoForm: 'seoForm',
     updateSeoForm: noop,
-    getSeo: noop
+    getSeo: noop,
+    seoForm: 'seoForm'
   };
   componentDidMount() {
     const { getSeo } = this.props.relaxProps;
-    getSeo(4);
+    getSeo('ff80808175b1a9b80175b50910f10004');
   }
 
   render() {
@@ -54,15 +58,25 @@ export default class SeoSettingForm extends Component<any, any> {
     const seoObj = seoForm.toJS();
     return (
       <Form {...formItemLayout} className="login-form">
+        {/*<Form.Item>*/}
+        {/*  {getFieldDecorator('title', {*/}
+        {/*    rules: [{ required: true, message: 'Please input your username!' }],*/}
+        {/*  })*/}
+        {/*  (*/}
+        {/*    <Input*/}
+        {/*      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}*/}
+        {/*      placeholder="Username"*/}
+        {/*    />,*/}
+        {/*  )}*/}
+        {/*</Form.Item>*/}
         <Form.Item label="Title">
-          {getFieldDecorator('title', {
-            initialValue: seoObj.title
+          {getFieldDecorator('titleSource', {
+            initialValue: seoObj.titleSource
           })(
             <Input
-              placeholder="Meta title for the site"
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'title',
+                  field: 'titleSource',
                   value: e.target.value
                 })
               }
@@ -70,15 +84,14 @@ export default class SeoSettingForm extends Component<any, any> {
           )}
         </Form.Item>
         <Form.Item label="Meta Keywords">
-          {getFieldDecorator('metaKeywords', {
-            initialValue: seoObj.metaKeywords
+          {getFieldDecorator('metaKeywordsSource', {
+            initialValue: seoObj.metaKeywordsSource
           })(
             <TextArea
-              placeholder="Meta keywords for the site"
               rows={4}
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'metaKeywords',
+                  field: 'metaKeywordsSource',
                   value: e.target.value
                 })
               }
@@ -86,15 +99,14 @@ export default class SeoSettingForm extends Component<any, any> {
           )}
         </Form.Item>
         <Form.Item label="Meta Description">
-          {getFieldDecorator('description', {
-            initialValue: seoObj.description
+          {getFieldDecorator('metaDescriptionSource', {
+            initialValue: seoObj.metaDescriptionSource
           })(
             <TextArea
               rows={4}
-              placeholder="Meta description for the site"
               onChange={(e) =>
                 updateSeoForm({
-                  field: 'description',
+                  field: 'metaDescriptionSource',
                   value: e.target.value
                 })
               }

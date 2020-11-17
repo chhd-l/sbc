@@ -231,7 +231,6 @@ export default class Interaction extends React.Component<any, any> {
   }
 
   generateFilterTree(filterList) {
-    console.log(filterList);
     return (
       filterList &&
       filterList.map((item) => {
@@ -240,7 +239,6 @@ export default class Interaction extends React.Component<any, any> {
         let selectedFilters = this.props.navigation.filter ? this.props.navigation.filter.split(',') : [];
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
         let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
-        debugger;
         if (item.children && item.children.length > 0) {
           return (
             <TreeNode key={item.key} value={item.value} title={item.title} disabled checkable={false}>
@@ -254,7 +252,7 @@ export default class Interaction extends React.Component<any, any> {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { navigation, hasLanguage } = this.props;
+    const { navigation, noLanguageSelect } = this.props;
     const { pageList, interaction, pageTypeCode, treeData, filterList, sortList } = this.state;
     const targetList = [
       { name: 'External', value: '_blank' },
@@ -274,7 +272,7 @@ export default class Interaction extends React.Component<any, any> {
     };
     return (
       <div>
-        <h3>{hasLanguage ? 'Step2' : 'Step3'}</h3>
+        <h3>{noLanguageSelect ? 'Step2' : 'Step3'}</h3>
         <h4>
           Interaction Type<span className="ant-form-item-required"></span>
         </h4>
@@ -373,7 +371,7 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                   </div>
                 ) : pageTypeCode !== '' ? (
-                  <FormItem {...layout} label="Paramter">
+                  <FormItem {...layout} label="Parameter">
                     {getFieldDecorator('paramsField', {
                       initialValue: navigation.paramsField
                     })(

@@ -181,13 +181,13 @@ class NavigationList extends Component<any, any> {
           <div>
             <div>
               <Tooltip placement="top" title="Add">
-                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'add', language: record.language } }} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
+                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'add', language: record.language, noLanguageSelect: true } }} className="iconfont iconbtn-addsubvisionsaddcategory"></Link>
               </Tooltip>
 
               <Divider type="vertical" />
 
               <Tooltip placement="top" title="Edit">
-                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'edit' } }} className="iconfont iconEdit"></Link>
+                <Link to={{ pathname: '/navigation-update/' + record.id, state: { type: 'edit', noLanguageSelect: !!record.parentId } }} className="iconfont iconEdit"></Link>
               </Tooltip>
 
               <Divider type="vertical" />

@@ -72,7 +72,7 @@ export default class Main extends React.Component<any, any> {
       <div>
         <Layout>
           {/*头部*/}
-          <MyHeader className="my-header" />
+          <MyHeader />
           <div className="layout-header"></div>
           <Layout className="ant-layout-has-sider">
             {/*左侧一级菜单*/}
@@ -81,7 +81,7 @@ export default class Main extends React.Component<any, any> {
             <MyLeftMenu matchedPath={this.state.matchedPath} ref={(menu) => (this._menu = menu)} />
             {/*右侧主操作区域*/}
             <Content>
-              <div style={styles.wrapper} id="page-content">
+              <div className="main-content" id="page-content">
                 {routeWithSubRoutes(routes, this.handlePathMatched)}
                 {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
                 <div style={styles.copyright}>

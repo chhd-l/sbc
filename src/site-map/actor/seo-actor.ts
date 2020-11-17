@@ -4,17 +4,9 @@ export default class SeoActor extends Actor {
   defaultState() {
     return {
       seoForm: {
-        title: '',
-        metaKeywords: '',
-        description: ''
-      },
-      seoModalVisible: false
+        content: ''
+      }
     };
-  }
-
-  @Action('seoActor: seoModal')
-  setSeoModalVisible(state, seoModalVisible) {
-    return state.set('seoModalVisible', seoModalVisible);
   }
 
   //seo

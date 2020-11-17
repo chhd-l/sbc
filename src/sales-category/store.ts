@@ -10,7 +10,7 @@ import SpecActor from './actor/spec-actor';
 import ImageActor from './actor/image-actor';
 import SeoActor from './actor/seo-actor';
 
-import { getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
+import { getSeo, editSeo, getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -492,5 +492,32 @@ export default class AppStore extends Store {
 
   updateSeoForm = ({ field, value }) => {
     this.dispatch('seoActor: seoForm', { field, value });
+  };
+
+  getSeo = async (storeCateId, type = 2) => {
+    this.clear();
+    this.setCurrentStoreCateId(storeCateId);
+    this.setSeoModalVisible(true);
+    const { res } = (await getSeo(storeCateId, type)) as any;
+    if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      this.dispatch(
+        'seoActor: setSeoForm',
+        fromJS({
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}',
+          metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}',
+          metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
+        })
+      );
+    }
+  };
+  editSeo = async (params) => {
+    const res = await editSeo(params);
+  };
+  setCurrentStoreCateId = (storeCateId) => {
+    this.dispatch('seoActor: currentStoreCateId', storeCateId);
+  };
+
+  clear = () => {
+    this.dispatch('seoActor: clear');
   };
 }

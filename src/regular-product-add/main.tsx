@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Tabs, Form, Alert } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import './index.less';
 import AppStore from './store';
@@ -9,6 +9,8 @@ import Related from './component/related';
 import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
+import SeoForm from './component/seoForm';
+const SeoFormModel = Form.create({})(SeoForm);
 //import Price from './component/price';
 import { Router } from 'react-router-dom';
 import Detail from './component/detail';
@@ -68,6 +70,8 @@ export default class Main extends React.Component<any, any> {
       type = 'price';
     } else if (res == 'related') {
       type = 'inventory';
+    } else if (res == 'seo') {
+      type = 'related';
     }
     this.setState({
       tabType: type
@@ -82,6 +86,8 @@ export default class Main extends React.Component<any, any> {
       type = 'inventory';
     } else if (res == 'inventory') {
       type = 'related';
+    } else if (res == 'related') {
+      type = 'seo';
     }
     this.setState({
       tabType: type
@@ -171,6 +177,25 @@ export default class Main extends React.Component<any, any> {
               <AlertInfo />
 
               <Related />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="SEO Setting"
+              key="seo"
+              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+            >
+              <AlertInfo
+                message={
+                  <div>
+                    <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
+                    <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
+                    <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
+                    <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
+                    <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
+                    <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
+                  </div>
+                }
+              />
+              <SeoFormModel />
             </Tabs.TabPane>
           </Tabs>
 

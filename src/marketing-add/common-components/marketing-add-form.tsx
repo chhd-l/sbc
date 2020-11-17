@@ -125,16 +125,20 @@ export default class MarketingAddForm extends React.Component<any, any> {
   render() {
     const { marketingType, marketingId, form } = this.props;
     const { getFieldDecorator } = form;
-    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading } = this.state;
+    const { customerLevel, selectedRows, marketingBean, level, isFullCount, skuExists, saveLoading, PromotionTypeValue } = this.state;
     let settingLabel = 'setting rules';
+    let settingLabel1 = 'setting rules';
+
     let settingRuleFrom = { ...formItemLayout };
 
     if (this.state.PromotionTypeValue === 1) {
       settingRuleFrom = { ...largeformItemLayout };
       if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
         settingLabel = 'For the first subscription order,discount';
+        settingLabel1 = 'For the rest subscription order,discount';
       } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
-        settingLabel = 'For the first subscription order,reduction';
+        settingLabel = 'For the first subscription order,discount';
+        settingLabel1 = 'For the rest subscription order,reduction';
       }
     }
 
@@ -294,6 +298,42 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
         {isFullCount != null && (
           <FormItem {...settingRuleFrom} label={settingLabel} required={true}>
+            {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
+              getFieldDecorator(
+                'rules',
+                {}
+              )(<GiftLevels form={this.props.form} selectedRows={this.makeSelectedRows(null)} fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()} onChangeBack={this.onRulesChange} isFullCount={isFullCount} />)}
+            {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
+              getFieldDecorator(
+                'rules',
+                {}
+              )(
+                <DiscountLevels
+                  form={this.props.form}
+                  fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
+                  onChangeBack={this.onRulesChange}
+                  isFullCount={isFullCount}
+                  isNormal={this.state.PromotionTypeValue === 0}
+                />
+              )}
+            {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION &&
+              getFieldDecorator(
+                'rules',
+                {}
+              )(
+                <ReductionLevels
+                  form={this.props.form}
+                  fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
+                  onChangeBack={this.onRulesChange}
+                  isFullCount={isFullCount}
+                  isNormal={this.state.PromotionTypeValue === 0}
+                  PromotionTypeValue={this.state.PromotionTypeValue}
+                />
+              )}
+          </FormItem>
+        )}
+        {PromotionTypeValue == 1 && (
+          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
             {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
               getFieldDecorator(
                 'rules',

@@ -20,7 +20,6 @@ export default class FormActor extends Actor {
       checkFlag: false,
       //企业购提示按钮
       enterpriseFlag: false,
-      AlertInfo: ''
     };
   }
 

@@ -56,6 +56,7 @@ export default class Main extends React.Component<any, any> {
       this.store.onMainTabChange(this.props.location.state.tab, false);
     }
   }
+
   onMainTabChange = (res) => {
     this.setState({
       tabType: res
@@ -79,6 +80,7 @@ export default class Main extends React.Component<any, any> {
   };
 
   onNext = (res) => {
+
     let type = 'main';
     if (res == 'main') {
       type = 'price';
@@ -88,6 +90,8 @@ export default class Main extends React.Component<any, any> {
       type = 'related';
     } else if (res == 'related') {
       type = 'seo';
+    } else if (this.store.state().get('saveSuccessful') == true) {
+      type = 'related';
     }
     this.setState({
       tabType: type
@@ -115,6 +119,7 @@ export default class Main extends React.Component<any, any> {
 
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
+
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -172,7 +177,7 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="Related product"
               key="related"
-              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+              //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo />
 

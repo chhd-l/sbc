@@ -1449,6 +1449,8 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
+      console.log(result.res.context,111111);
+      this.dispatch('goodsActor:getGoodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);
@@ -1460,6 +1462,7 @@ export default class AppStore extends Store {
         }
       }
       message.success('save successful');
+      this.dispatch('goodsActor:saveSuccessful', true);
       //history.push('/goods-list');
     } else {
       message.error(result.res.message);

@@ -59,7 +59,9 @@ export default class GoodsActor extends Actor {
       goodsDetailTab: [],
       nextType: '',
       getGoodsCate: '',
-      filtersTotal: ''
+      filtersTotal: '',
+      saveSuccessful: false,
+      getGoodsId: ''
     };
   }
 
@@ -196,11 +198,24 @@ export default class GoodsActor extends Actor {
   filtersTotal(state, filtersTotal) {
     return state.set('filtersTotal', filtersTotal);
   }
+
+  @Action('goodsActor:saveSuccessful')
+  saveSuccessful(state, saveSuccessful) {
+    return state.set('saveSuccessful', saveSuccessful);
+  }
+
+  @Action('goodsActor:getGoodsId')
+  getGoodsId(state, getGoodsId) {
+    return state.set('getGoodsId', getGoodsId);
+  }
+
+
   /**
    * 修改商品信息
    * @param state
    * @param data
    */
+
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
     return state.update('goods', (goods) => goods.merge(data));

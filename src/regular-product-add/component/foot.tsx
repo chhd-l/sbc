@@ -6,6 +6,13 @@ import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Foot extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      saveSuccessful: false
+    };
+  }
+
   props: {
     goodsFuncName: string;
     priceFuncName: string;
@@ -18,6 +25,8 @@ export default class Foot extends React.Component<any, any> {
       activeTabKey: string;
       onMainTabChange: Function;
       saveSeoSetting: Function;
+      saveSuccessful: string;
+      goodsId: string
     };
   };
 
@@ -28,13 +37,24 @@ export default class Foot extends React.Component<any, any> {
     saveLoading: 'saveLoading',
     activeTabKey: 'activeTabKey',
     onMainTabChange: noop,
-    saveSeoSetting: noop
+    saveSeoSetting: noop,
+    saveSuccessful: 'saveSuccessful',
+    goodsId: 'goodsId'
   };
   _saveSeoSetting = () => {
-    const { saveSeoSetting } = this.props.relaxProps;
-    const goodsId = 'ff80808175b1a9b80175b50910f10004';
+    const { saveSeoSetting, goodsId } = this.props.relaxProps;
     saveSeoSetting(goodsId);
   };
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    const { saveSuccessful } = this.props.relaxProps;
+    if (prevProps.relaxProps.saveSuccessful != saveSuccessful) {
+      /*this.setState({
+        saveSuccessful: saveSuccessful
+      });*/
+      this._next('');
+    }
+  }
+
   render() {
     const { saveLoading, activeTabKey } = this.props.relaxProps;
     return (
@@ -121,7 +141,6 @@ export default class Foot extends React.Component<any, any> {
   _savePrice = async () => {
     const { saveAll } = this.props.relaxProps;
     saveAll();
-    this._next('');
   };
 
   _prev = (res) => {

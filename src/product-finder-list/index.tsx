@@ -80,9 +80,9 @@ class ProductFinderList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          pagination.total = res.context.total;
+          pagination.total = res.context.resultPage.total;
           this.setState({
-            productFinderList: res.context.detailsList,
+            productFinderList: res.context.resultPage.content,
             petTypeList: res.context.petTypeList,
             pagination: pagination,
             loading: false

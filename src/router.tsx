@@ -799,7 +799,7 @@ const routes = [
     asyncComponent: () => import('./product-search-list')
   },
   {
-    path: '/product-search-details/:id',
+    path: '/product-search-details',
     asyncComponent: () => import('./product-search-details')
   },
   {

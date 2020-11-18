@@ -26,7 +26,7 @@ export default class Foot extends React.Component<any, any> {
       onMainTabChange: Function;
       saveSeoSetting: Function;
       saveSuccessful: string;
-      goodsId: string
+      getGoodsId: string
     };
   };
 
@@ -39,11 +39,11 @@ export default class Foot extends React.Component<any, any> {
     onMainTabChange: noop,
     saveSeoSetting: noop,
     saveSuccessful: 'saveSuccessful',
-    goodsId: 'goodsId'
+    getGoodsId: 'getGoodsId'
   };
   _saveSeoSetting = () => {
-    const { saveSeoSetting, goodsId } = this.props.relaxProps;
-    saveSeoSetting(goodsId);
+    const { saveSeoSetting, getGoodsId } = this.props.relaxProps;
+    saveSeoSetting(getGoodsId);
   };
   componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
     const { saveSuccessful } = this.props.relaxProps;
@@ -56,7 +56,7 @@ export default class Foot extends React.Component<any, any> {
   }
 
   render() {
-    const { saveLoading, activeTabKey } = this.props.relaxProps;
+    const { saveLoading } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {this.props.tabType == 'main' ? (

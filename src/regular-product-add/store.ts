@@ -1997,7 +1997,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
-        this.onRelatedList(this.state().get('goodsId'));
+        this.onRelatedList(this.state().get('getGoodsId'));
       });
     } else {
       message.error(res.message);
@@ -2093,4 +2093,6 @@ export default class AppStore extends Store {
   editFormData = ({ key, value }) => {};
   closeModal = ({ key, value }) => {};
   modalVisibleFun = ({ key, value }) => {};
+  onProductForm = ({ key, value }) => {};
+  onEditSkuNo = ({ key, value }) => {};
 }

@@ -59,7 +59,7 @@ export default class SearchForm extends React.Component<any, any> {
     brandList: 'brandList',
     //分类列表
     cateList: 'cateList',
-    sourceCateList: 'sourceCateList'
+    sourceCateList: 'sourceCateList',
   };
 
   searchBackFun = () => {
@@ -70,11 +70,11 @@ export default class SearchForm extends React.Component<any, any> {
       storeCateId: storeCateId
     };
 
-    //this.props.searchBackFun(from);
+    this.props.searchBackFun(from);
   };
 
   render() {
-    const { likeGoodsName, likeProductCategory, likeGoodsNo, sourceCateList, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
+    const { likeGoodsName, likeProductCategory, likeGoodsNo, onFormFieldChange, brandList, cateList } = this.props.relaxProps;
     //const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -92,12 +92,22 @@ export default class SearchForm extends React.Component<any, any> {
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
+            <TreeNode
+              key={item.get('storeCateId')}
+              value={item.get('storeCateId')}
+              title={item.get('cateName')}
+            >
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+        return (
+          <TreeNode
+            key={item.get('storeCateId')}
+            value={item.get('storeCateId')}
+            title={item.get('cateName')}
+          />
+        );
       });
 
     return (
@@ -141,68 +151,59 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-
           <Col span={8}>
-            {/*<FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
-              {getFieldDecorator('cateId', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select platform product category'
-                  },
-                  {
-                    validator: (_rule, value, callback) => {
-                      if (!value) {
-                        callback();
-                        return;
-                      }
-
-                      let overLen = false;
-                      sourceCateList.forEach((val) => {
-                        if (val.get('cateParentId') + '' == value) overLen = true;
-                        return;
-                      });
-
-                      if (overLen) {
-                        callback(new Error('Please select the last category'));
-                        return;
-                      }
-
-                      callback();
-                    }
-                  }
-                ],
-               //onChange: this._editGoods.bind(this, 'cateId'),
-                //initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
-              })(
-                <TreeSelect
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  placeholder="Please select category"
-                  notFoundContent="No classification"
-                  // disabled={cateDisabled}
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  treeDefaultExpandAll
-                >
+            <FormItem>
+              <TreeSelectGroup
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={
+                  <p style={styles.label}>
+                    Product category
+                  </p>
+                }
+                /* defaultValue="全部"*/
+                // style={styles.wrapper}
+                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                treeDefaultExpandAll
+                onChange={(value) => {
+                  onFormFieldChange({ key: 'goodsCateName', value });
+                }}
+              >
+                <TreeNode key="-1" value="-1" title="All">
                   {loop(cateList)}
-                </TreeSelect>
-              )}
-            </FormItem>*/}
+                </TreeNode>
+              </TreeSelectGroup>
+            </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
-              <Input
-                addonBefore={<p style={styles.label}>Product category</p>}
-                value={likeProductCategory}
-                style={{ width: 300 }}
-                onChange={(e: any) => {
-                  onFormFieldChange({
-                    key: 'likeProductCategory',
-                    value: e.target.value
-                  });
+              <TreeSelectGroup
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+                label={
+                  <p style={styles.label}>
+                    Product category
+                  </p>
+                }
+                /* defaultValue="全部"*/
+                // style={styles.wrapper}
+                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                treeDefaultExpandAll
+                onChange={(value) => {
+                  console.log(value,222);
+                  onFormFieldChange({key: 'storeCateId', value});
                 }}
-              />
+              >
+                <TreeNode key="-2" value="-2" title="All">
+                  {loop(cateList)}
+                </TreeNode>
+              </TreeSelectGroup>
             </FormItem>
           </Col>
+
+
           <Col span={8}>
             <FormItem>
               <SelectBox>
@@ -235,6 +236,8 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectBox>
             </FormItem>
           </Col>
+
+
           <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button

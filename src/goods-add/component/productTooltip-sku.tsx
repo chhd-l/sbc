@@ -2,23 +2,22 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { message, Modal } from 'antd';
-import RelatedForm from './related-form';
-import ProductGrid from './product-grid';
+//import RelatedForm from './related-form';
+import ProductGridSKU from './product-grid-sku';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 @Relax
-export default class GoodsModal extends React.Component<any, any> {
+export default class ProductTooltipSKU extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
       productForm: any;
       productList: IList;
-      onProductselect: Function;
+      onProductselectSku: Function;
       loading: boolean;
       createLink: any;
       getGoodsId: any;
-      productTooltip: any;
     };
     showModal: Function;
     selectedSkuIds: IList;
@@ -38,12 +37,11 @@ export default class GoodsModal extends React.Component<any, any> {
   static relaxProps = {
     sharing: 'sharing',
     productForm: 'productForm',
-    onProductselect: noop,
+    onProductselectSku: noop,
     loading: 'loading',
     productList: 'productList',
     createLink: 'createLink',
-    getGoodsId: 'getGoodsId',
-    productTooltip: 'productTooltip'
+    getGoodsId: 'getGoodsId'
   };
   constructor(props) {
     super(props);
@@ -61,9 +59,9 @@ export default class GoodsModal extends React.Component<any, any> {
   }
 
   render() {
-    const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams } = this.props;
+    const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselect, getGoodsId, productTooltip } = this.props.relaxProps;
+    const { onProductselectSku, getGoodsId } = this.props.relaxProps;
 
     return (
       <Modal
@@ -80,12 +78,8 @@ export default class GoodsModal extends React.Component<any, any> {
         visible={visible}
         onOk={() => {
           let targetGoodsIds = [];
-          this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsId));
-          let obj = {
-            sourceGoodsId: getGoodsId,
-            targetGoodsIds: targetGoodsIds
-          };
-          onProductselect(obj);
+          this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsInfoNo));
+          onProductselectSku(targetGoodsIds);
           this.props.showModal(false);
         }}
         onCancel={() => {
@@ -95,7 +89,7 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
+        {<ProductGridSKU visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }

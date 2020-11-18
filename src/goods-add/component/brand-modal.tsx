@@ -62,17 +62,8 @@ export default class BrandModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal  maskClosable={false}
-        title="增加品牌"
-         
-        visible={modalBrandVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={form => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title="增加品牌" visible={modalBrandVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -83,7 +74,7 @@ export default class BrandModal extends React.Component<any, any> {
   _handleSubmit = () => {
     const form = this._form as WrappedFormUtils;
 
-    form.validateFields(null, errs => {
+    form.validateFields(null, (errs) => {
       if (!errs) {
         //提交
         const { doBrandAdd, brandData } = this.props.relaxProps;
@@ -155,7 +146,7 @@ class BrandModalForm extends React.Component<any, any> {
   /**
    * 修改品牌名称
    */
-  _changeBrandName = e => {
+  _changeBrandName = (e) => {
     const { editBrandInfo } = this.props.relaxProps;
     editBrandInfo(Map({ brandName: e.target.value }));
   };

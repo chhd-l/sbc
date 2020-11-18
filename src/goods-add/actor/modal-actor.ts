@@ -66,9 +66,7 @@ export default class ModalActor extends Actor {
         const children = cateList
           .filter((item) => item.get('cateParentId') == data.get('cateId'))
           .map((childrenData) => {
-            const lastChildren = cateList.filter(
-              (item) => item.get('cateParentId') == childrenData.get('cateId')
-            );
+            const lastChildren = cateList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
             if (!lastChildren.isEmpty()) {
               childrenData = childrenData.set('children', lastChildren);
             }
@@ -96,12 +94,7 @@ export default class ModalActor extends Actor {
         'imgs',
         imgs.get('content')
           ? imgs.get('content').map((img) => {
-              img = img.set(
-                'checked',
-                chooseImgs.findIndex(
-                  (i) => i.get('resourceId') === img.get('resourceId')
-                ) >= 0
-              );
+              img = img.set('checked', chooseImgs.findIndex((i) => i.get('resourceId') === img.get('resourceId')) >= 0);
               return img;
             })
           : []
@@ -120,12 +113,7 @@ export default class ModalActor extends Actor {
         'videoList',
         videoList.get('content')
           ? videoList.get('content').map((img) => {
-              img = img.set(
-                'checked',
-                chooseVideos.findIndex(
-                  (i) => i.get('resourceId') === img.get('resourceId')
-                ) >= 0
-              );
+              img = img.set('checked', chooseVideos.findIndex((i) => i.get('resourceId') === img.get('resourceId')) >= 0);
               return img;
             })
           : []
@@ -204,13 +192,7 @@ export default class ModalActor extends Actor {
         );
     }
 
-    return state
-      .set('imageName', '')
-      .set('searchName', '')
-      .set('videoName', '')
-      .set('videoSearchName', '')
-      .set('imgType', imgType)
-      .set('skuId', skuId);
+    return state.set('imageName', '').set('searchName', '').set('videoName', '').set('videoSearchName', '').set('imgType', imgType).set('skuId', skuId);
   }
 
   /**
@@ -266,25 +248,16 @@ export default class ModalActor extends Actor {
       if (chooseCount === 1) {
         chooseImgs = fromJS([img]);
       } else {
-        chooseImgs = chooseImgs
-          .filter((f) => f.get('resourceId') !== img.get('resourceId'))
-          .push(img);
+        chooseImgs = chooseImgs.filter((f) => f.get('resourceId') !== img.get('resourceId')).push(img);
       }
     } else {
-      chooseImgs = chooseImgs.filter(
-        (f) => f.get('resourceId') !== img.get('resourceId')
-      );
+      chooseImgs = chooseImgs.filter((f) => f.get('resourceId') !== img.get('resourceId'));
     }
     let imgs = state.get('imgs');
     return state.set('chooseImgs', chooseImgs).set(
       'imgs',
       imgs.map((img) => {
-        img = img.set(
-          'checked',
-          chooseImgs.findIndex(
-            (i) => i.get('resourceId') === img.get('resourceId')
-          ) >= 0
-        );
+        img = img.set('checked', chooseImgs.findIndex((i) => i.get('resourceId') === img.get('resourceId')) >= 0);
         return img;
       })
     );
@@ -306,12 +279,7 @@ export default class ModalActor extends Actor {
     return state.set('chooseVideos', chooseVideos).set(
       'videoList',
       videoList.map((videoItem) => {
-        videoItem = videoItem.set(
-          'checked',
-          chooseVideos.findIndex(
-            (i) => i.get('resourceId') === videoItem.get('resourceId')
-          ) >= 0
-        );
+        videoItem = videoItem.set('checked', chooseVideos.findIndex((i) => i.get('resourceId') === videoItem.get('resourceId')) >= 0);
         return videoItem;
       })
     );
@@ -380,12 +348,7 @@ export default class ModalActor extends Actor {
     return state.set('chooseImgs', successImgs).set(
       'imgs',
       imgs.map((img) => {
-        img = img.set(
-          'checked',
-          successImgs.findIndex(
-            (i) => i.get('resourceId') === img.get('resourceId')
-          ) >= 0
-        );
+        img = img.set('checked', successImgs.findIndex((i) => i.get('resourceId') === img.get('resourceId')) >= 0);
         return img;
       })
     );
@@ -402,12 +365,7 @@ export default class ModalActor extends Actor {
     return state.set('chooseVideos', successVideos).set(
       'videoList',
       videoList.map((item) => {
-        item = item.set(
-          'checked',
-          successVideos.findIndex(
-            (i) => i.get('resourceId') === item.get('resourceId')
-          ) >= 0
-        );
+        item = item.set('checked', successVideos.findIndex((i) => i.get('resourceId') === item.get('resourceId')) >= 0);
         return item;
       })
     );

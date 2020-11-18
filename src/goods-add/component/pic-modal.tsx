@@ -3,18 +3,7 @@ import { Relax } from 'plume2';
 
 import { fromJS } from 'immutable';
 import { noop, QMUpload, Const } from 'qmkit';
-import {
-  Modal,
-  Form,
-  Input,
-  message,
-  Tree,
-  Row,
-  Col,
-  Button,
-  Checkbox,
-  Pagination
-} from 'antd';
+import { Modal, Form, Input, message, Tree, Row, Col, Button, Checkbox, Pagination } from 'antd';
 import { List } from 'immutable';
 
 import { choosedImgCountQL, clickImgsCountQL, clickEnabledQL } from '../ql';
@@ -110,42 +99,19 @@ export default class PicModal extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      expandedKeys,
-      cateIds,
-      imgCates,
-      imageName,
-      visible,
-      imgs,
-      currentPage,
-      total,
-      pageSize,
-      clickImgsCount,
-      choosedImgCount,
-      cateId
-    } = this.props.relaxProps;
+    const { expandedKeys, cateIds, imgCates, imageName, visible, imgs, currentPage, total, pageSize, clickImgsCount, choosedImgCount, cateId } = this.props.relaxProps;
 
     //分类列表生成树形结构
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
 
     return (
@@ -155,10 +121,7 @@ export default class PicModal extends React.Component<any, any> {
           <div style={styles.title}>
             <h4>Picture library</h4>
             <span style={styles.grey}>
-              <strong style={styles.dark}>{clickImgsCount}</strong> has been
-              selected and up to{' '}
-              <strong style={styles.dark}>{choosedImgCount}</strong> can be
-              selected
+              <strong style={styles.dark}>{clickImgsCount}</strong> has been selected and up to <strong style={styles.dark}>{choosedImgCount}</strong> can be selected
               {/* 已选<strong style={styles.dark}>{clickImgsCount}</strong>张
               最多可选<strong style={styles.dark}>{choosedImgCount}</strong>张 */}
             </span>
@@ -179,10 +142,7 @@ export default class PicModal extends React.Component<any, any> {
                   showPreviewIcon: false,
                   showRemoveIcon: false
                 }}
-                action={
-                  Const.HOST +
-                  `/store/uploadStoreResource?cateId=${cateId}&resourceType=IMAGE`
-                }
+                action={Const.HOST + `/store/uploadStoreResource?cateId=${cateId}&resourceType=IMAGE`}
                 multiple={true}
                 disabled={cateId ? false : true}
                 accept={'.jpg,.jpeg,.png,.gif'}
@@ -197,11 +157,7 @@ export default class PicModal extends React.Component<any, any> {
             <Col span={10}>
               <Form layout="inline">
                 <FormItem>
-                  <Input
-                    placeholder="Please enter the content"
-                    value={imageName}
-                    onChange={(e) => this._editSearchData(e)}
-                  />
+                  <Input placeholder="Please enter the content" value={imageName} onChange={(e) => this._editSearchData(e)} />
                 </FormItem>
                 <FormItem>
                   <Button
@@ -223,13 +179,7 @@ export default class PicModal extends React.Component<any, any> {
           <Row>
             <Col span={4}>
               <div style={{ height: 560, overflowY: 'scroll' }}>
-                <Tree
-                  className="draggable-tree"
-                  defaultExpandedKeys={expandedKeys.toJS()}
-                  defaultSelectedKeys={cateIds.toJS()}
-                  selectedKeys={cateIds.toJS()}
-                  onSelect={this._select}
-                >
+                <Tree className="draggable-tree" defaultExpandedKeys={expandedKeys.toJS()} defaultSelectedKeys={cateIds.toJS()} selectedKeys={cateIds.toJS()} onSelect={this._select}>
                   {loop(imgCates)}
                 </Tree>
               </div>
@@ -241,17 +191,8 @@ export default class PicModal extends React.Component<any, any> {
                   return (
                     <div style={styles.navItem} key={k}>
                       <div style={styles.boxItem}>
-                        <Checkbox
-                          className="big-check"
-                          checked={v.get('checked')}
-                          onChange={(e) => this._chooseImg(e, v)}
-                        />
-                        <img
-                          src={v.get('artworkUrl')}
-                          alt=""
-                          width="100"
-                          height="100"
-                        />
+                        <Checkbox className="big-check" checked={v.get('checked')} onChange={(e) => this._chooseImg(e, v)} />
+                        <img src={v.get('artworkUrl')} alt="" width="100" height="100" />
                       </div>
                       <p style={styles.name}>{v.get('resourceName')}</p>
                     </div>
@@ -274,14 +215,7 @@ export default class PicModal extends React.Component<any, any> {
               )}
             </Col>
           </Row>
-          {(imgs || fromJS([])).size > 0 ? (
-            <Pagination
-              onChange={(pageNum) => this._toCurrentPage(pageNum)}
-              current={currentPage}
-              total={total}
-              pageSize={pageSize}
-            />
-          ) : null}
+          {(imgs || fromJS([])).size > 0 ? <Pagination onChange={(pageNum) => this._toCurrentPage(pageNum)} current={currentPage} total={total} pageSize={pageSize} /> : null}
         </div>
       </Modal>
     );
@@ -293,14 +227,7 @@ export default class PicModal extends React.Component<any, any> {
    * @private
    */
   _select = (value) => {
-    const {
-      initImg,
-      editCateId,
-      editDefaultCateId,
-      search,
-      saveSearchName,
-      cleanChooseImgs
-    } = this.props.relaxProps;
+    const { initImg, editCateId, editDefaultCateId, search, saveSearchName, cleanChooseImgs } = this.props.relaxProps;
     const cateId = value[0];
     // 至少得有一个目录选中。判断是否有选中的目录编号
     if (cateId || cateId == 0) {
@@ -326,12 +253,7 @@ export default class PicModal extends React.Component<any, any> {
    * 查询
    */
   _search = () => {
-    const {
-      imageName,
-      saveSearchName,
-      initImg,
-      cateId
-    } = this.props.relaxProps;
+    const { imageName, saveSearchName, initImg, cateId } = this.props.relaxProps;
     saveSearchName(imageName);
     initImg({ pageNum: 0, cateId: cateId, successCount: 0 });
   };
@@ -356,11 +278,7 @@ export default class PicModal extends React.Component<any, any> {
     const status = file.status;
     let fileList = info.fileList;
     if (status === 'done') {
-      if (
-        file.response &&
-        file.response.code &&
-        file.response.code !== Const.SUCCESS_CODE
-      ) {
+      if (file.response && file.response.code && file.response.code !== Const.SUCCESS_CODE) {
         this.setState({
           errorCount: this.state.errorCount + 1
         });
@@ -378,10 +296,7 @@ export default class PicModal extends React.Component<any, any> {
     //仅展示上传中的文件列表
     fileList = fileList.filter((f) => f.status == 'uploading');
     this.setState({ fileList });
-    if (
-      this.state.successCount > 0 &&
-      this.state.successCount + this.state.errorCount === this.state.uploadCount
-    ) {
+    if (this.state.successCount > 0 && this.state.successCount + this.state.errorCount === this.state.uploadCount) {
       await initImg({
         pageNum: 0,
         cateId,
@@ -412,12 +327,7 @@ export default class PicModal extends React.Component<any, any> {
     }
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {

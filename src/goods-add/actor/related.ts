@@ -42,7 +42,8 @@ export default class BrandActor extends Actor {
       allCateList: [], //扁平的分类列表
       field: '',
       productTooltip: '',
-      searchType: false
+      searchType: false,
+      goodsCateName: ''
     };
   }
 

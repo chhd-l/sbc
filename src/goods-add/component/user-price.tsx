@@ -1,15 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {
-  Table,
-  Input,
-  Button,
-  InputNumber,
-  Row,
-  Col,
-  Form,
-  Checkbox
-} from 'antd';
+import { Table, Input, Button, InputNumber, Row, Col, Form, Checkbox } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { noop, ValidConst } from 'qmkit';
 import styled from 'styled-components';
@@ -108,26 +99,14 @@ export default class UserPrice extends React.Component<any, any> {
     const WrapperForm = this.WrapperForm;
     const relaxProps = this.props.relaxProps;
     const { updateUserPriceForm } = relaxProps;
-    return (
-      <WrapperForm
-        ref={(form) => updateUserPriceForm(form)}
-        {...{ relaxProps: relaxProps }}
-      />
-    );
+    return <WrapperForm ref={(form) => updateUserPriceForm(form)} {...{ relaxProps: relaxProps }} />;
   }
 }
 
 class UserPriceForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {
-      userList,
-      userPrice,
-      userCountChecked,
-      userCountDisable,
-      userMaxCountChecked,
-      userMaxCountDisable
-    } = this.props.relaxProps;
+    const { userList, userPrice, userCountChecked, userCountDisable, userMaxCountChecked, userMaxCountDisable } = this.props.relaxProps;
     const userPriceData = userPrice.valueSeq().toList().toJS();
     return (
       <Row>
@@ -161,21 +140,14 @@ class UserPriceForm extends React.Component<any, any> {
                 <Column
                   key="customerName"
                   render={(rowInfo) => {
-                    const checkedColor = userPrice.get(rowInfo.customerId)
-                      ? '#F56C1D'
-                      : '';
+                    const checkedColor = userPrice.get(rowInfo.customerId) ? '#F56C1D' : '';
                     return (
                       <Button
                         style={{
                           color: checkedColor,
                           borderColor: checkedColor
                         }}
-                        onClick={this._editUserPrice.bind(
-                          this,
-                          rowInfo.customerId,
-                          rowInfo.customerName,
-                          rowInfo.customerLevelName
-                        )}
+                        onClick={this._editUserPrice.bind(this, rowInfo.customerId, rowInfo.customerName, rowInfo.customerLevelName)}
                       >
                         {rowInfo.customerName}
                       </Button>
@@ -189,24 +161,9 @@ class UserPriceForm extends React.Component<any, any> {
         <Col span={20}>
           {/*用户价格table*/}
           <TableRight>
-            <Table
-              dataSource={userPriceData}
-              pagination={false}
-              scroll={{ y: 298 }}
-              rowKey="customerId"
-            >
-              <Column
-                title="客户名称"
-                key="userName"
-                dataIndex="userName"
-                width="20%"
-              />
-              <Column
-                title="客户级别"
-                key="userLevelName"
-                dataIndex="userLevelName"
-                width={150}
-              />
+            <Table dataSource={userPriceData} pagination={false} scroll={{ y: 298 }} rowKey="customerId">
+              <Column title="客户名称" key="userName" dataIndex="userName" width="20%" />
+              <Column title="客户级别" key="userLevelName" dataIndex="userLevelName" width={150} />
               <Column
                 title={
                   <div>
@@ -235,25 +192,18 @@ class UserPriceForm extends React.Component<any, any> {
                         },
                         {
                           pattern: ValidConst.zeroPrice,
-                          message:
-                            'Please input the legal amount with two decimal places'
+                          message: 'Please input the legal amount with two decimal places'
                         },
                         {
                           type: 'number',
                           max: 9999999.99,
                           message: '最大值为9999999.99',
                           transform: function (value) {
-                            return isNaN(parseFloat(value))
-                              ? 0
-                              : parseFloat(value);
+                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                           }
                         }
                       ],
-                      onChange: this._editPriceItem.bind(
-                        this,
-                        rowInfo.customerId,
-                        'price'
-                      ),
+                      onChange: this._editPriceItem.bind(this, rowInfo.customerId, 'price'),
                       initialValue: rowInfo.price
                     })(<Input />)}
                   </FormItem>
@@ -264,10 +214,7 @@ class UserPriceForm extends React.Component<any, any> {
                   <div>
                     起订量
                     <br />{' '}
-                    <Checkbox
-                      checked={userCountChecked}
-                      onChange={this._synchUserCount}
-                    >
+                    <Checkbox checked={userCountChecked} onChange={this._synchUserCount}>
                       全部相同
                     </Checkbox>
                   </div>
@@ -285,31 +232,21 @@ class UserPriceForm extends React.Component<any, any> {
                         {
                           customer: rowInfo.customerId,
                           validator: (rule, value, callback) => {
-                            let count = userPrice.get(rule.customer)
-                              ? userPrice.get(rule.customer).get('maxCount')
-                              : '';
+                            let count = userPrice.get(rule.customer) ? userPrice.get(rule.customer).get('maxCount') : '';
                             // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
                             const fieldsValue = this.props.form.getFieldsValue();
                             // 同步值
                             let levelPriceFields = {};
-                            Object.getOwnPropertyNames(fieldsValue).forEach(
-                              (field) => {
-                                // 级别价的表单字段以levelcount_开头
-                                if (field === 'usermaxcount_' + rule.customer) {
-                                  levelPriceFields[field] = count;
-                                }
+                            Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
+                              // 级别价的表单字段以levelcount_开头
+                              if (field === 'usermaxcount_' + rule.customer) {
+                                levelPriceFields[field] = count;
                               }
-                            );
+                            });
                             // update
                             this.props.form.setFieldsValue(levelPriceFields);
 
-                            if (
-                              count != null &&
-                              count != '' &&
-                              value != '' &&
-                              value != null &&
-                              value > count
-                            ) {
+                            if (count != null && count != '' && value != '' && value != null && value > count) {
                               callback('不可大于限订量');
                               return;
                             }
@@ -317,15 +254,9 @@ class UserPriceForm extends React.Component<any, any> {
                           }
                         }
                       ],
-                      onChange: this._editPriceItem.bind(
-                        this,
-                        rowInfo.customerId,
-                        'count'
-                      ),
+                      onChange: this._editPriceItem.bind(this, rowInfo.customerId, 'count'),
                       initialValue: rowInfo.count
-                    })(
-                      <InputNumber disabled={index > 0 && userCountDisable} />
-                    )}
+                    })(<InputNumber disabled={index > 0 && userCountDisable} />)}
                   </FormItem>
                 )}
               />
@@ -334,10 +265,7 @@ class UserPriceForm extends React.Component<any, any> {
                   <div>
                     限订量
                     <br />{' '}
-                    <Checkbox
-                      checked={userMaxCountChecked}
-                      onChange={this._synchUserMaxCount}
-                    >
+                    <Checkbox checked={userMaxCountChecked} onChange={this._synchUserMaxCount}>
                       全部相同
                     </Checkbox>
                   </div>
@@ -355,31 +283,21 @@ class UserPriceForm extends React.Component<any, any> {
                         {
                           customer: rowInfo.customerId,
                           validator: (rule, value, callback) => {
-                            let count = userPrice.get(rule.customer)
-                              ? userPrice.get(rule.customer).get('count')
-                              : '';
+                            let count = userPrice.get(rule.customer) ? userPrice.get(rule.customer).get('count') : '';
                             // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
                             const fieldsValue = this.props.form.getFieldsValue();
                             // 同步值
                             let levelPriceFields = {};
-                            Object.getOwnPropertyNames(fieldsValue).forEach(
-                              (field) => {
-                                // 级别价的表单字段以levelcount_开头
-                                if (field === 'usercount_' + rule.customer) {
-                                  levelPriceFields[field] = count;
-                                }
+                            Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
+                              // 级别价的表单字段以levelcount_开头
+                              if (field === 'usercount_' + rule.customer) {
+                                levelPriceFields[field] = count;
                               }
-                            );
+                            });
                             // update
                             this.props.form.setFieldsValue(levelPriceFields);
 
-                            if (
-                              count != null &&
-                              count != '' &&
-                              value != '' &&
-                              value != null &&
-                              value < count
-                            ) {
+                            if (count != null && count != '' && value != '' && value != null && value < count) {
                               callback('不可小于起订量');
                               return;
                             }
@@ -387,18 +305,9 @@ class UserPriceForm extends React.Component<any, any> {
                           }
                         }
                       ],
-                      onChange: this._editPriceItem.bind(
-                        this,
-                        rowInfo.customerId,
-                        'maxCount'
-                      ),
+                      onChange: this._editPriceItem.bind(this, rowInfo.customerId, 'maxCount'),
                       initialValue: rowInfo.maxCount
-                    })(
-                      <InputNumber
-                        min={1}
-                        disabled={index > 0 && userMaxCountDisable}
-                      />
-                    )}
+                    })(<InputNumber min={1} disabled={index > 0 && userMaxCountDisable} />)}
                   </FormItem>
                 )}
               />
@@ -407,16 +316,7 @@ class UserPriceForm extends React.Component<any, any> {
                 key="opt"
                 width="10%"
                 render={(rowInfo) => {
-                  return (
-                    <Button
-                      onClick={this._deleteUserPrice.bind(
-                        this,
-                        rowInfo.customerId
-                      )}
-                    >
-                      删除
-                    </Button>
-                  );
+                  return <Button onClick={this._deleteUserPrice.bind(this, rowInfo.customerId)}>删除</Button>;
                 }}
               />
             </Table>
@@ -429,11 +329,7 @@ class UserPriceForm extends React.Component<any, any> {
   /**
    * 修改用户价格
    */
-  _editUserPrice = (
-    userId: string,
-    userName: string,
-    userLevelName: string
-  ) => {
+  _editUserPrice = (userId: string, userName: string, userLevelName: string) => {
     const { editUserPrice } = this.props.relaxProps;
     editUserPrice(userId, userName, userLevelName);
   };
@@ -450,13 +346,7 @@ class UserPriceForm extends React.Component<any, any> {
    * 修改价格表属性
    */
   _editPriceItem = (userLevelId: string, key: string, e) => {
-    const {
-      editUserPriceItem,
-      userCountChecked,
-      synchUserCount,
-      userMaxCountChecked,
-      synchUserMaxCount
-    } = this.props.relaxProps;
+    const { editUserPriceItem, userCountChecked, synchUserCount, userMaxCountChecked, synchUserMaxCount } = this.props.relaxProps;
     if (e && e.target) {
       e = e.target.value;
     }
@@ -523,10 +413,7 @@ class UserPriceForm extends React.Component<any, any> {
    * 同步客户起订量库存
    */
   _synchUserMaxCount = (e) => {
-    const {
-      updateUserMaxCountChecked,
-      synchUserMaxCount
-    } = this.props.relaxProps;
+    const { updateUserMaxCountChecked, synchUserMaxCount } = this.props.relaxProps;
     updateUserMaxCountChecked(e.target.checked);
     synchUserMaxCount();
   };

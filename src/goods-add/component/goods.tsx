@@ -7,9 +7,9 @@ import { fromJS, Map } from 'immutable';
 
 import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
-import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
+//import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
 import { FormattedMessage } from 'react-intl';
-import { consoleTestResultHandler } from 'tslint/lib/test';
+//import { consoleTestResultHandler } from 'tslint/lib/test';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -47,6 +47,7 @@ const treeData = [
 ];
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
+const { SHOW_PARENT } = TreeSelect;
 
 @Relax
 export default class Info extends React.Component<any, any> {
@@ -82,6 +83,7 @@ export default class Info extends React.Component<any, any> {
       enterpriseFlag: boolean;
       flashsaleGoods: IList;
       getGoodsCate: IList;
+      filtersTotal: IList;
     };
   };
 
@@ -122,7 +124,8 @@ export default class Info extends React.Component<any, any> {
     checkFlag: 'checkFlag',
     enterpriseFlag: 'enterpriseFlag',
     flashsaleGoods: 'flashsaleGoods',
-    getGoodsCate: 'getGoodsCate'
+    getGoodsCate: 'getGoodsCate',
+    filtersTotal: 'filtersTotal'
   };
 
   constructor(props) {
@@ -182,7 +185,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, getGoodsCate, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, filtersTotal, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -190,6 +193,7 @@ class GoodsForm extends React.Component<any, any> {
           return { value: id };
         })) ||
       [];
+
     // const storeCateValues = [];
     //处理分类的树形图结构数据
     const loop = (cateList) =>
@@ -505,7 +509,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        <Row>
+        {/*<Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="price" />}>
               {getFieldDecorator('linePrice', {
@@ -528,7 +532,7 @@ class GoodsForm extends React.Component<any, any> {
               })(<Input placeholder="Please fill in the underlined price" />)}
             </FormItem>
           </Col>
-        </Row>
+        </Row>*/}
         <Row>
           <Col span={16}>
             <FormItem
@@ -601,6 +605,38 @@ class GoodsForm extends React.Component<any, any> {
               </FormItem>
             </Col>
           ) : null}
+        </Row>
+        <Row>
+          <Col span={8}>
+            <FormItem {...formItemLayout} label="Product Filter">
+              {getFieldDecorator('storeCateIds', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select sales category'
+                  }
+                ],
+
+                initialValue: storeCateValues
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  //treeData ={filtersTotal}
+                  // showCheckedStrategy = {SHOW_PARENT}
+                  placeholder="Please select store category"
+                  notFoundContent="No classification"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.storeCateChange}
+                >
+                  {this.filtersTotalTree(filtersTotal)}
+                </TreeSelect>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <Row type="flex" justify="start">
           <Col span={8}>
@@ -720,7 +756,6 @@ class GoodsForm extends React.Component<any, any> {
     const { setFieldsValue } = this.props.form;
 
     if (key === 'saleableFlag') {
-      console.log(e.target.value, 112344555);
       if (e.target.value == 0) {
         this.setState({
           saleableType: true
@@ -811,7 +846,6 @@ class GoodsForm extends React.Component<any, any> {
   storeCateChange = (value, _label, extra) => {
     const { editGoods } = this.props.relaxProps;
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
-
     // 店铺分类列表
     const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
 
@@ -927,6 +961,22 @@ class GoodsForm extends React.Component<any, any> {
           );
         }
         return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+      })
+    );
+  };
+
+  filtersTotalTree = (filtersTotalTree) => {
+    return (
+      filtersTotalTree &&
+      filtersTotalTree.map((item, i) => {
+        if (item.get('children') && item.get('children').count()) {
+          return (
+            <TreeNode key={i} value={item.get('attributeId')} title={item.get('attributeName')} disabled checkable={false}>
+              {this.generateStoreCateTree(item.get('children'))}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.get('attributeId') + i} value={item.get('attributeId')} title={item.get('attributeName')} />;
       })
     );
   };

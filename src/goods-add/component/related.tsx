@@ -16,13 +16,19 @@ export default class Related extends React.Component<any, any> {
   props: {
     relaxProps?: {
       priceOpt: number;
+      getGoodsId: any;
     };
   };
 
   static relaxProps = {
     priceOpt: 'priceOpt',
-    editPriceSetting: noop
+    editPriceSetting: noop,
+    getGoodsId: 'getGoodsId'
   };
+  componentDidMount() {
+    const { getGoodsId } = this.props.relaxProps;
+    console.log(getGoodsId, 1);
+  }
 
   showProduct = (res) => {
     this.setState({
@@ -31,6 +37,10 @@ export default class Related extends React.Component<any, any> {
   };
 
   render() {
+    const { getGoodsId } = this.props.relaxProps;
+    setTimeout(() => {
+      console.log(getGoodsId, 3);
+    });
     return (
       <div>
         <div className="related-btn">

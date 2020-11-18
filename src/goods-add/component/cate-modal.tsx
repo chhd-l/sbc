@@ -114,17 +114,8 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title={<FormattedMessage id="add" />}
-        visible={modalCateVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={(form) => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title={<FormattedMessage id="add" />} visible={modalCateVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -222,30 +213,14 @@ class CateModalForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     let storeCateList = this.props.relaxProps.storeCateList;
-    const {
-      sourceCateList,
-      goods,
-      cateList,
-      images,
-      modalVisibleFun,
-      clickImg,
-      removeImg
-    } = this.props.relaxProps;
+    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } = this.props.relaxProps;
     console.log(images.toJS(), 'images');
     // 返回一级分类列表
     const loop = (cateList) =>
       cateList
-        .filter(
-          (item) => item.get('isDefault') != 1 && item.get('cateParentId') == 0
-        )
+        .filter((item) => item.get('isDefault') != 1 && item.get('cateParentId') == 0)
         .map((item) => {
-          return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            />
-          );
+          return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
         });
     //处理分类的树形图结构数据
     const loopCate = (cateList) =>
@@ -253,23 +228,12 @@ class CateModalForm extends React.Component<any, any> {
         if (item.get('children') && item.get('children').count()) {
           // 一二级类目不允许选择
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              disabled={true}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} disabled={true} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
 
     return (
@@ -296,23 +260,14 @@ class CateModalForm extends React.Component<any, any> {
               }
             ]
           })(
-            <TreeSelect
-              getPopupContainer={() => document.getElementById('root')}
-              placeholder="please select superior classification"
-              notFoundContent="暂无分类"
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              treeDefaultExpandAll
-            >
+            <TreeSelect getPopupContainer={() => document.getElementById('root')} placeholder="please select superior classification" notFoundContent="暂无分类" dropdownStyle={{ maxHeight: 400, overflow: 'auto' }} treeDefaultExpandAll>
               <TreeNode key="0" value="0" title="Top level classification">
                 {loop(storeCateList)}
               </TreeNode>
             </TreeSelect>
           )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="product.platformCategory" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
           {getFieldDecorator('cateId', {
             rules: [
               {
@@ -342,10 +297,7 @@ class CateModalForm extends React.Component<any, any> {
               }
             ],
             onChange: this._editGoods.bind(this, 'cateId'),
-            initialValue:
-              goods.get('cateId') && goods.get('cateId') != ''
-                ? goods.get('cateId')
-                : undefined
+            initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
           })(
             <TreeSelect
               getPopupContainer={() => document.getElementById('page-content')}
@@ -359,28 +311,13 @@ class CateModalForm extends React.Component<any, any> {
             </TreeSelect>
           )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="cateImage" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
           <div style={{ width: 550 }}>
-            <ImageLibraryUpload
-              images={images}
-              modalVisible={modalVisibleFun}
-              clickImg={clickImg}
-              removeImg={removeImg}
-              imgType={0}
-              imgCount={10}
-              skuId=""
-            />
+            <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
           <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
         </FormItem>
-        <FormItem
-          labelCol={2}
-          {...formItemLayout}
-          label={<FormattedMessage id="cateDsc" />}
-        >
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
           {getFieldDecorator('goodsDescription', {
             rules: [
               {
@@ -391,12 +328,7 @@ class CateModalForm extends React.Component<any, any> {
             ],
             onChange: this._editGoods.bind(this, 'goodsDescription'),
             initialValue: goods.get('goodsDescription')
-          })(
-            <TextArea
-              rows={4}
-              placeholder="Please iwwwwwwwwwwwnput the sssssproduct description"
-            />
-          )}
+          })(<TextArea rows={4} placeholder="Please iwwwwwwwwwwwnput the sssssproduct description" />)}
         </FormItem>
         <Errorbox>
           <FormItem {...formItemLayout} label="Sort" hasFeedback>
@@ -421,15 +353,7 @@ class CateModalForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const {
-      editGoods,
-      showBrandModal,
-      showCateModal,
-      checkFlag,
-      enterpriseFlag,
-      flashsaleGoods,
-      updateGoodsForm
-    } = this.props.relaxProps;
+    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
     if (e && e.target) {
       e = e.target.value;
@@ -459,17 +383,14 @@ class CateModalForm extends React.Component<any, any> {
         if (checkFlag == 'true') {
           if (enterpriseFlag) {
             //分销商品和企业购商品
-            message =
-              '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
+            message = '该商品正在参加企业购和分销活动，切换为批发模式，将会退出企业购和分销活动，确定要切换？';
           } else {
             //分销商品
-            message =
-              '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
+            message = '该商品正在参加分销活动，切换为批发模式，将会退出分销活动，确定要切换？';
           }
         } else {
           if (enterpriseFlag) {
-            message =
-              '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
+            message = '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
           }
         }
         if (message != '') {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Select, Table, Input, Row, Col, Form, message } from 'antd';
+import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
 const { Option } = Select;
 
 import { IList, IMap } from 'typings/globalType';
@@ -154,41 +154,40 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          Inventory
+          <FormattedMessage id="product.inventory" />
+          <br />
+          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
+            <FormattedMessage id="allTheSame" />
+            &nbsp;
+            <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
+              <a style={{ fontSize: 14 }}>
+                <Icon type="question-circle-o" />
+              </a>
+            </Tooltip>
+          </Checkbox>
         </div>
       ),
-      key: 'subscriptionPrice',
+      key: 'stock',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+              {getFieldDecorator('stock_' + rowInfo.id, {
                 rules: [
                   {
-                    required: true,
-                    message: 'Please input market price'
-                  },
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: 'Please input the legal amount with two decimal places'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
+                    pattern: ValidConst.number,
+                    message: '0 or positive integer'
                   }
                 ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                initialValue: rowInfo.subscriptionPrice || 0
-              })(<Input style={{ width: '200px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
+                initialValue: rowInfo.stock
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
             </FormItem>
           </Col>
         </Row>
       )
     });
+
     columns = columns.push({
       title: '',
       key: '1',

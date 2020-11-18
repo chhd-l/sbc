@@ -6,7 +6,7 @@ import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
-import ProductTooltip from './productTooltip';
+import ProductTooltipSKU from './productTooltip-sku';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -35,6 +35,7 @@ export default class SkuTable extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      addSkUProduct: any;
     };
   };
 
@@ -49,6 +50,7 @@ export default class SkuTable extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -90,7 +92,8 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList } = this.props.relaxProps;
+
     // const {  } = this.state
     const columns = this._getColumns();
     // if(this.state.count < 100) {
@@ -101,7 +104,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -116,7 +119,7 @@ class SkuForm extends React.Component<any, any> {
   };
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, modalVisible, clickImg, removeImg, specSingleFlag, goods } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -252,6 +255,10 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subSKU',
       render: (rowInfo) => {
+        const { addSkUProduct } = this.props.relaxProps;
+        setTimeout(() => {
+          console.log(addSkUProduct, 2333);
+        });
         return (
           <Row>
             <Col span={12}>
@@ -278,20 +285,18 @@ class SkuForm extends React.Component<any, any> {
                       <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={() => this.showProduct(true)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      <div className="space-between-align" style={{ paddingLeft: 5 }}>
-                        <span style={{ paddingLeft: 5 }}>856436788</span>
-                        <Icon style={{ paddingLeft: 5, paddingRight: 5, color: 'red', cursor: 'pointer' }} type="minus" />
-                        <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
-                        <Icon style={{ paddingLeft: 5, color: 'red', cursor: 'pointer' }} type="plus" />
-                        <a style={{ paddingLeft: 5 }} key="item3" className="iconfont iconDelete"></a>
-                      </div>
-                      <div className="space-between-align" style={{ paddingLeft: 5 }}>
-                        <span style={{ paddingLeft: 5 }}>856436788</span>
-                        <Icon style={{ paddingLeft: 5, paddingRight: 5, color: 'red', cursor: 'pointer' }} type="minus" />
-                        <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
-                        <Icon style={{ paddingLeft: 5, color: 'red', cursor: 'pointer' }} type="plus" />
-                        <a style={{ paddingLeft: 5 }} key="item3" className="iconfont iconDelete"></a>
-                      </div>
+                      {addSkUProduct &&
+                        addSkUProduct.map((item, index) => {
+                          return (
+                            <div className="space-between-align" key={item} style={{ paddingLeft: 5 }}>
+                              <span style={{ paddingLeft: 5 }}>{item}</span>
+                              <Icon style={{ paddingLeft: 5, paddingRight: 5, color: 'red', cursor: 'pointer' }} type="minus" />
+                              <Input style={{ width: '40px', height: '20px', textAlign: 'center' }} min={0} max={99} />
+                              <Icon style={{ paddingLeft: 5, color: 'red', cursor: 'pointer' }} type="plus" />
+                              <a style={{ paddingLeft: 5 }} className="iconfont iconDelete"></a>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 )}

@@ -356,6 +356,13 @@ export function fetchproductTooltip(param) {
   });
 }
 
+export function fetchlistGoodsInfo(param) {
+  return Fetch<TResult>('/recommendation/listGoodsInfo', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
 export function fetchAdd(param) {
   return Fetch<TResult>('/goodsRelation/add', {
     method: 'POST',

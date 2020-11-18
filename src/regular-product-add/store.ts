@@ -90,7 +90,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('related:goodsId', goodsId);
 
-      fetchFiltersTotal
+      // fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
@@ -1449,7 +1449,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      console.log(result.res.context,111111);
+      console.log(result.res.context, 111111);
       this.dispatch('goodsActor:getGoodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
@@ -2083,7 +2083,10 @@ export default class AppStore extends Store {
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource
     };
-    const res = await editSeo(params);
+    const { res } = (await editSeo(params)) as any;
+    if (res.code === Const.SUCCESS_CODE) {
+      history.push('./goods-list');
+    }
     //调接口
   };
   showEditModal = ({ key, value }) => {};

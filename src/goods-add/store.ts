@@ -2081,8 +2081,10 @@ export default class AppStore extends Store {
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource
     };
-    const res = await editSeo(params);
-    //调接口
+    const { res } = (await editSeo(params)) as any;
+    if (res.code === Const.SUCCESS_CODE) {
+      history.push('./goods-list');
+    }
   };
   showEditModal = ({ key, value }) => {};
   onSwitch = ({ key, value }) => {};

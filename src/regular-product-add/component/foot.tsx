@@ -26,7 +26,7 @@ export default class Foot extends React.Component<any, any> {
       onMainTabChange: Function;
       saveSeoSetting: Function;
       saveSuccessful: string;
-      getGoodsId: string
+      getGoodsId: string;
     };
   };
 

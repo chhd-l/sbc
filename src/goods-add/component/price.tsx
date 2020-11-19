@@ -36,12 +36,8 @@ export default class Price extends React.Component<any, any> {
           message={
             <div>
               <p>
-                Please note that please select the price setting mode for this
-                product first. Under the same SPU, all SKUs use the same price
-                setting mode. Carry out batch setting of SPU, and the setting
-                scheme will cover all SKUS (except skUS that open and keep
-                independent setting). Please operate carefully. For separate
-                pricing for SKU, you can go to the SKU pricing page.
+                Please note that please select the price setting mode for this product first. Under the same SPU, all SKUs use the same price setting mode. Carry out batch setting of SPU, and the setting scheme will cover all SKUS (except skUS that open and keep independent
+                setting). Please operate carefully. For separate pricing for SKU, you can go to the SKU pricing page.
               </p>
               {/* <p>请注意</p>
               <p>
@@ -69,9 +65,7 @@ export default class Price extends React.Component<any, any> {
           <RadioGroup onChange={this._editPriceSetting} value={priceOpt}>
             <Radio value={2}>Sell at market price&nbsp;&nbsp;</Radio>
             <Radio value={0}>Sell at consumer price&nbsp;&nbsp;</Radio>
-            {saleType === 0 && (
-              <Radio value={1}>Set price for order quantity&nbsp;&nbsp;</Radio>
-            )}
+            {saleType === 0 && <Radio value={1}>Set price for order quantity&nbsp;&nbsp;</Radio>}
           </RadioGroup>
         </div>
 

@@ -69,7 +69,7 @@ export default class GoodsGrid extends React.Component<any, any> {
         <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
-          rowKey={(record) => record.goodsInfoId}
+          rowKey={(_row, index) => _row.goodsNo + index.toString()}
           dataSource={goodsInfoPage.content}
           isScroll={false}
           pagination={{

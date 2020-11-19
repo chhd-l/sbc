@@ -40,13 +40,7 @@ export default class GoodsSpecActor extends Actor {
    * @private
    */
   _randomGoodsInfoNo() {
-    const skuNo =
-      '8' +
-      new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        .getTime()
-        .toString()
-        .slice(4, 10) +
-      Math.random().toString().slice(2, 5);
+    const skuNo = '8' + new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
 
     // 如果已经生成过，重新生成
     if (this.generatedNo.get(skuNo)) {
@@ -62,14 +56,7 @@ export default class GoodsSpecActor extends Actor {
    *  初始化规格及商品
    */
   @Action('goodsSpecActor: init')
-  init(
-    state,
-    {
-      goodsSpecs,
-      goodsList,
-      baseSpecId
-    }: { goodsSpecs: IList; goodsList: IList; baseSpecId: Number }
-  ) {
+  init(state, { goodsSpecs, goodsList, baseSpecId }: { goodsSpecs: IList; goodsList: IList; baseSpecId: Number }) {
     if (!goodsSpecs.isEmpty()) {
       state = state.set('goodsSpecs', goodsSpecs);
     }
@@ -112,14 +99,9 @@ export default class GoodsSpecActor extends Actor {
    * 修改规格名称
    */
   @Action('goodsSpecActor: editSpecName')
-  editSpecName(
-    state,
-    { specId, specName }: { specId: number; specName: string }
-  ) {
+  editSpecName(state, { specId, specName }: { specId: number; specName: string }) {
     return state.update('goodsSpecs', (goodsSpecs) => {
-      const index = goodsSpecs.findIndex(
-        (item) => item.get('specId') == specId
-      );
+      const index = goodsSpecs.findIndex((item) => item.get('specId') == specId);
       return goodsSpecs.update(index, (item) => item.set('specName', specName));
     });
   }
@@ -131,9 +113,7 @@ export default class GoodsSpecActor extends Actor {
   editSpecValues(state, { specId, specValues, priceOpt, mtkPrice }) {
     let goodsSpecs = state.get('goodsSpecs');
     const index = goodsSpecs.findIndex((item) => item.get('specId') == specId);
-    goodsSpecs = goodsSpecs.update(index, (item) =>
-      item.set('specValues', specValues)
-    );
+    goodsSpecs = goodsSpecs.update(index, (item) => item.set('specValues', specValues));
 
     let stockChecked = state.get('stockChecked');
     let marketPriceChecked = state.get('marketPriceChecked');
@@ -169,10 +149,7 @@ export default class GoodsSpecActor extends Actor {
    * 修改商品属性
    */
   @Action('goodsSpecActor: editGoodsItem')
-  editGoodsItem(
-    state,
-    { id, key, value }: { id: string; key: string; value: string }
-  ) {
+  editGoodsItem(state, { id, key, value }: { id: string; key: string; value: string }) {
     if (key === 'baseSpecId') {
       return state.set('baseSpecId', fromJS(value));
     }
@@ -236,11 +213,7 @@ export default class GoodsSpecActor extends Actor {
    */
   @Action('goodsSpecActor: deleteSpec')
   deleteSpec(state, specId) {
-    state = state.update('goodsSpecs', (goodsSpecs) =>
-      goodsSpecs.delete(
-        goodsSpecs.findIndex((spec) => spec.get('specId') == specId)
-      )
-    );
+    state = state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.delete(goodsSpecs.findIndex((spec) => spec.get('specId') == specId)));
 
     // 规格都删掉了
     let goodsSpecs = state.get('goodsSpecs');
@@ -287,11 +260,7 @@ export default class GoodsSpecActor extends Actor {
 
     let resultArray = this._convertSpev(goodsSpecs.first());
     if (goodsSpecs.count() > 1) {
-      resultArray = this._convertSpecValues(
-        this._convertSpev(goodsSpecs.first()),
-        0,
-        goodsSpecs.slice(1).toList()
-      );
+      resultArray = this._convertSpecValues(this._convertSpev(goodsSpecs.first()), 0, goodsSpecs.slice(1).toList());
     }
 
     // 生成的sku列表和现有的匹配，规格值一致的话，使用现有的sku覆盖生成的
@@ -322,11 +291,7 @@ export default class GoodsSpecActor extends Actor {
    *  { '1111': '蓝', '2222': '小号' },
    *  { '1111': '蓝', '2222': '小号' }]
    */
-  _convertSpecValues = (
-    specValuesArray: IList,
-    index: number,
-    goodsSpecs: IList
-  ) => {
+  _convertSpecValues = (specValuesArray: IList, index: number, goodsSpecs: IList) => {
     let resultArray = List();
     let resultIndex = 1;
     const spec = goodsSpecs.get(index);
@@ -336,10 +301,7 @@ export default class GoodsSpecActor extends Actor {
         const specId = 'specId-' + spec.get('specId');
         let goodsItem = item1.set(specId, item2.get('detailName'));
         const goodsInfoNo = this._randomGoodsInfoNo();
-        goodsItem = goodsItem.set(
-          'specDetailId-' + spec.get('specId'),
-          item2.get('specDetailId')
-        );
+        goodsItem = goodsItem.set('specDetailId-' + spec.get('specId'), item2.get('specDetailId'));
         goodsItem = goodsItem.set('id', this._getRandom());
         goodsItem = goodsItem.set('index', resultIndex++);
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);

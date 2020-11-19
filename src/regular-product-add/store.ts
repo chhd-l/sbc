@@ -56,6 +56,7 @@ import {
   fetchConsentDelete,
   fetchAdd,
   fetchproductTooltip,
+  fetchFiltersTotal,
   getSeo,
   editSeo
 } from './webapi';
@@ -79,14 +80,17 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList()]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
       this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
+      this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('related:goodsId', goodsId);
+
+      // fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
@@ -1445,6 +1449,8 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
+      console.log(result.res.context, 111111);
+      this.dispatch('goodsActor:getGoodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);
@@ -1456,7 +1462,8 @@ export default class AppStore extends Store {
         }
       }
       message.success('save successful');
-      history.push('/goods-list');
+      this.dispatch('goodsActor:saveSuccessful', true);
+      //history.push('/goods-list');
     } else {
       message.error(result.res.message);
     }
@@ -1827,6 +1834,7 @@ export default class AppStore extends Store {
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetail = fromJS(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
+
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
             fromJS({
@@ -1989,7 +1997,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
-        this.onRelatedList(this.state().get('goodsId'));
+        this.onRelatedList(this.state().get('getGoodsId'));
       });
     } else {
       message.error(res.message);
@@ -2075,7 +2083,10 @@ export default class AppStore extends Store {
       metaKeywordsSource: seoObj.metaKeywordsSource,
       titleSource: seoObj.titleSource
     };
-    const res = await editSeo(params);
+    const { res } = (await editSeo(params)) as any;
+    if (res.code === Const.SUCCESS_CODE) {
+      history.push('./goods-list');
+    }
     //调接口
   };
   showEditModal = ({ key, value }) => {};
@@ -2085,4 +2096,6 @@ export default class AppStore extends Store {
   editFormData = ({ key, value }) => {};
   closeModal = ({ key, value }) => {};
   modalVisibleFun = ({ key, value }) => {};
+  onProductForm = ({ key, value }) => {};
+  onEditSkuNo = ({ key, value }) => {};
 }

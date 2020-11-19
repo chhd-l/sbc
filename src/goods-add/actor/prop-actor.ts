@@ -26,32 +26,22 @@ export default class PropActor extends Actor {
   }
 
   @Action('propActor: change')
-  change(
-    state,
-    { propId, detailIds }: { propId: string; detailIds: string[] }
-  ) {
+  change(state, { propId, detailIds }: { propId: string; detailIds: string[] }) {
     //选择下拉选项时，要改变原有属性下属性值的select状态为select，并根据detailId设置对于属性值的select为select
-    const index = state
-      .get('propDetail')
-      .findIndex((v) => v.get('propId') === propId);
+    const index = state.get('propDetail').findIndex((v) => v.get('propId') === propId);
     if (index > -1) {
-      const goodsPropDetails = state
-        .getIn(['propDetail', index, 'goodsPropDetails'])
-        .map((item) => {
-          let detailId = detailIds.find((d) => d === item.get('detailId'));
-          if (item.get('detailId') === detailId) {
-            return item.set('select', 'select').set('detailId', detailId);
-          }
+      const goodsPropDetails = state.getIn(['propDetail', index, 'goodsPropDetails']).map((item) => {
+        let detailId = detailIds.find((d) => d === item.get('detailId'));
+        if (item.get('detailId') === detailId) {
+          return item.set('select', 'select').set('detailId', detailId);
+        }
 
-          // if (item.get('detailId') === detailId || detailId == '0') {
-          //   return item.set('select', 'select').set('detailId', detailId);
-          // }
-          return item.set('select', '');
-        });
-      return state.setIn(
-        ['propDetail', index, 'goodsPropDetails'],
-        goodsPropDetails
-      );
+        // if (item.get('detailId') === detailId || detailId == '0') {
+        //   return item.set('select', 'select').set('detailId', detailId);
+        // }
+        return item.set('select', '');
+      });
+      return state.setIn(['propDetail', index, 'goodsPropDetails'], goodsPropDetails);
     } else {
       return state;
     }

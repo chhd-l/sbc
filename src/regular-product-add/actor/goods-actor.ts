@@ -58,7 +58,10 @@ export default class GoodsActor extends Actor {
       flashsaleGoods: [],
       goodsDetailTab: [],
       nextType: '',
-      getGoodsCate: ''
+      getGoodsCate: '',
+      filtersTotal: '',
+      saveSuccessful: false,
+      getGoodsId: ''
     };
   }
 
@@ -156,6 +159,9 @@ export default class GoodsActor extends Actor {
     return state.set('goodsTabs', goodsTabs);
   }
 
+
+
+
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
     const newDataList = getGoodsCate
@@ -185,11 +191,31 @@ export default class GoodsActor extends Actor {
     return state.set('getGoodsCate', newDataList);
   }
 
+
+
+
+  @Action('goodsActor:filtersTotal')
+  filtersTotal(state, filtersTotal) {
+    return state.set('filtersTotal', filtersTotal);
+  }
+
+  @Action('goodsActor:saveSuccessful')
+  saveSuccessful(state, saveSuccessful) {
+    return state.set('saveSuccessful', saveSuccessful);
+  }
+
+  @Action('goodsActor:getGoodsId')
+  getGoodsId(state, getGoodsId) {
+    return state.set('getGoodsId', getGoodsId);
+  }
+
+
   /**
    * 修改商品信息
    * @param state
    * @param data
    */
+
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
     return state.update('goods', (goods) => goods.merge(data));

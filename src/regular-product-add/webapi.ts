@@ -198,8 +198,21 @@ export function fetchResource(params = {}) {
  * 获取对应类目下所有的属性信息
  */
 export const getCateIdsPropDetail = (cateId: string) => {
-  return Fetch(`/goods/goodsProp/${cateId}`);
+  return Fetch(`/attribute_library/attribute/${cateId}`);
 };
+/*export const getCateIdsPropDetail = (cateId: string) => {
+  return Fetch(`/goods/goodsProp/1129`);
+};*/
+
+
+export function fetchFiltersTotal(params = {}) {
+  return Fetch('/goods_filter/filters/total', {
+    method: 'POST',
+    body: JSON.stringify({filterStatus:'1'})
+  });
+}
+
+
 
 /**
  * 查询店铺运费模板
@@ -229,7 +242,7 @@ export const goodsFreightExpress = (freightTempId) => {
  * 获取素材类目列表
  */
 export const getResourceCates = () => {
-  return Fetch('/store/resourceCates');
+  return Fetch('/store_cate/cates/total');
 };
 
 /**

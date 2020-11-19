@@ -1,16 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import {
-  Checkbox,
-  Input,
-  Select,
-  Button,
-  Row,
-  Col,
-  Icon,
-  Form,
-  message
-} from 'antd';
+import { Checkbox, Input, Select, Button, Row, Col, Icon, Form, message } from 'antd';
 import { noop } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
@@ -108,10 +98,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Row>
                 <Col offset={5}>
-                  <p style={{ color: '#999', marginBottom: 5 }}>
-                    You can quickly add multiple specifications using the
-                    keyboard enter key
-                  </p>
+                  <p style={{ color: '#999', marginBottom: 5 }}>You can quickly add multiple specifications using the keyboard enter key</p>
                 </Col>
               </Row>
             )}
@@ -163,39 +150,20 @@ class SpecForm extends React.Component<any, any> {
                                     //   获得表单其他列的规格名称，
                                     goodsSpecs.forEach((value, i) => {
                                       if (i != index) {
-                                        value.get('specName') == specsName
-                                          ? callback(
-                                              new Error(
-                                                'Specification name duplicate'
-                                              )
-                                            )
-                                          : callback();
+                                        value.get('specName') == specsName ? callback(new Error('Specification name duplicate')) : callback();
                                       }
                                     });
                                     callback();
                                   }
                                 }
                               ],
-                              onChange: this._editSpecName.bind(
-                                this,
-                                item.get('specId')
-                              ),
+                              onChange: this._editSpecName.bind(this, item.get('specId')),
                               initialValue: item.get('specName')
-                            })(
-                              <Input
-                                placeholder="Please input specification"
-                                style={{ width: '90%' }}
-                              />
-                            )}
+                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
                           </FormItem>
                         </Col>
-                        <Col
-                          span={2}
-                          style={{ marginTop: 2, textAlign: 'center' }}
-                        >
-                          <Button
-                            onClick={() => this._deleteSpec(item.get('specId'))}
-                          >
+                        <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
+                          <Button onClick={() => this._deleteSpec(item.get('specId'))}>
                             <FormattedMessage id="delete" />
                           </Button>
                         </Col>
@@ -212,103 +180,70 @@ class SpecForm extends React.Component<any, any> {
                             *
                           </span>
                           <FormItem>
-                            {getFieldDecorator(
-                              'specval_' + item.get('specId'),
-                              {
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Please input specification Value'
-                                  },
-                                  {
-                                    validator: (_rule, value, callback) => {
-                                      if (!value) {
-                                        callback();
-                                        return;
-                                      }
-
-                                      if (value.length > 0) {
-                                        const valueList = fromJS(value);
-                                        let overLen = false;
-                                        let whitespace = false;
-                                        let duplicated = false;
-
-                                        valueList.forEach((v, k) => {
-                                          const trimValue = v.trim();
-                                          if (!trimValue) {
-                                            whitespace = true;
-                                            return false;
-                                          }
-                                          if (v.length > 20) {
-                                            overLen = true;
-                                            return false;
-                                          }
-
-                                          // 重复校验
-                                          const duplicatedIndex = valueList.findIndex(
-                                            (v1, index1) =>
-                                              index1 != k &&
-                                              v1.trim() === trimValue
-                                          );
-                                          if (duplicatedIndex > -1) {
-                                            duplicated = true;
-                                          }
-                                        });
-
-                                        if (whitespace) {
-                                          callback(
-                                            new Error(
-                                              'The specification value cannot be a space character'
-                                            )
-                                          );
-                                          return;
-                                        }
-                                        if (overLen) {
-                                          callback(
-                                            new Error(
-                                              'Each value supports up to 20 characters'
-                                            )
-                                          );
-                                          return;
-                                        }
-                                        if (duplicated) {
-                                          callback(
-                                            new Error('Repeated specifications')
-                                          );
-                                          return;
-                                        }
-                                      }
-
-                                      if (value.length > 20) {
-                                        callback(
-                                          new Error(
-                                            'Support up to 20 specifications'
-                                          )
-                                        );
-                                        return;
-                                      }
-
+                            {getFieldDecorator('specval_' + item.get('specId'), {
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Please input specification Value'
+                                },
+                                {
+                                  validator: (_rule, value, callback) => {
+                                    if (!value) {
                                       callback();
+                                      return;
                                     }
+
+                                    if (value.length > 0) {
+                                      const valueList = fromJS(value);
+                                      let overLen = false;
+                                      let whitespace = false;
+                                      let duplicated = false;
+
+                                      valueList.forEach((v, k) => {
+                                        const trimValue = v.trim();
+                                        if (!trimValue) {
+                                          whitespace = true;
+                                          return false;
+                                        }
+                                        if (v.length > 20) {
+                                          overLen = true;
+                                          return false;
+                                        }
+
+                                        // 重复校验
+                                        const duplicatedIndex = valueList.findIndex((v1, index1) => index1 != k && v1.trim() === trimValue);
+                                        if (duplicatedIndex > -1) {
+                                          duplicated = true;
+                                        }
+                                      });
+
+                                      if (whitespace) {
+                                        callback(new Error('The specification value cannot be a space character'));
+                                        return;
+                                      }
+                                      if (overLen) {
+                                        callback(new Error('Each value supports up to 20 characters'));
+                                        return;
+                                      }
+                                      if (duplicated) {
+                                        callback(new Error('Repeated specifications'));
+                                        return;
+                                      }
+                                    }
+
+                                    if (value.length > 20) {
+                                      callback(new Error('Support up to 20 specifications'));
+                                      return;
+                                    }
+
+                                    callback();
                                   }
-                                ],
-                                onChange: this._editSpecValue.bind(
-                                  this,
-                                  item.get('specId')
-                                ),
-                                initialValue: specValues
-                              }
-                            )(
-                              <Select
-                                mode="tags"
-                                getPopupContainer={() =>
-                                  document.getElementById('specSelect')
                                 }
-                                style={{ width: '90%' }}
-                                placeholder="Please input specification Value"
-                                notFoundContent="No specification value"
-                                tokenSeparators={[',']}
-                              >
+                              ],
+                              onChange: this._editSpecValue.bind(this, item.get('specId')),
+                              initialValue: specValues
+                            })(
+                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'))}
                               </Select>
                             )}
@@ -337,9 +272,7 @@ class SpecForm extends React.Component<any, any> {
   _getChildren = (specValues: IList) => {
     const children = [];
     specValues.forEach((item) => {
-      children.push(
-        <Option key={item.get('detailName')}>{item.get('detailName')}</Option>
-      );
+      children.push(<Option key={item.get('detailName')}>{item.get('detailName')}</Option>);
     });
     return children;
   };
@@ -367,11 +300,7 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const {
-      editSpecValues,
-      goodsSpecs,
-      updateSpecForm
-    } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');

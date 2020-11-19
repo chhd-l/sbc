@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
+import SearchForm from 'web_modules/biz/selected-sku-modal/search-form';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -19,7 +20,11 @@ export default class ProductSearchDetails extends React.Component<any, any> {
       title: '',
       id: this.props.match.params.id,
       type: this.props.location.state ? this.props.location.state.type : '',
-      searchForm: {},
+      searchForm: {
+        searchTerm: this.props.location.state ? this.props.location.state.searchTerm : '',
+        startDate: this.props.location.state ? this.props.location.state.startDate : '',
+        endDate: this.props.location.state ? this.props.location.state.endDate : ''
+      },
       searchResultDetails: [],
       pagination: {
         current: 1,
@@ -31,14 +36,17 @@ export default class ProductSearchDetails extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.setState({
-      title: this.state.type === 'all' ? 'Search Result Details' : 'No-Result Search Details'
-    });
+    this.setState(
+      {
+        title: this.state.type === 'all' ? 'Search Result Details' : 'No-Result Search Details'
+      },
+      () => this.getSearchResultDetails()
+    );
   }
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
-    if (field === '') {
+    if (field === 'dateRange') {
       let startDate = moment(value[0]).format('YYYY-MM-DD');
       let endDate = moment(value[1]).format('YYYY-MM-DD');
       data['startDate'] = startDate;
@@ -60,6 +68,19 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     );
   };
 
+  onSearch() {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getSearchResultDetails()
+    );
+  }
+
   getSearchResultDetails() {
     const { searchForm, pagination } = this.state;
     let params = Object.assign(searchForm, {
@@ -70,13 +91,13 @@ export default class ProductSearchDetails extends React.Component<any, any> {
       loading: true
     });
     webapi
-      .getSearchResultData(params)
+      .getSearchDetailData(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          pagination.total = res.context.total;
+          pagination.total = res.context.totalElements;
           this.setState({
-            productFinderList: res.context.content,
+            searchResultDetails: res.context.searchDetailsViews,
             pagination: pagination,
             loading: false
           });
@@ -96,7 +117,8 @@ export default class ProductSearchDetails extends React.Component<any, any> {
   }
 
   render() {
-    const { title, type, searchResultDetails, pagination, loading } = this.state;
+    const { title, type, searchResultDetails, pagination, loading, searchForm } = this.state;
+    let test = searchForm;
     const columns = [
       {
         title: 'Search No.',
@@ -153,7 +175,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'productFinderNumber',
+                        field: 'consumerAccount',
                         value
                       });
                     }}
@@ -163,10 +185,10 @@ export default class ProductSearchDetails extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <RangePicker
-                    renderExtraFooter={() => 'extra footer'}
+                    defaultValue={[moment(searchForm.startDate), moment(searchForm.endDate)]}
                     onChange={(value) => {
                       this.onFormChange({
-                        field: 'DateRange',
+                        field: 'dateRange',
                         value: value
                       });
                     }}
@@ -182,7 +204,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
                     shape="round"
                     onClick={(e) => {
                       e.preventDefault();
-                      this.getSearchResultDetails();
+                      this.onSearch();
                     }}
                   >
                     <span>
@@ -196,6 +218,11 @@ export default class ProductSearchDetails extends React.Component<any, any> {
         </div>
         <div className="container">
           <Table rowKey="id" columns={columns} dataSource={searchResultDetails} pagination={pagination} loading={loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+        </div>
+        <div className="bar-button">
+          <Button type="primary" onClick={() => (history as any).go(-1)}>
+            {<FormattedMessage id="back" />}
+          </Button>
         </div>
       </div>
     );

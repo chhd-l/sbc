@@ -15,36 +15,22 @@ export default class VideoLibraryUpload extends Component<any, any> {
   };
   render() {
     const { video, modalVisible, removeVideo } = this.props;
-    return video &&
-      JSON.stringify(video) !== '{}' &&
-      video.get('artworkUrl') ? (
+    return video && JSON.stringify(video) !== '{}' && video.get('artworkUrl') ? (
       <div key={video.get('resourceId')}>
         <div className="ant-upload-list ant-upload-list-picture-card">
           <div className="ant-upload-list-item ant-upload-list-item-done">
             <div className="ant-upload-list-item-info">
               <span>
-                <a
-                  className="ant-upload-list-item-thumbnail"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a className="ant-upload-list-item-thumbnail" href="" target="_blank" rel="noopener noreferrer">
                   <img src={defaultImg} />
                 </a>
               </span>
             </div>
             <span className="ant-upload-list-item-actions">
-              <i
-                className="anticon anticon-eye-o"
-                onClick={() => this._videoDetail(video.get('artworkUrl'))}
-              >
+              <i className="anticon anticon-eye-o" onClick={() => this._videoDetail(video.get('artworkUrl'))}>
                 <Icon type="eye" />
               </i>
-              <i
-                title="Remove file"
-                onClick={() => removeVideo()}
-                className="anticon anticon-delete"
-              >
+              <i title="Remove file" onClick={() => removeVideo()} className="anticon anticon-delete">
                 <Icon type="delete" />
               </i>
             </span>

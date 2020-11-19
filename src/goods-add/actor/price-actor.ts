@@ -64,23 +64,14 @@ export default class PriceActor extends Actor {
    * @param param1
    */
   @Action('priceActor: editUserLevelPriceItem')
-  editUserLevelPriceItem(
-    state,
-    {
-      userLevelId,
-      key,
-      value
-    }: { userLevelId: string; key: string; value: string }
-  ) {
+  editUserLevelPriceItem(state, { userLevelId, key, value }: { userLevelId: string; key: string; value: string }) {
     const map = fromJS({
       [userLevelId]: {
         levelId: userLevelId,
         [key]: value
       }
     });
-    return state.update('userLevelPrice', (userLevelPrice) =>
-      userLevelPrice.mergeDeep(map)
-    );
+    return state.update('userLevelPrice', (userLevelPrice) => userLevelPrice.mergeDeep(map));
   }
 
   /**
@@ -89,14 +80,7 @@ export default class PriceActor extends Actor {
    * @param param1
    */
   @Action('priceActor: editUserPrice')
-  editUserPrice(
-    state,
-    {
-      userId,
-      userName,
-      userLevelName
-    }: { userId: string; userName: string; userLevelName: string }
-  ) {
+  editUserPrice(state, { userId, userName, userLevelName }: { userId: string; userName: string; userLevelName: string }) {
     const count = state.get('userPrice').count();
     if (count === 0) {
       state = state.set('userPrice', OrderedMap());
@@ -110,16 +94,10 @@ export default class PriceActor extends Actor {
     // 如果勾选了 起订量／限订量 全部相同
     if (count > 0) {
       if (state.get('userCountChecked')) {
-        userPriceMap['count'] = state
-          .get('userPrice')
-          .toList()
-          .getIn([0, 'count']);
+        userPriceMap['count'] = state.get('userPrice').toList().getIn([0, 'count']);
       }
       if (state.get('userMaxCountChecked')) {
-        userPriceMap['maxCount'] = state
-          .get('userPrice')
-          .toList()
-          .getIn([0, 'maxCount']);
+        userPriceMap['maxCount'] = state.get('userPrice').toList().getIn([0, 'maxCount']);
       }
     }
 
@@ -145,10 +123,7 @@ export default class PriceActor extends Actor {
    * @param param1
    */
   @Action('priceActor: editUserPriceItem')
-  editUserPriceItem(
-    state,
-    { userId, key, value }: { userId: string; key: string; value: string }
-  ) {
+  editUserPriceItem(state, { userId, key, value }: { userId: string; key: string; value: string }) {
     const map = fromJS({
       [userId]: {
         customerId: userId,
@@ -164,10 +139,7 @@ export default class PriceActor extends Actor {
    * @param param1
    */
   @Action('priceActor: editAreaPriceItem')
-  editAreaPriceItem(
-    state,
-    { id, key, value }: { id: string; key: string; value: string }
-  ) {
+  editAreaPriceItem(state, { id, key, value }: { id: string; key: string; value: string }) {
     const map = fromJS({
       [id]: {
         [key]: value
@@ -193,9 +165,7 @@ export default class PriceActor extends Actor {
    */
   @Action('priceActor: addAreaPrice')
   addAreaPrice(state) {
-    const id = Math.random()
-      .toString()
-      .substring(2);
+    const id = Math.random().toString().substring(2);
     const map = fromJS({
       [id]: { intervalPriceId: id }
     });
@@ -218,35 +188,16 @@ export default class PriceActor extends Actor {
     if (state.get('levelCountChecked')) {
       let userLevelPrice = state.get('userLevelPrice');
       let userLevelList = state.get('userLevelList');
-      if (
-        !userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '')
-      ) {
+      if (!userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '')) {
         userLevelList.toArray().forEach((v) => {
-          userLevelPrice = userLevelPrice
-            .setIn([v.get('customerLevelId') + '', 'count'], null)
-            .setIn(
-              [v.get('customerLevelId') + '', 'levelId'],
-              v.get('customerLevelId')
-            );
+          userLevelPrice = userLevelPrice.setIn([v.get('customerLevelId') + '', 'count'], null).setIn([v.get('customerLevelId') + '', 'levelId'], v.get('customerLevelId'));
         });
       } else {
         userLevelList.toArray().forEach((v) => {
-          userLevelPrice = userLevelPrice
-            .setIn(
-              [v.get('customerLevelId') + '', 'count'],
-              userLevelPrice
-                .get(userLevelList.get(0).get('customerLevelId') + '')
-                .get('count')
-            )
-            .setIn(
-              [v.get('customerLevelId') + '', 'levelId'],
-              v.get('customerLevelId')
-            );
+          userLevelPrice = userLevelPrice.setIn([v.get('customerLevelId') + '', 'count'], userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '').get('count')).setIn([v.get('customerLevelId') + '', 'levelId'], v.get('customerLevelId'));
         });
       }
-      return state
-        .set('levelCountDisable', true)
-        .set('userLevelPrice', userLevelPrice);
+      return state.set('levelCountDisable', true).set('userLevelPrice', userLevelPrice);
     }
     return state.set('levelCountDisable', false);
   }
@@ -273,35 +224,16 @@ export default class PriceActor extends Actor {
     if (state.get('levelMaxCountChecked')) {
       let userLevelPrice = state.get('userLevelPrice');
       let userLevelList = state.get('userLevelList');
-      if (
-        !userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '')
-      ) {
+      if (!userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '')) {
         userLevelList.toArray().forEach((v) => {
-          userLevelPrice = userLevelPrice
-            .setIn([v.get('customerLevelId') + '', 'maxCount'], null)
-            .setIn(
-              [v.get('customerLevelId') + '', 'levelId'],
-              v.get('customerLevelId')
-            );
+          userLevelPrice = userLevelPrice.setIn([v.get('customerLevelId') + '', 'maxCount'], null).setIn([v.get('customerLevelId') + '', 'levelId'], v.get('customerLevelId'));
         });
       } else {
         userLevelList.toArray().forEach((v) => {
-          userLevelPrice = userLevelPrice
-            .setIn(
-              [v.get('customerLevelId') + '', 'maxCount'],
-              userLevelPrice
-                .get(userLevelList.get(0).get('customerLevelId') + '')
-                .get('maxCount')
-            )
-            .setIn(
-              [v.get('customerLevelId') + '', 'levelId'],
-              v.get('customerLevelId')
-            );
+          userLevelPrice = userLevelPrice.setIn([v.get('customerLevelId') + '', 'maxCount'], userLevelPrice.get(userLevelList.get(0).get('customerLevelId') + '').get('maxCount')).setIn([v.get('customerLevelId') + '', 'levelId'], v.get('customerLevelId'));
         });
       }
-      return state
-        .set('levelMaxCountDisable', true)
-        .set('userLevelPrice', userLevelPrice);
+      return state.set('levelMaxCountDisable', true).set('userLevelPrice', userLevelPrice);
     }
     return state.set('levelMaxCountDisable', false);
   }
@@ -329,15 +261,7 @@ export default class PriceActor extends Actor {
       let userPrice = state.get('userPrice');
       let userPriceData = userPrice.valueSeq().toList();
       userPrice.forEach((value, key) => {
-        userPrice = userPrice.set(
-          key,
-          value.setIn(
-            ['count'],
-            userPrice
-              .get(userPriceData.get(0).get('customerId') + '')
-              .get('count')
-          )
-        );
+        userPrice = userPrice.set(key, value.setIn(['count'], userPrice.get(userPriceData.get(0).get('customerId') + '').get('count')));
       });
 
       return state.set('userCountDisable', true).set('userPrice', userPrice);
@@ -368,15 +292,7 @@ export default class PriceActor extends Actor {
       let userPrice = state.get('userPrice');
       let userPriceData = userPrice.valueSeq().toList();
       userPrice.forEach((value, key) => {
-        userPrice = userPrice.set(
-          key,
-          value.setIn(
-            ['maxCount'],
-            userPrice
-              .get(userPriceData.get(0).get('customerId') + '')
-              .get('maxCount')
-          )
-        );
+        userPrice = userPrice.set(key, value.setIn(['maxCount'], userPrice.get(userPriceData.get(0).get('customerId') + '').get('maxCount')));
       });
 
       return state.set('userMaxCountDisable', true).set('userPrice', userPrice);

@@ -8,8 +8,8 @@ type TResult = {
 //new
 
 // 获取customer list
-export function getSearchResultData(filterParams = {}) {
-  return Fetch<TResult>('/goods_cate/cates/total', {
+export function getSearchDetailData(filterParams = {}) {
+  return Fetch<TResult>('/search/details', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

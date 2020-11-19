@@ -42,18 +42,9 @@ export default class Detail extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      goods,
-      refDetailEditor,
-      reftabDetailEditor,
-      chooseImgs,
-      imgType,
-      goodsTabs
-    } = this.props.relaxProps;
+    const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs } = this.props.relaxProps;
     let { goodsDetailTab } = this.props.relaxProps;
-    let goodsDetailTabCopy = goodsDetailTab.sort(
-      (a, b) => a.get('priority') - b.get('priority')
-    );
+    let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
     let goodsDetailTabContent: any = {};
     let goodsDetailContent;
     if (goods.get('goodsDetail')) {

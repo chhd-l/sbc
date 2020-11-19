@@ -16,15 +16,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
   };
 
   render() {
-    const {
-      images,
-      modalVisible,
-      clickImg,
-      removeImg,
-      imgCount,
-      imgType,
-      skuId
-    } = this.props;
+    const { images, modalVisible, clickImg, removeImg, imgCount, imgType, skuId } = this.props;
 
     return (
       <div>
@@ -35,26 +27,13 @@ export default class ImageLibraryUpload extends Component<any, any> {
                 <div className="ant-upload-list-item ant-upload-list-item-done">
                   <div className="ant-upload-list-item-info">
                     <span>
-                      <a
-                        className="ant-upload-list-item-thumbnail"
-                        href=""
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={v.get('artworkUrl') || v.get('url')}
-                          alt={v.get('resourceName')}
-                        />
+                      <a className="ant-upload-list-item-thumbnail" href="" target="_blank" rel="noopener noreferrer">
+                        <img src={v.get('artworkUrl') || v.get('url')} alt={v.get('resourceName')} />
                       </a>
                     </span>
                   </div>
                   <span className="ant-upload-list-item-actions">
-                    <i
-                      className="anticon anticon-eye-o"
-                      onClick={() =>
-                        clickImg(v.get('artworkUrl') || v.get('url'))
-                      }
-                    >
+                    <i className="anticon anticon-eye-o" onClick={() => clickImg(v.get('artworkUrl') || v.get('url'))}>
                       <Icon type="eye" />
                     </i>
                     <i
@@ -76,10 +55,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
           );
         })}
         {images.count() < imgCount ? (
-          <div
-            onClick={() => modalVisible(imgCount, imgType, skuId)}
-            style={styles.addImg}
-          >
+          <div onClick={() => modalVisible(imgCount, imgType, skuId)} style={styles.addImg}>
             <div style={styles.imgBox}>
               <Icon type="plus" style={styles.plus} />
             </div>

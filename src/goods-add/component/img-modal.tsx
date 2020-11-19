@@ -29,12 +29,7 @@ export default class ImgModal extends React.Component<any, any> {
     return (
       <div>
         {imgVisible ? (
-          <Modal  maskClosable={false}
-            className="bg-color"
-            visible={imgVisible}
-            footer={null}
-            onCancel={() => clickImg('')}
-          >
+          <Modal maskClosable={false} className="bg-color" visible={imgVisible} footer={null} onCancel={() => clickImg('')}>
             <img alt="example" src={previewImage} />
           </Modal>
         ) : null}

@@ -15,11 +15,9 @@ export default class GoodsModal extends React.Component<any, any> {
       productForm: any;
       productList: IList;
       onProductselect: Function;
-      onSharing: Function;
-      onProductForm: Function;
       loading: boolean;
       createLink: any;
-      goodsId: any;
+      getGoodsId: any;
       productTooltip: any;
     };
     showModal: Function;
@@ -40,13 +38,11 @@ export default class GoodsModal extends React.Component<any, any> {
   static relaxProps = {
     sharing: 'sharing',
     productForm: 'productForm',
-    onSharing: noop,
-    onProductForm: noop,
     onProductselect: noop,
     loading: 'loading',
     productList: 'productList',
     createLink: 'createLink',
-    goodsId: 'goodsId',
+    getGoodsId: 'getGoodsId',
     productTooltip: 'productTooltip'
   };
   constructor(props) {
@@ -67,7 +63,7 @@ export default class GoodsModal extends React.Component<any, any> {
   render() {
     const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselect, goodsId, productTooltip } = this.props.relaxProps;
+    const { onProductselect, getGoodsId, productTooltip } = this.props.relaxProps;
 
     return (
       <Modal
@@ -86,7 +82,7 @@ export default class GoodsModal extends React.Component<any, any> {
           let targetGoodsIds = [];
           this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsId));
           let obj = {
-            sourceGoodsId: goodsId,
+            sourceGoodsId: getGoodsId,
             targetGoodsIds: targetGoodsIds
           };
           onProductselect(obj);

@@ -6,6 +6,13 @@ import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class Foot extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      saveSuccessful: false
+    };
+  }
+
   props: {
     goodsFuncName: string;
     priceFuncName: string;
@@ -14,10 +21,12 @@ export default class Foot extends React.Component<any, any> {
       validMain: Function;
       saveMain: Function;
       saveAll: Function;
-      saveSeoSetting: Function;
       saveLoading: boolean;
       activeTabKey: string;
       onMainTabChange: Function;
+      saveSeoSetting: Function;
+      saveSuccessful: string;
+      getGoodsId: string;
     };
   };
 
@@ -25,18 +34,29 @@ export default class Foot extends React.Component<any, any> {
     validMain: noop,
     saveMain: noop,
     saveAll: noop,
-    saveSeoSetting: noop,
     saveLoading: 'saveLoading',
     activeTabKey: 'activeTabKey',
-    onMainTabChange: noop
+    onMainTabChange: noop,
+    saveSeoSetting: noop,
+    saveSuccessful: 'saveSuccessful',
+    getGoodsId: 'getGoodsId'
   };
   _saveSeoSetting = () => {
-    const { saveSeoSetting } = this.props.relaxProps;
-    const goodsId = 'ff80808175b1a9b80175b50910f10004';
-    saveSeoSetting(goodsId);
+    const { saveSeoSetting, getGoodsId } = this.props.relaxProps;
+    saveSeoSetting(getGoodsId);
   };
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+    const { saveSuccessful } = this.props.relaxProps;
+    if (prevProps.relaxProps.saveSuccessful != saveSuccessful) {
+      /*this.setState({
+        saveSuccessful: saveSuccessful
+      });*/
+      this._next('');
+    }
+  }
+
   render() {
-    const { saveLoading, activeTabKey } = this.props.relaxProps;
+    const { saveLoading } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {this.props.tabType == 'main' ? (
@@ -59,7 +79,7 @@ export default class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
               Prev
             </Button>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+            <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
               Next
             </Button>
           </AuthWrapper>

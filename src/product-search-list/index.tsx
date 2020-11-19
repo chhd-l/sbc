@@ -22,6 +22,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
+      allSort: {},
       allLoading: false,
       noSearchResult: [],
       noResultPagination: {
@@ -29,6 +30,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
+      noResultSort: {},
       noResultLoading: false,
       dateRange: [],
       tabKey: '1',
@@ -43,6 +45,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     this.onAllSerch = this.onAllSerch.bind(this);
     this.onNoResultSerch = this.onNoResultSerch.bind(this);
     this.getStatisticsResult = this.getStatisticsResult.bind(this);
+    this.getSortOrder = this.getSortOrder.bind(this);
   }
 
   componentDidMount() {
@@ -61,7 +64,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
   dateRangeChange(date) {
     this.setState({
-      dateRange: [moment().week(moment(date).week()).startOf('week').add(1, 'days').format('YYYY-MM-DD'), moment().week(moment(date).week()).endOf('week').add(1, 'days').format('YYYY-MM-DD')]
+      dateRange: [moment().week(moment(date).week()).startOf('week').format('YYYY-MM-DD'), moment().week(moment(date).week()).endOf('week').format('YYYY-MM-DD')]
     });
     this.setState({}, () => this.getStatisticsResult());
     if (this.state.tabKey === '1') {
@@ -69,6 +72,15 @@ export default class ProductSearchList extends React.Component<any, any> {
     } else if (this.state.tabKey === '2') {
       this.onNoResultSerch();
     }
+  }
+
+  getSortOrder(sortOrder) {
+    if (sortOrder === 'ascend') {
+      return 'ASC';
+    } else if (sortOrder === 'descend') {
+      return 'DESC';
+    }
+    return null;
   }
 
   getStatisticsResult() {
@@ -90,10 +102,11 @@ export default class ProductSearchList extends React.Component<any, any> {
       });
   }
 
-  allTableChange = (pagination: any) => {
+  allTableChange = (pagination, filters, sorter) => {
     this.setState(
       {
-        pagination: pagination
+        allPagination: pagination,
+        allSort: sorter
       },
       () => this.getAllSearchResult()
     );
@@ -105,22 +118,26 @@ export default class ProductSearchList extends React.Component<any, any> {
           current: 1,
           pageSize: 10,
           total: 0
-        }
+        },
+        allSort: {}
       },
       () => this.getAllSearchResult()
     );
   }
   getAllSearchResult = () => {
-    const { dateRange, allPagination } = this.state;
+    const { dateRange, allPagination, allSort } = this.state;
+    let sortOrder = this.getSortOrder(allSort.order);
     let params = {
       startDate: dateRange[0],
       endDate: dateRange[1],
       isNoResults: 0,
       pageNum: allPagination.current - 1,
-      pageSize: allPagination.pageSize
+      pageSize: allPagination.pageSize,
+      sortName: allSort.field,
+      sortOrder: sortOrder
     };
     this.setState({
-      loading: true
+      allLoading: true
     });
     webapi
       .getAllSearchData(params)
@@ -148,10 +165,11 @@ export default class ProductSearchList extends React.Component<any, any> {
       });
   };
 
-  noResultTableChange = (pagination: any) => {
+  noResultTableChange = (pagination, filters, sorter) => {
     this.setState(
       {
-        noResultPagination: pagination
+        noResultPagination: pagination,
+        noResultSort: sorter
       },
       () => this.getNoSearchResults()
     );
@@ -163,22 +181,26 @@ export default class ProductSearchList extends React.Component<any, any> {
           current: 1,
           pageSize: 10,
           total: 0
-        }
+        },
+        noResultSort: {}
       },
       () => this.getNoSearchResults()
     );
   }
   getNoSearchResults = () => {
-    const { dateRange, noResultPagination } = this.state;
+    const { dateRange, noResultPagination, noResultSort } = this.state;
+    let sortOrder = this.getSortOrder(noResultSort.order);
     let params = {
       startDate: dateRange[0],
       endDate: dateRange[1],
       isNoResults: 1,
       pageNum: noResultPagination.current - 1,
-      pageSize: noResultPagination.pageSize
+      pageSize: noResultPagination.pageSize,
+      sortName: noResultSort.field,
+      sortOrder: sortOrder
     };
     this.setState({
-      loading: true
+      noResultLoading: true
     });
     webapi
       .getNoResultsData(params)
@@ -206,28 +228,29 @@ export default class ProductSearchList extends React.Component<any, any> {
       });
   };
   render() {
-    const { title, tabKey, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
+    const { title, tabKey, dateRange, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
     const columnsAll = [
       {
         title: 'Search Term',
         dataIndex: 'searchTerm',
         key: 'searchTerm',
-        width: '15%'
+        width: '20%'
       },
       {
         title: 'Searches With Results',
-        dataIndex: 'resultCount',
-        key: 'resultCount',
+        dataIndex: 'searchesCount',
+        key: 'searchesCount',
         width: '15%'
       },
       {
         title: 'Percent',
         dataIndex: 'percent',
         key: 'percent',
-        width: '15%'
+        width: '15%',
+        sorter: true
       },
       {
-        title: 'Result N0.',
+        title: 'Result No.',
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
@@ -245,7 +268,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={{ pathName: '/product-search-details/' + record.id, state: { type: 'all' } }} className="iconfont iconDetails"></Link>
+              <Link to={{ pathname: '/product-search-details', state: { type: 'all', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )
@@ -256,24 +279,25 @@ export default class ProductSearchList extends React.Component<any, any> {
         title: 'Search Term',
         dataIndex: 'searchTerm',
         key: 'searchTerm',
-        width: '15%'
+        width: '20%'
       },
       {
         title: 'Searches With No-Result',
-        dataIndex: 'resultCount',
-        key: 'resultCount',
+        dataIndex: 'searchesCount',
+        key: 'searchesCount',
         width: '15%'
       },
       {
         title: 'Percent',
         dataIndex: 'percent',
         key: 'percent',
-        width: '15%'
+        width: '15%',
+        sorter: true
       },
       {
         title: 'Last Not Found Date',
-        dataIndex: 'lastNoFoundDate',
-        key: 'lastNoFoundDate',
+        dataIndex: 'lastNotFoundDate',
+        key: 'lastNotFoundDate',
         width: '15%'
       },
       {
@@ -289,7 +313,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title="Details">
-              <Link to={{ pathName: '/product-search-details/' + record.id, state: { type: 'noResult' } }} className="iconfont iconDetails"></Link>
+              <Link to={{ pathname: '/product-search-details', state: { type: 'noResult', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
         )
@@ -412,7 +436,7 @@ export default class ProductSearchList extends React.Component<any, any> {
             <TabPane tab="All" key="1">
               <Table rowKey="id" columns={columnsAll} dataSource={allSerchResults} pagination={allPagination} loading={allLoading} scroll={{ x: '100%' }} onChange={this.allTableChange} />
             </TabPane>
-            <TabPane tab="No result searches" key="2">
+            <TabPane tab="No results searches" key="2">
               <Table rowKey="id" columns={columnsNoResult} dataSource={noSearchResult} pagination={noResultPagination} loading={noResultLoading} scroll={{ x: '100%' }} onChange={this.noResultTableChange} />
             </TabPane>
           </Tabs>

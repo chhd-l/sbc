@@ -551,6 +551,16 @@ class ClinicForm extends React.Component<any, any> {
     });
   }
 
+  newUrl=(oldUrl)=>{
+    let tempArr = oldUrl.split('?')
+    let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite
+    if(pcWebsite&&tempArr[1]){
+      return pcWebsite+ '?' + tempArr[1]
+    }
+    else oldUrl
+
+  }
+
   render() {
     const { cityArr, typeArr, prescriberForm, firstPrescriberForm } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -824,8 +834,8 @@ class ClinicForm extends React.Component<any, any> {
                 {this.state.qrCodeLink ? <img src={this.state.qrCodeLink} alt="" /> : null}
                 {this.state.url ? (
                   <div>
-                    {this.state.url}
-                    <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.state.url)} size="small">
+                    {this.newUrl(this.state.url) }
+                    <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
                       copy
                     </Button>
                   </div>

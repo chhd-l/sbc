@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { List, Map, fromJS } from 'immutable';
-import { Form, Modal, Switch, Table, Tooltip } from 'antd';
+import { Form, Modal, Popconfirm, Switch, Table, Tooltip } from 'antd';
 // import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 import { noop, checkAuth } from 'qmkit';
@@ -34,6 +34,7 @@ export default class CateList extends React.Component<any, any> {
       getSeo: Function;
       setCurrentStoreCateId: Function;
       clear: Function;
+      updateDisplayStatus:Function;
     };
   };
 
@@ -52,7 +53,8 @@ export default class CateList extends React.Component<any, any> {
     images: 'images',
     getSeo: noop,
     setCurrentStoreCateId: noop,
-    clear: noop
+    clear: noop,
+    updateDisplayStatus:noop
   };
 
   render() {
@@ -91,16 +93,24 @@ export default class CateList extends React.Component<any, any> {
       dataIndex: 'productNo',
       key: 'productNo'
     },
-    // {
-    //   title: 'Display in shop',
-    //   dataIndex: 'displayStatus',
-    //   key: 'displayStatus',
-    //   render: (text, record) => <Switch checked={text}></Switch>
-    // },
+    {
+      title: 'Display in shop',
+      dataIndex: 'displayStatus',
+      key: 'displayStatus',
+      
+      render: (text, record) =><div>
+        { record.isDefault!==1 && record.cateGrade===1?
+          <Popconfirm placement="topLeft" title={(+text ? 'Are you sure this item is not displayed in the shop?' : 'Are you sure to display this item in the shop?')} 
+          onConfirm={() => this._updateDisplayStatus(!+text, record)} 
+          okText="Confirm" cancelText="Cancel">
+            <Switch checked={+text ? true : false}></Switch>
+          </Popconfirm>:null }
+        
+      </div> 
+    },
     {
       title: <FormattedMessage id="operation" />,
       key: 'option',
-      width: '30%',
       render: (rowInfo) => this._getOption(rowInfo)
     }
   ];
@@ -274,6 +284,22 @@ export default class CateList extends React.Component<any, any> {
       });
     }
   };
+  _updateDisplayStatus=(checked,row)=>{
+    const { updateDisplayStatus } = this.props.relaxProps;
+    let params = {
+      cateDescription: row.cateDescription,
+      cateGrade: row.cateGrade,
+      cateImg: JSON.stringify(row.cateImg) ,
+      cateName: row.cateName,
+      cateParentId: row.cateParentId,
+      catePath: row.catePath,
+      displayStatus: checked,
+      sort: row.sort,
+      storeCateId: row.storeCateId,
+      children:row.children
+    };
+    updateDisplayStatus(params);
+  }
 
   /**
    * 拖拽排序

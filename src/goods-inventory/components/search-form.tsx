@@ -1,7 +1,8 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Alert, Input, Button, InputNumber } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { noop } from 'qmkit';
+//import { FormattedMessage } from 'react-intl';
 
 @Relax
 export default class SearchForm extends React.Component<any, any> {
@@ -9,33 +10,26 @@ export default class SearchForm extends React.Component<any, any> {
     super(props);
     this.state = {
       disabledType: true,
-      editType: true,
-      getThreshold: 10
+      editType: true
     };
   }
 
   props: {
     relaxProps?: {
       getThreshold: any;
+      onThreshold: Function;
+      onStock: Function;
+      init: Function;
     };
   };
 
   static relaxProps = {
     // 模糊条件-商品名称
-    getThreshold: 'getThreshold'
+    getThreshold: 'getThreshold',
+    onThreshold: noop,
+    onStock: noop,
+    init: noop
   };
-
-  static getDerivedStateFromProps(props, state) {
-    const { getThreshold } = props.relaxProps;
-    console.log(getThreshold, 222222222222222);
-    // 当传入的值发生变化的时候，更新state
-    if (getThreshold != state.getThreshold) {
-      return {
-        getThreshold
-      };
-    }
-    return null;
-  }
 
   onEdit = () => {
     this.setState({
@@ -43,17 +37,23 @@ export default class SearchForm extends React.Component<any, any> {
       editType: !this.state.editType
     });
   };
+
   onChangeNumber = (res) => {
-    console.log(res);
+    const { onStock } = this.props.relaxProps;
     this.setState({
       getThreshold: res
     });
+    onStock(res);
   };
 
-  onRefresh = () => {};
+  onRefresh = () => {
+    const { init } = this.props.relaxProps;
+
+    init({ pageNum: 0, pageSize: 10, stock: this.state.getThreshold });
+  };
 
   render() {
-    //const { getThreshold } = this.props.relaxProps;
+    const { getThreshold } = this.props.relaxProps;
     return (
       <div className="filter-content">
         <Alert message="Set an amount that when products are below this certain amount, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
@@ -61,7 +61,7 @@ export default class SearchForm extends React.Component<any, any> {
           <div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :
           </div>
-          <InputNumber style={{ width: '60px' }} value={this.state.valueEn} disabled={this.state.disabledType} onChange={(e) => this.onChangeNumber(e)} min={0} />
+          <div style={{ width: '60px' }}>{getThreshold && <InputNumber style={{ width: '60px' }} key={getThreshold} defaultValue={getThreshold} disabled={this.state.disabledType} onChange={this.onChangeNumber} min={0} />}</div>
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
           </Button>

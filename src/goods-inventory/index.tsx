@@ -13,6 +13,7 @@ export default class GoodsView extends React.Component<any, any> {
   store: AppStore;
 
   componentDidMount() {
+    this.store.onThreshold();
     this.store.init();
   }
 

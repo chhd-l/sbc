@@ -1,91 +1,57 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, noop, history, AuthWrapper, Const, cache, checkAuth } from 'qmkit';
-import { List, fromJS } from 'immutable';
-import { Menu, Dropdown, Icon, Modal, Tooltip } from 'antd';
-import { withRouter } from 'react-router';
-import { IList } from 'typings/globalType';
+import { DataGrid, noop, Const, cache } from 'qmkit';
+import { List } from 'immutable';
+import { Modal, Tooltip } from 'antd';
+
 import { Table } from 'antd';
 
 const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
 import { FormattedMessage } from 'react-intl';
+type TList = List<any>;
 
-@withRouter
 @Relax
 export default class CateList extends React.Component<any, any> {
   props: {
     relaxProps?: {
-      goodsPageContent: IList;
-      goodsInfoList: IList;
-      goodsInfoSpecDetails: IList;
-      allCateList: IList;
-      goodsBrandList: IList;
-      onSelectChange: Function;
-      spuDelete: Function;
-      spuOnSale: Function;
-      spuOffSale: Function;
-      selectedSpuKeys: IList;
+      loading: boolean;
       total: number;
-      onFormFieldChange: Function;
-      onSearch: Function;
-      onPageSearch: Function;
-      onShowSku: Function;
-      pageNum: number;
-      expandedRowKeys: IList;
+      pageSize: number;
+      dataList: any;
+      init: Function;
+      current: number;
+      stock: any;
     };
   };
 
   static relaxProps = {
-    goodsPageContent: ['goodsPage', 'content'],
-    goodsInfoList: 'goodsInfoList',
-    goodsInfoSpecDetails: 'goodsInfoSpecDetails',
-    allCateList: 'allCateList',
-    goodsBrandList: 'goodsBrandList',
-    onSelectChange: noop,
-    spuDelete: noop,
-    spuOnSale: noop,
-    spuOffSale: noop,
-    selectedSpuKeys: 'selectedSpuKeys',
-    total: ['goodsPage', 'totalElements'],
-    onFormFieldChange: noop,
-    onSearch: noop,
-    onPageSearch: noop,
-    onShowSku: noop,
-    pageNum: 'pageNum',
-    expandedRowKeys: 'expandedRowKeys'
+    loading: 'loading',
+    total: 'total',
+    pageSize: 'pageSize',
+    dataList: 'dataList',
+    init: noop,
+    current: 'current',
+    stock: 'stock'
   };
 
   render() {
-    const { goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, onShowSku } = this.props.relaxProps;
-
-    let hasMenu = false;
-    if (checkAuth('f_goods_sku_edit_2') || checkAuth('f_goods_sku_edit_3') || checkAuth('f_goods_up_down') || checkAuth('f_goods_6')) {
-      hasMenu = true;
-    }
+    const { loading, total, pageSize, dataList, init, current, stock } = this.props.relaxProps;
     return (
       <DataGrid
+        loading={loading}
         rowKey={(record) => record.goodsId}
-        dataSource={goodsPageContent.toJS()}
-        // expandedRowRender={this._expandedRowRender}
-        // expandedRowKeys={expandedRowKeys.toJS()}
-        // onExpand={(expanded, record) => {
-        //   let keys = fromJS([]);
-        //   if (expanded) {
-        //     keys = expandedRowKeys.push(record.goodsId);
-        //   } else {
-        //     keys = expandedRowKeys.filter((key) => key != record.goodsId);
-        //   }
-        //   onShowSku(keys);
-        // }}
-        rowSelection={{
-          selectedRowKeys: selectedSpuKeys.toJS(),
-          onChange: (selectedRowKeys) => {
-            onSelectChange(selectedRowKeys);
+        pagination={{
+          pageSize,
+          total,
+          fitColumns: true,
+          current: current,
+          onChange: (pageNum, pageSize) => {
+            init({ pageNum: pageNum - 1, pageSize, stock: stock });
           }
         }}
-        pagination={{ total, current: pageNum + 1, onChange: this._getData }}
+        dataSource={dataList}
       >
         <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column
@@ -136,32 +102,21 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="店铺分类"
-          title="Sale product"
+          title="Product category"
           dataIndex="Sale"
           key="Sale"
-          render={this._renderStoreCateList}
         />
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.storeCategory" />}
+          title="Product category"
           dataIndex="storeCateIds"
           key="storeCateIds"
-          render={this._renderStoreCateList}
         />
         <Column
           // title="品牌"
           title={<FormattedMessage id="product.brand" />}
           dataIndex="brandId"
           key="brandId"
-          render={(rowInfo) => {
-            return (
-              goodsBrandList
-                .filter((v) => {
-                  return v.get('brandId') == rowInfo;
-                })
-                .getIn([0, 'brandName']) || '-'
-            );
-          }}
         />
         <Column
           title={<FormattedMessage id="product.onOrOffShelves" />}
@@ -177,68 +132,11 @@ export default class CateList extends React.Component<any, any> {
             return <FormattedMessage id="product.onShelves" />;
           }}
         />
-        <Column title="Inventory" dataIndex="Inventory" key="Inventory" render={(rowInfo) => {}} />
+        <Column title="Inventory" dataIndex="Inventory" key="Inventory" />
         <Column align="center" title="" width={0} />
       </DataGrid>
     );
   }
-
-  /**
-   * 渲染多个店铺分类
-   */
-  _renderStoreCateList = (rowInfo) => {
-    const { allCateList } = this.props.relaxProps;
-    if (rowInfo && rowInfo.length) {
-      const strInfo = rowInfo.map((info) => allCateList.filter((v) => v.get('storeCateId') == info).getIn([0, 'cateName'])).join(',');
-      if (strInfo.length > 20) {
-        return (
-          <Tooltip placement="top" title={strInfo}>
-            {strInfo.substr(0, 20)}...
-          </Tooltip>
-        );
-      } else {
-        return (
-          <Tooltip placement="top" title={strInfo}>
-            {strInfo}
-          </Tooltip>
-        );
-      }
-    }
-    return '-';
-  };
-
-  //通过图标点击显示SKU
-  _showSkuByIcon = (index) => {
-    const { onShowSku } = this.props.relaxProps;
-    let goodsIds = List();
-    if (index != null && index.length > 0) {
-      index.forEach((value, key) => {
-        goodsIds = goodsIds.set(key, value);
-      });
-    }
-    onShowSku(goodsIds);
-  };
-
-  _getData = (pageNum, pageSize) => {
-    const { onFormFieldChange, onPageSearch } = this.props.relaxProps;
-    onFormFieldChange({ key: 'pageNum', value: --pageNum });
-    onFormFieldChange({ key: 'pageSize', value: pageSize });
-    onPageSearch();
-  };
-
-  /**
-   * 删除
-   */
-  _delete = (goodsId: string) => {
-    const { spuDelete } = this.props.relaxProps;
-    confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this product?',
-      onOk() {
-        spuDelete([goodsId]);
-      }
-    });
-  };
 }
 
 const styles = {

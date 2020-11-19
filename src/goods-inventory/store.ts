@@ -1,5 +1,5 @@
 import { Store, IOptions } from 'plume2';
-import { fromJS } from 'immutable';
+//import { fromJS } from 'immutable';
 import GoodsActor from './actor/goods-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
@@ -22,26 +22,30 @@ export default class AppStore extends Store {
   /**
    * 初始化
    */
-  init = async (
-    { pageNum, pageSize } = {
-      pageNum: 0,
-      pageSize: 10
-    }
-  ) => {
-    let stock = 11;
-    const { res: getThreshold } = await webapi.getThreshold();
+  init = async ({ pageNum, pageSize, stock } = { pageNum: 0, pageSize: 10, stock: 10 }) => {
+    this.dispatch('loading:start');
     const { res, err } = (await webapi.goodsList(pageNum, pageSize, stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      /*res.context.goodsPage.content.forEach((v, i) => {
-        v.key = i;
-      });*/
-      console.log(getThreshold.context.valueEn, 11111111);
-      this.dispatch('goodsActor:getThreshold', getThreshold.context.valueEn);
-      this.dispatch('goodsActor: init', fromJS(res.context));
-      this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+      this.dispatch('list:init', res.context.goodsInfoPage);
+      this.dispatch('current', pageNum + 1);
+      this.dispatch('loading:end');
+    } else {
+      this.dispatch('loading:end');
+      message.error(res.message);
+    }
+  };
+
+  onThreshold = async () => {
+    const { res, err } = await webapi.getThreshold();
+    if (!err && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor:getThreshold', res.context.valueEn);
     } else {
       message.error(res.message);
     }
+  };
+
+  onStock = (res) => {
+    this.dispatch('goodsActor:stock', res);
   };
 
   /**

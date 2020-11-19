@@ -1424,8 +1424,7 @@ export default class AppStore extends Store {
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('productFilter', this.state().get('productFilter'));
 
-    console.log(this.state().get('goodsTaggingRelList'), 1111);
-    console.log(this.state().get('productFilter'), 2222);
+    //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)

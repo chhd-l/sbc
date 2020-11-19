@@ -28,11 +28,17 @@ export const getCateList = () => {
 /**
  * 获取店铺分类列表
  */
-export const getStoreCateList = (goodsCateId?) => {
-  // return Fetch('/storeCate');
-  let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+export const getStoreCateList = () => {
   let params = {};
   return Fetch('/storeCate/storeCateByCondition', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const fetchTaggingTotal = () => {
+  let params = {};
+  return Fetch('/goods_tagging/tagging/total', {
     method: 'POST',
     body: JSON.stringify(params)
   });
@@ -204,15 +210,12 @@ export const getCateIdsPropDetail = (cateId: string) => {
   return Fetch(`/goods/goodsProp/1129`);
 };*/
 
-
 export function fetchFiltersTotal(params = {}) {
   return Fetch('/goods_filter/filters/total', {
     method: 'POST',
-    body: JSON.stringify({filterStatus:'1'})
+    body: JSON.stringify({ filterStatus: '1' })
   });
 }
-
-
 
 /**
  * 查询店铺运费模板

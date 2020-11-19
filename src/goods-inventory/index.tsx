@@ -4,8 +4,8 @@ import './inventory.less';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
-import Tab from './components/tab';
-import { FormattedMessage } from 'react-intl';
+//import Tab from './components/tab';
+//import { FormattedMessage } from 'react-intl';
 import GoodsList from '@/goods-inventory/components/goods-list';
 
 @StoreProvider(AppStore, { debug: __DEV__ })

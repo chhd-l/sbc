@@ -17,7 +17,7 @@ export default class SeoModal extends Component<any, any> {
       seoModalVisible: any;
       seoForm: any;
       setSeoModalVisible: Function;
-      addSeo: Function;
+      editSeo: Function;
     };
   };
 
@@ -26,7 +26,7 @@ export default class SeoModal extends Component<any, any> {
     seoForm: 'seoForm',
     currentPage: 'currentPage',
     setSeoModalVisible: noop,
-    addSeo: noop
+    editSeo: noop
   };
   constructor(props) {
     super(props);
@@ -37,7 +37,7 @@ export default class SeoModal extends Component<any, any> {
     setSeoModalVisible(false);
   };
   _handleSubmit = () => {
-    const { seoForm, currentPage, setSeoModalVisible, addSeo } = this.props.relaxProps;
+    const { seoForm, currentPage, setSeoModalVisible, editSeo } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
     const params = {
       type: 3,
@@ -46,7 +46,7 @@ export default class SeoModal extends Component<any, any> {
       titleSource: seoObj.title,
       pageName: currentPage
     };
-    addSeo(params);
+    editSeo(params);
   };
   uploadImage() {}
   render() {

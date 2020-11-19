@@ -813,6 +813,10 @@ const routes = [
   {
     path: '/product-tagging',
     asyncComponent: () => import('./product-tagging')
+  },
+  {
+    path: '/invoice-list',
+    asyncComponent: () => import('./invoice-list')
   }
 ];
 

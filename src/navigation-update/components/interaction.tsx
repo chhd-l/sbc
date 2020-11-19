@@ -131,13 +131,14 @@ export default class Interaction extends React.Component<any, any> {
                   value: child.id,
                   key: child.id,
                   isSingle: item.choiceStatus === 'Single choice',
-                  parentId: item.id
+                  filterType: item.filterType, // 1 is Custmered
+                  parentId: hasAttribute ? item.attributeId : item.id
                 };
               });
               filterList.push({
                 title: item.attributeName,
-                value: item.id,
-                key: item.id,
+                value: hasAttribute ? item.attributeId : item.id,
+                key: hasAttribute ? item.attributeId : item.id,
                 children: childrenNodes
               });
             }
@@ -244,8 +245,13 @@ export default class Interaction extends React.Component<any, any> {
     let allParentIds = [...new Set(selectChildren.map((x) => x.parentId))]; // remove repect item
     let selectFilterList = [];
     allParentIds.map((item) => {
-      let childrenIds = selectChildren.filter((x) => x.parentId === item).map((x) => x.value);
-      let selectFilter = { parentId: item, values: childrenIds };
+      debugger;
+      let children = selectChildren.filter((x) => x.parentId === item);
+      let childrenIds = children.map((x) => x.value);
+      if (children.length === 0) {
+        return;
+      }
+      let selectFilter = { attributeId: item, filterType: children[0].filterType, attributeValueIdList: childrenIds };
       selectFilterList.push(selectFilter);
     });
     let selectFilterListString = JSON.stringify(selectFilterList);
@@ -275,11 +281,13 @@ export default class Interaction extends React.Component<any, any> {
   }
   getFilterValues(filterObject) {
     let filterValues = [];
-    let selectFilters = filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
+    let selectFilters = filterObject && filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
     selectFilters.map((x) => {
-      x.values.map((v) => {
-        filterValues.push(v);
-      });
+      if (x.attributeValueIdList) {
+        x.attributeValueIdList.map((v) => {
+          filterValues.push(v);
+        });
+      }
     });
     return filterValues;
   }

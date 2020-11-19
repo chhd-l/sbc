@@ -61,7 +61,10 @@ export default class GoodsActor extends Actor {
       getGoodsCate: '',
       filtersTotal: '',
       saveSuccessful: false,
-      getGoodsId: ''
+      getGoodsId: '',
+      taggingTotal: '',
+      goodsTaggingRelList: [],
+      productFilter: []
     };
   }
 
@@ -159,9 +162,6 @@ export default class GoodsActor extends Actor {
     return state.set('goodsTabs', goodsTabs);
   }
 
-
-
-
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
     const newDataList = getGoodsCate
@@ -191,12 +191,14 @@ export default class GoodsActor extends Actor {
     return state.set('getGoodsCate', newDataList);
   }
 
-
-
-
   @Action('goodsActor:filtersTotal')
   filtersTotal(state, filtersTotal) {
     return state.set('filtersTotal', filtersTotal);
+  }
+
+  @Action('goodsActor:taggingTotal')
+  taggingTotal(state, taggingTotal) {
+    return state.set('taggingTotal', taggingTotal);
   }
 
   @Action('goodsActor:saveSuccessful')
@@ -208,7 +210,6 @@ export default class GoodsActor extends Actor {
   getGoodsId(state, getGoodsId) {
     return state.set('getGoodsId', getGoodsId);
   }
-
 
   /**
    * 修改商品信息
@@ -269,5 +270,15 @@ export default class GoodsActor extends Actor {
   @Action('product:nextType')
   activeTabKey(state, dataList) {
     return state.set('activeTabKey', dataList);
+  }
+
+  @Action('product:goodsTaggingRelList')
+  goodsTaggingRelList(state, goodsTaggingRelList) {
+    return state.set('goodsTaggingRelList', goodsTaggingRelList);
+  }
+
+  @Action('product:productFilter')
+  productFilter(state, productFilter) {
+    return state.set('productFilter', productFilter);
   }
 }

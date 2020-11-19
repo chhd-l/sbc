@@ -58,7 +58,8 @@ import {
   fetchproductTooltip,
   fetchFiltersTotal,
   getSeo,
-  editSeo
+  editSeo,
+  fetchTaggingTotal
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -80,7 +81,7 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal()]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal(), fetchTaggingTotal()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
@@ -88,6 +89,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
       this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
       this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
+      this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
+
       this.dispatch('related:goodsId', goodsId);
 
       // fetchFiltersTotal
@@ -1418,6 +1421,12 @@ export default class AppStore extends Store {
     }
 
     param = param.set('goodsIntervalPrices', areaPrice);
+    param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
+    param = param.set('productFilter', this.state().get('productFilter'));
+
+    console.log(this.state().get('goodsTaggingRelList'), 1111);
+    console.log(this.state().get('productFilter'), 2222);
+
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
     this.dispatch('goodsActor: saveLoading', true);
@@ -1449,7 +1458,6 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      console.log(result.res.context, 111111);
       this.dispatch('goodsActor:getGoodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
@@ -1530,6 +1538,13 @@ export default class AppStore extends Store {
     this.dispatch('brandActor: closeModal');
   };
 
+  onGoodsTaggingRelList = (res) => {
+    this.dispatch('product:goodsTaggingRelList', res);
+  };
+
+  onProductFilter = (res) => {
+    this.dispatch('product:productFilter', res);
+  };
   /**
    * 添加品牌
    */

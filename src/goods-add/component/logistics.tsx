@@ -80,26 +80,15 @@ class LogisticsForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { goods, selectTemp, freightList } = this.props.relaxProps;
-    const provinceId = selectTemp.get('provinceId')
-      ? selectTemp.get('provinceId').toString()
-      : '';
-    const cityId = selectTemp.get('cityId')
-      ? selectTemp.get('cityId').toString()
-      : '';
-    const areaId = selectTemp.get('areaId')
-      ? selectTemp.get('areaId').toString()
-      : '';
-    const deliveryAddress = provinceId
-      ? FindArea.addressInfo(provinceId, cityId, areaId)
-      : '-';
+    const provinceId = selectTemp.get('provinceId') ? selectTemp.get('provinceId').toString() : '';
+    const cityId = selectTemp.get('cityId') ? selectTemp.get('cityId').toString() : '';
+    const areaId = selectTemp.get('areaId') ? selectTemp.get('areaId').toString() : '';
+    const deliveryAddress = provinceId ? FindArea.addressInfo(provinceId, cityId, areaId) : '-';
     const express = this._freightExpress();
     let freightExists = false;
     if (goods.get('freightTempId') != null) {
       freightList.map((item) => {
-        if (
-          item.get('freightTempId') + '' ==
-          goods.get('freightTempId').toString()
-        ) {
+        if (item.get('freightTempId') + '' == goods.get('freightTempId').toString()) {
           freightExists = true;
         }
       });
@@ -109,10 +98,7 @@ class LogisticsForm extends React.Component<any, any> {
       <Form>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.shippinTemplate" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.shippinTemplate" />}>
               <div>
                 {getFieldDecorator(
                   'freightTempId',
@@ -172,10 +158,7 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.logisticsWeight" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.logisticsWeight" />}>
               {getFieldDecorator('goodsWeight', {
                 rules: [
                   {
@@ -184,17 +167,14 @@ class LogisticsForm extends React.Component<any, any> {
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,3})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,2})?$)/,
-                    message:
-                      'Please input the legal number with three decimal places'
+                    message: 'Please input the legal number with three decimal places'
                   },
                   {
                     type: 'number',
                     min: 0.001,
                     message: 'The minimum value is 0.001',
                     transform: function (value) {
-                      return isNaN(parseFloat(value))
-                        ? 0.001
-                        : parseFloat(value);
+                      return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
                   },
                   {
@@ -202,16 +182,12 @@ class LogisticsForm extends React.Component<any, any> {
                     max: 9999.999,
                     message: 'The maximum value is 9999.999',
                     transform: function (value) {
-                      return isNaN(parseFloat(value))
-                        ? 0.001
-                        : parseFloat(value);
+                      return isNaN(parseFloat(value)) ? 0.001 : parseFloat(value);
                     }
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsWeight'),
-                initialValue:
-                  goods.get('goodsWeight') &&
-                  goods.get('goodsWeight').toString()
+                initialValue: goods.get('goodsWeight') && goods.get('goodsWeight').toString()
               })(<Input placeholder="Not less than 0.001" />)}
             </FormItem>
           </Col>
@@ -221,10 +197,7 @@ class LogisticsForm extends React.Component<any, any> {
         </Row>
         <Row type="flex" justify="start" gutter={16}>
           <Col span={8}>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="product.logisticsVolumn" />}
-            >
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.logisticsVolumn" />}>
               {getFieldDecorator('goodsCubage', {
                 rules: [
                   {
@@ -233,17 +206,14 @@ class LogisticsForm extends React.Component<any, any> {
                   },
                   {
                     pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,6})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9]{1,5})?$)/,
-                    message:
-                      'Please input the legal number of six decimal places'
+                    message: 'Please input the legal number of six decimal places'
                   },
                   {
                     type: 'number',
                     min: 0.000001,
                     message: 'The minimum value is 0.000001',
                     transform: function (value) {
-                      return isNaN(parseFloat(value))
-                        ? 0.000001
-                        : parseFloat(value);
+                      return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }
                   },
                   {
@@ -251,16 +221,12 @@ class LogisticsForm extends React.Component<any, any> {
                     max: 999.999999,
                     message: 'The maximum value is 999.999999',
                     transform: function (value) {
-                      return isNaN(parseFloat(value))
-                        ? 0.000001
-                        : parseFloat(value);
+                      return isNaN(parseFloat(value)) ? 0.000001 : parseFloat(value);
                     }
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'goodsCubage'),
-                initialValue:
-                  goods.get('goodsCubage') &&
-                  goods.get('goodsCubage').toString()
+                initialValue: goods.get('goodsCubage') && goods.get('goodsCubage').toString()
               })(<Input placeholder="Not less than 0.000001" />)}
             </FormItem>
           </Col>
@@ -275,11 +241,7 @@ class LogisticsForm extends React.Component<any, any> {
    * spu属性收录
    */
   _editGoods = (key: string, e) => {
-    const {
-      editGoods,
-      setGoodsFreight,
-      updateLogisticsForm
-    } = this.props.relaxProps;
+    const { editGoods, setGoodsFreight, updateLogisticsForm } = this.props.relaxProps;
     if (e && e.target) {
       e = e.target.value;
     }
@@ -297,47 +259,14 @@ class LogisticsForm extends React.Component<any, any> {
    */
   _freightExpress = () => {
     const { selectTempExpress } = this.props.relaxProps;
-    const {
-      valuationType,
-      freightStartNum,
-      freightStartPrice,
-      freightPlusNum,
-      freightPlusPrice
-    } = selectTempExpress.toJS();
+    const { valuationType, freightStartNum, freightStartPrice, freightPlusNum, freightPlusPrice } = selectTempExpress.toJS();
     let express = '';
     if ((valuationType as number) == 0) {
-      express =
-        freightStartNum +
-        '件内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        '件，加' +
-        freightPlusPrice +
-        '元';
+      express = freightStartNum + '件内' + freightStartPrice + '元，' + '每增加' + freightPlusNum + '件，加' + freightPlusPrice + '元';
     } else if ((valuationType as number) == 1) {
-      express =
-        freightStartNum +
-        'kg内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        'kg，加' +
-        freightPlusPrice +
-        '元';
+      express = freightStartNum + 'kg内' + freightStartPrice + '元，' + '每增加' + freightPlusNum + 'kg，加' + freightPlusPrice + '元';
     } else if ((valuationType as number) == 2) {
-      express =
-        freightStartNum +
-        'm³内' +
-        freightStartPrice +
-        '元，' +
-        '每增加' +
-        freightPlusNum +
-        'm³，加' +
-        freightPlusPrice +
-        '元';
+      express = freightStartNum + 'm³内' + freightStartPrice + '元，' + '每增加' + freightPlusNum + 'm³，加' + freightPlusPrice + '元';
     }
     return express;
   };
@@ -347,18 +276,10 @@ class LogisticsForm extends React.Component<any, any> {
   _getFreightSelect = () => {
     const { freightList } = this.props.relaxProps;
     return (
-      <Select
-        showSearch
-        getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="Please select a shipping template"
-        notFoundContent="No shipping template"
-      >
+      <Select showSearch getPopupContainer={() => document.getElementById('page-content')} placeholder="Please select a shipping template" notFoundContent="No shipping template">
         {freightList.map((item) => {
           return (
-            <Option
-              key={item.get('freightTempId')}
-              value={item.get('freightTempId') + ''}
-            >
+            <Option key={item.get('freightTempId')} value={item.get('freightTempId') + ''}>
               {item.get('freightTempName')}
             </Option>
           );

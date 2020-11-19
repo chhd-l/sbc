@@ -58,7 +58,11 @@ export default class GoodsActor extends Actor {
       flashsaleGoods: [],
       goodsDetailTab: [],
       nextType: '',
-      getGoodsCate: ''
+      getGoodsCate: '',
+      filtersTotal: '',
+      saveSuccessful: false,
+      getGoodsId: '',
+      addSkUProduct: ''
     };
   }
 
@@ -120,6 +124,11 @@ export default class GoodsActor extends Actor {
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
+  @Action('sku:addSkUProduct')
+  addSkUProduct(state, addSkUProduct) {
+    return state.set('addSkUProduct', addSkUProduct);
+  }
+
   /**
    * 初始化品牌
    * @param state
@@ -128,6 +137,32 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initBrandList')
   initBrandList(state, brandList: IList) {
     return state.set('brandList', brandList);
+  }
+
+  @Action('goodsActor: isEditGoods')
+  isEditGoods(state, isEditGoods) {
+    return state.set('isEditGoods', isEditGoods);
+  }
+
+  @Action('goodsActor: tabChange')
+  tabChange(state, activeKey) {
+    return state.set('activeTabKey', activeKey);
+  }
+
+  @Action('goodsActor: detailEditor')
+  detailEditor(state, obj) {
+    // return state.set('detailEditor', detailEditor);
+    return state.set(obj.ref, obj.detailEditor);
+  }
+
+  @Action('goodsActor: tabDetailEditor')
+  tabDetailEditor(state, data) {
+    return state.set(data.tab, data);
+  }
+
+  @Action('goodsActor: goodsTabs')
+  goodsTabs(state, goodsTabs) {
+    return state.set('goodsTabs', goodsTabs);
   }
 
   @Action('goodsActor:getGoodsCate')
@@ -159,30 +194,19 @@ export default class GoodsActor extends Actor {
     return state.set('getGoodsCate', newDataList);
   }
 
-  @Action('goodsActor: isEditGoods')
-  isEditGoods(state, isEditGoods) {
-    return state.set('isEditGoods', isEditGoods);
+  @Action('goodsActor:filtersTotal')
+  filtersTotal(state, filtersTotal) {
+    return state.set('filtersTotal', filtersTotal);
   }
 
-  @Action('goodsActor: tabChange')
-  tabChange(state, activeKey) {
-    return state.set('activeTabKey', activeKey);
+  @Action('goodsActor:saveSuccessful')
+  saveSuccessful(state, saveSuccessful) {
+    return state.set('saveSuccessful', saveSuccessful);
   }
 
-  @Action('goodsActor: detailEditor')
-  detailEditor(state, obj) {
-    // return state.set('detailEditor', detailEditor);
-    return state.set(obj.ref, obj.detailEditor);
-  }
-
-  @Action('goodsActor: tabDetailEditor')
-  tabDetailEditor(state, data) {
-    return state.set(data.tab, data);
-  }
-
-  @Action('goodsActor: goodsTabs')
-  goodsTabs(state, goodsTabs) {
-    return state.set('goodsTabs', goodsTabs);
+  @Action('goodsActor:getGoodsId')
+  getGoodsId(state, getGoodsId) {
+    return state.set('getGoodsId', getGoodsId);
   }
 
   /**
@@ -190,6 +214,7 @@ export default class GoodsActor extends Actor {
    * @param state
    * @param data
    */
+
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
     return state.update('goods', (goods) => goods.merge(data));

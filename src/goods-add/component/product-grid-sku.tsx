@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid, noop, SelectGroup } from 'qmkit';
+import { Const, DataGrid } from 'qmkit';
 
 import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
-import { Relax } from 'plume2';
+//import { Relax } from 'plume2';
 
-const { Option } = Select;
+//const { Option } = Select;
 
 const Column = Table.Column;
 let recommendationNumber = 1;
@@ -17,7 +17,7 @@ let recommendationNumber = 1;
  */
 
 //@Relax
-export default class GoodsGrid extends React.Component<any, any> {
+export default class ProductGridSKU extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,14 +62,14 @@ export default class GoodsGrid extends React.Component<any, any> {
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
-    const { rowChangeBackFun, visible } = this.props;
+    const { rowChangeBackFun } = this.props;
 
     return (
       <div className="content">
         <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
-          rowKey={(_row, index) => _row.goodsNo + index.toString()}
+          rowKey={(_row) => _row.goodsInfoNo}
           dataSource={goodsInfoPage.content}
           isScroll={false}
           pagination={{
@@ -91,7 +91,7 @@ export default class GoodsGrid extends React.Component<any, any> {
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
               let rowsArr = [];
               rows.toJS().map((item) => {
-                rowsArr.push(item.goodsId);
+                rowsArr.push(item.goodsInfoNo);
               });
               //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
               this.setState({
@@ -114,11 +114,11 @@ export default class GoodsGrid extends React.Component<any, any> {
         >
           <Column
             title="Image"
-            dataIndex="Image"
-            key="Image"
+            dataIndex="goodsInfoImg"
+            key="goodsInfoImg"
             render={(rowInfo, i) => {
               if (i) {
-                return <img src={i.goodsImg} width="20" />;
+                return <img src={i.goodsInfoImg} width="20" />;
               } else {
                 return '-';
               }
@@ -126,13 +126,13 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="SPU"
-            dataIndex="goodsNo"
-            key="goodsNo"
+            title="SKU"
+            dataIndex="goodsInfoNo"
+            key="goodsInfoNo"
             //ellipsis
           />
 
-          <Column title="Product name" dataIndex="goodsName" key="goodsName" />
+          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" />
 
           <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
 
@@ -160,12 +160,11 @@ export default class GoodsGrid extends React.Component<any, any> {
       params.pageSize = 10;
     }
     // params.goodsName = "Baby"
-    params.goodsId = '2c91808574d8e87f0175251dd4a90028';
 
-    let { res } = await webapi.fetchproductTooltip({ ...params });
+    let { res } = await webapi.fetchlistGoodsInfo({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
-      res = (res as any).context.goods;
+      res = (res as any).context.goodsInfoPage;
       let arr = res.content;
       let a = arr;
       let b = this.state.selectedRows.toJS();

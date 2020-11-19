@@ -39,7 +39,6 @@ export default class SeoSettingModal extends Component<any, any> {
   _handleSubmit = () => {
     const { seoForm, setSeoModalVisible, editSeo, currentStoreCateId } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-    console.log(seoObj, '传递的参数------------');
     const params = {
       type: 2,
       storeCateId: currentStoreCateId,

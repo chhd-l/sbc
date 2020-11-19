@@ -138,7 +138,7 @@ class AttributeLibrary extends Component<any, any> {
   getTagging = () => {
     const { searchForm, pagination } = this.state;
     let params = {
-      taggingName: searchForm.attributeName,
+      taggingName: searchForm.taggingName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
@@ -304,7 +304,7 @@ class AttributeLibrary extends Component<any, any> {
         dataIndex: 'displayStatus',
         key: 'displayStatus',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to' + (+text ? 'disable' : 'enable') + 'this attribute?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={ 'Are you sure '+(+text ?'disable':'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )

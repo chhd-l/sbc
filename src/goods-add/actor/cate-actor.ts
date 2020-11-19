@@ -34,9 +34,7 @@ export default class CateActor extends Actor {
         const children = cateList
           .filter((item) => item.get('cateParentId') == data.get('cateId'))
           .map((childrenData) => {
-            const lastChildren = cateList.filter(
-              (item) => item.get('cateParentId') == childrenData.get('cateId')
-            );
+            const lastChildren = cateList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
             if (!lastChildren.isEmpty()) {
               childrenData = childrenData.set('children', lastChildren);
             }
@@ -49,9 +47,7 @@ export default class CateActor extends Actor {
         return data;
       });
 
-    return state
-      .set('resCateList', newDataList)
-      .set('resCateAllList', cateList);
+    return state.set('resCateList', newDataList).set('resCateAllList', cateList);
   }
 
   /**
@@ -75,10 +71,7 @@ export default class CateActor extends Actor {
    */
   @Action('cateActor: closeModal')
   close(state) {
-    return state
-      .set('modalCateVisible', false)
-      .set('formData', Map())
-      .set('cateImages', fromJS([]));
+    return state.set('modalCateVisible', false).set('formData', Map()).set('cateImages', fromJS([]));
   }
 
   /**

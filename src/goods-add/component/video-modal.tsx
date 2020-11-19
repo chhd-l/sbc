@@ -3,18 +3,7 @@ import { Relax } from 'plume2';
 
 import { fromJS, List } from 'immutable';
 import { Const, noop, QMUpload } from 'qmkit';
-import {
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Pagination,
-  Row,
-  Tree
-} from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Modal, Pagination, Row, Tree } from 'antd';
 import { clickVideosCountQL } from '../ql';
 
 const TreeNode = Tree.TreeNode;
@@ -102,14 +91,7 @@ export default class VideoModal extends React.Component<any, any> {
    * @private
    */
   _select = (value) => {
-    const {
-      editVideoCateId,
-      editVideoDefaultCateId,
-      videoSearch,
-      saveVideoSearchName,
-      initVideo,
-      cleanChooseVideo
-    } = this.props.relaxProps;
+    const { editVideoCateId, editVideoDefaultCateId, videoSearch, saveVideoSearchName, initVideo, cleanChooseVideo } = this.props.relaxProps;
     const cateId = value[0];
     // 至少得有一个目录选中。判断是否有选中的目录编号
     if (cateId || cateId == 0) {
@@ -133,12 +115,7 @@ export default class VideoModal extends React.Component<any, any> {
    * 查询
    */
   _search = () => {
-    const {
-      videoName,
-      saveVideoSearchName,
-      initVideo,
-      videoCateId
-    } = this.props.relaxProps;
+    const { videoName, saveVideoSearchName, initVideo, videoCateId } = this.props.relaxProps;
     saveVideoSearchName(videoName);
     //resourceType 1是视频
     initVideo({ pageNum: 0, cateId: videoCateId, successCount: 0 });
@@ -178,11 +155,7 @@ export default class VideoModal extends React.Component<any, any> {
     let fileList = info.fileList;
 
     if (status === 'done') {
-      if (
-        file.response &&
-        file.response.code &&
-        file.response.code !== Const.SUCCESS_CODE
-      ) {
+      if (file.response && file.response.code && file.response.code !== Const.SUCCESS_CODE) {
         this.setState({
           errorCount: this.state.errorCount + 1
         });
@@ -202,10 +175,7 @@ export default class VideoModal extends React.Component<any, any> {
     fileList = fileList.filter((f) => f.status == 'uploading');
     this.setState({ fileList });
 
-    if (
-      this.state.successCount > 0 &&
-      this.state.successCount + this.state.errorCount === this.state.uploadCount
-    ) {
+    if (this.state.successCount > 0 && this.state.successCount + this.state.errorCount === this.state.uploadCount) {
       await initVideo({
         pageNum: 0,
         cateId: videoCateId,
@@ -283,41 +253,19 @@ export default class VideoModal extends React.Component<any, any> {
   }
 
   render() {
-    const {
-      expandedKeys,
-      videoCateIds,
-      resCateList,
-      videoName,
-      tvisible,
-      videoList,
-      videoCurrentPage,
-      videoTotal,
-      pageSize,
-      clickVideosCount,
-      videoCateId
-    } = this.props.relaxProps;
+    const { expandedKeys, videoCateIds, resCateList, videoName, tvisible, videoList, videoCurrentPage, videoTotal, pageSize, clickVideosCount, videoCateId } = this.props.relaxProps;
 
     //分类列表生成树形结构
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('cateId')}
-              value={item.get('cateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId')}
-            value={item.get('cateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
     return (
       <Modal
@@ -326,9 +274,7 @@ export default class VideoModal extends React.Component<any, any> {
           <div style={styles.title}>
             <h4>Video library</h4>
             <span style={styles.grey}>
-              <strong style={styles.dark}>{clickVideosCount}</strong> has been
-              selected and up to <strong style={styles.dark}>1</strong> can be
-              selected
+              <strong style={styles.dark}>{clickVideosCount}</strong> has been selected and up to <strong style={styles.dark}>1</strong> can be selected
             </span>
           </div>
         }
@@ -347,10 +293,7 @@ export default class VideoModal extends React.Component<any, any> {
                   showPreviewIcon: false,
                   showRemoveIcon: false
                 }}
-                action={
-                  Const.HOST +
-                  `/store/uploadStoreResource?cateId=${videoCateId}&resourceType=VIDEO`
-                }
+                action={Const.HOST + `/store/uploadStoreResource?cateId=${videoCateId}&resourceType=VIDEO`}
                 multiple={true}
                 disabled={videoCateId ? false : true}
                 accept={'.mp4'}
@@ -365,11 +308,7 @@ export default class VideoModal extends React.Component<any, any> {
             <Col span={10}>
               <Form layout="inline">
                 <FormItem>
-                  <Input
-                    placeholder="Please enter the content"
-                    value={videoName}
-                    onChange={(e) => this._editSearchData(e)}
-                  />
+                  <Input placeholder="Please enter the content" value={videoName} onChange={(e) => this._editSearchData(e)} />
                 </FormItem>
                 <FormItem>
                   <Button
@@ -391,13 +330,7 @@ export default class VideoModal extends React.Component<any, any> {
           <Row>
             <Col span={4}>
               <div style={{ height: 560, overflowY: 'scroll' }}>
-                <Tree
-                  className="draggable-tree"
-                  defaultExpandedKeys={expandedKeys.toJS()}
-                  defaultSelectedKeys={videoCateIds.toJS()}
-                  selectedKeys={videoCateIds.toJS()}
-                  onSelect={this._select}
-                >
+                <Tree className="draggable-tree" defaultExpandedKeys={expandedKeys.toJS()} defaultSelectedKeys={videoCateIds.toJS()} selectedKeys={videoCateIds.toJS()} onSelect={this._select}>
                   {loop(resCateList)}
                 </Tree>
               </div>
@@ -415,25 +348,13 @@ export default class VideoModal extends React.Component<any, any> {
                     return (
                       <div style={styles.boxItem} key={item.get('resourceId')}>
                         <div style={styles.videoItemSmall}>
-                          <Checkbox
-                            checked={item.get('checked')}
-                            onChange={(e) => this._onchangeChecked(e, item)}
-                            style={{ width: '10%', display: 'inline-block' }}
-                          />
+                          <Checkbox checked={item.get('checked')} onChange={(e) => this._onchangeChecked(e, item)} style={{ width: '10%', display: 'inline-block' }} />
                         </div>
                         <div style={styles.videoItemMid}>
-                          <p style={styles.videoItemText}>
-                            {item.get('resourceName')}
-                          </p>
+                          <p style={styles.videoItemText}>{item.get('resourceName')}</p>
                         </div>
                         <div style={styles.videoItemLarge}>
-                          <a
-                            onClick={this._videoDetail.bind(
-                              this,
-                              item.get('artworkUrl')
-                            )}
-                            style={styles.videoItem}
-                          >
+                          <a onClick={this._videoDetail.bind(this, item.get('artworkUrl'))} style={styles.videoItem}>
                             {item.get('artworkUrl')}
                           </a>
                         </div>
@@ -459,14 +380,7 @@ export default class VideoModal extends React.Component<any, any> {
               )}
             </Col>
           </Row>
-          {(videoList || fromJS([])).size > 0 ? (
-            <Pagination
-              onChange={(pageNum) => this._toCurrentPage(pageNum)}
-              current={videoCurrentPage}
-              total={videoTotal}
-              pageSize={pageSize}
-            />
-          ) : null}
+          {(videoList || fromJS([])).size > 0 ? <Pagination onChange={(pageNum) => this._toCurrentPage(pageNum)} current={videoCurrentPage} total={videoTotal} pageSize={pageSize} /> : null}
         </div>
       </Modal>
     );

@@ -2,8 +2,12 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'antd';
-@Relax
+
 export default class AlertInfo extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <Alert

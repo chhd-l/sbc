@@ -44,6 +44,8 @@ export default class Interaction extends React.Component<any, any> {
     this.clearFields = this.clearFields.bind(this);
     this.getAllChildredIds = this.getAllChildredIds.bind(this);
     this.generateFilterTree = this.generateFilterTree.bind(this);
+    this.filterChange = this.filterChange.bind(this);
+    this.getFilterValues = this.getFilterValues.bind(this);
   }
 
   componentDidMount() {
@@ -119,20 +121,24 @@ export default class Interaction extends React.Component<any, any> {
           let filterList = [];
           res.context.map((item) => {
             let childrenNodes = [];
-            if (item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0) {
-              childrenNodes = item.storeGoodsFilterValueVOList.map((child) => {
+            let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
+            let hasAttribute = item.attributesValueList && item.attributesValueList.length > 0;
+            if (hasCustmerAttribute || hasAttribute) {
+              let valuesList = hasCustmerAttribute ? item.storeGoodsFilterValueVOList : hasAttribute ? item.attributesValueList : [];
+              childrenNodes = valuesList.map((child) => {
                 return {
                   title: child.attributeDetailName,
                   value: child.id,
                   key: child.id,
                   isSingle: item.choiceStatus === 'Single choice',
-                  parentId: item.id
+                  filterType: item.filterType, // 1 is Custmered
+                  parentId: hasAttribute ? item.attributeId : item.id
                 };
               });
               filterList.push({
                 title: item.attributeName,
-                value: item.id,
-                key: item.id,
+                value: hasAttribute ? item.attributeId : item.id,
+                key: hasAttribute ? item.attributeId : item.id,
                 children: childrenNodes
               });
             }
@@ -230,18 +236,41 @@ export default class Interaction extends React.Component<any, any> {
     return chilidrenIds;
   }
 
+  filterChange(filterValues) {
+    let allChildrenList = [];
+    this.state.filterList.map((x) => {
+      x.children.map((c) => allChildrenList.push(c));
+    });
+    let selectChildren = allChildrenList.filter((x) => filterValues.includes(x.value));
+    let allParentIds = [...new Set(selectChildren.map((x) => x.parentId))]; // remove repect item
+    let selectFilterList = [];
+    allParentIds.map((item) => {
+      debugger;
+      let children = selectChildren.filter((x) => x.parentId === item);
+      let childrenIds = children.map((x) => x.value);
+      if (children.length === 0) {
+        return;
+      }
+      let selectFilter = { attributeId: item, filterType: children[0].filterType, attributeValueIdList: childrenIds };
+      selectFilterList.push(selectFilter);
+    });
+    let selectFilterListString = JSON.stringify(selectFilterList);
+    this.props.addField('filter', selectFilterListString);
+    this.generateFilterTree(this.state.filterList);
+  }
+
   generateFilterTree(filterList) {
     return (
       filterList &&
       filterList.map((item) => {
         let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
-        let selectedFilters = this.props.navigation.filter ? this.props.navigation.filter.split(',') : [];
+        let selectedFilters = this.getFilterValues(this.props.navigation.filter);
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
         let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
         if (item.children && item.children.length > 0) {
           return (
-            <TreeNode key={item.key} value={item.value} title={item.title} disabled checkable={false}>
+            <TreeNode key={'parent' + item.key} value={'partent' + item.value} title={item.title} disabled checkable={false}>
               {this.generateFilterTree(item.children)}
             </TreeNode>
           );
@@ -249,6 +278,18 @@ export default class Interaction extends React.Component<any, any> {
         return <TreeNode key={item.key} value={item.value} title={item.title} disabled={singleDisabled} />;
       })
     );
+  }
+  getFilterValues(filterObject) {
+    let filterValues = [];
+    let selectFilters = filterObject && filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
+    selectFilters.map((x) => {
+      if (x.attributeValueIdList) {
+        x.attributeValueIdList.map((v) => {
+          filterValues.push(v);
+        });
+      }
+    });
+    return filterValues;
   }
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -270,6 +311,7 @@ export default class Interaction extends React.Component<any, any> {
         width: '100%'
       }
     };
+    let defaultFilter = this.getFilterValues(navigation.filter);
     return (
       <div>
         <h3>{noLanguageSelect ? 'Step2' : 'Step3'}</h3>
@@ -334,7 +376,7 @@ export default class Interaction extends React.Component<any, any> {
                   <div>
                     <FormItem {...layout} label="Filter">
                       {getFieldDecorator('filter', {
-                        initialValue: navigation.filter ? navigation.filter.split(',') : []
+                        initialValue: defaultFilter
                       })(
                         <TreeSelect
                           treeCheckable={true}
@@ -343,8 +385,7 @@ export default class Interaction extends React.Component<any, any> {
                           placeholder="Please select"
                           style={{ width: '100%' }}
                           onChange={(value: any) => {
-                            this.props.addField('filter', value.join(','));
-                            this.generateFilterTree(filterList);
+                            this.filterChange(value);
                           }}
                         >
                           {this.generateFilterTree(filterList)}
@@ -353,12 +394,11 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                     <FormItem {...layout} label="Sort">
                       {getFieldDecorator('searchSort', {
-                        initialValue: navigation.searchSort ? navigation.searchSort.split(',') : []
+                        initialValue: navigation.searchSort
                       })(
                         <Select
-                          mode="multiple"
                           onChange={(value: any) => {
-                            this.props.addField('searchSort', value.join(','));
+                            this.props.addField('searchSort', value);
                           }}
                         >
                           {sortList.map((item, index) => (

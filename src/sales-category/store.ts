@@ -520,4 +520,17 @@ export default class AppStore extends Store {
   clear = () => {
     this.dispatch('seoActor: clear');
   };
+  //更新显示状态
+  updateDisplayStatus =  (params) => {
+    editCate(params).then(data=>{
+      const {res} = data
+       if (res.code === Const.SUCCESS_CODE) {
+      // 刷新
+      this.refresh();
+    } else {
+      message.error(res.message);
+    }
+    })
+   
+  };
 }

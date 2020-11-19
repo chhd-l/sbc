@@ -27,7 +27,7 @@ class RelatedProduct extends React.Component<any, any> {
       pageChange: Function;
       linkStatus: any;
       onRelatedList: Function;
-      enterpriseFlag: any
+      enterpriseFlag: any;
     };
   };
 

@@ -1,10 +1,6 @@
 import { Store, IOptions } from 'plume2';
 import { fromJS } from 'immutable';
-import CateActor from './actor/cate-actor';
-import BrandActor from './actor/brand-actor';
 import GoodsActor from './actor/goods-actor';
-import FormActor from './actor/form-actor';
-import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
 import * as webapi from './webapi';
@@ -20,7 +16,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new CateActor(), new BrandActor(), new GoodsActor(), new FormActor(), new FreightActor()];
+    return [new GoodsActor()];
   }
 
   /**
@@ -33,14 +29,14 @@ export default class AppStore extends Store {
     }
   ) => {
     let stock = 11;
-    console.log(pageSize, 111111);
-    const getThreshold = await webapi.getThreshold();
+    const { res: getThreshold } = await webapi.getThreshold();
     const { res, err } = (await webapi.goodsList(pageNum, pageSize, stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      res.context.goodsPage.content.forEach((v, i) => {
+      /*res.context.goodsPage.content.forEach((v, i) => {
         v.key = i;
-      });
-      this.dispatch('goodsActor:getThreshold', getThreshold.context);
+      });*/
+      console.log(getThreshold.context.valueEn, 11111111);
+      this.dispatch('goodsActor:getThreshold', getThreshold.context.valueEn);
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {

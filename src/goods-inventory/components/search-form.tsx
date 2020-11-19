@@ -9,20 +9,33 @@ export default class SearchForm extends React.Component<any, any> {
     super(props);
     this.state = {
       disabledType: true,
-      editType: true
+      editType: true,
+      getThreshold: 10
     };
   }
 
   props: {
     relaxProps?: {
-      likeGoodsName: string;
+      getThreshold: any;
     };
   };
 
   static relaxProps = {
     // 模糊条件-商品名称
-    likeGoodsName: 'likeGoodsName'
+    getThreshold: 'getThreshold'
   };
+
+  static getDerivedStateFromProps(props, state) {
+    const { getThreshold } = props.relaxProps;
+    console.log(getThreshold, 222222222222222);
+    // 当传入的值发生变化的时候，更新state
+    if (getThreshold != state.getThreshold) {
+      return {
+        getThreshold
+      };
+    }
+    return null;
+  }
 
   onEdit = () => {
     this.setState({
@@ -32,11 +45,15 @@ export default class SearchForm extends React.Component<any, any> {
   };
   onChangeNumber = (res) => {
     console.log(res);
+    this.setState({
+      getThreshold: res
+    });
   };
 
   onRefresh = () => {};
 
   render() {
+    //const { getThreshold } = this.props.relaxProps;
     return (
       <div className="filter-content">
         <Alert message="Set an amount that when products are below this certain amount, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
@@ -44,7 +61,7 @@ export default class SearchForm extends React.Component<any, any> {
           <div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :
           </div>
-          <InputNumber style={{ width: '60px' }} defaultValue={10} disabled={this.state.disabledType} onChange={(e) => this.onChangeNumber(e)} min={0} max={10} />
+          <InputNumber style={{ width: '60px' }} value={this.state.valueEn} disabled={this.state.disabledType} onChange={(e) => this.onChangeNumber(e)} min={0} />
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
           </Button>

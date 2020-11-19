@@ -10,6 +10,7 @@ export default class GoodsActor extends Actor {
       goodsPage: {
         content: []
       },
+      getThreshold: '',
       // 商品SKU全部数据
       goodsInfoList: [],
       // 商品SKU的规格值全部数据
@@ -39,23 +40,8 @@ export default class GoodsActor extends Actor {
     return state.merge(data).set('expandedRowKeys', exp);
   }
 
-  @Action('goodsActor: onSelectChange')
-  onSelectChange(state: IMap, selectedKeys: IList) {
-    return state.set('selectedSpuKeys', selectedKeys);
-  }
-
-  @Action('goodsActor:clearSelectedSpuKeys')
-  clearSelectedSpuKeys(state: IMap) {
-    return state.set('selectedSpuKeys', List());
-  }
-
-  @Action('goodsActor:editLikeGoodsInfoNo1')
-  editLikeGoodsInfoNo1(state: IMap, value) {
-    return state.set('likeGoodsInfoNo1', value);
-  }
-
-  @Action('goodsActor:editExpandedRowKeys')
-  editExpandedRowKeys(state: IMap, expandedRowKeys: IList) {
-    return state.set('expandedRowKeys', expandedRowKeys);
+  @Action('goodsActor:getThreshold')
+  getThreshold(state, getThreshold) {
+    return state.set('getThreshold', getThreshold);
   }
 }

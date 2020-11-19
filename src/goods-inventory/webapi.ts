@@ -1,17 +1,11 @@
 import { Fetch } from 'qmkit';
 
-type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
-
 /**
  * 商品列表
  * @param params
  */
 const goodsList = (pageNum, pageSize, stock) => {
-  return Fetch(`/inventory/goodsInfo?pageNum=${pageNum}&pageNum=${pageSize}&stock=${stock}`, {
+  return Fetch(`/inventory/goodsInfo?pageNum=${pageNum}&pageSize=${pageSize}&stock=${stock}`, {
     method: 'GET'
   });
 };

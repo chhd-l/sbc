@@ -275,7 +275,7 @@ export default class Interaction extends React.Component<any, any> {
   }
   getFilterValues(filterObject) {
     let filterValues = [];
-    let selectFilters = filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
+    let selectFilters = filterObject && filterObject.indexOf('{') > -1 ? JSON.parse(filterObject) : [];
     selectFilters.map((x) => {
       x.values.map((v) => {
         filterValues.push(v);

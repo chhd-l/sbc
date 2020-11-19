@@ -14,7 +14,6 @@ export default class GoodsView extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
-    this.store.setFreightList();
   }
 
   render() {

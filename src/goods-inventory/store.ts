@@ -7,9 +7,9 @@ import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
-import { goodsList, getCateList, getBrandList, freightList } from './webapi';
+import * as webapi from './webapi';
 
-import { IList } from 'typings/globalType';
+//import { IList } from 'typings/globalType';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -27,36 +27,24 @@ export default class AppStore extends Store {
    * 初始化
    */
   init = async (
-    { pageNum, pageSize, flushSelected } = {
+    { pageNum, pageSize } = {
       pageNum: 0,
-      pageSize: 10,
-      flushSelected: true
+      pageSize: 10
     }
   ) => {
-    const { res, err } = (await goodsList({
-      pageNum,
-      pageSize,
-      auditStatus: this.state().get('auditStatus')
-    })) as any;
+    let stock = 11;
+    console.log(pageSize, 111111);
+    const getThreshold = await webapi.getThreshold();
+    const { res, err } = (await webapi.goodsList(pageNum, pageSize, stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
       res.context.goodsPage.content.forEach((v, i) => {
         v.key = i;
       });
+      this.dispatch('goodsActor:getThreshold', getThreshold.context);
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {
       message.error(res.message);
-    }
-
-    const cates: any = await getCateList();
-    const brands: any = await getBrandList();
-    this.transaction(() => {
-      this.dispatch('cateActor: init', fromJS(cates.res.context));
-      this.dispatch('brandActor: init', fromJS(brands.res.context));
-    });
-
-    if (flushSelected) {
-      this.dispatch('goodsActor:clearSelectedSpuKeys');
     }
   };
 
@@ -68,18 +56,6 @@ export default class AppStore extends Store {
       message.success('save successful');
     } else {
       message.error(data.res.code);
-    }
-  };
-
-  /**
-   * 所有运费模板
-   */
-  setFreightList = async () => {
-    const { res, err } = await freightList();
-    if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('freight:freightList', fromJS(res.context));
-    } else {
-      message.error(res.message);
     }
   };
 }

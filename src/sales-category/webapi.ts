@@ -1,6 +1,11 @@
 import { Fetch } from 'qmkit';
 import { IMap } from 'typings/globalType';
 
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
 /**
  * 获取类目列表
  */
@@ -33,7 +38,7 @@ export const deleteCate = (storeCateId: string) => {
  * 修改
  */
 export const editCate = (formData = {}) => {
-  return Fetch('/store_cate/cate', {
+  return Fetch<TResult>('/store_cate/cate', {
     method: 'PUT',
     body: JSON.stringify({ ...formData })
   });

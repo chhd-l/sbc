@@ -935,6 +935,10 @@ export default class AppStore extends Store {
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
 
+    goods = goods.set('freightTempId', '62');
+    goods = goods.set('goodsWeight', '1');
+    goods = goods.set('goodsCubage', '1'); // for hide 物流表单
+
     param = param.set('goods', goods);
     // 基本信息保存参数中要把priceType去掉 priceType-mark
     // param = param.removeIn(['goods', 'priceType']);

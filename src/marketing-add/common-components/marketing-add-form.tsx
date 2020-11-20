@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row } from 'antd';
-import { Const, history, QMMethod, util } from 'qmkit';
+import { Const, history, QMMethod, util, cache } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
 import DiscountLevels from '../full-discount/components/discount-levels';
@@ -322,38 +322,15 @@ export default class MarketingAddForm extends React.Component<any, any> {
         )}
         {PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
-            {marketingType == Enum.MARKETING_TYPE.FULL_GIFT &&
-              getFieldDecorator(
-                'rules',
-                {}
-              )(<GiftLevels form={this.props.form} selectedRows={this.makeSelectedRows(null)} fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()} onChangeBack={this.onRulesChange} isFullCount={isFullCount} />)}
-            {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT &&
-              getFieldDecorator(
-                'rules',
-                {}
-              )(
-                <DiscountLevels
-                  form={this.props.form}
-                  fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
-                  onChangeBack={this.onRulesChange}
-                  isFullCount={isFullCount}
-                  isNormal={this.state.PromotionTypeValue === 0}
-                />
-              )}
-            {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION &&
-              getFieldDecorator(
-                'rules',
-                {}
-              )(
-                <ReductionLevels
-                  form={this.props.form}
-                  fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
-                  onChangeBack={this.onRulesChange}
-                  isFullCount={isFullCount}
-                  isNormal={this.state.PromotionTypeValue === 0}
-                  PromotionTypeValue={this.state.PromotionTypeValue}
-                />
-              )}
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
+            {marketingType == Enum.MARKETING_TYPE.FULL_GIFT && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
+            {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
+            {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
+            <span>
+              {' '}
+              &nbsp;
+              {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
+            </span>
           </FormItem>
         )}
         <FormItem {...formItemLayout} label="Select products" required={true}>

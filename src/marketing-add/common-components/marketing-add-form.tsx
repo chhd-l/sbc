@@ -234,17 +234,10 @@ export default class MarketingAddForm extends React.Component<any, any> {
               },
               {
                 validator: (_rule, value, callback) => {
-                  if (
-                    value &&
-                    moment(new Date(sessionStorage.getItem('zoneDate')))
-                      .hour(0)
-                      .minute(0)
-                      .second(0)
-                      .unix() > value[0].unix()
-                  ) {
-                    callback("You can't start earlier than now");
-                  } else {
+                  if (value[0]) {
                     callback();
+                  } else {
+                    callback('Please select Starting and end time');
                   }
                 }
               }
@@ -258,12 +251,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               }
             },
 
-            initialValue:
-              this.state.timeZone == moment
-                ? [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
-                : marketingBean.get('beginTime') == undefined
-                ? [moment(this.state.timeZone), moment(this.state.timeZone)]
-                : [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
+            initialValue: marketingBean.get('beginTime') === undefined ? [undefined, undefined] : [moment(marketingBean.get('beginTime')), moment(marketingBean.get('endTime'))]
           })(
             <RangePicker
               getCalendarContainer={() => document.getElementById('page-content')}

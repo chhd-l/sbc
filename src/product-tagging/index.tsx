@@ -124,7 +124,6 @@ class AttributeLibrary extends Component<any, any> {
           };
           this.updateTagging(params);
         } else {
-          debugger;
           let params = {
             taggingFillColor: taggingForm.taggingFillColor,
             taggingFontColor: taggingForm.taggingFontColor,

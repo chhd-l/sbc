@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
-import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
+import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker, Dropdown, Menu, Icon, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
-
-export default class InvoiceList extends Component<any, any> {
+class InvoiceList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -25,13 +24,64 @@ export default class InvoiceList extends Component<any, any> {
         invoiceStatus: '',
         consumerType: '',
       },
-      invoiceList: [],
+      modalName: 'Add to invoice list',
+      visible: false,
+      objectFetching: false,
+      orderList: [],
+      orderNumber: '',
+      selectedOrder:{},
+      invoiceList: [
+        {
+          id:1,
+          invoiceNumber: 'test123',
+          invoiceTime: '2013-12-12',
+          invoiceStatus: 0,
+          orderNumber: '1234',
+          orderAmount: '$123',
+          paymentStatus: 'Paid',
+          subscriptionNumber: '12345',
+          consumerType: 'Guest',
+          consumerName: 'test12',
+        },
+        {
+          id:2,
+          invoiceNumber: 'test223',
+          invoiceTime: '2018-12-12',
+          invoiceStatus: 1,
+          orderNumber: '1234',
+          orderAmount: '$123',
+          paymentStatus: 'Paid',
+          subscriptionNumber: '12345',
+          consumerType: 'Member',
+          consumerName: 'test12',
+        },
+
+      ],
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
-      invoiceStatusList:[]
+      invoiceStatusList: [
+        {
+          name: 'Invoiced',
+          value: 1
+        },
+        {
+          name: 'Not invoiced',
+          value: 0
+        }
+      ],
+      comsumerTypeList: [
+        {
+          value: 234,
+          name: 'Member',
+        },
+        {
+          value: 233,
+          name: 'Guest',
+        }
+      ],
     };
   }
   componentDidMount() {
@@ -52,8 +102,8 @@ export default class InvoiceList extends Component<any, any> {
         pageSize: 10,
         total: 0
       }
-    },()=>this.getInvoiceList())
-    
+    }, () => this.getInvoiceList())
+
   };
   getInvoiceList = () => {
     const { searchForm, pagination } = this.state;
@@ -89,14 +139,14 @@ export default class InvoiceList extends Component<any, any> {
         });
       });
   };
-  querySysDictionary = (type: String) => {
+  querySysDictionary = (type) => {
     webapi
       .querySysDictionary({ type: type })
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
           console.log(res.context.sysDictionaryVOS);
-          
+
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -114,7 +164,7 @@ export default class InvoiceList extends Component<any, any> {
     );
   };
 
-  disableInvoice = (id: string) => {
+  disableInvoice = (id) => {
     this.setState({
       loading: true
     });
@@ -153,9 +203,57 @@ export default class InvoiceList extends Component<any, any> {
   disabledDate(current) {
     return current && current > moment().endOf('day');
   }
+  openAddPage = () => {
+    const { form } = this.props;
+    this.setState({
+      visible: true,
+      orderNumber: ''
+    }, () => {
+      form.setFieldsValue({
+        orderNumber: '',
+      });
+    })
+  }
+  batchInvoice = () => {
+
+  }
+  batchDownload = () => {
+
+  }
+  invoice = (id) => {
+
+  }
+  handleSubmit = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({
+          visible:false
+        })
+      }
+    })
+  }
+  getOrderList = (value) => {
+    let params = {
+      id: value,
+      pageSize: 30,
+      pageNum: 0
+    };
+    webapi.getOrderList(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          orderList: res.context.content,
+          objectFetching: false
+        });
+      }
+    });
+  }
+
 
   render() {
-    const { title,invoiceList,comsumerTypeList,invoiceStatusList} = this.state;
+    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList,selectedOrder } = this.state;
+
+    const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
@@ -220,42 +318,30 @@ export default class InvoiceList extends Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-{/*             
-              <div>
-                <Tooltip placement="top" title="Edit">
-                  <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
-                </Tooltip>
-
-                <Divider type="vertical" />
-
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
-                    <a type="link" className="iconfont iconDelete"></a>
+            {
+              record.invoiceStatus ? (
+                <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title="Invoice">
+                    <a className="iconfont iconkaipiao" ></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
-            {+record.status === 1 ? (
-              <div>
+              ) : (<>
                 <Tooltip placement="top" title="Details">
-                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                  <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
                 </Tooltip>
-
-                <Divider type="vertical" />
-
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
-                    <a type="link" className="iconfont iconDelete"></a>
+                <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title="Disable">
+                    <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
-            ) : null}
-            {+record.status === 2 ? (
-              <div>
-                <Tooltip placement="top" title="Details">
-                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                <Tooltip placement="top" title="Download">
+                  <Icon type="download" style={{ color: '#e2001a' }} />
                 </Tooltip>
-              </div>
-            ) : null} */}
+              </>
+                )
+            }
+
+
           </div>
         )
       }
@@ -265,111 +351,158 @@ export default class InvoiceList extends Component<any, any> {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
     };
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice}>
+            Batch invoice
+          </a>
+        </Menu.Item>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload}>
+            Batch download
+          </a>
+        </Menu.Item>
+      </Menu>
+    )
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
+    };
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title={title}/>
+          <Headline title={title} />
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Order number</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'orderNumber',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Consumer type</p>}
-                    style={{ width: 200 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'comsumerType',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {comsumerTypeList &&
-                      comsumerTypeList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>comsumer name</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'comsumerName',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
                   <InputGroup compact>
-                  <Input
-                      style={{
-                        width: 145,
-                        textAlign: 'center',
-                        color: 'rgba(0, 0, 0, 0.65)',
-                        backgroundColor: '#fff'
-                      }}
+                    <Input
+                      style={styles.label}
                       disabled
-                      defaultValue="Period"
+                      defaultValue="Order number"
                     />
-                    <RangePicker style={{ width: 200 }} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'orderNumber',
+                          value
+                        });
+                      }}
+                    />
                   </InputGroup>
                 </FormItem>
               </Col>
 
-              
               <Col span={8}>
                 <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Invoice status</p>}
-                    style={{ width: 200 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'invoiceStatus',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {invoiceStatusList &&
-                      invoiceStatusList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </SelectGroup>
+                  <InputGroup compact>
+                    <Input
+                      style={styles.label}
+                      disabled
+                      defaultValue="Consumer type"
+                    />
+                    <Select
+                      style={styles.wrapper}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'comsumerType',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {comsumerTypeList &&
+                        comsumerTypeList.map((item, index) => (
+                          <Option value={item.value} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact>
+                    <Input
+                      style={styles.label}
+                      disabled
+                      defaultValue="Comsumer name"
+                    />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'comsumerName',
+                          value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact>
+                    <Input
+                      style={styles.label}
+                      disabled
+                      defaultValue="Period"
+                    />
+                    <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact>
+                    <Input
+                      style={styles.label}
+                      disabled
+                      defaultValue="Invoice status"
+                    />
+                    <Select
+
+                      defaultValue=""
+                      style={styles.wrapper}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'invoiceStatus',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {invoiceStatusList &&
+                        invoiceStatusList.map((item, index) => (
+                          <Option value={item.value} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
@@ -394,28 +527,133 @@ export default class InvoiceList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
+          <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
             <span>Add new</span>
           </Button>
-          <Table rowKey="id" 
-          rowSelection={rowSelection}
-          columns={columns} 
-          dataSource={invoiceList} 
-          pagination={this.state.pagination} 
-          loading={this.state.loading} 
-          scroll={{ x: '100%' }} 
-          onChange={this.handleTableChange} />
+          <Dropdown overlay={menu} placement="bottomCenter">
+            <Button><span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> Batch operation</Button>
+          </Dropdown>
+          <Table rowKey="id"
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={invoiceList}
+            pagination={this.state.pagination}
+            loading={this.state.loading}
+            scroll={{ x: '100%' }}
+            onChange={this.handleTableChange} />
         </div>
+        <Modal
+          width="1000px"
+          title={modalName}
+          visible={visible}
+          onCancel={() =>
+            this.setState({
+              visible: false
+            })
+          }
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  visible: false
+                });
+              }}
+            >
+              Close
+            </Button>,
+            <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+              Comfirm
+            </Button>
+          ]}
+        >
+          <Form {...formItemLayout}>
+            <Row>
+              <Col span={12}>
+                <FormItem label="Order number">
+                  {getFieldDecorator('orderNumber', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please Select orderNumber!'
+                      },
+                      {
+                        max: 50,
+                        message: 'orderNumber exceed the maximum length!'
+                      }
+                    ]
+                  })(
+                    <Select
+                      showSearch
+                      placeholder="Select a Order number"
+                      optionFilterProp="children"
+                      onChange={(value) => {
+                        this.setState({
+                          orderNumber: value
+                        })
+                      }}
+                      notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                      onSearch={this.getOrderList}
+                      filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                      {orderList &&
+                        orderList.map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            {item.id}
+                          </Option>
+                        ))}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={12}>
+                <FormItem label="Order amount">
+                  <Input disabled value={selectedOrder.ordrAmount}/>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Consumer name">
+                  <Input disabled value={selectedOrder.consumerName}/>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Payment status">
+                  <Input disabled value={selectedOrder.paymentStatus}/>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Consumer email">
+                  <Input disabled value={selectedOrder.consumerEmail}/>
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="Billion address">
+                  <Input disabled value={selectedOrder.billionAddress}/>
+                </FormItem>
+              </Col>
+            </Row>
+
+
+          </Form>
+        </Modal>
       </div>
     );
   }
 }
 const styles = {
   label: {
-    width: 120,
-    textAlign: 'center'
+    width: 145,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
   },
   wrapper: {
-    width: 157
-  }
+    width: 220
+  },
 } as any;
+
+export default Form.create()(InvoiceList);

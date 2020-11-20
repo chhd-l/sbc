@@ -126,7 +126,7 @@ class MessageDetails extends Component<any, any> {
     }
   };
 
-  onBasicFormFormChange = ({ field, value }) => {
+  onBasicFormChange = ({ field, value }) => {
     let data = this.state.basicForm;
 
     if (field === 'objectType' && data['objectType'] !== value) {
@@ -612,7 +612,7 @@ class MessageDetails extends Component<any, any> {
                         <Select
                           onChange={(value) => {
                             value = value === '' ? null : value;
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'emailCategory',
                               value
                             });
@@ -643,11 +643,11 @@ class MessageDetails extends Component<any, any> {
                           onChange={(value, option) => {
                             let name = option.props.children;
                             value = value === '' ? null : value;
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'emailTemplate',
                               value: name
                             });
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'templateId',
                               value
                             });
@@ -678,7 +678,7 @@ class MessageDetails extends Component<any, any> {
                         <Select
                           onChange={(value) => {
                             value = value === '' ? null : value;
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'objectType',
                               value
                             });
@@ -715,7 +715,7 @@ class MessageDetails extends Component<any, any> {
                           placeholder="Select a Object No"
                           optionFilterProp="children"
                           onChange={(value) => {
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'objectNo',
                               value
                             });
@@ -749,7 +749,7 @@ class MessageDetails extends Component<any, any> {
                           disabled={this.state.isDetail}
                           onChange={(e) => {
                             const value = (e.target as any).value;
-                            this.onBasicFormFormChange({
+                            this.onBasicFormChange({
                               field: 'sendType',
                               value
                             });
@@ -775,7 +775,7 @@ class MessageDetails extends Component<any, any> {
                             style={{ width: '100%' }}
                             disabled={this.state.isDetail}
                             onChange={(value, dateString) => {
-                              this.onBasicFormFormChange({
+                              this.onBasicFormChange({
                                 field: 'sendTime',
                                 value: dateString
                               });

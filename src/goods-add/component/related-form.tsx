@@ -61,11 +61,12 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   searchBackFun = () => {
-    const { likeGoodsName, likeGoodsNo, storeCateId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsNo, storeCateId, brandId } = this.props.relaxProps;
     let from = {
-      goodsName: likeGoodsName,
-      goodsNo: likeGoodsNo,
-      storeCateId: storeCateId
+      goodsInfoName: likeGoodsName,
+      goodsInfoNo: likeGoodsNo,
+      goodsCateName: storeCateId,
+      brandId: brandId
     };
 
     this.props.searchBackFun(from);
@@ -104,16 +105,12 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem>
               <Input
-                addonBefore={
-                  <p style={styles.label}>
-                    <FormattedMessage id="product.productName" />
-                  </p>
-                }
-                value={likeGoodsName}
+                addonBefore={<p style={styles.label}>SKU</p>}
+                value={likeGoodsNo}
                 style={{ width: 300 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
-                    key: 'likeGoodsName',
+                    key: 'likeGoodsNo',
                     value: e.target.value
                   });
                 }}
@@ -125,14 +122,14 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SPU" />
+                    <FormattedMessage id="product.productName" />
                   </p>
                 }
-                value={likeGoodsNo}
+                value={likeGoodsName}
                 style={{ width: 300 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
-                    key: 'likeGoodsNo',
+                    key: 'likeGoodsName',
                     value: e.target.value
                   });
                 }}
@@ -154,25 +151,6 @@ export default class SearchForm extends React.Component<any, any> {
               >
                 <TreeNode key="-1" value="-1" title="All">
                   {loop(cateList)}
-                </TreeNode>
-              </TreeSelectGroup>
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem>
-              <TreeSelectGroup
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Product category</p>}
-                /* defaultValue="全部"*/
-                // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCateId', value });
-                }}
-              >
-                <TreeNode key="-2" value="-2" title="All">
-                  {/*{loop(cateList)}*/}
                 </TreeNode>
               </TreeSelectGroup>
             </FormItem>

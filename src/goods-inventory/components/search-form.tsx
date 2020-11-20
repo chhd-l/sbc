@@ -10,7 +10,8 @@ export default class SearchForm extends React.Component<any, any> {
     super(props);
     this.state = {
       disabledType: true,
-      editType: true
+      editType: true,
+      getThreshold: 10
     };
   }
 
@@ -47,7 +48,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   onRefresh = () => {
-    const { init } = this.props.relaxProps;
+    const { init, getThreshold } = this.props.relaxProps;
 
     init({ pageNum: 0, pageSize: 10, stock: this.state.getThreshold });
   };

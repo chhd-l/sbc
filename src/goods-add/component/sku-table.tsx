@@ -258,8 +258,11 @@ class SkuForm extends React.Component<any, any> {
       key: 'subSKU',
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
-        setTimeout(() => {
-          console.log(addSkUProduct, 2333);
+        const addSkUProductObj = addSkUProduct.map((item) => {
+          return {
+            subGoodsInfoId: item,
+            bundleNum: 0
+          };
         });
         return (
           <Row>
@@ -292,7 +295,27 @@ class SkuForm extends React.Component<any, any> {
                           return (
                             <div className="space-between-align" key={item} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item}</span>
-                              <InputNumber style={{ width: '60px', height: '25px', textAlign: 'center' }} defaultValue={0} min={0} onChange={(e) => this._editGoodsItem(rowInfo, 'GoodsInfoBundleRels', e)} />
+                              <InputNumber
+                                style={{ width: '60px', height: '25px', textAlign: 'center' }}
+                                defaultValue={0}
+                                min={0}
+                                onChange={(e) => {
+                                  let arr2 = [];
+                                  arr2.push({
+                                    subGoodsInfoId: item,
+                                    bundleNum: e
+                                  });
+                                  /*arr.map((o)=>{
+                                               if (o.subGoodsInfoId == item) {
+                                                 return o.bundleNum = e
+                                               }
+
+                                             })*/
+                                  //Object.assign(arr1,arr2);
+                                  //console.log(arr1,1111111111);
+                                  this._editGoodsItem(rowInfo, 'GoodsInfoBundleRels', arr);
+                                }}
+                              />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
                             </div>
                           );
@@ -658,9 +681,6 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(id, 1111111);
-    console.log(key, 2222222);
-    console.log(e, 3333333);
 
     editGoodsItem(id, key, e);
 
@@ -683,13 +703,6 @@ class SkuForm extends React.Component<any, any> {
       }
     } else if (key == 'GoodsInfoBundleRels') {
       //let arr = []
-      let arr = addSkUProduct.map((item) => {
-        return {
-          subGoodsInfoId: item,
-          bundleNum: e
-        };
-      });
-      console.log(arr, '+++++++++++++++');
     }
   };
 

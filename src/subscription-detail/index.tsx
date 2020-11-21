@@ -1,27 +1,5 @@
 import React from 'react';
-import {
-  Breadcrumb,
-  Tabs,
-  Card,
-  Dropdown,
-  Icon,
-  Menu,
-  Row,
-  Col,
-  Button,
-  Input,
-  Select,
-  message,
-  DatePicker,
-  Table,
-  InputNumber,
-  Modal,
-  Popconfirm,
-  Radio,
-  Collapse,
-  Spin,
-  Tooltip
-} from 'antd';
+import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Modal, Popconfirm, Radio, Collapse, Spin, Tooltip } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 
@@ -35,6 +13,7 @@ import moment from 'moment';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
+const { TabPane } = Tabs;
 /**
  * 订单详情
  */
@@ -42,7 +21,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      pageType: 'Details',
+      title: 'Subscription details',
       subscriptionId: this.props.match.params.subId,
       loading: true,
       orderInfo: {},
@@ -61,7 +40,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       operationLog: [],
       promotionCode: '',
       deliveryPrice: '',
-      discountsPrice: ''
+      discountsPrice: '',
+      frequencyList: [],
+      promotionDesc: 'Subscription 0% Discount',
+      noStartOrder: [],
+      completedOrder: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
+      }
     };
   }
 
@@ -99,10 +87,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus:
-              subscriptionDetail.subscribeStatus === '0'
-                ? 'Active'
-                : 'Inactive',
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? 'Active' : 'Inactive',
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -113,26 +98,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             frequency: subscriptionDetail.cycleTypeId,
             frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: moment(
-              new Date(subscriptionDetail.nextDeliveryTime)
-            ).format('MMMM Do YYYY'),
+            nextDeliveryTime: moment(new Date(subscriptionDetail.nextDeliveryTime)).format('MMMM Do YYYY'),
             promotionCode: subscriptionDetail.promotionCode
           };
           let orderInfo = {
-            recentOrderId: subscriptionDetail.trades
-              ? subscriptionDetail.trades[0].id
-              : '',
-            orderStatus: subscriptionDetail.trades
-              ? subscriptionDetail.trades[0].tradeState.deliverStatus
-              : ''
+            recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
+            orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.deliverStatus : ''
           };
           let recentOrderList = [];
           if (subscriptionDetail.trades) {
             for (let i = 0; i < subscriptionDetail.trades.length; i++) {
               let recentOrder = {
                 recentOrderId: subscriptionDetail.trades[i].id,
-                orderStatus:
-                  subscriptionDetail.trades[i].tradeState.deliverStatus
+                orderStatus: subscriptionDetail.trades[i].tradeState.deliverStatus
               };
               recentOrderList.push(recentOrder);
             }
@@ -261,9 +239,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 deliveryAddressInfo: deliveryAddressInfo
               },
               () => {
-                if (
-                  this.state.deliveryAddressId === this.state.billingAddressId
-                ) {
+                if (this.state.deliveryAddressId === this.state.billingAddressId) {
                   this.setState({
                     billingAddressInfo: deliveryAddressInfo
                   });
@@ -309,6 +285,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.querySysDictionary('city');
     }
+    this.querySysDictionary('Frequency_week');
 
     // this.querySysDictionary('Frequency');
   };
@@ -324,19 +301,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             this.setState({
               cityArr: res.context.sysDictionaryVOS
             });
-            sessionStorage.setItem(
-              'dict-city',
-              JSON.stringify(res.context.sysDictionaryVOS)
-            );
+            sessionStorage.setItem('dict-city', JSON.stringify(res.context.sysDictionaryVOS));
           }
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
             });
-            sessionStorage.setItem(
-              'dict-country',
-              JSON.stringify(res.context.sysDictionaryVOS)
+            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
+          }
+          if (type === 'Frequency_week') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month')
             );
+          }
+          if (type === 'Frequency_month') {
+            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
+            this.setState({
+              frequencyList: frequencyList
+            });
           }
           // if (type === 'Frequency') {
           //   this.setState({
@@ -421,50 +407,38 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
+  handleYearChange = (value) => {
+    console.log(value);
+  };
+  tabChange = (key) => {
+    console.log(`selected ${key}`);
+  };
+  handleTableChange = (pagination: any) => {
+    this.setState({
+      pagination: pagination
+    });
+  };
 
   render() {
-    const {
-      orderInfo,
-      recentOrderList,
-      subscriptionInfo,
-      goodsInfo,
-      paymentInfo,
-      deliveryAddressInfo,
-      billingAddressInfo,
-      countryArr,
-      cityArr,
-      operationLog
-    } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, cityArr, operationLog, frequencyList, pagination, noStartOrder, completedOrder } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription Details</span>
-        <span className="order-time">
-          {'#' + subscriptionInfo.deliveryTimes}
-        </span>
+        <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
           <Menu.Item key={item.recentOrderId}>
-            <Link to={'/order-detail/' + item.recentOrderId}>
-              {item.recentOrderId + '(' + item.orderStatus + ')'}
-            </Link>
+            <Link to={'/order-detail/' + item.recentOrderId}>{item.recentOrderId + '(' + item.orderStatus + ')'}</Link>
           </Menu.Item>
         ))}
       </Menu>
     );
     const cartExtra = (
       <div>
-        <Popconfirm
-          placement="topRight"
-          title="Are you sure skip next delivery?"
-          onConfirm={() =>
-            this.skipNextDelivery(subscriptionInfo.subscriptionNumber)
-          }
-          okText="Confirm"
-          cancelText="Cancel"
-        >
+        <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
           <Tooltip placement="top" title="Skip Next Delivery">
             <Button type="link" style={{ fontSize: 16 }}>
               Skip Next Delivery
@@ -486,14 +460,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
     const columns = [
       {
-        title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>
-        ),
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
         key: 'Product',
         width: '40%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} style={{ width: 100 }} alt="" />
+            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
             <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
           </div>
         )
@@ -504,17 +476,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>
-              ${record.originalPrice}
-            </p>
+            <p style={{ textDecoration: 'line-through' }}>${record.originalPrice}</p>
             <p>${record.subscribePrice}</p>
           </div>
         )
       },
       {
-        title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>
-        ),
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
         width: '15%'
@@ -523,6 +491,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         //     <InputNumber min={1} max={100} value={record.subscribeNum} />
         //   </div>
         // )
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Delivery frequency</span>,
+        dataIndex: 'frequency',
+        key: 'frequency',
+        width: '15%',
+        render: (text, record) => (
+          <div>
+            <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
+              {frequencyList.map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
+        )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Total</span>,
@@ -558,8 +543,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: 'Time',
         dataIndex: 'time',
         key: 'time',
-        render: (time) =>
-          time && moment(time).format(Const.TIME_FORMAT).toString()
+        render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
       },
       {
         title: 'Operation Category',
@@ -571,6 +555,147 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'operationLog',
         key: 'operationLog',
         width: '50%'
+      }
+    ];
+
+    const columns_no_start = [
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
+        key: 'Product',
+        width: '30%',
+        render: (text, record) => (
+          <div style={{ display: 'flex' }}>
+            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+          </div>
+        )
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
+        key: 'subscribeNum',
+        dataIndex: 'subscribeNum',
+        width: '10%',
+        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
+        key: 'promotionCode',
+        dataIndex: 'promotionCode',
+        width: '10%',
+        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
+        key: 'discount',
+        dataIndex: 'discount',
+        width: '10%',
+        render: (text, record) => <div style={{ display: 'flex', color: '#e2001a' }}>{text}</div>
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Amount</span>,
+        key: 'amount',
+        dataIndex: 'amount',
+        width: '10%'
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
+        key: 'shipmentDate',
+        dataIndex: 'Shipment date',
+        width: '10%'
+      },
+      {
+        title: 'Operation',
+        dataIndex: '',
+        key: 'x',
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title="Selcte Date">
+              <a
+                style={styles.edit}
+                onClick={() => {
+                  console.log('select delivery date');
+                }}
+                className="iconfont iconEdit"
+              ></a>
+            </Tooltip>
+            <Popconfirm
+              placement="topLeft"
+              title="Are you sure to skip this item?"
+              onConfirm={() => {
+                console.log('skip delivery');
+              }}
+              okText="Confirm"
+              cancelText="Cancel"
+            >
+              <Tooltip placement="top" title="Skip delivery">
+                <a className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
+          </div>
+        )
+      }
+    ];
+    const columns_completed = [
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
+        key: 'Product',
+        width: '30%',
+        render: (text, record) => (
+          <div style={{ display: 'flex' }}>
+            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+          </div>
+        )
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
+        key: 'subscribeNum',
+        dataIndex: 'subscribeNum',
+        width: '10%',
+        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
+        key: 'discount',
+        dataIndex: 'discount',
+        width: '10%',
+        render: (text, record) => <div style={{ display: 'flex', color: '#e2001a' }}>{text}</div>
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Amount</span>,
+        key: 'amount',
+        dataIndex: 'amount',
+        width: '10%'
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
+        key: 'shipmentDate',
+        dataIndex: 'shipmentDate',
+        width: '10%'
+      },
+      {
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment status</span>,
+        key: 'shipmentStatus',
+        dataIndex: 'shipmentStatus',
+        width: '10%'
+      },
+      {
+        title: 'Operation',
+        dataIndex: '',
+        key: 'x',
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title="Details">
+              <a
+                style={styles.edit}
+                onClick={() => {
+                  console.log('Details');
+                }}
+                className="iconfont iconDetails"
+              ></a>
+            </Tooltip>
+          </div>
+        )
       }
     ];
 
@@ -587,39 +712,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>
-            {<FormattedMessage id="subscription.detail" />}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="subscription.detail" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <Spin spinning={this.state.loading}>
-          <Card
-            // title={cartTitle}
-            title="Subscription Details"
-            bordered={false}
-            extra={
-              subscriptionInfo.subscriptionStatus === 'Active' ? cartExtra : ''
-            }
-            style={{ margin: 20 }}
-          >
-            {/* subscription 基本信息 */}
+        <div className="container-search">
+          <Spin spinning={this.state.loading}>
+            <Headline title={title} />
             <Row className="subscription-basic-info">
               <Col span={24}>
-                <span style={{ fontSize: '16px', color: '#3DB014' }}>
-                  {subscriptionInfo.subscriptionStatus}
-                </span>
+                <span style={{ fontSize: '16px', color: '#3DB014' }}>{subscriptionInfo.subscriptionStatus}</span>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  Subscription Number :{' '}
-                  <span>{subscriptionInfo.subscriptionNumber}</span>
+                  Subscription Number : <span>{subscriptionInfo.subscriptionNumber}</span>
                 </p>
                 <p>
-                  Subscription Date :
-                  <span>
-                    {moment(new Date(subscriptionInfo.subscriptionTime)).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )}
-                  </span>
+                  Subscription Date :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
                   Presciber ID : <span>{subscriptionInfo.presciberID}</span>
@@ -633,8 +740,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   Consumer name: <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
-                  Consumer Account :{' '}
-                  <span>{subscriptionInfo.consumerAccount}</span>
+                  Consumer Account : <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
                   Consumer type : <span>{subscriptionInfo.consumerType}</span>
@@ -644,112 +750,35 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </p>
               </Col>
             </Row>
-
-            {/* 订阅频率，配送日期修改 */}
-            <Row style={{ marginTop: 20 }} gutter={16}>
-              <Col span={8}>
-                <div className="previous-order-info">
-                  <p>Previous Orders</p>
-                  {orderInfo.recentOrderId ? (
-                    <Dropdown overlay={menu} trigger={['click']}>
-                      <a
-                        className="ant-dropdown-link"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {orderInfo.recentOrderId +
-                          '(' +
-                          orderInfo.orderStatus +
-                          ')'}
-                        <Icon type="down" style={{ margin: '0 5px' }} />
-                      </a>
-                    </Dropdown>
-                  ) : null}
-                </div>
-              </Col>
-              <Col span={8}>
-                <div className="previous-order-info">
-                  <p>Frequency</p>
-                  <p style={{ color: '#808285' }}>
-                    {subscriptionInfo.frequencyName}
-                  </p>
-                  {/* <Select style={{ width: '50%' }} value={subscriptionInfo.frequency}>
-                  {frequencyList.map((item) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select> */}
-                </div>
-              </Col>
-              <Col span={8}>
-                <div className="previous-order-info">
-                  <p>Next received date</p>
-                  <p style={{ color: '#808285' }}>
-                    {/* {moment(
-                    subscriptionInfo.nextDeliveryTime,
-                    'MMMM Do YY'
-                  )} */}
-                    {subscriptionInfo.nextDeliveryTime}
-                  </p>
-                  {/* <DatePicker value={subscriptionInfo.nextDeliveryTime} format={'MMMM Do YY'} style={{ width: '50%' }} /> */}
-                </div>
-              </Col>
-            </Row>
             {/* subscription 和 total */}
             <Row style={{ marginTop: 20 }} gutter={16}>
-              <Col span={16}>
-                <Table
-                  rowKey={(record, index) => index.toString()}
-                  columns={columns}
-                  dataSource={goodsInfo}
-                  pagination={false}
-                ></Table>
+              <Col span={24}>
+                <Table rowKey={(record, index) => index.toString()} columns={columns} dataSource={goodsInfo} pagination={false}></Table>
               </Col>
-              <Col span={8}>
-                <Card
-                  title="Order Summary"
-                  style={{ border: '1px solid #D7D7D7' }}
-                  headStyle={totalCartTitleStyle}
-                  bodyStyle={{ background: '#fafafa' }}
-                >
-                  <div className="order-summary-content">
-                    <div className="flex-between">
-                      <span>Total</span>
-                      <span>${this.subTotal()}</span>
-                    </div>
 
-                    <div className="flex-between">
-                      <span>Promotion Discount</span>
-                      <span>
-                        $
-                        {this.state.discountsPrice
-                          ? this.state.discountsPrice
-                          : 0}
-                      </span>
-                    </div>
+              <Col span={8} offset={16}>
+                <div className="flex-between">
+                  <span>Subtotal</span>
+                  <span style={styles.priceStyle}>${this.subTotal()}</span>
+                </div>
 
-                    {/* <div className="flex-between">
-                      <span>Promotion Code</span>
-                      <span>{this.state.promotionCode}</span>
-                    </div> */}
-                    <div className="flex-between">
-                      <span>Shipping</span>
-                      <span>${this.state.deliveryPrice}</span>
-                    </div>
-                  </div>
-                </Card>
-                <div className="order-summary-total flex-between">
-                  <span>Total (Inclu IVA):</span>
+                <div className="flex-between">
+                  <span>{this.state.promotionDesc}</span>
+                  <span style={styles.priceStyle}>${this.state.discountsPrice ? this.state.discountsPrice : 0}</span>
+                </div>
+
+                <div className="flex-between">
+                  <span>Shipping</span>
+                  <span style={styles.priceStyle}>${this.state.deliveryPrice ? this.state.deliveryPrice : 0}</span>
+                </div>
+                <div className="flex-between">
                   <span>
-                    $
-                    {this.subTotal() -
-                      +this.state.discountsPrice +
-                      +this.state.deliveryPrice}
+                    <span>Total</span> (IVA Include):
                   </span>
+                  <span style={styles.priceStyle}>${this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice}</span>
                 </div>
               </Col>
             </Row>
-
             <Row className="consumer-info" style={{ marginTop: 20 }}>
               <Col span={8}>
                 <Row>
@@ -759,42 +788,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Name: </p>
-                    <p>
-                      {deliveryAddressInfo
-                        ? deliveryAddressInfo.firstName +
-                          ' ' +
-                          deliveryAddressInfo.lastName
-                        : ''}
-                    </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>
-                      {deliveryAddressInfo
-                        ? this.getDictValue(
-                            cityArr,
-                            deliveryAddressInfo.cityId
-                          ) +
-                          ',' +
-                          this.getDictValue(
-                            countryArr,
-                            deliveryAddressInfo.countryId
-                          )
-                        : ''}
-                    </p>
+                    <p>{deliveryAddressInfo ? this.getDictValue(cityArr, deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
-                    <p>
-                      {deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}
-                    </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
                   </Col>
                 </Row>
                 <Col span={24}>
                   <p style={{ width: 140 }}>Address2: </p>
-                  <p>
-                    {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
-                  </p>
+                  <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
               </Col>
               <Col span={8}>
@@ -805,42 +812,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Name: </p>
-                    <p>
-                      {billingAddressInfo
-                        ? billingAddressInfo.firstName +
-                          ' ' +
-                          billingAddressInfo.lastName
-                        : ''}
-                    </p>
+                    <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>
-                      {billingAddressInfo
-                        ? this.getDictValue(
-                            cityArr,
-                            billingAddressInfo.cityId
-                          ) +
-                          ',' +
-                          this.getDictValue(
-                            countryArr,
-                            billingAddressInfo.countryId
-                          )
-                        : ''}
-                    </p>
+                    <p>{billingAddressInfo ? this.getDictValue(cityArr, billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
-                    <p>
-                      {billingAddressInfo ? billingAddressInfo.address1 : ''}
-                    </p>
+                    <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
                   </Col>
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address2: </p>
-                    <p>
-                      {billingAddressInfo ? billingAddressInfo.address2 : ''}
-                    </p>
+                    <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                   </Col>
                 </Row>
               </Col>
@@ -861,72 +846,41 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Col>
             </Row>
-
-            <Row className="consumer-info">
-              {/* <Col span={12}>
-              <Row>
-                <Col span={12}>
-                  <label className="info-title">Pet Infomation</label>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Name: </p>
-                  <p>{petsInfo ? petsInfo.petsName : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Type: </p>
-                  <p>{petsInfo ? petsInfo.petsType : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Pet Birthday: </p>
-                  <p>{petsInfo ? petsInfo.birthOfPets : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Breed: </p>
-                  <p>{petsInfo ? petsInfo.petsBreed : ''}</p>
-                </Col>
-              </Row>
-            </Col>
-            */}
-              {/* <Col span={12}>
-              <Row>
-                <Col span={18}>
-                  <label className="info-title">Payment Method</label>
-                </Col>
-
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Payment Method: </p>
-                  <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
-                </Col>
-                <Col span={18}>
-                  <p style={{ width: 140 }}>Card Number: </p>
-                  <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
-                </Col>
-              </Row>
-            </Col> */}
-            </Row>
-
-            <Row style={styles.backItem}>
-              <Collapse>
-                <Panel
-                  header={<FormattedMessage id="operationLog" />}
-                  key="1"
-                  style={{ paddingRight: 10 }}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <Table
-                        rowKey={(record, index) => index.toString()}
-                        columns={operatorColumns}
-                        dataSource={operationLog}
-                        bordered
-                      />
-                    </Col>
-                  </Row>
-                </Panel>
-              </Collapse>
-            </Row>
-          </Card>
-        </Spin>
+          </Spin>
+        </div>
+        <div className="container-search">
+          <Headline
+            title="Autoship order"
+            extra={
+              <div>
+                <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+                  <Option value="2020">2020</Option>
+                  <Option value="2019">2019</Option>
+                  <Option value="2018">2018</Option>
+                </Select>
+              </div>
+            }
+          />
+          <Tabs defaultActiveKey="1" onChange={this.tabChange}>
+            <TabPane tab="No start" key="noStart">
+              <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
+            </TabPane>
+            <TabPane tab="Completed" key="completed">
+              <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={pagination} onChange={this.handleTableChange}></Table>
+            </TabPane>
+          </Tabs>
+          <Row style={styles.backItem}>
+            <Collapse>
+              <Panel header={<FormattedMessage id="operationLog" />} key="1" style={{ paddingRight: 10 }}>
+                <Row>
+                  <Col span={24}>
+                    <Table rowKey={(record, index) => index.toString()} columns={operatorColumns} dataSource={operationLog} bordered pagination={false} />
+                  </Col>
+                </Row>
+              </Panel>
+            </Collapse>
+          </Row>
+        </div>
 
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
@@ -937,3 +891,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   }
 }
+const styles = {
+  priceStyle: {
+    marginRight: 15
+  },
+  edit: {
+    paddingRight: 10
+  }
+};

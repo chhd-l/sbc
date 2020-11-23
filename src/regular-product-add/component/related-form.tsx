@@ -59,7 +59,7 @@ export default class SearchForm extends React.Component<any, any> {
     brandList: 'brandList',
     //分类列表
     cateList: 'cateList',
-    sourceCateList: 'sourceCateList',
+    sourceCateList: 'sourceCateList'
   };
 
   searchBackFun = () => {
@@ -92,22 +92,12 @@ export default class SearchForm extends React.Component<any, any> {
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('storeCateId')}
-            value={item.get('storeCateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
       });
 
     return (
@@ -154,20 +144,14 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem>
               <TreeSelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label={
-                  <p style={styles.label}>
-                    Product category
-                  </p>
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<p style={styles.label}>Product category</p>}
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
-                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'goodsCateName', value });
+                  onFormFieldChange({ key: 'storeCateId', value });
                 }}
               >
                 <TreeNode key="-1" value="-1" title="All">
@@ -176,33 +160,20 @@ export default class SearchForm extends React.Component<any, any> {
               </TreeSelectGroup>
             </FormItem>
           </Col>
-          <Col span={8}>
-            <FormItem>
-              <TreeSelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label={
-                  <p style={styles.label}>
-                    Product category
-                  </p>
-                }
-                /* defaultValue="全部"*/
-                // style={styles.wrapper}
-                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+          {/* <Col span={8}>
+            <FormItem {...formItemLayout} label="Product category">
+              <TreeSelect
+                getPopupContainer={() => document.getElementById('page-content')}
+                placeholder="Please select category"
+                notFoundContent="No classification"
+                // disabled={cateDisabled}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
-                onChange={(value) => {
-                  console.log(value,222);
-                  onFormFieldChange({key: 'storeCateId', value});
-                }}
               >
-                <TreeNode key="-2" value="-2" title="All">
-                  {loop(cateList)}
-                </TreeNode>
-              </TreeSelectGroup>
+                {loop(cateList)}
+              </TreeSelect>
             </FormItem>
-          </Col>
-
+          </Col>*/}
 
           <Col span={8}>
             <FormItem>
@@ -236,7 +207,6 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectBox>
             </FormItem>
           </Col>
-
 
           <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>

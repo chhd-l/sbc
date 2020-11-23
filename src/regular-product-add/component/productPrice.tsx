@@ -67,9 +67,7 @@ export default class ProductPrice extends React.Component<any, any> {
   render() {
     const WrapperForm = this.WrapperForm;
     const { goods } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(goods.toJS().subscriptionStatus, 111111111111);
-    });
+
     return (
       <WrapperForm
         // ref={(form) => updateSkuForm(form)}

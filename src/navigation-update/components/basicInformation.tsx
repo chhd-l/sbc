@@ -37,9 +37,10 @@ export default class BasicInformation extends React.Component<any, any> {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
+                      debugger;
                       if (!value) {
                         callback('Please input Navigation Name');
-                      } else if (this.props.topNames.includes(value)) {
+                      } else if (this.props.topNames && this.props.topNames.includes(value)) {
                         callback('Top-level navigation cannot be repeated');
                       } else {
                         callback();

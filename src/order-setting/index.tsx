@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs } from 'antd';
+import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 const { TabPane } = Tabs;
 
 class OrderSetting extends Component<any, any> {

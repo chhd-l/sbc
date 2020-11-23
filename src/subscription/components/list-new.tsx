@@ -1,17 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Checkbox,
-  Spin,
-  Pagination,
-  Modal,
-  Form,
-  Input,
-  Button,
-  Popconfirm,
-  message,
-  Tooltip
-} from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Button, Popconfirm, message, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
 import moment from 'moment';
@@ -130,9 +119,7 @@ export default class ListView extends React.Component<any, any> {
           <div className="ant-table ant-table-large ant-table-scroll-position-left">
             <div className="ant-table-content">
               <div className="ant-table-body">
-                <table
-                  style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}
-                >
+                <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
                       {/* <th
@@ -159,9 +146,9 @@ export default class ListView extends React.Component<any, any> {
                       {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
                       </th> */}
-                      <th style={{ width: '10%' }}>
+                      {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.frequency" />
-                      </th>
+                      </th> */}
                       {/* <th style={{ width: '8%' }}>
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
@@ -170,11 +157,7 @@ export default class ListView extends React.Component<any, any> {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {!loading && pagination.total === 0 ? (
@@ -217,15 +200,9 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         return (
-          <tr
-            className="ant-table-row  ant-table-row-level-0"
-            key={v.subscribeId}
-          >
+          <tr className="ant-table-row  ant-table-row-level-0" key={v.subscribeId}>
             <td colSpan={12} style={{ padding: 0 }}>
-              <table
-                className="ant-table-self"
-                style={{ border: '1px solid #ddd' }}
-              >
+              <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
                 <thead>
                   <tr>
                     <td colSpan={12} style={{ padding: 0, color: '#999' }}>
@@ -246,19 +223,11 @@ export default class ListView extends React.Component<any, any> {
                         </span> */}
 
                         <div style={{ width: 310, display: 'inline-block' }}>
-                          <span style={{ marginLeft: 20, color: '#000' }}>
-                            {v.subscribeId}{' '}
-                          </span>
+                          <span style={{ marginLeft: 20, color: '#000' }}>{v.subscribeId} </span>
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="subscription.subscriptionDate" />
-                          :
-                          {v.createTime
-                            ? moment(
-                                new Date(v.createTime.replace(/ /g, 'T'))
-                              ).format('YYYY-MM-DD HH:mm:ss')
-                            : ''}
+                          <FormattedMessage id="subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
                         </span>
                       </div>
                     </td>
@@ -270,16 +239,7 @@ export default class ListView extends React.Component<any, any> {
                     {/* <td style={{ width: '3%' }} /> */}
                     <td style={{ width: '15%' }}>
                       {/*商品图片*/}
-                      {v.goodsInfo &&
-                        v.goodsInfo.map((item, k) =>
-                          k < 4 ? (
-                            <img
-                              src={item.goodsPic ? item.goodsPic : defaultImg}
-                              style={styles.imgItem}
-                              key={k}
-                            />
-                          ) : null
-                        )}
+                      {v.goodsInfo && v.goodsInfo.map((item, k) => (k < 4 ? <img src={item.goodsPic ? item.goodsPic : defaultImg} style={styles.imgItem} key={k} /> : null))}
 
                       {
                         /*第4张特殊处理*/
@@ -299,36 +259,26 @@ export default class ListView extends React.Component<any, any> {
                         ) : null
                       }
                     </td>
-                    <td
-                      style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}
-                    >
+                    <td style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}>
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p
-                            key={k}
-                            style={styles.ellipsisName}
-                            title={item.goodsName}
-                          >
+                          <p key={k} style={styles.ellipsisName} title={item.goodsName}>
                             {item.goodsName}
                           </p>
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>
-                      {v.subscribeStatus === '0' ? 'Active' : 'Inactive'}
-                    </td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
                     {/* consumerName */}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>
-                      {v.customerName ? v.customerName : ''}
-                    </td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
                     {/* Recipient */}
                     {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}
                     </td> */}
                     {/*Frequency*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                    {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.frequency ? v.frequency : ''}
-                    </td>
+                    </td> */}
                     {/* Quantity */}
                     {/* <td style={{ width: '8%' }}>
                       {v.goodsInfo && this.goodsSum(v.goodsInfo)}
@@ -337,36 +287,20 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '15%' }} className="operation-td">
                       <Tooltip placement="top" title="Details">
                         <Button type="link" style={{ padding: '0 5px' }}>
-                          <Link
-                            to={'/subscription-detail/' + v.subscribeId}
-                            className="iconfont iconDetails"
-                          ></Link>
+                          <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
                       {v.subscribeStatus === '0' ? (
                         <Tooltip placement="top" title="Edit">
                           <Button type="link" style={{ padding: '0 5px' }}>
-                            <Link
-                              to={'/subscription-edit/' + v.subscribeId}
-                              className="iconfont iconEdit"
-                            ></Link>
+                            <Link to={'/subscription-edit/' + v.subscribeId} className="iconfont iconEdit"></Link>
                           </Button>
                         </Tooltip>
                       ) : null}
                       {v.subscribeStatus === '0' ? (
-                        <Popconfirm
-                          placement="topRight"
-                          title="Are you sure cancel the subscription?"
-                          onConfirm={() => this.cancelAll(v.subscribeId)}
-                          okText="Confirm"
-                          cancelText="Cancel"
-                        >
+                        <Popconfirm placement="topRight" title="Are you sure cancel the subscription?" onConfirm={() => this.cancelAll(v.subscribeId)} okText="Confirm" cancelText="Cancel">
                           <Tooltip placement="top" title="Cancel all">
-                            <a
-                              type="link"
-                              style={{ padding: '0 5px' }}
-                              className="iconfont iconbtn-cancelall"
-                            >
+                            <a type="link" style={{ padding: '0 5px' }} className="iconfont iconbtn-cancelall">
                               {/*Cancel all*/}
                             </a>
                           </Tooltip>

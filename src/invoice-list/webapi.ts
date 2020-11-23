@@ -18,6 +18,15 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+// 获取订单列表
+export function getOrderList(filterParams = {}) {
+  return Fetch<TResult>('/trade', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 export function disableInvoice(filterParams = {}) {
   return Fetch<TResult>('/invoice/invoice', {

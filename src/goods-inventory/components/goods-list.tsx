@@ -41,7 +41,7 @@ export default class CateList extends React.Component<any, any> {
     return (
       <DataGrid
         loading={loading}
-        rowKey={(record) => record.goodsId}
+        rowKey={(record) => record.goodsInfoNo}
         pagination={{
           pageSize,
           total,
@@ -51,15 +51,15 @@ export default class CateList extends React.Component<any, any> {
             init({ pageNum: pageNum - 1, pageSize, stock: stock });
           }
         }}
-        dataSource={dataList}
+        dataSource={dataList && dataList}
       >
-        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column
           // title="商品名称"
           title={<FormattedMessage id="product.productName" />}
-          dataIndex="goodsName"
-          key="goodsName"
-          className="nameBox"
+          dataIndex="goodsInfoName"
+          key="goodsInfoName"
+          className="goodsInfoName"
           render={(rowInfo) => {
             return (
               <Tooltip
@@ -75,8 +75,8 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title="SKU" dataIndex="SKU" key="SKU" />
-        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
+        <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
+        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goods.goodsNo" key="goods.goodsNo" />
 
         <Column
           title={
@@ -103,20 +103,20 @@ export default class CateList extends React.Component<any, any> {
         <Column
           // title="店铺分类"
           title="Product category"
-          dataIndex="Sale"
+          dataIndex="goods.cateId"
           key="Sale"
         />
         <Column
           // title="店铺分类"
-          title="Product category"
-          dataIndex="storeCateIds"
-          key="storeCateIds"
+          title="Sales category"
+          dataIndex="goods.storeCateIds"
+          key="goods.storeCateIds"
         />
         <Column
           // title="品牌"
           title={<FormattedMessage id="product.brand" />}
-          dataIndex="brandId"
-          key="brandId"
+          dataIndex="goods.brandId"
+          key="goods.brandId"
         />
         <Column
           title={<FormattedMessage id="product.onOrOffShelves" />}
@@ -132,8 +132,8 @@ export default class CateList extends React.Component<any, any> {
             return <FormattedMessage id="product.onShelves" />;
           }}
         />
-        <Column title="Inventory" dataIndex="Inventory" key="Inventory" />
-        <Column align="center" title="" width={0} />
+        <Column title="Inventory" dataIndex="stock" key="stock" />
+        <Column align="center" key="goods.storeId" title="" width={0} />
       </DataGrid>
     );
   }

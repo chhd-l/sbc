@@ -492,7 +492,7 @@ class GoodsForm extends React.Component<any, any> {
               )(this._getBrandSelect())}
             </FormItem>
           </Col>
-          <Col span={8}>
+          {/*<Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.unitMeasurement" />}>
               {getFieldDecorator('goodsUnit', {
                 rules: [
@@ -507,7 +507,7 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('goodsUnit')
               })(<Input placeholder="Please fill in the unit of measurement，no more than 10 words" />)}
             </FormItem>
-          </Col>
+          </Col>*/}
         </Row>
         <Row>
           <Col span={16}>

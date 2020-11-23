@@ -268,7 +268,7 @@ class SkuForm extends React.Component<any, any> {
             </p>
             <p>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('marketPrice_' + rowInfo.id, {
+                {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
@@ -289,11 +289,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
                   initialValue: rowInfo.subscriptionPrice || 0
-                })(
-                  <div>
-                    <Input id="subscriptionPrice" style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                  </div>
-                )}
+                })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
               </FormItem>
             </p>
           </Col>
@@ -397,10 +393,6 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-
-    console.log(e, 22222);
-    console.log(key, 333333);
-    console.log(id, 444);
 
     editGoodsItem(id, key, e);
 

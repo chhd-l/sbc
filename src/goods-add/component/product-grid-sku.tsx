@@ -124,20 +124,12 @@ export default class ProductGridSKU extends React.Component<any, any> {
               }
             }}
           />
-
-          <Column
-            title="SKU"
-            dataIndex="goodsInfoNo"
-            key="goodsInfoNo"
-            //ellipsis
-          />
-
+          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" />
-
-          <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
-
-          <Column title="Product category" key="goodsCateName" dataIndex="goodsCateName" />
+          <Column title="Specification" dataIndex="specName" key="specName" />
+          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
           <Column title="Brand" key="brandName" dataIndex="brandName" />
+          <Column title="Price" key="price" dataIndex="price" />
         </DataGrid>
       </div>
     );
@@ -164,7 +156,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
     let { res } = await webapi.fetchlistGoodsInfo({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
-      res = (res as any).context.goodsInfoPage;
+      res = (res as any).context.goodsInfos;
       let arr = res.content;
       let a = arr;
       let b = this.state.selectedRows.toJS();

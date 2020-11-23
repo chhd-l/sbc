@@ -125,12 +125,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column
-            title="SPU"
-            dataIndex="goodsNo"
-            key="goodsNo"
-            //ellipsis
-          />
+          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
 
           <Column title="Product name" dataIndex="goodsName" key="goodsName" />
 

@@ -3,13 +3,15 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 
-import { Headline, BreadCrumb, SelectGroup, Const } from 'qmkit';
+import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
 const Panel = Collapse.Panel;
 
 import moment from 'moment';
+
+const { Search } = Input;
 
 const InputGroup = Input.Group;
 const { Option } = Select;
@@ -44,12 +46,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       frequencyList: [],
       promotionDesc: 'Subscription 0% Discount',
       noStartOrder: [],
-      completedOrder: [],
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
+      completedOrder: []
     };
   }
 
@@ -413,14 +410,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   tabChange = (key) => {
     console.log(`selected ${key}`);
   };
-  handleTableChange = (pagination: any) => {
-    this.setState({
-      pagination: pagination
-    });
-  };
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, cityArr, operationLog, frequencyList, pagination, noStartOrder, completedOrder } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, cityArr, operationLog, frequencyList, noStartOrder, completedOrder } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>Subscription Details</span>
@@ -476,8 +468,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>${record.originalPrice}</p>
-            <p>${record.subscribePrice}</p>
+            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.originalPrice}</p>
+            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.subscribePrice}</p>
           </div>
         )
       },
@@ -516,7 +508,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>${+record.subscribeNum * +record.subscribePrice}</span>
+            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + +record.subscribeNum * +record.subscribePrice}</span>
           </div>
         )
       }
@@ -562,46 +554,64 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Product</span>,
         key: 'Product',
-        width: '30%',
+        width: '20%',
         render: (text, record) => (
-          <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item) => (
+                <div style={{ display: 'flex' }}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
         key: 'subscribeNum',
-        dataIndex: 'subscribeNum',
         width: '10%',
-        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item) => (
+                <div style={{ margin: 'auto 10px' }}>
+                  <p>X {item.num}</p>
+                </div>
+              ))}
+          </div>
+        )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
         key: 'promotionCode',
-        dataIndex: 'promotionCode',
-        width: '10%',
-        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+        width: '20%',
+        render: (text, record) => (
+          <div>
+            <Search placeholder="Promotion code" enterButton="Apply" onSearch={(value) => console.log(value)} />
+          </div>
+        )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
-        dataIndex: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ display: 'flex', color: '#e2001a' }}>{text}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Amount</span>,
+        title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
-        dataIndex: 'amount',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
         key: 'shipmentDate',
-        dataIndex: 'Shipment date',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? record.tradeItems[0].nextDeliveryTime : '-'}</div>
       },
       {
         title: 'Operation',
@@ -641,43 +651,60 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text, record) => (
-          <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} style={{ width: 60, height: 80 }} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item) => (
+                <div style={{ display: 'flex' }}>
+                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <div style={{ margin: 'auto 10px' }}>
+                    <p>{item.skuName}</p>
+                    <p>{item.specDetails}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Quantity</span>,
         key: 'subscribeNum',
-        dataIndex: 'subscribeNum',
         width: '10%',
-        render: (text, record) => <div style={{ display: 'flex' }}>X {text}</div>
+        render: (text, record) => (
+          <div>
+            {record.tradeItems &&
+              record.tradeItems.map((item) => (
+                <div style={{ margin: 'auto 10px' }}>
+                  <p>X {item.num}</p>
+                </div>
+              ))}
+          </div>
+        )
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
-        dataIndex: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ display: 'flex', color: '#e2001a' }}>{text}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Amount</span>,
+        title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
-        dataIndex: 'amount',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? record.tradeItems[0].nextDeliveryTime : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment status</span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Order status</span>,
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].deliverStatus ? record.tradeItems[0].deliverStatus : '-'}</div>
       },
       {
         title: 'Operation',
@@ -759,23 +786,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8} offset={16}>
                 <div className="flex-between">
                   <span>Subtotal</span>
-                  <span style={styles.priceStyle}>${this.subTotal()}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + this.subTotal()}</span>
                 </div>
 
                 <div className="flex-between">
                   <span>{this.state.promotionDesc}</span>
-                  <span style={styles.priceStyle}>${this.state.discountsPrice ? this.state.discountsPrice : 0}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.discountsPrice ? this.state.discountsPrice : 0)}</span>
                 </div>
 
                 <div className="flex-between">
                   <span>Shipping</span>
-                  <span style={styles.priceStyle}>${this.state.deliveryPrice ? this.state.deliveryPrice : 0}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
                 </div>
                 <div className="flex-between">
                   <span>
                     <span>Total</span> (IVA Include):
                   </span>
-                  <span style={styles.priceStyle}>${this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice)}</span>
                 </div>
               </Col>
             </Row>
@@ -866,7 +893,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
             </TabPane>
             <TabPane tab="Completed" key="completed">
-              <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={pagination} onChange={this.handleTableChange}></Table>
+              <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={false}></Table>
             </TabPane>
           </Tabs>
           <Row style={styles.backItem}>

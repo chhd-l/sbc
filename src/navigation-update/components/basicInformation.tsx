@@ -34,7 +34,19 @@ export default class BasicInformation extends React.Component<any, any> {
             <FormItem {...layout} label="Navigation Name">
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
-                rules: [{ required: true, message: 'Please input Navigation Name' }]
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (!value) {
+                        callback('Please input Navigation Name');
+                      } else if (this.props.topNames.includes(value)) {
+                        callback('Top-level navigation cannot be repeated');
+                      } else {
+                        callback();
+                      }
+                    }
+                  }
+                ]
               })(
                 <Input
                   onChange={(e) => {

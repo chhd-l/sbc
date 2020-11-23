@@ -24,6 +24,7 @@ class NavigationUpdate extends Component<any, any> {
         enable: 1
       },
       noLanguageSelect: this.props.location.state && this.props.location.state.noLanguageSelect,
+      topNames: this.props.location.state ? this.props.location.state.topNames : [],
       store: {}
     };
     this.next = this.next.bind(this);
@@ -119,7 +120,7 @@ class NavigationUpdate extends Component<any, any> {
     });
   }
   render() {
-    const { id, current, title, navigation, store, noLanguageSelect } = this.state;
+    const { id, current, title, navigation, store, noLanguageSelect, topNames } = this.state;
     const steps = [
       {
         title: 'Navigation language',
@@ -127,7 +128,7 @@ class NavigationUpdate extends Component<any, any> {
       },
       {
         title: 'Basic information',
-        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} />
+        controller: <BasicInformation navigation={navigation} addField={this.addField} form={this.props.form} noLanguageSelect={noLanguageSelect} store={store} topNames={topNames} />
       },
       {
         title: 'Interaction',

@@ -2033,6 +2033,22 @@ export default class AppStore extends Store {
     }
   };
 
+  productSKU = async () => {
+    let request: any = {
+      goodsName: this.state().get('likeGoodsName'),
+      goodsNo: this.state().get('likeGoodsNo'),
+      goodsCateName: this.state().get('storeCateId'),
+      brandName: this.state().get('brandId')
+    };
+    const { res } = await fetchproductTooltip(request);
+    if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('related:productTooltip', res.context.goods);
+      this.dispatch('related:searchType', true);
+    } else {
+      message.error(res.message);
+    }
+  };
+
   onSearch = async () => {
     let request: any = {
       goodsName: this.state().get('likeGoodsName'),

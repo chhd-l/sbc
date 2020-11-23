@@ -357,7 +357,7 @@ export function fetchproductTooltip(param) {
 }
 
 export function fetchlistGoodsInfo(param) {
-  return Fetch<TResult>('/recommendation/listGoodsInfo', {
+  return Fetch<TResult>('/goodsInfos/bundelPage', {
     method: 'POST',
     body: JSON.stringify(param)
   });

@@ -2,7 +2,7 @@ import { Store, IOptions } from 'plume2';
 //import { fromJS } from 'immutable';
 import GoodsActor from './actor/goods-actor';
 import { message } from 'antd';
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 import * as webapi from './webapi';
 
 //import { IList } from 'typings/globalType';
@@ -57,5 +57,28 @@ export default class AppStore extends Store {
     } else {
       message.error(data.res.code);
     }
+  };
+
+  //导出
+  bulkExport = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 参数加密
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref = Const.HOST + `/inventory/goodsInfo?pageNum=${this.state().get('current')}&pageSize=${this.state().get('pageSize')}&stock=${this.state().get('stock')}/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
   };
 }

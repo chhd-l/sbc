@@ -40,7 +40,8 @@ export default class GoodsActor extends Actor {
         allowPriceSet: 0,
         saleType: 0,
         saleableFlag: 1,
-        displayFlag: 1
+        displayFlag: 1,
+        subscriptionPrice: ''
       },
       // 是否编辑商品
       isEditGoods: false,

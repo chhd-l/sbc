@@ -34,7 +34,20 @@ export default class BasicInformation extends React.Component<any, any> {
             <FormItem {...layout} label="Navigation Name">
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
-                rules: [{ required: true, message: 'Please input Navigation Name' }]
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      debugger;
+                      if (!value) {
+                        callback('Please input Navigation Name');
+                      } else if (this.props.topNames && this.props.topNames.includes(value)) {
+                        callback('Top-level navigation cannot be repeated');
+                      } else {
+                        callback();
+                      }
+                    }
+                  }
+                ]
               })(
                 <Input
                   onChange={(e) => {
@@ -99,7 +112,7 @@ export default class BasicInformation extends React.Component<any, any> {
                 >
                   Expanded
                 </Checkbox>
-                <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
+                <span className="checkBoxTip">If mouser over and the menu has children, the menu will expand</span>
               </FormItem>
             )}
           </Form>

@@ -170,9 +170,9 @@ export default class ProductFinderDetails extends React.Component<any, any> {
               </Row>
             </div>
 
-            <div className="garyContainer" style={{ marginTop: '20px' }}>
-              {chartRecords &&
-                chartRecords.map((item, index) => (
+            {chartRecords && chartRecords.length > 0 ? (
+              <div className="garyContainer" style={{ marginTop: '20px' }}>
+                {chartRecords.map((item, index) => (
                   <Row key={index}>
                     <Col span={1}>
                       <img src={img_question} alt="Question" />
@@ -183,7 +183,8 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                     </Col>
                   </Row>
                 ))}
-            </div>
+              </div>
+            ) : null}
           </div>
         </Spin>
         <div className="bar-button">

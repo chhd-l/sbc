@@ -20,7 +20,8 @@ class NavigationList extends Component<any, any> {
       selectLanguage: '',
       loading: false,
       defaultLanguage: '',
-      dataSource: []
+      dataSource: [],
+      allTopNavigationName: []
     };
     this.getNavigationList = this.getNavigationList.bind(this);
     this.updateNavigationStatus = this.updateNavigationStatus.bind(this);
@@ -50,6 +51,7 @@ class NavigationList extends Component<any, any> {
         const { res } = data;
         if (res.code === 'K-000000') {
           let dataSource = [];
+          let allTopNavigationName = [];
           res.context.map((item) => {
             let navigation = {
               id: item.id,
@@ -62,10 +64,14 @@ class NavigationList extends Component<any, any> {
               language: item.language
             };
             dataSource.push(navigation);
+            if (!item.parentId) {
+              allTopNavigationName.push(item.navigationName);
+            }
           });
           this.setState({
             dataSource: dataSource,
-            selectLanguage: language
+            selectLanguage: language,
+            allTopNavigationName
           });
         }
       })
@@ -146,7 +152,7 @@ class NavigationList extends Component<any, any> {
       });
   }
   render() {
-    const { title, languages, dataSource, loading, defaultLanguage } = this.state;
+    const { title, languages, dataSource, loading, defaultLanguage, allTopNavigationName } = this.state;
     const columns = [
       {
         title: 'ID',
@@ -211,7 +217,7 @@ class NavigationList extends Component<any, any> {
           <Row style={{ marginTop: '30px' }}>
             <Col span={12}>
               <Button type="primary" htmlType="submit">
-                <Link to={{ pathname: '/navigation-add', state: { type: 'add' } }}>Add New Navigation Item</Link>
+                <Link to={{ pathname: '/navigation-add', state: { type: 'add', topNames: allTopNavigationName } }}>Add New Navigation Item</Link>
               </Button>
             </Col>
             <Col span={12} style={{ textAlign: 'end' }}>

@@ -214,6 +214,7 @@ export default class Interaction extends React.Component<any, any> {
         pageTypeCode: selectPage.valueEn
       });
     }
+    this.clearFields(['navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
   }
   onSalesCategoryChange = (value) => {
     let treeLowestIds = [];
@@ -245,13 +246,13 @@ export default class Interaction extends React.Component<any, any> {
     let allParentIds = [...new Set(selectChildren.map((x) => x.parentId))]; // remove repect item
     let selectFilterList = [];
     allParentIds.map((item) => {
-      debugger;
       let children = selectChildren.filter((x) => x.parentId === item);
-      let childrenIds = children.map((x) => x.value);
+      let childValues = children.map((x) => x.value);
+      let childTitles = children.map((x) => x.title);
       if (children.length === 0) {
         return;
       }
-      let selectFilter = { attributeId: item, filterType: children[0].filterType, attributeValueIdList: childrenIds };
+      let selectFilter = { attributeId: item, filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
       selectFilterList.push(selectFilter);
     });
     let selectFilterListString = JSON.stringify(selectFilterList);

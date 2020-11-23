@@ -157,6 +157,7 @@ class DragTable extends React.Component<any, any> {
       <Table
         columns={this.props.columns}
         dataSource={data}
+        pagination = {false}
         components={this.components}
         loading={this.state.loading}
         onRow={(record, index) => ({

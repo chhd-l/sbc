@@ -99,7 +99,7 @@ export default class BasicInformation extends React.Component<any, any> {
                 >
                   Expanded
                 </Checkbox>
-                <span className="checkBoxTip">Menu items that are not enabled will not be listed in any menu</span>
+                <span className="checkBoxTip">If mouser over and the menu has children, the menu will expand</span>
               </FormItem>
             )}
           </Form>

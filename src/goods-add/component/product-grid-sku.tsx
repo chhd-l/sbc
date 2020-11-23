@@ -69,8 +69,8 @@ export default class ProductGridSKU extends React.Component<any, any> {
         <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
-          rowKey={(_row) => _row.goodsInfoNo}
-          dataSource={goodsInfoPage.content}
+          rowKey={(record, index) => record.goodsInfoNo + index}
+          dataSource={goodsInfoPage.content && goodsInfoPage.content}
           isScroll={false}
           pagination={{
             total: goodsInfoPage.totalElements,

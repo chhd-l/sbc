@@ -79,8 +79,12 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
         onOk={() => {
           let targetGoodsIds = [];
           this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsInfoNo));
-          onProductselectSku(targetGoodsIds);
-          this.props.showModal(false);
+          if (targetGoodsIds.length <= 10) {
+            onProductselectSku(targetGoodsIds);
+            this.props.showModal(false);
+          } else {
+            message.info('Maximum 10 products!');
+          }
         }}
         onCancel={() => {
           this.props.showModal(false);

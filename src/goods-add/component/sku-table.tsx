@@ -7,10 +7,11 @@ import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltipSKU from './productTooltip-sku';
-
+import * as _ from 'lodash';
 const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
+let SKUList = [];
 
 @Relax
 export default class SkuTable extends React.Component<any, any> {
@@ -129,7 +130,6 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
-          console.log(item.get('specId'), 'specid....');
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -258,12 +258,15 @@ class SkuForm extends React.Component<any, any> {
       key: 'subSKU',
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
-        const addSkUProductObj = addSkUProduct.map((item) => {
-          return {
-            subGoodsInfoId: item,
-            bundleNum: 0
-          };
-        });
+        let addSkUProductObj =
+          addSkUProduct &&
+          addSkUProduct.map((item) => {
+            return {
+              subGoodsInfoId: item,
+              bundleNum: 0
+            };
+          });
+
         return (
           <Row>
             <Col span={12}>
@@ -300,20 +303,12 @@ class SkuForm extends React.Component<any, any> {
                                 defaultValue={0}
                                 min={0}
                                 onChange={(e) => {
-                                  let arr2 = [];
-                                  arr2.push({
-                                    subGoodsInfoId: item,
-                                    bundleNum: e
-                                  });
-                                  /*arr.map((o)=>{
-                                               if (o.subGoodsInfoId == item) {
-                                                 return o.bundleNum = e
-                                               }
-
-                                             })*/
-                                  //Object.assign(arr1,arr2);
-                                  //console.log(arr1,1111111111);
-                                  this._editGoodsItem(rowInfo, 'GoodsInfoBundleRels', arr);
+                                  const target = addSkUProductObj.filter((a, i) => item === a.subGoodsInfoId)[0];
+                                  if (target) {
+                                    target['bundleNum'] = e;
+                                  }
+                                  let res = _.unionBy([target], addSkUProductObj, 'subGoodsInfoId');
+                                  this._editGoodsItem(rowInfo, 'GoodsInfoBundleRels', res);
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
@@ -738,6 +733,18 @@ class SkuForm extends React.Component<any, any> {
     if (goodsInfo) {
       this._editGoodsItem(goodsInfo.get('id'), key, goodsInfo.get(key));
     }
+  };
+
+  distinct = (arr, key) => {
+    let newobj = {},
+      newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      let item = arr[i];
+      if (!newobj[item[key]]) {
+        newobj[item[key]] = newArr.push(item);
+      }
+    }
+    return newArr;
   };
 }
 

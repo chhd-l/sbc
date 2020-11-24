@@ -12,7 +12,7 @@ const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
-export default class ProductPrice extends React.Component<any, any> {
+export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
 
   props: {
@@ -61,13 +61,11 @@ export default class ProductPrice extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {};
   }
 
   render() {
     const WrapperForm = this.WrapperForm;
-    const { goods } = this.props.relaxProps;
-
+    const { updateSkuForm } = this.props.relaxProps;
     return (
       <WrapperForm
         // ref={(form) => updateSkuForm(form)}
@@ -82,22 +80,22 @@ class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0,
-      priceType: ''
+      count: 0
     };
   }
-
-  onPriceType = (res) => {
-    this.setState({
-      priceType: res
-    });
-  };
 
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-
+    console.log(columns, 'columns', goods.toJS(), goodsSpecs.toJS());
+    console.log(goodsList.toJS(), 'columns', this.state);
+    // if(this.state.count < 100) {
+    //   let count = this.state.count + 1
+    //   this.setState({count: count})
+    // }else {
+    //   return false
+    // }
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
@@ -111,6 +109,7 @@ class SkuForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
+    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -126,55 +125,82 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
+    console.log(columns.toJS(), 'columns');
+    columns = columns.unshift({
+      title: (
+        <div>
+          {/* <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span> */}
+          <FormattedMessage id="product.image" />
+        </div>
+      ),
+      key: 'img',
+      className: 'goodsImg',
+      render: (rowInfo) => {
+        const images = fromJS(rowInfo.images ? rowInfo.images : []);
+        return <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
+      }
+    });
 
     columns = columns.unshift({
       title: '',
-      key: 'index' + 1,
+      key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
       }
     });
 
     columns = columns.push({
-      title: <FormattedMessage id="product.SKU" />,
-      key: 'goodsInfoNo' + 'index',
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <FormattedMessage id="product.SKU" />
+        </div>
+      ),
+      key: 'goodsInfoNo',
       render: (rowInfo) => {
         return (
           <Row>
             <Col span={12}>
-              <FormItem style={{ paddingTop: 28 }}>{rowInfo.goodsInfoNo}</FormItem>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoNo_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input SKU code'
+                    },
+                    {
+                      min: 1,
+                      max: 20,
+                      message: '1-20 characters'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
+                  initialValue: rowInfo.goodsInfoNo
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
             </Col>
           </Row>
         );
       }
-    });
-    columns = columns.push({
-      title: 'Purchase type',
-      key: 'index',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              <div>
-                {goods.toJS().subscriptionStatus != 0 ? (
-                  <div>
-                    <p>
-                      <span>One off</span>
-                    </p>
-                    <p>
-                      <span>Subscription</span>
-                    </p>
-                  </div>
-                ) : (
-                  <p>
-                    <span>One off</span>
-                  </p>
-                )}
-              </div>
-            </FormItem>
-          </Col>
-        </Row>
-      )
     });
 
     columns = columns.push({
@@ -197,13 +223,12 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '150px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
             </FormItem>
           </Col>
         </Row>
       )
     });
-
     columns = columns.push({
       title: (
         <div>
@@ -234,37 +259,70 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
-            <p>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('marketPrice_' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input market price'
-                    },
-                    {
-                      pattern: ValidConst.zeroPrice,
-                      message: 'Please input the legal amount with two decimal places'
-                    },
-                    {
-                      type: 'number',
-                      max: 9999999.99,
-                      message: 'The maximum value is 9999999.99',
-                      transform: function (value) {
-                        return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                      }
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('marketPrice_' + rowInfo.id, {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please input market price'
+                  },
+                  {
+                    pattern: ValidConst.zeroPrice,
+                    message: 'Please input the legal amount with two decimal places'
+                  },
+                  {
+                    type: 'number',
+                    max: 9999999.99,
+                    message: 'The maximum value is 9999999.99',
+                    transform: function (value) {
+                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
                     }
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                  initialValue: rowInfo.marketPrice || 0
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
+                initialValue: rowInfo.marketPrice || 0
+              })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+    if (goods.get('subscriptionStatus') !== '0') {
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionStatus" />
+          </div>
+        ),
+        key: 'subscriptionStatus',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
+                  initialValue: goods.get('subscriptionStatus') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
                 })(
-                  <div>
-                    <Input id="marketPrice" style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                  </div>
+                  <Select disabled={goods.get('subscriptionStatus') === '0'} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} placeholder="please select status">
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
                 )}
               </FormItem>
-            </p>
-            <p>
+            </Col>
+          </Row>
+        )
+      });
+      columns = columns.push({
+        title: (
+          <div>
+            <FormattedMessage id="product.subscriptionPrice" />
+          </div>
+        ),
+        key: 'subscriptionPrice',
+        render: (rowInfo) => (
+          <Row>
+            <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
                   rules: [
@@ -289,12 +347,12 @@ class SkuForm extends React.Component<any, any> {
                   initialValue: rowInfo.subscriptionPrice || 0
                 })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
               </FormItem>
-            </p>
-          </Col>
-        </Row>
-      )
-    });
-
+            </Col>
+          </Row>
+        )
+      });
+    }
+    console.log(goodsSpecs.toJS(), 'goodsSpecs');
     columns = columns.push({
       title: (
         <div>
@@ -308,6 +366,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'basePrice',
       render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo');
         return (
           <Row>
             <Col span={12}>
@@ -346,9 +405,123 @@ class SkuForm extends React.Component<any, any> {
       }
     });
     columns = columns.push({
-      title: '',
-      key: '1',
-      width: '5%'
+      title: (
+        <div>
+          <FormattedMessage id="description" />
+        </div>
+      ),
+      key: 'description',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('description_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   pattern: ValidConst.number,
+                  //   message: '0 or positive integer'
+                  // }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
+                initialValue: rowInfo.description
+              })(<Input style={{ width: '100px' }} min={0} max={9999999} disabled={rowInfo.description === 0} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+    columns = columns.push({
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <FormattedMessage id="product.inventory" />
+          <br />
+          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
+            <FormattedMessage id="allTheSame" />
+            &nbsp;
+            <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
+              <a style={{ fontSize: 14 }}>
+                <Icon type="question-circle-o" />
+              </a>
+            </Tooltip>
+          </Checkbox>
+        </div>
+      ),
+      key: 'stock',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('stock_' + rowInfo.id, {
+                rules: [
+                  {
+                    pattern: ValidConst.number,
+                    message: '0 or positive integer'
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
+                initialValue: rowInfo.stock
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+    // columns = columns.push({
+    //   title: '条形码',
+    //   key: 'goodsInfoBarcode',
+    //   render: (rowInfo) => (
+    //     <Row>
+    //       <Col span={12}>
+    //         <FormItem style={styles.tableFormItem}>
+    //           {getFieldDecorator('goodsInfoBarcode_' + rowInfo.id, {
+    //             rules: [
+    //               {
+    //                 max: 20,
+    //                 message: '0-20字符'
+    //               }
+    //             ],
+    //             onChange: this._editGoodsItem.bind(
+    //               this,
+    //               rowInfo.id,
+    //               'goodsInfoBarcode'
+    //             ),
+    //             initialValue: rowInfo.goodsInfoBarcode
+    //           })(<Input />)}
+    //         </FormItem>
+    //       </Col>
+    //     </Row>
+    //   )
+    // });
+
+    columns = columns.push({
+      // title: <FormattedMessage id="operation" />,
+      key: 'opt',
+      render: (rowInfo) =>
+        specSingleFlag ? null : (
+          // <Button onClick={() => this._deleteGoodsInfo(rowInfo.id)}>
+          //   <FormattedMessage id="delete" />
+          // </Button>
+          <a
+            href="#!"
+            onClick={() => {
+              this._deleteGoodsInfo(rowInfo.id);
+            }}
+            title="Delete"
+            style={{ marginRight: 5 }}
+          >
+            <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+          </a>
+        )
     });
 
     return columns.toJS();
@@ -464,3 +637,50 @@ const styles = {
     padding: '2px'
   }
 };
+
+// import { Table } from 'antd';
+
+// const columns = [
+//   {
+//     title: 'Name',
+//     dataIndex: 'name',
+//   },
+//   {
+//     title: 'Age',
+//     dataIndex: 'age',
+//   },
+//   {
+//     title: 'Address',
+//     dataIndex: 'address',
+//   },
+// ];
+// const data = [
+//   {
+//     key: '1',
+//     name: 'John Brown',
+//     age: 32,
+//     address: 'New York No. 1 Lake Park',
+//   },
+//   {
+//     key: '2',
+//     name: 'Jim Green',
+//     age: 42,
+//     address: 'London No. 1 Lake Park',
+//   },
+//   {
+//     key: '3',
+//     name: 'Joe Black',
+//     age: 32,
+//     address: 'Sidney No. 1 Lake Park',
+//   },
+// ];
+
+// ReactDOM.render(
+//   <div>
+//     <h4>Middle size table</h4>
+//     <Table columns={columns} dataSource={data} size="middle" />
+//     <h4>Small size table</h4>
+//     <Table columns={columns} dataSource={data} size="small" />
+//   </div>,
+//   mountNode,
+// );

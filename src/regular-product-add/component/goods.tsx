@@ -492,7 +492,7 @@ class GoodsForm extends React.Component<any, any> {
               )(this._getBrandSelect())}
             </FormItem>
           </Col>
-          <Col span={8}>
+          {/*<Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.unitMeasurement" />}>
               {getFieldDecorator('goodsUnit', {
                 rules: [
@@ -507,7 +507,7 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('goodsUnit')
               })(<Input placeholder="Please fill in the unit of measurement，no more than 10 words" />)}
             </FormItem>
-          </Col>
+          </Col>*/}
         </Row>
         <Row>
           <Col span={16}>
@@ -937,7 +937,7 @@ class GoodsForm extends React.Component<any, any> {
     const { onGoodsTaggingRelList } = this.props.relaxProps;
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
     // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
+    const sourceStoreCateList = this.props.relaxProps.taggingTotal || fromJS([]);
 
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
@@ -974,14 +974,14 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     });
-    const storeCateIds = originValues;
+    const goodsTaggingRelList = originValues;
 
     const goods = Map({
-      ['id']: storeCateIds
+      ['id']: goodsTaggingRelList
     });
 
     // 强制刷新店铺分类的选中视图
-    this.setState({ storeCateIds }, () => {
+    this.setState({ goodsTaggingRelList }, () => {
       this.props.form.resetFields(['id']);
     });
 
@@ -989,10 +989,15 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   filterChange = (value, _label, extra) => {
+    console.log(_label, 22222);
+    console.log(value, 1111111);
+    console.log(extra, 22222233333333);
     const { onProductFilter } = this.props.relaxProps;
+
     // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
     // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
+    const sourceStoreCateList = this.props.relaxProps.filtersTotal || fromJS([]);
+    console.log(sourceStoreCateList.toJS());
 
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
@@ -1012,6 +1017,7 @@ class GoodsForm extends React.Component<any, any> {
 
     // 如果子节点被选中，上级节点也要被选中
     // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    console.log(originValues.toJS(), 2222222222);
     originValues.forEach((v) => {
       sourceStoreCateList.forEach((cate) => {
         // 找到选中的分类，判断是否有上级
@@ -1029,14 +1035,13 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     });
-    const storeCateIds = originValues;
+    const productFilter = originValues;
 
     const goods = Map({
-      ['id']: storeCateIds
+      ['id']: productFilter
     });
-
     // 强制刷新店铺分类的选中视图
-    this.setState({ storeCateIds }, () => {
+    this.setState({ productFilter }, () => {
       this.props.form.resetFields(['id']);
     });
 
@@ -1100,7 +1105,7 @@ class GoodsForm extends React.Component<any, any> {
       storeCateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} /*disabled checkable={false}*/>
               {this.generateStoreCateTree(item.get('children'))}
             </TreeNode>
           );
@@ -1114,14 +1119,14 @@ class GoodsForm extends React.Component<any, any> {
     return (
       filtersTotalTree &&
       filtersTotalTree.map((item, i) => {
-        if (item.get('children') && item.get('children').count()) {
+        if (item.get('attributesValueList') && item.get('attributesValueList').count()) {
           return (
-            <TreeNode key={i} value={item.get('attributeId')} title={item.get('attributeName')} disabled checkable={false}>
-              {this.generateStoreCateTree(item.get('children'))}
+            <TreeNode key={item.id} value={item.get('id')} title={item.get('attributeName')}>
+              {this.filtersTotalTree(item.get('attributesValueList'))}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.get('attributeId') + i} value={item.get('attributeId')} title={item.get('attributeName')} />;
+        return <TreeNode key={item.id} value={item.get('id')} title={item.get('attributeName')} />;
       })
     );
   };

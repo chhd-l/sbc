@@ -68,11 +68,14 @@ export default class AppStore extends Store {
         const token = (window as any).token;
         if (token) {
           const result = JSON.stringify({
+            pageNum: this.state().get('current'),
+            pageSize: this.state().get('pageSize'),
+            stock: this.state().get('stock'),
             token: token
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref = Const.HOST + `/inventory/goodsInfo?pageNum=${this.state().get('current')}&pageSize=${this.state().get('pageSize')}&stock=${this.state().get('stock')}/${encrypted}`;
+          const exportHref = Const.HOST + `/inventory/goodsInfo?/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

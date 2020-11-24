@@ -157,7 +157,7 @@ export default class Main extends React.Component<any, any> {
                 <SkuTable />
 
                 {/*物流表单*/}
-                <Logistics />
+                {/* <Logistics /> */}
 
                 {/*详情*/}
                 <Detail />

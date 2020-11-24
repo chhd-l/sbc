@@ -150,7 +150,7 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.storeCategory" />}
+          title={<FormattedMessage id="product.productCategory" />}
           dataIndex="storeCateIds"
           key="storeCateIds"
           width={100}

@@ -842,6 +842,7 @@ export default class AppStore extends Store {
   }
 
   validMain = () => {
+    debugger;
     return this._validMainForms();
   };
 

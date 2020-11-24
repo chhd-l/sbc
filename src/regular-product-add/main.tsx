@@ -81,7 +81,7 @@ export default class Main extends React.Component<any, any> {
 
   onNext = (res) => {
     let type = 'main';
-    if (res == 'main' && this.store.validMain) {
+    if (res == 'main' && this.store.validMain()) {
       type = 'price';
     } else if (res == 'price') {
       type = 'inventory';

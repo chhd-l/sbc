@@ -931,7 +931,7 @@ export default class AppStore extends Store {
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
 
-    debugger
+    debugger;
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1131,7 +1131,7 @@ export default class AppStore extends Store {
       }
       result = await edit(param.toJS());
     } else {
-      debugger
+      debugger;
       result = await save(param.toJS());
     }
     this.dispatch('goodsActor: saveLoading', false);
@@ -1231,7 +1231,7 @@ export default class AppStore extends Store {
     goods = goods.set('goodsType', 0);
     goods = goods.set('goodsSource', 1);
 
-    debugger
+    debugger;
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1473,7 +1473,7 @@ export default class AppStore extends Store {
       }
       result = await edit(param.toJS());
     } else {
-      debugger
+      debugger;
       result = await save(param.toJS());
     }
 
@@ -2135,4 +2135,5 @@ export default class AppStore extends Store {
   modalVisibleFun = ({ key, value }) => {};
   onProductForm = ({ key, value }) => {};
   onEditSkuNo = ({ key, value }) => {};
+  validMain = ({ key, value }) => {};
 }

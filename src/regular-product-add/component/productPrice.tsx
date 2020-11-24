@@ -255,13 +255,10 @@ class SkuForm extends React.Component<any, any> {
                       }
                     }
                   ],
+
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
                   initialValue: rowInfo.marketPrice || 0
-                })(
-                  <div>
-                    <Input id="marketPrice" style={{ width: '60px' }} min={0} max={9999999} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                  </div>
-                )}
+                })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
               </FormItem>
             </p>
             <p>
@@ -286,8 +283,8 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                  initialValue: rowInfo.subscriptionPrice || 0
-                })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
+                  initialValue: (rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice) ? rowInfo.marketPrice : rowInfo.subscriptionPrice || 0
+                })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={(rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} /*disabled={rowInfo.subscriptionStatus === 0} */ />)}
               </FormItem>
             </p>
           </Col>

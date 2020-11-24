@@ -495,7 +495,11 @@ class SkuForm extends React.Component<any, any> {
         )
       });*!/
     }*/
-
+    columns = columns.push({
+      title: '',
+      key: '1',
+      width: '1%'
+    });
     return columns.toJS();
   };
   _handleChange = (value) => {

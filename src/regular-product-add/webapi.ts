@@ -45,7 +45,7 @@ export const fetchTaggingTotal = () => {
 };
 
 export const getGoodsCate = () => {
-  return Fetch('/store_cate/cates/total');
+  return Fetch('/store_cate/batch/cate');
 };
 
 /**
@@ -245,7 +245,7 @@ export const goodsFreightExpress = (freightTempId) => {
  * 获取素材类目列表
  */
 export const getResourceCates = () => {
-  return Fetch('/store_cate/cates/total');
+  return Fetch('/store_cate/batch/cate');
 };
 
 /**

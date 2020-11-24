@@ -448,7 +448,7 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'cateId'),
-                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
+                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? parseInt(goods.get('cateId') ): undefined
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}

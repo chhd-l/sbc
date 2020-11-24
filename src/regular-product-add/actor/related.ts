@@ -28,7 +28,8 @@ export default class BrandActor extends Actor {
 
       likeProductCategory: '',
       // 商品店铺分类
-      storeCateId: '-1',
+      storeCategoryIds: [],
+      goodsCateId: '',
       // 品牌编号
       brandId: '',
       // 上下架状态-也是tab页的下标
@@ -38,8 +39,6 @@ export default class BrandActor extends Actor {
 
       pageNum: 0,
       pageSize: 10,
-      cateList: [], //层级结构的分类列表
-      allCateList: [], //扁平的分类列表
       field: '',
       productTooltip: '',
       searchType: false,
@@ -114,6 +113,7 @@ export default class BrandActor extends Actor {
 
   @Action('form:field')
   formFieldChange(state: IMap, { key, value }) {
+    debugger
     return state.set(key, value);
   }
 

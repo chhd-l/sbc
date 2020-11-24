@@ -33,7 +33,8 @@ export default class SearchForm extends React.Component<any, any> {
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
-      cateList: IList;
+      allCateList: IList;
+      sourceGoodCateList: IList;
     };
   };
 
@@ -54,20 +55,12 @@ export default class SearchForm extends React.Component<any, any> {
     //品牌列表
     brandList: 'brandList',
     //分类列表
-    cateList: 'cateList'
+    cateList: 'cateList',
+    allCateList: 'allCateList'
   };
 
   render() {
-    const {
-      likeGoodsName,
-      likeGoodsInfoNo,
-      likeGoodsNo,
-      onSearch,
-      onFormFieldChange,
-      brandList,
-      cateList,
-      onEditSkuNo
-    } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo, allCateList } = this.props.relaxProps;
 
     const formItemLayout = {
       labelCol: {
@@ -85,22 +78,12 @@ export default class SearchForm extends React.Component<any, any> {
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('storeCateId')}
-            value={item.get('storeCateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
       });
 
     return (
@@ -167,12 +150,11 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem>
               <TreeSelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                allowClear
+                getPopupContainer={() => document.getElementById('page-content')}
                 label={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.storeCategory" />
+                     Sales category
                   </p>
                 }
                 /* defaultValue="全部"*/
@@ -180,12 +162,19 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCateId', value });
+                  let sourceCategories = allCateList ? allCateList.toJS() : []
+                  let childCategoryIds = []
+            
+                  var children = sourceCategories.filter(x=>x.cateParentId ===value);
+                  if(children && children.length > 0) {
+                    childCategoryIds = children.map(x=>x.storeCateId)
+                  } else {
+                    childCategoryIds = value
+                  }
+                  onFormFieldChange({ key: 'storeCateId', value:childCategoryIds});
                 }}
               >
-                <TreeNode key="-1" value="-1" title="All">
-                  {loop(cateList)}
-                </TreeNode>
+                {loop(cateList)}
               </TreeSelectGroup>
             </FormItem>
           </Col>
@@ -194,9 +183,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <SelectBox>
                 <SelectGroup
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
+                  getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
                     <p style={styles.label}>

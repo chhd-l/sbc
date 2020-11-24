@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { noop, history, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
@@ -11,6 +11,7 @@ export default class Foot extends React.Component<any, any> {
       currentTab: any;
       seoForm: any;
       currentPage: any;
+      loading: any;
       editSeo: Function;
     };
   };
@@ -19,15 +20,16 @@ export default class Foot extends React.Component<any, any> {
     currentTab: 'currentTab',
     seoForm: 'seoForm',
     currentPage: 'currentPage',
+    loading: 'loading',
     editSeo: noop
   };
 
   render() {
-    const { currentTab, editSeo } = this.props.relaxProps;
+    const { currentTab, editSeo, loading } = this.props.relaxProps;
     return (
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
-        <Button type="primary" onClick={this._save}>
+        <Button type="primary" onClick={this._save} disabled={loading}>
           Save
         </Button>
         {/*</AuthWrapper>*/}

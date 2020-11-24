@@ -4,9 +4,9 @@ import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import SeoSettingForm from './seo-setting-form';
+import PageSettingForm from './page-seo-form';
 const FormItem = Form.Item;
-const _SeoSettingForm = Form.create({})(SeoSettingForm);
+const _PageSettingForm = Form.create({})(PageSettingForm);
 
 @Relax
 export default class SeoModal extends Component<any, any> {
@@ -18,6 +18,7 @@ export default class SeoModal extends Component<any, any> {
       seoForm: any;
       setSeoModalVisible: Function;
       editSeo: Function;
+      clear: Function;
     };
   };
 
@@ -26,14 +27,17 @@ export default class SeoModal extends Component<any, any> {
     seoForm: 'seoForm',
     currentPage: 'currentPage',
     setSeoModalVisible: noop,
-    editSeo: noop
+    editSeo: noop,
+    clear: noop
   };
   constructor(props) {
     super(props);
   }
   componentDidMount() {}
   _handleModelCancel = () => {
-    const { setSeoModalVisible } = this.props.relaxProps;
+    const { setSeoModalVisible, clear } = this.props.relaxProps;
+    debugger;
+    clear();
     setSeoModalVisible(false);
   };
   _handleSubmit = () => {
@@ -62,7 +66,7 @@ export default class SeoModal extends Component<any, any> {
         onOk={this._handleSubmit}
       >
         <AuthWrapper functionName="fOrderList001">
-          <_SeoSettingForm />
+          <_PageSettingForm />
         </AuthWrapper>
       </Modal>
     );

@@ -3,7 +3,7 @@ import { Actor, Action, IMap } from 'plume2';
 export default class LoadingActor extends Actor {
   defaultState() {
     return {
-      loading: true
+      loading: false
     };
   }
 

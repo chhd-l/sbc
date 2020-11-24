@@ -4,7 +4,7 @@ import AppStore from './store';
 import './index.less';
 import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Tabs, Select, Input, Button, Table, Divider, message } from 'antd';
+import { Form, Tabs, Spin, Select, Input, Button, Table, Divider, message } from 'antd';
 import { Link } from 'react-router-dom';
 import SeoSettingForm from './components/seo-setting-form';
 import Foot from './components/foot';

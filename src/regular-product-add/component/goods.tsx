@@ -169,7 +169,8 @@ class GoodsForm extends React.Component<any, any> {
     this.state = {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
       goodsTaggingRelList: props.relaxProps.goodsTaggingRelList,
-      productFilter: props.relaxProps.productFilter
+      productFilter: props.relaxProps.productFilter,
+      filterList: []
     };
   }
 
@@ -177,6 +178,7 @@ class GoodsForm extends React.Component<any, any> {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     const goodsTaggingRelList = nextProps.relaxProps.goodsTaggingRelList;
     const productFilter = nextProps.relaxProps.productFilter;
+    const filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
     } else if (this.state.goodsTaggingRelList != goodsTaggingRelList) {
@@ -184,14 +186,46 @@ class GoodsForm extends React.Component<any, any> {
     } else if (this.state.productFilter != productFilter) {
       this.setState({ productFilter: productFilter });
     }
+
+    let filterList = [];
+    if (filtersTotal) {
+      let sourceFilter = filtersTotal.toJS();
+      sourceFilter.map((item) => {
+        let childrenNodes = [];
+        let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
+        let hasAttribute = item.attributesValueList && item.attributesValueList.length > 0;
+        if (hasCustmerAttribute || hasAttribute) {
+          let valuesList = hasCustmerAttribute ? item.storeGoodsFilterValueVOList : hasAttribute ? item.attributesValueList : [];
+          childrenNodes = valuesList.map((child) => {
+            return {
+              title: child.attributeDetailName,
+              value: child.id,
+              key: child.id,
+              isSingle: item.choiceStatus === 'Single choice',
+              filterType: item.filterType, // 1 is Custmered
+              parentId: hasAttribute ? item.attributeId : item.id
+            };
+          });
+          filterList.push({
+            title: item.attributeName,
+            value: hasAttribute ? item.attributeId : item.id,
+            key: hasAttribute ? item.attributeId : item.id,
+            children: childrenNodes
+          });
+        }
+        return item;
+      });
+    }
+    this.setState({
+      filterList
+    });
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, getGoodsCate, filtersTotal, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const goodsTaggingRelList = this.state.goodsTaggingRelList;
-    const productFilter = this.state.productFilter;
     const storeCateValues =
       (storeCateIds &&
         storeCateIds.toJS().map((id) => {
@@ -200,16 +234,11 @@ class GoodsForm extends React.Component<any, any> {
       [];
     const taggingRelListValues =
       (goodsTaggingRelList &&
-        goodsTaggingRelList.toJS().map((id) => {
-          return { value: id };
+        goodsTaggingRelList.map((x) => {
+          return x.taggingId;
         })) ||
       [];
-    const filterValues =
-      (productFilter &&
-        productFilter.toJS().map((id) => {
-          return { value: id };
-        })) ||
-      [];
+    const filterValues = this.getFilterValues();
     // const storeCateValues = [];
     //处理分类的树形图结构数据
 
@@ -665,9 +694,11 @@ class GoodsForm extends React.Component<any, any> {
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
-                  onChange={this.filterChange}
+                  onChange={(value: any) => {
+                    this.filterChange(value);
+                  }}
                 >
-                  {this.filtersTotalTree(filtersTotal)}
+                  {this.filtersTotalTree(this.state.filterList)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -933,119 +964,44 @@ class GoodsForm extends React.Component<any, any> {
     editGoods(goods);
   };
 
-  taggingChange = (value, _label, extra) => {
+  taggingChange = (taggingValues, _label, extra) => {
+    debugger
     const { onGoodsTaggingRelList } = this.props.relaxProps;
-    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
-    // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.taggingTotal || fromJS([]);
-
-    // 勾选的店铺分类列表
-    let originValues = fromJS(value.map((v) => v.value));
-
-    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
-    if (extra.clear || !extra.checked) {
-      sourceStoreCateList.forEach((cate) => {
-        // 删的是某个一级的
-        if (extra.triggerValue == cate.get('id') && cate.get('id') == 0) {
-          // 找到此一级节点下的二级节点
-          const children = sourceStoreCateList.filter((ss) => ss.get('id') == extra.triggerValue);
-          // 把一级的子节点也都删了
-          originValues = originValues.filter((v) => children.findIndex((c) => c.get('id') == v) == -1);
-        }
-      });
-    }
-
-    // 如果子节点被选中，上级节点也要被选中
-    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
-    originValues.forEach((v) => {
-      sourceStoreCateList.forEach((cate) => {
-        // 找到选中的分类，判断是否有上级
-        if (v == cate.get('id') && cate.get('id') != 0) {
-          // 判断上级是否已添加过，如果没有添加过，添加
-          let exist = false;
-          originValues.forEach((vv) => {
-            if (vv == cate.get('id')) {
-              exist = true;
-            }
-          });
-          if (!exist) {
-            originValues = originValues.push(cate.get('id'));
-          }
-        }
-      });
-    });
-    const goodsTaggingRelList = originValues;
-
-    const goods = Map({
-      ['id']: goodsTaggingRelList
+    let originValues = taggingValues.map((v) => v.value);
+    const goodsTaggingRelList = [];
+    originValues.map((x) => {
+      goodsTaggingRelList.push({ taggingId: x });
     });
 
     // 强制刷新店铺分类的选中视图
-    this.setState({ goodsTaggingRelList }, () => {
-      this.props.form.resetFields(['id']);
-    });
+    this.setState({ goodsTaggingRelList }, () => {});
 
-    onGoodsTaggingRelList(goods);
+    onGoodsTaggingRelList(goodsTaggingRelList);
   };
 
-  filterChange = (value, _label, extra) => {
-    console.log(_label, 22222);
-    console.log(value, 1111111);
-    console.log(extra, 22222233333333);
+  filterChange = (values) => {
     const { onProductFilter } = this.props.relaxProps;
-
-    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
-    // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.filtersTotal || fromJS([]);
-    console.log(sourceStoreCateList.toJS());
-
-    // 勾选的店铺分类列表
-    let originValues = fromJS(value.map((v) => v.value));
-
-    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
-    if (extra.clear || !extra.checked) {
-      sourceStoreCateList.forEach((cate) => {
-        // 删的是某个一级的
-        if (extra.triggerValue == cate.get('id') && cate.get('id') == 0) {
-          // 找到此一级节点下的二级节点
-          const children = sourceStoreCateList.filter((ss) => ss.get('id') == extra.triggerValue);
-          // 把一级的子节点也都删了
-          originValues = originValues.filter((v) => children.findIndex((c) => c.get('id') == v) == -1);
-        }
-      });
-    }
-
-    // 如果子节点被选中，上级节点也要被选中
-    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
-    console.log(originValues.toJS(), 2222222222);
-    originValues.forEach((v) => {
-      sourceStoreCateList.forEach((cate) => {
-        // 找到选中的分类，判断是否有上级
-        if (v == cate.get('id') && cate.get('id') != 0) {
-          // 判断上级是否已添加过，如果没有添加过，添加
-          let exist = false;
-          originValues.forEach((vv) => {
-            if (vv == cate.get('id')) {
-              exist = true;
-            }
-          });
-          if (!exist) {
-            originValues = originValues.push(cate.get('id'));
-          }
-        }
-      });
+    let allChildrenList = [];
+    this.state.filterList.map((x) => {
+      x.children.map((c) => allChildrenList.push(c));
     });
-    const productFilter = originValues;
+    let filterValues = values.map((x) => x.value);
+    let selectChildren = allChildrenList.filter((x) => filterValues.includes(x.value));
 
-    const goods = Map({
-      ['id']: productFilter
+    let productFilter = [];
+
+    selectChildren.map((child) => {
+      productFilter.push({
+        filterId: child.parentId,
+        filterValueId: child.value
+      });
     });
     // 强制刷新店铺分类的选中视图
     this.setState({ productFilter }, () => {
-      this.props.form.resetFields(['id']);
+      this.filtersTotalTree(this.state.filterList);
     });
 
-    onProductFilter(goods);
+    onProductFilter(productFilter);
   };
 
   /**
@@ -1105,7 +1061,7 @@ class GoodsForm extends React.Component<any, any> {
       storeCateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} /*disabled checkable={false}*/>
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} disabled checkable={false}>
               {this.generateStoreCateTree(item.get('children'))}
             </TreeNode>
           );
@@ -1115,26 +1071,41 @@ class GoodsForm extends React.Component<any, any> {
     );
   };
 
-  filtersTotalTree = (filtersTotalTree) => {
+  filtersTotalTree = (filterList) => {
     return (
-      filtersTotalTree &&
-      filtersTotalTree.map((item, i) => {
-        if (item.get('attributesValueList') && item.get('attributesValueList').count()) {
+      filterList &&
+      filterList.map((item) => {
+        let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
+        let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
+        let selectedFilters = this.getFilterValues();
+        let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
+        let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
+        if (item.children && item.children.length > 0) {
           return (
-            <TreeNode key={item.id} value={item.get('id')} title={item.get('attributeName')}>
-              {this.filtersTotalTree(item.get('attributesValueList'))}
+            <TreeNode key={'parent' + item.key} value={'partent' + item.value} title={item.title} disabled checkable={false}>
+              {this.filtersTotalTree(item.children)}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.id} value={item.get('id')} title={item.get('attributeName')} />;
+        return <TreeNode key={item.key} value={item.value} title={item.title} disabled={singleDisabled} />;
       })
     );
   };
 
-  loopTagging = (filtersTotalTree) => {
+  getFilterValues() {
+    const filterValues =
+      (this.state.productFilter &&
+        this.state.productFilter.map((x) => {
+          return x.filterValueId;
+        })) ||
+      [];
+    return filterValues;
+  }
+
+  loopTagging = (taggingTotalTree) => {
     return (
-      filtersTotalTree &&
-      filtersTotalTree.map((item) => {
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
         return <TreeNode key={item.id} value={item.get('id')} title={item.get('taggingName')} />;
       })
     );

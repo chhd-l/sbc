@@ -1328,14 +1328,26 @@ export default class AppStore extends Store {
 
       goodsList = goodsList.push(
         Map({
-          goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
+          /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
           stock: item.get('stock'),
           marketPrice: item.get('marketPrice'),
           mockSpecIds,
           mockSpecDetailIds,
-          goodsInfoImg: imageUrl
+          goodsInfoImg: imageUrl*/
+          goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
+          goodsInfoNo: item.get('goodsInfoNo'),
+          goodsInfoBarcode: item.get('goodsInfoBarcode'),
+          stock: item.get('stock'),
+          marketPrice: item.get('marketPrice') || 0,
+          mockSpecIds,
+          mockSpecDetailIds,
+          goodsInfoImg: imageUrl,
+          linePrice: item.get('linePrice') || 0,
+          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
+          description: item.get('description')
         })
       );
     });

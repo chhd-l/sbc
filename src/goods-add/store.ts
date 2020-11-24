@@ -926,6 +926,10 @@ export default class AppStore extends Store {
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
 
+    goods = goods.set('freightTempId', '62');
+    goods = goods.set('goodsWeight', '1');
+    goods = goods.set('goodsCubage', '1'); // for hide 物流表单
+
     param = param.set('goods', goods);
     // 基本信息保存参数中要把priceType去掉 priceType-mark
     // param = param.removeIn(['goods', 'priceType']);
@@ -1438,9 +1442,9 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      result = await editAll(param.toJS());
+      result = await edit(param.toJS());
     } else {
-      result = await addAll(param.toJS());
+      result = await save(param.toJS());
     }
 
     this.dispatch('goodsActor: saveLoading', false);
@@ -1908,22 +1912,22 @@ export default class AppStore extends Store {
    * 运费模板首重，续重信息
    */
   setGoodsFreight = async (freightTempId: number, isSelect: boolean) => {
-    const { res, err } = await goodsFreight(freightTempId);
-    if (!err && res.code === Const.SUCCESS_CODE) {
-      if (isSelect) {
-        this.dispatch('freight:selectTemp', fromJS(res.context));
-        const result = (await goodsFreightExpress(freightTempId)) as any;
-        if (result.res.code === Const.SUCCESS_CODE) {
-          this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
-        } else {
-          message.error(result.res.message);
-        }
-      } else {
-        this.dispatch('freight:freightTemp', fromJS(res.context));
-      }
-    } else {
-      message.error(res.message);
-    }
+    // const { res, err } = await goodsFreight(freightTempId);
+    // if (!err && res.code === Const.SUCCESS_CODE) {
+    //   if (isSelect) {
+    //     this.dispatch('freight:selectTemp', fromJS(res.context));
+    //     const result = (await goodsFreightExpress(freightTempId)) as any;
+    //     if (result.res.code === Const.SUCCESS_CODE) {
+    //       this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
+    //     } else {
+    //       message.error(result.res.message);
+    //     }
+    //   } else {
+    //     this.dispatch('freight:freightTemp', fromJS(res.context));
+    //   }
+    // } else {
+    //   message.error(res.message);
+    // }
   };
 
   /**

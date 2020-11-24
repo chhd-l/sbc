@@ -148,6 +148,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                       })(
                         <Input
                           style={{ width: 200 }}
+                          title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
                             this.onChange(index, 'discount', e.target.value);

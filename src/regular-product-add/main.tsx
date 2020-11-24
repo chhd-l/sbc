@@ -83,7 +83,7 @@ export default class Main extends React.Component<any, any> {
     let type = res || 'main';
     if (res == 'main' && this.store._validMainForms()) {
       type = 'price';
-    } else if (res == 'price' && this.store._validPriceForms()) {
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
     } else if (res == 'inventory') {
       type = 'related';

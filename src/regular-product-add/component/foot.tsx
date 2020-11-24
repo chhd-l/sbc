@@ -20,7 +20,6 @@ export default class Foot extends React.Component<any, any> {
     onNext: Function;
     onPrev: Function;
     relaxProps?: {
-      validMain: Function;
       saveMain: Function;
       saveAll: Function;
       saveLoading: boolean;
@@ -33,7 +32,6 @@ export default class Foot extends React.Component<any, any> {
   };
 
   static relaxProps = {
-    validMain: noop,
     saveMain: noop,
     saveAll: noop,
     saveLoading: 'saveLoading',

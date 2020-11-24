@@ -199,7 +199,6 @@ class SkuForm extends React.Component<any, any> {
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

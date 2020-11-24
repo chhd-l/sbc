@@ -81,7 +81,7 @@ export default class Main extends React.Component<any, any> {
 
   onNext = (res) => {
     let type = 'main';
-    if (res == 'main') {
+    if (res == 'main' && this.store.validMain) {
       type = 'price';
     } else if (res == 'price') {
       type = 'inventory';
@@ -115,6 +115,7 @@ export default class Main extends React.Component<any, any> {
         priceFuncName = 'f_goods_sku_edit_3';
       }
     }
+    const currentTab = this.store.state().get('currentTab');
 
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
@@ -142,7 +143,7 @@ export default class Main extends React.Component<any, any> {
             // onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main" disabled style={styles.cursorDefaultStyle}>
+              <Tabs.TabPane tab="Product information" key="main" disabled>
                 <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
@@ -162,12 +163,12 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled style={styles.cursorDefaultStyle}>
+            <Tabs.TabPane tab="Product price" key="price" disabled>
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory" disabled style={styles.cursorDefaultStyle}>
+            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
               <AlertInfo />
 
               <ProductInventory />
@@ -177,7 +178,7 @@ export default class Main extends React.Component<any, any> {
               tab="Related product"
               key="related"
               disabled
-              style={styles.cursorDefaultStyle}
+
               //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo />
@@ -188,7 +189,7 @@ export default class Main extends React.Component<any, any> {
               tab="SEO Setting"
               key="seo"
               disabled
-              style={styles.cursorDefaultStyle}
+
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo
@@ -249,8 +250,3 @@ export default class Main extends React.Component<any, any> {
     return null;
   }
 }
-const styles = {
-  cursorDefaultStyle: {
-    cursor: 'default'
-  }
-};

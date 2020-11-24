@@ -58,9 +58,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   render() {
     const { getThreshold, bulkExport } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(getThreshold, 11111111);
-    });
+
     return (
       <div className="filter-content">
         <Alert message="Set an amount that when products are below this certain amount, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />

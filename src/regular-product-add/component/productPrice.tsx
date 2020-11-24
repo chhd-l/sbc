@@ -197,7 +197,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
             </FormItem>
           </Col>
         </Row>
@@ -258,7 +258,7 @@ class SkuForm extends React.Component<any, any> {
 
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
                   initialValue: rowInfo.marketPrice || 0
-                })(<InputNumber min={0} max={9999999} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}></InputNumber>)}
+                })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
               </FormItem>
             </p>
             <p>
@@ -284,7 +284,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
                   initialValue: (rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice) ? rowInfo.marketPrice : rowInfo.subscriptionPrice || 0
-                })(<InputNumber min={0} max={9999999} precision={2} disabled={(rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}></InputNumber>)}
+                })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={(rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} /*disabled={rowInfo.subscriptionStatus === 0} */ />)}
               </FormItem>
             </p>
           </Col>
@@ -385,27 +385,28 @@ class SkuForm extends React.Component<any, any> {
   _editGoodsItem = (id: string, key: string, e: any) => {
     const { editGoodsItem, synchValue } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
-    let value = 0;
     if (e && e.target) {
-      value = e.target.value;
-      editGoodsItem(id, key, value);
-      if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
-        // 是否同步库存
-        if (checked) {
-          // 修改store中的库存或市场价
-          synchValue(key);
-          // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
-          const fieldsValue = this.props.form.getFieldsValue();
-          // 同步库存/市场价
-          let values = {};
-          Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
-            if (field.indexOf(`${key}_`) === 0) {
-              values[field] = e;
-            }
-          });
-          // update
-          this.props.form.setFieldsValue(values);
-        }
+      e = e.target.value;
+    }
+
+    editGoodsItem(id, key, e);
+
+    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
+      // 是否同步库存
+      if (checked) {
+        // 修改store中的库存或市场价
+        synchValue(key);
+        // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
+        const fieldsValue = this.props.form.getFieldsValue();
+        // 同步库存/市场价
+        let values = {};
+        Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
+          if (field.indexOf(`${key}_`) === 0) {
+            values[field] = e;
+          }
+        });
+        // update
+        this.props.form.setFieldsValue(values);
       }
     }
   };

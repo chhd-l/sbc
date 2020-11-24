@@ -175,6 +175,10 @@ class SkuForm extends React.Component<any, any> {
               {getFieldDecorator('stock_' + rowInfo.id, {
                 rules: [
                   {
+                    required: true,
+                    message: 'Please input inventory'
+                  },
+                  {
                     pattern: ValidConst.number,
                     message: '0 or positive integer'
                   }

@@ -840,7 +840,34 @@ export default class AppStore extends Store {
 
     return valid;
   }
-
+  _validPriceFormsNew() {
+    let valid = true;
+    let goodsList = this.state().get('goodsList');
+    if (goodsList) {
+      goodsList.forEach((item) => {
+        if (!(item.get('marketPrice') || item.get('marketPrice') == 0) || !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+          message.error('Please input market price');
+          valid = false;
+          return;
+        }
+      });
+    }
+    return valid;
+  }
+  _validInventoryFormsNew() {
+    let valid = true;
+    let goodsList = this.state().get('goodsList');
+    if (goodsList) {
+      goodsList.forEach((item) => {
+        if (!(item.get('stock') || item.get('stock') == 0)) {
+          message.error('Please input Inventory');
+          valid = false;
+          return;
+        }
+      });
+    }
+    return valid;
+  }
   validMain = () => {
     return this._validMainForms();
   };
@@ -931,8 +958,6 @@ export default class AppStore extends Store {
     goods = goods.set('goodsType', 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
-
-    debugger
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1132,7 +1157,6 @@ export default class AppStore extends Store {
       }
       result = await edit(param.toJS());
     } else {
-      debugger
       result = await save(param.toJS());
     }
     this.dispatch('goodsActor: saveLoading', false);
@@ -1170,7 +1194,7 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async () => {
-    if (!this._validMainForms() || !this._validPriceForms()) {
+    if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
 
@@ -1231,8 +1255,6 @@ export default class AppStore extends Store {
 
     goods = goods.set('goodsType', 0);
     goods = goods.set('goodsSource', 1);
-
-    debugger
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1474,7 +1496,6 @@ export default class AppStore extends Store {
       }
       result = await edit(param.toJS());
     } else {
-      debugger
       result = await save(param.toJS());
     }
 

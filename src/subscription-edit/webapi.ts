@@ -69,15 +69,9 @@ export function updateSubscription(filterParams = {}) {
  * @param filterParams
  */
 export function getAddressListByType(id = null, type = '') {
-  return Fetch<TResult>(
-    '/customer/addressList/listByCustomerIdAndType?customerId=' +
-      id +
-      '&type=' +
-      type,
-    {
-      method: 'Get'
-    }
-  );
+  return Fetch<TResult>('/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
+    method: 'Get'
+  });
 }
 // 根据订阅单号查找日志信息
 export function getBySubscribeId(filterParams = {}) {
@@ -92,6 +86,15 @@ export function getBySubscribeId(filterParams = {}) {
 // 根据参数查询促销的金额与订单运费
 export function getPromotionPrice(filterParams = {}) {
   return Fetch<TResult>('/sub/getPromotionPrice', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function cancelNextSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/cancelNextSubscription', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

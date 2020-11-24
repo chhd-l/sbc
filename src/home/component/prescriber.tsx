@@ -255,7 +255,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="subscription-btm">
                     <div className="consumer-top flex-start">
                       <div className="mode">
-                        <div className="mode-text">Number</div>
+                        <div className="mode-text">Order Number</div>
                         <div className="mode-num">
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                         </div>
@@ -267,7 +267,7 @@ export default class Prescriber extends React.Component<any, any> {
                         </div>
                       </div>
                       <div className="mode">
-                        <div className="mode-text">Revenue</div>
+                        <div className="mode-text">Sales volume</div>
                         <div className="mode-num">
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} {...countUpProps} /> : '--'}</span>
                         </div>

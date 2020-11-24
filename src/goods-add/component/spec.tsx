@@ -137,8 +137,8 @@ class SpecForm extends React.Component<any, any> {
                                 },
                                 {
                                   min: 1,
-                                  max: 10,
-                                  message: 'No more than 10 characters'
+                                  max: 100,
+                                  message: 'No more than 100 characters'
                                 },
                                 {
                                   // 重复校验,

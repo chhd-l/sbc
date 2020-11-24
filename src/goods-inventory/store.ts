@@ -22,9 +22,24 @@ export default class AppStore extends Store {
   /**
    * 初始化
    */
-  init = async ({ pageNum, pageSize, stock } = { pageNum: 0, pageSize: 10, stock: 10 }) => {
+  init = async (pageNum, pageSize, stock) => {
+    console.log(pageNum, 1111111111);
+    console.log(pageSize, 222222222222);
+    console.log(stock, 333333333333);
+    let param = {
+      pageNum: 0,
+      pageSize: 10,
+      stock: 10
+    };
+    if (!pageNum && !pageSize && !stock) {
+      param = {
+        pageNum: pageNum,
+        pageSize: pageSize,
+        stock: stock
+      };
+    }
     this.dispatch('loading:start');
-    const { res, err } = (await webapi.goodsList(pageNum, pageSize, stock)) as any;
+    const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('list:init', res.context.goodsInfoPage);
       this.dispatch('current', pageNum + 1);
@@ -75,7 +90,7 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref = Const.HOST + `/inventory/goodsInfo?/${encrypted}`;
+          const exportHref = Const.HOST + `/inventory/export/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

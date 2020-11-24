@@ -9,11 +9,6 @@ export default class SeoActor extends Actor {
         metaKeywords: '',
         description: ''
       },
-      pageForm: {
-        title: '',
-        metaKeywords: '',
-        description: ''
-      },
       seoModalVisible: false,
       currentTab: 'siteSeo',
       currentPage: '',

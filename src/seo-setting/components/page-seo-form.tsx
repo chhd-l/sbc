@@ -23,7 +23,7 @@ const formItemLayout = {
 };
 
 @Relax
-export default class SeoSettingForm extends Component<any, any> {
+export default class PageSettingForm extends Component<any, any> {
   _rejectForm;
 
   WrapperForm: any;
@@ -45,16 +45,16 @@ export default class SeoSettingForm extends Component<any, any> {
     updateSeoForm: noop,
     getSeo: noop
   };
-  componentDidMount() {
-    const { getSeo } = this.props.relaxProps;
-    getSeo(4);
-  }
+  componentDidMount() {}
 
   render() {
     const { getFieldDecorator } = this.props.form;
     const { seoForm, updateSeoForm, loading } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-    console.log(seoObj, 'seoObj--------------');
+
+    setTimeout(() => {
+      console.log(seoObj, 'seoObj--------------');
+    });
     return (
       <div>
         {loading ? (

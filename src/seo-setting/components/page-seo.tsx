@@ -52,7 +52,7 @@ export default class PageSeo extends React.Component<any, any> {
         title: 'Operation',
         dataIndex: 'Operation',
         key: 'Operation',
-        render: (text, record) => <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>
+        render: (text, record) => <a style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>
       }
     ];
     return (

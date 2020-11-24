@@ -557,7 +557,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       let goods = {
         goodsInfoId: goodsInfo[i].skuId,
         buyCount: goodsInfo[i].subscribeNum,
-        periodTypeId: goodsInfo[i].periodTypeId
+        periodTypeId: goodsInfo[i].periodTypeId,
+        goodsInfoFlag: 1
       };
       goodsInfoList.push(goods);
     }

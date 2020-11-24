@@ -80,11 +80,10 @@ export default class Main extends React.Component<any, any> {
   };
 
   onNext = (res) => {
-
-    let type = 'main';
-    if (res == 'main') {
+    let type = res || 'main';
+    if (res == 'main' && this.store._validMainForms()) {
       type = 'price';
-    } else if (res == 'price') {
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
     } else if (res == 'inventory') {
       type = 'related';
@@ -116,6 +115,7 @@ export default class Main extends React.Component<any, any> {
         priceFuncName = 'f_goods_sku_edit_3';
       }
     }
+    const currentTab = this.store.state().get('currentTab');
 
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
@@ -140,10 +140,10 @@ export default class Main extends React.Component<any, any> {
             //onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
             //defaultActiveKey="main"
             //ref={(e) => { this._Tabs = e }}
-            onChange={(activeKey) => this.onMainTabChange(activeKey)}
+            // onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main">
+              <Tabs.TabPane tab="Product information" key="main" disabled>
                 <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
@@ -163,12 +163,12 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price">
+            <Tabs.TabPane tab="Product price" key="price" disabled>
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory">
+            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
               <AlertInfo />
 
               <ProductInventory />
@@ -177,6 +177,8 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="Related product"
               key="related"
+              disabled
+
               //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo />
@@ -186,6 +188,8 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="SEO Setting"
               key="seo"
+              disabled
+
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo

@@ -808,13 +808,14 @@ export default class AppStore extends Store {
    * @private
    */
   _validPriceForms() {
-    let valid = true;
+    let valid = false;
     // 校验表单
     if (this.state().get('levelPriceForm') && this.state().get('levelPriceForm').validateFieldsAndScroll) {
       this.state()
         .get('levelPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
           valid = valid && !errs;
+          debugger;
           if (!errs) {
           }
         });
@@ -824,6 +825,7 @@ export default class AppStore extends Store {
         .get('userPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
           valid = valid && !errs;
+          debugger;
           if (!errs) {
           }
         });
@@ -833,6 +835,7 @@ export default class AppStore extends Store {
         .get('areaPriceForm')
         .validateFieldsAndScroll(null, (errs) => {
           valid = valid && !errs;
+          debugger;
           if (!errs) {
           }
         });
@@ -840,10 +843,6 @@ export default class AppStore extends Store {
 
     return valid;
   }
-
-  validMain = () => {
-    return this._validMainForms();
-  };
 
   /**
    * 保存商品基本信息

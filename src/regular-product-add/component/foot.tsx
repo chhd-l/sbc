@@ -17,6 +17,8 @@ export default class Foot extends React.Component<any, any> {
     goodsFuncName: string;
     priceFuncName: string;
     tabType: string;
+    onNext: Function;
+    onPrev: Function;
     relaxProps?: {
       validMain: Function;
       saveMain: Function;

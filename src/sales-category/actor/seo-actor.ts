@@ -10,7 +10,8 @@ export default class SeoActor extends Actor {
         metaDescriptionSource: '{description}'
       },
       seoModalVisible: false,
-      currentStoreCateId: null
+      currentStoreCateId: null,
+      loading: false
     };
   }
 
@@ -44,5 +45,15 @@ export default class SeoActor extends Actor {
         metaDescriptionSource: '{description}'
       })
     );
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

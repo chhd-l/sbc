@@ -379,7 +379,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
       let goods = {
         goodsInfoId: goodsInfo[i].skuId,
-        buyCount: goodsInfo[i].subscribeNum
+        buyCount: goodsInfo[i].subscribeNum,
+        goodsInfoFlag: 1
       };
       goodsInfoList.push(goods);
     }

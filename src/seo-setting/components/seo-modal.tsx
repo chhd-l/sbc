@@ -36,8 +36,6 @@ export default class SeoModal extends Component<any, any> {
   componentDidMount() {}
   _handleModelCancel = () => {
     const { setSeoModalVisible, clear } = this.props.relaxProps;
-    debugger;
-    clear();
     setSeoModalVisible(false);
   };
   _handleSubmit = () => {
@@ -50,7 +48,7 @@ export default class SeoModal extends Component<any, any> {
       titleSource: seoObj.title,
       pageName: currentPage
     };
-    editSeo(params);
+    editSeo(params, 1);
   };
   uploadImage() {}
   render() {

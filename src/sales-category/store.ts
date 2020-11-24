@@ -498,8 +498,10 @@ export default class AppStore extends Store {
     this.clear();
     this.setCurrentStoreCateId(storeCateId);
     this.setSeoModalVisible(true);
+    this.dispatch('loading:start');
     const { res } = (await getSeo(storeCateId, type)) as any;
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      this.dispatch('loading:end');
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
@@ -511,7 +513,15 @@ export default class AppStore extends Store {
     }
   };
   editSeo = async (params) => {
-    const res = await editSeo(params);
+    this.dispatch('loading:start');
+    const { res } = (await editSeo(params)) as any;
+    if (res.code === Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
+      message.success('Save successfully.');
+      this.setSeoModalVisible(false);
+    } else {
+      message.success('Save error.');
+    }
   };
   setCurrentStoreCateId = (storeCateId) => {
     this.dispatch('seoActor: currentStoreCateId', storeCateId);
@@ -521,16 +531,15 @@ export default class AppStore extends Store {
     this.dispatch('seoActor: clear');
   };
   //更新显示状态
-  updateDisplayStatus =  (params) => {
-    editCate(params).then(data=>{
-      const {res} = data
-       if (res.code === Const.SUCCESS_CODE) {
-      // 刷新
-      this.refresh();
-    } else {
-      message.error(res.message);
-    }
-    })
-   
+  updateDisplayStatus = (params) => {
+    editCate(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        // 刷新
+        this.refresh();
+      } else {
+        message.error(res.message);
+      }
+    });
   };
 }

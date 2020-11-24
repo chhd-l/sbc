@@ -47,7 +47,6 @@ export default class SeoSettingModal extends Component<any, any> {
       titleSource: seoObj.titleSource
     };
     editSeo(params);
-    setSeoModalVisible(false);
   };
   uploadImage() {}
   render() {

@@ -75,7 +75,7 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref = Const.HOST + `/inventory/goodsInfo?/${encrypted}`;
+          const exportHref = Const.HOST + `/inventory/export/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

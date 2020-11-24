@@ -97,7 +97,9 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-
+    setTimeout(() => {
+      console.log(goodsList.toJS(), 1111111111111111);
+    });
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>

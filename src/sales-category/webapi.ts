@@ -108,7 +108,7 @@ export function fetchImages(params = {}) {
 }
 
 export const getSeo = (storeCateId, type = 2) => {
-  return Fetch(`/seo/setting?type=${type}&cateParentId=${storeCateId}`);
+  return Fetch(`/seo/setting?type=${type}&storeCateId=${storeCateId}`);
 };
 
 export const editSeo = (params) => {

@@ -38,10 +38,14 @@ export default class AppStore extends Store {
     this.clear();
     if (pageName) {
       this.changeCurrentPage(pageName);
-      this.setSeoModalVisible(true);
     }
+    this.dispatch('loading:start');
     const { res } = (await webapi.getSeo(type, pageName)) as any;
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
+      if (pageName) {
+        this.setSeoModalVisible(true);
+      }
+      this.dispatch('loading:end');
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
@@ -56,7 +60,14 @@ export default class AppStore extends Store {
     this.dispatch('seoActor: clear');
   };
   editSeo = async (params) => {
-    const res = await webapi.editSeo(params);
+    this.dispatch('loading:start');
+    const { res } = (await webapi.editSeo(params)) as any;
+    if (res.code === Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
+      message.success('Save successfully.');
+    } else {
+      message.error('Save Error.');
+    }
   };
   addSeo = async (params) => {
     const res = await webapi.addSeo(params);

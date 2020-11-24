@@ -234,8 +234,8 @@ class GoodsForm extends React.Component<any, any> {
       [];
     const taggingRelListValues =
       (goodsTaggingRelList &&
-        goodsTaggingRelList.toJS().map((id) => {
-          return { value: id };
+        goodsTaggingRelList.map((x) => {
+          return x.taggingId;
         })) ||
       [];
     const filterValues = this.getFilterValues();
@@ -965,6 +965,7 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   taggingChange = (taggingValues, _label, extra) => {
+    debugger
     const { onGoodsTaggingRelList } = this.props.relaxProps;
     let originValues = taggingValues.map((v) => v.value);
     const goodsTaggingRelList = [];
@@ -1101,10 +1102,10 @@ class GoodsForm extends React.Component<any, any> {
     return filterValues;
   }
 
-  loopTagging = (filtersTotalTree) => {
+  loopTagging = (taggingTotalTree) => {
     return (
-      filtersTotalTree &&
-      filtersTotalTree.map((item) => {
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
         return <TreeNode key={item.id} value={item.get('id')} title={item.get('taggingName')} />;
       })
     );

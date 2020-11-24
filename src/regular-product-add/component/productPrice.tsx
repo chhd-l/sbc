@@ -197,7 +197,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '150px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
             </FormItem>
           </Col>
         </Row>
@@ -259,7 +259,7 @@ class SkuForm extends React.Component<any, any> {
                   initialValue: rowInfo.marketPrice || 0
                 })(
                   <div>
-                    <Input id="marketPrice" style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                    <Input id="marketPrice" style={{ width: '60px' }} min={0} max={9999999} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   </div>
                 )}
               </FormItem>

@@ -868,9 +868,9 @@ export default class AppStore extends Store {
     }
     return valid;
   }
-  validMain() {
+  validMain = () => {
     return this._validMainForms();
-  }
+  };
 
   /**
    * 保存商品基本信息

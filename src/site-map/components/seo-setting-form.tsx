@@ -3,7 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 import { fromJS, Map } from 'immutable';
 import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Select, Input, Button, Table, Divider, message, Icon } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Icon, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import { IMap } from '../../../typings/globalType';
 const { TextArea } = Input;
@@ -33,6 +33,7 @@ export default class SeoSettingForm extends Component<any, any> {
     form: any;
     relaxProps?: {
       seoForm: any;
+      loading: any;
       updateSeoForm: Function;
       getContent: Function;
     };
@@ -40,6 +41,7 @@ export default class SeoSettingForm extends Component<any, any> {
 
   static relaxProps = {
     seoForm: 'seoForm',
+    loading: 'loading',
     updateSeoForm: noop,
     getContent: noop
   };
@@ -50,26 +52,33 @@ export default class SeoSettingForm extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { seoForm, updateSeoForm } = this.props.relaxProps;
+    const { seoForm, updateSeoForm, loading } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
     return (
-      <Form {...formItemLayout} className="login-form">
-        <Form.Item label="Site Map">
-          {getFieldDecorator('content', {
-            initialValue: seoObj.content
-          })(
-            <TextArea
-              rows={12}
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'content',
-                  value: e.target.value
-                })
-              }
-            />
-          )}
-        </Form.Item>
-      </Form>
+      <div>
+        {loading ? (
+          <div className="spin-container">
+            <Spin />
+          </div>
+        ) : null}
+        <Form {...formItemLayout} className="login-form">
+          <Form.Item label="Site Map">
+            {getFieldDecorator('content', {
+              initialValue: seoObj.content
+            })(
+              <TextArea
+                rows={12}
+                onChange={(e) =>
+                  updateSeoForm({
+                    field: 'content',
+                    value: e.target.value
+                  })
+                }
+              />
+            )}
+          </Form.Item>
+        </Form>
+      </div>
     );
   }
 }

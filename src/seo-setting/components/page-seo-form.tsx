@@ -48,10 +48,14 @@ export default class PageSettingForm extends Component<any, any> {
   componentDidMount() {}
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, setFieldsValue } = this.props.form;
     const { seoForm, updateSeoForm, loading } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-
+    setFieldsValue({
+      title: seoObj.title,
+      metaKeywords: seoObj.metaKeywords,
+      description: seoObj.description
+    });
     setTimeout(() => {
       console.log(seoObj, 'seoObj--------------');
     });

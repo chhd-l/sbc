@@ -2,7 +2,6 @@ import { IOptions, Store, ViewAction } from 'plume2';
 import { message, Modal } from 'antd';
 import LoadingActor from './actor/loading-actor';
 import SeoActor from './actor/seo-actor';
-import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
 import { cache, Const, history, util } from 'qmkit';
@@ -26,8 +25,10 @@ export default class AppStore extends Store {
   };
 
   getContent = async () => {
+    this.dispatch('loading:start');
     const { res } = (await webapi.getContent()) as any;
     if (res && res.code === Const.SUCCESS_CODE && res.context.siteMapVO) {
+      this.dispatch('loading:end');
       this.updateSeoForm({
         field: 'content',
         value: res.context.siteMapVO.content
@@ -35,6 +36,11 @@ export default class AppStore extends Store {
     }
   };
   save = async (params) => {
-    const res = await webapi.save(params);
+    this.dispatch('loading:start');
+    const { res } = (await webapi.save(params)) as any;
+    if (res && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
+      message.success('Save successfully.');
+    }
   };
 }

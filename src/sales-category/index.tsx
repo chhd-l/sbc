@@ -10,6 +10,7 @@ import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
 import PicModal from './component/pic-modal';
 import SeoSettingModal from './component/seo-setting-modal';
+import './index.less';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
   store: AppStore;

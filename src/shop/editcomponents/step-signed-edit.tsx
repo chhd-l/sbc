@@ -111,31 +111,15 @@ export default class StepThree extends React.Component<any, any> {
           <div>
             <Red>*</Red>
             <H2>Signing Categories</H2>
-            <GreyText>
-              Signed {cateList.length} Categories, Can sign up to 200 categories
-            </GreyText>
-            <Button onClick={this._showSortsModal}>
+            <GreyText>Signed {cateList.length} Categories, Can sign up to 200 categories</GreyText>
+            <Button onClick={this._showSortsModal} disabled>
               Edit Contract Category
             </Button>
           </div>
           <TableBox>
-            <DataGrid
-              dataSource={cateList}
-              scroll={{ y: 240 }}
-              pagination={false}
-            >
-              <Column
-                title="Category"
-                dataIndex="cateName"
-                key="cateName"
-                width="15%"
-              />
-              <Column
-                title="Superior Category"
-                dataIndex="parentGoodCateNames"
-                key="parentGoodCateNames"
-                width="20%"
-              />
+            <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false}>
+              <Column title="Category" dataIndex="cateName" key="cateName" width="15%" />
+              <Column title="Superior Category" dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
               <Column
                 title="Category Deduction Rate"
                 dataIndex="cateRate"
@@ -160,16 +144,7 @@ export default class StepThree extends React.Component<any, any> {
                   return images.length > 0 ? (
                     <PicBox>
                       {images.map((v, k) => {
-                        return (
-                          <img
-                            src={v}
-                            key={k}
-                            alt=""
-                            onClick={() =>
-                              this.setState({ showImg: true, imgUrl: v })
-                            }
-                          />
-                        );
+                        return <img src={v} key={k} alt="" onClick={() => this.setState({ showImg: true, imgUrl: v })} />;
                       })}
                     </PicBox>
                   ) : (
@@ -184,23 +159,14 @@ export default class StepThree extends React.Component<any, any> {
           <div>
             <Red>*</Red>
             <H2>Signed Brand</H2>
-            <GreyText>
-              Signed {totalBrand} brand, Up to 50 brands can be signed
-            </GreyText>
-            <Button onClick={this._showModal}>Edit Contracted Brand</Button>
+            <GreyText>Signed {totalBrand} brand, Up to 50 brands can be signed</GreyText>
+            <Button onClick={this._showModal} disabled>
+              Edit Contracted Brand
+            </Button>
           </div>
           <TableBox>
-            <DataGrid
-              dataSource={brandList}
-              scroll={{ y: 240 }}
-              pagination={false}
-            >
-              <Column
-                title="Brand Name"
-                dataIndex="brandName"
-                key="brandName"
-                width="15%"
-              />
+            <DataGrid dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
+              <Column title="Brand Name" dataIndex="brandName" key="brandName" width="15%" />
               <Column
                 title="Brand Alias"
                 dataIndex="nickName"
@@ -218,14 +184,7 @@ export default class StepThree extends React.Component<any, any> {
                 render={(text, _record: any, i) => {
                   return text ? (
                     <PicBox>
-                      <img
-                        src={text}
-                        key={i}
-                        alt=""
-                        onClick={() =>
-                          this.setState({ showImg: true, imgUrl: text })
-                        }
-                      />
+                      <img src={text} key={i} alt="" onClick={() => this.setState({ showImg: true, imgUrl: text })} />
                     </PicBox>
                   ) : (
                     <span>-</span>
@@ -242,16 +201,7 @@ export default class StepThree extends React.Component<any, any> {
                   return (
                     <PicBox>
                       {images.map((v, k) => {
-                        return (
-                          <img
-                            src={v.url}
-                            key={k}
-                            alt=""
-                            onClick={() =>
-                              this.setState({ showImg: true, imgUrl: v.url })
-                            }
-                          />
-                        );
+                        return <img src={v.url} key={k} alt="" onClick={() => this.setState({ showImg: true, imgUrl: v.url })} />;
                       })}
                     </PicBox>
                   );
@@ -259,37 +209,15 @@ export default class StepThree extends React.Component<any, any> {
               />
             </DataGrid>
             {checkBrand.length == 0 ? null : (
-              <DataGrid
-                dataSource={checkBrand}
-                rowKey="contractBrandId"
-                scroll={{ y: 240 }}
-                pagination={false}
-              >
-                <Column
-                  title="Shop increase"
-                  dataIndex="name"
-                  key="name"
-                  width="15%"
-                />
+              <DataGrid dataSource={checkBrand} rowKey="contractBrandId" scroll={{ y: 240 }} pagination={false}>
+                <Column title="Shop increase" dataIndex="name" key="name" width="15%" />
                 <Column dataIndex="nickName" key="nickName" width="20%" />
                 <Column
                   dataIndex="logo"
                   key="logo"
                   width="15%"
                   render={(text, record: any) => {
-                    return text ? (
-                      <img
-                        src={record.logo}
-                        width="140"
-                        height="50"
-                        alt=""
-                        onClick={() =>
-                          this.setState({ showImg: true, imgUrl: record.logo })
-                        }
-                      />
-                    ) : (
-                      <span>-</span>
-                    );
+                    return text ? <img src={record.logo} width="140" height="50" alt="" onClick={() => this.setState({ showImg: true, imgUrl: record.logo })} /> : <span>-</span>;
                   }}
                 />
                 <Column
@@ -301,16 +229,7 @@ export default class StepThree extends React.Component<any, any> {
                     return images.length > 0 ? (
                       <PicBox>
                         {images.map((v, k) => {
-                          return (
-                            <img
-                              src={v.url}
-                              key={k}
-                              alt=""
-                              onClick={() =>
-                                this.setState({ showImg: true, imgUrl: v.url })
-                              }
-                            />
-                          );
+                          return <img src={v.url} key={k} alt="" onClick={() => this.setState({ showImg: true, imgUrl: v.url })} />;
                         })}
                       </PicBox>
                     ) : (
@@ -328,14 +247,7 @@ export default class StepThree extends React.Component<any, any> {
             <H2>Signing Period</H2>
             <GreyText>Merchant store validity</GreyText>
           </div>
-          <RangePicker
-            value={[
-              moment(storeInfo.get('contractStartDate')),
-              moment(storeInfo.get('contractEndDate'))
-            ]}
-            format="YYYY-MM-DD HH:mm:ss"
-            disabled
-          />
+          <RangePicker value={[moment(storeInfo.get('contractStartDate')), moment(storeInfo.get('contractEndDate'))]} format="YYYY-MM-DD HH:mm:ss" disabled />
         </Content>
         <Content>
           <div style={{ marginBottom: 10 }}>
@@ -361,18 +273,10 @@ export default class StepThree extends React.Component<any, any> {
             </Button>
           </Content>
         )}
-        <Modal
-          maskClosable={false}
-          visible={this.state.showImg}
-          footer={null}
-          onCancel={() => this._hideImgModal()}
-        >
+        <Modal maskClosable={false} visible={this.state.showImg} footer={null} onCancel={() => this._hideImgModal()}>
           <div>
             <div>
-              <img
-                style={{ width: '100%', height: '100%' }}
-                src={this.state.imgUrl}
-              />
+              <img style={{ width: '100%', height: '100%' }} src={this.state.imgUrl} />
             </div>
           </div>
         </Modal>
@@ -407,9 +311,7 @@ export default class StepThree extends React.Component<any, any> {
     //判重
     if (checkBrand.length > 0) {
       checkBrand.map((item) => {
-        repeatPlatForm = allBrands
-          .toJS()
-          .filter((v) => v.brandName == item.name);
+        repeatPlatForm = allBrands.toJS().filter((v) => v.brandName == item.name);
         if (repeatPlatForm.length > 0) {
           count++;
         }

@@ -108,8 +108,8 @@ export default class SetBannerList extends Component<any, any> {
 
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={index}>
-            <td>{bannerNo}</td>
-            <td>{pcName}</td>
+            <td style={{ wordBreak: 'break-all' }}>{bannerNo}</td>
+            <td style={{ wordBreak: 'break-all' }}>{pcName}</td>
             <td className="pad0">
               {pcType === 'image' ? (
                 <div className="img-box ">
@@ -135,14 +135,9 @@ export default class SetBannerList extends Component<any, any> {
                 </video>
               )}
             </td>
-            <td>{webSkipUrl}</td>
-            <td>{mobiSkipUrl}</td>
+            <td style={{ wordBreak: 'break-all' }}>{webSkipUrl}</td>
+            <td style={{ wordBreak: 'break-all' }}>{mobiSkipUrl}</td>
             <td>
-              <Tooltip placement="top" title="Delete">
-                <span style={{ color: 'red', paddingRight: 10 }} /*className="red"*/ onClick={() => this.deleteRow(item.toJS())} className="iconfont iconDelete">
-                  {/*<FormattedMessage id="delete" />*/}
-                </span>
-              </Tooltip>
               <Tooltip placement="top" title="Edit">
                 <span
                   /*className="red mgl20"*/
@@ -151,6 +146,11 @@ export default class SetBannerList extends Component<any, any> {
                   className="iconfont iconEdit"
                 >
                   {/*<FormattedMessage id="edit" />*/}
+                </span>
+              </Tooltip>
+              <Tooltip placement="top" title="Delete">
+                <span style={{ color: 'red', paddingRight: 10 }} /*className="red"*/ onClick={() => this.deleteRow(item.toJS())} className="iconfont iconDelete">
+                  {/*<FormattedMessage id="delete" />*/}
                 </span>
               </Tooltip>
             </td>
@@ -195,19 +195,17 @@ export default class SetBannerList extends Component<any, any> {
                           <th style={{ width: '10%' }}>
                             <FormattedMessage id="bannerNo" />
                           </th>
-                          {/*<th style={{ width: '10%' }}>
-                            <FormattedMessage id="resourceName" />
-                          </th>*/}
-                          <th style={{ width: '20%' }}>
+                          <th style={{ width: '10%' }}>Resource name</th>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage id="resource" values={{ type: 'Pc' }} />
                           </th>
-                          <th style={{ width: '20%' }}>
+                          <th style={{ width: '10%' }}>
                             <FormattedMessage id="resourceName" values={{ type: 'Mobile' }} />
                           </th>
-                          <th style={{ width: '10%' }}>
+                          <th style={{ width: '25%' }}>
                             <FormattedMessage id="bannerUrl" values={{ type: 'Pc' }} />
                           </th>
-                          <th style={{ width: '10%' }}>
+                          <th style={{ width: '25%' }}>
                             <FormattedMessage id="bannerUrl" values={{ type: 'Mobile' }} />
                           </th>
                           <th style={{ width: '10%' }}>

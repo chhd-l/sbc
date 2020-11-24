@@ -162,7 +162,7 @@ export default class EditForm extends React.Component<any, any> {
             : employeeForm.get('departmentIds').split(',')
           : []
       };
-
+      console.log(departmentIdList, 111);
       sex = {
         initialValue: employeeForm.get('sex') || 0
       };
@@ -304,10 +304,7 @@ export default class EditForm extends React.Component<any, any> {
             {getFieldDecorator('sex', {
               ...sex
             })(
-              <RadioGroup
-                disabled={editDisable}
-                value={employeeForm.get('sex')}
-              >
+              <RadioGroup disabled={editDisable} value={employeeForm.get('sex')}>
                 <Radio value={0}>
                   <span style={styles.darkColor}>Secret</span>
                 </Radio>

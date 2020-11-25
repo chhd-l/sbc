@@ -184,6 +184,7 @@ export default class AppStore extends Store {
         .find((item) => item.get('isDefault') == 1)
         .get('cateId');
     }
+    debugger;
     cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
 
     //查询视频分页信息

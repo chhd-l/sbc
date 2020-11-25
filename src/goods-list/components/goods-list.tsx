@@ -35,6 +35,8 @@ export default class CateList extends React.Component<any, any> {
       onShowSku: Function;
       pageNum: number;
       expandedRowKeys: IList;
+      getGoodsCate: IList;
+      sourceGoodCateList: IList;
     };
   };
 
@@ -55,7 +57,9 @@ export default class CateList extends React.Component<any, any> {
     onPageSearch: noop,
     onShowSku: noop,
     pageNum: 'pageNum',
-    expandedRowKeys: 'expandedRowKeys'
+    expandedRowKeys: 'expandedRowKeys',
+    getGoodsCate: 'getGoodsCate',
+    sourceGoodCateList: 'sourceGoodCateList'
   };
 
   render() {
@@ -147,11 +151,19 @@ export default class CateList extends React.Component<any, any> {
         />
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.productCategory" />}
+          title={<FormattedMessage id="product.salesCategory" />}
           dataIndex="storeCateIds"
           key="storeCateIds"
           width={100}
           render={this._renderStoreCateList}
+        />
+          <Column
+          // title="店铺分类"
+          title={<FormattedMessage id="product.productCategory" />}
+          dataIndex="cateId"
+          key="cateId"
+          width={100}
+          render={this._renderProductCateList}
         />
         <Column
           // title="品牌"
@@ -218,6 +230,16 @@ export default class CateList extends React.Component<any, any> {
     }
     return '-';
   };
+  _renderProductCateList = (rowInfo) => {
+    const { sourceGoodCateList } = this.props.relaxProps;
+    if(sourceGoodCateList) {
+      var test = sourceGoodCateList.toJS()
+      debugger
+      var productCategory = sourceGoodCateList.toJS().find(x=>x.cateId === rowInfo)
+      return (<span>{productCategory ? productCategory.cateName : ''}</span>)
+    }
+    return ''
+  }
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale } = this.props.relaxProps;

@@ -7,7 +7,7 @@ import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
-import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
+import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
 
 import { IList } from 'typings/globalType';
 
@@ -49,9 +49,11 @@ export default class AppStore extends Store {
     }
 
     const cates: any = await getCateList();
+    const productCates: any = await getProductCategories();
     const brands: any = await getBrandList();
     this.transaction(() => {
       this.dispatch('cateActor: init', fromJS(cates.res.context));
+      this.dispatch('goodsActor:getGoodsCate', fromJS(productCates.res.context));
       this.dispatch('brandActor: init', fromJS(brands.res.context));
     });
 

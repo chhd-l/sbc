@@ -1367,14 +1367,6 @@ export default class AppStore extends Store {
       console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
-          /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
-          goodsInfoNo: item.get('goodsInfoNo'),
-          goodsInfoBarcode: item.get('goodsInfoBarcode'),
-          stock: item.get('stock'),
-          marketPrice: item.get('marketPrice'),
-          mockSpecIds,
-          mockSpecDetailIds,
-          goodsInfoImg: imageUrl*/
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),

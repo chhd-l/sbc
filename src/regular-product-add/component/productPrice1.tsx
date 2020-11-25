@@ -352,7 +352,6 @@ class SkuForm extends React.Component<any, any> {
         )
       });
     }
-    console.log(goodsSpecs.toJS(), 'goodsSpecs');
     columns = columns.push({
       title: (
         <div>

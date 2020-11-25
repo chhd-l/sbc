@@ -217,7 +217,7 @@ class SkuForm extends React.Component<any, any> {
           </span>
           <FormattedMessage id="product.marketPrice" />
           <br />
-          <Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
+          {/*<Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
             <Tooltip placement="top" title={'After checking, all SKUs use the same market price'}>
@@ -225,7 +225,7 @@ class SkuForm extends React.Component<any, any> {
                 <Icon type="question-circle-o" />
               </a>
             </Tooltip>
-          </Checkbox>
+          </Checkbox>*/}
         </div>
       ),
       key: 'marketPrice',
@@ -283,8 +283,8 @@ class SkuForm extends React.Component<any, any> {
                         }
                       ],
                       onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                      initialValue: (rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice) ? rowInfo.marketPrice : rowInfo.subscriptionPrice || 0
-                    })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={(rowInfo.index >= 0 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} /*disabled={rowInfo.subscriptionStatus === 0} */ />)}
+                      initialValue: rowInfo.subscriptionPrice || 0
+                    })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
                   </FormItem>
                 </p>
               </div>
@@ -325,7 +325,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="Base price" />
+          Base price
           <Select value={baseSpecId || null} onChange={this._handleChange}>
             {goodsSpecs.map((item) => (
               <Option value={item.get('specId')}>{item.get('specName')}</Option>

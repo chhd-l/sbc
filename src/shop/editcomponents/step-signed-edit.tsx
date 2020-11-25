@@ -118,7 +118,7 @@ export default class StepThree extends React.Component<any, any> {
           </div>
           <TableBox>
             <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false}>
-              <Column title="Category" dataIndex="cateName" key="cateName" width="15%" />
+              <Column title="Product category" dataIndex="cateName" key="cateName" width="15%" />
               <Column title="Superior Category" dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
               <Column
                 title="Category Deduction Rate"

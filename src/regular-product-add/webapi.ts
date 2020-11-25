@@ -245,7 +245,7 @@ export const goodsFreightExpress = (freightTempId) => {
  * 获取素材类目列表
  */
 export const getResourceCates = () => {
-  return Fetch('/store_cate/batch/cate');
+  return Fetch('/store/resourceCates');
 };
 
 /**

@@ -268,6 +268,7 @@ export default class AppStore extends Store {
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
+      debugger;
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段

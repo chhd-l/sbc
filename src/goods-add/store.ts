@@ -926,8 +926,6 @@ export default class AppStore extends Store {
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
 
-    debugger
-
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1370,7 +1368,6 @@ export default class AppStore extends Store {
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
 
-    debugger
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单

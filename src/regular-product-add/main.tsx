@@ -38,7 +38,6 @@ export default class Main extends React.Component<any, any> {
 
   componentDidMount() {
     const { gid } = this.props.match.params;
-
     this.store.init(gid);
     this.store.setFreightList();
     //初始化素材
@@ -99,7 +98,6 @@ export default class Main extends React.Component<any, any> {
 
   render() {
     const { gid } = this.props.match.params;
-    const goodsType = this.props.location.state && this.props.location.state.goodsType;
     //默认添加商品的编辑与设价权限
     let goodsFuncName = 'f_goods_add_1';
     let priceFuncName = 'f_goods_add_2';
@@ -123,24 +121,26 @@ export default class Main extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{goodsType == 'edit' ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
-        {/* <Breadcrumb separator=">">
+        <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
           <Breadcrumb.Item>商品管理</Breadcrumb.Item>
           <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item>
           <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
-        </Breadcrumb> */}
+        </Breadcrumb>
         <div className="container-search">
-          <Headline title={goodsType == 'edit' ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
+          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs
             activeKey={this.state.tabType}
-            //onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
-            //defaultActiveKey="main"
-            //ref={(e) => { this._Tabs = e }}
-            // onChange={(activeKey) => this.onMainTabChange(activeKey)}
+            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            defaultActiveKey="main"
+            ref={(e) => {
+              this._Tabs = e;
+            }}
+            onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
               <Tabs.TabPane tab="Product information" key="main" disabled>

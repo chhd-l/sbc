@@ -264,10 +264,10 @@ export default {
   businessScope: 'Business Scope',
   electronicCopyOfBusinessLicense: 'Electronic copy of business license',
   corporateIdentityCard: 'Corporate identity card',
-  signedCategory: 'Signed category',
+  signedCategory: 'Signed product category',
   signedCategoryInfo:
     'categories have been signed, the maximum is 200 categories',
-  superiorCategory: 'Superior category',
+  superiorCategory: 'Parent category',
   categoryDeductionRate: 'Category deduction rate',
   businessQualification: 'Business qualification',
   settlementDate: 'Settlement date',

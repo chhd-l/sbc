@@ -84,7 +84,7 @@ class NavigationList extends Component<any, any> {
     let that = this;
     confirm({
       title: 'Prompt',
-      content: 'Are you sure ' + tipMessage + ' the navigation',
+      content: 'Are you sure to ' + tipMessage + ' the navigation',
       onOk() {
         let enable = checked ? 1 : 0;
         webapi

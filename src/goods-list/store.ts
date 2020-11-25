@@ -7,18 +7,7 @@ import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const } from 'qmkit';
-import {
-  goodsList,
-  spuDelete,
-  spuOnSale,
-  spuOffSale,
-  getCateList,
-  getBrandList,
-  freightList,
-  goodsFreight,
-  goodsFreightExpress,
-  updateFreight
-} from './webapi';
+import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
 
 import { IList } from 'typings/globalType';
 
@@ -31,13 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new CateActor(),
-      new BrandActor(),
-      new GoodsActor(),
-      new FormActor(),
-      new FreightActor()
-    ];
+    return [new CateActor(), new BrandActor(), new GoodsActor(), new FormActor(), new FreightActor()];
   }
 
   /**
@@ -98,8 +81,8 @@ export default class AppStore extends Store {
       auditStatus: this.state().get('auditStatus')
     };
 
-    if (this.state().get('storeCateId') != '-1') {
-      request.storeCateId = this.state().get('storeCateId');
+    if (this.state().get('storeCateId') != '-1' && this.state().get('storeCateId')) {
+      request.storeCateIdList = this.state().get('storeCateId');
     }
     if (this.state().get('brandId') != '-1') {
       request.brandId = this.state().get('brandId');
@@ -216,10 +199,7 @@ export default class AppStore extends Store {
         this.dispatch('freight:selectTemp', fromJS(res.context));
         const result = (await goodsFreightExpress(freightTempId)) as any;
         if (result.res.code === Const.SUCCESS_CODE) {
-          this.dispatch(
-            'freight:selectTempExpress',
-            fromJS(result.res.context)
-          );
+          this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
         } else {
           message.error(result.res.message);
         }

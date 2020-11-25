@@ -161,7 +161,7 @@ export default class Header extends React.Component<any, any> {
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
           <Icon type="clock-circle" className="Header-date-icon" />
-          <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR))} onChange={this.dateChange} placeholder="Select week" />
+          <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())} onChange={this.dateChange} placeholder="Select week" />
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">

@@ -33,8 +33,8 @@ export default class SearchForm extends React.Component<any, any> {
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
-      allCateList: IList;
       sourceGoodCateList: IList;
+      allCateList: IList;
     };
   };
 
@@ -152,26 +152,31 @@ export default class SearchForm extends React.Component<any, any> {
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
-                label={
-                  <p style={styles.label}>
-                     Sales category
-                  </p>
-                }
+                label={<p style={styles.label}>Sales category</p>}
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  let sourceCategories = allCateList ? allCateList.toJS() : []
-                  let childCategoryIds = []
-            
-                  var children = sourceCategories.filter(x=>x.cateParentId ===value);
-                  if(children && children.length > 0) {
-                    childCategoryIds = children.map(x=>x.storeCateId)
+                  let sourceCategories = allCateList ? allCateList.toJS() : [];
+                  let childCategoryIds = [];
+
+                  let children = sourceCategories.filter((x) => x.cateParentId === value);
+                  if (children && children.length > 0) {
+                    children.map((x) => {
+                      let lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
+                      if (lastChildren && lastChildren.length > 0) {
+                        lastChildren.map((l) => {
+                          childCategoryIds.push(l.storeCateId);
+                        });
+                      } else {
+                        childCategoryIds.push(x.storeCateId);
+                      }
+                    });
                   } else {
-                    childCategoryIds = value
+                    childCategoryIds.push(value);
                   }
-                  onFormFieldChange({ key: 'storeCateId', value:childCategoryIds});
+                  onFormFieldChange({ key: 'storeCateId', value: childCategoryIds });
                 }}
               >
                 {loop(cateList)}

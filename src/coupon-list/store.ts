@@ -120,7 +120,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('Successfully deleted');
+    message.success('Operate successfully');
     //刷新页面
     this.init();
   };
@@ -133,7 +133,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('复制成功');
+    message.success('Operate successfully');
     //刷新页面
     this.init();
   };

@@ -200,7 +200,7 @@ export default class AppStore extends Store {
     }
     res = res.res;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(activity.activityId ? 'save successful' : '保存成功');
+      message.success('Operate successfully');
       history.push({
         pathname: '/coupon-activity-list'
       });

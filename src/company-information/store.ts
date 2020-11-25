@@ -41,7 +41,7 @@ export default class AppStore extends Store {
     info.areaId = info.area[2];
     const { res } = await webapi.saveCompanyInfo(info);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('修改公司信息成功');
+      message.success('Operate successfully');
     }
   };
 }

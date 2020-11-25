@@ -201,7 +201,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init({ pageNum: 0, pageSize: 10 });
     } else {
       message.error(res.message);
@@ -221,7 +221,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.addReceivable(receivableForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.init({});
     } else {
@@ -233,7 +233,7 @@ export default class AppStore extends Store {
    * save successful提示
    */
   successMsgThenInit = () => {
-    message.success('save successful');
+    message.success('Operate successfully');
     this.init({ pageNum: 0, pageSize: 10 });
   };
 }

@@ -83,7 +83,7 @@ export default class AppStore extends Store {
       accountId: id
     });
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('设置成功');
+      message.success('Operate successfully');
       this.accountInfo();
     } else {
       message.error(res.message);
@@ -147,7 +147,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       await this.accountInfo();
-      message.success('编辑成功');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -166,7 +166,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       await this.accountInfo();
-      message.success('确认成功');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }

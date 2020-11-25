@@ -75,7 +75,7 @@ export default class AppStore extends Store {
       const res = ((await webapi.register(account, telCode, password)) as any)
         .res;
       if ((res as any).code == 'K-000000') {
-        message.success('注册成功');
+        message.success('Operate successfully');
         //清除本地缓存的审核未通过的或者正在审核中的账户信息
         localStorage.removeItem(cache.PENDING_AND_REFUSED);
         //去登录页
@@ -118,7 +118,7 @@ export default class AppStore extends Store {
     const type = 2;
     return webapi.sendCode(tel, type).then(({ res }) => {
       if ((res as any).code == 'K-000000') {
-        message.success('发送验证码成功');
+        message.success('Operate successfully');
       } else {
         message.error((res as any).message);
         return Promise.reject(message);

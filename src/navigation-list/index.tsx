@@ -92,7 +92,7 @@ class NavigationList extends Component<any, any> {
           .then((data) => {
             const { res } = data;
             if (res.code === 'K-000000') {
-              message.success(res.message || 'Update successful');
+              message.success('Operate successfully');
               that.getNavigationList(that.state.selectLanguage);
             } else {
               message.error(res.message || 'Update Failed');
@@ -116,7 +116,7 @@ class NavigationList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Sort successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Sort Failed');
         }
@@ -135,7 +135,7 @@ class NavigationList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Delete successful');
+          message.success('Operate successfully');
           this.getNavigationList(this.state.selectLanguage);
         } else {
           message.error(res.message || 'Delete Failed');

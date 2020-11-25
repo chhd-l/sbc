@@ -97,7 +97,7 @@ export default class ListView extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           this.init();
         } else {
           message.error(res.message || 'Unsuccessful');

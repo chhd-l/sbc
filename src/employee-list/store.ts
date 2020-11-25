@@ -161,7 +161,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.batchDimissionEmployees(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -179,7 +179,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.batchSetEmployee(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -199,7 +199,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.deleteEmployeeByIds(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -214,7 +214,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.enableEmployee(selected.toJS());
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -226,7 +226,7 @@ export default class AppStore extends Store {
     ids.push(id);
     const { res } = await webapi.enableEmployee(ids);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -261,7 +261,7 @@ export default class AppStore extends Store {
       accountState
     );
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.switchModal('');
       this.init();
     } else {
@@ -283,7 +283,7 @@ export default class AppStore extends Store {
       accountState
     );
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.switchModal('');
       this.init();
     } else {
@@ -358,7 +358,7 @@ export default class AppStore extends Store {
       //取消编辑状态
 
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('save successful');
+        message.success('Operate successfully');
         this.transaction(() => {
           this.dispatch('edit', false);
           this.dispatch('modal:hide');
@@ -373,7 +373,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.saveEmployee(employeeForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.init();
     } else {
@@ -442,7 +442,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('save successful！');
+      message.success('Operate successfully');
       this.toggleAdjustModal();
       this.init();
     } else {
@@ -475,7 +475,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('save successful！');
+      message.success('Operate successfully');
       this.toggleConnectModal();
       this.init();
     } else {
@@ -496,7 +496,7 @@ export default class AppStore extends Store {
     });
     if (res.code == Const.SUCCESS_CODE) {
       //弹框消失
-      message.success('save successful！');
+      message.success('Operate successfully');
       //this.toggleConnectModal();
       this.init();
     } else {

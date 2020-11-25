@@ -219,7 +219,7 @@ export default class AppStore extends Store {
       //保存
       const { res } = await webapi.saveCustomer(customerForm);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('save successful');
+        message.success('Operate successfully');
         this.dispatch('modal:hide');
         this.init();
       } else {
@@ -232,7 +232,7 @@ export default class AppStore extends Store {
   deleteRelated = async (customerId) => {
     const { res } = await webapi.deletePlatformCustomerRelated(customerId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -245,7 +245,7 @@ export default class AppStore extends Store {
       customerLevelId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.onShowAddRelatedModal(false);
       this.init();
       modalClose();
@@ -265,7 +265,7 @@ export default class AppStore extends Store {
       employeeId
     );
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.onShowUpdateRelatedModal(false, null);
     } else {
       message.error(res.message);

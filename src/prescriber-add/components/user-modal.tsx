@@ -134,7 +134,7 @@ class UserModal extends Component<any, any> {
         if (this.props.userForm.id) {
           const { res } = await webapi.updateUser(param);
           if (res.code === 'K-000000') {
-            message.success('save successful');
+            message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
           } else {
@@ -143,7 +143,7 @@ class UserModal extends Component<any, any> {
         } else {
           const { res } = await webapi.addUser(param);
           if (res.code === 'K-000000') {
-            message.success('save successful');
+            message.success('Operate successfully');
             this.props.reflash();
             this.cancel();
           } else {

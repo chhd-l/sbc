@@ -155,7 +155,7 @@ export default class AppStore extends Store {
   onSave = async (saveForm) => {
     const { res } = await webapi.saveInvoice(saveForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
 
       let param = {
         checkState: this.state().getIn(['searchForm', 'checkState'])
@@ -263,7 +263,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
 
       let param = {
         checkState: this.state().getIn(['searchForm', 'checkState'])

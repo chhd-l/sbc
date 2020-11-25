@@ -508,7 +508,7 @@ export default class AppStore extends Store {
     result = await addApply(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success('新增退单成功');
+      message.success('Operate successfully');
       history.push('/order-return-list');
     } else {
       message.error(result.res.message);

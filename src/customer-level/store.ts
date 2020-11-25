@@ -117,7 +117,7 @@ export default class AppStore extends Store {
       if (res.code === Const.SUCCESS_CODE) {
         //取消编辑状态
         this.dispatch('edit', false);
-        message.success('save successful!');
+        message.success('Operate successfully');
         this.dispatch('modal:hide');
         this.init();
       } else {
@@ -128,7 +128,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.saveCustomerLevel(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.init();
     } else {
@@ -162,7 +162,7 @@ export default class AppStore extends Store {
   onDelete = async (customerLevelId: string) => {
     const { res } = await webapi.deleteCustomerLevel(customerLevelId);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.init();
     } else {

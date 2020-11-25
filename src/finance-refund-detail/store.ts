@@ -112,7 +112,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -133,7 +133,7 @@ export default class AppStore extends Store {
     //保存
     const { res } = await webapi.addRefundBill(refundForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.init();
     } else {

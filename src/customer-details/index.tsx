@@ -99,7 +99,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           history.push('/customer-list');
         } else {
           message.error(data.res.message || 'Unsuccessful');

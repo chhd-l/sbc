@@ -1179,7 +1179,7 @@ export default class AppStore extends Store {
 
       this.dispatch('goodsActor: editGoods', goods);
 
-      message.success('save successful');
+      message.success('Operate successfully');
 
       // 新增时只有保存成功才能进入价格tab
       return true;
@@ -1513,7 +1513,7 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
       //history.push('/goods-list');
     } else {
@@ -1597,7 +1597,7 @@ export default class AppStore extends Store {
     let result: any = await addBrand(formData);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('brandActor: closeModal');
 
       // 刷新
@@ -1640,7 +1640,7 @@ export default class AppStore extends Store {
   doCateAdd = async (cateName, cateParentId, sort) => {
     let result: any = await addCate({ cateName, cateParentId, sort });
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('cateActor: closeModal');
       // 刷新
       const cateList = await getStoreCateList();

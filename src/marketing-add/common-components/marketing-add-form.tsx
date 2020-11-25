@@ -931,7 +931,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
    */
   _responseThen = (response) => {
     if (response.res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       history.push('/marketing-list');
     } else {
       message.error(response.res.message);

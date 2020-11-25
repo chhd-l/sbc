@@ -170,7 +170,7 @@ class GoodsForm extends React.Component<any, any> {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
       goodsTaggingRelList: props.relaxProps.goodsTaggingRelList,
       productFilter: props.relaxProps.productFilter,
-      sourceFilter: []
+      filterList: []
     };
   }
 
@@ -215,10 +215,10 @@ class GoodsForm extends React.Component<any, any> {
         }
         return item;
       });
-      this.setState({
-        sourceFilter : sourceFilter
-      });
     }
+    this.setState({
+      filterList
+    });
   }
 
   render() {
@@ -676,7 +676,7 @@ class GoodsForm extends React.Component<any, any> {
                   }}
                   treeDefaultExpandAll
                 >
-                  {this.filtersTotalTree(this.state.sourceFilter)}
+                  {this.filtersTotalTree(this.state.filterList)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -945,10 +945,9 @@ class GoodsForm extends React.Component<any, any> {
     return (
       filterList &&
       filterList.map((item) => {
-        let parentItem = this.state.sourceFilter.find((x) => x.value === item.parentId);
+        let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
         let selectedFilters = this.getFilterValues();
-        debugger
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
         let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
         if (item.children && item.children.length > 0) {

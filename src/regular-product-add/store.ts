@@ -1267,11 +1267,7 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
-    console.log(images, 11111111111);
+
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();

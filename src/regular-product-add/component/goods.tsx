@@ -76,6 +76,8 @@ export default class Info extends React.Component<any, any> {
       getGoodsCate: IList;
       filtersTotal: IList;
       taggingTotal: IList;
+      goodsTaggingRelList: IList;
+      productFilter: IList;
     };
   };
 
@@ -120,7 +122,9 @@ export default class Info extends React.Component<any, any> {
     filtersTotal: 'filtersTotal',
     taggingTotal: 'taggingTotal',
     onGoodsTaggingRelList: noop,
-    onProductFilter: noop
+    onProductFilter: noop,
+    goodsTaggingRelList: 'goodsTaggingRelList',
+    productFilter: 'productFilter'
   };
 
   constructor(props) {
@@ -168,24 +172,14 @@ class GoodsForm extends React.Component<any, any> {
     super(props);
     this.state = {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
-      goodsTaggingRelList: props.relaxProps.goodsTaggingRelList,
-      productFilter: props.relaxProps.productFilter,
-      filterList: []
+      filterList: [],
+      selectFilters: []
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
-    const goodsTaggingRelList = nextProps.relaxProps.goodsTaggingRelList;
-    const productFilter = nextProps.relaxProps.productFilter;
     const filtersTotal = nextProps.relaxProps.filtersTotal;
-    if (this.state.storeCateIds != storeCateIds) {
-      this.setState({ storeCateIds: storeCateIds });
-    } else if (this.state.goodsTaggingRelList != goodsTaggingRelList) {
-      this.setState({ goodsTaggingRelList: goodsTaggingRelList });
-    } else if (this.state.productFilter != productFilter) {
-      this.setState({ productFilter: productFilter });
-    }
 
     let filterList = [];
     if (filtersTotal) {
@@ -223,9 +217,8 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    const goodsTaggingRelList = this.state.goodsTaggingRelList;
     const storeCateValues =
       (storeCateIds &&
         storeCateIds.toJS().map((id) => {
@@ -235,10 +228,14 @@ class GoodsForm extends React.Component<any, any> {
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
-          return x.taggingId;
+          return { value: x.taggingId } ;
         })) ||
       [];
-    const filterValues = this.getFilterValues();
+    const filterValues = (productFilter &&
+        productFilter.map((x) => {
+          return { value: x.filterValueId} ;
+        })) ||
+      [];
     // const storeCateValues = [];
     //处理分类的树形图结构数据
 
@@ -393,7 +390,7 @@ class GoodsForm extends React.Component<any, any> {
               {getFieldDecorator('tagging', {
                 rules: [
                   {
-                    required: true,
+                    required: false,
                     message: 'Please select product tagging'
                   }
                 ],
@@ -660,7 +657,7 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={filtersTotal}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select store filter"
+                  placeholder="Please select customized filter"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
@@ -848,8 +845,8 @@ class GoodsForm extends React.Component<any, any> {
     this.state.filterList.map((x) => {
       x.children.map((c) => allChildrenList.push(c));
     });
-    let filterValues = values.map((x) => x.value);
-    let selectChildren = allChildrenList.filter((x) => filterValues.includes(x.value));
+    let selectFilters = values.map((x) => x.value);
+    let selectChildren = allChildrenList.filter((x) => selectFilters.includes(x.value));
 
     let productFilter = [];
 
@@ -860,7 +857,7 @@ class GoodsForm extends React.Component<any, any> {
       });
     });
     // 强制刷新店铺分类的选中视图
-    this.setState({ productFilter }, () => {
+    this.setState({ productFilter, selectFilters}, () => {
       this.filtersTotalTree(this.state.filterList);
     });
 
@@ -940,7 +937,7 @@ class GoodsForm extends React.Component<any, any> {
       filterList.map((item) => {
         let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
-        let selectedFilters = this.getFilterValues();
+        let selectedFilters = this.state.selectFilters;
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
         let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
         if (item.children && item.children.length > 0) {
@@ -954,16 +951,6 @@ class GoodsForm extends React.Component<any, any> {
       })
     );
   };
-
-  getFilterValues() {
-    const filterValues =
-      (this.state.productFilter &&
-        this.state.productFilter.map((x) => {
-          return x.filterValueId;
-        })) ||
-      [];
-    return filterValues;
-  }
 
   loopTagging = (taggingTotalTree) => {
     return (

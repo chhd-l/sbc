@@ -268,7 +268,6 @@ export default class AppStore extends Store {
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
-      debugger;
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
@@ -286,6 +285,20 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
+      var productFilter = tmpContext.filterList.map(x=>{
+        return { 
+          filterId: x.filterId,
+          filterValueId: x.id
+         }
+      })
+      this.onProductFilter(productFilter) 
+
+      let taggingIds = tmpContext.taggingList.map(x=>{
+        return { taggingId: x.id }
+      })
+
+      this.onGoodsTaggingRelList(taggingIds)
+
       goodsDetail = fromJS(tmpContext);
     } else {
       message.error('查询商品信息失败');

@@ -1265,6 +1265,15 @@ export default class AppStore extends Store {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }
 
+    let goodsDetailTab = data.get('goodsDetailTab');
+    let goodsDetailTabTemplate = {};
+    goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
+    goodsDetailTab.map((item, i) => {
+      goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
+    });
+
+    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+
     param = param.set('goodsTabRelas', tabs);
 
     goods = goods.set('goodsType', 0);
@@ -1850,6 +1859,7 @@ export default class AppStore extends Store {
   };
 
   editEditor = (editor) => {
+    console.log(editor, 1111111);
     this.dispatch('goodsActor: editor', editor);
   };
   /**

@@ -123,12 +123,6 @@ export default class Main extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
-        <Breadcrumb separator=">">
-          <Breadcrumb.Item>商品</Breadcrumb.Item>
-          <Breadcrumb.Item>商品管理</Breadcrumb.Item>
-          <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item>
-          <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
-        </Breadcrumb>
         <div className="container-search">
           <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>

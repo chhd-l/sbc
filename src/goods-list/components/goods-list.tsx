@@ -302,7 +302,6 @@ export default class CateList extends React.Component<any, any> {
         <AuthWrapper functionName="f_goods_6">
           <Tooltip placement="top" title="Delete">
             <a
-              href="#!"
               onClick={() => {
                 this._delete(rowInfo.goodsId);
               }}

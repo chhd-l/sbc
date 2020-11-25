@@ -161,10 +161,10 @@ export default class SearchForm extends React.Component<any, any> {
                   let sourceCategories = allCateList ? allCateList.toJS() : [];
                   let childCategoryIds = [];
 
-                  var children = sourceCategories.filter((x) => x.cateParentId === value);
+                  let children = sourceCategories.filter((x) => x.cateParentId === value);
                   if (children && children.length > 0) {
                     children.map((x) => {
-                      var lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
+                      let lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
                       if (lastChildren && lastChildren.length > 0) {
                         lastChildren.map((l) => {
                           childCategoryIds.push(l.storeCateId);

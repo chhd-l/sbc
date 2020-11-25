@@ -925,7 +925,6 @@ export default class AppStore extends Store {
     goods = goods.set('goodsType', 0);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
-    
 
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');

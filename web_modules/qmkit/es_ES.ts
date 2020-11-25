@@ -92,7 +92,7 @@ export default {
   'product.publishItemInfo1': 'Publish directly delicacy managment',
   'product.publishItemInfo2': 'Excel file quick import',
   'product.publishItemInfo3': 'One-click import of platform commodity library',
-  'product.postGoods': 'Post goods',
+  'product.postGoods': 'Publish product',
   'product.InternalSPU': 'Internal SPU',
   'product.InternalSKU': 'Internal SKU',
   'product.chooseAPublishingMethod': 'Choose a publishing method',

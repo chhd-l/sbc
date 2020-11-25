@@ -95,26 +95,27 @@ export default class SearchForm extends React.Component<any, any> {
     };
 
     //处理分类的树形图结构数据
-    const loop = (cateList) =>
-    {
-        return (
-          cateList && cateList.count() > 0 &&
-          cateList.map((item) => {
-            if (item.get('children') && item.get('children').count()) {
-              return (
-                <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
-                  {loop(item.get('children'))}
-                </TreeNode>
-              );
-            }
-            return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
-          })
-        );
-      };
+    const loop = (cateList) => {
+      return (
+        cateList &&
+        cateList.count() > 0 &&
+        cateList.map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
+                {loop(item.get('children'))}
+              </TreeNode>
+            );
+          }
+          return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
+        })
+      );
+    };
 
     const generateStoreCateTree = (storeCateList) => {
       return (
-        storeCateList && storeCateList.count() > 0 &&
+        storeCateList &&
+        storeCateList.count() > 0 &&
         storeCateList.map((item) => {
           if (item.get('children') && item.get('children').count()) {
             return (
@@ -129,26 +130,26 @@ export default class SearchForm extends React.Component<any, any> {
     };
 
     const onSalesCategoryChange = (value) => {
-      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : []
-      let childCategoryIds = []
+      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : [];
+      let childCategoryIds = [];
 
-      var children = sourceCategories.filter(x=>x.cateParentId ===value);
-      if(children && children.length > 0) {
-        children.map(x=>{
-          var lastChildren = sourceCategories.filter(l=>l.cateParentId ===x.storeCateId);
-          if(lastChildren && lastChildren.length > 0) {
-            lastChildren.map(l=>{
-              childCategoryIds.push(l.storeCateId)
-            })
+      let children = sourceCategories.filter((x) => x.cateParentId === value);
+      if (children && children.length > 0) {
+        children.map((x) => {
+          let lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
+          if (lastChildren && lastChildren.length > 0) {
+            lastChildren.map((l) => {
+              childCategoryIds.push(l.storeCateId);
+            });
           } else {
-            childCategoryIds.push(x.storeCateId)
+            childCategoryIds.push(x.storeCateId);
           }
-        })
+        });
       } else {
-        childCategoryIds.push(value)
+        childCategoryIds.push(value);
       }
       onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
-    }
+    };
 
     return (
       <Form className="filter-content" layout="inline">
@@ -218,7 +219,7 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onSalesCategoryChange(value)
+                  onSalesCategoryChange(value);
                 }}
               >
                 {generateStoreCateTree(getGoodsCate)}

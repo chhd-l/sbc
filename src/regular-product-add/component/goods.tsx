@@ -448,7 +448,7 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'cateId'),
-                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? parseInt(goods.get('cateId') ): undefined
+                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? parseInt(goods.get('cateId')) : undefined
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
@@ -649,15 +649,8 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product Filter">
+            <FormItem {...formItemLayout} label="Customized filter">
               {getFieldDecorator('productFilter', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select product filter'
-                  }
-                ],
-
                 initialValue: filterValues
               })(
                 <TreeSelect

@@ -674,13 +674,6 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem {...formItemLayout} label="Customized filter">
               {getFieldDecorator('productFilter', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select sales filter'
-                  }
-                ],
-
                 initialValue: filterValues
               })(
                 <TreeSelect

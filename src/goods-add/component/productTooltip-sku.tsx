@@ -62,7 +62,6 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     const { onProductselectSku, getGoodsId } = this.props.relaxProps;
-
     return (
       <Modal
         maskClosable={false}

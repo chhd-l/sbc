@@ -267,6 +267,8 @@ class AttributeLibrary extends Component<any, any> {
       taggingFillColor: row.taggingFillColor,
       taggingFontColor: row.taggingFontColor,
       taggingName: row.taggingName,
+      taggingType: row.taggingType,
+      taggingImgUrl: row.taggingImgUrl,
       displayStatus: checked ? true : false,
       id: row.id
     };
@@ -340,7 +342,7 @@ class AttributeLibrary extends Component<any, any> {
         dataIndex: 'displayStatus',
         key: 'displayStatus',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )

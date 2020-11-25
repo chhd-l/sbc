@@ -6,7 +6,7 @@ import { fromJS, List } from 'immutable';
 import { noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
-import ProductTooltip from './productTooltip';
+import ProductTooltipSKU from './productTooltip-sku';
 import * as _ from 'lodash';
 
 const FormItem = Form.Item;
@@ -106,7 +106,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>

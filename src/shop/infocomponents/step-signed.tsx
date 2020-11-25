@@ -95,29 +95,14 @@ export default class StepThree extends React.Component<any, any> {
               <FormattedMessage id="signedCategory" />
             </H2>
             <GreyText>
-              {cateList ? cateList.length : 0}{' '}
-              <FormattedMessage id="signedCategoryInfo" />
+              {cateList ? cateList.length : 0} <FormattedMessage id="signedCategoryInfo" />
             </GreyText>
           </div>
           <TableBox>
-            <DataGrid
-              dataSource={cateList}
-              scroll={{ y: 240 }}
-              pagination={false}
-              rowKey="contractCateId"
-            >
-              <Column
-                title={<FormattedMessage id="category" />}
-                dataIndex="cateName"
-                key="cateName"
-                width="15%"
-              />
-              <Column
-                title={<FormattedMessage id="superiorCategory" />}
-                dataIndex="parentGoodCateNames"
-                key="parentGoodCateNames"
-                width="20%"
-              />
+            <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false} rowKey="contractCateId">
+              <Column title={<FormattedMessage id="product.productCategory" />} dataIndex="cateName" key="cateName" width="15%" />
+              <Column title={<FormattedMessage id="superiorCategory" />} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+
               <Column
                 align="left"
                 title={<FormattedMessage id="businessQualification" />}
@@ -129,16 +114,7 @@ export default class StepThree extends React.Component<any, any> {
                   return images.length > 0 ? (
                     <PicBox>
                       {images.map((v, k) => {
-                        return (
-                          <img
-                            src={v}
-                            key={k}
-                            alt=""
-                            onClick={() =>
-                              this.setState({ showImg: true, imgUrl: v })
-                            }
-                          />
-                        );
+                        return <img src={v} key={k} alt="" onClick={() => this.setState({ showImg: true, imgUrl: v })} />;
                       })}
                     </PicBox>
                   ) : (
@@ -154,24 +130,11 @@ export default class StepThree extends React.Component<any, any> {
           <div>
             <Red>*</Red>
             <H2>Signed brand</H2>
-            <GreyText>
-              Signed {brandList ? brandList.length : 0} brands, Up to 50 brands
-              can be signed
-            </GreyText>
+            <GreyText>Signed {brandList ? brandList.length : 0} brands, Up to 50 brands can be signed</GreyText>
           </div>
           <TableBox>
-            <DataGrid
-              rowKey="contractBrandId"
-              dataSource={brandList}
-              scroll={{ y: 240 }}
-              pagination={false}
-            >
-              <Column
-                title="Brand name"
-                dataIndex="brandName"
-                key="brandName"
-                width="15%"
-              />
+            <DataGrid rowKey="contractBrandId" dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
+              <Column title="Brand name" dataIndex="brandName" key="brandName" width="15%" />
               <Column
                 title="Brand alias"
                 dataIndex="nickName"
@@ -189,14 +152,7 @@ export default class StepThree extends React.Component<any, any> {
                 render={(text, _record: any, i) => {
                   return text ? (
                     <PicBox>
-                      <img
-                        src={text}
-                        key={i}
-                        alt=""
-                        onClick={() =>
-                          this.setState({ showImg: true, imgUrl: text })
-                        }
-                      />
+                      <img src={text} key={i} alt="" onClick={() => this.setState({ showImg: true, imgUrl: text })} />
                     </PicBox>
                   ) : (
                     <span>-</span>
@@ -213,16 +169,7 @@ export default class StepThree extends React.Component<any, any> {
                   return (
                     <PicBox>
                       {images.map((v, k) => {
-                        return (
-                          <img
-                            src={v.url}
-                            key={k}
-                            alt=""
-                            onClick={() =>
-                              this.setState({ showImg: true, imgUrl: v.url })
-                            }
-                          />
-                        );
+                        return <img src={v.url} key={k} alt="" onClick={() => this.setState({ showImg: true, imgUrl: v.url })} />;
                       })}
                     </PicBox>
                   );
@@ -283,14 +230,7 @@ export default class StepThree extends React.Component<any, any> {
             <H2>Signing period</H2>
             <GreyText>Merchant store validity</GreyText>
           </div>
-          <RangePicker
-            value={[
-              moment(storeInfo.get('contractStartDate')),
-              moment(storeInfo.get('contractEndDate'))
-            ]}
-            format="YYYY-MM-DD HH:mm:ss"
-            disabled
-          />
+          <RangePicker value={[moment(storeInfo.get('contractStartDate')), moment(storeInfo.get('contractEndDate'))]} format="YYYY-MM-DD HH:mm:ss" disabled />
         </Content>
 
         <Content>
@@ -311,18 +251,10 @@ export default class StepThree extends React.Component<any, any> {
           </RadioGroup>
         </Content>
 
-        <Modal
-          maskClosable={false}
-          visible={this.state.showImg}
-          footer={null}
-          onCancel={() => this._hideImgModal()}
-        >
+        <Modal maskClosable={false} visible={this.state.showImg} footer={null} onCancel={() => this._hideImgModal()}>
           <div>
             <div>
-              <img
-                style={{ width: '100%', height: '100%' }}
-                src={this.state.imgUrl}
-              />
+              <img style={{ width: '100%', height: '100%' }} src={this.state.imgUrl} />
             </div>
           </div>
         </Modal>

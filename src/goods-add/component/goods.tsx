@@ -33,18 +33,7 @@ const formItemLayout = {
 const tProps = {
   treeCheckable: 'true'
 };
-const treeData = [
-  {
-    title: 'Node1',
-    value: '0-0',
-    key: '0-0'
-  },
-  {
-    title: 'Node2',
-    value: '0-1',
-    key: '0-1'
-  }
-];
+
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const confirm = Modal.confirm;
 const { SHOW_PARENT } = TreeSelect;
@@ -58,6 +47,8 @@ export default class Info extends React.Component<any, any> {
       isEditGoods: boolean;
       goods: IMap;
       editGoods: Function;
+      onGoodsTaggingRelList: Function;
+      onProductFilter: Function;
       statusHelpMap: IMap;
       cateList: IList;
       sourceCateList: IList;
@@ -84,6 +75,9 @@ export default class Info extends React.Component<any, any> {
       flashsaleGoods: IList;
       getGoodsCate: IList;
       filtersTotal: IList;
+      taggingTotal: IList;
+      goodsTaggingRelList: IList;
+      productFilter: IList;
     };
   };
 
@@ -125,7 +119,12 @@ export default class Info extends React.Component<any, any> {
     enterpriseFlag: 'enterpriseFlag',
     flashsaleGoods: 'flashsaleGoods',
     getGoodsCate: 'getGoodsCate',
-    filtersTotal: 'filtersTotal'
+    filtersTotal: 'filtersTotal',
+    taggingTotal: 'taggingTotal',
+    onGoodsTaggingRelList: noop,
+    onProductFilter: noop,
+    goodsTaggingRelList: 'goodsTaggingRelList',
+    productFilter: 'productFilter'
   };
 
   constructor(props) {
@@ -172,20 +171,55 @@ class GoodsForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      storeCateIds: props.relaxProps.goods.get('storeCateIds') // 店铺分类id列表
+      storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
+      filterList: [],
+      selectFilters: []
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
+    const filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
     }
+    let filterList = [];
+    if (filtersTotal) {
+      let sourceFilter = filtersTotal.toJS();
+      sourceFilter.map((item) => {
+        let childrenNodes = [];
+        let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
+        let hasAttribute = item.attributesValueList && item.attributesValueList.length > 0;
+        if (hasCustmerAttribute || hasAttribute) {
+          let valuesList = hasCustmerAttribute ? item.storeGoodsFilterValueVOList : hasAttribute ? item.attributesValueList : [];
+          childrenNodes = valuesList.map((child) => {
+            return {
+              title: child.attributeDetailName,
+              value: child.id,
+              key: child.id,
+              isSingle: item.choiceStatus === 'Single choice',
+              filterType: item.filterType, // 1 is Custmered
+              parentId: hasAttribute ? item.attributeId : item.id
+            };
+          });
+          filterList.push({
+            title: item.attributeName,
+            value: hasAttribute ? item.attributeId : item.id,
+            key: hasAttribute ? item.attributeId : item.id,
+            children: childrenNodes
+          });
+        }
+        return item;
+      });
+    }
+    this.setState({
+      filterList
+    });
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, getGoodsCate, filtersTotal, isEditGoods, modalVisible, showCateModal, storeCateList, clickImg, removeImg, brandList, cateDisabled, removeVideo, video } = this.props.relaxProps;
+    const { goods, images, sourceCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -193,10 +227,23 @@ class GoodsForm extends React.Component<any, any> {
           return { value: id };
         })) ||
       [];
-
+    const taggingRelListValues =
+      (goodsTaggingRelList &&
+        goodsTaggingRelList.map((x) => {
+          return { value: x.taggingId };
+        })) ||
+      [];
+    const filterValues =
+      (productFilter &&
+        productFilter.map((x) => {
+          return { value: x.filterValueId };
+        })) ||
+      [];
     // const storeCateValues = [];
     //处理分类的树形图结构数据
+
     const loop = (cateList) =>
+      cateList &&
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           // 一二级类目不允许选择
@@ -216,7 +263,6 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
-
     return (
       <Form>
         <Row type="flex" justify="start">
@@ -345,10 +391,28 @@ class GoodsForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem {...formItemLayout} label="Product tagging">
               {getFieldDecorator('tagging', {
-                rules: [],
-                onChange: this._editGoods.bind(this, 'tagging')
-                // initialValue: 'Y'
-              })(<TreeSelect getPopupContainer={() => document.getElementById('page-content')} treeData={treeData} treeCheckable="true" placeholder="please select status"></TreeSelect>)}
+                rules: [
+                  {
+                    required: false,
+                    message: 'Please select product tagging'
+                  }
+                ],
+                initialValue: taggingRelListValues
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  placeholder="Please select product tagging"
+                  notFoundContent="No classification"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.taggingChange}
+                >
+                  {this.loopTagging(taggingTotal)}
+                </TreeSelect>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -384,11 +448,11 @@ class GoodsForm extends React.Component<any, any> {
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'cateId'),
-                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? goods.get('cateId') : undefined
+                initialValue: goods.get('cateId') && goods.get('cateId') != '' ? parseInt(goods.get('cateId')) : undefined
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  placeholder="Please select category"
+                  placeholder="Please select product category"
                   notFoundContent="No classification"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -418,11 +482,12 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select store category"
+                  placeholder="Please select sales category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.storeCateChange}
+                  treeDefaultExpandAll
                 >
                   {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
@@ -505,34 +570,10 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please select the item subtitle, no more than 225 words" />)}
+              })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
             </FormItem>
           </Col>
         </Row>
-        {/*<Row>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="price" />}>
-              {getFieldDecorator('linePrice', {
-                rules: [
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: 'Please fill in the legal amount with two decimal places'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'linePrice'),
-                initialValue: goods.get('linePrice')
-              })(<Input placeholder="Please fill in the underlined price" />)}
-            </FormItem>
-          </Col>
-        </Row>*/}
         <Row>
           <Col span={16}>
             <FormItem
@@ -609,8 +650,8 @@ class GoodsForm extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="Customized filter">
-              {getFieldDecorator('storeCateIds', {
-                initialValue: storeCateValues
+              {getFieldDecorator('productFilter', {
+                initialValue: filterValues
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
@@ -619,13 +660,16 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={filtersTotal}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select store category"
+                  placeholder="Please select customized filter"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
-                  onChange={this.storeCateChange}
+                  onChange={(value: any) => {
+                    this.filterChange(value);
+                  }}
+                  treeDefaultExpandAll
                 >
-                  {this.filtersTotalTree(filtersTotal)}
+                  {this.filtersTotalTree(this.state.filterList)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -658,77 +702,6 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        {/* <Row>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="销售类型">
-              {getFieldDecorator('saleType', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请选择销售类型'
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'saleType'),
-                initialValue: goods.get('saleType')
-              })(
-                <RadioGroup>
-                  <Radio value={0}>批发</Radio>
-                  <Radio value={1}>零售</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-          </Col>
-        </Row> */}
-        {/* <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="市场价">
-              {getFieldDecorator('marketPrice', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请填写市场价'
-                  },
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function(value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'marketPrice'),
-                initialValue: goods.get('marketPrice')
-              })(<Input placeholder="请填写商品统一市场价，单位“元”" />)}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="成本价">
-              {getFieldDecorator('costPrice', {
-                rules: [
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function(value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'costPrice'),
-                initialValue: goods.get('costPrice')
-              })(<Input placeholder="请填写商品统一成本价，单位“元”" />)}
-            </FormItem>
-          </Col>
-        </Row> */}
       </Form>
     );
   }
@@ -838,45 +811,9 @@ class GoodsForm extends React.Component<any, any> {
    */
   storeCateChange = (value, _label, extra) => {
     const { editGoods } = this.props.relaxProps;
-    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
-    // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
-
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
 
-    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
-    if (extra.clear || !extra.checked) {
-      sourceStoreCateList.forEach((cate) => {
-        // 删的是某个一级的
-        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
-          // 找到此一级节点下的二级节点
-          const children = sourceStoreCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
-          // 把一级的子节点也都删了
-          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
-        }
-      });
-    }
-
-    // 如果子节点被选中，上级节点也要被选中
-    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
-    originValues.forEach((v) => {
-      sourceStoreCateList.forEach((cate) => {
-        // 找到选中的分类，判断是否有上级
-        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
-          // 判断上级是否已添加过，如果没有添加过，添加
-          let exist = false;
-          originValues.forEach((vv) => {
-            if (vv == cate.get('cateParentId')) {
-              exist = true;
-            }
-          });
-          if (!exist) {
-            originValues = originValues.push(cate.get('cateParentId'));
-          }
-        }
-      });
-    });
     const storeCateIds = originValues;
 
     const goods = Map({
@@ -889,6 +826,45 @@ class GoodsForm extends React.Component<any, any> {
     });
 
     editGoods(goods);
+  };
+
+  taggingChange = (taggingValues, _label, extra) => {
+    const { onGoodsTaggingRelList } = this.props.relaxProps;
+    let originValues = taggingValues.map((v) => v.value);
+    const goodsTaggingRelList = [];
+    originValues.map((x) => {
+      goodsTaggingRelList.push({ taggingId: x });
+    });
+
+    // 强制刷新店铺分类的选中视图
+    this.setState({ goodsTaggingRelList }, () => {});
+
+    onGoodsTaggingRelList(goodsTaggingRelList);
+  };
+
+  filterChange = (values) => {
+    const { onProductFilter } = this.props.relaxProps;
+    let allChildrenList = [];
+    this.state.filterList.map((x) => {
+      x.children.map((c) => allChildrenList.push(c));
+    });
+    let selectFilters = values.map((x) => x.value);
+    let selectChildren = allChildrenList.filter((x) => selectFilters.includes(x.value));
+
+    let productFilter = [];
+
+    selectChildren.map((child) => {
+      productFilter.push({
+        filterId: child.parentId,
+        filterValueId: child.value
+      });
+    });
+    // 强制刷新店铺分类的选中视图
+    this.setState({ productFilter, selectFilters }, () => {
+      this.filtersTotalTree(this.state.filterList);
+    });
+
+    onProductFilter(productFilter);
   };
 
   /**
@@ -958,18 +934,32 @@ class GoodsForm extends React.Component<any, any> {
     );
   };
 
-  filtersTotalTree = (filtersTotalTree) => {
+  filtersTotalTree = (filterList) => {
     return (
-      filtersTotalTree &&
-      filtersTotalTree.map((item, i) => {
-        if (item.get('children') && item.get('children').count()) {
+      filterList &&
+      filterList.map((item) => {
+        let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
+        let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
+        let selectedFilters = this.state.selectFilters;
+        let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
+        let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
+        if (item.children && item.children.length > 0) {
           return (
-            <TreeNode key={i} value={item.get('attributeId')} title={item.get('attributeName')} disabled checkable={false}>
-              {this.generateStoreCateTree(item.get('children'))}
+            <TreeNode key={'parent' + item.key} value={'partent' + item.value} title={item.title} disabled checkable={false}>
+              {this.filtersTotalTree(item.children)}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.get('attributeId') + i} value={item.get('attributeId')} title={item.get('attributeName')} />;
+        return <TreeNode key={item.key} value={item.value} title={item.title} disabled={singleDisabled} />;
+      })
+    );
+  };
+
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('taggingName')} />;
       })
     );
   };

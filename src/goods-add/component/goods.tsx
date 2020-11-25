@@ -608,7 +608,7 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
         <Row>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product Filter">
+            <FormItem {...formItemLayout} label="Customized filter">
               {getFieldDecorator('storeCateIds', {
                 rules: [
                   {

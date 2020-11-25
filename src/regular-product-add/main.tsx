@@ -180,7 +180,7 @@ export default class Main extends React.Component<any, any> {
               <Related />
             </Tabs.TabPane>
             <Tabs.TabPane
-              tab="SEO Setting"
+              tab="SEO setting"
               key="seo"
               disabled
 

@@ -67,11 +67,12 @@ const getBrandList = () => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 const getCateList = () => {
-  return Fetch('/storeCate', {
-    method: 'GET'
-  });
+  return Fetch('/store_cate/batch/cate');
 };
 
+const getProductCategories = () => {
+  return Fetch('/contract/goods/cate/list');
+};
 /**
  * 查询店铺运费模板
  * @param params
@@ -118,6 +119,7 @@ export {
   spuDelete,
   getBrandList,
   getCateList,
+  getProductCategories,
   freightList,
   goodsFreight,
   goodsFreightExpress,

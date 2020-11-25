@@ -33,16 +33,17 @@ export default {
   operationInstruction: 'Operation instruction',
   allTheSame: 'All the same',
   'operationInstruction.first':
-    'After the platform opens review function，first added products defaults to the status of pending review. Once the product has been reviewed and be on shelves, it can be sold;',
+    'Until filled all required fields, the product could be published. ',
   'operationInstruction.second':
-    'If you do not need to set the price or order quantity, you can save it directly after editing the basic information;',
+    ' The product information tab, product price tab, product inventory tab must be filled before published.',
   'operationInstruction.third':
-    'You can set the market price, on/off shelves status, price and order quantity of SKU;',
+    'If you do not need to set the related product or SEO, you can click \'Next\' directly after editing the inventory information.',
   'product.product': 'Product',
   'product.productList': 'Product list',
   'product.productName': 'Product name',
   'product.SPU': 'SPU',
   'product.SKU': 'SKU',
+  "product.purchasePrice": "Purchase price",
   'product.productCategory': 'Product category',
   'product.storeCategory': 'Store category',
   'product.salesCategory': 'Sales category',
@@ -69,7 +70,7 @@ export default {
   'product.productImage': 'Product image',
   'product.productVideo': 'Product video',
   'product.recommendedSizeImg':
-    'Recommended size: 800 * 800px, the size of a single sheet does not exceed 2M, and the maximum sheets is 10',
+    'If the sales category is set to display in shop, the first picture is showed in the hompage and the next picture is showed in the product list page.',
   'product.recommendedSizeVideo':
     'Product video size is recommended 30M, the maximum limit is 50M, supported file type is mp4, recommended duration is less than or equal to 90s, greater than or equal to 6s, recommended video ratio of 7: 9',
   'product.attributeInformation': 'Attribute information',

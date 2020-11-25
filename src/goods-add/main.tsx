@@ -157,7 +157,7 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled>
+            <Tabs.TabPane tab="Product price" key="price">
               <AlertInfo />
 
               <ProductPrice />

@@ -969,7 +969,7 @@ export default class AppStore extends Store {
 
     param = param.set('goodsTabRelas', tabs);
 
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', 2);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
     goods = goods.set('freightTempId', '62');
@@ -1276,7 +1276,7 @@ export default class AppStore extends Store {
 
     param = param.set('goodsTabRelas', tabs);
 
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', 2);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
@@ -1390,6 +1390,7 @@ export default class AppStore extends Store {
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
           linePrice: item.get('linePrice') || 0,
+          purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')

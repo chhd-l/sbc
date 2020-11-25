@@ -232,12 +232,12 @@ class GoodsForm extends React.Component<any, any> {
         goodsTaggingRelList.map((x) => {
           return { value: x.taggingId } ;
         })) ||
-      [];
+      null;
     const filterValues = (productFilter &&
         productFilter.map((x) => {
           return { value: x.filterValueId} ;
         })) ||
-      [];
+      null;
     // const storeCateValues = [];
     //处理分类的树形图结构数据
 

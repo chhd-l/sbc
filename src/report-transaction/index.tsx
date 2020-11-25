@@ -225,7 +225,6 @@ export default class TransactionReport extends Component<any, any> {
   }
 
   onChangeDate = (date, dateString) => {
-    debugger;
     let startDate = moment(dateString[0]).format('YYYY-MM-DD');
     let endDate = moment(dateString[1]).format('YYYY-MM-DD');
     this.setState(

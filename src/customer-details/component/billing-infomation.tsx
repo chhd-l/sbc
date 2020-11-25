@@ -161,7 +161,7 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success('Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Unsuccessful');
         }
@@ -244,7 +244,7 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           this.getAddressList();
         } else {
           message.error(res.message || 'Unsuccessful');

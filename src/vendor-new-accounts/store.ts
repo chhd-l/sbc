@@ -113,7 +113,7 @@ export default class AppStore extends Store {
       offlineAccounts: newAccounts
     });
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('新增成功');
+      message.success('Operate successfully');
       history.push('./vendor-payment-account');
     } else {
       message.error(res.message);

@@ -834,7 +834,7 @@ export default class AppStore extends Store {
   addCustomer = async (customer) => {
     const { res } = await webapi.addCustomer(customer);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.switchCustomerFormVisible(false);
     } else {
       message.error(res.message);
@@ -882,7 +882,7 @@ export default class AppStore extends Store {
     });
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('添加收货地址成功');
+      message.success('Operate successfully');
       const { res } = (await webapi.addressList(customerId)) as any;
       let { code, context, message: errorInfo } = res;
 
@@ -913,7 +913,7 @@ export default class AppStore extends Store {
     });
     if (res.code === Const.SUCCESS_CODE) {
       address = fromJS(res).get('context');
-      message.success('更新收货地址成功');
+      message.success('Operate successfully');
       let editId = '';
       if (this.state().get('addressType') == 1) {
         editId = this.state().get('editDeliveryAddressId');
@@ -1431,7 +1431,7 @@ export default class AppStore extends Store {
     this.dispatch('order:submitting', false);
 
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(edit ? '修改订单成功' : '恭喜，下单成功');
+      message.success('Operate successfully');
       history.push('/order-list');
     } else if (res.code == 'K-999999') {
       confirm({

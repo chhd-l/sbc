@@ -86,7 +86,7 @@ export default class AppStore extends Store {
     const { res } = await addPay(copy);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('添加收款单成功!');
+      message.success('Operate successfully');
       //刷新
       const tid = this.state().get('tid');
       this.setReceiveVisible();
@@ -126,7 +126,7 @@ export default class AppStore extends Store {
 
     this.hideRejectModal();
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(audit == 'CHECKED' ? 'Audit successfully' : '驳回成功');
+      message.success('Operate successfully');
       const tid = this.state().get('tid');
       this.init(tid);
     } else {
@@ -179,7 +179,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Confirm successful receipt!');
+      message.success('Operate successfully');
       //刷新
       const tid = this.state().get('tid');
       this.init(tid);
@@ -235,7 +235,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.deliver(tid, tradeDelivery);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Save deliver successfully!');
+      message.success('Operate successfully');
       //刷新
       this.init(tid);
     } else {
@@ -268,7 +268,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.obsoleteDeliver(tid, params);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Void shipment record succeeded!');
+      message.success('Operate successfully');
       this.init(tid);
     } else {
       message.error(res.message);
@@ -286,7 +286,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init(tid);
-      message.success('回审成功!');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -309,7 +309,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.destroyOrder(params);
 
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('作废成功');
+      message.success('Operate successfully');
       this.init(tid);
     } else {
       message.error(res.message);
@@ -346,7 +346,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.remedySellerRemark(tid, sellerRemark);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     } else {
@@ -411,7 +411,7 @@ export default class AppStore extends Store {
     ids.push(id);
     const { res } = await webapi.payConfirm(ids);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('确认成功');
+      message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     } else {

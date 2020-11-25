@@ -78,7 +78,7 @@ export default class AppStore extends Store {
       freightTemplateType: fMode
     })) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('保存成功');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -90,7 +90,7 @@ export default class AppStore extends Store {
   copy = async (freightId) => {
     const { res } = (await webapi.copyFreightGoods(freightId)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Copy successful');
+      message.success('Operate successfully');
       this.init({ tab: 1 } as any);
     } else if (res.code == 'K-110701' || res.code == 'K-110702') {
       confirm({
@@ -122,7 +122,7 @@ export default class AppStore extends Store {
     }
     const { res } = result;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Delete Successful');
+      message.success('Operate successfully');
       const { size, number } = this.state().get('storeFreight').toJS();
       if (isStore) {
         this.freightTemplateStore(number - 1, size);

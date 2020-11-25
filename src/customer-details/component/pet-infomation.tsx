@@ -271,7 +271,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           this.petsByConsumer();
         } else {
           message.error(res.message || 'Unsuccessful');
@@ -342,7 +342,7 @@ class PetInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           this.petsByConsumer();
         } else {
           this.setState({

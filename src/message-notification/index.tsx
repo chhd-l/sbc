@@ -103,7 +103,7 @@ class Notification extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
-          message.success(res.message || 'Update Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Update Failed');
         }
@@ -119,7 +119,7 @@ class Notification extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
-          message.success(res.message || 'Update Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Update Failed');
         }
@@ -202,7 +202,7 @@ class Notification extends Component<any, any> {
               this.getNotificationList();
             }
           );
-          message.success(res.message || 'Save Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Save Failed');
         }

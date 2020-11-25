@@ -141,7 +141,7 @@ export default class AppStore extends Store {
     const params = this.fetchParams();
     const { res } = (await webApi.addCoupon(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('新增优惠券成功!');
+      message.success('Operate successfully');
       history.push('/coupon-list');
     } else {
       this.changeBtnDisabled();
@@ -157,7 +157,7 @@ export default class AppStore extends Store {
     params.couponId = this.state().get('couponId');
     const { res } = (await webApi.editCoupon(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('修改优惠券成功!');
+      message.success('Operate successfully');
       history.push('/coupon-list');
     } else {
       this.changeBtnDisabled();

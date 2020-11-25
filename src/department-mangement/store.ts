@@ -137,7 +137,7 @@ export default class AppStore extends Store {
       result = await addDepartment(formData);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       // 刷新
       this.refresh();
       // 关闭弹框
@@ -196,7 +196,7 @@ export default class AppStore extends Store {
 
     const { res } = (await dragSort(sortList, sourceIndex, targetIndex)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);

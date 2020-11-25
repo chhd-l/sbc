@@ -131,7 +131,7 @@ export default class ClinicList extends Component<any, any> {
       id: id
     });
     if (res.code === 'K-000000') {
-      message.success('Successful');
+      message.success('Operate successfully');
       const { pagination } = this.state;
       let params = {
         type: 'clinicType',

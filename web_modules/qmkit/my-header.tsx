@@ -232,7 +232,7 @@ export default class MyHeader extends React.Component {
 
   handleCopy = (value) => {
     if (copy(value)) {
-      message.success('Successful');
+      message.success('Operate successfully');
     } else message.error('Unsuccessful');
   };
 }

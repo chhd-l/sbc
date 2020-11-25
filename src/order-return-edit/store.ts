@@ -296,7 +296,7 @@ export default class AppStore extends Store {
     result = await remedy(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success('修改退单成功');
+      message.success('Operate successfully');
       history.go(-1);
     } else {
       message.error(result.res.message);

@@ -240,7 +240,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'operation successful');
+          message.success('Operate successfully');
           this.setState({
             visible: false
           });

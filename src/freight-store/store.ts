@@ -107,7 +107,7 @@ export default class AppStore extends Store {
     }
     const { res } = (await webapi.freightStoreSave(request)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       history.push({
         pathname: '/freight',
         state: { tab: 0 }

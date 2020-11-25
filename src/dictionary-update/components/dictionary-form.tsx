@@ -130,7 +130,7 @@ class DictionaryForm extends Component<any, any> {
       ...dictionaryForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'create success');
+      message.success('Operate successfully');
       history.push('/dictionary');
     } else {
       message.error(res.message || 'create faild');
@@ -143,7 +143,7 @@ class DictionaryForm extends Component<any, any> {
       ...dictionaryForm
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'update success');
+      message.success('Operate successfully');
       history.push('/dictionary');
     } else {
       message.error(res.message || 'update faild');

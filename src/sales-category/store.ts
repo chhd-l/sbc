@@ -98,7 +98,7 @@ export default class AppStore extends Store {
       result = await addCate(formDataJs);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       // 刷新
       this.refresh();
     } else {
@@ -193,7 +193,7 @@ export default class AppStore extends Store {
     }
     const { res } = (await dragSort(paramList)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);

@@ -125,7 +125,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.batchAudit(checkedIds);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('批量审核成功');
+      message.success('Operate successfully');
       //refresh
       this.init();
     } else {
@@ -149,7 +149,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.audit(tid, audit, reason);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success(audit == 'CHECKED' ? 'Audit successfully' : '驳回成功');
+        message.success('Operate successfully');
         this.init();
       } else {
         message.error(
@@ -166,7 +166,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init();
-      message.success('回审成功!');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }

@@ -208,7 +208,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('cate: modal', false);
       this.init({ pageNum: 0, pageSize: 10 });
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }

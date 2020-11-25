@@ -176,7 +176,7 @@ class BasicInfomation extends React.Component<any, any> {
         .then((data) => {
           const res = data.res;
           if (res.code === 'K-000000') {
-            message.success(res.message || 'Update data success');
+            message.success('Operate successfully');
           } else {
             message.error(res.message || 'Update data failed');
           }

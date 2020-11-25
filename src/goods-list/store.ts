@@ -178,7 +178,7 @@ export default class AppStore extends Store {
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(data.res.code);
     }
@@ -241,7 +241,7 @@ export default class AppStore extends Store {
     };
     const { res, err } = (await updateFreight(param)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.setFeightVisible(false);
       this.setFreightTempId(null);
       this.dispatch('goodsActor:clearSelectedSpuKeys');

@@ -55,7 +55,7 @@ export default class AppStore extends Store {
     settings.commissionRate = settings.commissionRate / 100;
     const { res } = await webapi.editSetting(settings);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);

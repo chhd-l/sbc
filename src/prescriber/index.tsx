@@ -115,7 +115,7 @@ export default class ClinicList extends Component<any, any> {
       id: id
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'Successful');
+      message.success('Operate successfully');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
       message.error(res.message || 'Unsuccessful');
@@ -125,7 +125,7 @@ export default class ClinicList extends Component<any, any> {
     // message.info('API under development');
     const { res } = await webapi.enableAndDisable(id);
     if (res.code === 'K-000000') {
-      message.success(res.message || 'Successful');
+      message.success('Operate successfully');
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
     } else {
       message.error(res.message || 'Unsuccessful');

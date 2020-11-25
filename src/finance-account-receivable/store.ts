@@ -87,7 +87,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.editOfflineAccount(params);
 
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('save successful');
+        message.success('Operate successfully');
         this.transaction(() => {
           this.dispatch('modal:hide');
           this.dispatch('edit', false);
@@ -101,7 +101,7 @@ export default class AppStore extends Store {
 
     const { res: saveRes } = await webapi.saveOfflineAccount(params);
     if (saveRes.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('modal:hide');
       this.initOffLineAccounts();
     } else {
@@ -113,7 +113,7 @@ export default class AppStore extends Store {
   onDelete = async (id) => {
     const { res } = await webapi.deleteOfflineAccount(id);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
       message.error(res.message);
@@ -124,7 +124,7 @@ export default class AppStore extends Store {
   onEnable = async (id) => {
     const { res } = await webapi.enableOfflineAccount(id);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
       message.error(res.message);
@@ -135,7 +135,7 @@ export default class AppStore extends Store {
   onDisable = async (id) => {
     const { res } = await webapi.disableOfflineAccount(id);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
       message.error(res.message);
@@ -191,7 +191,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.saveGateWaysDetails(channelJson);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('modal:channel_hide');
       this.init();
     } else {

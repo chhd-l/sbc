@@ -97,7 +97,7 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Save successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Save config failed');
         }
@@ -140,7 +140,7 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getGoodsCategory();
-          message.success(res.message || 'Update successful');
+          message.success('Operate successfully');
         } else {
           this.setState({
             categoryLoading: false
@@ -166,7 +166,7 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getGoodsCategory();
-          message.success(res.message || 'Update successful');
+          message.success('Operate successfully');
         } else {
           this.setState({
             categoryLoading: false

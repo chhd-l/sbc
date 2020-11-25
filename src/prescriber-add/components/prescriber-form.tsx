@@ -150,7 +150,7 @@ class ClinicForm extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Successful');
+          message.success('Operate successfully');
           this.setState({
             saveLoading: false
           });
@@ -188,7 +188,7 @@ class ClinicForm extends React.Component<any, any> {
   //       const res = data.res;
   //       if (res.code === 'K-000000') {
   //         this.getClinicsReward(this.props.prescriberId);
-  //         message.success(res.message || 'Successful');
+  //         message.success('Operate successfully');
   //       } else {
   //         message.error(res.message||'Unsuccessful');
   //       }
@@ -481,7 +481,7 @@ class ClinicForm extends React.Component<any, any> {
   // };
   handleCopy = (value) => {
     if (copy(value)) {
-      message.success('Successful');
+      message.success('Operate successfully');
     } else message.error('Unsuccessful');
   };
 

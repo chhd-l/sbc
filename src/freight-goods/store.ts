@@ -161,7 +161,7 @@ export default class AppStore extends Store {
     }
     const { res } = (await webapi.saveFreightGoods(request)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(freightTempId ? 'save successful' : '新增成功');
+      message.success('Operate successfully');
       history.push({
         pathname: '/freight',
         state: { tab: 1 }

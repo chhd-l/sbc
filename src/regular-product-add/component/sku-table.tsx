@@ -11,7 +11,7 @@ import ProductTooltip from './productTooltip';
 const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
-
+const { TextArea } = Input;
 @Relax
 export default class SkuTable extends React.Component<any, any> {
   WrapperForm: any;
@@ -227,7 +227,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
                 initialValue: rowInfo.description
-              })(<Input style={{ width: '100px' }} min={0} max={9999999} disabled={rowInfo.description === 0} />)}
+              })(<TextArea rows={2} style={{ width: '300px' }} disabled={rowInfo.description === 0} />)}
             </FormItem>
           </Col>
         </Row>

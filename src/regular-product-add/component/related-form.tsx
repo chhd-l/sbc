@@ -6,6 +6,8 @@ import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import { fromJS, Map } from 'immutable';
+import '../index.less';
+import value from '*.json';
 
 const SelectBox = styled.div`
   .ant-select-dropdown-menu-item,
@@ -27,7 +29,8 @@ export default class SearchForm extends React.Component<any, any> {
       likeGoodsName: string;
       likeGoodsInfoNo: string;
       likeGoodsNo: string;
-      storeCateId: string;
+      storeCategoryIds: IList;
+      goodsCateId: string;
       brandId: string;
       addedFlag: string;
       likeProductCategory: string;
@@ -36,7 +39,8 @@ export default class SearchForm extends React.Component<any, any> {
       onFormFieldChange: Function;
       brandList: IList;
       cateList: IList;
-      sourceCateList: IList;
+      getGoodsCate: IList;
+      sourceGoodCateList: IList;
     };
   };
 
@@ -48,7 +52,8 @@ export default class SearchForm extends React.Component<any, any> {
     // 模糊条件-SPU编码
     likeGoodsNo: 'likeGoodsNo',
     // 商品分类
-    storeCateId: 'storeCateId',
+    storeCategoryIds: 'storeCategoryIds',
+    goodsCateId: 'goodsCateId',
     // 品牌编号
     likeProductCategory: 'likeProductCategory',
     brandId: 'brandId',
@@ -59,22 +64,24 @@ export default class SearchForm extends React.Component<any, any> {
     brandList: 'brandList',
     //分类列表
     cateList: 'cateList',
-    sourceCateList: 'sourceCateList'
+    getGoodsCate: 'getGoodsCate',
+    sourceGoodCateList: 'sourceGoodCateList'
   };
 
   searchBackFun = () => {
-    const { likeGoodsName, likeGoodsNo, storeCateId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId } = this.props.relaxProps;
     let from = {
       goodsName: likeGoodsName,
       goodsNo: likeGoodsNo,
-      storeCateId: storeCateId
+      storeCateId: storeCategoryIds,
+      goodsCateId: goodsCateId
     };
 
     this.props.searchBackFun(from);
   };
 
   render() {
-    const { likeGoodsName, likeProductCategory, likeGoodsNo, onFormFieldChange, brandList, cateList } = this.props.relaxProps;
+    const { likeGoodsName, likeProductCategory, storeCategoryIds, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
     //const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -89,16 +96,50 @@ export default class SearchForm extends React.Component<any, any> {
 
     //处理分类的树形图结构数据
     const loop = (cateList) =>
-      cateList.map((item) => {
-        if (item.get('children') && item.get('children').count()) {
-          return (
-            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
-              {loop(item.get('children'))}
-            </TreeNode>
-          );
-        }
-        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
-      });
+    {
+        return (
+          cateList && cateList.count() > 0 &&
+          cateList.map((item) => {
+            if (item.get('children') && item.get('children').count()) {
+              return (
+                <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
+                  {loop(item.get('children'))}
+                </TreeNode>
+              );
+            }
+            return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
+          })
+        );
+      };
+
+    const generateStoreCateTree = (storeCateList) => {
+      return (
+        storeCateList && storeCateList.count() > 0 &&
+        storeCateList.map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
+                {generateStoreCateTree(item.get('children'))}
+              </TreeNode>
+            );
+          }
+          return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+        })
+      );
+    };
+
+    const onSalesCategoryChange = (value) => {
+      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : []
+      let childCategoryIds = []
+
+      var children = sourceCategories.filter(x=>x.cateParentId ===value);
+      if(children && children.length > 0) {
+        childCategoryIds = children.map(x=>x.storeCateId)
+      } else {
+        childCategoryIds = value
+      }
+      onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
+    }
 
     return (
       <Form className="filter-content" layout="inline">
@@ -144,6 +185,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem>
               <TreeSelectGroup
+                allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={<p style={styles.label}>Product category</p>}
                 /* defaultValue="全部"*/
@@ -151,29 +193,29 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCateId', value });
+                  onFormFieldChange({ key: 'goodsCateId', value });
                 }}
               >
-                <TreeNode key="-1" value="-1" title="All">
-                  {loop(cateList)}
-                </TreeNode>
+                {loop(cateList)}
               </TreeSelectGroup>
             </FormItem>
           </Col>
-          {/* <Col span={8}>
-            <FormItem {...formItemLayout} label="Product category">
-              <TreeSelect
+          <Col span={8} id="salesCategory">
+            <FormItem>
+              <TreeSelectGroup
+                allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
-                placeholder="Please select category"
-                notFoundContent="No classification"
-                // disabled={cateDisabled}
+                label={<p style={styles.label}>Sales category</p>}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
+                onChange={(value) => {
+                  onSalesCategoryChange(value)
+                }}
               >
-                {loop(cateList)}
-              </TreeSelect>
+                {generateStoreCateTree(getGoodsCate)}
+              </TreeSelectGroup>
             </FormItem>
-          </Col>*/}
+          </Col>
 
           <Col span={8}>
             <FormItem>

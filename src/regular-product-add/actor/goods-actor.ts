@@ -10,6 +10,7 @@ export default class GoodsActor extends Actor {
       // 店铺分类信息
       storeCateList: [],
       sourceStoreCateList: [],
+      sourceGoodCateList: [],
       // 品牌信息
       brandList: [],
       // 商品信息
@@ -189,7 +190,7 @@ export default class GoodsActor extends Actor {
         }
         return data;
       });
-    return state.set('getGoodsCate', newDataList);
+    return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', getGoodsCate);
   }
 
   @Action('goodsActor:filtersTotal')

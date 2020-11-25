@@ -247,7 +247,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span>Traffic</span>
                   <span>
-                    <Link to="/report-traffic">more ></Link>
+                    <Link to="/report-traffic">more &gt;</Link>
                   </span>
                 </div>
                 <div className="traffic space-between">
@@ -309,7 +309,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span>Transaction</span>
                   <span>
-                    <Link to="/report-transaction">more ></Link>
+                    <Link to="/report-transaction">more &gt;</Link>
                   </span>
                 </div>
                 <div className="m-content flex-content">
@@ -417,7 +417,7 @@ export default class TodoItems extends React.Component<any, any> {
                   </div>
                   <div className="subscription-r flex-content">
                     <div className="subscription-content space-around">
-                      <div className="text">Order</div>
+                      <div className="text">Order Number</div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -429,7 +429,7 @@ export default class TodoItems extends React.Component<any, any> {
                       </div>
                     </div>
                     <div className="subscription-content space-around">
-                      <div className="text">Sales</div>
+                      <div className="text">Sales volume</div>
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
@@ -500,7 +500,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span>Best seller</span>
                   <span>
-                    <Link to="/report-product">more ></Link>
+                    <Link to="/report-product">more &gt;</Link>
                   </span>
                 </div>
               </div>
@@ -528,7 +528,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="top-text space-between">
                   <span>Traffic Trend</span>
                   <span>
-                    <Link to="/report-traffic">more ></Link>
+                    <Link to="/report-traffic">more &gt;</Link>
                   </span>
                 </div>
               </div>
@@ -566,7 +566,7 @@ export default class TodoItems extends React.Component<any, any> {
               <div className="top-text space-between">
                 <span>Transaction Trend</span>
                 <span>
-                  <Link to="/report-transaction">more ></Link>
+                  <Link to="/report-transaction">more &gt;</Link>
                 </span>
               </div>
               <div className="line">

@@ -43,6 +43,7 @@ export default {
   'product.productName': 'Product name',
   'product.SPU': 'SPU',
   'product.SKU': 'SKU',
+  'product.productCategory': 'Product category',
   'product.storeCategory': 'Store category',
   'product.salesCategory': 'Sales category',
   'product.brand': 'Brand',

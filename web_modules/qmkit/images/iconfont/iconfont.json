@@ -6,6 +6,27 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "18430148",
+      "name": "finance",
+      "font_class": "finance",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
+      "icon_id": "18403310",
+      "name": "data",
+      "font_class": "data",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "18403294",
+      "name": "skip",
+      "font_class": "skip",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
       "icon_id": "18336592",
       "name": "Batch Invoicing",
       "font_class": "BatchInvoicing",

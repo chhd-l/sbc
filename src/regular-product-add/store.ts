@@ -1266,11 +1266,12 @@ export default class AppStore extends Store {
       Map({
         artworkUrl: item.get('artworkUrl')
       })
-    );u
+    );
     if (images.length === 0) {
       message.error('Product image is required');
       return false;
     }
+    console.log(images, 11111111111);
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();
@@ -1358,7 +1359,7 @@ export default class AppStore extends Store {
           return false;
         }
       }
-
+      console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
           /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,

@@ -169,7 +169,6 @@ export default class CateActor extends Actor {
     return state.set(
       'images',
       images.map((i, index) => {
-        debugger;
         i = i.set('imageId', index);
         return i;
       })

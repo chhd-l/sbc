@@ -119,7 +119,6 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-
     columns = columns.unshift({
       title: '',
       key: 'index' + 2,

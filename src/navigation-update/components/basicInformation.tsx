@@ -35,12 +35,10 @@ export default class BasicInformation extends React.Component<any, any> {
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
                 rules: [
+                  {required: true, message: 'Please input Navigation Name'},
                   {
                     validator: (_rule, value, callback) => {
-                      debugger;
-                      if (!value) {
-                        callback('Please input Navigation Name');
-                      } else if (this.props.topNames && this.props.topNames.includes(value)) {
+                     if (this.props.topNames && this.props.topNames.includes(value)) {
                         callback('Top-level navigation cannot be repeated');
                       } else {
                         callback();

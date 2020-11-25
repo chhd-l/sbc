@@ -86,7 +86,6 @@ class RejectForm extends React.Component<any, any> {
   }
 
   // checkComment = (_rule, value, callback) => {
-  //   debugger
   //   if (!value) {
   //     callback();
   //     return;

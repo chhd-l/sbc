@@ -4,25 +4,7 @@ import '../index.less';
 import { FormattedMessage } from 'react-intl';
 import { cache, Const, noop, SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Table,
-  Divider,
-  message,
-  Checkbox,
-  Pagination,
-  Spin,
-  Tooltip,
-  Modal,
-  Rate,
-  TreeSelect,
-  Icon,
-  Upload,
-  Tree
-} from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
 import { IMap } from 'plume2';
 import { List, fromJS, Map } from 'immutable';
 import { FunctionOrConstructorTypeNodeBase } from 'ts-morph';
@@ -110,9 +92,7 @@ export default class UploadImageModal extends Component<any, any> {
     setMFileList: noop
   };
   componentDidMount() {
-    const { storeId, companyInfoId } = JSON.parse(
-      sessionStorage.getItem(cache.LOGIN_DATA)
-    );
+    const { storeId, companyInfoId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     this.setState({
       storeId,
       companyInfoId
@@ -120,13 +100,7 @@ export default class UploadImageModal extends Component<any, any> {
   }
 
   _handleSubmit = () => {
-    const {
-      tableDatas,
-      imageForm,
-      fileList,
-      mFileList,
-      editBanner
-    } = this.props.relaxProps;
+    const { tableDatas, imageForm, fileList, mFileList, editBanner } = this.props.relaxProps;
     this.setState({
       okDisabled: true
     });
@@ -138,21 +112,15 @@ export default class UploadImageModal extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         let imageObj = imageForm.toJS();
-        if (
-          imageObj.fileList.filter((file) => file.status === 'done').length <= 0
-        ) {
+        if (imageObj.fileList.filter((file) => file.status === 'done').length <= 0) {
           message.error('Please choose to upload pc resource!');
           return;
         }
-        if (
-          imageObj.mFileList.filter((file) => file.status === 'done').length <=
-          0
-        ) {
+        if (imageObj.mFileList.filter((file) => file.status === 'done').length <= 0) {
           message.error('Please choose to upload mobile resource!');
           return;
         }
         if (imageObj.bannerId) {
-          debugger;
           // edit
           const params = {
             bannerId: imageObj.bannerId,
@@ -254,13 +222,7 @@ export default class UploadImageModal extends Component<any, any> {
   };
 
   render() {
-    const {
-      modalVisible,
-      tableDatas,
-      imageForm,
-      bannerNoList,
-      onImageFormChange
-    } = this.props.relaxProps;
+    const { modalVisible, tableDatas, imageForm, bannerNoList, onImageFormChange } = this.props.relaxProps;
 
     if (!modalVisible) {
       return null;
@@ -283,15 +245,12 @@ export default class UploadImageModal extends Component<any, any> {
       name: 'uploadFile',
       headers: {
         Accept: 'application/json',
-        Authorization:
-          'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
+        Authorization: 'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },
       multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
-      action:
-        Const.HOST +
-        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+      action: Const.HOST + `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
@@ -305,11 +264,7 @@ export default class UploadImageModal extends Component<any, any> {
           return false;
         }
 
-        if (
-          /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(
-            fileName
-          )
-        ) {
+        if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
           message.error('Please enter the file name in the correct format');
           return false;
         }
@@ -323,13 +278,7 @@ export default class UploadImageModal extends Component<any, any> {
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
-        if (
-          fileName.endsWith('.jpg') ||
-          fileName.endsWith('.jpeg') ||
-          fileName.endsWith('.png') ||
-          fileName.endsWith('.gif') ||
-          fileName.endsWith('.mp4')
-        ) {
+        if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.mp4')) {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
@@ -345,11 +294,7 @@ export default class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
-          if (
-            info.file.response &&
-            info.file.response.code &&
-            info.file.response.code !== Const.SUCCESS_CODE
-          ) {
+          if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
             message.error(`${info.file.name} upload failed!`);
           } else {
             // ref.setState({
@@ -383,12 +328,7 @@ export default class UploadImageModal extends Component<any, any> {
           message.error(`${info.file.name} upload failed!`);
         }
         //仅展示上传中和上传成功的文件列表
-        fileList = fileList.filter(
-          (f) =>
-            f.status == 'uploading' ||
-            (f.status == 'done' && !f.response) ||
-            (f.status == 'done' && f.response && !f.response.code)
-        );
+        fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
         setFileList(fileList);
       }
     };
@@ -396,15 +336,12 @@ export default class UploadImageModal extends Component<any, any> {
       name: 'uploadFile',
       headers: {
         Accept: 'application/json',
-        Authorization:
-          'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
+        Authorization: 'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },
       multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
-      action:
-        Const.HOST +
-        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+      action: Const.HOST + `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
       beforeUpload(file) {
         // if (!cateIdCurr) {
@@ -423,11 +360,7 @@ export default class UploadImageModal extends Component<any, any> {
           return false;
         }
 
-        if (
-          /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(
-            fileName
-          )
-        ) {
+        if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
           message.error('Please enter the file name in the correct format');
           return false;
         }
@@ -441,13 +374,7 @@ export default class UploadImageModal extends Component<any, any> {
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
-        if (
-          fileName.endsWith('.jpg') ||
-          fileName.endsWith('.jpeg') ||
-          fileName.endsWith('.png') ||
-          fileName.endsWith('.gif') ||
-          fileName.endsWith('.mp4')
-        ) {
+        if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.mp4')) {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
@@ -463,11 +390,7 @@ export default class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
-          if (
-            info.file.response &&
-            info.file.response.code &&
-            info.file.response.code !== Const.SUCCESS_CODE
-          ) {
+          if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
             message.error(`${info.file.name} upload failed!`);
           } else {
             // ref.setState({
@@ -502,12 +425,7 @@ export default class UploadImageModal extends Component<any, any> {
           message.error(`${info.file.name} upload failed!`);
         }
         //仅展示上传中和上传成功的文件列表
-        fileList = fileList.filter(
-          (f) =>
-            f.status == 'uploading' ||
-            (f.status == 'done' && !f.response) ||
-            (f.status == 'done' && f.response && !f.response.code)
-        );
+        fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
         setMFileList(fileList);
       }
     };
@@ -527,9 +445,7 @@ export default class UploadImageModal extends Component<any, any> {
               <FormItem {...formItemLayout} label="Banner No">
                 {getFieldDecorator('bannerNo', {
                   initialValue: bannerNo,
-                  rules: [
-                    { required: true, message: 'Please select banner No.' }
-                  ]
+                  rules: [{ required: true, message: 'Please select banner No.' }]
                 })(
                   <Select
                     style={{ width: 160 }}
@@ -551,9 +467,7 @@ export default class UploadImageModal extends Component<any, any> {
               <FormItem {...formItemLayout} label="Banner name">
                 {getFieldDecorator('bannerName', {
                   initialValue: bannerName,
-                  rules: [
-                    { required: true, message: 'Please enter banner name.' }
-                  ]
+                  rules: [{ required: true, message: 'Please enter banner name.' }]
                 })(
                   <Input
                     onChange={(e) =>
@@ -595,16 +509,7 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem
-                {...formItemLayout}
-                label={
-                  <FormattedMessage
-                    id="selectResource"
-                    values={{ type: 'pc' }}
-                  />
-                }
-                required={true}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="selectResource" values={{ type: 'pc' }} />} required={true}>
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...props} fileList={list}>
                     <p className="ant-upload-drag-icon">
@@ -623,16 +528,7 @@ export default class UploadImageModal extends Component<any, any> {
           </div>
           <div>
             <Form>
-              <FormItem
-                {...formItemLayout}
-                label={
-                  <FormattedMessage
-                    id="selectResource"
-                    values={{ type: 'mobile' }}
-                  />
-                }
-                required={true}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="selectResource" values={{ type: 'mobile' }} />} required={true}>
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...mProps} fileList={mList}>
                     <p className="ant-upload-drag-icon">

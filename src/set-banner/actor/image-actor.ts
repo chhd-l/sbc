@@ -49,7 +49,6 @@ export default class ImageActor extends Actor {
   }
   @Action('imageActor:imageForm')
   changeImageForm(state: IMap, imageForm) {
-    debugger;
     return state.set('imageForm', fromJS(imageForm));
   }
 

@@ -73,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
     let from = {
       goodsName: likeGoodsName,
       goodsNo: likeGoodsNo,
-      storeCateId: storeCategoryIds,
+      storeCateIds: storeCategoryIds,
       goodsCateId: goodsCateId
     };
 
@@ -134,9 +134,18 @@ export default class SearchForm extends React.Component<any, any> {
 
       var children = sourceCategories.filter(x=>x.cateParentId ===value);
       if(children && children.length > 0) {
-        childCategoryIds = children.map(x=>x.storeCateId)
+        children.map(x=>{
+          var lastChildren = sourceCategories.filter(l=>l.cateParentId ===x.storeCateId);
+          if(lastChildren && lastChildren.length > 0) {
+            lastChildren.map(l=>{
+              childCategoryIds.push(l.storeCateId)
+            })
+          } else {
+            childCategoryIds.push(x.storeCateId)
+          }
+        })
       } else {
-        childCategoryIds = value
+        childCategoryIds.push(value)
       }
       onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
     }

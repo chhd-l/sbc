@@ -268,6 +268,7 @@ export default class AppStore extends Store {
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
+      debugger
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
@@ -1267,11 +1268,7 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
-    console.log(images, 11111111111);
+
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();

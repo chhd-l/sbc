@@ -279,7 +279,7 @@ class OrderSetting extends Component<any, any> {
         width: '33%'
       },
       {
-        title: 'Superior category',
+        title: 'Parent category',
         dataIndex: 'cateName',
         key: 'cateName',
         width: '33%'
@@ -313,7 +313,7 @@ class OrderSetting extends Component<any, any> {
         width: '33%'
       },
       {
-        title: 'Superior category',
+        title: 'Parent category',
         dataIndex: 'cateName',
         key: 'cateName',
         width: '33%'

@@ -1266,7 +1266,7 @@ export default class AppStore extends Store {
       Map({
         artworkUrl: item.get('artworkUrl')
       })
-    );
+    );u
     if (images.length === 0) {
       message.error('Product image is required');
       return false;

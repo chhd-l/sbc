@@ -965,7 +965,6 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   taggingChange = (taggingValues, _label, extra) => {
-    debugger;
     const { onGoodsTaggingRelList } = this.props.relaxProps;
     let originValues = taggingValues.map((v) => v.value);
     const goodsTaggingRelList = [];

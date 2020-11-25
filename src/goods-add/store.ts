@@ -56,12 +56,13 @@ import {
   fetchConsentDelete,
   fetchAdd,
   fetchproductTooltip,
+  fetchFiltersTotal,
   getSeo,
-  editSeo
+  editSeo,
+  fetchTaggingTotal
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
-import { goodsList } from '@/goods-list/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -80,14 +81,19 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
-    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList()]).then((results) => {
+    await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal(), fetchTaggingTotal()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
       this.dispatch('formActor:check', fromJS((results[2].res as any).context));
       this.dispatch('goodsActor:flashsaleGoods', fromJS((results[3].res as any).context).get('flashSaleGoodsVOList'));
       this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[4].res as any).context.sysDictionaryVOS));
       this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
+      this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
+      this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
+
       this.dispatch('related:goodsId', goodsId);
+
+      // fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
@@ -279,6 +285,20 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
+      let productFilter = tmpContext.filterList.map((x) => {
+        return {
+          filterId: x.filterId,
+          filterValueId: x.id
+        };
+      });
+      this.onProductFilter(productFilter);
+
+      let taggingIds = tmpContext.taggingList.map((x) => {
+        return { taggingId: x.id };
+      });
+
+      this.onGoodsTaggingRelList(taggingIds);
+
       goodsDetail = fromJS(tmpContext);
     } else {
       message.error('查询商品信息失败');
@@ -834,7 +854,34 @@ export default class AppStore extends Store {
 
     return valid;
   }
-
+  _validPriceFormsNew() {
+    let valid = true;
+    let goodsList = this.state().get('goodsList');
+    if (goodsList) {
+      goodsList.forEach((item) => {
+        if (!(item.get('marketPrice') || item.get('marketPrice') == 0) || !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+          message.error('Please input market price');
+          valid = false;
+          return;
+        }
+      });
+    }
+    return valid;
+  }
+  _validInventoryFormsNew() {
+    let valid = true;
+    let goodsList = this.state().get('goodsList');
+    if (goodsList) {
+      goodsList.forEach((item) => {
+        if (!(item.get('stock') || item.get('stock') == 0)) {
+          message.error('Please input Inventory');
+          valid = false;
+          return;
+        }
+      });
+    }
+    return valid;
+  }
   validMain = () => {
     return this._validMainForms();
   };
@@ -922,10 +969,9 @@ export default class AppStore extends Store {
 
     param = param.set('goodsTabRelas', tabs);
 
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', 2);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('baseSpec', data.get('baseSpecId'));
-
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
     goods = goods.set('goodsCubage', '1'); // for hide 物流表单
@@ -1162,7 +1208,7 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async () => {
-    if (!this._validMainForms() || !this._validPriceForms()) {
+    if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
 
@@ -1219,10 +1265,22 @@ export default class AppStore extends Store {
       goods = goods.set('goodsVideo', data.get('video').get('artworkUrl'));
     }
 
+    let goodsDetailTab = data.get('goodsDetailTab');
+    let goodsDetailTabTemplate = {};
+    goodsDetailTab = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
+    goodsDetailTab.map((item, i) => {
+      goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
+    });
+
+    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+
     param = param.set('goodsTabRelas', tabs);
 
-    goods = goods.set('goodsType', 0);
+    goods = goods.set('goodsType', 2);
     goods = goods.set('goodsSource', 1);
+    goods = goods.set('freightTempId', '62');
+    goods = goods.set('goodsWeight', '1');
+    goods = goods.set('goodsCubage', '1'); // for hide 物流表单
 
     param = param.set('goods', goods);
 
@@ -1232,10 +1290,7 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
+
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();
@@ -1323,17 +1378,22 @@ export default class AppStore extends Store {
           return false;
         }
       }
-
+      console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
           stock: item.get('stock'),
-          marketPrice: item.get('marketPrice'),
+          marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,
-          goodsInfoImg: imageUrl
+          goodsInfoImg: imageUrl,
+          linePrice: item.get('linePrice') || 0,
+          purchasePrice: item.get('purchasePrice') || 0,
+          subscriptionPrice: item.get('subscriptionPrice') || 0,
+          subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
+          description: item.get('description')
         })
       );
     });
@@ -1367,10 +1427,6 @@ export default class AppStore extends Store {
     goods = goods.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
-
-    goods = goods.set('freightTempId', '62');
-    goods = goods.set('goodsWeight', '1');
-    goods = goods.set('goodsCubage', '1'); // for hide 物流表单
 
     param = param.set('goods', goods);
 
@@ -1423,6 +1479,11 @@ export default class AppStore extends Store {
     }
 
     param = param.set('goodsIntervalPrices', areaPrice);
+    param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
+    param = param.set('goodsFilterRelList', this.state().get('productFilter'));
+
+    //console.log(this.state().get('productFilter'), 2222);
+
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)
     this.dispatch('goodsActor: saveLoading', true);
@@ -1454,6 +1515,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
+      this.dispatch('goodsActor:getGoodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);
@@ -1465,7 +1527,8 @@ export default class AppStore extends Store {
         }
       }
       message.success('Operate successfully');
-      history.push('/goods-list');
+      this.dispatch('goodsActor:saveSuccessful', true);
+      //history.push('/goods-list');
     } else {
       message.error(result.res.message);
     }
@@ -1532,6 +1595,13 @@ export default class AppStore extends Store {
     this.dispatch('brandActor: closeModal');
   };
 
+  onGoodsTaggingRelList = (res) => {
+    this.dispatch('product:goodsTaggingRelList', res);
+  };
+
+  onProductFilter = (res) => {
+    this.dispatch('product:productFilter', res);
+  };
   /**
    * 添加品牌
    */
@@ -1782,6 +1852,7 @@ export default class AppStore extends Store {
   };
 
   editEditor = (editor) => {
+    console.log(editor, 1111111);
     this.dispatch('goodsActor: editor', editor);
   };
   /**
@@ -1836,6 +1907,7 @@ export default class AppStore extends Store {
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetail = fromJS(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
+
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
             fromJS({
@@ -1998,15 +2070,11 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
-        this.onRelatedList(this.state().get('goodsId'));
+        this.onRelatedList(this.state().get('getGoodsId'));
       });
     } else {
       message.error(res.message);
     }
-  };
-
-  onProductselectSku = (addProduct) => {
-    this.dispatch('sku:addSkUProduct', addProduct != null ? addProduct : []);
   };
 
   onSPU = (res) => {
@@ -2026,22 +2094,6 @@ export default class AppStore extends Store {
   };
 
   productInit = async () => {
-    let request: any = {
-      goodsName: this.state().get('likeGoodsName'),
-      goodsNo: this.state().get('likeGoodsNo'),
-      goodsCateName: this.state().get('storeCateId'),
-      brandName: this.state().get('brandId')
-    };
-    const { res } = await fetchproductTooltip(request);
-    if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('related:productTooltip', res.context.goods);
-      this.dispatch('related:searchType', true);
-    } else {
-      message.error(res.message);
-    }
-  };
-
-  productSKU = async () => {
     let request: any = {
       goodsName: this.state().get('likeGoodsName'),
       goodsNo: this.state().get('likeGoodsNo'),
@@ -2078,6 +2130,9 @@ export default class AppStore extends Store {
   onFormFieldChange = ({ key, value }) => {
     this.dispatch('form:field', { key, value });
   };
+  updateSeoForm = ({ field, value }) => {
+    this.dispatch('formActor:seo', { field, value });
+  };
 
   getSeo = async (goodsId, type = 1) => {
     const { res } = (await getSeo(goodsId, type)) as any;
@@ -2085,16 +2140,12 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin',
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })
       );
     }
-  };
-
-  updateSeoForm = ({ field, value }) => {
-    this.dispatch('formActor:seo', { field, value });
   };
   saveSeoSetting = async (goodsId) => {
     const seoObj = this.state().get('seoForm').toJS();
@@ -2109,6 +2160,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       history.push('./goods-list');
     }
+    //调接口
   };
   showEditModal = ({ key, value }) => {};
   onSwitch = ({ key, value }) => {};
@@ -2117,4 +2169,6 @@ export default class AppStore extends Store {
   editFormData = ({ key, value }) => {};
   closeModal = ({ key, value }) => {};
   modalVisibleFun = ({ key, value }) => {};
+  onProductForm = ({ key, value }) => {};
+  onEditSkuNo = ({ key, value }) => {};
 }

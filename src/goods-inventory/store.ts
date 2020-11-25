@@ -22,22 +22,16 @@ export default class AppStore extends Store {
   /**
    * 初始化
    */
-  init = async (pageNum, pageSize, stock) => {
+  init = async (pageNum = 0, pageSize = 10, stock = 10) => {
     console.log(pageNum, 1111111111);
     console.log(pageSize, 222222222222);
     console.log(stock, 333333333333);
-    let param = {
-      pageNum: 0,
-      pageSize: 10,
-      stock: 10
+    const param = {
+      pageNum,
+      pageSize,
+      stock
     };
-    if (!pageNum && !pageSize && !stock) {
-      param = {
-        pageNum: pageNum,
-        pageSize: pageSize,
-        stock: stock
-      };
-    }
+
     this.dispatch('loading:start');
     const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
@@ -60,7 +54,7 @@ export default class AppStore extends Store {
   };
 
   onStock = (res) => {
-    this.dispatch('goodsActor:stock', res);
+    this.dispatch('goodsActor:getThreshold', res);
   };
 
   /**

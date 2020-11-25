@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
-import { Alert, Breadcrumb, Form, Tabs } from 'antd';
+import { Breadcrumb, Tabs, Form, Alert } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import './index.less';
 import AppStore from './store';
@@ -9,7 +9,10 @@ import Related from './component/related';
 import GoodsPropDetail from './component/goodsPropDetail';
 import Spec from './component/spec';
 import SkuTable from './component/sku-table';
+import SeoForm from './component/seoForm';
+const SeoFormModel = Form.create({})(SeoForm);
 //import Price from './component/price';
+import { Router } from 'react-router-dom';
 import Detail from './component/detail';
 import Foot from './component/foot';
 import BrandModal from './component/brand-modal';
@@ -22,8 +25,6 @@ import { FormattedMessage } from 'react-intl';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
-import SeoForm from './component/seoForm';
-const SeoFormModel = Form.create({})(SeoForm);
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -54,6 +55,7 @@ export default class Main extends React.Component<any, any> {
       this.store.onMainTabChange(this.props.location.state.tab, false);
     }
   }
+
   onMainTabChange = (res) => {
     this.setState({
       tabType: res
@@ -77,15 +79,17 @@ export default class Main extends React.Component<any, any> {
   };
 
   onNext = (res) => {
-    let type = 'main';
-    if (res == 'main') {
+    let type = res || 'main';
+    if (res == 'main' && this.store._validMainForms()) {
       type = 'price';
-    } else if (res == 'price') {
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
     } else if (res == 'inventory') {
       type = 'related';
     } else if (res == 'related') {
       type = 'seo';
+    } else if (this.store.state().get('saveSuccessful') == true) {
+      type = 'related';
     }
     this.setState({
       tabType: type
@@ -109,33 +113,31 @@ export default class Main extends React.Component<any, any> {
         priceFuncName = 'f_goods_sku_edit_3';
       }
     }
+    const currentTab = this.store.state().get('currentTab');
 
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
+
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
         </BreadCrumb>
-        {/* <Breadcrumb separator=">">
-          <Breadcrumb.Item>商品</Breadcrumb.Item>
-          <Breadcrumb.Item>商品管理</Breadcrumb.Item>
-          <Breadcrumb.Item>{gid ? parentPath : '发布商品'}</Breadcrumb.Item>
-          <Breadcrumb.Item>{gid ? '编辑商品' : '新增商品'}</Breadcrumb.Item>
-        </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={gid ? <FormattedMessage id="product.editProduct" /> : <FormattedMessage id="newProduct" />} state={this._getState(gid)} />
+          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs
             activeKey={this.state.tabType}
-            //onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
-            //defaultActiveKey="main"
-            //ref={(e) => { this._Tabs = e }}
+            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            defaultActiveKey="main"
+            ref={(e) => {
+              this._Tabs = e;
+            }}
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main">
+              <Tabs.TabPane tab="Product information" key="main" disabled>
                 <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
@@ -160,7 +162,7 @@ export default class Main extends React.Component<any, any> {
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory">
+            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
               <AlertInfo />
 
               <ProductInventory />
@@ -169,7 +171,9 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="Related product"
               key="related"
-              // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
+              disabled
+
+              //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo />
 
@@ -178,6 +182,8 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="SEO Setting"
               key="seo"
+              disabled
+
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo

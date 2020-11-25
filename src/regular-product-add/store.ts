@@ -178,13 +178,24 @@ export default class AppStore extends Store {
     }
   ) => {
     const cateList: any = await getResourceCates();
+    // const cateListIm = this.state().get('resCateAllList');
+    // if (cateId == -1 && cateList.res.context.length > 0) {
+    //   cateId = cateList.res.context
+    //     .find((item) => item.isDefault == 1)
+    //     .storeCateId;
+    // }
+    // debugger
+    // cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
+
+    // const cateList: any = await getImgCates();
     const cateListIm = this.state().get('resCateAllList');
     if (cateId == -1 && cateList.res.length > 0) {
-      cateId = fromJS(cateList.res)
-        .find((item) => item.get('isDefault') == 1)
-        .get('cateId');
+      const cateIdList = fromJS(cateList.res).filter((item) => item.get('isDefault') == 1);
+      if (cateIdList.size > 0) {
+        cateId = cateIdList.get(0).get('cateId');
+      }
     }
-    cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
+    cateId = cateId ? cateId : this.state().get('cateId');
 
     //查询视频分页信息
     const videoList: any = await fetchResource({
@@ -232,6 +243,7 @@ export default class AppStore extends Store {
       }
     }
     cateId = cateId ? cateId : this.state().get('cateId');
+
     const imageList: any = await fetchImages({
       pageNum,
       pageSize: 10,
@@ -285,19 +297,19 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
-      var productFilter = tmpContext.filterList.map(x=>{
-        return { 
+      let productFilter = tmpContext.filterList.map((x) => {
+        return {
           filterId: x.filterId,
           filterValueId: x.id
-         }
-      })
-      this.onProductFilter(productFilter) 
+        };
+      });
+      this.onProductFilter(productFilter);
 
-      let taggingIds = tmpContext.taggingList.map(x=>{
-        return { taggingId: x.id }
-      })
+      let taggingIds = tmpContext.taggingList.map((x) => {
+        return { taggingId: x.id };
+      });
 
-      this.onGoodsTaggingRelList(taggingIds)
+      this.onGoodsTaggingRelList(taggingIds);
 
       goodsDetail = fromJS(tmpContext);
     } else {
@@ -1381,14 +1393,6 @@ export default class AppStore extends Store {
       console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
-          /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
-          goodsInfoNo: item.get('goodsInfoNo'),
-          goodsInfoBarcode: item.get('goodsInfoBarcode'),
-          stock: item.get('stock'),
-          marketPrice: item.get('marketPrice'),
-          mockSpecIds,
-          mockSpecDetailIds,
-          goodsInfoImg: imageUrl*/
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
@@ -2026,7 +2030,12 @@ export default class AppStore extends Store {
   _getCateIdsList = (cateListIm, cateId) => {
     let cateIdList = new Array();
     if (cateId) {
-      cateIdList.push(cateId);
+      if (Array.isArray(cateId)) {
+        cateIdList = cateIdList.concat(cateId);
+      } else {
+        cateIdList.push(cateId);
+      }
+
       const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
         cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
@@ -2147,7 +2156,7 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin',
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })

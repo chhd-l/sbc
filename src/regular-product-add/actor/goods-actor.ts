@@ -281,7 +281,6 @@ export default class GoodsActor extends Actor {
 
   @Action('product:productFilter')
   productFilter(state, productFilter) {
-    debugger
     return state.set('productFilter', productFilter);
   }
 }

@@ -157,7 +157,7 @@ export default class CateList extends React.Component<any, any> {
           width={100}
           render={this._renderStoreCateList}
         />
-          <Column
+        <Column
           // title="店铺分类"
           title={<FormattedMessage id="product.productCategory" />}
           dataIndex="cateId"
@@ -232,14 +232,13 @@ export default class CateList extends React.Component<any, any> {
   };
   _renderProductCateList = (rowInfo) => {
     const { sourceGoodCateList } = this.props.relaxProps;
-    if(sourceGoodCateList) {
-      var test = sourceGoodCateList.toJS()
-      debugger
-      var productCategory = sourceGoodCateList.toJS().find(x=>x.cateId === rowInfo)
-      return (<span>{productCategory ? productCategory.cateName : ''}</span>)
+    if (sourceGoodCateList) {
+      let test = sourceGoodCateList.toJS();
+      let productCategory = sourceGoodCateList.toJS().find((x) => x.cateId === rowInfo);
+      return <span>{productCategory ? productCategory.cateName : ''}</span>;
     }
-    return ''
-  }
+    return '';
+  };
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale } = this.props.relaxProps;

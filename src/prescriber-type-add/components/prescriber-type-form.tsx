@@ -73,7 +73,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
 
     const { res } = await webapi.addClinicsDictionary(params);
     if (res.code === 'K-000000') {
-      message.success('Successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message || 'Unsuccessful');
     }
@@ -94,7 +94,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
 
     const { res } = await webapi.updateClinicsDictionary(params);
     if (res.code === 'K-000000') {
-      message.success('Successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message || 'Unsuccessful');
     }

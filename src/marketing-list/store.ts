@@ -94,7 +94,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:start');
 
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
       this.dispatch('loading:end');
@@ -105,7 +105,7 @@ export default class AppStore extends Store {
   onPause = async (marketingId) => {
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -124,7 +124,7 @@ export default class AppStore extends Store {
   onStart = async (marketingId) => {
     const { res } = await webapi.start(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }

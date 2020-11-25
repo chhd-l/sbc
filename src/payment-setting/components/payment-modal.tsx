@@ -309,7 +309,7 @@ class PaymentModal extends React.Component<any, any> {
           })
         });
         if (res.code === 'K-000000') {
-          message.success('save successful');
+          message.success('Operate successfully');
           this.props.reflash();
           this.cancel();
         } else {

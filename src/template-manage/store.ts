@@ -110,7 +110,7 @@ export default class AppStore extends Store {
       sc: 'H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA=='
     });
     if (res.status === 1) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -129,7 +129,7 @@ export default class AppStore extends Store {
       sc: 'H4sIAAAAAAAAA0sxSg4uyS9KBQDJOKt4CAAAAA=='
     });
     if (res.status === 1) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);

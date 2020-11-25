@@ -151,7 +151,7 @@ export default class AppStore extends Store {
       flashSaleGoodsVOList: flashSaleGoodsVOList
     });
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       // 刷新
       history.push(`/flash-sale-goods-list/${activityDate}/${activityTime}`);
     } else {

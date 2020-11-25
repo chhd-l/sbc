@@ -124,7 +124,7 @@ export default class AppStore extends Store {
       .set('backIDCard', (backIDCard ? backIDCard.map((b) => b.thumbUrl || b.url) : []).toString());
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       this.setCurrentStep(2);
     } else {
       message.error(res.message);
@@ -252,7 +252,7 @@ export default class AppStore extends Store {
       cateSaveRequests: cates
     });
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       this.sortModal();
     } else {
       message.error(res.message);
@@ -571,7 +571,7 @@ export default class AppStore extends Store {
       brandSaveRequests: brandSaveRequests
     });
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
       //弹框关闭
       this.dispatch('modalActor: brandModal');
       //重新获取签约详情
@@ -712,7 +712,7 @@ export default class AppStore extends Store {
     if (storeId != null) {
       const { res } = await webApi.editStoreInfo(storeInfo);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('save successful!');
+        message.success('Operate successfully');
         this.setCurrentStep(1);
       } else {
         message.error(res.message);
@@ -720,7 +720,7 @@ export default class AppStore extends Store {
     } else {
       const { res } = await webApi.saveStoreInfo(storeInfo);
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('save successful!');
+        message.success('Operate successfully');
         this.setCurrentStep(1);
       } else {
         message.error(res.message);
@@ -736,7 +736,7 @@ export default class AppStore extends Store {
   onEditStoreInfo = async (storeInfo) => {
     const { res } = await webApi.editStoreInfo(storeInfo);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -755,7 +755,7 @@ export default class AppStore extends Store {
       .set('backIDCard', (backIDCard ? backIDCard.map((b) => b.thumbUrl || b.url) : []).toString());
     const { res } = await webApi.saveCompanyInfo(info);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful!');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -898,7 +898,7 @@ export default class AppStore extends Store {
       offlineAccounts: offlineAccounts
     });
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('店铺申请成功!');
+      message.success('Operate successfully');
       history.push('/shop-info');
     } else {
       message.error(res.message);
@@ -938,7 +938,7 @@ export default class AppStore extends Store {
     } else if (brandList.length + otherBrands.length < 1) {
       message.error('请至少选择一种签约品牌');
     } else {
-      message.success('save successful！');
+      message.success('Operate successfully');
     }
   };
 

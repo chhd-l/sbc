@@ -163,7 +163,7 @@ export default class ClinicList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Delete successful');
+          message.success('Operate successfully');
           this.getEmailTaskList();
         } else {
           message.error(res.message || 'Delete Failed');

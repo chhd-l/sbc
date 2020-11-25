@@ -244,7 +244,7 @@ export default class AppStore extends Store {
     const video = { resourceName: videoName, resourceId: videoId };
     const result = (await updateVideo(video)) as any;
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('修改名称成功');
+      message.success('Operate successfully');
     } else {
       message.error(result.res.message);
     }
@@ -285,7 +285,7 @@ export default class AppStore extends Store {
     const result: any = await addCate(formData);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('新增分类成功!');
+      message.success('Operate successfully');
       this.showCateModal(false);
       const cateList: any = await getCateList();
       this.dispatch('cateActor: init', fromJS(cateList.res)); //初始化分类列表

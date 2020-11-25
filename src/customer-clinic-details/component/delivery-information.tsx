@@ -115,7 +115,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success(res.message || 'Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Update failed');
         }
@@ -198,7 +198,7 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Successful');
+          message.success('Operate successfully');
         } else {
           message.error(res.message || 'Delete failed');
         }

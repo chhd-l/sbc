@@ -123,7 +123,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('Successfully deleted');
+    message.success('Operate successfully');
     //刷新页面
     this.init();
   };
@@ -137,7 +137,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('save successful');
+    message.success('Operate successfully');
     this.dispatch('activity: pause', id);
   };
 
@@ -150,7 +150,7 @@ export default class AppStore extends Store {
       message.error(res.message);
       return;
     }
-    message.success('save successful');
+    message.success('Operate successfully');
     this.dispatch('activity: start', id);
   };
 }

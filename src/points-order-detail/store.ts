@@ -206,7 +206,7 @@ export default class AppStore extends Store {
     }
     const { res } = await webapi.remedySellerRemark(tid, sellerRemark);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
     } else {

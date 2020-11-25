@@ -155,7 +155,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === 'K-000000') {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success('Successful');
+          message.success('Operate successfully');
         } else {
           this.setState({
             loading: false
@@ -181,7 +181,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === 'K-000000') {
           this.getSubscriptionDetail(this.state.subscriptionId);
-          message.success('Successful');
+          message.success('Operate successfully');
         } else {
           this.setState({
             loading: false

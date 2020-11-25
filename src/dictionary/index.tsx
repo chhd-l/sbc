@@ -125,7 +125,7 @@ export default class DitionaryList extends Component<any, any> {
       id: id
     });
     if (res.code === 'K-000000') {
-      message.success(res.message || 'delete success');
+      message.success('Operate successfully');
       this.getDictionary({
         pageNum: this.state.pagination.current - 1,
         pageSize: 10

@@ -130,7 +130,7 @@ export default class AppStore extends Store {
 
   messageByResult(res) {
     if (res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -161,7 +161,7 @@ export default class AppStore extends Store {
             throw Error('K-040017');
           }
         } else {
-          message.success('save successful');
+          message.success('Operate successfully');
         }
 
         this.dispatch('modal:hide');
@@ -220,7 +220,7 @@ export default class AppStore extends Store {
       .toJS();
     const { res } = await webapi.saveRefuse(refuseForm);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.transaction(() => {
         this.dispatch('refuse:hide');
         this.dispatch('current', 1);

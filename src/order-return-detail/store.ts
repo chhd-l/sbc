@@ -153,7 +153,7 @@ export default class AppStore extends Store {
         message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.success('save successful');
+        message.success('Operate successfully');
       }
 
       setTimeout(() => this.init(rid), 3000);
@@ -175,7 +175,7 @@ export default class AppStore extends Store {
             throw Error('K-040017');
           }
         } else {
-          message.success('save successful');
+          message.success('Operate successfully');
         }
         this.init(rid);
       });

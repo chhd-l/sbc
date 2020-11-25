@@ -1180,7 +1180,7 @@ export default class AppStore extends Store {
 
       this.dispatch('goodsActor: editGoods', goods);
 
-      message.success('save successful');
+      message.success('Operate successfully');
 
       // 新增时只有保存成功才能进入价格tab
       return true;
@@ -1268,10 +1268,7 @@ export default class AppStore extends Store {
         artworkUrl: item.get('artworkUrl')
       })
     );
-    if (images.length === 0) {
-      message.error('Product image is required');
-      return false;
-    }
+
     param = param.set('images', images);
     // -----商品属性列表-------
     let goodsPropDatil = List();
@@ -1359,7 +1356,7 @@ export default class AppStore extends Store {
           return false;
         }
       }
-
+      console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
           /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1514,7 +1511,7 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
       //history.push('/goods-list');
     } else {
@@ -1598,7 +1595,7 @@ export default class AppStore extends Store {
     let result: any = await addBrand(formData);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('brandActor: closeModal');
 
       // 刷新
@@ -1641,7 +1638,7 @@ export default class AppStore extends Store {
   doCateAdd = async (cateName, cateParentId, sort) => {
     let result: any = await addCate({ cateName, cateParentId, sort });
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('cateActor: closeModal');
       // 刷新
       const cateList = await getStoreCateList();

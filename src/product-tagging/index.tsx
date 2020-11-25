@@ -39,8 +39,6 @@ class AttributeLibrary extends Component<any, any> {
       modalName: '',
       colourList: []
     };
-    this.setImageUrl = this.setImageUrl.bind(this);
-    this.onTaggingFormChange = this.onTaggingFormChange.bind(this);
   }
   componentDidMount() {
     this.querySysDictionary('colour');
@@ -66,29 +64,28 @@ class AttributeLibrary extends Component<any, any> {
       () => this.getTagging()
     );
   };
-  setImageUrl(url) {
+  setImageUrl = (url) => {
     const { form } = this.props;
     this.onTaggingFormChange({ field: 'taggingImgUrl', value: url });
     form.setFieldsValue({
       taggingImgUrl: url
     });
-  }
+  };
   onTaggingFormChange = ({ field, value }) => {
+    const { form } = this.props;
     let data = this.state.taggingForm;
-    if (field === 'taggingType') {
-      data['taggingType'] = value;
-      if (value === 'Text') {
-        data['taggingImgUrl'] = '';
-      } else {
-        data['taggingFontColor'] = '';
-        data['taggingFillColor'] = '';
+    data[field] = value;
+    this.setState(
+      {
+        taggingForm: data
+      },
+      () => {
+        form.setFieldsValue({
+          taggingFillColor: this.getColour(data.taggingFillColor) ? this.getColour(data.taggingFillColor).name : '',
+          taggingFontColor: this.getColour(data.taggingFontColor) ? this.getColour(data.taggingFontColor).name : ''
+        });
       }
-    } else {
-      data[field] = value;
-    }
-    this.setState({
-      taggingForm: data
-    });
+    );
   };
 
   openAddPage = () => {
@@ -112,11 +109,12 @@ class AttributeLibrary extends Component<any, any> {
   };
   openEditPage = (row) => {
     const { form } = this.props;
+    row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
+      taggingType: row.taggingType,
       taggingFontColor: row.taggingFontColor,
       taggingFillColor: row.taggingFillColor,
-      taggingType: row.taggingType ? row.taggingType : 'Text',
       taggingImgUrl: row.taggingImgUrl
     };
     this.setState(
@@ -142,11 +140,22 @@ class AttributeLibrary extends Component<any, any> {
     const { taggingForm, isEdit, currentEditTagging } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        taggingForm.taggingType = taggingForm.taggingType ? taggingForm.taggingType : 'Text';
+        let params = {
+          taggingName: taggingForm.taggingName,
+          taggingFontColor: taggingForm.taggingType === 'Text' ? taggingForm.taggingFontColor : '',
+          taggingFillColor: taggingForm.taggingType === 'Text' ? taggingForm.taggingFillColor : '',
+          taggingType: taggingForm.taggingType,
+          taggingImgUrl: taggingForm.taggingType === 'Text' ? '' : taggingForm.taggingImgUrl
+        };
         if (isEdit) {
-          let params = Object.assign(taggingForm, { displayStatus: currentEditTagging.displayStatus ? true : false, id: currentEditTagging.id });
+          params = Object.assign(params, {
+            displayStatus: currentEditTagging.displayStatus ? true : false,
+            id: currentEditTagging.id
+          });
           this.updateTagging(params);
         } else {
-          this.addTagging(taggingForm);
+          this.addTagging(params);
         }
       }
     });
@@ -258,6 +267,8 @@ class AttributeLibrary extends Component<any, any> {
       taggingFillColor: row.taggingFillColor,
       taggingFontColor: row.taggingFontColor,
       taggingName: row.taggingName,
+      taggingType: row.taggingType,
+      taggingImgUrl: row.taggingImgUrl,
       displayStatus: checked ? true : false,
       id: row.id
     };
@@ -331,7 +342,7 @@ class AttributeLibrary extends Component<any, any> {
         dataIndex: 'displayStatus',
         key: 'displayStatus',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )
@@ -471,7 +482,7 @@ class AttributeLibrary extends Component<any, any> {
               <FormItem label="Tagging type">
                 {getFieldDecorator('taggingType', {
                   initialValue: taggingForm.taggingType,
-                  rules: []
+                  rules: [{ required: true, message: 'Please selected tagging type' }]
                 })(
                   <Radio.Group
                     name="radiogroup"

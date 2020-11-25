@@ -258,7 +258,7 @@ export default class Customer extends React.Component<any, any> {
   //     .delCustomer(params)
   //     .then((data) => {
   //       if (data.res.code === 'K-000000') {
-  //         message.success('Successful');
+  //         message.success('Operate successfully');
   //         this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
   //       } else {
   //         message.error(res.message||'Unsuccessful');

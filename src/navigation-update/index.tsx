@@ -90,7 +90,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(res.message || 'Update successful');
+                message.success('Operate successfully');
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               } else {
                 message.error(res.message || 'Update Failed');
@@ -106,7 +106,7 @@ class NavigationUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(res.message || 'Add successful');
+                message.success('Operate successfully');
                 history.push({ pathname: '/navigation-list', state: { language: navigation.language } });
               } else {
                 message.error(res.message || 'Add Failed');

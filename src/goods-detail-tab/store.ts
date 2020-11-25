@@ -88,7 +88,7 @@ export default class AppStore extends Store {
       result = await addTab(formData);
     }
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       // 刷新
       this.refresh();
     } else {
@@ -122,7 +122,7 @@ export default class AppStore extends Store {
     );
     const { res } = (await setSort(tabSortRequest)) as any;
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       this.dispatch('tabActor: init', fromJS(sortList));
     } else {
       message.error(res.message);

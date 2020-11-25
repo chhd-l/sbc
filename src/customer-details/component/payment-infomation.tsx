@@ -241,7 +241,7 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success(res.message || 'Successful');
+          message.success('Operate successfully');
           this.getList();
         } else {
           message.error(res.message || 'Delete failed');

@@ -463,7 +463,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       return true;
     } else {
       message.error(result.res.message);
@@ -590,7 +590,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
 
     if (result.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
       history.goBack();
     } else {
       message.error(result.res.message);

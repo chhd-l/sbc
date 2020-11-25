@@ -135,7 +135,7 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       this.changeData(goodsIds, this.state());
       this.onSelectChange([]);
-      message.success('导入成功');
+      message.success('Operate successfully');
     } else {
       message.error(res.message);
     }
@@ -158,7 +158,7 @@ export default class AppStore extends Store {
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(data.res.code);
     }

@@ -113,7 +113,6 @@ export default class BrandActor extends Actor {
 
   @Action('form:field')
   formFieldChange(state: IMap, { key, value }) {
-    debugger
     return state.set(key, value);
   }
 

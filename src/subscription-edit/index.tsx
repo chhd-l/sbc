@@ -364,7 +364,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             saveLoading: false
           });
-          message.success('Successful');
+          message.success('Operate successfully');
           this.getSubscriptionDetail();
         } else {
           this.setState({

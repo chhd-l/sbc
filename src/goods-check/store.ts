@@ -177,7 +177,7 @@ export default class AppStore extends Store {
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('save successful');
+      message.success('Operate successfully');
     } else {
       message.error(data.res.message);
     }

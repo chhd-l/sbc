@@ -77,7 +77,7 @@ export default class AppStore extends Store {
   copy = async (id: string) => {
     const res = await copyPage({ id });
     if (res.status == 1) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -93,7 +93,7 @@ export default class AppStore extends Store {
       storeId: storeId
     });
     if (res.status == 1) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);
@@ -113,7 +113,7 @@ export default class AppStore extends Store {
       storeId: storeId
     });
     if (res.status === 1) {
-      message.success(res.message);
+      message.success('Operate successfully');
       this.init();
     } else {
       message.error(res.message);

@@ -1392,6 +1392,7 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
+          GoodsInfoBundleRels: item.get('goodsInfoBundleRels') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
         })

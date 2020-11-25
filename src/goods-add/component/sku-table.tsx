@@ -227,6 +227,9 @@ class SkuForm extends React.Component<any, any> {
       key: 'subSKU',
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
+        setTimeout(() => {
+          console.log(rowInfo, 22222);
+        });
         let addSkUProductObj =
           addSkUProduct &&
           addSkUProduct.map((item) => {
@@ -277,7 +280,7 @@ class SkuForm extends React.Component<any, any> {
                                     target['bundleNum'] = e;
                                   }
                                   let res = _.unionBy([target], addSkUProductObj, 'subGoodsInfoId');
-                                  this._editGoodsItem(rowInfo, 'GoodsInfoBundleRels', res);
+                                  this._editGoodsItem(rowInfo, 'goodsInfoBundleRels', res);
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>

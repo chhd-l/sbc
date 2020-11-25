@@ -170,7 +170,7 @@ class GoodsForm extends React.Component<any, any> {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
       goodsTaggingRelList: props.relaxProps.goodsTaggingRelList,
       productFilter: props.relaxProps.productFilter,
-      filterList: []
+      sourceFilter: []
     };
   }
 
@@ -215,10 +215,10 @@ class GoodsForm extends React.Component<any, any> {
         }
         return item;
       });
+      this.setState({
+        sourceFilter : sourceFilter
+      });
     }
-    this.setState({
-      filterList
-    });
   }
 
   render() {
@@ -394,7 +394,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select sales tagging'
+                    message: 'Please select product tagging'
                   }
                 ],
                 initialValue: taggingRelListValues
@@ -404,7 +404,7 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckable={true}
                   showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                   treeCheckStrictly={true}
-                  placeholder="Please select store tagging"
+                  placeholder="Please select product tagging"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
@@ -452,7 +452,7 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  placeholder="Please select category"
+                  placeholder="Please select product category"
                   notFoundContent="No classification"
                   // disabled={cateDisabled}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -482,11 +482,12 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select store category"
+                  placeholder="Please select sales category"
                   notFoundContent="No classification"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.storeCateChange}
+                  treeDefaultExpandAll
                 >
                   {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
@@ -569,34 +570,10 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please select the item subtitle, no more than 225 words" />)}
+              })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
             </FormItem>
           </Col>
         </Row>
-        {/*<Row>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="price" />}>
-              {getFieldDecorator('linePrice', {
-                rules: [
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: 'Please fill in the legal amount with two decimal places'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: 'The maximum value is 9999999.99',
-                    transform: function (value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'linePrice'),
-                initialValue: goods.get('linePrice')
-              })(<Input placeholder="Please fill in the underlined price" />)}
-            </FormItem>
-          </Col>
-        </Row>*/}
         <Row>
           <Col span={16}>
             <FormItem
@@ -677,7 +654,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select sales filter'
+                    message: 'Please select product filter'
                   }
                 ],
 
@@ -697,8 +674,9 @@ class GoodsForm extends React.Component<any, any> {
                   onChange={(value: any) => {
                     this.filterChange(value);
                   }}
+                  treeDefaultExpandAll
                 >
-                  {this.filtersTotalTree(this.state.filterList)}
+                  {this.filtersTotalTree(this.state.sourceFilter)}
                 </TreeSelect>
               )}
             </FormItem>
@@ -731,77 +709,6 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        {/* <Row>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="销售类型">
-              {getFieldDecorator('saleType', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请选择销售类型'
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'saleType'),
-                initialValue: goods.get('saleType')
-              })(
-                <RadioGroup>
-                  <Radio value={0}>批发</Radio>
-                  <Radio value={1}>零售</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-          </Col>
-        </Row> */}
-        {/* <Row type="flex" justify="start">
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="市场价">
-              {getFieldDecorator('marketPrice', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请填写市场价'
-                  },
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function(value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'marketPrice'),
-                initialValue: goods.get('marketPrice')
-              })(<Input placeholder="请填写商品统一市场价，单位“元”" />)}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem {...formItemLayout} label="成本价">
-              {getFieldDecorator('costPrice', {
-                rules: [
-                  {
-                    pattern: ValidConst.zeroPrice,
-                    message: '请填写两位小数的合法金额'
-                  },
-                  {
-                    type: 'number',
-                    max: 9999999.99,
-                    message: '最大值为9999999.99',
-                    transform: function(value) {
-                      return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'costPrice'),
-                initialValue: goods.get('costPrice')
-              })(<Input placeholder="请填写商品统一成本价，单位“元”" />)}
-            </FormItem>
-          </Col>
-        </Row> */}
       </Form>
     );
   }
@@ -911,45 +818,9 @@ class GoodsForm extends React.Component<any, any> {
    */
   storeCateChange = (value, _label, extra) => {
     const { editGoods } = this.props.relaxProps;
-    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
-    // 店铺分类列表
-    const sourceStoreCateList = this.props.relaxProps.sourceStoreCateList || fromJS([]);
-
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
 
-    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
-    if (extra.clear || !extra.checked) {
-      sourceStoreCateList.forEach((cate) => {
-        // 删的是某个一级的
-        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
-          // 找到此一级节点下的二级节点
-          const children = sourceStoreCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
-          // 把一级的子节点也都删了
-          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
-        }
-      });
-    }
-
-    // 如果子节点被选中，上级节点也要被选中
-    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
-    originValues.forEach((v) => {
-      sourceStoreCateList.forEach((cate) => {
-        // 找到选中的分类，判断是否有上级
-        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
-          // 判断上级是否已添加过，如果没有添加过，添加
-          let exist = false;
-          originValues.forEach((vv) => {
-            if (vv == cate.get('cateParentId')) {
-              exist = true;
-            }
-          });
-          if (!exist) {
-            originValues = originValues.push(cate.get('cateParentId'));
-          }
-        }
-      });
-    });
     const storeCateIds = originValues;
 
     const goods = Map({
@@ -965,7 +836,6 @@ class GoodsForm extends React.Component<any, any> {
   };
 
   taggingChange = (taggingValues, _label, extra) => {
-    debugger;
     const { onGoodsTaggingRelList } = this.props.relaxProps;
     let originValues = taggingValues.map((v) => v.value);
     const goodsTaggingRelList = [];
@@ -1075,9 +945,10 @@ class GoodsForm extends React.Component<any, any> {
     return (
       filterList &&
       filterList.map((item) => {
-        let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
+        let parentItem = this.state.sourceFilter.find((x) => x.value === item.parentId);
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
         let selectedFilters = this.getFilterValues();
+        debugger
         let intersection = childrenIds.filter((v) => selectedFilters.includes(v));
         let singleDisabled = item.isSingle && intersection.length > 0 && item.value != intersection[0];
         if (item.children && item.children.length > 0) {

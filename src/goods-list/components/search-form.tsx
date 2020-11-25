@@ -34,6 +34,7 @@ export default class SearchForm extends React.Component<any, any> {
       onFormFieldChange: Function;
       brandList: IList;
       sourceGoodCateList: IList;
+      allCateList: IList;
     };
   };
 
@@ -54,11 +55,12 @@ export default class SearchForm extends React.Component<any, any> {
     //品牌列表
     brandList: 'brandList',
     //分类列表
-    cateList: 'cateList'
+    cateList: 'cateList',
+    allCateList: 'allCateList'
   };
 
   render() {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo, allCateList } = this.props.relaxProps;
 
     const formItemLayout = {
       labelCol: {
@@ -150,17 +152,31 @@ export default class SearchForm extends React.Component<any, any> {
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
-                label={
-                  <p style={styles.label}>
-                     Sales category
-                  </p>
-                }
+                label={<p style={styles.label}>Sales category</p>}
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCateId', value});
+                  let sourceCategories = allCateList ? allCateList.toJS() : [];
+                  let childCategoryIds = [];
+
+                  var children = sourceCategories.filter((x) => x.cateParentId === value);
+                  if (children && children.length > 0) {
+                    children.map((x) => {
+                      var lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
+                      if (lastChildren && lastChildren.length > 0) {
+                        lastChildren.map((l) => {
+                          childCategoryIds.push(l.storeCateId);
+                        });
+                      } else {
+                        childCategoryIds.push(x.storeCateId);
+                      }
+                    });
+                  } else {
+                    childCategoryIds.push(value);
+                  }
+                  onFormFieldChange({ key: 'storeCateId', value: childCategoryIds });
                 }}
               >
                 {loop(cateList)}

@@ -29,7 +29,7 @@ export default class SearchForm extends React.Component<any, any> {
       likeGoodsName: string;
       likeGoodsInfoNo: string;
       likeGoodsNo: string;
-      storeCategoryIds: string;
+      storeCategoryIds: IList;
       goodsCateId: string;
       brandId: string;
       addedFlag: string;
@@ -73,7 +73,7 @@ export default class SearchForm extends React.Component<any, any> {
     let from = {
       goodsName: likeGoodsName,
       goodsNo: likeGoodsNo,
-      storeCateId: storeCategoryIds,
+      storeCateIds: storeCategoryIds,
       goodsCateId: goodsCateId
     };
 
@@ -81,7 +81,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const { likeGoodsName, likeProductCategory, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
+    const { likeGoodsName, likeProductCategory, storeCategoryIds, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
     //const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -127,6 +127,28 @@ export default class SearchForm extends React.Component<any, any> {
         })
       );
     };
+
+    const onSalesCategoryChange = (value) => {
+      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : []
+      let childCategoryIds = []
+
+      var children = sourceCategories.filter(x=>x.cateParentId ===value);
+      if(children && children.length > 0) {
+        children.map(x=>{
+          var lastChildren = sourceCategories.filter(l=>l.cateParentId ===x.storeCateId);
+          if(lastChildren && lastChildren.length > 0) {
+            lastChildren.map(l=>{
+              childCategoryIds.push(l.storeCateId)
+            })
+          } else {
+            childCategoryIds.push(x.storeCateId)
+          }
+        })
+      } else {
+        childCategoryIds.push(value)
+      }
+      onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
+    }
 
     return (
       <Form className="filter-content" layout="inline">
@@ -196,7 +218,7 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onFormFieldChange({ key: 'storeCategoryIds', value});
+                  onSalesCategoryChange(value)
                 }}
               >
                 {generateStoreCateTree(getGoodsCate)}

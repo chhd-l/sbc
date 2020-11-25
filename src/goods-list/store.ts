@@ -99,7 +99,7 @@ export default class AppStore extends Store {
     };
 
     if (this.state().get('storeCateId') != '-1' && this.state().get('storeCateId')) {
-      request.storeCateId = this.state().get('storeCateId');
+      request.storeCateIdList = this.state().get('storeCateId');
     }
     if (this.state().get('brandId') != '-1') {
       request.brandId = this.state().get('brandId');

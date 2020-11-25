@@ -2085,7 +2085,7 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin',
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })

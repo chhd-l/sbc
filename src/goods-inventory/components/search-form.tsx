@@ -52,8 +52,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   onRefresh = () => {
     const { init, getThreshold } = this.props.relaxProps;
-
-    init({ pageNum: 0, pageSize: 10, stock: this.state.getThreshold });
+    init(0, 10, getThreshold);
   };
 
   render() {

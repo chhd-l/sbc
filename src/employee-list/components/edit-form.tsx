@@ -176,6 +176,7 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('roleIds')
       };
     }
+    debugger;
     return (
       <Form>
         <Row>
@@ -324,7 +325,8 @@ export default class EditForm extends React.Component<any, any> {
               ...departmentIdList
             })(
               <TreeSelect
-                disabled={editDisable || (isMaster == 0 && manageDepartmentIdList.size == 0)}
+                // disabled={editDisable || (isMaster == 0 && manageDepartmentIdList.size == 0)}
+                disabled={editDisable}
                 // treeData = {treeData.toJS()}
                 showSearch={false}
                 style={{ width: '100%' }}

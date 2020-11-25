@@ -13,6 +13,7 @@ import EmployeeConnectModal from './components/employee-connect-modal';
 import EmployeeAdjustModal from './components/employee-adjust-modal';
 import DepartTree from './components/depart-tree';
 import { FormattedMessage } from 'react-intl';
+import './index.less';
 import { bool } from 'prop-types';
 
 const WrapperForm = Form.create()(SearchForm as any);

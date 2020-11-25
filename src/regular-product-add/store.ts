@@ -285,19 +285,19 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
-      var productFilter = tmpContext.filterList.map(x=>{
-        return { 
+      let productFilter = tmpContext.filterList.map((x) => {
+        return {
           filterId: x.filterId,
           filterValueId: x.id
-         }
-      })
-      this.onProductFilter(productFilter) 
+        };
+      });
+      this.onProductFilter(productFilter);
 
-      let taggingIds = tmpContext.taggingList.map(x=>{
-        return { taggingId: x.id }
-      })
+      let taggingIds = tmpContext.taggingList.map((x) => {
+        return { taggingId: x.id };
+      });
 
-      this.onGoodsTaggingRelList(taggingIds)
+      this.onGoodsTaggingRelList(taggingIds);
 
       goodsDetail = fromJS(tmpContext);
     } else {
@@ -2147,7 +2147,7 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin',
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })

@@ -2031,6 +2031,10 @@ export default class AppStore extends Store {
     return cateIdList;
   };
 
+  onProductselectSku = (addProduct) => {
+    this.dispatch('sku:addSkUProduct', addProduct != null ? addProduct : []);
+  };
+
   onRelatedList = async (param?: any) => {
     this.dispatch('loading:start');
     const { res } = await getRelatedList(param);

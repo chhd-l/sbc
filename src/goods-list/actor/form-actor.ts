@@ -12,7 +12,7 @@ export default class FormActor extends Actor {
       // 模糊条件-SPU编码
       likeGoodsNo: '',
       // 商品店铺分类
-      storeCateId: [],
+      storeCateId: null,
       // 品牌编号
       brandId: '-1',
       // 上下架状态-也是tab页的下标

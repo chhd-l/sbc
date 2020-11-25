@@ -130,8 +130,6 @@ export default class CateList extends React.Component<any, any> {
           title={
             <span>
               <FormattedMessage id="product.marketPrice" />
-              <br />
-              <FormattedMessage id="priceSettingMethod" />
             </span>
           }
           key="marketPrice"
@@ -143,7 +141,6 @@ export default class CateList extends React.Component<any, any> {
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {marketPrice == null ? 0.0 : marketPrice.toFixed(2)}
                 </p>
-                <p style={{ color: '#999' }}>{Const.priceType[priceType]}</p>
               </div>
             );
           }}

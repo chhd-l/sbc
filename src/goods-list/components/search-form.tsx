@@ -33,7 +33,6 @@ export default class SearchForm extends React.Component<any, any> {
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
-      allCateList: IList;
       sourceGoodCateList: IList;
     };
   };
@@ -55,12 +54,11 @@ export default class SearchForm extends React.Component<any, any> {
     //品牌列表
     brandList: 'brandList',
     //分类列表
-    cateList: 'cateList',
-    allCateList: 'allCateList'
+    cateList: 'cateList'
   };
 
   render() {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo, allCateList } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
 
     const formItemLayout = {
       labelCol: {
@@ -162,16 +160,7 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  let sourceCategories = allCateList ? allCateList.toJS() : []
-                  let childCategoryIds = []
-            
-                  var children = sourceCategories.filter(x=>x.cateParentId ===value);
-                  if(children && children.length > 0) {
-                    childCategoryIds = children.map(x=>x.storeCateId)
-                  } else {
-                    childCategoryIds = value
-                  }
-                  onFormFieldChange({ key: 'storeCateId', value:childCategoryIds});
+                  onFormFieldChange({ key: 'storeCateId', value});
                 }}
               >
                 {loop(cateList)}

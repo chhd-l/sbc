@@ -28,10 +28,10 @@ export default class BrandActor extends Actor {
 
       likeProductCategory: '',
       // 商品店铺分类
-      storeCategoryIds: [],
-      goodsCateId: '',
+      storeCategoryIds: null,
+      goodsCateId: null,
       // 品牌编号
-      brandId: '',
+      brandId: null,
       // 上下架状态-也是tab页的下标
       addedFlag: '',
       // 销售类别 批发or零售

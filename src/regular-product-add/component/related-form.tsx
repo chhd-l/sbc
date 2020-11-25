@@ -29,7 +29,7 @@ export default class SearchForm extends React.Component<any, any> {
       likeGoodsName: string;
       likeGoodsInfoNo: string;
       likeGoodsNo: string;
-      storeCategoryIds: IList;
+      storeCategoryIds: string;
       goodsCateId: string;
       brandId: string;
       addedFlag: string;
@@ -81,7 +81,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const { likeGoodsName, likeProductCategory, storeCategoryIds, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
+    const { likeGoodsName, likeProductCategory, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
     //const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -127,19 +127,6 @@ export default class SearchForm extends React.Component<any, any> {
         })
       );
     };
-
-    const onSalesCategoryChange = (value) => {
-      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : []
-      let childCategoryIds = []
-
-      var children = sourceCategories.filter(x=>x.cateParentId ===value);
-      if(children && children.length > 0) {
-        childCategoryIds = children.map(x=>x.storeCateId)
-      } else {
-        childCategoryIds = value
-      }
-      onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
-    }
 
     return (
       <Form className="filter-content" layout="inline">
@@ -209,7 +196,7 @@ export default class SearchForm extends React.Component<any, any> {
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeDefaultExpandAll
                 onChange={(value) => {
-                  onSalesCategoryChange(value)
+                  onFormFieldChange({ key: 'storeCategoryIds', value});
                 }}
               >
                 {generateStoreCateTree(getGoodsCate)}

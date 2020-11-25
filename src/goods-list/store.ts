@@ -98,7 +98,7 @@ export default class AppStore extends Store {
       auditStatus: this.state().get('auditStatus')
     };
 
-    if (this.state().get('storeCateId') != '-1') {
+    if (this.state().get('storeCateId') != '-1' && this.state().get('storeCateId')) {
       request.storeCateId = this.state().get('storeCateId');
     }
     if (this.state().get('brandId') != '-1') {

@@ -28,14 +28,24 @@ export const getCateList = () => {
 /**
  * 获取店铺分类列表
  */
-export const getStoreCateList = (goodsCateId?) => {
-  // return Fetch('/storeCate');
-  let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+export const getStoreCateList = () => {
   let params = {};
   return Fetch('/storeCate/storeCateByCondition', {
     method: 'POST',
     body: JSON.stringify(params)
   });
+};
+
+export const fetchTaggingTotal = () => {
+  let params = {};
+  return Fetch('/goods_tagging/tagging/total', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getGoodsCate = () => {
+  return Fetch('/store_cate/batch/cate');
 };
 
 /**
@@ -194,8 +204,25 @@ export function fetchResource(params = {}) {
  * 获取对应类目下所有的属性信息
  */
 export const getCateIdsPropDetail = (cateId: string) => {
-  return Fetch(`/goods/goodsProp/${cateId}`);
+  return Fetch(`/attribute_library/attribute/${cateId}`);
 };
+/*export const getCateIdsPropDetail = (cateId: string) => {
+  return Fetch(`/goods/goodsProp/1129`);
+};*/
+
+export function fetchlistGoodsInfo(param) {
+  return Fetch<TResult>('/goodsInfos/bundelPage', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+export function fetchFiltersTotal(params = {}) {
+  return Fetch('/goods_filter/filters/total', {
+    method: 'POST',
+    body: JSON.stringify({ filterStatus: '1' })
+  });
+}
 
 /**
  * 查询店铺运费模板
@@ -225,7 +252,7 @@ export const goodsFreightExpress = (freightTempId) => {
  * 获取素材类目列表
  */
 export const getResourceCates = () => {
-  return Fetch('/store/resourceCates');
+  return Fetch('/store_cate/batch/cate');
 };
 
 /**
@@ -351,13 +378,6 @@ export const fetchConsentDelete = (params) => {
 
 export function fetchproductTooltip(param) {
   return Fetch<TResult>('/goodsRelation/goods', {
-    method: 'POST',
-    body: JSON.stringify(param)
-  });
-}
-
-export function fetchlistGoodsInfo(param) {
-  return Fetch<TResult>('/goodsInfos/bundelPage', {
     method: 'POST',
     body: JSON.stringify(param)
   });

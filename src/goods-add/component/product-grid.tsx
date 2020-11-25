@@ -16,7 +16,7 @@ let recommendationNumber = 1;
  * 商品添加
  */
 
-//@Relax
+@Relax
 export default class GoodsGrid extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -125,7 +125,12 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
+          <Column
+            title="SPU"
+            dataIndex="goodsNo"
+            key="goodsNo"
+            //ellipsis
+          />
 
           <Column title="Product name" dataIndex="goodsName" key="goodsName" />
 

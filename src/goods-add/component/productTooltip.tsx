@@ -15,6 +15,7 @@ export default class GoodsModal extends React.Component<any, any> {
       productForm: any;
       productList: IList;
       onProductselect: Function;
+      onProductForm: Function;
       loading: boolean;
       createLink: any;
       getGoodsId: any;
@@ -38,6 +39,7 @@ export default class GoodsModal extends React.Component<any, any> {
   static relaxProps = {
     sharing: 'sharing',
     productForm: 'productForm',
+    onProductForm: noop,
     onProductselect: noop,
     loading: 'loading',
     productList: 'productList',

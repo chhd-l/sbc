@@ -180,7 +180,9 @@ class GoodsForm extends React.Component<any, any> {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     const filtersTotal = nextProps.relaxProps.filtersTotal;
-
+    if (this.state.storeCateIds != storeCateIds) {
+      this.setState({ storeCateIds: storeCateIds });
+    } 
     let filterList = [];
     if (filtersTotal) {
       let sourceFilter = filtersTotal.toJS();

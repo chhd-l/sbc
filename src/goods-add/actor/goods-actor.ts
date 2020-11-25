@@ -10,6 +10,7 @@ export default class GoodsActor extends Actor {
       // 店铺分类信息
       storeCateList: [],
       sourceStoreCateList: [],
+      sourceGoodCateList: [],
       // 品牌信息
       brandList: [],
       // 商品信息
@@ -40,7 +41,8 @@ export default class GoodsActor extends Actor {
         allowPriceSet: 0,
         saleType: 0,
         saleableFlag: 1,
-        displayFlag: 1
+        displayFlag: 1,
+        subscriptionPrice: ''
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -62,7 +64,9 @@ export default class GoodsActor extends Actor {
       filtersTotal: '',
       saveSuccessful: false,
       getGoodsId: '',
-      addSkUProduct: ''
+      taggingTotal: '',
+      goodsTaggingRelList: [],
+      productFilter: []
     };
   }
 
@@ -122,11 +126,6 @@ export default class GoodsActor extends Actor {
         return data;
       });
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
-  }
-
-  @Action('sku:addSkUProduct')
-  addSkUProduct(state, addSkUProduct) {
-    return state.set('addSkUProduct', addSkUProduct);
   }
 
   /**
@@ -191,12 +190,17 @@ export default class GoodsActor extends Actor {
         }
         return data;
       });
-    return state.set('getGoodsCate', newDataList);
+    return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', getGoodsCate);
   }
 
   @Action('goodsActor:filtersTotal')
   filtersTotal(state, filtersTotal) {
     return state.set('filtersTotal', filtersTotal);
+  }
+
+  @Action('goodsActor:taggingTotal')
+  taggingTotal(state, taggingTotal) {
+    return state.set('taggingTotal', taggingTotal);
   }
 
   @Action('goodsActor:saveSuccessful')
@@ -268,5 +272,16 @@ export default class GoodsActor extends Actor {
   @Action('product:nextType')
   activeTabKey(state, dataList) {
     return state.set('activeTabKey', dataList);
+  }
+
+  @Action('product:goodsTaggingRelList')
+  goodsTaggingRelList(state, goodsTaggingRelList) {
+    return state.set('goodsTaggingRelList', goodsTaggingRelList);
+  }
+
+  @Action('product:productFilter')
+  productFilter(state, productFilter) {
+    debugger;
+    return state.set('productFilter', productFilter);
   }
 }

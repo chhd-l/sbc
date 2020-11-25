@@ -119,7 +119,6 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-
     columns = columns.unshift({
       title: '',
       key: 'index' + 2,
@@ -156,7 +155,7 @@ class SkuForm extends React.Component<any, any> {
           </span>
           <FormattedMessage id="product.inventory" />
           <br />
-          <Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
+          {/*<Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
             &nbsp;
             <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
@@ -164,7 +163,7 @@ class SkuForm extends React.Component<any, any> {
                 <Icon type="question-circle-o" />
               </a>
             </Tooltip>
-          </Checkbox>
+          </Checkbox>*/}
         </div>
       ),
       key: 'stock',
@@ -174,6 +173,10 @@ class SkuForm extends React.Component<any, any> {
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('stock_' + rowInfo.id, {
                 rules: [
+                  {
+                    required: true,
+                    message: 'Please input inventory'
+                  },
                   {
                     pattern: ValidConst.number,
                     message: '0 or positive integer'
@@ -199,7 +202,6 @@ class SkuForm extends React.Component<any, any> {
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

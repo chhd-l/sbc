@@ -1393,14 +1393,6 @@ export default class AppStore extends Store {
       console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
-          /*goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
-          goodsInfoNo: item.get('goodsInfoNo'),
-          goodsInfoBarcode: item.get('goodsInfoBarcode'),
-          stock: item.get('stock'),
-          marketPrice: item.get('marketPrice'),
-          mockSpecIds,
-          mockSpecDetailIds,
-          goodsInfoImg: imageUrl*/
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
@@ -2164,7 +2156,7 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin}',
+          titleSource: res.context.seoSettingVO.titleSource ? res.context.seoSettingVO.titleSource : '{name}-Royal Canin',
           metaKeywordsSource: res.context.seoSettingVO.metaKeywordsSource ? res.context.seoSettingVO.metaKeywordsSource : '{name}, {subtitle}, {sales category}, {tagging}',
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })

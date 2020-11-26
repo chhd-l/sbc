@@ -9,7 +9,7 @@ export default class CateActor extends Actor {
       cateList: [], //层级结构的分类列表
       allCateList: [], //扁平的分类列表
 
-      getGoodsCate: [],
+      productCateList: [],
       sourceGoodCateList: []
     };
   }
@@ -57,6 +57,6 @@ export default class CateActor extends Actor {
         }
         return data;
       });
-    return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', dataList);
+    return state.set('productCateList', newDataList).set('sourceGoodCateList', dataList);
   }
 }

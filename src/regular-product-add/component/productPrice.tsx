@@ -248,7 +248,7 @@ class SkuForm extends React.Component<any, any> {
                         }
                       ],
 
-                      onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
+                      onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
                       initialValue: rowInfo.marketPrice || ''
                     })(<InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />)}
                   </FormItem>
@@ -280,7 +280,8 @@ class SkuForm extends React.Component<any, any> {
                         message: 'Please input market price'
                       }
                     ],
-                    onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
+
+                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
                     initialValue: rowInfo.marketPrice || ''
                   })(<InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />)}
                 </FormItem>
@@ -387,14 +388,16 @@ class SkuForm extends React.Component<any, any> {
   /**
    * 修改商品属性
    */
-  _editGoodsItem = (id: string, key: string, e: any) => {
+  _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
     const { editGoodsItem, synchValue } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
-
     editGoodsItem(id, key, e);
+    if (key == 'marketPrice') {
+      editGoodsItem(id, 'flag', flag);
+    }
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

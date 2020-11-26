@@ -66,7 +66,7 @@ export default class GoodsGrid extends React.Component<any, any> {
 
     return (
       <div className="content">
-        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
+        <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={loading}
           rowKey={(_row, index) => _row.goodsNo + index.toString()}

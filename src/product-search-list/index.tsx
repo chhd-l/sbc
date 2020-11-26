@@ -404,7 +404,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                     <strong>No-result Rate</strong>
                   </div>
                   <div className="resultValue">
-                    <strong>{statistics.noResultRate}</strong>
+                    <strong>{statistics.noResultRate}%</strong>
                   </div>
                 </Col>
               </Row>

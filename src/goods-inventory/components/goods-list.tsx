@@ -48,7 +48,7 @@ export default class CateList extends React.Component<any, any> {
           fitColumns: true,
           current: current,
           onChange: (pageNum, pageSize) => {
-            init({ pageNum: pageNum - 1, pageSize, stock: stock });
+            init(pageNum - 1, pageSize, stock );
           }
         }}
         dataSource={dataList && dataList}
@@ -101,20 +101,25 @@ export default class CateList extends React.Component<any, any> {
         <Column
           // title="店铺分类"
           title="Product category"
-          dataIndex="goods.cateId"
-          key="Sale"
+          dataIndex="goods.cateName"
+          key="goods.cateName"
         />
         <Column
           // title="店铺分类"
           title="Sales category"
-          dataIndex="goods.storeCateIds"
-          key="goods.storeCateIds"
+          dataIndex="goods.storeCateNames"
+          key="goods.storeCateNames"
+          render={(rowInfo) => {
+            return (
+              rowInfo &&  rowInfo.join(' , ')
+            )
+          }}
         />
         <Column
           // title="品牌"
           title={<FormattedMessage id="product.brand" />}
-          dataIndex="goods.brandId"
-          key="goods.brandId"
+          dataIndex="goods.brandName"
+          key="goods.brandName"
         />
         <Column
           title={<FormattedMessage id="product.onOrOffShelves" />}

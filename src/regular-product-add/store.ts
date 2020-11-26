@@ -296,17 +296,21 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
-      let productFilter = tmpContext.filterList.map((x) => {
-        return {
-          filterId: x.filterId,
-          filterValueId: x.id
-        };
-      });
+      let productFilter = tmpContext.filterList
+        ? tmpContext.filterList.map((x) => {
+            return {
+              filterId: x.filterId,
+              filterValueId: x.id
+            };
+          })
+        : [];
       this.onProductFilter(productFilter);
 
-      let taggingIds = tmpContext.taggingList.map((x) => {
-        return { taggingId: x.id };
-      });
+      let taggingIds = tmpContext.taggingList
+        ? tmpContext.taggingList.map((x) => {
+            return { taggingId: x.id };
+          })
+        : [];
 
       this.onGoodsTaggingRelList(taggingIds);
 
@@ -869,12 +873,18 @@ export default class AppStore extends Store {
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('marketPrice') || item.get('marketPrice') == 0) || !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
-          message.error('Please input market price');
+        if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+          valid = false;
+          return;
+        }
+        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           valid = false;
           return;
         }
       });
+    }
+    if (!valid) {
+      message.error('Please input market price');
     }
     return valid;
   }
@@ -884,11 +894,13 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!(item.get('stock') || item.get('stock') == 0)) {
-          message.error('Please input Inventory');
           valid = false;
           return;
         }
       });
+    }
+    if (!valid) {
+      message.error('Please input Inventory');
     }
     return valid;
   }

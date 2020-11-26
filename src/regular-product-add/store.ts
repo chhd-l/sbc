@@ -184,7 +184,6 @@ export default class AppStore extends Store {
     //     .find((item) => item.isDefault == 1)
     //     .storeCateId;
     // }
-    // debugger
     // cateId = cateId ? cateId : this.state().get('videoCateId').toJS();
 
     // const cateList: any = await getImgCates();

@@ -164,6 +164,11 @@ export default class GoodsActor extends Actor {
     return state.set('goodsTabs', goodsTabs);
   }
 
+  @Action('sku:addSkUProduct')
+  addSkUProduct(state, addSkUProduct) {
+    return state.set('addSkUProduct', addSkUProduct);
+  }
+
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
     const newDataList = getGoodsCate
@@ -281,7 +286,6 @@ export default class GoodsActor extends Actor {
 
   @Action('product:productFilter')
   productFilter(state, productFilter) {
-    debugger;
     return state.set('productFilter', productFilter);
   }
 }

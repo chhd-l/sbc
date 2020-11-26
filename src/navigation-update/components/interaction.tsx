@@ -264,7 +264,6 @@ export default class Interaction extends React.Component<any, any> {
     return (
       filterList &&
       filterList.map((item) => {
-        debugger
         let parentItem = this.state.filterList.find((x) => x.value === item.parentId);
         let childrenIds = parentItem ? parentItem.children.map((x) => x.value) : [];
         let selectedFilters = this.getFilterValues(this.props.navigation.filter);

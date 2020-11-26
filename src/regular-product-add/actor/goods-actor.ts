@@ -65,8 +65,8 @@ export default class GoodsActor extends Actor {
       saveSuccessful: false,
       getGoodsId: '',
       taggingTotal: '',
-      goodsTaggingRelList: [],
-      productFilter: []
+      goodsTaggingRelList: null,
+      productFilter: null
     };
   }
 
@@ -281,7 +281,6 @@ export default class GoodsActor extends Actor {
 
   @Action('product:productFilter')
   productFilter(state, productFilter) {
-    debugger
     return state.set('productFilter', productFilter);
   }
 }

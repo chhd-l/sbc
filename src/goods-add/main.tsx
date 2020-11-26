@@ -121,10 +121,10 @@ export default class Main extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
+          <Headline title={gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'} state={this._getState(gid)} />
         </div>
         <div className="container">
           <Tabs
@@ -157,7 +157,7 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled>
+            <Tabs.TabPane tab="Product price" key="price">
               <AlertInfo />
 
               <ProductPrice />

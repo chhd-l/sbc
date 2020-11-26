@@ -176,7 +176,6 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('roleIds')
       };
     }
-    debugger;
     return (
       <Form>
         <Row>

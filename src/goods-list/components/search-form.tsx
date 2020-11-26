@@ -35,6 +35,7 @@ export default class SearchForm extends React.Component<any, any> {
       brandList: IList;
       sourceGoodCateList: IList;
       allCateList: IList;
+      cateList: IList;
     };
   };
 
@@ -72,7 +73,6 @@ export default class SearchForm extends React.Component<any, any> {
         sm: { span: 14 }
       }
     };
-
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {

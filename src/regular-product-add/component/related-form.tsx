@@ -130,9 +130,9 @@ export default class SearchForm extends React.Component<any, any> {
     };
 
     const onSalesCategoryChange = (value) => {
-      if(!value) {
+      if (!value) {
         onFormFieldChange({ key: 'storeCategoryIds', value: null });
-        return
+        return;
       }
       let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : [];
       let childCategoryIds = [];
@@ -154,87 +154,96 @@ export default class SearchForm extends React.Component<any, any> {
       }
       onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
     };
-
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form className="filter-content" layout="inline">
         <Row>
           <Col span={8}>
             <FormItem>
-              <Input
-                addonBefore={
-                  <p style={styles.label}>
-                    <FormattedMessage id="product.productName" />
-                  </p>
-                }
-                value={likeGoodsName}
-                style={{ width: 300 }}
-                onChange={(e: any) => {
-                  onFormFieldChange({
-                    key: 'likeGoodsName',
-                    value: e.target.value
-                  });
-                }}
-              />
+              {getFieldDecorator('likeGoodsName')(
+                <Input
+                  addonBefore={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.productName" />
+                    </p>
+                  }
+                  value={likeGoodsName}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsName',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
-              <Input
-                addonBefore={
-                  <p style={styles.label}>
-                    <FormattedMessage id="product.SPU" />
-                  </p>
-                }
-                value={likeGoodsNo}
-                style={{ width: 300 }}
-                onChange={(e: any) => {
-                  onFormFieldChange({
-                    key: 'likeGoodsNo',
-                    value: e.target.value
-                  });
-                }}
-              />
+              {getFieldDecorator('likeGoodsNo')(
+                <Input
+                  addonBefore={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.SPU" />
+                    </p>
+                  }
+                  value={likeGoodsNo}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsNo',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
-              <TreeSelectGroup
-                allowClear
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Product category</p>}
-                /* defaultValue="全部"*/
-                // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'goodsCateId', value });
-                }}
-              >
-                {loop(cateList)}
-              </TreeSelectGroup>
+              {getFieldDecorator('goodsCateId')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Product category</p>}
+                  /* defaultValue="全部"*/
+                  // style={styles.wrapper}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'goodsCateId', value });
+                  }}
+                >
+                  {loop(cateList)}
+                </TreeSelectGroup>
+              )}
             </FormItem>
           </Col>
           <Col span={8} id="salesCategory">
             <FormItem>
-              <TreeSelectGroup
-                allowClear
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Sales category</p>}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onSalesCategoryChange(value);
-                }}
-              >
-                {generateStoreCateTree(getGoodsCate)}
-              </TreeSelectGroup>
+              {getFieldDecorator('salesCategory')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Sales category</p>}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onSalesCategoryChange(value);
+                  }}
+                >
+                  {generateStoreCateTree(getGoodsCate)}
+                </TreeSelectGroup>
+              )}
             </FormItem>
           </Col>
 
           <Col span={8}>
             <FormItem>
-              <SelectBox>
+              {getFieldDecorator('brandId')(
                 <SelectGroup
+                  allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
@@ -249,9 +258,6 @@ export default class SearchForm extends React.Component<any, any> {
                     onFormFieldChange({ key: 'brandId', value });
                   }}
                 >
-                  <Option key="-1" value="-1">
-                    <FormattedMessage id="all" />
-                  </Option>
                   {brandList.map((v, i) => {
                     return (
                       <Option key={i} value={v.get('brandId') + ''}>
@@ -260,7 +266,7 @@ export default class SearchForm extends React.Component<any, any> {
                     );
                   })}
                 </SelectGroup>
-              </SelectBox>
+              )}
             </FormItem>
           </Col>
 

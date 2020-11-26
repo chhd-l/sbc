@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { fromJS } from 'immutable';
 
-import { message, Modal } from 'antd';
+import { message, Modal, Form } from 'antd';
 //import RelatedForm from './related-form';
 import ProductGridSKU from './product-grid-sku';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 @Relax
-export default class ProductTooltipSKU extends React.Component<any, any> {
+class ProductTooltipSKU extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
@@ -90,15 +90,17 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
           } else {
             message.info('Maximum 10 products!');
           }
+          this.props.form.resetFields()
         }}
         onCancel={() => {
           this.props.showModal(false);
+          this.props.form.resetFields()
           //onCancelBackFun();
         }}
         okText="Confirm"
         cancelText="Cancel"
       >
-        {<ProductGridSKU visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
+        {<ProductGridSKU form={this.props.form} visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }
@@ -113,3 +115,5 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
     );
   };
 }
+
+export default Form.create()(ProductTooltipSKU)

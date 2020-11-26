@@ -64,21 +64,39 @@ class upload extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    let defaultValue = this.props.defaultValue;
-    if (defaultValue) {
-      this.setState({
-        imageLogo: defaultValue,
-        imageList: [
-          {
-            uid: 'navigation-logo',
-            name: defaultValue,
-            size: 1,
-            status: 'done',
-            url: defaultValue
-          }
-        ]
-      });
+    // let defaultValue = this.props.defaultValue;
+    // if (defaultValue) {
+    //   this.setState({
+    //     imageLogo: defaultValue,
+    //     imageList: [
+    //       {
+    //         uid: 'navigation-logo',
+    //         name: defaultValue,
+    //         size: 1,
+    //         status: 'done',
+    //         url: defaultValue
+    //       }
+    //     ]
+    //   });
+    // }
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let defaultValue = nextProps.defaultValue;
+    if(defaultValue != prevState.imageLogo) {
+        return({
+          imageLogo: defaultValue,
+          imageList: defaultValue ? [
+            {
+              uid: 'navigation-logo',
+              name: defaultValue,
+              size: 1,
+              status: 'done',
+              url: defaultValue
+            }
+          ] : []
+        });
     }
+    return null
   }
 
   render() {

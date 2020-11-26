@@ -222,8 +222,8 @@ export default class SearchForm extends React.Component<any, any> {
 
           <Col span={8}>
             <FormItem>
-              <SelectBox>
                 <SelectGroup
+                  allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
@@ -238,9 +238,6 @@ export default class SearchForm extends React.Component<any, any> {
                     onFormFieldChange({ key: 'brandId', value });
                   }}
                 >
-                  <Option key="-1" value="-1">
-                    <FormattedMessage id="all" />
-                  </Option>
                   {brandList.map((v, i) => {
                     return (
                       <Option key={i} value={v.get('brandId') + ''}>
@@ -249,7 +246,6 @@ export default class SearchForm extends React.Component<any, any> {
                     );
                   })}
                 </SelectGroup>
-              </SelectBox>
             </FormItem>
           </Col>
           <Col span={24} style={{ textAlign: 'center' }}>

@@ -66,7 +66,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
     return (
       <div className="content">
-        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} sku={true}/>
+        <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true}/>
         <DataGrid
           loading={loading}
           rowKey={(record, index) => record.goodsInfoNo + index}

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { fromJS } from 'immutable';
 
-import { message, Modal } from 'antd';
+import { message, Modal, Form } from 'antd';
 import RelatedForm from './related-form';
 import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 @Relax
-export default class GoodsModal extends React.Component<any, any> {
+class ProductTooltip extends React.Component<any, any> {
   props: {
     relaxProps?: {
       sharing: any;
@@ -97,7 +97,7 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
+        {<ProductGrid form={this.props.form} visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }
@@ -112,3 +112,6 @@ export default class GoodsModal extends React.Component<any, any> {
     );
   };
 }
+
+export default Form.create()(ProductTooltip)
+

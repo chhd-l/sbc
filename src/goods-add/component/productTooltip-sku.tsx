@@ -32,6 +32,7 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
     searchParams?: Object;
     //应用标示。如添加秒杀商品：saleType
     application?: string;
+    pid: any
   };
 
   static relaxProps = {
@@ -86,13 +87,13 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
           );
           if (targetGoodsIds.length <= 10) {
             onProductselectSku(targetGoodsIds);
-            this.props.showModal(false);
+            this.props.showModal({type:0},this.props.pid);
           } else {
             message.info('Maximum 10 products!');
           }
         }}
         onCancel={() => {
-          this.props.showModal(false);
+          this.props.showModal({type:0},this.props.pid);
           //onCancelBackFun();
         }}
         okText="Confirm"

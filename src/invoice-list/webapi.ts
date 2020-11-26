@@ -29,7 +29,7 @@ export function getOrderList(filterParams = {}) {
 }
 
 export function disableInvoice(filterParams = {}) {
-  return Fetch<TResult>('/invoice/invoice', {
+  return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -37,7 +37,7 @@ export function disableInvoice(filterParams = {}) {
   });
 }
 export function getInvoiceList(filterParams = {}) {
-  return Fetch<TResult>('/invoice/invoice', {
+  return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

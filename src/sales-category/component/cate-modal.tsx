@@ -156,7 +156,7 @@ class CateModalForm extends React.Component<any, any> {
     const cateName = formData.get('cateName');
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
-    // const descriptionTitle = formData.get('descriptionTitle');
+    const descriptionTitle = formData.get('cateTitle');
     const { getFieldDecorator } = this.props.form;
     // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
@@ -252,15 +252,13 @@ class CateModalForm extends React.Component<any, any> {
           <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
         </FormItem>
 
-        {/* <FormItem {...formItemLayout} label="Description title">
-          {getFieldDecorator('descriptionTitle', {
-            rules: [
-              { max: 100, message: 'Up to 100 characters' },
-            ],
-            onChange: this._editGoods.bind(this, 'descriptionTitle'),
+        <FormItem {...formItemLayout} label="Description title">
+          {getFieldDecorator('cateTitle', {
+            rules: [{ max: 100, message: 'Up to 100 characters' }],
+            onChange: this._editGoods.bind(this, 'cateTitle'),
             initialValue: descriptionTitle
           })(<Input />)}
-        </FormItem> */}
+        </FormItem>
         <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [

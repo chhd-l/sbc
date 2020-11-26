@@ -34,7 +34,7 @@ export default class CateList extends React.Component<any, any> {
       getSeo: Function;
       setCurrentStoreCateId: Function;
       clear: Function;
-      updateDisplayStatus:Function;
+      updateDisplayStatus: Function;
     };
   };
 
@@ -54,7 +54,7 @@ export default class CateList extends React.Component<any, any> {
     getSeo: noop,
     setCurrentStoreCateId: noop,
     clear: noop,
-    updateDisplayStatus:noop
+    updateDisplayStatus: noop
   };
 
   render() {
@@ -90,23 +90,23 @@ export default class CateList extends React.Component<any, any> {
     },
     {
       title: 'Number of product',
-      dataIndex: 'productNo',
-      key: 'productNo'
+      dataIndex: 'productNum',
+      key: 'productNum'
     },
     {
       title: 'Display in shop',
       dataIndex: 'displayStatus',
       key: 'displayStatus',
-      
-      render: (text, record) =><div>
-        { record.isDefault!==1 && record.cateGrade===1?
-          <Popconfirm placement="topLeft" title={(+text ? 'Are you sure this item is not displayed in the shop?' : 'Are you sure to display this item in the shop?')} 
-          onConfirm={() => this._updateDisplayStatus(!+text, record)} 
-          okText="Confirm" cancelText="Cancel">
-            <Switch checked={+text ? true : false}></Switch>
-          </Popconfirm>:null }
-        
-      </div> 
+
+      render: (text, record) => (
+        <div>
+          {record.isDefault !== 1 && record.cateGrade === 1 ? (
+            <Popconfirm placement="topLeft" title={+text ? 'Are you sure this item is not displayed in the shop?' : 'Are you sure to display this item in the shop?'} onConfirm={() => this._updateDisplayStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+              <Switch checked={+text ? true : false}></Switch>
+            </Popconfirm>
+          ) : null}
+        </div>
+      )
     },
     {
       title: <FormattedMessage id="operation" />,
@@ -284,22 +284,22 @@ export default class CateList extends React.Component<any, any> {
       });
     }
   };
-  _updateDisplayStatus=(checked,row)=>{
+  _updateDisplayStatus = (checked, row) => {
     const { updateDisplayStatus } = this.props.relaxProps;
     let params = {
       cateDescription: row.cateDescription,
       cateGrade: row.cateGrade,
-      cateImg: JSON.stringify(row.cateImg) ,
+      cateImg: JSON.stringify(row.cateImg),
       cateName: row.cateName,
       cateParentId: row.cateParentId,
       catePath: row.catePath,
       displayStatus: checked,
       sort: row.sort,
       storeCateId: row.storeCateId,
-      children:row.children
+      children: row.children
     };
     updateDisplayStatus(params);
-  }
+  };
 
   /**
    * 拖拽排序

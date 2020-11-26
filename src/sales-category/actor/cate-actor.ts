@@ -65,18 +65,18 @@ export default class CateActor extends Actor {
             const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
             if (!lastChildren.isEmpty()) {
               const sum = lastChildren.reduce(function (prev, cur) {
-                return cur.get('productNo') + prev;
+                return cur.get('productNum') + prev;
               }, 0);
-              childrenData = childrenData.set('children', lastChildren).set('productNo', sum);
+              childrenData = childrenData.set('children', lastChildren).set('productNum', sum);
             }
             return childrenData;
           });
 
         if (!children.isEmpty()) {
           const sum = children.reduce(function (prev, cur) {
-            return cur.get('productNo') + prev;
+            return cur.get('productNum') + prev;
           }, 0);
-          data = data.set('children', children).set('productNo', sum);
+          data = data.set('children', children).set('productNum', sum);
         }
         return data;
       });

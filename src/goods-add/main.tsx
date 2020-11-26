@@ -129,7 +129,7 @@ export default class Main extends React.Component<any, any> {
         <div className="container">
           <Tabs
             activeKey={this.state.tabType}
-            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
             defaultActiveKey="main"
             ref={(e) => {
               this._Tabs = e;

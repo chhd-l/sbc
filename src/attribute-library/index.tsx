@@ -447,7 +447,7 @@ class AttributeLibrary extends Component<any, any> {
         key: 'attributeStatus',
         width: '10%',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + 'this attribute?'} onConfirm={() => this.updateAttributeStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this attribute?'} onConfirm={() => this.updateAttributeStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
         )

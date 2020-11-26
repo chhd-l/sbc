@@ -867,14 +867,22 @@ export default class AppStore extends Store {
   _validPriceFormsNew() {
     let valid = true;
     let goodsList = this.state().get('goodsList');
+    debugger;
+    let temp = goodsList.toJS();
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('marketPrice') || item.get('marketPrice') == 0) || !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
-          message.error('Please input market price');
+        if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+          valid = false;
+          return;
+        }
+        if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
           valid = false;
           return;
         }
       });
+    }
+    if (!valid) {
+      message.error('Please input market price');
     }
     return valid;
   }

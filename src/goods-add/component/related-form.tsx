@@ -154,7 +154,6 @@ export default class SearchForm extends React.Component<any, any> {
       }
       onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
     };
-
     return (
       <Form className="filter-content" layout="inline">
         <Row>
@@ -182,7 +181,7 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SPU" />
+                  {this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />} 
                   </p>
                 }
                 value={likeGoodsNo}

@@ -285,17 +285,17 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
-      let productFilter = tmpContext.filterList.map((x) => {
+      let productFilter = tmpContext.filterList ? tmpContext.filterList.map((x) => {
         return {
           filterId: x.filterId,
           filterValueId: x.id
         };
-      });
+      }) : [];
       this.onProductFilter(productFilter);
 
-      let taggingIds = tmpContext.taggingList.map((x) => {
+      let taggingIds = tmpContext.taggingList ? tmpContext.taggingList.map((x) => {
         return { taggingId: x.id };
-      });
+      }) : [];
 
       this.onGoodsTaggingRelList(taggingIds);
 

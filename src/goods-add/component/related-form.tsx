@@ -23,7 +23,7 @@ const { Option } = Select;
 const TreeNode = Tree.TreeNode;
 
 @Relax
-export default class SearchForm extends React.Component<any, any> {
+class SearchForm extends React.Component<any, any> {
   props: {
     relaxProps?: {
       likeGoodsName: string;
@@ -154,11 +154,13 @@ export default class SearchForm extends React.Component<any, any> {
       }
       onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
     };
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form className="filter-content" layout="inline">
         <Row>
           <Col span={8}>
             <FormItem>
+            {getFieldDecorator('likeGoodsName')(
               <Input
                 addonBefore={
                   <p style={styles.label}>
@@ -173,11 +175,12 @@ export default class SearchForm extends React.Component<any, any> {
                     value: e.target.value
                   });
                 }}
-              />
+              />)}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
+            {getFieldDecorator('likeGoodsNo')(
               <Input
                 addonBefore={
                   <p style={styles.label}>
@@ -192,11 +195,12 @@ export default class SearchForm extends React.Component<any, any> {
                     value: e.target.value
                   });
                 }}
-              />
+              />)}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
+            {getFieldDecorator('goodsCateId')(
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
@@ -211,10 +215,12 @@ export default class SearchForm extends React.Component<any, any> {
               >
                 {loop(cateList)}
               </TreeSelectGroup>
+              )}
             </FormItem>
           </Col>
           <Col span={8} id="salesCategory">
             <FormItem>
+            {getFieldDecorator('salesCategory')(
               <TreeSelectGroup
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
@@ -227,12 +233,13 @@ export default class SearchForm extends React.Component<any, any> {
               >
                 {generateStoreCateTree(getGoodsCate)}
               </TreeSelectGroup>
+              )}
             </FormItem>
           </Col>
 
           <Col span={8}>
             <FormItem>
-              <SelectBox>
+            {getFieldDecorator('brandId')(
                 <SelectGroup
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
@@ -248,9 +255,6 @@ export default class SearchForm extends React.Component<any, any> {
                     onFormFieldChange({ key: 'brandId', value });
                   }}
                 >
-                  <Option key="-1" value="-1">
-                    <FormattedMessage id="all" />
-                  </Option>
                   {brandList.map((v, i) => {
                     return (
                       <Option key={i} value={v.get('brandId') + ''}>
@@ -259,7 +263,7 @@ export default class SearchForm extends React.Component<any, any> {
                     );
                   })}
                 </SelectGroup>
-              </SelectBox>
+              )}
             </FormItem>
           </Col>
 
@@ -286,6 +290,7 @@ export default class SearchForm extends React.Component<any, any> {
     );
   }
 }
+export default SearchForm
 
 const styles = {
   label: {

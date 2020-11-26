@@ -296,17 +296,21 @@ export default class AppStore extends Store {
         });
         tmpContext.goodsPropDetailRels = tmpGoodsPropDetailRels;
       }
-      let productFilter = tmpContext.filterList ? tmpContext.filterList.map((x) => {
-        return {
-          filterId: x.filterId,
-          filterValueId: x.id
-        };
-      }) : [];
+      let productFilter = tmpContext.filterList
+        ? tmpContext.filterList.map((x) => {
+            return {
+              filterId: x.filterId,
+              filterValueId: x.id
+            };
+          })
+        : [];
       this.onProductFilter(productFilter);
 
-      let taggingIds = tmpContext.taggingList ? tmpContext.taggingList.map((x) => {
-        return { taggingId: x.id };
-      }) : [];
+      let taggingIds = tmpContext.taggingList
+        ? tmpContext.taggingList.map((x) => {
+            return { taggingId: x.id };
+          })
+        : [];
 
       this.onGoodsTaggingRelList(taggingIds);
 
@@ -867,8 +871,6 @@ export default class AppStore extends Store {
   _validPriceFormsNew() {
     let valid = true;
     let goodsList = this.state().get('goodsList');
-    debugger;
-    let temp = goodsList.toJS();
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
@@ -892,11 +894,13 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!(item.get('stock') || item.get('stock') == 0)) {
-          message.error('Please input Inventory');
           valid = false;
           return;
         }
       });
+    }
+    if (!valid) {
+      message.error('Please input Inventory');
     }
     return valid;
   }

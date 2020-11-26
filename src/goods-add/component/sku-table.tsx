@@ -38,6 +38,7 @@ export default class SkuTable extends React.Component<any, any> {
       baseSpecId: Number;
       addSkUProduct: any;
       onProductselectSku: Function;
+      onEditSubSkuItem: Function;
     };
   };
 
@@ -61,7 +62,8 @@ export default class SkuTable extends React.Component<any, any> {
     clickImg: noop,
     removeImg: noop,
     modalVisible: noop,
-    onProductselectSku: noop
+    onProductselectSku: noop,
+    onEditSubSkuItem: noop
   };
 
   constructor(props) {
@@ -224,26 +226,16 @@ class SkuForm extends React.Component<any, any> {
           <p style={{ fontSize: '12px', color: '#ccc' }}>Maximum 10 products</p>
         </div>
       ),
-      key: 'subSKU',
+      key: 'goodsInfoBundleRels',
       render: (rowInfo) => {
         const { addSkUProduct } = this.props.relaxProps;
-        setTimeout(() => {
-          console.log(rowInfo, 22222);
-        });
-        let addSkUProductObj =
-          addSkUProduct &&
-          addSkUProduct.map((item) => {
-            return {
-              subGoodsInfoId: item,
-              bundleNum: 0
-            };
-          });
+        this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
 
         return (
           <Row>
             <Col span={16}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('subSKU' + rowInfo.id, {
+                {getFieldDecorator('goodsInfoBundleRels' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
@@ -256,8 +248,8 @@ class SkuForm extends React.Component<any, any> {
                       message: '1-20 characters'
                     }
                   ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subSKU'),
-                  initialValue: rowInfo.subSKU
+                  //onChange:  (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e),
+                  initialValue: rowInfo.goodsInfoBundleRels
                 })(
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
@@ -268,19 +260,21 @@ class SkuForm extends React.Component<any, any> {
                       {addSkUProduct &&
                         addSkUProduct.map((item, index) => {
                           return (
-                            <div className="space-between-align" key={item} style={{ paddingLeft: 5 }}>
-                              <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item}</span>
+                            <div className="space-between-align" key={item.goodsInfoNo} style={{ paddingLeft: 5 }}>
+                              <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
                               <InputNumber
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
                                 defaultValue={0}
+                                key={item.goodsInfoNo}
                                 min={0}
                                 onChange={(e) => {
-                                  const target = addSkUProductObj.filter((a, i) => item === a.subGoodsInfoId)[0];
+                                  const target = addSkUProduct.filter((a, i) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
                                   if (target) {
                                     target['bundleNum'] = e;
                                   }
-                                  let res = _.unionBy([target], addSkUProductObj, 'subGoodsInfoId');
-                                  this._editGoodsItem(rowInfo, 'goodsInfoBundleRels', res);
+                                  let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
+                                  // this._editSubSkuItem(rowInfo.id, 'goodsInfoBundleRels', res)
+                                  this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
@@ -370,7 +364,6 @@ class SkuForm extends React.Component<any, any> {
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;
@@ -405,7 +398,9 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-
+    //console.log(id);
+    //console.log(key);
+    console.log(e);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
@@ -426,6 +421,13 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
+  };
+
+  _editSubSkuItem = (id: string, key: string, e: any) => {
+    const { onEditSubSkuItem } = this.props.relaxProps;
+
+    onEditSubSkuItem(e);
+    console.log(e, 44444);
   };
 
   /**

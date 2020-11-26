@@ -77,7 +77,13 @@ export default class ProductTooltipSKU extends React.Component<any, any> {
         visible={visible}
         onOk={() => {
           let targetGoodsIds = [];
-          this.state.selectedRows.toJS().map((item) => targetGoodsIds.push(item.goodsInfoNo));
+          this.state.selectedRows.toJS().map((item) =>
+            targetGoodsIds.push({
+              subGoodsInfoId: item.goodsInfoId,
+              bundleNum: 0,
+              goodsInfoNo: item.goodsInfoNo
+            })
+          );
           if (targetGoodsIds.length <= 10) {
             onProductselectSku(targetGoodsIds);
             this.props.showModal(false);

@@ -65,8 +65,8 @@ export default class GoodsActor extends Actor {
       saveSuccessful: false,
       getGoodsId: '',
       taggingTotal: '',
-      goodsTaggingRelList: [],
-      productFilter: []
+      goodsTaggingRelList: null,
+      productFilter: null
     };
   }
 

@@ -338,7 +338,6 @@ export default class AppStore extends Store {
       if (goods.get('freightTempId')) {
         this.setGoodsFreight(goods.get('freightTempId'), true);
       }
-
       this.dispatch('goodsActor: editGoods', goods);
       this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
 
@@ -1437,7 +1436,6 @@ export default class AppStore extends Store {
     goods = goods.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
-
     param = param.set('goods', goods);
 
     // -----商品等级价格列表-------

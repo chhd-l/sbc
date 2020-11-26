@@ -233,7 +233,6 @@ export default class CateList extends React.Component<any, any> {
   _renderProductCateList = (rowInfo) => {
     const { sourceGoodCateList } = this.props.relaxProps;
     if (sourceGoodCateList) {
-      let test = sourceGoodCateList.toJS();
       let productCategory = sourceGoodCateList.toJS().find((x) => x.cateId === rowInfo);
       return <span>{productCategory ? productCategory.cateName : ''}</span>;
     }

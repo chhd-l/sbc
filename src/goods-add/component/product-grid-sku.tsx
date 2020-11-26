@@ -66,7 +66,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
     return (
       <div className="content">
-        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} />
+        <RelatedForm searchBackFun={(res) => this.searchBackFun(res)} sku={true}/>
         <DataGrid
           loading={loading}
           rowKey={(record, index) => record.goodsInfoNo + index}
@@ -125,11 +125,12 @@ export default class ProductGridSKU extends React.Component<any, any> {
             }}
           />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="200px"/>
+          <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
           <Column title="Specification" dataIndex="specName" key="specName" />
           <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
           <Column title="Brand" key="brandName" dataIndex="brandName" />
-          <Column title="Price" key="price" dataIndex="price" />
+          <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
         </DataGrid>
       </div>
     );

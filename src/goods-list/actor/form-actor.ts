@@ -15,6 +15,7 @@ export default class FormActor extends Actor {
       storeCateId: null,
       // 品牌编号
       brandId: '-1',
+      cateId: '',
       // 上下架状态-也是tab页的下标
       addedFlag: '-1',
       // 销售类别 批发or零售

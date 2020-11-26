@@ -130,6 +130,10 @@ export default class SearchForm extends React.Component<any, any> {
     };
 
     const onSalesCategoryChange = (value) => {
+      if(!value) {
+        onFormFieldChange({ key: 'storeCategoryIds', value: null });
+        return
+      }
       let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : [];
       let childCategoryIds = [];
 

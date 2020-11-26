@@ -183,6 +183,11 @@ class GoodsForm extends React.Component<any, any> {
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
     } 
+    const goods = Map({
+      ['storeCateIds']: storeCateIds
+    });
+
+    nextProps.relaxProps.editGoods(goods);
     let filterList = [];
     if (filtersTotal) {
       let sourceFilter = filtersTotal.toJS();
@@ -821,7 +826,7 @@ class GoodsForm extends React.Component<any, any> {
 
     // 强制刷新店铺分类的选中视图
     this.setState({ storeCateIds }, () => {
-      this.props.form.resetFields(['storeCateIds']);
+      // this.props.form.resetFields(['storeCateIds']);
     });
 
     editGoods(goods);

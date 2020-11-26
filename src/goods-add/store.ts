@@ -613,6 +613,10 @@ export default class AppStore extends Store {
     this.dispatch('goodsSpecActor: editGoodsItem', { id, key, value });
   };
 
+  onEditSubSkuItem = (res) => {
+    this.dispatch('goodsSpecActor:editSubSkuItem', res);
+  };
+
   changePriceDisabled = (disabled: boolean) => {
     this.dispatch('priceActor: priceDisabled', disabled);
   };
@@ -1107,6 +1111,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          goodsInfoType: 1,
           linePrice: item.get('linePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
@@ -1378,7 +1383,7 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      console.log(imageUrl, 2222222);
+      console.log(this.state().get('editSubSkuItem'), 2222222);
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1389,10 +1394,11 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          goodsInfoType: 1,
           linePrice: item.get('linePrice') || 0,
           purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          GoodsInfoBundleRels: item.get('goodsInfoBundleRels') || 0,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
         })
@@ -1853,7 +1859,6 @@ export default class AppStore extends Store {
   };
 
   editEditor = (editor) => {
-    console.log(editor, 1111111);
     this.dispatch('goodsActor: editor', editor);
   };
   /**

@@ -33,9 +33,11 @@ export default class SearchForm extends React.Component<any, any> {
       onEditSkuNo: Function;
       onFormFieldChange: Function;
       brandList: IList;
+      productCateList:IList;
       sourceGoodCateList: IList;
       allCateList: IList;
       cateList: IList;
+      cateId: String;
     };
   };
 
@@ -50,18 +52,21 @@ export default class SearchForm extends React.Component<any, any> {
     storeCateId: 'storeCateId',
     // 品牌编号
     brandId: 'brandId',
+    cateId: 'cateId',
     onSearch: noop,
     onFormFieldChange: noop,
     onEditSkuNo: noop,
     //品牌列表
     brandList: 'brandList',
     //分类列表
+    productCateList:'productCateList',
+    sourceGoodCateList: 'sourceGoodCateList',
     cateList: 'cateList',
     allCateList: 'allCateList'
   };
 
   render() {
-    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo, allCateList } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo, allCateList, productCateList } = this.props.relaxProps;
 
     const formItemLayout = {
       labelCol: {
@@ -85,6 +90,18 @@ export default class SearchForm extends React.Component<any, any> {
         }
         return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
       });
+
+    const loopProductCateory = (productCateList) =>
+    productCateList.map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
+                {loopProductCateory(item.get('children'))}
+              </TreeNode>
+            );
+          }
+          return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
+        });
 
     return (
       <Form className="filter-content" layout="inline">
@@ -186,6 +203,25 @@ export default class SearchForm extends React.Component<any, any> {
 
           <Col span={8}>
             <FormItem>
+              <TreeSelectGroup
+                allowClear
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<p style={styles.label}>Product category</p>}
+                /* defaultValue="全部"*/
+                // style={styles.wrapper}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeDefaultExpandAll
+                onChange={(value) => {
+                  onFormFieldChange({ key: 'cateId', value });
+                }}
+              >
+                {loopProductCateory(productCateList)}
+              </TreeSelectGroup>
+            </FormItem>
+          </Col>
+
+          <Col span={8}>
+            <FormItem>
               <SelectBox>
                 <SelectGroup
                   getPopupContainer={() => document.getElementById('page-content')}
@@ -216,26 +252,6 @@ export default class SearchForm extends React.Component<any, any> {
               </SelectBox>
             </FormItem>
           </Col>
-
-          {/* <FormItem>
-            <SelectBox>
-              <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="销售类型"
-                defaultValue="全部"
-                showSearch
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'saleType', value });
-                }}
-              >
-                <Option value="-1">全部</Option>
-                <Option value="0">批发</Option>
-                <Option value="1">零售</Option>
-              </SelectGroup>
-            </SelectBox>
-          </FormItem> */}
           <Col span={24} style={{ textAlign: 'center' }}>
             <FormItem>
               <Button

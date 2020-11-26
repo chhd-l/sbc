@@ -51,7 +51,7 @@ export function orderInvoiceState(filterParams = {}) {
   });
 }
 export function addInvoice(filterParams = {}) {
-  return Fetch<TResult>('/account/orderInvoiceState', {
+  return Fetch<TResult>('/account/orderInvoiceGenerateByTid', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -240,7 +240,10 @@ class InvoiceList extends Component<any, any> {
     });
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.addInvoice(orderNumber);
+        let params = {
+          orderNo: orderNumber
+        };
+        this.addInvoice(params);
       }
     });
   };
@@ -302,9 +305,9 @@ class InvoiceList extends Component<any, any> {
       }, 500);
     });
   };
-  addInvoice = (orderNumber) => {
+  addInvoice = (params) => {
     webapi
-      .addInvoice(orderNumber)
+      .addInvoice(params)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {

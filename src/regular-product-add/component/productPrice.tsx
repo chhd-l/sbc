@@ -241,24 +241,27 @@ class SkuForm extends React.Component<any, any> {
                         {
                           required: true,
                           message: 'Please input market price'
-                        },
-                        {
-                          pattern: ValidConst.zeroPrice,
-                          message: 'Please input the legal amount with two decimal places'
-                        },
-                        {
-                          type: 'number',
-                          max: 9999999.99,
-                          message: 'The maximum value is 9999999.99',
-                          transform: function (value) {
-                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                          }
                         }
+                        // {
+                        //   pattern: ValidConst.zeroPrice,
+                        //   message: 'Please input the legal amount with two decimal places'
+                        // },
+                        // {
+                        //   type: 'number',
+                        //   max: 9999999.99,
+                        //   message: 'The maximum value is 9999999.99',
+                        //   transform: function (value) {
+                        //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                        //   }
+                        // }
                       ],
 
                       onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                      initialValue: rowInfo.marketPrice || 0
-                    })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+                      initialValue: rowInfo.marketPrice || ''
+                    })(
+                      <InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />
+                      // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                    )}
                   </FormItem>
                 </p>
                 <p>
@@ -268,23 +271,26 @@ class SkuForm extends React.Component<any, any> {
                         {
                           required: true,
                           message: 'Please input market price'
-                        },
-                        {
-                          pattern: ValidConst.zeroPrice,
-                          message: 'Please input the legal amount with two decimal places'
-                        },
-                        {
-                          type: 'number',
-                          max: 9999999.99,
-                          message: 'The maximum value is 9999999.99',
-                          transform: function (value) {
-                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                          }
                         }
+                        // {
+                        //   pattern: ValidConst.zeroPrice,
+                        //   message: 'Please input the legal amount with two decimal places'
+                        // },
+                        // {
+                        //   type: 'number',
+                        //   max: 9999999.99,
+                        //   message: 'The maximum value is 9999999.99',
+                        //   transform: function (value) {
+                        //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                        //   }
+                        // }
                       ],
                       onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                      initialValue: rowInfo.subscriptionPrice || 0
-                    })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
+                      initialValue: rowInfo.subscriptionPrice || ''
+                    })(
+                      <InputNumber min={0} max={9999999.99} precision={2} disabled={rowInfo.subscriptionStatus === 0} />
+                      // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
+                    )}
                   </FormItem>
                 </p>
               </div>
@@ -296,24 +302,27 @@ class SkuForm extends React.Component<any, any> {
                       {
                         required: true,
                         message: 'Please input market price'
-                      },
-                      {
-                        pattern: ValidConst.zeroPrice,
-                        message: 'Please input the legal amount with two decimal places'
-                      },
-                      {
-                        type: 'number',
-                        max: 9999999.99,
-                        message: 'The maximum value is 9999999.99',
-                        transform: function (value) {
-                          return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                        }
                       }
+                      // {
+                      //   pattern: ValidConst.zeroPrice,
+                      //   message: 'Please input the legal amount with two decimal places'
+                      // },
+                      // {
+                      //   type: 'number',
+                      //   max: 9999999.99,
+                      //   message: 'The maximum value is 9999999.99',
+                      //   transform: function (value) {
+                      //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                      //   }
+                      // }
                     ],
 
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                    initialValue: rowInfo.marketPrice || 0
-                  })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+                    initialValue: rowInfo.marketPrice || ''
+                  })(
+                    <InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />
+                    // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                  )}
                 </FormItem>
               </p>
             )}

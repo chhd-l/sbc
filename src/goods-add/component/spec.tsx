@@ -79,7 +79,7 @@ class SpecForm extends React.Component<any, any> {
           <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
               <span>
-                <span
+                {/* <span
                   style={{
                     color: 'red',
                     fontFamily: 'SimSun',
@@ -89,7 +89,7 @@ class SpecForm extends React.Component<any, any> {
                   }}
                 >
                   *
-                </span>
+                </span> */}
                 <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
               </span>
             </Checkbox>

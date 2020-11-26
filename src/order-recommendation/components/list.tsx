@@ -303,10 +303,11 @@ export default class ListView extends React.Component<any, any> {
                   <td style={{ width: '15.4%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
                   <td style={{ width: '18%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
                   <td style={{ width: '14%' }}>
-                    {v.recommendationGoodsInfoRels.reduce((sum, item) => {
-                      let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);
-                      return a.toFixed(2);
-                    }, 0)}
+                    {v.recommendationGoodsInfoRels &&
+                      v.recommendationGoodsInfoRels.reduce((sum, item) => {
+                        let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);
+                        return a.toFixed(2);
+                      }, 0)}
                   </td>
                   <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
                   <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>

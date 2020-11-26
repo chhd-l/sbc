@@ -132,7 +132,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             //ellipsis
           />
 
-          <Column title="Product name" dataIndex="goodsName" key="goodsName" />
+          <Column title="Product name" dataIndex="goodsName" key="goodsName" width="200px"/>
 
           <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
 

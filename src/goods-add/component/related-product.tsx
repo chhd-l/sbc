@@ -143,7 +143,6 @@ class RelatedProduct extends React.Component<any, any> {
     rowInfo = fromJS(rowInfo);
     const check = +rowInfo.get('openFlag') === 0 ? false : true;
     // const check = +linkStatus === 0 ? true : false;
-
     return (
       <div className="operation flex-end">
         <Popconfirm

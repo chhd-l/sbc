@@ -654,7 +654,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
     if (!marketingBean.get('publicStatus')) {
-      marketingBean = marketingBean.set('publicStatus', '0');
+      marketingBean = marketingBean.set('publicStatus', '1');
     }
 
     form.validateFieldsAndScroll((err) => {

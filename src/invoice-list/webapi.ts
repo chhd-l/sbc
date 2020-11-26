@@ -28,16 +28,30 @@ export function getOrderList(filterParams = {}) {
   });
 }
 
-export function disableInvoice(filterParams = {}) {
-  return Fetch<TResult>('/invoice/invoice', {
+export function disableInvoice(id) {
+  return Fetch<TResult>('/account/orderInvoice/' + id, {
+    method: 'PUT'
+  });
+}
+
+export function getInvoiceList(filterParams = {}) {
+  return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
   });
 }
-export function getInvoiceList(filterParams = {}) {
-  return Fetch<TResult>('/invoice/invoice', {
+export function orderInvoiceState(filterParams = {}) {
+  return Fetch<TResult>('/account/orderInvoiceState', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function addInvoice(filterParams = {}) {
+  return Fetch<TResult>('/account/orderInvoiceGenerateByTid', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

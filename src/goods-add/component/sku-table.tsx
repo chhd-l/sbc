@@ -70,7 +70,7 @@ export default class SkuTable extends React.Component<any, any> {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
     this.state = {
-      visible: false
+      visible: false,
     };
   }
 
@@ -92,7 +92,8 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      visible: false
+      visible: false,
+      pid: ''
     };
   }
 
@@ -108,7 +109,7 @@ class SkuForm extends React.Component<any, any> {
     // }
     return (
       <div style={{ marginBottom: 20 }}>
-        {this.state.visible == true ? <ProductTooltipSKU visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {this.state.visible == true ? <ProductTooltipSKU pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
@@ -116,11 +117,22 @@ class SkuForm extends React.Component<any, any> {
     );
   }
 
-  showProduct = (res) => {
+  showProduct = (res,e) => {
+    let type = res.type ==1?true:false
+    console.log(res,22222);
+
+    console.log(e,3333333);
+    if(e) {
+      this.setState({
+        pid: e
+      });
+    }
     this.setState({
-      visible: res
+      visible: type,
     });
   };
+
+
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
@@ -131,7 +143,6 @@ class SkuForm extends React.Component<any, any> {
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
-          console.log(item.get('specId'), 'specid....');
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -231,6 +242,13 @@ class SkuForm extends React.Component<any, any> {
         const { addSkUProduct } = this.props.relaxProps;
         this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
 
+        if(rowInfo.id == this.state.pid) {
+          rowInfo.goodsInfoBundleRels = addSkUProduct
+        }
+
+        setTimeout(()=>{
+          console.log(rowInfo,1111111111111);
+        })
         return (
           <Row>
             <Col span={16}>
@@ -254,11 +272,11 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={() => this.showProduct(true)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.id)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {addSkUProduct &&
-                        addSkUProduct.map((item, index) => {
+                      {rowInfo.goodsInfoBundleRels&&
+                      rowInfo.goodsInfoBundleRels.map((item, index) => {
                           return (
                             <div className="space-between-align" key={item.goodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
@@ -273,7 +291,6 @@ class SkuForm extends React.Component<any, any> {
                                     target['bundleNum'] = e;
                                   }
                                   let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
-                                  // this._editSubSkuItem(rowInfo.id, 'goodsInfoBundleRels', res)
                                   this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                 }}
                               />
@@ -370,6 +387,16 @@ class SkuForm extends React.Component<any, any> {
     deleteGoodsInfo(id);
   };
 
+  _getSubSkulist = (id: string) => {
+    const { addSkUProduct } = this.props.relaxProps;
+    addSkUProduct&&addSkUProduct.map(item=>{
+      return (
+        <div>{item.goodsInfoNo}</div>
+      )
+    })
+
+  };
+
   /**
    * 检查文件格式
    */
@@ -400,7 +427,7 @@ class SkuForm extends React.Component<any, any> {
     }
     //console.log(id);
     //console.log(key);
-    console.log(e);
+    //console.log(e);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {

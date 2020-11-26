@@ -159,9 +159,11 @@ class SkuForm extends React.Component<any, any> {
                     <p>
                       <span>One off</span>
                     </p>
-                    <p>
-                      <span>Subscription</span>
-                    </p>
+                    {rowInfo.subscriptionStatus === 1 ? (
+                      <p>
+                        <span>Subscription</span>
+                      </p>
+                    ) : null}
                   </div>
                 ) : (
                   <p>
@@ -241,52 +243,30 @@ class SkuForm extends React.Component<any, any> {
                         {
                           required: true,
                           message: 'Please input market price'
-                        },
-                        {
-                          pattern: ValidConst.zeroPrice,
-                          message: 'Please input the legal amount with two decimal places'
-                        },
-                        {
-                          type: 'number',
-                          max: 9999999.99,
-                          message: 'The maximum value is 9999999.99',
-                          transform: function (value) {
-                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                          }
                         }
                       ],
 
                       onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                      initialValue: rowInfo.marketPrice || 0
-                    })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+                      initialValue: rowInfo.marketPrice || ''
+                    })(<InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />)}
                   </FormItem>
                 </p>
-                <p>
-                  <FormItem style={styles.tableFormItem}>
-                    {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input market price'
-                        },
-                        {
-                          pattern: ValidConst.zeroPrice,
-                          message: 'Please input the legal amount with two decimal places'
-                        },
-                        {
-                          type: 'number',
-                          max: 9999999.99,
-                          message: 'The maximum value is 9999999.99',
-                          transform: function (value) {
-                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                {rowInfo.subscriptionStatus === 1 ? (
+                  <p>
+                    <FormItem style={styles.tableFormItem}>
+                      {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input market price'
                           }
-                        }
-                      ],
-                      onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                      initialValue: rowInfo.subscriptionPrice || 0
-                    })(<Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />)}
-                  </FormItem>
-                </p>
+                        ],
+                        onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
+                        initialValue: rowInfo.subscriptionPrice || ''
+                      })(<InputNumber min={0} max={9999999.99} precision={2} disabled={rowInfo.subscriptionStatus === 0} />)}
+                    </FormItem>
+                  </p>
+                ) : null}
               </div>
             ) : (
               <p>
@@ -296,24 +276,11 @@ class SkuForm extends React.Component<any, any> {
                       {
                         required: true,
                         message: 'Please input market price'
-                      },
-                      {
-                        pattern: ValidConst.zeroPrice,
-                        message: 'Please input the legal amount with two decimal places'
-                      },
-                      {
-                        type: 'number',
-                        max: 9999999.99,
-                        message: 'The maximum value is 9999999.99',
-                        transform: function (value) {
-                          return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                        }
                       }
                     ],
-
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'marketPrice'),
-                    initialValue: rowInfo.marketPrice || 0
-                  })(<Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />)}
+                    initialValue: rowInfo.marketPrice || ''
+                  })(<InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />)}
                 </FormItem>
               </p>
             )}
@@ -352,7 +319,7 @@ class SkuForm extends React.Component<any, any> {
                   })(
                     <div>
                       <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
-                      <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                      {rowInfo.subscriptionStatus === 1 ? <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p> : null}
                     </div>
                   )}
                 </FormItem>

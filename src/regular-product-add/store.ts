@@ -2072,7 +2072,7 @@ export default class AppStore extends Store {
     const { res } = await fetchConsentDelete(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.onRelatedList(this.state().get('goodsId'));
+        this.onRelatedList(this.state().get('getGoodsId'));
       });
     }
   };

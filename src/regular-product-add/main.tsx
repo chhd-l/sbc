@@ -129,7 +129,7 @@ export default class Main extends React.Component<any, any> {
         <div className="container">
           <Tabs
             activeKey={this.state.tabType}
-            onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
+            // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
             defaultActiveKey="main"
             ref={(e) => {
               this._Tabs = e;
@@ -157,7 +157,7 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled>
+            <Tabs.TabPane tab="Product price" key="price">
               <AlertInfo />
 
               <ProductPrice />

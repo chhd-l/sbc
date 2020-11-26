@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker, Dropdown, Menu, Icon, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -10,6 +10,13 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
+
+const payOrderStatusDic = {
+  0: 'Paid',
+  1: 'Unpaid',
+  2: 'To be confirmed',
+  null: 'Unpaid'
+};
 class InvoiceList extends Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -18,45 +25,26 @@ class InvoiceList extends Component<any, any> {
       loading: false,
       searchForm: {
         orderNumber: '',
-        consumerName: '',
+        customerName: '',
         startDate: '',
         endDate: '',
         invoiceStatus: '',
-        consumerType: '',
+        consumerType: ''
       },
       modalName: 'Add to invoice list',
       visible: false,
       objectFetching: false,
       orderList: [],
       orderNumber: '',
-      selectedOrder:{},
-      invoiceList: [
-        {
-          id:1,
-          invoiceNumber: 'test123',
-          invoiceTime: '2013-12-12',
-          invoiceStatus: 0,
-          orderNumber: '1234',
-          orderAmount: '$123',
-          paymentStatus: 'Paid',
-          subscriptionNumber: '12345',
-          consumerType: 'Guest',
-          consumerName: 'test12',
-        },
-        {
-          id:2,
-          invoiceNumber: 'test223',
-          invoiceTime: '2018-12-12',
-          invoiceStatus: 1,
-          orderNumber: '1234',
-          orderAmount: '$123',
-          paymentStatus: 'Paid',
-          subscriptionNumber: '12345',
-          consumerType: 'Member',
-          consumerName: 'test12',
-        },
-
-      ],
+      selectedOrder: {
+        ordrAmount: '',
+        customerName: '',
+        paymentStatus: '',
+        consumerEmail: '',
+        billingAddress: ''
+      },
+      invoiceList: [],
+      selectedInvoiceIds: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -75,17 +63,18 @@ class InvoiceList extends Component<any, any> {
       comsumerTypeList: [
         {
           value: 234,
-          name: 'Member',
+          name: 'Member'
         },
         {
           value: 233,
-          name: 'Guest',
+          name: 'Guest'
         }
       ],
+      confirmLoading: false
     };
   }
   componentDidMount() {
-    // this.querySysDictionary('objectType');
+    this.getInvoiceList();
   }
 
   onFormChange = ({ field, value }) => {
@@ -96,20 +85,28 @@ class InvoiceList extends Component<any, any> {
     });
   };
   onSearch = () => {
-    this.setState({
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      }
-    }, () => this.getInvoiceList())
-
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getInvoiceList()
+    );
   };
   getInvoiceList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
+      beginTime: searchForm.startDate,
+      endTime: searchForm.endDate,
+      orderNo: searchForm.orderNumber,
+      invoiceState: searchForm.invoiceStatus === 0 || searchForm.invoiceStatus === 1 ? searchForm.invoiceStatus : null,
+      customerName: searchForm.customerName,
+      consumerLevelId: searchForm.consumerType,
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize,
+      pageSize: pagination.pageSize
     };
     this.setState({
       loading: true
@@ -121,7 +118,7 @@ class InvoiceList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            taskList: res.context.content,
+            invoiceList: res.context.data,
             pagination: pagination,
             loading: false
           });
@@ -146,7 +143,6 @@ class InvoiceList extends Component<any, any> {
         const { res } = data;
         if (res.code === 'K-000000') {
           console.log(res.context.sysDictionaryVOS);
-
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -165,151 +161,267 @@ class InvoiceList extends Component<any, any> {
   };
 
   disableInvoice = (id) => {
-    this.setState({
-      loading: true
-    });
     webapi
       .disableInvoice(id)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
-          this.getInvoiceList();
+          message.success('Operate successfully');
+          this.onSearch();
         } else {
-          message.error(res.message || 'Operation failure');
-          this.setState({
-            loading: false
-          });
+          message.error(res.message || 'operation failure');
         }
       })
       .catch((err) => {
-        message.error(err || 'Operation failure');
-        this.setState({
-          loading: false
-        });
+        message.error(err.toString() || 'operation failure');
       });
   };
   onChangeDate = (date, dateString) => {
-    const { searchForm } = this.state
-    searchForm.startDate = moment(dateString[0]).format('YYYY-MM-DD');
-    searchForm.endDate = moment(dateString[1]).format('YYYY-MM-DD');
-    searchForm
-    this.setState(
-      {
-        searchForm
-      }
-    );
+    const { searchForm } = this.state;
+    searchForm.startDate = dateString[0] ? moment(dateString[0]).format('YYYY-MM-DD') : '';
+    searchForm.endDate = dateString[1] ? moment(dateString[1]).format('YYYY-MM-DD') : '';
+    this.setState({
+      searchForm
+    });
   };
   disabledDate(current) {
     return current && current > moment().endOf('day');
   }
   openAddPage = () => {
     const { form } = this.props;
-    this.setState({
-      visible: true,
-      orderNumber: ''
-    }, () => {
-      form.setFieldsValue({
-        orderNumber: '',
-      });
-    })
-  }
+    this.setState(
+      {
+        visible: true,
+        orderNumber: ''
+      },
+      () => {
+        form.setFieldsValue({
+          orderNumber: ''
+        });
+      }
+    );
+  };
   batchInvoice = () => {
-
-  }
+    const { selectedInvoiceIds } = this.state;
+    let orderInvoiceIds = selectedInvoiceIds;
+    let params = {
+      orderInvoiceIds
+    };
+    this.orderInvoiceState(params);
+  };
   batchDownload = () => {
-
-  }
+    const { selectedInvoiceIds } = this.state;
+    let orderInvoiceIds = selectedInvoiceIds;
+    let params = {
+      orderInvoiceIds
+    };
+    this.onExport(params);
+  };
   invoice = (id) => {
-
-  }
+    let orderInvoiceIds = [];
+    orderInvoiceIds.push(id);
+    let params = {
+      orderInvoiceIds
+    };
+    this.orderInvoiceState(params);
+  };
+  downloadInvoice = (id) => {
+    let orderInvoiceIds = [];
+    orderInvoiceIds.push(id);
+    let params = {
+      orderInvoiceIds
+    };
+    this.onExport(params);
+  };
   handleSubmit = () => {
+    const { orderNumber } = this.state;
+    this.setState({
+      confirmLoading: true
+    });
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.setState({
-          visible:false
-        })
+        let params = {
+          orderNo: orderNumber
+        };
+        this.addInvoice(params);
       }
-    })
-  }
+    });
+  };
   getOrderList = (value) => {
     let params = {
       id: value,
       pageSize: 30,
       pageNum: 0
     };
-    webapi.getOrderList(params).then((data) => {
-      const { res } = data;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          orderList: res.context.content,
-          objectFetching: false
-        });
-      }
-    });
-  }
+    webapi
+      .getOrderList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            orderList: res.context.content,
+            objectFetching: false
+          });
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+  orderInvoiceState = (params) => {
+    webapi
+      .orderInvoiceState(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
+          this.onSearch();
+        } else {
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+  onExport = (params) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result);
 
+          // 新窗口下载
+          const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+        resolve();
+      }, 500);
+    });
+  };
+  addInvoice = (params) => {
+    webapi
+      .addInvoice(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            confirmLoading: false,
+            visible: false
+          });
+          message.success('Operate successfully');
+          this.onSearch();
+        } else {
+          this.setState({
+            confirmLoading: false
+          });
+          message.error(res.message || 'operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          confirmLoading: false
+        });
+        message.error(err.toString() || 'operation failure');
+      });
+  };
+
+  onChangeOrder = (item) => {
+    const { selectedOrder } = this.state;
+    (selectedOrder.ordrAmount = item.tradePrice.totalPrice), (selectedOrder.customerName = item.invoice.contacts), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.invoice.email), (selectedOrder.billingAddress = item.invoice.address);
+
+    this.setState({
+      orderNumber: item.id,
+      selectedOrder
+    });
+  };
 
   render() {
-    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList,selectedOrder } = this.state;
+    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
         title: 'Invoice number',
-        dataIndex: 'invoiceNumber',
-        key: 'invoiceNumber',
-        width: '8%'
+        dataIndex: 'orderInvoiceNo',
+        key: 'orderInvoiceNo',
+        width: '8%',
+        render: (text) => <p>{text ? text : '-'}</p>
       },
       {
         title: 'Invoice Time',
         dataIndex: 'invoiceTime',
         key: 'invoiceTime',
         width: '8%',
-        ellipsis: true
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD') : '-'}</p>
       },
       {
         title: 'Invoice status',
-        dataIndex: 'invoiceStatus',
-        key: 'invoiceStatus',
-        width: '8%'
+        dataIndex: 'invoiceState',
+        key: 'invoiceState',
+        width: '8%',
+        render: (text, row) => (
+          <div>
+            {text ? (
+              <p>
+                <span style={styles.successPoint}></span>Invoiced
+              </p>
+            ) : (
+              <p>
+                <span style={styles.warningPoint}></span>Not invoiced
+              </p>
+            )}
+          </div>
+        )
       },
       {
         title: 'Order number',
-        dataIndex: 'orderNumber',
-        key: 'orderNumber',
-        width: '8%'
+        dataIndex: 'orderNo',
+        key: 'orderNo',
+        width: '8%',
+        render: (text) => <p>{text ? text : '-'}</p>
       },
       {
         title: 'Order amount',
-        dataIndex: 'orderAmount',
-        key: 'orderAmount',
-        width: '8%'
+        dataIndex: 'invoiceAmount',
+        key: 'invoiceAmount',
+        width: '8%',
+        render: (text) => <p>{text ? 'sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)' + text : '-'}</p>
       },
       {
         title: 'Payment status',
-        dataIndex: 'paymentStatus',
-        key: 'paymentStatus',
+        dataIndex: 'payOrderStatus',
+        key: 'payOrderStatus',
         width: '8%',
+        render: (text) => <p>{payOrderStatusDic[text]}</p>
       },
       {
         title: 'Subscription number',
-        dataIndex: 'subscriptionNumber',
-        key: 'subscriptionNumber',
-        width: '8%'
+        dataIndex: 'subscriptionId',
+        key: 'subscriptionId',
+        width: '8%',
+        render: (text) => <p>{text ? text : '-'}</p>
       },
       {
         title: 'Consumer type',
-        dataIndex: 'consumerType',
-        key: 'consumerType',
-        width: '8%'
+        dataIndex: 'consumerLevelId',
+        key: 'consumerLevelId',
+        width: '8%',
+        render: (text) => <div>{+text === 233 ? 'Guest' : +text === 234 ? 'Member' : '-'}</div>
       },
       {
         title: 'Consumer Name',
-        dataIndex: 'consumerName',
-        key: 'consumerName',
-        width: '8%'
+        dataIndex: 'customerName',
+        key: 'customerName',
+        width: '8%',
+        render: (text) => <p>{text ? text : '-'}</p>
       },
 
       {
@@ -318,53 +430,52 @@ class InvoiceList extends Component<any, any> {
         width: '8%',
         render: (text, record) => (
           <div>
-            {
-              record.invoiceStatus ? (
-                <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Invoice">
-                    <a className="iconfont iconkaipiao" ></a>
-                  </Tooltip>
-                </Popconfirm>
-              ) : (<>
-                <Tooltip placement="top" title="Details">
-                  <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
+            {record.invoiceState === 0 ? (
+              <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Invoice">
+                  <a className="iconfont iconkaipiao"></a>
                 </Tooltip>
-                <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.id)} okText="Confirm" cancelText="Cancel">
+              </Popconfirm>
+            ) : (
+              <>
+                {/* <Tooltip placement="top" title="Details">
+                  <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
+                </Tooltip> */}
+                <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title="Disable">
                     <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
                   </Tooltip>
                 </Popconfirm>
                 <Tooltip placement="top" title="Download">
-                  <Icon type="download" style={{ color: '#e2001a' }} />
+                  <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
                 </Tooltip>
               </>
-                )
-            }
-
-
+            )}
           </div>
         )
       }
     ];
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
+        this.setState({
+          selectedInvoiceIds: selectedRowKeys
+        });
+      }
     };
     const menu = (
       <Menu>
         <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice}>
+          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice()}>
             Batch invoice
           </a>
         </Menu.Item>
         <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload}>
+          <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload()}>
             Batch download
           </a>
         </Menu.Item>
       </Menu>
-    )
+    );
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -385,12 +496,8 @@ class InvoiceList extends Component<any, any> {
             <Row>
               <Col span={8}>
                 <FormItem>
-                  <InputGroup compact>
-                    <Input
-                      style={styles.label}
-                      disabled
-                      defaultValue="Order number"
-                    />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Order number" />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -407,18 +514,14 @@ class InvoiceList extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <InputGroup compact>
-                    <Input
-                      style={styles.label}
-                      disabled
-                      defaultValue="Consumer type"
-                    />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Consumer type" />
                     <Select
                       style={styles.wrapper}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
-                          field: 'comsumerType',
+                          field: 'consumerType',
                           value
                         });
                       }}
@@ -439,18 +542,14 @@ class InvoiceList extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <InputGroup compact>
-                    <Input
-                      style={styles.label}
-                      disabled
-                      defaultValue="Comsumer name"
-                    />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Consumer name" />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
-                          field: 'comsumerName',
+                          field: 'customerName',
                           value
                         });
                       }}
@@ -461,12 +560,8 @@ class InvoiceList extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <InputGroup compact>
-                    <Input
-                      style={styles.label}
-                      disabled
-                      defaultValue="Period"
-                    />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Period" />
                     <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
                   </InputGroup>
                 </FormItem>
@@ -474,14 +569,9 @@ class InvoiceList extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <InputGroup compact>
-                    <Input
-                      style={styles.label}
-                      disabled
-                      defaultValue="Invoice status"
-                    />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Invoice status" />
                     <Select
-
                       defaultValue=""
                       style={styles.wrapper}
                       onChange={(value) => {
@@ -531,16 +621,11 @@ class InvoiceList extends Component<any, any> {
             <span>Add new</span>
           </Button>
           <Dropdown overlay={menu} placement="bottomCenter">
-            <Button><span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> Batch operation</Button>
+            <Button>
+              <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> Batch operation
+            </Button>
           </Dropdown>
-          <Table rowKey="id"
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={invoiceList}
-            pagination={this.state.pagination}
-            loading={this.state.loading}
-            scroll={{ x: '100%' }}
-            onChange={this.handleTableChange} />
+          <Table rowKey="orderInvoiceId" rowSelection={rowSelection} columns={columns} dataSource={invoiceList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
         <Modal
           width="1000px"
@@ -588,9 +673,7 @@ class InvoiceList extends Component<any, any> {
                       placeholder="Select a Order number"
                       optionFilterProp="children"
                       onChange={(value) => {
-                        this.setState({
-                          orderNumber: value
-                        })
+                        this.onChangeOrder(value);
                       }}
                       notFoundContent={objectFetching ? <Spin size="small" /> : null}
                       onSearch={this.getOrderList}
@@ -598,7 +681,7 @@ class InvoiceList extends Component<any, any> {
                     >
                       {orderList &&
                         orderList.map((item, index) => (
-                          <Option value={item.id} key={index}>
+                          <Option value={item} key={index}>
                             {item.id}
                           </Option>
                         ))}
@@ -611,32 +694,30 @@ class InvoiceList extends Component<any, any> {
             <Row>
               <Col span={12}>
                 <FormItem label="Order amount">
-                  <Input disabled value={selectedOrder.ordrAmount}/>
+                  <Input disabled value={selectedOrder.ordrAmount} />
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Consumer name">
-                  <Input disabled value={selectedOrder.consumerName}/>
+                  <Input disabled value={selectedOrder.customerName} />
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Payment status">
-                  <Input disabled value={selectedOrder.paymentStatus}/>
+                  <Input disabled value={selectedOrder.paymentStatus} />
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem label="Consumer email">
-                  <Input disabled value={selectedOrder.consumerEmail}/>
+                  <Input disabled value={selectedOrder.consumerEmail} />
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Billion address">
-                  <Input disabled value={selectedOrder.billionAddress}/>
+                <FormItem label="Billing address">
+                  <Input disabled value={selectedOrder.billingAddress} />
                 </FormItem>
               </Col>
             </Row>
-
-
           </Form>
         </Modal>
       </div>
@@ -644,16 +725,35 @@ class InvoiceList extends Component<any, any> {
   }
 }
 const styles = {
+  formItemStyle: {
+    width: 335
+  },
   label: {
-    width: 145,
+    width: 135,
     textAlign: 'center',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
     cursor: 'text'
   },
   wrapper: {
-    width: 220
+    width: 200
   },
+  successPoint: {
+    display: 'inline-block',
+    width: 7,
+    height: 7,
+    margin: '0 5px 2px 0',
+    background: '#008900',
+    borderRadius: '50%'
+  },
+  warningPoint: {
+    display: 'inline-block',
+    width: 7,
+    height: 7,
+    margin: '0 5px 2px 0',
+    background: '#EE8B00',
+    borderRadius: '50%'
+  }
 } as any;
 
 export default Form.create()(InvoiceList);

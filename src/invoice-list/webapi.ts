@@ -28,7 +28,13 @@ export function getOrderList(filterParams = {}) {
   });
 }
 
-export function disableInvoice(filterParams = {}) {
+export function disableInvoice(id) {
+  return Fetch<TResult>('/account/orderInvoice/' + id, {
+    method: 'PUT'
+  });
+}
+
+export function getInvoiceList(filterParams = {}) {
   return Fetch<TResult>('/account/orderInvoices', {
     method: 'POST',
     body: JSON.stringify({
@@ -36,8 +42,16 @@ export function disableInvoice(filterParams = {}) {
     })
   });
 }
-export function getInvoiceList(filterParams = {}) {
-  return Fetch<TResult>('/account/orderInvoices', {
+export function orderInvoiceState(filterParams = {}) {
+  return Fetch<TResult>('/account/orderInvoiceState', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function addInvoice(filterParams = {}) {
+  return Fetch<TResult>('/account/orderInvoiceState', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

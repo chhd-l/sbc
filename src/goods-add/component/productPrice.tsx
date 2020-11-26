@@ -146,30 +146,29 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-    columns = columns.push({
-      title: <FormattedMessage id="product.purchasePrice" />,
-      key: 'goodsInfoNo' + 'index',
-      render: (rowInfo) => {
-        return (
-          <Row>
-            <Col span={12}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('purchasePrice_' + rowInfo.id, {
-                  rules: [
-                    {
-                      pattern: ValidConst.number,
-                      message: '0 or positive integer'
-                    }
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'purchasePrice'),
-                  initialValue: rowInfo.linePrice || 0
-                })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });
+    // columns = columns.push({
+    //   title: <FormattedMessage id="product.purchasePrice" />,
+    //   key: 'goodsInfoNo' + 'index',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={12}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('purchasePrice_' + rowInfo.id, {
+    //               rules: [
+    //                 {
+    //                   pattern: ValidConst.number,
+    //                   message: '0 or positive integer'
+    //                 }
+    //               ],
+    //               initialValue: rowInfo.linePrice || 0
+    //             })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
     columns = columns.push({
       title: 'Purchase type',
       key: 'index',

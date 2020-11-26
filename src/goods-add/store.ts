@@ -923,6 +923,7 @@ export default class AppStore extends Store {
 
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
+      message.error('请选择平台类目');
       return false;
     }
 
@@ -1390,7 +1391,7 @@ export default class AppStore extends Store {
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
           linePrice: item.get('linePrice') || 0,
-          purchasePrice: item.get('purchasePrice') || 0,
+          // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
@@ -2059,7 +2060,7 @@ export default class AppStore extends Store {
     const { res } = await fetchConsentDelete(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.onRelatedList(this.state().get('goodsId'));
+        this.onRelatedList(this.state().get('getGoodsId'));
       });
     }
   };

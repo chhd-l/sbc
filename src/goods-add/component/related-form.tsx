@@ -130,9 +130,9 @@ class SearchForm extends React.Component<any, any> {
     };
 
     const onSalesCategoryChange = (value) => {
-      if(!value) {
+      if (!value) {
         onFormFieldChange({ key: 'storeCategoryIds', value: null });
-        return
+        return;
       }
       let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : [];
       let childCategoryIds = [];
@@ -160,87 +160,86 @@ class SearchForm extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <FormItem>
-            {getFieldDecorator('likeGoodsName')(
-              <Input
-                addonBefore={
-                  <p style={styles.label}>
-                    <FormattedMessage id="product.productName" />
-                  </p>
-                }
-                value={likeGoodsName}
-                style={{ width: 300 }}
-                onChange={(e: any) => {
-                  onFormFieldChange({
-                    key: 'likeGoodsName',
-                    value: e.target.value
-                  });
-                }}
-              />)}
+              {getFieldDecorator('likeGoodsName')(
+                <Input
+                  addonBefore={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.productName" />
+                    </p>
+                  }
+                  value={likeGoodsName}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsName',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
-            {getFieldDecorator('likeGoodsNo')(
-              <Input
-                addonBefore={
-                  <p style={styles.label}>
-                  {this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />} 
-                  </p>
-                }
-                value={likeGoodsNo}
-                style={{ width: 300 }}
-                onChange={(e: any) => {
-                  onFormFieldChange({
-                    key: 'likeGoodsNo',
-                    value: e.target.value
-                  });
-                }}
-              />)}
+              {getFieldDecorator('likeGoodsNo')(
+                <Input
+                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />}</p>}
+                  value={likeGoodsNo}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsNo',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
             </FormItem>
           </Col>
           <Col span={8}>
             <FormItem>
-            {getFieldDecorator('goodsCateId')(
-              <TreeSelectGroup
-                allowClear
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Product category</p>}
-                /* defaultValue="全部"*/
-                // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onFormFieldChange({ key: 'goodsCateId', value });
-                }}
-              >
-                {loop(cateList)}
-              </TreeSelectGroup>
+              {getFieldDecorator('goodsCateId')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Product category</p>}
+                  /* defaultValue="全部"*/
+                  // style={styles.wrapper}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'goodsCateId', value });
+                  }}
+                >
+                  {loop(cateList)}
+                </TreeSelectGroup>
               )}
             </FormItem>
           </Col>
           <Col span={8} id="salesCategory">
             <FormItem>
-            {getFieldDecorator('salesCategory')(
-              <TreeSelectGroup
-                allowClear
-                getPopupContainer={() => document.getElementById('page-content')}
-                label={<p style={styles.label}>Sales category</p>}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeDefaultExpandAll
-                onChange={(value) => {
-                  onSalesCategoryChange(value);
-                }}
-              >
-                {generateStoreCateTree(getGoodsCate)}
-              </TreeSelectGroup>
+              {getFieldDecorator('salesCategory')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Sales category</p>}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onSalesCategoryChange(value);
+                  }}
+                >
+                  {generateStoreCateTree(getGoodsCate)}
+                </TreeSelectGroup>
               )}
             </FormItem>
           </Col>
 
           <Col span={8}>
             <FormItem>
-            {getFieldDecorator('brandId')(
+              {getFieldDecorator('brandId')(
                 <SelectGroup
+                  allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
@@ -290,7 +289,7 @@ class SearchForm extends React.Component<any, any> {
     );
   }
 }
-export default SearchForm
+export default SearchForm;
 
 const styles = {
   label: {

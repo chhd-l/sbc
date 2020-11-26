@@ -23,9 +23,6 @@ export default class AppStore extends Store {
    * 初始化
    */
   init = async (pageNum = 0, pageSize = 10, stock = 10) => {
-    console.log(pageNum, 1111111111);
-    console.log(pageSize, 222222222222);
-    console.log(stock, 333333333333);
     const param = {
       pageNum,
       pageSize,
@@ -33,6 +30,7 @@ export default class AppStore extends Store {
     };
 
     this.dispatch('loading:start');
+    debugger
     const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('list:init', res.context.goodsInfoPage);

@@ -34,6 +34,7 @@ export default class ProductPrice extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      subscriptionStatus: any;
     };
   };
 
@@ -48,6 +49,7 @@ export default class ProductPrice extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    subscriptionStatus: 'subscriptionStatus',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -108,8 +110,8 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-
+    const { goodsSpecs, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    console.log(subscriptionStatus, 222222222);
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -251,7 +253,7 @@ class SkuForm extends React.Component<any, any> {
                     })(<InputNumber min={0} max={9999999.99} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} precision={2} />)}
                   </FormItem>
                 </p>
-                {rowInfo.subscriptionStatus === 1 ? (
+                {rowInfo.subscriptionStatus === 1 && subscriptionStatus === 1 ? (
                   <p>
                     <FormItem style={styles.tableFormItem}>
                       {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {

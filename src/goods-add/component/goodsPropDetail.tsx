@@ -126,7 +126,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
         showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
         treeCheckStrictly={true}
         placeholder="Select the property information"
-        notFoundContent="暂无信息"
+        notFoundContent="No Data"
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         treeDefaultExpandAll
         showSearch={false}

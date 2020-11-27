@@ -44,14 +44,15 @@ export default class AppStore extends Store {
   onThreshold = async () => {
     const { res, err } = await webapi.getThreshold();
     if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('goodsActor:getThreshold', res.context.valueEn);
+      this.dispatch('goodsActor:stock', res.context.valueEn);
+      this.init(0, 10, res.context.valueEn);
     } else {
       message.error(res.message);
     }
   };
 
   onStock = (res) => {
-    this.dispatch('goodsActor:getThreshold', res);
+    this.dispatch('goodsActor:stock', res);
   };
 
   /**
@@ -72,14 +73,14 @@ export default class AppStore extends Store {
         // 参数加密
         const base64 = new util.Base64();
         const token = (window as any).token;
-        console.log(this.state().get('total'), "this.state().get('total')");
         if (token) {
           const result = JSON.stringify({
-            pageNum: this.state().get('current'),
+            pageNum: 0,
             pageSize: this.state().get('total'),
             stock: this.state().get('stock'),
             token: token
           });
+          console.log(result, 'result------------');
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
           const exportHref = Const.HOST + `/inventory/export/${encrypted}`;

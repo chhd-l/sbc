@@ -30,7 +30,7 @@ export function getOrderList(filterParams = {}) {
 
 export function disableInvoice(id) {
   return Fetch<TResult>('/account/orderInvoice/' + id, {
-    method: 'PUT'
+    method: 'DELETE'
   });
 }
 

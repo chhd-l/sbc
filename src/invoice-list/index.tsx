@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const, util } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util, cache } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker, Dropdown, Menu, Icon, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import './index.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -205,14 +206,16 @@ class InvoiceList extends Component<any, any> {
   batchInvoice = () => {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
+    let id = '';
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState === 1) {
         valid = false;
+        id = selectedRowList[i].orderNo;
         break;
       }
     }
     if (!valid) {
-      message.error('Partial orders have been invoiced and cannot be invoiced repeatedly.');
+      message.error('the order ' + id + ' already have invoiced');
       return;
     }
     let orderInvoiceIds = selectedRowKeys;
@@ -224,14 +227,16 @@ class InvoiceList extends Component<any, any> {
   batchDownload = () => {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
+    let id = '';
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState !== 1) {
         valid = false;
+        id = selectedRowList[i].orderNo;
         break;
       }
     }
     if (!valid) {
-      message.error('Some orders have not been invoiced yet, please select the invoiced order to download.');
+      message.error('the order ' + id + ' is not invoiced');
       return;
     }
     let orderInvoiceIds = selectedRowKeys;
@@ -431,7 +436,7 @@ class InvoiceList extends Component<any, any> {
         dataIndex: 'invoiceAmount',
         key: 'invoiceAmount',
         width: '8%',
-        render: (text) => <p>{text ? 'sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)' + text : '-'}</p>
+        render: (text) => <p>{text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text : '-'}</p>
       },
       {
         title: 'Payment status',
@@ -467,37 +472,41 @@ class InvoiceList extends Component<any, any> {
         key: 'operation',
         width: '8%',
         render: (text, record) => (
-          <div>
-            {record.invoiceState === 0 ? (
-              <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Invoice">
-                  <a className="iconfont iconkaipiao"></a>
-                </Tooltip>
-              </Popconfirm>
-            ) : (
-              <>
-                {/* <Tooltip placement="top" title="Details">
+          <>
+            {+record.delFlag === 1 ? null : (
+              <div>
+                {record.invoiceState === 0 ? (
+                  <Popconfirm placement="topLeft" title="Are you sure to do this?" onConfirm={() => this.invoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
+                    <Tooltip placement="top" title="Invoice">
+                      <a className="iconfont iconkaipiao"></a>
+                    </Tooltip>
+                  </Popconfirm>
+                ) : (
+                  <>
+                    {/* <Tooltip placement="top" title="Details">
                   <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
                 </Tooltip> */}
-                <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Disable">
-                    <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
-                  </Tooltip>
-                </Popconfirm>
-                <Tooltip placement="top" title="Download">
-                  <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
-                </Tooltip>
-              </>
+                    <Popconfirm placement="topLeft" title="Are you sure to disable this item?" onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText="Confirm" cancelText="Cancel">
+                      <Tooltip placement="top" title="Disable">
+                        <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
+                      </Tooltip>
+                    </Popconfirm>
+                    <Tooltip placement="top" title="Download">
+                      <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
+                    </Tooltip>
+                  </>
+                )}
+              </div>
             )}
-          </div>
+          </>
         )
       }
     ];
     const rowSelection = {
-      onChange: this.onSelectChange
-      // getCheckboxProps: record => ({
-      //   disabled: record.name === 'Disabled User',
-      // }),
+      onChange: this.onSelectChange,
+      getCheckboxProps: (record) => ({
+        disabled: +record.delFlag === 1
+      })
     };
     const menu = (
       <Menu>
@@ -662,7 +671,21 @@ class InvoiceList extends Component<any, any> {
               <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> Batch operation
             </Button>
           </Dropdown>
-          <Table rowKey="orderInvoiceId" rowSelection={rowSelection} columns={columns} dataSource={invoiceList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          <Table
+            rowKey="orderInvoiceId"
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={invoiceList}
+            pagination={this.state.pagination}
+            loading={this.state.loading}
+            scroll={{ x: '100%' }}
+            onChange={this.handleTableChange}
+            rowClassName={(record, index) => {
+              let className = 'normal-row';
+              if (record.delFlag) className = 'disable-row';
+              return className;
+            }}
+          />
         </div>
         <Modal
           width="1000px"

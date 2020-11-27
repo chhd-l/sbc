@@ -282,7 +282,8 @@ export default class AppStore extends Store {
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
-      let goodsPropDetailRelsOrigin = tmpContext.goodsPropDetailRels;
+      let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
+
 
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
@@ -1942,7 +1943,6 @@ export default class AppStore extends Store {
       this.dispatch('propActor: clear');
     } else {
       const result: any = await getCateIdsPropDetail(cateId);
-
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetailList = this.attributesToProp(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项

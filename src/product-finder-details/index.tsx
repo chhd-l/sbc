@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin } from 'antd';
+import { Button, Row, Col, Breadcrumb, message, Spin } from 'antd';
 import './index.less';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -151,7 +151,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                       <p>Breed</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.breed}</strong>
+                      <strong>{details.petBreed}</strong>
                     </Col>
                   </Row>
                 </Col>
@@ -164,7 +164,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                     </Col>
                     <Col span={20}>
                       <h4 style={{ marginBottom: '10px' }}>{details.productName}</h4>
-                      <p>Product SKU: {details.productSku}</p>
+                      <p>Product SKU: {details.spuCode}</p>
                     </Col>
                   </Row>
                 </div>
@@ -198,9 +198,4 @@ export default class ProductFinderDetails extends React.Component<any, any> {
   }
 }
 
-const styles = {
-  garyContainer: {
-    background: '#fafafa',
-    padding: '20px 30px'
-  }
-} as any;
+

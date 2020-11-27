@@ -271,7 +271,7 @@ export default class AppStore extends Store {
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
-      let goodsPropDetailRelsOrigin = tmpContext.goodsPropDetailRels;
+      let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
         goodsPropDetailRelsOrigin.forEach((item) => {
@@ -1318,22 +1318,18 @@ export default class AppStore extends Store {
       list.forEach((item) => {
         let { propId, goodsPropDetails } = item.toJS();
         goodsPropDetails = fromJS(goodsPropDetails);
-        let goodsId = goods.get('goodsId');
-        const propValue = goodsPropDetails.find((i) => i.get('select') == 'select');
-        //let detailId = propValue.get('detailId');
         const propValues = goodsPropDetails.filter((i) => i.get('select') == 'select');
         let detailIds = propValues.map((p) => p.get('detailId'));
         detailIds.forEach((dItem) => {
           goodsPropDatil = goodsPropDatil.push(
             Map({
-              propId: propId,
-              goodsId: goodsId,
-              detailId: dItem
+              goodsAttributeValueId: propId,
+              goodsAttributeId: dItem
             })
           );
         });
       });
-      param = param.set('goodsPropDetailRels', goodsPropDatil);
+      param = param.set('goodsAttrbutesValueRelList', goodsPropDatil);
     }
     // -----商品规格列表-------
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
@@ -1919,14 +1915,36 @@ export default class AppStore extends Store {
   /**
    * 对应类目、商品下的所有属性信息
    */
+  attributesToProp(attributesList) {
+    if(attributesList){
+      var propList = []
+      attributesList.map(a=>{
+        propList.push({
+          propId: a.id,
+          propName: a.attributeName,
+          goodsPropDetails: a.attributesValuesVOList ? a.attributesValuesVOList.map(v=>{
+            return {
+              detailId: v.id,
+              propId: v.attributeId,
+              detailName: v.attributeDetailName
+            }
+          }) : []
+        })
+      })
+      return propList
+    }
+    return []
+  }
+
   showGoodsPropDetail = async (cateId, goodsPropList) => {
     if (!cateId) {
       this.dispatch('propActor: clear');
     } else {
       const result: any = await getCateIdsPropDetail(cateId);
       if (result.res.code === Const.SUCCESS_CODE) {
-        let catePropDetail = fromJS(result.res.context);
+        let catePropDetailList = this.attributesToProp(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
+        let catePropDetail = fromJS(catePropDetailList) 
 
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(

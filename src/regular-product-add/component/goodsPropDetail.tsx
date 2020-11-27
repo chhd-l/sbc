@@ -44,9 +44,6 @@ export default class GoodsPropDetail extends React.Component<any, any> {
 
   render() {
     const { propList } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(propList.toJS(), 11111111);
-    });
     return (
       <div>
         <div

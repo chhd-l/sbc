@@ -394,7 +394,7 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Invoice Time',
+        title: 'Invoice Date',
         dataIndex: 'invoiceTime',
         key: 'invoiceTime',
         width: '8%',
@@ -456,8 +456,8 @@ class InvoiceList extends Component<any, any> {
       },
       {
         title: 'Consumer Name',
-        dataIndex: 'customerName',
-        key: 'customerName',
+        dataIndex: 'consumerName',
+        key: 'consumerName',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },
@@ -495,6 +495,9 @@ class InvoiceList extends Component<any, any> {
     ];
     const rowSelection = {
       onChange: this.onSelectChange
+      // getCheckboxProps: record => ({
+      //   disabled: record.name === 'Disabled User',
+      // }),
     };
     const menu = (
       <Menu>

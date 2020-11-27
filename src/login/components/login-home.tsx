@@ -41,7 +41,6 @@ let LoginHome = (props) => {
 
     if (authState.isAuthenticated) {
       var routerType = getRoutType(props.parent.location.search)
-      console.log(authState.accessToken)
       login(routerType, authState.accessToken);
     }
   }, [authState, authService]);

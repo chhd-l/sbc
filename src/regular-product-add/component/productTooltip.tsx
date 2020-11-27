@@ -89,9 +89,11 @@ class ProductTooltip extends React.Component<any, any> {
           };
           onProductselect(obj);
           this.props.showModal(false);
+          this.props.form.resetFields();
         }}
         onCancel={() => {
           this.props.showModal(false);
+          this.props.form.resetFields();
           //onCancelBackFun();
         }}
         okText="Confirm"

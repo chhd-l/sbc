@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
-import { Breadcrumb, Tabs, Form, Alert } from 'antd';
+import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import './index.less';
 import AppStore from './store';
@@ -76,6 +76,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: type
     });
+    this.store.onMainTabChange(type);
   };
 
   onNext = (res) => {
@@ -88,12 +89,11 @@ export default class Main extends React.Component<any, any> {
       type = 'related';
     } else if (res == 'related') {
       type = 'seo';
-    } else if (this.store.state().get('saveSuccessful') == true) {
-      type = 'related';
     }
     this.setState({
       tabType: type
     });
+    this.store.onMainTabChange(type);
   };
 
   render() {
@@ -102,7 +102,7 @@ export default class Main extends React.Component<any, any> {
     let goodsFuncName = 'f_goods_add_1';
     let priceFuncName = 'f_goods_add_2';
     if (gid) {
-      //编辑
+      //编辑tabType
       if (this.props.location.pathname.indexOf('/goods-check-edit') > -1) {
         //待审核商品编辑,设价
         goodsFuncName = 'f_goods_sku_edit';
@@ -128,7 +128,7 @@ export default class Main extends React.Component<any, any> {
         </div>
         <div className="container">
           <Tabs
-            activeKey={this.state.tabType}
+            activeKey={this.store.get('activeTabKey')}
             // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
             defaultActiveKey="main"
             ref={(e) => {
@@ -203,7 +203,7 @@ export default class Main extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.state.tabType} onNext={this.onNext} onPrev={this.onPrev} />
+          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
           {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}
@@ -219,6 +219,10 @@ export default class Main extends React.Component<any, any> {
 
           {/*视频库*/}
           <VideoModal />
+
+          <div className="spin">
+            <Spin spinning={this.store.get('loading')} size="large" />
+          </div>
         </div>
       </div>
     );

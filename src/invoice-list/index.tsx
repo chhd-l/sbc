@@ -456,8 +456,8 @@ class InvoiceList extends Component<any, any> {
       },
       {
         title: 'Consumer Name',
-        dataIndex: 'customerName',
-        key: 'customerName',
+        dataIndex: 'consumerName',
+        key: 'consumerName',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },

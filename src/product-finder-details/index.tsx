@@ -33,7 +33,8 @@ export default class ProductFinderDetails extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             details: res.context.details,
-            chartRecords: res.context.stepList.map((x) => ({ question: x.question, answer: x.answer }))
+            chartRecords: res.context.stepList.map((x) => ({ question: x.question,
+               answer: x.productFinderAnswerDetailsVO ? (x.productFinderAnswerDetailsVO.prefix || '') + ' ' + (x.productFinderAnswerDetailsVO.suffix || '') : '' }))
           });
         } else {
           message.error(res.message || 'Get Data Failed');

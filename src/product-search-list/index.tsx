@@ -247,7 +247,8 @@ export default class ProductSearchList extends React.Component<any, any> {
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
-        sorter: true
+        sorter: true,
+        render: (text, record) =>  ( text*100 + '%' ) 
       },
       {
         title: 'Result No.',
@@ -292,7 +293,8 @@ export default class ProductSearchList extends React.Component<any, any> {
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
-        sorter: true
+        sorter: true,
+        render: (text, record) =>  ( text*100 + '%' ) 
       },
       {
         title: 'Last Not Found Date',

@@ -37,6 +37,7 @@ export default class SeoForm extends Component<any, any> {
     form: any;
     relaxProps?: {
       seoForm: any;
+      getGoodsId: any;
       updateSeoForm: Function;
       getSeo: Function;
     };
@@ -45,11 +46,16 @@ export default class SeoForm extends Component<any, any> {
   static relaxProps = {
     updateSeoForm: noop,
     getSeo: noop,
-    seoForm: 'seoForm'
+    seoForm: 'seoForm',
+    getGoodsId: 'getGoodsId'
   };
   componentDidMount() {
-    const { getSeo } = this.props.relaxProps;
-    getSeo('ff80808175b1a9b80175b50910f10004');
+    const { getSeo, getGoodsId } = this.props.relaxProps;
+    if (getGoodsId) {
+      getSeo(getGoodsId);
+    } else {
+      getSeo();
+    }
   }
 
   render() {

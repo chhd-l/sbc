@@ -207,8 +207,9 @@ class FilterSortSetting extends Component<any, any> {
     const { title, attributeFilterList, customizedFilterList, sortByList, selectedRowKeys } = this.state;
     const description = (
       <div>
-        <p>The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.</p>
-        <p>The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.</p>
+        <p>1. Filter attributes can be chosen from attributes, which are associated with product category</p>
+        <p>2. The enabled filters will show in the ‘Filter’ section for customer to choose and filter out desired products.</p>
+        <p>3. The enabled sort conditions will show in the ‘Sort by’ section for customer to sort products in desired orders.</p>
       </div>
     );
 

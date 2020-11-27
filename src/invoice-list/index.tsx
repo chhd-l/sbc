@@ -44,7 +44,7 @@ class InvoiceList extends Component<any, any> {
         billingAddress: ''
       },
       invoiceList: [],
-      selectedInvoiceIds: [],
+      selectedRowKeys: [],
       pagination: {
         current: 1,
         pageSize: 10,
@@ -70,7 +70,8 @@ class InvoiceList extends Component<any, any> {
           name: 'Guest'
         }
       ],
-      confirmLoading: false
+      confirmLoading: false,
+      selectedRowList: []
     };
   }
   componentDidMount() {
@@ -202,16 +203,38 @@ class InvoiceList extends Component<any, any> {
     );
   };
   batchInvoice = () => {
-    const { selectedInvoiceIds } = this.state;
-    let orderInvoiceIds = selectedInvoiceIds;
+    const { selectedRowKeys, selectedRowList } = this.state;
+    let valid = true;
+    for (let i = 0; i < selectedRowList.length; i++) {
+      if (selectedRowList[i].invoiceState === 1) {
+        valid = false;
+        break;
+      }
+    }
+    if (!valid) {
+      message.error('Partial orders have been invoiced and cannot be invoiced repeatedly.');
+      return;
+    }
+    let orderInvoiceIds = selectedRowKeys;
     let params = {
       orderInvoiceIds
     };
     this.orderInvoiceState(params);
   };
   batchDownload = () => {
-    const { selectedInvoiceIds } = this.state;
-    let orderInvoiceIds = selectedInvoiceIds;
+    const { selectedRowKeys, selectedRowList } = this.state;
+    let valid = true;
+    for (let i = 0; i < selectedRowList.length; i++) {
+      if (selectedRowList[i].invoiceState !== 1) {
+        valid = false;
+        break;
+      }
+    }
+    if (!valid) {
+      message.error('Some orders have not been invoiced yet, please select the invoiced order to download.');
+      return;
+    }
+    let orderInvoiceIds = selectedRowKeys;
     let params = {
       orderInvoiceIds
     };
@@ -341,9 +364,24 @@ class InvoiceList extends Component<any, any> {
       selectedOrder
     });
   };
+  onSelectChange = (selectedRowKeys, selectedRow) => {
+    let { selectedRowList } = this.state;
+    selectedRowList = selectedRowList.concat(selectedRow);
+    selectedRowList = this.arrayFilter(selectedRowKeys, selectedRowList);
+    console.log(selectedRowKeys, selectedRowList);
+
+    this.setState({ selectedRowKeys, selectedRowList });
+  };
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.orderInvoiceId === item));
+    });
+    return tempList;
+  };
 
   render() {
-    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder } = this.state;
+    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder, confirmLoading } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -456,11 +494,7 @@ class InvoiceList extends Component<any, any> {
       }
     ];
     const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({
-          selectedInvoiceIds: selectedRowKeys
-        });
-      }
+      onChange: this.onSelectChange
     };
     const menu = (
       <Menu>
@@ -631,6 +665,7 @@ class InvoiceList extends Component<any, any> {
           width="1000px"
           title={modalName}
           visible={visible}
+          confirmLoading={confirmLoading}
           onCancel={() =>
             this.setState({
               visible: false
@@ -661,10 +696,6 @@ class InvoiceList extends Component<any, any> {
                       {
                         required: true,
                         message: 'Please Select orderNumber!'
-                      },
-                      {
-                        max: 50,
-                        message: 'orderNumber exceed the maximum length!'
                       }
                     ]
                   })(

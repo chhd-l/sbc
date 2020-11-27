@@ -60,7 +60,7 @@ export default class SearchForm extends React.Component<any, any> {
 
     return (
       <div className="filter-content">
-        <Alert message="Set an amount that when products are below this certain amount, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
+        <Alert message="Set an amount that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
         <div className="inventory flex-start-align">
           <div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :

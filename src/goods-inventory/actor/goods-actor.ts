@@ -20,7 +20,7 @@ export default class GoodsActor extends Actor {
       dataList: [],
       current: 1,
       loading: true,
-      stock: 10
+      stock: 10 ////用这个
     };
   }
 

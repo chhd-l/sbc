@@ -139,7 +139,7 @@ export default class Foot extends React.Component<any, any> {
   };
 
   _savePrice = async () => {
-    const { saveAll } = this.props.relaxProps;
+    const { saveAll, getGoodsId } = this.props.relaxProps;
     saveAll();
   };
 

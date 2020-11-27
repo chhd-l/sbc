@@ -78,6 +78,7 @@ export default class Info extends React.Component<any, any> {
       taggingTotal: IList;
       goodsTaggingRelList: IList;
       productFilter: IList;
+      sourceGoodCateList: IList;
     };
   };
 
@@ -124,7 +125,8 @@ export default class Info extends React.Component<any, any> {
     onGoodsTaggingRelList: noop,
     onProductFilter: noop,
     goodsTaggingRelList: 'goodsTaggingRelList',
-    productFilter: 'productFilter'
+    productFilter: 'productFilter',
+    sourceGoodCateList: 'sourceGoodCateList'
   };
 
   constructor(props) {
@@ -219,7 +221,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
+    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     const storeCateValues =
       (storeCateIds &&
@@ -433,7 +435,7 @@ class GoodsForm extends React.Component<any, any> {
                       }
 
                       let overLen = false;
-                      sourceCateList.forEach((val) => {
+                      sourceGoodCateList.forEach((val) => {
                         if (val.get('cateParentId') + '' == value) overLen = true;
                         return;
                       });
@@ -710,7 +712,7 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail, changeStoreCategory } = this.props.relaxProps;
+    const { showGoodsPropDetail, changeStoreCategory, changePropVal} = this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
   };
@@ -810,19 +812,49 @@ class GoodsForm extends React.Component<any, any> {
    * 修改店铺分类
    */
   storeCateChange = (value, _label, extra) => {
-    const { editGoods } = this.props.relaxProps;
+    const { editGoods, sourceGoodCateList } = this.props.relaxProps;
+    // 店铺分类，结构如 [{value: 1, label: xx},{value: 2, label: yy}]
+    // 店铺分类列表
+
     // 勾选的店铺分类列表
     let originValues = fromJS(value.map((v) => v.value));
 
+    // 如果是点x清除某个节点或者是取消勾选某个节点，判断清除的是一级还是二级，如果是二级可以直接清；如果是一级，连带把二级的清了
+    if (extra.clear || !extra.checked) {
+      sourceGoodCateList.forEach((cate) => {
+        // 删的是某个一级的
+        if (extra.triggerValue == cate.get('storeCateId') && cate.get('cateParentId') == 0) {
+          // 找到此一级节点下的二级节点
+          const children = sourceGoodCateList.filter((ss) => ss.get('cateParentId') == extra.triggerValue);
+          // 把一级的子节点也都删了
+          originValues = originValues.filter((v) => children.findIndex((c) => c.get('storeCateId') == v) == -1);
+        }
+      });
+    }
+
+    // 如果子节点被选中，上级节点也要被选中
+    // 为了防止extra对象中的状态api变化，业务代码未及时更新，这里的逻辑不放在上面的else中
+    originValues.forEach((v) => {
+      sourceGoodCateList.forEach((cate) => {
+        // 找到选中的分类，判断是否有上级r
+        if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
+          // 判断上级是否已添加过，如果没有添加过，添加
+          let exist = false;
+          originValues.forEach((vv) => {
+            if (vv == cate.get('cateParentId')) {
+              exist = true;
+            }
+          });
+          if (!exist) {
+            originValues = originValues.push(cate.get('cateParentId'));
+          }
+        }
+      });
+    });
     const storeCateIds = originValues;
 
     const goods = Map({
       ['storeCateIds']: storeCateIds
-    });
-
-    // 强制刷新店铺分类的选中视图
-    this.setState({ storeCateIds }, () => {
-      // this.props.form.resetFields(['storeCateIds']);
     });
 
     editGoods(goods);

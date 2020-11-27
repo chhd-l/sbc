@@ -19,7 +19,7 @@ export default class SearchForm extends React.Component<any, any> {
   props: {
     relaxProps?: {
       getThreshold: any;
-      onThreshold: Function;
+      stock: any;
       onStock: Function;
       init: Function;
       bulkExport: Function;
@@ -29,7 +29,7 @@ export default class SearchForm extends React.Component<any, any> {
   static relaxProps = {
     // 模糊条件-商品名称
     getThreshold: 'getThreshold',
-    onThreshold: noop,
+    stock: 'stock',
     onStock: noop,
     init: noop,
     bulkExport: noop
@@ -51,13 +51,12 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   onRefresh = () => {
-    const { init, getThreshold } = this.props.relaxProps;
-    init(0, 10, getThreshold);
+    const { init, stock } = this.props.relaxProps;
+    init(0, 10, stock);
   };
 
   render() {
-    const { getThreshold, bulkExport } = this.props.relaxProps;
-
+    const { getThreshold, bulkExport, stock } = this.props.relaxProps;
     return (
       <div className="filter-content">
         <Alert message="Set an amount that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below." type="info" />
@@ -65,7 +64,7 @@ export default class SearchForm extends React.Component<any, any> {
           <div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :
           </div>
-          <div style={{ width: '60px' }}>{getThreshold && <InputNumber style={{ width: '60px' }} key={Number(getThreshold) + 1} defaultValue={getThreshold} disabled={this.state.disabledType} onChange={this.onChangeNumber} min={0} />}</div>
+          <div style={{ width: '60px' }}>{stock && <InputNumber style={{ width: '60px' }} key={Number(stock) + 1} defaultValue={stock} disabled={this.state.disabledType} onChange={this.onChangeNumber} min={0} />}</div>
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
           </Button>

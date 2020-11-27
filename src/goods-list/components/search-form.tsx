@@ -231,7 +231,6 @@ export default class SearchForm extends React.Component<any, any> {
                       <FormattedMessage id="product.brand" />
                     </p>
                   }
-                  defaultValue="All"
                   showSearch
                   optionFilterProp="children"
                   onChange={(value) => {

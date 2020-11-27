@@ -270,7 +270,7 @@ export default class GoodsActor extends Actor {
     return state.setIn(['goods', 'allowPriceSet'], result);
   }
 
-  @Action('priceActor:goodsId')
+  @Action('goodsActor:goodsId')
   updateGoodsId(state, result) {
     return state.setIn(['goods', 'goodsId'], result);
   }

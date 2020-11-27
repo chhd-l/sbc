@@ -524,7 +524,7 @@ export default class AppStore extends Store {
       message.success('Save successfully.');
       this.setSeoModalVisible(false);
     } else {
-      message.success('Save error.');
+      message.error('Save error.');
     }
   };
   setCurrentStoreCateId = (storeCateId) => {

@@ -36,6 +36,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //应用标示。如添加秒杀商品：saleType
     application?: string;
     pid: any;
+    initCateList: any
   };
 
   static relaxProps = {
@@ -45,7 +46,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     loading: 'loading',
     productList: 'productList',
     createLink: 'createLink',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    initCateList: 'initCateList'
   };
   constructor(props) {
     super(props);
@@ -65,7 +67,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselectSku, getGoodsId } = this.props.relaxProps;
+    const { onProductselectSku, initCateList } = this.props.relaxProps;
+    setTimeout(()=>{
+      console.log(initCateList,1111111111);
+    })
     return (
       <Modal
         maskClosable={false}

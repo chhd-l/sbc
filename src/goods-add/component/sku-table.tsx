@@ -26,6 +26,9 @@ export default class SkuTable extends React.Component<any, any> {
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      initStoreCateList: any;
+      goodsInfos: any;
+      addSkUProduct: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -36,9 +39,9 @@ export default class SkuTable extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
-      addSkUProduct: any;
       onProductselectSku: Function;
       onEditSubSkuItem: Function;
+      onProductselectSku: Function
     };
   };
 
@@ -54,6 +57,8 @@ export default class SkuTable extends React.Component<any, any> {
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
     addSkUProduct: 'addSkUProduct',
+    initStoreCateList: 'initStoreCateList',
+    goodsInfos: 'goodsInfos',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -63,7 +68,8 @@ export default class SkuTable extends React.Component<any, any> {
     removeImg: noop,
     modalVisible: noop,
     onProductselectSku: noop,
-    onEditSubSkuItem: noop
+    onEditSubSkuItem: noop,
+    onProductselectSku: noop
   };
 
   constructor(props) {
@@ -95,6 +101,12 @@ class SkuForm extends React.Component<any, any> {
       visible: false,
       pid: ''
     };
+  }
+
+  componentDidMount() {
+    const { goodsInfos } = this.props.relaxProps;
+    console.log(goodsInfos)
+
   }
 
   render() {
@@ -135,6 +147,8 @@ class SkuForm extends React.Component<any, any> {
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
+    let a = []
+    let list = []
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
@@ -236,13 +250,30 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoBundleRels',
       render: (rowInfo) => {
-        const { addSkUProduct } = this.props.relaxProps;
-        this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
+        const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
+        //this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
 
         /*if(rowInfo.goodsInfoNo == this.state.pid) {
           rowInfo.goodsInfoBundleRels = addSkUProduct
           let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
         }*/
+        console.log(addSkUProduct,2222222);
+
+        if(addSkUProduct.length == 0) {
+          console.log(rowInfo)
+          a.push({
+            pid: rowInfo.goodsInfoNo,
+            targetGoodsIds: rowInfo.goodsInfoBundleRels
+          })
+          /*setTimeout(()=>{
+            console.log(addSkUProduct.toJS(),111);
+            console.log(rowInfo.goodsInfoNo,222);
+            console.log(rowInfo.goodsInfoBundleRels,3333);
+            console.log(a,44444444);
+          })*/
+          onProductselectSku(a)
+        }
+        console.log(addSkUProduct,11111111111);
 
         return (
           <Row>
@@ -270,7 +301,7 @@ class SkuForm extends React.Component<any, any> {
                       <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.goodsInfoNo)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {addSkUProduct&&addSkUProduct.map((i, index) => {
+                      {/*{addSkUProduct&&addSkUProduct.map((i, index) => {
                         return(
                           i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
                           return (
@@ -282,16 +313,18 @@ class SkuForm extends React.Component<any, any> {
                                 key={item.goodsInfoNo}
                                 min={0}
                                 onChange={(e) => {
-                                  console.log(item,2222);
-                                  console.log(i,3333);
-
-                                  const target = i.targetGoodsIds.filter((a, o) => i.subGoodsInfoId === a.subGoodsInfoId)[0];
-                                  if (target) {
-                                    target['bundleNum'] = e;
+                                  console.log(i.pid,2222);
+                                  console.log(rowInfo.goodsInfoNo,3333);
+                                  if (i.pid == rowInfo.goodsInfoNo) {
+                                    const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
+                                    if (target) {
+                                      target['bundleNum'] = e;
+                                    }
+                                    let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
+                                    console.log(res,1111);
+                                    this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                   }
-                                  let res = _.unionBy([target], item.targetGoodsIds, 'subGoodsInfoId');
-                                  console.log(res,1111);
-                                  this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
+
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
@@ -299,7 +332,7 @@ class SkuForm extends React.Component<any, any> {
                           );
                         })
                         )
-                        })}
+                        })}*/}
                     </div>
                   </div>
                 )}
@@ -429,7 +462,7 @@ class SkuForm extends React.Component<any, any> {
     }
     //console.log(id);
     //console.log(key);
-    //console.log(e);
+    console.log(e,44444);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
@@ -456,7 +489,6 @@ class SkuForm extends React.Component<any, any> {
     const { onEditSubSkuItem } = this.props.relaxProps;
 
     onEditSubSkuItem(e);
-    console.log(e, 44444);
   };
 
   /**

@@ -92,6 +92,11 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
 
       this.dispatch('related:goodsId', goodsId);
+      console.log(results[0].res,666);
+      console.log(results[1].res,11111);
+      console.log(results[2].res,22222);
+      console.log(results[3].res,33333);
+      console.log(results[4].res,44444);
 
       // fetchFiltersTotal
     });
@@ -1397,7 +1402,6 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      console.log(this.state().get('editSubSkuItem'), 2222222);
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,

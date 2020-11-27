@@ -11,6 +11,7 @@ import ImageActor from './actor/image-actor';
 import SeoActor from './actor/seo-actor';
 
 import { getSeo, editSeo, getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
+import { getDictionaryByType } from '@/shop/webapi';
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -30,10 +31,12 @@ export default class AppStore extends Store {
   init = async () => {
     const result: any = await getCateList();
     const result1: any = await getSignCateList();
+    const petType: any = await getDictionaryByType('petType');
     this.transaction(() => {
       this.dispatch('cateActor: init', fromJS(result.res.context));
       this.dispatch('cateActor: initCateList', fromJS(result1.res.context));
       this.dispatch('cateActor: closeModal');
+      this.dispatch('cateActor: petType', fromJS(petType.res.context.sysDictionaryVOS));
     });
   };
 

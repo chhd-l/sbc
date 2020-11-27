@@ -30,7 +30,6 @@ export default class AppStore extends Store {
     };
 
     this.dispatch('loading:start');
-    debugger
     const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('list:init', res.context.goodsInfoPage);
@@ -73,10 +72,11 @@ export default class AppStore extends Store {
         // 参数加密
         const base64 = new util.Base64();
         const token = (window as any).token;
+        console.log(this.state().get('total'), "this.state().get('total')");
         if (token) {
           const result = JSON.stringify({
             pageNum: this.state().get('current'),
-            pageSize: this.state().get('pageSize'),
+            pageSize: this.state().get('total'),
             stock: this.state().get('stock'),
             token: token
           });

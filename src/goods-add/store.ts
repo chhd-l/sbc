@@ -1174,7 +1174,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
-    if (goods.get('goodsId')) {
+    if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
         if (i == 'true') {
@@ -1412,7 +1412,7 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels') || 0,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') || [],
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
         })
@@ -1514,7 +1514,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
-    if (goods.get('goodsId')) {
+    if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
         if (i == 'true') {
@@ -1534,9 +1534,9 @@ export default class AppStore extends Store {
     }
 
     this.dispatch('goodsActor: saveLoading', false);
-
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
+      this.dispatch('priceActor:goodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);
@@ -2053,7 +2053,7 @@ export default class AppStore extends Store {
   };
 
   onProductselectSku = (addProduct) => {
-    this.dispatch('sku:addSkUProduct', addProduct != null ? addProduct : []);
+    this.dispatch('sku:addSkUProduct', addProduct);
   };
 
   onRelatedList = async (param?: any) => {

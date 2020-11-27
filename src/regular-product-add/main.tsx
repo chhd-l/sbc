@@ -137,7 +137,7 @@ export default class Main extends React.Component<any, any> {
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main" disabled>
+              <Tabs.TabPane tab="Product information" key="main">
                 <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
@@ -157,12 +157,12 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price">
+            <Tabs.TabPane tab="Product price" key="price" disabled>
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
+            <Tabs.TabPane tab="Product inventory" key="inventory">
               <AlertInfo />
 
               <ProductInventory />

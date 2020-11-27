@@ -119,9 +119,6 @@ class SkuForm extends React.Component<any, any> {
 
   showProduct = (res,e) => {
     let type = res.type ==1?true:false
-    console.log(res,22222);
-
-    console.log(e,3333333);
     if(e) {
       this.setState({
         pid: e
@@ -242,13 +239,11 @@ class SkuForm extends React.Component<any, any> {
         const { addSkUProduct } = this.props.relaxProps;
         this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
 
-        if(rowInfo.id == this.state.pid) {
+        /*if(rowInfo.goodsInfoNo == this.state.pid) {
           rowInfo.goodsInfoBundleRels = addSkUProduct
-        }
+          let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
+        }*/
 
-        setTimeout(()=>{
-          console.log(rowInfo,1111111111111);
-        })
         return (
           <Row>
             <Col span={16}>
@@ -272,11 +267,12 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.id)} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.goodsInfoNo)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {rowInfo.goodsInfoBundleRels&&
-                      rowInfo.goodsInfoBundleRels.map((item, index) => {
+                      {addSkUProduct&&addSkUProduct.map((i, index) => {
+                        return(
+                          i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
                           return (
                             <div className="space-between-align" key={item.goodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
@@ -286,17 +282,23 @@ class SkuForm extends React.Component<any, any> {
                                 key={item.goodsInfoNo}
                                 min={0}
                                 onChange={(e) => {
-                                  const target = addSkUProduct.filter((a, i) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
+                                  console.log(item,2222);
+                                  console.log(i,3333);
+
+                                  const target = i.targetGoodsIds.filter((a, o) => i.subGoodsInfoId === a.subGoodsInfoId)[0];
                                   if (target) {
                                     target['bundleNum'] = e;
                                   }
-                                  let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
+                                  let res = _.unionBy([target], item.targetGoodsIds, 'subGoodsInfoId');
+                                  console.log(res,1111);
                                   this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
                             </div>
                           );
+                        })
+                        )
                         })}
                     </div>
                   </div>

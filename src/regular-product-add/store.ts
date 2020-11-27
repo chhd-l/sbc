@@ -1178,7 +1178,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
-    if (goods.get('goodsId')) {
+    if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
         if (i == 'true') {
@@ -1234,7 +1234,6 @@ export default class AppStore extends Store {
     if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
       return false;
     }
-
     const data = this.state();
     let param = Map();
 
@@ -1510,7 +1509,7 @@ export default class AppStore extends Store {
     let result3: any;
     const i = this.state().get('checkFlag');
     const enterpriseFlag = this.state().get('enterpriseFlag');
-    if (goods.get('goodsId')) {
+    if (this.state().get('getGoodsId')) {
       if (goods.get('saleType') == 0) {
         const goodsId = goods.get('goodsId');
         if (i == 'true') {
@@ -1533,6 +1532,7 @@ export default class AppStore extends Store {
 
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
+      this.dispatch('priceActor:goodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);

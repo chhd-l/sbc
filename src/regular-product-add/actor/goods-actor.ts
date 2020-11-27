@@ -42,7 +42,9 @@ export default class GoodsActor extends Actor {
         saleType: 0,
         saleableFlag: 1,
         displayFlag: 1,
-        subscriptionPrice: ''
+        subscriptionStatus: 1,
+        subscriptionPrice: '',
+        goodsId: null
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -260,6 +262,10 @@ export default class GoodsActor extends Actor {
     return state.setIn(['goods', 'allowPriceSet'], result);
   }
 
+  @Action('priceActor:goodsId')
+  updateGoodsId(state, result) {
+    return state.setIn(['goods', 'goodsId'], result);
+  }
   @Action('goodsActor:flashsaleGoods')
   setFlashsaleGoods(state, context) {
     return state.set('flashsaleGoods', context);

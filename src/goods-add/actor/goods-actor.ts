@@ -42,7 +42,8 @@ export default class GoodsActor extends Actor {
         saleType: 0,
         saleableFlag: 1,
         displayFlag: 1,
-        subscriptionPrice: ''
+        subscriptionPrice: '',
+        goodsId: null
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -66,7 +67,11 @@ export default class GoodsActor extends Actor {
       getGoodsId: '',
       taggingTotal: '',
       goodsTaggingRelList: null,
-      productFilter: null
+      productFilter: null,
+      addSkUProduct:[{
+        pid: '',
+        targetGoodsIds: []
+      }]
     };
   }
 
@@ -263,6 +268,11 @@ export default class GoodsActor extends Actor {
   @Action('priceActor:setAlonePrice')
   toggleSetAlonePrice(state, result) {
     return state.setIn(['goods', 'allowPriceSet'], result);
+  }
+
+  @Action('priceActor:goodsId')
+  updateGoodsId(state, result) {
+    return state.setIn(['goods', 'goodsId'], result);
   }
 
   @Action('goodsActor:flashsaleGoods')

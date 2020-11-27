@@ -45,7 +45,8 @@ export default class CateActor extends Actor {
       sourceCateList: [],
       resCateAllList: [],
       images: [],
-      video: {}
+      video: {},
+      petType: []
     };
   }
 
@@ -220,5 +221,9 @@ export default class CateActor extends Actor {
   @Action('cateActor: deleteVideo')
   deleteVideo(state: IMap) {
     return state.set('video', {});
+  }
+  @Action('cateActor: petType')
+  setPetType(state, petType) {
+    return state.set('petType', petType);
   }
 }

@@ -181,7 +181,10 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible',
         render: (text, record) => (
           <div>
-            <Switch checked={+text ? true : false} onClick={(checked) => this.updateSortStatus(checked, record)}></Switch>
+            <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateSortStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+              <Switch checked={+text ? true : false}></Switch>
+            </Popconfirm>
+            {/* <Switch checked={+text ? true : false} onClick={(checked) => this.updateSortStatus(checked, record)}></Switch> */}
           </div>
         )
       },

@@ -394,7 +394,7 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Invoice Time',
+        title: 'Invoice Date',
         dataIndex: 'invoiceTime',
         key: 'invoiceTime',
         width: '8%',
@@ -495,6 +495,9 @@ class InvoiceList extends Component<any, any> {
     ];
     const rowSelection = {
       onChange: this.onSelectChange
+      // getCheckboxProps: record => ({
+      //   disabled: record.name === 'Disabled User',
+      // }),
     };
     const menu = (
       <Menu>

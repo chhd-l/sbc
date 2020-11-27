@@ -320,8 +320,8 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
-                      {rowInfo.subscriptionStatus != 0 ? <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p> : null}
+                      <p>{this._getBasePrice(rowInfo.marketPrice, rowInfo['specId-' + baseSpecId])}</p>
+                      {rowInfo.subscriptionStatus != 0 ? <p> {this._getBasePrice(rowInfo.subscriptionPrice, rowInfo['specId-' + baseSpecId])}</p> : null}
                     </div>
                   )}
                 </FormItem>
@@ -338,7 +338,7 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                      <p>{this._getBasePrice(rowInfo.marketPrice, rowInfo['specId-' + baseSpecId])}</p>
                     </div>
                   )}
                 </FormItem>
@@ -355,6 +355,13 @@ class SkuForm extends React.Component<any, any> {
     });
 
     return columns.toJS();
+  };
+  _getBasePrice = (price, spec) => {
+    if (isNaN(parseFloat(price) / parseFloat(spec))) {
+      return '0';
+    } else {
+      return (parseFloat(price) / parseFloat(spec)).toFixed(2);
+    }
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);

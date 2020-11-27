@@ -7,6 +7,9 @@ import ProductGridSKU from './product-grid-sku';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
+import * as _ from 'lodash';
+
+let targetGoodsList = [];
 @Relax
 class ProductTooltipSKU extends React.Component<any, any> {
   props: {
@@ -32,7 +35,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     searchParams?: Object;
     //应用标示。如添加秒杀商品：saleType
     application?: string;
-    pid: any
+    pid: any;
   };
 
   static relaxProps = {
@@ -78,6 +81,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         visible={visible}
         onOk={() => {
           let targetGoodsIds = [];
+
           this.state.selectedRows.toJS().map((item) =>
             targetGoodsIds.push({
               subGoodsInfoId: item.goodsInfoId,
@@ -85,17 +89,27 @@ class ProductTooltipSKU extends React.Component<any, any> {
               goodsInfoNo: item.goodsInfoNo
             })
           );
+          targetGoodsList.push({
+            pid: this.props.pid,
+            targetGoodsIds: targetGoodsIds
+          });
           if (targetGoodsIds.length <= 10) {
-            onProductselectSku(targetGoodsIds);
-            this.props.showModal({type:0},this.props.pid);
+            let a = _.filter(targetGoodsList, (o) => o.pid != this.props.pid);
+            a.push({
+              pid: this.props.pid,
+              targetGoodsIds: targetGoodsIds
+            });
+
+            onProductselectSku(a);
+            this.props.showModal({ type: 0 }, this.props.pid);
           } else {
             message.info('Maximum 10 products!');
           }
-          this.props.form.resetFields()
+          this.props.form.resetFields();
         }}
         onCancel={() => {
-          this.props.showModal({type:0},this.props.pid);
-          this.props.form.resetFields()
+          this.props.showModal({ type: 0 }, this.props.pid);
+          this.props.form.resetFields();
           //onCancelBackFun();
         }}
         okText="Confirm"
@@ -117,4 +131,4 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 }
 
-export default Form.create()(ProductTooltipSKU)
+export default Form.create()(ProductTooltipSKU);

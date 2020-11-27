@@ -2053,7 +2053,7 @@ export default class AppStore extends Store {
   };
 
   onProductselectSku = (addProduct) => {
-    this.dispatch('sku:addSkUProduct', addProduct != null ? addProduct : []);
+    this.dispatch('sku:addSkUProduct', addProduct);
   };
 
   onRelatedList = async (param?: any) => {

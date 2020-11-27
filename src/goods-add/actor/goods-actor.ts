@@ -66,7 +66,11 @@ export default class GoodsActor extends Actor {
       getGoodsId: '',
       taggingTotal: '',
       goodsTaggingRelList: null,
-      productFilter: null
+      productFilter: null,
+      addSkUProduct:[{
+        pid: '',
+        targetGoodsIds: []
+      }]
     };
   }
 

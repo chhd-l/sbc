@@ -182,7 +182,7 @@ class GoodsForm extends React.Component<any, any> {
     const filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {
       this.setState({ storeCateIds: storeCateIds });
-    } 
+    }
     const goods = Map({
       ['storeCateIds']: storeCateIds
     });
@@ -235,17 +235,18 @@ class GoodsForm extends React.Component<any, any> {
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
-          return { value: x.taggingId } ;
+          return { value: x.taggingId };
         })) ||
       null;
-    const filterValues = (productFilter &&
+    const filterValues =
+      (productFilter &&
         productFilter.map((x) => {
-          return { value: x.filterValueId} ;
+          return { value: x.filterValueId };
         })) ||
       null;
     // const storeCateValues = [];
     //处理分类的树形图结构数据
-
+    //this._editGoods.bind(1, 'subscriptionStatus')
     const loop = (cateList) =>
       cateList &&
       cateList.map((item) => {
@@ -864,7 +865,7 @@ class GoodsForm extends React.Component<any, any> {
       });
     });
     // 强制刷新店铺分类的选中视图
-    this.setState({ productFilter, selectFilters}, () => {
+    this.setState({ productFilter, selectFilters }, () => {
       this.filtersTotalTree(this.state.filterList);
     });
 

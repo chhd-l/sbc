@@ -1399,7 +1399,6 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      console.log(imageUrl, 2222222);
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,

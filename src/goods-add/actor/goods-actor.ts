@@ -43,6 +43,7 @@ export default class GoodsActor extends Actor {
         saleableFlag: 1,
         displayFlag: 1,
         subscriptionPrice: '',
+        subscriptionStatus: 1,
         goodsId: null
       },
       // 是否编辑商品
@@ -68,10 +69,12 @@ export default class GoodsActor extends Actor {
       taggingTotal: '',
       goodsTaggingRelList: null,
       productFilter: null,
-      addSkUProduct:[{
-        pid: '',
-        targetGoodsIds: []
-      }]
+      addSkUProduct: [
+        {
+          pid: '',
+          targetGoodsIds: []
+        }
+      ]
     };
   }
 

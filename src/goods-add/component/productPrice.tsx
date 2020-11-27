@@ -34,6 +34,7 @@ export default class ProductPrice extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      subscriptionStatus: any;
     };
   };
 
@@ -48,6 +49,7 @@ export default class ProductPrice extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    subscriptionStatus: 'subscriptionStatus',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,

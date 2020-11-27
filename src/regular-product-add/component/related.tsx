@@ -16,7 +16,7 @@ export default class Related extends React.Component<any, any> {
   props: {
     relaxProps?: {
       priceOpt: number;
-      getGoodsId: any
+      getGoodsId: any;
     };
   };
 
@@ -27,7 +27,6 @@ export default class Related extends React.Component<any, any> {
   };
   componentDidMount() {
     const { getGoodsId } = this.props.relaxProps;
-    console.log(getGoodsId,1);
   }
 
   showProduct = (res) => {
@@ -38,9 +37,6 @@ export default class Related extends React.Component<any, any> {
 
   render() {
     const { getGoodsId } = this.props.relaxProps;
-    setTimeout(()=>{
-      console.log(getGoodsId,3);
-    })
     return (
       <div>
         <div className="related-btn">

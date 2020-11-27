@@ -624,14 +624,18 @@ class GoodsForm extends React.Component<any, any> {
                 initialValue: goods.get('saleableFlag')
               })(
                 <RadioGroup>
-                  <Radio value={0}>Not–Saleable</Radio>
-                  <Radio value={1}>Saleable</Radio>
+                  <span>
+                    <Radio value={1}>Saleable</Radio>
+                  </span>
+                  <span>
+                    <Radio value={0}>Not–Saleable</Radio>
+                  </span>
                 </RadioGroup>
               )}
             </FormItem>
           </Col>
           {this.state.saleableType == true ? (
-            <Col span={8}>
+            <Col span={12}>
               <FormItem {...formItemLayout} label="Display on shop">
                 {getFieldDecorator('displayFlag', {
                   rules: [

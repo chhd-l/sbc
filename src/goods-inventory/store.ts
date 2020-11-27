@@ -30,7 +30,6 @@ export default class AppStore extends Store {
     };
 
     this.dispatch('loading:start');
-    debugger
     const { res, err } = (await webapi.goodsList(param.pageNum, param.pageSize, param.stock)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('list:init', res.context.goodsInfoPage);

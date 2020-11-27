@@ -246,7 +246,7 @@ class GoodsForm extends React.Component<any, any> {
       null;
     // const storeCateValues = [];
     //处理分类的树形图结构数据
-    //this._editGoods.bind('Y', 'subscriptionStatus')
+    //this._editGoods.bind(1, 'subscriptionStatus')
     const loop = (cateList) =>
       cateList &&
       cateList.map((item) => {

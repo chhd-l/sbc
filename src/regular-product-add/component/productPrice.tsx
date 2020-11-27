@@ -111,7 +111,7 @@ class SkuForm extends React.Component<any, any> {
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-    console.log(subscriptionStatus, 222222222);
+    console.log(goods.toJS(), 222222222);
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格

@@ -141,9 +141,12 @@ export default class SortableTable extends React.Component {
         dataIndex: 'filterStatus',
         className: 'drag-visible',
         render: (text, record) => (
-          <div>
-            <Switch checked={+text ? true : false} onClick={(checked) => this.updateFilterStatus(checked, record)}></Switch>
-          </div>
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateFilterStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+            <Switch checked={+text ? true : false}></Switch>
+          </Popconfirm>
+          // <div>
+          //   <Switch checked={+text ? true : false} onClick={(checked) => this.updateFilterStatus(checked, record)}></Switch>
+          // </div>
         )
       },
       {
@@ -152,13 +155,15 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible',
         render: (text, record) => (
           <div>
-            {record.filterType === '1' && record.canDelFlag? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null}
-            
-            {record.canDelFlag?<Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
-                <a className="iconfont iconDelete"></a>
-              </Tooltip>
-            </Popconfirm>:null}
+            {record.filterType === '1' && record.canDelFlag ? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null}
+
+            {record.canDelFlag ? (
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <a className="iconfont iconDelete"></a>
+                </Tooltip>
+              </Popconfirm>
+            ) : null}
             <DragHandle />
           </div>
         )

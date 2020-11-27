@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input, TreeSelect, Tree, message } from 'antd';
+import { Modal, Form, Input, TreeSelect, Tree, message, Select } from 'antd';
 import { Relax } from 'plume2';
 import { noop, QMMethod, Tips } from 'qmkit';
 import { Map, fromJS } from 'immutable';
@@ -11,6 +11,7 @@ import { IList, IMap } from 'typings/globalType';
 import ImageLibraryUpload from './image-library-upload';
 const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
+const Option = Select.Option;
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -47,6 +48,7 @@ export default class CateModal extends React.Component<any, any> {
       sourceCateList: IList;
       goods: IMap;
       modalVisibleFun: Function;
+      petType: IList;
     };
   };
 
@@ -71,7 +73,8 @@ export default class CateModal extends React.Component<any, any> {
     images: 'images',
     modalVisibleFun: noop,
     clickImg: noop,
-    removeImg: noop
+    removeImg: noop,
+    petType: 'petType'
   };
 
   render() {
@@ -137,6 +140,7 @@ class CateModalForm extends React.Component<any, any> {
       clickImg: Function;
       removeImg: Function;
       modalVisibleFun: Function;
+      petType: IList;
     };
     form;
   };
@@ -157,6 +161,7 @@ class CateModalForm extends React.Component<any, any> {
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const descriptionTitle = formData.get('cateTitle');
+    const cateType = formData.get('cateType');
     const { getFieldDecorator } = this.props.form;
     // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
@@ -172,7 +177,7 @@ class CateModalForm extends React.Component<any, any> {
         }
         return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
       });
-    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } = this.props.relaxProps;
+    const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg, petType } = this.props.relaxProps;
 
     return (
       <Form className="login-form" style={{ width: 550 }}>
@@ -272,6 +277,24 @@ class CateModalForm extends React.Component<any, any> {
             initialValue: goodsDescription
           })(<TextArea rows={4} placeholder="Please input the product description" />)}
         </FormItem>
+        <FormItem labelCol={2} {...formItemLayout} label="Category type">
+          {getFieldDecorator('cateType', {
+            onChange: this._editGoods.bind(this, 'cateType'),
+            initialValue: cateType ? this._getCateTypeName(cateType) : ''
+          })(
+            <Select>
+              <Option value="">
+                <FormattedMessage id="all" />
+              </Option>
+              {petType &&
+                petType.toJS().map((item, index) => (
+                  <Option value={item.id} key={index}>
+                    {item.name}
+                  </Option>
+                ))}
+            </Select>
+          )}
+        </FormItem>
       </Form>
     );
   }
@@ -366,6 +389,15 @@ class CateModalForm extends React.Component<any, any> {
       });
       updateGoodsForm(this.props.form);
       editGoods(goods);
+    }
+  };
+  _getCateTypeName = (type) => {
+    const { petType } = this.props.relaxProps;
+    let currentPetType = petType && petType.toJS().find((item) => item.id === +type);
+    if (currentPetType && currentPetType.name) {
+      return currentPetType.name;
+    } else {
+      return '';
     }
   };
 }

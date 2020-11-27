@@ -16,6 +16,7 @@ import ModalActor from './actor/modal-actor';
 import PropActor from './actor/prop-actor';
 import FreightActor from './actor/freight-actor';
 import relatedActor from './actor/related';
+import LoadingActor from './actor/loading-actor';
 
 import {
   addAll,
@@ -73,7 +74,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor()];
+    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor(), new LoadingActor()];
   }
 
   /**
@@ -81,6 +82,7 @@ export default class AppStore extends Store {
    */
   init = async (goodsId?: string) => {
     // 保证品牌分类等信息先加载完
+    this.dispatch('loading:start');
     await Promise.all([getCateList(), getBrandList(), checkSalesType(goodsId), isFlashsele(goodsId), getDetailTab(), this.onRelatedList(goodsId), getStoreCateList(), fetchFiltersTotal(), fetchTaggingTotal()]).then((results) => {
       this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context));
       this.dispatch('goodsActor: initBrandList', fromJS((results[1].res as any).context));
@@ -90,7 +92,6 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:getGoodsCate', fromJS((results[6].res as any).context.storeCateResponseVOList));
       this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
-
       this.dispatch('related:goodsId', goodsId);
 
       // fetchFiltersTotal
@@ -98,6 +99,7 @@ export default class AppStore extends Store {
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
       const { res: checkResponse } = await checkEnterpriseType(goodsId);
+
       if (checkResponse.code === config.SUCCESS_CODE) {
         this.dispatch('formActor:enterpriseFlag', fromJS(checkResponse.context).get('checkFlag'));
       }
@@ -139,7 +141,6 @@ export default class AppStore extends Store {
     newLevelList.unshift(userLevel);
     this.dispatch('userActor: setUserLevelList', fromJS(newLevelList));
     this.dispatch('priceActor: setUserLevelList', fromJS(newLevelList));
-
     if (goodsId) {
       this.dispatch('goodsActor: isEditGoods', true);
       this._getGoodsDetail(goodsId);
@@ -149,7 +150,7 @@ export default class AppStore extends Store {
       localStorage.setItem('storeCode', storeCode.res.context);
       this.dispatch('goodsActor: disableCate', false);
       this.dispatch('goodsActor:randomGoodsNo', storeCode.res.context);
-
+      this.dispatch('loading:end');
       const storeGoodsTab = await getStoreGoodsTab();
       if ((storeGoodsTab.res as any).code === Const.SUCCESS_CODE) {
         const tabs = [];
@@ -269,6 +270,7 @@ export default class AppStore extends Store {
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
+      this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = tmpContext.goodsPropDetailRels;
@@ -1536,7 +1538,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: saveLoading', false);
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor:getGoodsId', result.res.context);
-      this.dispatch('priceActor:goodsId', result.res.context);
+      this.dispatch('goodsActor:goodsId', result.res.context);
       if (i == 'true' && goods.get('saleType') == 0) {
         if (result2 != undefined && result2.res.code !== Const.SUCCESS_CODE) {
           message.error(result.res.message);
@@ -2057,11 +2059,9 @@ export default class AppStore extends Store {
   };
 
   onRelatedList = async (param?: any) => {
-    this.dispatch('loading:start');
     const { res } = await getRelatedList(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch('loading:end');
         this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
       });
     } else {

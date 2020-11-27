@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
-import { Breadcrumb, Tabs, Form, Alert } from 'antd';
+import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
 import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
 import './index.less';
 import AppStore from './store';
@@ -32,7 +32,8 @@ export default class Main extends React.Component<any, any> {
   constructor(props: IOptions) {
     super(props);
     this.state = {
-      tabType: 'main'
+      tabType: 'main',
+      gid: ''
     };
   }
 
@@ -101,6 +102,7 @@ export default class Main extends React.Component<any, any> {
     //默认添加商品的编辑与设价权限
     let goodsFuncName = 'f_goods_add_1';
     let priceFuncName = 'f_goods_add_2';
+
     if (gid) {
       //编辑
       if (this.props.location.pathname.indexOf('/goods-check-edit') > -1) {
@@ -117,7 +119,6 @@ export default class Main extends React.Component<any, any> {
 
     const path = this.props.match.path || '';
     const parentPath = path.indexOf('/goods-check-edit/') > -1 ? '待审核商品' : '商品列表';
-
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -126,7 +127,7 @@ export default class Main extends React.Component<any, any> {
         <div className="container-search">
           <Headline title={gid ? 'Edit product (Bundle product)' : 'New product (Bundle product)'} state={this._getState(gid)} />
         </div>
-        <div className="container">
+        <div className="container ">
           <Tabs
             activeKey={this.state.tabType}
             // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
@@ -219,6 +220,10 @@ export default class Main extends React.Component<any, any> {
 
           {/*视频库*/}
           <VideoModal />
+
+          <div className="spin">
+            <Spin spinning={this.store.get('loading')} size="large" />
+          </div>
         </div>
       </div>
     );

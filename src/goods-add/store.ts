@@ -93,11 +93,6 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
       this.dispatch('related:goodsId', goodsId);
-      console.log(results[0].res,666);
-      console.log(results[1].res,11111);
-      console.log(results[2].res,22222);
-      console.log(results[3].res,33333);
-      console.log(results[4].res,44444);
 
       // fetchFiltersTotal
     });
@@ -277,6 +272,7 @@ export default class AppStore extends Store {
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
+
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
       if (goodsPropDetailRelsOrigin) {
@@ -311,6 +307,15 @@ export default class AppStore extends Store {
       this.onGoodsTaggingRelList(taggingIds);
 
       goodsDetail = fromJS(tmpContext);
+
+      let addSkUProduct = tmpContext.goodsInfos&&tmpContext.goodsInfos.map(item=>{
+        return ({
+          pid: item.goodsInfoNo,
+          targetGoodsIds: item.goodsInfoBundleRels
+        })
+      })
+      this.dispatch('sku:addSkUProduct', addSkUProduct);
+
     } else {
       message.error('查询商品信息失败');
       return false;
@@ -1923,7 +1928,7 @@ export default class AppStore extends Store {
    */
   attributesToProp(attributesList) {
     if(attributesList){
-      var propList = []
+      let propList = []
       attributesList.map(a=>{
         propList.push({
           propId: a.id,

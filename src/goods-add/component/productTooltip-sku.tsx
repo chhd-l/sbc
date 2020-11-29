@@ -67,10 +67,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselectSku, initCateList } = this.props.relaxProps;
-    setTimeout(()=>{
-      console.log(initCateList,1111111111);
-    })
+    const { onProductselectSku } = this.props.relaxProps;
+
     return (
       <Modal
         maskClosable={false}

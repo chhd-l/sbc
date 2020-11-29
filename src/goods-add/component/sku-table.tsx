@@ -103,12 +103,6 @@ class SkuForm extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
-    const { goodsInfos } = this.props.relaxProps;
-    console.log(goodsInfos)
-
-  }
-
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
@@ -299,7 +293,7 @@ class SkuForm extends React.Component<any, any> {
                       <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({type: 1}, rowInfo.goodsInfoNo)} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
-                      {/*{addSkUProduct&&addSkUProduct.map((i, index) => {
+                      {addSkUProduct&&addSkUProduct.map((i, index) => {
                         return(
                           i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
                           return (
@@ -330,7 +324,7 @@ class SkuForm extends React.Component<any, any> {
                           );
                         })
                         )
-                        })}*/}
+                        })}
                     </div>
                   </div>
                 )}

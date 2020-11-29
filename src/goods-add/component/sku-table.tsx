@@ -252,13 +252,11 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
         const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
         //this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', addSkUProduct);
-
         /*if(rowInfo.goodsInfoNo == this.state.pid) {
           rowInfo.goodsInfoBundleRels = addSkUProduct
           let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
         }*/
         console.log(addSkUProduct,2222222);
-
         if(addSkUProduct.length == 0) {
           console.log(rowInfo)
           a.push({

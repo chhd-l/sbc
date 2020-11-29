@@ -29,8 +29,14 @@ const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 //const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
+//prerender-spa-plugin 预渲染
+//const PrerenderSpaPlugin = require('prerender-spa-plugin')
+
 //Gzip
-//const CompressionPlugin = require("compression-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+
+//可视化分包分析工具
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -169,28 +175,57 @@ module.exports = function (webpackEnv, envCode = 'prod') {
           },
         }),
       ],
+
       splitChunks: {
-        chunks: 'async',
-        minSize: 20000,
-        maxSize: 30000,
+        chunks: 'all',
+        minSize: 30000,
+        maxSize: 50000,
         minChunks: 1,
-        maxAsyncRequests: 5,
-        maxInitialRequests: 5,
+        maxAsyncRequests: 6,
+        maxInitialRequests: 6,
         automaticNameDelimiter: '~',
         name: true,
         cacheGroups: {
-          default: {
-            test: function (module, chunks) {
-              return true
+          vendor: {
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            priority: 10,
+            enforce: true,
+          },
+          react: {
+            name: 'react',
+            test: module => /react|redux/.test(module.context),
+            chunks: 'initial',
+            priority: 11,
+            enforce: true,
+          },
+          antd: {
+            name: 'antd',
+            test: (module) => {
+              return /ant/.test(module.context);
             },
-            priority: -20,
-            reuseExistingChunk: true
-          }
-        }
+            chunks: 'initial',
+            priority: 11,
+            enforce: true,
+          },
+          moment: {
+            name: 'moment',
+            test: (module) => {
+              return /moment/.test(module.context);
+            },
+            chunks: 'initial',
+            priority: 13,
+            enforce: true,
+          },
+        },
       },
       runtimeChunk: true,
     },
     externals: {
+      /*'react': 'React',
+      'react-dom': 'ReactDOM',
+      'antd': 'antd'*/
     },
     resolve: {
       modules: ['node_modules', "src"].concat(
@@ -295,6 +330,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             //     sourceMaps: false,
             //   },
             // },
+
             {
               test: cssRegex,
               exclude: cssModuleRegex,
@@ -389,13 +425,30 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
     },
     plugins: [
-      /*new CompressionPlugin({
+
+     /* new PrerenderSpaPlugin(
+        //将渲染的文件放到dist目录下
+        path.join(__dirname, '../dist'),
+        //需要预渲染的路由信息
+        [ '/','/home'/!*,'/goods-list','/order-list-prescriber','/subscription-list','/customer-clinic-list','/finance-manage-check','/prescriber'*!/ ],
+        {
+          //在一定时间后再捕获页面信息，使得页面数据信息加载完成
+          captureAfterTime: 50000,
+          //忽略打包错误
+          ignoreJSErrors: true,
+          phantomOptions: '--web-security=false',
+          maxAttempts: 10,
+
+        }
+      ),*/
+      new BundleAnalyzerPlugin(),
+      new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法
         test: new RegExp('\\.(js|css)$'), // 压缩 js 与 css
-        threshold: 10240, // 只处理比这个值大的资源。按字节计算
+        threshold: 102400, // 只处理比这个值大的资源。按字节计算
         minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
-      }),*/
+      }),
       new HappyPack({
         //用id来标识 happypack处理那里类文件
         id: 'happyBabel',

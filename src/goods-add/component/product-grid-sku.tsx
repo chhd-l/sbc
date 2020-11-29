@@ -6,7 +6,7 @@ import { Const, DataGrid } from 'qmkit';
 import RelatedForm from './related-form';
 import * as webapi from '../webapi';
 import { Select, Table } from 'antd';
-//import { Relax } from 'plume2';
+import { Relax } from 'plume2';
 
 //const { Option } = Select;
 
@@ -16,7 +16,7 @@ let recommendationNumber = 1;
  * 商品添加
  */
 
-//@Relax
+@Relax
 export default class ProductGridSKU extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -28,22 +28,29 @@ export default class ProductGridSKU extends React.Component<any, any> {
       goodsInfoPage: {},
       searchParams: props.searchParams ? props.searchParams : {},
       showValidGood: props.showValidGood,
-      content: []
+      content: [],
+      goodsNo: []
     };
   }
 
-  /* props: {
+   props: {
     relaxProps?: {
-      productTooltip: any;
+      addSkUProduct: any;
     };
   };
 
   static relaxProps = {
-    productTooltip: 'productTooltip',
+    addSkUProduct: 'addSkUProduct',
   };
-*/
+
   componentDidMount() {
+    const { addSkUProduct } = this.props.relaxProps;
     this.init(this.props.searchParams ? this.props.searchParams : {});
+    let pid = addSkUProduct.filter(item=>item.pid == this.props.pid)
+    console.log(pid,1111111111);
+    this.setState({
+      goodsNo:pid
+    })
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -101,15 +108,41 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
-            getCheckboxProps: (record) => ({
-              /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
-                      该情况下商品checkbox置灰,禁止选中 */
+            getCheckboxProps(record) {
+              console.log(record,111111111);
+              return {
+                defaultChecked: record.goodsInfoNo == "8068576583" // 配置默认勾选的列
+              }
+            }
+            /*getCheckboxProps: (record) => {
+              console.log(this.state.goodsNo,22222222);
+
+              console.log(record,333333333);
+              let a = []
+              this.state.goodsNo.map(item=>{
+                return item.targetGoodsIds.map(i=>{
+                  return a.push(i)
+                })
+              })
+              a.map(o=>{
+                if(o.goodsInfoNo == record.goodsNo) {
+                  //return disabled
+                }
+              })
+
+              return record.disabled = 'disabled'
+
+              console.log(a,4444);
+            },*/
+            /*getCheckboxProps: (record) => ({
+              /!* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
+                      该情况下商品checkbox置灰,禁止选中 *!/
 
               // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
               // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
               // 因此判断等于2的失效状态下禁用
-              disabled: showValidGood ? !showValidGood : record.goodsStatus === 2
-            })
+              disabled: showValidGood ? !showValidGood : record.goodsInfoNo === '8068576583'
+            })*/
           }}
         >
           <Column

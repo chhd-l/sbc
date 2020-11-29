@@ -250,9 +250,7 @@ class SkuForm extends React.Component<any, any> {
           rowInfo.goodsInfoBundleRels = addSkUProduct
           let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
         }*/
-        console.log(addSkUProduct,2222222);
         if(addSkUProduct.length == 0) {
-          console.log(rowInfo)
           a.push({
             pid: rowInfo.goodsInfoNo,
             targetGoodsIds: rowInfo.goodsInfoBundleRels
@@ -265,7 +263,7 @@ class SkuForm extends React.Component<any, any> {
           })*/
           onProductselectSku(a)
         }
-        console.log(addSkUProduct,11111111111);
+        //console.log(addSkUProduct,11111111111);
 
         return (
           <Row>
@@ -285,7 +283,7 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   //onChange:  (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e),
-                  initialValue: rowInfo.goodsInfoBundleRels
+                  //initialValue: rowInfo.goodsInfoBundleRels
                 })(
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
@@ -301,22 +299,18 @@ class SkuForm extends React.Component<any, any> {
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
                               <InputNumber
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
-                                defaultValue={0}
+                                defaultValue={item.bundleNum}
                                 key={item.goodsInfoNo}
                                 min={0}
                                 onChange={(e) => {
-                                  console.log(i.pid,2222);
-                                  console.log(rowInfo.goodsInfoNo,3333);
                                   if (i.pid == rowInfo.goodsInfoNo) {
                                     const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
                                     if (target) {
                                       target['bundleNum'] = e;
                                     }
                                     let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                    console.log(res,1111);
                                     this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                   }
-
                                 }}
                               />
                               <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
@@ -454,7 +448,7 @@ class SkuForm extends React.Component<any, any> {
     }
     //console.log(id);
     //console.log(key);
-    console.log(e,44444);
+    //console.log(e,44444);
     editGoodsItem(id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {

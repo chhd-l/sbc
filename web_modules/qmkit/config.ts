@@ -1,5 +1,10 @@
 import Common from './config-common';
 export default {
-  HOST: 'https://supplierbff.s2btest3.kstore.shop',
+  // dev
+  HOST: 'http://124.71.151.9:8390',
+  // HOST: 'https://store.royalcanin.com/api/',
+
+  //product
+  // HOST: 'https://store.royalcanin.com/api',
   ...Common
 };

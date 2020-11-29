@@ -41,7 +41,6 @@ export default class SkuTable extends React.Component<any, any> {
       baseSpecId: Number;
       onProductselectSku: Function;
       onEditSubSkuItem: Function;
-      onProductselectSku: Function
     };
   };
 
@@ -69,7 +68,6 @@ export default class SkuTable extends React.Component<any, any> {
     modalVisible: noop,
     onProductselectSku: noop,
     onEditSubSkuItem: noop,
-    onProductselectSku: noop
   };
 
   constructor(props) {

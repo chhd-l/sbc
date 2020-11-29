@@ -2082,8 +2082,22 @@ export default class AppStore extends Store {
   };
 
   onProductselectSku = (addProduct) => {
-    this.dispatch('sku:addSkUProduct', addProduct);
+    let a = addProduct.concat(this.state().toJS().addSkUProduct);
+    let newJson = []; //盛放去重后数据的新数组
+    for( let item1 of a){
+      let flag = true;
+      for( let item2 of newJson){
+        if(item1.pid==item2.pid){
+          flag = false;
+        }
+      }
+      if(flag){ //判断是否重复
+        newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
+      }
+    }
+    this.dispatch('sku:addSkUProduct', newJson);
   };
+
 
   onRelatedList = async (param?: any) => {
     const { res } = await getRelatedList(param);

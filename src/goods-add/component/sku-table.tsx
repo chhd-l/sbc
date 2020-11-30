@@ -291,8 +291,8 @@ class SkuForm extends React.Component<any, any> {
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct&&addSkUProduct.map((i, index) => {
                         return(
-                          i.pid == rowInfo.subGoodsInfoNo&&i.targetGoodsIds.map((item, index) => {
-                          return (
+                          i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
+                            return (
                             <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
                               <InputNumber
@@ -302,7 +302,7 @@ class SkuForm extends React.Component<any, any> {
                                 min={0}
                                 onChange={(e) => {
                                   if (i.pid == rowInfo.subGoodsInfoNo) {
-                                    const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
+                                    const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoId)[0];
                                     if (target) {
                                       target['bundleNum'] = e;
                                     }
@@ -311,7 +311,7 @@ class SkuForm extends React.Component<any, any> {
                                   }
                                 }}
                               />
-                              <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid)}></a>
+                              <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid, rowInfo.id)}></a>
                             </div>
                           );
                         })
@@ -444,7 +444,9 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    //console.log(id);
+    console.log(e,1111111111);
+
+    console.log(id);
     //console.log(key);
     //console.log(e,44444);
     editGoodsItem(id, key, e);
@@ -509,7 +511,7 @@ class SkuForm extends React.Component<any, any> {
     }
   };
 
-  onDel = (item, pid) => {
+  onDel = (item, pid, id) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
     // console.log(item,11111);
     // console.log(pid);
@@ -535,9 +537,10 @@ class SkuForm extends React.Component<any, any> {
       }
 
     });
-
+    console.log(a,222222222);
     let d = b.concat(c)
     onProductselectSku(d);
+    this._editGoodsItem(id, 'goodsInfoBundleRels', a);
   };
 }
 

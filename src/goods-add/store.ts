@@ -93,7 +93,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:filtersTotal', fromJS((results[7].res as any).context));
       this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
       this.dispatch('related:goodsId', goodsId);
-
+      this.dispatch('goodsActor:getGoodsId', goodsId);
       // fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
@@ -308,14 +308,15 @@ export default class AppStore extends Store {
 
       goodsDetail = fromJS(tmpContext);
 
-      let addSkUProduct = tmpContext.goodsInfos&&tmpContext.goodsInfos.map(item=>{
-        return ({
-          pid: item.goodsInfoNo,
-          targetGoodsIds: item.goodsInfoBundleRels
-        })
-      })
+      let addSkUProduct =
+        tmpContext.goodsInfos &&
+        tmpContext.goodsInfos.map((item) => {
+          return {
+            pid: item.goodsInfoNo,
+            targetGoodsIds: item.goodsInfoBundleRels
+          };
+        });
       this.dispatch('sku:addSkUProduct', addSkUProduct);
-
     } else {
       message.error('查询商品信息失败');
       return false;
@@ -1535,8 +1536,10 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
+      console.log('edit------------------');
       result = await edit(param.toJS());
     } else {
+      console.log('new------------------');
       result = await save(param.toJS());
     }
 
@@ -1556,6 +1559,7 @@ export default class AppStore extends Store {
       }
       message.success('Operate successfully');
       this.dispatch('goodsActor:saveSuccessful', true);
+      this.onMainTabChange('related');
       //history.push('/goods-list');
     } else {
       message.error(result.res.message);
@@ -1927,24 +1931,26 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   attributesToProp(attributesList) {
-    if(attributesList){
-      let propList = []
-      attributesList.map(a=>{
+    if (attributesList) {
+      let propList = [];
+      attributesList.map((a) => {
         propList.push({
           propId: a.id,
           propName: a.attributeName,
-          goodsPropDetails: a.attributesValuesVOList ? a.attributesValuesVOList.map(v=>{
-            return {
-              detailId: v.id,
-              propId: v.attributeId,
-              detailName: v.attributeDetailName
-            }
-          }) : []
-        })
-      })
-      return propList
+          goodsPropDetails: a.attributesValuesVOList
+            ? a.attributesValuesVOList.map((v) => {
+                return {
+                  detailId: v.id,
+                  propId: v.attributeId,
+                  detailName: v.attributeDetailName
+                };
+              })
+            : []
+        });
+      });
+      return propList;
     }
-    return []
+    return [];
   }
 
   showGoodsPropDetail = async (cateId, goodsPropList) => {
@@ -1955,7 +1961,7 @@ export default class AppStore extends Store {
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetailList = this.attributesToProp(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
-        let catePropDetail = fromJS(catePropDetailList) 
+        let catePropDetail = fromJS(catePropDetailList);
 
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
@@ -2084,20 +2090,20 @@ export default class AppStore extends Store {
   onProductselectSku = (addProduct) => {
     let a = addProduct.concat(this.state().toJS().addSkUProduct);
     let newJson = []; //盛放去重后数据的新数组
-    for( let item1 of a){
+    for (let item1 of a) {
       let flag = true;
-      for( let item2 of newJson){
-        if(item1.pid==item2.pid){
+      for (let item2 of newJson) {
+        if (item1.pid == item2.pid) {
           flag = false;
         }
       }
-      if(flag){ //判断是否重复
+      if (flag) {
+        //判断是否重复
         newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
       }
     }
     this.dispatch('sku:addSkUProduct', newJson);
   };
-
 
   onRelatedList = async (param?: any) => {
     const { res } = await getRelatedList(param);
@@ -2223,7 +2229,8 @@ export default class AppStore extends Store {
     };
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
-      history.push('./goods-list');
+      // history.push('./goods-list');
+      history.replace('/goods-list');
     }
     //调接口
   };

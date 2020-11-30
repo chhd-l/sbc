@@ -414,9 +414,9 @@ export default class StepConsentDetail extends Component<any, any> {
           </div>
 
           <div className="detail-form">
-            <FormItem>
+            {/* <FormItem>
               <TreeSelect {...tProps} />
-            </FormItem>
+            </FormItem> */}
             <FormItem>
               <SelectGroup
                 defaultValue={

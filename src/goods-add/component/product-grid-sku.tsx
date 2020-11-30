@@ -109,8 +109,6 @@ export default class ProductGridSKU extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps(record) {
-              console.log(record, 22222222);
-              console.log(goodsNo, 333333333322);
               let a = []
               let b = ''
 
@@ -124,9 +122,6 @@ export default class ProductGridSKU extends React.Component<any, any> {
                   b = o.goodsInfoNo
                 }
               })
-
-
-              console.log(a,4444);
               return {
                 defaultChecked: record.goodsInfoNo == b // 配置默认勾选的列
               };

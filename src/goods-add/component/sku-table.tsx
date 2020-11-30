@@ -291,17 +291,17 @@ class SkuForm extends React.Component<any, any> {
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct&&addSkUProduct.map((i, index) => {
                         return(
-                          i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
+                          i.pid == rowInfo.subGoodsInfoNo&&i.targetGoodsIds.map((item, index) => {
                           return (
                             <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
-                              <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
+                              <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
                               <InputNumber
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
                                 defaultValue={item.bundleNum}
-                                key={item.goodsInfoNo}
+                                key={item.subGoodsInfoNo}
                                 min={0}
                                 onChange={(e) => {
-                                  if (i.pid == rowInfo.goodsInfoNo) {
+                                  if (i.pid == rowInfo.subGoodsInfoNo) {
                                     const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoId === a.subGoodsInfoId)[0];
                                     if (target) {
                                       target['bundleNum'] = e;
@@ -337,7 +337,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   // {
                   //   pattern: ValidConst.number,
-                  //   message: '0 or positive integer'
+                  //   message: 'Please enter the correct value'
                   // }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'description'),
@@ -511,23 +511,33 @@ class SkuForm extends React.Component<any, any> {
 
   onDel = (item, pid) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
-    console.log(item,11111);
-    console.log(pid);
-
-    console.log(addSkUProduct,2222);
+    // console.log(item,11111);
+    // console.log(pid);
+    // console.log(addSkUProduct,2222);
     let a = []
     let b = []
+    let c = []
     addSkUProduct.map((i) =>{
-      i.targetGoodsIds.map(o=>{
-        if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
-          a.push(o)
-        }
-      })
-      console.log(i);
+      if(i.pid == pid) {
+        i.targetGoodsIds.map(o=>{
+          if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
+            a.push(o)
+          }
+        })
+        b.push(
+          {
+            pid: pid,
+            targetGoodsIds: a
+          }
+        )
+      }else {
+        c.push(i)
+      }
+
     });
 
-    console.log(b,3333);
-    //onProductselectSku(getSkUProduct);
+    let d = b.concat(c)
+    onProductselectSku(d);
   };
 }
 

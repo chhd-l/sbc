@@ -32,16 +32,20 @@ class AttributeLibrary extends Component<any, any> {
         taggingFontColor: '',
         taggingFillColor: '',
         taggingType: 'Text',
-        taggingImgUrl: ''
+        taggingImgUrl: '',
+        displayStatus: false,
+        shopPage: []
       },
       isEdit: false,
       currentEditTagging: {},
       modalName: '',
-      colourList: []
+      colourList: [],
+      shopPageList: []
     };
   }
   componentDidMount() {
     this.querySysDictionary('colour');
+    this.querySysDictionary('shopPage');
     this.getTagging();
   }
 
@@ -95,7 +99,9 @@ class AttributeLibrary extends Component<any, any> {
       taggingFontColor: '',
       taggingFillColor: '',
       taggingType: 'Text',
-      taggingImgUrl: ''
+      taggingImgUrl: '',
+      displayStatus: false,
+      shopPage: []
     };
     this.setState(
       {
@@ -115,7 +121,9 @@ class AttributeLibrary extends Component<any, any> {
       taggingType: row.taggingType,
       taggingFontColor: row.taggingFontColor,
       taggingFillColor: row.taggingFillColor,
-      taggingImgUrl: row.taggingImgUrl
+      taggingImgUrl: row.taggingImgUrl,
+      displayStatus: row.displayStatus,
+      shopPage: row.shopPage ? row.shopPage.split(',') : []
     };
     this.setState(
       {
@@ -131,7 +139,9 @@ class AttributeLibrary extends Component<any, any> {
           taggingFillColor: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : '',
           taggingFontColor: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : '',
           taggingType: row.taggingType,
-          taggingImgUrl: row.taggingImgUrl
+          taggingImgUrl: row.taggingImgUrl,
+          displayStatus: row.displayStatus,
+          shopPage: row.shopPage ? row.shopPage.split(',') : []
         });
       }
     );
@@ -146,7 +156,9 @@ class AttributeLibrary extends Component<any, any> {
           taggingFontColor: taggingForm.taggingType === 'Text' ? taggingForm.taggingFontColor : '',
           taggingFillColor: taggingForm.taggingType === 'Text' ? taggingForm.taggingFillColor : '',
           taggingType: taggingForm.taggingType,
-          taggingImgUrl: taggingForm.taggingType === 'Text' ? '' : taggingForm.taggingImgUrl
+          taggingImgUrl: taggingForm.taggingType === 'Text' ? '' : taggingForm.taggingImgUrl,
+          displayStatus: taggingForm.displayStatus,
+          shopPage: taggingForm.shopPage
         };
         if (isEdit) {
           params = Object.assign(params, {
@@ -189,9 +201,16 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            colourList: res.context.sysDictionaryVOS
-          });
+          if (type === 'colour') {
+            this.setState({
+              colourList: res.context.sysDictionaryVOS
+            });
+          }
+          if (type === 'shopPage') {
+            this.setState({
+              shopPageList: res.context.sysDictionaryVOS
+            });
+          }
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -282,7 +301,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { title, taggingList, visible, modalName, colourList, taggingForm } = this.state;
+    const { title, taggingList, visible, modalName, colourList, taggingForm, shopPageList } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -337,16 +356,16 @@ class AttributeLibrary extends Component<any, any> {
         key: 'taggingImgUrl',
         render: (text) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
       },
-      {
-        title: 'Display in shop',
-        dataIndex: 'displayStatus',
-        key: 'displayStatus',
-        render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
-            <Switch checked={+text ? true : false}></Switch>
-          </Popconfirm>
-        )
-      },
+      // {
+      //   title: 'Display in shop',
+      //   dataIndex: 'displayStatus',
+      //   key: 'displayStatus',
+      //   render: (text, record) => (
+      //     <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+      //       <Switch checked={+text ? true : false}></Switch>
+      //     </Popconfirm>
+      //   )
+      // },
       {
         title: 'Product count',
         dataIndex: 'productNum',
@@ -554,6 +573,49 @@ class AttributeLibrary extends Component<any, any> {
                   })(<Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={taggingForm.taggingImgUrl} />)}
                 </FormItem>
               )}
+              <FormItem label="Display in shop">
+                {getFieldDecorator('displayStatus', {
+                  initialValue: taggingForm.displayStatus ? true : false
+                })(
+                  <Radio.Group
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onTaggingFormChange({
+                        field: 'displayStatus',
+                        value
+                      });
+                    }}
+                  >
+                    <Radio value={true}>Yes</Radio>
+                    <Radio value={false}>No</Radio>
+                  </Radio.Group>
+                )}
+              </FormItem>
+              {taggingForm.displayStatus ? (
+                <FormItem label="Shop page">
+                  {getFieldDecorator('shopPage', {
+                    rules: [{ required: true, message: 'Please selec shop page' }]
+                  })(
+                    <Select
+                      mode="multiple"
+                      style={{ width: '80%' }}
+                      onChange={(value) => {
+                        value = Array.isArray(value) ? value.join(',') : value;
+                        this.onTaggingFormChange({
+                          field: 'shopPage',
+                          value
+                        });
+                      }}
+                    >
+                      {shopPageList.map((item) => (
+                        <Option value={item.value} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+              ) : null}
             </Form>
           </Modal>
         ) : null}

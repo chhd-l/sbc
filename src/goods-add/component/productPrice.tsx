@@ -162,7 +162,7 @@ class SkuForm extends React.Component<any, any> {
     //               rules: [
     //                 {
     //                   pattern: ValidConst.number,
-    //                   message: '0 or positive integer'
+    //                   message: 'Please enter the correct value'
     //                 }
     //               ],
     //               initialValue: rowInfo.linePrice || 0
@@ -219,12 +219,12 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: '0 or positive integer'
+                    message: 'Please enter the correct value'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '60px', top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999} />)}
             </FormItem>
           </Col>
         </Row>
@@ -300,7 +300,7 @@ class SkuForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input market price'
+                            message: 'Please input subscription price'
                           },
                           {
                             pattern: ValidConst.zeroPrice,
@@ -384,7 +384,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -402,7 +402,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),

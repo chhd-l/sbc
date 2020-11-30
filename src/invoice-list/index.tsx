@@ -194,12 +194,20 @@ class InvoiceList extends Component<any, any> {
     this.setState(
       {
         visible: true,
-        orderNumber: ''
+        orderNumber: '',
+        selectedOrder: {
+          ordrAmount: '',
+          customerName: '',
+          paymentStatus: '',
+          consumerEmail: '',
+          billingAddress: ''
+        }
       },
       () => {
         form.setFieldsValue({
           orderNumber: ''
         });
+        
       }
     );
   };
@@ -694,7 +702,14 @@ class InvoiceList extends Component<any, any> {
           confirmLoading={confirmLoading}
           onCancel={() =>
             this.setState({
-              visible: false
+              visible: false,
+              selectedOrder: {
+                ordrAmount: '',
+                customerName: '',
+                paymentStatus: '',
+                consumerEmail: '',
+                billingAddress: ''
+              }
             })
           }
           footer={[

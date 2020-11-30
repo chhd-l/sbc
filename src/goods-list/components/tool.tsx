@@ -31,21 +31,14 @@ export default class Tool extends React.Component<any, any> {
 
   render() {
     let hasMenu = false;
-    if (
-      checkAuth('f_goods_up_down') ||
-      checkAuth('f_goods_6') ||
-      checkAuth('f_goods_temp_set')
-    ) {
+    if (checkAuth('f_goods_up_down') || checkAuth('f_goods_6') || checkAuth('f_goods_temp_set')) {
       hasMenu = true;
     }
 
     return (
       <div className="handle-bar">
         {hasMenu && (
-          <Dropdown
-            overlay={this._menu()}
-            getPopupContainer={() => document.getElementById('page-content')}
-          >
+          <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>
               {<FormattedMessage id="product.batchOperation" />}
               <Icon type="down" />
@@ -62,7 +55,6 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#"
               onClick={() => {
                 this._spuOnSale();
               }}
@@ -74,7 +66,6 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
-              href="#"
               onClick={() => {
                 this._spuOffSale();
               }}
@@ -86,7 +77,6 @@ export default class Tool extends React.Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="f_goods_6">
             <a
-              href="#"
               onClick={() => {
                 this._delGoods();
               }}

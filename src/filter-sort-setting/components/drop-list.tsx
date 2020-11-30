@@ -155,9 +155,9 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible',
         render: (text, record) => (
           <div>
-            {record.filterType === '1' && record.canDelFlag ? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null}
+            {/* {record.filterType === '1' && record.canDelFlag ? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null} */}
 
-            {record.canDelFlag ? (
+            {record.filterType !== '1' ? (
               <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText="Confirm" cancelText="Cancel">
                 <Tooltip placement="top" title="Delete">
                   <a className="iconfont iconDelete"></a>

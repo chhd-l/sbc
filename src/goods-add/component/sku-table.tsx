@@ -248,6 +248,8 @@ class SkuForm extends React.Component<any, any> {
           rowInfo.goodsInfoBundleRels = addSkUProduct
           let res = _.unionBy([target], addSkUProduct, 'subGoodsInfoId');
         }*/
+        //console.log(addSkUProduct,1111111111111)
+
         if(addSkUProduct.length == 0) {
           a.push({
             pid: rowInfo.goodsInfoNo,
@@ -290,12 +292,14 @@ class SkuForm extends React.Component<any, any> {
                     </div>
                     <div style={{ lineHeight: 2 }}>
                       {addSkUProduct&&addSkUProduct.map((i, index) => {
+                        this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', i.targetGoodsIds);
                         return(
                           i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
+
                             return (
                             <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
-                              <Input
+                              <InputNumber
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
                                 defaultValue={item.bundleNum}
                                 key={item.subGoodsInfoNo}
@@ -445,9 +449,8 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(e,1111111111);
 
-    console.log(id);
+    // console.log(id);
     //console.log(key);
     //console.log(e,44444);
     editGoodsItem(id, key, e);
@@ -538,7 +541,6 @@ class SkuForm extends React.Component<any, any> {
       }
 
     });
-    console.log(a,222222222);
     let d = b.concat(c)
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
     onProductselectSku(d);

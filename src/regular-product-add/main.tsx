@@ -60,6 +60,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: res
     });
+    this.store.onMainTabChange(res);
   };
 
   onPrev = (res) => {

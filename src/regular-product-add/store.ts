@@ -2005,7 +2005,7 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeStoreCategory = async (goodsCateId) => {
-    const result: any = await getStoreCateList(goodsCateId);
+    const result: any = await getStoreCateList();
     if (result.res.code === Const.SUCCESS_CODE) {
       this.dispatch('goodsActor: initStoreCateList', fromJS((result.res as any).context.storeCateResponseVOList));
     }

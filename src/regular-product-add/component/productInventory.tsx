@@ -179,7 +179,7 @@ class SkuForm extends React.Component<any, any> {
                   },
                   {
                     pattern: ValidConst.number,
-                    message: '0 or positive integer'
+                    message: 'Please enter the correct value'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),

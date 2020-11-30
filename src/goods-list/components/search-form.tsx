@@ -172,7 +172,7 @@ export default class SearchForm extends React.Component<any, any> {
                 label={<p style={styles.label}>Sales category</p>}
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth:200 }}
                 treeDefaultExpandAll
                 onChange={(value) => {
                   let sourceCategories = allCateList ? allCateList.toJS() : [];
@@ -209,7 +209,7 @@ export default class SearchForm extends React.Component<any, any> {
                 label={<p style={styles.label}>Product category</p>}
                 /* defaultValue="全部"*/
                 // style={styles.wrapper}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth:200 }}
                 treeDefaultExpandAll
                 onChange={(value) => {
                   onFormFieldChange({ key: 'cateId', value });

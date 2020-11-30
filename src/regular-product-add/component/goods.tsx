@@ -642,7 +642,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          {this.state.saleableType == true ? (
+          {goods.get('saleableFlag') == 0 ? (
             <Col span={12}>
               <FormItem {...formItemLayout} label="Display on shop">
                 {getFieldDecorator('displayFlag', {
@@ -738,17 +738,17 @@ class GoodsForm extends React.Component<any, any> {
     const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
 
-    if (key === 'saleableFlag') {
-      if (e.target.value == 0) {
-        this.setState({
-          saleableType: true
-        });
-      } else {
-        this.setState({
-          saleableType: false
-        });
-      }
-    }
+    // if (key === 'saleableFlag') {
+    //   if (e.target.value == 0) {
+    //     this.setState({
+    //       saleableType: true
+    //     });
+    //   } else {
+    //     this.setState({
+    //       saleableType: false
+    //     });
+    //   }
+    // }
 
     if (e && e.target) {
       e = e.target.value;

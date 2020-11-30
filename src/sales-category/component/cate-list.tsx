@@ -164,11 +164,12 @@ export default class CateList extends React.Component<any, any> {
                       rowInfo.get('storeCateId'),
                       rowInfo.get('cateName'),
                       rowInfo.get('cateParentId'),
+                      rowInfo.get('cateRouter'),
                       rowInfo.get('goodsCateId'),
                       rowInfo.get('children'),
                       rowInfo.get('cateTitle'),
                       rowInfo.get('cateDescription'),
-                      rowInfo.get('cateType'),
+                      // rowInfo.get('cateType'),
                       rowInfo.get('cateImg')
                     )}
                     className="iconfont iconEdit"
@@ -206,7 +207,18 @@ export default class CateList extends React.Component<any, any> {
   /**
    * 显示修改弹窗
    */
-  _showEditModal = (storeCateId: string, cateName: string, cateParentId: number, goodsCateId: number, children: IList, cateTitle: string, cateDescription: string, cateType: number, cateImg: IList) => {
+  _showEditModal = (
+    storeCateId: string,
+    cateName: string,
+    cateParentId: number,
+    cateRouter: string,
+    goodsCateId: number,
+    children: IList,
+    cateTitle: string,
+    cateDescription: string,
+    // cateType: number,
+    cateImg: IList
+  ) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
     if (cateParentId > 0) {
@@ -219,12 +231,13 @@ export default class CateList extends React.Component<any, any> {
       storeCateId,
       cateName,
       cateParentName,
+      cateRouter,
       cateParentId,
       goodsCateId,
       children,
       cateTitle,
-      cateDescription,
-      cateType
+      cateDescription
+      // cateType
     });
 
     showEditModal(cateInfo, cateImg);

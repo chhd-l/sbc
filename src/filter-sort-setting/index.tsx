@@ -228,7 +228,7 @@ class FilterSortSetting extends Component<any, any> {
               <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
             </TabPane>
             <TabPane tab="Customized filter" key="customizedFilter">
-              <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter>
+              {/* <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter> */}
               <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
             </TabPane>
             <TabPane tab="Sort by" key="sortBy">

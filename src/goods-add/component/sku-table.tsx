@@ -293,7 +293,7 @@ class SkuForm extends React.Component<any, any> {
                         return(
                           i.pid == rowInfo.goodsInfoNo&&i.targetGoodsIds.map((item, index) => {
                           return (
-                            <div className="space-between-align" key={item.goodsInfoNo} style={{ paddingLeft: 5 }}>
+                            <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
                               <InputNumber
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
@@ -311,7 +311,7 @@ class SkuForm extends React.Component<any, any> {
                                   }
                                 }}
                               />
-                              <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, index)}></a>
+                              <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(item, i.pid)}></a>
                             </div>
                           );
                         })
@@ -509,10 +509,25 @@ class SkuForm extends React.Component<any, any> {
     }
   };
 
-  onDel = (item, index) => {
+  onDel = (item, pid) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
-    let getSkUProduct = addSkUProduct.filter((a) => a != item);
-    onProductselectSku(getSkUProduct);
+    console.log(item,11111);
+    console.log(pid);
+
+    console.log(addSkUProduct,2222);
+    let a = []
+    let b = []
+    addSkUProduct.map((i) =>{
+      i.targetGoodsIds.map(o=>{
+        if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
+          a.push(o)
+        }
+      })
+      console.log(i);
+    });
+
+    console.log(b,3333);
+    //onProductselectSku(getSkUProduct);
   };
 }
 

@@ -89,7 +89,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
             targetGoodsIds.push({
               subGoodsInfoId: item.goodsInfoId,
               bundleNum: 0,
-              goodsInfoNo: item.goodsInfoNo
+              goodsInfoNo: item.goodsInfoNo,
+              subGoodsInfoNo: item.goodsInfoNo,
             })
           );
           targetGoodsList.push({
@@ -102,7 +103,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
             });
-
             onProductselectSku(a);
             this.props.showModal({ type: 0 }, this.props.pid);
           } else {

@@ -68,7 +68,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
   }
 
   render() {
-    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, goodsNo, showValidGood } = this.state;
     const { rowChangeBackFun } = this.props;
 
     return (
@@ -109,11 +109,21 @@ export default class ProductGridSKU extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps(record) {
-              console.log(record, 22222222);
-              console.log(this.state.goodsNo, 333333333322);
+              let a = []
+              let b = ''
 
+              goodsNo.map(item=>{
+                return item.targetGoodsIds.map(i=>{
+                  return a.push(i)
+                })
+              })
+              a.map(o=>{
+                if(o.goodsInfoNo == record.goodsInfoNo) {
+                  b = o.goodsInfoNo
+                }
+              })
               return {
-                defaultChecked: record.goodsInfoNo == '8068576583' // 配置默认勾选的列
+                defaultChecked: record.goodsInfoNo == b // 配置默认勾选的列
               };
             }
             /*getCheckboxProps: (record) => {

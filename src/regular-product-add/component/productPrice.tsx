@@ -198,7 +198,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '60px', top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999} />)}
             </FormItem>
           </Col>
         </Row>
@@ -259,7 +259,7 @@ class SkuForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input market price'
+                            message: 'Please input subscription price'
                           }
                         ],
                         onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),

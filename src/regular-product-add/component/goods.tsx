@@ -132,9 +132,6 @@ export default class Info extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(GoodsForm);
-    this.state = {
-      saleableType: 1
-    };
   }
 
   render() {
@@ -175,11 +172,21 @@ class GoodsForm extends React.Component<any, any> {
     this.state = {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
       filterList: [],
-      selectFilters: []
+      selectFilters: [],
+      saleableType: null
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.relaxProps.goods.get('saleableFlag') == 0) {
+      this.setState({
+        saleableType: true
+      });
+    } else {
+      this.setState({
+        saleableType: false
+      });
+    }
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     const filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {
@@ -227,12 +234,15 @@ class GoodsForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    const storeCateValues =
-      (storeCateIds &&
+    var parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map(x=>x.cateParentId) : [];
+    const storeCateValues = [];
+
+    storeCateIds &&
         storeCateIds.toJS().map((id) => {
-          return { value: id };
-        })) ||
-      [];
+          if(!parentIds.includes(id)) {
+            storeCateValues.push({ value: id });
+          }
+    });
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -245,9 +255,6 @@ class GoodsForm extends React.Component<any, any> {
           return { value: x.filterValueId };
         })) ||
       null;
-    // const storeCateValues = [];
-    //处理分类的树形图结构数据
-    //this._editGoods.bind(1, 'subscriptionStatus')
     const loop = (cateList) =>
       cateList &&
       cateList.map((item) => {
@@ -489,7 +496,7 @@ class GoodsForm extends React.Component<any, any> {
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
                   placeholder="Please select sales category"
-                  notFoundContent="No classification"
+                  notFoundContent="No sales category"
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.storeCateChange}
@@ -657,7 +664,7 @@ class GoodsForm extends React.Component<any, any> {
             </Col>
           ) : null}
         </Row>
-        <Row>
+        {/* <Row>
           <Col span={8}>
             <FormItem {...formItemLayout} label="Customized filter">
               {getFieldDecorator('productFilter', {
@@ -684,7 +691,7 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-        </Row>
+        </Row> */}
         <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem

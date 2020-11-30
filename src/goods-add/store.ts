@@ -274,7 +274,15 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
 
       // 合并多属性字段
-      let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
+      let goodsPropDetailRelsOrigin = [];
+      
+      tmpContext.goodsAttributesValueRelList && tmpContext.goodsAttributesValueRelList.map(x=>{
+        goodsPropDetailRelsOrigin.push({
+          propId: x.goodsAttributeId,
+          detailId: x.goodsAttributeValueId
+        })
+      })
+
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
         goodsPropDetailRelsOrigin.forEach((item) => {
@@ -877,21 +885,26 @@ export default class AppStore extends Store {
   }
   _validPriceFormsNew() {
     let valid = true;
+    let tip = 0;
     let goodsList = this.state().get('goodsList');
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+          tip = 1;
           valid = false;
           return;
         }
         if (item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0)) {
+          tip = 2;
           valid = false;
           return;
         }
       });
     }
-    if (!valid) {
+    if (tip === 1) {
       message.error('Please input market price');
+    } else if (tip === 2) {
+      message.error('Please input subscription price');
     }
     return valid;
   }
@@ -1336,8 +1349,8 @@ export default class AppStore extends Store {
         detailIds.forEach((dItem) => {
           goodsPropDatil = goodsPropDatil.push(
             Map({
-              goodsAttributeValueId: propId,
-              goodsAttributeId: dItem
+              goodsAttributeId: propId,
+              goodsAttributeValueId: dItem
             })
           );
         });
@@ -2230,6 +2243,7 @@ export default class AppStore extends Store {
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
+      message.success('Save successfully.');
       history.replace('/goods-list');
     }
     //调接口

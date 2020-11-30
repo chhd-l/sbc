@@ -93,7 +93,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor:taggingTotal', fromJS((results[8].res as any).context));
 
       this.dispatch('related:goodsId', goodsId);
-
+      this.dispatch('goodsActor:getGoodsId', goodsId);
       // fetchFiltersTotal
     });
     // 如果是编辑则判断是否有企业购商品
@@ -284,8 +284,14 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
-      let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
+      let goodsPropDetailRelsOrigin = [];
 
+      tmpContext.goodsAttributesValueRelList && tmpContext.goodsAttributesValueRelList.map(x=>{
+        goodsPropDetailRelsOrigin.push({
+          propId: x.goodsAttributeId,
+          detailId: x.goodsAttributeValueId
+        })
+      })
 
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
@@ -1329,8 +1335,8 @@ export default class AppStore extends Store {
         detailIds.forEach((dItem) => {
           goodsPropDatil = goodsPropDatil.push(
             Map({
-              goodsAttributeValueId: propId,
-              goodsAttributeId: dItem
+              goodsAttributeId: propId,
+              goodsAttributeValueId: dItem
             })
           );
         });
@@ -1525,8 +1531,10 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
+      console.log('edit------------------');
       result = await edit(param.toJS());
     } else {
+      console.log('new------------------');
       result = await save(param.toJS());
     }
 
@@ -1921,26 +1929,28 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   attributesToProp(attributesList) {
-    if(attributesList){
-      var propList = []
-      attributesList.map(a=>{
+    if (attributesList) {
+      let propList = [];
+      attributesList.map((a) => {
         propList.push({
           propId: a.id,
           propName: a.attributeName,
-          goodsPropDetails: a.attributesValuesVOList ? a.attributesValuesVOList.map(v=>{
-            return {
-              detailId: v.id,
-              propId: v.attributeId,
-              detailName: v.attributeDetailName
-            }
-          }) : []
-        })
-      })
-      return propList
+          goodsPropDetails: a.attributesValuesVOList
+            ? a.attributesValuesVOList.map((v) => {
+                return {
+                  detailId: v.id,
+                  propId: v.attributeId,
+                  detailName: v.attributeDetailName
+                };
+              })
+            : []
+        });
+      });
+      return propList;
     }
-    return []
+    return [];
   }
-   
+
   showGoodsPropDetail = async (cateId, goodsPropList) => {
     if (!cateId) {
       this.dispatch('propActor: clear');
@@ -1949,7 +1959,7 @@ export default class AppStore extends Store {
       if (result.res.code === Const.SUCCESS_CODE) {
         let catePropDetailList = this.attributesToProp(result.res.context);
         //类目属性中的属性值没有其他，拼接一个其他选项
-        let catePropDetail = fromJS(catePropDetailList) 
+        let catePropDetail = fromJS(catePropDetailList);
 
         catePropDetail = catePropDetail.map((prop) => {
           let goodsPropDetails = prop.get('goodsPropDetails').push(
@@ -2081,7 +2091,6 @@ export default class AppStore extends Store {
   };
 
   onRelatedList = async (param?: any) => {
-    this.dispatch('loading:start');
     const { res } = await getRelatedList(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
@@ -2205,7 +2214,9 @@ export default class AppStore extends Store {
     };
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
-      history.push('./goods-list');
+      // history.push('./goods-list');
+      message.success('Save successfully.');
+      history.replace('/goods-list');
     }
     //调接口
   };

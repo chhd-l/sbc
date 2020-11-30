@@ -132,9 +132,6 @@ export default class Info extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(GoodsForm);
-    this.state = {
-      saleableType: 1
-    };
   }
 
   render() {
@@ -175,11 +172,21 @@ class GoodsForm extends React.Component<any, any> {
     this.state = {
       storeCateIds: props.relaxProps.goods.get('storeCateIds'), // 店铺分类id列表
       filterList: [],
-      selectFilters: []
+      selectFilters: [],
+      saleableType: null
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.relaxProps.goods.get('saleableFlag') == 0) {
+      this.setState({
+        saleableType: true
+      });
+    } else {
+      this.setState({
+        saleableType: false
+      });
+    }
     const storeCateIds = nextProps.relaxProps.goods.get('storeCateIds');
     const filtersTotal = nextProps.relaxProps.filtersTotal;
     if (this.state.storeCateIds != storeCateIds) {

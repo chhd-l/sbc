@@ -539,8 +539,8 @@ class SkuForm extends React.Component<any, any> {
     });
     console.log(a,222222222);
     let d = b.concat(c)
-    onProductselectSku(d);
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
+    onProductselectSku(d);
   };
 }
 

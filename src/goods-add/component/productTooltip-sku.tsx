@@ -36,7 +36,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     //应用标示。如添加秒杀商品：saleType
     application?: string;
     pid: any;
-    initCateList: any
+    initCateList: any;
   };
 
   static relaxProps = {
@@ -118,7 +118,20 @@ class ProductTooltipSKU extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {<ProductGridSKU form={this.props.form} pid={this.props.pid} visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
+        {
+          <ProductGridSKU
+            form={this.props.form}
+            pid={this.props.pid}
+            visible={visible}
+            showValidGood={showValidGood}
+            skuLimit={skuLimit}
+            isScroll={false}
+            selectedSkuIds={selectedSkuIds}
+            selectedRows={selectedRows}
+            rowChangeBackFun={this.rowChangeBackFun}
+            searchParams={searchParams}
+          />
+        }
       </Modal>
     );
   }

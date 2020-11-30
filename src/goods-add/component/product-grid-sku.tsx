@@ -33,24 +33,24 @@ export default class ProductGridSKU extends React.Component<any, any> {
     };
   }
 
-   props: {
+  props: {
     relaxProps?: {
       addSkUProduct: any;
     };
   };
 
   static relaxProps = {
-    addSkUProduct: 'addSkUProduct',
+    addSkUProduct: 'addSkUProduct'
   };
 
   componentDidMount() {
     const { addSkUProduct } = this.props.relaxProps;
     this.init(this.props.searchParams ? this.props.searchParams : {});
-    let pid = addSkUProduct.filter(item=>item.pid == this.props.pid)
-    console.log(pid,1111111111);
+    let pid = addSkUProduct.filter((item) => item.pid == this.props.pid);
+    console.log(pid, 1111111111);
     this.setState({
-      goodsNo:pid
-    })
+      goodsNo: pid
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -73,7 +73,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
     return (
       <div className="content">
-        <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true}/>
+        <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true} />
         <DataGrid
           loading={loading}
           rowKey={(record, index) => record.goodsInfoNo + index}
@@ -109,10 +109,12 @@ export default class ProductGridSKU extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps(record) {
-              console.log(record,111111111);
+              console.log(record, 22222222);
+              console.log(this.state.goodsNo, 333333333322);
+
               return {
-                defaultChecked: record.goodsInfoNo == "8068576583" // 配置默认勾选的列
-              }
+                defaultChecked: record.goodsInfoNo == '8068576583' // 配置默认勾选的列
+              };
             }
             /*getCheckboxProps: (record) => {
               console.log(this.state.goodsNo,22222222);
@@ -158,7 +160,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
             }}
           />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="200px"/>
+          <Column title="Product name" dataIndex="goodsInfoName" key="goodsInfoName" width="200px" />
           <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
           <Column title="Specification" dataIndex="specName" key="specName" />
           <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />

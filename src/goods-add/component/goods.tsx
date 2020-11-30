@@ -230,15 +230,15 @@ class GoodsForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    var parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map(x=>x.cateParentId) : [];
+    var parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
 
     storeCateIds &&
       storeCateIds.toJS().map((id) => {
-        if(!parentIds.includes(id)) {
+        if (!parentIds.includes(id)) {
           storeCateValues.push({ value: id });
         }
-    });
+      });
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -724,7 +724,7 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail, changeStoreCategory, changePropVal} = this.props.relaxProps;
+    const { showGoodsPropDetail, changeStoreCategory, changePropVal } = this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
   };
@@ -1003,7 +1003,9 @@ class GoodsForm extends React.Component<any, any> {
     return (
       taggingTotalTree &&
       taggingTotalTree.map((item) => {
-        return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('taggingName')} />;
+        if (item.get('displayStatus') === true) {
+          return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('taggingName')} />;
+        }
       })
     );
   };

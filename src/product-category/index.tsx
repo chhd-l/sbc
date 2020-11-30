@@ -241,7 +241,7 @@ class PeoductCategory extends Component<any, any> {
         render: (text, record) => (
           <div>
             {record.cateGrade === 3 ? (
-              <Tooltip placement="top" title="Bind attribute">
+              <Tooltip placement="topLeft" title="Bind attribute">
                 <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
               </Tooltip>
             ) : (
@@ -285,7 +285,7 @@ class PeoductCategory extends Component<any, any> {
           <Headline title={title} />
           <Alert message={description} type="info" />
 
-          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} />
+          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{marginRight:10}} />
         </div>
         <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>

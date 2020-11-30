@@ -1922,7 +1922,7 @@ export default class AppStore extends Store {
    */
   attributesToProp(attributesList) {
     if(attributesList){
-      var propList = []
+      let propList = []
       attributesList.map(a=>{
         propList.push({
           propId: a.id,

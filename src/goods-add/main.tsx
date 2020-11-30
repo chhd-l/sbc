@@ -78,6 +78,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: type
     });
+    this.store.onMainTabChange(type);
   };
 
   onNext = (res) => {

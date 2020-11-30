@@ -177,7 +177,7 @@ class SkuForm extends React.Component<any, any> {
       title: 'Purchase type',
       key: 'index',
       render: (rowInfo) => (
-        <Row>
+        <Row class="purchase-row">
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               <div>

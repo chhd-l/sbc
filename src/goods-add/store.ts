@@ -2230,6 +2230,7 @@ export default class AppStore extends Store {
     const { res } = (await editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       // history.push('./goods-list');
+      message.success('Save successfully.');
       history.replace('/goods-list');
     }
     //调接口

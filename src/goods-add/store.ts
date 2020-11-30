@@ -274,7 +274,15 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
 
       // 合并多属性字段
-      let goodsPropDetailRelsOrigin = this.attributesToProp(tmpContext.goodsAttrbutesValueRelList);
+      let goodsPropDetailRelsOrigin = [];
+      
+      tmpContext.goodsAttributesValueRelList && tmpContext.goodsAttributesValueRelList.map(x=>{
+        goodsPropDetailRelsOrigin.push({
+          propId: x.goodsAttributeId,
+          detailId: x.goodsAttributeValueId
+        })
+      })
+
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
         goodsPropDetailRelsOrigin.forEach((item) => {
@@ -1335,8 +1343,8 @@ export default class AppStore extends Store {
         detailIds.forEach((dItem) => {
           goodsPropDatil = goodsPropDatil.push(
             Map({
-              goodsAttributeValueId: propId,
-              goodsAttributeId: dItem
+              goodsAttributeId: propId,
+              goodsAttributeValueId: dItem
             })
           );
         });

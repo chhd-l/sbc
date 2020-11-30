@@ -34,7 +34,7 @@ class AttributeLibrary extends Component<any, any> {
         taggingType: 'Text',
         taggingImgUrl: '',
         displayStatus: false,
-        shopPage: []
+        showPage: []
       },
       isEdit: false,
       currentEditTagging: {},
@@ -101,7 +101,7 @@ class AttributeLibrary extends Component<any, any> {
       taggingType: 'Text',
       taggingImgUrl: '',
       displayStatus: false,
-      shopPage: []
+      showPage: []
     };
     this.setState(
       {
@@ -123,7 +123,7 @@ class AttributeLibrary extends Component<any, any> {
       taggingFillColor: row.taggingFillColor,
       taggingImgUrl: row.taggingImgUrl,
       displayStatus: row.displayStatus,
-      shopPage: row.shopPage ? row.shopPage.split(',') : []
+      showPage: row.showPage ? row.showPage.split(',') : []
     };
     this.setState(
       {
@@ -141,7 +141,7 @@ class AttributeLibrary extends Component<any, any> {
           taggingType: row.taggingType,
           taggingImgUrl: row.taggingImgUrl,
           displayStatus: row.displayStatus,
-          shopPage: row.shopPage ? row.shopPage.split(',') : []
+          showPage: row.showPage ? row.showPage.split(',') : []
         });
       }
     );
@@ -158,11 +158,10 @@ class AttributeLibrary extends Component<any, any> {
           taggingType: taggingForm.taggingType,
           taggingImgUrl: taggingForm.taggingType === 'Text' ? '' : taggingForm.taggingImgUrl,
           displayStatus: taggingForm.displayStatus,
-          shopPage: taggingForm.shopPage
+          showPage: Array.isArray(taggingForm.showPage) ? taggingForm.showPage.join(',') : taggingForm.showPage
         };
         if (isEdit) {
           params = Object.assign(params, {
-            displayStatus: currentEditTagging.displayStatus ? true : false,
             id: currentEditTagging.id
           });
           this.updateTagging(params);
@@ -593,7 +592,7 @@ class AttributeLibrary extends Component<any, any> {
               </FormItem>
               {taggingForm.displayStatus ? (
                 <FormItem label="Shop page">
-                  {getFieldDecorator('shopPage', {
+                  {getFieldDecorator('showPage', {
                     rules: [{ required: true, message: 'Please selec shop page' }]
                   })(
                     <Select
@@ -602,7 +601,7 @@ class AttributeLibrary extends Component<any, any> {
                       onChange={(value) => {
                         value = Array.isArray(value) ? value.join(',') : value;
                         this.onTaggingFormChange({
-                          field: 'shopPage',
+                          field: 'showPage',
                           value
                         });
                       }}

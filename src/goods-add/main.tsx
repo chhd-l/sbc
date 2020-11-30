@@ -61,6 +61,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: res
     });
+    this.store.onMainTabChange(res);
   };
 
   onPrev = (res) => {
@@ -95,6 +96,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: type
     });
+    this.store.onMainTabChange(type);
   };
 
   render() {
@@ -129,7 +131,7 @@ export default class Main extends React.Component<any, any> {
         </div>
         <div className="container ">
           <Tabs
-            activeKey={this.state.tabType}
+            activeKey={this.store.get('activeTabKey')}
             // onChange={(activeKey) => this.store.onMainTabChange(activeKey)}
             defaultActiveKey="main"
             ref={(e) => {

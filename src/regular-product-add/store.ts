@@ -2084,7 +2084,6 @@ export default class AppStore extends Store {
   };
 
   onRelatedList = async (param?: any) => {
-    this.dispatch('loading:start');
     const { res } = await getRelatedList(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {

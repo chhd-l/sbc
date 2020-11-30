@@ -31,7 +31,8 @@ export default class Interaction extends React.Component<any, any> {
       treeSource: [],
       treeData: [],
       filterList: [],
-      sortList: []
+      sortList: [],
+      example: 'Example: ${product name}-${product SPU}'
     };
     this.getPageTypes = this.getPageTypes.bind(this);
     this.getCategories = this.getCategories.bind(this);
@@ -295,7 +296,7 @@ export default class Interaction extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation, noLanguageSelect } = this.props;
-    const { pageList, interaction, pageTypeCode, treeData, filterList, sortList } = this.state;
+    const { pageList, interaction, pageTypeCode, treeData, filterList, sortList, example } = this.state;
     const targetList = [
       { name: 'External', value: '_blank' },
       { name: 'Self', value: '_self' }
@@ -336,7 +337,7 @@ export default class Interaction extends React.Component<any, any> {
               <div>
                 <FormItem {...layout} label="Page">
                   {getFieldDecorator('pageId', {
-                    initialValue: navigation.pageId,
+                    initialValue: pageList && pageList.length > 0 ? navigation.pageId : null,
                     rules: [{ required: true, message: 'Please select page' }]
                   })(
                     <Select onChange={this.pageChange}>
@@ -413,8 +414,10 @@ export default class Interaction extends React.Component<any, any> {
                   </div>
                 ) : pageTypeCode !== '' ? (
                   <FormItem {...layout} label="Parameter">
+                    <span className="tip ant-form-item-required">{example}</span>
                     {getFieldDecorator('paramsField', {
-                      initialValue: navigation.paramsField
+                      initialValue: navigation.paramsField,
+                      rules: [{ required: true, message: 'Please input parameter' }]
                     })(
                       <Input.TextArea
                         autoSize={{ minRows: 8, maxRows: 10 }}

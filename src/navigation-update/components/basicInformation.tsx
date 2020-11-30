@@ -35,10 +35,10 @@ export default class BasicInformation extends React.Component<any, any> {
               {getFieldDecorator('navigationName', {
                 initialValue: navigation.navigationName,
                 rules: [
-                  {required: true, message: 'Please input Navigation Name'},
+                  { required: true, message: 'Please input Navigation Name' },
                   {
                     validator: (_rule, value, callback) => {
-                     if (this.props.topNames && this.props.topNames.includes(value)) {
+                      if (this.props.topNames && this.props.topNames.includes(value)) {
                         callback('Top-level navigation cannot be repeated');
                       } else {
                         callback();
@@ -56,6 +56,9 @@ export default class BasicInformation extends React.Component<any, any> {
               )}
             </FormItem>
             <FormItem {...layout} label="Navigation Link">
+              <span className="tip ant-form-item-required" style={{top: '20px'}}>
+                External URL like: /cat, internal URL like: http://www.google.com/
+              </span>
               {getFieldDecorator('navigationLink', {
                 initialValue: navigation.navigationLink
               })(

@@ -511,22 +511,34 @@ class SkuForm extends React.Component<any, any> {
 
   onDel = (item, pid) => {
     const { addSkUProduct, onProductselectSku } = this.props.relaxProps;
-    console.log(item,11111);
-    console.log(pid);
-
-    console.log(addSkUProduct,2222);
+    // console.log(item,11111);
+    // console.log(pid);
+    // console.log(addSkUProduct,2222);
     let a = []
     let b = []
+    let c = []
     addSkUProduct.map((i) =>{
-      i.targetGoodsIds.map(o=>{
-        if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
-          a.push(o)
-        }
-      })
-      console.log(i);
+      if(i.pid == pid) {
+        i.targetGoodsIds.map(o=>{
+          if (o.subGoodsInfoNo !== item.subGoodsInfoNo) {
+            a.push(o)
+          }
+        })
+        b.push(
+          {
+            pid: pid,
+            targetGoodsIds: a
+          }
+        )
+      }else {
+        c.push(i)
+      }
+
     });
 
-    console.log(b,3333);
+    console.log(a,111);
+    console.log(b,222);
+    console.log(c,333);
     //onProductselectSku(getSkUProduct);
   };
 }

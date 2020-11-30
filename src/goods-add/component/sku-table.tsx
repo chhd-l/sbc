@@ -295,13 +295,14 @@ class SkuForm extends React.Component<any, any> {
                             return (
                             <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
                               <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
-                              <InputNumber
+                              <Input
                                 style={{ width: '60px', height: '25px', textAlign: 'center' }}
                                 defaultValue={item.bundleNum}
                                 key={item.subGoodsInfoNo}
-                                min={0}
+                                min={1}
+                                step={1}
                                 onChange={(e) => {
-                                  if (i.pid == rowInfo.subGoodsInfoNo) {
+                                  if (i.pid == rowInfo.goodsInfoNo) {
                                     const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoId)[0];
                                     if (target) {
                                       target['bundleNum'] = e;

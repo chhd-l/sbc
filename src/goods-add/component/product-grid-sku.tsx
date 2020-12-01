@@ -75,7 +75,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true} />
         <DataGrid
           loading={loading}
-          rowKey={(record, index) => record.goodsInfoNo + index}
+          rowKey={(record, index) => record.goodsInfoNo}
           dataSource={goodsInfoPage.content && goodsInfoPage.content}
           isScroll={false}
           pagination={{
@@ -108,9 +108,9 @@ export default class ProductGridSKU extends React.Component<any, any> {
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps(record) {
-              console.log(record);
+              //console.log(record);
               let a = [];
-              let b = '';
+              let b = null;
               goodsNo.map((item) => {
                 return item.targetGoodsIds.map((i) => {
                   return a.push(i);
@@ -120,16 +120,15 @@ export default class ProductGridSKU extends React.Component<any, any> {
               //console.log(record);
               a.map((o) => {
                 if (o.subGoodsInfoNo == record.goodsInfoNo) {
-                  console.log(record.goodsInfoNo == b);
                   if (o.subGoodsInfoNo) {
-                    b = o.subGoodsInfoNo;
-                  } else {
-                    return;
+                    if (record.goodsInfoNo == o.subGoodsInfoNo) {
+                      b = 'checked';
+                    }
                   }
                 }
               });
               return {
-                defaultChecked: record.goodsInfoNo == b // 配置默认勾选的列
+                defaultChecked: b // 配置默认勾选的列
               };
             }
             /*getCheckboxProps: (record) => {

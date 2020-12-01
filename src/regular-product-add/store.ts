@@ -1940,6 +1940,7 @@ export default class AppStore extends Store {
         propList.push({
           propId: a.id,
           propName: a.attributeName,
+          isSingle: a.attributeType === 'Single choice',
           goodsPropDetails: a.attributesValuesVOList
             ? a.attributesValuesVOList.map((v) => {
                 return {
@@ -1957,6 +1958,7 @@ export default class AppStore extends Store {
   }
 
   showGoodsPropDetail = async (cateId, goodsPropList) => {
+    this.dispatch('propActor: setPropList', []);
     if (!cateId) {
       this.dispatch('propActor: clear');
     } else {
@@ -1967,13 +1969,7 @@ export default class AppStore extends Store {
         let catePropDetail = fromJS(catePropDetailList);
 
         catePropDetail = catePropDetail.map((prop) => {
-          let goodsPropDetails = prop.get('goodsPropDetails').push(
-            fromJS({
-              detailId: 0,
-              detailName: 'Other',
-              select: ''
-            })
-          );
+          let goodsPropDetails = prop.get('goodsPropDetails');
           return prop.set('goodsPropDetails', goodsPropDetails);
         });
         //将商品中的属性与属性值信息映射到类目属性里

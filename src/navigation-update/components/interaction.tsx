@@ -416,8 +416,7 @@ export default class Interaction extends React.Component<any, any> {
                   <FormItem {...layout} label="Parameter">
                     <span className="tip ant-form-item-required">{example}</span>
                     {getFieldDecorator('paramsField', {
-                      initialValue: navigation.paramsField,
-                      rules: [{ required: true, message: 'Please input parameter' }]
+                      initialValue: navigation.paramsField
                     })(
                       <Input.TextArea
                         autoSize={{ minRows: 8, maxRows: 10 }}

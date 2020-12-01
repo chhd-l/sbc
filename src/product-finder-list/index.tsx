@@ -133,7 +133,8 @@ class ProductFinderList extends Component<any, any> {
         title: 'Consumer Type',
         dataIndex: 'consumerType',
         key: 'consumerType',
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (text === 1 ? 'Guest' : 'Member')
       },
       {
         title: 'Order Number',

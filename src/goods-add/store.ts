@@ -1396,7 +1396,6 @@ export default class AppStore extends Store {
       } else {
         skuNoMap = skuNoMap.set(item.get('goodsInfoNo') + '', '1');
       }
-
       // 规格id集合
       let mockSpecIds = List();
       // 规格值id集合
@@ -1419,6 +1418,15 @@ export default class AppStore extends Store {
           return false;
         }
       }
+      let a = this.state().get('addSkUProduct').filter(a=>a.pid == item.toJS().goodsInfoNo)
+      let b = []
+      a.map((i)=>{
+        b = i.targetGoodsIds
+        console.log(i.targetGoodsIds,222222222);
+      })
+      console.log(b,111111111);
+      console.log(item,33333);
+
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1433,12 +1441,14 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels') || [],
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined? item.get('goodsInfoBundleRels'): b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
         })
       );
     });
+    console.log(goodsList.toJS(),'+++++++++++');
+    console.log(this.state().get('addSkUProduct'),'------');
 
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');
@@ -1454,6 +1464,7 @@ export default class AppStore extends Store {
       message.error(`SKU数量不超过${Const.spuMaxSku}个`);
       return false;
     }
+
 
     param = param.set('goodsInfos', goodsList);
 
@@ -1950,6 +1961,7 @@ export default class AppStore extends Store {
         propList.push({
           propId: a.id,
           propName: a.attributeName,
+          isSingle: a.attributeType === 'Single choice',
           goodsPropDetails: a.attributesValuesVOList
             ? a.attributesValuesVOList.map((v) => {
                 return {
@@ -1967,6 +1979,7 @@ export default class AppStore extends Store {
   }
 
   showGoodsPropDetail = async (cateId, goodsPropList) => {
+    this.dispatch('propActor: setPropList', []);
     if (!cateId) {
       this.dispatch('propActor: clear');
     } else {
@@ -1977,13 +1990,7 @@ export default class AppStore extends Store {
         let catePropDetail = fromJS(catePropDetailList);
 
         catePropDetail = catePropDetail.map((prop) => {
-          let goodsPropDetails = prop.get('goodsPropDetails').push(
-            fromJS({
-              detailId: 0,
-              detailName: 'Other',
-              select: ''
-            })
-          );
+          let goodsPropDetails = prop.get('goodsPropDetails');
           return prop.set('goodsPropDetails', goodsPropDetails);
         });
         //将商品中的属性与属性值信息映射到类目属性里

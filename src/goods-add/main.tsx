@@ -224,9 +224,12 @@ export default class Main extends React.Component<any, any> {
           {/*视频库*/}
           <VideoModal />
 
-          <div className="spin">
-            <Spin spinning={this.store.get('loading')} size="large" />
-          </div>
+          {this.store.get('loading') ? (
+            <div className="spin">
+              {/*<Spin spinning={this.store.get('loading')} size="large" />*/}
+              <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px' }} alt="" />
+            </div>
+          ) : null}
         </div>
       </div>
     );

@@ -171,11 +171,11 @@ class InvoiceList extends Component<any, any> {
           message.success('Operate successfully');
           this.onSearch();
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   onChangeDate = (date, dateString) => {
@@ -207,7 +207,6 @@ class InvoiceList extends Component<any, any> {
         form.setFieldsValue({
           orderNumber: ''
         });
-        
       }
     );
   };
@@ -299,11 +298,11 @@ class InvoiceList extends Component<any, any> {
             objectFetching: false
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   orderInvoiceState = (params) => {
@@ -315,11 +314,11 @@ class InvoiceList extends Component<any, any> {
           message.success('Operate successfully');
           this.onSearch();
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   onExport = (params) => {
@@ -357,14 +356,14 @@ class InvoiceList extends Component<any, any> {
           this.setState({
             confirmLoading: false
           });
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
         this.setState({
           confirmLoading: false
         });
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 

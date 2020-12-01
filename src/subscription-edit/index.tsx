@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm } from 'antd';
+import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
 import { StoreProvider } from 'plume2';
 
 import { Headline, BreadCrumb, SelectGroup, Const, cache } from 'qmkit';
@@ -25,7 +25,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     this.state = {
       title: 'Subscription edit',
       subscriptionId: this.props.match.params.subId,
-      loading: true,
+      loading: false,
       orderInfo: {},
       subscriptionInfo: {},
       recentOrderList: [],
@@ -60,7 +60,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       promotionLoading: false,
       promotionDesc: 'Subscription 0% Discount',
       noStartOrder: [],
-      completedOrder: []
+      completedOrder: [],
+      visibleDate: false,
+      currentOrder: {}
 
       // operationLog: []
     };
@@ -73,6 +75,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   getSubscriptionDetail = () => {
+    this.setState({
+      loading: true
+    });
     webapi
       .getSubscriptionDetail(this.state.subscriptionId)
       .then((data) => {
@@ -163,6 +168,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }
           );
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Unsuccessful');
         }
       })
@@ -602,6 +610,97 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   tabChange = (key) => {
     console.log(`selected ${key}`);
   };
+  cancelNextSubscription = (row) => {
+    let goodsItems = [];
+    if (row && row.tradeItems) {
+      for (let i = 0; i < row.tradeItems.length; i++) {
+        let item = {
+          skuId: row.tradeItems[i].skuId
+        };
+        goodsItems.push(item);
+      }
+    }
+
+    let params = {
+      subscribeId: this.state.subscriptionId,
+      changeField: 'Delivery Time',
+      goodsItems: goodsItems
+    };
+    this.setState({
+      loading: true
+    });
+    webapi
+      .cancelNextSubscription(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getSubscriptionDetail();
+          message.success('Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  updateNextDeliveryTime = (date) => {
+    const { currentOrder } = this.state;
+    let goodsItems = [];
+    if (currentOrder && currentOrder.tradeItems) {
+      for (let i = 0; i < currentOrder.tradeItems.length; i++) {
+        let item = {
+          skuId: currentOrder.tradeItems[i].skuId
+        };
+        goodsItems.push(item);
+      }
+    }
+
+    let params = {
+      subscribeId: this.state.subscriptionId,
+      nextDeliveryTime: date ? moment(date).format('YYYY-MM-DD') : '',
+      changeField: 'Delivery Time',
+      goodsItems: goodsItems
+    };
+    this.setState({
+      visibleDate: false,
+      loading: true
+    });
+    webapi
+      .updateNextDeliveryTime(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getSubscriptionDetail();
+          message.success('Operation successful');
+        } else {
+          this.setState({
+            loading: false
+          });
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
+  handleVisibleDateChange = (record) => {
+    const { visibleDate } = this.state;
+    this.setState({
+      visibleDate: !visibleDate,
+      currentOrder: record
+    });
+  };
 
   render() {
     const {
@@ -622,15 +721,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       promotionCodeShow,
       title,
       noStartOrder,
-      completedOrder
+      completedOrder,
+      currentOrder
       // operationLog
     } = this.state;
-    const cartTitle = (
-      <div className="cart-title">
-        <span>Subscription</span>
-        <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
-      </div>
-    );
     const menu = (
       <Menu>
         {recentOrderList.map((item) => (
@@ -661,8 +755,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.originalPrice}</p>
-            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.subscribePrice}</p>
+            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.originalPrice}</p>
+            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.subscribePrice}</p>
           </div>
         )
       },
@@ -737,17 +831,88 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + +record.subscribeNum * +record.subscribePrice}</span>
+            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + +record.subscribeNum * +record.subscribePrice}</span>
           </div>
         )
       }
     ];
-    const totalCartTitleStyle = {
-      background: '#fafafa',
-      borderBottom: '2px solid #D7D7D7',
-      color: '#8E8E8E',
-      fontWeight: 500
-    };
+    const content = (
+      <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+        <Calendar
+          fullscreen={false}
+          headerRender={({ value, onChange }) => {
+            const start = 0;
+            const end = 12;
+            const monthOptions = [];
+
+            const current = value.clone();
+            const localeData = value.localeData();
+            const months = [];
+            for (let i = 0; i < 12; i++) {
+              current.month(i);
+              months.push(localeData.monthsShort(current));
+            }
+
+            for (let index = start; index < end; index++) {
+              monthOptions.push(
+                <Select.Option className="month-item" key={`${index}`}>
+                  {months[index]}
+                </Select.Option>
+              );
+            }
+            const month = value.month();
+
+            const year = value.year();
+            const options = [];
+            for (let i = year; i < year + 10; i += 1) {
+              options.push(
+                <Select.Option key={i} value={i} className="year-item">
+                  {i}
+                </Select.Option>
+              );
+            }
+            return (
+              <div style={{ padding: 10 }}>
+                <div style={{ marginBottom: '10px' }}>Custom header </div>
+                <Row type="flex" justify="space-between">
+                  <Col>
+                    <Select
+                      size="small"
+                      dropdownMatchSelectWidth={false}
+                      className="my-year-select"
+                      onChange={(newYear) => {
+                        const now = value.clone().year(newYear);
+                        onChange(now);
+                      }}
+                      value={String(year)}
+                    >
+                      {options}
+                    </Select>
+                  </Col>
+                  <Col>
+                    <Select
+                      size="small"
+                      dropdownMatchSelectWidth={false}
+                      value={String(month)}
+                      onChange={(selectedMonth) => {
+                        const newValue = value.clone();
+                        newValue.month(parseInt(selectedMonth, 10));
+                        onChange(newValue);
+                      }}
+                    >
+                      {monthOptions}
+                    </Select>
+                  </Col>
+                </Row>
+              </div>
+            );
+          }}
+          disabledDate={this.disabledStartDate}
+          defaultValue={currentOrder && currentOrder.tradeItems && currentOrder.tradeItems[0].nextDeliveryTime ? moment(currentOrder.tradeItems[0].nextDeliveryTime) : moment()}
+          onSelect={this.updateNextDeliveryTime}
+        />
+      </div>
+    );
 
     const columns_no_start = [
       {
@@ -757,8 +922,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ display: 'flex' }}>
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
@@ -776,8 +941,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ margin: 'auto 10px' }}>
+              record.tradeItems.map((item, index) => (
+                <div style={{ margin: 'auto 10px' }} key={index}>
                   <p>X {item.num}</p>
                 </div>
               ))}
@@ -798,13 +963,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -818,26 +983,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Selcte Date">
-              <a
-                style={styles.edit}
-                onClick={() => {
-                  console.log('select delivery date');
-                }}
-                className="iconfont iconEdit"
-              ></a>
-            </Tooltip>
+            <Popover content={content} trigger="click" visible={this.state.visibleDate} onVisibleChange={() => this.handleVisibleDateChange(record)}>
+              <Tooltip placement="top" title="Selcte Date">
+                <a style={styles.edit} className="iconfont icondata"></a>
+              </Tooltip>
+            </Popover>
+            ,
             <Popconfirm
               placement="topLeft"
               title="Are you sure to skip this item?"
               onConfirm={() => {
-                console.log('skip delivery');
+                this.cancelNextSubscription(record);
               }}
               okText="Confirm"
               cancelText="Cancel"
             >
               <Tooltip placement="top" title="Skip delivery">
-                <a className="iconfont iconDelete"></a>
+                <a className="iconfont iconskip"></a>
               </Tooltip>
             </Popconfirm>
           </div>
@@ -883,13 +1045,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -910,17 +1072,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
-          <div>
+          <Link to={'/order-detail/' + record.id}>
             <Tooltip placement="top" title="Details">
-              <a
-                style={styles.edit}
-                onClick={() => {
-                  console.log('Details');
-                }}
-                className="iconfont iconDetails"
-              ></a>
+              <a style={styles.edit} className="iconfont iconDetails"></a>
             </Tooltip>
-          </div>
+          </Link>
         )
       }
     ];
@@ -930,8 +1086,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.edit" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container-search">
-          <Spin spinning={this.state.loading}>
+        <Spin spinning={this.state.loading}>
+          <div className="container-search">
             <Headline title={title} />
             {/* subscription 基本信息 */}
             <Row className="subscription-basic-info">
@@ -977,12 +1133,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Spin spinning={this.state.promotionLoading}>
                   <div className="flex-between">
                     <span>Subtotal</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + this.subTotal()}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + this.subTotal()}</span>
                   </div>
 
                   <div className="flex-between">
                     <span>{this.state.promotionDesc}</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.discountsPrice ? this.state.discountsPrice : 0)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0)}</span>
                   </div>
 
                   {/* <div className="flex-between">
@@ -998,13 +1154,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </div> */}
                   <div className="flex-between">
                     <span>Shipping</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
                   </div>
                   <div className="flex-between">
                     <span>
                       <span>Total</span> (IVA Include):
                     </span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice)}</span>
                   </div>
 
                   {/* <Row style={{ marginTop: 20 }}>
@@ -1056,9 +1212,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <Button type="link" onClick={() => this.deliveryOpen()}>
-                      Change
-                    </Button>
+                    <Tooltip placement="top" title="Change">
+                      <a style={styles.edit} onClick={() => this.deliveryOpen()} className="iconfont iconEdit"></a>
+                    </Tooltip>
                   </Col>
 
                   <Col span={24}>
@@ -1085,9 +1241,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <label className="info-title">Billing Address</label>
                   </Col>
                   <Col span={12}>
-                    <Button type="link" onClick={() => this.billingOpen()}>
-                      Change
-                    </Button>
+                    <Tooltip placement="top" title="Change">
+                      <a style={styles.edit} onClick={() => this.billingOpen()} className="iconfont iconEdit"></a>
+                    </Tooltip>
                   </Col>
 
                   <Col span={24}>
@@ -1116,11 +1272,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
+                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
                   </Col>
                 </Row>
               </Col>
@@ -1262,40 +1418,40 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Button>
               )}
             </Modal>
-          </Spin>
-        </div>
+          </div>
 
-        <div className="container-search" style={{ marginBottom: 20 }}>
-          <Headline
-            title="Autoship order"
-            extra={
-              <div>
-                <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-                  <Option value="2020">2020</Option>
-                  <Option value="2019">2019</Option>
-                  <Option value="2018">2018</Option>
-                </Select>
-              </div>
-            }
-          />
-          <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-            <TabPane tab="No start" key="noStart">
-              <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
-            </TabPane>
-            <TabPane tab="Completed" key="completed">
-              <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={false}></Table>
-            </TabPane>
-          </Tabs>
-        </div>
+          <div className="container-search" style={{ marginBottom: 20 }}>
+            <Headline
+              title="Autoship order"
+              // extra={
+              //   <div>
+              //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+              //       <Option value="2020">2020</Option>
+              //       <Option value="2019">2019</Option>
+              //       <Option value="2018">2018</Option>
+              //     </Select>
+              //   </div>
+              // }
+            />
+            <Tabs defaultActiveKey="1" onChange={this.tabChange}>
+              <TabPane tab="No start" key="noStart">
+                <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
+              </TabPane>
+              <TabPane tab="Completed" key="completed">
+                <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={false}></Table>
+              </TabPane>
+            </Tabs>
+          </div>
 
-        <div className="bar-button">
-          <Button type="primary" onClick={() => this.updateSubscription()} loading={this.state.saveLoading}>
-            {<FormattedMessage id="save" />}
-          </Button>
-          <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
-            {<FormattedMessage id="back" />}
-          </Button>
-        </div>
+          <div className="bar-button">
+            <Button type="primary" onClick={() => this.updateSubscription()} loading={this.state.saveLoading}>
+              {<FormattedMessage id="save" />}
+            </Button>
+            <Button style={{ marginLeft: 20 }} onClick={() => (history as any).go(-1)}>
+              {<FormattedMessage id="back" />}
+            </Button>
+          </div>
+        </Spin>
       </div>
     );
   }

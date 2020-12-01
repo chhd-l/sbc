@@ -101,3 +101,12 @@ export function cancelNextSubscription(filterParams = {}) {
     })
   });
 }
+
+export function updateNextDeliveryTime(filterParams = {}) {
+  return Fetch<TResult>('/sub/updateNextDeliveryTime', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

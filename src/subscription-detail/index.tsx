@@ -128,6 +128,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
               promotionCode: subscriptionDetail.promotionCode,
+              noStartOrder: subscriptionDetail.noStartTradeList,
+              completedOrder: subscriptionDetail.completedTradeList,
               loading: false
             },
             () => {
@@ -420,15 +422,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-    const menu = (
-      <Menu>
-        {recentOrderList.map((item) => (
-          <Menu.Item key={item.recentOrderId}>
-            <Link to={'/order-detail/' + item.recentOrderId}>{item.recentOrderId + '(' + item.orderStatus + ')'}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
-    );
     const cartExtra = (
       <div>
         <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
@@ -559,8 +552,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ display: 'flex' }}>
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
@@ -578,7 +571,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
+              record.tradeItems.map((item, index) => (
                 <div style={{ margin: 'auto 10px' }}>
                   <p>X {item.num}</p>
                 </div>
@@ -589,12 +582,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Promotion code</span>,
         key: 'promotionCode',
+        dataIndex: 'promotionCode',
         width: '20%',
-        render: (text, record) => (
-          <div>
-            <Search placeholder="Promotion code" enterButton="Apply" onSearch={(value) => console.log(value)} />
-          </div>
-        )
+        render: (text, record) => <div>{text}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
@@ -613,37 +603,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? record.tradeItems[0].nextDeliveryTime : '-'}</div>
-      },
-      {
-        title: 'Operation',
-        dataIndex: '',
-        key: 'x',
-        render: (text, record) => (
-          <div>
-            <Tooltip placement="top" title="Selcte Date">
-              <a
-                style={styles.edit}
-                onClick={() => {
-                  console.log('select delivery date');
-                }}
-                className="iconfont iconEdit"
-              ></a>
-            </Tooltip>
-            <Popconfirm
-              placement="topLeft"
-              title="Are you sure to skip this item?"
-              onConfirm={() => {
-                console.log('skip delivery');
-              }}
-              okText="Confirm"
-              cancelText="Cancel"
-            >
-              <Tooltip placement="top" title="Skip delivery">
-                <a className="iconfont iconDelete"></a>
-              </Tooltip>
-            </Popconfirm>
-          </div>
-        )
       }
     ];
     const columns_completed = [
@@ -654,8 +613,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ display: 'flex' }}>
+              record.tradeItems.map((item, index) => (
+                <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>{item.skuName}</p>
@@ -673,8 +632,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ margin: 'auto 10px' }}>
+              record.tradeItems.map((item, index) => (
+                <div style={{ margin: 'auto 10px' }} key={index}>
                   <p>X {item.num}</p>
                 </div>
               ))}
@@ -711,18 +670,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
+        width: '10%',
         render: (text, record) => (
-          <div>
+          <Link to={'/order-detail/' + record.id}>
             <Tooltip placement="top" title="Details">
-              <a
-                style={styles.edit}
-                onClick={() => {
-                  console.log('Details');
-                }}
-                className="iconfont iconDetails"
-              ></a>
+              <a style={styles.edit} className="iconfont iconDetails"></a>
             </Tooltip>
-          </div>
+          </Link>
         )
       }
     ];
@@ -865,11 +819,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}>Payment Method: </p>
-                    <p>{paymentInfo ? paymentInfo.vendor : ''}</p>
+                    <p>{paymentInfo ? paymentInfo.paymentType : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Card Number: </p>
-                    <p>{paymentInfo ? paymentInfo.cardNumber : ''}</p>
+                    <p>{paymentInfo && paymentInfo.payuPaymentMethod ? '**** **** **** ' + paymentInfo.payuPaymentMethod.last_4_digits : paymentInfo.adyenPaymentMethod ? '**** **** **** ' + paymentInfo.adyenPaymentMethod.lastFour : ''}</p>
                   </Col>
                 </Row>
               </Col>
@@ -879,15 +833,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <div className="container-search">
           <Headline
             title="Autoship order"
-            extra={
-              <div>
-                <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-                  <Option value="2020">2020</Option>
-                  <Option value="2019">2019</Option>
-                  <Option value="2018">2018</Option>
-                </Select>
-              </div>
-            }
+            // extra={
+            //   <div>
+            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+            //       <Option value="2020">2020</Option>
+            //       <Option value="2019">2019</Option>
+            //       <Option value="2018">2018</Option>
+            //     </Select>
+            //   </div>
+            // }
           />
           <Tabs defaultActiveKey="1" onChange={this.tabChange}>
             <TabPane tab="No start" key="noStart">

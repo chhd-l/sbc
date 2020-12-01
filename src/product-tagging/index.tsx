@@ -293,9 +293,9 @@ class AttributeLibrary extends Component<any, any> {
     this.updateTagging(params);
   };
 
-  getColour = (id) => {
+  getColour = (value) => {
     const { colourList } = this.state;
-    let colour = colourList.find((item) => +item.id === +id);
+    let colour = colourList.find((item) => item.id == value || item.valueEn === value);
     return colour;
   };
 
@@ -535,7 +535,7 @@ class AttributeLibrary extends Component<any, any> {
                         }}
                       >
                         {colourList.map((item) => (
-                          <Option value={item.id} key={item.id}>
+                          <Option value={item.valueEn} key={item.id}>
                             <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
                           </Option>
                         ))}
@@ -557,7 +557,7 @@ class AttributeLibrary extends Component<any, any> {
                         }}
                       >
                         {colourList.map((item) => (
-                          <Option value={item.id} key={item.id}>
+                          <Option value={item.valueEn} key={item.id}>
                             <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
                           </Option>
                         ))}

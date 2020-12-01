@@ -158,10 +158,11 @@ class CateModalForm extends React.Component<any, any> {
   render() {
     const formData = this._store.state().get('formData');
     const cateName = formData.get('cateName');
+    const cateRouter = formData.get('cateRouter');
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const descriptionTitle = formData.get('cateTitle');
-    const cateType = formData.get('cateType');
+    // const cateType = formData.get('cateType');
     const { getFieldDecorator } = this.props.form;
     // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
@@ -203,52 +204,22 @@ class CateModalForm extends React.Component<any, any> {
         <FormItem {...formItemLayout} label="Parent category">
           {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
-
-        {/* <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
-          {getFieldDecorator('cateId', {
-            rules: [
-              {
-                required: true,
-                message: 'Please select platform product category'
-              },
-              {
-                validator: (_rule, value, callback) => {
-                  if (!value) {
-                    callback();
-                    return;
-                  }
-
-                  let overLen = false;
-                  sourceCateList.forEach((val) => {
-                    if (val.get('cateParentId') + '' == value) overLen = true;
-                    return;
-                  });
-
-                  if (overLen) {
-                    callback(new Error('Please select the last level of classification'));
-                    return;
-                  }
-
-                  callback();
-                }
-              }
-            ],
-            onChange: this._editGoods.bind(this, 'cateId'),
-            initialValue: goodsCateId
-          })(
-            <TreeSelect
-              disabled={(formData.get('cateParentId') && formData.get('cateParentId') !== 0) || formData.get('children')}
-              getPopupContainer={() => document.getElementById('page-content')}
-              placeholder="Please select classification"
-              notFoundContent="No classification"
-              // disabled={cateDisabled}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              treeDefaultExpandAll
-            >
-              {loop(cateList)}
-            </TreeSelect>
-          )}
-        </FormItem> */}
+        {formData.get('cateParentName') ? null : (
+          <FormItem {...formItemLayout} label="Router">
+            {getFieldDecorator('cateRouter', {
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please enter router'
+                },
+                { max: 100, message: 'Up to 100 characters' }
+              ],
+              initialValue: cateRouter,
+              onChange: this._editGoods.bind(this, 'cateRouter')
+            })(<Input />)}
+          </FormItem>
+        )}
 
         <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
           <div style={{ width: '400px' }}>
@@ -277,7 +248,7 @@ class CateModalForm extends React.Component<any, any> {
             initialValue: goodsDescription
           })(<TextArea rows={4} placeholder="Please input the product description" />)}
         </FormItem>
-        <FormItem labelCol={2} {...formItemLayout} label="Category type">
+        {/* <FormItem labelCol={2} {...formItemLayout} label="Category type">
           {getFieldDecorator('cateType', {
             onChange: this._editGoods.bind(this, 'cateType'),
             initialValue: cateType ? this._getCateTypeName(cateType) : ''
@@ -294,7 +265,7 @@ class CateModalForm extends React.Component<any, any> {
                 ))}
             </Select>
           )}
-        </FormItem>
+        </FormItem> */}
       </Form>
     );
   }

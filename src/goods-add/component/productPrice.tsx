@@ -127,7 +127,7 @@ class SkuForm extends React.Component<any, any> {
         .toList();
     }
 
-    console.log(goods.toJS(), 1111111111111111111);
+    //console.log(goods.toJS(), 1111111111111111111);
 
     columns = columns.unshift({
       title: '',
@@ -162,7 +162,7 @@ class SkuForm extends React.Component<any, any> {
     //               rules: [
     //                 {
     //                   pattern: ValidConst.number,
-    //                   message: '0 or positive integer'
+    //                   message: 'Please enter the correct value'
     //                 }
     //               ],
     //               initialValue: rowInfo.linePrice || 0
@@ -219,7 +219,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: '0 or positive integer'
+                    message: 'Please enter the correct value'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
@@ -384,7 +384,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -402,7 +402,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),

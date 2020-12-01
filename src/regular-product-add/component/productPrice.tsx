@@ -193,7 +193,7 @@ class SkuForm extends React.Component<any, any> {
                 rules: [
                   {
                     pattern: ValidConst.number,
-                    message: '0 or positive integer'
+                    message: 'Please enter the correct value'
                   }
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
@@ -295,7 +295,7 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
           Base price
-          <Select value={baseSpecId || null} onChange={this._handleChange}>
+          <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
             {goodsSpecs.map((item) => (
               <Option value={item.get('specId')}>{item.get('specName')}</Option>
             ))}
@@ -313,7 +313,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -331,7 +331,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: '0 or positive integer'
+                        message: 'Please enter the correct value'
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),

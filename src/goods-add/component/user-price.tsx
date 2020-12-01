@@ -227,7 +227,7 @@ class UserPriceForm extends React.Component<any, any> {
                       rules: [
                         {
                           pattern: ValidConst.number,
-                          message: '0 or positive integer'
+                          message: 'Please enter the correct value'
                         },
                         {
                           customer: rowInfo.customerId,

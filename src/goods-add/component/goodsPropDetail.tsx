@@ -30,12 +30,14 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     relaxProps?: {
       changePropVal: Function;
       propList: IList;
+      propDetail: IList;
     };
   };
 
   static relaxProps = {
     changePropVal: noop,
-    propList: 'propList'
+    propList: 'propList',
+    propDetail: 'propDetail'
   };
 
   constructor(props) {
@@ -44,9 +46,6 @@ export default class GoodsPropDetail extends React.Component<any, any> {
 
   render() {
     const { propList } = this.props.relaxProps;
-    setTimeout(() => {
-      console.log(propList.toJS(), 11111111);
-    });
     return (
       <div>
         <div
@@ -75,7 +74,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
                             det.get('goodsPropDetails'),
                             det.get('propId')
                           )} */}
-                          {this._getPropTree(det.get('goodsPropDetails'), det.get('propId'))}
+                          {this._getPropTree(det.get('goodsPropDetails'), det.get('propId'), det.get('isSingle'))}
                         </FormItem>
                       </Col>
                     ))}
@@ -108,7 +107,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     );
   };
 
-  _getPropTree = (propValues, propId) => {
+  _getPropTree = (propValues, propId, isSingle) => {
     const propVals = propValues.filter((item) => item.get('select') === 'select');
     const selected = propVals.length
       ? propVals.toJS().map((item) => {
@@ -118,7 +117,6 @@ export default class GoodsPropDetail extends React.Component<any, any> {
           };
         })
       : [];
-    console.log(propVals.toJS(), selected, 'props');
     return (
       <TreeSelect
         getPopupContainer={() => document.getElementById('page-content')}
@@ -133,7 +131,7 @@ export default class GoodsPropDetail extends React.Component<any, any> {
         defaultValue={selected}
         onChange={(value) => this._onChange(propId, value)}
       >
-        {this.generateStoreCateTree(propValues)}
+        {this.generateStoreCateTree(propValues,isSingle)}
       </TreeSelect>
     );
   };
@@ -142,16 +140,22 @@ export default class GoodsPropDetail extends React.Component<any, any> {
    * 店铺分类树形下拉框
    * @param propValues
    */
-  generateStoreCateTree = (propValues) => {
+  generateStoreCateTree = (propValues, isSingle) => {
+    const { propDetail } = this.props.relaxProps
+    const propDetails = propDetail ? propDetail.toJS() : []
+    const selectList = []
+    propDetails.map(p=>{
+      p.goodsPropDetails &&  p.goodsPropDetails.map(x=>{
+        if(x.select === 'select') {
+          selectList.push(x.detailId)
+        }
+      })
+    })
+    const values = propValues ? (propValues.toJS()).map(x=>x.detailId) : []
+    let intersection = values.filter((v) => selectList.includes(v));
     return propValues.map((item) => {
-      if (item.get('children') && item.get('children').count()) {
-        return (
-          <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')}>
-            {this.generateStoreCateTree(item.get('children'))}
-          </TreeNode>
-        );
-      }
-      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} />;
+      const singleDisabled = isSingle && intersection.length > 0 && item.get('detailId') != intersection[0]
+      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} disabled={singleDisabled}/>;
     });
   };
 

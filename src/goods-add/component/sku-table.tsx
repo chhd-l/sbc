@@ -332,7 +332,7 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-    columns = columns.push({
+    /*columns = columns.push({
       title: <div>Description</div>,
       key: 'description',
       render: (rowInfo) => (
@@ -353,11 +353,13 @@ class SkuForm extends React.Component<any, any> {
           </Col>
         </Row>
       )
-    });
+    });*/
 
     columns = columns.push({
       title: (
-        <div>
+        <div style={{
+          marginRight: '152px',
+        }}>
           <span
             style={{
               color: 'red',
@@ -383,7 +385,9 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => (
-        <Row>
+        <Row  style={{
+          marginRight: '124px',
+        }}>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
@@ -400,7 +404,18 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
+    /*columns = columns.push({
+      title: (
+        <div>
 
+        </div>
+      ),
+      key: 'subscriptionStatus',
+      render: (rowInfo) => (
+        <Row>
+        </Row>
+      )
+    });*/
     return columns.toJS();
   };
   _handleChange = (value) => {

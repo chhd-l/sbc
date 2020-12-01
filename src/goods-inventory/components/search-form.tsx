@@ -72,9 +72,7 @@ export default class SearchForm extends React.Component<any, any> {
             Refresh
           </Button>
 
-          <AuthWrapper functionName={'rewardDetailListExport'}>
-            <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
-          </AuthWrapper>
+          <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
         </div>
       </div>
     );

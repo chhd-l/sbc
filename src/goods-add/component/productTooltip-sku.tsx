@@ -73,6 +73,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     setTimeout(()=>{
       console.log(selectedSkuIds);
       console.log(selectedRows.toJS());
+
     })
     return (
       <Modal
@@ -88,6 +89,20 @@ class ProductTooltipSKU extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
+          let a = []
+          console.log(selectedSkuIds);
+          selectedSkuIds.map(item=>{
+            a.push({
+              goodsInfoNo:item
+            })
+          })
+          let newArr =_.differenceWith(
+            this.state.selectedRows.toJS(),
+            a,
+            'goodsInfoNo'
+          );
+          console.log(newArr)
+          console.log(a,222222);
           console.log(this.state.selectedRows.toJS(),11111);
           this.state.selectedRows.toJS().map((item) =>
             targetGoodsIds.push({
@@ -110,9 +125,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
               targetGoodsIds: targetGoodsIds
             });*/
             //console.log(a,3333);
-            onProductselectSku(targetGoodsList);
+            //onProductselectSku(targetGoodsList);
             targetGoodsIds = [];
-            this.props.showModal({ type: 0 }, this.props.pid);
+            //this.props.showModal({ type: 0 }, this.props.pid);
           } else {
             message.info('Maximum 10 products!');
           }

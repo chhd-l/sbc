@@ -1425,6 +1425,7 @@ export default class AppStore extends Store {
         console.log(i.targetGoodsIds,222222222);
       })
       console.log(b,111111111);
+      console.log(item,33333);
 
       goodsList = goodsList.push(
         Map({
@@ -1440,7 +1441,7 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels').toJS().length != 0? item.get('goodsInfoBundleRels'): b,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined? item.get('goodsInfoBundleRels'): b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description')
         })

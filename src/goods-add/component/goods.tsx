@@ -584,7 +584,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
-        <Row>
+        {/*<Row>
           <Col span={16}>
             <FormItem
               labelCol={{
@@ -613,7 +613,7 @@ class GoodsForm extends React.Component<any, any> {
               })(<TextArea rows={4} placeholder="Please fill in the description of the item" />)}
             </FormItem>
           </Col>
-        </Row>
+        </Row>*/}
 
         <Row type="flex" justify="start">
           <Col span={8}>

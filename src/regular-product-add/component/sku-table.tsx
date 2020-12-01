@@ -211,7 +211,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    columns = columns.push({
+    /*columns = columns.push({
       title: <div>Description</div>,
       key: 'description',
       render: (rowInfo) => (
@@ -232,17 +232,21 @@ class SkuForm extends React.Component<any, any> {
           </Col>
         </Row>
       )
-    });
+    });*/
 
     columns = columns.push({
       title: (
-        <div>
+        <div style={{
+          marginRight: '152px',
+          textAlign: "left",
+          float: "left"
+        }}>
           <span
             style={{
               color: 'red',
               fontFamily: 'SimSun',
               marginRight: '4px',
-              fontSize: '12px'
+              fontSize: '12px',
             }}
           >
             *
@@ -262,7 +266,9 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => (
-        <Row>
+        <Row style={{
+          marginRight: '124px',
+        }}>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {

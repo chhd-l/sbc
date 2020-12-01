@@ -158,7 +158,7 @@ class CateModalForm extends React.Component<any, any> {
   render() {
     const formData = this._store.state().get('formData');
     const cateName = formData.get('cateName');
-    const cateRouter = formData.get('cateName');
+    const cateRouter = formData.get('cateRouter');
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const descriptionTitle = formData.get('cateTitle');

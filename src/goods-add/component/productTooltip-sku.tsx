@@ -10,6 +10,8 @@ import { noop } from 'qmkit';
 import * as _ from 'lodash';
 
 let targetGoodsList = [];
+let targetGoodsIds = [];
+
 @Relax
 class ProductTooltipSKU extends React.Component<any, any> {
   props: {
@@ -83,28 +85,31 @@ class ProductTooltipSKU extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
-          let targetGoodsIds = [];
-
           this.state.selectedRows.toJS().map((item) =>
             targetGoodsIds.push({
               subGoodsInfoId: item.goodsInfoId,
               bundleNum: 1,
               goodsInfoNo: item.goodsInfoNo,
-              subGoodsInfoNo: item.goodsInfoNo,
+              subGoodsInfoNo: item.goodsInfoNo
             })
           );
+          let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
+          console.log(goodsIds, 11111);
+          targetGoodsList = [];
           targetGoodsList.push({
             pid: this.props.pid,
-            targetGoodsIds: targetGoodsIds
+            targetGoodsIds: goodsIds
           });
+          console.log(targetGoodsList, 22222);
           if (targetGoodsIds.length <= 10) {
-            let a = _.filter(targetGoodsList, (o) => o.pid != this.props.pid);
-            a.push({
+            //let a = _.filter(targetGoodsList, (o) => o.pid != this.props.pid);
+            /*a.push({
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
-            });
-            //console.log(a,111111);
-            onProductselectSku(a);
+            });*/
+            //console.log(a,3333);
+            onProductselectSku(targetGoodsList);
+            targetGoodsIds = [];
             this.props.showModal({ type: 0 }, this.props.pid);
           } else {
             message.info('Maximum 10 products!');

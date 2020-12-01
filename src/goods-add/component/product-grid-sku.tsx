@@ -107,24 +107,31 @@ export default class ProductGridSKU extends React.Component<any, any> {
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
-            /*getCheckboxProps(record) {
-              let a = []
-              let b = ''
-
-              goodsNo.map(item=>{
-                return item.targetGoodsIds.map(i=>{
-                  return a.push(i)
-                })
-              })
-              a.map(o=>{
-                if(o.goodsInfoNo == record.goodsInfoNo) {
-                  b = o.goodsInfoNo
+            getCheckboxProps(record) {
+              console.log(record);
+              let a = [];
+              let b = '';
+              goodsNo.map((item) => {
+                return item.targetGoodsIds.map((i) => {
+                  return a.push(i);
+                });
+              });
+              //console.log(a);
+              //console.log(record);
+              a.map((o) => {
+                if (o.subGoodsInfoNo == record.goodsInfoNo) {
+                  console.log(record.goodsInfoNo == b);
+                  if (o.subGoodsInfoNo) {
+                    b = o.subGoodsInfoNo;
+                  } else {
+                    return;
+                  }
                 }
-              })
+              });
               return {
                 defaultChecked: record.goodsInfoNo == b // 配置默认勾选的列
               };
-            }*/
+            }
             /*getCheckboxProps: (record) => {
               console.log(this.state.goodsNo,22222222);
 

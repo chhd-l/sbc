@@ -817,6 +817,10 @@ const routes = [
   {
     path: '/invoice-list',
     asyncComponent: () => import('./invoice-list')
+  },
+  {
+    path: '/subscription-setting',
+    asyncComponent: () => import('./subscription-setting')
   }
   // {
   //   path: '/invoice-details',

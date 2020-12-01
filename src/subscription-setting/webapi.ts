@@ -12,8 +12,8 @@ export function getSettingConfig() {
   });
 }
 
-export function updateCategoryStatus(filterParams = {}) {
-  return Fetch<TResult>('/goods/cate/enableAndDisable', {
+export function updateSetting(filterParams = {}) {
+  return Fetch<TResult>('/order/config/batchEnableAndDisable', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

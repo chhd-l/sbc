@@ -183,11 +183,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
             pagination
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -227,11 +227,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
             selectedRowList
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   updateOverridedProduct = (params) => {
@@ -245,11 +245,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
             visible: false
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 

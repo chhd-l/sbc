@@ -10,20 +10,193 @@ export default class SubscriptionSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Subscription setting'
+      title: 'Subscription setting',
+      settingForm: {
+        newOrdersId: null,
+        newOrdersStatus: 0,
+        newOrdersValue: 0,
+        cardExpirationId: null,
+        cardExpirationStatus: 0,
+        cardExpirationValue: 0
+      }
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.getSettingConfig();
+  }
+  settingFormChange = ({ field, value }) => {
+    let data = this.state.settingForm;
+    data[field] = value;
+    this.setState({
+      settingForm: data
+    });
+  };
+  getSettingConfig = () => {
+    webapi
+      .getSettingConfig()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const { settingForm } = this.state;
+          let newOrderConfig = res.context.find((item) => {
+            return item.configType === 'subscription_new_order_send_email';
+          });
+          let cardExpirationConfig = res.context.find((item) => {
+            return item.configType === 'subscription_tied_card_failure';
+          });
+          if (newOrderConfig) {
+            settingForm.newOrdersId = newOrderConfig.id;
+            settingForm.newOrdersStatus = newOrderConfig.status;
+            settingForm.newOrdersValue = newOrderConfig.context;
+          }
+          if (cardExpirationConfig) {
+            settingForm.cardExpirationId = cardExpirationConfig.id;
+            settingForm.cardExpirationStatus = cardExpirationConfig.status;
+            settingForm.cardExpirationValue = cardExpirationConfig.context;
+          }
+          this.setState({
+            settingForm
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  updateSetting = () => {
+    const { settingForm } = this.state;
+    let params = {
+      requestList: [
+        {
+          context: settingForm.newOrdersValue,
+          id: settingForm.newOrdersId,
+          status: settingForm.newOrdersStatus ? 1 : 0
+        },
+        {
+          context: settingForm.cardExpirationValue,
+          id: settingForm.cardExpirationId,
+          status: settingForm.cardExpirationStatus ? 1 : 0
+        }
+      ]
+    };
+    webapi
+      .updateSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operation successful');
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
   render() {
-    const { title } = this.state;
+    const { title, settingForm } = this.state;
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
+          <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
+            <FormItem label="Remind of new orders">
+              <Row>
+                <Col span={1}>
+                  <Switch
+                    checkedChildren="On"
+                    unCheckedChildren="Off"
+                    checked={settingForm.newOrdersStatus ? true : false}
+                    onChange={(value) =>
+                      this.settingFormChange({
+                        field: 'newOrdersStatus',
+                        value: value
+                      })
+                    }
+                  />
+                </Col>
+                {settingForm.newOrdersStatus ? (
+                  <Col span={20}>
+                    <div style={styles.inputStyle}>
+                      <InputNumber
+                        precision={0}
+                        min={0}
+                        max={9999}
+                        value={settingForm.newOrdersValue}
+                        onChange={(value) =>
+                          this.settingFormChange({
+                            field: 'newOrdersValue',
+                            value: value
+                          })
+                        }
+                      />
+                      <span style={{ marginLeft: 10 }}>Days ahead new orders being created, an email will be sent to pet owners to remind them of new orders.</span>
+                    </div>
+                  </Col>
+                ) : null}
+              </Row>
+            </FormItem>
+
+            <FormItem label="Remind of card expiration">
+              <Row>
+                <Col span={1}>
+                  <Switch
+                    checkedChildren="On"
+                    unCheckedChildren="Off"
+                    checked={settingForm.cardExpirationStatus ? true : false}
+                    onChange={(value) =>
+                      this.settingFormChange({
+                        field: 'cardExpirationStatus',
+                        value: value
+                      })
+                    }
+                  />
+                </Col>
+                {settingForm.cardExpirationStatus ? (
+                  <Col span={20}>
+                    <div style={styles.inputStyle}>
+                      <InputNumber
+                        precision={0}
+                        min={1}
+                        max={9999}
+                        value={settingForm.cardExpirationValue}
+                        onChange={(value) =>
+                          this.settingFormChange({
+                            field: 'cardExpirationValue',
+                            value: value
+                          })
+                        }
+                      />
+                      <span style={{ marginLeft: 10 }}>Days ahead pet owners’ card expired, an email will be sent to pet owners to remind them of card expiration.</span>
+                    </div>
+                  </Col>
+                ) : null}
+              </Row>
+            </FormItem>
+          </Form>
+        </div>
+        <div className="bar-button">
+          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateSetting()}>
+            {<FormattedMessage id="save" />}
+          </Button>
         </div>
       </div>
     );
   }
 }
+
+const styles = {
+  inputStyle: {
+    display: 'inline-block',
+    marginLeft: '20px'
+  },
+  tipsStyle: {
+    fontSize: 16,
+    lineHeight: 1,
+    margin: '20px 0 10px 0'
+  }
+} as any;

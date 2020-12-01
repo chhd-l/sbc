@@ -46,11 +46,11 @@ class FilterSortSetting extends Component<any, any> {
             selectedRowKeys: selectedRowKeys
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -71,11 +71,11 @@ class FilterSortSetting extends Component<any, any> {
             customizedFilterList: customizedFilterList
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -93,11 +93,11 @@ class FilterSortSetting extends Component<any, any> {
             sortByList: sortByList
           });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -115,11 +115,11 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -132,11 +132,11 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -157,11 +157,11 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -178,11 +178,11 @@ class FilterSortSetting extends Component<any, any> {
             this.findCustomizeFilterList();
           }
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 
@@ -195,11 +195,11 @@ class FilterSortSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.findSortList();
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
 

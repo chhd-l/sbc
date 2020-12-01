@@ -158,11 +158,11 @@ class AddCustomizedfilter extends React.Component<any, any> {
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   updateCustomizeFilter = (params) => {
@@ -175,11 +175,11 @@ class AddCustomizedfilter extends React.Component<any, any> {
           this.props.refreshList();
           this.setState({ visibleAttribute: false });
         } else {
-          message.error(res.message || 'operation failure');
+          message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'operation failure');
+        message.error(err.toString() || 'Operation failure');
       });
   };
   handleSubmit = () => {

@@ -70,10 +70,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     const { onProductselectSku } = this.props.relaxProps;
-    setTimeout(()=>{
+    setTimeout(() => {
       console.log(selectedSkuIds);
       console.log(selectedRows.toJS());
-    })
+    });
     return (
       <Modal
         maskClosable={false}
@@ -88,7 +88,17 @@ class ProductTooltipSKU extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
-          console.log(this.state.selectedRows.toJS(),11111);
+          let a = [];
+          console.log(selectedSkuIds);
+          selectedSkuIds.map((item) => {
+            a.push({
+              goodsInfoNo: item
+            });
+          });
+          let newArr = _.differenceWith(this.state.selectedRows.toJS(), a, 'goodsInfoNo');
+          console.log(newArr);
+          console.log(a, 222222);
+          console.log(this.state.selectedRows.toJS(), 11111);
           this.state.selectedRows.toJS().map((item) =>
             targetGoodsIds.push({
               subGoodsInfoId: item.goodsInfoId,

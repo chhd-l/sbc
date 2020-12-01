@@ -221,7 +221,7 @@ class PeoductCategory extends Component<any, any> {
   };
 
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination } = this.state;
     const columns = [
       {
         title: 'Category name',
@@ -285,7 +285,7 @@ class PeoductCategory extends Component<any, any> {
           <Headline title={title} />
           <Alert message={description} type="info" />
 
-          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{marginRight:10}} />
+          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
         </div>
         <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
@@ -348,7 +348,7 @@ class PeoductCategory extends Component<any, any> {
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} />
+            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
       </div>

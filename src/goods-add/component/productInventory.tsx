@@ -24,6 +24,7 @@ export default class ProductInventory extends React.Component<any, any> {
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      addSkUProduct: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -48,6 +49,7 @@ export default class ProductInventory extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -80,7 +82,8 @@ class SkuForm extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0
+      count: 0,
+      stock: 0
     };
   }
   handleChange(value) {
@@ -167,28 +170,32 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'stock',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('stock_' + rowInfo.id, {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please input inventory'
-                  },
-                  {
-                    pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
-                  }
-                ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                initialValue: rowInfo.stock
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
-            </FormItem>
-          </Col>
-        </Row>
-      )
+      render: (rowInfo) => {
+        console.log(11111111111)
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('stock_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please input inventory'
+                    },
+                    {
+                      pattern: ValidConst.number,
+                      message: 'Please enter the correct value'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo, 'stock'),
+                  initialValue: rowInfo.stock
+                })(<InputNumber style={{ width: '60px' }} min={0} max={rowInfo.stock} disabled={rowInfo.index > 1 && stockChecked} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      }
+
     });
 
     columns = columns.push({
@@ -230,14 +237,22 @@ class SkuForm extends React.Component<any, any> {
   /**
    * 修改商品属性
    */
-  _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+  _editGoodsItem = (rowInfo: any, key: string, e: any) => {
+    const { editGoodsItem, synchValue, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
-
-    editGoodsItem(id, key, e);
+    let a = addSkUProduct.filter(i=>i.pid == rowInfo.goodsInfoNo)
+    if(e > a[0].stock) {
+      e = a[0].stock
+      message.error('The inventory must be less than or equal to the inventory of the bound product');
+    }
+    console.log(addSkUProduct);
+    // console.log(rowInfo,111);
+    // console.log(key,2222);
+    // console.log(e,3333);
+    editGoodsItem(rowInfo.id, key, e);
 
     if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存

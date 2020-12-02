@@ -28,6 +28,7 @@ class AttributeLibrary extends Component<any, any> {
       visibleAttribute: false,
       attributeForm: {
         attributeName: '',
+        attributeNameEn: '',
         attributeType: ''
       },
       attributeValueList: [],
@@ -151,6 +152,7 @@ class AttributeLibrary extends Component<any, any> {
     const { form } = this.props;
 
     attributeForm.attributeName = '';
+    attributeForm.attributeNameEn = '';
     attributeForm.attributeType = 'Single choice';
 
     this.setState(
@@ -172,6 +174,7 @@ class AttributeLibrary extends Component<any, any> {
     const { form } = this.props;
 
     attributeForm.attributeName = row.attributeName;
+    attributeForm.attributeNameEn = row.attributeNameEn;
     attributeForm.attributeType = row.attributeType;
     this.setState(
       {
@@ -211,6 +214,7 @@ class AttributeLibrary extends Component<any, any> {
         if (isEdit) {
           let params = {
             attributeName: attributeForm.attributeName,
+            attributeNameEn: attributeForm.attributeNameEn,
             attributeType: attributeForm.attributeType,
             attributesValueList: tempAttributeValueList,
             attributeStatus: currentEditAttribute.attributeStatus ? true : false,
@@ -221,6 +225,7 @@ class AttributeLibrary extends Component<any, any> {
         } else {
           let params = {
             attributeName: attributeForm.attributeName,
+            attributeNameEn: attributeForm.attributeNameEn,
             attributeType: attributeForm.attributeType,
             attributesValueList: tempAttributeValueList
           };
@@ -298,6 +303,7 @@ class AttributeLibrary extends Component<any, any> {
   updateAttributeStatus = (checked, row) => {
     let params = {
       attributeName: row.attributeName,
+      attributeNameEn: row.attributeNameEn,
       attributeStatus: checked ? true : false,
       attributeType: row.attributeType,
       id: row.id,
@@ -435,6 +441,11 @@ class AttributeLibrary extends Component<any, any> {
         key: 'attributeName'
       },
       {
+        title: 'Alias name',
+        dataIndex: 'attributeNameEn',
+        key: 'attributeNameEn'
+      },
+      {
         title: 'Attribute value',
         dataIndex: 'attributeValue',
         key: 'attributeValue',
@@ -570,7 +581,7 @@ class AttributeLibrary extends Component<any, any> {
           ]}
         >
           <Form {...formItemLayout}>
-            <FormItem label="Attribute Name">
+            <FormItem label="Attribute name">
               {getFieldDecorator('attributeName', {
                 rules: [
                   { required: true },
@@ -586,6 +597,27 @@ class AttributeLibrary extends Component<any, any> {
                     const value = (e.target as any).value;
                     this.onAttributeFormChange({
                       field: 'attributeName',
+                      value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+            <FormItem label="Alias name">
+              {getFieldDecorator('attributeNameEn', {
+                rules: [
+                  {
+                    max: 50,
+                    message: 'Exceed maximum length!'
+                  }
+                ]
+              })(
+                <Input
+                  style={{ width: '80%' }}
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onAttributeFormChange({
+                      field: 'attributeNameEn',
                       value
                     });
                   }}

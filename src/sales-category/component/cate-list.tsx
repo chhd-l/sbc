@@ -100,11 +100,12 @@ export default class CateList extends React.Component<any, any> {
 
       render: (text, record) => (
         <div>
-          {record.isDefault !== 1 && record.cateGrade === 1 ? (
+          {text ? 'Yes' : 'No'}
+          {/* {record.isDefault !== 1 && record.cateGrade === 1 ? (
             <Popconfirm placement="topLeft" title={+text ? 'Are you sure this item is not displayed in the shop?' : 'Are you sure to display this item in the shop?'} onConfirm={() => this._updateDisplayStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
               <Switch checked={+text ? true : false}></Switch>
             </Popconfirm>
-          ) : null}
+          ) : null} */}
         </div>
       )
     },
@@ -156,24 +157,7 @@ export default class CateList extends React.Component<any, any> {
               // 非默认分类可编辑
               rowInfo.get('isDefault') != 1 && checkAuth('f_goods_cate_1') && (
                 <Tooltip placement="top" title="Edit">
-                  <a
-                    key="item2"
-                    style={styles.edit}
-                    onClick={this._showEditModal.bind(
-                      this,
-                      rowInfo.get('storeCateId'),
-                      rowInfo.get('cateName'),
-                      rowInfo.get('cateParentId'),
-                      rowInfo.get('cateRouter'),
-                      rowInfo.get('goodsCateId'),
-                      rowInfo.get('children'),
-                      rowInfo.get('cateTitle'),
-                      rowInfo.get('cateDescription'),
-                      // rowInfo.get('cateType'),
-                      rowInfo.get('cateImg')
-                    )}
-                    className="iconfont iconEdit"
-                  >
+                  <a key="item2" style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo)} className="iconfont iconEdit">
                     {/*<FormattedMessage id="edit" />*/}
                   </a>
                 </Tooltip>
@@ -207,40 +191,17 @@ export default class CateList extends React.Component<any, any> {
   /**
    * 显示修改弹窗
    */
-  _showEditModal = (
-    storeCateId: string,
-    cateName: string,
-    cateParentId: number,
-    cateRouter: string,
-    goodsCateId: number,
-    children: IList,
-    cateTitle: string,
-    cateDescription: string,
-    // cateType: number,
-    cateImg: IList
-  ) => {
+  _showEditModal = (rowInfo) => {
     const { showEditModal, allDataList } = this.props.relaxProps;
     let cateParentName = '';
+    let cateParentId = rowInfo.get('cateParentId');
     if (cateParentId > 0) {
       cateParentName = allDataList
         .filter((item) => item.get('storeCateId') === cateParentId)
         .get(0)
         .get('cateName');
     }
-    let cateInfo = Map({
-      storeCateId,
-      cateName,
-      cateParentName,
-      cateRouter,
-      cateParentId,
-      goodsCateId,
-      children,
-      cateTitle,
-      cateDescription
-      // cateType
-    });
-
-    showEditModal(cateInfo, cateImg);
+    showEditModal(rowInfo, rowInfo.get('cateImg'));
   };
 
   /**

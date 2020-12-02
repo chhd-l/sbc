@@ -219,6 +219,14 @@ class PeoductCategory extends Component<any, any> {
       () => this.getAttributes()
     );
   };
+  handleTableChange = (pagination: any) => {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getAttributes()
+    );
+  };
 
   render() {
     const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination } = this.state;
@@ -256,6 +264,11 @@ class PeoductCategory extends Component<any, any> {
         title: 'Attribute name',
         dataIndex: 'attributeName',
         key: 'attributeName'
+      },
+      {
+        title: 'Alias name',
+        dataIndex: 'attributeNameEn',
+        key: 'attributeNameEn'
       },
       {
         title: 'Attribute value',
@@ -348,7 +361,7 @@ class PeoductCategory extends Component<any, any> {
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-            <Table rowKey="id" rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+            <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
       </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input, TreeSelect, Tree, message, Select } from 'antd';
+import { Modal, Form, Input, TreeSelect, Tree, message, Select, Radio } from 'antd';
 import { Relax } from 'plume2';
 import { noop, QMMethod, Tips } from 'qmkit';
 import { Map, fromJS } from 'immutable';
@@ -162,7 +162,8 @@ class CateModalForm extends React.Component<any, any> {
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const descriptionTitle = formData.get('cateTitle');
-    // const cateType = formData.get('cateType');
+    const cateType = formData.get('cateType');
+    const displayStatus = formData.get('displayStatus');
     const { getFieldDecorator } = this.props.form;
     // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
@@ -204,22 +205,65 @@ class CateModalForm extends React.Component<any, any> {
         <FormItem {...formItemLayout} label="Parent category">
           {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
-        {formData.get('cateParentName') ? null : (
-          <FormItem {...formItemLayout} label="Router">
-            {getFieldDecorator('cateRouter', {
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: 'Please enter router'
-                },
-                { max: 100, message: 'Up to 100 characters' }
-              ],
-              initialValue: cateRouter,
-              onChange: this._editGoods.bind(this, 'cateRouter')
-            })(<Input />)}
-          </FormItem>
-        )}
+        <FormItem {...formItemLayout} label="Display in shop">
+          {getFieldDecorator('displayStatus', {
+            rules: [
+              {
+                required: true,
+                message: 'Please selecte display in shop'
+              }
+            ],
+            initialValue: displayStatus,
+            onChange: this._editGoods.bind(this, 'displayStatus')
+          })(
+            <Radio.Group>
+              <Radio value={true}>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </Radio.Group>
+          )}
+        </FormItem>
+        {displayStatus ? (
+          <>
+            {formData.get('cateParentName') ? null : (
+              <FormItem {...formItemLayout} label="Router">
+                {getFieldDecorator('cateRouter', {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please enter router'
+                    },
+                    { max: 100, message: 'Up to 100 characters' }
+                  ],
+                  initialValue: cateRouter,
+                  onChange: this._editGoods.bind(this, 'cateRouter')
+                })(<Input />)}
+              </FormItem>
+            )}
+            <FormItem labelCol={2} {...formItemLayout} label="Category type">
+              {getFieldDecorator('cateType', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please selecte category type'
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'cateType'),
+                initialValue: cateType ? this._getCateTypeName(cateType) : ''
+              })(
+                <Select>
+                  {petType &&
+                    petType.toJS().map((item, index) => (
+                      <Option value={item.valueEn} key={index}>
+                        {item.name}
+                      </Option>
+                    ))}
+                </Select>
+              )}
+              <Tips title={<FormattedMessage id="product.recommendedAliasName" />} />
+            </FormItem>
+          </>
+        ) : null}
 
         <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
           <div style={{ width: '400px' }}>
@@ -235,6 +279,7 @@ class CateModalForm extends React.Component<any, any> {
             initialValue: descriptionTitle
           })(<Input />)}
         </FormItem>
+
         <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [
@@ -248,24 +293,6 @@ class CateModalForm extends React.Component<any, any> {
             initialValue: goodsDescription
           })(<TextArea rows={4} placeholder="Please input the product description" />)}
         </FormItem>
-        {/* <FormItem labelCol={2} {...formItemLayout} label="Category type">
-          {getFieldDecorator('cateType', {
-            onChange: this._editGoods.bind(this, 'cateType'),
-            initialValue: cateType ? this._getCateTypeName(cateType) : ''
-          })(
-            <Select>
-              <Option value="">
-                <FormattedMessage id="all" />
-              </Option>
-              {petType &&
-                petType.toJS().map((item, index) => (
-                  <Option value={item.id} key={index}>
-                    {item.name}
-                  </Option>
-                ))}
-            </Select>
-          )}
-        </FormItem> */}
       </Form>
     );
   }
@@ -362,9 +389,9 @@ class CateModalForm extends React.Component<any, any> {
       editGoods(goods);
     }
   };
-  _getCateTypeName = (type) => {
+  _getCateTypeName = (value) => {
     const { petType } = this.props.relaxProps;
-    let currentPetType = petType && petType.toJS().find((item) => item.id === +type);
+    let currentPetType = petType && petType.toJS().find((item) => item.id == value || item.valueEn == value);
     if (currentPetType && currentPetType.name) {
       return currentPetType.name;
     } else {

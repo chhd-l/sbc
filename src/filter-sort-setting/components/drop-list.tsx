@@ -130,6 +130,11 @@ export default class SortableTable extends React.Component {
         className: 'drag-visible'
       },
       {
+        title: 'Alias name',
+        dataIndex: 'attributeNameEn',
+        key: 'attributeNameEn'
+      },
+      {
         title: 'Attribute value',
         dataIndex: 'attributeValue',
         key: 'attributeValue',
@@ -172,7 +177,7 @@ export default class SortableTable extends React.Component {
     const columnsSort = [
       {
         title: 'Sort field name',
-        dataIndex: 'field',
+        dataIndex: 'sortName',
         className: 'drag-visible'
       },
       {

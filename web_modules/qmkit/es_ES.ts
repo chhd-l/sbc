@@ -74,6 +74,7 @@ export default {
   'product.recommendedSizeVideo':
     'Product video size is recommended 30M, the maximum limit is 50M, supported file type is mp4, recommended duration is less than or equal to 90s, greater than or equal to 6s, recommended video ratio of 7: 9',
   'product.attributeInformation': 'Attribute information',
+  'product.recommendedAliasName':'English name of sales category for searching specific type producy,  you need to create Alias name in dictionary first, and then choose from.',
   'product.attributeInformationDetail':
     'Consumber can filter the products according to the attributes. If attributes are not filled in or filled in incorrectly, the products may not be found and affect your sales. Please input carefully and accurately',
   'product.specificationSetting': 'Specification setting',

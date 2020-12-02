@@ -243,12 +243,12 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    let a = addSkUProduct.filter(i=>i.pid == rowInfo.goodsInfoNo)
+    /*let a = addSkUProduct.filter(i=>i.pid == rowInfo.goodsInfoNo)
     if(e > a[0].stock) {
       e = a[0].stock
       message.error('The inventory must be less than or equal to the inventory of the bound product');
     }
-    console.log(addSkUProduct);
+    console.log(addSkUProduct);*/
     // console.log(rowInfo,111);
     // console.log(key,2222);
     // console.log(e,3333);

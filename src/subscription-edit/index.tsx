@@ -16,6 +16,20 @@ const { Option } = Select;
 
 const { TabPane } = Tabs;
 const { Search } = Input;
+
+const deliverStatus = (status) => {
+  if (status == 'NOT_YET_SHIPPED') {
+    return <FormattedMessage id="order.notShipped" />;
+  } else if (status == 'SHIPPED') {
+    return <FormattedMessage id="order.allShipments" />;
+  } else if (status == 'PART_SHIPPED') {
+    return <FormattedMessage id="order.partialShipment" />;
+  } else if (status == 'VOID') {
+    return <FormattedMessage id="order.invalid" />;
+  } else {
+    return <FormattedMessage id="order.unknown" />;
+  }
+};
 /**
  * 订单详情
  */
@@ -58,7 +72,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
       isPromotionCodeValid: false,
       promotionLoading: false,
-      promotionDesc: 'Subscription 0% Discount',
+      promotionDesc: 'Promotion',
       noStartOrder: [],
       completedOrder: [],
       visibleDate: false,
@@ -539,8 +553,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const { goodsInfo } = this.state;
     let sum = 0;
     for (let i = 0; i < goodsInfo.length; i++) {
-      if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
-        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
+      if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
+        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
       }
     }
     return sum;
@@ -755,8 +769,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.originalPrice}</p>
-            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.subscribePrice}</p>
+            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.originalPrice.toFixed(2)}</p>
+            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.subscribePrice.toFixed(2)}</p>
           </div>
         )
       },
@@ -831,7 +845,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + +record.subscribeNum * +record.subscribePrice}</span>
+            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (+record.subscribeNum * +record.originalPrice).toFixed(2)}</span>
           </div>
         )
       }
@@ -942,8 +956,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <div>
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
-                <div style={{ margin: 'auto 10px' }} key={index}>
-                  <p>X {item.num}</p>
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
               ))}
           </div>
@@ -963,13 +977,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -1033,9 +1047,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {record.tradeItems &&
-              record.tradeItems.map((item) => (
-                <div style={{ margin: 'auto 10px' }}>
-                  <p>X {item.num}</p>
+              record.tradeItems.map((item, index) => (
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
               ))}
           </div>
@@ -1065,18 +1079,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].deliverStatus ? record.tradeItems[0].deliverStatus : '-'}</div>
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
       },
       {
         title: 'Operation',
         dataIndex: '',
         key: 'x',
+        width: '10%',
         render: (text, record) => (
-          <Link to={'/order-detail/' + record.id}>
-            <Tooltip placement="top" title="Details">
-              <a style={styles.edit} className="iconfont iconDetails"></a>
-            </Tooltip>
-          </Link>
+          <>
+            {record.id ? (
+              <Link to={'/order-detail/' + record.id}>
+                <Tooltip placement="top" title="Details">
+                  <a style={styles.edit} className="iconfont iconDetails"></a>
+                </Tooltip>
+              </Link>
+            ) : null}
+          </>
         )
       }
     ];
@@ -1133,12 +1152,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Spin spinning={this.state.promotionLoading}>
                   <div className="flex-between">
                     <span>Subtotal</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + this.subTotal()}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + this.subTotal().toFixed(2)}</span>
                   </div>
 
                   <div className="flex-between">
                     <span>{this.state.promotionDesc}</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                   </div>
 
                   {/* <div className="flex-between">
@@ -1154,13 +1173,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </div> */}
                   <div className="flex-between">
                     <span>Shipping</span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                   </div>
                   <div className="flex-between">
                     <span>
                       <span>Total</span> (IVA Include):
                     </span>
-                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice)}</span>
+                    <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
                   </div>
 
                   {/* <Row style={{ marginTop: 20 }}>
@@ -1438,7 +1457,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
               <TabPane tab="Completed" key="completed">
-                <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={false}></Table>
+                <Table
+                  rowKey={(record, index) => index.toString()}
+                  rowClassName={(record, index) => {
+                    let className = 'normal-row';
+                    if (!record.id) className = 'disable-row';
+                    return className;
+                  }}
+                  columns={columns_completed}
+                  dataSource={completedOrder}
+                  pagination={false}
+                ></Table>
               </TabPane>
             </Tabs>
           </div>

@@ -1,26 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
-import {
-  Form,
-  Input,
-  Select,
-  Button,
-  Menu,
-  Dropdown,
-  Icon,
-  DatePicker,
-  Row,
-  Col
-} from 'antd';
-import {
-  noop,
-  ExportModal,
-  Const,
-  AuthWrapper,
-  checkAuth,
-  Headline,
-  SelectGroup
-} from 'qmkit';
+import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
@@ -88,19 +69,11 @@ export default class SearchHead extends Component<any, any> {
   }
 
   render() {
-    const {
-      onSearch,
-      tab,
-      exportModalData,
-      onExportModalHide
-    } = this.props.relaxProps;
+    const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
     const { tradeState } = this.state;
     let hasMenu = false;
-    if (
-      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
-      checkAuth('fOrderList004')
-    ) {
+    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
     }
 
@@ -109,11 +82,7 @@ export default class SearchHead extends Component<any, any> {
         {tab.get('key') == 'flowState-INIT' && (
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
-              <a
-                target="_blank"
-                href="javascript:;"
-                onClick={() => this._showBatchAudit()}
-              >
+              <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
                 <FormattedMessage id="order.batchReview" />
               </a>
             </AuthWrapper>
@@ -196,10 +165,7 @@ export default class SearchHead extends Component<any, any> {
                       let a = e.target.value.split(',');
 
                       this.setState({
-                        clinicSelectValue:
-                          this.state.clinicSelect == 'clinicsName'
-                            ? (e.target as any).value
-                            : e.target.value.split(',').map(Number)
+                        clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
                       });
                     }}
                   />
@@ -236,6 +202,7 @@ export default class SearchHead extends Component<any, any> {
                         <Option value="PAID">
                           <FormattedMessage id="order.paid" />
                         </Option>
+                        <Option value="PAYING">Paying</Option>
                       </Select>
                     ) : (
                       <Select
@@ -295,23 +262,7 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const {
-                        buyerOptions,
-                        goodsOptions,
-                        receiverSelect,
-                        clinicSelect,
-                        numberSelect,
-                        id,
-                        subscribeId,
-                        buyerOptionsValue,
-                        goodsOptionsValue,
-                        receiverSelectValue,
-                        clinicSelectValue,
-                        numberSelectValue,
-                        tradeState,
-                        beginTime,
-                        endTime
-                      } = this.state;
+                      const { buyerOptions, goodsOptions, receiverSelect, clinicSelect, numberSelect, id, subscribeId, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue, numberSelectValue, tradeState, beginTime, endTime } = this.state;
 
                       const ts = {} as any;
                       if (tradeState.deliverStatus) {
@@ -327,14 +278,8 @@ export default class SearchHead extends Component<any, any> {
                       }
 
                       const params = {
-                        id:
-                          numberSelect === 'orderNumber'
-                            ? numberSelectValue
-                            : '',
-                        subscribeId:
-                          numberSelect !== 'orderNumber'
-                            ? numberSelectValue
-                            : '',
+                        id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+                        subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
                         [buyerOptions]: buyerOptionsValue,
                         tradeState: ts,
                         [goodsOptions]: goodsOptionsValue,
@@ -358,28 +303,16 @@ export default class SearchHead extends Component<any, any> {
 
           {hasMenu && (
             <div className="handle-bar">
-              <Dropdown
-                overlay={menu}
-                placement="bottomLeft"
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-              >
+              <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" />{' '}
-                  <Icon type="down" />
+                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
           )}
         </div>
 
-        <ExportModal
-          data={exportModalData}
-          onHide={onExportModalHide}
-          handleByParams={exportModalData.get('exportByParams')}
-          handleByIds={exportModalData.get('exportByIds')}
-        />
+        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
       </div>
     );
   }

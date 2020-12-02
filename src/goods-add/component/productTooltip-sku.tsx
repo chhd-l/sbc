@@ -86,26 +86,30 @@ class ProductTooltipSKU extends React.Component<any, any> {
         visible={visible}
         onOk={() => {
           let a = [];
-          console.log(selectedSkuIds);
+          let minStock = []
           selectedSkuIds.map((item) => {
             a.push({
               goodsInfoNo: item
             });
           });
           let b = _.intersectionBy(this.state.selectedRows.toJS(), a, 'goodsInfoNo');
-          b&&b.map((item) =>
-            targetGoodsIds.push({
-              subGoodsInfoId: item.goodsInfoId,
-              bundleNum: 1,
-              goodsInfoNo: item.goodsInfoNo,
-              subGoodsInfoNo: item.goodsInfoNo
-            })
+          b&&b.map((item) =>{
+            minStock.push(item.stock)
+              targetGoodsIds.push({
+                subGoodsInfoId: item.goodsInfoId,
+                bundleNum: 1,
+                goodsInfoNo: item.goodsInfoNo,
+                subGoodsInfoNo: item.goodsInfoNo,
+              })
+            }
           );
           let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
           targetGoodsList = [];
+          console.log(minStock);
           targetGoodsList.push({
             pid: this.props.pid,
-            targetGoodsIds: goodsIds
+            targetGoodsIds: goodsIds,
+            minStock: Math.min.apply(Math, minStock)
           });
           if (targetGoodsIds.length <= 10) {
             //let a = _.filter(targetGoodsList, (o) => o.pid != this.props.pid);
@@ -113,7 +117,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
             });*/
-            //console.log(a,3333);
             onProductselectSku(targetGoodsList);
             targetGoodsIds = [];
             this.props.showModal({ type: 0 }, this.props.pid);

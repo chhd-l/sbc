@@ -35,6 +35,8 @@ export default class ProductPrice extends React.Component<any, any> {
       goods: IMap;
       baseSpecId: Number;
       subscriptionStatus: any;
+      updateBasePrice: Function;
+      updateAllBasePrice: Function;
     };
   };
 
@@ -57,7 +59,9 @@ export default class ProductPrice extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    updateBasePrice: noop,
+    updateAllBasePrice: noop
   };
 
   constructor(props) {
@@ -85,7 +89,8 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      priceType: ''
+      priceType: '',
+      goodsSpecsForShow: []
     };
   }
 
@@ -112,18 +117,46 @@ class SkuForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
     let columns: any = List();
-
+    // this.setState({
+    //   goodsSpecsForShow : [...goodsSpecs]
+    // })
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-      columns = goodsSpecs
-        .map((item) => {
-          return {
-            title: item.get('specName'),
-            dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
-          };
-        })
-        .toList();
+      if (baseSpecId) {
+        const _goodsSpecs = goodsSpecs.toJS();
+        let selectedItem;
+        _goodsSpecs.forEach((item) => {
+          if (item.specId === baseSpecId) {
+            selectedItem = item;
+          }
+        });
+        if (selectedItem) {
+          columns = columns.push({
+            title: selectedItem.specName,
+            dataIndex: 'specId-' + selectedItem.specId,
+            key: selectedItem.specId,
+            render: (rowInfo) => {
+              return (
+                <Row>
+                  <Col span={12}>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
+                  </Col>
+                </Row>
+              );
+            }
+          });
+        }
+      } else {
+        columns = goodsSpecs
+          .map((item) => {
+            return {
+              title: item.get('specName'),
+              dataIndex: 'specId-' + item.get('specId'),
+              key: item.get('specId')
+            };
+          })
+          .toList();
+      }
     }
 
     columns = columns.unshift({
@@ -290,7 +323,6 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-
     columns = columns.push({
       title: (
         <div>
@@ -320,8 +352,8 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{this._getBasePrice(rowInfo.marketPrice, rowInfo['specId-' + baseSpecId])}</p>
-                      {rowInfo.subscriptionStatus != 0 ? <p> {this._getBasePrice(rowInfo.subscriptionPrice, rowInfo['specId-' + baseSpecId])}</p> : null}
+                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
+                      <p>{rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
                     </div>
                   )}
                 </FormItem>
@@ -338,7 +370,7 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{this._getBasePrice(rowInfo.marketPrice, rowInfo['specId-' + baseSpecId])}</p>
+                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
                     </div>
                   )}
                 </FormItem>
@@ -356,16 +388,35 @@ class SkuForm extends React.Component<any, any> {
 
     return columns.toJS();
   };
-  _getBasePrice = (price, spec) => {
+  _getBasePrice = (id, price, spec) => {
     if (isNaN(parseFloat(price) / parseFloat(spec))) {
       return '0';
     } else {
-      return (parseFloat(price) / parseFloat(spec)).toFixed(2);
+      const { editGoodsItem } = this.props.relaxProps;
+      const value = (parseFloat(price) / parseFloat(spec)).toFixed(2);
+      editGoodsItem(id, 'basePrice', value);
+      return value;
+    }
+  };
+  _getSubscriptionBasePrice = (id, price, spec) => {
+    if (isNaN(parseFloat(price) / parseFloat(spec))) {
+      return '0';
+    } else {
+      const { editGoodsItem } = this.props.relaxProps;
+      const value = (parseFloat(price) / parseFloat(spec)).toFixed(2);
+      editGoodsItem(id, ' subscriptionBasePrice', value);
+      return value;
     }
   };
   _handleChange = (value) => {
+    const { updateAllBasePrice } = this.props.relaxProps;
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
+    updateAllBasePrice(value);
+    const goodsSpecsForShow = this.state.goodsSpecsForShow.splice(0, 1);
+    this.setState({
+      goodsSpecsForShow
+    });
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;
@@ -395,12 +446,14 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
+
     editGoodsItem(id, key, e);
+
     if (key == 'marketPrice') {
       editGoodsItem(id, 'flag', flag);
     }
@@ -423,6 +476,7 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
+    updateBasePrice(id, key, e);
   };
 
   /**

@@ -138,6 +138,7 @@ export default class Interaction extends React.Component<any, any> {
               });
               filterList.push({
                 title: item.attributeName,
+                attributeNameEn: item.attributeNameEn,
                 value: hasAttribute ? item.attributeId : item.id,
                 key: hasAttribute ? item.attributeId : item.id,
                 children: childrenNodes
@@ -250,10 +251,13 @@ export default class Interaction extends React.Component<any, any> {
       let children = selectChildren.filter((x) => x.parentId === item);
       let childValues = children.map((x) => x.value);
       let childTitles = children.map((x) => x.title);
+      let parent = this.state.filterList.find(x=>x.value ===item);
+      debugger
       if (children.length === 0) {
         return;
       }
-      let selectFilter = { attributeId: item, filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
+      let selectFilter = { attributeId: item, attributeNameEn: parent && parent.attributeNameEn ? parent.attributeNameEn : '',
+         filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
       selectFilterList.push(selectFilter);
     });
     let selectFilterListString = JSON.stringify(selectFilterList);

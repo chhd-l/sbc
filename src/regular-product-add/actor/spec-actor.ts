@@ -11,13 +11,14 @@ export default class GoodsSpecActor extends Actor {
       specSingleFlag: true,
       // 规格列表
       goodsSpecs: [
-        {
-          specId: this._getRandom(),
-          isMock: true,
-          specName: 'specification1',
-          specValues: []
-        }
+        // {
+        //   specId: this._getRandom(),
+        //   isMock: true,
+        //   specName: 'specification1',
+        //   specValues: []
+        // }
       ],
+
       goodsList: [
         {
           id: this._getRandom(),
@@ -27,7 +28,7 @@ export default class GoodsSpecActor extends Actor {
       ],
       stockChecked: false,
       marketPriceChecked: false,
-      baseSpecId: 0
+      baseSpecId: 0 //代表specName
     };
   }
 
@@ -83,14 +84,15 @@ export default class GoodsSpecActor extends Actor {
       state = state.set(
         'goodsSpecs',
         fromJS([
-          {
-            specId: this._getRandom(),
-            isMock: true,
-            specName: 'specification1',
-            specValues: []
-          }
+          // {
+          //   specId: this._getRandom(),
+          //   isMock: true,
+          //   specName: '',
+          //   specValues: []
+          // }
         ])
       );
+      state = state.set('baseSpecId', null);
     }
     return state.set('specSingleFlag', specSingleFlag);
   }

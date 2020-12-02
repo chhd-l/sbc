@@ -50,6 +50,7 @@ export default class FormActor extends Actor {
 
   @Action('formActor:spec')
   updateSpecForm(state, specForm) {
+    debugger;
     return state.set('specForm', specForm);
   }
 

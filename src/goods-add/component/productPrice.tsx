@@ -35,6 +35,8 @@ export default class ProductPrice extends React.Component<any, any> {
       goods: IMap;
       baseSpecId: Number;
       subscriptionStatus: any;
+      updateBasePrice: Function;
+      updateAllBasePrice: Function;
     };
   };
 
@@ -57,7 +59,9 @@ export default class ProductPrice extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    updateBasePrice: noop,
+    updateAllBasePrice: noop
   };
 
   constructor(props) {
@@ -116,18 +120,42 @@ class SkuForm extends React.Component<any, any> {
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
-      columns = goodsSpecs
-        .map((item) => {
-          return {
-            title: item.get('specName'),
-            dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
-          };
-        })
-        .toList();
+      if (baseSpecId) {
+        const _goodsSpecs = goodsSpecs.toJS();
+        let selectedItem;
+        _goodsSpecs.forEach((item) => {
+          if (item.mockSpecId === baseSpecId) {
+            selectedItem = item;
+          }
+        });
+        if (selectedItem) {
+          columns = columns.push({
+            title: selectedItem.specName,
+            dataIndex: 'specId-' + selectedItem.specId,
+            key: selectedItem.specId,
+            render: (rowInfo) => {
+              return (
+                <Row>
+                  <Col span={12}>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
+                  </Col>
+                </Row>
+              );
+            }
+          });
+        }
+      } else {
+        columns = goodsSpecs
+          .map((item) => {
+            return {
+              title: item.get('specName'),
+              dataIndex: 'specId-' + item.get('specId'),
+              key: item.get('specId')
+            };
+          })
+          .toList();
+      }
     }
-
-    //console.log(goods.toJS(), 1111111111111111111);
 
     columns = columns.unshift({
       title: '',
@@ -368,7 +396,7 @@ class SkuForm extends React.Component<any, any> {
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange}>
             {goodsSpecs.map((item) => (
-              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+              <Option value={item.get('mockSpecId')}>{item.get('specName')}</Option>
             ))}
           </Select>
         </div>
@@ -391,8 +419,8 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
-                      {rowInfo.subscriptionStatus != 0 ? <p>{isNaN(parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.subscriptionPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p> : null}
+                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
+                      <p>{rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
                     </div>
                   )}
                 </FormItem>
@@ -409,7 +437,7 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{isNaN(parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])) ? '0' : (parseFloat(rowInfo.marketPrice) / parseFloat(rowInfo['specId-' + baseSpecId])).toFixed(2)}</p>
+                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
                     </div>
                   )}
                 </FormItem>
@@ -428,8 +456,10 @@ class SkuForm extends React.Component<any, any> {
     return columns.toJS();
   };
   _handleChange = (value) => {
+    const { updateAllBasePrice } = this.props.relaxProps;
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
+    updateAllBasePrice(value);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;
@@ -459,7 +489,7 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
@@ -486,6 +516,7 @@ class SkuForm extends React.Component<any, any> {
         this.props.form.setFieldsValue(values);
       }
     }
+    updateBasePrice(id, key, e);
   };
 
   /**

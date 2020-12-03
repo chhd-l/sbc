@@ -199,8 +199,10 @@ export default class GoodsSpecActor extends Actor {
   @Action('goodsSpecActor: addSpec')
   addSpec(state) {
     let goodsSpecs = state.get('goodsSpecs');
+    const random = this._getRandom();
     const spec = fromJS({
-      specId: this._getRandom(),
+      specId: random,
+      mockSpecId: random,
       isMock: true,
       specName: 'specification' + (goodsSpecs.count() + 1),
       specValues: []

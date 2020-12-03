@@ -275,13 +275,15 @@ export default class AppStore extends Store {
 
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = [];
-      
-      tmpContext.goodsAttributesValueRelList && tmpContext.goodsAttributesValueRelList.map(x=>{
-        goodsPropDetailRelsOrigin.push({
-          propId: x.goodsAttributeId,
-          detailId: x.goodsAttributeValueId
-        })
-      })
+
+      if (tmpContext.goodsAttributesValueRelList) {
+        tmpContext.goodsAttributesValueRelList.map((x) => {
+          goodsPropDetailRelsOrigin.push({
+            propId: x.goodsAttributeId,
+            detailId: x.goodsAttributeValueId
+          });
+        });
+      }
 
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
@@ -322,7 +324,7 @@ export default class AppStore extends Store {
           return {
             pid: item.goodsInfoNo,
             targetGoodsIds: item.goodsInfoBundleRels,
-            stock:item.stock
+            stock: item.stock
           };
         });
       this.dispatch('sku:addSkUProduct', addSkUProduct);
@@ -415,9 +417,12 @@ export default class AppStore extends Store {
         });
 
         // 商品列表
+        let basePriceType;
+
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
+          basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
@@ -449,7 +454,7 @@ export default class AppStore extends Store {
         this.dispatch('goodsSpecActor: init', {
           goodsSpecs,
           goodsList,
-          baseSpecId: goods.get('baseSpec') || 0
+          baseSpecId: basePriceType || 0
         });
       } else {
         // 商品列表
@@ -1286,9 +1291,9 @@ export default class AppStore extends Store {
 
     goods = goods.set('goodsDescriptionDetails', detailEditor.getContent ? detailEditor.getContent() : '');
     const tabs = [];
-    console.log(data.get('detailEditor_0'),11111111111111);
+    // console.log(data.get('detailEditor_0'),11111111111111);
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
-      console.log(data.get('detailEditor_0').val.getContent())
+      // console.log(data.get('detailEditor_0').val.getContent())
       tabs.push({
         goodsId: goods.get('goodsId'),
         tabId: data.get('detailEditor_0').tabId,
@@ -1421,11 +1426,13 @@ export default class AppStore extends Store {
           return false;
         }
       }
-      let a = this.state().get('addSkUProduct').filter(a=>a.pid == item.toJS().goodsInfoNo)
-      let b = []
-      a.map((i)=>{
-        b = i.targetGoodsIds
-      })
+      let a = this.state()
+        .get('addSkUProduct')
+        .filter((a) => a.pid == item.toJS().goodsInfoNo);
+      let b = [];
+      a.map((i) => {
+        b = i.targetGoodsIds;
+      });
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1440,9 +1447,12 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined? item.get('goodsInfoBundleRels'): b,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined ? item.get('goodsInfoBundleRels') : b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
-          description: item.get('description')
+          description: item.get('description'),
+          basePriceType: data.get('baseSpecId'),
+          basePrice: item.get('basePrice') || 0,
+          subscriptionBasePrice: item.get('subscriptionBasePrice') || 0
         })
       );
     });
@@ -1461,7 +1471,6 @@ export default class AppStore extends Store {
       message.error(`SKU数量不超过${Const.spuMaxSku}个`);
       return false;
     }
-
 
     param = param.set('goodsInfos', goodsList);
 
@@ -1557,10 +1566,8 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      console.log('edit------------------');
       result = await edit(param.toJS());
     } else {
-      console.log('new------------------');
       result = await save(param.toJS());
     }
 
@@ -2252,6 +2259,57 @@ export default class AppStore extends Store {
     }
     //调接口
   };
+
+  // 产品规格
+  updateAllBasePrice = (mockSpecId) => {
+    if (!mockSpecId) {
+      return;
+    }
+    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let specId;
+    goodsSpecs.forEach((item) => {
+      if (item.mockSpecId === mockSpecId) {
+        specId = item.specId;
+      }
+    });
+    const goodsInfos = this.state().get('goodsList').toJS();
+    let specValue;
+    goodsInfos.forEach((item) => {
+      specValue = item['specId-' + specId];
+      const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+      const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+      this.editGoodsItem(item.id, 'basePrice', basePrice);
+      this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+    });
+  };
+  updateBasePrice = (id, key, e) => {
+    // type === 'basePrice' || subscriptionBasePrice
+    const mockSpecId = this.state().get('baseSpecId');
+    if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
+      return;
+    }
+    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let specId;
+    goodsSpecs.forEach((item) => {
+      if (item.mockSpecId === mockSpecId) {
+        specId = item.specId;
+      }
+    });
+    let specValue;
+    const goodsInfos = this.state().get('goodsList').toJS();
+    goodsInfos.forEach((item) => {
+      if (item.id === id) {
+        specValue = item['specId-' + specId];
+      }
+    });
+    const value = (parseFloat(e) / parseFloat(specValue)).toFixed(2);
+    if (key === 'marketPrice') {
+      this.editGoodsItem(id, 'basePrice', value);
+    } else if (key === 'subscriptionPrice') {
+      this.editGoodsItem(id, 'subscriptionBasePrice', value);
+    }
+  };
+
   showEditModal = ({ key, value }) => {};
   onSwitch = ({ key, value }) => {};
   pageChange = ({ key, value }) => {};

@@ -968,7 +968,7 @@ export default class AppStore extends Store {
       // console.log(item, i, data.get('detailEditor' + i), 'detailEditor_' + (i + 1))
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDescription', JSON.stringify(goodsDetailTabTemplate));
 
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
@@ -1289,7 +1289,7 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDescriptionDetails', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
     const tabs = [];
     // console.log(data.get('detailEditor_0'),11111111111111);
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
@@ -1325,7 +1325,7 @@ export default class AppStore extends Store {
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
 
-    goods = goods.set('goodsDescriptionDetails', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDescription', JSON.stringify(goodsDetailTabTemplate));
 
     param = param.set('goodsTabRelas', tabs);
 

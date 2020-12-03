@@ -1332,7 +1332,7 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDescriptionDetails', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDescription', detailEditor.getContent ? detailEditor.getContent() : '');
     const tabs = [];
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       tabs.push({
@@ -1366,7 +1366,7 @@ export default class AppStore extends Store {
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
 
-    goods = goods.set('goodsDescriptionDetails', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDescription', JSON.stringify(goodsDetailTabTemplate));
 
     param = param.set('goodsTabRelas', tabs);
 

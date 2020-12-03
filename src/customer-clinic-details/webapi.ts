@@ -71,15 +71,9 @@ export function getAddressList(id = null) {
  * @param filterParams
  */
 export function getAddressListByType(id = null, type = '') {
-  return Fetch<TResult>(
-    '/customer/addressList/encryption/listByCustomerIdAndType?customerId=' +
-      id +
-      '&type=' +
-      type,
-    {
-      method: 'Get'
-    }
-  );
+  return Fetch<TResult>('/customer/addressList/encryption/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
+    method: 'Get'
+  });
 }
 
 /**
@@ -144,6 +138,23 @@ export function petsById(filterParams = {}) {
 
 export function querySysDictionary(filterParams = {}) {
   return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function queryCityById(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-id', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function queryCityListByName(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-name', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

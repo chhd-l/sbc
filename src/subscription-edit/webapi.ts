@@ -110,3 +110,12 @@ export function updateNextDeliveryTime(filterParams = {}) {
     })
   });
 }
+
+export function queryCityById(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-id', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

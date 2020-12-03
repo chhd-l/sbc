@@ -1,26 +1,10 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Menu,
-  Card,
-  Checkbox,
-  Empty,
-  Spin,
-  Popconfirm
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { Const } from 'qmkit';
 
 const { TextArea } = Input;
 
@@ -62,13 +46,15 @@ class DeliveryInfomation extends React.Component<any, any> {
       isDefault: false,
       clinicList: [],
       currentId: '',
-      loading: true
+      loading: true,
+      objectFetching: false,
+      initCityName: ''
     };
   }
   componentDidMount() {
     this.getDict();
     this.getAddressList();
-    this.getClinicList();
+    // this.getClinicList();
   }
 
   getDict = () => {
@@ -80,14 +66,6 @@ class DeliveryInfomation extends React.Component<any, any> {
     } else {
       this.querySysDictionary('country');
     }
-    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
-      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-      this.setState({
-        cityArr: cityArr
-      });
-    } else {
-      this.querySysDictionary('city');
-    }
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -97,23 +75,11 @@ class DeliveryInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          if (type === 'city') {
-            this.setState({
-              cityArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem(
-              'dict-city',
-              JSON.stringify(res.context.sysDictionaryVOS)
-            );
-          }
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
             });
-            sessionStorage.setItem(
-              'dict-country',
-              JSON.stringify(res.context.sysDictionaryVOS)
-            );
+            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         } else {
           message.error(res.message || 'Unsuccessful');
@@ -198,33 +164,46 @@ class DeliveryInfomation extends React.Component<any, any> {
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
-            this.props.form.setFieldsValue({
-              customerAccount: res.context.customerAccount,
-              clinicsVOS: clinicsVOS,
-              firstName: deliveryForm.firstName,
-              lastName: deliveryForm.lastName,
-              consigneeNumber: deliveryForm.consigneeNumber,
-              postCode: deliveryForm.postCode,
-              cityId: deliveryForm.cityId,
-              countryId: deliveryForm.countryId,
-              address1: deliveryForm.address1,
-              address2: deliveryForm.address2,
-              rfc: deliveryForm.rfc
-            });
-            this.setState({
-              currentId: deliveryForm.deliveryAddressId,
-              clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
-              addressList: addressList,
-              deliveryForm: deliveryForm,
-              title: deliveryForm.consigneeName,
-              isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
-            });
+            this.getCityNameById(deliveryForm.cityId);
+
+            this.setState(
+              {
+                currentId: deliveryForm.deliveryAddressId,
+                clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
+                addressList: addressList,
+                deliveryForm: deliveryForm,
+                title: deliveryForm.consigneeName,
+                isDefault: deliveryForm.isDefaltAddress === 1 ? true : false,
+                loading: false
+              },
+              () => {
+                this.props.form.setFieldsValue({
+                  customerAccount: res.context.customerAccount,
+                  clinicsVOS: clinicsVOS,
+                  firstName: deliveryForm.firstName,
+                  lastName: deliveryForm.lastName,
+                  consigneeNumber: deliveryForm.consigneeNumber,
+                  postCode: deliveryForm.postCode,
+                  // cityId: deliveryForm.cityId,
+                  countryId: deliveryForm.countryId,
+                  address1: deliveryForm.address1,
+                  address2: deliveryForm.address2,
+                  rfc: deliveryForm.rfc
+                });
+              }
+            );
           }
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.message || 'Unsuccessful');
       });
   };
@@ -297,24 +276,29 @@ class DeliveryInfomation extends React.Component<any, any> {
     let deliveryForm = addressList.find((item) => {
       return item.deliveryAddressId === id;
     });
+    this.getCityNameById(deliveryForm.cityId);
 
-    this.props.form.setFieldsValue({
-      firstName: deliveryForm.firstName,
-      lastName: deliveryForm.lastName,
-      consigneeNumber: deliveryForm.consigneeNumber,
-      postCode: deliveryForm.postCode,
-      cityId: deliveryForm.cityId,
-      countryId: deliveryForm.countryId,
-      address1: deliveryForm.address1,
-      address2: deliveryForm.address2,
-      rfc: deliveryForm.rfc
-    });
-    this.setState({
-      currentId: id,
-      deliveryForm: deliveryForm,
-      title: deliveryForm.consigneeName,
-      isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
-    });
+    this.setState(
+      {
+        currentId: id,
+        deliveryForm: deliveryForm,
+        title: deliveryForm.consigneeName,
+        isDefault: deliveryForm.isDefaltAddress === 1 ? true : false
+      },
+      () => {
+        this.props.form.setFieldsValue({
+          firstName: deliveryForm.firstName,
+          lastName: deliveryForm.lastName,
+          consigneeNumber: deliveryForm.consigneeNumber,
+          postCode: deliveryForm.postCode,
+          // cityId: deliveryForm.cityId,
+          countryId: deliveryForm.countryId,
+          address1: deliveryForm.address1,
+          address2: deliveryForm.address2,
+          rfc: deliveryForm.rfc
+        });
+      }
+    );
   };
   //手机校验
   comparePhone = (rule, value, callback) => {
@@ -337,6 +321,55 @@ class DeliveryInfomation extends React.Component<any, any> {
     }
   };
 
+  getCityList = (value) => {
+    let params = {
+      cityName: value,
+      pageSize: 30,
+      pageNum: 0
+    };
+    webapi
+      .queryCityListByName(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            cityArr: res.context.systemCityVO,
+            objectFetching: false
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  getCityNameById = (id) => {
+    let params = {
+      id: [id]
+    };
+    webapi
+      .queryCityById(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0].cityName) {
+            this.setState({
+              initCityName: res.context.systemCityVO[0].cityName
+            });
+            this.props.form.setFieldsValue({
+              cityId: res.context.systemCityVO[0].cityName
+            });
+          }
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   render() {
     const formItemLayout = {
       labelCol: {
@@ -348,7 +381,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         sm: { span: 12 }
       }
     };
-    const { countryArr, cityArr, clinicList } = this.state;
+    const { countryArr, cityArr, clinicList, objectFetching, initCityName } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
@@ -363,10 +396,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                       onClick={() => this.switchAddress(item.deliveryAddressId)}
                       style={{
                         cursor: 'pointer',
-                        color:
-                          item.deliveryAddressId === this.state.currentId
-                            ? '#e2001a'
-                            : ''
+                        color: item.deliveryAddressId === this.state.currentId ? '#e2001a' : ''
                       }}
                     >
                       {item.consigneeName}
@@ -376,9 +406,7 @@ class DeliveryInfomation extends React.Component<any, any> {
             </ul>
           </Col>
           <Col span={20}>
-            {this.state.addressList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.addressList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
               title={this.state.title}
               style={{
@@ -387,14 +415,10 @@ class DeliveryInfomation extends React.Component<any, any> {
               extra={
                 <div
                   style={{
-                    display:
-                      this.props.customerType === 'Guest' ? 'none' : 'block'
+                    display: this.props.customerType === 'Guest' ? 'none' : 'block'
                   }}
                 >
-                  <Checkbox
-                    checked={this.state.isDefault}
-                    onChange={() => this.clickDefault()}
-                  >
+                  <Checkbox checked={this.state.isDefault} onChange={() => this.clickDefault()}>
                     Set default delivery address
                   </Checkbox>
                 </div>
@@ -405,8 +429,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   <Col
                     span={12}
                     style={{
-                      display:
-                        this.props.customerType !== 'Guest' ? 'none' : 'block'
+                      display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
                     <FormItem label="Consumer account">
@@ -423,8 +446,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   <Col
                     span={12}
                     style={{
-                      display:
-                        this.props.customerType !== 'Guest' ? 'none' : 'block'
+                      display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
                     <FormItem label="Selected Prescriber">
@@ -460,13 +482,8 @@ class DeliveryInfomation extends React.Component<any, any> {
                         ))} */}
                           {clinicList
                             ? clinicList.map((item) => (
-                                <Option
-                                  value={item.prescriberId.toString()}
-                                  key={item.prescriberId}
-                                >
-                                  {item.prescriberId +
-                                    ',' +
-                                    item.prescriberName}
+                                <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                                  {item.prescriberId + ',' + item.prescriberName}
                                 </Option>
                               ))
                             : null}
@@ -580,9 +597,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Country">
                       {getFieldDecorator('countryId', {
-                        rules: [
-                          { required: true, message: 'Please input Country!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input Country!' }]
                       })(
                         <Select
                           disabled={this.props.customerType === 'Guest'}
@@ -608,11 +623,15 @@ class DeliveryInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="City">
                       {getFieldDecorator('cityId', {
-                        rules: [
-                          { required: true, message: 'Please input City!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input City!' }],
+                        initialValue: initCityName
                       })(
                         <Select
+                          showSearch
+                          placeholder="Select a Order number"
+                          notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                          onSearch={this.getCityList}
+                          filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -625,7 +644,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                           {cityArr
                             ? cityArr.map((item) => (
                                 <Option value={item.id} key={item.id}>
-                                  {item.name}
+                                  {item.cityName}
                                 </Option>
                               ))
                             : null}
@@ -716,8 +735,7 @@ class DeliveryInfomation extends React.Component<any, any> {
                         htmlType="submit"
                         style={{
                           marginRight: '20px',
-                          display:
-                            this.props.customerType === 'Guest' ? 'none' : null
+                          display: this.props.customerType === 'Guest' ? 'none' : null
                         }}
                       >
                         Save
@@ -734,20 +752,11 @@ class DeliveryInfomation extends React.Component<any, any> {
                         Delete
                       </Button> */}
 
-                      <Popconfirm
-                        placement="topRight"
-                        title="Are you sure to delete this item?"
-                        onConfirm={() => this.delAddress()}
-                        okText="Confirm"
-                        cancelText="Cancel"
-                      >
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginRight: '20px',
-                            display:
-                              this.props.customerType === 'Guest'
-                                ? 'none'
-                                : null
+                            display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
                           <FormattedMessage id="delete" />

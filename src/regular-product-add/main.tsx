@@ -64,6 +64,7 @@ export default class Main extends React.Component<any, any> {
   };
 
   onPrev = (res) => {
+    debugger;
     let type = '';
     if (res == 'price') {
       type = 'main';

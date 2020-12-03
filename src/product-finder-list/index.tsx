@@ -302,7 +302,9 @@ class ProductFinderList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Table rowKey="id" columns={columns} dataSource={productFinderList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          <Table rowKey="id" columns={columns} dataSource={productFinderList} pagination={this.state.pagination}
+                 loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+                 scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
       </div>
     );

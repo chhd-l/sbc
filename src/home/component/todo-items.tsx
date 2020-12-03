@@ -124,7 +124,7 @@ export default class TodoItems extends React.Component<any, any> {
     const { loading, tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     return (
       <div className="item">
-        <Spin spinning={loading}>
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <img src={NoData} width={50}></img>
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
@@ -419,11 +419,11 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="subscription-content space-around">
                       <div className="text">Order Number</div>
                       <div className="num">
-                        <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
+                        <div className="num-l">{tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
-                            {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate >= 0 ? 'green' : 'red') : ''}>
+                            {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
                         </div>
                       </div>
@@ -431,11 +431,11 @@ export default class TodoItems extends React.Component<any, any> {
                     <div className="subscription-content space-around">
                       <div className="text">Sales volume</div>
                       <div className="num">
-                        <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
+                        <div className="num-l">{tradeCustomerView && tradeCustomerView.salesVolume != null ? <CountUp end={tradeCustomerView.salesVolume} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
-                            {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                          {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <img src={tradeCustomerView.salesVolumeRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? (tradeCustomerView.salesVolumeRate >= 0 ? 'green' : 'red') : ''}>
+                            {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <CountUp end={Math.abs(tradeCustomerView.salesVolumeRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
                         </div>
                       </div>
@@ -504,14 +504,14 @@ export default class TodoItems extends React.Component<any, any> {
                   </span>
                 </div>
               </div>
-              {!goodsInfoTopView || !trafficTrendDashboardView.goodsInfoTopViewItemList || trafficTrendDashboardView.goodsInfoTopViewItemList.length === 0 ? (
+              {goodsInfoTopView.length === 0 ? (
                 <div>
                   <img src={nodataImg} className="no-data-img" />
                 </div>
               ) : (
                 <div className="seller space-between">
                   {goodsInfoTopView &&
-                    goodsInfoTopView.goodsInfoTopViewItemList.map((item, i) => {
+                    goodsInfoTopView.map((item, i) => {
                       return (
                         <div className="seller-pro flex-start" key={i}>
                           <div className="text">TOP {i + 1}</div>

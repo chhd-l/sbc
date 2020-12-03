@@ -33,6 +33,7 @@ export default class AppStore extends Store {
       flushSelected: true
     }
   ) => {
+    this.dispatch('info:setLoading', true);
     const { res, err } = (await goodsList({
       pageNum,
       pageSize,
@@ -42,10 +43,13 @@ export default class AppStore extends Store {
       res.context.goodsPage.content.forEach((v, i) => {
         v.key = i;
       });
+      this.dispatch('info:setLoading', false);
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+
     } else {
       message.error(res.message);
+      this.dispatch('info:setLoading', false);
     }
 
     const cates: any = await getCateList();

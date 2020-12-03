@@ -37,6 +37,7 @@ export default class CateList extends React.Component<any, any> {
       expandedRowKeys: IList;
       getGoodsCate: IList;
       sourceGoodCateList: IList;
+      loading: any
     };
   };
 
@@ -59,11 +60,12 @@ export default class CateList extends React.Component<any, any> {
     pageNum: 'pageNum',
     expandedRowKeys: 'expandedRowKeys',
     getGoodsCate: 'getGoodsCate',
-    sourceGoodCateList: 'sourceGoodCateList'
+    sourceGoodCateList: 'sourceGoodCateList',
+    loading: 'loading'
   };
 
   render() {
-    const { goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, onShowSku } = this.props.relaxProps;
+    const { loading, goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, onShowSku } = this.props.relaxProps;
 
     let hasMenu = false;
     if (checkAuth('f_goods_sku_edit_2') || checkAuth('f_goods_sku_edit_3') || checkAuth('f_goods_up_down') || checkAuth('f_goods_6')) {
@@ -73,6 +75,7 @@ export default class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
+        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
         // expandedRowRender={this._expandedRowRender}
         // expandedRowKeys={expandedRowKeys.toJS()}
         // onExpand={(expanded, record) => {

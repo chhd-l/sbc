@@ -89,8 +89,7 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      priceType: '',
-      goodsSpecsForShow: []
+      priceType: ''
     };
   }
 
@@ -117,16 +116,14 @@ class SkuForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
     let columns: any = List();
-    // this.setState({
-    //   goodsSpecsForShow : [...goodsSpecs]
-    // })
+
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       if (baseSpecId) {
         const _goodsSpecs = goodsSpecs.toJS();
         let selectedItem;
         _goodsSpecs.forEach((item) => {
-          if (item.specId === baseSpecId) {
+          if (item.mockSpecId === baseSpecId) {
             selectedItem = item;
           }
         });
@@ -323,7 +320,6 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    console.log(goodsSpecs.toJS(), 'goodsSpecs------------------');
     columns = columns.push({
       title: (
         <div>
@@ -414,10 +410,6 @@ class SkuForm extends React.Component<any, any> {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
     updateAllBasePrice(value);
-    const goodsSpecsForShow = this.state.goodsSpecsForShow.splice(0, 1);
-    this.setState({
-      goodsSpecsForShow
-    });
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

@@ -104,7 +104,7 @@ export default class SearchForm extends React.Component<any, any> {
           rowKey={(record) => record.clinicID}
           dataSource={data}
           pagination={pagination}
-          loading={loading}
+          loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
           onChange={this.handleTableChange}
         />
       </div>

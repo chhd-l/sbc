@@ -83,7 +83,7 @@ export default class CustomerList extends React.Component<any, any> {
 
     return (
       <DataGrid
-        loading={loading}
+        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
         className="resetTable"
         rowKey="evaluateId"
         pagination={{

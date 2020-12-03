@@ -277,9 +277,8 @@ class SkuForm extends React.Component<any, any> {
                       message: 'Please input SKU code'
                     },
                     {
-                      min: 1,
-                      max: 20,
-                      message: '1-20 characters'
+                      pattern: ValidConst.number,
+                      message: 'Please enter a positive integer'
                     }
                   ],
                   //onChange:  (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e),
@@ -304,7 +303,6 @@ class SkuForm extends React.Component<any, any> {
                                 defaultValue={item.bundleNum}
                                 key={item.subGoodsInfoNo}
                                 min={1}
-                                step={1}
                                 onChange={(e) => {
                                   if (i.pid == rowInfo.goodsInfoNo) {
                                     const target = i.targetGoodsIds.filter((a, o) => item.subGoodsInfoNo === a.subGoodsInfoNo)[0];
@@ -312,7 +310,6 @@ class SkuForm extends React.Component<any, any> {
                                       target['bundleNum'] = e;
                                     }
                                     let res = _.unionBy([target], i.targetGoodsIds, 'subGoodsInfoId');
-                                    console.log(res,333333);
                                     this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', res);
                                   }
                                 }}

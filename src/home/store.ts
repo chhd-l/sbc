@@ -137,7 +137,7 @@ export default class AppStore extends Store {
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
-      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
+      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context.goodsInfoTopViewItemList || []);
       this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
       this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
       this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
@@ -149,6 +149,7 @@ export default class AppStore extends Store {
   };
 
   prescriberInit = async (data) => {
+    this.dispatch('loading:start');
     const { res: getTradeCustomerView } = await webapi.getPrescriberTradeAndCustomerData(data);
     const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);
     const { res: getConversionFunnelDashboardView } = await webapi.getPrescriberConversionFunnelDashboardView(data);
@@ -157,6 +158,7 @@ export default class AppStore extends Store {
     const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
 
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       this.dispatch('prescriber:p_trafficDashboardView', getTrafficDashboardView.context);
       this.dispatch('prescriber:p_tradeCustomerView', getTradeCustomerView.context);
       this.dispatch('prescriber:p_prescriberTopView', getPrescriberTopView.context);
@@ -174,7 +176,6 @@ export default class AppStore extends Store {
   };
 
   selectSearch = (data) => {
-    console.log(data);
     this.dispatch('home:selectSearchData', data);
   };
 

@@ -332,7 +332,8 @@ export default class Customer extends React.Component<any, any> {
             </Form>
           </div>
           <div className="container">
-            <Table columns={columns} rowKey="id" dataSource={this.state.searchList} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
+            <Table columns={columns} rowKey="id" dataSource={this.state.searchList} pagination={this.state.pagination}
+                   loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }} onChange={this.handleTableChange} />
           </div>
         </div>
       </AuthWrapper>

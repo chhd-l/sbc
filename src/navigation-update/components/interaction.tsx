@@ -120,7 +120,8 @@ export default class Interaction extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let filterList = [];
-          res.context.map((item) => {
+          let activeFilters = res.context.filter(x=>x.filterStatus === '1') 
+          activeFilters.map((item) => {
             let childrenNodes = [];
             let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
             let hasAttribute = item.attributesValueList && item.attributesValueList.length > 0;
@@ -252,7 +253,6 @@ export default class Interaction extends React.Component<any, any> {
       let childValues = children.map((x) => x.value);
       let childTitles = children.map((x) => x.title);
       let parent = this.state.filterList.find(x=>x.value ===item);
-      debugger
       if (children.length === 0) {
         return;
       }

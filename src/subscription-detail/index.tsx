@@ -743,8 +743,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.detail" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <Spin spinning={this.state.loading}>
-          <div className="container-search">
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>          <div className="container-search">
             <Headline title={title} />
             <Row className="subscription-basic-info">
               <Col span={24}>

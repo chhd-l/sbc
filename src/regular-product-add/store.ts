@@ -417,10 +417,11 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
+
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
-          // basePriceType = item.get('basePriceType')
+          basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
@@ -428,6 +429,7 @@ export default class AppStore extends Store {
 
             const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
             item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
+
             item = item.set('specDetailId-' + specId, detailId);
             if (item.get('goodsInfoImg')) {
               item = item.set(
@@ -444,6 +446,7 @@ export default class AppStore extends Store {
               );
             }
           });
+
           item = item.set('id', item.get('goodsInfoId'));
           item = item.set('skuSvIds', mockSpecDetailIds.join());
           item = item.set('index', index + 1);
@@ -587,10 +590,18 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: editGoods', goods);
   };
 
-  updateAllBasePrice = (specId) => {
-    if (!specId) {
+  // 产品规格
+  updateAllBasePrice = (mockSpecId) => {
+    if (!mockSpecId) {
       return;
     }
+    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let specId;
+    goodsSpecs.forEach((item) => {
+      if (item.mockSpecId === mockSpecId) {
+        specId = item.specId;
+      }
+    });
     const goodsInfos = this.state().get('goodsList').toJS();
     let specValue;
     goodsInfos.forEach((item) => {
@@ -604,10 +615,17 @@ export default class AppStore extends Store {
   };
   updateBasePrice = (id, key, e) => {
     // type === 'basePrice' || subscriptionBasePrice
-    const specId = this.state().get('baseSpecId');
-    if (!specId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
+    const mockSpecId = this.state().get('baseSpecId');
+    if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
       return;
     }
+    const goodsSpecs = this.state().get('goodsSpecs').toJS();
+    let specId;
+    goodsSpecs.forEach((item) => {
+      if (item.mockSpecId === mockSpecId) {
+        specId = item.specId;
+      }
+    });
     let specValue;
     const goodsInfos = this.state().get('goodsList').toJS();
     goodsInfos.forEach((item) => {

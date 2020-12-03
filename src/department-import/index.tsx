@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, Icon, message, Spin, Steps, Upload } from 'antd';
+import {Alert, Button, Icon, message, Row, Spin, Steps, Upload} from 'antd';
 import { Const, Fetch, Headline, util, BreadCrumb } from 'qmkit';
 
 const Dragger = Upload.Dragger;
@@ -104,7 +104,7 @@ export default class GoodsImport extends React.Component<any, any> {
             </div>
           ) : null}
           {current == 1 ? (
-            <Spin spinning={this.state.loading}>
+            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
               <div className="steps-content" style={styles.center}>
                 <Dragger
                   name="uploadFile"

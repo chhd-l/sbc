@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { Table, Button, InputNumber, Modal, Form, Spin } from 'antd';
+import {Table, Button, InputNumber, Modal, Form, Spin, Row} from 'antd';
 import { IMap, IList } from 'typings/globalType';
 import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
 import DeliveryForm from './delivery-form';
@@ -138,7 +138,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                     )}
                   </div>
 
-                  <Spin spinning={this.state.loading} delay={0}>
+                  <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
                     <div style={{ marginTop: 0, marginBottom: 20, marginLeft: 15 }}>
                       {refresh.length != 0
                         ? refresh[i].syncLogisticsInfo.originInfo.trackInfo &&

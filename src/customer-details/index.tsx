@@ -1,18 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Breadcrumb,
-  Modal,
-  Popconfirm
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Breadcrumb, Modal, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
@@ -36,12 +23,8 @@ export default class CustomerDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
-      customerType: this.props.match.params.type
-        ? this.props.match.params.type
-        : 'Guest',
-      customerAccount: this.props.match.params.account
-        ? this.props.match.params.account
-        : '',
+      customerType: this.props.match.params.type ? this.props.match.params.type : 'Guest',
+      customerAccount: this.props.match.params.account ? this.props.match.params.account : '',
       loading: false
     };
   }
@@ -91,9 +74,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     customerIds.push(constomerId);
     let params = {
       customerIds: customerIds,
-      userId: sessionStorage.getItem('employeeId')
-        ? sessionStorage.getItem('employeeId')
-        : ''
+      userId: sessionStorage.getItem('employeeId') ? sessionStorage.getItem('employeeId') : ''
     };
     webapi
       .delCustomer(params)
@@ -132,13 +113,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                 defaultActiveKey="basic"
                 onChange={this.clickTabs}
                 tabBarExtraContent={
-                  <Popconfirm
-                    placement="topRight"
-                    title="Are you sure to remove this item?"
-                    onConfirm={() => this.removeConsumer(this.state.customerId)}
-                    okText="Confirm"
-                    cancelText="Cancel"
-                  >
+                  <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
                     <Button type="link">
                       <FormattedMessage id="consumer.removeConsumer" />
                     </Button>
@@ -146,43 +121,28 @@ export default class CustomerDetails extends React.Component<any, any> {
                 }
               >
                 <TabPane tab="Basic infomation" key="basic">
-                  <BasicInfomation
-                    customerId={this.state.customerId}
-                  ></BasicInfomation>
+                  <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
                 </TabPane>
                 <TabPane tab="Pet infomation" key="pet">
-                  <PetInfomation
-                    customerId={this.state.customerId}
-                    customerAccount={this.state.customerAccount}
-                  ></PetInfomation>
+                  <PetInfomation customerId={this.state.customerId} customerAccount={this.state.customerAccount}></PetInfomation>
                 </TabPane>
                 <TabPane tab="Delivery infomation" key="delivery">
-                  <DeliveryInformation
-                    customerId={this.state.customerId}
-                  ></DeliveryInformation>
+                  <DeliveryInformation customerId={this.state.customerId}></DeliveryInformation>
                 </TabPane>
                 <TabPane tab="Billing infomation" key="billing">
-                  <BillingInfomation
-                    customerId={this.state.customerId}
-                  ></BillingInfomation>
+                  <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
                 </TabPane>
-                <TabPane tab="Payment methods" key="payment">
+                {/* <TabPane tab="Payment methods" key="payment">
                   <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
-                </TabPane>
+                </TabPane> */}
               </Tabs>
             ) : (
               <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
                 <TabPane tab="Delivery infomation" key="vistor-delivery">
-                  <DeliveryInformation
-                    customerId={this.state.customerId}
-                    customerType="Guest"
-                  ></DeliveryInformation>
+                  <DeliveryInformation customerId={this.state.customerId} customerType="Guest"></DeliveryInformation>
                 </TabPane>
                 <TabPane tab="Billing infomation" key="vistor-billing">
-                  <BillingInfomation
-                    customerId={this.state.customerId}
-                    customerType="Guest"
-                  ></BillingInfomation>
+                  <BillingInfomation customerId={this.state.customerId} customerType="Guest"></BillingInfomation>
                 </TabPane>
               </Tabs>
             )}

@@ -1,24 +1,11 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  DatePicker,
-  Empty,
-  Spin
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin, Checkbox } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import { Const } from 'qmkit';
 
 const { TextArea } = Input;
 
@@ -43,11 +30,11 @@ class BasicInfomation extends React.Component<any, any> {
         birthDay: '',
         email: '',
         contactPhone: '',
-        // postCode: '',
-        // city: '',
-        country: '',
-        // address1: '',
-        // address2: '',
+        postalCode: '',
+        cityId: '',
+        countryId: '',
+        address1: '',
+        address2: '',
         preferredMethods: '',
         reference: '',
         selectedClinics: [],
@@ -55,16 +42,17 @@ class BasicInfomation extends React.Component<any, any> {
         defaultClinics: {
           clinicsId: 0,
           clinicsName: ''
-        },
-        // cityObj: {},
-        countryObj: {}
+        }
       },
       countryArr: [],
       cityArr: [],
       currentBirthDay: '2020-01-01',
       clinicList: [],
       currentForm: {},
-      loading: true
+      loading: true,
+      objectFetching: false,
+      initCityName: '',
+      initPreferChannel: []
     };
   }
   componentDidMount() {
@@ -82,14 +70,6 @@ class BasicInfomation extends React.Component<any, any> {
     } else {
       this.querySysDictionary('country');
     }
-    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
-      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-      this.setState({
-        cityArr: cityArr
-      });
-    } else {
-      this.querySysDictionary('city');
-    }
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -99,23 +79,20 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          if (type === 'city') {
-            this.setState({
-              cityArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem(
-              'dict-city',
-              JSON.stringify(res.context.sysDictionaryVOS)
-            );
-          }
+          // if (type === 'city') {
+          //   this.setState({
+          //     cityArr: res.context.sysDictionaryVOS
+          //   });
+          //   sessionStorage.setItem(
+          //     'dict-city',
+          //     JSON.stringify(res.context.sysDictionaryVOS)
+          //   );
+          // }
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
             });
-            sessionStorage.setItem(
-              'dict-country',
-              JSON.stringify(res.context.sysDictionaryVOS)
-            );
+            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         } else {
           message.error(res.message || 'Unsuccessful');
@@ -155,50 +132,62 @@ class BasicInfomation extends React.Component<any, any> {
           let basicForm = {
             firstName: resObj.firstName,
             lastName: resObj.lastName,
-            birthDay: resObj.birthDay
-              ? resObj.birthDay
-              : this.state.currentBirthDay,
+            birthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
             email: resObj.email,
             contactPhone: resObj.contactPhone,
-            // postCode: resObj.postCode,
-            // city: resObj.Id,
-            country: resObj.countryId,
-            // address1: resObj.house,
-            // address2: resObj.housing,
-            preferredMethods: resObj.contactMethod,
+            postalCode: resObj.postalCode,
+            cityId: resObj.cityId,
+            countryId: resObj.countryId,
+            address1: resObj.address1,
+            address2: resObj.address2,
+            communicationPhone: resObj.communicationPhone,
+            communicationEmail: resObj.communicationEmail,
             reference: resObj.reference,
             selectedClinics: resObj.clinicsVOS,
             defaultClinicsId: defaultClinicsId,
-            defaultClinics: resObj.defaultClinics
+            defaultClinics: resObj.defaultClinics,
+            preferredMethods: []
           };
-          this.setState({
-            currentBirthDay: resObj.birthDay
-              ? resObj.birthDay
-              : this.state.currentBirthDay,
-            basicForm: basicForm,
-            currentForm: resObj
-          });
-          setTimeout(() => {
-            this.props.form.setFieldsValue({
-              firstName: resObj.firstName,
-              lastName: resObj.lastName,
-              // birthDay: resObj.birthDay,
-              email: resObj.email,
-              contactPhone: resObj.contactPhone,
-              // postCode: resObj.postCode,
-              // city: resObj.cityId,
-              country: resObj.countryId,
-              // address1: resObj.house,
-              // address2: resObj.housing,
-              preferredMethods: resObj.contactMethod,
-              reference: resObj.reference,
-              selectedClinics: clinicsVOS,
-              defaultClinicsId: defaultClinicsId
-            });
-            this.setState({
-              loading: false
-            });
-          }, 1000);
+          if (basicForm.cityId) {
+            this.getCityNameById(basicForm.cityId);
+          }
+          let initPreferChannel = [];
+          if (+basicForm.communicationPhone) {
+            initPreferChannel.push('Phone');
+          }
+          if (+basicForm.communicationEmail) {
+            initPreferChannel.push('Email');
+          }
+          basicForm.preferredMethods = initPreferChannel;
+
+          this.setState(
+            {
+              currentBirthDay: resObj.birthDay ? resObj.birthDay : this.state.currentBirthDay,
+              basicForm: basicForm,
+              currentForm: resObj,
+              initPreferChannel: initPreferChannel
+            },
+            () => {
+              this.props.form.setFieldsValue({
+                firstName: resObj.firstName,
+                lastName: resObj.lastName,
+                email: resObj.email,
+                contactPhone: resObj.contactPhone,
+                postalCode: resObj.postalCode,
+                // city: resObj.cityId,
+                country: resObj.countryId,
+                address1: resObj.address1,
+                address2: resObj.address2,
+                // preferredMethods: resObj.contactMethod,
+                reference: resObj.reference,
+                selectedClinics: clinicsVOS,
+                defaultClinicsId: defaultClinicsId
+              });
+              this.setState({
+                loading: false
+              });
+            }
+          );
         }
       })
       .catch((err) => {
@@ -227,51 +216,24 @@ class BasicInfomation extends React.Component<any, any> {
 
   saveBasicInfomation = () => {
     const { basicForm, currentForm } = this.state;
-
-    // (currentForm.firstName = basicForm.firstName),
-    //   (currentForm.lastName = basicForm.lastName),
-    //   (currentForm.consigneeName =
-    //     basicForm.firstName + ' ' + basicForm.lastName),
-    //   (currentForm.customerName =
-    //     basicForm.firstName + ' ' + basicForm.lastName),
-
-    //   (currentForm.birthDay = basicForm.birthDay),
-    //   (currentForm.email = basicForm.email),
-    //   (currentForm.contactPhone = basicForm.contactPhone),
-    //   (currentForm.postCode = basicForm.postCode),
-    //   (currentForm.city = basicForm.city),
-    //   (currentForm.country = basicForm.country),
-    //   (currentForm.house = basicForm.address1),
-    //   (currentForm.housing = basicForm.address2),
-    //   (currentForm.contactMethod = basicForm.preferredMethods),
-    //   (currentForm.reference = basicForm.reference),
-    //   (currentForm.clinicsVOS = basicForm.selectedClinics),
-    //   (currentForm.customerId = basicForm.customerId),
-    //   (currentForm.defaultClinics = basicForm.defaultClinics)
     let params = {
-      birthDay: basicForm.birthDay
-        ? basicForm.birthDay
-        : this.state.currentBirthDay,
-      // city: basicForm.cityObj ? basicForm.cityObj.cityName : currentForm.city,
-      // cityId: basicForm.cityObj ? basicForm.cityObj.cityId : currentForm.cityId,
+      birthDay: basicForm.birthDay ? basicForm.birthDay : this.state.currentBirthDay,
+      cityId: basicForm.cityId ? basicForm.cityId : currentForm.cityId,
       clinicsVOS: basicForm.selectedClinics,
-      contactMethod: basicForm.preferredMethods,
+      // contactMethod: basicForm.preferredMethods,
       contactPhone: basicForm.contactPhone,
-      country: basicForm.countryObj
-        ? basicForm.countryObj.countryName
-        : currentForm.country,
-      countryId: basicForm.countryObj
-        ? basicForm.countryObj.countryId
-        : currentForm.countryId,
+      countryId: basicForm.countryId ? basicForm.countryId : currentForm.countryId,
       customerDetailId: currentForm.customerDetailId,
       defaultClinics: basicForm.defaultClinics,
       email: basicForm.email,
       firstName: basicForm.firstName,
-      // house: basicForm.address1,
-      // housing: basicForm.address2,
+      address1: basicForm.address1,
+      address2: basicForm.address2,
       lastName: basicForm.lastName,
-      // postCode: basicForm.postCode,
-      reference: basicForm.reference
+      postalCode: basicForm.postalCode,
+      reference: basicForm.reference,
+      communicationPhone: JSON.stringify(basicForm.preferredMethods).indexOf('Phone') > -1 ? 1 : 0,
+      communicationEmail: JSON.stringify(basicForm.preferredMethods).indexOf('Email') > -1 ? 1 : 0
     };
 
     webapi
@@ -330,7 +292,7 @@ class BasicInfomation extends React.Component<any, any> {
   compareZip = (rule, value, callback) => {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
-    if (!reg.test(form.getFieldValue('postCode'))) {
+    if (!reg.test(form.getFieldValue('postalCode'))) {
       callback('Please enter the correct Post Code');
     } else {
       callback();
@@ -346,9 +308,64 @@ class BasicInfomation extends React.Component<any, any> {
       callback();
     }
   };
+  getCityList = (value) => {
+    let params = {
+      cityName: value,
+      pageSize: 30,
+      pageNum: 0
+    };
+    webapi
+      .queryCityListByName(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            cityArr: res.context.systemCityVO,
+            objectFetching: false
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  getCityNameById = (id) => {
+    let params = {
+      id: [id]
+    };
+    webapi
+      .queryCityById(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0].cityName) {
+            this.setState({
+              initCityName: res.context.systemCityVO[0].cityName
+            });
+          }
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
-    const { countryArr, cityArr, clinicList } = this.state;
+    const { countryArr, cityArr, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const options = [
+      {
+        label: 'Phone',
+        value: 'Phone'
+      },
+      {
+        label: 'Email',
+        value: 'Email'
+      }
+    ];
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -415,13 +432,8 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Birth Date">
                   {getFieldDecorator('birthDay', {
-                    rules: [
-                      { required: true, message: 'Please input Birth Date!' }
-                    ],
-                    initialValue: moment(
-                      new Date(this.state.currentBirthDay),
-                      'YYYY-MM-DD'
-                    )
+                    rules: [{ required: true, message: 'Please input Birth Date!' }],
+                    initialValue: moment(new Date(this.state.currentBirthDay), 'YYYY-MM-DD')
                   })(
                     <DatePicker
                       style={{ width: '100%' }}
@@ -443,11 +455,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Email">
                   {getFieldDecorator('email', {
-                    rules: [
-                      { required: true, message: 'Please input Email!' },
-                      { validator: this.compareEmail },
-                      { max: 50, message: 'Exceed maximum length!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }]
                   })(
                     <Input
                       disabled
@@ -465,10 +473,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
-                    rules: [
-                      { required: true, message: 'Please input Phone Number!' },
-                      { validator: this.comparePhone }
-                    ]
+                    rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -483,44 +488,35 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
 
-              {/* <Col span={12}>
-                <FormItem label="Post Code">
-                  {getFieldDecorator('postCode', {
-                    rules: [
-                      { required: true, message: 'Please input Post Code!' },
-                      { validator: this.compareZip }
-                    ]
+              <Col span={12}>
+                <FormItem label="Postal Code">
+                  {getFieldDecorator('postalCode', {
+                    rules: [{ required: true, message: 'Please input Post Code!' }, { validator: this.compareZip }]
                   })(
                     <Input
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
-                          field: 'postCode',
+                          field: 'postalCode',
                           value
                         });
                       }}
                     />
                   )}
                 </FormItem>
-              </Col> */}
+              </Col>
 
               <Col span={12}>
                 <FormItem label="Country">
                   {getFieldDecorator('country', {
-                    rules: [
-                      { required: true, message: 'Please input Country!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Country!' }]
                   })(
                     <Select
-                      onChange={(value, Option) => {
-                        let countryObj = {
-                          countryId: Option.props.value,
-                          countryName: Option.props.children
-                        };
-
+                      optionFilterProp="children"
+                      onChange={(value) => {
                         this.onFormChange({
-                          field: 'countryObj',
-                          value: countryObj
+                          field: 'countryID',
+                          value: value ? value : ''
                         });
                       }}
                     >
@@ -536,36 +532,29 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
 
-              {/* <Col span={12}>
+              <Col span={12}>
                 <FormItem label="City">
                   {getFieldDecorator('city', {
-                    rules: [{ required: true, message: 'Please input City!' }]
+                    rules: [{ required: true, message: 'Please select City!' }],
+                    initialValue: initCityName
                   })(
                     <Select
-                      onChange={(value, Option) => {
-                        let cityObj = {
-                          cityId: Option.props.value,
-                          cityName: Option.props.children
-                        };
-
+                      showSearch
+                      placeholder="Select a Order number"
+                      notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                      onSearch={this.getCityList}
+                      filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                      onChange={(value) => {
                         this.onFormChange({
-                          field: 'cityObj',
-                          value: cityObj
+                          field: 'cityId',
+                          value: value ? value : ''
                         });
                       }}
-                      // onChange={(value) => {
-                      //   value = value === '' ? null : value;
-
-                      //   this.onFormChange({
-                      //     field: 'city',
-                      //     value
-                      //   });
-                      // }}
                     >
                       {cityArr
                         ? cityArr.map((item) => (
                             <Option value={item.id} key={item.id}>
-                              {item.name}
+                              {item.cityName}
                             </Option>
                           ))
                         : null}
@@ -619,7 +608,7 @@ class BasicInfomation extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col> */}
+              </Col>
 
               <Col span={12}>
                 <FormItem label="Prefer channel">
@@ -627,27 +616,24 @@ class BasicInfomation extends React.Component<any, any> {
                     rules: [
                       {
                         required: true,
-                        message:
-                          'Please Select Preferred methods of communication!'
+                        message: 'Please Select Preferred methods of communication!'
                       }
-                    ]
+                    ],
+                    initialValue: initPreferChannel
                   })(
-                    <Radio.Group
-                      style={{ display: 'inline', height: '40px' }}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
+                    <Checkbox.Group
+                      options={options}
+                      onChange={(value) => {
                         this.onFormChange({
                           field: 'preferredMethods',
                           value
                         });
                       }}
-                    >
-                      <Radio value="phone">Phone</Radio>
-                      <Radio value="email">Email</Radio>
-                    </Radio.Group>
+                    />
                   )}
                 </FormItem>
               </Col>
+
               <Col span={12}>
                 <FormItem label="Reference">
                   {getFieldDecorator('reference', {
@@ -695,10 +681,7 @@ class BasicInfomation extends React.Component<any, any> {
                     >
                       {clinicList
                         ? clinicList.map((item) => (
-                            <Option
-                              value={item.prescriberId.toString()}
-                              key={item.prescriberId}
-                            >
+                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))
@@ -710,9 +693,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Selected Prescriber">
                   {getFieldDecorator('selectedClinics', {
-                    rules: [
-                      { required: true, message: 'Please Select Prescriber!' }
-                    ]
+                    rules: [{ required: true, message: 'Please Select Prescriber!' }]
                   })(
                     <Select
                       mode="tags"
@@ -741,10 +722,7 @@ class BasicInfomation extends React.Component<any, any> {
                       ))} */}
                       {clinicList
                         ? clinicList.map((item) => (
-                            <Option
-                              value={item.prescriberId.toString()}
-                              key={item.prescriberId}
-                            >
+                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))

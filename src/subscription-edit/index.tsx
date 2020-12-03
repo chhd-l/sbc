@@ -56,7 +56,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       visibleBilling: false,
       visiblePetInfo: false,
       countryArr: [],
-      cityArr: [],
+      billingCityArr: [],
+      deliveryCityArr: [],
       deliveryList: [],
       billingList: [],
       customerAccount: '',
@@ -227,14 +228,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.querySysDictionary('country');
     }
-    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
-      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-      this.setState({
-        cityArr: cityArr
-      });
-    } else {
-      this.querySysDictionary('city');
-    }
 
     this.querySysDictionary('Frequency_week');
   };
@@ -246,12 +239,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          if (type === 'city') {
-            this.setState({
-              cityArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem('dict-city', JSON.stringify(res.context.sysDictionaryVOS));
-          }
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -417,12 +404,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
       if (item) {
         return item.name;
-      } else {
-        return id;
       }
-    } else {
-      return id;
     }
+    return id;
+  };
+  getCityName = (id) => {
+    const { deliveryCityArr, billingCityArr } = this.state;
+    let list = [];
+    list = list.concat(deliveryCityArr, billingCityArr);
+    if (list && list.length > 0) {
+      let item = list.find((item) => {
+        return item.id === id;
+      });
+      if (item) {
+        return item.cityName;
+      }
+    }
+    return id;
   };
 
   getAddressList = (customerId, type) => {
@@ -434,7 +432,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
         if (type === 'DELIVERY') {
           addressList = this.selectedOnTop(addressList, this.state.deliveryAddressId);
-
+          let cityIds = [];
+          for (let i = 0; i < addressList.length; i++) {
+            cityIds.push(addressList[i].cityId);
+          }
+          this.getCityNameById(cityIds, 'DELIVERY');
           this.setState({
             deliveryList: addressList,
             customerAccount: customerAccount
@@ -442,6 +444,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         }
         if (type === 'BILLING') {
           addressList = this.selectedOnTop(addressList, this.state.billingAddressId);
+          let cityIds = [];
+          for (let i = 0; i < addressList.length; i++) {
+            cityIds.push(addressList[i].cityId);
+          }
+          this.getCityNameById(cityIds, 'BILLING');
 
           this.setState({
             billingList: addressList,
@@ -715,6 +722,41 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       currentOrder: record
     });
   };
+  getCityNameById = (ids, type) => {
+    let params = {
+      id: ids
+    };
+    webapi
+      .queryCityById(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          if (type === 'BILLING') {
+            let billingCityArr = [];
+            if (res.context.systemCityVO) {
+              billingCityArr = res.context.systemCityVO;
+            }
+            this.setState({
+              billingCityArr
+            });
+          }
+          if (type === 'DELIVERY') {
+            let deliveryCityArr = [];
+            if (res.context.systemCityVO) {
+              deliveryCityArr = res.context.systemCityVO;
+            }
+            this.setState({
+              deliveryCityArr
+            });
+          }
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
 
   render() {
     const {
@@ -728,7 +770,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressInfo,
       billingAddressInfo,
       countryArr,
-      cityArr,
       deliveryList,
       billingList,
       customerAccount,
@@ -736,7 +777,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       title,
       noStartOrder,
       completedOrder,
-      currentOrder
+      currentOrder,
+      billingCityArr,
+      deliveryCityArr
       // operationLog
     } = this.state;
     const menu = (
@@ -1240,7 +1283,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{this.getDictValue(cityArr, deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>{this.getCityName(deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1269,7 +1312,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? this.getDictValue(cityArr, billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p>{billingAddressInfo ? this.getCityName(billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1337,7 +1380,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getDictValue(cityArr, item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                            <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
@@ -1350,7 +1393,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getDictValue(cityArr, item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                              <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>
@@ -1400,7 +1443,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getDictValue(cityArr, item.cityId)}</p>
+                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
@@ -1413,7 +1456,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getDictValue(cityArr, item.cityId)}</p>
+                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>

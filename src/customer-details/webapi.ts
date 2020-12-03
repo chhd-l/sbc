@@ -71,15 +71,9 @@ export function getAddressList(id = null) {
  * @param filterParams
  */
 export function getAddressListByType(id = null, type = '') {
-  return Fetch<TResult>(
-    '/customer/addressList/listByCustomerIdAndType?customerId=' +
-      id +
-      '&type=' +
-      type,
-    {
-      method: 'Get'
-    }
-  );
+  return Fetch<TResult>('/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
+    method: 'Get'
+  });
 }
 
 /**
@@ -191,6 +185,23 @@ export function addOrUpdatePaymentMethod(param) {
 export function delCustomer(filterParams = {}) {
   return Fetch<TResult>('/customer', {
     method: 'DELETE',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function queryCityById(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-id', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+export function queryCityListByName(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-name', {
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })

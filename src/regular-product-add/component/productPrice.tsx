@@ -228,7 +228,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px', top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '60px', top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999.99} precision={2} />)}
             </FormItem>
           </Col>
         </Row>

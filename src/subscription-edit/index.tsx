@@ -58,7 +58,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
-      cityArr: [],
       deliveryList: [],
       billingList: [],
       customerAccount: '',
@@ -229,14 +228,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.querySysDictionary('country');
     }
-    // if (JSON.parse(sessionStorage.getItem('dict-city'))) {
-    //   let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-    //   this.setState({
-    //     cityArr: cityArr
-    //   });
-    // } else {
-    //   this.querySysDictionary('city');
-    // }
 
     this.querySysDictionary('Frequency_week');
   };
@@ -248,12 +239,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          // if (type === 'city') {
-          //   this.setState({
-          //     cityArr: res.context.sysDictionaryVOS
-          //   });
-          //   sessionStorage.setItem('dict-city', JSON.stringify(res.context.sysDictionaryVOS));
-          // }
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -423,7 +408,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     return id;
   };
-  getCityName = (list = [], id) => {
+  getCityName = (id) => {
+    const { deliveryCityArr, billingCityArr } = this.state;
+    let list = [];
+    list = list.concat(deliveryCityArr, billingCityArr);
     if (list && list.length > 0) {
       let item = list.find((item) => {
         return item.id === id;
@@ -782,7 +770,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressInfo,
       billingAddressInfo,
       countryArr,
-      cityArr,
       deliveryList,
       billingList,
       customerAccount,
@@ -1298,7 +1285,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{this.getCityName(deliveryCityArr, deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>{this.getCityName(deliveryAddressInfo.cityId) + ',' + this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1327,7 +1314,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>City,Country: </p>
-                    <p>{billingAddressInfo ? this.getCityName(billingCityArr, billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
+                    <p>{billingAddressInfo ? this.getCityName(billingAddressInfo.cityId) + ',' + this.getDictValue(countryArr, billingAddressInfo.countryId) : ''}</p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>Address1: </p>
@@ -1395,7 +1382,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getCityName(deliveryCityArr, item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                            <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
@@ -1408,7 +1395,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getCityName(deliveryCityArr, item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
+                              <p>{this.getCityName(item.cityId) + ',' + this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>
@@ -1458,7 +1445,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
-                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(billingCityArr, item.cityId)}</p>
+                            <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
                           </div>
@@ -1471,7 +1458,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(billingCityArr, item.cityId)}</p>
+                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item.cityId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
                             </div>

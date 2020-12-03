@@ -321,7 +321,8 @@ export default class AppStore extends Store {
         tmpContext.goodsInfos.map((item) => {
           return {
             pid: item.goodsInfoNo,
-            targetGoodsIds: item.goodsInfoBundleRels
+            targetGoodsIds: item.goodsInfoBundleRels,
+            stock:item.stock
           };
         });
       this.dispatch('sku:addSkUProduct', addSkUProduct);
@@ -1283,9 +1284,11 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDescriptionDetails', detailEditor.getContent ? detailEditor.getContent() : '');
     const tabs = [];
+    console.log(data.get('detailEditor_0'),11111111111111);
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
+      console.log(data.get('detailEditor_0').val.getContent())
       tabs.push({
         goodsId: goods.get('goodsId'),
         tabId: data.get('detailEditor_0').tabId,
@@ -1317,7 +1320,7 @@ export default class AppStore extends Store {
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
 
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDescriptionDetails', JSON.stringify(goodsDetailTabTemplate));
 
     param = param.set('goodsTabRelas', tabs);
 
@@ -1422,11 +1425,7 @@ export default class AppStore extends Store {
       let b = []
       a.map((i)=>{
         b = i.targetGoodsIds
-        console.log(i.targetGoodsIds,222222222);
       })
-      console.log(b,111111111);
-      console.log(item,33333);
-
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
@@ -1447,8 +1446,6 @@ export default class AppStore extends Store {
         })
       );
     });
-    console.log(goodsList.toJS(),'+++++++++++');
-    console.log(this.state().get('addSkUProduct'),'------');
 
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');

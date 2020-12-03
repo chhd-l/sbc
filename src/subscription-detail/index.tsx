@@ -16,6 +16,20 @@ const { Search } = Input;
 const InputGroup = Input.Group;
 const { Option } = Select;
 const { TabPane } = Tabs;
+
+const deliverStatus = (status) => {
+  if (status == 'NOT_YET_SHIPPED') {
+    return <FormattedMessage id="order.notShipped" />;
+  } else if (status == 'SHIPPED') {
+    return <FormattedMessage id="order.allShipments" />;
+  } else if (status == 'PART_SHIPPED') {
+    return <FormattedMessage id="order.partialShipment" />;
+  } else if (status == 'VOID') {
+    return <FormattedMessage id="order.invalid" />;
+  } else {
+    return <FormattedMessage id="order.unknown" />;
+  }
+};
 /**
  * 订单详情
  */
@@ -44,7 +58,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryPrice: '',
       discountsPrice: '',
       frequencyList: [],
-      promotionDesc: 'Subscription 0% Discount',
+      promotionDesc: 'Promotion',
       noStartOrder: [],
       completedOrder: []
     };
@@ -369,8 +383,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const { goodsInfo } = this.state;
     let sum = 0;
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
-      if (goodsInfo[i].subscribeNum && goodsInfo[i].subscribePrice) {
-        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].subscribePrice;
+      if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
+        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
       }
     }
     return sum;
@@ -399,7 +413,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.setState({
             deliveryPrice: res.context.deliveryPrice,
             discountsPrice: res.context.discountsPrice,
-            promotionCodeShow: res.context.promotionCode
+            promotionCodeShow: res.context.promotionCode,
+            promotionDesc: res.context.promotionDesc
           });
         }
       })
@@ -462,8 +477,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.originalPrice}</p>
-            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.subscribePrice}</p>
+            <p style={{ textDecoration: 'line-through' }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.originalPrice.toFixed(2)}</p>
+            <p>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.subscribePrice.toFixed(2)}</p>
           </div>
         )
       },
@@ -502,7 +517,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + +record.subscribeNum * +record.subscribePrice}</span>
+            <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (+record.subscribeNum * +record.originalPrice).toFixed(2)}</span>
           </div>
         )
       }
@@ -572,8 +587,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <div>
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
-                <div style={{ margin: 'auto 10px' }}>
-                  <p>X {item.num}</p>
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
               ))}
           </div>
@@ -590,13 +605,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Enjoy discount</span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? '-' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ fontWeight: 500 }}>Amount</span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}>Shipment date</span>,
@@ -633,8 +648,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <div>
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
-                <div style={{ margin: 'auto 10px' }} key={index}>
-                  <p>X {item.num}</p>
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
               ))}
           </div>
@@ -664,7 +679,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].deliverStatus ? record.tradeItems[0].deliverStatus : '-'}</div>
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeItems && record.tradeItems[0].deliverStatus ? deliverStatus(record.tradeItems[0].deliverStatus) : '-'}</div>
       },
       {
         title: 'Operation',
@@ -672,11 +687,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         width: '10%',
         render: (text, record) => (
-          <Link to={'/order-detail/' + record.id}>
-            <Tooltip placement="top" title="Details">
-              <a style={styles.edit} className="iconfont iconDetails"></a>
-            </Tooltip>
-          </Link>
+          <>
+            {record.id ? (
+              <Link to={'/order-detail/' + record.id}>
+                <Tooltip placement="top" title="Details">
+                  <a style={styles.edit} className="iconfont iconDetails"></a>
+                </Tooltip>
+              </Link>
+            ) : null}
+          </>
         )
       }
     ];
@@ -696,8 +715,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.detail" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <div className="container-search">
-          <Spin spinning={this.state.loading}>
+        <Spin spinning={this.state.loading}>
+          <div className="container-search">
             <Headline title={title} />
             <Row className="subscription-basic-info">
               <Col span={24}>
@@ -741,23 +760,23 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8} offset={16}>
                 <div className="flex-between">
                   <span>Subtotal</span>
-                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + this.subTotal()}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + this.subTotal().toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
                   <span>{this.state.promotionDesc}</span>
-                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.discountsPrice ? this.state.discountsPrice : 0)}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">
                   <span>Shipping</span>
-                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
                 </div>
                 <div className="flex-between">
                   <span>
                     <span>Total</span> (IVA Include):
                   </span>
-                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice)}</span>
+                  <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
                 </div>
               </Col>
             </Row>
@@ -828,42 +847,51 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Col>
             </Row>
-          </Spin>
-        </div>
-        <div className="container-search">
-          <Headline
-            title="Autoship order"
-            // extra={
-            //   <div>
-            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-            //       <Option value="2020">2020</Option>
-            //       <Option value="2019">2019</Option>
-            //       <Option value="2018">2018</Option>
-            //     </Select>
-            //   </div>
-            // }
-          />
-          <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-            <TabPane tab="No start" key="noStart">
-              <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
-            </TabPane>
-            <TabPane tab="Completed" key="completed">
-              <Table rowKey={(record, index) => index.toString()} columns={columns_completed} dataSource={completedOrder} pagination={false}></Table>
-            </TabPane>
-          </Tabs>
-          <Row style={styles.backItem}>
-            <Collapse>
-              <Panel header={<FormattedMessage id="operationLog" />} key="1" style={{ paddingRight: 10 }}>
-                <Row>
-                  <Col span={24}>
-                    <Table rowKey={(record, index) => index.toString()} columns={operatorColumns} dataSource={operationLog} bordered pagination={false} />
-                  </Col>
-                </Row>
-              </Panel>
-            </Collapse>
-          </Row>
-        </div>
-
+          </div>
+          <div className="container-search">
+            <Headline
+              title="Autoship order"
+              // extra={
+              //   <div>
+              //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+              //       <Option value="2020">2020</Option>
+              //       <Option value="2019">2019</Option>
+              //       <Option value="2018">2018</Option>
+              //     </Select>
+              //   </div>
+              // }
+            />
+            <Tabs defaultActiveKey="1" onChange={this.tabChange}>
+              <TabPane tab="No start" key="noStart">
+                <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
+              </TabPane>
+              <TabPane tab="Completed" key="completed">
+                <Table
+                  rowKey={(record, index) => index.toString()}
+                  rowClassName={(record, index) => {
+                    let className = 'normal-row';
+                    if (!record.id) className = 'disable-row';
+                    return className;
+                  }}
+                  columns={columns_completed}
+                  dataSource={completedOrder}
+                  pagination={false}
+                ></Table>
+              </TabPane>
+            </Tabs>
+            <Row style={styles.backItem}>
+              <Collapse>
+                <Panel header={<FormattedMessage id="operationLog" />} key="1" style={{ paddingRight: 10 }}>
+                  <Row>
+                    <Col span={24}>
+                      <Table rowKey={(record, index) => index.toString()} columns={operatorColumns} dataSource={operationLog} bordered pagination={false} />
+                    </Col>
+                  </Row>
+                </Panel>
+              </Collapse>
+            </Row>
+          </div>
+        </Spin>
         <div className="bar-button">
           <Button type="primary" onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}

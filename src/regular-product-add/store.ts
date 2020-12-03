@@ -281,17 +281,20 @@ export default class AppStore extends Store {
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
       let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
+
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = [];
 
-      tmpContext.goodsAttributesValueRelList && tmpContext.goodsAttributesValueRelList.map(x=>{
-        goodsPropDetailRelsOrigin.push({
-          propId: x.goodsAttributeId,
-          detailId: x.goodsAttributeValueId
-        })
-      })
+      if (tmpContext.goodsAttributesValueRelList) {
+        tmpContext.goodsAttributesValueRelList.map((x) => {
+          goodsPropDetailRelsOrigin.push({
+            propId: x.goodsAttributeId,
+            detailId: x.goodsAttributeValueId
+          });
+        });
+      }
 
       if (goodsPropDetailRelsOrigin) {
         let tmpGoodsPropDetailRels = [];
@@ -413,9 +416,11 @@ export default class AppStore extends Store {
         });
 
         // 商品列表
+        let basePriceType;
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
+          // basePriceType = item.get('basePriceType')
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
@@ -447,7 +452,7 @@ export default class AppStore extends Store {
         this.dispatch('goodsSpecActor: init', {
           goodsSpecs,
           goodsList,
-          baseSpecId: goods.get('baseSpec') || 0
+          baseSpecId: basePriceType || 0
         });
       } else {
         // 商品列表
@@ -582,6 +587,41 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: editGoods', goods);
   };
 
+  updateAllBasePrice = (specId) => {
+    if (!specId) {
+      return;
+    }
+    const goodsInfos = this.state().get('goodsList').toJS();
+    let specValue;
+    goodsInfos.forEach((item) => {
+      specValue = item['specId-' + specId];
+      const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+      const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+      this.editGoodsItem(item.id, 'basePrice', basePrice);
+      this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+    });
+    this.dispatch('');
+  };
+  updateBasePrice = (id, key, e) => {
+    // type === 'basePrice' || subscriptionBasePrice
+    const specId = this.state().get('baseSpecId');
+    if (!specId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
+      return;
+    }
+    let specValue;
+    const goodsInfos = this.state().get('goodsList').toJS();
+    goodsInfos.forEach((item) => {
+      if (item.id === id) {
+        specValue = item['specId-' + specId];
+      }
+    });
+    const value = (parseFloat(e) / parseFloat(specValue)).toFixed(2);
+    if (key === 'marketPrice') {
+      this.editGoodsItem(id, 'basePrice', value);
+    } else if (key === 'subscriptionPrice') {
+      this.editGoodsItem(id, 'subscriptionBasePrice', value);
+    }
+  };
   /**
    * 修改商品图片
    */
@@ -1274,7 +1314,7 @@ export default class AppStore extends Store {
     // 详情
     const detailEditor = data.get('detailEditor') || {};
 
-    goods = goods.set('goodsDetail', detailEditor.getContent ? detailEditor.getContent() : '');
+    goods = goods.set('goodsDescriptionDetails', detailEditor.getContent ? detailEditor.getContent() : '');
     const tabs = [];
     if (data.get('detailEditor_0') && data.get('detailEditor_0').val && data.get('detailEditor_0').val.getContent) {
       tabs.push({
@@ -1308,7 +1348,7 @@ export default class AppStore extends Store {
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
 
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDescriptionDetails', JSON.stringify(goodsDetailTabTemplate));
 
     param = param.set('goodsTabRelas', tabs);
 
@@ -1351,6 +1391,7 @@ export default class AppStore extends Store {
     // -----商品规格列表-------
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
       return Map({
+        // specId: item.get('isMock') == true ? null : item.get('specId'),
         specId: item.get('isMock') == true ? null : item.get('specId'),
         mockSpecId: item.get('specId'),
         specName: item.get('specName').trim()
@@ -1423,7 +1464,10 @@ export default class AppStore extends Store {
           linePrice: item.get('linePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
-          description: item.get('description')
+          description: item.get('description'),
+          basePriceType: data.get('baseSpecId'),
+          basePrice: item.get('basePrice') || 0,
+          subscriptionBasePrice: item.get('subscriptionBasePrice') || 0
         })
       );
     });
@@ -1536,10 +1580,8 @@ export default class AppStore extends Store {
           result3 = await enterpriseToGeneralgoods(goodsId);
         }
       }
-      console.log('edit------------------');
       result = await edit(param.toJS());
     } else {
-      console.log('new------------------');
       result = await save(param.toJS());
     }
 
@@ -1886,7 +1928,6 @@ export default class AppStore extends Store {
   };
 
   editEditor = (editor) => {
-    console.log(editor, 1111111);
     this.dispatch('goodsActor: editor', editor);
   };
   /**

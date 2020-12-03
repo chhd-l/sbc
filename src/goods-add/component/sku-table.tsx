@@ -278,7 +278,7 @@ class SkuForm extends React.Component<any, any> {
                     },
                     {
                       pattern: ValidConst.number,
-                      message: '请输入1-999999999的数值'
+                      message: 'Please enter a positive integer'
                     }
                   ],
                   //onChange:  (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e),

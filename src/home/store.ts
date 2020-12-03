@@ -137,7 +137,7 @@ export default class AppStore extends Store {
     if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
-      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context);
+      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context.goodsInfoTopViewItemList || []);
       this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
       this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
       this.dispatch('home:prescriberTopView', getPrescriberTopView.context);

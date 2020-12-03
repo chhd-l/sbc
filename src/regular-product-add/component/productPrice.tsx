@@ -323,13 +323,14 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
+    console.log(goodsSpecs.toJS(), 'goodsSpecs------------------');
     columns = columns.push({
       title: (
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
             {goodsSpecs.map((item) => (
-              <Option value={item.get('specId')}>{item.get('specName')}</Option>
+              <Option value={item.get('mockSpecId')}>{item.get('specName')}</Option>
             ))}
           </Select>
         </div>

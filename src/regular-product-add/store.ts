@@ -417,22 +417,11 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
-        debugger;
 
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
           basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
-          // const mockIds = []
-          // goodsDetail.get('goodsSpecs').toJS().forEach(spec => {
-          //   item.push(spec.mockSpecId)
-          // })
-          // mockIds.forEach(mockId => {
-          //   const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
-          //   const detailId = detail.get('specDetailId');
-          //   const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
-          //   item = item.set('specId-' + mockId, goodsSpecDetail.get('detailName'));
-          // })
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
             const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
@@ -601,6 +590,7 @@ export default class AppStore extends Store {
     this.dispatch('goodsActor: editGoods', goods);
   };
 
+  // 产品规格
   updateAllBasePrice = (mockSpecId) => {
     if (!mockSpecId) {
       return;

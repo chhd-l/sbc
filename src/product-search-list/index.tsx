@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, cache, util } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Tabs, DatePicker } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -46,6 +46,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     this.onNoResultSerch = this.onNoResultSerch.bind(this);
     this.getStatisticsResult = this.getStatisticsResult.bind(this);
     this.getSortOrder = this.getSortOrder.bind(this);
+    this.onExport = this.onExport.bind(this);
   }
 
   componentDidMount() {
@@ -227,6 +228,30 @@ export default class ProductSearchList extends React.Component<any, any> {
         });
       });
   };
+  onExport = () => {
+    return new Promise((resolve) => {
+      const { dateRange, tabKey } = this.state;
+      let params = {
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+        isNoResults: tabKey === '1' ? 0 : 1
+      };
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ ...params, token: token });
+          let encrypted = base64.urlEncode(result); // 新窗口下载
+
+          const exportHref = Const.HOST + `/search/details/term/statistics/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('Unsuccessful');
+        }
+        resolve();
+      }, 500);
+    });
+  };
   render() {
     const { title, tabKey, dateRange, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
     const columnsAll = [
@@ -248,7 +273,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
-        render: (text, record) =>  ( text*100 + '%' ) 
+        render: (text, record) => text * 100 + '%'
       },
       {
         title: 'Result No.',
@@ -294,7 +319,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
-        render: (text, record) =>  ( text*100 + '%' ) 
+        render: (text, record) => text * 100 + '%'
       },
       {
         title: 'Last Not Found Date',
@@ -429,6 +454,16 @@ export default class ProductSearchList extends React.Component<any, any> {
           </Row>
         </div>
         <div className="container">
+          <div className="exportContainer">
+            <Button
+              className="exportBtn"
+              type="primary"
+              onClick={(e) => {
+                e.preventDefault();
+                this.onExport();
+              }}
+            >Export</Button>
+          </div>
           <Tabs
             defaultActiveKey={tabKey}
             onChange={(key) => {

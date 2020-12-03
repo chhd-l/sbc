@@ -53,7 +53,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
           <div className="container-search">
             <Headline title={title} />
           </div>

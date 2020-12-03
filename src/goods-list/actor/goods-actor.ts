@@ -23,7 +23,8 @@ export default class GoodsActor extends Actor {
       // 展开显示的spuIdList
       expandedRowKeys: [],
       // 模糊条件-SKU编码(搜索出来直接展开显示这个sku对应的spu)
-      likeGoodsInfoNo1: ''
+      likeGoodsInfoNo1: '',
+      loading: true,
     };
   }
 
@@ -63,5 +64,13 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:editExpandedRowKeys')
   editExpandedRowKeys(state: IMap, expandedRowKeys: IList) {
     return state.set('expandedRowKeys', expandedRowKeys);
+  }
+
+  /**
+   * 设置loading状态
+   */
+  @Action('info:setLoading')
+  setLoading(state: IMap, loading) {
+    return state.set('loading', loading);
   }
 }

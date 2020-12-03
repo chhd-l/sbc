@@ -64,7 +64,7 @@ export default class SearchForm extends React.Component<any, any> {
           <div className="inventory-text">
             <span>* </span>Products are ‘Low inventory’ when below :
           </div>
-          <div style={{ width: '60px' }}>{stock && <InputNumber style={{ width: '60px' }} key={Number(stock) + 1} defaultValue={stock} disabled={this.state.disabledType} onChange={this.onChangeNumber} min={0} />}</div>
+          <div style={{ width: '60px' }}>{stock && <InputNumber style={{ width: '60px' }} key={Number(stock) + 1} defaultValue={stock} disabled={this.state.disabledType} onChange={this.onChangeNumber} min={1} />}</div>
           <Button type="primary" icon="edit" shape="round" onClick={() => this.onEdit()}>
             {this.state.editType == true ? 'Edit' : 'Save'}
           </Button>

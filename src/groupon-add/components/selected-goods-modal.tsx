@@ -191,7 +191,7 @@ export default class SelectedGoodsModal extends React.Component<any, any> {
     const { goodsPage, selectedSpuIds } = this.state;
     return (
       <DataGrid
-        loading={this.state.loading}
+        loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
         rowKey={(record) => record.goodsId}
         dataSource={goodsPage.content}
         rowSelection={{

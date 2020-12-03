@@ -124,7 +124,7 @@ export default class TodoItems extends React.Component<any, any> {
     const { loading, tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     return (
       <div className="item">
-        <Spin spinning={loading}>
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
           <img src={NoData} width={50}></img>
           <div className="item-top space-between">
             <div className="item-top-l flex-content">

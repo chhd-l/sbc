@@ -1105,8 +1105,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{<FormattedMessage id="subscription.edit" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <Spin spinning={this.state.loading}>
-          <div className="container-search">
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>          <div className="container-search">
             <Headline title={title} />
             {/* subscription 基本信息 */}
             <Row className="subscription-basic-info">
@@ -1149,8 +1148,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
 
               <Col span={8} offset={16}>
-                <Spin spinning={this.state.promotionLoading}>
-                  <div className="flex-between">
+                <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>                  <div className="flex-between">
                     <span>Subtotal</span>
                     <span style={styles.priceStyle}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + this.subTotal().toFixed(2)}</span>
                   </div>

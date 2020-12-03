@@ -184,7 +184,7 @@ export default class ClinicList extends Component<any, any> {
             rowKey={(record) => record.id}
             dataSource={this.state.typeList}
             pagination={this.state.pagination}
-            loading={this.state.loading}
+            loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
             onChange={this.handleTableChange}
           />
         </div>

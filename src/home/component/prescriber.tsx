@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Icon, Modal, Checkbox } from 'antd';
+import {Icon, Modal, Checkbox, Spin} from 'antd';
 import { fromJS } from 'immutable';
 
 import { cache, history, noop } from 'qmkit';
@@ -43,6 +43,7 @@ export default class Prescriber extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      loading: boolean;
       p_tradeCustomerView: any;
       p_prescriberTopView: any;
       p_transactionTrendView: any;
@@ -58,7 +59,8 @@ export default class Prescriber extends React.Component<any, any> {
     p_transactionTrendView: 'p_transactionTrendView',
     p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
     p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView',
-    p_trafficDashboardView: 'p_trafficDashboardView'
+    p_trafficDashboardView: 'p_trafficDashboardView',
+    loading: 'loading',
   };
 
   componentWillUnmount() {
@@ -76,7 +78,7 @@ export default class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
+    const { loading, prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       prescriberId !== prevState.prescriberId ||
@@ -85,7 +87,8 @@ export default class Prescriber extends React.Component<any, any> {
       p_transactionTrendView !== prevState.transactionTrendView ||
       p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
       p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
-      p_trafficDashboardView !== prevState.trafficDashboardView
+      p_trafficDashboardView !== prevState.trafficDashboardView ||
+      loading
     ) {
       return {
         tradeCustomerView: p_tradeCustomerView,
@@ -94,7 +97,8 @@ export default class Prescriber extends React.Component<any, any> {
         trafficTrendDashboardView: p_trafficTrendDashboardView,
         conversionFunnelDashboardView: p_conversionFunnelDashboardView,
         trafficDashboardView: p_trafficDashboardView,
-        prescriberId
+        prescriberId,
+        loading
       };
     }
     // 否则，对于state不进行任何操作
@@ -114,168 +118,170 @@ export default class Prescriber extends React.Component<any, any> {
   };
 
   render() {
-    const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+    const { loading, tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     return (
       <div className="prescriber-item">
-        <div className="item-top space-between">
-          <div className="item-top-l flex-content">
-            <div className="item-top-l-top">
-              <div className="top-text">Overview</div>
-              <div className="content space-between">
-                <div className="mode">
-                  <div className="mode-text">Revenue</div>
-                  <div className="mode-num">
-                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
-                  </div>
-                  <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={tradeCustomerView && tradeCustomerView.revenueRate != null ? (tradeCustomerView.revenueRate >= 0 ? 'green' : 'red') : ''}>
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+          <div className="item-top space-between">
+            <div className="item-top-l flex-content">
+              <div className="item-top-l-top">
+                <div className="top-text">Overview</div>
+                <div className="content space-between">
+                  <div className="mode">
+                    <div className="mode-text">Revenue</div>
+                    <div className="mode-num">
+                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                      <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
+                    </div>
+                    <div className="mode-per">
+                      {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.revenueRate != null ? (tradeCustomerView.revenueRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={Math.abs(tradeCustomerView.revenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div className="line"></div>
-                <div className="mode">
-                  <div className="mode-text">Average basket</div>
-                  <div className="mode-num">
-                    <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-                    <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
-                  </div>
-                  <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={tradeCustomerView && tradeCustomerView.averageBasketRate != null ? (tradeCustomerView.averageBasketRate >= 0 ? 'green' : 'red') : ''}>
+                  <div className="line"></div>
+                  <div className="mode">
+                    <div className="mode-text">Average basket</div>
+                    <div className="mode-num">
+                      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                      <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} {...countUpProps} /> : '--'}</span>
+                    </div>
+                    <div className="mode-per">
+                      {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.averageBasketRate != null ? (tradeCustomerView.averageBasketRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <CountUp end={Math.abs(tradeCustomerView.averageBasketRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div className="line"></div>
-                <div className="mode">
-                  <div className="mode-text">Conversion</div>
-                  <div className="mode-num">
-                    <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
-                  </div>
-                  <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
+                  <div className="line"></div>
+                  <div className="mode">
+                    <div className="mode-text">Conversion</div>
+                    <div className="mode-num">
+                      <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
+                    </div>
+                    <div className="mode-per">
+                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.conversionRate != null ? <CountUp end={Math.abs(tradeCustomerView.conversionRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div className="line"></div>
-                <div className="mode">
-                  <div className="mode-text">Conversion</div>
-                  <div className="mode-num">
-                    <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
-                  </div>
-                  <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
+                  <div className="line"></div>
+                  <div className="mode">
+                    <div className="mode-text">Conversion</div>
+                    <div className="mode-num">
+                      <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
+                    </div>
+                    <div className="mode-per">
+                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.conversionRate != null ? <CountUp end={Math.abs(tradeCustomerView.conversionRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
+                    </div>
                   </div>
-                </div>
-                <div className="line"></div>
-                <div className="mode">
-                  <div className="mode-text">Traffic</div>
-                  <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
-                  <div className="mode-per">
-                    {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                    <span className={tradeCustomerView && tradeCustomerView.trafficRate != null ? (tradeCustomerView.trafficRate >= 0 ? 'green' : 'red') : ''}>
+                  <div className="line"></div>
+                  <div className="mode">
+                    <div className="mode-text">Traffic</div>
+                    <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
+                    <div className="mode-per">
+                      {tradeCustomerView && tradeCustomerView.trafficRate != null ? <img src={tradeCustomerView.trafficRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      <span className={tradeCustomerView && tradeCustomerView.trafficRate != null ? (tradeCustomerView.trafficRate >= 0 ? 'green' : 'red') : ''}>
                       {tradeCustomerView && tradeCustomerView.trafficRate != null ? <CountUp end={Math.abs(tradeCustomerView.trafficRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                     </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="conversion space-between">
-              <div className="item-top-l-btm-l">
-                <div className="top-text">Conversion Funnel</div>
-                <div className="Funnel">
-                  <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
-                  <div className="Funnel-l">
-                    <div className="Funnel-l-text align-items-center">
-                      <span>Landing page</span>
-                      <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</span>
-                      <span className="Funnel-l-dash1"></span>
-                    </div>
-                    <div className="Funnel-l-text align-items-center">
-                      <span>Shopping cart</span>
-                      <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</span>
-                      <span className="Funnel-l-dash2"></span>
-                    </div>
-                    <div className="Funnel-l-text align-items-center">
-                      <span>Checkout</span>
-                      <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</span>
-                      <span className="Funnel-l-dash3"></span>
-                    </div>
-                    <div className="Funnel-l-text align-items-center">
-                      <span>Payment</span>
-                      <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</span>
-                      <span className="Funnel-l-dash4"></span>
-                    </div>
-                  </div>
-                  <div className="Funnel-r">
-                    <div className="Funnel-r-top"></div>
-                    <div className="Funnel-r-mid">
-                      <div className="text1">Conversion rate</div>
-                      <div className="text2">
-                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
-                        <i>%</i>
+              <div className="conversion space-between">
+                <div className="item-top-l-btm-l">
+                  <div className="top-text">Conversion Funnel</div>
+                  <div className="Funnel">
+                    <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
+                    <div className="Funnel-l">
+                      <div className="Funnel-l-text align-items-center">
+                        <span>Landing page</span>
+                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</span>
+                        <span className="Funnel-l-dash1"></span>
                       </div>
-                      <div className="text3">
-                        {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <img src={conversionFunnelDashboardView.payLoginRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? (conversionFunnelDashboardView.payLoginRateRate >= 0 ? 'green' : 'red') : ''}>
+                      <div className="Funnel-l-text align-items-center">
+                        <span>Shopping cart</span>
+                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</span>
+                        <span className="Funnel-l-dash2"></span>
+                      </div>
+                      <div className="Funnel-l-text align-items-center">
+                        <span>Checkout</span>
+                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</span>
+                        <span className="Funnel-l-dash3"></span>
+                      </div>
+                      <div className="Funnel-l-text align-items-center">
+                        <span>Payment</span>
+                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</span>
+                        <span className="Funnel-l-dash4"></span>
+                      </div>
+                    </div>
+                    <div className="Funnel-r">
+                      <div className="Funnel-r-top"></div>
+                      <div className="Funnel-r-mid">
+                        <div className="text1">Conversion rate</div>
+                        <div className="text2">
+                          {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRate != null ? <CountUp end={conversionFunnelDashboardView.payLoginRate} decimals={2} {...countUpProps} /> : '--'}
+                          <i>%</i>
+                        </div>
+                        <div className="text3">
+                          {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <img src={conversionFunnelDashboardView.payLoginRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? (conversionFunnelDashboardView.payLoginRateRate >= 0 ? 'green' : 'red') : ''}>
                           {conversionFunnelDashboardView && conversionFunnelDashboardView.payLoginRateRate != null ? <CountUp end={Math.abs(conversionFunnelDashboardView.payLoginRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
+                        </div>
                       </div>
+                      <div className="Funnel-r-btm"></div>
                     </div>
-                    <div className="Funnel-r-btm"></div>
-                  </div>
-                  <div className="Funnel-per1 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
-                  </div>
-                  <div className="Funnel-per2 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
-                  </div>
-                  <div className="Funnel-per3 flex-start-align">
-                    <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
-                    <p>%</p>
+                    <div className="Funnel-per1 flex-start-align">
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[0] != null ? <CountUp end={conversionFunnelDashboardView.rateList[0]} decimals={2} {...countUpProps} /> : '--'}</p>
+                      <p>%</p>
+                    </div>
+                    <div className="Funnel-per2 flex-start-align">
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[1] != null ? <CountUp end={conversionFunnelDashboardView.rateList[1]} decimals={2} {...countUpProps} /> : '--'}</p>
+                      <p>%</p>
+                    </div>
+                    <div className="Funnel-per3 flex-start-align">
+                      <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.rateList[2] != null ? <CountUp end={conversionFunnelDashboardView.rateList[2]} decimals={2} {...countUpProps} /> : '--'}</p>
+                      <p>%</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="item-top-l-btm-r">
-                <div className="top-text">Subscription</div>
-                <div className="subscription flex-content">
-                  <div className="subscription-top">
-                    <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
-                  </div>
-                  <div className="subscription-btm">
-                    <div className="consumer-top flex-start">
-                      <div className="mode">
-                        <div className="mode-text">Order Number</div>
-                        <div className="mode-num">
-                          <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
-                        </div>
-                        <div className="mode-per">
-                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
+                <div className="item-top-l-btm-r">
+                  <div className="top-text">Subscription</div>
+                  <div className="subscription flex-content">
+                    <div className="subscription-top">
+                      <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
+                    </div>
+                    <div className="subscription-btm">
+                      <div className="consumer-top flex-start">
+                        <div className="mode">
+                          <div className="mode-text">Order Number</div>
+                          <div className="mode-num">
+                            <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
+                          </div>
+                          <div className="mode-per">
+                            {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                            <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="mode">
-                        <div className="mode-text">Sales volume</div>
-                        <div className="mode-num">
-                          <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
-                        </div>
-                        <div className="mode-per">
-                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                          <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
+                        <div className="mode">
+                          <div className="mode-text">Sales volume</div>
+                          <div className="mode-num">
+                            <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
+                          </div>
+                          <div className="mode-per">
+                            {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                            <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -283,31 +289,30 @@ export default class Prescriber extends React.Component<any, any> {
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="item-top-r flex-content">
-            <div className="item-top-r-btm">
-              <div className="top-text space-between">
-                <span>Traffic</span>
-                {/*<span>more ></span>*/}
-              </div>
-              <div className="traffic space-between">
-                <div className="traffic-r flex-content">
-                  <div className="traffic-r-top flex-start">
-                    <div className="mode">
-                      <div className="mode-text">Page view</div>
-                      <div className="mode-num">
-                        <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
-                      </div>
-                      <div className="mode-per">
-                        {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                        <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
+            <div className="item-top-r flex-content">
+              <div className="item-top-r-btm">
+                <div className="top-text space-between">
+                  <span>Traffic</span>
+                  {/*<span>more ></span>*/}
+                </div>
+                <div className="traffic space-between">
+                  <div className="traffic-r flex-content">
+                    <div className="traffic-r-top flex-start">
+                      <div className="mode">
+                        <div className="mode-text">Page view</div>
+                        <div className="mode-num">
+                          <span>{trafficDashboardView && trafficDashboardView.pageView != null ? <CountUp end={trafficDashboardView.pageView} {...countUpProps} /> : '--'}</span>
+                        </div>
+                        <div className="mode-per">
+                          {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <img src={trafficDashboardView.pageViewRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          <span className={trafficDashboardView && trafficDashboardView.pageViewRate ? (trafficDashboardView.pageViewRate >= 0 ? 'green' : 'red') : ''}>
                           {trafficDashboardView && trafficDashboardView.pageViewRate != null ? <CountUp end={Math.abs(trafficDashboardView.pageViewRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="mode">
-                      {/*<div className="mode-text">Bounce rate</div>
+                      <div className="mode">
+                        {/*<div className="mode-text">Bounce rate</div>
                       <div className="mode-num">
                         <span> {trafficDashboardView && trafficDashboardView.bounceRate != null ? <CountUp end={trafficDashboardView.bounceRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
                       </div>
@@ -317,108 +322,109 @@ export default class Prescriber extends React.Component<any, any> {
                           {trafficDashboardView && trafficDashboardView.bounceRateRate != null ? <CountUp end={Math.abs(trafficDashboardView.bounceRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                       </div>*/}
-                    </div>
-                  </div>
-                  <div className="traffic-r-btm flex-content">
-                    <div className="mode">
-                      <div className="mode-text">VET traffic</div>
-                      <div className="mode-num">
-                        <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
                       </div>
                     </div>
-                    <div className="mode">
-                      <div className="mode-text">VET traffic rate</div>
-                      <div className="mode-num num">
-                        <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                    <div className="traffic-r-btm flex-content">
+                      <div className="mode">
+                        <div className="mode-text">VET traffic</div>
+                        <div className="mode-num">
+                          <span> {trafficDashboardView && trafficDashboardView.vetTraffic != null ? <CountUp end={trafficDashboardView.vetTraffic} {...countUpProps} /> : '--'}</span>
+                        </div>
+                      </div>
+                      <div className="mode">
+                        <div className="mode-text">VET traffic rate</div>
+                        <div className="mode-num num">
+                          <span> {trafficDashboardView && trafficDashboardView.vetTrafficRate != null ? <CountUp end={trafficDashboardView.vetTrafficRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="item-top-r-top">
-              <div className="top-text">Consumer</div>
-              <div className="consumer flex-content">
-                <div className="consumer-top flex-start">
-                  <div className="mode">
-                    <div className="mode-text">Active consumers</div>
-                    <div className="mode-num">
-                      <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                      <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
+              <div className="item-top-r-top">
+                <div className="top-text">Consumer</div>
+                <div className="consumer flex-content">
+                  <div className="consumer-top flex-start">
+                    <div className="mode">
+                      <div className="mode-text">Active consumers</div>
+                      <div className="mode-num">
+                        <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
+                      </div>
+                      <div className="mode-per">
+                        {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
                         {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="mode">
-                    <div className="mode-text">Active consumer rate</div>
-                    <div className="mode-num">
-                      <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                      <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
+                    <div className="mode">
+                      <div className="mode-text">Active consumer rate</div>
+                      <div className="mode-num">
+                        <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                      </div>
+                      <div className="mode-per">
+                        {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                        <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
                         {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="consumer-btm flex-content">
-                  <div className="mode">
-                    <div className="mode-text">Total consumers</div>
-                    <div className="mode-num">
-                      <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
+                  <div className="consumer-btm flex-content">
+                    <div className="mode">
+                      <div className="mode-text">Total consumers</div>
+                      <div className="mode-num">
+                        <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="item-btm space-between">
-          <div className="item-btm-l">
-            <div className="top-text">
+          <div className="item-btm space-between">
+            <div className="item-btm-l">
+              <div className="top-text">
+                <div className="top-text space-between">
+                  <span>Traffic Trend</span>
+                  {/*<span>more ></span>*/}
+                </div>
+              </div>
+              <div className="line">
+                {trafficTrendDashboardView && (
+                  <BarLine
+                    yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    unit={{ unit1: '', unit2: '%' }}
+                    data={{
+                      x: trafficTrendDashboardView.weekNumList,
+                      y1: trafficTrendDashboardView.totalPVList,
+                      y2: trafficTrendDashboardView.conversionRateList
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="item-btm-r">
               <div className="top-text space-between">
-                <span>Traffic Trend</span>
+                <span>Transaction Trend</span>
                 {/*<span>more ></span>*/}
               </div>
-            </div>
-            <div className="line">
-              {trafficTrendDashboardView && (
-                <BarLine
-                  yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
-                  unit={{ unit1: '', unit2: '%' }}
-                  data={{
-                    x: trafficTrendDashboardView.weekNumList,
-                    y1: trafficTrendDashboardView.totalPVList,
-                    y2: trafficTrendDashboardView.conversionRateList
-                  }}
-                />
-              )}
-            </div>
-          </div>
-          <div className="item-btm-r">
-            <div className="top-text space-between">
-              <span>Transaction Trend</span>
-              {/*<span>more ></span>*/}
-            </div>
-            <div className="line">
-              {transactionTrendView && (
-                <BarLine
-                  yName={{ y1: 'Revenue', y2: 'Transaction' }}
-                  unit={{ unit1: '', unit2: '' }}
-                  data={{
-                    x: transactionTrendView.weekNumList,
-                    y1: transactionTrendView.revenueList,
-                    y2: transactionTrendView.transactionList
-                  }}
-                />
-              )}
+              <div className="line">
+                {transactionTrendView && (
+                  <BarLine
+                    yName={{ y1: 'Revenue', y2: 'Transaction' }}
+                    unit={{ unit1: '', unit2: '' }}
+                    data={{
+                      x: transactionTrendView.weekNumList,
+                      y1: transactionTrendView.revenueList,
+                      y2: transactionTrendView.transactionList
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </Spin>
       </div>
     );
   }

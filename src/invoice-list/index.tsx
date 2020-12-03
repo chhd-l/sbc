@@ -684,7 +684,7 @@ class InvoiceList extends Component<any, any> {
             columns={columns}
             dataSource={invoiceList}
             pagination={this.state.pagination}
-            loading={this.state.loading}
+            loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
             rowClassName={(record, index) => {

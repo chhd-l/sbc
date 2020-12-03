@@ -126,7 +126,7 @@ class SkuForm extends React.Component<any, any> {
         const _goodsSpecs = goodsSpecs.toJS();
         let selectedItem;
         _goodsSpecs.forEach((item) => {
-          if (item.specId === baseSpecId) {
+          if (item.mockSpecId === baseSpecId) {
             selectedItem = item;
           }
         });

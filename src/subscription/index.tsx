@@ -111,6 +111,8 @@ export default class SubscriptionList extends Component<any, any> {
 
   onSearch = () => {
     const { searchForm, activeKey } = this.state;
+    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) 
+      ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null
     let param = {
       orderNumber:
         searchForm.subscriptionOption === 'Order Number'
@@ -144,7 +146,7 @@ export default class SubscriptionList extends Component<any, any> {
         //   : '',
         JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
         null
-          ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
+          ? prescriberType
           : searchForm.prescriberOption === 'Prescriber ID'
           ? searchForm.prescriber
           : '',
@@ -290,6 +292,11 @@ export default class SubscriptionList extends Component<any, any> {
         </Menu.Item>
       </Menu>
     );
+    let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) 
+      ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null
+
+    const clinicsIds = JSON.parse(sessionStorage.getItem('s2b-employee@data')) 
+       ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds : null
 
     return (
       <AuthWrapper functionName="f_subscription_list">
@@ -436,12 +443,8 @@ export default class SubscriptionList extends Component<any, any> {
                             : false
                         }
                         value={
-                          JSON.parse(
-                            sessionStorage.getItem('s2b-employee@data')
-                          ).clinicsIds
-                            ? JSON.parse(
-                                sessionStorage.getItem('PrescriberType')
-                              ).value
+                          clinicsIds
+                            ? prescriberType
                             : searchForm.prescriber
                         }
                         // value={searchForm.prescriber}

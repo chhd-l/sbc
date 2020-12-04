@@ -48,10 +48,10 @@ export default class Detail extends React.Component<any, any> {
     let goodsDetailTabContent: any = {};
     let goodsDetailContent;
 
-    if (goods.get('goodsDescription')) {
-      goodsDetailContent = goods.get('goodsDescription');
+    if (goods.get('goodsDetail')) {
+      goodsDetailContent = goods.get('goodsDetail');
       try {
-        goodsDetailTabContent = JSON.parse(goods.get('goodsDescription'));
+        goodsDetailTabContent = JSON.parse(goods.get('goodsDetail'));
       } catch {
         goodsDetailTabCopy.map((item) => {
           goodsDetailTabContent[item.get('name')] = '';

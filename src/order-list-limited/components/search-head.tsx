@@ -62,7 +62,8 @@ export default class SearchHead extends Component<any, any> {
         deliverStatus: '',
         payState: '',
         orderSource: ''
-      }
+      },
+      orderCategory: ''
     };
   }
 
@@ -219,6 +220,28 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
+              <Col span={8}>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue=""
+                    style={{width: '190px'}}
+                    label={<p style={{width: '138px'}}>Order Category</p>}
+                    onChange={(value) => {
+                      this.setState({
+                        orderCategory: value
+                      });
+                    }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="all" />
+                    </Option>
+                    <Option value="SINGLE">Ordinary order</Option>
+                    <Option value="FIRST_AUTOSHIP">First subscription</Option>
+                    <Option value="RECURRENT_AUTOSHIP">After second subscription</Option>
+                  </SelectGroup>
+                </FormItem>
+              </Col>
+
               <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
@@ -245,7 +268,7 @@ export default class SearchHead extends Component<any, any> {
                     htmlType="submit"
                     onClick={(e) => {
                       e.preventDefault();
-                      const { buyerOptions, goodsOptions, receiverSelect, id, subscribeId, numberSelect, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, numberSelectValue, tradeState, beginTime, endTime } = this.state;
+                      const { buyerOptions, goodsOptions, receiverSelect, id, subscribeId, numberSelect, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, numberSelectValue, tradeState, beginTime, endTime, orderCategory } = this.state;
 
                       const ts = {} as any;
                       if (tradeState.deliverStatus) {
@@ -268,7 +291,8 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         beginTime,
-                        endTime
+                        endTime,
+                        orderCategory
                       };
 
                       onSearch(params);

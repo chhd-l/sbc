@@ -324,7 +324,6 @@ class SpecForm extends React.Component<any, any> {
    */
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
-
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
       message.error('Add up to 5 specifications');
       return;

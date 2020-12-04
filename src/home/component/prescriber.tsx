@@ -199,25 +199,25 @@ export default class Prescriber extends React.Component<any, any> {
                   <div className="Funnel">
                     <Funnel data={conversionFunnelDashboardView && conversionFunnelDashboardView.dataList} />
                     <div className="Funnel-l">
-                      <div className="Funnel-l-text align-items-center">
-                        <span>Landing page</span>
-                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</span>
-                        <span className="Funnel-l-dash1"></span>
+                      <div className="Funnel-l-text">
+                        <p>Landing page</p>
+                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[0]} {...countUpProps} /> : '--'}</p>
+                        <p className="Funnel-l-dash1"></p>
                       </div>
-                      <div className="Funnel-l-text align-items-center">
-                        <span>Shopping cart</span>
-                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</span>
-                        <span className="Funnel-l-dash2"></span>
+                      <div className="Funnel-l-text">
+                        <p>Shopping cart</p>
+                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[1]} {...countUpProps} /> : '--'}</p>
+                        <p className="Funnel-l-dash2"></p>
                       </div>
-                      <div className="Funnel-l-text align-items-center">
-                        <span>Checkout</span>
-                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</span>
-                        <span className="Funnel-l-dash3"></span>
+                      <div className="Funnel-l-text">
+                        <p>Checkout</p>
+                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[2]} {...countUpProps} /> : '--'}</p>
+                        <p className="Funnel-l-dash3"></p>
                       </div>
-                      <div className="Funnel-l-text align-items-center">
-                        <span>Payment</span>
-                        <span>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</span>
-                        <span className="Funnel-l-dash4"></span>
+                      <div className="Funnel-l-text">
+                        <p>Payment</p>
+                        <p>{conversionFunnelDashboardView && conversionFunnelDashboardView.dataList != null ? <CountUp end={conversionFunnelDashboardView.dataList[3]} {...countUpProps} /> : '--'}</p>
+                        <p className="Funnel-l-dash4"></p>
                       </div>
                     </div>
                     <div className="Funnel-r">
@@ -394,6 +394,7 @@ export default class Prescriber extends React.Component<any, any> {
                 {trafficTrendDashboardView && (
                   <BarLine
                     yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     unit={{ unit1: '', unit2: '%' }}
                     data={{
                       x: trafficTrendDashboardView.weekNumList,
@@ -414,6 +415,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <BarLine
                     yName={{ y1: 'Revenue', y2: 'Transaction' }}
                     unit={{ unit1: '', unit2: '' }}
+                    nameTextStyle={{ y1: [0, 0, 0, 0], y2: [0, 22, 0, 0] }}
                     data={{
                       x: transactionTrendView.weekNumList,
                       y1: transactionTrendView.revenueList,

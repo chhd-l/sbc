@@ -19,7 +19,7 @@ export default class Line extends React.Component {
   }
 
   getOption = () => {
-    const { yName, unit, data } = this.props as any;
+    const { yName, unit, data, nameTextStyle } = this.props as any;
     let option = {
       backgroundColor: '',
       tooltip: {
@@ -40,9 +40,11 @@ export default class Line extends React.Component {
         }
       },
       grid: {
+        left: '1%',
+        right: '1%',
         top: '13%',
-
-        bottom: '10%'
+        bottom: '1%',
+        containLabel: true
       },
       xAxis: [
         {
@@ -69,7 +71,7 @@ export default class Line extends React.Component {
           nameTextStyle: {
             color: '#C7C7C7',
             fontSize: 12,
-            padding: [0, 0, 0, -3]
+            padding: nameTextStyle.y1,
           },
           /*min: 0,
           max: 250,*/
@@ -92,7 +94,7 @@ export default class Line extends React.Component {
           nameTextStyle: {
             color: '#C7C7C7',
             fontSize: 12,
-            textAlign: 'left'
+            padding: nameTextStyle.y2,
           },
           /*min: 0,
           max: 25,*/

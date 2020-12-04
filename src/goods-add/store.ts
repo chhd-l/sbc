@@ -779,6 +779,10 @@ export default class AppStore extends Store {
     this.dispatch('formActor:spec', specForm);
   };
 
+  updateAttributeForm = (goodsForm) => {
+    this.dispatch('formActor:attributes', goodsForm);
+  };
+
   updateLevelPriceForm = (levelPriceForm) => {
     this.dispatch('formActor:levelprice', levelPriceForm);
   };
@@ -833,6 +837,16 @@ export default class AppStore extends Store {
     if (this.state().get('logisticsForm') && this.state().get('logisticsForm').validateFieldsAndScroll) {
       this.state()
         .get('logisticsForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
+    }
+
+    if (this.state().get('attributesForm') && this.state().get('attributesForm').validateFieldsAndScroll) {
+      this.state()
+        .get('attributesForm')
         .validateFieldsAndScroll(null, (errs) => {
           valid = valid && !errs;
           if (!errs) {
@@ -1325,7 +1339,7 @@ export default class AppStore extends Store {
       goodsDetailTabTemplate[item.get('name')] = data.get('detailEditor_' + i).getContent();
     });
 
-    goods = goods.set('goodsDescription', JSON.stringify(goodsDetailTabTemplate));
+    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
 
     param = param.set('goodsTabRelas', tabs);
 

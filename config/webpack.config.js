@@ -36,7 +36,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const CompressionPlugin = require("compression-webpack-plugin");
 
 //可视化分包分析工具
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -178,47 +178,49 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
       splitChunks: {
         chunks: 'all',
-        minSize: 30000,
-        maxSize: 50000,
+        minSize: 120000,
+        maxSize: 200000,
         minChunks: 1,
         maxAsyncRequests: 6,
         maxInitialRequests: 6,
         automaticNameDelimiter: '~',
         name: true,
-        cacheGroups: {
-          vendor: {
-            name: 'vendor',
-            test: /[\\/]node_modules[\\/]/,
-            chunks: 'all',
-            priority: 10,
-            enforce: true,
-          },
-          react: {
-            name: 'react',
-            test: module => /react|redux/.test(module.context),
-            chunks: 'initial',
-            priority: 11,
-            enforce: true,
-          },
-          antd: {
-            name: 'antd',
-            test: (module) => {
-              return /ant/.test(module.context);
-            },
-            chunks: 'initial',
-            priority: 11,
-            enforce: true,
-          },
-          moment: {
-            name: 'moment',
-            test: (module) => {
-              return /moment/.test(module.context);
-            },
-            chunks: 'initial',
-            priority: 13,
-            enforce: true,
-          },
-        },
+        // cacheGroups: {
+        //   vendor: {
+        //     name: 'vendor',
+        //     test: /[\\/]node_modules[\\/]/,
+        //     chunks: 'all',
+        //     priority: 10,
+        //     enforce: true,
+        //   },
+        //   react: {
+        //     name: 'react',
+        //     test: module => /react|redux/.test(module.context),
+        //     chunks: 'initial',
+        //     priority: 11,
+        //     enforce: true,
+        //   },
+        //   antd: {
+        //     name: 'antd',
+        //     test: (module) => {
+        //       return /ant/.test(module.context);
+        //     },
+        //     chunks: 'initial',
+        //     priority: 11,
+        //     enforce: true,
+        //   },
+        //   moment: {
+        //     name: 'moment',
+        //     test: (module) => {
+        //       return /moment/.test(module.context);
+        //     },
+        //     chunks: 'initial',
+        //     priority: 13,
+        //     enforce: true,
+        //   },
+        
+        // },
+
       },
       runtimeChunk: true,
     },
@@ -441,7 +443,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
         }
       ),*/
-      /*new BundleAnalyzerPlugin(
+      new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。
           //  在`server`模式下，分析器将启动HTTP服务器来显示软件包报告。
@@ -472,7 +474,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
           statsOptions: null,
           logLevel: 'info' // 日志级别。可以是'信息'，'警告'，'错误'或'沉默'。
         }
-      ),*/
+      ),
       new CompressionPlugin({
         filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
         algorithm: 'gzip', // 算法

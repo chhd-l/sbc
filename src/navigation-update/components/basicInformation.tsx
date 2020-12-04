@@ -57,7 +57,7 @@ export default class BasicInformation extends React.Component<any, any> {
             </FormItem>
             <FormItem {...layout} label="Navigation Link">
               <span className="tip ant-form-item-required" style={{top: '20px'}}>
-                External URL like: /cat, internal URL like: http://www.google.com/
+              Internal URL like: /cat, external URL like: http://www.google.com/
               </span>
               {getFieldDecorator('navigationLink', {
                 initialValue: navigation.navigationLink

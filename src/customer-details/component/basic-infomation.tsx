@@ -78,7 +78,7 @@ class BasicInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           // if (type === 'city') {
           //   this.setState({
           //     cityArr: res.context.sysDictionaryVOS
@@ -117,7 +117,7 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (res.code && res.code !== 'K-000000') {
+        if (res.code && res.code !== Const.SUCCESS_CODE) {
           message.error(res.message || 'Unsuccessful');
         } else {
           let res2 = JSON.stringify(data.res);
@@ -240,7 +240,7 @@ class BasicInfomation extends React.Component<any, any> {
       .basicDetailsUpdate(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
         } else {
           message.error(res.message || 'Unsuccessful');
@@ -259,7 +259,7 @@ class BasicInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
             clinicList: res.context

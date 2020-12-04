@@ -242,16 +242,19 @@ class CateModalForm extends React.Component<any, any> {
             )}
             <FormItem labelCol={2} {...formItemLayout} label="Category type">
               {getFieldDecorator('cateType', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please selecte category type'
-                  }
-                ],
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: 'Please selecte category type'
+                //   }
+                // ],
                 onChange: this._editGoods.bind(this, 'cateType'),
                 initialValue: cateType ? this._getCateTypeName(cateType) : ''
               })(
                 <Select>
+                  <Option value=''>
+                    All
+                  </Option>
                   {petType &&
                     petType.toJS().map((item, index) => (
                       <Option value={item.valueEn} key={index}>

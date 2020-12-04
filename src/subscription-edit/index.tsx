@@ -646,7 +646,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     let params = {
       subscribeId: this.state.subscriptionId,
       changeField: 'Delivery Time',
-      goodsItems: goodsItems
+      goodsList: goodsItems
     };
     this.setState({
       loading: true

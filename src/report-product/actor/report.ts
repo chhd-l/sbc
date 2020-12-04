@@ -21,7 +21,8 @@ export default class BrandActor extends Actor {
       // 当前页码
       current: 1,
       getDate: {},
-      getForm: ''
+      getForm: '',
+      loading: true
     };
   }
 
@@ -54,5 +55,16 @@ export default class BrandActor extends Actor {
   @Action('report:getForm')
   getForm(state, data: IMap) {
     return state.set('getForm', data);
+  }
+
+  //loading
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

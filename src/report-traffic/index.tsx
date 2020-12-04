@@ -36,7 +36,7 @@ export default class TrafficReport extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Traffic',
-      loading: false,
+      loading: true,
       overviewList: [],
       // productTrafficList: [
       // ],
@@ -263,7 +263,8 @@ export default class TrafficReport extends Component<any, any> {
           }
         ];
         this.setState({
-          overviewList
+          overviewList,
+          loading: false
         });
       }
     });
@@ -285,7 +286,8 @@ export default class TrafficReport extends Component<any, any> {
           {
             xData_week,
             trafficData_week,
-            pageViewData_week
+            pageViewData_week,
+            loading: false
           },
           () => {
             this.chartInit();
@@ -310,7 +312,8 @@ export default class TrafficReport extends Component<any, any> {
         this.setState({
           xData_day,
           trafficData_day,
-          pageViewData_day
+          pageViewData_day,
+          loading: false
         });
       }
     });
@@ -330,7 +333,8 @@ export default class TrafficReport extends Component<any, any> {
         let tableData = res.context.trafficReport;
         this.setState({
           pagination,
-          tableData
+          tableData,
+          loading: false
         });
       }
     });
@@ -415,44 +419,45 @@ export default class TrafficReport extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline
-            title={<p style={styles.blodFont}> {title}</p>}
-            extra={
-              <div>
-                <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline
+              title={<p style={styles.blodFont}> {title}</p>}
+              extra={
+                <div>
+                  <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                </div>
+              }
+            />
+            <div>
+              <h4 style={styles.blodFont}>Overview</h4>
+              <div className="data-statistics-traffic" style={{ width: 1200 }}>
+                {overviewList &&
+                  overviewList.map((item, index) => (
+                    <div className="mode" key={index}>
+                      <div className="mode-text" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                        {item.name}
+                      </div>
+                      <div className="mode-num" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
+                      </div>
+                      <div className="mode-per" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
+                        {item && (item.rate || item.rate === 0) ? (
+                          <>
+                            <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
+                            <span className={item.rate > 0 ? 'green' : 'red'}>
+                              <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            </span>
+                          </>
+                        ) : (
+                          '--'
+                        )}
+                      </div>
+                    </div>
+                  ))}
               </div>
-            }
-          />
-          <div>
-            <h4 style={styles.blodFont}>Overview</h4>
-            <div className="data-statistics-traffic" style={{ width: 1200 }}>
-              {overviewList &&
-                overviewList.map((item, index) => (
-                  <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
-                      {item.name}
-                    </div>
-                    <div className="mode-num" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
-                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per" style={item.name === 'Vet traffic' ? {} : styles.borderRight}>
-                      {item && (item.rate || item.rate === 0) ? (
-                        <>
-                          <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span className={item.rate > 0 ? 'green' : 'red'}>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
-                          </span>
-                        </>
-                      ) : (
-                        '--'
-                      )}
-                    </div>
-                  </div>
-                ))}
             </div>
-          </div>
-          {/* 
+            {/*
           <div style={styles.itemDisplay}>
             <h4>Product traffic</h4>
             <div className="data-statistics">
@@ -511,40 +516,41 @@ export default class TrafficReport extends Component<any, any> {
             </div>
           </div>
          */}
-        </div>
+          </div>
 
-        <div className="container-search">
-          <Headline
-            // title= {"Traffic trend"}
-            title={<p style={styles.blodFont}>Traffic trend</p>}
-            extra={
-              <div>
-                <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
-                  <Option value="Week trend">Week trend</Option>
-                  <Option value="Day trend">Day trend</Option>
-                </Select>
-              </div>
-            }
-          />
-          <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
-        </div>
+          <div className="container-search">
+            <Headline
+              // title= {"Traffic trend"}
+              title={<p style={styles.blodFont}>Traffic trend</p>}
+              extra={
+                <div>
+                  <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
+                    <Option value="Week trend">Week trend</Option>
+                    <Option value="Day trend">Day trend</Option>
+                  </Select>
+                </div>
+              }
+            />
+            <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
+          </div>
 
-        <div className="container-search">
-          <Headline
-            title={<p style={styles.blodFont}>Traffic report</p>}
-            // title="Traffic report"
-            extra={
-              <div>
-                <AuthWrapper functionName="f_export_traffic_data">
-                  <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                    <span style={{ color: '#ffffff' }}>Download the report</span>
-                  </Button>
-                </AuthWrapper>
-              </div>
-            }
-          />
-          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
-        </div>
+          <div className="container-search">
+            <Headline
+              title={<p style={styles.blodFont}>Traffic report</p>}
+              // title="Traffic report"
+              extra={
+                <div>
+                  <AuthWrapper functionName="f_export_traffic_data">
+                    <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
+                      <span style={{ color: '#ffffff' }}>Download the report</span>
+                    </Button>
+                  </AuthWrapper>
+                </div>
+              }
+            />
+            <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          </div>
+        </Spin>
       </div>
     );
   }

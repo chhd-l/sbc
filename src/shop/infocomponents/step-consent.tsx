@@ -111,7 +111,7 @@ export default class StepConsent extends Component<any, any> {
                 </Select>
               </div>
             </div>
-            <Button className="btn" type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
+            <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
               New consent
             </Button>
             <div id="consent" className="consent-table">

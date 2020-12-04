@@ -4,6 +4,7 @@ import { Relax } from 'plume2';
 import { noop } from 'qmkit';
 import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import '../index.less'
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -89,7 +90,7 @@ class AttributeForm extends React.Component<any, any> {
           </span>
         </div>
         <div>
-          <Form>
+          <Form id="attributeForm">
             {propList &&
               propList.map((detList) => {
                 return (

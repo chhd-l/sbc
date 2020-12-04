@@ -106,7 +106,7 @@ export default class CustomerDetails extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container">
             {this.state.customerType !== 'Guest' ? (
               <Tabs
@@ -132,9 +132,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab="Billing infomation" key="billing">
                   <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
                 </TabPane>
-                {/* <TabPane tab="Payment methods" key="payment">
+                <TabPane tab="Payment methods" key="payment">
                   <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
-                </TabPane> */}
+                </TabPane>
               </Tabs>
             ) : (
               <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>

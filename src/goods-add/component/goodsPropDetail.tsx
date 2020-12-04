@@ -31,21 +31,48 @@ export default class GoodsPropDetail extends React.Component<any, any> {
       changePropVal: Function;
       propList: IList;
       propDetail: IList;
+      updateAttributeForm: Function;
     };
   };
 
   static relaxProps = {
     changePropVal: noop,
     propList: 'propList',
-    propDetail: 'propDetail'
+    propDetail: 'propDetail',
+    updateAttributeForm: noop
   };
 
   constructor(props) {
     super(props);
+    this.WrapperForm = Form.create({})(AttributeForm);
+  }
+
+  componentDidMount() {
+    // const { updateGoodsForm } = this.props.relaxProps;
+    // updateGoodsForm(this.props.form);
   }
 
   render() {
+    const WrapperForm = this.WrapperForm;
+    const relaxProps = this.props.relaxProps;
+    return (
+      <div>
+        <WrapperForm
+          ref={(form) => (this['_form'] = form)}
+          {...{ relaxProps: relaxProps }}
+        />
+      </div>
+    );
+  }
+}
+class AttributeForm extends React.Component<any, any> {
+  componentDidMount() {
+    const { updateAttributeForm } = this.props.relaxProps;
+    updateAttributeForm(this.props.form);
+  }
+  render() {
     const { propList } = this.props.relaxProps;
+    const { getFieldDecorator } = this.props.form;
     return (
       <div>
         <div
@@ -70,11 +97,22 @@ export default class GoodsPropDetail extends React.Component<any, any> {
                     {detList.map((det) => (
                       <Col span={10} key={det.get('propId') + det.get('cateId')}>
                         <FormItem {...formItemLayout} label={det.get('propName')}>
-                          {/* {this._getPropSelect(
-                            det.get('goodsPropDetails'),
-                            det.get('propId')
-                          )} */}
-                          {this._getPropTree(det.get('goodsPropDetails'), det.get('propId'), det.get('isSingle'))}
+                          {getFieldDecorator(`${det.get('propName')}`, {
+                            rules: [
+                              {
+                                required: true,
+                                message: `Please select the ${det.get('propName')}`
+                              }
+                            ],
+                            initialValue:
+                            det.get('goodsPropDetails') && (det.get('goodsPropDetails').filter((item) => item.get('select') === 'select')).length
+                             ? (det.get('goodsPropDetails').filter((item) => item.get('select') === 'select')).toJS().map((item) => {
+                              return {
+                                label: item.detailName,
+                                value: item.detailId
+                              }
+                            }) : []
+                          })(this._getPropTree(det))}
                         </FormItem>
                       </Col>
                     ))}
@@ -107,16 +145,10 @@ export default class GoodsPropDetail extends React.Component<any, any> {
     );
   };
 
-  _getPropTree = (propValues, propId, isSingle) => {
-    const propVals = propValues.filter((item) => item.get('select') === 'select');
-    const selected = propVals.length
-      ? propVals.toJS().map((item) => {
-          return {
-            label: item.detailName,
-            value: item.detailId
-          };
-        })
-      : [];
+  _getPropTree = (det) => {
+    let propValues = det.get('goodsPropDetails');
+    let propId = det.get('propId');
+    let isSingle = det.get('isSingle');
     return (
       <TreeSelect
         getPopupContainer={() => document.getElementById('page-content')}
@@ -128,10 +160,9 @@ export default class GoodsPropDetail extends React.Component<any, any> {
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         treeDefaultExpandAll
         showSearch={false}
-        defaultValue={selected}
         onChange={(value) => this._onChange(propId, value)}
       >
-        {this.generateStoreCateTree(propValues,isSingle)}
+        {this.generateStoreCateTree(propValues, isSingle)}
       </TreeSelect>
     );
   };
@@ -141,21 +172,22 @@ export default class GoodsPropDetail extends React.Component<any, any> {
    * @param propValues
    */
   generateStoreCateTree = (propValues, isSingle) => {
-    const { propDetail } = this.props.relaxProps
-    const propDetails = propDetail ? propDetail.toJS() : []
-    const selectList = []
-    propDetails.map(p=>{
-      p.goodsPropDetails &&  p.goodsPropDetails.map(x=>{
-        if(x.select === 'select') {
-          selectList.push(x.detailId)
-        }
-      })
-    })
-    const values = propValues ? (propValues.toJS()).map(x=>x.detailId) : []
+    const { propDetail } = this.props.relaxProps;
+    const propDetails = propDetail ? propDetail.toJS() : [];
+    const selectList = [];
+    propDetails.map((p) => {
+      p.goodsPropDetails &&
+        p.goodsPropDetails.map((x) => {
+          if (x.select === 'select') {
+            selectList.push(x.detailId);
+          }
+        });
+    });
+    const values = propValues ? propValues.toJS().map((x) => x.detailId) : [];
     let intersection = values.filter((v) => selectList.includes(v));
     return propValues.map((item) => {
-      const singleDisabled = isSingle && intersection.length > 0 && item.get('detailId') != intersection[0]
-      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} disabled={singleDisabled}/>;
+      const singleDisabled = isSingle && intersection.length > 0 && item.get('detailId') != intersection[0];
+      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} disabled={singleDisabled} />;
     });
   };
 

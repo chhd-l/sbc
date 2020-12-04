@@ -11,12 +11,12 @@ export default class GoodsSpecActor extends Actor {
       specSingleFlag: true,
       // 规格列表
       goodsSpecs: [
-        {
-          specId: this._getRandom(),
-          isMock: true,
-          specName: 'specification1',
-          specValues: []
-        }
+        // {
+        //   specId: this._getRandom(),
+        //   isMock: true,
+        //   specName: 'specification1',
+        //   specValues: []
+        // }
       ],
       goodsList: [
         {

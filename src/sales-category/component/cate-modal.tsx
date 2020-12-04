@@ -205,23 +205,26 @@ class CateModalForm extends React.Component<any, any> {
         <FormItem {...formItemLayout} label="Parent category">
           {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
-        <FormItem {...formItemLayout} label="Display in shop">
-          {getFieldDecorator('displayStatus', {
-            rules: [
-              {
-                required: true,
-                message: 'Please selecte display in shop'
-              }
-            ],
-            initialValue: displayStatus,
-            onChange: this._editGoods.bind(this, 'displayStatus')
-          })(
-            <Radio.Group>
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </Radio.Group>
-          )}
-        </FormItem>
+        {formData.get('cateParentName') ? null : (
+          <FormItem {...formItemLayout} label="Display in shop">
+            {getFieldDecorator('displayStatus', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please selecte display in shop'
+                }
+              ],
+              initialValue: displayStatus,
+              onChange: this._editGoods.bind(this, 'displayStatus')
+            })(
+              <Radio.Group>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </Radio.Group>
+            )}
+          </FormItem>
+        )}
+
         {displayStatus ? (
           <>
             {formData.get('cateParentName') ? null : (

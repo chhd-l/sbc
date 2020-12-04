@@ -252,9 +252,7 @@ class CateModalForm extends React.Component<any, any> {
                 initialValue: cateType ? this._getCateTypeName(cateType) : ''
               })(
                 <Select>
-                  <Option value=''>
-                    All
-                  </Option>
+                  <Option value="">All</Option>
                   {petType &&
                     petType.toJS().map((item, index) => (
                       <Option value={item.valueEn} key={index}>

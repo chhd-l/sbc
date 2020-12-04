@@ -63,8 +63,9 @@ export default class Spec extends React.Component<any, any> {
 
 class SpecForm extends React.Component<any, any> {
   componentDidMount() {
-    const { updateSpecForm } = this.props.relaxProps;
+    const { updateSpecForm, editSpecSingleFlag } = this.props.relaxProps;
     updateSpecForm(this.props.form);
+    //editSpecSingleFlag('checked');
   }
 
   render() {
@@ -77,7 +78,7 @@ class SpecForm extends React.Component<any, any> {
             <FormattedMessage id="product.specificationSetting" />
           </div>
           <div style={styles.box}>
-            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
+            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag} disabled>
               <span>
                 {/* <span
                   style={{
@@ -102,6 +103,137 @@ class SpecForm extends React.Component<any, any> {
                 </Col>
               </Row>
             )}
+            <div style={{ marginBottom: 20 }}>
+              <Row type="flex" justify="start" align="top">
+                <Col span={3}>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px',
+                      float: 'left'
+                    }}
+                  >
+                    *
+                  </span>
+                  <FormItem>
+                    {getFieldDecorator('spec_' + 1, {
+                      rules: [
+                        {
+                          required: true,
+                          whitespace: true,
+                          message: 'Please input specification'
+                        },
+                        {
+                          min: 1,
+                          max: 100,
+                          message: 'No more than 100 characters'
+                        },
+                        {
+                          // 重复校验,
+                          validator: (_rule, specsName, callback) => {
+                            if (!specsName) {
+                              callback();
+                              return;
+                            }
+                            //   获得表单其他列的规格名称，
+                            goodsSpecs.forEach((value, i) => {
+                              value.get('specName') == specsName ? callback(new Error('Specification name duplicate')) : callback();
+                            });
+                            callback();
+                          }
+                        }
+                      ],
+                      onChange: this._editSpecName.bind(this, 1),
+                      initialValue: 3
+                    })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                  </FormItem>
+                </Col>
+                <Col span={10}>
+                  <span
+                    style={{
+                      color: 'red',
+                      fontFamily: 'SimSun',
+                      marginRight: '4px',
+                      fontSize: '12px',
+                      float: 'left'
+                    }}
+                  >
+                    *
+                  </span>
+                  <FormItem>
+                    {getFieldDecorator('specval_' + 2, {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please input specification Value'
+                        },
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (!value) {
+                              callback();
+                              return;
+                            }
+
+                            if (value.length > 0) {
+                              const valueList = fromJS(value);
+                              let overLen = false;
+                              let whitespace = false;
+                              let duplicated = false;
+
+                              valueList.forEach((v, k) => {
+                                const trimValue = v.trim();
+                                if (!trimValue) {
+                                  whitespace = true;
+                                  return false;
+                                }
+                                if (v.length > 20) {
+                                  overLen = true;
+                                  return false;
+                                }
+
+                                // 重复校验
+                                const duplicatedIndex = valueList.findIndex((v1, index1) => index1 != k && v1.trim() === trimValue);
+                                if (duplicatedIndex > -1) {
+                                  duplicated = true;
+                                }
+                              });
+
+                              if (whitespace) {
+                                callback(new Error('The specification value cannot be a space character'));
+                                return;
+                              }
+                              if (overLen) {
+                                callback(new Error('Each value supports up to 20 characters'));
+                                return;
+                              }
+                              if (duplicated) {
+                                callback(new Error('Repeated specifications'));
+                                return;
+                              }
+                            }
+
+                            if (value.length > 20) {
+                              callback(new Error('Support up to 20 specifications'));
+                              return;
+                            }
+
+                            callback();
+                          }
+                        }
+                      ],
+                      onChange: this._editSpecValue.bind(this, 23),
+                      initialValue: 33
+                    })(
+                      <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
+                        {/*{this._getChildren(item.get('specValues'))}*/}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+            </div>
             {specSingleFlag
               ? null
               : goodsSpecs.map((item, index) => {

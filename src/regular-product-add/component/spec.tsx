@@ -282,7 +282,6 @@ class SpecForm extends React.Component<any, any> {
    */
   _editSpecFlag = (e) => {
     const { editSpecSingleFlag, updateSpecForm, editGoodsItem } = this.props.relaxProps;
-    debugger;
     updateSpecForm(this.props.form);
     editSpecSingleFlag(!e.target.checked);
   };
@@ -301,7 +300,6 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    debugger;
     const { editSpecValues, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
@@ -326,8 +324,6 @@ class SpecForm extends React.Component<any, any> {
    */
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
-    debugger;
-
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
       message.error('Add up to 5 specifications');
       return;

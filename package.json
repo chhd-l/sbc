@@ -10,7 +10,6 @@
     "server": "http-server dist",
     "build": "cross-env NODE_ENV=development node scripts/build.js",
     "build:prod": "cross-env NODE_ENV=production node scripts/build.js prod",
-    "analyze": "source-map-explorer dist/static/js/main.*",
     "start:dev": "node ./web_modules/qmkit/build.ts dev && ./node_modules/.bin/webpack-dev-server --progress --color --open",
     "start:test1": "node ./web_modules/qmkit/build.ts test1 && ./node_modules/.bin/webpack-dev-server --progress --color --open",
     "start:test2": "node ./web_modules/qmkit/build.ts test2 && ./node_modules/.bin/webpack-dev-server --progress --color --open",

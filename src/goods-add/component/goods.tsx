@@ -230,7 +230,7 @@ class GoodsForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    var parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
+    let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
 
     storeCateIds &&
@@ -740,10 +740,20 @@ class GoodsForm extends React.Component<any, any> {
         this.setState({
           saleableType: true
         });
+        let goods = Map({
+          [key]: fromJS(1)
+        });
+        editGoods(goods);
+        setFieldsValue({ saleType: 1 });
       } else {
         this.setState({
           saleableType: false
         });
+        let goods = Map({
+          [key]: fromJS(0)
+        });
+        editGoods(goods);
+        setFieldsValue({ saleType: 0 });
       }
     }
 

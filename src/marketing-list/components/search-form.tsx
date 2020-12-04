@@ -118,13 +118,13 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <DatePicker
                 allowClear={true}
-                disabledDate={this.disabledEndDate}
-                // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
+                disabledDate={this.disabledStartDate}
+                // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
                 showTime={{ format: 'HH:mm' }}
                 format={Const.DATE_FORMAT}
-                value={endValue}
-                placeholder="End time"
-                onChange={this.onEndChange}
+                value={startValue}
+                placeholder="Start time"
+                onChange={this.onStartChange}
                 showToday={false}
               />
             </FormItem>
@@ -133,13 +133,13 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <DatePicker
                 allowClear={true}
-                disabledDate={this.disabledStartDate}
-                // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
+                disabledDate={this.disabledEndDate}
+                // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
                 showTime={{ format: 'HH:mm' }}
                 format={Const.DATE_FORMAT}
-                value={startValue}
-                placeholder="Start time"
-                onChange={this.onStartChange}
+                value={endValue}
+                placeholder="End time"
+                onChange={this.onEndChange}
                 showToday={false}
               />
             </FormItem>

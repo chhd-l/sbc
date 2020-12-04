@@ -779,6 +779,10 @@ export default class AppStore extends Store {
     this.dispatch('formActor:spec', specForm);
   };
 
+  updateAttributeForm = (goodsForm) => {
+    this.dispatch('formActor:attributes', goodsForm);
+  };
+
   updateLevelPriceForm = (levelPriceForm) => {
     this.dispatch('formActor:levelprice', levelPriceForm);
   };
@@ -833,6 +837,16 @@ export default class AppStore extends Store {
     if (this.state().get('logisticsForm') && this.state().get('logisticsForm').validateFieldsAndScroll) {
       this.state()
         .get('logisticsForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
+    }
+
+    if (this.state().get('attributesForm') && this.state().get('attributesForm').validateFieldsAndScroll) {
+      this.state()
+        .get('attributesForm')
         .validateFieldsAndScroll(null, (errs) => {
           valid = valid && !errs;
           if (!errs) {

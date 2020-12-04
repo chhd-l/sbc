@@ -7,6 +7,7 @@ export default class FormActor extends Actor {
       goodsForm: {},
       skuForm: {},
       specForm: {},
+      attributesForm: {},
       levelPriceForm: {},
       userPriceForm: {},
       areaPriceForm: {},
@@ -51,6 +52,11 @@ export default class FormActor extends Actor {
   @Action('formActor:spec')
   updateSpecForm(state, specForm) {
     return state.set('specForm', specForm);
+  }
+
+  @Action('formActor:attributes')
+  updateAttributeForm(state, attributesForm) {
+    return state.set('attributesForm', attributesForm);
   }
 
   @Action('formActor:levelprice')

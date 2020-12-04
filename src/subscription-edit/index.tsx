@@ -1049,7 +1049,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             <Popover content={content} trigger="click" visible={this.state.visibleDate} onVisibleChange={() => this.handleVisibleDateChange(record)}>
-              <Tooltip placement="top" title="Selcte Date">
+              <Tooltip placement="top" title="Select Date">
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>
             </Popover>

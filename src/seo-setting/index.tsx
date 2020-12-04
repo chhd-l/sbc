@@ -35,12 +35,12 @@ export default class SetBanner extends Component<any, any> {
             <Tabs defaultActiveKey="1" onChange={(key) => this.changeTab(key)}>
               <TabPane tab="Site SEO" key="siteSeo">
                 <_SeoSettingForm />
+                <Foot />
               </TabPane>
               <TabPane tab="Page SEO" key="pageSeo">
                 <PageSeo />
               </TabPane>
             </Tabs>
-            <Foot />
           </div>
         </div>
       </AuthWrapper>

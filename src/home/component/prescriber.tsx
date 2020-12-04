@@ -394,6 +394,7 @@ export default class Prescriber extends React.Component<any, any> {
                 {trafficTrendDashboardView && (
                   <BarLine
                     yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
+                    nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     unit={{ unit1: '', unit2: '%' }}
                     data={{
                       x: trafficTrendDashboardView.weekNumList,
@@ -414,6 +415,7 @@ export default class Prescriber extends React.Component<any, any> {
                   <BarLine
                     yName={{ y1: 'Revenue', y2: 'Transaction' }}
                     unit={{ unit1: '', unit2: '' }}
+                    nameTextStyle={{ y1: [0, 0, 0, 0], y2: [0, 22, 0, 0] }}
                     data={{
                       x: transactionTrendView.weekNumList,
                       y1: transactionTrendView.revenueList,

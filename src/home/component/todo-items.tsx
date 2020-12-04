@@ -548,6 +548,7 @@ export default class TodoItems extends React.Component<any, any> {
                   <BarLine
                     yName={{ y1: 'Traffic', y2: 'Conversion rate' }}
                     unit={{ unit1: '', unit2: '%' }}
+                    nameTextStyle={{ y1: [0, 20, 0, 0], y2: [0, 16, 0, 0] }}
                     data={{
                       x: trafficTrendDashboardView.weekNumList,
                       y1: trafficTrendDashboardView.totalPVList,
@@ -569,6 +570,7 @@ export default class TodoItems extends React.Component<any, any> {
                     <BarLine
                       yName={{ y1: 'Prescriber reward', y2: 'Active rate' }}
                       unit={{ unit1: '', unit2: '%' }}
+                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
                       data={{
                         x: prescriberTrendView.weekNumList,
                         y1: prescriberTrendView.reward,
@@ -596,6 +598,7 @@ export default class TodoItems extends React.Component<any, any> {
                     <BarLine
                       yName={{ y1: 'Revenue', y2: 'Transaction' }}
                       unit={{ unit1: '', unit2: '' }}
+                      nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
                       data={{
                         x: transactionTrendView.weekNumList,
                         y1: transactionTrendView.revenueList,

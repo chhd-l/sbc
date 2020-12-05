@@ -177,50 +177,25 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       ],
 
       splitChunks: {
-        chunks: 'all',
-        minSize: 120000,
-        maxSize: 200000,
-        minChunks: 1,
-        maxAsyncRequests: 6,
-        maxInitialRequests: 6,
+        chunks: 'async',
+        minSize: 90000,
+        maxSize: 100000,
+        minChunks: 2,
+        maxAsyncRequests: 5,
+        maxInitialRequests: 3,
         automaticNameDelimiter: '~',
         name: true,
-        // cacheGroups: {
-        //   vendor: {
-        //     name: 'vendor',
-        //     test: /[\\/]node_modules[\\/]/,
-        //     chunks: 'all',
-        //     priority: 10,
-        //     enforce: true,
-        //   },
-        //   react: {
-        //     name: 'react',
-        //     test: module => /react|redux/.test(module.context),
-        //     chunks: 'initial',
-        //     priority: 11,
-        //     enforce: true,
-        //   },
-        //   antd: {
-        //     name: 'antd',
-        //     test: (module) => {
-        //       return /ant/.test(module.context);
-        //     },
-        //     chunks: 'initial',
-        //     priority: 11,
-        //     enforce: true,
-        //   },
-        //   moment: {
-        //     name: 'moment',
-        //     test: (module) => {
-        //       return /moment/.test(module.context);
-        //     },
-        //     chunks: 'initial',
-        //     priority: 13,
-        //     enforce: true,
-        //   },
-        
-        // },
-
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true
+          }
+        }
       },
       runtimeChunk: true,
     },
@@ -428,21 +403,21 @@ module.exports = function (webpackEnv, envCode = 'prod') {
     },
     plugins: [
 
-     /* new PrerenderSpaPlugin(
-        //将渲染的文件放到dist目录下
-        path.join(__dirname, '../dist'),
-        //需要预渲染的路由信息
-        [ '/','/home'/!*,'/goods-list','/order-list-prescriber','/subscription-list','/customer-clinic-list','/finance-manage-check','/prescriber'*!/ ],
-        {
-          //在一定时间后再捕获页面信息，使得页面数据信息加载完成
-          captureAfterTime: 50000,
-          //忽略打包错误
-          ignoreJSErrors: true,
-          phantomOptions: '--web-security=false',
-          maxAttempts: 10,
+      /* new PrerenderSpaPlugin(
+         //将渲染的文件放到dist目录下
+         path.join(__dirname, '../dist'),
+         //需要预渲染的路由信息
+         [ '/','/home'/!*,'/goods-list','/order-list-prescriber','/subscription-list','/customer-clinic-list','/finance-manage-check','/prescriber'*!/ ],
+         {
+           //在一定时间后再捕获页面信息，使得页面数据信息加载完成
+           captureAfterTime: 50000,
+           //忽略打包错误
+           ignoreJSErrors: true,
+           phantomOptions: '--web-security=false',
+           maxAttempts: 10,
 
-        }
-      ),*/
+         }
+       ),*/
       new BundleAnalyzerPlugin(
         {
           //  可以是`server`，`static`或`disabled`。

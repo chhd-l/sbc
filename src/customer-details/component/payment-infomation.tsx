@@ -1,23 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Menu,
-  Card,
-  Checkbox,
-  Empty,
-  Spin,
-  DatePicker,
-  Popconfirm
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, DatePicker, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -77,16 +59,13 @@ class BillingInfomation extends React.Component<any, any> {
   }
   getList() {
     webapi
-      .getPaymentMethods({ customerId: this.props.customerId })
+      .getPaymentMethods({ customerId: this.props.customerId, storeId: 123456858 })
       .then((res) => {
         let data = res.res.context;
         let sortData = data.sort((a, b) => b.isDefault - a.isDefault);
         let cardForm = sortData[0];
         this.props.form.setFieldsValue({
-          cardNumber:
-            cardForm.cardNumber.slice(0, 4) +
-            '****' +
-            cardForm.cardNumber.slice(8),
+          cardNumber: cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
           cardType: cardForm.cardType,
           cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
           cardCvv: '***',
@@ -134,14 +113,8 @@ class BillingInfomation extends React.Component<any, any> {
         },
         {
           headers: {
-            public_key:
-              process.env.NODE_ENV === 'development'
-                ? 'fd931719-5733-4b77-b146-2fd22f9ad2e3'
-                : process.env.REACT_APP_PaymentKEY,
-            'x-payments-os-env':
-              process.env.NODE_ENV === 'development'
-                ? 'test'
-                : process.env.REACT_APP_PaymentENV,
+            public_key: process.env.NODE_ENV === 'development' ? 'fd931719-5733-4b77-b146-2fd22f9ad2e3' : process.env.REACT_APP_PaymentKEY,
+            'x-payments-os-env': process.env.NODE_ENV === 'development' ? 'test' : process.env.REACT_APP_PaymentENV,
             'Content-type': 'application/json',
             app_id: 'com.razorfish.dev_mexico',
             'api-version': '1.3.0'
@@ -172,23 +145,11 @@ class BillingInfomation extends React.Component<any, any> {
         loading: false
       });
       if (res) {
-        if (
-          res.data.more_info.indexOf(
-            'body/credit_card_cvv should match pattern'
-          ) !== -1
-        ) {
+        if (res.data.more_info.indexOf('body/credit_card_cvv should match pattern') !== -1) {
           message.error('your card cvv is invalid');
-        } else if (
-          res.data.more_info.indexOf(
-            'body/card_number should match pattern'
-          ) !== -1
-        ) {
+        } else if (res.data.more_info.indexOf('body/card_number should match pattern') !== -1) {
           message.error('your card number is invalid');
-        } else if (
-          res.data.more_info.indexOf(
-            'body/expiration_date should match pattern'
-          ) !== -1
-        ) {
+        } else if (res.data.more_info.indexOf('body/expiration_date should match pattern') !== -1) {
           message.error('your card expiration_date is invalid');
         } else {
           message.error(res.data.description);
@@ -219,8 +180,7 @@ class BillingInfomation extends React.Component<any, any> {
       isDefault: 0
     };
     this.props.form.setFieldsValue({
-      cardNumber:
-        cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
+      cardNumber: cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
       cardType: cardForm.cardType,
       cardMmyy: cardForm.cardMmyy,
       cardCvv: '***',
@@ -264,8 +224,7 @@ class BillingInfomation extends React.Component<any, any> {
       return item.id === id;
     });
     this.props.form.setFieldsValue({
-      cardNumber:
-        cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
+      cardNumber: cardForm.cardNumber.slice(0, 4) + '****' + cardForm.cardNumber.slice(8),
       cardType: cardForm.cardType,
       cardMmyy: moment(cardForm.cardMmyy, 'MM/YY'),
       cardCvv: '***',
@@ -297,7 +256,7 @@ class BillingInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <Col span={3}>
             <h3>All Methods( {this.state.cardList.length} )</h3>
             <ul>
@@ -306,10 +265,7 @@ class BillingInfomation extends React.Component<any, any> {
                   key={item.id}
                   style={{
                     cursor: 'pointer',
-                    color:
-                      item.cardNumber === this.state.carrentCardNumber
-                        ? '#e2001a'
-                        : ''
+                    color: item.cardNumber === this.state.carrentCardNumber ? '#e2001a' : ''
                   }}
                   onClick={() => this.switchForm(item.id)}
                 >
@@ -322,15 +278,9 @@ class BillingInfomation extends React.Component<any, any> {
             </Button> */}
           </Col>
           <Col span={20}>
-            {this.state.cardList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.cardList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
-              title={
-                this.state.title.slice(0, 4) +
-                '****' +
-                this.state.title.slice(8)
-              }
+              title={this.state.title.slice(0, 4) + '****' + this.state.title.slice(8)}
               style={{
                 display: this.state.cardList.length === 0 ? 'none' : 'block'
               }}
@@ -392,10 +342,7 @@ class BillingInfomation extends React.Component<any, any> {
                         <Input
                           disabled
                           onChange={(e) => {
-                            const value = (e.target as any).value.replace(
-                              /\s*/g,
-                              ''
-                            );
+                            const value = (e.target as any).value.replace(/\s*/g, '');
                             this.onFormChange({
                               field: 'cardNumber',
                               value
@@ -414,12 +361,7 @@ class BillingInfomation extends React.Component<any, any> {
                             message: 'your card expiration_date is invalid!'
                           }
                         ],
-                        initialValue: moment(
-                          new Date(
-                            sessionStorage.getItem('defaultLocalDateTime')
-                          ),
-                          'MM/YY'
-                        )
+                        initialValue: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'MM/YY')
                       })(
                         <MonthPicker
                           disabled
@@ -499,9 +441,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Email">
                       {getFieldDecorator('email', {
-                        rules: [
-                          { required: true, message: 'Please input email!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input email!' }]
                       })(
                         <Input
                           disabled
@@ -652,20 +592,11 @@ class BillingInfomation extends React.Component<any, any> {
                       >
                         Delete
                       </Button> */}
-                      <Popconfirm
-                        placement="topRight"
-                        title="Are you sure to delete this item?"
-                        onConfirm={() => this.delCard()}
-                        okText="Confirm"
-                        cancelText="Cancel"
-                      >
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delCard()} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginRight: '20px',
-                            display:
-                              this.props.customerType === 'Guest'
-                                ? 'none'
-                                : null
+                            display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
                           <FormattedMessage id="delete" />

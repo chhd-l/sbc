@@ -23,24 +23,19 @@ export default class GoodsActor extends Actor {
       // 展开显示的spuIdList
       expandedRowKeys: [],
       // 模糊条件-SKU编码(搜索出来直接展开显示这个sku对应的spu)
-      likeGoodsInfoNo1: ''
+      likeGoodsInfoNo1: '',
+      loading: true
     };
   }
 
   @Action('goodsActor: init')
   init(state: IMap, data) {
     let exp = List();
-    if (
-      state.get('likeGoodsInfoNo1') != '' &&
-      data
-        .get('goodsPage')
-        .get('content')
-        .count() > 0
-    ) {
+    if (state.get('likeGoodsInfoNo1') != '' && data.get('goodsPage').get('content').count() > 0) {
       exp = data
         .get('goodsPage')
         .get('content')
-        .map(value => value.get('goodsId'));
+        .map((value) => value.get('goodsId'));
     }
     return state.merge(data).set('expandedRowKeys', exp);
   }
@@ -63,5 +58,16 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:editExpandedRowKeys')
   editExpandedRowKeys(state: IMap, expandedRowKeys: IList) {
     return state.set('expandedRowKeys', expandedRowKeys);
+  }
+
+  //loading
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

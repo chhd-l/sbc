@@ -29,7 +29,8 @@ class PeoductCategory extends Component<any, any> {
       searchForm: {
         attributeName: '',
         attributeValue: ''
-      }
+      },
+      loading: true
     };
   }
   componentDidMount() {
@@ -52,7 +53,8 @@ class PeoductCategory extends Component<any, any> {
         searchForm: {
           attributeName: '',
           attributeValue: ''
-        }
+        },
+        loading: false
       },
       () => this.getAttributes()
     );
@@ -104,8 +106,6 @@ class PeoductCategory extends Component<any, any> {
     });
   };
   init(cates) {
-    console.log(cates.filter((item) => item.cateParentId == 0));
-
     const newDataList = cates
       .filter((item) => item.cateParentId == 0)
       .map((data) => {
@@ -134,7 +134,8 @@ class PeoductCategory extends Component<any, any> {
         return c1.sort - c2.sort;
       });
     this.setState({
-      productCategoryList: newDataList
+      productCategoryList: newDataList,
+      loading: false
     });
   }
 
@@ -177,11 +178,13 @@ class PeoductCategory extends Component<any, any> {
           message.success('Operate successfully');
           this.setState({
             visible: false,
-            confirmLoading: false
+            confirmLoading: false,
+            loading: false
           });
         } else {
           this.setState({
-            confirmLoading: false
+            confirmLoading: false,
+            loading: false
           });
           message.error(res.message || 'Operate failed');
         }
@@ -204,7 +207,8 @@ class PeoductCategory extends Component<any, any> {
     let data = this.state.searchForm;
     data[field] = value;
     this.setState({
-      searchForm: data
+      searchForm: data,
+      loading: false
     });
   };
   onSearch = () => {
@@ -213,7 +217,8 @@ class PeoductCategory extends Component<any, any> {
         pagination: {
           current: 1,
           pageSize: 8,
-          total: 0
+          total: 0,
+          loading: false
         }
       },
       () => this.getAttributes()
@@ -294,76 +299,78 @@ class PeoductCategory extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <Alert message={description} type="info" />
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline title={title} />
+            <Alert message={description} type="info" />
 
-          <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
-        </div>
-        <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
-          <div>
-            <div style={{ marginBottom: 16 }}>
-              <Form className="filter-content" layout="inline">
-                <Row>
-                  <Col span={10}>
-                    <FormItem>
-                      <Input
-                        addonBefore={<p style={styles.label}>Attribute name</p>}
-                        value={searchForm.attributeName}
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onFormChange({
-                            field: 'attributeName',
-                            value
-                          });
-                        }}
-                      />
-                    </FormItem>
-                  </Col>
-                  <Col span={10}>
-                    <FormItem>
-                      <Input
-                        addonBefore={<p style={styles.label}>Attribute value</p>}
-                        value={searchForm.attributeValue}
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.onFormChange({
-                            field: 'attributeValue',
-                            value
-                          });
-                        }}
-                      />
-                    </FormItem>
-                  </Col>
-                  <Col span={4} style={{ textAlign: 'center' }}>
-                    <FormItem>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon="search"
-                        shape="round"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.onSearch();
-                        }}
-                      >
-                        <span>
-                          <FormattedMessage id="search" />
-                        </span>
-                      </Button>
-                    </FormItem>
-                  </Col>
-                </Row>
-              </Form>
-
-              <Button type="primary" onClick={this.start} disabled={!hasSelected}>
-                Reload
-              </Button>
-              <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
-            </div>
-            <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+            <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
           </div>
-        </Modal>
+          <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+            <div>
+              <div style={{ marginBottom: 16 }}>
+                <Form className="filter-content" layout="inline">
+                  <Row>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input
+                          addonBefore={<p style={styles.label}>Attribute name</p>}
+                          value={searchForm.attributeName}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'attributeName',
+                              value
+                            });
+                          }}
+                        />
+                      </FormItem>
+                    </Col>
+                    <Col span={10}>
+                      <FormItem>
+                        <Input
+                          addonBefore={<p style={styles.label}>Attribute value</p>}
+                          value={searchForm.attributeValue}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onFormChange({
+                              field: 'attributeValue',
+                              value
+                            });
+                          }}
+                        />
+                      </FormItem>
+                    </Col>
+                    <Col span={4} style={{ textAlign: 'center' }}>
+                      <FormItem>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          icon="search"
+                          shape="round"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.onSearch();
+                          }}
+                        >
+                          <span>
+                            <FormattedMessage id="search" />
+                          </span>
+                        </Button>
+                      </FormItem>
+                    </Col>
+                  </Row>
+                </Form>
+
+                <Button type="primary" onClick={this.start} disabled={!hasSelected}>
+                  Reload
+                </Button>
+                <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
+              </div>
+              <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+            </div>
+          </Modal>
+        </Spin>
       </div>
     );
   }

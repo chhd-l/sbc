@@ -29,10 +29,12 @@ export default class AppStore extends Store {
    * 初始化
    */
   init = async () => {
+    this.dispatch('loading:start');
     const result: any = await getCateList();
     const result1: any = await getSignCateList();
     const petType: any = await getDictionaryByType('petType');
     this.transaction(() => {
+      this.dispatch('loading:end');
       this.dispatch('cateActor: init', fromJS(result.res.context));
       this.dispatch('cateActor: initCateList', fromJS(result1.res.context));
       this.dispatch('cateActor: closeModal');

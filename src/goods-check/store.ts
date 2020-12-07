@@ -17,12 +17,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new CateActor(),
-      new BrandActor(),
-      new GoodsActor(),
-      new FormActor()
-    ];
+    return [new CateActor(), new BrandActor(), new GoodsActor(), new FormActor()];
   }
 
   /**
@@ -38,17 +33,18 @@ export default class AppStore extends Store {
     const { res, err } = (await goodsList({
       pageNum,
       pageSize,
-      auditStatusList: this.state()
-        .get('auditStatusList')
-        .toJS()
+      auditStatusList: this.state().get('auditStatusList').toJS()
     })) as any;
+    this.dispatch('loading:start');
     if (!err && res.code === Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       res.context.goodsPage.content.forEach((v, i) => {
         v.key = i;
       });
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
     } else {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
 
@@ -82,10 +78,9 @@ export default class AppStore extends Store {
       likeGoodsNo: this.state().get('likeGoodsNo'),
       pageNum: this.state().get('pageNum'),
       pageSize: this.state().get('pageSize'),
-      auditStatusList: this.state()
-        .get('auditStatusList')
-        .toJS()
+      auditStatusList: this.state().get('auditStatusList').toJS()
     };
+    this.dispatch('loading:start');
 
     if (this.state().get('storeCateId') != '-1') {
       request.storeCateId = this.state().get('storeCateId');
@@ -99,11 +94,14 @@ export default class AppStore extends Store {
 
     const { res, err } = (await goodsList(request)) as any;
     if (!err) {
+      this.dispatch('loading:end');
       res.context.goodsPage.content.forEach((v, i) => {
         v.key = i;
       });
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('goodsActor:clearSelectedSpuKeys');
+    } else {
+      this.dispatch('loading:end');
     }
   };
 
@@ -164,9 +162,7 @@ export default class AppStore extends Store {
    */
   onSpuDelete = async (ids: string[]) => {
     if (!ids) {
-      ids = this.state()
-        .get('selectedSpuKeys')
-        .toJS();
+      ids = this.state().get('selectedSpuKeys').toJS();
     }
     await spuDelete({ goodsIds: ids });
     this.onSearch();

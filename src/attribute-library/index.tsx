@@ -34,7 +34,8 @@ class AttributeLibrary extends Component<any, any> {
       attributeValueList: [],
       isEdit: false,
       currentEditAttribute: {},
-      modalName: ''
+      modalName: '',
+      loading: true
     };
   }
   componentDidMount() {
@@ -45,7 +46,8 @@ class AttributeLibrary extends Component<any, any> {
     let data = this.state.searchForm;
     data[field] = value;
     this.setState({
-      searchForm: data
+      searchForm: data,
+      loading: false
     });
   };
 
@@ -55,7 +57,8 @@ class AttributeLibrary extends Component<any, any> {
   handleTableChange = (pagination: any) => {
     this.setState(
       {
-        pagination: pagination
+        pagination: pagination,
+        loading: false
       },
       () => this.onSearch()
     );
@@ -78,7 +81,8 @@ class AttributeLibrary extends Component<any, any> {
     attributeValueList.push(obj);
     this.setState(
       {
-        attributeValueList
+        attributeValueList,
+        loading: false
       },
       () => {
         this.setAttributeFieldsValue(attributeValueList);
@@ -111,7 +115,8 @@ class AttributeLibrary extends Component<any, any> {
     const { attributeValueList } = this.state;
     let attributeValueListTemp = attributeValueList.filter((item) => item.tempId !== id);
     this.setState({
-      attributeValueList: attributeValueListTemp
+      attributeValueList: attributeValueListTemp,
+      loading: false
     });
   };
   removeRemote = (id) => {
@@ -123,7 +128,8 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           let attributeValueListTemp = attributeValueList.filter((item) => item.id !== id);
           this.setState({
-            attributeValueList: attributeValueListTemp
+            attributeValueList: attributeValueListTemp,
+            loading: false
           });
         } else {
           message.error(res.message.toString() || 'Operation failed');
@@ -144,7 +150,8 @@ class AttributeLibrary extends Component<any, any> {
     });
 
     this.setState({
-      attributeValueList
+      attributeValueList,
+      loading: false
     });
   };
   openAddPage = () => {
@@ -161,7 +168,8 @@ class AttributeLibrary extends Component<any, any> {
         attributeValueList: [],
         visibleAttribute: true,
         attributeForm,
-        isEdit: false
+        isEdit: false,
+        loading: false
       },
       () => {
         this.add();
@@ -183,7 +191,8 @@ class AttributeLibrary extends Component<any, any> {
         visibleAttribute: true,
         attributeForm,
         isEdit: true,
-        currentEditAttribute: row
+        currentEditAttribute: row,
+        loading: false
       },
       () => {
         form.setFieldsValue(attributeForm);
@@ -249,7 +258,7 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
-          this.setState({ attributeList, pagination });
+          this.setState({ attributeList, pagination, loading: false });
         } else {
           message.error(res.message || 'Operation failed');
         }
@@ -268,7 +277,8 @@ class AttributeLibrary extends Component<any, any> {
 
           this.setState(
             {
-              visibleAttribute: false
+              visibleAttribute: false,
+              loading: false
             },
             () => this.getAttributes()
           );
@@ -320,7 +330,8 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            visibleAttribute: false
+            visibleAttribute: false,
+            loading: false
           });
           this.getAttributes();
           message.success('Operate successfully');
@@ -430,7 +441,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { title, attributeList, visibleAttribute, attributeValueList, modalName } = this.state;
+    const { title, attributeList, visibleAttribute, attributeValueList, modalName, loading } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -497,155 +508,157 @@ class AttributeLibrary extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <Form layout="inline" style={{ marginBottom: 20 }}>
-            <Row>
-              <Col span={8}>
-                <FormItem>
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline title={title} />
+            <Form layout="inline" style={{ marginBottom: 20 }}>
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore="Attribute name"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onSearchFormChange({
+                          field: 'attributeName',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore="Attribute value"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onSearchFormChange({
+                          field: 'attributeValue',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    type="primary"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.onSearch();
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+
+          <div className="container-search">
+            <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
+              <span>Add new attribute</span>
+            </Button>
+            <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          </div>
+
+          <Modal
+            width="600px"
+            title={modalName}
+            visible={visibleAttribute}
+            onCancel={() =>
+              this.setState({
+                visibleAttribute: false
+              })
+            }
+            footer={[
+              <Button
+                key="back"
+                onClick={() => {
+                  this.setState({
+                    visibleAttribute: false
+                  });
+                }}
+              >
+                Close
+              </Button>,
+              <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+                Submit
+              </Button>
+            ]}
+          >
+            <Form {...formItemLayout}>
+              <FormItem label="Attribute name">
+                {getFieldDecorator('attributeName', {
+                  rules: [
+                    { required: true },
+                    {
+                      max: 50,
+                      message: 'Exceed maximum length!'
+                    }
+                  ]
+                })(
                   <Input
-                    addonBefore="Attribute name"
+                    style={{ width: '80%' }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onSearchFormChange({
+                      this.onAttributeFormChange({
                         field: 'attributeName',
                         value
                       });
                     }}
                   />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
+                )}
+              </FormItem>
+              <FormItem label="Alias name">
+                {getFieldDecorator('attributeNameEn', {
+                  rules: [
+                    {
+                      max: 50,
+                      message: 'Exceed maximum length!'
+                    }
+                  ]
+                })(
                   <Input
-                    addonBefore="Attribute value"
+                    style={{ width: '80%' }}
                     onChange={(e) => {
                       const value = (e.target as any).value;
-                      this.onSearchFormChange({
-                        field: 'attributeValue',
+                      this.onAttributeFormChange({
+                        field: 'attributeNameEn',
                         value
                       });
                     }}
                   />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <Button
-                  type="primary"
-                  icon="search"
-                  shape="round"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
-                  }}
-                >
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-
-        <div className="container-search">
-          <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-            <span>Add new attribute</span>
-          </Button>
-          <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
-        </div>
-
-        <Modal
-          width="600px"
-          title={modalName}
-          visible={visibleAttribute}
-          onCancel={() =>
-            this.setState({
-              visibleAttribute: false
-            })
-          }
-          footer={[
-            <Button
-              key="back"
-              onClick={() => {
-                this.setState({
-                  visibleAttribute: false
-                });
-              }}
-            >
-              Close
-            </Button>,
-            <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-              Submit
-            </Button>
-          ]}
-        >
-          <Form {...formItemLayout}>
-            <FormItem label="Attribute name">
-              {getFieldDecorator('attributeName', {
-                rules: [
-                  { required: true },
-                  {
-                    max: 50,
-                    message: 'Exceed maximum length!'
-                  }
-                ]
-              })(
-                <Input
-                  style={{ width: '80%' }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onAttributeFormChange({
-                      field: 'attributeName',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Alias name">
-              {getFieldDecorator('attributeNameEn', {
-                rules: [
-                  {
-                    max: 50,
-                    message: 'Exceed maximum length!'
-                  }
-                ]
-              })(
-                <Input
-                  style={{ width: '80%' }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onAttributeFormChange({
-                      field: 'attributeNameEn',
-                      value
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-            <FormItem label="Choose type">
-              {getFieldDecorator('attributeType', {
-                rules: [{ required: true }]
-              })(
-                <Radio.Group
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onAttributeFormChange({
-                      field: 'attributeType',
-                      value
-                    });
-                  }}
-                  style={{ width: '80%' }}
-                >
-                  <Radio value="Single choice">Single choice</Radio>
-                  <Radio value="Multiple choice">Multiple choice</Radio>
-                </Radio.Group>
-              )}
-            </FormItem>
-            {this.renderForm(attributeValueList)}
-          </Form>
-        </Modal>
+                )}
+              </FormItem>
+              <FormItem label="Choose type">
+                {getFieldDecorator('attributeType', {
+                  rules: [{ required: true }]
+                })(
+                  <Radio.Group
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onAttributeFormChange({
+                        field: 'attributeType',
+                        value
+                      });
+                    }}
+                    style={{ width: '80%' }}
+                  >
+                    <Radio value="Single choice">Single choice</Radio>
+                    <Radio value="Multiple choice">Multiple choice</Radio>
+                  </Radio.Group>
+                )}
+              </FormItem>
+              {this.renderForm(attributeValueList)}
+            </Form>
+          </Modal>
+        </Spin>
       </div>
     );
   }

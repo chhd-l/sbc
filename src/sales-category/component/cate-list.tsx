@@ -59,8 +59,6 @@ export default class CateList extends React.Component<any, any> {
 
   render() {
     const { dataList } = this.props.relaxProps;
-    console.log('data:', dataList.toJS());
-
     return (
       <Table
         rowKey="storeCateId"

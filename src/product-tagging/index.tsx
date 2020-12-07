@@ -40,7 +40,8 @@ class AttributeLibrary extends Component<any, any> {
       currentEditTagging: {},
       modalName: '',
       colourList: [],
-      shopPageList: []
+      shopPageList: [],
+      loading: true
     };
   }
   componentDidMount() {
@@ -108,7 +109,8 @@ class AttributeLibrary extends Component<any, any> {
         modalName: 'Add new tagging',
         visible: true,
         taggingForm,
-        isEdit: false
+        isEdit: false,
+        loading: false
       },
       () => form.setFieldsValue(taggingForm)
     );
@@ -131,7 +133,8 @@ class AttributeLibrary extends Component<any, any> {
         visible: true,
         taggingForm,
         isEdit: true,
-        currentEditTagging: row
+        currentEditTagging: row,
+        loading: false
       },
       () => {
         form.setFieldsValue({
@@ -176,7 +179,8 @@ class AttributeLibrary extends Component<any, any> {
     let params = {
       taggingName: searchForm.taggingName,
       pageSize: pagination.pageSize,
-      pageNum: pagination.current - 1
+      pageNum: pagination.current - 1,
+      loading: false
     };
     webapi
       .getTagging(params)
@@ -185,7 +189,7 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           const taggingList = res.context.taggingList;
-          this.setState({ taggingList, pagination });
+          this.setState({ taggingList, pagination, loading: false });
         } else {
           message.error(res.message || 'Operation failed');
         }
@@ -202,12 +206,14 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           if (type === 'colour') {
             this.setState({
-              colourList: res.context.sysDictionaryVOS
+              colourList: res.context.sysDictionaryVOS,
+              loading: false
             });
           }
           if (type === 'shopPage') {
             this.setState({
-              shopPageList: res.context.sysDictionaryVOS
+              shopPageList: res.context.sysDictionaryVOS,
+              loading: false
             });
           }
         } else {
@@ -227,7 +233,8 @@ class AttributeLibrary extends Component<any, any> {
           message.success('Operate successfully');
           this.setState(
             {
-              visible: false
+              visible: false,
+              loading: false
             },
             () => this.getTagging()
           );
@@ -268,7 +275,8 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            visible: false
+            visible: false,
+            loading: false
           });
           this.getTagging();
           message.success('Operate successfully');
@@ -300,7 +308,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { title, taggingList, visible, modalName, colourList, taggingForm, shopPageList } = this.state;
+    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -404,220 +412,222 @@ class AttributeLibrary extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <Form layout="inline" style={{ marginBottom: 20 }}>
-            <Row>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore="Tagging name"
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onSearchFormChange({
-                        field: 'taggingName',
-                        value
-                      });
+        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline title={title} />
+            <Form layout="inline" style={{ marginBottom: 20 }}>
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore="Tagging name"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onSearchFormChange({
+                          field: 'taggingName',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    type="primary"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.onSearch();
                     }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
+                  >
+                    <span>
+                      <FormattedMessage id="search" />
+                    </span>
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+
+          <div className="container-search">
+            <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
+              <span>Add new tagging</span>
+            </Button>
+            <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          </div>
+
+          {visible ? (
+            <Modal
+              width="600px"
+              title={modalName}
+              visible={visible}
+              onCancel={() =>
+                this.setState({
+                  visible: false
+                })
+              }
+              footer={[
                 <Button
-                  type="primary"
-                  icon="search"
-                  shape="round"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
+                  key="back"
+                  onClick={() => {
+                    this.setState({
+                      visible: false
+                    });
                   }}
                 >
-                  <span>
-                    <FormattedMessage id="search" />
-                  </span>
+                  Close
+                </Button>,
+                <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+                  Submit
                 </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-
-        <div className="container-search">
-          <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-            <span>Add new tagging</span>
-          </Button>
-          <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} loading={this.state.loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
-        </div>
-
-        {visible ? (
-          <Modal
-            width="600px"
-            title={modalName}
-            visible={visible}
-            onCancel={() =>
-              this.setState({
-                visible: false
-              })
-            }
-            footer={[
-              <Button
-                key="back"
-                onClick={() => {
-                  this.setState({
-                    visible: false
-                  });
-                }}
-              >
-                Close
-              </Button>,
-              <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                Submit
-              </Button>
-            ]}
-          >
-            <Form {...formItemLayout}>
-              <FormItem label="Tagging name">
-                {getFieldDecorator('taggingName', {
-                  rules: [
-                    { required: true, message: 'Tagging name is required' },
-                    {
-                      max: 50,
-                      message: 'Exceed maximum length!'
-                    }
-                  ]
-                })(
-                  <Input
-                    style={{ width: '80%' }}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onTaggingFormChange({
-                        field: 'taggingName',
-                        value
-                      });
-                    }}
-                  />
-                )}
-              </FormItem>
-              <FormItem label="Tagging type">
-                {getFieldDecorator('taggingType', {
-                  initialValue: taggingForm.taggingType,
-                  rules: [{ required: true, message: 'Please selected tagging type' }]
-                })(
-                  <Radio.Group
-                    name="radiogroup"
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onTaggingFormChange({
-                        field: 'taggingType',
-                        value
-                      });
-                    }}
-                  >
-                    <Radio value="Text">Text</Radio>
-                    <Radio value="Image">Image</Radio>
-                  </Radio.Group>
-                )}
-              </FormItem>
-
-              {taggingForm.taggingType === 'Text' ? (
-                <div>
-                  <FormItem label="Tagging font color">
-                    {getFieldDecorator('taggingFontColor', {
-                      rules: [{ required: true, message: 'Tagging font color is required' }]
-                    })(
-                      <Select
-                        style={{ width: '80%' }}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onTaggingFormChange({
-                            field: 'taggingFontColor',
-                            value
-                          });
-                        }}
-                      >
-                        {colourList.map((item) => (
-                          <Option value={item.valueEn} key={item.id}>
-                            <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                  <FormItem label="Tagging fill color">
-                    {getFieldDecorator('taggingFillColor', {
-                      rules: [{ required: true, message: 'Tagging fill color is required' }]
-                    })(
-                      <Select
-                        style={{ width: '80%' }}
-                        onChange={(value) => {
-                          value = value === '' ? null : value;
-                          this.onTaggingFormChange({
-                            field: 'taggingFillColor',
-                            value
-                          });
-                        }}
-                      >
-                        {colourList.map((item) => (
-                          <Option value={item.valueEn} key={item.id}>
-                            <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </FormItem>
-                </div>
-              ) : (
-                <FormItem label="Tagging Image">
-                  {getFieldDecorator('taggingImgUrl', {
-                    rules: [{ required: true, message: 'Tagging image is required' }]
-                  })(<Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={taggingForm.taggingImgUrl} />)}
-                </FormItem>
-              )}
-              <FormItem label="Display in shop">
-                {getFieldDecorator('displayStatus', {
-                  initialValue: taggingForm.displayStatus ? true : false
-                })(
-                  <Radio.Group
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onTaggingFormChange({
-                        field: 'displayStatus',
-                        value
-                      });
-                    }}
-                  >
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
-                  </Radio.Group>
-                )}
-              </FormItem>
-              {taggingForm.displayStatus ? (
-                <FormItem label="Shop page">
-                  {getFieldDecorator('showPage', {
-                    rules: [{ required: true, message: 'Please selec shop page' }]
+              ]}
+            >
+              <Form {...formItemLayout}>
+                <FormItem label="Tagging name">
+                  {getFieldDecorator('taggingName', {
+                    rules: [
+                      { required: true, message: 'Tagging name is required' },
+                      {
+                        max: 50,
+                        message: 'Exceed maximum length!'
+                      }
+                    ]
                   })(
-                    <Select
-                      mode="multiple"
+                    <Input
                       style={{ width: '80%' }}
-                      onChange={(value) => {
-                        value = Array.isArray(value) ? value.join(',') : value;
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
                         this.onTaggingFormChange({
-                          field: 'showPage',
+                          field: 'taggingName',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <FormItem label="Tagging type">
+                  {getFieldDecorator('taggingType', {
+                    initialValue: taggingForm.taggingType,
+                    rules: [{ required: true, message: 'Please selected tagging type' }]
+                  })(
+                    <Radio.Group
+                      name="radiogroup"
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onTaggingFormChange({
+                          field: 'taggingType',
                           value
                         });
                       }}
                     >
-                      {shopPageList.map((item) => (
-                        <Option value={item.value} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </Select>
+                      <Radio value="Text">Text</Radio>
+                      <Radio value="Image">Image</Radio>
+                    </Radio.Group>
                   )}
                 </FormItem>
-              ) : null}
-            </Form>
-          </Modal>
-        ) : null}
+
+                {taggingForm.taggingType === 'Text' ? (
+                  <div>
+                    <FormItem label="Tagging font color">
+                      {getFieldDecorator('taggingFontColor', {
+                        rules: [{ required: true, message: 'Tagging font color is required' }]
+                      })(
+                        <Select
+                          style={{ width: '80%' }}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onTaggingFormChange({
+                              field: 'taggingFontColor',
+                              value
+                            });
+                          }}
+                        >
+                          {colourList.map((item) => (
+                            <Option value={item.valueEn} key={item.id}>
+                              <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                    <FormItem label="Tagging fill color">
+                      {getFieldDecorator('taggingFillColor', {
+                        rules: [{ required: true, message: 'Tagging fill color is required' }]
+                      })(
+                        <Select
+                          style={{ width: '80%' }}
+                          onChange={(value) => {
+                            value = value === '' ? null : value;
+                            this.onTaggingFormChange({
+                              field: 'taggingFillColor',
+                              value
+                            });
+                          }}
+                        >
+                          {colourList.map((item) => (
+                            <Option value={item.valueEn} key={item.id}>
+                              <div style={{ width: 10, height: 10, backgroundColor: item.valueEn, display: 'inline-block', borderRadius: '25%' }}></div> {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </div>
+                ) : (
+                  <FormItem label="Tagging Image">
+                    {getFieldDecorator('taggingImgUrl', {
+                      rules: [{ required: true, message: 'Tagging image is required' }]
+                    })(<Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={taggingForm.taggingImgUrl} />)}
+                  </FormItem>
+                )}
+                <FormItem label="Display in shop">
+                  {getFieldDecorator('displayStatus', {
+                    initialValue: taggingForm.displayStatus ? true : false
+                  })(
+                    <Radio.Group
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onTaggingFormChange({
+                          field: 'displayStatus',
+                          value
+                        });
+                      }}
+                    >
+                      <Radio value={true}>Yes</Radio>
+                      <Radio value={false}>No</Radio>
+                    </Radio.Group>
+                  )}
+                </FormItem>
+                {taggingForm.displayStatus ? (
+                  <FormItem label="Shop page">
+                    {getFieldDecorator('showPage', {
+                      rules: [{ required: true, message: 'Please selec shop page' }]
+                    })(
+                      <Select
+                        mode="multiple"
+                        style={{ width: '80%' }}
+                        onChange={(value) => {
+                          value = Array.isArray(value) ? value.join(',') : value;
+                          this.onTaggingFormChange({
+                            field: 'showPage',
+                            value
+                          });
+                        }}
+                      >
+                        {shopPageList.map((item) => (
+                          <Option value={item.value} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                ) : null}
+              </Form>
+            </Modal>
+          ) : null}
+        </Spin>
       </div>
     );
   }

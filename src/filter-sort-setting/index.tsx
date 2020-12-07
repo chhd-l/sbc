@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Form, Alert, Tabs, message } from 'antd';
+import { Spin, Form, Alert, Tabs, message } from 'antd';
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+//import { FormattedMessage } from 'react-intl';
 import DropList from './components/drop-list';
-import AddCustomizedFilter from './components/add-customized-filter';
+//import AddCustomizedFilter from './components/add-customized-filter';
 import SelectAttribute from './components/select-attribute';
 
 const { TabPane } = Tabs;
@@ -17,7 +17,8 @@ class FilterSortSetting extends Component<any, any> {
       attributeFilterList: [],
       customizedFilterList: [],
       sortByList: [],
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      loading: true
     };
   }
   componentDidMount() {
@@ -43,7 +44,8 @@ class FilterSortSetting extends Component<any, any> {
           }
           this.setState({
             attributeFilterList: attributeFilterList,
-            selectedRowKeys: selectedRowKeys
+            selectedRowKeys: selectedRowKeys,
+            loading: false
           });
         } else {
           message.error(res.message || 'Operation failure');
@@ -68,7 +70,8 @@ class FilterSortSetting extends Component<any, any> {
             customizedFilterList[i].index = i;
           }
           this.setState({
-            customizedFilterList: customizedFilterList
+            customizedFilterList: customizedFilterList,
+            loading: false
           });
         } else {
           message.error(res.message || 'Operation failure');
@@ -90,7 +93,8 @@ class FilterSortSetting extends Component<any, any> {
             sortByList[i].index = i;
           }
           this.setState({
-            sortByList: sortByList
+            sortByList: sortByList,
+            loading: false
           });
         } else {
           message.error(res.message || 'Operation failure');
@@ -217,25 +221,27 @@ class FilterSortSetting extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <Alert message={description} type="error" />
-        </div>
-        <div className="container-search">
-          <Tabs defaultActiveKey="attributeFilter">
-            <TabPane tab="Attribute filter" key="attributeFilter">
-              <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys}></SelectAttribute>
-              <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
-            </TabPane>
-            <TabPane tab="Customized filter" key="customizedFilter">
-              {/* <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter> */}
-              <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
-            </TabPane>
-            <TabPane tab="Sort by" key="sortBy">
-              <DropList sortFunction={this.updateSortList} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
-            </TabPane>
-          </Tabs>
-        </div>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline title={title} />
+            <Alert message={description} type="error" />
+          </div>
+          <div className="container-search">
+            <Tabs defaultActiveKey="attributeFilter">
+              <TabPane tab="Attribute filter" key="attributeFilter">
+                <SelectAttribute refreshList={this.findAttributeFilterList} selectedRowKeys={selectedRowKeys}></SelectAttribute>
+                <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} type="filter" dataSource={attributeFilterList}></DropList>
+              </TabPane>
+              <TabPane tab="Customized filter" key="customizedFilter">
+                {/* <AddCustomizedFilter type="add" refreshList={this.findCustomizeFilterList}></AddCustomizedFilter> */}
+                <DropList sortFunction={this.updateFilterSort} deleteFunction={this.deleteFilter} switchFunction={this.switchFilter} refreshListFunction={this.findCustomizeFilterList} type="filter" dataSource={customizedFilterList}></DropList>
+              </TabPane>
+              <TabPane tab="Sort by" key="sortBy">
+                <DropList sortFunction={this.updateSortList} switchFunction={this.switchSort} type="sort" dataSource={sortByList}></DropList>
+              </TabPane>
+            </Tabs>
+          </div>
+        </Spin>
       </div>
     );
   }

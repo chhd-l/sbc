@@ -57,7 +57,7 @@ export default class ButtonGroup extends React.Component<any, any> {
       >
         <div className="ant-form-inline filter-content">
           <AuthWrapper functionName={'updateEmployee'}>
-            <Button type="primary" onClick={() => onAdd()}>
+            <Button type="primary" onClick={() => onAdd()} style={{cursor:'pointer'}}>
               <FormattedMessage id="add" />
             </Button>
           </AuthWrapper>

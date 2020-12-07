@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, ValidConst } from 'qmkit';
+import { noop, ValidConst, cache } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltipSKU from './productTooltip-sku';
@@ -147,7 +147,7 @@ class SkuForm extends React.Component<any, any> {
       columns = goodsSpecs
         .map((item,i) => {
           return {
-            title: i==0?'Weight':item.get('specName'),
+            title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId')
           };

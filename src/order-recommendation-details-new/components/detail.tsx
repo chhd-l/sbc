@@ -42,7 +42,6 @@ export default class BillingDetails extends React.Component<any, any> {
   componentDidMount() {
     const { onSharing } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    console.log(employee.prescribers[0].id);
     onSharing({
       field: 'prescriberId',
       value: employee.prescribers[0].id

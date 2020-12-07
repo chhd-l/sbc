@@ -353,6 +353,7 @@ export function logout() {
   sessionStorage.removeItem(cache.FIRST_ACTIVE);
   sessionStorage.removeItem(cache.SECOND_ACTIVE);
   sessionStorage.removeItem(cache.THIRD_ACTIVE);
+  sessionStorage.removeItem(cache.SYSTEM_GET_WEIGHT); //weight
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
   sessionStorage.removeItem('PrescriberType');
 }

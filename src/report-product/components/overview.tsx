@@ -196,9 +196,9 @@ export default class ProductOverView extends Component<any, any> {
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
                           <span className="goodsName line-clamp">{item.skuName}</span>
-                          <span className="price">{item.marketPrice}</span>
+                          <span className="price">{item.marketPrice?item.marketPrice:'--'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                           <span className="price">
-                            {item.goodsWeight} {item.goodsUnit}
+                            {item.salesVolume?item.salesVolume:'--'} units
                           </span>
                         </div>
                       </div>

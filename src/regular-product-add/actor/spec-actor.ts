@@ -206,7 +206,7 @@ export default class GoodsSpecActor extends Actor {
       specId: random,
       mockSpecId: random,
       isMock: true,
-      specName: 'specification' + (goodsSpecs.count() + 1),
+      specName: 'specification' + goodsSpecs.count(),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

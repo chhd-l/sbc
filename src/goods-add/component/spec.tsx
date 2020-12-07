@@ -66,6 +66,7 @@ class SpecForm extends React.Component<any, any> {
     const { updateSpecForm, editSpecSingleFlag } = this.props.relaxProps;
     updateSpecForm(this.props.form);
     //editSpecSingleFlag('checked');
+    this._addSpec()
   }
 
   render() {
@@ -103,7 +104,7 @@ class SpecForm extends React.Component<any, any> {
                 </Col>
               </Row>
             )}
-            <div style={{ marginBottom: 20 }}>
+            {/*<div style={{ marginBottom: 20 }}>
               <Row type="flex" justify="start" align="top">
                 <Col span={3}>
                   <span
@@ -146,8 +147,8 @@ class SpecForm extends React.Component<any, any> {
                         }
                       ],
                       onChange: this._editSpecName.bind(this, 1),
-                      initialValue: 3
-                    })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                      initialValue: 'weight'
+                    })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={true} />)}
                   </FormItem>
                 </Col>
                 <Col span={10}>
@@ -224,16 +225,16 @@ class SpecForm extends React.Component<any, any> {
                         }
                       ],
                       onChange: this._editSpecValue.bind(this, 23),
-                      initialValue: 33
+                      //initialValue: ''
                     })(
                       <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
-                        {/*{this._getChildren(item.get('specValues'))}*/}
+                        {this._getChildren(item.get('specValues'))}
                       </Select>
                     )}
                   </FormItem>
                 </Col>
               </Row>
-            </div>
+            </div>*/}
             {specSingleFlag
               ? null
               : goodsSpecs.map((item, index) => {
@@ -290,8 +291,8 @@ class SpecForm extends React.Component<any, any> {
                                 }
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
-                              initialValue: item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                              initialValue: index == 0?'Weight':item.get('specName')
+                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0?true:false} />)}
                           </FormItem>
                         </Col>
                         <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>

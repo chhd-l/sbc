@@ -220,15 +220,15 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
-                  }
-                ],
+                // rules: [
+                //   {
+                //     pattern: ValidConst.number,
+                //     message: 'Please enter the correct value'
+                //   }
+                // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px', top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999.99} precision={2} />)}
+              })(<InputNumber style={{ top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999.99} precision={2} />)}
             </FormItem>
           </Col>
         </Row>
@@ -333,6 +333,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'basePrice',
       render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo---------');
         return (
           <Row>
             <Col span={12}>
@@ -350,7 +351,7 @@ class SkuForm extends React.Component<any, any> {
                   })(
                     <div>
                       <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
-                      <p>{rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
+                      <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
                     </div>
                   )}
                 </FormItem>

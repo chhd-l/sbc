@@ -861,7 +861,6 @@ export default class AppStore extends Store {
     this.state()
       .get('goodsForm')
       .validateFieldsAndScroll(null, (errs) => {
-        debugger
         valid = valid && !errs;
         if (!errs) {
         }

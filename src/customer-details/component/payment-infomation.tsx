@@ -99,32 +99,53 @@ class PaymentInformation extends React.Component<any, any> {
           {cardList &&
             cardList.map((item, index) => (
               <Col span={6} offset={1} key={index}>
-                <Card>
-                  <Row>
-                    <Col span={16} offset={1}>
-                      {item.paymentType === 'PAYU' ? (
-                        <>
-                          <p>{item.payuPaymentMethod.holder_name}</p>
-                          <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
-                          <p>{item.payuPaymentMethod.card_type}</p>{' '}
-                        </>
-                      ) : (
-                        <>
-                          <p>{item.adyenPaymentMethod.holder_name}</p>
-                          <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.payuPaymentMethod.lastFour : ''}</p>
-                          <p>{item.adyenPaymentMethod.card_type}</p>
-                        </>
-                      )}
-                    </Col>
-                    <Col span={5}>
-                      <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                        <Tooltip placement="top" title="Delete">
-                          <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
-                        </Tooltip>
-                      </Popconfirm>
-                    </Col>
-                  </Row>
-                </Card>
+                {item.paymentType === 'PAYU' ? (
+                  <>
+                    {item.payuPaymentMethod ? (
+                      <Card>
+                        <Row>
+                          <Col span={16} offset={1}>
+                            <p>{item.payuPaymentMethod.holder_name}</p>
+                            <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
+                            <p>{item.payuPaymentMethod.card_type}</p>
+                          </Col>
+                          <Col span={5}>
+                            {!item.isDefault ? (
+                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
+                                <Tooltip placement="top" title="Delete">
+                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                </Tooltip>
+                              </Popconfirm>
+                            ) : null}
+                          </Col>
+                        </Row>
+                      </Card>
+                    ) : null}
+                  </>
+                ) : (
+                  <>
+                    {item.adyenPaymentMethod ? (
+                      <Card>
+                        <Row>
+                          <Col span={16} offset={1}>
+                            <p>{item.adyenPaymentMethod.holder_name}</p>
+                            <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.payuPaymentMethod.lastFour : ''}</p>
+                            <p>{item.adyenPaymentMethod.card_type}</p>
+                          </Col>
+                          <Col span={5}>
+                            {!item.isDefault ? (
+                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
+                                <Tooltip placement="top" title="Delete">
+                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                </Tooltip>
+                              </Popconfirm>
+                            ) : null}
+                          </Col>
+                        </Row>
+                      </Card>
+                    ) : null}
+                  </>
+                )}
               </Col>
             ))}
           <div className="bar-button">

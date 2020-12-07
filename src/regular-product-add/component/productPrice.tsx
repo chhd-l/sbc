@@ -333,6 +333,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'basePrice',
       render: (rowInfo) => {
+        console.log(rowInfo, 'rowInfo---------');
         return (
           <Row>
             <Col span={12}>
@@ -350,7 +351,7 @@ class SkuForm extends React.Component<any, any> {
                   })(
                     <div>
                       <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
-                      <p>{rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
+                      <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
                     </div>
                   )}
                 </FormItem>

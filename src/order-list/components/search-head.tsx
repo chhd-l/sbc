@@ -241,8 +241,8 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    style={{width: '190px'}}
-                    label={<p style={{width: '138px'}}>Order Category</p>}
+                    style={{ width: '190px' }}
+                    label={<p style={{ width: '138px' }}>Order Category</p>}
                     onChange={(value) => {
                       this.setState({
                         orderCategory: value
@@ -262,6 +262,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8} id="Range-picker-width">
                 <FormItem>
                   <RangePicker
+                    className="rang-picker-width"
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';

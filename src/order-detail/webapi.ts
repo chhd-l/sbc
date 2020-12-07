@@ -209,3 +209,12 @@ export function refresh(settleId) {
 export function getPaymentInfo(tid: string) {
   return Fetch(`/trade/record/${tid}`);
 }
+
+export function queryCityById(filterParams = {}) {
+  return Fetch<TResult>('/system-city/query-system-city-by-id', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

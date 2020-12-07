@@ -333,7 +333,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
             </p>
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).name}
+              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}

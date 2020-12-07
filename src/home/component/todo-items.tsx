@@ -118,9 +118,9 @@ export default class TodoItems extends React.Component<any, any> {
       visible: false
     });
   };
-
   render() {
     const { loading, tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+
     return (
       <div className="item">
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -473,7 +473,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="item-mid-l-r">
                   <div className="r-text">Prescriber reward Top 3</div>
                   <div className="r-content">
-                    {prescriberTopView.prescriberDashboardViewItemList &&
+                    {prescriberTopView.prescriberDashboardViewItemList && prescriberTopView.prescriberDashboardViewItemList.length != 0 ? (
                       prescriberTopView.prescriberDashboardViewItemList.map((item, i) => {
                         return (
                           <React.Fragment key={i}>
@@ -488,7 +488,12 @@ export default class TodoItems extends React.Component<any, any> {
                             <div className="line-1 r-content-line"></div>
                           </React.Fragment>
                         );
-                      })}
+                      })
+                    ) : (
+                      <span style={{ width: '100%', textAlign: 'center', position: 'absolute', top: '-30px', right: '100px' }}>
+                        <img src={nodataImg} width="180" height="137" className="no-data-img" />
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -504,7 +509,9 @@ export default class TodoItems extends React.Component<any, any> {
               </div>
               {goodsInfoTopView.length === 0 ? (
                 <div>
-                  <img src={nodataImg} className="no-data-img" />
+                  <span style={{ paddingLeft: '150px' }}>
+                    <img src={nodataImg} className="no-data-img" />
+                  </span>
                 </div>
               ) : (
                 <div className="seller space-between">

@@ -63,13 +63,12 @@ const RcRouter = () => (
   </IntlProvider>
 );
 
-switchRouter()
+switchRouter();
 
-export function switchRouter () {
-  var type = getRoutType(window.location.search)
-  console.log(type)
-  ReactDOM.unmountComponentAtNode(document.getElementById('root'))
-  if(type === 'staff') {
+export function switchRouter() {
+  let type = getRoutType(window.location.search);
+  ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+  if (type === 'staff') {
     ReactDOM.render(<RcRouter />, document.getElementById('root'));
   } else {
     ReactDOM.render(<PrescriberRouter />, document.getElementById('root'));

@@ -251,19 +251,12 @@ export default class See extends React.Component<any, any> {
    */
   _handleSubmit = () => {
     const { saveAnswer, goodsEditEvaluate } = this.props.relaxProps;
-    if (
-      !goodsEditEvaluate.get('evaluateAnswer') ||
-      !goodsEditEvaluate.get('evaluateAnswer').trim()
-    ) {
-      this._handleModelCancel();
-    } else {
       saveAnswer(
         goodsEditEvaluate.get('evaluateId'),
         goodsEditEvaluate.get('evaluateContent'),
         goodsEditEvaluate.get('evaluateAnswer'),
         goodsEditEvaluate.get('isShow')
       );
-    }
   };
 
   _clickArrow = () => {

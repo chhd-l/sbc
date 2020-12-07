@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon, Switch } from 'antd';
-import { history, cache } from 'qmkit';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon, Switch, Spin } from 'antd';
+import { history, cache, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
 import { Tabs } from 'antd';
@@ -77,7 +77,8 @@ class ClinicForm extends React.Component<any, any> {
       isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
       clinicsLites: [],
       prescriberKeyId: this.props.prescriberId,
-      isPrescriber: bool
+      isPrescriber: bool,
+      objectFetching: false,
     };
   }
   componentWillMount() {
@@ -106,7 +107,7 @@ class ClinicForm extends React.Component<any, any> {
       .getClinicsReward(id)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (res.context) {
             const { sectionList } = this.state;
             sectionList[0].rewardRate = res.context.rewardRateFirst;
@@ -149,7 +150,7 @@ class ClinicForm extends React.Component<any, any> {
       .saveReward(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.setState({
             saveLoading: false
@@ -171,32 +172,7 @@ class ClinicForm extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  // clearAndSave = () => {
-  //   const { rewardForm } = this.state;
-  //   let params = {
-  //     prescriberId: this.props.prescriberId,
-  //     id: rewardForm.id,
-  //     rewardRateFirst: 0,
-  //     rewardRateMore: 0,
-  //     rewardRule: false,
-  //     storeId: rewardForm.storeId,
-  //     timeZone: ''
-  //   };
-  //   webapi
-  //     .clearRulesAndSave(params)
-  //     .then((data) => {
-  //       const res = data.res;
-  //       if (res.code === 'K-000000') {
-  //         this.getClinicsReward(this.props.prescriberId);
-  //         message.success('Operate successfully');
-  //       } else {
-  //         message.error(res.message||'Unsuccessful');
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       message.error(res.message||'Unsuccessful');
-  //     });
-  // };
+
 
   selectTimeZone = (value) => {
     this.setState({
@@ -221,7 +197,7 @@ class ClinicForm extends React.Component<any, any> {
     const { res } = await webapi.getClinicById({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let qrCodeLink = res.context.qrCodeLink;
       let url = res.context.url;
       this.setState({
@@ -261,7 +237,7 @@ class ClinicForm extends React.Component<any, any> {
     const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         typeArr: res.context
       });
@@ -273,7 +249,7 @@ class ClinicForm extends React.Component<any, any> {
     const { res } = await webapi.querySysDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         cityArr: res.context.sysDictionaryVOS
       });
@@ -283,7 +259,7 @@ class ClinicForm extends React.Component<any, any> {
   };
   getClinicsLites = async () => {
     const { res } = await webapi.getClinicsLites();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         clinicsLites: res.context
       });
@@ -317,7 +293,7 @@ class ClinicForm extends React.Component<any, any> {
       .addClinic({ ...prescriberForm })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (prescriberForm.prescriberId) {
             this.setState({
               isEdit: true,
@@ -350,7 +326,7 @@ class ClinicForm extends React.Component<any, any> {
       .updateClinic({ ...prescriberForm })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (prescriberForm.prescriberId) {
             this.setState({
               isEdit: true
@@ -514,7 +490,7 @@ class ClinicForm extends React.Component<any, any> {
   reloadCode = () => {
     webapi.getRecommendationCode().then((data) => {
       const { res } = data;
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         if (res.context) {
           let prescriber = this.state.prescriberForm;
           prescriber.prescriberCode = res.context;
@@ -560,9 +536,33 @@ class ClinicForm extends React.Component<any, any> {
     else oldUrl
 
   }
+  getCityList = (value) => {
+    let params = {
+      cityName: value,
+      pageSize: 30,
+      pageNum: 0
+    };
+    webapi
+      .queryCityListByName(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            cityArr: res.context.systemCityVO,
+            objectFetching: false
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
 
   render() {
-    const { cityArr, typeArr, prescriberForm, firstPrescriberForm } = this.state;
+    const { cityArr, typeArr, prescriberForm, firstPrescriberForm,objectFetching, } = this.state;
     const { getFieldDecorator } = this.props.form;
 
     return (
@@ -681,24 +681,29 @@ class ClinicForm extends React.Component<any, any> {
                 <FormItem label="Prescriber city">
                   {getFieldDecorator(
                     'primaryCity',
-                    {}
-                  )(
-                    <Select
-                      disabled={firstPrescriberForm && firstPrescriberForm.primaryCity && this.state.isPrescriber}
-                      onChange={(value) => {
-                        value = value === '' ? null : value;
-                        this.onFormChange({
-                          field: 'primaryCity',
-                          value
-                        });
-                      }}
-                    >
-                      {cityArr.map((item) => (
-                        <Option value={item.valueEn} key={item.id}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </Select>
+                    {
+                    })(
+                      <Select
+                        showSearch
+                        placeholder="Select a Order number"
+                        notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                        onSearch={this.getCityList}
+                        filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        onChange={(value) => {
+                          this.onFormChange({
+                            field: 'primaryCity',
+                            value: value ? value : ''
+                          });
+                        }}
+                      >
+                        {cityArr
+                          ? cityArr.map((item) => (
+                              <Option value={item.cityName} key={item.id}>
+                                {item.cityName}
+                              </Option>
+                            ))
+                          : null}
+                      </Select>
                   )}
                 </FormItem>
                 <FormItem label="Prescriber zip">

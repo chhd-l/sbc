@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const, util, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util, AuthWrapper, cache } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -36,7 +36,7 @@ export default class TransactionReport extends Component<any, any> {
     super(props);
     this.state = {
       title: 'Transaction',
-      loading: false,
+      loading: true,
       overviewList: [],
       subscriptionList: [],
       tableData: [],
@@ -47,7 +47,6 @@ export default class TransactionReport extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-
       currentTrend: 'Week trend',
 
       xData_week: [],
@@ -347,7 +346,8 @@ export default class TransactionReport extends Component<any, any> {
             averageBasketData_week,
             consumersData_week,
             revenueData_week,
-            salesVolumeData_week
+            salesVolumeData_week,
+            loading: false
           },
           () => {
             this.chartInit();
@@ -378,7 +378,8 @@ export default class TransactionReport extends Component<any, any> {
           averageBasketData_day,
           consumersData_day,
           revenueData_day,
-          salesVolumeData_day
+          salesVolumeData_day,
+          loading: false
         });
       }
     });
@@ -398,7 +399,8 @@ export default class TransactionReport extends Component<any, any> {
         let tableData = res.context.transactionReport;
         this.setState({
           pagination,
-          tableData
+          tableData,
+          loading: false
         });
       }
     });
@@ -448,12 +450,14 @@ export default class TransactionReport extends Component<any, any> {
       {
         title: 'Revenue',
         dataIndex: 'revenue',
-        key: 'revenue'
+        key: 'revenue',
+        render: (revenue) => <span>{revenue != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + revenue.toFixed(2) : null}</span>
       },
       {
         title: 'Average basket',
         dataIndex: 'averageBasket',
-        key: 'averageBasket'
+        key: 'averageBasket',
+        render: (averageBasket) => <span>{averageBasket != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + averageBasket.toFixed(2) : null}</span>
       },
       {
         title: 'Units sold',
@@ -466,115 +470,122 @@ export default class TransactionReport extends Component<any, any> {
         key: 'consumers'
       }
     ];
-
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline
-            title={<p style={styles.blodFont}> {title}</p>}
-            extra={
-              <div>
-                <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline
+              title={<p style={styles.blodFont}> {title}</p>}
+              extra={
+                <div>
+                  <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                </div>
+              }
+            />
+            <div>
+              <h4 style={styles.blodFont}>Sales Overview</h4>
+              <div className="data-statistics-transaction" style={{ width: 1200 }}>
+                {overviewList &&
+                  overviewList.map((item, index) => (
+                    <div className="mode" key={index}>
+                      <div className="mode-text" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
+                        {item.name}
+                      </div>
+                      <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
+                        <span>
+                          {item && (item.name == 'Revenue' || item.name == 'Average basket') ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : null}
+                          {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}
+                        </span>
+                      </div>
+                      <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
+                        {item && (item.rate || item.rate === 0) ? (
+                          <>
+                            <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
+                            <span className={item.rate > 0 ? 'green' : 'red'}>
+                              <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            </span>
+                          </>
+                        ) : (
+                          '--'
+                        )}
+                      </div>
+                    </div>
+                  ))}
               </div>
-            }
-          />
-          <div>
-            <h4 style={styles.blodFont}>Sales Overview</h4>
-            <div className="data-statistics-transaction" style={{ width: 1200 }}>
-              {overviewList &&
-                overviewList.map((item, index) => (
-                  <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      {item.name}
-                    </div>
-                    <div className="mode-num" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per" style={item.name === 'Sales per visitor' ? {} : styles.borderRight}>
-                      {item && (item.rate || item.rate === 0) ? (
-                        <>
-                          <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span className={item.rate > 0 ? 'green' : 'red'}>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
-                          </span>
-                        </>
+            </div>
+
+            <div style={styles.itemDisplay}>
+              <h4 style={styles.blodFont}>Subscription</h4>
+              <div className="data-statistics-transaction">
+                {subscriptionList &&
+                  subscriptionList.map((item, index) => (
+                    <div className="mode" key={index}>
+                      <div className="mode-text" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
+                        {item.name}
+                      </div>
+                      {item.name === 'Subscription rate' ? (
+                        <div className="mode-num" style={styles.borderRight}>
+                          <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
+                        </div>
                       ) : (
-                        '--'
+                        <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
+                          <span>
+                            {item.name == 'Subscription transaction amount' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : null}
+                            {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}
+                          </span>
+                        </div>
                       )}
+                      <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
+                        {item && (item.rate || item.rate === 0) ? (
+                          <>
+                            <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
+                            <span className={item.rate > 0 ? 'green' : 'red'}>
+                              <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
+                            </span>
+                          </>
+                        ) : (
+                          '--'
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
           </div>
 
-          <div style={styles.itemDisplay}>
-            <h4 style={styles.blodFont}>Subscription</h4>
-            <div className="data-statistics-transaction">
-              {subscriptionList &&
-                subscriptionList.map((item, index) => (
-                  <div className="mode" key={index}>
-                    <div className="mode-text" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
-                      {item.name}
-                    </div>
-                    {item.name === 'Subscription rate' ? (
-                      <div className="mode-num" style={styles.borderRight}>
-                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}</span>
-                      </div>
-                    ) : (
-                      <div className="mode-num" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
-                        <span> {item && (item.value || item.value === 0) ? <CountUp end={item.value} decimals={item.value.toString().indexOf('.') !== -1 ? 2 : 0} {...countUpProps} /> : '--'}</span>
-                      </div>
-                    )}
-                    <div className="mode-per" style={item.name === 'Subscription transaction amount' ? styles.paddingRightZero : styles.borderRight}>
-                      {item && (item.rate || item.rate === 0) ? (
-                        <>
-                          <img src={item.rate >= 0 ? icon1 : icon2} width="14" height="14" />
-                          <span className={item.rate > 0 ? 'green' : 'red'}>
-                            <CountUp end={Math.abs(item.rate)} decimals={2} suffix={'%'} {...countUpProps} />
-                          </span>
-                        </>
-                      ) : (
-                        '--'
-                      )}
-                    </div>
-                  </div>
-                ))}
-            </div>
+          <div className="container-search">
+            <Headline
+              title={<p style={styles.blodFont}>Transaction trend</p>}
+              // title= "Transaction trend"
+              extra={
+                <div>
+                  <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
+                    <Option value="Week trend">Week trend</Option>
+                    <Option value="Day trend">Day trend</Option>
+                  </Select>
+                </div>
+              }
+            />
+            <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
           </div>
-        </div>
 
-        <div className="container-search">
-          <Headline
-            title={<p style={styles.blodFont}>Transaction trend</p>}
-            // title= "Transaction trend"
-            extra={
-              <div>
-                <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
-                  <Option value="Week trend">Week trend</Option>
-                  <Option value="Day trend">Day trend</Option>
-                </Select>
-              </div>
-            }
-          />
-          <div id="main" style={{ width: '100%', height: 400, margin: '0 auto' }}></div>
-        </div>
-
-        <div className="container-search">
-          <Headline
-            title={<p style={styles.blodFont}>Transaction report</p>}
-            // title="Transaction report"
-            extra={
-              <AuthWrapper functionName="f_export_transaction_data">
-                <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                  <span style={{ color: '#ffffff' }}>Download the report</span>
-                </Button>
-              </AuthWrapper>
-            }
-          />
-          <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
-        </div>
+          <div className="container-search">
+            <Headline
+              title={<p style={styles.blodFont}>Transaction report</p>}
+              // title="Transaction report"
+              extra={
+                <AuthWrapper functionName="f_export_transaction_data">
+                  <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
+                    <span style={{ color: '#ffffff' }}>Download the report</span>
+                  </Button>
+                </AuthWrapper>
+              }
+            />
+            <Table columns={columns} rowKey={(record, index) => index.toString()} dataSource={tableData} pagination={pagination} onChange={this.handleTableChange} />
+          </div>
+        </Spin>
       </div>
     );
   }

@@ -89,7 +89,7 @@ class AttributeForm extends React.Component<any, any> {
           </span>
         </div>
         <div>
-          <Form>
+          <Form id="attributeForm">
             {propList &&
               propList.map((detList) => {
                 return (

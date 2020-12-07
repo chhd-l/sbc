@@ -188,7 +188,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  });
+  }); 
 }
 
 export function queryCityById(filterParams = {}) {

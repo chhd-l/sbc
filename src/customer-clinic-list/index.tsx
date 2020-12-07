@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Row, Col } from 'antd';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Row, Col, Tooltip } from 'antd';
 import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -44,12 +44,39 @@ export default class Customer extends React.Component<any, any> {
         //   dataIndex: 'selectedPrescriber',
         //   key: 'selectedPrescriber'
         // },
+        // {
+        //   title: 'Operation',
+        //   key: 'operation',
+        //   render: (text, record) => (
+            
+        //     <span>
+        //       <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Visitor') + '/' + record.customerId + '/' + record.customerAccount}>Details</Link>
+        //     </span>
+        //   )
+        // },
         {
           title: 'Operation',
           key: 'operation',
+          width: '8%',
           render: (text, record) => (
             <span>
-              <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Visitor') + '/' + record.customerId + '/' + record.customerAccount}>Details</Link>
+              <Tooltip placement="top" title="Details">
+                <Link
+                  to={
+                    '/customer-clinic-details/' +
+                    (record.customerLevelName
+                      ? record.customerLevelName
+                      : 'Guest') +
+                    '/' +
+                    record.customerId +
+                    '/' +
+                    record.customerAccount
+                  }
+                  className="iconfont iconDetails"
+                ></Link>
+              </Tooltip>
+              {/* <Divider type="vertical" />
+              <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>
           )
         }

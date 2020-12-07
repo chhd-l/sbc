@@ -38,8 +38,8 @@ export default class AppStore extends Store {
       const { context: logistics } = (await fetchLogistics()) as any;
       const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
       const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
-      const { res: cityDictRes } = (await queryDictionary({
-        type: 'city'
+      const { res: cityDictRes } = (await webapi.queryCityById({
+        id: [orderInfo.consignee.cityId]
       })) as any;
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
@@ -53,7 +53,7 @@ export default class AppStore extends Store {
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
-        this.dispatch('dict:initCity', cityDictRes.context.sysDictionaryVOS);
+        this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         this.dispatch('dict:refresh', refresh.context.tradeDelivers);
       });

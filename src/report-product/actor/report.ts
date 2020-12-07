@@ -57,6 +57,7 @@ export default class BrandActor extends Actor {
     return state.set('getForm', data);
   }
 
+  //loading
   @Action('loading:start')
   start(state: IMap) {
     return state.set('loading', true);

@@ -201,6 +201,7 @@ export default class CateList extends React.Component<any, any> {
         .get(0)
         .get('cateName');
     }
+    rowInfo = rowInfo.set('cateParentName', cateParentName);
     showEditModal(rowInfo, rowInfo.get('cateImg'));
   };
 

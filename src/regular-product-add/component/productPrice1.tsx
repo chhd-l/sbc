@@ -215,12 +215,12 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
-                rules: [
-                  {
-                    pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
-                  }
-                ],
+                // rules: [
+                //   {
+                //     pattern: ValidConst.number,
+                //     message: 'Please enter the correct value'
+                //   }
+                // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
               })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}

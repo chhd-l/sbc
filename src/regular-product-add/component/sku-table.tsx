@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, ValidConst } from 'qmkit';
+import {cache, noop, ValidConst} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
@@ -123,10 +123,9 @@ class SkuForm extends React.Component<any, any> {
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
-        .map((item) => {
-          console.log(item.get('specId'), 'specid....');
+        .map((item,i) => {
           return {
-            title: item.get('specName'),
+            title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId')
           };
@@ -163,6 +162,30 @@ class SkuForm extends React.Component<any, any> {
       key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
+      }
+    });
+
+    columns = columns.push({
+      title: 'Unit',
+      key: 'goodsInfoUnit',
+      render:  (rowInfo) => {
+        return(
+          <Row>
+            <Col span={6}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
+                  initialValue: rowInfo.goodsInfoUnit?rowInfo.goodsInfoUnit:'kg'
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{width: '60px'}} placeholder="please select unit">
+                    <Option value="kg">kg</Option>
+                    <Option value="g">g</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
       }
     });
 
@@ -238,8 +261,8 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div style={{
           marginRight: '152px',
-          textAlign: "left",
-          float: "left"
+          textAlign: 'left',
+          float: 'left'
         }}>
           <span
             style={{

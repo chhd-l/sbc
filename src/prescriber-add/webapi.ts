@@ -175,11 +175,7 @@ export function deleteEmployeeByIds(employeeIds: string[]) {
   });
 }
 
-export function disableEmployee(
-  employeeId,
-  accountDisableReason,
-  accountState
-) {
+export function disableEmployee(employeeId, accountDisableReason, accountState) {
   return Fetch<TResult>('/customer/employee/disable', {
     method: 'POST',
     body: JSON.stringify({
@@ -250,4 +246,3 @@ export function queryCityListByName(filterParams = {}) {
     })
   });
 }
-

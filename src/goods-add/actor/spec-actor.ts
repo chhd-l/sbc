@@ -8,7 +8,7 @@ export default class GoodsSpecActor extends Actor {
   defaultState() {
     return {
       // 是否为单规格
-      specSingleFlag: true,
+      specSingleFlag: false,
       // 规格列表
       goodsSpecs: [
         // {
@@ -204,7 +204,7 @@ export default class GoodsSpecActor extends Actor {
       specId: random,
       mockSpecId: random,
       isMock: true,
-      specName: 'specification' + (goodsSpecs.count() + 1),
+      specName: 'specification' + goodsSpecs.count(),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

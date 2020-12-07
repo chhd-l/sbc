@@ -55,7 +55,6 @@ export default class See extends React.Component<any, any> {
     if (!modalVisible) {
       return null;
     }
-    console.log(goodsEvaluate, 'haha');
     // const goodsImg = goodsEvaluate.goodsImg;
     return (
       <Modal

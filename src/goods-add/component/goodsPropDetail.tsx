@@ -131,7 +131,6 @@ class AttributeForm extends React.Component<any, any> {
   _getPropSelect = (propValues, propId) => {
     const propVal = propValues.find((item) => item.get('select') === 'select');
     const selected = propVal ? propVal.get('detailId') : '0';
-    console.log(selected, 'selected');
     return (
       <Select getPopupContainer={() => document.getElementById('page-content')} defaultValue={selected} onChange={(value) => this._onChange(propId, value)}>
         {propValues.map((item) => {

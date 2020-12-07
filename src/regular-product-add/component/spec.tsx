@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { Checkbox, Input, Select, Button, Row, Col, Icon, Form, message } from 'antd';
-import { noop } from 'qmkit';
+import { noop, cache } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
@@ -64,6 +64,7 @@ export default class Spec extends React.Component<any, any> {
 class SpecForm extends React.Component<any, any> {
   componentDidMount() {
     const { updateSpecForm } = this.props.relaxProps;
+    this._addSpec()
     updateSpecForm(this.props.form);
   }
 
@@ -158,23 +159,19 @@ class SpecForm extends React.Component<any, any> {
                                 }
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
-                              initialValue: item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                              initialValue: index == 0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName')
+                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0?true:false} />)}
                           </FormItem>
                         </Col>
-                        <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button onClick={() => this._deleteSpec(item.get('specId'))}>
-                            <FormattedMessage id="delete" />
-                          </Button>
-                        </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                           <span
                             style={{
                               color: 'red',
                               fontFamily: 'SimSun',
                               marginRight: '4px',
                               fontSize: '12px',
-                              float: 'left'
+                              float: 'left',
+                              marginLeft:'10px'
                             }}
                           >
                             *
@@ -249,6 +246,11 @@ class SpecForm extends React.Component<any, any> {
                             )}
                           </FormItem>
                         </Col>
+                        {index != 0?<Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
+                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{marginTop:'2px'}} >
+                            <FormattedMessage id="delete" />
+                          </Button>
+                        </Col>:null}
                       </Row>
                     </div>
                   );

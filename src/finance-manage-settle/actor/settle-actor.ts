@@ -6,6 +6,16 @@ export default class SettleActor extends Actor {
   //数据源
   defaultState() {
     return {
+      // 数据总条数
+      total: 0,
+      // 每页显示条数
+      pageSize: 10,
+      // 当前页的数据列表
+      dataList: [],
+      // 分类信息
+      cateList: [],
+      // 当前页码
+      current: 1,
       queryParams: {
         startTime: moment(
           new Date(sessionStorage.getItem('defaultLocalDateTime'))
@@ -21,7 +31,8 @@ export default class SettleActor extends Actor {
       selected: [],
       checkedSettleIds: [],
       accountDay: '',
-      settleQueryParams: {}
+      settleQueryParams: {},
+      loading: true
     };
   }
 
@@ -32,6 +43,20 @@ export default class SettleActor extends Actor {
   @Action('settleStore:accountDay')
   accountDay(state: IMap, accountDay) {
     return state.set('accountDay', accountDay);
+  }
+
+  /**
+   * 设置分页数据
+   */
+  @Action('info:setPageData')
+  setPageData(state: IMap, res: IPageResponse) {
+    const { content, size, totalElements } = res;
+    return state.withMutations((state) => {
+      state
+        .set('total', totalElements)
+        .set('pageSize', size)
+        .set('dataList', fromJS(content));
+    });
   }
 
   @Action('settleStore:settleQueryParams')
@@ -86,5 +111,15 @@ export default class SettleActor extends Actor {
     }
 
     return state;
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

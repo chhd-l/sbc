@@ -153,7 +153,6 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('departmentIds')
           ? employeeForm.get('departmentIds').split(',') : []
       };
-      console.log(departmentIdList, 111);
       sex = {
         initialValue: employeeForm.get('sex') || 0
       };

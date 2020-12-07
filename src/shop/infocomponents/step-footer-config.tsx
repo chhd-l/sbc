@@ -137,7 +137,6 @@ class StepFooterConfig extends React.Component<any, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { footerCategory } = this.state;
-        console.log(footerCategory);
       }
     });
   };

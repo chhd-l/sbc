@@ -861,7 +861,6 @@ export default class AppStore extends Store {
     this.state()
       .get('goodsForm')
       .validateFieldsAndScroll(null, (errs) => {
-        debugger
         valid = valid && !errs;
         if (!errs) {
         }
@@ -1493,6 +1492,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           linePrice: item.get('linePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),

@@ -20,6 +20,7 @@ export default class AppStore extends Store {
 
   init = async () => {
     const { res } = await webapi.getStoreInfo();
+    this.dispatch('loading:start');
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('settleStore:accountDay', res.context.accountDay);
     }
@@ -47,6 +48,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.fetchSettlementList(queryParams);
     this.dispatch('settleStore:settleQueryParams', fromJS(queryParams));
     if (res.code == Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       res.context.content.forEach((item) => {
         if (!item.commonCouponPrice) {
           item.commonCouponPrice = '-';
@@ -59,8 +61,13 @@ export default class AppStore extends Store {
         }
       });
       this.dispatch('settle:list', res.context);
+      // 设置分页数据
+      this.dispatch('info:setPageData', res.context);
+      // 设置当前页码
+      this.dispatch('info:setCurrent', pageNum + 1);
     } else {
       message.error(res.message);
+      this.dispatch('loading:end');
     }
   };
 

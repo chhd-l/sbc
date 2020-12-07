@@ -163,19 +163,15 @@ class SpecForm extends React.Component<any, any> {
                             })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0?true:false} />)}
                           </FormItem>
                         </Col>
-                        <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button onClick={() => this._deleteSpec(item.get('specId'))}>
-                            <FormattedMessage id="delete" />
-                          </Button>
-                        </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                           <span
                             style={{
                               color: 'red',
                               fontFamily: 'SimSun',
                               marginRight: '4px',
                               fontSize: '12px',
-                              float: 'left'
+                              float: 'left',
+                              marginLeft:'10px'
                             }}
                           >
                             *
@@ -250,6 +246,11 @@ class SpecForm extends React.Component<any, any> {
                             )}
                           </FormItem>
                         </Col>
+                        {index != 0?<Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
+                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{marginTop:'2px'}} >
+                            <FormattedMessage id="delete" />
+                          </Button>
+                        </Col>:null}
                       </Row>
                     </div>
                   );

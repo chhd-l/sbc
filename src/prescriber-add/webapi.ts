@@ -175,11 +175,7 @@ export function deleteEmployeeByIds(employeeIds: string[]) {
   });
 }
 
-export function disableEmployee(
-  employeeId,
-  accountDisableReason,
-  accountState
-) {
+export function disableEmployee(employeeId, accountDisableReason, accountState) {
   return Fetch<TResult>('/customer/employee/disable', {
     method: 'POST',
     body: JSON.stringify({
@@ -236,7 +232,7 @@ export function sendEmail(filterParams = {}) {
 
 export function queryCityById(filterParams = {}) {
   return Fetch<TResult>('/system-city/query-system-city-by-id', {
-    method: 'POST',·
+    method: 'POST',
     body: JSON.stringify({
       ...filterParams
     })
@@ -250,4 +246,3 @@ export function queryCityListByName(filterParams = {}) {
     })
   });
 }
-

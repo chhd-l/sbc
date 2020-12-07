@@ -90,9 +90,6 @@ export default class EditForm extends React.Component<any, any> {
 
     const _state = this._store.state();
     const roles = _state.get('roles');
-    //管理部门的账号集合
-    const manageDepartmentIdList = _state.get('manageDepartmentIdList');
-    const isMaster = _state.get('isMaster');
     //扁平化roles,获取roleIds集合
     const roleIds = roles.map((role) => {
       return role.get('roleInfoId');
@@ -154,13 +151,7 @@ export default class EditForm extends React.Component<any, any> {
 
       departmentIdList = {
         initialValue: employeeForm.get('departmentIds')
-          ? isMaster == 0
-            ? employeeForm
-                .get('departmentIds')
-                .split(',')
-                .filter((v) => manageDepartmentIdList.toJS().includes(v))
-            : employeeForm.get('departmentIds').split(',')
-          : []
+          ? employeeForm.get('departmentIds').split(',') : []
       };
       sex = {
         initialValue: employeeForm.get('sex') || 0
@@ -323,8 +314,8 @@ export default class EditForm extends React.Component<any, any> {
               ...departmentIdList
             })(
               <TreeSelect
-                // disabled={editDisable || (isMaster == 0 && manageDepartmentIdList.size == 0)}
                 disabled={editDisable}
+                treeCheckable={true}
                 // treeData = {treeData.toJS()}
                 showSearch={false}
                 style={{ width: '100%' }}
@@ -592,21 +583,17 @@ export default class EditForm extends React.Component<any, any> {
   };
 
   _loop = (allDeparts) => {
-    const _state = this._store.state();
-    const manageDepartmentIdList = _state.get('manageDepartmentIdList');
-    //是否为主账号
-    const isMaster = _state.get('isMaster');
     return allDeparts.map((dep, index) => {
       //子部门
       if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-          <TreeNode disabled={isMaster == 0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))} value={dep.get('departmentId')} title={dep.get('departmentName')} key={index}>
+          <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={index}>
             {this._loop(childDeparts)}
           </TreeNode>
         );
       }
-      return <TreeNode disabled={isMaster == 0 && !manageDepartmentIdList.toJS().includes(dep.get('departmentId'))} value={dep.get('departmentId')} title={dep.get('departmentName')} key={index} />;
+      return <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={index} />;
     });
   };
 }

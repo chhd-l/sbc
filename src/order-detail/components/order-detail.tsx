@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, util } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -30,7 +30,12 @@ const columns = [
     title: 'Price',
     dataIndex: 'levelPrice',
     key: 'levelPrice',
-    render: (levelPrice) => <span>${levelPrice.toFixed(2)}</span>
+    render: (levelPrice) => (
+      <span>
+        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+        {levelPrice.toFixed(2)}
+      </span>
+    )
   },
   {
     title: 'Quantity',
@@ -39,7 +44,12 @@ const columns = [
   },
   {
     title: 'Subtotal',
-    render: (row) => <span>${(row.num * row.levelPrice).toFixed(2)}</span>
+    render: (row) => (
+      <span>
+        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+        {(row.num * row.levelPrice).toFixed(2)}
+      </span>
+    )
   }
 ];
 
@@ -338,7 +348,10 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
-                <strong>${(tradePrice.goodsPrice || 0).toFixed(2)}</strong>
+                <strong>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {(tradePrice.goodsPrice || 0).toFixed(2)}
+                </strong>
               </label>
               {/* <label style={styles.priceItem as any}>
                 <span style={styles.name}>
@@ -384,12 +397,18 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
-                <strong>${(tradePrice.deliveryPrice || 0).toFixed(2)}</strong>
+                <strong>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {(tradePrice.deliveryPrice || 0).toFixed(2)}
+                </strong>
               </label>
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
-                <strong>${(tradePrice.totalPrice || 0).toFixed(2)}</strong>
+                <strong>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {(tradePrice.totalPrice || 0).toFixed(2)}
+                </strong>
               </label>
             </div>
           </div>

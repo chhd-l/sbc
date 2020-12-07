@@ -73,8 +73,12 @@ export default class List extends React.Component<any, any> {
         pagination={{
           total: settlePage.get('totalElements'),
           pageSize: settlePage.get('size'),
-          current: settlePage.get('number') + 1
+          current: settlePage.get('number') + 1,
+          onChange: (pageNum, pageSize) => {
+            fetchSettleList(pageNum - 1, pageSize );
+          }
         }}
+
       >
         {queryParams.get('settleStatus') == 1 && (
           <Column

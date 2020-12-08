@@ -100,7 +100,7 @@ class AttributeForm extends React.Component<any, any> {
                           {getFieldDecorator(`${det.get('propName')}`, {
                             rules: [
                               {
-                                required: true,
+                                required: false,
                                 message: `Please select the ${det.get('propName')}`
                               }
                             ],

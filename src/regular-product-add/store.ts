@@ -1494,6 +1494,7 @@ export default class AppStore extends Store {
           goodsInfoImg: imageUrl,
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           linePrice: item.get('linePrice') || 0,
+          packSize: item.get('packSize') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),

@@ -1460,6 +1460,7 @@ export default class AppStore extends Store {
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           goodsInfoType: 1,
           linePrice: item.get('linePrice') || 0,
+          packSize: item.get('packSize') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined ? item.get('goodsInfoBundleRels') : b,

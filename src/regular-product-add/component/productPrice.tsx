@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, ValidConst } from 'qmkit';
+import { noop, ValidConst, cache } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 
@@ -24,6 +24,7 @@ export default class ProductPrice extends React.Component<any, any> {
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      getGoodsId: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -37,6 +38,7 @@ export default class ProductPrice extends React.Component<any, any> {
       subscriptionStatus: any;
       updateBasePrice: Function;
       updateAllBasePrice: Function;
+      setDefaultBaseSpecId: Function;
     };
   };
 
@@ -52,6 +54,7 @@ export default class ProductPrice extends React.Component<any, any> {
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
+    getGoodsId: 'getGoodsId',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -61,7 +64,8 @@ export default class ProductPrice extends React.Component<any, any> {
     removeImg: noop,
     modalVisible: noop,
     updateBasePrice: noop,
-    updateAllBasePrice: noop
+    updateAllBasePrice: noop,
+    setDefaultBaseSpecId: noop
   };
 
   constructor(props) {
@@ -69,7 +73,12 @@ export default class ProductPrice extends React.Component<any, any> {
     this.WrapperForm = Form.create({})(SkuForm);
     this.state = {};
   }
-
+  componentDidMount() {
+    const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
+    if (!getGoodsId) {
+      setDefaultBaseSpecId();
+    }
+  }
   render() {
     const WrapperForm = this.WrapperForm;
     const { goods } = this.props.relaxProps;
@@ -114,7 +123,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, getGoodsId, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -129,7 +138,7 @@ class SkuForm extends React.Component<any, any> {
         });
         if (selectedItem) {
           columns = columns.push({
-            title: selectedItem.specName,
+            title: sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT),
             dataIndex: 'specId-' + selectedItem.specId,
             key: selectedItem.specId,
             render: (rowInfo) => {
@@ -143,17 +152,18 @@ class SkuForm extends React.Component<any, any> {
             }
           });
         }
-      } else {
-        columns = goodsSpecs
-          .map((item) => {
-            return {
-              title: item.get('specName'),
-              dataIndex: 'specId-' + item.get('specId'),
-              key: item.get('specId')
-            };
-          })
-          .toList();
       }
+      // else {
+      //   columns = goodsSpecs
+      //     .map((item) => {
+      //       return {
+      //         title: item.get('specName'),
+      //         dataIndex: 'specId-' + item.get('specId'),
+      //         key: item.get('specId')
+      //       };
+      //     })
+      //     .toList();
+      // }
     }
 
     columns = columns.unshift({
@@ -327,9 +337,8 @@ class SkuForm extends React.Component<any, any> {
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
-            {goodsSpecs.map((item) => (
-              <Option value={item.get('mockSpecId')}>{item.get('specName')}</Option>
-            ))}
+            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
+            <Option value={null}>None</Option>
           </Select>
         </div>
       ),
@@ -351,10 +360,14 @@ class SkuForm extends React.Component<any, any> {
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
                     initialValue: rowInfo.basePrice || 0
                   })(
-                    <div>
-                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
-                      <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
-                    </div>
+                    baseSpecId ? (
+                      <div>
+                        <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
+                        <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )
                   )}
                 </FormItem>
               ) : (

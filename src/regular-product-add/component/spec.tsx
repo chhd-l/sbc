@@ -22,6 +22,8 @@ export default class Spec extends React.Component<any, any> {
       addSpec: Function;
       deleteSpec: Function;
       updateSpecForm: Function;
+      setDefaultBaseSpecId: Function;
+      baseSpecId: any;
     };
   };
 
@@ -32,6 +34,7 @@ export default class Spec extends React.Component<any, any> {
     editSpecSingleFlag: noop,
     // 商品规格
     goodsSpecs: 'goodsSpecs',
+    baseSpecId: 'baseSpecId',
     // 修改规格名称
     editSpecName: noop,
     // 修改规格值
@@ -39,7 +42,8 @@ export default class Spec extends React.Component<any, any> {
     // 添加规格
     addSpec: noop,
     deleteSpec: noop,
-    updateSpecForm: noop
+    updateSpecForm: noop,
+    setDefaultBaseSpecId: noop
   };
 
   constructor(props) {
@@ -63,14 +67,14 @@ export default class Spec extends React.Component<any, any> {
 
 class SpecForm extends React.Component<any, any> {
   componentDidMount() {
-    const { updateSpecForm } = this.props.relaxProps;
+    const { updateSpecForm, setDefaultBaseSpecId } = this.props.relaxProps;
     this._addSpec();
     updateSpecForm(this.props.form);
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { specSingleFlag, goodsSpecs } = this.props.relaxProps;
+    const { specSingleFlag, goodsSpecs, baseSpecId } = this.props.relaxProps;
     return (
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
@@ -258,11 +262,7 @@ class SpecForm extends React.Component<any, any> {
                               <FormattedMessage id="delete" />
                             </Button>
                           </Col>
-                        ) : (
-                          <div style={{ marginTop: '7px' }}>
-                            <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
-                          </div>
-                        )}
+                        ) : null}
                       </Row>
                     </div>
                   );
@@ -285,8 +285,9 @@ class SpecForm extends React.Component<any, any> {
    */
   _getChildren = (specValues: IList) => {
     const children = [];
-    specValues.forEach((item, i) => {
-      children.push(<Option key={item.get('detailName') + i}>{item.get('detailName')}</Option>);
+    specValues.forEach((item) => {
+      let a = item.get('detailName').replace(/[^\d.]/g, '');
+      children.push(<Option key={item.get('detailName')}>{a}</Option>);
     });
     return children;
   };
@@ -320,14 +321,13 @@ class SpecForm extends React.Component<any, any> {
     const oldSpecValues = spec.get('specValues');
     let specValues = fromJS(value);
     specValues = specValues.map((item) => {
-      console.log(item, 221121);
       const ov = oldSpecValues.find((ov) => ov.get('detailName') == item);
       const isMock = !ov || ov.get('isMock') === true;
       const valueId = ov ? ov.get('specDetailId') : this._getRandom();
       return Map({
         isMock: isMock,
         specDetailId: valueId,
-        detailName: item.replace(/[^\d.]/g, '')
+        detailName: item
       });
     });
     updateSpecForm(this.props.form);

@@ -67,7 +67,7 @@ class DictionaryForm extends Component<any, any> {
         description: response.description,
         valueEn: response.valueEn,
         priority: response.priority,
-        enabled: response.priority,
+        enabled: response.enabled,
         parentId: response.parentId
       };
       let isCity = false;

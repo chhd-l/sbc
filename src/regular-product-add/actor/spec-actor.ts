@@ -28,7 +28,7 @@ export default class GoodsSpecActor extends Actor {
       ],
       stockChecked: false,
       marketPriceChecked: false,
-      baseSpecId: 0 //代表specName
+      baseSpecId: 0
     };
   }
 
@@ -63,6 +63,10 @@ export default class GoodsSpecActor extends Actor {
     }
     state = state.set('baseSpecId', baseSpecId);
     return state.set('goodsList', goodsList);
+  }
+  @Action('goodsSpecActor: baseSpecId')
+  setBaseSpecId(state, baseSpecId) {
+    return (state = state.set('baseSpecId', baseSpecId));
   }
 
   /**

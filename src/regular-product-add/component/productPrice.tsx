@@ -218,18 +218,20 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('linePrice_' + rowInfo.id, {
-                // rules: [
-                //   {
-                //     pattern: ValidConst.number,
-                //     message: 'Please enter the correct value'
-                //   }
-                // ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
-                initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ top: rowInfo.subscriptionStatus === 0 ? '0' : '-24px' }} min={0} max={9999999.99} precision={2} />)}
-            </FormItem>
+            <p>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('linePrice_' + rowInfo.id, {
+                  // rules: [
+                  //   {
+                  //     pattern: ValidConst.number,
+                  //     message: 'Please enter the correct value'
+                  //   }
+                  // ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
+                  initialValue: rowInfo.linePrice || 0
+                })(<InputNumber min={0} max={9999999.99} precision={2} />)}
+              </FormItem>
+            </p>
           </Col>
         </Row>
       )

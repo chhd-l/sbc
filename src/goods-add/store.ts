@@ -1467,8 +1467,8 @@ export default class AppStore extends Store {
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),
           basePriceType: data.get('baseSpecId'),
-          basePrice: item.get('basePrice') || 0,
-          subscriptionBasePrice: item.get('subscriptionBasePrice') || 0
+          basePrice: data.get('baseSpecId') && item.get('basePrice') ? item.get('basePrice') : null,
+          subscriptionBasePrice: data.get('baseSpecId') && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
         })
       );
     });
@@ -2324,6 +2324,14 @@ export default class AppStore extends Store {
     } else if (key === 'subscriptionPrice') {
       this.editGoodsItem(id, 'subscriptionBasePrice', value);
     }
+  };
+  setDefaultBaseSpecId = () => {
+    const item = this.state()
+      .get('goodsSpecs')
+      .find((item) => {
+        return item.get('specName') === 'specification0';
+      });
+    this.dispatch('goodsSpecActor: baseSpecId', item.get('mockSpecId'));
   };
 
   showEditModal = ({ key, value }) => {};

@@ -19,9 +19,9 @@ import BrandModal from './component/brand-modal';
 import CateModal from './component/cate-modal';
 import PicModal from './component/pic-modal';
 import ImgModal from './component/img-modal';
-import Logistics from './component/logistics';
+//import Logistics from './component/logistics';
 import VideoModal from './component/video-modal';
-import { FormattedMessage } from 'react-intl';
+//import { FormattedMessage } from 'react-intl';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
@@ -166,7 +166,7 @@ export default class Main extends React.Component<any, any> {
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
+            <Tabs.TabPane tab="Product inventory" key="inventory">
               <AlertInfo />
 
               <ProductInventory />

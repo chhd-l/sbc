@@ -90,10 +90,10 @@ class SkuForm extends React.Component<any, any> {
     console.log(`selected ${value}`);
   }
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const { goodsList, addSkUProduct } = this.props.relaxProps;
     // const {  } = this.state
-    const columns = this._getColumns();
 
+    const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
@@ -105,7 +105,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, specSingleFlag } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -171,7 +171,12 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'stock',
       render: (rowInfo) => {
-        console.log(11111111111)
+        let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0];
+        /*setTimeout(()=>{
+          console.log(addSkUProduct,111111);
+          console.log(rowInfo,2222222222222);
+          console.log(a.minStock,3333333333);
+        })*/
         return (
           <Row>
             <Col span={12}>
@@ -188,14 +193,13 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo, 'stock'),
-                  initialValue: rowInfo.stock
-                })(<InputNumber style={{ width: '60px' }} min={0} max={rowInfo.stock} disabled={rowInfo.index > 1 && stockChecked} />)}
+                  initialValue: rowInfo.stock ? rowInfo.stock : a && a.minStock
+                })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock} />)}
               </FormItem>
             </Col>
           </Row>
-        )
+        );
       }
-
     });
 
     columns = columns.push({

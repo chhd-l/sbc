@@ -234,6 +234,36 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+    columns = columns.push({
+      title: "Pack size",
+      key: 'packSize',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('packSize_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input packSize code'
+                    },
+                    {
+                      min: 1,
+                      max: 20,
+                      message: '1-20 characters'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'packSize'),
+                  initialValue: rowInfo.packSize
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
     /*columns = columns.push({
       title: <div>Description</div>,
       key: 'description',

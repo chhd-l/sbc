@@ -1013,9 +1013,7 @@ class GoodsForm extends React.Component<any, any> {
     return (
       taggingTotalTree &&
       taggingTotalTree.map((item) => {
-        if (item.get('displayStatus') === true) {
-          return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('taggingName')} />;
-        }
+        return <TreeNode key={item.get('id')} value={item.get('id')} title={item.get('taggingName')} />;
       })
     );
   };

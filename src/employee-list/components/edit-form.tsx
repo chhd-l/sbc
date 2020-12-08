@@ -316,14 +316,11 @@ export default class EditForm extends React.Component<any, any> {
               <TreeSelect
                 disabled={editDisable}
                 treeCheckable={true}
-                // treeData = {treeData.toJS()}
                 showSearch={false}
                 style={{ width: '100%' }}
-                // value={departmentIdList}
                 dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
                 placeholder="Please select, Multiple choice"
                 allowClear
-                multiple
                 treeDefaultExpandAll
                 onChange={this.onChange}
               >
@@ -588,12 +585,12 @@ export default class EditForm extends React.Component<any, any> {
       if (dep.get('children') && dep.get('children').size > 0) {
         const childDeparts = dep.get('children');
         return (
-          <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={index}>
+          <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={dep.get('departmentId')}>
             {this._loop(childDeparts)}
           </TreeNode>
         );
       }
-      return <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={index} />;
+      return <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={dep.get('departmentId')} />;
     });
   };
 }

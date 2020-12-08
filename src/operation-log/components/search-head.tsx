@@ -118,14 +118,15 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <Option value="">All</Option>
-                    <Option value="登录">Login</Option>
-                    <Option value="商品">Product</Option>
-                    <Option value="订单">Order</Option>
-                    <Option value="客户">Client</Option>
-                    <Option value="营销">Marketing</Option>
-                    <Option value="财务">Finance</Option>
-                    <Option value="设置">Setting</Option>
-                    <Option value="账户管理">Account management</Option>
+                    <Option value="Login">Login</Option>
+                    <Option value="Goods">Goods</Option>
+                    <Option value="Order">Order</Option>
+                    <Option value="Prescriber">Prescriber</Option>
+                    <Option value="Marketing">Marketing</Option>
+                    <Option value="Finance">Finance</Option>
+                    <Option value="Setting">Setting</Option>
+                    <Option value="Customer Delivery">Customer Delivery</Option>
+                    <Option value="Customer Billing">Customer Billing</Option>
                   </SelectGroup>
                 </FormItem>
               </Col>

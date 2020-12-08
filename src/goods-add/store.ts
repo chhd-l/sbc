@@ -1466,7 +1466,7 @@ export default class AppStore extends Store {
           goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined ? item.get('goodsInfoBundleRels') : b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),
-          basePriceType: data.get('baseSpecId'),
+          basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
           basePrice: data.get('baseSpecId') && item.get('basePrice') ? item.get('basePrice') : null,
           subscriptionBasePrice: data.get('baseSpecId') && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
         })

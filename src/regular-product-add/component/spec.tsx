@@ -22,6 +22,8 @@ export default class Spec extends React.Component<any, any> {
       addSpec: Function;
       deleteSpec: Function;
       updateSpecForm: Function;
+      setDefaultBaseSpecId: Function;
+      baseSpecId: any;
     };
   };
 
@@ -32,6 +34,7 @@ export default class Spec extends React.Component<any, any> {
     editSpecSingleFlag: noop,
     // 商品规格
     goodsSpecs: 'goodsSpecs',
+    baseSpecId: 'baseSpecId',
     // 修改规格名称
     editSpecName: noop,
     // 修改规格值
@@ -39,7 +42,8 @@ export default class Spec extends React.Component<any, any> {
     // 添加规格
     addSpec: noop,
     deleteSpec: noop,
-    updateSpecForm: noop
+    updateSpecForm: noop,
+    setDefaultBaseSpecId: noop
   };
 
   constructor(props) {
@@ -63,14 +67,16 @@ export default class Spec extends React.Component<any, any> {
 
 class SpecForm extends React.Component<any, any> {
   componentDidMount() {
-    const { updateSpecForm } = this.props.relaxProps;
-    this._addSpec()
+    const { updateSpecForm, setDefaultBaseSpecId } = this.props.relaxProps;
+    this._addSpec();
     updateSpecForm(this.props.form);
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { specSingleFlag, goodsSpecs } = this.props.relaxProps;
+    const { specSingleFlag, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    console.log(goodsSpecs.toJS(), 'goodsSpecs-----------');
+    console.log(baseSpecId, 'baseSpecId-----------');
     return (
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
@@ -159,8 +165,8 @@ class SpecForm extends React.Component<any, any> {
                                 }
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
-                              initialValue: index == 0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0?true:false} />)}
+                              initialValue: index == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : item.get('specName')
+                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0 ? true : false} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -171,7 +177,7 @@ class SpecForm extends React.Component<any, any> {
                               marginRight: '4px',
                               fontSize: '12px',
                               float: 'left',
-                              marginLeft:'10px'
+                              marginLeft: '10px'
                             }}
                           >
                             *
@@ -246,11 +252,13 @@ class SpecForm extends React.Component<any, any> {
                             )}
                           </FormItem>
                         </Col>
-                        {index != 0?<Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{marginTop:'2px'}} >
-                            <FormattedMessage id="delete" />
-                          </Button>
-                        </Col>:null}
+                        {index != 0 ? (
+                          <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
+                            <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
+                              <FormattedMessage id="delete" />
+                            </Button>
+                          </Col>
+                        ) : null}
                       </Row>
                     </div>
                   );

@@ -105,7 +105,10 @@ export default class GoodsSpecActor extends Actor {
       return goodsSpecs.update(index, (item) => item.set('specName', specName));
     });
   }
-
+  @Action('goodsSpecActor: baseSpecId')
+  setBaseSpecId(state, baseSpecId) {
+    return (state = state.set('baseSpecId', baseSpecId));
+  }
   /**
    * 修改规格值
    */

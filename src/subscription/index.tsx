@@ -217,7 +217,6 @@ export default class SubscriptionList extends Component<any, any> {
   };
   //todo
   _handleBatchExport = () => {
-    console.log('coding');
   };
   onTabChange = (key) => {
     this.setState(

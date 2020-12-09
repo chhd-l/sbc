@@ -58,7 +58,6 @@ const REACT_APP = /^REACT_APP_/i;
 
 function getClientEnvironment(envCode, publicUrl) {
 
-  console.log(`当前生效config: ./env-config/${envCode}.js`);
   let config = evnMap[envCode];
 
   const raw = Object.keys(process.env)

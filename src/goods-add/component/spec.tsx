@@ -415,7 +415,8 @@ class SpecForm extends React.Component<any, any> {
   _getChildren = (specValues: IList) => {
     const children = [];
     specValues.forEach((item) => {
-      children.push(<Option key={item.get('detailName')}>{item.get('detailName')}</Option>);
+      let a = item.get('detailName').replace(/[^\d.]/g, '');
+      children.push(<Option key={item.get('detailName')}>{a}</Option>);
     });
     return children;
   };

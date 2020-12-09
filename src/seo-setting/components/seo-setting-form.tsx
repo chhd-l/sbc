@@ -54,7 +54,6 @@ export default class SeoSettingForm extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { seoForm, updateSeoForm, loading } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-    console.log(seoObj, 'seoObj--------------');
     return (
       <div>
         {loading ? (

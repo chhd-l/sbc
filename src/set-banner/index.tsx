@@ -27,7 +27,6 @@ export default class SetBanner extends Component<any, any> {
     this.store.onFormChange({ field, value });
   };
   onSearch = () => {
-    console.log('search------------');
   };
 
   uploadImage() {}

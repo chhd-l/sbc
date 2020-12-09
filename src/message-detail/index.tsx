@@ -216,7 +216,6 @@ class MessageDetails extends Component<any, any> {
   };
   findEmailTask = () => {
     webapi.findEmailTask(this.state.id).then((data) => {
-      console.log(data);
     });
   };
 
@@ -486,14 +485,11 @@ class MessageDetails extends Component<any, any> {
   }
   //限制时间
   disabledDateTime(data) {
-    console.log(moment(data).format('YYYY-MM-DD HH:mm:ss'));
-
     return {
       disabledHours: () => {
         let currentDay = moment(sessionStorage.getItem('defaultLocalDateTime')).date();
         let currentHours = moment(sessionStorage.getItem('defaultLocalDateTime')).hours();
         let selectedDay = moment(data).date();
-        console.log(currentDay, currentHours, selectedDay);
         if (selectedDay > currentDay) {
           return [];
         } else {

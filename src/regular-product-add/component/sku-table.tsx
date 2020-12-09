@@ -181,7 +181,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    /*columns = columns.push({
+    columns = columns.push({
       title: 'Unit',
       key: 'goodsInfoUnit',
       render:  (rowInfo) => {
@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )
       }
-    });*/
+    });
 
     columns = columns.push({
       title: (
@@ -354,13 +354,14 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-
-    return columns.toJS();
+    let a = columns.toJS()
+    let b = a.splice(a.length-4,1)
+    a.splice(3,0,b[0])
+    return a;
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

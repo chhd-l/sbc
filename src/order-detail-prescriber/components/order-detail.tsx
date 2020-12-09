@@ -914,7 +914,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       visiblePetDetails: true,
       currentPetInfo: petInfo
     });
-    console.log(petInfo);
   };
   // 是否是Prescriber
   isPrescriber = () => {

@@ -56,9 +56,6 @@ export default class PageSettingForm extends Component<any, any> {
       metaKeywords: seoObj.metaKeywords,
       description: seoObj.description
     });
-    setTimeout(() => {
-      console.log(seoObj, 'seoObj--------------');
-    });
     return (
       <div>
         {loading ? (

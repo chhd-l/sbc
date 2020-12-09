@@ -9,7 +9,6 @@ const OktaLogout = (props) => {
   const { authState, authService } = useOktaAuth();
 
   const oktaLogout = async () => {
-    console.log(authState.isAuthenticated)
     if(authState.isAuthenticated) {
       authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))  
     } else {

@@ -271,7 +271,6 @@ export default withOktaAuth(class VerifyForm extends React.Component<any, any> {
         this.state.optionalConsents
 
         let oktaToken = this.props.authState.accessToken;
-        console.log(this.props.authState)
         sessionStorage.setItem(
           cache.OKTA_TOKEN,
           oktaToken

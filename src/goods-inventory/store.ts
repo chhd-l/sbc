@@ -80,7 +80,6 @@ export default class AppStore extends Store {
             stock: this.state().get('stock'),
             token: token
           });
-          console.log(result, 'result------------');
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
           const exportHref = Const.HOST + `/inventory/export/${encrypted}`;

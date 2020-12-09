@@ -471,7 +471,10 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });*/
-    return columns.toJS();
+    let a = columns.toJS()
+    let b = a.splice(a.length-5,1)
+    a.splice(3,0,b[0])
+    return a;
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);

@@ -122,15 +122,18 @@ class SkuForm extends React.Component<any, any> {
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
+      /*let a = ''
 
-      goodsSpecs&&goodsSpecs.toJS().push({aa:'1111'})
+
+
+      if(goodsSpecs.toJS().length == 1) {
+        a = a.merge(goodsSpecs)
+      }
       setTimeout(()=>{
         console.log(goodsSpecs.toJS(),11111111);
-        console.log(goodsSpecs.toJS().length,222222);
-      })
-      if(goodsSpecs.toJS().length == 1) {
 
-      }
+
+      })*/
       columns = goodsSpecs
         .map((item,i) => {
           return {
@@ -178,7 +181,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    columns = columns.push({
+    /*columns = columns.push({
       title: 'Unit',
       key: 'goodsInfoUnit',
       render:  (rowInfo) => {
@@ -200,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         )
       }
-    });
+    });*/
 
     columns = columns.push({
       title: (

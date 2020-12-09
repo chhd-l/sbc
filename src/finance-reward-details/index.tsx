@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Breadcrumb, Tooltip, Icon } from 'antd';
+import { Breadcrumb, Tooltip, Icon, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
 import styled from 'styled-components';
 
@@ -14,7 +14,7 @@ import AppStore from './store';
 import './style.css';
 import { FormattedMessage } from 'react-intl';
 import SearchForm from './components/search-form';
-import { WMChart } from 'biz';
+//import { WMChart } from 'biz';
 //import { __DEV__ } from 'typings/global';
 
 const OptionDiv = styled.div`
@@ -47,40 +47,39 @@ export default class BillingDetails extends React.Component<any, any> {
         }}
       >
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>
-            {<FormattedMessage id="rewardDetails" />}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="rewardDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
-
-        <div className="container-search">
-          <div className="space-between">
-            <div style={{ width: '60%' }}>
-              <Headline title={<FormattedMessage id="rewardDetails" />} />
+        <Spin spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <div className="space-between">
+              <div style={{ width: '60%' }}>
+                <Headline title={<FormattedMessage id="rewardDetails" />} />
+              </div>
+              <OptionDiv style={{ width: '30%' }}>
+                <Tooltip
+                  overlayStyle={{
+                    overflowY: 'auto'
+                    //height: 100
+                  }}
+                  placement="bottomLeft"
+                  title={this._renderTitle}
+                >
+                  <a style={{ fontSize: 14 }}>
+                    <Icon type="question-circle-o" />
+                    &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
+                  </a>
+                </Tooltip>
+              </OptionDiv>
             </div>
-            <OptionDiv style={{ width: '30%' }}>
-              <Tooltip
-                overlayStyle={{
-                  overflowY: 'auto'
-                  //height: 100
-                }}
-                placement="bottomLeft"
-                title={this._renderTitle}
-              >
-                <a style={{ fontSize: 14 }}>
-                  <Icon type="question-circle-o" />
-                  &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
-                </a>
-              </Tooltip>
-            </OptionDiv>
+            <Detail />
+            <SearchForm />
           </div>
-          <Detail />
-          <SearchForm />
-        </div>
-        <div className="container">
-          <Chart />
-          <OrderInvoiceList settleId={this.props.match.params.settleId} />
-          <Bottom />
-        </div>
+          <div className="container">
+            <Chart />
+            <OrderInvoiceList settleId={this.props.match.params.settleId} />
+            <Bottom />
+          </div>
+        </Spin>
       </div>
     );
   }
@@ -89,11 +88,7 @@ export default class BillingDetails extends React.Component<any, any> {
     return (
       <div>
         <div>
-          <div
-            style={{ textAlign: 'center', width: '170px', fontSize: '18px' }}
-          >
-            Reward rules
-          </div>
+          <div style={{ textAlign: 'center', width: '170px', fontSize: '18px' }}>Reward rules</div>
           {this.state.fetchFindListByPrescriber.map((item, i) => {
             return (
               <div key={i} style={{ padding: '10px' }}>
@@ -101,12 +96,10 @@ export default class BillingDetails extends React.Component<any, any> {
                   {i + 1}. {item.startTime} - {item.endTIme}
                 </p>
                 <p>
-                  {<FormattedMessage id="firstRewardRate" />}:{' '}
-                  {item.firstRewardRate}
+                  {<FormattedMessage id="firstRewardRate" />}: {item.firstRewardRate}
                 </p>
                 <p>
-                  {<FormattedMessage id="repeatRewardRate" />}:{' '}
-                  {item.repeatRewardRate}
+                  {<FormattedMessage id="repeatRewardRate" />}: {item.repeatRewardRate}
                 </p>
               </div>
             );

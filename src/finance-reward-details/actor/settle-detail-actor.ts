@@ -31,14 +31,10 @@ export default class SettleDetailActor extends Actor {
       endTime: '',
       searchForm: {
         prescriberId: '',
-        beginTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        beginTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString(),
-        endTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        endTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString(),
         /* beginTime: '2020-05-01',
@@ -49,14 +45,10 @@ export default class SettleDetailActor extends Actor {
       echartsData: {},
       setName: {},
       dateRange: {
-        beginTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        beginTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString(),
-        endTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        endTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString()
       },
@@ -66,7 +58,8 @@ export default class SettleDetailActor extends Actor {
       fetchFindListByPrescriber: {},
       onRewardExportData: {},
       id: '',
-      prescriber: {}
+      prescriber: {},
+      loading: true
     };
   }
 
@@ -156,5 +149,15 @@ export default class SettleDetailActor extends Actor {
   @Action('finance:dateRange')
   dateRange(state: IMap, param) {
     return state.setIn(['dateRange', param['field']], param['value']);
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
   }
 }

@@ -406,7 +406,7 @@ class SkuForm extends React.Component<any, any> {
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
+            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' || 'weight' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
             <Option value={null}>None</Option>
           </Select>
         </div>
@@ -434,7 +434,7 @@ class SkuForm extends React.Component<any, any> {
                         <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
                       </div>
                     ) : (
-                      <div></div>
+                      <p></p>
                     )
                   )}
                 </FormItem>

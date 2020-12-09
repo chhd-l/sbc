@@ -200,8 +200,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
       runtimeChunk: true,
     },
     externals: {
-      /*'react': 'React',
-      'react-dom': 'ReactDOM',
+      /*'react': 'react',
       'antd': 'antd'*/
     },
     resolve: {

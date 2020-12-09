@@ -122,12 +122,25 @@ class SkuForm extends React.Component<any, any> {
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
+
+      goodsSpecs&&goodsSpecs.toJS().push({aa:'1111'})
+      setTimeout(()=>{
+        console.log(goodsSpecs.toJS(),11111111);
+        console.log(goodsSpecs.toJS().length,222222);
+      })
+      if(goodsSpecs.toJS().length == 1) {
+
+      }
       columns = goodsSpecs
         .map((item,i) => {
           return {
             title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
+            key: item.get('specId'),
+            render: (rowInfo) => {
+              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+
+            }
           };
         })
         .toList();
@@ -235,7 +248,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: "Pack size",
+      title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
         return (

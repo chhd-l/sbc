@@ -123,7 +123,9 @@ export default class UEditor extends React.Component<any, any> {
 
   componentWillUnmount() {
     // 清除实例
-    (window as any).UE.delEditor(this.props.id);
+    setTimeout(()=>{
+      (window as any).UE.delEditor(this.props);
+    },2000)
   }
 
   /**

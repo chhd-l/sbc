@@ -5,7 +5,7 @@ const { Option } = Select;
 
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, ValidConst } from 'qmkit';
+import {cache, noop, ValidConst} from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -109,12 +109,14 @@ class SkuForm extends React.Component<any, any> {
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
-        .map((item) => {
-          console.log(item.get('specId'), 'specid....');
+        .map((item,i) => {
           return {
-            title: item.get('specName'),
+            title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
+            key: item.get('specId'),
+            render: (rowInfo) => {
+              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+            }
           };
         })
         .toList();

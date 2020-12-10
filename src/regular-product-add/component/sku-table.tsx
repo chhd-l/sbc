@@ -142,7 +142,6 @@ class SkuForm extends React.Component<any, any> {
             key: item.get('specId'),
             render: (rowInfo) => {
               return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
-
             }
           };
         })

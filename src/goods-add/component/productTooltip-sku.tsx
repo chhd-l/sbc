@@ -105,7 +105,6 @@ class ProductTooltipSKU extends React.Component<any, any> {
           );
           let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
           targetGoodsList = [];
-          console.log(minStock);
           targetGoodsList.push({
             pid: this.props.pid,
             targetGoodsIds: goodsIds,

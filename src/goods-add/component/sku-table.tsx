@@ -139,8 +139,7 @@ class SkuForm extends React.Component<any, any> {
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
-    let a = []
-    let list = []
+
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
@@ -148,7 +147,10 @@ class SkuForm extends React.Component<any, any> {
           return {
             title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
+            key: item.get('specId'),
+            render: (rowInfo) => {
+              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+            }
           };
         })
         .toList();
@@ -378,7 +380,7 @@ class SkuForm extends React.Component<any, any> {
     });*/
 
     columns = columns.push({
-      title: "Pack size",
+      title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
         return (
@@ -469,7 +471,10 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });*/
-    return columns.toJS();
+    let a = columns.toJS()
+    let b = a.splice(a.length-5,1)
+    a.splice(3,0,b[0])
+    return a;
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);

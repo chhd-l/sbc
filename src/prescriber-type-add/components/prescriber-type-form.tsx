@@ -48,7 +48,6 @@ class PrescriberTypeForm extends React.Component<any, any> {
     } else {
       message.error(res.message || 'Unsuccessful');
     }
-    console.log(this.state.clinicTypeForm);
   };
   onFormChange = ({ field, value }) => {
     let data = this.state.clinicTypeForm;

@@ -144,7 +144,6 @@ class InvoiceList extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
-          console.log(res.context.sysDictionaryVOS);
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -380,7 +379,6 @@ class InvoiceList extends Component<any, any> {
     let { selectedRowList } = this.state;
     selectedRowList = selectedRowList.concat(selectedRow);
     selectedRowList = this.arrayFilter(selectedRowKeys, selectedRowList);
-    console.log(selectedRowKeys, selectedRowList);
 
     this.setState({ selectedRowKeys, selectedRowList });
   };

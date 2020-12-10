@@ -38,7 +38,6 @@ class MessageSetting extends Component<any, any> {
   handleOk = () => {
     this.props.form.validateFields((err) => {
       if (!err) {
-        console.log(this.state.settingForm);
         this.setState({
           visible: false
         });
@@ -47,7 +46,6 @@ class MessageSetting extends Component<any, any> {
   };
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false
     });

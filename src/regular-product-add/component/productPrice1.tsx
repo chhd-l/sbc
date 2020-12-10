@@ -88,8 +88,6 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-    console.log(columns, 'columns', goods.toJS(), goodsSpecs.toJS());
-    console.log(goodsList.toJS(), 'columns', this.state);
     // if(this.state.count < 100) {
     //   let count = this.state.count + 1
     //   this.setState({count: count})
@@ -109,14 +107,12 @@ class SkuForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
-    console.log(goods.get('subscriptionStatus'), 'aaaa');
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
         .map((item) => {
-          console.log(item.get('specId'), 'specid....');
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -125,7 +121,6 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
-    console.log(columns.toJS(), 'columns');
     columns = columns.unshift({
       title: (
         <div>
@@ -365,7 +360,6 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'basePrice',
       render: (rowInfo) => {
-        console.log(rowInfo, 'rowInfo');
         return (
           <Row>
             <Col span={12}>
@@ -528,7 +522,6 @@ class SkuForm extends React.Component<any, any> {
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

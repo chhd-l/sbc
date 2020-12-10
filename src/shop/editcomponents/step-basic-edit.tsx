@@ -576,7 +576,6 @@ export default class StepOneEdit extends React.Component<any, any> {
     if (fileList && fileList.length > 0) {
       this.setState({ storeLogo: fileList[0].url });
       this.props.form.setFieldsValue({ storeLogo: this.state.storeLogo });
-      console.log(this.state.storeLogo);
       onChange({
         field: 'storeLogo',
         value: this.state.storeLogo

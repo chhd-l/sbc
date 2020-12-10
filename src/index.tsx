@@ -15,7 +15,7 @@ import store from './redux/store';
 import './index.less';
 import Main from './main';
 import { ConfigProvider } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
+//import zhCN from 'antd/lib/locale-provider/zh_CN';
 import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment';
 import 'moment/locale/zh-cn';

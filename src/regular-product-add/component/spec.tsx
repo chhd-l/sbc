@@ -120,9 +120,6 @@ class SpecForm extends React.Component<any, any> {
                   let a = specValues.map((item) => {
                     return item.replace(/[^\d.]/g, '');
                   });
-                  setTimeout(() => {
-                    console.log(specValues);
-                  });
                   return (
                     <div key={item.get('specId')} style={{ marginBottom: 20 }}>
                       <Row type="flex" justify="start" align="top">
@@ -262,7 +259,9 @@ class SpecForm extends React.Component<any, any> {
                               <FormattedMessage id="delete" />
                             </Button>
                           </Col>
-                        ) : null}
+                        ) : (<div style={{ marginTop: '7px' }}>
+                          <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
+                        </div>)}
                       </Row>
                     </div>
                   );

@@ -142,7 +142,6 @@ export default class ClinicList extends Component<any, any> {
     } else {
       message.error(res.message || 'Unsuccessful');
     }
-    console.log(this.state.typeList);
   };
   handleTableChange = (pagination: any) => {
     let params = {

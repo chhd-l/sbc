@@ -122,12 +122,28 @@ class SkuForm extends React.Component<any, any> {
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
+      /*let a = ''
+
+
+
+      if(goodsSpecs.toJS().length == 1) {
+        a = a.merge(goodsSpecs)
+      }
+      setTimeout(()=>{
+        console.log(goodsSpecs.toJS(),11111111);
+
+
+      })*/
       columns = goodsSpecs
         .map((item,i) => {
           return {
             title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
-            key: item.get('specId')
+            key: item.get('specId'),
+            render: (rowInfo) => {
+              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+
+            }
           };
         })
         .toList();
@@ -235,7 +251,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: "Pack size",
+      title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
         return (
@@ -338,13 +354,14 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-
-    return columns.toJS();
+    let a = columns.toJS()
+    let b = a.splice(a.length-4,1)
+    a.splice(3,0,b[0])
+    return a;
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);
     this._editGoodsItem(null, 'baseSpecId', value);
-    console.log(`selected ${value}`);
   };
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;

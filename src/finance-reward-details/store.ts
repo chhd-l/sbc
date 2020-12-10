@@ -21,56 +21,38 @@ export default class AppStore extends Store {
   init = async (param?: any) => {
     this.dispatch('loading:start');
     if (history.location.params) {
-      sessionStorage.setItem(
-        'prescriberId',
-        history.location.params.prescriberId
-      );
-      sessionStorage.setItem(
-        'prescriberName',
-        history.location.params.prescriberName
-      );
+      sessionStorage.setItem('prescriberId', history.location.params.prescriberId);
+      sessionStorage.setItem('prescriberName', history.location.params.prescriberName);
     } else {
       sessionStorage.getItem('prescriberId');
     }
     // sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriberId:sessionStorage.getItem('prescriberId'));
     let prescriberId = sessionStorage.getItem('prescriberId');
-    this.dispatch(
-      'getPrescribe:prescriber',
-      history.location.params ? history.location.params : prescriberId
-    );
+    this.dispatch('getPrescribe:prescriber', history.location.params ? history.location.params : prescriberId);
 
     //sessionStorage.setItem('prescriberId', history.location.params?history.location.params.prescriber.prescriberId:sessionStorage.getItem('prescriberId'));
-    param = Object.assign(
-      this.state().get('searchForm').merge({ prescriberId }).toJS(),
-      param
-    );
+    param = Object.assign(this.state().get('searchForm').merge({ prescriberId }).toJS(), param);
 
     const res1 = await webapi.fetchFinanceRewardDetails(param);
     const res2 = await webapi.fetchEverydayAmountTotal(param);
     const PeriodAmountTotal = await webapi.fetchPeriodAmountTotal(param);
-    const findListByPrescriberId = await webapi.fetchFindListByPrescriberId(
-      param
-    );
+    const findListByPrescriberId = await webapi.fetchFindListByPrescriberId(param);
 
     if (res1.res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
-        // this.dispatch('loading:end');
+        this.dispatch('loading:end');
         this.dispatch('list:init', res1.res.context.content);
         //this.dispatch('list:init', [111,222,333]);
         this.dispatch('list:EchartsData', res2.res.context);
         this.dispatch('current', param && param.pageNum + 1);
         this.dispatch('list:PeriodAmountTotal', PeriodAmountTotal.res.context);
-        this.dispatch(
-          'list:fetchFindListByPrescriber',
-          findListByPrescriberId.res.context
-        );
+        this.dispatch('list:fetchFindListByPrescriber', findListByPrescriberId.res.context);
         this.dispatch('list:setName', prescriberId);
         this.dispatch('ticket:onRewardExport', fromJS(param));
       });
       //获取收入对账明细
       const searchTime = {
-        beginTime:
-          this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+        beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
         endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
       };
       this.dispatch('finance:searchTime', fromJS(searchTime));
@@ -133,17 +115,11 @@ export default class AppStore extends Store {
       return validateFlag;
     }
 
-    if (
-      distributionCommissionFirst &&
-      !ValidConst.zeroPrice.test(distributionCommissionFirst)
-    ) {
+    if (distributionCommissionFirst && !ValidConst.zeroPrice.test(distributionCommissionFirst)) {
       return validateFlag;
     }
 
-    if (
-      distributionCommissionLast &&
-      !ValidConst.zeroPrice.test(distributionCommissionLast)
-    ) {
+    if (distributionCommissionLast && !ValidConst.zeroPrice.test(distributionCommissionLast)) {
       return validateFlag;
     }
 
@@ -155,10 +131,7 @@ export default class AppStore extends Store {
       return validateFlag;
     }
 
-    if (
-      commissionRateFirst &&
-      !ValidConst.zeroPrice.test(commissionRateFirst)
-    ) {
+    if (commissionRateFirst && !ValidConst.zeroPrice.test(commissionRateFirst)) {
       return validateFlag;
     }
 
@@ -175,10 +148,7 @@ export default class AppStore extends Store {
         value: salePriceFirst
       });
     }
-    if (
-      parseFloat(distributionCommissionFirst) >
-      parseFloat(distributionCommissionLast)
-    ) {
+    if (parseFloat(distributionCommissionFirst) > parseFloat(distributionCommissionLast)) {
       this.onFormFieldChange({
         key: 'distributionCommissionFirst',
         value: distributionCommissionLast
@@ -228,10 +198,7 @@ export default class AppStore extends Store {
     const settlement = await webapi.getSettlementById(settleId);
     this.transaction(() => {
       if (settleDetailList.res.code == Const.SUCCESS_CODE) {
-        this.dispatch(
-          'settleDetail:list',
-          this.renderSettleDetailList(settleDetailList.res.context)
-        );
+        this.dispatch('settleDetail:list', this.renderSettleDetailList(settleDetailList.res.context));
       }
       if (settlement.res.code == Const.SUCCESS_CODE) {
         this.dispatch('settleDetail:settlement', settlement.res.context);
@@ -252,8 +219,7 @@ export default class AppStore extends Store {
       let encrypted = base64.urlEncode(result);
 
       // 新窗口下载
-      const exportHref =
-        Const.HOST + `/finance/settlement/detail/export/${encrypted}`;
+      const exportHref = Const.HOST + `/finance/settlement/detail/export/${encrypted}`;
       window.open(exportHref);
     } else {
       message.error('请登录');
@@ -317,8 +283,7 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/trade/prescriber/export/rewardDetails/${encrypted}`;
+          const exportHref = Const.HOST + `/trade/prescriber/export/rewardDetails/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

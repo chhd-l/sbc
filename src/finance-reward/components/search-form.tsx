@@ -39,7 +39,6 @@ export default class SearchForm extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    console.log(JSON.parse(sessionStorage.getItem('PrescriberType')), 22122);
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
 

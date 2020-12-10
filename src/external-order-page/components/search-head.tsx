@@ -533,7 +533,6 @@ export default class SearchHead extends Component<any, any> {
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
         onChange={(val, a) => {
-          console.log(val, 22222);
           this.setState({
             clinicSelect: val
           });

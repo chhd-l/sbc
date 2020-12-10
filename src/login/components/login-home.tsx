@@ -5,42 +5,42 @@ import { Form, Icon, Input, Button, Row, Col } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
-let switchedRouter = false
-import { switchRouter } from '@/index'
+let switchedRouter = false;
+import { switchRouter } from '@/index';
 
 let LoginHome = (props) => {
   let { authState, authService } = useOktaAuth();
   let toOkta = props.parent.location.search === '?toOkta=true';
-  let loginpPercriberOkta =  () => { 
-    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber')
-    switchRouter()
-    switchedRouter = true
-  } 
+  let loginpPercriberOkta = () => {
+    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
+    switchRouter();
+    switchedRouter = true;
+  };
 
-  let loginpRcOkta = () => { 
-    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'staff')
-    switchRouter()
-    switchedRouter = true
-  }
+  let loginpRcOkta = () => {
+    sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'staff');
+    switchRouter();
+    switchedRouter = true;
+  };
 
   useEffect(() => {
     if (!authState.isAuthenticated) {
-      if(switchedRouter) {
-        let loginType = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)
-        if(loginType === 'staff') {
+      if (switchedRouter) {
+        let loginType = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
+        if (loginType === 'staff') {
           authService.login('/login?type=staff');
-        } else if(loginType === 'prescriber'){
+        } else if (loginType === 'prescriber') {
           authService.login('/login?type=prescriber');
         }
-        return
+        return;
       }
-      if(toOkta) {
-        loginpPercriberOkta()
+      if (toOkta) {
+        loginpPercriberOkta();
       }
     }
 
     if (authState.isAuthenticated) {
-      var routerType = getRoutType(props.parent.location.search)
+      let routerType = getRoutType(props.parent.location.search);
       login(routerType, authState.accessToken);
     }
   }, [authState, authService]);
@@ -50,24 +50,19 @@ let LoginHome = (props) => {
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
           <Row style={styles.welcomeFont}>
-            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store
-            portal
+            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store portal
           </Row>
           <Row style={styles.selectFont}>Please select your role:</Row>
           <Row style={{ marginTop: '40px' }}>
             <Col span={2}></Col>
-            <Col
-              span={9}
-              style={styles.buttonContainer}
-              onClick={loginpRcOkta}
-            >
+            <Col span={9} style={styles.buttonContainer} onClick={loginpRcOkta}>
               <img style={styles.roleImg} src={role_RC} />
               <div style={styles.roleWord}>RC Staff</div>
             </Col>
             <Col span={2}></Col>
             <Col span={9} style={styles.buttonContainer} onClick={loginpPercriberOkta}>
               <img style={styles.roleImg} src={role_Perscriber} />
-              <div style={styles.roleWord}>Presriber</div>
+              <div style={styles.roleWord}>Prescriber</div>
             </Col>
             <Col span={2}></Col>
           </Row>

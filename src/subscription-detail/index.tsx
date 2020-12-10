@@ -421,10 +421,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
   handleYearChange = (value) => {
-    console.log(value);
   };
   tabChange = (key) => {
-    console.log(`selected ${key}`);
   };
   getCityNameById = (ids, type) => {
     let params = {

@@ -365,7 +365,6 @@ export default class StepNewConsent extends Component<any, any> {
             defaultValue={defaultLanguage}
             style={{ width: 120 }}
             onChange={(value) => {
-              console.log(value);
               value = value === '' ? null : value;
               onFormChange({
                 field: 'languageTypeId',

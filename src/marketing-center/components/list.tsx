@@ -29,161 +29,162 @@ export default class List extends React.Component<any, any> {
         </div>
         <div className="container">
           <div className="appsMain">
-            {/* <h3>
-            获客拉新<span>全渠道新用户</span>
-          </h3>
-          <Row>
-            <Col span={6}>
-              <a
-                className="createMarket"
-                onClick={() => {
-                  history.push('/groupon-add');
-                }}
-              >
-                <span className="left">
-                  <img src={images.new_01} />
-                </span>
-                <div className="info">
-                  <h5>拼团</h5>
-                  <p>裂变传播拉新，邀请好友一起购买</p>
-                </div>
-              </a>
-            </Col>
-
-            <Col span={6}>
-              <a
-                className="createMarket"
-                onClick={() => history.push('/distribution-setting')}
-              >
-                <span className="left">
-                  <img src={images.new_02} />
-                </span>
-                <div className="info">
-                  <h5>社交分销</h5>
-                  <p>裂变传播，让分销员帮你卖货</p>
-                </div>
-                <span className="miniTags">推荐</span>
-              </a>
-            </Col>
-          </Row>
-
-          <h3>
-            下单转化<span>更多订单和销量</span>
-          </h3>
-          <Row>
-            <AuthWrapper functionName={'f_create_coupon'}>
+            <h3>
+              获客拉新<span>全渠道新用户</span>
+            </h3>
+            <Row>
               <Col span={6}>
                 <a
                   className="createMarket"
-                  onClick={() =>
-                    history.push({
-                      pathname: 'coupon-add',
-                      state: {
-                        couponType: '1',
-                        source: 'marketCenter'
-                      }
-                    })
-                  }
+                  onClick={() => {
+                    history.push('/groupon-add');
+                  }}
                 >
                   <span className="left">
-                    <img src={images.order_01} />
+                    <img src={images.new_01} />
                   </span>
                   <div className="info">
-                    <h5>优惠券</h5>
-                    <p>优惠券抵扣，购物更优惠</p>
+                    <h5>拼团</h5>
+                    <p>裂变传播拉新，邀请好友一起购买</p>
+                  </div>
+                </a>
+              </Col>
+
+              <Col span={6}>
+                <a className="createMarket" onClick={() => history.push('/distribution-setting')}>
+                  <span className="left">
+                    <img src={images.new_02} />
+                  </span>
+                  <div className="info">
+                    <h5>社交分销</h5>
+                    <p>裂变传播，让分销员帮你卖货</p>
                   </div>
                   <span className="miniTags">推荐</span>
                 </a>
               </Col>
-            </AuthWrapper>
+            </Row>
 
-            <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+            <h3>
+              下单转化<span>更多订单和销量</span>
+            </h3>
+            <Row>
+              <AuthWrapper functionName={'f_create_coupon'}>
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: 'coupon-add',
+                        state: {
+                          couponType: '1',
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.order_01} />
+                    </span>
+                    <div className="info">
+                      <h5>优惠券</h5>
+                      <p>优惠券抵扣，购物更优惠</p>
+                    </div>
+                    <span className="miniTags">推荐</span>
+                  </a>
+                </Col>
+              </AuthWrapper>
+
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: 'coupon-activity-all-present',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.order_02} />
+                    </span>
+                    <div className="info">
+                      <h5>全场赠券</h5>
+                      <p>全场发券活动，领券中心全员领券</p>
+                    </div>
+                    <span className="miniTags">推荐</span>
+                  </a>
+                </Col>
+              </AuthWrapper>
+
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: 'coupon-activity-specify',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.order_03} />
+                    </span>
+                    <div className="info">
+                      <h5>精准发券</h5>
+                      <p>定向发券，精准触达会员</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+
+              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: 'coupon-activity-store',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.order_04} />
+                    </span>
+                    <div className="info">
+                      <h5>进店赠券</h5>
+                      <p>进店发放券礼包，促进转化</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+            </Row>
+            <Row>
               <Col span={6}>
                 <a
                   className="createMarket"
-                  onClick={() =>
-                    history.push({
-                      pathname: 'coupon-activity-all-present',
-                      state: {
-                        source: 'marketCenter'
-                      }
-                    })
-                  }
+                  onClick={() => {
+                    history.push('/flash-sale-list');
+                  }}
                 >
                   <span className="left">
-                    <img src={images.order_02} />
+                    <img src={images.order_05} />
                   </span>
                   <div className="info">
-                    <h5>全场赠券</h5>
-                    <p>全场发券活动，领券中心全员领券</p>
+                    <h5>秒杀</h5>
+                    <p>限时特价促销，刺激消费</p>
                   </div>
-                  <span className="miniTags">推荐</span>
                 </a>
               </Col>
-            </AuthWrapper>
-
-            <AuthWrapper functionName={'f_create_all_coupon_activity'}>
-            <Col span={6}>
-              <a className="createMarket" onClick={() =>
-                history.push({
-                  pathname: 'coupon-activity-specify',
-                  state: {
-                    source: 'marketCenter'
-                  }
-                })}>
-                <span className="left">
-                  <img src={images.order_03} />
-                </span>
-                <div className="info">
-                  <h5>
-                    精准发券
-                  </h5>
-                  <p>定向发券，精准触达会员</p>
-                </div>
-              </a>
-            </Col>
-            </AuthWrapper>
-
-            <AuthWrapper functionName={'f_create_all_coupon_activity'}>
-            <Col span={6}>
-              <a className="createMarket" onClick={() =>
-                history.push({
-                  pathname: 'coupon-activity-store',
-                  state: {
-                    source: 'marketCenter'
-                  }
-                })}>
-                <span className="left">
-                  <img src={images.order_04} />
-                </span>
-                <div className="info">
-                  <h5>
-                    进店赠券
-                  </h5>
-                  <p>进店发放券礼包，促进转化</p>
-                </div>
-              </a>
-            </Col>
-            </AuthWrapper>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <a
-                className="createMarket"
-                onClick={() => {
-                  history.push('/flash-sale-list');
-                }}
-              >
-                <span className="left">
-                  <img src={images.order_05} />
-                </span>
-                <div className="info">
-                  <h5>秒杀</h5>
-                  <p>限时特价促销，刺激消费</p>
-                </div>
-              </a>
-            </Col>
-          </Row> */}
+            </Row>
 
             <h3>
               Improve consumer bill<span>Higher sales and profits</span>
@@ -207,10 +208,7 @@ export default class List extends React.Component<any, any> {
                     </span>
                     <div className="info">
                       <h5>Reduction</h5>
-                      <p>
-                        Meet the specified conditions to enjoy the price
-                        reduction
-                      </p>
+                      <p>Meet the specified conditions to enjoy the price reduction</p>
                     </div>
                   </a>
                 </Col>
@@ -240,91 +238,79 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
 
-              {/* <AuthWrapper functionName="f_marketing_gift_add">
+              <AuthWrapper functionName="f_marketing_gift_add">
+                <Col span={6}>
+                  <a
+                    className="createMarket"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/marketing-full-gift',
+                        state: {
+                          source: 'marketCenter'
+                        }
+                      })
+                    }
+                  >
+                    <span className="left">
+                      <img src={images.full_03} />
+                    </span>
+                    <div className="info">
+                      <h5>满赠</h5>
+                      <p>满足指定条件获得赠品</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+            </Row>
+
+            <h3>
+              Increase Repeat purchase<span>Improve consumer loyalty</span>
+            </h3>
+            <Row>
+              <AuthWrapper functionName="f_subscription_promotion">
+                <Col span={6}>
+                  <a className="createMarket" onClick={() => history.push('/customer-level')}>
+                    <span className="left">
+                      <img src={images.order_02} />
+                    </span>
+                    <div className="info">
+                      <h5>Subscription Promotion</h5>
+                      <p>Enjoy easy repeat deliveries and saving on each order</p>
+                    </div>
+                  </a>
+                </Col>
+              </AuthWrapper>
+            </Row>
+
+            <h3>
+              留存复购<span>维护老客不流失</span>
+            </h3>
+            <Row>
               <Col span={6}>
-                <a
-                  className="createMarket"
-                  onClick={() =>
-                    history.push({
-                      pathname: '/marketing-full-gift',
-                      state: {
-                        source: 'marketCenter'
-                      }
-                    })
-                  }
-                >
+                <a className="createMarket" onClick={() => history.push('/customer-level')}>
                   <span className="left">
-                    <img src={images.full_03} />
+                    <img src={images.customer_01} />
                   </span>
                   <div className="info">
-                    <h5>满赠</h5>
-                    <p>满足指定条件获得赠品</p>
+                    <h5>店铺会员等级</h5>
+                    <p>店铺内会员体系管理，差异化服务</p>
                   </div>
                 </a>
               </Col>
-            </AuthWrapper>
-           */}
+
+              <Col span={6}>
+                <a className="createMarket" onClick={() => history.push('/points-order-list')}>
+                  <span className="left">
+                    <img src={images.customer_02} />
+                  </span>
+                  <div className="info">
+                    <h5>积分商城</h5>
+                    <p>小积分大价值，礼品随心兑</p>
+                  </div>
+                  <span className="miniTags">推荐</span>
+                </a>
+              </Col>
             </Row>
-
-            {/*<h3>*/}
-            {/*  Increase Repeat purchase<span>Improve consumer loyalty</span>*/}
-            {/*</h3>*/}
-            {/*<Row>*/}
-            {/*  <AuthWrapper functionName="f_subscription_promotion">*/}
-            {/*    <Col span={6}>*/}
-            {/*      <a*/}
-            {/*        className="createMarket"*/}
-            {/*        onClick={() => history.push('/customer-level')}*/}
-            {/*      >*/}
-            {/*        <span className="left">*/}
-            {/*          <img src={images.order_02} />*/}
-            {/*        </span>*/}
-            {/*        <div className="info">*/}
-            {/*          <h5>Subscription Promotion</h5>*/}
-            {/*          <p>Enjoy easy repeat deliveries and saving on each order</p>*/}
-            {/*        </div>*/}
-            {/*      </a>*/}
-            {/*    </Col>*/}
-            {/*  </AuthWrapper>*/}
-            {/*</Row>*/}
-
-            {/* <h3>
-            留存复购<span>维护老客不流失</span>
-          </h3>
-          <Row>
-            <Col span={6}>
-              <a
-                className="createMarket"
-                onClick={() => history.push('/customer-level')}
-              >
-                <span className="left">
-                  <img src={images.customer_01} />
-                </span>
-                <div className="info">
-                  <h5>店铺会员等级</h5>
-                  <p>店铺内会员体系管理，差异化服务</p>
-                </div>
-              </a>
-            </Col>
-
-            <Col span={6}>
-              <a
-                className="createMarket"
-                onClick={() => history.push('/points-order-list')}
-              >
-                <span className="left">
-                  <img src={images.customer_02} />
-                </span>
-                <div className="info">
-                  <h5>积分商城</h5>
-                  <p>小积分大价值，礼品随心兑</p>
-                </div>
-                <span className="miniTags">推荐</span>
-              </a>
-            </Col>
-
-          </Row>
-         */}
           </div>
         </div>
       </div>

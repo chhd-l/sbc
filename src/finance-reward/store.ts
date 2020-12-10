@@ -392,7 +392,6 @@ export default class AppStore extends Store {
         if (token) {
           let result = JSON.stringify({ ...params, token: token });
           let encrypted = base64.urlEncode(result);
-          console.log(result, '+++++++++++++++++');
 
           // 新窗口下载
           /* const exportHref =

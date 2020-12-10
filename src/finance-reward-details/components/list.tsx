@@ -1,14 +1,6 @@
 import React from 'react';
 import { Action, IMap, Relax, Store } from 'plume2';
-import {
-  Const,
-  DataGrid,
-  noop,
-  AuthWrapper,
-  checkAuth,
-  history,
-  cache
-} from 'qmkit';
+import { Const, DataGrid, noop, AuthWrapper, checkAuth, history, cache } from 'qmkit';
 import { List } from 'immutable';
 import { Link } from 'react-router-dom';
 import { Dropdown, Icon, Menu, Popconfirm, Tooltip } from 'antd';
@@ -82,20 +74,10 @@ export default class OrderInvoiceList extends React.Component<any, any> {
   };
   componentDidMount() {}
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      selected,
-      dataList,
-      onSelect,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
         /*rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
@@ -119,43 +101,10 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           { id: '2', firstName: 'Bob', lastName: 'Mclaren'}
         ]}*/
       >
-        <Column
-          title={<FormattedMessage id="OrderTime" />}
-          key="tradeState"
-          width="12%"
-          dataIndex="tradeState.createTime"
-          render={(v, i) => <span>{this._newDate(v)}</span>}
-        />
-        <Column
-          title={<FormattedMessage id="OrderNumber" />}
-          key="id"
-          dataIndex="id"
-          width="18%"
-        />
-        <Column
-          title={<FormattedMessage id="OrderAmount" />}
-          key="tradePrice"
-          dataIndex="tradePrice.totalPrice"
-          width="11%"
-          render={(OrderAmount) => (
-            <span>
-              {OrderAmount != null
-                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + OrderAmount
-                : '-'}
-            </span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="RewardRate" />}
-          key="orderRewardRate"
-          dataIndex="orderRewardRate"
-          width="11%"
-          render={(orderRewardRate) => (
-            <span>
-              {orderRewardRate != null ? `${orderRewardRate.toFixed(2)}%` : '-'}
-            </span>
-          )}
-        />
+        <Column title={<FormattedMessage id="OrderTime" />} key="tradeState" width="12%" dataIndex="tradeState.createTime" render={(v, i) => <span>{this._newDate(v)}</span>} />
+        <Column title={<FormattedMessage id="OrderNumber" />} key="id" dataIndex="id" width="18%" />
+        <Column title={<FormattedMessage id="OrderAmount" />} key="tradePrice" dataIndex="tradePrice.totalPrice" width="11%" render={(OrderAmount) => <span>{OrderAmount != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + OrderAmount : '-'}</span>} />
+        <Column title={<FormattedMessage id="RewardRate" />} key="orderRewardRate" dataIndex="orderRewardRate" width="11%" render={(orderRewardRate) => <span>{orderRewardRate != null ? `${orderRewardRate.toFixed(2)}%` : '-'}</span>} />
         <Column
           title={<FormattedMessage id="RewardRemark" />}
           dataIndex="firstOrderFlag"
@@ -173,20 +122,14 @@ export default class OrderInvoiceList extends React.Component<any, any> {
                   title={
                     <div>
                       First order：
-                      {record.prescriberReward
-                        ? record.prescriberReward.rewardRateFirst + '%'
-                        : '--'}
+                      {record.prescriberReward ? record.prescriberReward.rewardRateFirst + '%' : '--'}
                       <br />
                       Repeat order：
-                      {record.prescriberReward
-                        ? record.prescriberReward.rewardRateMore + '%'
-                        : '--'}
+                      {record.prescriberReward ? record.prescriberReward.rewardRateMore + '%' : '--'}
                     </div>
                   }
                 >
-                  <span style={{ fontSize: 14 }}>
-                    {firstOrderFlag == 0 ? 'First' : 'Repeat'}
-                  </span>
+                  <span style={{ fontSize: 14 }}>{firstOrderFlag == 0 ? 'First' : 'Repeat'}</span>
                 </Tooltip>
               </OptionDiv>
             </span>
@@ -198,14 +141,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
           dataIndex="orderRewardAmount"
           key="orderRewardAmount"
           width="11%"
-          render={(orderRewardRate) => (
-            <span>
-              {orderRewardRate != null
-                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                  orderRewardRate
-                : '-'}
-            </span>
-          )}
+          render={(orderRewardRate) => <span>{orderRewardRate != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderRewardRate : '-'}</span>}
           //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
         />
         <Column
@@ -276,20 +212,14 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={
-              invoiceState == 0
-                ? 'Do you confirm to bill?？'
-                : 'Do you confirm to cancel bill record？'
-            }
+            title={invoiceState == 0 ? 'Do you confirm to bill?？' : 'Do you confirm to cancel bill record？'}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
             okText="Confirm"
             cancelText="Cancel"
           >
-            <a href="javascript:void(0);">
-              {invoiceState == 0 ? 'Billing' : 'Cancellation'}
-            </a>
+            <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>
         </AuthWrapper>
       </div>

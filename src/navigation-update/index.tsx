@@ -75,14 +75,12 @@ class NavigationUpdate extends Component<any, any> {
     this.setState({
       navigation: data
     });
-    console.log(data);
   }
   updateNavigation(e) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
         const { navigation, type, id } = this.state;
-        console.log(navigation);
         if (type === 'edit') {
           navigation.id = id; // edit by id
           webapi

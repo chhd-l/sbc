@@ -245,9 +245,6 @@ class SpecForm extends React.Component<any, any> {
                           .map((item) => item.get('detailName'))
                           .toJS()
                       : [];
-                  setTimeout(() => {
-                    console.log(specValues, 11111111111);
-                  });
                   return (
                     <div key={item.get('specId')} style={{ marginBottom: 20 }}>
                       <Row type="flex" justify="start" align="top">
@@ -260,9 +257,7 @@ class SpecForm extends React.Component<any, any> {
                               fontSize: '12px',
                               float: 'left'
                             }}
-                          >
-                            *
-                          </span>
+                          ></span>
                           <FormItem>
                             {getFieldDecorator('spec_' + item.get('specId'), {
                               rules: [
@@ -308,9 +303,7 @@ class SpecForm extends React.Component<any, any> {
                               float: 'left',
                               marginLeft: '10px'
                             }}
-                          >
-                            *
-                          </span>
+                          ></span>
                           <FormItem>
                             {getFieldDecorator('specval_' + item.get('specId'), {
                               rules: [

@@ -80,6 +80,10 @@ module.exports = function(webpackEnv, envCode = 'prod') {
         'whatwg-fetch',
         'react-router',
         'react-router-dom',
+        'redux',
+        'antd',
+        'echarts',
+        'echarts-for-react',
       ],
     },
     output: {

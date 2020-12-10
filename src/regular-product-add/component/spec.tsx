@@ -132,9 +132,7 @@ class SpecForm extends React.Component<any, any> {
                               fontSize: '12px',
                               float: 'left'
                             }}
-                          >
-                            *
-                          </span>
+                          ></span>
                           <FormItem>
                             {getFieldDecorator('spec_' + item.get('specId'), {
                               rules: [
@@ -180,9 +178,7 @@ class SpecForm extends React.Component<any, any> {
                               float: 'left',
                               marginLeft: '10px'
                             }}
-                          >
-                            *
-                          </span>
+                          ></span>
                           <FormItem>
                             {getFieldDecorator('specval_' + item.get('specId'), {
                               rules: [
@@ -259,9 +255,11 @@ class SpecForm extends React.Component<any, any> {
                               <FormattedMessage id="delete" />
                             </Button>
                           </Col>
-                        ) : (<div style={{ marginTop: '7px' }}>
-                          <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
-                        </div>)}
+                        ) : (
+                          <div style={{ marginTop: '7px' }}>
+                            <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
+                          </div>
+                        )}
                       </Row>
                     </div>
                   );

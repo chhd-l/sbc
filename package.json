@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node scripts/start.js dev --plugins dynamic-import-node",
-    "b:dll": "node scripts/dll.js",
+    "b:dll": "node scripts/dll.js prod",
     "server": "http-server dist",
     "build": "cross-env NODE_ENV=development node scripts/build.js",
     "build:prod": "cross-env NODE_ENV=production node scripts/build.js prod",

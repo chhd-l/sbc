@@ -2,7 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 
-import { Icon, Modal, Checkbox, Spin } from 'antd';
+import { Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
 import { cache, history, noop } from 'qmkit';
@@ -10,7 +10,7 @@ import { cache, history, noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
 import Funnel from 'web_modules/biz/funnel/funnel.tsx';
-import BarLine from '/web_modules/biz/BarLine/index.tsx';
+import BarLine from 'web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '../images/no-data.jpg';
 const icon1 =

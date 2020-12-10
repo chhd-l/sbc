@@ -74,7 +74,6 @@ export default class HelloApp extends React.Component<any, any> {
       }
     );
   }
-
   render() {
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
     if (allFunctions.includes('f_home')) {

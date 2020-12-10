@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 import { message, Modal } from 'antd';
 
 import moment from 'moment';
-import { cache, checkAuth, Const } from 'qmkit';
+import { cache, checkAuth, Const, history } from 'qmkit';
 import * as webapi from './webapi';
 import TodoItemsActor from './actor/todo-items-actor';
 import DataBoardActor from './actor/data-board';
@@ -180,13 +180,15 @@ export default class AppStore extends Store {
   };
 
   cleanRedux = () => {
-    this.dispatch('home:tradeCustomerView', '');
-    this.dispatch('home:goodsInfoTopView', '');
-    this.dispatch('home:conversionFunnelDashboardView', '');
-    this.dispatch('home:prescriberTrendView', '');
-    this.dispatch('home:prescriberTopView', '');
-    this.dispatch('home:trafficDashboardView', '');
-    this.dispatch('home:transactionTrendView', '');
-    this.dispatch('home:trafficTrendDashboardView', '');
+    setTimeout(() => {
+      this.dispatch('home:tradeCustomerView', null);
+      this.dispatch('home:goodsInfoTopView', null);
+      this.dispatch('home:conversionFunnelDashboardView', null);
+      this.dispatch('home:prescriberTrendView', null);
+      this.dispatch('home:prescriberTopView', null);
+      this.dispatch('home:trafficDashboardView', null);
+      this.dispatch('home:transactionTrendView', null);
+      this.dispatch('home:trafficTrendDashboardView', null);
+    }, 3000);
   };
 }

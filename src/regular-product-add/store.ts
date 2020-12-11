@@ -2,7 +2,7 @@ import { IOptions, Store } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List, Map, OrderedMap } from 'immutable';
 import { message } from 'antd';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, cache } from 'qmkit';
 
 import GoodsActor from './actor/goods-actor';
 import ImageActor from './actor/image-actor';
@@ -2299,7 +2299,7 @@ export default class AppStore extends Store {
     const item = this.state()
       .get('goodsSpecs')
       .find((item) => {
-        return item.get('specName') === 'specification0';
+        return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
       });
     this.dispatch('goodsSpecActor: baseSpecId', item.get('mockSpecId'));
   };

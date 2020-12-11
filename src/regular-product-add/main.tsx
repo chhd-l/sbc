@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
-import { Const, Headline, history, checkAuth, BreadCrumb } from 'qmkit';
+import { Const, Headline, history, checkAuth, BreadCrumb, ErrorBoundary } from 'qmkit';
 import './index.less';
 import AppStore from './store';
 import Goods from './component/goods';
@@ -11,6 +11,7 @@ import Spec from './component/spec';
 import SkuTable from './component/sku-table';
 import SeoForm from './component/seoForm';
 const SeoFormModel = Form.create({})(SeoForm);
+
 //import Price from './component/price';
 import { Router } from 'react-router-dom';
 import Detail from './component/detail';
@@ -155,6 +156,9 @@ export default class Main extends React.Component<any, any> {
                 {/* <Logistics /> */}
 
                 {/*详情*/}
+                {/*<ErrorBoundary>
+                  <Detail />
+                </ErrorBoundary>*/}
                 <Detail />
               </Tabs.TabPane>
             )}

@@ -38,7 +38,8 @@ import VASConst from './VAS-Const';
 import { login, getRoutType } from './login/login';
 import OktaLogout from './okta/okta-logout'
 import DragTable from './dragTable';
-import AssetManagement from './assetManagement'
+import AssetManagement from './assetManagement';
+import ErrorBoundary from './errorBoundary';
 
 export {
   noop,
@@ -84,5 +85,6 @@ export {
   OktaLogout,
   getRoutType,
   DragTable,
-  AssetManagement
+  AssetManagement,
+  ErrorBoundary
 };

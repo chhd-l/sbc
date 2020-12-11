@@ -2,7 +2,7 @@ import { Actor, Action } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, Map, List } from 'immutable';
 import { message } from 'antd';
-import { Const } from 'qmkit';
+import { cache, Const } from 'qmkit';
 
 export default class GoodsSpecActor extends Actor {
   defaultState() {
@@ -210,7 +210,7 @@ export default class GoodsSpecActor extends Actor {
       specId: random,
       mockSpecId: random,
       isMock: true,
-      specName: 'specification' + goodsSpecs.count(),
+      specName: goodsSpecs.count() == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : 'specification' + goodsSpecs.count(),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

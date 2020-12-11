@@ -99,7 +99,7 @@ class SpecForm extends React.Component<any, any> {
           <div style={styles.bg}>
             {specSingleFlag ? null : (
               <Row>
-                <Col offset={5}>
+                <Col offset={0}>
                   <p style={{ color: '#999', marginBottom: 5 }}>You can quickly add multiple specifications using the keyboard enter key</p>
                 </Col>
               </Row>

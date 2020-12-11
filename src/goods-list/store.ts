@@ -46,7 +46,6 @@ export default class AppStore extends Store {
       this.dispatch('info:setLoading', false);
       this.dispatch('goodsActor: init', fromJS(res.context));
       this.dispatch('form:field', { key: 'pageNum', value: pageNum });
-
     } else {
       message.error(res.message);
       this.dispatch('info:setLoading', false);
@@ -139,8 +138,16 @@ export default class AppStore extends Store {
       const selectedSpuKeys: IList = this.state().get('selectedSpuKeys');
       ids = selectedSpuKeys.toJS();
     }
-    await spuDelete({ goodsIds: ids });
-    this.onSearch();
+    const data = await spuDelete({ goodsIds: ids });
+    if (data) {
+      const { res } = data;
+      if (res && res.code && res.code === Const.SUCCESS_CODE) {
+        message.success('Operation successful');
+        this.onSearch();
+      } else {
+        message.error(res.message || 'Operation failure');
+      }
+    }
   };
 
   spuOnSale = async (ids: string[]) => {

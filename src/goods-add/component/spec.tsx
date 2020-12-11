@@ -307,10 +307,10 @@ class SpecForm extends React.Component<any, any> {
                           <FormItem>
                             {getFieldDecorator('specval_' + item.get('specId'), {
                               rules: [
-                                {
-                                  required: true,
-                                  message: 'Please input specification Value'
-                                },
+                                // {
+                                //   required: true,
+                                //   message: 'Please input specification Value'
+                                // },
                                 {
                                   validator: (_rule, value, callback) => {
                                     if (!value) {
@@ -380,12 +380,13 @@ class SpecForm extends React.Component<any, any> {
                               <FormattedMessage id="delete" />
                             </Button>
                           </Col>
-                        ) : (
-                          <div style={{ marginTop: '7px' }}>
-                            <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
-                          </div>
-                        )}
+                        ) : null}
                       </Row>
+                      {index === 0 ? (
+                        <Row>
+                          <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
+                        </Row>
+                      ) : null}
                     </div>
                   );
                 })}

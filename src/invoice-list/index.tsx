@@ -331,6 +331,7 @@ class InvoiceList extends Component<any, any> {
 
           // 新窗口下载
           const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
+          debugger;
           window.open(exportHref);
         } else {
           message.error('Unsuccessful');
@@ -404,7 +405,7 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? text : '-'}</p>
       },
       {
-        title: 'Invoice Date',
+        title: 'Invoice date',
         dataIndex: 'invoiceTime',
         key: 'invoiceTime',
         width: '8%',
@@ -428,6 +429,13 @@ class InvoiceList extends Component<any, any> {
             )}
           </div>
         )
+      },
+      {
+        title: 'Order date',
+        dataIndex: 'orderTime',
+        key: 'orderTime',
+        width: '8%',
+        render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD') : '-'}</p>
       },
       {
         title: 'Order number',
@@ -682,7 +690,7 @@ class InvoiceList extends Component<any, any> {
             columns={columns}
             dataSource={invoiceList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
             rowClassName={(record, index) => {

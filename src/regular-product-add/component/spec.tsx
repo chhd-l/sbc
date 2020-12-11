@@ -136,11 +136,11 @@ class SpecForm extends React.Component<any, any> {
                           <FormItem>
                             {getFieldDecorator('spec_' + item.get('specId'), {
                               rules: [
-                                {
-                                  required: true,
-                                  whitespace: true,
-                                  message: 'Please input specification'
-                                },
+                                // {
+                                //   required: true,
+                                //   whitespace: true,
+                                //   message: 'Please input specification'
+                                // },
                                 {
                                   min: 1,
                                   max: 100,

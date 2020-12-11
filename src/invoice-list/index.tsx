@@ -331,7 +331,6 @@ class InvoiceList extends Component<any, any> {
 
           // 新窗口下载
           const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
-          debugger;
           window.open(exportHref);
         } else {
           message.error('Unsuccessful');

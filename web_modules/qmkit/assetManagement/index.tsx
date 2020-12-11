@@ -56,7 +56,6 @@ export default class PicModal extends React.Component<any, any> {
   //获取
   getCateList = () =>{
     webapi.getImgCates().then(data=>{
-      debugger
       const {res} = data
       if(res){
         let cateIds = []
@@ -74,7 +73,15 @@ export default class PicModal extends React.Component<any, any> {
 
   }
 
-  getImages = (params) =>{
+  getImages = () =>{
+    const {cateIds,currentPage,pageSize,searchImageName}= this.state
+    let params={
+      cateIds: cateIds,
+      pageNum: currentPage-1,
+      pageSize: pageSize,
+      resourceName: searchImageName,
+      resourceType: 0,
+    }
     webapi.fetchImages(params).then(data=>{
       const {res} = data
       if(res.code=== Const.SUCCESS_CODE){
@@ -96,15 +103,13 @@ export default class PicModal extends React.Component<any, any> {
   }
 
   initImages=()=>{
-    const {cateIds}= this.state
-    let params={
-      cateIds: cateIds,
-      pageNum: 0,
-      pageSize: 10,
-      resourceName: "",
-      resourceType: 0,
-    }
-    this.getImages(params)
+    this.setState({
+      currentPage:1,
+      searchImageName:""
+    },()=>{
+      this.getImages()
+    })
+    
   }
 
    /**
@@ -138,129 +143,6 @@ export default class PicModal extends React.Component<any, any> {
       });
     return newDataList;
   }
-
-  render() {
-    const { visible,cateList,choosedImgCount,clickImgsCount,cateId,searchImageName,cateIds,imgs,currentPage,total,pageSize } = this.state
-
-    //分类列表生成树形结构
-    const loop = (cateList) =>
-      cateList.map((item) => {
-        if (item.children && item.children.length>0) {
-          return (
-            <TreeNode key={item.cateId} value={item.cateId} title={item.cateName}>
-              {loop(item.children)}
-            </TreeNode>
-          );
-        }
-        return <TreeNode key={item.cateId} value={item.cateId} title={item.cateName} />;
-      });
-
-    return (
-      <Modal
-        maskClosable={false}
-        title={
-          <div style={styles.title}>
-            <h4>Picture library</h4>
-            <span style={styles.grey}>
-              <strong style={styles.dark}>{clickImgsCount}</strong> has been selected and up to <strong style={styles.dark}>{choosedImgCount}</strong> can be selected
-            </span>
-          </div>
-        }
-        visible={visible}
-        width={880}
-        zIndex={200}
-        onCancel={this.handleCancel}
-        onOk={() => this.handleOk()}
-      >
-        <div>
-          <Row style={styles.header}>
-            <Col span={4}>
-              <QMUpload
-                name="uploadFile"
-                onChange={this.uploadImages}
-                showUploadList={{
-                  showPreviewIcon: false,
-                  showRemoveIcon: false
-                }}
-                action={Const.HOST + `/store/uploadStoreResource?cateId=${cateId}&resourceType=IMAGE`}
-                multiple={true}
-                disabled={cateId ? false : true}
-                accept={'.jpg,.jpeg,.png,.gif'}
-                beforeUpload={this.checkUploadFile}
-                fileList={this.state.fileList}
-              >
-                <Button onClick={() => this.handleUploadClick()}>
-                  Local upload
-                </Button>
-              </QMUpload>
-            </Col>
-            <Col span={10}>
-              <Form layout="inline">
-                <FormItem>
-                  <Input placeholder="Please enter the content" value={searchImageName} onChange={(e) => this.editSearchData(e)} />
-                </FormItem>
-                <FormItem>
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.search();
-                    }}
-                    type="primary"
-                    icon="search"
-                    shape="round"
-                    htmlType="submit"
-                  >
-                    Search
-                  </Button>
-                </FormItem>
-              </Form>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <div style={{ height: 560, overflowY: 'auto' }}>
-                <Tree className="draggable-tree" defaultExpandedKeys={cateIds} defaultSelectedKeys={cateIds} selectedKeys={cateIds} onSelect={this.selectCate}>
-                  {loop(this.cates(cateList))}
-                </Tree>
-              </div>
-            </Col>
-            <Col span={1} />
-            <Col span={17}>
-              <div style={styles.box}>
-                { imgs&&imgs.map((v, k) => {
-                  return (
-                    <div style={styles.navItem} key={k}>
-                      <div style={styles.boxItem}>
-                        <Checkbox className="big-check" checked={v.checked} onChange={(e) => this.chooseImg(e, v)} />
-                        <img src={v.artworkUrl} alt="" width="100" height="100" />
-                      </div>
-                      <p style={styles.name}>{v.resourceName}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              {imgs&&imgs.length > 0 ? null : (
-                <div
-                  style={{
-                    textAlign: 'center',
-                    fontSize: '12px',
-                    color: 'rgba(0, 0, 0, 0.43)'
-                  }}
-                >
-                  <span>
-                    <i className="anticon anticon-frown-o" />
-                    No data
-                  </span>
-                </div>
-              )}
-            </Col>
-          </Row>
-          { imgs&&imgs.length > 0 ? <Pagination onChange={(pageNum) => this.handlePageChange(pageNum)} current={currentPage} total={total} pageSize={pageSize} /> : null}
-        </div>
-      </Modal>
-    );
-  }
-
   /**
    * 选择分类
    * @param value 选中的id
@@ -277,8 +159,11 @@ export default class PicModal extends React.Component<any, any> {
    * 查询
    */
   search = () => {
-    console.log('search');
-    
+    this.setState({
+      currentPage:1
+    },()=>{
+      this.getImages()
+    })
   };
 
   /**
@@ -286,8 +171,13 @@ export default class PicModal extends React.Component<any, any> {
    * @param pageNum
    * @private
    */
-  handlePageChange = (pageNum: number) => {
-    console.log('pageNum');
+  handlePageChange = (page) => {
+    debugger
+    this.setState({
+      currentPage:page
+    },()=>{
+      this.getImages()
+    })
     
   };
 
@@ -394,6 +284,130 @@ export default class PicModal extends React.Component<any, any> {
       message.error('Please select picture category');
     }
   };
+
+  render() {
+    const { visible,cateList,choosedImgCount,clickImgsCount,cateId,searchImageName,cateIds,imgs,currentPage,total,pageSize } = this.state
+
+    //分类列表生成树形结构
+    const loop = (cateList) =>
+      cateList.map((item) => {
+        if (item.children && item.children.length>0) {
+          return (
+            <TreeNode key={item.cateId} value={item.cateId} title={item.cateName}>
+              {loop(item.children)}
+            </TreeNode>
+          );
+        }
+        return <TreeNode key={item.cateId} value={item.cateId} title={item.cateName} />;
+      });
+
+    return (
+      <Modal
+        maskClosable={false}
+        title={
+          <div style={styles.title}>
+            <h4>Picture library</h4>
+            <span style={styles.grey}>
+              <strong style={styles.dark}>{clickImgsCount}</strong> has been selected and up to <strong style={styles.dark}>{choosedImgCount}</strong> can be selected
+            </span>
+          </div>
+        }
+        visible={visible}
+        width={880}
+        zIndex={200}
+        onCancel={this.handleCancel}
+        onOk={() => this.handleOk()}
+      >
+        <div>
+          <Row style={styles.header}>
+            <Col span={4}>
+              <QMUpload
+                name="uploadFile"
+                onChange={this.uploadImages}
+                showUploadList={{
+                  showPreviewIcon: false,
+                  showRemoveIcon: false
+                }}
+                action={Const.HOST + `/store/uploadStoreResource?cateId=${cateId}&resourceType=IMAGE`}
+                multiple={true}
+                disabled={cateId ? false : true}
+                accept={'.jpg,.jpeg,.png,.gif'}
+                beforeUpload={this.checkUploadFile}
+                fileList={this.state.fileList}
+              >
+                <Button size="large" onClick={() => this.handleUploadClick()}>
+                  Local upload
+                </Button>
+              </QMUpload>
+            </Col>
+            <Col span={10}>
+              <Form layout="inline">
+                <FormItem>
+                  <Input placeholder="Please enter the content" value={searchImageName} onChange={(e) => this.editSearchData(e)} />
+                </FormItem>
+                <FormItem>
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.search();
+                    }}
+                    type="primary"
+                    icon="search"
+                    shape="round"
+                    htmlType="submit"
+                  >
+                    Search
+                  </Button>
+                </FormItem>
+              </Form>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <div style={{ height: 560, overflowY: 'auto' }}>
+                <Tree className="draggable-tree" defaultExpandedKeys={cateIds} defaultSelectedKeys={cateIds} selectedKeys={cateIds} onSelect={this.selectCate}>
+                  {loop(this.cates(cateList))}
+                </Tree>
+              </div>
+            </Col>
+            <Col span={1} />
+            <Col span={17}>
+              <div style={styles.box}>
+                { imgs&&imgs.map((v, k) => {
+                  return (
+                    <div style={styles.navItem} key={k}>
+                      <div style={styles.boxItem}>
+                        <Checkbox className="big-check" checked={v.checked} onChange={(e) => this.chooseImg(e, v)} />
+                        <img src={v.artworkUrl} alt="" width="100" height="100" />
+                      </div>
+                      <p style={styles.name}>{v.resourceName}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              {imgs&&imgs.length > 0 ? null : (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    color: 'rgba(0, 0, 0, 0.43)'
+                  }}
+                >
+                  <span>
+                    <i className="anticon anticon-frown-o" />
+                    No data
+                  </span>
+                </div>
+              )}
+            </Col>
+          </Row>
+          { imgs&&imgs.length > 0 ? <Pagination onChange={this.handlePageChange} current={currentPage} total={total} pageSize={pageSize} /> : null}
+        </div>
+      </Modal>
+    );
+  }
+
+  
 }
 
 const styles = {

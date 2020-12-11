@@ -452,7 +452,7 @@ class AttributeLibrary extends Component<any, any> {
         key: 'attributeName'
       },
       {
-        title: 'Alias name',
+        title: 'Display name',
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
@@ -615,7 +615,7 @@ class AttributeLibrary extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem label="Alias name">
+              <FormItem label="Display name">
                 {getFieldDecorator('attributeNameEn', {
                   rules: [
                     {

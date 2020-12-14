@@ -201,7 +201,7 @@ export default class SelectAttribute extends React.Component<any, any> {
         key: 'attributeName'
       },
       {
-        title: 'Alias name',
+        title: 'Display name',
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },

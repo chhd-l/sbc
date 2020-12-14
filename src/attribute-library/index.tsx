@@ -373,7 +373,9 @@ class AttributeLibrary extends Component<any, any> {
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
         <div key={k.tempId}>
-          <FormItem
+          <Row>
+            <Col span={11}>
+            <FormItem
             label={
               index === 0 ? (
                 <span>
@@ -398,25 +400,51 @@ class AttributeLibrary extends Component<any, any> {
             required={false}
             key={'value_' + (k.id || k.tempId)}
           >
-            {getFieldDecorator('value_' + (k.id || k.tempId), {
+            {getFieldDecorator('attributeValue_' + (k.id || k.tempId), {
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input Attribute value.'
+                  message: 'Please input attribute value.'
                 }
               ]
             })(
               <Input
                 placeholder="Attribute value"
-                style={{ width: '80%', marginRight: 8 }}
+                style={{ marginRight: 8 }}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onChangeValue(k.id || k.tempId, value);
                 }}
               />
             )}
+          </FormItem>
+            </Col>
+            <Col span={11}>
+            <FormItem>
+          {getFieldDecorator('displayValue_' + (k.id || k.tempId), {
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please input display value.'
+                }
+              ]
+            })(
+              <Input
+                placeholder="Display value"
+                style={{ marginRight: 8 }}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onChangeValue(k.id || k.tempId, value);
+                }}
+              />
+            )}
+          </FormItem>
+            </Col>
+            <Col span={2}>
             <span>
               {obj.length > 1 ? (
                 <>
@@ -433,7 +461,8 @@ class AttributeLibrary extends Component<any, any> {
               ) : null}
               <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
             </span>
-          </FormItem>
+            </Col>
+          </Row>
         </div>
       ));
       return formItems;
@@ -452,7 +481,7 @@ class AttributeLibrary extends Component<any, any> {
         key: 'attributeName'
       },
       {
-        title: 'Alias name',
+        title: 'Display name',
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
@@ -615,7 +644,7 @@ class AttributeLibrary extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem label="Alias name">
+              <FormItem label="Display name">
                 {getFieldDecorator('attributeNameEn', {
                   rules: [
                     {

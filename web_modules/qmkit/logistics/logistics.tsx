@@ -89,9 +89,9 @@ export default class LogisticPopover extends React.Component<LogisticProps, any>
         }
         trigger="click"
       >
-        <a href="#" onClick={() => this.showLogistics(companyInfo)}>
+        {/*<a href="#" onClick={() => this.showLogistics(companyInfo)}>
           &nbsp;Real-time logistics&nbsp;
-        </a>
+        </a>*/}
       </Popover>
     );
   }

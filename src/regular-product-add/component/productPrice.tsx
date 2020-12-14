@@ -145,7 +145,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
                   </Col>
                 </Row>
               );
@@ -337,7 +337,13 @@ class SkuForm extends React.Component<any, any> {
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
-            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' || 'weight' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
+            {goodsSpecs.map((item, i) =>
+              item.get('specName') === 'specification0' || 'weight' ? (
+                <Option key={i} value={item.get('mockSpecId')}>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
+                </Option>
+              ) : null
+            )}
             <Option value={null}>None</Option>
           </Select>
         </div>
@@ -395,7 +401,7 @@ class SkuForm extends React.Component<any, any> {
     });
     columns = columns.push({
       title: '',
-      key: '1',
+      key: 'goodsNo',
       width: '5%'
     });
 

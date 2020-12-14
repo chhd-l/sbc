@@ -2,11 +2,12 @@ import * as React from 'react';
 import { fromJS, List } from 'immutable';
 
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row } from 'antd';
-import { Const, history, QMMethod, util, cache } from 'qmkit';
+import { Const, history, QMMethod, util, cache, ValidConst } from 'qmkit';
 import moment from 'moment';
 import GiftLevels from '../full-gift/components/gift-levels';
 import DiscountLevels from '../full-discount/components/discount-levels';
 import ReductionLevels from '../full-reduction/components/reduction-levels';
+import ReductionSubscritionLevels from '../full-reduction/components/reduction-subscrition-levels';
 import { GoodsModal } from 'biz';
 import SelectedGoodsGrid from './selected-goods-grid';
 
@@ -130,14 +131,14 @@ export default class MarketingAddForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
 
     let settingRuleFrom = { ...formItemLayout };
-
+    console.log(marketingBean.toJS(), 'marketingBean-------');
     if (this.state.PromotionTypeValue === 1) {
       settingRuleFrom = { ...largeformItemLayout };
       if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
         settingLabel = 'For the first subscription order,discount';
         settingLabel1 = 'For the rest subscription order,discount';
       } else if (marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION) {
-        settingLabel = 'For the first subscription order,discount';
+        settingLabel = 'For the first subscription order,reduction';
         settingLabel1 = 'For the rest subscription order,reduction';
       }
     }
@@ -309,28 +310,76 @@ export default class MarketingAddForm extends React.Component<any, any> {
                 'rules',
                 {}
               )(
-                <ReductionLevels
-                  form={this.props.form}
-                  fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
-                  onChangeBack={this.onRulesChange}
-                  isFullCount={isFullCount}
-                  isNormal={this.state.PromotionTypeValue === 0}
-                  PromotionTypeValue={this.state.PromotionTypeValue}
-                />
+                this.state.PromotionTypeValue === 0 ? (
+                  <ReductionLevels
+                    form={this.props.form}
+                    fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
+                    onChangeBack={this.onRulesChange}
+                    isFullCount={isFullCount}
+                    isNormal={this.state.PromotionTypeValue === 0}
+                    PromotionTypeValue={this.state.PromotionTypeValue}
+                  />
+                ) : (
+                  <div>
+                    <FormItem>
+                      <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
+                      {getFieldDecorator('firstSubscriptionOrderReduction', {
+                        rules: [
+                          { required: true, message: 'Amount must be entered' },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                  callback('0.01-99999999.99');
+                                }
+                              }
+                              callback();
+                            }
+                          }
+                        ],
+                        initialValue: marketingBean.get('firstSubscriptionOrderReduction')
+                      })(
+                        <Input
+                          style={{ width: 200 }}
+                          placeholder={'0.01-99999999.99'}
+                          onChange={(e) => {
+                            this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </div>
+                )
               )}
           </FormItem>
         )}
         {PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
-            {marketingType == Enum.MARKETING_TYPE.FULL_GIFT && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
-            {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
-            {marketingType == Enum.MARKETING_TYPE.FULL_REDUCTION && <Input style={{ width: 200 }} placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'} />}
-            <span>
-              {' '}
-              &nbsp;
-              {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-            </span>
+            {getFieldDecorator('restSubscriptionOrderReduction', {
+              rules: [
+                { required: true, message: 'Amount must be entered' },
+                {
+                  validator: (_rule, value, callback) => {
+                    if (value) {
+                      if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                        callback('0.01-99999999.99');
+                      }
+                    }
+                    callback();
+                  }
+                }
+              ],
+              initialValue: marketingBean.get('restSubscriptionOrderReduction')
+            })(
+              <Input
+                style={{ width: 200 }}
+                placeholder={'0.01-99999999.99'}
+                onChange={(e) => {
+                  this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
+                }}
+              />
+            )}
           </FormItem>
         )}
         <FormItem {...formItemLayout} label="Select products" required={true}>
@@ -409,6 +458,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
     this.setState({ customerLevel: levelList });
 
     let { marketingBean } = this.state;
+    debugger;
+
     this.setState({
       promotionCode2: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode()
     });
@@ -423,6 +474,11 @@ export default class MarketingAddForm extends React.Component<any, any> {
           this.setState({
             PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
           });
+          const bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
+          if (bean && this.state.PromotionTypeValue === 1) {
+            this.onBeanChange({ firstSubscriptionOrderReduction: bean[0].firstSubscriptionOrderReduction });
+            // this.onBeanChange({'restSubscriptionOrderReduction': bean[0].restSubscriptionOrderReduction})
+          }
         }
       );
     } else {
@@ -523,7 +579,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
   handleSubmit = (e) => {
     e.preventDefault();
     let { marketingBean, level, isFullCount, selectedSkuIds, PromotionTypeValue } = this.state;
-
     let levelList = fromJS([]);
     let errorObject = {};
     marketingBean = marketingBean.set('promotionType', PromotionTypeValue);
@@ -693,6 +748,21 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       );
                       this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
                     } else {
+                      // if(this.state.PromotionTypeValue === 0) {
+                      //   marketingBean = marketingBean.set('marketingSubscriptionReduction', null)
+                      // } else {
+                      //   marketingBean = marketingBean.set('fullDiscountLevelList', null)
+                      // }
+
+                      let obj = {
+                        firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
+                        restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                      };
+
+                      marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
+                      // marketingBean.remove('firstSubscriptionOrderReduction')
+                      // marketingBean.remove('restSubscriptionOrderReduction')
+                      console.log(marketingBean, 'marketingBean---------');
                       this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
                     }
                   }
@@ -815,6 +885,26 @@ export default class MarketingAddForm extends React.Component<any, any> {
       this.onBeanChange({ fullDiscountLevelList: rules });
     } else {
       this.onBeanChange({ fullReductionLevelList: rules });
+    }
+  };
+
+  onSubscriptionChange = (props, value) => {
+    const { marketingType } = this.props;
+    const { marketingBean } = this.state;
+    // this.props.form.resetFields('rules');
+    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+      let obj = marketingBean.get('marketingSubscriptionDiscount');
+      obj[props] = value;
+      this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+      let obj = marketingBean.get('marketingSubscriptionDiscount');
+      obj[props] = value;
+      this.onBeanChange({ marketingSubscriptionDiscount: obj });
+    } else {
+      let obj = marketingBean.get('marketingSubscriptionReduction') ? marketingBean.get('marketingSubscriptionReduction').toJS() : {};
+      obj[props] = value;
+      console.log(obj, '11111111');
+      this.onBeanChange({ marketingSubscriptionReduction: obj });
     }
   };
 

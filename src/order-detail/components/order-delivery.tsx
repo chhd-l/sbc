@@ -129,13 +129,13 @@ export default class OrderDelivery extends React.Component<any, any> {
                         'none'
                       )}
                     </div>
-                    {flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
+                    {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
                         <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
                           Invalid
                         </a>
                       </AuthWrapper>
-                    )}
+                    )}*/}
                   </div>
 
                   <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>

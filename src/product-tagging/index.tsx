@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, AssetManagement } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs, Popconfirm } from 'antd';
 
 import * as webapi from './webapi';
@@ -456,6 +456,8 @@ class AttributeLibrary extends Component<any, any> {
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
+
+          {/* <AssetManagement /> */}
 
           {visible ? (
             <Modal

@@ -54,8 +54,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction
-    ? "/"
-    : isEnvDevelopment && '/';
+    ? "https://cdnstorestg.azureedge.net/res/"
+    : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { DataGrid, noop, history, AuthWrapper, Const, cache, checkAuth } from 'qmkit';
 import { List, fromJS } from 'immutable';
-import { Menu, Dropdown, Icon, Modal, Tooltip } from 'antd';
+import { Menu, Dropdown, Icon, Modal, Tooltip, Popconfirm } from 'antd';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 import { Table } from 'antd';
@@ -74,7 +74,7 @@ export default class CateList extends React.Component<any, any> {
     return (
       <DataGrid
         rowKey={(record) => record.goodsId}
-        dataSource={goodsPageContent.toJS() && goodsPageContent.toJS()}
+        dataSource={goodsPageContent.toJS()}
         loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         // expandedRowRender={this._expandedRowRender}
         // expandedRowKeys={expandedRowKeys.toJS()}
@@ -243,14 +243,13 @@ export default class CateList extends React.Component<any, any> {
   };
 
   _menu = (rowInfo) => {
-    const { spuOnSale, spuOffSale } = this.props.relaxProps;
+    const { spuOnSale, spuOffSale, spuDelete } = this.props.relaxProps;
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
           <Tooltip placement="top" title="Edit">
             {rowInfo.goodsType != 2 ? (
               <a
-                href="#!"
                 onClick={() =>
                   history.push({
                     pathname: `/goods-regular-edit/${rowInfo.goodsId}`,
@@ -264,7 +263,6 @@ export default class CateList extends React.Component<any, any> {
               </a>
             ) : (
               <a
-                href="#!"
                 onClick={() =>
                   history.push({
                     pathname: `/goods-bundle-edit/${rowInfo.goodsId}`,
@@ -309,21 +307,24 @@ export default class CateList extends React.Component<any, any> {
         ) : null}
         {rowInfo.addedFlag == 1 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <Tooltip placement="top" title="Off Shelves">
-              <a
-                href="#!"
-                onClick={() => {
-                  spuOffSale([rowInfo.goodsId]);
-                }}
-                style={{ marginRight: 5 }}
-              >
-                <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
-              </a>
-            </Tooltip>
+            <Popconfirm placement="topLeft" title="Are you sure you want off to shelves this product?" onConfirm={() => spuOffSale([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title="Off Shelves">
+                <a>
+                  <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
+                </a>
+              </Tooltip>
+            </Popconfirm>
           </AuthWrapper>
         ) : null}
         <AuthWrapper functionName="f_goods_6">
-          <Tooltip placement="top" title="Delete">
+          <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => spuDelete([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
+            <Tooltip placement="top" title="Delete">
+              <a>
+                <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+              </a>
+            </Tooltip>
+          </Popconfirm>
+          {/* <Tooltip placement="top" title="Delete">
             <a
               onClick={() => {
                 this._delete(rowInfo.goodsId);
@@ -332,7 +333,7 @@ export default class CateList extends React.Component<any, any> {
             >
               <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
             </a>
-          </Tooltip>
+          </Tooltip> */}
         </AuthWrapper>
       </div>
     );

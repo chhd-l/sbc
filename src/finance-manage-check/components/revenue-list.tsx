@@ -27,13 +27,7 @@ export default class RevenueList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      incomeList,
-      payWaysObj,
-      incomeTotal,
-      dateRange,
-      payWay
-    } = this.props.relaxProps;
+    const { incomeList, payWaysObj, incomeTotal, dateRange, payWay } = this.props.relaxProps;
     let totalAmount = 0;
     return (
       <div>
@@ -98,11 +92,7 @@ export default class RevenueList extends React.Component<any, any> {
         </div>*/}
 
         <div>
-          <DataGrid
-            dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []}
-            rowKey={(record, index) => index}
-            pagination={false}
-          >
+          <DataGrid dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []} rowKey={(record, index) => index} pagination={false}>
             <Column
               title="NO."
               dataIndex="index"
@@ -117,11 +107,7 @@ export default class RevenueList extends React.Component<any, any> {
               dataIndex="totalAmount"
               key="totalAmount"
               render={(_text, rowData: any) => {
-                return (
-                  <span>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}
-                  </span>
-                );
+                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}</span>;
               }}
             />
             {/* <Column
@@ -179,15 +165,11 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             /> */}
             <Column
-              title={payWay}
+              title="Payment Source"
               dataIndex="totalAmount"
               key="supplierId"
               render={(_text, rowData: any) => {
-                return (
-                  <span>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}
-                  </span>
-                );
+                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}</span>;
               }}
             />
             {/*<Column
@@ -243,14 +225,10 @@ export default class RevenueList extends React.Component<any, any> {
                       <a
                         onClick={() =>
                           history.push({
-                            pathname: `/finance-manage-refund/${
-                              record.storeId
-                            }/${'income'}`,
+                            pathname: `/finance-manage-refund/${record.storeId}/${'income'}`,
                             state: {
-                              beginTime:
-                                dateRange.get('beginTime') + ' ' + '00:00:00',
-                              endTime:
-                                dateRange.get('endTime') + ' ' + '23:59:59'
+                              beginTime: dateRange.get('beginTime') + ' ' + '00:00:00',
+                              endTime: dateRange.get('endTime') + ' ' + '23:59:59'
                             }
                           })
                         }

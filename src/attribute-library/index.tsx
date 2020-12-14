@@ -35,7 +35,9 @@ class AttributeLibrary extends Component<any, any> {
       isEdit: false,
       currentEditAttribute: {},
       modalName: '',
-      loading: true
+      loading: true,
+      nameSelect: 'attributeName',
+      valueSelect: 'attributeValue'
     };
   }
   componentDidMount() {
@@ -92,15 +94,25 @@ class AttributeLibrary extends Component<any, any> {
   setAttributeFieldsValue = (arr) => {
     const { form } = this.props;
     if (arr && arr.length > 0) {
-      let setObj = {};
+      let attributeObj = {};
       for (let i = 0; i < arr.length; i++) {
-        let valueName = 'value_' + (arr[i].id || arr[i].tempId);
+        let valueName = 'attributeValue_' + (arr[i].id || arr[i].tempId);
         let tempObj = {};
 
         tempObj[valueName] = arr[i].attributeDetailName;
-        setObj = Object.assign(setObj, tempObj);
+        attributeObj = Object.assign(attributeObj, tempObj);
       }
-      form.setFieldsValue(setObj);
+      form.setFieldsValue(attributeObj);
+
+      let displayObj = {};
+      for (let i = 0; i < arr.length; i++) {
+        let valueName = 'displayValue_' + (arr[i].id || arr[i].tempId);
+        let tempObj = {};
+
+        tempObj[valueName] = arr[i].attributeDetailNameEn;
+        displayObj = Object.assign(displayObj, tempObj);
+      }
+      form.setFieldsValue(displayObj);
     } else {
       this.add();
     }
@@ -140,12 +152,17 @@ class AttributeLibrary extends Component<any, any> {
       });
   };
 
-  onChangeValue = (id, value) => {
+  onChangeValue = (id, value, type) => {
     const { attributeValueList } = this.state;
     attributeValueList.map((item) => {
       if (item.id === id || item.tempId === id) {
-        item.attributeDetailName = value;
-        return item;
+        if(type==='attribute') {
+          item.attributeDetailName = value;
+          return item;
+        } else if (type === 'display') {
+          item.attributeDetailNameEn = value;
+          return item;
+        }
       }
     });
 
@@ -209,12 +226,14 @@ class AttributeLibrary extends Component<any, any> {
           if (attributeValueList[i].id) {
             let attributeValue = {
               id: attributeValueList[i].id,
-              attributeDetailName: attributeValueList[i].attributeDetailName
+              attributeDetailName: attributeValueList[i].attributeDetailName,
+              attributeDetailNameEn: attributeValueList[i].attributeDetailNameEn
             };
             tempAttributeValueList.push(attributeValue);
           } else {
             let attributeValue = {
-              attributeDetailName: attributeValueList[i].attributeDetailName
+              attributeDetailName: attributeValueList[i].attributeDetailName,
+              attributeDetailNameEn: attributeValueList[i].attributeDetailNameEn
             };
             tempAttributeValueList.push(attributeValue);
           }
@@ -244,10 +263,12 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   getAttributes = () => {
-    const { searchForm, pagination } = this.state;
+    const { searchForm, pagination, nameSelect, valueSelect } = this.state;
     let params = {
-      attributeName: searchForm.attributeName,
-      attributeValue: searchForm.attributeValue,
+      attributeName: nameSelect ==='attributeName' ? searchForm.attributeName : '',
+      displayName: nameSelect ==='displayName' ? searchForm.attributeName : '',
+      attributeValue: valueSelect ==='attributeValue' ? searchForm.attributeValue : '',
+      displayValue:  valueSelect ==='displayValue' ? searchForm.attributeValue : '',
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
@@ -344,10 +365,14 @@ class AttributeLibrary extends Component<any, any> {
       });
   };
 
-  getAttributeValue = (attributeValueList) => {
+  getAttributeValue = (attributeValueList, type) => {
     let attributeValue = [];
     for (let i = 0; i < attributeValueList.length; i++) {
-      attributeValue.push(attributeValueList[i].attributeDetailName);
+      if(type === 'attrbuite' && attributeValueList[i].attributeDetailName) {
+        attributeValue.push(attributeValueList[i].attributeDetailName)
+      } else if(type === 'display' && attributeValueList[i].attributeDetailNameEn) {
+        attributeValue.push(attributeValueList[i].attributeDetailNameEn)
+      }
     }
     return attributeValue.join(';');
   };
@@ -356,117 +381,162 @@ class AttributeLibrary extends Component<any, any> {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 11 }
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 12 }
       }
     };
     const formItemLayoutWithOutLabel = {
       wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 16, offset: 6 }
+        sm: { span: 12, offset: 11 }
+      }
+    };
+    const secondFormItemWithOutLabel = {
+      wrapperCol: {
+        sm: { span: 20, offset: 0 }
       }
     };
     if (obj && obj.length > 0) {
       const formItems = obj.map((k, index) => (
         <div key={k.tempId}>
           <Row>
-            <Col span={11}>
-            <FormItem
-            label={
-              index === 0 ? (
-                <span>
-                  <span
-                    style={{
-                      color: 'red',
-                      fontFamily: 'SimSun',
-                      marginRight: '4px',
-                      fontSize: '12px'
-                    }}
-                  >
-                    {' '}
-                    *
-                  </span>
-                  Attribute value
-                </span>
-              ) : (
-                ''
-              )
-            }
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            required={false}
-            key={'value_' + (k.id || k.tempId)}
-          >
-            {getFieldDecorator('attributeValue_' + (k.id || k.tempId), {
-              validateTrigger: ['onChange', 'onBlur'],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: 'Please input attribute value.'
-                }
-              ]
-            })(
-              <Input
-                placeholder="Attribute value"
-                style={{ marginRight: 8 }}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onChangeValue(k.id || k.tempId, value);
-                }}
-              />
-            )}
-          </FormItem>
-            </Col>
-            <Col span={11}>
-            <FormItem>
-          {getFieldDecorator('displayValue_' + (k.id || k.tempId), {
-              validateTrigger: ['onChange', 'onBlur'],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: 'Please input display value.'
-                }
-              ]
-            })(
-              <Input
-                placeholder="Display value"
-                style={{ marginRight: 8 }}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onChangeValue(k.id || k.tempId, value);
-                }}
-              />
-            )}
-          </FormItem>
-            </Col>
-            <Col span={2}>
-            <span>
-              {obj.length > 1 ? (
-                <>
-                  {k.id ? (
-                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
-                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                    </Popconfirm>
+            <Col span={13}>
+              <FormItem
+                label={
+                  index === 0 ? (
+                    <span>
+                      <span
+                        style={{
+                          color: 'red',
+                          fontFamily: 'SimSun',
+                          marginRight: '4px',
+                          fontSize: '12px'
+                        }}
+                      >
+                        {' '}
+                        *
+                      </span>
+                      Attribute value
+                    </span>
                   ) : (
-                    <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
-                      <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                    </Popconfirm>
-                  )}
-                </>
-              ) : null}
-              <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
-            </span>
+                    ''
+                  )
+                }
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                required={false}
+                key={'value_' + (k.id || k.tempId)}
+              >
+                {getFieldDecorator('attributeValue_' + (k.id || k.tempId), {
+                  validateTrigger: ['onChange', 'onBlur'],
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input attribute value.'
+                    }
+                  ]
+                })(
+                  <Input
+                    placeholder="Attribute value"
+                    style={{ marginRight: 8 }}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onChangeValue(k.id || k.tempId, value, 'attribute');
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={7}>
+              <FormItem {...secondFormItemWithOutLabel}>
+                {getFieldDecorator('displayValue_' + (k.id || k.tempId), {
+                  validateTrigger: ['onChange', 'onBlur'],
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input display value.'
+                    }
+                  ]
+                })(
+                  <Input
+                    placeholder="Display value"
+                    style={{ marginRight: 8 }}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onChangeValue(k.id || k.tempId, value, 'display');
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={2} style={{marginTop: '10px'}}>
+            <span>
+                {obj.length > 1 ? (
+                  <>
+                    {k.id ? (
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeRemote(k.id)} okText="Confirm" cancelText="Cancel">
+                        <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                      </Popconfirm>
+                    ) : (
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.removeTemp(k.tempId)} okText="Confirm" cancelText="Cancel">
+                        <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                      </Popconfirm>
+                    )}
+                  </>
+                ) : null}
+                <Icon className="dynamic-delete-button" type="plus-circle-o" style={{ marginLeft: 8 }} onClick={() => this.add()} />
+              </span>
             </Col>
           </Row>
         </div>
       ));
       return formItems;
     }
+  };
+
+  _renderNameSelect = () => {
+    return (
+      <Select
+        onChange={(val, a) => {
+          this.setState({
+            nameSelect: val
+          });
+        }}
+        value={this.state.nameSelect}
+        style={styles.label}
+      >
+        <Option value="attributeName">
+          Attribute name
+        </Option>
+        <Option value="displayName">
+          Display name
+        </Option>
+      </Select>
+    );
+  };
+
+
+  _renderValueSelect = () => {
+    return (
+      <Select
+        onChange={(val, a) => {
+          this.setState({
+            valueSelect: val
+          });
+        }}
+        value={this.state.valueSelect}
+        style={styles.label}
+      >
+        <Option value="attributeValue">
+          Attribute value
+        </Option>
+        <Option value="displayValue">
+          Display value
+        </Option>
+      </Select>
+    );
   };
 
   render() {
@@ -489,8 +559,15 @@ class AttributeLibrary extends Component<any, any> {
         title: 'Attribute value',
         dataIndex: 'attributeValue',
         key: 'attributeValue',
-        width: '30%',
-        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList) : ''}</p>
+        width: '20%',
+        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'attrbuite') : ''}</p>
+      },
+      {
+        title: 'Display value',
+        dataIndex: 'displayValue',
+        key: 'displayValue',
+        width: '20%',
+        render: (text, record) => <p>{record.attributesValuesVOList ? this.getAttributeValue(record.attributesValuesVOList, 'display') : ''}</p>
       },
       {
         title: 'Status',
@@ -545,7 +622,7 @@ class AttributeLibrary extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore="Attribute name"
+                      addonBefore={this._renderNameSelect()}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({
@@ -559,7 +636,7 @@ class AttributeLibrary extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore="Attribute value"
+                      addonBefore={this._renderValueSelect()}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({
@@ -695,6 +772,10 @@ class AttributeLibrary extends Component<any, any> {
 const styles = {
   edit: {
     paddingRight: 10
+  },
+  label: {
+    width: 160,
+    textAlign: 'center'
   }
 } as any;
 

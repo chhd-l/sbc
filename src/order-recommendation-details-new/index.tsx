@@ -168,23 +168,18 @@ export default class BillingDetails extends React.Component<any, any> {
             ) : null}
           </div>
           <div className="steps-action">
-            {current < steps.length - 2 && (
-              <Button type="primary" shape="round" onClick={() => this.next()}>
-                Next
-              </Button>
-            )}
-            {current === 2 && (
-              <Button type="primary" shape="round" onClick={() => this.next()}>
-                Create Link
-              </Button>
-            )}
-            {current > 0 && (
+          {current > 0 && (
               <Button
                 shape="round"
                 style={{ margin: '0 20px' }}
                 onClick={() => this.prev()}
               >
                 Previous
+              </Button>
+            )}
+          {current === 2 && (
+              <Button type="primary" shape="round" onClick={() => this.next()}>
+                Create Link
               </Button>
             )}
             {current === steps.length - 1 && (
@@ -197,6 +192,11 @@ export default class BillingDetails extends React.Component<any, any> {
                 Send
               </Button>
             )}
+            {current < steps.length - 2 && (
+              <Button type="primary" shape="round" onClick={() => this.next()}>
+                Next
+              </Button>
+            )}       
           </div>
 
           {/* <div className="text">

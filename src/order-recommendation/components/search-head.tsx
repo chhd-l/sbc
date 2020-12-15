@@ -234,13 +234,13 @@ export default class SearchHead extends Component<any, any> {
                         clinicSelectValue: (e.target as any).value
                       });
                     }}
-                    value={
-                      JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                        .clinicsIds != null
-                        ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                            .children
-                        : this.state.clinicSelectValue
-                    }
+                    // value={
+                    //   JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                    //     .clinicsIds != null
+                    //     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                    //         .children
+                    //     : this.state.clinicSelectValue
+                    // }
                     /* onChange={(e) => {
                       let a = e.target.value.split(',');
                       console.log(a.map(Number), 111);

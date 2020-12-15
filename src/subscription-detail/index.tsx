@@ -456,7 +456,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
-    debugger
     this.setState({
       currencySymbol
     });
@@ -799,7 +798,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                 <div className="flex-between">
                   <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{ '-  ' + currencySymbol +  (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 
                 <div className="flex-between">

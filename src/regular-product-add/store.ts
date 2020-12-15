@@ -606,16 +606,22 @@ export default class AppStore extends Store {
     let specValue;
     goodsInfos.forEach((item) => {
       specValue = item['specId-' + specId];
-      const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
-      const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
-      this.editGoodsItem(item.id, 'basePrice', basePrice);
-      this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+      if (specValue) {
+        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+        const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+        this.editGoodsItem(item.id, 'basePrice', basePrice);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+      } else {
+        this.editGoodsItem(item.id, 'basePrice', null);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', null);
+      }
     });
     this.dispatch('');
   };
   updateBasePrice = (id, key, e) => {
     // type === 'basePrice' || subscriptionBasePrice
     const mockSpecId = this.state().get('baseSpecId');
+    debugger;
     if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
       return;
     }
@@ -633,7 +639,7 @@ export default class AppStore extends Store {
         specValue = item['specId-' + specId];
       }
     });
-    const value = (parseFloat(e) / parseFloat(specValue)).toFixed(2);
+    const value = specValue ? (parseFloat(e) / parseFloat(specValue)).toFixed(2) : null;
     if (key === 'marketPrice') {
       this.editGoodsItem(id, 'basePrice', value);
     } else if (key === 'subscriptionPrice') {

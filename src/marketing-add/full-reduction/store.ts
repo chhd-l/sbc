@@ -45,4 +45,8 @@ export default class AppStore extends Store {
     }
     return response;
   };
+
+  setMarketingBean = (bean) => {
+    this.dispatch('marketing:reductionBean', bean);
+  };
 }

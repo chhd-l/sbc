@@ -421,10 +421,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  handleYearChange = (value) => {
-  };
-  tabChange = (key) => {
-  };
+  handleYearChange = (value) => {};
+  tabChange = (key) => {};
   getCityNameById = (ids, type) => {
     let params = {
       id: ids

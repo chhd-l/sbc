@@ -187,13 +187,19 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             test: /[\\/]node_modules[\\/]/,
             priority: -10
           },
-          vendors: {
+          antDesigns: {
+            name: 'antDesigns',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+            priority: -11,
+          },
+          web_modules: {
             test: /[\\/]web_modules[\\/]/,
-            priority: -20
+            priority: -30
           },
           default: {
             minChunks: 2,
-            priority: -30,
+            priority: -40,
             reuseExistingChunk: true
           }
         }

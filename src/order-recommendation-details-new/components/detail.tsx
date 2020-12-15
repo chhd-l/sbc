@@ -46,7 +46,7 @@ export default class BillingDetails extends React.Component<any, any> {
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     onSharing({
       field: 'prescriberId',
-      value: sharing.get("prescriberId") ? sharing.get("prescriberId") : employee.prescribers[0].id
+      value: sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id
     });
   }
 
@@ -81,12 +81,7 @@ export default class BillingDetails extends React.Component<any, any> {
             {history.location.state ? (
               <SelectGroup label="Prescriber" disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
             ) : (
-              <SelectGroup
-                label="Prescriber"
-                defaultValue={sharing.get("prescriberId") ? sharing.get("prescriberId") : employee.prescribers[0].id}
-                disabled={localStorage.getItem('enable') ? true : false}
-                onChange={(value, name) => this._prescriberChange(value, name)}
-              >
+              <SelectGroup label="Prescriber" defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
                 {allPrescribers.map((item) => (
                   <Option value={item.id} key={item.id}>
                     {item.prescriberName}

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Breadcrumb,
-  Tooltip,
-  Icon,
-  Input,
-  Modal,
-  Steps,
-  Button,
-  message
-} from 'antd';
+import { Breadcrumb, Tooltip, Icon, Input, Modal, Steps, Button, message } from 'antd';
 import { StoreProvider } from 'plume2';
 import { Headline, BreadCrumb, history } from 'qmkit';
 import Detail from './components/detail';
@@ -112,20 +103,10 @@ export default class BillingDetails extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>
-            {history.location.state
-              ? 'Prescription portal detail'
-              : 'New Prescription portal'}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{history.location.state ? 'Prescription portal detail' : 'New Prescription portal'}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline
-            title={
-              history.location.state
-                ? 'Prescription portal detail'
-                : 'New Prescription portal'
-            }
-          />
+          <Headline title={history.location.state ? 'Prescription portal detail' : 'New Prescription portal'} />
         </div>
         <div className="container step" id="recommendation">
           <Steps current={current}>
@@ -142,23 +123,9 @@ export default class BillingDetails extends React.Component<any, any> {
               <div className="reasonsInput">
                 <span>Recommended Reasons</span>
                 {history.location.state ? (
-                  <Input
-                    size="large"
-                    placeholder={
-                      this.store.state().get('detailProductList')
-                        .recommendationReasons
-                    }
-                    style={{ border: '1px #dedede solid' }}
-                    disabled={localStorage.getItem('enable') ? true : false}
-                  />
+                  <Input size="large" placeholder={this.store.state().get('detailProductList').recommendationReasons} style={{ border: '1px #dedede solid' }} disabled={localStorage.getItem('enable') ? true : false} />
                 ) : (
-                  <Input
-                    size="large"
-                    placeholder="Input Recommended Reasons"
-                    style={{ border: '1px #dedede solid' }}
-                    onChange={this.onInput}
-                    disabled={localStorage.getItem('enable') ? true : false}
-                  />
+                  <Input size="large" placeholder="Input Recommended Reasons" style={{ border: '1px #dedede solid' }} onChange={this.onInput} disabled={localStorage.getItem('enable') ? true : false} />
                 )}
               </div>
             ) : current == 3 ? (
@@ -168,27 +135,18 @@ export default class BillingDetails extends React.Component<any, any> {
             ) : null}
           </div>
           <div className="steps-action">
-          {current > 0 && (
-              <Button
-                shape="round"
-                style={{ margin: '0 20px' }}
-                onClick={() => this.prev()}
-              >
+            {current > 0 && (
+              <Button shape="round" style={{ margin: '0 20px' }} onClick={() => this.prev()}>
                 Previous
               </Button>
             )}
-          {current === 2 && (
+            {current === 2 && (
               <Button type="primary" shape="round" onClick={() => this.next()}>
                 Create Link
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button
-                type="primary"
-                shape="round"
-                style={{ margin: '0 8px' }}
-                onClick={this.handleSend}
-              >
+              <Button type="primary" shape="round" style={{ margin: '0 8px' }} onClick={this.handleSend}>
                 Send
               </Button>
             )}
@@ -196,7 +154,7 @@ export default class BillingDetails extends React.Component<any, any> {
               <Button type="primary" shape="round" onClick={() => this.next()}>
                 Next
               </Button>
-            )}       
+            )}
           </div>
 
           {/* <div className="text">

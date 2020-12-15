@@ -40,8 +40,7 @@ export default class BillingDetailsNext extends React.Component<any, any> {
     onLinkStatus: noop,
     detailProductList: 'detailProductList'
   };
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   showProduct = (res) => {
     this.setState({
@@ -56,33 +55,16 @@ export default class BillingDetailsNext extends React.Component<any, any> {
   render() {
     return (
       <div style={styles.main}>
-        <div style={styles.nav}>
-          {history.location.state
-            ? 'Recommended Product List'
-            : 'Select Recommended Product'}
-        </div>
+        <div style={styles.nav}>{history.location.state ? 'Recommended Product List' : 'Select Recommended Product'}</div>
         <div style={styles.btn}>
           {history.location.state ? null : (
-            <Button
-              type="primary"
-              shape="round"
-              icon="edit"
-              onClick={() => this.showProduct(true)}
-              disabled={localStorage.getItem('enable') ? true : false}
-            >
+            <Button type="primary" shape="round" icon="edit" onClick={() => this.showProduct(true)} disabled={localStorage.getItem('enable') ? true : false}>
               Add Product
             </Button>
           )}
         </div>
         <DetailList />
-        {this.state.visible == true ? (
-          <ProductTooltip
-            visible={this.state.visible}
-            showModal={this.showProduct}
-          />
-        ) : (
-          <React.Fragment />
-        )}
+        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
       </div>
     );
   }

@@ -35,24 +35,24 @@ const columns = [
     title: 'Price',
     dataIndex: 'levelPrice',
     key: 'levelPrice',
-    render: (levelPrice, record) => (
-      record.subscriptionPrice > 0 ?
-      (<div>
+    render: (levelPrice, record) =>
+      record.subscriptionPrice > 0 ? (
+        <div>
+          <span>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {record.subscriptionPrice.toFixed(2)}
+          </span>
+          <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {levelPrice.toFixed(2)}
+          </span>
+        </div>
+      ) : (
         <span>
-          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {record.subscriptionPrice.toFixed(2)}
-        </span>
-        <span style={{textDecoration:'line-through', marginLeft: '8px'}}>
           {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
           {levelPrice.toFixed(2)}
         </span>
-      </div>)
-      : 
-      (<span>
-        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-        {levelPrice.toFixed(2)}
-      </span>)
-    )
+      )
   },
   {
     title: 'Subtotal',

@@ -156,7 +156,7 @@ class AttributeLibrary extends Component<any, any> {
     const { attributeValueList } = this.state;
     attributeValueList.map((item) => {
       if (item.id === id || item.tempId === id) {
-        if(type==='attribute') {
+        if (type === 'attribute') {
           item.attributeDetailName = value;
           return item;
         } else if (type === 'display') {
@@ -265,10 +265,10 @@ class AttributeLibrary extends Component<any, any> {
   getAttributes = () => {
     const { searchForm, pagination, nameSelect, valueSelect } = this.state;
     let params = {
-      attributeName: nameSelect ==='attributeName' ? searchForm.attributeName : '',
-      displayName: nameSelect ==='displayName' ? searchForm.attributeName : '',
-      attributeValue: valueSelect ==='attributeValue' ? searchForm.attributeValue : '',
-      displayValue:  valueSelect ==='displayValue' ? searchForm.attributeValue : '',
+      attributeName: nameSelect === 'attributeName' ? searchForm.attributeName : '',
+      displayName: nameSelect === 'displayName' ? searchForm.attributeName : '',
+      attributeValue: valueSelect === 'attributeValue' ? searchForm.attributeValue : '',
+      displayValue: valueSelect === 'displayValue' ? searchForm.attributeValue : '',
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
@@ -368,10 +368,10 @@ class AttributeLibrary extends Component<any, any> {
   getAttributeValue = (attributeValueList, type) => {
     let attributeValue = [];
     for (let i = 0; i < attributeValueList.length; i++) {
-      if(type === 'attrbuite' && attributeValueList[i].attributeDetailName) {
-        attributeValue.push(attributeValueList[i].attributeDetailName)
-      } else if(type === 'display' && attributeValueList[i].attributeDetailNameEn) {
-        attributeValue.push(attributeValueList[i].attributeDetailNameEn)
+      if (type === 'attrbuite' && attributeValueList[i].attributeDetailName) {
+        attributeValue.push(attributeValueList[i].attributeDetailName);
+      } else if (type === 'display' && attributeValueList[i].attributeDetailNameEn) {
+        attributeValue.push(attributeValueList[i].attributeDetailNameEn);
       }
     }
     return attributeValue.join(';');
@@ -471,8 +471,8 @@ class AttributeLibrary extends Component<any, any> {
                 )}
               </FormItem>
             </Col>
-            <Col span={2} style={{marginTop: '10px'}}>
-            <span>
+            <Col span={2} style={{ marginTop: '10px' }}>
+              <span>
                 {obj.length > 1 ? (
                   <>
                     {k.id ? (
@@ -507,16 +507,11 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.nameSelect}
         style={styles.label}
       >
-        <Option value="attributeName">
-          Attribute name
-        </Option>
-        <Option value="displayName">
-          Display name
-        </Option>
+        <Option value="attributeName">Attribute name</Option>
+        <Option value="displayName">Display name</Option>
       </Select>
     );
   };
-
 
   _renderValueSelect = () => {
     return (
@@ -529,12 +524,8 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.valueSelect}
         style={styles.label}
       >
-        <Option value="attributeValue">
-          Attribute value
-        </Option>
-        <Option value="displayValue">
-          Display value
-        </Option>
+        <Option value="attributeValue">Attribute value</Option>
+        <Option value="displayValue">Display value</Option>
       </Select>
     );
   };

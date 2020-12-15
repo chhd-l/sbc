@@ -39,10 +39,7 @@ export default class AppStore extends Store {
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
     let obj = {
-      linkStatus: 2,
-      prescriberId: sessionStorage.getItem('PrescriberType')
-        ? JSON.parse(sessionStorage.getItem('PrescriberType')).value
-        : ''
+      linkStatus: 2
     };
 
     if (key != '0') {

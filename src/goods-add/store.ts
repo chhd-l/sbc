@@ -1060,7 +1060,7 @@ export default class AppStore extends Store {
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
       return Map({
         specId: item.get('isMock') == true ? null : item.get('specId'),
-        mockSpecId: item.get('specId'),
+        mockSpecId: item.get('mockSpecId'),
         specName: item.get('specName').trim()
       });
     });
@@ -1103,7 +1103,7 @@ export default class AppStore extends Store {
         goodsSpecDetails = goodsSpecDetails.push(
           Map({
             specId: item.get('isMock') == true ? null : item.get('specId'),
-            mockSpecId: item.get('specId'),
+            mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('specDetailId'),
@@ -1383,7 +1383,7 @@ export default class AppStore extends Store {
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
       return Map({
         specId: item.get('isMock') == true ? null : item.get('specId'),
-        mockSpecId: item.get('specId'),
+        mockSpecId: item.get('mockSpecId'),
         specName: item.get('specName').trim()
       });
     });
@@ -1396,7 +1396,7 @@ export default class AppStore extends Store {
         goodsSpecDetails = goodsSpecDetails.push(
           Map({
             specId: item.get('isMock') == true ? null : item.get('specId'),
-            mockSpecId: item.get('specId'),
+            mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('specDetailId'),
@@ -1586,6 +1586,8 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
+
+    console.log(param.toJS(), 'param.toJS(),----------------');
 
     this.dispatch('goodsActor: saveLoading', false);
     if (result.res.code === Const.SUCCESS_CODE) {

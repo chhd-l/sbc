@@ -67,6 +67,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    this.getCurrencySymbol();
     this.getDict();
     this.getSubscriptionDetail(this.state.subscriptionId);
     this.getBySubscribeId(this.state.subscriptionId);
@@ -457,6 +458,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
+    debugger
     this.setState({
       currencySymbol
     });

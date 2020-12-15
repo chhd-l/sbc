@@ -225,7 +225,7 @@ export default class SearchHead extends Component<any, any> {
                     addonBefore={this._renderClinicSelect()}
                     disabled={
                       JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                        .clinicsIds != null
+                        .clinicsIds === null
                         ? true
                         : null
                     }
@@ -394,7 +394,7 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         disabled={
-          JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds !=
+          JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ===
           null
             ? true
             : null

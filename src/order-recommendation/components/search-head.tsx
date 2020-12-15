@@ -223,12 +223,6 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={this._renderClinicSelect()}
-                    disabled={
-                      JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                        .clinicsIds === null
-                        ? true
-                        : null
-                    }
                     onChange={(e) => {
                       this.setState({
                         clinicSelectValue: (e.target as any).value
@@ -289,7 +283,7 @@ export default class SearchHead extends Component<any, any> {
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect == 'clinicsName'
                           ? 'prescriberName'
-                          : 'prescriberBusinessId']: clinicSelectValue,
+                          : 'prescriberId']: clinicSelectValue,
                         linkStatus
                       };
                       onSearch(params);
@@ -393,12 +387,6 @@ export default class SearchHead extends Component<any, any> {
   _renderClinicSelect = () => {
     return (
       <Select
-        disabled={
-          JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ===
-          null
-            ? true
-            : null
-        }
         onChange={(val, a) => {
           this.setState({
             clinicSelect: val

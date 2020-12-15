@@ -74,18 +74,6 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                     </Col>
                   </Row>
                 </Col>
-                <Col span={8}>
-                  <Row>
-                    <Col span={12}>
-                      <p>Order number</p>
-                    </Col>
-                    <Col span={12}>
-                      <Link to={`/order-detail/${details.orderNumber}`}>
-                        <span style={{ textDecoration: 'underline' }}>{details.orderNumber}</span>
-                      </Link>
-                    </Col>
-                  </Row>
-                </Col>
               </Row>
               <Row>
                 <Col span={8}>

@@ -137,12 +137,6 @@ class ProductFinderList extends Component<any, any> {
         render: (text, record) => (text === 1 ? 'Guest' : 'Member')
       },
       {
-        title: 'Order Number',
-        dataIndex: 'orderNumber',
-        key: 'orderNumber',
-        width: '10%'
-      },
-      {
         title: 'Pet Type',
         dataIndex: 'petType',
         key: 'petType',
@@ -262,20 +256,6 @@ class ProductFinderList extends Component<any, any> {
                         </Option>
                       ))}
                   </SelectGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Order number</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'orderNumber',
-                        value
-                      });
-                    }}
-                  />
                 </FormItem>
               </Col>
             </Row>

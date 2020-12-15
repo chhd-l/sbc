@@ -234,7 +234,7 @@ class GoodsForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
-    var parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map(x=>x.cateParentId) : [];
+    let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map(x=>x.cateParentId) : [];
     const storeCateValues = [];
 
     storeCateIds &&
@@ -392,7 +392,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
               })(
                 <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
                   <Option value="1">Y</Option>

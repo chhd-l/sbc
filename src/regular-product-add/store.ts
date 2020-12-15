@@ -621,7 +621,6 @@ export default class AppStore extends Store {
   updateBasePrice = (id, key, e) => {
     // type === 'basePrice' || subscriptionBasePrice
     const mockSpecId = this.state().get('baseSpecId');
-    debugger;
     if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
       return;
     }

@@ -1429,7 +1429,7 @@ export default class AppStore extends Store {
       return Map({
         // specId: item.get('isMock') == true ? null : item.get('specId'),
         specId: item.get('isMock') == true ? null : item.get('specId'),
-        mockSpecId: item.get('specId'),
+        mockSpecId: item.get('mockSpecId'),
         specName: item.get('specName').trim()
       });
     });
@@ -1442,7 +1442,7 @@ export default class AppStore extends Store {
         goodsSpecDetails = goodsSpecDetails.push(
           Map({
             specId: item.get('isMock') == true ? null : item.get('specId'),
-            mockSpecId: item.get('specId'),
+            mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('specDetailId'),

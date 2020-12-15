@@ -131,7 +131,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     let settingLabel1 = 'setting rules';
     let settingType = 'discount';
     let settingRuleFrom = { ...formItemLayout };
-    console.log(marketingBean.toJS(), 'marketingBean-------');
     if (this.state.PromotionTypeValue === 1) {
       settingRuleFrom = { ...largeformItemLayout };
       if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
@@ -311,7 +310,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   <div>
                     <FormItem>
                       <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
-                      {getFieldDecorator('firstSubscriptionOrderReduction', {
+                      {getFieldDecorator('firstSubscriptionOrderDiscount', {
                         rules: [
                           { required: true, message: 'Amount must be entered' },
                           {
@@ -325,13 +324,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                             }
                           }
                         ],
-                        initialValue: marketingBean.get('firstSubscriptionOrderReduction')
+                        initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
                           style={{ width: 200 }}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
-                            this.onBeanChange({ firstSubscriptionOrderReduction: e.target.value });
+                            this.onBeanChange({ firstSubscriptionOrderDiscount: e.target.value });
                           }}
                         />
                       )}
@@ -421,7 +420,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         {marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT && PromotionTypeValue == 1 && (
           <FormItem {...settingRuleFrom} label={settingLabel1} required={true} style={{ marginTop: '-20px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
-            {getFieldDecorator('restSubscriptionOrderReduction', {
+            {getFieldDecorator('restSubscriptionOrderDiscount', {
               rules: [
                 { required: true, message: 'Amount must be entered' },
                 {
@@ -435,13 +434,13 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                 }
               ],
-              initialValue: marketingBean.get('restSubscriptionOrderReduction')
+              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
             })(
               <Input
                 style={{ width: 200 }}
                 placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                 onChange={(e) => {
-                  this.onBeanChange({ restSubscriptionOrderReduction: e.target.value });
+                  this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
                 }}
               />
             )}
@@ -540,13 +539,24 @@ export default class MarketingAddForm extends React.Component<any, any> {
           this.setState({
             PromotionTypeChecked: this.state.PromotionTypeValue === 1 ? true : false
           });
-          let bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
-          if (bean && this.state.PromotionTypeValue === 1) {
-            marketingBean = marketingBean.set('firstSubscriptionOrderReduction', bean[0].firstSubscriptionOrderReduction);
-            marketingBean = marketingBean.set('restSubscriptionOrderReduction', bean[0].restSubscriptionOrderReduction);
-            this.setState({
-              marketingBean
-            });
+          if (subType === 6) {
+            let bean = marketingBean.get('fullReductionLevelList') ? marketingBean.get('fullReductionLevelList').toJS() : null;
+            if (bean && this.state.PromotionTypeValue === 1) {
+              marketingBean = marketingBean.set('firstSubscriptionOrderReduction', bean[0].firstSubscriptionOrderReduction);
+              marketingBean = marketingBean.set('restSubscriptionOrderReduction', bean[0].restSubscriptionOrderReduction);
+              this.setState({
+                marketingBean
+              });
+            }
+          } else if (subType === 7) {
+            let bean = marketingBean.get('fullDiscountLevelList') ? marketingBean.get('fullDiscountLevelList').toJS() : null;
+            if (bean && this.state.PromotionTypeValue === 1) {
+              marketingBean = marketingBean.set('firstSubscriptionOrderDiscount', bean[0].firstSubscriptionOrderDiscount);
+              marketingBean = marketingBean.set('restSubscriptionOrderDiscount', bean[0].restSubscriptionOrderDiscount);
+              this.setState({
+                marketingBean
+              });
+            }
           }
         }
       );
@@ -816,8 +826,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
                       );
                       let obj = {
-                        firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                        restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                        firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount'),
+                        restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount')
                       };
 
                       marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);

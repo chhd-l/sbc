@@ -420,10 +420,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-  handleYearChange = (value) => {
-  };
-  tabChange = (key) => {
-  };
+  handleYearChange = (value) => {};
+  tabChange = (key) => {};
   getCityNameById = (ids, type) => {
     let params = {
       id: ids
@@ -550,7 +548,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>{currencySymbol + (+record.subscribeNum * +record.originalPrice).toFixed(2)}</span>
+            <span>{currencySymbol + (+record.subscribeNum * +record.subscribePrice).toFixed(2)}</span>
           </div>
         )
       }
@@ -798,7 +796,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </div>
 
                 <div className="flex-between">
-                  <span>{this.state.promotionDesc}</span>
+                  <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span>
                   <span style={styles.priceStyle}>{currencySymbol + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
                 </div>
 

@@ -29,6 +29,7 @@ export default class BillingDetails extends React.Component<any, any> {
       onSharing: Function;
       onLinkStatus: Function;
       detailProductList: any;
+      sharing: any;
     };
   };
 
@@ -37,14 +38,15 @@ export default class BillingDetails extends React.Component<any, any> {
     setName: 'setName',
     onSharing: noop,
     onLinkStatus: noop,
-    detailProductList: 'detailProductList'
+    detailProductList: 'detailProductList',
+    sharing: 'sharing'
   };
   componentDidMount() {
-    const { onSharing } = this.props.relaxProps;
+    const { onSharing, sharing } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     onSharing({
       field: 'prescriberId',
-      value: employee.prescribers[0].id
+      value: sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id
     });
   }
 
@@ -68,6 +70,7 @@ export default class BillingDetails extends React.Component<any, any> {
   };
   render() {
     const { detailProductList } = this.props.relaxProps;
+    const { onSharing, sharing } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const allPrescribers = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers : [];
 
@@ -78,12 +81,7 @@ export default class BillingDetails extends React.Component<any, any> {
             {history.location.state ? (
               <SelectGroup label="Prescriber" disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
             ) : (
-              <SelectGroup
-                label="Prescriber"
-                defaultValue={sessionStorage.getItem('PrescriberType') ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : null}
-                disabled={localStorage.getItem('enable') ? true : false}
-                onChange={(value, name) => this._prescriberChange(value, name)}
-              >
+              <SelectGroup label="Prescriber" defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
                 {allPrescribers.map((item) => (
                   <Option value={item.id} key={item.id}>
                     {item.prescriberName}

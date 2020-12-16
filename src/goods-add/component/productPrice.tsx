@@ -219,7 +219,7 @@ class SkuForm extends React.Component<any, any> {
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               <div>
-                {goods.get('subscriptionStatus') == 1 || goods.get('subscriptionStatus') != null ? (
+                {goods.get('subscriptionStatus') == 1 ? (
                   <div>
                     <p>
                       <span>One off</span>
@@ -299,7 +299,7 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
-            {goods.get('subscriptionStatus') == 1 || goods.get('subscriptionStatus') != null ? (
+            {goods.get('subscriptionStatus') == 1 ? (
               <div>
                 <p>
                   <FormItem style={styles.tableFormItem}>
@@ -416,7 +416,7 @@ class SkuForm extends React.Component<any, any> {
         return (
           <Row>
             <Col span={12}>
-              {goods.get('subscriptionStatus') == 1 || goods.get('subscriptionStatus') != null ? (
+              {goods.get('subscriptionStatus') == 1 ? (
                 <FormItem style={styles.tableFormItem}>
                   {getFieldDecorator('basePrice_' + rowInfo.id, {
                     rules: [

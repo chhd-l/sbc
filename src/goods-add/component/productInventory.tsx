@@ -5,7 +5,7 @@ const { Option } = Select;
 
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import {cache, noop, ValidConst} from 'qmkit';
+import { cache, noop, ValidConst } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -112,13 +112,13 @@ class SkuForm extends React.Component<any, any> {
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
-        .map((item,i) => {
+        .map((item, i) => {
           return {
-            title:i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
+            title: i == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+              return rowInfo && rowInfo.replace(/[^\d.]/g, '');
             }
           };
         })
@@ -177,13 +177,13 @@ class SkuForm extends React.Component<any, any> {
         /*setTimeout(()=>{
           console.log(addSkUProduct,111111);
           console.log(rowInfo,2222222222222);
-          console.log(a.minStock,3333333333);
+          console.log(a,3333333333);
         })*/
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('stock_' + rowInfo.id, {
+                {getFieldDecorator('stock_' + rowInfo.stock, {
                   rules: [
                     {
                       required: true,

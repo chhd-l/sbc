@@ -74,7 +74,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
       <div className="content">
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} sku={true} />
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           rowKey={(record, index) => record.goodsInfoNo}
           dataSource={goodsInfoPage.content && goodsInfoPage.content}
           isScroll={false}
@@ -191,7 +191,8 @@ export default class ProductGridSKU extends React.Component<any, any> {
     this.init({ ...params, pageNum, pageSize });
     this.setState({
       pageNum,
-      pageSize
+      pageSize,
+      loading: false
     });
   };
 
@@ -203,7 +204,9 @@ export default class ProductGridSKU extends React.Component<any, any> {
       params.pageSize = 10;
     }
     // params.goodsName = "Baby"
-
+    this.setState({
+      loading: true
+    });
     let { res } = await webapi.fetchlistGoodsInfo({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {

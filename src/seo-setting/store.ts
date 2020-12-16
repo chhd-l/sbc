@@ -90,6 +90,8 @@ export default class AppStore extends Store {
       const pages = res.context.sysDictionaryPage.content;
       this.dispatch('loading:end');
       this.dispatch('seoActor: allPages', fromJS(pages));
+      this.dispatch('seoActor: pageNum', res.context.sysDictionaryPage.number + 1);
+      this.dispatch('seoActor: total', res.context.sysDictionaryPage.totalElements);
     }
   };
 }

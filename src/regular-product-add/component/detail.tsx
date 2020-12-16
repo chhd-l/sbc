@@ -41,6 +41,20 @@ export default class Detail extends React.Component<any, any> {
     editEditor: noop
   };
 
+  getDetailString = (goodsDetailTabContent, name) => {
+    var detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
+    if (!detail) {
+      return '';
+    }
+    debugger
+    var test = goodsDetailTabContent[name].toString() 
+    if (Array.isArray(detail)) {
+      return '[' + (goodsDetailTabContent[name].toString()).replace(/^\"|\"$/g,'') + ']';
+    } else {
+      return detail.toString();
+    }
+  };
+
   render() {
     const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs } = this.props.relaxProps;
     let { goodsDetailTab } = this.props.relaxProps;
@@ -77,7 +91,7 @@ export default class Detail extends React.Component<any, any> {
                     height="320"
                     // content="112"
                     // content = {JSON.parse(goods.get('goodsDetail'))[item.get('name')]}
-                    content={goodsDetailTabContent && goodsDetailTabContent[item.get('name')] ? JSON.stringify(goodsDetailTabContent[item.get('name')]).replace(/^\"|\"$/g, '') : ''} //去除前后的双引号
+                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))} //去除前后的双引号
                     insertImg={() => {
                       this._handleClick();
                       this.props.relaxProps.editEditor('detail');

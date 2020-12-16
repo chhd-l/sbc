@@ -67,11 +67,19 @@ export default class MarketingRule extends React.Component<any, any> {
                       Full {level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 10} discount
                     </span>
                   ) : subType === 6 ? ( // subsctiption reduction
-                    <span className="rule-span">
-                      For the first subscription order, reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    </span>
+                    <div className="rule-span">
+                      <div>
+                        For the first subscription order, reduction{level.firstSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      </div>
+                      <div>
+                        For the rest subscription order, reduction{level.restSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      </div>
+                    </div>
                   ) : subType === 7 ? ( // subsctiption discount
-                    <span className="rule-span">For the first subscription order, discount {level.discount * 10} discount</span>
+                    <div className="rule-span">
+                      <div>For the first subscription order, discount {level.firstSubscriptionOrderDiscount * 10} discount</div>
+                      <div>For the rest subscription order, discount {level.restSubscriptionOrderDiscount * 10} discount</div>
+                    </div>
                   ) : null}
                 </Col>
               </Row>

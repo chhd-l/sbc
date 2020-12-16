@@ -169,7 +169,7 @@ class InvoiceList extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-          this.onSearch();
+          this.getInvoiceList();
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -320,7 +320,7 @@ class InvoiceList extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-          this.onSearch();
+          this.getInvoiceList();
           this.emptySelected();
         } else {
           message.error(res.message || 'Operation failure');
@@ -379,7 +379,7 @@ class InvoiceList extends Component<any, any> {
 
   onChangeOrder = (item) => {
     const { selectedOrder } = this.state;
-    (selectedOrder.ordrAmount = item.consignee.totalPrice), (selectedOrder.customerName = item.buyer.name), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.consignee.email), (selectedOrder.billingAddress = item.invoice.address);
+    (selectedOrder.ordrAmount = item.tradePrice.totalPrice), (selectedOrder.customerName = item.buyer.name), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.buyer.account), (selectedOrder.billingAddress = item.invoice.address);
 
     this.setState({
       orderNumber: item.id,
@@ -475,9 +475,9 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text}</p>
       },
       {
-        title: 'Subscription number',
-        dataIndex: 'subscriptionId',
-        key: 'subscriptionId',
+        title: 'Consumer email',
+        dataIndex: 'email',
+        key: 'email',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },

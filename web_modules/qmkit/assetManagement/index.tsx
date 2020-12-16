@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { QMUpload, Const } from 'qmkit';
-import { Modal, Form, Input, message, Tree, Row, Col, Button, Checkbox, Pagination } from 'antd';
+import { Modal, Form, Input, message, Tree, Row, Col, Button, Checkbox, Pagination, Spin } from 'antd';
 import * as webapi from './webapi';
 
 
@@ -21,16 +21,20 @@ export default class PicModal extends React.Component<any, any> {
     visible: true,
     cateList:[],
     imgs:null,
+    //已选中的 img 数量
     clickImgsCount:0,
-    choosedImgCount:0,
-    clickEnabled:true,
+    //能选中的 img 数量
+    choosedImgCount:1,
     cateId:'',
     searchImageName:'',
     cateIds:[],
+    loading:false,
 
     currentPage:1,
     total:0,
     pageSize:10,
+
+    currentSelectedImgs:[],
 
 
 
@@ -49,25 +53,39 @@ export default class PicModal extends React.Component<any, any> {
     this.setState({
       successCount: 0,
       uploadCount: 0,
-      errorCount: 0
+      errorCount: 0,
+      visible:false
     });
   };
 
   //获取
   getCateList = () =>{
+    this.setState({
+      loading:true
+    })
     webapi.getImgCates().then(data=>{
       const {res} = data
       if(res){
+        let cateList = this.cates(res)
+        let cateId = cateList[0].cateId.toString()
         let cateIds = []
-        cateIds.push(res[0].cateId)
+        cateIds.push(cateId)
         this.setState({
+          cateId,
           cateIds,
-          cateList: res
+          cateList
       },()=>{
         this.initImages()
       })
-    } 
+    } else{
+      this.setState({
+        loading:false
+      })
+    }
     }).catch(err=>{
+      this.setState({
+        loading:false
+      })
       message.error(err.toString()||'Operation failure')
     })
 
@@ -75,6 +93,9 @@ export default class PicModal extends React.Component<any, any> {
 
   getImages = () =>{
     const {cateIds,currentPage,pageSize,searchImageName}= this.state
+    this.setState({
+      loading:true
+    })
     let params={
       cateIds: cateIds,
       pageNum: currentPage-1,
@@ -90,14 +111,21 @@ export default class PicModal extends React.Component<any, any> {
         if(imgs){
           this.setState({
             imgs,
-            total
+            total,
+            loading:false
           })
         }
         
       }else{
+        this.setState({
+          loading:false
+        })
         message.error(res.message||'Operation failure')
       }
     }).catch(err=>{
+      this.setState({
+        loading:false
+      })
       message.error(err.toString()||'Operation failure')
     })
   }
@@ -149,7 +177,12 @@ export default class PicModal extends React.Component<any, any> {
    * @private
    */
   selectCate = (value) => {
-    console.log(value);
+    this.setState({
+      currentPage:1,
+      cateIds:value
+    },()=>{
+      this.getImages()
+    })
     
   };
 
@@ -255,8 +288,28 @@ export default class PicModal extends React.Component<any, any> {
    * @private
    */
   chooseImg = (e, v) => {
-    console.log('chooseImg');
-    
+    const { choosedImgCount,clickImgsCount, imgs, currentSelectedImgs } = this.state;
+    const checked = (e.target as any).checked;
+    if (choosedImgCount>clickImgsCount||!checked) {
+      let tempSelectedImgs = []
+      const tempImgs = imgs.map(item=>{
+        if(item.resourceId === v.resourceId){
+          item.checked = checked
+        }
+        if(item.checked){
+          tempSelectedImgs.push(item)
+        }
+        return item
+      })
+      this.setState({
+        imgs:tempImgs,
+        currentSelectedImgs:tempSelectedImgs,
+        clickImgsCount:tempSelectedImgs.length
+      })
+    }
+    else{
+      message.error('A maximum of '+ choosedImgCount + ' items can be selected')
+    }
   };
 
   /**
@@ -284,9 +337,10 @@ export default class PicModal extends React.Component<any, any> {
       message.error('Please select picture category');
     }
   };
+  
 
   render() {
-    const { visible,cateList,choosedImgCount,clickImgsCount,cateId,searchImageName,cateIds,imgs,currentPage,total,pageSize } = this.state
+    const { visible,cateList,choosedImgCount,clickImgsCount,cateId,searchImageName,cateIds,imgs,currentPage,total,pageSize,loading } = this.state
 
     //分类列表生成树形结构
     const loop = (cateList) =>
@@ -362,11 +416,16 @@ export default class PicModal extends React.Component<any, any> {
               </Form>
             </Col>
           </Row>
+          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
           <Row>
             <Col span={6}>
-              <div style={{ height: 560, overflowY: 'auto' }}>
-                <Tree className="draggable-tree" defaultExpandedKeys={cateIds} defaultSelectedKeys={cateIds} selectedKeys={cateIds} onSelect={this.selectCate}>
-                  {loop(this.cates(cateList))}
+              <div style={{ height: 560, overflowY: 'auto' ,borderRight:'1px solid #f6f6f6'}}>
+                <Tree className="draggable-tree" 
+                defaultExpandedKeys={cateIds} 
+                defaultSelectedKeys={cateIds} 
+                selectedKeys={cateIds} 
+                onSelect={this.selectCate}>
+                  {loop(cateList)}
                 </Tree>
               </div>
             </Col>
@@ -402,6 +461,8 @@ export default class PicModal extends React.Component<any, any> {
             </Col>
           </Row>
           { imgs&&imgs.length > 0 ? <Pagination onChange={this.handlePageChange} current={currentPage} total={total} pageSize={pageSize} /> : null}
+          </Spin>
+          
         </div>
       </Modal>
     );

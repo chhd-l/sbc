@@ -457,7 +457,7 @@ class AttributeLibrary extends Component<any, any> {
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
 
-          <AssetManagement />
+          {/* <AssetManagement /> */}
 
           {visible ? (
             <Modal

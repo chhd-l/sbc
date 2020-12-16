@@ -133,8 +133,8 @@ export default class RevenueList extends React.Component<any, any> {
             title="Real Revenue"
             dataIndex="paymentOSActualPrice"
             key="paymentOSActualPrice"
-            render={(text, rowData: any) => {
-              return text ? <span>{text}</span> : '--';
+            render={(text, _rowData: any) => {
+              return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text}</span>;
             }}
           />
         </DataGrid>

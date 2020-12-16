@@ -371,7 +371,7 @@ class SkuForm extends React.Component<any, any> {
                     baseSpecId ? (
                       <div>
                         <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
-                        <p>{rowInfo.subscriptionStatus === 1 && rowInfo.subscriptionBasePrice ? rowInfo.subscriptionBasePrice : null}</p>
+                        <p>{rowInfo.subscriptionBasePrice}</p>
                       </div>
                     ) : (
                       <p></p>

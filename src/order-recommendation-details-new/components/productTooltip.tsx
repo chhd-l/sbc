@@ -4,6 +4,8 @@ import { fromJS } from 'immutable';
 import { message, Modal } from 'antd';
 
 import ProductGrid from './product-grid';
+import SearchForm from './search-form';
+
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
 import { noop } from 'qmkit';
@@ -56,23 +58,13 @@ export default class GoodsModal extends React.Component<any, any> {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
-      selectedRows: nextProps.selectedRows
-        ? nextProps.selectedRows
-        : fromJS([]),
+      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
       selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
   render() {
-    const {
-      visible,
-      onOkBackFun,
-      onCancelBackFun,
-      skuLimit,
-      showValidGood,
-      searchParams,
-      application
-    } = this.props;
+    const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams, application } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     const { onProductselect } = this.props.relaxProps;
     return (
@@ -82,8 +74,7 @@ export default class GoodsModal extends React.Component<any, any> {
           <div>
             Choose goods&nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
-              items have been selected
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
             </small>
           </div>
         }
@@ -107,18 +98,8 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {
-          <ProductGrid
-            visible={visible}
-            showValidGood={showValidGood}
-            skuLimit={skuLimit}
-            isScroll={false}
-            selectedSkuIds={selectedSkuIds}
-            selectedRows={selectedRows}
-            rowChangeBackFun={this.rowChangeBackFun}
-            searchParams={searchParams}
-          />
-        }
+        {/*<SearchForm/>*/}
+        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }
@@ -129,8 +110,7 @@ export default class GoodsModal extends React.Component<any, any> {
         selectedSkuIds: selectedSkuIds,
         selectedRows: selectedRows
       },
-      () => {
-      }
+      () => {}
     );
   };
 }

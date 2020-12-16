@@ -40,26 +40,11 @@ export default class BillingDetailsNext extends React.Component<any, any> {
     onLinkStatus: noop,
     detailProductList: 'detailProductList'
   };
-  componentDidMount() {
-    const { onSharing } = this.props.relaxProps;
-    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    onSharing({
-      field: 'prescriberId',
-      value: employee.prescribers[0].id
-    });
-  }
+  componentDidMount() {}
 
   showProduct = (res) => {
     this.setState({
       visible: res
-    });
-  };
-  _prescriberChange = (value, name) => {
-    //const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const { onSharing } = this.props.relaxProps;
-    onSharing({
-      field: 'prescriberId',
-      value: value
     });
   };
   onValid = (e) => {
@@ -68,41 +53,18 @@ export default class BillingDetailsNext extends React.Component<any, any> {
     onLinkStatus({ linkStatus, id: history.location.state.id });
   };
   render() {
-    const { detailProductList } = this.props.relaxProps;
-    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const allPrescribers =
-      employee && employee.prescribers && employee.prescribers.length > 0
-        ? employee.prescribers
-        : [];
     return (
       <div style={styles.main}>
-        <div style={styles.nav}>
-          {history.location.state
-            ? 'Recommended Product List'
-            : 'Select Recommended Product'}
-        </div>
+        <div style={styles.nav}>{history.location.state ? 'Recommended Product List' : 'Select Recommended Product'}</div>
         <div style={styles.btn}>
           {history.location.state ? null : (
-            <Button
-              type="primary"
-              shape="round"
-              icon="edit"
-              onClick={() => this.showProduct(true)}
-              disabled={localStorage.getItem('enable') ? true : false}
-            >
+            <Button type="primary" shape="round" icon="edit" onClick={() => this.showProduct(true)} disabled={localStorage.getItem('enable') ? true : false}>
               Add Product
             </Button>
           )}
         </div>
         <DetailList />
-        {this.state.visible == true ? (
-          <ProductTooltip
-            visible={this.state.visible}
-            showModal={this.showProduct}
-          />
-        ) : (
-          <React.Fragment />
-        )}
+        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
       </div>
     );
   }

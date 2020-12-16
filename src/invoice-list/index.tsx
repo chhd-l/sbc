@@ -98,6 +98,7 @@ class InvoiceList extends Component<any, any> {
       () => this.getInvoiceList()
     );
   };
+
   getInvoiceList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
@@ -213,6 +214,10 @@ class InvoiceList extends Component<any, any> {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
     let id = '';
+    if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
+      message.error('Please choose order');
+      return;
+    }
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState === 1) {
         valid = false;
@@ -234,6 +239,10 @@ class InvoiceList extends Component<any, any> {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
     let id = '';
+    if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
+      message.error('Please choose order');
+      return;
+    }
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState !== 1) {
         valid = false;
@@ -312,6 +321,7 @@ class InvoiceList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.onSearch();
+          this.emptySelected();
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -331,8 +341,8 @@ class InvoiceList extends Component<any, any> {
 
           // 新窗口下载
           const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
-          debugger;
           window.open(exportHref);
+          this.emptySelected();
         } else {
           message.error('Unsuccessful');
         }
@@ -369,7 +379,7 @@ class InvoiceList extends Component<any, any> {
 
   onChangeOrder = (item) => {
     const { selectedOrder } = this.state;
-    (selectedOrder.ordrAmount = item.tradePrice.totalPrice), (selectedOrder.customerName = item.invoice.contacts), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.invoice.email), (selectedOrder.billingAddress = item.invoice.address);
+    (selectedOrder.ordrAmount = item.consignee.totalPrice), (selectedOrder.customerName = item.buyer.name), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.consignee.email), (selectedOrder.billingAddress = item.invoice.address);
 
     this.setState({
       orderNumber: item.id,
@@ -390,9 +400,15 @@ class InvoiceList extends Component<any, any> {
     });
     return tempList;
   };
+  emptySelected = () => {
+    this.setState({
+      selectedRowKeys: [],
+      selectedRowList: []
+    });
+  };
 
   render() {
-    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder, confirmLoading } = this.state;
+    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder, confirmLoading, selectedRowKeys } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -456,7 +472,7 @@ class InvoiceList extends Component<any, any> {
         dataIndex: 'payOrderStatus',
         key: 'payOrderStatus',
         width: '8%',
-        render: (text) => <p>{payOrderStatusDic[text]}</p>
+        render: (text) => <p>{text}</p>
       },
       {
         title: 'Subscription number',
@@ -516,6 +532,7 @@ class InvoiceList extends Component<any, any> {
       }
     ];
     const rowSelection = {
+      selectedRowKeys,
       onChange: this.onSelectChange,
       getCheckboxProps: (record) => ({
         disabled: +record.delFlag === 1
@@ -620,7 +637,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Period" />
+                    <Input style={styles.label} disabled defaultValue="Invoice date" />
                     <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
                   </InputGroup>
                 </FormItem>

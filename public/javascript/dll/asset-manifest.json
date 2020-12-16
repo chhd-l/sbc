@@ -1,3 +1,4 @@
 {
-  "vendor.js": "/vendor.dll.js"
+  "vendor.js": "/vendor.dll.js",
+  "vendor.dll.js.gz": "/vendor.dll.js.gz"
 }

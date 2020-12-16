@@ -68,7 +68,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       <div className="content">
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={{ spinning: true, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           rowKey={(_row, index) => _row.goodsNo + index.toString()}
           dataSource={goodsInfoPage.content}
           isScroll={false}
@@ -132,7 +132,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             //ellipsis
           />
 
-          <Column title="Product name" dataIndex="goodsName" key="goodsName"  width="200px"/>
+          <Column title="Product name" dataIndex="goodsName" key="goodsName" width="200px" />
 
           <Column title="Sales category" key="storeCateName" dataIndex="storeCateName" />
 
@@ -161,6 +161,9 @@ export default class GoodsGrid extends React.Component<any, any> {
     }
     // params.goodsName = "Baby"
     params.goodsId = '2c91808574d8e87f0175251dd4a90028';
+    this.setState({
+      loading: true
+    });
 
     let { res } = await webapi.fetchproductTooltip({ ...params });
 

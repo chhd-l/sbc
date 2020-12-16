@@ -60,7 +60,7 @@ export default class PageSettingForm extends Component<any, any> {
       <div>
         {loading ? (
           <div className="spin-container">
-            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
           </div>
         ) : null}
         <Form {...formItemLayout} className="login-form">
@@ -69,7 +69,7 @@ export default class PageSettingForm extends Component<any, any> {
               initialValue: seoObj.title
             })(
               <Input
-                placeholder="Meta title for the site"
+                placeholder="Meta title for the page"
                 onChange={(e) =>
                   updateSeoForm({
                     field: 'title',
@@ -84,7 +84,7 @@ export default class PageSettingForm extends Component<any, any> {
               initialValue: seoObj.metaKeywords
             })(
               <TextArea
-                placeholder="Meta keywords for the site"
+                placeholder="Meta keywords for the page"
                 rows={4}
                 onChange={(e) =>
                   updateSeoForm({
@@ -101,7 +101,7 @@ export default class PageSettingForm extends Component<any, any> {
             })(
               <TextArea
                 rows={4}
-                placeholder="Meta description for the site"
+                placeholder="Meta description for the page"
                 onChange={(e) =>
                   updateSeoForm({
                     field: 'description',

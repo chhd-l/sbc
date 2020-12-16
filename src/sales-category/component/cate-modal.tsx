@@ -242,6 +242,7 @@ class CateModalForm extends React.Component<any, any> {
                   initialValue: cateRouter,
                   onChange: this._editGoods.bind(this, 'cateRouter')
                 })(<Input />)}
+                <Tips title={<FormattedMessage id="product.recommendedRouter" />} />
               </FormItem>
             )}
             <FormItem labelCol={2} {...formItemLayout} label="Category type">

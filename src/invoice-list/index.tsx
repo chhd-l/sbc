@@ -215,7 +215,7 @@ class InvoiceList extends Component<any, any> {
     let valid = true;
     let id = '';
     if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
-      message.error('Please select invoice');
+      message.error('Please choose order');
       return;
     }
     for (let i = 0; i < selectedRowList.length; i++) {
@@ -240,7 +240,7 @@ class InvoiceList extends Component<any, any> {
     let valid = true;
     let id = '';
     if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
-      message.error('Please select invoice');
+      message.error('Please choose order');
       return;
     }
     for (let i = 0; i < selectedRowList.length; i++) {
@@ -472,7 +472,7 @@ class InvoiceList extends Component<any, any> {
         dataIndex: 'payOrderStatus',
         key: 'payOrderStatus',
         width: '8%',
-        render: (text) => <p>{payOrderStatusDic[text]}</p>
+        render: (text) => <p>{text}</p>
       },
       {
         title: 'Subscription number',

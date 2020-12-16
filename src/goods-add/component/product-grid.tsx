@@ -43,9 +43,6 @@ export default class GoodsGrid extends React.Component<any, any> {
   };
 */
   componentDidMount() {
-    this.setState({
-      loading: true
-    });
     this.init(this.props.searchParams ? this.props.searchParams : {});
   }
 
@@ -66,14 +63,14 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   render() {
-    const { goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible } = this.props;
 
     return (
       <div className="content">
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
-          loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           rowKey={(_row, index) => _row.goodsNo + index.toString()}
           dataSource={goodsInfoPage.content}
           isScroll={false}

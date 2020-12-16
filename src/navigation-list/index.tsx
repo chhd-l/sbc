@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, DragTable } from 'qmkit';
-import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal } from 'antd';
+import { Row, Col, Select, Button, message, Tooltip, Divider, Popconfirm, Switch, Form, Modal, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { getStoreLanguages } from './storeLanguage';
@@ -30,6 +30,9 @@ class NavigationList extends Component<any, any> {
   }
 
   componentDidMount() {
+    this.setState({
+      loading: true
+    });
     getStoreLanguages().then((res) => {
       this.setState({
         languages: res,
@@ -45,6 +48,9 @@ class NavigationList extends Component<any, any> {
   }
 
   getNavigationList(language) {
+    this.setState({
+      loading: true
+    });
     webapi
       .getNavigations(language)
       .then((data) => {
@@ -71,11 +77,19 @@ class NavigationList extends Component<any, any> {
           this.setState({
             dataSource: dataSource,
             selectLanguage: language,
-            allTopNavigationName
+            allTopNavigationName,
+            loading: false
+          });
+        } else {
+          this.setState({
+            loading: false
           });
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.message || 'Unsuccessful');
       });
   }
@@ -86,6 +100,9 @@ class NavigationList extends Component<any, any> {
       title: 'Prompt',
       content: 'Are you sure to ' + tipMessage + ' the navigation?',
       onOk() {
+        this.setState({
+          loading: true
+        });
         let enable = checked ? 1 : 0;
         webapi
           .updateNavigationStatus(record.id, enable)
@@ -111,12 +128,18 @@ class NavigationList extends Component<any, any> {
     });
   }
   sortNavigation(sortList) {
+    this.setState({
+      loading: true
+    });
     webapi
       .sortNavigations(sortList)
       .then((data) => {
         const { res } = data;
         if (res.code === 'K-000000') {
           message.success('Operate successfully');
+          this.setState({
+            loading: false
+          });
         } else {
           message.error(res.message || 'Sort Failed');
         }
@@ -130,6 +153,9 @@ class NavigationList extends Component<any, any> {
       message.warning('You must delete children of the navigation firstly');
       return;
     }
+    this.setState({
+      loading: true
+    });
     webapi
       .deleteNavigation(record.id)
       .then((data) => {
@@ -247,7 +273,9 @@ class NavigationList extends Component<any, any> {
             </Col>
           </Row>
           <Row>
-            <DragTable loading={loading} columns={columns} dataSource={dataSource} sort={this.sortNavigation} />
+            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <DragTable columns={columns} dataSource={dataSource} sort={this.sortNavigation} />
+            </Spin>
           </Row>
         </div>
       </div>

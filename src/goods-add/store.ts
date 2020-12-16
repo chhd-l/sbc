@@ -931,9 +931,11 @@ export default class AppStore extends Store {
   _validInventoryFormsNew() {
     let valid = true;
     let goodsList = this.state().get('goodsList');
+    let addSkUProduct = this.state().get('addSkUProduct');
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
+        if (!(item.get('stock') || item.get('stock') == 0) && !a.minStock) {
           valid = false;
           return;
         }

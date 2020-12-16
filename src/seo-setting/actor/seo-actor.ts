@@ -12,6 +12,8 @@ export default class SeoActor extends Actor {
       seoModalVisible: false,
       currentTab: 'siteSeo',
       currentPage: '',
+      pageNum: 1, //当前页数
+      total: 1, //总数
       allPages: []
     };
   }
@@ -49,7 +51,14 @@ export default class SeoActor extends Actor {
   changeCurrentPage(state, currentPage) {
     return state.set('currentPage', currentPage);
   }
-
+  @Action('seoActor: pageNum')
+  changePageNum(state, pageNum) {
+    return state.set('pageNum', pageNum);
+  }
+  @Action('seoActor: total')
+  changeTotalPages(state, total) {
+    return state.set('total', total);
+  }
   @Action('seoActor: allPages')
   changeSEOPages(state, allPages) {
     return state.set('allPages', allPages);

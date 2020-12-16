@@ -77,7 +77,7 @@ export default class Detail extends React.Component<any, any> {
                     height="320"
                     // content="112"
                     // content = {JSON.parse(goods.get('goodsDetail'))[item.get('name')]}
-                    content={goodsDetailTabContent && goodsDetailTabContent[item.get('name')]}
+                    content={goodsDetailTabContent && goodsDetailTabContent[item.get('name')] ? JSON.stringify(goodsDetailTabContent[item.get('name')]).replace(/^\"|\"$/g, '') : ''} //去除前后的双引号
                     insertImg={() => {
                       this._handleClick();
                       this.props.relaxProps.editEditor('detail');

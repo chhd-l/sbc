@@ -11,6 +11,8 @@ export default class PageSeo extends React.Component<any, any> {
     relaxProps?: {
       loading: any;
       allPages: any;
+      pageNum: any;
+      total: any;
       saveSeo: Function;
       savePage: Function;
       setSeoModalVisible: Function;
@@ -23,6 +25,8 @@ export default class PageSeo extends React.Component<any, any> {
   static relaxProps = {
     allPages: 'allPages',
     loading: 'loading',
+    pageNum: 'pageNum',
+    total: 'total',
     saveSeo: noop,
     savePage: noop,
     setSeoModalVisible: noop,
@@ -39,8 +43,13 @@ export default class PageSeo extends React.Component<any, any> {
     const { setSeoModalVisible, getSeo, changeCurrentPage } = this.props.relaxProps;
     getSeo(3, record.name);
   }
+
+  handleTableChange = (pagination, filters, sorter) => {
+    const { getPages } = this.props.relaxProps;
+    getPages(pagination.current - 1);
+  };
   render() {
-    const { loading, allPages, saveSeo, savePage, setSeoModalVisible } = this.props.relaxProps;
+    const { loading, allPages, pageNum, total, saveSeo, savePage, setSeoModalVisible } = this.props.relaxProps;
     const dataSource = allPages.toJS();
     const columns = [
       {
@@ -55,9 +64,22 @@ export default class PageSeo extends React.Component<any, any> {
         render: (text, record) => <a style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>
       }
     ];
+
+    console.log(total, 'total----------');
     return (
       <div>
-        <Table dataSource={dataSource} columns={columns} loading={loading} />
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{
+            defaultPageSize: 10,
+            pageSize: 10,
+            current: pageNum,
+            total: total
+          }}
+          onChange={this.handleTableChange}
+          loading={loading}
+        />
         <SeoModal />
       </div>
     );

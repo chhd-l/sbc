@@ -98,6 +98,7 @@ class InvoiceList extends Component<any, any> {
       () => this.getInvoiceList()
     );
   };
+
   getInvoiceList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
@@ -213,6 +214,10 @@ class InvoiceList extends Component<any, any> {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
     let id = '';
+    if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
+      message.error('Please select invoice');
+      return;
+    }
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState === 1) {
         valid = false;
@@ -234,6 +239,10 @@ class InvoiceList extends Component<any, any> {
     const { selectedRowKeys, selectedRowList } = this.state;
     let valid = true;
     let id = '';
+    if (selectedRowKeys.length < 1 || selectedRowList.length < 1) {
+      message.error('Please select invoice');
+      return;
+    }
     for (let i = 0; i < selectedRowList.length; i++) {
       if (selectedRowList[i].invoiceState !== 1) {
         valid = false;
@@ -312,6 +321,7 @@ class InvoiceList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
           this.onSearch();
+          this.emptySelected();
         } else {
           message.error(res.message || 'Operation failure');
         }
@@ -332,6 +342,7 @@ class InvoiceList extends Component<any, any> {
           // 新窗口下载
           const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
           window.open(exportHref);
+          this.emptySelected();
         } else {
           message.error('Unsuccessful');
         }
@@ -368,7 +379,7 @@ class InvoiceList extends Component<any, any> {
 
   onChangeOrder = (item) => {
     const { selectedOrder } = this.state;
-    (selectedOrder.ordrAmount = item.tradePrice.totalPrice), (selectedOrder.customerName = item.invoice.contacts), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.invoice.email), (selectedOrder.billingAddress = item.invoice.address);
+    (selectedOrder.ordrAmount = item.consignee.totalPrice), (selectedOrder.customerName = item.buyer.name), (selectedOrder.paymentStatus = item.tradeState.payState), (selectedOrder.consumerEmail = item.consignee.email), (selectedOrder.billingAddress = item.invoice.address);
 
     this.setState({
       orderNumber: item.id,
@@ -388,6 +399,12 @@ class InvoiceList extends Component<any, any> {
       tempList.push(arrList.find((el) => el.orderInvoiceId === item));
     });
     return tempList;
+  };
+  emptySelected = () => {
+    this.setState({
+      selectedRowKeys: [],
+      selectedRowList: []
+    });
   };
 
   render() {

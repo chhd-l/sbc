@@ -75,6 +75,8 @@ export default {
     'Product video size is recommended 30M, the maximum limit is 50M, supported file type is mp4, recommended duration is less than or equal to 90s, greater than or equal to 6s, recommended video ratio of 7: 9',
   'product.attributeInformation': 'Attribute information',
   'product.recommendedAliasName':'English name of sales category for searching specific type producy,  you need to create Alias name in dictionary first, and then choose from.',
+  'product.recommendedRouter':'The router could be customized by business needs, which show in the shop when select relevant sales category. In France shop, the router should be like this"/"any letters"/?prefn1={attribute name}&prefv1={Attibute value1}|{Attribute value2}|{Attribute valuen},{}should be replace with real content of attribute.For example /cats/?prefn1=ages&prefv1=Adulte (1-7 ans)|Mature (7-12 ans)|Senior (+ 12 ans)',
+  
   'product.attributeInformationDetail':
     'Consumber can filter the products according to the attributes. If attributes are not filled in or filled in incorrectly, the products may not be found and affect your sales. Please input carefully and accurately',
   'product.specificationSetting': 'Specification setting',

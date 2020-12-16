@@ -56,7 +56,6 @@ export default class PicModal extends React.Component<any, any> {
   //获取
   getCateList = () =>{
     webapi.getImgCates().then(data=>{
-      debugger
       const {res} = data
       if(res){
         let cateIds = []

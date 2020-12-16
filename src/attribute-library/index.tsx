@@ -693,7 +693,10 @@ class AttributeLibrary extends Component<any, any> {
               <FormItem label="Attribute name">
                 {getFieldDecorator('attributeName', {
                   rules: [
-                    { required: true },
+                    {
+                      required: true,
+                      message: 'Please enter attribute name'
+                    },
                     {
                       max: 50,
                       message: 'Exceed maximum length!'
@@ -715,6 +718,10 @@ class AttributeLibrary extends Component<any, any> {
               <FormItem label="Display name">
                 {getFieldDecorator('attributeNameEn', {
                   rules: [
+                    {
+                      required: true,
+                      message: 'Please enter display name'
+                    },
                     {
                       max: 50,
                       message: 'Exceed maximum length!'

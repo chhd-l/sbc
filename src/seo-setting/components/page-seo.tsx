@@ -78,7 +78,7 @@ export default class PageSeo extends React.Component<any, any> {
             total: total
           }}
           onChange={this.handleTableChange}
-          loading={loading}
+          loading={{ spinning: loading, delay: 3000, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" /> }}
         />
         <SeoModal />
       </div>

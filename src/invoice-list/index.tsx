@@ -408,7 +408,7 @@ class InvoiceList extends Component<any, any> {
   };
 
   render() {
-    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder, confirmLoading } = this.state;
+    const { title, invoiceList, comsumerTypeList, invoiceStatusList, modalName, visible, objectFetching, orderList, selectedOrder, confirmLoading, selectedRowKeys } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -532,6 +532,7 @@ class InvoiceList extends Component<any, any> {
       }
     ];
     const rowSelection = {
+      selectedRowKeys,
       onChange: this.onSelectChange,
       getCheckboxProps: (record) => ({
         disabled: +record.delFlag === 1

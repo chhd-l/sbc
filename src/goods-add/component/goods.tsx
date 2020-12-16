@@ -389,7 +389,7 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
               })(
                 <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
                   <Option value="1">Y</Option>

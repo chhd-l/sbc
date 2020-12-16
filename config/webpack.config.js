@@ -55,7 +55,7 @@ module.exports = function (webpackEnv, envCode = 'prod') {
 
   const publicPath = isEnvProduction
     ? "https://cdnstorestg.azureedge.net/res/"
-    : isEnvDevelopment && 'https://cdnstorestg.azureedge.net/res/';
+    : isEnvDevelopment && './';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction
@@ -187,13 +187,19 @@ module.exports = function (webpackEnv, envCode = 'prod') {
             test: /[\\/]node_modules[\\/]/,
             priority: -10
           },
-          vendors: {
+          antDesigns: {
+            name: 'antDesigns',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](@ant-design|antd)[\\/]/,
+            priority: -11,
+          },
+          web_modules: {
             test: /[\\/]web_modules[\\/]/,
-            priority: -20
+            priority: -30
           },
           default: {
             minChunks: 2,
-            priority: -30,
+            priority: -40,
             reuseExistingChunk: true
           }
         }

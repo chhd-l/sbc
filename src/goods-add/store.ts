@@ -1060,7 +1060,7 @@ export default class AppStore extends Store {
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
       return Map({
         specId: item.get('isMock') == true ? null : item.get('specId'),
-        mockSpecId: item.get('specId'),
+        mockSpecId: item.get('mockSpecId'),
         specName: item.get('specName').trim()
       });
     });
@@ -1103,7 +1103,7 @@ export default class AppStore extends Store {
         goodsSpecDetails = goodsSpecDetails.push(
           Map({
             specId: item.get('isMock') == true ? null : item.get('specId'),
-            mockSpecId: item.get('specId'),
+            mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('specDetailId'),
@@ -1383,7 +1383,7 @@ export default class AppStore extends Store {
     let goodsSpecs = data.get('goodsSpecs').map((item) => {
       return Map({
         specId: item.get('isMock') == true ? null : item.get('specId'),
-        mockSpecId: item.get('specId'),
+        mockSpecId: item.get('mockSpecId'),
         specName: item.get('specName').trim()
       });
     });
@@ -1396,7 +1396,7 @@ export default class AppStore extends Store {
         goodsSpecDetails = goodsSpecDetails.push(
           Map({
             specId: item.get('isMock') == true ? null : item.get('specId'),
-            mockSpecId: item.get('specId'),
+            mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('specDetailId'),
@@ -1586,6 +1586,8 @@ export default class AppStore extends Store {
     } else {
       result = await save(param.toJS());
     }
+
+    console.log(param.toJS(), 'param.toJS(),----------------');
 
     this.dispatch('goodsActor: saveLoading', false);
     if (result.res.code === Const.SUCCESS_CODE) {
@@ -2292,10 +2294,15 @@ export default class AppStore extends Store {
     let specValue;
     goodsInfos.forEach((item) => {
       specValue = item['specId-' + specId];
-      const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
-      const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
-      this.editGoodsItem(item.id, 'basePrice', basePrice);
-      this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+      if (specValue) {
+        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+        const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+        this.editGoodsItem(item.id, 'basePrice', basePrice);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+      } else {
+        this.editGoodsItem(item.id, 'basePrice', null);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', null);
+      }
     });
   };
   updateBasePrice = (id, key, e) => {
@@ -2318,7 +2325,7 @@ export default class AppStore extends Store {
         specValue = item['specId-' + specId];
       }
     });
-    const value = (parseFloat(e) / parseFloat(specValue)).toFixed(2);
+    const value = specValue ? (parseFloat(e) / parseFloat(specValue)).toFixed(2) : null;
     if (key === 'marketPrice') {
       this.editGoodsItem(id, 'basePrice', value);
     } else if (key === 'subscriptionPrice') {

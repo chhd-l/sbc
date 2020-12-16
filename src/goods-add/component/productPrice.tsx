@@ -75,9 +75,9 @@ export default class ProductPrice extends React.Component<any, any> {
   }
   componentDidMount() {
     const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
-    if (!getGoodsId) {
-      setDefaultBaseSpecId();
-    }
+    // if (!getGoodsId) {
+    //   setDefaultBaseSpecId();
+    // }
   }
   render() {
     const WrapperForm = this.WrapperForm;
@@ -146,7 +146,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
                   </Col>
                 </Row>
               );
@@ -406,7 +406,7 @@ class SkuForm extends React.Component<any, any> {
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' || 'weight' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
+            {goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
             <Option value={null}>None</Option>
           </Select>
         </div>

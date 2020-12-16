@@ -4,7 +4,7 @@ import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, A
 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
-
+import './index.less';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
 

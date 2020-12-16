@@ -75,9 +75,9 @@ export default class ProductPrice extends React.Component<any, any> {
   }
   componentDidMount() {
     const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
-    if (!getGoodsId) {
-      setDefaultBaseSpecId();
-    }
+    // if (!getGoodsId) {
+    //   setDefaultBaseSpecId();
+    // }
   }
   render() {
     const WrapperForm = this.WrapperForm;
@@ -112,6 +112,8 @@ class SkuForm extends React.Component<any, any> {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
+    console.log(goodsSpecs.toJS(), 'goodsSpecs----------------------');
+    console.log(baseSpecId, 'baseSpecId-----------------------');
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
@@ -145,7 +147,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
                   </Col>
                 </Row>
               );
@@ -337,7 +339,13 @@ class SkuForm extends React.Component<any, any> {
         <div>
           Base price
           <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
-            {goodsSpecs.map((item) => (item.get('specName') === 'specification0' || 'weight' ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
+            {goodsSpecs.map((item, i) =>
+              item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (
+                <Option key={i} value={item.get('mockSpecId')}>
+                  {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
+                </Option>
+              ) : null
+            )}
             <Option value={null}>None</Option>
           </Select>
         </div>
@@ -395,7 +403,7 @@ class SkuForm extends React.Component<any, any> {
     });
     columns = columns.push({
       title: '',
-      key: '1',
+      key: 'goodsNo',
       width: '5%'
     });
 

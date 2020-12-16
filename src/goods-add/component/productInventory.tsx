@@ -195,7 +195,7 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo, 'stock'),
-                  initialValue: rowInfo.stock ? rowInfo.stock : a && a.minStock
+                  initialValue: a && a.minStock ? a.minStock : rowInfo.stock
                 })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock} />)}
               </FormItem>
             </Col>

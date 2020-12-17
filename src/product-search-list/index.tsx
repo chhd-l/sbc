@@ -7,7 +7,7 @@ import * as webapi from './webapi';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
-const RangePicker = DatePicker.RangePicker;;
+const RangePicker = DatePicker.RangePicker;
 
 export default class ProductSearchList extends React.Component<any, any> {
   static propTypes = {};
@@ -51,7 +51,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.dateRangeChange(([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'),moment(sessionStorage.getItem(cache.CURRENT_YEAR))]));
+    this.dateRangeChange([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]);
   }
 
   onTabChange(key) {
@@ -66,7 +66,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
   dateRangeChange(date) {
     this.setState({
-      dateRange: [date[0].format('YYYY-MM-DD'),date[1].format('YYYY-MM-DD')],
+      dateRange: [date[0].format('YYYY-MM-DD'), date[1].format('YYYY-MM-DD')],
       loading: false
     });
     this.setState({}, () => this.getStatisticsResult());
@@ -287,7 +287,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
-        render: (text, record) => text * 100 + '%'
+        render: (text, record) => text.toFixed(2) + '%'
       },
       {
         title: 'Result No.',
@@ -333,7 +333,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         key: 'percent',
         width: '15%',
         sorter: true,
-        render: (text, record) => text * 100 + '%'
+        render: (text, record) => text.toFixed(2) + '%'
       },
       {
         title: 'Last Not Found Date',
@@ -371,7 +371,7 @@ export default class ProductSearchList extends React.Component<any, any> {
               </Col>
               <Col span={8}></Col>
               <Col span={8}>
-                <RangePicker defaultValue={[moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'),moment(sessionStorage.getItem(cache.CURRENT_YEAR))]} onChange={this.dateRangeChange} placeholder={['Start time', 'End time']} />
+                <RangePicker defaultValue={[moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]} onChange={this.dateRangeChange} placeholder={['Start time', 'End time']} />
               </Col>
             </Row>
             <Row className="searchHeader">

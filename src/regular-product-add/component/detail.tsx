@@ -42,14 +42,12 @@ export default class Detail extends React.Component<any, any> {
   };
 
   getDetailString = (goodsDetailTabContent, name) => {
-    var detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
+    let detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
     if (!detail) {
       return '';
     }
-    debugger
-    var test = goodsDetailTabContent[name].toString() 
     if (Array.isArray(detail)) {
-      return '[' + (goodsDetailTabContent[name].toString()).replace(/^\"|\"$/g,'') + ']';
+      return '[' + goodsDetailTabContent[name].toString().replace(/^\"|\"$/g, '') + ']';
     } else {
       return detail.toString();
     }

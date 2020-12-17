@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Tabs, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 
@@ -28,7 +28,11 @@ export default class OrderDetail extends React.Component<any, any> {
 
   render() {
     if (this.state.loading) {
-      return <div>loading...</div>;
+      return (
+        <div style={styles.noBackgroundContainer}>
+          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+        </div>
+      );
     }
 
     return (
@@ -39,16 +43,9 @@ export default class OrderDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container">
-          <Headline
-            title={
-              <FormattedMessage id="PointsOrderDetails"></FormattedMessage>
-            }
-          />
+          <Headline title={<FormattedMessage id="PointsOrderDetails"></FormattedMessage>} />
 
-          <Tabs
-            onChange={(key) => this.store.onTabsChange(key)}
-            activeKey={this.store.state().get('tab')}
-          >
+          <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
             <Tabs.TabPane tab="订单详情" key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
@@ -66,3 +63,11 @@ export default class OrderDetail extends React.Component<any, any> {
     );
   }
 }
+const styles = {
+  noBackgroundContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh'
+  } as any
+};

@@ -1,22 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import * as webapi from './webapi';
-import {
-  Icon,
-  Table,
-  Tooltip,
-  Divider,
-  Switch,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  message,
-  Select,
-  Spin
-} from 'antd';
+import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -46,7 +31,8 @@ class Notification extends Component<any, any> {
       selectedTemplateName: '',
       emailTemplateList: [],
       previewHtml: '',
-      loading: false
+      loading: false,
+      allLoading: false
     };
   }
   componentDidMount() {
@@ -55,17 +41,34 @@ class Notification extends Component<any, any> {
   }
 
   getNotificationList = () => {
-    webapi.getNotificationList().then((data) => {
-      const { res } = data;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          orderAutomationData: res.context.orderList,
-          subscriptionAutomationData: res.context.subscriptionList,
-          recommendationAutomationData: res.context.recommendationList,
-          priscriberAutomationData: res.context.oktList
-        });
-      }
+    this.setState({
+      allLoading: true
     });
+    webapi
+      .getNotificationList()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            orderAutomationData: res.context.orderList,
+            subscriptionAutomationData: res.context.subscriptionList,
+            recommendationAutomationData: res.context.recommendationList,
+            priscriberAutomationData: res.context.oktList,
+            allLoading: false
+          });
+        } else {
+          message.error(res.message || 'Operation failure');
+          this.setState({
+            allLoading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err.message || 'Operation failure');
+        this.setState({
+          allLoading: false
+        });
+      });
   };
 
   handleCancel = () => {
@@ -213,16 +216,7 @@ class Notification extends Component<any, any> {
   };
 
   render() {
-    const {
-      title,
-      orderAutomationData,
-      subscriptionAutomationData,
-      recommendationAutomationData,
-      priscriberAutomationData,
-      selectedForm,
-      emailTemplateList,
-      previewHtml
-    } = this.state;
+    const { title, orderAutomationData, subscriptionAutomationData, recommendationAutomationData, priscriberAutomationData, selectedForm, emailTemplateList, previewHtml, allLoading } = this.state;
     const columns = [
       {
         title: 'Status',
@@ -244,12 +238,7 @@ class Notification extends Component<any, any> {
           <span>
             <a onClick={() => this.openSetting(record)}>setting</a>
             <Divider type="vertical" />
-            <Switch
-              checkedChildren="on"
-              unCheckedChildren="off"
-              defaultChecked={+record.status === 1 ? true : false}
-              onChange={() => this.changeAutoStatus(record.id, record.status)}
-            />
+            <Switch checkedChildren="on" unCheckedChildren="off" defaultChecked={+record.status === 1 ? true : false} onChange={() => this.changeAutoStatus(record.id, record.status)} />
           </span>
         )
       }
@@ -258,84 +247,59 @@ class Notification extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <div style={{ marginTop: 10 }}>
-            <div style={{ display: 'flex' }}>
-              <div style={{ margin: 'auto 0' }}>
-                <Icon type="mail" style={{ fontSize: 40 }} />
+        <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <div className="container-search">
+            <Headline title={title} />
+            <div style={{ marginTop: 10 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>Email Automation - Order</h3>
+                  <p>Sending Email automatically by the status of Order</p>
+                </div>
               </div>
-              <div style={{ marginLeft: 10 }}>
-                <h3>Email Automation - Order</h3>
-                <p>Sending Email automatically by the status of Order</p>
-              </div>
+              <Table style={{ marginTop: 20 }} columns={columns} dataSource={orderAutomationData} pagination={false} />
             </div>
-            <Table
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={orderAutomationData}
-              pagination={false}
-            />
-          </div>
-          <div style={{ marginTop: 30 }}>
-            <div style={{ display: 'flex' }}>
-              <div style={{ margin: 'auto 0' }}>
-                <Icon type="mail" style={{ fontSize: 40 }} />
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>Email Automation - Subscription</h3>
+                  <p>Sending Email automatically by the status of Subscription</p>
+                </div>
               </div>
-              <div style={{ marginLeft: 10 }}>
-                <h3>Email Automation - Subscription</h3>
-                <p>Sending Email automatically by the status of Subscription</p>
-              </div>
+              <Table style={{ marginTop: 20 }} columns={columns} dataSource={subscriptionAutomationData} pagination={false} />
             </div>
-            <Table
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={subscriptionAutomationData}
-              pagination={false}
-            />
-          </div>
-          <div style={{ marginTop: 30 }}>
-            <div style={{ display: 'flex' }}>
-              <div style={{ margin: 'auto 0' }}>
-                <Icon type="mail" style={{ fontSize: 40 }} />
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>Email Automation - Recommendation</h3>
+                  <p>Sending Email automatically by the status of Recommendation</p>
+                </div>
               </div>
-              <div style={{ marginLeft: 10 }}>
-                <h3>Email Automation - Recommendation</h3>
-                <p>
-                  Sending Email automatically by the status of Recommendation
-                </p>
-              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={recommendationAutomationData} pagination={false} />
             </div>
-            <Table
-              rowKey="id"
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={recommendationAutomationData}
-              pagination={false}
-            />
-          </div>
-          <div style={{ marginTop: 30 }}>
-            <div style={{ display: 'flex' }}>
-              <div style={{ margin: 'auto 0' }}>
-                <Icon type="mail" style={{ fontSize: 40 }} />
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>Email Automation - Prescriber creation</h3>
+                  <p>Sending Email automatically by the status of Prescriber creation</p>
+                </div>
               </div>
-              <div style={{ marginLeft: 10 }}>
-                <h3>Email Automation - Prescriber creation</h3>
-                <p>
-                  Sending Email automatically by the status of Prescriber
-                  creation
-                </p>
-              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={priscriberAutomationData} pagination={false} />
             </div>
-            <Table
-              rowKey="id"
-              style={{ marginTop: 20 }}
-              columns={columns}
-              dataSource={priscriberAutomationData}
-              pagination={false}
-            />
           </div>
-        </div>
+        </Spin>
         <Modal
           width="800px"
           title="Template Setting"
@@ -346,12 +310,7 @@ class Notification extends Component<any, any> {
             <Button key="back" shape="round" onClick={this.handleCancel}>
               Cancel
             </Button>,
-            <Button
-              key="submit"
-              shape="round"
-              type="primary"
-              onClick={this.updateNotification}
-            >
+            <Button key="submit" shape="round" type="primary" onClick={this.updateNotification}>
               Confirm
             </Button>
           ]}
@@ -363,12 +322,7 @@ class Notification extends Component<any, any> {
                   <p>{selectedForm.selectedStatus}</p>
                 </FormItem>
                 <FormItem label="Email Template">
-                  <Select
-                    value={selectedForm.selectedTemplateId}
-                    onChange={(value, option) =>
-                      this.templateChange(value, option)
-                    }
-                  >
+                  <Select value={selectedForm.selectedTemplateId} onChange={(value, option) => this.templateChange(value, option)}>
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
                         <Option value={item.templateId} key={index}>
@@ -380,13 +334,8 @@ class Notification extends Component<any, any> {
               </Form>
             </Col>
             <Col span={18}>
-              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
-                {previewHtml ? (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: previewHtml }}
-                    style={{ zoom: '0.5' }}
-                  ></div>
-                ) : null}
+              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+                {previewHtml ? <div dangerouslySetInnerHTML={{ __html: previewHtml }} style={{ zoom: '0.5' }}></div> : null}
               </Spin>
             </Col>
           </Row>

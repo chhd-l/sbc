@@ -116,6 +116,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
             });*/
+            console.log(targetGoodsList,111111111112);
             onProductselectSku(targetGoodsList);
             targetGoodsIds = [];
             this.props.showModal({ type: 0 }, this.props.pid);

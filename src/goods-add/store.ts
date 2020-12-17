@@ -1137,6 +1137,8 @@ export default class AppStore extends Store {
         b = i.targetGoodsIds;
         c = i.minStock;
       });
+      console.log(b,22232222);
+      console.log(item.get('goodsInfoBundleRels').toJS(),3333333333);
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({

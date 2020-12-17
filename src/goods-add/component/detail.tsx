@@ -41,6 +41,18 @@ export default class Detail extends React.Component<any, any> {
     editEditor: noop
   };
 
+  getDetailString = (goodsDetailTabContent, name) => {
+    var detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
+    if (!detail) {
+      return '';
+    }
+    if (Array.isArray(detail)) {
+      return '[' + (goodsDetailTabContent[name].toString()).replace(/^\"|\"$/g,'') + ']';
+    } else {
+      return detail.toString();
+    }
+  };
+
   render() {
     const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs } = this.props.relaxProps;
     let { goodsDetailTab } = this.props.relaxProps;
@@ -74,9 +86,7 @@ export default class Detail extends React.Component<any, any> {
                     }}
                     id={'main' + i}
                     height="320"
-                    // content="112"
-                    // content = {JSON.parse(goods.get('goodsDetail'))[item.get('name')]}
-                    content={goodsDetailTabContent[item.get('name')]}
+                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))}
                     insertImg={() => {
                       this._handleClick();
                       this.props.relaxProps.editEditor('detail');

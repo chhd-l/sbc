@@ -46,8 +46,6 @@ export default class Detail extends React.Component<any, any> {
     if (!detail) {
       return '';
     }
-    debugger
-    var test = goodsDetailTabContent[name].toString() 
     if (Array.isArray(detail)) {
       return '[' + (goodsDetailTabContent[name].toString()).replace(/^\"|\"$/g,'') + ']';
     } else {

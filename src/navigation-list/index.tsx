@@ -100,7 +100,7 @@ class NavigationList extends Component<any, any> {
       title: 'Prompt',
       content: 'Are you sure to ' + tipMessage + ' the navigation?',
       onOk() {
-        this.setState({
+        that.setState({
           loading: true
         });
         let enable = checked ? 1 : 0;

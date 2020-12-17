@@ -1,7 +1,7 @@
 import { useOktaAuth } from '@okta/okta-react';
-import React, { useState, useEffect } from 'react';
-import { login, cache, util, getRoutType } from 'qmkit';
-import { Form, Icon, Input, Button, Row, Col } from 'antd';
+import React, { useEffect } from 'react';
+import { login, cache, getRoutType } from 'qmkit';
+import { Row, Col, Spin } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
@@ -45,7 +45,13 @@ let LoginHome = (props) => {
     }
   }, [authState, authService]);
 
-  return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? null : (
+  return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
+    <div>
+      <div style={styles.noBackgroundContainer}>
+        <Spin spinning={true} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+      </div>
+    </div>
+  ) : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
@@ -81,6 +87,12 @@ const styles = {
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
+  } as any,
+  noBackgroundContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
   } as any,
   buttonContainer: {
     background: '#FFFFF',

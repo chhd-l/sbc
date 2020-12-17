@@ -95,7 +95,10 @@ class InvoiceList extends Component<any, any> {
           total: 0
         }
       },
-      () => this.getInvoiceList()
+      () => {
+        this.emptySelected();
+        this.getInvoiceList();
+      }
     );
   };
 

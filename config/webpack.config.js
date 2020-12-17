@@ -27,7 +27,6 @@ const WebpackBar = require('webpackbar');
 const HappyPack = require('happypack');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-//const happyThreadPool = HappyPack.ThreadPool({ size: 20 });
 
 //prerender-spa-plugin 预渲染
 //const PrerenderSpaPlugin = require('prerender-spa-plugin')
@@ -54,8 +53,8 @@ module.exports = function (webpackEnv, envCode = 'prod') {
   const isEnvProduction = envCode === 'prod';
 
   const publicPath = isEnvProduction
-    ? "https://cdnstorestg.azureedge.net/res/"
-    : isEnvDevelopment && './';
+    ? '/'
+    : isEnvDevelopment && '/';
   const shouldUseRelativeAssetPaths = publicPath === './';
 
   const publicUrl = isEnvProduction

@@ -5,7 +5,8 @@
   "description": "supplier",
   "main": "index.js",
   "scripts": {
-    "start": "node scripts/start.js dev --plugins dynamic-import-node",
+    "start": "node scripts/start.js dev",
+    "start-dynamic": "node scripts/start.js dev --plugins dynamic-import-node",
     "dll-dev": "node scripts/dll.js dev",
     "dll-prod": "node scripts/dll.js prod",
     "server": "http-server dist",
@@ -75,6 +76,7 @@
     "core-js": "^3.1.2",
     "echarts": "4.2.1",
     "echarts-for-react": "^2.0.0",
+    "hard-source-webpack-plugin": "^0.13.1",
     "immutability-helper": "^2.9.1",
     "json-loader": "^0.5.4",
     "lodash": "^4.17.10",

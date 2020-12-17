@@ -1447,7 +1447,6 @@ export default class AppStore extends Store {
         .filter((a) => a.pid == item.toJS().goodsInfoNo);
       let b = [];
       let c = '';
-      console.log(a, 111111111111);
       a.map((i) => {
         b = i.targetGoodsIds;
         c = i.minStock;

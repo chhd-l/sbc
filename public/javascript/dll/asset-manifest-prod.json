@@ -1,6 +1,6 @@
 {
-  "vendor.js": "https://cdnstorestg.azureedge.net/res/vendor.62d372aa.dll.js",
-  "precache-manifest.99de918b3fad3b899e41015493d46d1d.js": "https://cdnstorestg.azureedge.net/res/precache-manifest.99de918b3fad3b899e41015493d46d1d.js",
-  "service-worker.js": "https://cdnstorestg.azureedge.net/res/service-worker.js",
-  "vendor.62d372aa.dll.js.gz": "https://cdnstorestg.azureedge.net/res/vendor.62d372aa.dll.js.gz"
+  "vendor.js": "/vendor.c3075f56.dll.js",
+  "precache-manifest.8b2f31b7fa3fd5a14b057093a83d4327.js": "/precache-manifest.8b2f31b7fa3fd5a14b057093a83d4327.js",
+  "service-worker.js": "/service-worker.js",
+  "vendor.c3075f56.dll.js.gz": "/vendor.c3075f56.dll.js.gz"
 }

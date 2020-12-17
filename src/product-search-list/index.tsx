@@ -7,7 +7,7 @@ import * as webapi from './webapi';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
-const { WeekPicker } = DatePicker;
+const RangePicker = DatePicker.RangePicker;;
 
 export default class ProductSearchList extends React.Component<any, any> {
   static propTypes = {};
@@ -51,7 +51,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.dateRangeChange(moment(sessionStorage.getItem(cache.CURRENT_YEAR)));
+    this.dateRangeChange(([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'),moment(sessionStorage.getItem(cache.CURRENT_YEAR))]));
   }
 
   onTabChange(key) {
@@ -66,7 +66,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
   dateRangeChange(date) {
     this.setState({
-      dateRange: [moment().week(moment(date).week()).startOf('week').format('YYYY-MM-DD'), moment().week(moment(date).week()).endOf('week').format('YYYY-MM-DD')],
+      dateRange: [date[0].format('YYYY-MM-DD'),date[1].format('YYYY-MM-DD')],
       loading: false
     });
     this.setState({}, () => this.getStatisticsResult());
@@ -366,11 +366,12 @@ export default class ProductSearchList extends React.Component<any, any> {
         <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
             <Row>
-              <Col span={12}>
+              <Col span={8}>
                 <Headline title={title} />
               </Col>
-              <Col span={12} style={{ textAlign: 'end' }}>
-                <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR))} onChange={this.dateRangeChange} placeholder="Select week" />
+              <Col span={8}></Col>
+              <Col span={8}>
+                <RangePicker defaultValue={[moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'),moment(sessionStorage.getItem(cache.CURRENT_YEAR))]} onChange={this.dateRangeChange} placeholder={['Start time', 'End time']} />
               </Col>
             </Row>
             <Row className="searchHeader">

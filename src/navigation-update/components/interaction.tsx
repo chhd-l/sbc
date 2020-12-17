@@ -130,6 +130,7 @@ export default class Interaction extends React.Component<any, any> {
               childrenNodes = valuesList.map((child) => {
                 return {
                   title: child.attributeDetailName,
+                  titleEn: child.attributeDetailNameEn,
                   value: child.id,
                   key: child.id,
                   isSingle: item.choiceStatus === 'Single choice',
@@ -139,7 +140,7 @@ export default class Interaction extends React.Component<any, any> {
               });
               filterList.push({
                 title: item.attributeName,
-                attributeNameEn: item.attributeNameEn,
+                attributeName: item.attributeName,
                 value: hasAttribute ? item.attributeId : item.id,
                 key: hasAttribute ? item.attributeId : item.id,
                 children: childrenNodes
@@ -251,12 +252,12 @@ export default class Interaction extends React.Component<any, any> {
     allParentIds.map((item) => {
       let children = selectChildren.filter((x) => x.parentId === item);
       let childValues = children.map((x) => x.value);
-      let childTitles = children.map((x) => x.title);
+      let childTitles = children.map((x) => x.titleEn);
       let parent = this.state.filterList.find(x=>x.value ===item);
       if (children.length === 0) {
         return;
       }
-      let selectFilter = { attributeId: item, attributeNameEn: parent && parent.attributeNameEn ? parent.attributeNameEn : '',
+      let selectFilter = { attributeId: item, attributeName: parent && parent.attributeName ? parent.attributeName : '',
          filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
       selectFilterList.push(selectFilter);
     });

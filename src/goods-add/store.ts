@@ -1446,15 +1446,19 @@ export default class AppStore extends Store {
         .get('addSkUProduct')
         .filter((a) => a.pid == item.toJS().goodsInfoNo);
       let b = [];
+      let c = '';
+      console.log(a, 111111111111);
       a.map((i) => {
         b = i.targetGoodsIds;
+        c = i.minStock;
       });
+      this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
           goodsInfoId: item.get('goodsInfoId') ? item.get('goodsInfoId') : null,
           goodsInfoNo: item.get('goodsInfoNo'),
           goodsInfoBarcode: item.get('goodsInfoBarcode'),
-          stock: item.get('stock'),
+          stock: item.get('stock') || c,
           marketPrice: item.get('marketPrice') || 0,
           mockSpecIds,
           mockSpecDetailIds,

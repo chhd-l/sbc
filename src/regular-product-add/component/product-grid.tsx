@@ -32,16 +32,18 @@ export default class GoodsGrid extends React.Component<any, any> {
     };
   }
 
-  /* props: {
+   props: {
     relaxProps?: {
       productTooltip: any;
+      goodsId: any
     };
   };
 
   static relaxProps = {
     productTooltip: 'productTooltip',
+    goodsId: 'goodsId'
   };
-*/
+
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
   }
@@ -69,7 +71,7 @@ export default class GoodsGrid extends React.Component<any, any> {
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
-          rowKey={(_row, index) => _row.goodsNo + index.toString()}
+          rowKey={(record) => record.goodsId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
           pagination={{
@@ -101,15 +103,9 @@ export default class GoodsGrid extends React.Component<any, any> {
 
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
-            getCheckboxProps: (record) => ({
-              /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
-                      该情况下商品checkbox置灰,禁止选中 */
-
-              // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
-              // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
-              // 因此判断等于2的失效状态下禁用
-              disabled: showValidGood ? !showValidGood : record.goodsStatus === 2
-            })
+            getCheckboxProps: (record) => {
+              return {defaultChecked:record.selectedFlag}
+            }
           }}
         >
           <Column
@@ -153,6 +149,7 @@ export default class GoodsGrid extends React.Component<any, any> {
   };
 
   init = async (params) => {
+    const { goodsId } = this.props.relaxProps;
     if (!params.pageNum) {
       params.pageNum = 0;
     }
@@ -160,7 +157,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       params.pageSize = 10;
     }
     // params.goodsName = "Baby"
-    params.goodsId = '2c91808574d8e87f0175251dd4a90028';
+    params.goodsId = goodsId;
     this.setState({
       loading: true
     });

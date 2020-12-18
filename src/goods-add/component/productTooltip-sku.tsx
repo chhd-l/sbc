@@ -39,6 +39,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     application?: string;
     pid: any;
     initCateList: any;
+    addSkUProduct: any;
   };
 
   static relaxProps = {
@@ -49,7 +50,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     productList: 'productList',
     createLink: 'createLink',
     getGoodsId: 'getGoodsId',
-    initCateList: 'initCateList'
+    initCateList: 'initCateList',
+    addSkUProduct: 'addSkUProduct'
   };
   constructor(props) {
     super(props);
@@ -69,7 +71,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselectSku } = this.props.relaxProps;
+    const { onProductselectSku, addSkUProduct } = this.props.relaxProps;
 
     return (
       <Modal
@@ -104,6 +106,11 @@ class ProductTooltipSKU extends React.Component<any, any> {
             }
           );
           let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
+          console.log(targetGoodsList,1111);
+          console.log(addSkUProduct,22222111);
+          console.log(a,3333333);
+          console.log(b,44444);
+
           targetGoodsList = [];
           targetGoodsList.push({
             pid: this.props.pid,
@@ -116,8 +123,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
             });*/
-            console.log(targetGoodsList,111111111112);
-            onProductselectSku(targetGoodsList);
+            console.log(targetGoodsList,123);
+            if(targetGoodsIds.length !=0) {
+              onProductselectSku(targetGoodsList);
+            }
             targetGoodsIds = [];
             this.props.showModal({ type: 0 }, this.props.pid);
           } else {

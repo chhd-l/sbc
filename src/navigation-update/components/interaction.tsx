@@ -1,7 +1,8 @@
 import React from 'react';
-import { Form, Input, message, Radio, Select, Tree, TreeSelect } from 'antd';
+import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row , Col  } from 'antd';
 import * as webapi from '../webapi';
 import { util } from 'qmkit';
+import Upload from './upload';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -47,6 +48,7 @@ export default class Interaction extends React.Component<any, any> {
     this.generateFilterTree = this.generateFilterTree.bind(this);
     this.filterChange = this.filterChange.bind(this);
     this.getFilterValues = this.getFilterValues.bind(this);
+    this.setImageUrl = this.setImageUrl.bind(this);
   }
 
   componentDidMount() {
@@ -120,7 +122,7 @@ export default class Interaction extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let filterList = [];
-          let activeFilters = res.context.filter(x=>x.filterStatus === '1') 
+          let activeFilters = res.context.filter((x) => x.filterStatus === '1');
           activeFilters.map((item) => {
             let childrenNodes = [];
             let hasCustmerAttribute = item.storeGoodsFilterValueVOList && item.storeGoodsFilterValueVOList.length > 0;
@@ -253,12 +255,11 @@ export default class Interaction extends React.Component<any, any> {
       let children = selectChildren.filter((x) => x.parentId === item);
       let childValues = children.map((x) => x.value);
       let childTitles = children.map((x) => x.titleEn);
-      let parent = this.state.filterList.find(x=>x.value ===item);
+      let parent = this.state.filterList.find((x) => x.value === item);
       if (children.length === 0) {
         return;
       }
-      let selectFilter = { attributeId: item, attributeName: parent && parent.attributeName ? parent.attributeName : '',
-         filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
+      let selectFilter = { attributeId: item, attributeName: parent && parent.attributeName ? parent.attributeName : '', filterType: children[0].filterType, attributeValues: childTitles, attributeValueIdList: childValues };
       selectFilterList.push(selectFilter);
     });
     let selectFilterListString = JSON.stringify(selectFilterList);
@@ -297,6 +298,9 @@ export default class Interaction extends React.Component<any, any> {
       }
     });
     return filterValues;
+  }
+  setImageUrl(url) {
+    this.props.addField('pageImg', url);
   }
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -356,12 +360,47 @@ export default class Interaction extends React.Component<any, any> {
                   )}
                 </FormItem>
                 {pageTypeCode === 'PLP' ? (
-                  <FormItem {...layout} label="Sales Category">
-                    {getFieldDecorator('navigationCateIds', {
-                      initialValue: defaultCategoryIds,
-                      rules: [{ required: true, message: 'Please select sales category' }]
-                    })(<TreeSelect {...tProps} />)}
-                  </FormItem>
+                  <div>
+                    <FormItem {...layout} label="Sales Category">
+                      {getFieldDecorator('navigationCateIds', {
+                        initialValue: defaultCategoryIds,
+                        rules: [{ required: true, message: 'Please select sales category' }]
+                      })(<TreeSelect {...tProps} />)}
+                    </FormItem>
+                    <FormItem {...layout} label="Page Title">
+                      {getFieldDecorator('pageTitle', {
+                        initialValue: navigation.pageTitle
+                      })(
+                        <Input
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.props.addField('pageTitle', value);
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                    <FormItem {...layout} label="Page Description">
+                      {getFieldDecorator('pageDesc', {
+                        initialValue: navigation.pageDesc
+                      })(
+                        <Input.TextArea
+                          autoSize={{ minRows: 3, maxRows: 5 }}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.props.addField('pageDesc', value);
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                    <Row>
+                      <Col span={4}>
+                        <div className="uploadTip">Recommened size：800*800px the size of a single sheet does not exceed 2M，and the maximum sheets is 10</div>
+                      </Col>
+                    </Row>
+                    <FormItem {...layout} label="Page Picture">
+                      <Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={navigation.pageImg} />
+                    </FormItem>
+                  </div>
                 ) : null}
                 {pageTypeCode === 'SRP' ? (
                   <FormItem {...layout} label="Keywords">

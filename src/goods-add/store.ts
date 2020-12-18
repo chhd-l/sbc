@@ -1138,7 +1138,7 @@ export default class AppStore extends Store {
         c = i.minStock;
       });
       /*console.log(b,22232222);
-      console.log(item.get('goodsInfoBundleRels'),3333333333);*/
+      console.log(item,3333333333);*/
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
@@ -1156,7 +1156,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined && item.get('goodsInfoBundleRels').length == 0 ? item.get('goodsInfoBundleRels') : b,
+          goodsInfoBundleRels: b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',

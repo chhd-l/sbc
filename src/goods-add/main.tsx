@@ -175,7 +175,7 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="Related product"
               key="related"
-              //disabled
+              disabled
 
               //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >

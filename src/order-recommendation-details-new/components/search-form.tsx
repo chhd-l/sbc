@@ -1,175 +1,302 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Button, Select, DatePicker } from 'antd';
-import { SelectGroup, noop, Const, AuthWrapper } from 'qmkit';
+import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
+import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { IList } from 'typings/globalType';
+import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
+import { fromJS, Map } from 'immutable';
+import '../index.less';
+import value from '*.json';
 
+const SelectBox = styled.div`
+  .ant-select-dropdown-menu-item,
+  .ant-select-selection-selected-value {
+    max-width: 142px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
 const FormItem = Form.Item;
-const Option = Select.Option;
-//const RangePicker = DatePicker.RangePicker;
-const { RangePicker } = DatePicker;
+const { Option } = Select;
+const TreeNode = Tree.TreeNode;
+
 @Relax
-export default class SearchForm extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      beginTime: moment(nextProps.relaxProps.dateRange.get('beginTime')),
-      endTime: moment(nextProps.relaxProps.dateRange.get('endTime')),
-      pickErrorInfo: ''
-    });
-  }
-
-  state = {
-    beginTime: moment(this.props.relaxProps.dateRange.get('beginTime')),
-    endTime: moment(this.props.relaxProps.dateRange.get('endTime')),
-    pickOpen: false,
-    pickErrorInfo: ''
-  };
+class SearchForm extends React.Component<any, any> {
   props: {
-    form?: any;
     relaxProps?: {
-      searchForm: any;
-      onFormChange: Function;
-      bulkExport: Function;
+      likeGoodsName: string;
+      likeGoodsInfoNo: string;
+      likeGoodsNo: string;
+      storeCategoryIds: IList;
+      goodsCateId: string;
+      brandId: string;
+      addedFlag: string;
+      likeProductCategory: string;
       onSearch: Function;
-      dateRange: any;
-      //改变日期范围
-      changeDateRange: Function;
-      //根据日期搜索
-      searchByDate: Function;
-      beginTime: any;
-      endTime: any;
+      onEditSkuNo: Function;
+      onFormFieldChange: Function;
+      brandList: IList;
+      cateList: IList;
+      getGoodsCate: IList;
+      sourceGoodCateList: IList;
     };
   };
 
   static relaxProps = {
-    searchForm: 'searchForm',
-    onFormChange: noop,
+    // 模糊条件-商品名称
+    likeGoodsName: 'likeGoodsName',
+    // 模糊条件-SKU编码
+    likeGoodsInfoNo: 'likeGoodsInfoNo',
+    // 模糊条件-SPU编码
+    likeGoodsNo: 'likeGoodsNo',
+    // 商品分类
+    storeCategoryIds: 'storeCategoryIds',
+    goodsCateId: 'goodsCateId',
+    // 品牌编号
+    likeProductCategory: 'likeProductCategory',
+    brandId: 'brandId',
     onSearch: noop,
-    dateRange: 'dateRange',
-    changeDateRange: noop,
-    searchByDate: noop,
-    bulkExport: noop
+    onFormFieldChange: noop,
+    onEditSkuNo: noop,
+    //品牌列表
+    brandList: 'brandList',
+    //分类列表
+    cateList: 'cateList',
+    getGoodsCate: 'getGoodsCate',
+    sourceGoodCateList: 'sourceGoodCateList'
+  };
+
+  searchBackFun = () => {
+    const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId } = this.props.relaxProps;
+    let from = {
+      goodsName: likeGoodsName,
+      goodsNo: likeGoodsNo,
+      storeCateIds: storeCategoryIds,
+      goodsCateId: goodsCateId
+    };
+
+    this.props.searchBackFun(from);
   };
 
   render() {
-    const {
-      onFormChange,
-      searchForm,
-      onSearch,
-      bulkExport
-    } = this.props.relaxProps;
-    const { searchByDate } = this.props.relaxProps;
-    const { beginTime, endTime, pickOpen, pickErrorInfo } = this.state;
-    const options = {
-      onFocus: () => {
-        this.setState({ pickOpen: true });
+    const { likeGoodsName, likeProductCategory, storeCategoryIds, likeGoodsNo, onFormFieldChange, brandList, cateList, getGoodsCate, sourceGoodCateList } = this.props.relaxProps;
+    //const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 10 }
       },
-      onBlur: () => {
-        this.setState({ pickOpen: false });
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 }
       }
     };
+
+    //处理分类的树形图结构数据
+    const loop = (cateList) => {
+      return (
+        cateList &&
+        cateList.count() > 0 &&
+        cateList.map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} disabled={true}>
+                {loop(item.get('children'))}
+              </TreeNode>
+            );
+          }
+          return <TreeNode key={item.get('cateId')} value={item.get('cateId')} title={item.get('cateName')} />;
+        })
+      );
+    };
+
+    const generateStoreCateTree = (storeCateList) => {
+      return (
+        storeCateList &&
+        storeCateList.count() > 0 &&
+        storeCateList.map((item) => {
+          if (item.get('children') && item.get('children').count()) {
+            return (
+              <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
+                {generateStoreCateTree(item.get('children'))}
+              </TreeNode>
+            );
+          }
+          return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
+        })
+      );
+    };
+
+    const onSalesCategoryChange = (value) => {
+      if (!value) {
+        onFormFieldChange({ key: 'storeCategoryIds', value: null });
+        return;
+      }
+      let sourceCategories = sourceGoodCateList ? sourceGoodCateList.toJS() : [];
+      let childCategoryIds = [];
+
+      let children = sourceCategories.filter((x) => x.cateParentId === value);
+      if (children && children.length > 0) {
+        children.map((x) => {
+          let lastChildren = sourceCategories.filter((l) => l.cateParentId === x.storeCateId);
+          if (lastChildren && lastChildren.length > 0) {
+            lastChildren.map((l) => {
+              childCategoryIds.push(l.storeCateId);
+            });
+          } else {
+            childCategoryIds.push(x.storeCateId);
+          }
+        });
+      } else {
+        childCategoryIds.push(value);
+      }
+      onFormFieldChange({ key: 'storeCategoryIds', value: childCategoryIds });
+    };
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form className="filter-content" layout="inline">
-        <FormItem>
-          <RangePicker
-            getCalendarContainer={() => document.getElementById('page-content')}
-            allowClear={false}
-            format="YYYY-MM-DD"
-            placeholder={['Start Time', 'End Time']}
-            onChange={(date, dateString) =>
-              this._handleDateParams(date, dateString)
-            }
-            renderExtraFooter={() =>
-              pickErrorInfo != '' && (
-                <span style={{ color: 'red' }}>{pickErrorInfo}</span>
-              )
-            }
-            value={[beginTime, endTime]}
-            open={pickOpen}
-            onOpenChange={() => this.setState({ pickErrorInfo: '' })}
-            {...options}
-          />
-        </FormItem>
-        <FormItem>
-          <Input
-            addonBefore={<FormattedMessage id="OrderNumber" />}
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'id',
-                value
-              });
-            }}
-            value={searchForm.get('id')}
-          />
-        </FormItem>
+        <Row>
+          <Col span={8}>
+            <FormItem>
+              {getFieldDecorator('likeGoodsName')(
+                <Input
+                  addonBefore={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.productName" />
+                    </p>
+                  }
+                  value={likeGoodsName}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsName',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem>
+              {getFieldDecorator('likeGoodsNo')(
+                <Input
+                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />}</p>}
+                  value={likeGoodsNo}
+                  style={{ width: 300 }}
+                  onChange={(e: any) => {
+                    onFormFieldChange({
+                      key: 'likeGoodsNo',
+                      value: e.target.value
+                    });
+                  }}
+                />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem>
+              {getFieldDecorator('goodsCateId')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Product category</p>}
+                  /* defaultValue="全部"*/
+                  // style={styles.wrapper}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'goodsCateId', value });
+                  }}
+                >
+                  {loop(cateList)}
+                </TreeSelectGroup>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8} id="salesCategory">
+            <FormItem>
+              {getFieldDecorator('salesCategory')(
+                <TreeSelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label={<p style={styles.label}>Sales category</p>}
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeDefaultExpandAll
+                  onChange={(value) => {
+                    onSalesCategoryChange(value);
+                  }}
+                >
+                  {generateStoreCateTree(getGoodsCate)}
+                </TreeSelectGroup>
+              )}
+            </FormItem>
+          </Col>
 
-        {/* <br /> */}
+          <Col span={8}>
+            <FormItem>
+              {getFieldDecorator('brandId')(
+                <SelectGroup
+                  allowClear
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  style={styles.wrapper}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="product.brand" />
+                    </p>
+                  }
+                  defaultValue="All"
+                  showSearch
+                  optionFilterProp="children"
+                  onChange={(value) => {
+                    onFormFieldChange({ key: 'brandId', value });
+                  }}
+                >
+                  {brandList.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.get('brandId') + ''}>
+                        {v.get('nickName')}
+                      </Option>
+                    );
+                  })}
+                </SelectGroup>
+              )}
+            </FormItem>
+          </Col>
 
-        <FormItem>
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon="search"
-            shape="round"
-            onClick={(e) => {
-              e.preventDefault();
-              onSearch();
-            }}
-          >
-            <span>
-              <FormattedMessage id="search" />
-            </span>
-          </Button>
-        </FormItem>
-        <FormItem>
-          <AuthWrapper functionName={'rewardDetailListExport'}>
-            <div style={{ paddingBottom: '16px' }}>
-              <Button onClick={() => bulkExport()}>
-                {<FormattedMessage id="bulkExport" />}
+          <Col span={24} style={{ textAlign: 'center' }}>
+            <FormItem>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon="search"
+                shape="round"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.searchBackFun();
+                }}
+              >
+                <span>
+                  <FormattedMessage id="product.search" />
+                </span>
               </Button>
-            </div>
-          </AuthWrapper>
-          {/*<Button
-            htmlType="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              onSearch();
-            }}
-          >
-            {<FormattedMessage id="BulkExport" />}
-          </Button>*/}
-        </FormItem>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     );
   }
-
-  /**
-   * 操作时间段的选择
-   * @param date
-   * @param dateString
-   * @private
-   */
-  _handleDateParams = (date, _dateString) => {
-    let startTime = date[0];
-    let endTime = date[1];
-    let endTimeClone: any = endTime.clone();
-    if (startTime.valueOf() >= endTimeClone.subtract(3, 'months').valueOf()) {
-      this.setState({ pickOpen: false, pickErrorInfo: '' });
-      const { changeDateRange } = this.props.relaxProps;
-      changeDateRange('beginTime', startTime.format('YYYY-MM-DD').toString());
-      changeDateRange('endTime', endTime.format('YYYY-MM-DD').toString());
-    } else {
-      this.setState({
-        pickOpen: true,
-        pickErrorInfo:
-          'The start time and end time should be within three months'
-      });
-    }
-  };
 }
+export default SearchForm;
+
+const styles = {
+  label: {
+    width: 100,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 177
+  }
+} as any;

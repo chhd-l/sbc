@@ -79,14 +79,6 @@ export default class RevenueList extends React.Component<any, any> {
             }}
           />
           <Column title="Order number" dataIndex="orderCode" key="orderCode" width="12%" />
-          <Column
-            title="Order Revenue"
-            dataIndex="amount"
-            key="amount"
-            render={(text, _rowData: any) => {
-              return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text}</span>;
-            }}
-          />
 
           {/*<Column
             title="Transaction serial number"
@@ -95,6 +87,22 @@ export default class RevenueList extends React.Component<any, any> {
             key="tradeNo"
           />*/}
           <Column title="Consumer name" dataIndex="customerName" key="customerName" />
+          <Column
+            title="Order Revenue"
+            dataIndex="amount"
+            key="amount"
+            render={(text, _rowData: any) => {
+              return <span>{text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text : '--'}</span>;
+            }}
+          />
+          <Column
+            title="Real Revenue"
+            dataIndex="paymentOSActualPrice"
+            key="paymentOSActualPrice"
+            render={(text, _rowData: any) => {
+              return <span>{text ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text : '--'}</span>;
+            }}
+          />
           <Column
             title="Payment time"
             dataIndex="tradeTime"
@@ -125,18 +133,11 @@ export default class RevenueList extends React.Component<any, any> {
           {/*<span>{text}</span> :'￥0.00'*/}
           {/*}}/>*/}
           {/*/>*/}
+          <Column title="Transaction id" dataIndex="transactionId" key="transactionId" />
           <Column title="Payment type" dataIndex="payWay" key="payWay" />
           {/*<Column title="Payment method" dataIndex="vendor" key="vendor" />*/}
           <Column title="Syn status" dataIndex="syncPayStatus" key="syncPayStatus" width="7%" />
           <Column title="Credit status" dataIndex="payStatus" key="payStatus" width="8%" />
-          <Column
-            title="Real Revenue"
-            dataIndex="paymentOSActualPrice"
-            key="paymentOSActualPrice"
-            render={(text, _rowData: any) => {
-              return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + text}</span>;
-            }}
-          />
         </DataGrid>
         {/*<Table columns={columns} dataSource={data} />*/}
       </div>

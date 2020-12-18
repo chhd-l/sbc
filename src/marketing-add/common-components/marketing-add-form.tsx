@@ -831,7 +831,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       };
 
                       marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-                      console.log(marketingBean.toJS(), 'marketingBean---------');
                       this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
                     } else {
                       let obj = {
@@ -839,7 +838,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
                       };
                       marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-                      console.log(marketingBean, 'marketingBean---------');
                       this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
                     }
                   }
@@ -980,7 +978,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     } else {
       let obj = marketingBean.get('marketingSubscriptionReduction') ? marketingBean.get('marketingSubscriptionReduction').toJS() : {};
       obj[props] = value;
-      console.log(obj, '11111111');
       this.onBeanChange({ marketingSubscriptionReduction: obj });
     }
   };

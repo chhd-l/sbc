@@ -838,6 +838,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                         restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
                       };
                       marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
+                      //console.log(marketingBean.toJS(),111111111);
                       this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
                     }
                   }

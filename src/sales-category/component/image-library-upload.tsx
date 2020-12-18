@@ -53,7 +53,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
             </div>
           );
         })}
-        {images.count() < 10 ? (
+        {images.count() < imgCount ? (
           <div onClick={() => modalVisible(imgCount, imgType, skuId)} style={styles.addImg}>
             <div style={styles.imgBox}>
               <Icon type="plus" style={styles.plus} />

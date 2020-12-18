@@ -92,7 +92,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100vh',
+    height: '100vh'
   } as any,
   buttonContainer: {
     background: '#FFFFF',

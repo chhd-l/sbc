@@ -1065,9 +1065,8 @@ export default class AppStore extends Store {
     goodsDetailTab.map((item, i) => {
       const contect = data.get('detailEditor_' + i).getContent();
       const contectTxt = data.get('detailEditor_' + i).getContentTxt();
-      if(contectTxt.substring(0, 1) === '[' 
-          && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
-        goodsDetailTabTemplate[item.get('name')] = contectTxt
+      if (contectTxt.substring(0, 1) === '[' && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
+        goodsDetailTabTemplate[item.get('name')] = contectTxt;
       } else {
         goodsDetailTabTemplate[item.get('name')] = contect;
       }

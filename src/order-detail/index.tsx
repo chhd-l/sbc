@@ -70,4 +70,4 @@ const styles = {
     justifyContent: 'center',
     height: '100vh'
   } as any
-}
+};

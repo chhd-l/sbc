@@ -38,25 +38,17 @@ export default class OrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>
-            {<FormattedMessage id="orderDetails" />}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="orderDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="orderDetails" />} />
         </div>
         <div className="container">
-          <Tabs
-            onChange={(key) => this.store.onTabsChange(key)}
-            activeKey={this.store.state().get('tab')}
-          >
+          <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
             <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab={<FormattedMessage id="deliveryRecord" />}
-              key="2"
-            >
+            <Tabs.TabPane tab={<FormattedMessage id="deliveryRecord" />} key="2">
               <OrderDelivery />
             </Tabs.TabPane>
             {/* <Tabs.TabPane
@@ -80,4 +72,4 @@ const styles = {
     justifyContent: 'center',
     height: '100vh'
   } as any
-}
+};

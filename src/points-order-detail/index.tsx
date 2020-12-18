@@ -43,16 +43,9 @@ export default class OrderDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container">
-          <Headline
-            title={
-              <FormattedMessage id="PointsOrderDetails"></FormattedMessage>
-            }
-          />
+          <Headline title={<FormattedMessage id="PointsOrderDetails"></FormattedMessage>} />
 
-          <Tabs
-            onChange={(key) => this.store.onTabsChange(key)}
-            activeKey={this.store.state().get('tab')}
-          >
+          <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
             <Tabs.TabPane tab="订单详情" key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
@@ -77,4 +70,4 @@ const styles = {
     justifyContent: 'center',
     height: '100vh'
   } as any
-}
+};

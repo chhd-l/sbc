@@ -935,7 +935,7 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-        if (!(item.get('stock') || item.get('stock') == 0) && !a.minStock) {
+        if (!(item.get('stock') || item.get('stock') == 0) && a.minStock == undefined) {
           valid = false;
           return;
         }
@@ -1020,9 +1020,8 @@ export default class AppStore extends Store {
     goodsDetailTab.map((item, i) => {
       const contect = data.get('detailEditor_' + i).getContent();
       const contectTxt = data.get('detailEditor_' + i).getContentTxt();
-      if(contectTxt.substring(0, 1) === '[' 
-          && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
-        goodsDetailTabTemplate[item.get('name')] = contectTxt
+      if (contectTxt.substring(0, 1) === '[' && contectTxt.substring(contectTxt.length - 1, contectTxt.length) === ']') {
+        goodsDetailTabTemplate[item.get('name')] = contectTxt;
       } else {
         goodsDetailTabTemplate[item.get('name')] = contect;
       }
@@ -1134,11 +1133,12 @@ export default class AppStore extends Store {
         .filter((a) => a.pid == item.toJS().goodsInfoNo);
       let b = [];
       let c = '';
-      console.log(a, 111111111111);
       a.map((i) => {
         b = i.targetGoodsIds;
         c = i.minStock;
       });
+      /*console.log(b,22232222);
+      console.log(item.get('goodsInfoBundleRels'),3333333333);*/
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({
@@ -1156,7 +1156,7 @@ export default class AppStore extends Store {
           packSize: item.get('packSize') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
-          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined ? item.get('goodsInfoBundleRels') : b,
+          goodsInfoBundleRels: item.get('goodsInfoBundleRels') != undefined && item.get('goodsInfoBundleRels').length == 0 ? item.get('goodsInfoBundleRels') : b,
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',

@@ -43,18 +43,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      changePayWay,
-      changeVendorWay,
-      changeTradeNo,
-      kind,
-      exportIncomeDetail,
-      exportRefundDetail,
-      refundDetail,
-      incomeDetail,
-      onSearch,
-      payW
-    } = this.props.relaxProps;
+    const { changePayWay, changeVendorWay, changeTradeNo, kind, exportIncomeDetail, exportRefundDetail, refundDetail, incomeDetail, onSearch, payW } = this.props.relaxProps;
     return (
       <div>
         <div style={styles.head}>
@@ -74,7 +63,7 @@ export default class SearchForm extends React.Component<any, any> {
                 <Option value="OXXO">OXXO</Option>
               </SelectGroup>
             </FormItem>*/}
-            <FormItem>
+            {/*<FormItem>
               <SelectGroup
                 onChange={(value) => changeVendorWay(value)}
                 getPopupContainer={() =>
@@ -92,19 +81,16 @@ export default class SearchForm extends React.Component<any, any> {
                     </Option>
                   );
                 })}
-                {/*  <Option value="UNIONPAY"></Option>
+                  <Option value="UNIONPAY"></Option>
                 <Option value="WECHAT">微信</Option>
                 <Option value="UNIONPAY_B2B">企业银联</Option>
                 <Option value="POINT">积分兑换</Option>
-                <Option value="BALANCE">余额</Option>*/}
+                <Option value="BALANCE">余额</Option>
               </SelectGroup>
-            </FormItem>
+            </FormItem>*/}
 
             <FormItem>
-              <Input
-                addonBefore="Order number"
-                onChange={(e) => changeTradeNo(e.target.value)}
-              />
+              <Input addonBefore="Order number" onChange={(e) => changeTradeNo(e.target.value)} />
             </FormItem>
 
             <AuthWrapper functionName="f_finance_export">

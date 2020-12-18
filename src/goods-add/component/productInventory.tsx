@@ -178,7 +178,8 @@ class SkuForm extends React.Component<any, any> {
           console.log(addSkUProduct,111111);
           console.log(rowInfo,2222222222222);
           console.log(a,3333333333);
-        })*/
+        })
+        debugger*/
         return (
           <Row>
             <Col span={12}>
@@ -196,7 +197,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo, 'stock'),
                   initialValue: a && a.minStock ? a.minStock : rowInfo.stock
-                })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock} />)}
+                })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock ? a.minStock : rowInfo.stock} />)}
               </FormItem>
             </Col>
           </Row>

@@ -41,7 +41,8 @@ class AttributeLibrary extends Component<any, any> {
       modalName: '',
       colourList: [],
       shopPageList: [],
-      loading: true
+      loading: true,
+      images: []
     };
   }
   componentDidMount() {
@@ -127,6 +128,10 @@ class AttributeLibrary extends Component<any, any> {
       displayStatus: row.displayStatus,
       showPage: row.showPage ? row.showPage.split(',') : []
     };
+    let images = [];
+    if (row.taggingImgUrl) {
+      images.push(row.taggingImgUrl);
+    }
     this.setState(
       {
         modalName: 'Edit tagging',
@@ -134,7 +139,8 @@ class AttributeLibrary extends Component<any, any> {
         taggingForm,
         isEdit: true,
         currentEditTagging: row,
-        loading: false
+        loading: false,
+        images: images
       },
       () => {
         form.setFieldsValue({
@@ -307,8 +313,27 @@ class AttributeLibrary extends Component<any, any> {
     return colour;
   };
 
+  updateImg = (images) => {
+    if (images && images.length > 0) {
+      this.setImageUrl(images[0]);
+    } else {
+      this.setImageUrl('');
+    }
+    this.setState({
+      images
+    });
+  };
+  deleteImg = (item) => {
+    const { images } = this.state;
+    let tempImages = images.filter((el) => el !== item);
+    this.setState({
+      images: tempImages
+    });
+    this.setImageUrl('');
+  };
+
   render() {
-    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList } = this.state;
+    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -457,10 +482,9 @@ class AttributeLibrary extends Component<any, any> {
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
 
-          {/* <AssetManagement /> */}
-
           {visible ? (
             <Modal
+              zIndex={1000}
               width="600px"
               title={modalName}
               visible={visible}
@@ -580,7 +604,7 @@ class AttributeLibrary extends Component<any, any> {
                   <FormItem label="Tagging Image">
                     {getFieldDecorator('taggingImgUrl', {
                       rules: [{ required: true, message: 'Tagging image is required' }]
-                    })(<Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={taggingForm.taggingImgUrl} />)}
+                    })(<AssetManagement choosedImgCount={1} images={images} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />)}
                   </FormItem>
                 )}
                 <FormItem label="Display in shop">

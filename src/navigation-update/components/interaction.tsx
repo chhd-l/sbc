@@ -167,7 +167,8 @@ export default class Interaction extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let sortList = res.context.map((item) => {
+          let activeSorter = res.context.filter(x=>x.sortStatus === '1') 
+          let sortList = activeSorter.map((item) => {
             return {
               id: item.id,
               name: item.sortName

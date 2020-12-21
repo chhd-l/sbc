@@ -155,8 +155,8 @@ export default class DiscountLevels extends React.Component<any, any> {
                           }}
                         />
                       )}
+                      <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
                     </FormItem>
-                    <span>&nbsp;of orginal price&nbsp;&nbsp;</span>
                     {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
                   </HasError>
                 )}

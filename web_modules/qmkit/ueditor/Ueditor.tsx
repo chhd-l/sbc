@@ -19,6 +19,7 @@ export default class UEditor extends React.Component<any, any> {
     id: string;
     toolbars?: StringArray;
     content: string;
+    disabled: boolean;
     imgType?: number;
     height: string;
     chooseImgs?: StringArray;
@@ -201,6 +202,9 @@ export default class UEditor extends React.Component<any, any> {
     // this.editor.ready后通过setState强制渲染一次
     if (this.editor && this.editor.body && this.editor.iframe && this.props.content && this.props.imgType != 2) {
       this.editor.setContent(this.props.content);
+    }
+    if(this.editor && this.editor.body && this.editor.iframe && this.props.disabled) {
+      this.editor.setDisabled();
     }
     return <div id={this.props.id} style={{ width: '100%', height: this.props.height }} />;
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row, Col } from 'antd';
 import * as webapi from '../webapi';
 import { util, AssetManagement } from 'qmkit';
-import Upload from './upload';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -406,7 +405,6 @@ export default class Interaction extends React.Component<any, any> {
                       </Col>
                     </Row>
                     <FormItem {...layout} label="Page Picture">
-                      {/* <Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={navigation.pageImg} /> */}
                       <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
                     </FormItem>
                   </div>

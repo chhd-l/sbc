@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Checkbox, Row, Col } from 'antd';
-import Upload from './upload';
+import { AssetManagement } from 'qmkit';
 const FormItem = Form.Item;
 const layout = {
   labelCol: { span: 4 },
@@ -13,12 +13,18 @@ export default class BasicInformation extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {};
-    this.setImageUrl = this.setImageUrl.bind(this);
+    this.updateImg = this.updateImg.bind(this);
+    this.deleteImg = this.deleteImg.bind(this);
   }
 
-  setImageUrl(url) {
-    this.props.addField('imageLink', url);
-  }
+  updateImg = (images) => {
+    let imageString =images && images.length > 0 ? images[0] : ''
+    this.props.addField('imageLink', imageString);
+  };
+
+  deleteImg = (item) => {
+    this.props.addField('imageLink', '');
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -88,7 +94,7 @@ export default class BasicInformation extends React.Component<any, any> {
               </Col>
             </Row>
             <FormItem {...layout} label="Picture Image">
-              <Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={navigation.imageLink} />
+              <AssetManagement choosedImgCount={1} images={navigation.imageLink ? [navigation.imageLink] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
             </FormItem>
             <FormItem>
               <Checkbox

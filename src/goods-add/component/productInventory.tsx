@@ -126,7 +126,7 @@ class SkuForm extends React.Component<any, any> {
     }
     columns = columns.unshift({
       title: '',
-      key: 'index' + 2,
+      key: 'index' + 20,
       render: (_text, _rowInfo, index) => {
         return index + 1;
       }
@@ -134,7 +134,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: <FormattedMessage id="product.SKU" />,
-      key: 'goodsInfoNo' + 'subscriptionPrice',
+      key: 'goodsInfoNo',
       render: (rowInfo) => {
         return (
           <Row>
@@ -174,17 +174,11 @@ class SkuForm extends React.Component<any, any> {
       key: 'stock',
       render: (rowInfo) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0];
-        /*setTimeout(()=>{
-          console.log(addSkUProduct,111111);
-          console.log(rowInfo,2222222222222);
-          console.log(a,3333333333);
-        })
-        debugger*/
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('stock_' + rowInfo.stock, {
+                {getFieldDecorator('stock_' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
@@ -195,7 +189,7 @@ class SkuForm extends React.Component<any, any> {
                       message: 'Please enter the correct value'
                     }
                   ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo, 'stock'),
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
                   initialValue: a && a.minStock ? a.minStock : rowInfo.stock
                 })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock ? a.minStock : rowInfo.stock} />)}
               </FormItem>
@@ -207,7 +201,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: '',
-      key: '1',
+      key: 'id',
       width: '5%'
     });
 

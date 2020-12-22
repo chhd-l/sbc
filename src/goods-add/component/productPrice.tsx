@@ -25,6 +25,7 @@ export default class ProductPrice extends React.Component<any, any> {
       spuMarketPrice: number;
       priceOpt: number;
       getGoodsId: any;
+      addSkUProduct: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -55,6 +56,7 @@ export default class ProductPrice extends React.Component<any, any> {
     baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
+    addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -169,7 +171,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.unshift({
       title: '',
-      key: 'index' + 1,
+      key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
       }
@@ -177,8 +179,9 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: <FormattedMessage id="product.SKU" />,
-      key: 'goodsInfoNo' + 'index',
+      key: 'goodsInfoNo'+'index',
       render: (rowInfo) => {
+        //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
         return (
           <Row>
             <Col span={12}>
@@ -188,32 +191,9 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-    // columns = columns.push({
-    //   title: <FormattedMessage id="product.purchasePrice" />,
-    //   key: 'goodsInfoNo' + 'index',
-    //   render: (rowInfo) => {
-    //     return (
-    //       <Row>
-    //         <Col span={12}>
-    //           <FormItem style={styles.tableFormItem}>
-    //             {getFieldDecorator('purchasePrice_' + rowInfo.id, {
-    //               rules: [
-    //                 {
-    //                   pattern: ValidConst.number,
-    //                   message: 'Please enter the correct value'
-    //                 }
-    //               ],
-    //               initialValue: rowInfo.linePrice || 0
-    //             })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
-    //           </FormItem>
-    //         </Col>
-    //       </Row>
-    //     );
-    //   }
-    // });
     columns = columns.push({
       title: 'Purchase type',
-      key: 'index',
+      key: 'subscriptionStatus',
       render: (rowInfo) => (
         <Row class="purchase-row">
           <Col span={12}>
@@ -268,6 +248,29 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
+    // columns = columns.push({
+    //   title: <FormattedMessage id="product.purchasePrice" />,
+    //   key: 'goodsInfoNo' + 'index',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={12}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('purchasePrice_' + rowInfo.id, {
+    //               rules: [
+    //                 {
+    //                   pattern: ValidConst.number,
+    //                   message: 'Please enter the correct value'
+    //                 }
+    //               ],
+    //               initialValue: rowInfo.linePrice || 0
+    //             })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} />)}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
 
     columns = columns.push({
       title: (
@@ -463,7 +466,7 @@ class SkuForm extends React.Component<any, any> {
     });
     columns = columns.push({
       title: '',
-      key: '1',
+      key: 'id',
       width: '5%'
     });
 

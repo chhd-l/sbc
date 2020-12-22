@@ -143,7 +143,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
         settingType = 'reduction';
       }
     }
-
+    //this.onBeanChange({publicStatus: 1});
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} label="Promotion type:">

@@ -306,7 +306,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (levelPrice) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice.toFixed(2)}
+            {levelPrice&&levelPrice.toFixed(2)}
           </span>
         )
       },
@@ -320,7 +320,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * row.levelPrice).toFixed(2)}
+            {row&&(row.num * row.levelPrice).toFixed(2)}
           </span>
         )
       }
@@ -351,7 +351,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (levelPrice) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice.toFixed(2)}
+            {levelPrice&&levelPrice.toFixed(2)}
           </span>
         )
       },
@@ -365,7 +365,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * row.levelPrice).toFixed(2)}
+            {row&&(row.num * row.levelPrice).toFixed(2)}
           </span>
         )
       }

@@ -102,7 +102,7 @@ export default class OrderDelivery extends React.Component<any, any> {
           ) : null}
         </div>
         {tradeDelivers.count() > 0
-          ? tradeDelivers.map((v, i) => {
+          ? tradeDelivers&&tradeDelivers.map((v, i) => {
               const logistic = v.get('logistics');
               const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
               //处理赠品

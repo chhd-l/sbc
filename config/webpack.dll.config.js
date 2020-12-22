@@ -66,7 +66,9 @@ module.exports = function(webpackEnv, envCode = 'prod') {
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     bail: isEnvProduction,
-    devtool: false,
+    devtool: isEnvProduction
+      ? shouldUseSourceMap ? 'source-map' : false
+      : isEnvDevelopment && 'eval-source-map',
     entry: {
       vendor: [
         'plume2',

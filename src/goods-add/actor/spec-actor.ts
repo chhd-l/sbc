@@ -18,6 +18,7 @@ export default class GoodsSpecActor extends Actor {
         //   specValues: []
         // }
       ],
+
       goodsList: [
         {
           id: this._getRandom(),
@@ -63,6 +64,10 @@ export default class GoodsSpecActor extends Actor {
     state = state.set('baseSpecId', baseSpecId);
     return state.set('goodsList', goodsList);
   }
+  @Action('goodsSpecActor: baseSpecId')
+  setBaseSpecId(state, baseSpecId) {
+    return (state = state.set('baseSpecId', baseSpecId));
+  }
 
   /**
    * 设置是否为单规格
@@ -83,14 +88,15 @@ export default class GoodsSpecActor extends Actor {
       state = state.set(
         'goodsSpecs',
         fromJS([
-          {
-            specId: this._getRandom(),
-            isMock: true,
-            specName: 'specification1',
-            specValues: []
-          }
+          // {
+          //   specId: this._getRandom(),
+          //   isMock: true,
+          //   specName: '',
+          //   specValues: []
+          // }
         ])
       );
+      state = state.set('baseSpecId', null);
     }
     return state.set('specSingleFlag', specSingleFlag);
   }
@@ -105,10 +111,7 @@ export default class GoodsSpecActor extends Actor {
       return goodsSpecs.update(index, (item) => item.set('specName', specName));
     });
   }
-  @Action('goodsSpecActor: baseSpecId')
-  setBaseSpecId(state, baseSpecId) {
-    return (state = state.set('baseSpecId', baseSpecId));
-  }
+
   /**
    * 修改规格值
    */

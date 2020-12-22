@@ -231,6 +231,25 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'goodsInfoNo',
       render: (rowInfo) => {
+        const { addSkUProduct } = this.props.relaxProps;
+        //console.log(rowInfo.index,33333333);
+
+        let a = ''
+        /*if(rowInfo.goodsInfoNo == addSkUProduct[rowInfo.index-1].pid) {
+          a =  addSkUProduct[rowInfo.index-1].pid
+
+        }else {
+          // console.log(333333)
+          a = ''
+        }*/
+        if(rowInfo.goodsInfoNo == '') {
+          a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
+
+        }else {
+         // console.log(333333)
+          a = rowInfo.goodsInfoNo
+        }
+
         return (
           <Row>
             <Col span={12}>
@@ -249,7 +268,7 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
-                  initialValue: rowInfo.goodsInfoNo
+                  initialValue: a
                 })(<Input style={{ width: '115px' }} />)}
               </FormItem>
             </Col>
@@ -402,6 +421,37 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'packSize'),
                   initialValue: rowInfo.packSize
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: 'UOM',
+      key: 'goodsMeasureUnit',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsMeasureUnit_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input goods Measure Unit code'
+                    },
+                    {
+                      min: 1,
+                      max: 20,
+                      message: '1-20 characters'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
+                  initialValue: rowInfo.goodsMeasureUnit
                 })(<Input style={{ width: '115px' }} />)}
               </FormItem>
             </Col>

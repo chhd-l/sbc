@@ -935,7 +935,7 @@ export default class AppStore extends Store {
     if (goodsList) {
       goodsList.forEach((item) => {
         let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == item.get('goodsInfoNo'))[0];
-        if (!(item.get('stock') || item.get('stock') == 0) && a.minStock == undefined) {
+        if (!(item.get('stock') || item.get('stock') == 0) && a == undefined) {
           valid = false;
           return;
         }
@@ -1154,6 +1154,7 @@ export default class AppStore extends Store {
           goodsInfoType: 1,
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',
+          goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           // purchasePrice: item.get('purchasePrice') || 0,
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           goodsInfoBundleRels: b,
@@ -2043,4 +2044,5 @@ export default class AppStore extends Store {
   modalVisibleFun = ({ key, value }) => {};
   onProductForm = ({ key, value }) => {};
   onEditSkuNo = ({ key, value }) => {};
+  saveMain = ({ key, value }) => {};
 }

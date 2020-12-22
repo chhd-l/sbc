@@ -44,13 +44,13 @@ const columns = [
           </span>
           <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice.toFixed(2)}
+            {levelPrice&&levelPrice.toFixed(2)}
           </span>
         </div>
       ) : (
         <span>
           {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {levelPrice.toFixed(2)}
+          {levelPrice&&levelPrice.toFixed(2)}
         </span>
       )
   },

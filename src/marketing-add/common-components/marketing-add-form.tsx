@@ -182,6 +182,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
           <Checkbox
             style={{ marginLeft: 20 }}
+            disabled={this.state.PromotionTypeValue === 1}
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
               if (this.state.PromotionTypeValue === 0) {

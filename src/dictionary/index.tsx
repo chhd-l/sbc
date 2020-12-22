@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Tooltip } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -47,10 +47,14 @@ export default class DitionaryList extends Component<any, any> {
               <Tooltip placement="top" title="Edit">
                 <Link to={'/dictionary-edit/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
+
               <Divider type="vertical" />
-              <Tooltip placement="top" title="Delete">
-                <a onClick={() => this.deleteDictionary(record.id)} className="iconfont iconDelete"></a>
-              </Tooltip>
+
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <a type="link" className="iconfont iconDelete"></a>
+                </Tooltip>
+              </Popconfirm>
             </span>
           )
         }
@@ -66,7 +70,7 @@ export default class DitionaryList extends Component<any, any> {
         keywords: '',
         type: ''
       },
-      loading: false
+      loading: true
     };
     this.onSearch = this.onSearch.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
@@ -201,7 +205,9 @@ export default class DitionaryList extends Component<any, any> {
           </Button>
         </div>
         <div className="container">
-          <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
+          <Spin spinning={this.state.loading}  indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} onChange={this.handleTableChange} />
+          </Spin>
         </div>
       </div>
     );

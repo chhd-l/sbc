@@ -152,6 +152,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.uploadBanner(params);
     const ref = this;
     if (res.code === Const.SUCCESS_CODE) {
+      this.setModalVisible(false);
       return res;
     } else {
       message.error(res.message);

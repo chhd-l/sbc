@@ -861,14 +861,17 @@ class GoodsForm extends React.Component<any, any> {
         // 找到选中的分类，判断是否有上级r
         if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
           // 判断上级是否已添加过，如果没有添加过，添加
-          let exist = false;
-          originValues.forEach((vv) => {
-            if (vv == cate.get('cateParentId')) {
-              exist = true;
+          var secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
+          if (secondLevel) {
+            let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
+            if (!exsit) {
+              originValues = originValues.push(secondLevel.get('cateParentId')); // first level
             }
-          });
-          if (!exist) {
-            originValues = originValues.push(cate.get('cateParentId'));
+          }
+
+          let exsit = originValues.toJS().includes(cate.get('cateParentId'));
+          if (!exsit) {
+            originValues = originValues.push(cate.get('cateParentId')); // second level
           }
         }
       });

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row, Col } from 'antd';
 import * as webapi from '../webapi';
-import { util } from 'qmkit';
-import Upload from './upload';
+import { util, AssetManagement } from 'qmkit';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -48,7 +47,8 @@ export default class Interaction extends React.Component<any, any> {
     this.generateFilterTree = this.generateFilterTree.bind(this);
     this.filterChange = this.filterChange.bind(this);
     this.getFilterValues = this.getFilterValues.bind(this);
-    this.setImageUrl = this.setImageUrl.bind(this);
+    this.updateImg = this.updateImg.bind(this);
+    this.deleteImg = this.deleteImg.bind(this);
   }
 
   componentDidMount() {
@@ -167,7 +167,8 @@ export default class Interaction extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          let sortList = res.context.map((item) => {
+          let activeSorter = res.context.filter(x=>x.sortStatus === '1') 
+          let sortList = activeSorter.map((item) => {
             return {
               id: item.id,
               name: item.sortName
@@ -299,9 +300,15 @@ export default class Interaction extends React.Component<any, any> {
     });
     return filterValues;
   }
-  setImageUrl(url) {
-    this.props.addField('pageImg', url);
-  }
+
+  updateImg = (images) => {
+    let imageString =images && images.length > 0 ? images[0] : ''
+    this.props.addField('pageImg', imageString);
+  };
+
+  deleteImg = (item) => {
+    this.props.addField('pageImg', '');
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     const { navigation, noLanguageSelect } = this.props;
@@ -398,7 +405,7 @@ export default class Interaction extends React.Component<any, any> {
                       </Col>
                     </Row>
                     <FormItem {...layout} label="Page Picture">
-                      <Upload form={this.props.form} setUrl={this.setImageUrl} defaultValue={navigation.pageImg} />
+                      <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
                     </FormItem>
                   </div>
                 ) : null}

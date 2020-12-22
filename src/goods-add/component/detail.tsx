@@ -69,6 +69,8 @@ export default class Detail extends React.Component<any, any> {
         });
       }
     }
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId =  loginInfo ? loginInfo.storeId : '';
     return (
       <div>
         <Tabs defaultActiveKey="main1" animated={false}>
@@ -86,7 +88,8 @@ export default class Detail extends React.Component<any, any> {
                     }}
                     id={'main' + i}
                     height="320"
-                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))}
+                    disabled={storeId === 123457909} //fr
+                    content={this.getDetailString(goodsDetailTabContent, item.get('name'))} //去除前后的双引号, 数组加上[]
                     insertImg={() => {
                       this._handleClick();
                       this.props.relaxProps.editEditor('detail');

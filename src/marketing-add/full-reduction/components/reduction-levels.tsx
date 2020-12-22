@@ -122,38 +122,39 @@ export default class ReductionLevels extends React.Component<any, any> {
                     </FormItem>
                   </div>
                 ) : null}
-                <FormItem>
+                <div>
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;reduction&nbsp;&nbsp;</span>
-                  {getFieldDecorator(`level_rule_reduction_${index}`, {
-                    rules: [
-                      { required: true, message: 'Amount must be entered' },
-                      {
-                        validator: (_rule, value, callback) => {
-                          if (value) {
-                            if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                              callback('0.01-99999999.99');
+                  <FormItem style={{ display: 'inline-block', width: '250px' }}>
+                    {getFieldDecorator(`level_rule_reduction_${index}`, {
+                      rules: [
+                        { required: true, message: 'Amount must be entered' },
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (value) {
+                              if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                callback('0.01-99999999.99');
+                              }
                             }
+                            callback();
                           }
-                          callback();
                         }
-                      }
-                    ],
-                    initialValue: level.reduction
-                  })(
-                    <Input
-                      style={{ width: 200 }}
-                      placeholder={'0.01-99999999.99'}
-                      onChange={(e) => {
-                        this.onChange(index, 'reduction', e.target.value);
-                      }}
-                    />
-                  )}
-                  <span>
-                    &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    &nbsp;&nbsp;
-                  </span>
-                </FormItem>
-
+                      ],
+                      initialValue: level.reduction
+                    })(
+                      <Input
+                        style={{ width: 200 }}
+                        placeholder={'0.01-99999999.99'}
+                        onChange={(e) => {
+                          this.onChange(index, 'reduction', e.target.value);
+                        }}
+                      />
+                    )}
+                    <span>
+                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      &nbsp;&nbsp;
+                    </span>
+                  </FormItem>
+                </div>
                 {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
               </HasError>
             </div>

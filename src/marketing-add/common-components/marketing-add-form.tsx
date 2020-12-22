@@ -182,6 +182,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
 
           <Checkbox
             style={{ marginLeft: 20 }}
+            disabled={this.state.PromotionTypeValue === 1}
             checked={this.state.PromotionTypeChecked}
             onChange={(e) => {
               if (this.state.PromotionTypeValue === 0) {
@@ -813,36 +814,36 @@ export default class MarketingAddForm extends React.Component<any, any> {
               })
               .then(({ res }) => {
                 if (res.code == Const.SUCCESS_CODE) {
-                  if (res.context.length > 0) {
-                    this.setState({ skuExists: res.context });
-                    message.error(`${res.context.length} items are in conflict with each other. Please delete them before saving them`);
-                    this.setState({ saveLoading: false });
-                  } else {
-                    if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
-                      this.props.store.submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
-                    } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
-                      marketingBean = marketingBean.set(
-                        'fullDiscountLevelList',
-                        marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
-                      );
-                      let obj = {
-                        firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount'),
-                        restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount')
-                      };
+                  // if (res.context.length > 0) {
+                  //   this.setState({ skuExists: res.context });
+                  //   message.error(`${res.context.length} items are in conflict with each other. Please delete them before saving them`);
+                  //   this.setState({ saveLoading: false });
+                  // } else {
+                  if (marketingType == Enum.MARKETING_TYPE.FULL_GIFT) {
+                    this.props.store.submitFullGift(marketingBean.toJS()).then((res) => this._responseThen(res));
+                  } else if (marketingType == Enum.MARKETING_TYPE.FULL_DISCOUNT) {
+                    marketingBean = marketingBean.set(
+                      'fullDiscountLevelList',
+                      marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
+                    );
+                    let obj = {
+                      firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount'),
+                      restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount')
+                    };
 
-                      marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
-                      this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
-                    } else {
-                      let obj = {
-                        firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
-                        restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
-                      };
-                      marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
-                      //console.log(marketingBean.toJS(),111111111);
-                      this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
-                    }
+                    marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);
+                    this.props.store.submitFullDiscount(marketingBean.toJS()).then((res) => this._responseThen(res));
+                  } else {
+                    let obj = {
+                      firstSubscriptionOrderReduction: marketingBean.get('firstSubscriptionOrderReduction'),
+                      restSubscriptionOrderReduction: marketingBean.get('restSubscriptionOrderReduction')
+                    };
+                    marketingBean = marketingBean.set('marketingSubscriptionReduction', obj);
+                    //console.log(marketingBean.toJS(),111111111);
+                    this.props.store.submitFullReduction(marketingBean.toJS()).then((res) => this._responseThen(res));
                   }
                 }
+                //}
               });
           }
         }

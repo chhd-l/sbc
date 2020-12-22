@@ -664,7 +664,8 @@ const styles = {
     display: 'inline-block',
     marginRight: 8,
     marginBottom: 8,
-    backgroundColor: '#fbfbfb'
+    backgroundColor: '#fbfbfb',
+    cursor: 'pointer'
   },
   imgBox: {
     width: '100%',

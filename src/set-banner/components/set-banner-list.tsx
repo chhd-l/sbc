@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Relax, StoreProvider } from 'plume2';
+import { Relax } from 'plume2';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
-import { cache, noop } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip } from 'antd';
-import { Link } from 'react-router-dom';
-import { AuthWrapper, Const } from 'qmkit';
+import { noop } from 'qmkit';
+import { Form, Button, Spin, Tooltip, Popconfirm } from 'antd';
 import { IMap } from 'plume2';
-import { List, fromJS, Map } from 'immutable';
-const FormItem = Form.Item;
+import { List } from 'immutable';
 
 type TList = List<IMap>;
 const styles = {
@@ -85,7 +82,6 @@ export default class SetBannerList extends Component<any, any> {
     return (
       dataList &&
       dataList.map((item, index) => {
-        const id = item.get('id');
         const pcName = item.get('bannerName');
         const bannerNo = item.get('bannerNo');
         const webSkipUrl = item.get('webSkipUrl');
@@ -141,18 +137,18 @@ export default class SetBannerList extends Component<any, any> {
               <Tooltip placement="top" title="Edit">
                 <span
                   /*className="red mgl20"*/
-                  style={{ color: 'red', paddingRight: 10 }}
+                  style={{ color: 'red', paddingRight: 10, cursor: 'pointer' }}
                   onClick={() => this.editRow(item.toJS())}
                   className="iconfont iconEdit"
                 >
                   {/*<FormattedMessage id="edit" />*/}
                 </span>
               </Tooltip>
-              <Tooltip placement="top" title="Delete">
-                <span style={{ color: 'red', paddingRight: 10 }} /*className="red"*/ onClick={() => this.deleteRow(item.toJS())} className="iconfont iconDelete">
-                  {/*<FormattedMessage id="delete" />*/}
-                </span>
-              </Tooltip>
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteRow(item.toJS())} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <a type="link" className="iconfont iconDelete"></a>
+                </Tooltip>
+              </Popconfirm>
             </td>
           </tr>
         );
@@ -161,7 +157,7 @@ export default class SetBannerList extends Component<any, any> {
   }
 
   render() {
-    const { loading, tableDatas, setModalVisible, onImageFormChange, resetForm } = this.props.relaxProps;
+    const { loading, tableDatas, setModalVisible, resetForm } = this.props.relaxProps;
     return (
       <div>
         <div>

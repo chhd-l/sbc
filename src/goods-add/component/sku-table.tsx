@@ -149,7 +149,7 @@ class SkuForm extends React.Component<any, any> {
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return rowInfo&&rowInfo.replace(/[^\d.]/g, '');
+              return item.get('specName') == sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)?rowInfo&&rowInfo.replace(/[^\d.]/g, ''):rowInfo;
             }
           };
         })

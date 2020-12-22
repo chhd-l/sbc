@@ -199,7 +199,6 @@ class SpecForm extends React.Component<any, any> {
                                       let duplicated = false;
 
                                       valueList.forEach((v, k) => {
-                                        console.log(v);
                                         const trimValue = v.trim();
                                         if (!trimValue) {
                                           whitespace = true;
@@ -244,7 +243,7 @@ class SpecForm extends React.Component<any, any> {
                               initialValue: a
                             })(
                               <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
-                                {this._getChildren(item.get('specValues'),item.get('specName'))}
+                                {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
                           </FormItem>
@@ -281,11 +280,11 @@ class SpecForm extends React.Component<any, any> {
   /**
    * 获取规格值转为option
    */
-  _getChildren = (specValues: IList,specName: any) => {
+  _getChildren = (specValues: IList, specName: any) => {
     const children = [];
     specValues.forEach((item) => {
       let a = item.get('detailName').replace(/[^\d.]/g, '');
-      children.push(<Option key={item.get('detailName')}>{specName==sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)?a:item.get('detailName')}</Option>);
+      children.push(<Option key={item.get('detailName')}>{specName == sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) ? a : item.get('detailName')}</Option>);
     });
     return children;
   };

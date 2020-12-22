@@ -172,14 +172,6 @@ export default class AppStore extends Store {
     const { res } = await webapi.getListAll(data);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('home:searchData', res.context);
-      console.log(111111111);
-      console.log(222222);
-      console.log(3333333);
-      console.log(554444);
-      console.log(56666666666666666666666);
-      console.log(567677);
-      console.log(888);
-      console.log(9999);
     }
   };
 

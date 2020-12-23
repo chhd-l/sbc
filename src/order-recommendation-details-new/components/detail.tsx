@@ -90,7 +90,7 @@ export default class BillingDetails extends React.Component<any, any> {
               </SelectGroup>
             )}
           </div>
-          <div style={{ marginTop: 12, marginRight: 15 }}>{history.location.state ? <Switch checkedChildren=" Valid " unCheckedChildren=" Invalid " defaultChecked onClick={this.onValid} disabled={localStorage.getItem('enable') ? true : false} /> : null}</div>
+          <div style={{ marginTop: 12, marginRight: 105 }}>{history.location.state ? <Switch checkedChildren=" Valid " unCheckedChildren=" Invalid " defaultChecked onClick={this.onValid} disabled={localStorage.getItem('enable') ? true : false} /> : null}</div>
         </div>
       </div>
     );

@@ -173,109 +173,6 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span={8} id="input-group-width">
-                <FormItem>
-                  <InputGroup compact>
-                    {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
-                        style={styles.wrapper}
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                        <Option value="PAYING">Paying</Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    style={{ width: '190px' }}
-                    label={<p style={{ width: '138px' }}>Order Category</p>}
-                    onChange={(value) => {
-                      this.setState({
-                        orderCategory: value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    <Option value="SINGLE">Ordinary order</Option>
-                    <Option value="FIRST_AUTOSHIP">First subscription</Option>
-                    <Option value="RECURRENT_AUTOSHIP">After second subscription</Option>
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8} id="Range-picker-width">
-                <FormItem>
-                  <RangePicker
-                    className="rang-picker-width"
-                    onChange={(e) => {
-                      let beginTime = '';
-                      let endTime = '';
-                      if (e.length > 0) {
-                        beginTime = e[0].format(Const.DAY_FORMAT);
-                        endTime = e[1].format(Const.DAY_FORMAT);
-                      }
-                      this.setState({ beginTime: beginTime, endTime: endTime });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
@@ -336,7 +233,6 @@ export default class SearchHead extends Component<any, any> {
             </div>
           )}
         </div>
-
       </div>
     );
   }

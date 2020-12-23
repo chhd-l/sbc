@@ -200,6 +200,32 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
+      title: 'UOM',
+      key: 'goodsMeasureUnit',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsMeasureUnit_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please input UOM'
+                    },
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
+                  initialValue: rowInfo.goodsMeasureUnit
+                })(<Input style={{ width: '115px' }} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
       title: '',
       key: 'id',
       width: '5%'

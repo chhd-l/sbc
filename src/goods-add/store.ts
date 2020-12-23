@@ -1152,6 +1152,7 @@ export default class AppStore extends Store {
           goodsInfoImg: imageUrl,
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           goodsInfoType: 1,
+          goodsInfoWeight: item.get('goodsInfoWeight') || 0,
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',

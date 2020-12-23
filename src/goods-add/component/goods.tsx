@@ -862,7 +862,7 @@ class GoodsForm extends React.Component<any, any> {
         if (v == cate.get('storeCateId') && cate.get('cateParentId') != 0) {
           // 判断上级是否已添加过，如果没有添加过，添加
           let secondLevel = sourceGoodCateList.find((x) => x.get('storeCateId') === cate.get('cateParentId'));
-          if (secondLevel) {
+          if (secondLevel && secondLevel.get('cateParentId') !== 0) {
             let exsit = originValues.toJS().includes(secondLevel.get('cateParentId'));
             if (!exsit) {
               originValues = originValues.push(secondLevel.get('cateParentId')); // first level

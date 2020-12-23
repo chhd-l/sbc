@@ -239,14 +239,14 @@ class SkuForm extends React.Component<any, any> {
                       required: true,
                       message: 'Please input weight value'
                     },
-                    {
+                    /*{
                       pattern: ValidConst.number,
                       message: 'Please enter the correct value'
-                    }
+                    }*/
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
-                  initialValue: rowInfo.goodsInfoWeight
-                })(<InputNumber style={{ width: '121px', paddingTop: '3px' }} precision={0} min={0} />)}
+                  initialValue: rowInfo.goodsInfoWeight || 0
+                })(<Input type="number" style={{ width: '121px' }} min={0} />)}
               </FormItem>
             </Col>
           </Row>
@@ -255,7 +255,7 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: 'Unit',
+      title: 'Weight unit',
       key: 'goodsInfoUnit',
       render: (rowInfo) => {
         return (
@@ -278,7 +278,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    columns = columns.push({
+    /*columns = columns.push({
       title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
@@ -307,7 +307,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
-    });
+    });*/
 
     /*columns = columns.push({
       title: <div>Description</div>,
@@ -377,7 +377,7 @@ class SkuForm extends React.Component<any, any> {
                 onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
                 initialValue: goods.get('subscriptionStatus') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
               })(
-                <Select disabled={goods.get('subscriptionStatus') === '0'} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                <Select disabled={goods.get('subscriptionStatus') === '0' } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                   <Option value="1">Y</Option>
                   <Option value="0">N</Option>
                 </Select>
@@ -387,10 +387,10 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    let a = columns.toJS();
+   /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);
-    a.splice(3, 0, b[0]);
-    return a;
+    a.splice(3, 0, b[0]);*/
+    return columns.toJS();
   };
   _handleChange = (value) => {
     sessionStorage.setItem('baseSpecId', value);

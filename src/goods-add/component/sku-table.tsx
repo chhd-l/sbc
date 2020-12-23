@@ -294,7 +294,7 @@ class SkuForm extends React.Component<any, any> {
                               <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
                                 <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
                                 <InputNumber
-                                  style={{ width: '60px', height: '25px', textAlign: 'center' }}
+                                  style={{ width: '60px', height: '28px', textAlign: 'center' }}
                                   defaultValue={item.bundleNum}
                                   key={item.subGoodsInfoNo}
                                   min={1}
@@ -346,8 +346,8 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
-                  initialValue: rowInfo.goodsInfoWeight
-                })(<InputNumber style={{ width: '121px',paddingTop: '3px' }} precision={0} min={0} />)}
+                  initialValue: rowInfo.goodsInfoWeight || 0
+                })(<Input type="number" style={{ width: '121px' }} min={0} />)}
               </FormItem>
             </Col>
           </Row>
@@ -357,7 +357,7 @@ class SkuForm extends React.Component<any, any> {
 
 
     columns = columns.push({
-      title: 'Weight Unit',
+      title: 'Weight unit',
       key: 'goodsInfoUnit',
       render:  (rowInfo) => {
         return(
@@ -380,7 +380,7 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    columns = columns.push({
+    /*columns = columns.push({
       title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
@@ -409,7 +409,7 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
-    });
+    });*/
 
 
     columns = columns.push({
@@ -451,7 +451,7 @@ class SkuForm extends React.Component<any, any> {
                 onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
                 initialValue: goods.get('subscriptionStatus') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
               })(
-                <Select disabled={goods.get('subscriptionStatus') === '0'} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                <Select disabled={goods.get('subscriptionStatus') === '0' } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                   <Option value="1">Y</Option>
                   <Option value="0">N</Option>
                 </Select>

@@ -870,7 +870,6 @@ class GoodsForm extends React.Component<any, any> {
       });
     });
     const storeCateIds = originValues;
-    debugger
     const goods = Map({
       ['storeCateIds']: storeCateIds
     });

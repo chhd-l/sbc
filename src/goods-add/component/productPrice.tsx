@@ -411,15 +411,22 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
           Base price
-          <Select value={selectedBasePrice} onChange={this._handleBasePriceChange}>
-            {/*{goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}*/}
+          {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange}>
+            {goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
             <Option value={'weightValue'}>Weight value</Option>
             <Option value={'None'}>None</Option>
-          </Select>
+          </Select>*/}
         </div>
       ),
       key: 'basePrice',
-      render: (rowInfo) => {
+      render: (rowInfo,a,b) => {
+        const { goodsList, goods } = this.props.relaxProps;
+
+        if(goodsList.toJS()[b].goodsInfoWeight != 0) {
+          this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight)
+        }else {
+          this._handleBasePriceChange('None')
+        }
         return (
           <Row>
             <Col span={12}>

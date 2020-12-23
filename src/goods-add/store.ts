@@ -2002,7 +2002,6 @@ export default class AppStore extends Store {
     });
   };
   updateBasePrice = (id, key, e) => {
-    debugger;
     if (key !== 'marketPrice' && key !== 'subscriptionPrice') {
       return;
     }

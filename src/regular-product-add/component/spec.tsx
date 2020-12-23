@@ -237,7 +237,7 @@ class SpecForm extends React.Component<any, any> {
                                 }
                               ],
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
-                              initialValue: a
+                              initialValue: specValues
                             })(
                               <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}

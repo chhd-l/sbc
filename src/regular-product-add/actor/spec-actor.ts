@@ -8,7 +8,7 @@ export default class GoodsSpecActor extends Actor {
   defaultState() {
     return {
       // 是否为单规格
-      specSingleFlag: false,
+      specSingleFlag: true,
       // 规格列表
       goodsSpecs: [
         // {

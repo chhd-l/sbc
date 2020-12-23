@@ -325,7 +325,7 @@ class Notification extends Component<any, any> {
                   <Select value={selectedForm.selectedTemplateId} onChange={(value, option) => this.templateChange(value, option)}>
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
-                        <Option value={item.templateId} key={index}>
+                        <Option title={item.emailTemplate} value={item.templateId} key={index}>
                           {item.emailTemplate}
                         </Option>
                       ))}

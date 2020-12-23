@@ -114,11 +114,11 @@ class SkuForm extends React.Component<any, any> {
       columns = goodsSpecs
         .map((item, i) => {
           return {
-            title: i == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : item.get('specName'),
+            title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return i == 0?rowInfo && rowInfo.replace(/[^\d.]/g, ''):rowInfo;
+              return rowInfo;
             }
           };
         })
@@ -213,7 +213,7 @@ class SkuForm extends React.Component<any, any> {
                       required: true,
                       whitespace: true,
                       message: 'Please input UOM'
-                    },
+                    }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
                   initialValue: rowInfo.goodsMeasureUnit

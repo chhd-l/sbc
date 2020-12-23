@@ -1185,6 +1185,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          goodsInfoWeight: item.get('goodsInfoWeight') || 0,
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',

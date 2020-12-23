@@ -210,7 +210,7 @@ export default class GoodsSpecActor extends Actor {
       specId: random,
       mockSpecId: random,
       isMock: true,
-      specName: goodsSpecs.count() == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : 'specification' + goodsSpecs.count(),
+      specName: 'specification' + goodsSpecs.count(),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

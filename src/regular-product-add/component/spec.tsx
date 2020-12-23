@@ -82,7 +82,7 @@ class SpecForm extends React.Component<any, any> {
             <FormattedMessage id="product.specificationSetting" />
           </div>
           <div style={styles.box}>
-            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag} disabled>
+            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
               <span>
                 {/* <span
                   style={{
@@ -117,9 +117,6 @@ class SpecForm extends React.Component<any, any> {
                           .map((item) => item.get('detailName'))
                           .toJS()
                       : [];
-                  let a = specValues.map((o) => {
-                    return o.replace(/[^\d.]/g, '');
-                  });
                   return (
                     <div key={item.get('specId')} style={{ marginBottom: 20 }}>
                       <Row type="flex" justify="start" align="top">
@@ -164,8 +161,8 @@ class SpecForm extends React.Component<any, any> {
                                 }
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
-                              initialValue: index == 0 ? sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) : item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} disabled={index == 0 ? true : false} />)}
+                              initialValue: item.get('specName')
+                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -248,19 +245,12 @@ class SpecForm extends React.Component<any, any> {
                             )}
                           </FormItem>
                         </Col>
-                        {index != 0 ? (
-                          <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                            <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
-                              <FormattedMessage id="delete" />
-                            </Button>
-                          </Col>
-                        ) : null}
+                        <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
+                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
+                            <FormattedMessage id="delete" />
+                          </Button>
+                        </Col>
                       </Row>
-                      {index === 0 ? (
-                        <Row>
-                          <span style={{ color: 'red' }}>*</span> You only need to input specific weight value
-                        </Row>
-                      ) : null}
                     </div>
                   );
                 })}
@@ -283,8 +273,8 @@ class SpecForm extends React.Component<any, any> {
   _getChildren = (specValues: IList, specName: any) => {
     const children = [];
     specValues.forEach((item) => {
-      let a = item.get('detailName').replace(/[^\d.]/g, '');
-      children.push(<Option key={item.get('detailName')}>{specName == sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) ? a : item.get('detailName')}</Option>);
+      //let a = item.get('detailName').replace(/[^\d.]/g, '');
+      children.push(<Option key={item.get('detailName')}>{item.get('detailName')}</Option>);
     });
     return children;
   };

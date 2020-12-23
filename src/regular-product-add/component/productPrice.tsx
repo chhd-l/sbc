@@ -151,7 +151,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
                   </Col>
                 </Row>
               );

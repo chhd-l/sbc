@@ -148,7 +148,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
                   </Col>
                 </Row>
               );
@@ -179,7 +179,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: <FormattedMessage id="product.SKU" />,
-      key: 'goodsInfoNo'+'index',
+      key: 'goodsInfoNo' + 'index',
       render: (rowInfo) => {
         //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
         return (
@@ -403,7 +403,6 @@ class SkuForm extends React.Component<any, any> {
       )
     });
 
-    console.log('goodsSpecs--------------', goodsSpecs.toJS());
     columns = columns.push({
       title: (
         <div>

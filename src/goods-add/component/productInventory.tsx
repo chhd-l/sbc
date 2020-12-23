@@ -201,7 +201,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: 'UOM',
-      key: 'goodsMeasureUnit',
+      key: 'goodsMeasureUnit + stock',
       render: (rowInfo) => {
         return (
           <Row>

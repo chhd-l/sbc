@@ -26,6 +26,7 @@ export default class ProductPrice extends React.Component<any, any> {
       priceOpt: number;
       getGoodsId: any;
       addSkUProduct: any;
+      selectedBasePrice: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -40,6 +41,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateBasePrice: Function;
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
+      setSelectedBasePrice: Function;
     };
   };
 
@@ -57,6 +59,7 @@ export default class ProductPrice extends React.Component<any, any> {
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
     addSkUProduct: 'addSkUProduct',
+    selectedBasePrice: 'selectedBasePrice',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -67,7 +70,8 @@ export default class ProductPrice extends React.Component<any, any> {
     modalVisible: noop,
     updateBasePrice: noop,
     updateAllBasePrice: noop,
-    setDefaultBaseSpecId: noop
+    setDefaultBaseSpecId: noop,
+    setSelectedBasePrice: noop
   };
 
   constructor(props) {
@@ -125,7 +129,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, selectedBasePrice, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -407,9 +411,10 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
           Base price
-          <Select value={baseSpecId || null} onChange={this._handleChange}>
-            {goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
-            <Option value={null}>None</Option>
+          <Select value={selectedBasePrice} onChange={this._handleBasePriceChange}>
+            {/*{goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}*/}
+            <Option value={'weightValue'}>Weight value</Option>
+            <Option value={'None'}>None</Option>
           </Select>
         </div>
       ),
@@ -430,7 +435,7 @@ class SkuForm extends React.Component<any, any> {
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
                     initialValue: rowInfo.basePrice || 0
                   })(
-                    baseSpecId ? (
+                    selectedBasePrice != 'None' ? (
                       <div>
                         <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
                         <p>{rowInfo.subscriptionBasePrice}</p>
@@ -481,7 +486,10 @@ class SkuForm extends React.Component<any, any> {
     const { deleteGoodsInfo } = this.props.relaxProps;
     deleteGoodsInfo(id);
   };
-
+  _handleBasePriceChange = (e) => {
+    const { setSelectedBasePrice } = this.props.relaxProps;
+    setSelectedBasePrice(e);
+  };
   /**
    * 检查文件格式
    */

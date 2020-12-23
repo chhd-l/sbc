@@ -618,7 +618,20 @@ export default class AppStore extends Store {
     });
     this.dispatch('');
   };
+
   updateBasePrice = (id, key, e) => {
+    if (key !== 'marketPrice' && key !== 'subscriptionPrice') {
+      return;
+    }
+    const value = e;
+    if (key === 'marketPrice') {
+      this.editGoodsItem(id, 'basePrice', value);
+    } else if (key === 'subscriptionPrice') {
+      this.editGoodsItem(id, 'subscriptionBasePrice', value);
+    }
+    this.computedBasePrice();
+  };
+  updateBasePrice2 = (id, key, e) => {
     // type === 'basePrice' || subscriptionBasePrice
     const mockSpecId = this.state().get('baseSpecId');
     if (!mockSpecId || (key !== 'marketPrice' && key !== 'subscriptionPrice')) {
@@ -651,6 +664,26 @@ export default class AppStore extends Store {
    */
   setSelectedBasePrice = (value) => {
     this.dispatch('goodsSpecActor: selectedBasePrice', value);
+    if (value === 'None') {
+      return;
+    }
+    this.computedBasePrice();
+  };
+
+  computedBasePrice = () => {
+    const goodsInfo = this.state().get('goodsList').toJS();
+    goodsInfo.forEach((item) => {
+      const specValue = item.goodsInfoWeight;
+      if (specValue) {
+        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+        const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+        this.editGoodsItem(item.id, 'basePrice', basePrice);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
+      } else {
+        this.editGoodsItem(item.id, 'basePrice', null);
+        this.editGoodsItem(item.id, 'subscriptionBasePrice', null);
+      }
+    });
   };
   /**
    * 修改商品图片

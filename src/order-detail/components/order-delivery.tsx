@@ -102,7 +102,8 @@ export default class OrderDelivery extends React.Component<any, any> {
           ) : null}
         </div>
         {tradeDelivers.count() > 0
-          ? tradeDelivers&&tradeDelivers.map((v, i) => {
+          ? tradeDelivers &&
+            tradeDelivers.map((v, i) => {
               const logistic = v.get('logistics');
               const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
               //处理赠品
@@ -121,9 +122,18 @@ export default class OrderDelivery extends React.Component<any, any> {
                           {logistic.get('logisticCompanyName')} &nbsp;&nbsp;Logistics single number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
                           <Logistics companyInfo={logistic} deliveryTime={deliverTime} />
-                          <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                          {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
-                          </Button>
+                          </Button> */}
+                          {v.get('trackingUrl') ? (
+                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
+                              Track delivery
+                            </Button>
+                          ) : (
+                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                              Refresh
+                            </Button>
+                          )}
                         </label>
                       ) : (
                         'none'

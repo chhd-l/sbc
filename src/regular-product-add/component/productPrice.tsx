@@ -25,6 +25,8 @@ export default class ProductPrice extends React.Component<any, any> {
       spuMarketPrice: number;
       priceOpt: number;
       getGoodsId: any;
+      selectedBasePrice: any;
+      setSelectedBasePrice: Function;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -55,6 +57,7 @@ export default class ProductPrice extends React.Component<any, any> {
     baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
+    selectedBasePrice: 'selectedBasePrice',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -65,7 +68,8 @@ export default class ProductPrice extends React.Component<any, any> {
     modalVisible: noop,
     updateBasePrice: noop,
     updateAllBasePrice: noop,
-    setDefaultBaseSpecId: noop
+    setDefaultBaseSpecId: noop,
+    setSelectedBasePrice: noop
   };
 
   constructor(props) {
@@ -125,7 +129,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, getGoodsId, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, selectedBasePrice, getGoodsId, stockChecked, marketPriceChecked, subscriptionStatus, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -147,7 +151,7 @@ class SkuForm extends React.Component<any, any> {
               return (
                 <Row>
                   <Col span={12}>
-                    <FormItem style={{ paddingTop: 28 }}>{rowInfo && rowInfo.replace(/[^\d.]/g, '')}</FormItem>
+                    <FormItem style={{ paddingTop: 28 }}>{rowInfo}</FormItem>
                   </Col>
                 </Row>
               );
@@ -338,14 +342,15 @@ class SkuForm extends React.Component<any, any> {
       title: (
         <div>
           Base price
-          <Select value={baseSpecId || null} onChange={this._handleChange} allowClear>
-            {goodsSpecs.map((item, i) =>
-              item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (
-                <Option key={i} value={item.get('mockSpecId')}>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
-                </Option>
-              ) : null
-            )}
+          <Select value={selectedBasePrice} onChange={this._handleBasePriceChange} allowClear>
+            {/*{goodsSpecs.map((item, i) =>*/}
+            {/*  item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (*/}
+            {/*    <Option key={i} value={item.get('mockSpecId')}>*/}
+            {/*      {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}*/}
+            {/*    </Option>*/}
+            {/*  ) : null*/}
+            {/*)}*/}
+            <Option value={'weightValue'}>Weight Value</Option>
             <Option value={null}>None</Option>
           </Select>
         </div>
@@ -368,7 +373,7 @@ class SkuForm extends React.Component<any, any> {
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
                     initialValue: rowInfo.basePrice || 0
                   })(
-                    baseSpecId ? (
+                    selectedBasePrice ? (
                       <div>
                         <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
                         <p>{rowInfo.subscriptionBasePrice}</p>
@@ -438,6 +443,11 @@ class SkuForm extends React.Component<any, any> {
   _deleteGoodsInfo = (id: string) => {
     const { deleteGoodsInfo } = this.props.relaxProps;
     deleteGoodsInfo(id);
+  };
+
+  _handleBasePriceChange = (e) => {
+    const { setSelectedBasePrice } = this.props.relaxProps;
+    setSelectedBasePrice(e);
   };
 
   /**

@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import {cache, noop, ValidConst} from 'qmkit';
+import { cache, noop, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
@@ -135,13 +135,13 @@ class SkuForm extends React.Component<any, any> {
 
       })*/
       columns = goodsSpecs
-        .map((item,i) => {
+        .map((item, i) => {
           return {
-            title: i==0?sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT):item.get('specName'),
+            title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
-              return item.get('specName') == sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)?rowInfo&&rowInfo.replace(/[^\d.]/g, ''):rowInfo;
+              return rowInfo;
             }
           };
         })
@@ -177,30 +177,6 @@ class SkuForm extends React.Component<any, any> {
       key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
-      }
-    });
-
-    columns = columns.push({
-      title: 'Unit',
-      key: 'goodsInfoUnit',
-      render:  (rowInfo) => {
-        return(
-          <Row>
-            <Col span={6}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit?rowInfo.goodsInfoUnit:'kg'
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{width: '60px'}} placeholder="please select unit">
-                    <Option value="kg">kg</Option>
-                    <Option value="g">g</Option>
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-        )
       }
     });
 
@@ -250,6 +226,59 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
+      title: 'Weight value',
+      key: 'goodsInfoWeight',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoWeight' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please input weight value'
+                    },
+                    {
+                      pattern: ValidConst.number,
+                      message: 'Please enter the correct value'
+                    }
+                  ],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
+                  initialValue: rowInfo.goodsInfoWeight
+                })(<InputNumber style={{ width: '121px', paddingTop: '3px' }} precision={0} min={0} />)}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: 'Unit',
+      key: 'goodsInfoUnit',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={6}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
+                  initialValue: rowInfo.goodsInfoUnit ? rowInfo.goodsInfoUnit : 'kg'
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} placeholder="please select unit">
+                    <Option value="kg">kg</Option>
+                    <Option value="g">g</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
       title: 'Pack size',
       key: 'packSize',
       render: (rowInfo) => {
@@ -272,37 +301,6 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'packSize'),
                   initialValue: rowInfo.packSize
-                })(<Input style={{ width: '115px' }} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });
-
-    columns = columns.push({
-      title: 'UOM',
-      key: 'goodsMeasureUnit',
-      render: (rowInfo) => {
-        return (
-          <Row>
-            <Col span={12}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsMeasureUnit_' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: 'Please input goods Measure Unit code'
-                    },
-                    {
-                      min: 1,
-                      max: 20,
-                      message: '1-20 characters'
-                    }
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
-                  initialValue: rowInfo.goodsMeasureUnit
                 })(<Input style={{ width: '115px' }} />)}
               </FormItem>
             </Col>
@@ -336,17 +334,19 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '152px',
-          textAlign: 'left',
-          float: 'left'
-        }}>
+        <div
+          style={{
+            marginRight: '152px',
+            textAlign: 'left',
+            float: 'left'
+          }}
+        >
           <span
             style={{
               color: 'red',
               fontFamily: 'SimSun',
               marginRight: '4px',
-              fontSize: '12px',
+              fontSize: '12px'
             }}
           >
             *
@@ -366,9 +366,11 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => (
-        <Row style={{
-          marginRight: '124px',
-        }}>
+        <Row
+          style={{
+            marginRight: '124px'
+          }}
+        >
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
@@ -385,9 +387,9 @@ class SkuForm extends React.Component<any, any> {
         </Row>
       )
     });
-    let a = columns.toJS()
-    let b = a.splice(a.length-4,1)
-    a.splice(3,0,b[0])
+    let a = columns.toJS();
+    let b = a.splice(a.length - 4, 1);
+    a.splice(3, 0, b[0]);
     return a;
   };
   _handleChange = (value) => {

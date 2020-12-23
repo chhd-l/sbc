@@ -646,6 +646,13 @@ export default class AppStore extends Store {
     }
   };
   /**
+   *
+   * 设置选中的Base Price
+   */
+  setSelectedBasePrice = (value) => {
+    this.dispatch('goodsSpecActor: selectedBasePrice', value);
+  };
+  /**
    * 修改商品图片
    */
   editImages = (images: IList) => {
@@ -1185,6 +1192,7 @@ export default class AppStore extends Store {
           mockSpecIds,
           mockSpecDetailIds,
           goodsInfoImg: imageUrl,
+          goodsInfoWeight: item.get('goodsInfoWeight') || 0,
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',

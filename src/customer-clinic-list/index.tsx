@@ -48,7 +48,7 @@ export default class Customer extends React.Component<any, any> {
         //   title: 'Operation',
         //   key: 'operation',
         //   render: (text, record) => (
-            
+
         //     <span>
         //       <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Visitor') + '/' + record.customerId + '/' + record.customerAccount}>Details</Link>
         //     </span>
@@ -61,19 +61,7 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title="Details">
-                <Link
-                  to={
-                    '/customer-clinic-details/' +
-                    (record.customerLevelName
-                      ? record.customerLevelName
-                      : 'Guest') +
-                    '/' +
-                    record.customerId +
-                    '/' +
-                    record.customerAccount
-                  }
-                  className="iconfont iconDetails"
-                ></Link>
+                <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
               </Tooltip>
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
@@ -291,7 +279,7 @@ export default class Customer extends React.Component<any, any> {
                     >
                       <Option value="">All</Option>
                       {customerTypeArr.map((item) => (
-                        <Option value={item.id} key={item.id}>
+                        <Option title={item.name} value={item.id} key={item.id}>
                           {item.name}
                         </Option>
                       ))}
@@ -359,8 +347,14 @@ export default class Customer extends React.Component<any, any> {
             </Form>
           </div>
           <div className="container">
-            <Table columns={columns} rowKey="id" dataSource={this.state.searchList} pagination={this.state.pagination}
-                   loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }} onChange={this.handleTableChange} />
+            <Table
+              columns={columns}
+              rowKey="id"
+              dataSource={this.state.searchList}
+              pagination={this.state.pagination}
+              loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+              onChange={this.handleTableChange}
+            />
           </div>
         </div>
       </AuthWrapper>

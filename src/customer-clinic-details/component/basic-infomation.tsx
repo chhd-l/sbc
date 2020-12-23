@@ -1,19 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  DatePicker,
-  Empty,
-  Spin
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
@@ -229,15 +215,13 @@ class BasicInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Row gutter={16}>
               <Col span={12}>
                 <FormItem label="First Name">
                   {getFieldDecorator('firstName', {
-                    rules: [
-                      { required: true, message: 'Please input First Name!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input First Name!' }]
                   })(
                     <Input
                       style={{ width: '100%' }}
@@ -255,9 +239,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Last Name">
                   {getFieldDecorator('lastName', {
-                    rules: [
-                      { required: true, message: 'Please input Last Name!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Last Name!' }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -274,13 +256,8 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Birth Date">
                   {getFieldDecorator('birthDay', {
-                    rules: [
-                      { required: true, message: 'Please input Birth Date!' }
-                    ],
-                    initialValue: moment(
-                      new Date(this.state.currentBirthDay),
-                      'DD/MM/YYYY'
-                    )
+                    rules: [{ required: true, message: 'Please input Birth Date!' }],
+                    initialValue: moment(new Date(this.state.currentBirthDay), 'DD/MM/YYYY')
                   })(
                     <DatePicker
                       style={{ width: '100%' }}
@@ -319,9 +296,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Phone Number">
                   {getFieldDecorator('contactPhone', {
-                    rules: [
-                      { required: true, message: 'Please input Phone Number!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Phone Number!' }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -338,9 +313,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Post Code">
                   {getFieldDecorator('postCode', {
-                    rules: [
-                      { required: true, message: 'Please input Post Code!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Post Code!' }]
                   })(
                     <Input
                       onChange={(e) => {
@@ -358,9 +331,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Country">
                   {getFieldDecorator('country', {
-                    rules: [
-                      { required: true, message: 'Please input Country!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Country!' }]
                   })(
                     <Select
                       onChange={(value) => {
@@ -372,7 +343,7 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {countryArr.map((item) => (
-                        <Option value={item.valueEn} key={item.id}>
+                        <Option title={item.name} value={item.valueEn} key={item.id}>
                           {item.name}
                         </Option>
                       ))}
@@ -395,7 +366,7 @@ class BasicInfomation extends React.Component<any, any> {
                       }}
                     >
                       {cityArr.map((item) => (
-                        <Option value={item.valueEn} key={item.id}>
+                        <Option title={item.name} value={item.valueEn} key={item.id}>
                           {item.name}
                         </Option>
                       ))}
@@ -406,9 +377,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Address 1">
                   {getFieldDecorator('address1', {
-                    rules: [
-                      { required: true, message: 'Please input Address 1!' }
-                    ]
+                    rules: [{ required: true, message: 'Please input Address 1!' }]
                   })(
                     <TextArea
                       autoSize={{ minRows: 3, maxRows: 3 }}
@@ -463,17 +432,14 @@ class BasicInfomation extends React.Component<any, any> {
                     >
                       *
                     </span>
-                    <label style={{ minWidth: '200px', marginRight: '10px' }}>
-                      Preferred methods of communication:
-                    </label>
+                    <label style={{ minWidth: '200px', marginRight: '10px' }}>Preferred methods of communication:</label>
                   </div>
 
                   {getFieldDecorator('preferredMethods', {
                     rules: [
                       {
                         required: true,
-                        message:
-                          'Please Select Preferred methods of communication!'
+                        message: 'Please Select Preferred methods of communication!'
                       }
                     ]
                   })(
@@ -517,16 +483,9 @@ class BasicInfomation extends React.Component<any, any> {
                     'defaultClinics',
                     {}
                   )(
-                    <Select
-                      showSearch
-                      placeholder="Please select"
-                      style={{ width: '100%' }}
-                    >
+                    <Select showSearch placeholder="Please select" style={{ width: '100%' }}>
                       {clinicList.map((item) => (
-                        <Option
-                          value={item.prescriberId.toString()}
-                          key={item.prescriberId}
-                        >
+                        <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                           {item.prescriberId + ',' + item.prescriberName}
                         </Option>
                       ))}
@@ -537,9 +496,7 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem label="Selected Prescriber">
                   {getFieldDecorator('selectedClinics', {
-                    rules: [
-                      { required: true, message: 'Please Select Prescriber!' }
-                    ]
+                    rules: [{ required: true, message: 'Please Select Prescriber!' }]
                   })(
                     <Select
                       mode="tags"
@@ -566,10 +523,7 @@ class BasicInfomation extends React.Component<any, any> {
                         <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                       ))} */}
                       {clinicList.map((item) => (
-                        <Option
-                          value={item.prescriberId.toString()}
-                          key={item.prescriberId}
-                        >
+                        <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                           {item.prescriberId + ',' + item.prescriberName}
                         </Option>
                       ))}

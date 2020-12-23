@@ -215,8 +215,7 @@ class MessageDetails extends Component<any, any> {
     });
   };
   findEmailTask = () => {
-    webapi.findEmailTask(this.state.id).then((data) => {
-    });
+    webapi.findEmailTask(this.state.id).then((data) => {});
   };
 
   save = () => {
@@ -575,7 +574,7 @@ class MessageDetails extends Component<any, any> {
           <Breadcrumb.Item>Message Details</Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
             <Headline title={title} />
 
@@ -653,7 +652,7 @@ class MessageDetails extends Component<any, any> {
                         >
                           {emailTemplateList &&
                             emailTemplateList.map((item, index) => (
-                              <Option value={item.templateId} key={index}>
+                              <Option title={item.emailTemplate && item.emailTemplate.length > 15 ? item.emailTemplate : ''} value={item.templateId} key={index}>
                                 {item.emailTemplate}
                               </Option>
                             ))}

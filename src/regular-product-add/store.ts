@@ -284,6 +284,8 @@ export default class AppStore extends Store {
 
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
+      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue);
+
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = [];
 
@@ -1234,12 +1236,12 @@ export default class AppStore extends Store {
           subscriptionStatus: item.get('subscriptionStatus') === undefined ? 1 : item.get('subscriptionStatus'),
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
-          basePrice: data.get('baseSpecId') && item.get('basePrice') ? item.get('basePrice') : null,
-          subscriptionBasePrice: data.get('baseSpecId') && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
+          basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
+          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null
         })
       );
     });
-
+    console.log(goodsList, 'goodsList---');
     if (goodsList.count() === 0) {
       message.error('SKU不能为空');
       return false;
@@ -1322,7 +1324,7 @@ export default class AppStore extends Store {
     param = param.set('goodsIntervalPrices', areaPrice);
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
-
+    param = param.set('weightValue', this.state().get('selectedBasePrice'));
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价

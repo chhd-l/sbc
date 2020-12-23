@@ -29,7 +29,7 @@ export default class GoodsSpecActor extends Actor {
       stockChecked: false,
       marketPriceChecked: false,
       baseSpecId: 0,
-      selectedBasePrice: null
+      selectedBasePrice: 'None'
     };
   }
 

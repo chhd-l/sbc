@@ -28,7 +28,8 @@ export default class GoodsSpecActor extends Actor {
       ],
       stockChecked: false,
       marketPriceChecked: false,
-      baseSpecId: 0
+      baseSpecId: 0,
+      selectedBasePrice: 'None'
     };
   }
 
@@ -68,7 +69,10 @@ export default class GoodsSpecActor extends Actor {
   setBaseSpecId(state, baseSpecId) {
     return (state = state.set('baseSpecId', baseSpecId));
   }
-
+  @Action('goodsSpecActor: selectedBasePrice')
+  setSelectedBasePrice(state, selectedBasePrice) {
+    return (state = state.set('selectedBasePrice', selectedBasePrice));
+  }
   /**
    * 设置是否为单规格
    */

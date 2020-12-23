@@ -350,8 +350,8 @@ class SkuForm extends React.Component<any, any> {
             {/*    </Option>*/}
             {/*  ) : null*/}
             {/*)}*/}
-            <Option value={'weightValue'}>Weight Value</Option>
-            <Option value={null}>None</Option>
+            <Option value={'weightValue'}>Weight value</Option>
+            <Option value={'None'}>None</Option>
           </Select>
         </div>
       ),
@@ -373,7 +373,7 @@ class SkuForm extends React.Component<any, any> {
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
                     initialValue: rowInfo.basePrice || 0
                   })(
-                    selectedBasePrice ? (
+                    selectedBasePrice != 'None' ? (
                       <div>
                         <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
                         <p>{rowInfo.subscriptionBasePrice}</p>

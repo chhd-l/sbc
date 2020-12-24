@@ -33,6 +33,9 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.searchParams) {
+      this.init(nextProps.searchParams ? nextProps.searchParams : {});
+    }
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {}
@@ -51,7 +54,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     return (
       <div className="content">
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
@@ -173,6 +176,9 @@ export default class GoodsGrid extends React.Component<any, any> {
   };
 
   init = async (params) => {
+    this.setState({
+      loading: true
+    });
     if (!params.pageNum) {
       params.pageNum = 0;
     }

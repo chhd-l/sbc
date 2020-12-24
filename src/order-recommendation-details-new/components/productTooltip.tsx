@@ -33,7 +33,7 @@ export default class GoodsModal extends React.Component<any, any> {
     showValidGood?: boolean;
     companyType?: number;
     //搜索参数
-    searchParams?: Object;
+    searchParams: any;
     //应用标示。如添加秒杀商品：saleType
     application?: string;
   };
@@ -42,7 +42,7 @@ export default class GoodsModal extends React.Component<any, any> {
     sharing: 'sharing',
     productForm: 'productForm',
     onSharing: noop,
-    onProductForm: noop,
+    searchParams: 'searchParams',
     onProductselect: noop,
     loading: 'loading',
     productList: 'productList',
@@ -64,9 +64,9 @@ export default class GoodsModal extends React.Component<any, any> {
   }
 
   render() {
-    const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, searchParams, application } = this.props;
+    const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, application } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselect } = this.props.relaxProps;
+    const { onProductselect, searchParams } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
@@ -98,7 +98,7 @@ export default class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {/*<SearchForm/>*/}
+        <SearchForm />
         {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );

@@ -37,7 +37,8 @@ export default class SettleDetailActor extends Actor {
       getLink: '',
       send: '',
       detailProductList: {},
-      linkStatus: Number
+      linkStatus: Number,
+      searchParams: ''
     };
   }
 
@@ -113,6 +114,11 @@ export default class SettleDetailActor extends Actor {
   @Action('get:linkStatus')
   linkStatus(state: IMap, res) {
     return state.set('linkStatus', res);
+  }
+
+  @Action('product:searchParams')
+  linkStatus(state: IMap, res) {
+    return state.set('searchParams', res);
   }
 
   //loading

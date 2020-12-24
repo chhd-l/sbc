@@ -19,7 +19,7 @@ const InputGroup = Input.Group;
 export default class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
-      onSearch: Function;
+      onProductForm: Function;
       onBatchAudit: Function;
       tab: IMap;
       dataList: IList;
@@ -28,11 +28,12 @@ export default class SearchHead extends Component<any, any> {
       onExportModalChange: Function;
       onExportModalHide: Function;
       exportModalData: IMap;
+      onSearchParams: Function;
     };
   };
 
   static relaxProps = {
-    onSearch: noop,
+    onProductForm: noop,
     onBatchAudit: noop,
     tab: 'tab',
     dataList: 'dataList',
@@ -40,6 +41,7 @@ export default class SearchHead extends Component<any, any> {
     onExportByIds: noop,
     onExportModalChange: noop,
     onExportModalHide: noop,
+    onSearchParams: noop,
     exportModalData: 'exportModalData'
   };
 
@@ -47,71 +49,61 @@ export default class SearchHead extends Component<any, any> {
     super(props);
 
     this.state = {
-      goodsOptions: 'skuName',
-      receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsName',
-      buyerOptions: 'buyerName',
-      numberSelect: 'orderNumber',
-      statusSelect: 'paymentStatus',
-      id: '',
-      subscribeId: '',
-      buyerOptionsValue: '',
-      goodsOptionsValue: '',
-      receiverSelectValue: '',
-      clinicSelectValue: '',
-      numberSelectValue: '',
-      tradeState: {
-        deliverStatus: '',
-        payState: '',
-        orderSource: ''
-      },
-      orderCategory: ''
+      likeGoodsName: '',
+      likeGoodsInfoNo: '',
+      Signed: '',
+      Price: ''
     };
   }
 
   render() {
-    const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
-
-    const { tradeState } = this.state;
-    let hasMenu = false;
-    /*if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
-      hasMenu = true;
-    }
-
-    const menu = (
-      <Menu>
-        {tab.get('key') == 'flowState-INIT' && (
-          <Menu.Item>
-            <AuthWrapper functionName="fOrderList002">
-              <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
-              </a>
-            </AuthWrapper>
-          </Menu.Item>
-        )}
-        <Menu.Item>
-          <AuthWrapper functionName="fOrderList004">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
-            </a>
-          </AuthWrapper>
-        </Menu.Item>
-      </Menu>
-    );*/
+    const { onSearchParams } = this.props.relaxProps;
 
     return (
       <div>
         <Headline title={<FormattedMessage id="order.orderList" />} />
         <div>
           <Form className="filter-content" layout="inline">
-            <Row>
-              <Col span={8}>
+            <Row style={{ width: '100vh', margin: '0 auto' }}>
+              <div style={{ width: '100vh', margin: '0 auto' }} className="space-around">
+                <Col>
+                  <FormItem>
+                    <Input
+                      addonBefore={<p style={{ width: '120px' }}>Product Name</p>}
+                      onChange={(e) => {
+                        this.setState({
+                          likeGoodsName: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+
+                <Col>
+                  <FormItem>
+                    <Input
+                      addonBefore={<p style={{ width: '120px' }}>SKU</p>}
+                      onChange={(e) => {
+                        this.setState({
+                          likeGoodsInfoNo: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+              </div>
+
+              {/*<Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={this._renderNumberSelect()}
+                    addonBefore={
+                    <p style={{width:'120px'}}>
+                      Signed classification
+                    </p>
+                  }
                     onChange={(e) => {
                       this.setState({
-                        numberSelectValue: (e.target as any).value
+                        Signed: (e.target as any).value
                       });
                     }}
                   />
@@ -121,57 +113,19 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={this._renderBuyerOptionSelect()}
+                    addonBefore={
+                      <p style={{width:'120px'}}>
+                        Price
+                      </p>
+                    }
                     onChange={(e) => {
                       this.setState({
-                        buyerOptionsValue: (e.target as any).value
+                        Price: (e.target as any).value
                       });
                     }}
                   />
                 </FormItem>
-              </Col>
-
-              <Col span={8}>
-                {/*商品名称、SKU编码*/}
-                <FormItem>
-                  <Input
-                    addonBefore={this._renderGoodsOptionSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        goodsOptionsValue: (e.target as any).value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={this._renderReceiverSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        receiverSelectValue: (e.target as any).value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={this._renderClinicSelect()}
-                    onChange={(e) => {
-                      let a = e.target.value.split(',');
-
-                      this.setState({
-                        clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
+              </Col>*/}
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -183,35 +137,13 @@ export default class SearchHead extends Component<any, any> {
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
                       e.preventDefault();
-                      const { buyerOptions, goodsOptions, receiverSelect, clinicSelect, numberSelect, id, subscribeId, buyerOptionsValue, goodsOptionsValue, receiverSelectValue, clinicSelectValue, numberSelectValue, tradeState, beginTime, endTime, orderCategory } = this.state;
-
-                      const ts = {} as any;
-                      if (tradeState.deliverStatus) {
-                        ts.deliverStatus = tradeState.deliverStatus;
-                      }
-
-                      if (tradeState.payState) {
-                        ts.payState = tradeState.payState;
-                      }
-
-                      if (tradeState.orderSource) {
-                        ts.orderSource = tradeState.orderSource;
-                      }
-
+                      const { likeGoodsName, likeGoodsInfoNo } = this.state;
                       const params = {
-                        id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-                        subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-                        [buyerOptions]: buyerOptionsValue,
-                        tradeState: ts,
-                        [goodsOptions]: goodsOptionsValue,
-                        [receiverSelect]: receiverSelectValue,
-                        [clinicSelect]: clinicSelectValue,
-                        beginTime,
-                        endTime,
-                        orderCategory
+                        likeGoodsName: likeGoodsName,
+                        likeGoodsInfoNo: likeGoodsInfoNo
                       };
 
-                      onSearch(params);
+                      onSearchParams(params);
                     }}
                   >
                     <span>
@@ -222,16 +154,6 @@ export default class SearchHead extends Component<any, any> {
               </Col>
             </Row>
           </Form>
-
-          {hasMenu && (
-            <div className="handle-bar">
-              <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
-                <Button>
-                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </div>
-          )}
         </div>
       </div>
     );

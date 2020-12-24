@@ -49,10 +49,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch(
-          'productList:productInit',
-          res1.res.context.goodsInfoPage.content
-        );
+        this.dispatch('productList:productInit', res1.res.context.goodsInfoPage.content);
       });
     } else {
       message.error(res1.res.message);
@@ -60,6 +57,10 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       }
     }
+  };
+
+  onSearchParams = (searchParams) => {
+    this.dispatch('product:searchParams', searchParams);
   };
 
   //productselect

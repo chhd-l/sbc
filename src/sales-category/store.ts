@@ -99,7 +99,6 @@ export default class AppStore extends Store {
     if (formData.get('storeCateId')) {
       result = await editCate(formDataJs);
     } else {
-      formDataJs.displayStatus = false;
       result = await addCate(formDataJs);
     }
     if (result.res.code === Const.SUCCESS_CODE) {

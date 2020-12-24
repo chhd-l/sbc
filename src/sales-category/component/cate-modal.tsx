@@ -164,6 +164,7 @@ class CateModalForm extends React.Component<any, any> {
     const descriptionTitle = formData.get('cateTitle');
     const cateType = formData.get('cateType');
     const displayStatus = formData.get('displayStatus');
+    const altName = formData.get('altName');
 
     const { getFieldDecorator } = this.props.form;
     // console.log(formData.get('children'), 'children')
@@ -243,6 +244,22 @@ class CateModalForm extends React.Component<any, any> {
                   onChange: this._editGoods.bind(this, 'cateRouter')
                 })(<Input />)}
                 <Tips title={<FormattedMessage id="product.recommendedRouter" />} />
+              </FormItem>
+            )}
+            {formData.get('cateParentName') ? null : (
+              <FormItem {...formItemLayout} label="ALT name">
+                {getFieldDecorator('altName', {
+                  rules: [
+                    {
+                      required: true,
+                      whitespace: true,
+                      message: 'Please enter ALT name'
+                    },
+                    { max: 100, message: 'Up to 100 characters' }
+                  ],
+                  initialValue: altName,
+                  onChange: this._editGoods.bind(this, 'altName')
+                })(<Input />)}
               </FormItem>
             )}
             <FormItem labelCol={2} {...formItemLayout} label="Category type">

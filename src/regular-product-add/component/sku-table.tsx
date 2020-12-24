@@ -246,7 +246,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} />)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={e=>this.noMinus(e)}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -485,6 +485,18 @@ class SkuForm extends React.Component<any, any> {
       this._editGoodsItem(goodsInfo.get('id'), key, goodsInfo.get(key));
     }
   };
+
+  noMinus = (e) => {
+    let val=e.target.value;
+    //限制只能输入一个小数点
+    if (val.indexOf('.') != -1) {
+      let str = val.substr(val.indexOf('.') + 1);
+      if (str.indexOf('.') != -1) {
+        val = val.substr(0, val.indexOf('.') + str.indexOf('.') + 1);
+      }
+    }
+    e.target.value = val.replace(/[^\d^\.]+/g,'');
+  }
 }
 
 const styles = {

@@ -340,14 +340,14 @@ class SkuForm extends React.Component<any, any> {
                       required: true,
                       message: 'Please input weight value'
                     },
-                    {
-                      pattern: ValidConst.number,
+                    /*{
+                      pattern: ValidConst.noMinus,
                       message: 'Please enter the correct value'
-                    }
+                    }*/
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<Input type="number" style={{ width: '121px' }} min={0} />)}
+                })(<Input type="number" style={{ width: '121px' }} min={0} onKeyUp={e=>this.noMinus(e)}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -621,6 +621,19 @@ class SkuForm extends React.Component<any, any> {
     this._editGoodsItem(id, 'goodsInfoBundleRels', a);
     onProductselectSku(d);
   };
+
+  noMinus = (e) => {
+    let val=e.target.value;
+    if (val.indexOf('.') != -1) {
+      let str = val.substr(val.indexOf('.') + 1);
+      if (str.indexOf('.') != -1) {
+        val = val.substr(0, val.indexOf('.') + str.indexOf('.') + 1);
+      }
+    }
+    e.target.value = val.replace(/[^\d^\.]+/g,'');
+  }
+
+
 }
 
 const styles = {

@@ -12,7 +12,7 @@ import { IndicatorPopver } from 'biz';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-const noneData = require('./images/nodata.png');
+const noneData = require('/web_modules/qmkit/images/sys/no-data.jpg');
 
 interface WMChartProps {
   isTrade?: boolean;

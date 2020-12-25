@@ -280,7 +280,7 @@ export default class AppStore extends Store {
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
-      let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
+      let storeCateList: any = await getStoreCateList();
 
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
@@ -358,6 +358,8 @@ export default class AppStore extends Store {
         this.setGoodsFreight(goods.get('freightTempId'), true);
       }
       this.dispatch('goodsActor: editGoods', goods);
+
+      this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
       this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
 
       // 商品图片
@@ -1114,7 +1116,15 @@ export default class AppStore extends Store {
       }
     });
 
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    let oldGoodsDetailTabContent = data.get('oldGoodsDetailTabContent');
+    //如果是法国，不改变goodsDetail
+    if (storeId === 123457909 && oldGoodsDetailTabContent) {
+      goods = goods.set('goodsDetail', oldGoodsDetailTabContent);
+    } else {
+      goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    }
 
     param = param.set('goodsTabRelas', tabs);
 

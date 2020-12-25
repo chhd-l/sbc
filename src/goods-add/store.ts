@@ -1028,7 +1028,15 @@ export default class AppStore extends Store {
       }
     });
 
-    goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    let oldGoodsDetailTabContent = data.get('oldGoodsDetailTabContent');
+    //如果是法国，不改变goodsDetail
+    if (storeId === 123457909 && oldGoodsDetailTabContent) {
+      goods = goods.set('goodsDetail', oldGoodsDetailTabContent);
+    } else {
+      goods = goods.set('goodsDetail', JSON.stringify(goodsDetailTabTemplate));
+    }
 
     param = param.set('goodsTabRelas', tabs);
 

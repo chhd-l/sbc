@@ -68,7 +68,8 @@ export default class GoodsActor extends Actor {
       getGoodsId: '',
       taggingTotal: '',
       goodsTaggingRelList: null,
-      productFilter: null
+      productFilter: null,
+      oldGoodsDetailTabContent: ''
     };
   }
 
@@ -224,6 +225,11 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: editGoods')
   editGoods(state, data: IMap) {
     return state.update('goods', (goods) => goods.merge(data));
+  }
+
+  @Action('goodsActor: goodsDetailTabContentOld')
+  saveOldGoodsDetailTabContent(state, data) {
+    return state.set('oldGoodsDetailTabContent', data);
   }
 
   @Action('goodsActor:randomGoodsNo')

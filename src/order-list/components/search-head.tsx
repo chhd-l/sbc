@@ -107,75 +107,89 @@ export default class SearchHead extends Component<any, any> {
             <Row>
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderNumberSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        numberSelectValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderNumberSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          numberSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
 
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderBuyerOptionSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        buyerOptionsValue: (e.target as any).value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                {/*商品名称、SKU编码*/}
-                <FormItem>
-                  <Input
-                    addonBefore={this._renderGoodsOptionSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        goodsOptionsValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderBuyerOptionSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          buyerOptionsValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
 
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderReceiverSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        receiverSelectValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderGoodsOptionSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          goodsOptionsValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
 
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderClinicSelect()}
-                    onChange={(e) => {
-                      let a = e.target.value.split(',');
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderReceiverSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          receiverSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
 
-                      this.setState({
-                        clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
-                      });
-                    }}
-                  />
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderClinicSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        let a = e.target.value.split(',');
+
+                        this.setState({
+                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
 
               <Col span={8} id="input-group-width">
                 <FormItem>
-                  <InputGroup compact>
+                  <InputGroup compact style={styles.formItemStyle}>
                     {this._renderStatusSelect()}
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
@@ -239,23 +253,25 @@ export default class SearchHead extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    style={{ width: '190px' }}
-                    label={<p style={{ width: '138px' }}>Order Category</p>}
-                    onChange={(value) => {
-                      this.setState({
-                        orderCategory: value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    <Option value="SINGLE">Ordinary order</Option>
-                    <Option value="FIRST_AUTOSHIP">First subscription</Option>
-                    <Option value="RECURRENT_AUTOSHIP">After second subscription</Option>
-                  </SelectGroup>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Order Category" />
+                    <Select
+                      style={styles.wrapper}
+                      defaultValue=""
+                      onChange={(value) => {
+                        this.setState({
+                          orderCategory: value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      <Option value="SINGLE">Ordinary order</Option>
+                      <Option value="FIRST_AUTOSHIP">First subscription</Option>
+                      <Option value="RECURRENT_AUTOSHIP">After second subscription</Option>
+                    </Select>
+                  </InputGroup>
                 </FormItem>
               </Col>
 
@@ -263,6 +279,7 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <RangePicker
                     className="rang-picker-width"
+                    style={styles.formItemStyle}
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';
@@ -345,7 +362,6 @@ export default class SearchHead extends Component<any, any> {
   _renderBuyerOptionSelect = () => {
     return (
       <Select
-        getPopupContainer={() => document.getElementById('page-content')}
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
@@ -354,10 +370,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="buyerName">
+        <Option title="Consumer name" value="buyerName">
           <FormattedMessage id="consumerName" />
         </Option>
-        <Option value="buyerAccount">
+        <Option title="Consumer account" value="buyerAccount">
           <FormattedMessage id="consumerAccount" />
         </Option>
       </Select>
@@ -375,10 +391,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option value="skuName">
+        <Option title="Product name" value="skuName">
           <FormattedMessage id="productName" />
         </Option>
-        <Option value="skuNo">
+        <Option title="Sku code" value="skuNo">
           <FormattedMessage id="skuCode" />
         </Option>
       </Select>
@@ -396,10 +412,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option value="consigneeName">
+        <Option title="Recipient" value="consigneeName">
           <FormattedMessage id="recipient" />
         </Option>
-        <Option value="consigneePhone">
+        <Option title="Recipient phone" value="consigneePhone">
           <FormattedMessage id="recipientPhone" />
         </Option>
       </Select>
@@ -417,10 +433,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option value="clinicsName">
+        <Option title="Prescriber name" value="clinicsName">
           <FormattedMessage id="clinicName" />
         </Option>
-        <Option value="clinicsIds">
+        <Option title="Prescriber ID" value="clinicsIds">
           <FormattedMessage id="clinicID" />
         </Option>
       </Select>
@@ -437,10 +453,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option value="orderNumber">
+        <Option title="Order number" value="orderNumber">
           <FormattedMessage id="order.orderNumber" />
         </Option>
-        <Option value="subscriptioNumber">
+        <Option title="Subscriptio number" value="subscriptioNumber">
           <FormattedMessage id="order.subscriptioNumber" />
         </Option>
       </Select>
@@ -458,10 +474,10 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option value="paymentStatus">
+        <Option title="Payment status" value="paymentStatus">
           <FormattedMessage id="order.paymentStatus" />
         </Option>
-        <Option value="shippingStatus">
+        <Option title="Shipping status" value="shippingStatus">
           <FormattedMessage id="order.shippingStatus" />
         </Option>
       </Select>
@@ -508,11 +524,17 @@ export default class SearchHead extends Component<any, any> {
 }
 
 const styles = {
+  formItemStyle: {
+    width: 335
+  },
   label: {
-    width: 160,
-    textAlign: 'center'
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
   },
   wrapper: {
-    // width: 139
+    width: 200
   }
 } as any;

@@ -61,6 +61,8 @@ export default class SearchForm extends React.Component<any, any> {
   render() {
     const { onFormChange, searchForm, onSearch, rewardList } = this.props.relaxProps;
 
+    const employeeData = JSON.parse(sessionStorage.getItem('s2b-employee@data'));
+
     return (
       <Form className="filter-content" layout="inline">
         <Row>
@@ -89,7 +91,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="PrescriberID" />}
-                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
+                disabled={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -97,7 +99,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : searchForm.get('prescriberId')}
+                value={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : searchForm.get('prescriberId')}
               />
             </FormItem>
           </Col>
@@ -105,7 +107,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="prescriberName" />}
-                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
+                disabled={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -113,7 +115,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : searchForm.get('prescriberName')}
+                value={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : searchForm.get('prescriberName')}
               />
             </FormItem>
           </Col>

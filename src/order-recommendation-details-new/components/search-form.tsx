@@ -9,8 +9,6 @@ import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RangePicker = DatePicker.RangePicker;
-const InputGroup = Input.Group;
 
 /**
  * 订单查询头

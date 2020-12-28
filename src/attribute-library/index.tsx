@@ -272,6 +272,9 @@ class AttributeLibrary extends Component<any, any> {
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
+    this.setState({
+      loading: true
+    });
     webapi
       .getAttributes(params)
       .then((data) => {
@@ -279,12 +282,22 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
-          this.setState({ attributeList, pagination, loading: false });
+          this.setState({
+            attributeList,
+            pagination,
+            loading: false
+          });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failed');
       });
   };
@@ -668,15 +681,17 @@ class AttributeLibrary extends Component<any, any> {
             width="600px"
             title={modalName}
             visible={visibleAttribute}
-            onCancel={() =>
+            onCancel={() => {
+              this.getAttributes();
               this.setState({
                 visibleAttribute: false
-              })
-            }
+              });
+            }}
             footer={[
               <Button
                 key="back"
                 onClick={() => {
+                  this.getAttributes();
                   this.setState({
                     visibleAttribute: false
                   });

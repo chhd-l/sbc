@@ -20,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new ListActor(),
-      new FormActor(),
-      new TabActor()
-    ];
+    return [new LoadingActor(), new ListActor(), new FormActor(), new TabActor()];
   }
 
   /**
@@ -57,9 +52,8 @@ export default class AppStore extends Store {
           });
         } else {
           message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
-          }
+
+          this.dispatch('loading:end');
         }
       });
     }
@@ -144,9 +138,7 @@ export default class AppStore extends Store {
         message.success('Operate successfully');
         this.init();
       } else {
-        message.error(
-          res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败')
-        );
+        message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
         this.btnLoading = false;
         //set loading false
         // this.dispatch('detail-actor:setButtonLoading', false)
@@ -270,8 +262,7 @@ export default class AppStore extends Store {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/trade/export3pl/params/${encrypted}`;
+          const exportHref = Const.HOST + `/trade/export3pl/params/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

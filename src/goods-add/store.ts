@@ -269,7 +269,7 @@ export default class AppStore extends Store {
     // let storeCateList: any;
     if (goodsDetail.res.code == Const.SUCCESS_CODE) {
       let tmpContext = goodsDetail.res.context;
-      let storeCateList: any = await getStoreCateList(tmpContext.goods.cateId);
+      let storeCateList: any = await getStoreCateList();
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
       this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
@@ -330,7 +330,8 @@ export default class AppStore extends Store {
         });
       this.dispatch('sku:addSkUProduct', addSkUProduct);
     } else {
-      message.error('查询商品信息失败');
+      this.dispatch('loading:end');
+      message.error(goodsDetail.res.message);
       return false;
     }
     this.transaction(() => {

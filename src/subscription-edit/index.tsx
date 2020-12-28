@@ -11,7 +11,6 @@ import moment from 'moment';
 
 const Panel = Collapse.Panel;
 
-const InputGroup = Input.Group;
 const { Option } = Select;
 
 const { TabPane } = Tabs;
@@ -626,10 +625,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  handleYearChange = (value) => {
-  };
-  tabChange = (key) => {
-  };
+  handleYearChange = (value) => {};
+  tabChange = (key) => {};
   cancelNextSubscription = (row) => {
     let goodsItems = [];
     if (row && row.tradeItems) {

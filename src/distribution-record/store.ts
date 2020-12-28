@@ -23,13 +23,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new ListActor(),
-      new FormActor(),
-      new TabActor(),
-      new ExportActor()
-    ];
+    return [new LoadingActor(), new ListActor(), new FormActor(), new TabActor(), new ExportActor()];
   }
 
   /**
@@ -40,9 +34,7 @@ export default class AppStore extends Store {
   init = ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     this.dispatch('loading:start');
     //获取form数据
-    let form = this.state()
-      .get('form')
-      .toJS();
+    let form = this.state().get('form').toJS();
     this.searchCache = form;
     const key = this.state().getIn(['tab', 'key']);
 
@@ -57,23 +49,19 @@ export default class AppStore extends Store {
       form.deleteFlag = '1';
     }
 
-    webapi
-      .fetchDistributionRecordList({ ...form, pageNum, pageSize })
-      .then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context.distributionRecordVOPage);
-            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-            this.btnLoading = false;
-          });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
-          }
-        }
-      });
+    webapi.fetchDistributionRecordList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code == Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('loading:end');
+          this.dispatch('list:init', res.context.distributionRecordVOPage);
+          this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          this.btnLoading = false;
+        });
+      } else {
+        this.dispatch('loading:end');
+        message.error(res.message);
+      }
+    });
   };
 
   onTabChange = (key) => {
@@ -207,21 +195,14 @@ export default class AppStore extends Store {
   searchDistributionCustomers = async (value) => {
     if (value != undefined) {
       //根据分销员账号联想
-      if (
-        this.state()
-          .get('distributionSearchSelect')
-          .get('checked') == '0'
-      ) {
+      if (this.state().get('distributionSearchSelect').get('checked') == '0') {
         const { res } = await webapi.filterDistributionCustomer({
           customerAccount: value,
           pageNum: 0,
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterDistributionCustomer',
-            res.context.distributionCustomerVOPage.content
-          );
+          this.dispatch('distribution:record:filterDistributionCustomer', res.context.distributionCustomerVOPage.content);
         }
       } else {
         //根据分销员名称联想
@@ -231,10 +212,7 @@ export default class AppStore extends Store {
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterDistributionCustomer',
-            res.context.distributionCustomerVOPage.content
-          );
+          this.dispatch('distribution:record:filterDistributionCustomer', res.context.distributionCustomerVOPage.content);
         }
       }
     } else {
@@ -251,21 +229,14 @@ export default class AppStore extends Store {
   searchGoodsInfos = async (value) => {
     if (value != undefined) {
       //根据货品编号
-      if (
-        this.state()
-          .get('goodsInfoSearchSelect')
-          .get('checked') == '0'
-      ) {
+      if (this.state().get('goodsInfoSearchSelect').get('checked') == '0') {
         const { res } = await webapi.filterGoodsInfoData({
           likeGoodsInfoNo: value,
           pageNum: 0,
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterGoodsInfo',
-            res.context.goodsInfoPage.content
-          );
+          this.dispatch('distribution:record:filterGoodsInfo', res.context.goodsInfoPage.content);
         }
       } else {
         //根据货品的名称
@@ -275,10 +246,7 @@ export default class AppStore extends Store {
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterGoodsInfo',
-            res.context.goodsInfoPage.content
-          );
+          this.dispatch('distribution:record:filterGoodsInfo', res.context.goodsInfoPage.content);
         }
       }
     } else {
@@ -295,21 +263,14 @@ export default class AppStore extends Store {
   searchCustomerInfos = async (value) => {
     if (value != undefined) {
       //根据会员的账号
-      if (
-        this.state()
-          .get('customerSearchSelect')
-          .get('checked') == '0'
-      ) {
+      if (this.state().get('customerSearchSelect').get('checked') == '0') {
         const { res } = await webapi.filterCustomerData({
           customerAccount: value,
           pageNum: 0,
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterCustomer',
-            res.context.detailResponseList
-          );
+          this.dispatch('distribution:record:filterCustomer', res.context.detailResponseList);
         }
       } else {
         //根据会员的名称
@@ -319,10 +280,7 @@ export default class AppStore extends Store {
           pageSize: 5
         });
         if (res.code == Const.SUCCESS_CODE) {
-          this.dispatch(
-            'distribution:record:filterCustomer',
-            res.context.detailResponseList
-          );
+          this.dispatch('distribution:record:filterCustomer', res.context.detailResponseList);
         }
       }
     } else {
@@ -353,9 +311,7 @@ export default class AppStore extends Store {
    * 根据选中的分销员信息过滤出其distributionId,并存放
    */
   saveDistributionCustomerFilter = (value) => {
-    const filterCustomerData = this.state().get(
-      'filterDistributionCustomerData'
-    );
+    const filterCustomerData = this.state().get('filterDistributionCustomerData');
     const distributionId = filterCustomerData
       .filter((v) => v.get('value') == value)
       .get(0)

@@ -33,6 +33,8 @@ export default class AppStore extends Store {
         field: 'content',
         value: res.context.siteMapVO.content
       });
+    } else {
+      this.dispatch('loading:end');
     }
   };
   save = async (params) => {
@@ -41,6 +43,8 @@ export default class AppStore extends Store {
     if (res && res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       message.success('Save successfully.');
+    } else {
+      this.dispatch('loading:end');
     }
   };
 }

@@ -33,10 +33,12 @@ export default class AppStore extends Store {
   deleteRow = async (params) => {
     this.dispatch('loading:start');
     const { res } = await webapi.deleteRow(params);
-    this.dispatch('loading:end');
+
     if (res.code === Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       this.getList({ storeId: this.getStoreId() });
     } else {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
   };
@@ -52,6 +54,7 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
       this.dispatch('list:getList', fromJS(res.context));
     } else {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
   };

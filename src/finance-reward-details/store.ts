@@ -66,9 +66,7 @@ export default class AppStore extends Store {
       });*/
     } else {
       message.error(res1.res.message);
-      if (res1.res.code === 'K-110001') {
-        this.dispatch('loading:end');
-      }
+      this.dispatch('loading:end');
     }
   };
   onFormChange = (searchParam) => {

@@ -38,6 +38,7 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       });
     } else {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
     if (kind == 'income') {
@@ -89,10 +90,7 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         //总数
-        this.dispatch(
-          'detail:total',
-          res.context.totalPages * res.context.size
-        );
+        this.dispatch('detail:total', res.context.totalPages * res.context.size);
         this.dispatch('detail:income', res.context.content);
       });
     }
@@ -173,8 +171,7 @@ export default class AppStore extends Store {
           });
           let encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/finance/bill/income/details/export/${encrypted}`;
+          const exportHref = Const.HOST + `/finance/bill/income/details/export/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');
@@ -205,8 +202,7 @@ export default class AppStore extends Store {
           });
           let encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/finance/bill/refund/details/export/${encrypted}`;
+          const exportHref = Const.HOST + `/finance/bill/refund/details/export/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

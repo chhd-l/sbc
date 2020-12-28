@@ -23,15 +23,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new ListActor(),
-      new SelectedActor(),
-      new RoleActor(),
-      new EditActor(),
-      new VisibleActor(),
-      new ModalActor()
-    ];
+    return [new LoadingActor(), new ListActor(), new SelectedActor(), new RoleActor(), new EditActor(), new VisibleActor(), new ModalActor()];
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -57,9 +49,7 @@ export default class AppStore extends Store {
       });
     } else {
       message.error(res.message);
-      if (res.code === 'K-110001') {
-        this.dispatch('loading:end');
-      }
+      this.dispatch('loading:end');
     }
   };
 
@@ -79,15 +69,10 @@ export default class AppStore extends Store {
         ids: manageDepartmentIdList,
         isMaster: isMaster
       });
-      const parentId = departmentVOList.get(0)
-        ? departmentVOList.get(0).get('departmentId').toString()
-        : '';
+      const parentId = departmentVOList.get(0) ? departmentVOList.get(0).get('departmentId').toString() : '';
       //默认展开第一个父部门极其下面的子部门
       if (parentId) {
-        const defaultExpandedKeys = this._findParentAndChildrenIds(
-          parentId,
-          departmentVOS
-        );
+        const defaultExpandedKeys = this._findParentAndChildrenIds(parentId, departmentVOS);
         this.dispatch('employee:defaultExpandedKeys', defaultExpandedKeys);
       }
     } else {
@@ -107,9 +92,7 @@ export default class AppStore extends Store {
     const ids = [];
     ids.push(parentId);
     //筛选出目标的子部门
-    const target = list.filter((vo) =>
-      vo.get('parentDepartmentIds').split('|').includes(parentId)
-    );
+    const target = list.filter((vo) => vo.get('parentDepartmentIds').split('|').includes(parentId));
     if (target.size > 0) {
       return target.reduce((pre, current) => {
         pre.push(current.get('departmentId'));
@@ -123,10 +106,7 @@ export default class AppStore extends Store {
   onFormChange = async (searchParam) => {
     this.dispatch('change:searchForm', searchParam);
     //如果是选中部门的，直接出发搜索
-    if (
-      searchParam.field == 'departmentIds' ||
-      searchParam.field == 'isHiddenDimission'
-    ) {
+    if (searchParam.field == 'departmentIds' || searchParam.field == 'isHiddenDimission') {
       this.onSearch();
     }
   };
@@ -255,11 +235,7 @@ export default class AppStore extends Store {
     let employeeId = this.state().get('employeeId');
     let accountDisableReason = this.state().get('reason');
     let accountState = 1;
-    const { res } = await webapi.disableEmployee(
-      employeeId,
-      accountDisableReason,
-      accountState
-    );
+    const { res } = await webapi.disableEmployee(employeeId, accountDisableReason, accountState);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.switchModal('');
@@ -277,11 +253,7 @@ export default class AppStore extends Store {
     }
     let accountDisableReason = this.state().get('reason');
     let accountState = 1;
-    const { res } = await webapi.batchDisableEmployee(
-      selected.toJS(),
-      accountDisableReason,
-      accountState
-    );
+    const { res } = await webapi.batchDisableEmployee(selected.toJS(), accountDisableReason, accountState);
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.switchModal('');
@@ -311,9 +283,7 @@ export default class AppStore extends Store {
     const employee = this.state()
       .get('dataList')
       .find((employee) => employee.get('employeeId') == id);
-    const manageDepartmentIdList = this.state()
-      .get('manageDepartmentIdList')
-      .toJS();
+    const manageDepartmentIdList = this.state().get('manageDepartmentIdList').toJS();
     if (employee.get('departmentIds')) {
       //非当前用户能看到及操作的部门ID结合
       this.dispatch(
@@ -346,14 +316,10 @@ export default class AppStore extends Store {
     if (this.state().get('edit')) {
       //如果非主账号，部门ID,需要拼接
       if (this.state().get('isMaster') == 0) {
-        employeeForm.departmentIdList = employeeForm.departmentIdList.concat(
-          this.state().get('restDepartmentIds')
-        );
+        let restDepartmentIds = this.state().get('restDepartmentIds').toJS();
+        employeeForm.departmentIdList = employeeForm.departmentIdList.concat(restDepartmentIds);
       }
-      employeeForm.employeeId = this.state().getIn([
-        'employeeForm',
-        'employeeId'
-      ]);
+      employeeForm.employeeId = this.state().getIn(['employeeForm', 'employeeId']);
       const { res } = await webapi.updateEmployee(employeeForm);
       //取消编辑状态
 

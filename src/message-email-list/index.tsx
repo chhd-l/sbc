@@ -316,73 +316,72 @@ export default class ClinicList extends Component<any, any> {
             <Row>
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Task ID</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'taskId',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Object Type</p>}
-                    style={{ width: 200 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'objectType',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {objectTypeList &&
-                      objectTypeList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </SelectGroup>
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <Input
-                    addonBefore={<p style={styles.label}>Object No</p>}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
-                      this.onFormChange({
-                        field: 'objectNo',
-                        value
-                      });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Task ID" />
                     <Input
-                      style={{
-                        width: 143,
-                        textAlign: 'center',
-                        color: 'rgba(0, 0, 0, 0.65)',
-                        backgroundColor: '#fff'
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'taskId',
+                          value
+                        });
                       }}
-                      disabled
-                      defaultValue="Email Template"
                     />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Object Type" />
                     <Select
-                      style={{ width: 200 }}
+                      style={styles.wrapper}
+                      defaultValue=""
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'objectType',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {objectTypeList &&
+                        objectTypeList.map((item, index) => (
+                          <Option value={item.valueEn} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Object No" />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'objectNo',
+                          value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Email Template" />
+                    <Select
+                      style={styles.wrapper}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -430,54 +429,58 @@ export default class ClinicList extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Category</p>}
-                    style={{ width: 200 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'category',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {categoryList &&
-                      categoryList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </SelectGroup>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Category" />
+                    <Select
+                      style={styles.wrapper}
+                      defaultValue=""
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'category',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {categoryList &&
+                        categoryList.map((item, index) => (
+                          <Option value={item.valueEn} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
                 </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
-                  <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Status</p>}
-                    style={{ width: 200 }}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'status',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {statusList &&
-                      statusList.map((item, index) => (
-                        <Option value={item.valueEn} key={index}>
-                          {item.name}
-                        </Option>
-                      ))}
-                  </SelectGroup>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue="Status" />
+                    <Select
+                      style={styles.wrapper}
+                      defaultValue=""
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'status',
+                          value
+                        });
+                      }}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="all" />
+                      </Option>
+                      {statusList &&
+                        statusList.map((item, index) => (
+                          <Option value={item.valueEn} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
@@ -502,20 +505,32 @@ export default class ClinicList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Table rowKey="id" columns={columns} dataSource={taskList} pagination={this.state.pagination}
-                 loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
-                 scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={taskList}
+            pagination={this.state.pagination}
+            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            scroll={{ x: '100%' }}
+            onChange={this.handleTableChange}
+          />
         </div>
       </div>
     );
   }
 }
 const styles = {
+  formItemStyle: {
+    width: 335
+  },
   label: {
-    width: 120,
-    textAlign: 'center'
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
   },
   wrapper: {
-    width: 157
+    width: 200
   }
 } as any;

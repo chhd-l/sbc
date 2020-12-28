@@ -13,9 +13,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/toolbox';
 import './index.less';
 
-const FormItem = Form.Item;
 const Option = Select.Option;
-const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 
 const icon1 =

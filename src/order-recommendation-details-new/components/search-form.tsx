@@ -9,8 +9,6 @@ import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RangePicker = DatePicker.RangePicker;
-const InputGroup = Input.Group;
 
 /**
  * 订单查询头
@@ -61,7 +59,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Headline title={'Product list'} />
         <div>
           <Form className="filter-content" layout="inline">
             <Row style={{ width: '100vh', margin: '0 auto' }}>
@@ -70,6 +68,7 @@ export default class SearchHead extends Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={<p style={{ width: '120px' }}>Product Name</p>}
+                      style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({
                           likeGoodsName: (e.target as any).value
@@ -83,6 +82,7 @@ export default class SearchHead extends Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={<p style={{ width: '120px' }}>SKU</p>}
+                      style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({
                           likeGoodsInfoNo: (e.target as any).value

@@ -61,10 +61,12 @@ export default class SearchForm extends React.Component<any, any> {
   render() {
     const { onFormChange, searchForm, onSearch, rewardList } = this.props.relaxProps;
 
+    const employeeData = JSON.parse(sessionStorage.getItem('s2b-employee@data'));
+
     return (
       <Form className="filter-content" layout="inline">
         <Row>
-          <Col span="4" style={{ marginTop: '3px' }}>
+          <Col span="5">
             <FormItem>
               <Select
                 getPopupContainer={() => document.getElementById('page-content')}
@@ -75,6 +77,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: e
                   });
                 }}
+                allowClear
                 defaultValue={'60'}
               >
                 <Option value={null}></Option>
@@ -84,11 +87,11 @@ export default class SearchForm extends React.Component<any, any> {
               </Select>
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="8">
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="PrescriberID" />}
-                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
+                disabled={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -96,15 +99,15 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : searchForm.get('prescriberId')}
+                value={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : searchForm.get('prescriberId')}
               />
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="8">
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="prescriberName" />}
-                disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? true : null}
+                disabled={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? true : false}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -112,7 +115,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: value
                   });
                 }}
-                value={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : searchForm.get('prescriberName')}
+                value={employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? JSON.parse(sessionStorage.getItem('PrescriberType')).children : searchForm.get('prescriberName')}
               />
             </FormItem>
           </Col>
@@ -169,7 +172,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>*/}
 
           {/* <br /> */}
-          <Col span="6">
+          <Col span="3">
             <FormItem>
               <Button
                 type="primary"
@@ -177,10 +180,6 @@ export default class SearchForm extends React.Component<any, any> {
                 icon="search"
                 shape="round"
                 onClick={(e) => {
-                  /*rewardList({
-                field: 'search',
-                value: '11111111111111111111111122222222222222'
-              })*/
                   e.preventDefault();
                   onSearch();
                 }}

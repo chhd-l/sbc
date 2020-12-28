@@ -35,26 +35,20 @@ export default class AppStore extends Store {
     form['beginTime'] = form.beginTime.format(Const.DATE_FORMAT) + ':00';
     form['endTime'] = form.endTime.format(Const.DATE_FORMAT) + ':59';
 
-    webapi
-      .fetchOperationLogList({ ...form, pageNum, pageSize })
-      .then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context.opLogPage);
-            this.dispatch(
-              'list:page',
-              fromJS({ pageSize: pageSize, currentPage: pageNum + 1 })
-            );
-            this.btnLoading = false;
-          });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
-          }
-        }
-      });
+    webapi.fetchOperationLogList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code == Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('loading:end');
+          this.dispatch('list:init', res.context.opLogPage);
+          this.dispatch('list:page', fromJS({ pageSize: pageSize, currentPage: pageNum + 1 }));
+          this.btnLoading = false;
+        });
+      } else {
+        message.error(res.message);
+
+        this.dispatch('loading:end');
+      }
+    });
   };
 
   /**
@@ -76,8 +70,7 @@ export default class AppStore extends Store {
   onExportByParams = (params) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        params['beginTime'] =
-          params.beginTime.format(Const.DATE_FORMAT) + ':00';
+        params['beginTime'] = params.beginTime.format(Const.DATE_FORMAT) + ':00';
         params['endTime'] = params.endTime.format(Const.DATE_FORMAT) + ':59';
         // 参数加密
         let base64 = new util.Base64();
@@ -86,9 +79,7 @@ export default class AppStore extends Store {
           let result = JSON.stringify({ ...params, token: token });
           let encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST +
-            `/system/operationLog/exportOperationLogByParams/${encrypted}`;
+          const exportHref = Const.HOST + `/system/operationLog/exportOperationLogByParams/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

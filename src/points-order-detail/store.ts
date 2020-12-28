@@ -44,6 +44,7 @@ export default class AppStore extends Store {
         this.dispatch('logistics:init', logistics);
       });
     } else {
+      this.dispatch('loading:end');
       message.error(errorInfo);
     }
   };

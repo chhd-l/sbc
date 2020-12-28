@@ -20,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new ListActor(),
-      new FormActor(),
-      new TabActor()
-    ];
+    return [new LoadingActor(), new ListActor(), new FormActor(), new TabActor()];
   }
 
   /**
@@ -46,22 +41,18 @@ export default class AppStore extends Store {
     form['orderType'] = 'NORMAL_ORDER';
     const { res: needRes } = await webapi.getOrderNeedAudit();
     if (needRes.code == Const.SUCCESS_CODE) {
-      webapi
-        .getExternalOrderList({ ...form, pageNum, pageSize })
-        .then(({ res }) => {
-          if (res.code == Const.SUCCESS_CODE) {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context);
-            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-            //this.dispatch('list:setNeedAudit', needRes.context.audit);
-            this.btnLoading = false;
-          } else {
-            message.error(res.message);
-            if (res.code === 'K-110001') {
-              this.dispatch('loading:end');
-            }
-          }
-        });
+      webapi.getExternalOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
+        if (res.code == Const.SUCCESS_CODE) {
+          this.dispatch('loading:end');
+          this.dispatch('list:init', res.context);
+          this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          //this.dispatch('list:setNeedAudit', needRes.context.audit);
+          this.btnLoading = false;
+        } else {
+          message.error(res.message);
+          this.dispatch('loading:end');
+        }
+      });
     }
   };
 
@@ -144,9 +135,7 @@ export default class AppStore extends Store {
         message.success(audit == 'CHECKED' ? 'Audit successfully' : '驳回成功');
         this.init();
       } else {
-        message.error(
-          res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败')
-        );
+        message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
         this.btnLoading = false;
         //set loading false
         // this.dispatch('detail-actor:setButtonLoading', false)
@@ -311,15 +300,7 @@ export default class AppStore extends Store {
 
   bulkExport = async () => {
     const queryParams = this.state().get('form').toJS();
-    const {
-      clientId,
-      clinicsName,
-      prescriptionId,
-      orderId,
-      productId,
-      beginTime,
-      endTime
-    } = queryParams;
+    const { clientId, clinicsName, prescriptionId, orderId, productId, beginTime, endTime } = queryParams;
     return new Promise((resolve) => {
       setTimeout(() => {
         // 参数加密

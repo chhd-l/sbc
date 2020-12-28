@@ -13,7 +13,6 @@ import moment from 'moment';
 
 const { Search } = Input;
 
-const InputGroup = Input.Group;
 const { Option } = Select;
 const { TabPane } = Tabs;
 

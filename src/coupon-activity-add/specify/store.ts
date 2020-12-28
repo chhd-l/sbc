@@ -60,6 +60,7 @@ export default class AppStore extends Store {
     if (util.isThirdStore()) {
       const levRes = await webapi.allStoreCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
+        this.dispatch('loading:end');
         message.error(levRes.res.message);
         return;
       }
@@ -85,13 +86,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.getActivityDetail(activityId);
       if (res.code == Const.SUCCESS_CODE) {
         let activity = {} as any;
-        const {
-          couponActivity,
-          couponActivityConfigList,
-          couponInfoList,
-          couponMarketingCustomerScope,
-          customerDetailVOS
-        } = res.context;
+        const { couponActivity, couponActivityConfigList, couponInfoList, couponMarketingCustomerScope, customerDetailVOS } = res.context;
         // 2.格式化数据
         // 2.1.基础信息
         activity.activityId = couponActivity.activityId;
@@ -106,27 +101,18 @@ export default class AppStore extends Store {
         // 2.2.优惠券列表
         activity.coupons = couponActivityConfigList.map((item) => {
           let coupon = {} as any;
-          const couponInfo = couponInfoList.find(
-            (info) => info.couponId == item.couponId
-          );
+          const couponInfo = couponInfoList.find((info) => info.couponId == item.couponId);
           // 2.2.1.优惠券基础信息
           coupon.couponId = item.couponId;
           coupon.totalCount = item.totalCount;
           coupon.couponName = couponInfo.couponName;
           // 2.2.2.面值
-          coupon.denominationStr =
-            couponInfo.fullBuyType == 0
-              ? `满0减${couponInfo.denomination}`
-              : `满${couponInfo.fullBuyPrice}减${couponInfo.denomination}`;
+          coupon.denominationStr = couponInfo.fullBuyType == 0 ? `满0减${couponInfo.denomination}` : `满${couponInfo.fullBuyPrice}减${couponInfo.denomination}`;
           // 2.2.3.有效期
           if (couponInfo.rangeDayType == 0) {
             // 按起止时间
-            let startTime = moment(couponInfo.startTime)
-              .format(Const.DAY_FORMAT)
-              .toString();
-            let endTime = moment(couponInfo.endTime)
-              .format(Const.DAY_FORMAT)
-              .toString();
+            let startTime = moment(couponInfo.startTime).format(Const.DAY_FORMAT).toString();
+            let endTime = moment(couponInfo.endTime).format(Const.DAY_FORMAT).toString();
             coupon.validity = `${startTime}至${endTime}`;
           } else {
             // 按N天有效
@@ -152,6 +138,8 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
         // 3.设置状态
         this.dispatch('edit: init', fromJS(activity));
+      } else {
+        this.dispatch('loading:end');
       }
     }
   };
@@ -166,9 +154,7 @@ export default class AppStore extends Store {
     }
 
     // 1.从state中获取数据
-    let activity = this.state()
-      .get('activity')
-      .toJS();
+    let activity = this.state().get('activity').toJS();
     // 2.格式化数据
     let params = {} as any;
     params.activityName = activity.activityName;

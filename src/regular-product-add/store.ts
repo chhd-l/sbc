@@ -164,6 +164,8 @@ export default class AppStore extends Store {
           }
         });
         this.dispatch('goodsActor: goodsTabs', tabs);
+      } else {
+        this.dispatch('loading:end');
       }
     }
   };
@@ -331,6 +333,7 @@ export default class AppStore extends Store {
 
       goodsDetail = fromJS(tmpContext);
     } else {
+      this.dispatch('loading:end');
       message.error('查询商品信息失败');
       return false;
     }

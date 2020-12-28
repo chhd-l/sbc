@@ -145,6 +145,8 @@ export default class AppStore extends Store {
       this.dispatch('home:transactionTrendView', getTransactionTrendView.context);
       this.dispatch('home:trafficTrendDashboardView', getTrafficTrendDashboardView.context);
       //this.dispatch('home:searchData', getListAll.context);
+    } else {
+      this.dispatch('loading:end');
     }
   };
 
@@ -165,6 +167,8 @@ export default class AppStore extends Store {
       this.dispatch('prescriber:p_conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
       this.dispatch('prescriber:p_trafficTrendDashboardView', getTrafficTrendDashboardView.context);
       this.dispatch('prescriber:p_transactionTrendView', getTransactionTrendView.context);
+    } else {
+      this.dispatch('loading:end');
     }
   };
 

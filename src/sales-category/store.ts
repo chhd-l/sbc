@@ -515,6 +515,8 @@ export default class AppStore extends Store {
           metaDescriptionSource: res.context.seoSettingVO.metaDescriptionSource ? res.context.seoSettingVO.metaDescriptionSource : '{description}'
         })
       );
+    } else {
+      this.dispatch('loading:end');
     }
   };
   editSeo = async (params) => {
@@ -525,6 +527,7 @@ export default class AppStore extends Store {
       message.success('Save successfully.');
       this.setSeoModalVisible(false);
     } else {
+      this.dispatch('loading:end');
       message.error('Save error.');
     }
   };

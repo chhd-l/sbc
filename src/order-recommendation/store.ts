@@ -20,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new LoadingActor(),
-      new ListActor(),
-      new FormActor(),
-      new TabActor()
-    ];
+    return [new LoadingActor(), new ListActor(), new FormActor(), new TabActor()];
   }
 
   /**
@@ -46,23 +41,20 @@ export default class AppStore extends Store {
       obj.linkStatus = key == 'Invalid' ? 1 : 0;
     }
 
-    webapi
-      .fetchOrderList({ ...obj, ...form, pageNum, pageSize })
-      .then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context);
-            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-            this.btnLoading = false;
-          });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('loading:end');
-          }
-        }
-      });
+    webapi.fetchOrderList({ ...obj, ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code == Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('loading:end');
+          this.dispatch('list:init', res.context);
+          this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          this.btnLoading = false;
+        });
+      } else {
+        message.error(res.message);
+
+        this.dispatch('loading:end');
+      }
+    });
   };
 
   //详情

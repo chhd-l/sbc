@@ -64,7 +64,7 @@ export default class SearchForm extends React.Component<any, any> {
     return (
       <Form className="filter-content" layout="inline">
         <Row>
-          <Col span="4" style={{ marginTop: '3px' }}>
+          <Col span="5">
             <FormItem>
               <Select
                 getPopupContainer={() => document.getElementById('page-content')}
@@ -75,6 +75,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value: e
                   });
                 }}
+                allowClear
                 defaultValue={'60'}
               >
                 <Option value={null}></Option>
@@ -84,7 +85,7 @@ export default class SearchForm extends React.Component<any, any> {
               </Select>
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="8">
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="PrescriberID" />}
@@ -100,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="7">
+          <Col span="8">
             <FormItem>
               <Input
                 addonBefore={<FormattedMessage id="prescriberName" />}
@@ -169,7 +170,7 @@ export default class SearchForm extends React.Component<any, any> {
         </FormItem>*/}
 
           {/* <br /> */}
-          <Col span="6">
+          <Col span="3">
             <FormItem>
               <Button
                 type="primary"
@@ -177,10 +178,6 @@ export default class SearchForm extends React.Component<any, any> {
                 icon="search"
                 shape="round"
                 onClick={(e) => {
-                  /*rewardList({
-                field: 'search',
-                value: '11111111111111111111111122222222222222'
-              })*/
                   e.preventDefault();
                   onSearch();
                 }}

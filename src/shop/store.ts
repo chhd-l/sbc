@@ -989,6 +989,8 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
         this.dispatch('consent:consentList', fromJS(res.context != null ? res.context.consentVOList : []));
       });
+    } else {
+      this.dispatch('loading:end');
     }
   };
 

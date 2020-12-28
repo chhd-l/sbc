@@ -17,12 +17,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new ListActor(),
-      new LoadingActor(),
-      new FormActor(),
-      new CustomerLevelActor()
-    ];
+    return [new ListActor(), new LoadingActor(), new FormActor(), new CustomerLevelActor()];
   }
 
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
@@ -92,7 +87,7 @@ export default class AppStore extends Store {
   onDelete = async (marketingId) => {
     const { res } = await webapi.deleteMarketing(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
-      this.dispatch('loading:start');
+      this.dispatch('loading:end');
 
       message.success('Operate successfully');
     } else {

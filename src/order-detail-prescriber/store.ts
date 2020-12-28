@@ -47,6 +47,7 @@ export default class AppStore extends Store {
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
       });
     } else {
+      this.dispatch('loading:end');
       message.error(errorInfo);
     }
   };

@@ -58,6 +58,7 @@ export default class AppStore extends Store {
         this.dispatch('dict:refresh', refresh.context.tradeDelivers);
       });
     } else {
+      this.dispatch('loading:end');
       message.error(errorInfo);
     }
   };

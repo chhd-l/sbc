@@ -25,25 +25,14 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const { res } = await webapi.activityDetail(id);
     if (res.code != Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       message.error(res.message);
     }
     //拼装页面需要展示的参数 couponInfoList
-    let {
-      couponInfoList,
-      couponActivityConfigList,
-      couponActivity,
-      customerDetailVOS
-    } = res.context;
+    let { couponInfoList, couponActivityConfigList, couponActivity, customerDetailVOS } = res.context;
     couponInfoList = couponInfoList.map((item) => {
       if (item.rangeDayType == 0) {
-        item.time =
-          moment(item.startTime)
-            .format(Const.TIME_FORMAT)
-            .toString() +
-          '至' +
-          moment(item.endTime)
-            .format(Const.TIME_FORMAT)
-            .toString();
+        item.time = moment(item.startTime).format(Const.TIME_FORMAT).toString() + '至' + moment(item.endTime).format(Const.TIME_FORMAT).toString();
       } else {
         item.time = `领取当天${item.effectiveDays}日内有效`;
       }
@@ -52,9 +41,7 @@ export default class AppStore extends Store {
       } else {
         item.price = `满${item.fullBuyPrice}元减${item.denomination}`;
       }
-      const config = couponActivityConfigList.find(
-        (config) => config.couponId == item.couponId
-      );
+      const config = couponActivityConfigList.find((config) => config.couponId == item.couponId);
       item.totalCount = config.totalCount;
       return item;
     });

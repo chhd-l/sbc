@@ -41,13 +41,12 @@ export default class AppStore extends Store {
       const { res: cityDictRes } = (await webapi.queryCityById({
         id: [orderInfo.consignee.cityId]
       })) as any;
-      
-      
+
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
       })) as any;
 
-      this.transaction(() => {        
+      this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
         this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);
@@ -58,10 +57,10 @@ export default class AppStore extends Store {
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
       });
     } else {
+      this.dispatch('loading:end');
       message.error(errorInfo);
     }
-  }; 
-
+  };
 
   /**
    * 添加收款单

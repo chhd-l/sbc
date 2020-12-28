@@ -18,17 +18,7 @@ import { Const } from 'qmkit';
 type TList = List<any>;
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new InvoiceActor(),
-      new EditActor(),
-      new LoadingActor(),
-      new ListActor(),
-      new SearchActor(),
-      new VisibleActor(),
-      new CustomerActor(),
-      new InvoiceConfigActor(),
-      new SelectedActor()
-    ];
+    return [new InvoiceActor(), new EditActor(), new LoadingActor(), new ListActor(), new SearchActor(), new VisibleActor(), new CustomerActor(), new InvoiceConfigActor(), new SelectedActor()];
   }
 
   constructor(props) {
@@ -52,9 +42,8 @@ export default class AppStore extends Store {
       });
     } else {
       message.error(res.message);
-      if (res.code === 'K-110001') {
-        this.dispatch('loading:end');
-      }
+
+      this.dispatch('loading:end');
     }
   };
 
@@ -220,10 +209,7 @@ export default class AppStore extends Store {
   fetch = async (value) => {
     let searchString = '';
     //搜索的字符串搜出来的
-    if (
-      this.state().get('customers').count < 10 &&
-      searchString.indexOf(value) !== -1
-    ) {
+    if (this.state().get('customers').count < 10 && searchString.indexOf(value) !== -1) {
       return;
     }
 

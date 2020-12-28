@@ -52,6 +52,8 @@ export default class AppStore extends Store {
           description: res.context.seoSettingVO.metaDescriptionSource
         })
       );
+    } else {
+      this.dispatch('loading:end');
     }
   };
   clear = () => {
@@ -67,6 +69,7 @@ export default class AppStore extends Store {
         this.setSeoModalVisible(false);
       }
     } else {
+      this.dispatch('loading:end');
       message.error('Save Error.');
     }
   };

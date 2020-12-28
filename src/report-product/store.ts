@@ -28,9 +28,7 @@ export default class AppStore extends Store {
       });
     } else {
       message.error(res.message);
-      if (res.code === 'K-110001') {
-        this.dispatch('loading:end');
-      }
+      this.dispatch('loading:end');
     }
   };
 
@@ -45,9 +43,7 @@ export default class AppStore extends Store {
       this.dispatch('report:getForm', param);
     } else {
       message.error(res.message);
-      if (res.code === 'K-110001') {
-        this.dispatch('loading:end');
-      }
+      this.dispatch('loading:end');
     }
   };
 

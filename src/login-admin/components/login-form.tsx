@@ -5,6 +5,7 @@ const logo = require('../img/logo.png');
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import PropTypes from 'prop-types';
 import { history, Const, login, cache } from 'qmkit';
+import { TIMEOUT } from 'dns';
 
 export default class LoginForm extends React.Component<any, any> {
   form;
@@ -98,6 +99,11 @@ export default class LoginForm extends React.Component<any, any> {
         });
       }
     });
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      });
+    }, 20000);
   };
 }
 

@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import copy from 'copy-to-clipboard';
 import UserList from './user-list';
 import { bool } from 'prop-types';
+import _ from 'lodash';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -687,7 +688,7 @@ class ClinicForm extends React.Component<any, any> {
                         showSearch
                         placeholder="Select a Order number"
                         notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                        onSearch={this.getCityList}
+                        onSearch={_.debounce(this.getCityList, 500)}                   
                         filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         onChange={(value) => {
                           this.onFormChange({

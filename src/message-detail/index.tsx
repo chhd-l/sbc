@@ -5,6 +5,7 @@ import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row,
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import _ from 'lodash';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -716,7 +717,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                          onSearch={this.getObjectNoList}
+                          onSearch={_.debounce(this.getObjectNoList, 500)}
                           filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           {objectNoList &&

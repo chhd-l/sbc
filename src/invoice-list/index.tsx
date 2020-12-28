@@ -6,6 +6,7 @@ import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './index.less';
+import _ from 'lodash';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -773,7 +774,7 @@ class InvoiceList extends Component<any, any> {
                         this.onChangeOrder(value);
                       }}
                       notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                      onSearch={this.getOrderList}
+                      onSearch={_.debounce(this.getOrderList, 500)}
                       filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     >
                       {orderList &&

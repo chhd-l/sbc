@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addressList } from '@/order-add-old/webapi';
 import { Const } from 'qmkit';
+import _ from 'lodash';
 
 const { TextArea } = Input;
 
@@ -625,7 +626,7 @@ class BillingInfomation extends React.Component<any, any> {
                           showSearch
                           placeholder="Select a Order number"
                           notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                          onSearch={this.getCityList}
+                          onSearch={_.debounce(this.getCityList, 500)}
                           filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           disabled={this.props.customerType === 'Guest'}
                           onChange={(value) => {

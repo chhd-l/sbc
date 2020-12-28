@@ -199,7 +199,7 @@ class SkuForm extends React.Component<any, any> {
       title: 'Purchase type',
       key: 'subscriptionStatus',
       render: (rowInfo) => (
-        <Row class="purchase-row">
+        <Row className="purchase-row">
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               <div>
@@ -290,16 +290,6 @@ class SkuForm extends React.Component<any, any> {
             *
           </span>
           <FormattedMessage id="product.marketPrice" />
-          <br />
-          {/*<Checkbox disabled={priceOpt === 0} checked={marketPriceChecked} onChange={(e) => this._synchValue(e, 'marketPrice')}>
-            <FormattedMessage id="allTheSame" />
-            &nbsp;
-            <Tooltip placement="top" title={'After checking, all SKUs use the same market price'}>
-              <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />
-              </a>
-            </Tooltip>
-          </Checkbox>*/}
         </div>
       ),
       key: 'marketPrice',
@@ -307,71 +297,7 @@ class SkuForm extends React.Component<any, any> {
         <Row>
           <Col span={12}>
             {goods.get('subscriptionStatus') == 1 ? (
-              <div>
-                <p>
-                  <FormItem style={styles.tableFormItem}>
-                    {getFieldDecorator('marketPrice_' + rowInfo.id, {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input market price'
-                        }
-                        // {
-                        //   pattern: ValidConst.zeroPrice,
-                        //   message: 'Please input the legal amount with two decimal places'
-                        // },
-                        // {
-                        //   type: 'number',
-                        //   max: 9999999.99,
-                        //   message: 'The maximum value is 9999999.99',
-                        //   transform: function (value) {
-                        //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                        //   }
-                        // }
-                      ],
-
-                      onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                      initialValue: rowInfo.marketPrice || ''
-                    })(
-                      <InputNumber min={0} max={9999999.99} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                      // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                    )}
-                  </FormItem>
-                </p>
-                {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                  <p>
-                    <FormItem style={styles.tableFormItem}>
-                      {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input subscription price'
-                          },
-                          {
-                            pattern: ValidConst.zeroPrice,
-                            message: 'Please input the legal amount with two decimal places'
-                          },
-                          {
-                            type: 'number',
-                            max: 9999999.99,
-                            message: 'The maximum value is 9999999.99',
-                            transform: function (value) {
-                              return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                            }
-                          }
-                        ],
-                        onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                        initialValue: rowInfo.subscriptionPrice || ''
-                      })(
-                        <InputNumber min={0} max={9999999.99} precision={2} disabled={rowInfo.subscriptionStatus === 0} />
-                        // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
-                      )}
-                    </FormItem>
-                  </p>
-                ) : null}
-              </div>
-            ) : (
-              <p>
+              <div className="flex-content-center">
                 <FormItem style={styles.tableFormItem}>
                   {getFieldDecorator('marketPrice_' + rowInfo.id, {
                     rules: [
@@ -393,14 +319,72 @@ class SkuForm extends React.Component<any, any> {
                       // }
                     ],
 
-                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
+                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
                     initialValue: rowInfo.marketPrice || ''
                   })(
                     <InputNumber min={0} max={9999999.99} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}
                 </FormItem>
-              </p>
+                {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
+                  <FormItem style={styles.tableFormItem}>
+                    {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please input subscription price'
+                        },
+                        {
+                          pattern: ValidConst.zeroPrice,
+                          message: 'Please input the legal amount with two decimal places'
+                        },
+                        {
+                          type: 'number',
+                          max: 9999999.99,
+                          message: 'The maximum value is 9999999.99',
+                          transform: function (value) {
+                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                          }
+                        }
+                      ],
+                      onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
+                      initialValue: rowInfo.subscriptionPrice || ''
+                    })(
+                      <InputNumber min={0} max={9999999.99} precision={2} disabled={rowInfo.subscriptionStatus === 0} />
+                      // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
+                    )}
+                  </FormItem>
+                ) : null}
+              </div>
+            ) : (
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('marketPrice_' + rowInfo.id, {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please input market price'
+                    }
+                    // {
+                    //   pattern: ValidConst.zeroPrice,
+                    //   message: 'Please input the legal amount with two decimal places'
+                    // },
+                    // {
+                    //   type: 'number',
+                    //   max: 9999999.99,
+                    //   message: 'The maximum value is 9999999.99',
+                    //   transform: function (value) {
+                    //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                    //   }
+                    // }
+                  ],
+
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
+                  initialValue: rowInfo.marketPrice || ''
+                })(
+                  <InputNumber min={0} max={9999999.99} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                  // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                )}
+              </FormItem>
             )}
           </Col>
         </Row>

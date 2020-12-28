@@ -106,10 +106,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
             }
           );
           let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
-          console.log(targetGoodsList,1111);
+          /*console.log(targetGoodsList,1111);
           console.log(addSkUProduct,22222111);
           console.log(a,3333333);
-          console.log(b,44444);
+          console.log(b,44444);*/
 
           targetGoodsList = [];
           targetGoodsList.push({
@@ -123,7 +123,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
               pid: this.props.pid,
               targetGoodsIds: targetGoodsIds
             });*/
-            console.log(targetGoodsList,123);
+            //console.log(targetGoodsList,123);
             if(targetGoodsIds.length !=0) {
               onProductselectSku(targetGoodsList);
             }

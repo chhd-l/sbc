@@ -33,10 +33,10 @@ const columns = [
   },
   {
     title: 'Price',
-    dataIndex: 'levelPrice',
-    key: 'levelPrice',
-    render: (levelPrice, record) =>
-      record.subscriptionPrice > 0 ? (
+    dataIndex: 'originalPrice',
+    key: 'originalPrice',
+    render: (originalPrice, record) =>
+      record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
         <div>
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -44,13 +44,13 @@ const columns = [
           </span>
           <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice&&levelPrice.toFixed(2)}
+            {originalPrice && originalPrice.toFixed(2)}
           </span>
         </div>
       ) : (
         <span>
           {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {levelPrice&&levelPrice.toFixed(2)}
+          {originalPrice && originalPrice.toFixed(2)}
         </span>
       )
   },
@@ -406,7 +406,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   </label>
                 </div>
               ) : null} */}
-              
+
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
                 <strong>

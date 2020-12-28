@@ -28,10 +28,10 @@ export default class ClinicList extends Component<any, any> {
   render() {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
-    if (prescriberId && prescriberId !== this.props.match.params.id) {
-      message.error("You don't have permission to access the prescriber");
-      return null;
-    }
+    // if (prescriberId && prescriberId !== this.props.match.params.id) {
+    //   message.error("You don't have permission to access the prescriber");
+    //   return null;
+    // }
     return (
       <div>
         {prescriberId ? null : this.props.match.params.id ? (

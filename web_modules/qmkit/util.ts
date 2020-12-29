@@ -356,6 +356,10 @@ export function logout() {
   sessionStorage.removeItem(cache.SYSTEM_GET_WEIGHT); //weight
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
   sessionStorage.removeItem('PrescriberType');
+  sessionStorage.removeItem('PrescriberSelect');
+  sessionStorage.removeItem('PrescriberSelectType');
+
+
 }
 
 

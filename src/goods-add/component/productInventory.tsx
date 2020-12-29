@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
-const { Option } = Select;
-
+import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
 import { cache, noop, ValidConst } from 'qmkit';
+import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
@@ -24,7 +24,9 @@ export default class ProductInventory extends React.Component<any, any> {
       specSingleFlag: boolean;
       spuMarketPrice: number;
       priceOpt: number;
+      getGoodsId: any;
       addSkUProduct: any;
+      selectedBasePrice: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
       updateSkuForm: Function;
@@ -35,6 +37,12 @@ export default class ProductInventory extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      subscriptionStatus: any;
+      addSkUProduct: any;
+      updateBasePrice: Function;
+      updateAllBasePrice: Function;
+      setDefaultBaseSpecId: Function;
+      setSelectedBasePrice: Function;
     };
   };
 
@@ -49,6 +57,10 @@ export default class ProductInventory extends React.Component<any, any> {
     spuMarketPrice: ['goods', 'marketPrice'],
     priceOpt: 'priceOpt',
     baseSpecId: 'baseSpecId',
+    subscriptionStatus: 'subscriptionStatus',
+    getGoodsId: 'getGoodsId',
+    addSkUProduct: 'addSkUProduct',
+    selectedBasePrice: 'selectedBasePrice',
     addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
@@ -57,17 +69,28 @@ export default class ProductInventory extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    updateBasePrice: noop,
+    updateAllBasePrice: noop,
+    setDefaultBaseSpecId: noop,
+    setSelectedBasePrice: noop
   };
 
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
+    this.state = {};
   }
-
+  componentDidMount() {
+    const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
+    // if (!getGoodsId) {
+    //   setDefaultBaseSpecId();
+    // }
+  }
   render() {
     const WrapperForm = this.WrapperForm;
-    const { updateSkuForm } = this.props.relaxProps;
+    const { goods } = this.props.relaxProps;
+
     return (
       <WrapperForm
         // ref={(form) => updateSkuForm(form)}
@@ -83,16 +106,13 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      stock: 0
+      priceType: ''
     };
   }
-  handleChange(value) {
-    console.log(`selected ${value}`);
-  }
-  render() {
-    const { goodsList, addSkUProduct } = this.props.relaxProps;
-    // const {  } = this.state
 
+  render() {
+    const { goodsList } = this.props.relaxProps;
+    // const {  } = this.state
     const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
@@ -105,14 +125,14 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, addSkUProduct, specSingleFlag } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, specSingleFlag, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
       columns = goodsSpecs
-        .map((item, i) => {
+        .map((item) => {
           return {
             title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
@@ -124,9 +144,10 @@ class SkuForm extends React.Component<any, any> {
         })
         .toList();
     }
+
     columns = columns.unshift({
       title: '',
-      key: 'index' + 20,
+      key: 'index',
       render: (_text, _rowInfo, index) => {
         return index + 1;
       }
@@ -136,6 +157,7 @@ class SkuForm extends React.Component<any, any> {
       title: <FormattedMessage id="product.SKU" />,
       key: 'goodsInfoNo',
       render: (rowInfo) => {
+        //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
         return (
           <Row>
             <Col span={12}>
@@ -145,6 +167,7 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
+
     columns = columns.push({
       title: (
         <div>
@@ -159,21 +182,20 @@ class SkuForm extends React.Component<any, any> {
             *
           </span>
           <FormattedMessage id="product.inventory" />
-          <br />
-          {/*<Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
-            <FormattedMessage id="allTheSame" />
-            &nbsp;
-            <Tooltip placement="top" title={'After checking, all SKUs use the same inventory'}>
-              <a style={{ fontSize: 14 }}>
-                <Icon type="question-circle-o" />
-              </a>
-            </Tooltip>
-          </Checkbox>*/}
         </div>
       ),
       key: 'stock',
       render: (rowInfo) => {
-        let a = addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0];
+        let a = '';
+        let b = '';
+        let c = 0;
+        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || '';
+        c = rowInfo.maxStock ? rowInfo.stock : a.minStock;
+        if (a) {
+          b = a.minStock - rowInfo.maxStock ? rowInfo.maxStock : 0 >= 0 ? a.minStock : rowInfo.maxStock;
+        } else {
+          b = 999999;
+        }
         return (
           <Row>
             <Col span={12}>
@@ -190,8 +212,8 @@ class SkuForm extends React.Component<any, any> {
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                  initialValue: a && a.minStock ? a.minStock : rowInfo.stock
-                })(<InputNumber style={{ width: '121px' }} precision={0} min={0} max={a && a.minStock ? a.minStock : rowInfo.stock} />)}
+                  initialValue: c
+                })(<InputNumber style={{ width: '121px' }} min={0} max={b} />)}
               </FormItem>
             </Col>
           </Row>
@@ -201,7 +223,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: 'UOM',
-      key: 'goodsMeasureUnit + stock',
+      key: 'goodsMeasureUnit',
       render: (rowInfo) => {
         return (
           <Row>
@@ -233,106 +255,18 @@ class SkuForm extends React.Component<any, any> {
 
     return columns.toJS();
   };
-  _handleChange = (value) => {
-    sessionStorage.setItem('baseSpecId', value);
-    this._editGoodsItem(null, 'baseSpecId', value);
-  };
-  _deleteGoodsInfo = (id: string) => {
-    const { deleteGoodsInfo } = this.props.relaxProps;
-    deleteGoodsInfo(id);
-  };
-
-  /**
-   * 检查文件格式
-   */
-  _checkUploadFile = (file) => {
-    let fileName = file.name.toLowerCase();
-    // 支持的图片格式：jpg、jpeg、png、gif
-    if (fileName.endsWith('.jpg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.jpeg')) {
-      if (file.size < FILE_MAX_SIZE) {
-        return true;
-      } else {
-        message.error('The file size must be less than 2M');
-        return false;
-      }
-    } else {
-      message.error('File format error');
-      return false;
-    }
-  };
 
   /**
    * 修改商品属性
    */
-  _editGoodsItem = (rowInfo: any, key: string, e: any) => {
-    const { editGoodsItem, synchValue, addSkUProduct } = this.props.relaxProps;
+  _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
+    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
-    /*let a = addSkUProduct.filter(i=>i.pid == rowInfo.goodsInfoNo)
-    if(e > a[0].stock) {
-      e = a[0].stock
-      message.error('The inventory must be less than or equal to the inventory of the bound product');
-    }
-    console.log(addSkUProduct);*/
-    // console.log(rowInfo,111);
-    // console.log(key,2222);
-    // console.log(e,3333);
-    editGoodsItem(rowInfo.id, key, e);
 
-    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
-      // 是否同步库存
-      if (checked) {
-        // 修改store中的库存或市场价
-        synchValue(key);
-        // form表单initialValue方式赋值不成功，这里通过setFieldsValue方法赋值
-        const fieldsValue = this.props.form.getFieldsValue();
-        // 同步库存/市场价
-        let values = {};
-        Object.getOwnPropertyNames(fieldsValue).forEach((field) => {
-          if (field.indexOf(`${key}_`) === 0) {
-            values[field] = e;
-          }
-        });
-        // update
-        this.props.form.setFieldsValue(values);
-      }
-    }
-  };
-
-  /**
-   * 修改商品图片属性
-   */
-  _editGoodsImageItem = (id: string, key: string, { fileList }) => {
-    let msg = null;
-    if (fileList != null) {
-      fileList.forEach((file) => {
-        if (file.status == 'done' && file.response != null && file.response.message != null) {
-          msg = file.response.message;
-        }
-      });
-
-      if (msg != null) {
-        //如果上传失败，只过滤成功的图片
-        message.error(msg);
-        fileList = fileList.filter((file) => file.status == 'done' && file.response != null && file.response.message == null);
-      }
-    }
-    const { editGoodsItem } = this.props.relaxProps;
-    editGoodsItem(id, key, fromJS(fileList));
-  };
-
-  /**
-   * 同步库存
-   */
-  _synchValue = async (e, key) => {
-    const { updateChecked, goodsList } = this.props.relaxProps;
-    await updateChecked(key, e.target.checked);
-    const goodsInfo = goodsList.get(0);
-    if (goodsInfo) {
-      this._editGoodsItem(goodsInfo.get('id'), key, goodsInfo.get(key));
-    }
+    editGoodsItem(id, key, e);
   };
 }
 

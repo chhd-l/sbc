@@ -286,7 +286,7 @@ export default class AppStore extends Store {
 
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
-      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue);
+      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
 
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = [];

@@ -186,7 +186,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
                 initialValue: rowInfo.stock
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
             </FormItem>
           </Col>
         </Row>

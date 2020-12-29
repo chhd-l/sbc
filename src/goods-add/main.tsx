@@ -161,12 +161,12 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled>
+            <Tabs.TabPane tab="Product price" key="price" disabled  >
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
+            <Tabs.TabPane tab="Product inventory" key="inventory" disabled  >
               <AlertInfo />
 
               <ProductInventory />

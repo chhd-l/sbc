@@ -272,7 +272,7 @@ export default class AppStore extends Store {
       let storeCateList: any = await getStoreCateList();
       this.dispatch('loading:end');
       this.dispatch('goodsActor: initStoreCateList', fromJS((storeCateList.res as any).context.storeCateResponseVOList));
-      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue);
+      this.dispatch('goodsSpecActor: selectedBasePrice', tmpContext.weightValue || '');
 
       // 合并多属性字段
       let goodsPropDetailRelsOrigin = [];
@@ -325,7 +325,7 @@ export default class AppStore extends Store {
           return {
             pid: item.goodsInfoNo,
             targetGoodsIds: item.goodsInfoBundleRels,
-            stock: item.stock
+            minStock: item.stock
           };
         });
       this.dispatch('sku:addSkUProduct', addSkUProduct);

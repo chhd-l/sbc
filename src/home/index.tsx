@@ -88,7 +88,7 @@ export default class HelloApp extends React.Component<any, any> {
       ) : (
         <div style={styles.container}>
           {/*<HomePrescriber prescriberId={prescriberId} />*/}
-          <Header />
+          <Header changePage={(mode) => this.changePage(mode)} />
           <Prescriber prescriberId={this.state.prescriberId} />
         </div>
       );

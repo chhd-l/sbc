@@ -51,11 +51,22 @@ export default class Header extends React.Component<any, any> {
   };
 
   componentDidMount() {
+    const { searchData } = this.props.relaxProps;
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
+    let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
-      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : {}
+      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : ''
     });
+    if (searchData == '') {
+      this.setState({
+        selectList: prescribers,
+        defaultValue: PrescriberSelectType == null ? prescribers && prescribers[0] && prescribers[0].prescriberName : JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName
+      });
+    }
+    if (PrescriberSelectType == null && prescribers != null) {
+      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: prescribers[0].prescriberId, prescriberName: prescribers[0].prescriberName }));
+    }
   }
 
   componentDidUpdate(prevProps, prevState: Readonly<any>, snapshot?: any) {
@@ -71,7 +82,24 @@ export default class Header extends React.Component<any, any> {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
     let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
     this.setState({ week: date.week() });
-    if (this.state.searchType == true) {
+    if (this.state.prescriber == '') {
+      if (this.state.searchType == true) {
+        let obj = {
+          companyId: 2,
+          weekNum: date.week(),
+          year: Number(year),
+          prescriberId: this.state.prescriberId
+        };
+        prescriberInit(obj);
+      } else {
+        let obj = {
+          companyId: 2,
+          weekNum: date.week(),
+          year: Number(year)
+        };
+        newInit(obj);
+      }
+    } else {
       let obj = {
         companyId: 2,
         weekNum: date.week(),
@@ -79,13 +107,6 @@ export default class Header extends React.Component<any, any> {
         prescriberId: this.state.prescriberId
       };
       prescriberInit(obj);
-    } else {
-      let obj = {
-        companyId: 2,
-        weekNum: date.week(),
-        year: Number(year)
-      };
-      newInit(obj);
     }
   };
 
@@ -156,6 +177,16 @@ export default class Header extends React.Component<any, any> {
     });
   };
 
+  onPrescriberChange = (res, a) => {
+    this.props.changePage({ type: true, getPrescriberId: res });
+    this.setState({
+      openType: false,
+      prescriberId: res
+    });
+    sessionStorage.setItem('PrescriberSelectType', true);
+    sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: a.props.val.prescriberId, prescriberName: a.props.val.prescriberName }));
+  };
+
   render() {
     return (
       <div className="shopHeader home space-between">
@@ -166,45 +197,61 @@ export default class Header extends React.Component<any, any> {
         </div>
         <div className="home-prescriber flex-start-end">
           <span style={{ marginRight: 8 }}>Prescriber: </span>
-          {this.state.searchType == false ? (
-            <Input
-              style={{ width: 200, marginRight: 8 }}
-              onChange={(e) => {
-                const value = (e.target as any).value;
-                this.onSearch2(value);
-              }}
-            />
-          ) : (
-            <Select
-              showArrow={false}
-              autoFocus={false}
-              open={this.state.openType}
-              style={{ width: 200, marginRight: 8 }}
-              placeholder="Select Prescriber Data"
-              defaultValue="All"
-              //optionFilterProp="children"
-              onChange={this.onChange}
-              //onFocus={this.onFocus}
-              //onBlur={this.onBlur}
-              onSearch={this.selectSearch}
-              onDropdownVisibleChange={this.selectClick}
-              /*filterOption={(input, option) =>
+          {this.state.prescriber == '' ? (
+            this.state.searchType == false ? (
+              <Input
+                style={{ width: 200, marginRight: 8 }}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  this.onSearch2(value);
+                }}
+              />
+            ) : (
+              <Select
+                showArrow={false}
+                autoFocus={false}
+                open={this.state.openType}
+                style={{ width: 200, marginRight: 8 }}
+                placeholder="Select Prescriber Data"
+                defaultValue="All"
+                //optionFilterProp="children"
+                onChange={this.onChange}
+                //onFocus={this.onFocus}
+                //onBlur={this.onBlur}
+                onSearch={this.selectSearch}
+                onDropdownVisibleChange={this.selectClick}
+                /*filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }*/
-            >
-              <Option value="all">All</Option>
-              {this.state.selectList.length !== 0
-                ? this.state.selectList.map((item, index) => {
-                    return (
-                      <Option value={item.prescriberId} key={index}>
-                        {item.prescriberName}
-                      </Option>
-                    );
-                  })
-                : null}
-            </Select>
+              >
+                <Option value="all">All</Option>
+                {this.state.selectList && this.state.selectList.length !== 0
+                  ? this.state.selectList.map((item, index) => {
+                      return (
+                        <Option value={item.prescriberId} key={index}>
+                          {item.prescriberName}
+                        </Option>
+                      );
+                    })
+                  : null}
+              </Select>
+            )
+          ) : (
+            this.state.defaultValue && (
+              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder="Select Prescriber Data" defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
+                {this.state.selectList.length !== 0
+                  ? this.state.selectList.map((item, index) => {
+                      return (
+                        <Option value={item.prescriberId} val={item} key={index}>
+                          {item.prescriberName}
+                        </Option>
+                      );
+                    })
+                  : null}
+              </Select>
+            )
           )}
-          {this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} />}
+          {this.state.prescriber == '' ? this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} /> : ''}
         </div>
         {this.state.prescriber.id ? (
           <div>

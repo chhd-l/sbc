@@ -25,12 +25,12 @@ export default class AppStore extends Store {
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.total;
       //param.total = res1.res.context.total
-      res1.res.context.recommendationGoodsInfoRels.map((v, i) => {
-        arr.push(v.goodsInfo);
-      });
+      // res1.res.context.recommendationGoodsInfoRels.map((v, i) => {
+      //   arr.push(v.goodsInfo);
+      // });
       this.transaction(() => {
         this.dispatch('product:detailProductList', res1.res.context);
-        this.dispatch('product:productselect', arr);
+        this.dispatch('product:productselect', res1.res.context.recommendationGoodsInfoRels);
         this.dispatch('loading:end');
       });
     } else {

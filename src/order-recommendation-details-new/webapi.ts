@@ -31,8 +31,15 @@ export function fetchFindById(param = {}) {
   });
 }
 
+// export function fetchproductTooltip(param) {
+//   return Fetch<TResult>('/recommendation/listGoodsInfo', {
+//     method: 'POST',
+//     body: JSON.stringify(param)
+//   });
+// }
+
 export function fetchproductTooltip(param) {
-  return Fetch<TResult>('/recommendation/listGoodsInfo', {
+  return Fetch<TResult>('/goodsInfos/bundelPage', {
     method: 'POST',
     body: JSON.stringify(param)
   });

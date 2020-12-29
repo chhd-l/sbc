@@ -1,9 +1,7 @@
-import { Button, Col, Form, Icon, Input, message, Modal, Radio, Row, Table } from 'antd';
-import moment from 'moment';
+import { Button, Col, Form, Icon, Input, message, Modal, Row, Table } from 'antd';
 import { Const } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
-import { IList } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;

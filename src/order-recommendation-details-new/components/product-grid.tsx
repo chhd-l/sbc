@@ -5,11 +5,11 @@ import { Const, DataGrid, SelectGroup } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
-import { Select, Table } from 'antd';
-const { Option } = Select;
+import { message, Select, Table } from 'antd';
 
 const Column = Table.Column;
 let recommendationNumber = 1;
+const { Option } = Select;
 /**
  * 商品添加
  */
@@ -94,73 +94,50 @@ export default class GoodsGrid extends React.Component<any, any> {
             })
           }}
         >
-          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" width="15%" />
+          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
+          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
+          <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
 
-          <Column
-            title="SKU"
-            dataIndex="goodsInfoNo"
-            key="goodsInfoNo"
-            width="20%"
-            //ellipsis
-          />
-
-          <Column
-            title="Signed classification"
-            dataIndex="Signed"
-            key="Signed"
-            width="20%"
-            ellipsis
-            render={(value) => {
-              if (value) {
-                return <span>{value.goods.goodsCateName}</span>;
-              } else {
-                return '-';
-              }
-            }}
-          />
-
-          <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
-
-          <Column
+          {/* <Column
             title="Quantity"
             key="recommendationNumber"
             dataIndex="recommendationNumber"
-            render={(value, i, e) => {
-              if (value) {
+            render={(value, row) => {
                 return (
                   <Select
-                    defaultValue={value}
+                    defaultValue={value?value:1}
                     style={{ width: 120 }}
-                    onChange={(e, a) => {
+                    onChange={(e) => {
                       let obj = this.state.selectedRows.toJS();
                       for (let o = 0; o < obj.length; o++) {
-                        obj[o].goodsInfoId === i['goodsInfoId'] ? (obj[o].recommendationNumber = Number(e)) : this.state.selectedRows.toJS();
+                        obj[o].goodsInfoId === row['goodsInfoId'] ? (obj[o].recommendationNumber = Number(e)) : this.state.selectedRows.toJS();
                       }
                       this.setState({
                         selectedRows: fromJS(obj)
                       });
 
-                      i = i['recommendationNumber'] = Number(e);
+                      row = row['recommendationNumber'] = Number(e);
                       rowChangeBackFun(this.state.selectedRowKeys, fromJS(obj));
                     }}
                   >
-                    <Option value="1">1</Option>
-                    <Option value="2">2</Option>
-                    <Option value="3">3</Option>
-                    <Option value="4">4</Option>
-                    <Option value="5">5</Option>
-                    <Option value="6">6</Option>
-                    <Option value="7">7</Option>
-                    <Option value="8">8</Option>
-                    <Option value="9">9</Option>
-                    <Option value="10">10</Option>
+                    <Option value={1}>1</Option>
+                    <Option value={2}>2</Option>
+                    <Option value={3}>3</Option>
+                    <Option value={4}>4</Option>
+                    <Option value={5}>5</Option>
+                    <Option value={6}>6</Option>
+                    <Option value={7}>7</Option>
+                    <Option value={8}>8</Option>
+                    <Option value={9}>9</Option>
+                    <Option value={10}>10</Option>
                   </Select>
                 );
-              } else {
-                return '-';
-              }
+              
             }}
-          />
+          /> */}
         </DataGrid>
       </div>
     );
@@ -187,28 +164,66 @@ export default class GoodsGrid extends React.Component<any, any> {
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
 
-    let { res } = await webapi.fetchproductTooltip({ ...params });
+    let newParams = {
+      goodsName: params.likeGoodsName,
+      goodsInfoNo: params.likeGoodsInfoNo,
+      pageNum: params.pageNum,
+      pageSize: params.pageSize
+    };
 
-    if ((res as any).code == Const.SUCCESS_CODE) {
-      res = (res as any).context.goodsInfoPage;
-      let arr = res.content;
-      let a = arr;
-      let b = this.state.selectedRows.toJS();
-      b.reduce((pre, cur) => {
-        let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
-        if (target) {
-          Object.assign(target, cur);
+    webapi
+      .fetchproductTooltip(newParams)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+          let goodsInfos = (res as any).context.goodsInfos;
+          let arr = goodsInfos.content;
+          let a = arr;
+          let b = this.state.selectedRows.toJS();
+          b.reduce((pre, cur) => {
+            let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
+            if (target) {
+              Object.assign(target, cur);
+            } else {
+              pre.concat(arr);
+            }
+            return pre;
+          }, a);
+
+          this.setState({
+            goodsInfoPage: goodsInfos,
+            loading: false
+          });
         } else {
-          pre.concat(arr);
+          message.error(res.message || 'Operation failure');
         }
-        return pre;
-      }, a);
-
-      this.setState({
-        goodsInfoPage: res,
-        loading: false
+      })
+      .catch((err) => {
+        message.error(err.toString() || 'Operation failure');
       });
-    }
+
+    // let { res } = await webapi.fetchproductTooltip({ ...params });
+
+    // if ((res as any).code == Const.SUCCESS_CODE) {
+    //   let data = (res as any).context.goodsInfos;
+    //   let arr = data.content;
+    //   let a = arr;
+    //   let b = this.state.selectedRows.toJS();
+    //   b.reduce((pre, cur) => {
+    //     let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
+    //     if (target) {
+    //       Object.assign(target, cur);
+    //     } else {
+    //       pre.concat(arr);
+    //     }
+    //     return pre;
+    //   }, a);
+
+    //   this.setState({
+    //     goodsInfoPage: res,
+    //     loading: false
+    //   });
   };
 
   /**

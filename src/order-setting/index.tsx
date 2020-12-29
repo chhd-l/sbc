@@ -404,7 +404,7 @@ class OrderSetting extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
-          <Alert message={message} description={description} type="warning" />
+          <Alert message={message} description={description} type="error" />
 
           <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p>
           <Tabs defaultActiveKey="Payment before delivery">

@@ -160,7 +160,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
   state = {
     visiblePetDetails: false,
-    havePet: true,
+    havePet: false,
     currentPetInfo: {
       petsName: '',
       birthOfPets: '',
@@ -173,7 +173,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   };
 
   render() {
-    const { detail, countryDict, cityDict, sellerRemarkVisible, setSellerRemarkVisible, remedySellerRemark, setSellerRemark, orderRejectModalVisible } = this.props.relaxProps;
+    const { detail, orderRejectModalVisible } = this.props.relaxProps;
     const { currentPetInfo, havePet } = this.state;
     //当前的订单号
     const tid = detail.get('id');
@@ -306,7 +306,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (levelPrice) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice&&levelPrice.toFixed(2)}
+            {levelPrice && levelPrice.toFixed(2)}
           </span>
         )
       },
@@ -320,7 +320,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row&&(row.num * row.levelPrice).toFixed(2)}
+            {row && (row.num * row.levelPrice).toFixed(2)}
           </span>
         )
       }
@@ -351,7 +351,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (levelPrice) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice&&levelPrice.toFixed(2)}
+            {levelPrice && levelPrice.toFixed(2)}
           </span>
         )
       },
@@ -365,7 +365,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row&&(row.num * row.levelPrice).toFixed(2)}
+            {row && (row.num * row.levelPrice).toFixed(2)}
           </span>
         )
       }
@@ -494,10 +494,10 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 </div>
               ) : null} */}
 
-             <label style={styles.priceItem as any}>
+              <label style={styles.priceItem as any}>
                 <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '  -'}
+                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.discountsPrice || 0).toFixed(2)}
                 </strong>
               </label>

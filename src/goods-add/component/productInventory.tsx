@@ -125,7 +125,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, addSkUProduct, specSingleFlag,  baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, specSingleFlag, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -134,7 +134,7 @@ class SkuForm extends React.Component<any, any> {
       columns = goodsSpecs
         .map((item) => {
           return {
-            title:item.get('specName'),
+            title: item.get('specName'),
             dataIndex: 'specId-' + item.get('specId'),
             key: item.get('specId'),
             render: (rowInfo) => {
@@ -168,8 +168,6 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-
-
     columns = columns.push({
       title: (
         <div>
@@ -188,13 +186,15 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'stock',
       render: (rowInfo) => {
-        let a =''; let b = ''; let c = 0
-        a = addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0] || '';
-        c = rowInfo.maxStock? rowInfo.stock : a.minStock
+        let a = '';
+        let b = '';
+        let c = 0;
+        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || '';
+        c = rowInfo.maxStock ? rowInfo.stock : a.minStock;
         if (a) {
-          b = a.minStock - rowInfo.maxStock>=0?a.minStock:rowInfo.maxStock
-        }else {
-          b = 999999
+          b = a.minStock - rowInfo.maxStock ? rowInfo.maxStock : 0 >= 0 ? a.minStock : rowInfo.maxStock;
+        } else {
+          b = 999999;
         }
         return (
           <Row>
@@ -266,11 +266,8 @@ class SkuForm extends React.Component<any, any> {
       e = e.target.value;
     }
 
-
     editGoodsItem(id, key, e);
   };
-
-
 }
 
 const styles = {

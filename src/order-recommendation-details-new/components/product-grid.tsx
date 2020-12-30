@@ -18,8 +18,10 @@ export default class GoodsGrid extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: true,
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([]),
-      selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
+      selectedRows: [],
+      selectedRowKeys: [],
+      oldSelectedRowKeys: [],
+      prevPropSelectedRowKeys: [],
       total: 0,
       goodsInfoPage: {},
       searchParams: props.searchParams ? props.searchParams : {},
@@ -29,24 +31,62 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.init(this.props.searchParams ? this.props.searchParams : {});
+    this.init({});
+  }
+  static getDerivedStateFromProps(props, state) {
+    // 当传入的值发生变化的时候，更新state
+    if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
+      return {
+        oldSelectedRowKeys: props.selectedRowKeys.concat(),
+        selectedRowKeys: props.selectedRowKeys.concat(),
+        prevPropSelectedRowKeys: props.selectedRowKeys.concat(),
+        selectedRows: props.selectedRows.concat()
+      };
+    }
+
+    return null;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.searchParams) {
-      this.init(nextProps.searchParams ? nextProps.searchParams : {});
-    }
-    if (!this.props.visible && nextProps.visible) {
-      this.setState({
-        searchParams: nextProps.searchParams ? nextProps.searchParams : {}
-      });
-      this.init(nextProps.searchParams ? nextProps.searchParams : {});
-    }
-    this.setState({
-      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   if (nextProps.searchParams) {
+  //     this.init(nextProps.searchParams ? nextProps.searchParams : {});
+  //   }
+  //   if (!this.props.visible && nextProps.visible) {
+  //     this.setState({
+  //       searchParams: nextProps.searchParams ? nextProps.searchParams : {}
+  //     });
+  //     this.init(nextProps.searchParams ? nextProps.searchParams : {});
+  //   }
+  //   this.setState({
+  //     selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
+  //     selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
+  //   });
+  // }
+
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsInfoId === item));
     });
-  }
+    return tempList;
+  };
+  // initSelectedRow=()=>{
+  //   const { productselect } = this.props.relaxProps;
+  //   let obj = productselect;
+  //   if(Array.isArray(obj) && obj.length>0){
+  //     let selectedRows = []
+  //     let selectedRowKeys = []
+  //     for (let i = 0; i < obj.length; i++) {
+  //       const element = obj[i];
+  //       selectedRows.push(element)
+  //       selectedRowKeys.push(element.goodsInfoId)
+  //     }
+  //     this.setState({
+  //       selectedRows,
+  //       selectedRowKeys
+  //     })
+  //   }
+  // }
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
@@ -73,15 +113,19 @@ export default class GoodsGrid extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
-              const sRows = fromJS(selectedRows).filter((f) => f);
-              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsInfoId') == key).first()).filter((f) => f);
+              // const sRows = fromJS(selectedRows).filter((f) => f);
+              // let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
+              // rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsInfoId') == key).first()).filter((f) => f);
+
+              let { selectedRows } = this.state;
+              selectedRows = selectedRows.concat(selectedTableRows);
+              selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
               this.setState({
-                selectedRows: rows,
+                selectedRows: selectedRows,
                 selectedRowKeys
               });
 
-              rowChangeBackFun(selectedRowKeys, fromJS(rows));
+              rowChangeBackFun(selectedRowKeys, selectedRows);
             },
             getCheckboxProps: (record) => ({
               /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
@@ -180,7 +224,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           let goodsInfos = (res as any).context.goodsInfos;
           let arr = goodsInfos.content;
           let a = arr;
-          let b = this.state.selectedRows.toJS();
+          let b = this.state.selectedRows;
           b.reduce((pre, cur) => {
             let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
             if (target) {
@@ -196,10 +240,16 @@ export default class GoodsGrid extends React.Component<any, any> {
             loading: false
           });
         } else {
+          this.setState({
+            loading: false
+          });
           message.error(res.message || 'Operation failure');
         }
       })
       .catch((err) => {
+        this.setState({
+          loading: false
+        });
         message.error(err.toString() || 'Operation failure');
       });
 

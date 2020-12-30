@@ -103,7 +103,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             render={(text, row) => {
               return (
                 <Select
-                  defaultValue={text ? text : 1}
+                  value={text ? text : 1}
                   style={{ width: 120 }}
                   onChange={(e) => {
                     const value = e;

@@ -78,7 +78,7 @@ export default class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { loading, prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
+    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       prescriberId !== prevState.prescriberId ||
@@ -87,8 +87,7 @@ export default class Prescriber extends React.Component<any, any> {
       p_transactionTrendView !== prevState.transactionTrendView ||
       p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
       p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
-      p_trafficDashboardView !== prevState.trafficDashboardView ||
-      loading
+      p_trafficDashboardView !== prevState.trafficDashboardView
     ) {
       return {
         tradeCustomerView: p_tradeCustomerView,
@@ -97,8 +96,7 @@ export default class Prescriber extends React.Component<any, any> {
         trafficTrendDashboardView: p_trafficTrendDashboardView,
         conversionFunnelDashboardView: p_conversionFunnelDashboardView,
         trafficDashboardView: p_trafficDashboardView,
-        prescriberId,
-        loading
+        prescriberId
       };
     }
     // 否则，对于state不进行任何操作
@@ -118,7 +116,8 @@ export default class Prescriber extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+    const { loading } = this.props.relaxProps;
+    const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
     return (
       <div className="prescriber-item">
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>

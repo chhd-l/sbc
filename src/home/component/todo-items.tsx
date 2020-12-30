@@ -77,7 +77,7 @@ export default class TodoItems extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { loading, tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
+    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       tradeCustomerView !== prevState.tradeCustomerView ||
@@ -87,8 +87,7 @@ export default class TodoItems extends React.Component<any, any> {
       trafficDashboardView !== prevState.trafficDashboardView ||
       transactionTrendView !== prevState.transactionTrendView ||
       trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
-      conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
-      loading
+      conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView
     ) {
       return {
         tradeCustomerView,
@@ -98,8 +97,7 @@ export default class TodoItems extends React.Component<any, any> {
         trafficDashboardView,
         transactionTrendView,
         trafficTrendDashboardView,
-        conversionFunnelDashboardView,
-        loading
+        conversionFunnelDashboardView
       };
     }
 
@@ -119,7 +117,8 @@ export default class TodoItems extends React.Component<any, any> {
     });
   };
   render() {
-    const { loading, tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+    const { loading } = this.props.relaxProps;
+    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
 
     return (
       <div className="item">

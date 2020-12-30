@@ -4,6 +4,7 @@ import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, R
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import './index.less';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -332,7 +333,7 @@ export default class ClinicList extends Component<any, any> {
               {/* <div className="space-around"> */}
               {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
               <Col span="8">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
@@ -351,7 +352,7 @@ export default class ClinicList extends Component<any, any> {
               </Col>
               <Col span="8" id="select-group-width">
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={<p className="PrescriberCity">Prescriber city</p>}
                     onChange={(e) => {
@@ -387,7 +388,7 @@ export default class ClinicList extends Component<any, any> {
               </Col>
               <Col span="8" id="select-group-width">
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue=""
                     label="Prescriber type"
@@ -399,6 +400,7 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
+                    style={styles.wrapper}
                   >
                     <Option value="">
                       <FormattedMessage id="all" />
@@ -412,7 +414,7 @@ export default class ClinicList extends Component<any, any> {
                 </FormItem>
               </Col>
               <Col span="8">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
@@ -431,7 +433,7 @@ export default class ClinicList extends Component<any, any> {
               </Col>
 
               <Col span="8">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
@@ -449,7 +451,7 @@ export default class ClinicList extends Component<any, any> {
                 </FormItem>
               </Col>
               <Col span="8">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
@@ -468,7 +470,7 @@ export default class ClinicList extends Component<any, any> {
                 {/* </div> */}
               </Col>
               <Col span="8" id="select-group-width">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue="true"
                     label="Prescriber status"
@@ -480,6 +482,7 @@ export default class ClinicList extends Component<any, any> {
                         value
                       });
                     }}
+                    style={styles.wrapper}
                   >
                     <Option value="">
                       <FormattedMessage id="all" />{' '}
@@ -499,7 +502,7 @@ export default class ClinicList extends Component<any, any> {
             > */}
               </Col>
               <Col span="8">
-                <FormItem>
+                <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={<p className="prescriber-iput-lable">Recommendation code</p>}
                     onChange={(e) => {
@@ -565,11 +568,40 @@ export default class ClinicList extends Component<any, any> {
           </div>
         </div>
         <div className="container">
-          <Table rowKey="id" columns={columns} dataSource={this.state.prescriberList} pagination={this.state.pagination}
-                 loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
-                 scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={this.state.prescriberList}
+            pagination={this.state.pagination}
+            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            scroll={{ x: '100%' }}
+            onChange={this.handleTableChange}
+          />
         </div>
       </div>
     );
   }
 }
+
+const styles = {
+  formItemStyle: {
+    width: 375
+  },
+  label: {
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  leftLabel: {
+    width: 135,
+    textAlign: 'left',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  wrapper: {
+    width: 200
+  }
+} as any;

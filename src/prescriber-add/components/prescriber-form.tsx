@@ -79,7 +79,7 @@ class ClinicForm extends React.Component<any, any> {
       clinicsLites: [],
       prescriberKeyId: this.props.prescriberId,
       isPrescriber: bool,
-      objectFetching: false,
+      objectFetching: false
     };
   }
   componentWillMount() {
@@ -173,7 +173,6 @@ class ClinicForm extends React.Component<any, any> {
         message.error(err.message || 'Unsuccessful');
       });
   };
-
 
   selectTimeZone = (value) => {
     this.setState({
@@ -528,15 +527,13 @@ class ClinicForm extends React.Component<any, any> {
     });
   }
 
-  newUrl=(oldUrl)=>{
-    let tempArr = oldUrl.split('?')
-    let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite
-    if(pcWebsite&&tempArr[1]){
-      return pcWebsite+ '?' + tempArr[1]
-    }
-    else oldUrl
-
-  }
+  newUrl = (oldUrl) => {
+    let tempArr = oldUrl.split('?');
+    let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite;
+    if (pcWebsite && tempArr[1]) {
+      return pcWebsite + '?' + tempArr[1];
+    } else return oldUrl;
+  };
   getCityList = (value) => {
     let params = {
       cityName: value,
@@ -561,9 +558,8 @@ class ClinicForm extends React.Component<any, any> {
       });
   };
 
-
   render() {
-    const { cityArr, typeArr, prescriberForm, firstPrescriberForm,objectFetching, } = this.state;
+    const { cityArr, typeArr, prescriberForm, firstPrescriberForm, objectFetching } = this.state;
     const { getFieldDecorator } = this.props.form;
 
     return (
@@ -682,29 +678,29 @@ class ClinicForm extends React.Component<any, any> {
                 <FormItem label="Prescriber city">
                   {getFieldDecorator(
                     'primaryCity',
-                    {
-                    })(
-                      <Select
-                        showSearch
-                        placeholder="Select a Order number"
-                        notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                        onSearch={_.debounce(this.getCityList, 500)}                   
-                        filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        onChange={(value) => {
-                          this.onFormChange({
-                            field: 'primaryCity',
-                            value: value ? value : ''
-                          });
-                        }}
-                      >
-                        {cityArr
-                          ? cityArr.map((item) => (
-                              <Option value={item.cityName} key={item.id}>
-                                {item.cityName}
-                              </Option>
-                            ))
-                          : null}
-                      </Select>
+                    {}
+                  )(
+                    <Select
+                      showSearch
+                      placeholder="Select a Order number"
+                      notFoundContent={objectFetching ? <Spin size="small" /> : null}
+                      onSearch={_.debounce(this.getCityList, 500)}
+                      filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                      onChange={(value) => {
+                        this.onFormChange({
+                          field: 'primaryCity',
+                          value: value ? value : ''
+                        });
+                      }}
+                    >
+                      {cityArr
+                        ? cityArr.map((item) => (
+                            <Option value={item.name} key={item.id}>
+                              {item.name}
+                            </Option>
+                          ))
+                        : null}
+                    </Select>
                   )}
                 </FormItem>
                 <FormItem label="Prescriber zip">
@@ -829,9 +825,11 @@ class ClinicForm extends React.Component<any, any> {
                     Proceed to set reward rules
                   </Button>
 
-                  <Button style={{ marginLeft: '20px' }}>
-                    <Link to="/prescriber">Back to list</Link>
-                  </Button>
+                  {!sessionStorage.getItem('PrescriberSelect') ? (
+                    <Button style={{ marginLeft: '20px' }}>
+                      <Link to="/prescriber">Back to list</Link>
+                    </Button>
+                  ) : null}
                 </FormItem>
               </Form>
             </Col>
@@ -840,7 +838,7 @@ class ClinicForm extends React.Component<any, any> {
                 {this.state.qrCodeLink ? <img src={this.state.qrCodeLink} alt="" /> : null}
                 {this.state.url ? (
                   <div>
-                    {this.newUrl(this.state.url) }
+                    {this.newUrl(this.state.url)}
                     <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
                       copy
                     </Button>
@@ -1004,9 +1002,12 @@ class ClinicForm extends React.Component<any, any> {
               <Button type="primary" loading={this.state.saveLoading} onClick={() => this.savePrescriber()}>
                 Save
               </Button>
-              <Button style={{ marginLeft: '20px' }}>
-                <Link to="/prescriber">Back to list</Link>
-              </Button>
+              {!sessionStorage.getItem('PrescriberSelect') ? (
+                <Button style={{ marginLeft: '20px' }}>
+                  <Link to="/prescriber">Back to list</Link>
+                </Button>
+              ) : null}
+
               {/* <Button onClick={() => this.clearAndSave()}>
                 Clear rules and Save
               </Button> */}

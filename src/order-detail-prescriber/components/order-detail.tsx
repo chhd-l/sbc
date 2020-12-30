@@ -542,7 +542,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               {discount && (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
-                  <strong>-${discount.discounts.toFixed(2)}</strong>
+                  <strong>$-{discount.discounts.toFixed(2)}</strong>
                 </label>
               )}
 
@@ -571,7 +571,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
                   <strong>
-                    {'- ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
                     {(tradePrice.discountsPrice || 0).toFixed(2)}
                   </strong>
                 </label>

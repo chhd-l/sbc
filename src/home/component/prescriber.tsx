@@ -262,24 +262,24 @@ export default class Prescriber extends React.Component<any, any> {
                         <div className="mode">
                           <div className="mode-text">Order Number</div>
                           <div className="mode-num">
-                            <span>{tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}</span>
+                            <span>{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</span>
                           </div>
                           <div className="mode-per">
-                            {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                            <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate >= 0 ? 'green' : 'red') : ''}>
-                              {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                            {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                            <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
+                              {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                             </span>
                           </div>
                         </div>
                         <div className="mode">
                           <div className="mode-text">Sales volume</div>
                           <div className="mode-num">
-                            <span>{tradeCustomerView && tradeCustomerView.salesVolume != null ? <CountUp end={tradeCustomerView.salesVolume} {...countUpProps} /> : '--'}</span>
+                            <span>{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</span>
                           </div>
                           <div className="mode-per">
-                            {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <img src={tradeCustomerView.salesVolumeRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                            <span className={tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? (tradeCustomerView.salesVolumeRate >= 0 ? 'green' : 'red') : ''}>
-                              {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <CountUp end={Math.abs(tradeCustomerView.salesVolumeRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
+                            {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                            <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
+                              {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                             </span>
                           </div>
                         </div>

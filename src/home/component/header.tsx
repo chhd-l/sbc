@@ -78,7 +78,6 @@ export default class Header extends React.Component<any, any> {
       });
     }
   }
-  c;
 
   dateChange = (date, dateString) => {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
@@ -183,10 +182,11 @@ export default class Header extends React.Component<any, any> {
   };
 
   onPrescriberChange = (res, a) => {
-    this.props.changePage({ type: true, getPrescriberId: res });
+    this.props.changePage({ type: true, getPrescriberId: res, week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     this.setState({
       openType: false,
-      prescriberId: res
+      prescriberId: res,
+      week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week()
     });
     sessionStorage.setItem('PrescriberSelectType', true);
     sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: a.props.val.prescriberId, prescriberName: a.props.val.prescriberName }));

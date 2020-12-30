@@ -42,6 +42,7 @@ export default class AppStore extends Store {
     }
     if (sessionStorage.getItem('PrescriberSelect')) {
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
+      form['prescriberName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
     }
     webapi.fetchOrderList({ ...obj, ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {

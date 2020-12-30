@@ -300,30 +300,67 @@ export default class OrderDetailTab extends React.Component<any, any> {
         )
       },
       {
-        title: 'Price',
-        dataIndex: 'levelPrice',
-        key: 'levelPrice',
-        render: (levelPrice) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice && levelPrice.toFixed(2)}
-          </span>
-        )
-      },
-      {
         title: 'Quantity',
         dataIndex: 'num',
         key: 'num'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'originalPrice',
+        key: 'originalPrice',
+        render: (originalPrice, record) =>
+          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
+            <div>
+              <span>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {record.subscriptionPrice.toFixed(2)}
+              </span>
+              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {originalPrice && originalPrice.toFixed(2)}
+              </span>
+            </div>
+          ) : (
+            <span>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              {originalPrice && originalPrice.toFixed(2)}
+            </span>
+          )
       },
       {
         title: 'Subtotal',
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row && (row.num * row.levelPrice).toFixed(2)}
+            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
           </span>
         )
       }
+      // {
+      //   title: 'Price',
+      //   dataIndex: 'levelPrice',
+      //   key: 'levelPrice',
+      //   render: (levelPrice) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {levelPrice && levelPrice.toFixed(2)}
+      //     </span>
+      //   )
+      // },
+      // {
+      //   title: 'Quantity',
+      //   dataIndex: 'num',
+      //   key: 'num'
+      // },
+      // {
+      //   title: 'Subtotal',
+      //   render: (row) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {row && (row.num * row.levelPrice).toFixed(2)}
+      //     </span>
+      //   )
+      // }
     ];
 
     const columnsNoPet = [
@@ -345,30 +382,67 @@ export default class OrderDetailTab extends React.Component<any, any> {
         key: 'specDetails'
       },
       {
-        title: 'Price',
-        dataIndex: 'levelPrice',
-        key: 'levelPrice',
-        render: (levelPrice) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {levelPrice && levelPrice.toFixed(2)}
-          </span>
-        )
-      },
-      {
         title: 'Quantity',
         dataIndex: 'num',
         key: 'num'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'originalPrice',
+        key: 'originalPrice',
+        render: (originalPrice, record) =>
+          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
+            <div>
+              <span>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {record.subscriptionPrice.toFixed(2)}
+              </span>
+              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {originalPrice && originalPrice.toFixed(2)}
+              </span>
+            </div>
+          ) : (
+            <span>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              {originalPrice && originalPrice.toFixed(2)}
+            </span>
+          )
       },
       {
         title: 'Subtotal',
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row && (row.num * row.levelPrice).toFixed(2)}
+            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
           </span>
         )
       }
+      // {
+      //   title: 'Price',
+      //   dataIndex: 'levelPrice',
+      //   key: 'levelPrice',
+      //   render: (levelPrice) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {levelPrice && levelPrice.toFixed(2)}
+      //     </span>
+      //   )
+      // },
+      // {
+      //   title: 'Quantity',
+      //   dataIndex: 'num',
+      //   key: 'num'
+      // },
+      // {
+      //   title: 'Subtotal',
+      //   render: (row) => (
+      //     <span>
+      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {row && (row.num * row.levelPrice).toFixed(2)}
+      //     </span>
+      //   )
+      // }
     ];
 
     return (

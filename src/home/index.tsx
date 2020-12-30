@@ -37,13 +37,13 @@ export default class HelloApp extends React.Component<any, any> {
       this.store.newInit({
         companyId: 2,
         weekNum: moment(date).week(),
-        year: moment(date).year()
+        year: moment(date).weekYear()
       });
     } else {
       this.store.prescriberInit({
         companyId: 2,
         weekNum: moment(date).week(),
-        year: moment(date).year()
+        year: moment(date).weekYear()
       });
     }
   }
@@ -61,14 +61,14 @@ export default class HelloApp extends React.Component<any, any> {
           this.store.prescriberInit({
             companyId: 2,
             weekNum: this.state.week,
-            year: moment(date).year(),
+            year: moment(date).weekYear(),
             prescriberId: res.getPrescriberId
           });
         } else {
           this.store.newInit({
             companyId: 2,
             weekNum: this.state.week,
-            year: moment(date).year()
+            year: moment(date).weekYear()
           });
         }
       }

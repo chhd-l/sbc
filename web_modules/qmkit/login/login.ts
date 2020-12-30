@@ -128,10 +128,7 @@ export async function login(routerType, oktaToken: string) {
       //Perscriber used
       const employee = (await webapi.employee()) as any;
       if (employee.res) {
-        sessionStorage.setItem(
-          cache.EMPLOYEE_DATA,
-          JSON.stringify(employee.res)
-        );
+        sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(employee.res));
       } else {
         message.error(employee.res.message)
       }

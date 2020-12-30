@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid, SelectGroup } from 'qmkit';
+import { cache, Const, DataGrid, SelectGroup } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -152,7 +152,16 @@ export default class GoodsGrid extends React.Component<any, any> {
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
           <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
-          <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
+          <Column
+            title="Weight"
+            dataIndex="goodsInfoWeight"
+            key="goodsInfoWeight"
+            render={(goodsInfoWeight) => {
+              return goodsInfoWeight != null ? goodsInfoWeight : '--';
+              console.log(goodsInfoWeight, 1111111111);
+            }}
+          />
+          <Column title="Price" dataIndex="marketPrice" key="marketPrice" render={(marketPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + marketPrice}</span>} />
 
           {/* <Column
             title="Quantity"

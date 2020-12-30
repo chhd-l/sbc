@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { DatePicker, Icon, Select, Input, Button } from 'antd';
+import { DatePicker, Icon, Select, Input, Button, message } from 'antd';
 import '../index.less';
 import { cache, noop } from 'qmkit';
 import moment from 'moment';
@@ -189,6 +189,7 @@ export default class Header extends React.Component<any, any> {
     });
     sessionStorage.setItem('PrescriberSelectType', true);
     sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: a.props.val.prescriberId, prescriberName: a.props.val.prescriberName }));
+    message.success('Prescriber choosed here will be setted as default for other pages.');
   };
 
   render() {

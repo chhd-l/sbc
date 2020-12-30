@@ -39,6 +39,9 @@ export default class AppStore extends Store {
       form['tradeState'][state] = value;
     }
     form['orderType'] = 'NORMAL_ORDER';
+    if (sessionStorage.getItem('PrescriberSelect')) {
+      form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
+    }
     const { res: needRes } = await webapi.getOrderNeedAudit();
     if (needRes.code == Const.SUCCESS_CODE) {
       const { res: employeeRes } = await webapi.employee();

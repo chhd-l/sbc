@@ -58,7 +58,7 @@ export default class SearchHead extends Component<any, any> {
       goodsOptionsValue: '',
       receiverSelectValue: '',
       numberSelectValue: '',
-      clinicSelectValue: '',
+      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -172,16 +172,20 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     {this._renderClinicSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        let a = e.target.value.split(',');
+                    {sessionStorage.getItem('PrescriberSelect') ? (
+                      <Input style={styles.wrapper} value={this.state.clinicSelectValue} disabled />
+                    ) : (
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          let a = e.target.value.split(',');
 
-                        this.setState({
-                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
-                        });
-                      }}
-                    />
+                          this.setState({
+                            clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
+                          });
+                        }}
+                      />
+                    )}
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -253,7 +257,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Order Category" />
+                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -431,6 +435,7 @@ export default class SearchHead extends Component<any, any> {
         }}
         value={this.state.clinicSelect}
         style={styles.label}
+        disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
         <Option title="Prescriber name" value="clinicsName">
           <FormattedMessage id="clinicName" />
@@ -529,6 +534,13 @@ const styles = {
   label: {
     width: 135,
     textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  leftLabel: {
+    width: 135,
+    textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
     cursor: 'text'

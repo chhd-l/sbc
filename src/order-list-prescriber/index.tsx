@@ -13,9 +13,9 @@ export default class OrderList extends Component<any, any> {
 
   componentDidMount() {
     const state = this.props.location.state;
-
     if (state) {
       // state.key? this.store.onTabChange(this.props.location.state.key) : null
+
       if (state.key) {
         this.store.onTabChange(this.props.location.state.key);
       }

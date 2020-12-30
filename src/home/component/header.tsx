@@ -80,14 +80,14 @@ export default class Header extends React.Component<any, any> {
 
   dateChange = (date, dateString) => {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
-    let year = moment(new Date(sessionStorage.getItem('defaultLocalDateTime'))).format('YYYY');
+    let year = sessionStorage.getItem(cache.CURRENT_YEAR);
     this.setState({ week: date.week() });
     if (this.state.prescriber == '') {
       if (this.state.searchType == true) {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: Number(year),
+          year: moment(year).weekYear(),
           prescriberId: this.state.prescriberId
         };
         prescriberInit(obj);
@@ -95,7 +95,7 @@ export default class Header extends React.Component<any, any> {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: Number(year)
+          year: moment(year).weekYear()
         };
         newInit(obj);
       }
@@ -103,7 +103,7 @@ export default class Header extends React.Component<any, any> {
       let obj = {
         companyId: 2,
         weekNum: date.week(),
-        year: Number(year),
+        year: moment(year).weekYear(),
         prescriberId: this.state.prescriberId
       };
       prescriberInit(obj);

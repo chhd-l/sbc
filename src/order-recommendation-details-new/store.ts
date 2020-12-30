@@ -43,11 +43,11 @@ export default class AppStore extends Store {
     this.dispatch('loading:start');
     const res1 = await webapi.fetchproductTooltip(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
-      param.total = res1.res.context.goodsInfoPage.total;
+      param.total = res1.res.context.goodsInfos.total;
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('product:productForm', param);
-        this.dispatch('productList:productInit', res1.res.context.goodsInfoPage.content);
+        this.dispatch('productList:productInit', res1.res.context.goodsInfos.content);
       });
     } else {
       message.error(res1.res.message);
@@ -61,6 +61,21 @@ export default class AppStore extends Store {
 
   //productselect
   onProductselect = (addProduct) => {
+    localStorage.removeItem('productselect');
+    if (Array.isArray(addProduct) && addProduct.length > 0) {
+      let arr = addProduct.map((v, i) => {
+        return {
+          goodsInfoId: v.goodsInfoId,
+          recommendationNumber: v.recommendationNumber ? v.recommendationNumber : 1
+        };
+      });
+      this.onCreateLink({
+        field: 'recommendationGoodsInfoRels',
+        value: arr
+      });
+      localStorage.setItem('productselect', String(addProduct.length));
+    }
+
     this.dispatch('product:productselect', addProduct);
   };
 

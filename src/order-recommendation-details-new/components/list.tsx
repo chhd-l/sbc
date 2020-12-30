@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 import { DataGrid, cache, noop, Const, history } from 'qmkit';
-import { Table } from 'antd';
+import { Popconfirm, Select, Table, Tooltip } from 'antd';
 const Column = Table.Column;
 import styled from 'styled-components';
 import { Relax } from 'plume2';
 declare type IList = List<any>;
+const { Option } = Select;
 
 import moment from 'moment';
 const TableRow = styled.div`
@@ -33,6 +34,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       productForm: any;
       detailProductList: any;
       onCreateLink: Function;
+      onProductselect: Function;
     };
   };
 
@@ -40,73 +42,98 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     productselect: 'productselect',
     productForm: 'productForm',
     detailProductList: 'detailProductList',
-    onCreateLink: noop
+    onCreateLink: noop,
+    onProductselect: noop
   };
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
-    localStorage.removeItem('productselect');
-    const { productselect, onCreateLink } = this.props.relaxProps;
-    localStorage.setItem('productselect', String(productselect.length));
-    let arr = productselect.map((v, i) => {
-      return {
-        goodsInfoId: v.goodsInfoId,
-        recommendationNumber: v.recommendationNumber
-      };
-    });
-    onCreateLink({
-      field: 'recommendationGoodsInfoRels',
-      value: arr
-    });
-    localStorage.setItem('productselect', String(productselect.length));
-  }
+  // componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+  //   localStorage.removeItem('productselect');
+  //   const { productselect, onCreateLink } = this.props.relaxProps;
+  //   localStorage.setItem('productselect', String(productselect.length));
+  //   let arr = productselect.map((v, i) => {
+  //     return {
+  //       goodsInfoId: v.goodsInfoId,
+  //       recommendationNumber: v.recommendationNumber?v.recommendationNumber:1
+  //     };
+  //   });
+  //   debugger
+  //   onCreateLink({
+  //     field: 'recommendationGoodsInfoRels',
+  //     value: arr
+  //   });
+  //   localStorage.setItem('productselect', String(productselect.length));
+  // }
 
   forceUpdate(callback?: () => void) {
     super.forceUpdate(callback);
   }
+  onQuantityChange = (row, value) => {
+    const { productselect, onProductselect } = this.props.relaxProps;
+    let obj = productselect;
+    for (let o = 0; o < obj.length; o++) {
+      if (obj[o].goodsInfoId === row['goodsInfoId']) {
+        obj[o].recommendationNumber = Number(value);
+      }
+    }
+    onProductselect(obj);
+  };
+  deleteProduct = (row) => {
+    const { productselect, onProductselect } = this.props.relaxProps;
+    let obj = productselect.filter((item) => item.goodsInfoId !== row.goodsInfoId);
+    onProductselect(obj);
+  };
 
   render() {
-    const { productselect, detailProductList } = this.props.relaxProps;
+    const { productselect } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
-          {/*<Column title="No" dataIndex="No" key="No" render={(text,record,index) => {
-            return <span>{(pageNum)*10+index+1}</span>
-          }}/>
-          <Column title="Image" dataIndex="Image" key="Image" render={(text) => {
-            return <img src={text} alt="" width="20" height="25"/>
-          }}/>*/}
           <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column
-            title="Signed classification"
-            dataIndex="goods.goodsCateName"
-            key="goodsCateName"
-            render={(text, record, i) => {
-              /*setTimeout(() => {
-                console.log(text, 11111111);
-                console.log(
-                  detailProductList.recommendationGoodsInfoRels,
-                  22222222
-                );
-                console.log(i, 33333333);
-              });*/
-              return text;
-              //return history.location.state?detailProductList.recommendationGoodsInfoRels[i].recommendationNumber:text
-            }}
-          />
+          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
           <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
+
           <Column
             title="Quantity"
-            key="quantity"
-            dataIndex="quantity"
-            render={(text, record, i) => {
-              /*return history.location.state
-                ? detailProductList.recommendationGoodsInfoRels[i]
-                    .recommendationNumber
-                : text;*/
-              return record.recommendationNumber;
+            key="recommendationNumber"
+            dataIndex="recommendationNumber"
+            render={(text, row) => {
+              return (
+                <Select
+                  defaultValue={text ? text : 1}
+                  style={{ width: 120 }}
+                  onChange={(e) => {
+                    const value = e;
+                    this.onQuantityChange(row, value);
+                  }}
+                >
+                  <Option value={1}>1</Option>
+                  <Option value={2}>2</Option>
+                  <Option value={3}>3</Option>
+                  <Option value={4}>4</Option>
+                  <Option value={5}>5</Option>
+                  <Option value={6}>6</Option>
+                  <Option value={7}>7</Option>
+                  <Option value={8}>8</Option>
+                  <Option value={9}>9</Option>
+                  <Option value={10}>10</Option>
+                </Select>
+              );
             }}
+          />
+          <Column
+            title="Operation"
+            key="Operation"
+            render={(text, row) => (
+              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteProduct(row)} okText="Confirm" cancelText="Cancel">
+                <Tooltip placement="top" title="Delete">
+                  <a className="iconfont iconDelete" style={{ marginRight: 10 }}></a>
+                </Tooltip>
+              </Popconfirm>
+            )}
           />
         </DataGrid>
       </TableRow>

@@ -3,10 +3,9 @@ import { Breadcrumb, Tabs, Spin } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 
-import OperateLog from './components/operate-log';
 import OrderDetailTab from './components/order-detail';
-import OrderDelivery from './components/order-delivery';
-import OrderReceive from './components/order-receive';
+// import OrderDelivery from './components/order-delivery';
+// import OrderReceive from './components/order-receive';
 
 import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -61,8 +60,6 @@ export default class OrderDetail extends React.Component<any, any> {
               <OrderReceive />
             </Tabs.TabPane> */}
           </Tabs>
-
-          <OperateLog />
         </div>
       </div>
     );

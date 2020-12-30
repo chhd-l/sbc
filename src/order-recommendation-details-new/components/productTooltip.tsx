@@ -83,13 +83,6 @@ export default class GoodsModal extends React.Component<any, any> {
         onOk={() => {
           onProductselect(this.state.selectedRows.toJS());
           this.props.showModal(false);
-          /* if (application === 'saleType') {
-                   // onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
-                 } else if (skuLimit && selectedSkuIds.length > skuLimit) {
-                   message.error('Choose up to 20 items');
-                 } else {
-                 //  onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
-                 }*/
         }}
         onCancel={() => {
           this.props.showModal(false);

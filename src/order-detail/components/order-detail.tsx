@@ -1,69 +1,12 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tooltip } from 'antd';
+import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
 import { AuthWrapper, Const, noop, cache, util } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-
-const columns = [
-  {
-    title: 'SKU Code',
-    dataIndex: 'skuNo',
-    key: 'skuNo',
-    render: (text) => text
-  },
-  {
-    title: 'Product Name',
-    dataIndex: 'skuName',
-    key: 'skuName',
-    width: '50%'
-  },
-  {
-    title: 'Weight',
-    dataIndex: 'specDetails',
-    key: 'specDetails'
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'num',
-    key: 'num'
-  },
-  {
-    title: 'Price',
-    dataIndex: 'originalPrice',
-    key: 'originalPrice',
-    render: (originalPrice, record) =>
-      record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
-        <div>
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {record.subscriptionPrice.toFixed(2)}
-          </span>
-          <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {originalPrice && originalPrice.toFixed(2)}
-          </span>
-        </div>
-      ) : (
-        <span>
-          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {originalPrice && originalPrice.toFixed(2)}
-        </span>
-      )
-  },
-  {
-    title: 'Subtotal',
-    render: (row) => (
-      <span>
-        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-        {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
-      </span>
-    )
-  }
-];
 
 const invoiceContent = (invoice) => {
   let invoiceContent = '';
@@ -198,9 +141,23 @@ export default class OrderDetailTab extends React.Component<any, any> {
     showRejectModal: noop,
     hideRejectModal: noop
   };
+  state = {
+    visiblePetDetails: false,
+    havePet: false,
+    currentPetInfo: {
+      petsName: '',
+      birthOfPets: '',
+      petsBreed: '',
+      petsSex: 0,
+      petsType: '',
+      petsSizeValueName: '',
+      customerPetsPropRelations: []
+    }
+  };
 
   render() {
-    const { detail, countryDict, cityDict, sellerRemarkVisible, setSellerRemarkVisible, remedySellerRemark, setSellerRemark, orderRejectModalVisible } = this.props.relaxProps;
+    const { currentPetInfo, havePet } = this.state;
+    const { detail, countryDict, cityDict, orderRejectModalVisible } = this.props.relaxProps;
     //当前的订单号
     const tid = detail.get('id');
     let orderSource = detail.get('orderSource');
@@ -281,6 +238,136 @@ export default class OrderDetailTab extends React.Component<any, any> {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
+    const columns = [
+      {
+        title: 'SKU Code',
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => text
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'skuName',
+        key: 'skuName',
+        width: '50%'
+      },
+      {
+        title: 'Weight',
+        dataIndex: 'specDetails',
+        key: 'specDetails'
+      },
+      {
+        title: 'Pet category',
+        dataIndex: 'petCategory',
+        key: 'petCategory',
+        width: '10%',
+        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
+      },
+      {
+        title: 'Pet name',
+        dataIndex: 'petName',
+        key: 'petName',
+        width: '10%',
+        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
+      },
+      {
+        title: 'Pet details',
+        dataIndex: 'petDetails',
+        key: 'petDetails',
+        width: '10%',
+        render: (text, record) => (
+          <>
+            {record.petsInfo ? (
+              <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
+                view
+              </Button>
+            ) : null}
+          </>
+        )
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'originalPrice',
+        key: 'originalPrice',
+        render: (originalPrice, record) =>
+          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
+            <div>
+              <span>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {record.subscriptionPrice.toFixed(2)}
+              </span>
+              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                {originalPrice && originalPrice.toFixed(2)}
+              </span>
+            </div>
+          ) : (
+            <span>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              {originalPrice && originalPrice.toFixed(2)}
+            </span>
+          )
+      },
+      {
+        title: 'Subtotal',
+        render: (row) => (
+          <span>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
+          </span>
+        )
+      }
+    ];
+
+    const columnsNoPet = [
+      {
+        title: 'SKU Code',
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => text
+      },
+      {
+        title: 'Product Name',
+        dataIndex: 'skuName',
+        key: 'skuName',
+        width: '20%'
+      },
+      {
+        title: 'Weight',
+        dataIndex: 'specDetails',
+        key: 'specDetails'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'levelPrice',
+        key: 'levelPrice',
+        render: (levelPrice) => (
+          <span>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {levelPrice && levelPrice.toFixed(2)}
+          </span>
+        )
+      },
+      {
+        title: 'Quantity',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Subtotal',
+        render: (row) => (
+          <span>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {row && (row.num * row.levelPrice).toFixed(2)}
+          </span>
+        )
+      }
+    ];
     return (
       <div>
         <div style={styles.headBox as any}>
@@ -352,7 +439,49 @@ export default class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
+          <Table rowKey={(_record, index) => index.toString()} columns={havePet ? columns : columnsNoPet} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
+
+          <Modal
+            title={currentPetInfo.petsName}
+            visible={this.state.visiblePetDetails}
+            onOk={() => {
+              this.setState({
+                visiblePetDetails: false
+              });
+            }}
+            onCancel={() => {
+              this.setState({
+                visiblePetDetails: false
+              });
+            }}
+          >
+            <Row>
+              <Col span={12}>
+                <p>
+                  {currentPetInfo.petsType === 'dog' ? <i className="iconfont icondog" style={styles.iconRight}></i> : <i className="iconfont iconcat" style={styles.iconRight}></i>}
+                  {currentPetInfo.petsBreed}
+                </p>
+                <p>
+                  <i className="iconfont iconbirthday" style={styles.iconRight}></i>
+                  {currentPetInfo.birthOfPets}
+                </p>
+                <p>
+                  {currentPetInfo.petsSex === 0 ? <i className="iconfont iconman" style={styles.iconRight}></i> : <i className="iconfont iconwoman" style={styles.iconRight}></i>}
+                  {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
+                </p>
+                {currentPetInfo.petsSizeValueName ? (
+                  <p>
+                    <i className="iconfont iconweight" style={styles.iconRight}></i>
+                    {currentPetInfo.petsSizeValueName}
+                  </p>
+                ) : null}
+              </Col>
+              <Col span={12}>
+                <h3>special Needs</h3>
+                {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
+              </Col>
+            </Row>
+          </Modal>
 
           <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
@@ -775,6 +904,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
         confirm(tdId);
       },
       onCancel() {}
+    });
+  };
+  _openPetDetails = (petInfo) => {
+    this.setState({
+      visiblePetDetails: true,
+      currentPetInfo: petInfo
     });
   };
 }

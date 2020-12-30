@@ -49,6 +49,7 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
+      clinicSelect: 'clinicsName',
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
@@ -57,6 +58,7 @@ export default class SearchHead extends Component<any, any> {
       goodsOptionsValue: '',
       receiverSelectValue: '',
       numberSelectValue: '',
+      clinicSelectValue: '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -159,6 +161,24 @@ export default class SearchHead extends Component<any, any> {
                       onChange={(e) => {
                         this.setState({
                           receiverSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderClinicSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        let a = e.target.value.split(',');
+
+                        this.setState({
+                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
                         });
                       }}
                     />
@@ -494,8 +514,8 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected order',
+      byParamsTitle: 'Export all orders',
+      byIdsTitle: 'Export selected orders',
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });

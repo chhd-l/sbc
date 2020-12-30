@@ -49,6 +49,7 @@ export default class HelloApp extends React.Component<any, any> {
   }
 
   changePage(res) {
+    console.log(res, 11111111111);
     this.setState(
       {
         changeMode: res.type,
@@ -58,6 +59,7 @@ export default class HelloApp extends React.Component<any, any> {
       () => {
         let date = sessionStorage.getItem(cache.CURRENT_YEAR);
         if (res.getPrescriberId != null) {
+          console.log(2222222);
           this.store.prescriberInit({
             companyId: 2,
             weekNum: this.state.week,

@@ -489,8 +489,8 @@ export default class TodoItems extends React.Component<any, any> {
                         );
                       })
                     ) : (
-                      <span style={{ width: '100%', textAlign: 'center', position: 'absolute', top: '-30px', right: '100px' }}>
-                        <img src={nodataImg} width="180" height="137" className="no-data-img" />
+                      <span className="data-img" style={{ width: '100%', textAlign: 'right', float: 'right', paddingTop: '55px' }}>
+                        <img src={nodataImg} className="no-data-img" />
                       </span>
                     )}
                   </div>
@@ -507,10 +507,8 @@ export default class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               {goodsInfoTopView.length === 0 ? (
-                <div>
-                  <span style={{ paddingLeft: '150px' }}>
-                    <img src={nodataImg} className="no-data-img" />
-                  </span>
+                <div className="data-img">
+                  <img src={nodataImg} className="no-data-img" />
                 </div>
               ) : (
                 <div className="seller space-between">
@@ -544,7 +542,7 @@ export default class TodoItems extends React.Component<any, any> {
               </div>
 
               {!trafficTrendDashboardView || (trafficTrendDashboardView.weekNumList.length === 0 && trafficTrendDashboardView.totalPVList.length === 0 && trafficTrendDashboardView.conversionRateList.length === 0) ? (
-                <div>
+                <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>
               ) : (
@@ -565,7 +563,7 @@ export default class TodoItems extends React.Component<any, any> {
             <div className="item-btm-m">
               <div className="top-text">Prescribers Trend</div>
               {!prescriberTrendView || (prescriberTrendView.weekNumList.length === 0 && prescriberTrendView.reward.length === 0 && prescriberTrendView.activeRate.length === 0) ? (
-                <div>
+                <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>
               ) : (
@@ -593,7 +591,7 @@ export default class TodoItems extends React.Component<any, any> {
                 </span>
               </div>
               {!transactionTrendView || (transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList.length === 0) ? (
-                <div>
+                <div className="data-img">
                   <img src={nodataImg} className="no-data-img" />
                 </div>
               ) : (

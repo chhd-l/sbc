@@ -22,10 +22,11 @@ export default class GoodsModal extends React.Component<any, any> {
       onProductForm: Function;
       loading: boolean;
       createLink: any;
+      productselect: any;
+      searchParams: any;
+      onSearchParams: Function;
     };
     showModal: Function;
-    selectedSkuIds: IList;
-    selectedRows: IList;
     visible: boolean;
     onOkBackFun: Function;
     onCancelBackFun: Function;
@@ -33,7 +34,7 @@ export default class GoodsModal extends React.Component<any, any> {
     showValidGood?: boolean;
     companyType?: number;
     //搜索参数
-    searchParams: any;
+
     //应用标示。如添加秒杀商品：saleType
     application?: string;
   };
@@ -46,27 +47,39 @@ export default class GoodsModal extends React.Component<any, any> {
     onProductselect: noop,
     loading: 'loading',
     productList: 'productList',
-    createLink: 'createLink'
+    createLink: 'createLink',
+    productselect: 'productselect',
+    onSearchParams: noop
   };
   constructor(props) {
     super(props);
     this.state = {
-      selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
+      selectedRowKeys: [],
+      selectedRows: []
     };
   }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
-    });
-  }
+  componentDidMount = () => {
+    this.init();
+  };
+  init = () => {
+    const { productselect } = this.props.relaxProps;
+    let obj = productselect;
+    if (Array.isArray(obj) && obj.length > 0) {
+      let selectedRows = [];
+      let selectedRowKeys = [];
+      for (let i = 0; i < obj.length; i++) {
+        const element = obj[i];
+        selectedRows.push(element);
+        selectedRowKeys.push(element.goodsInfoId);
+      }
+      this.setState({ selectedRows, selectedRowKeys });
+    }
+  };
 
   render() {
     const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, application } = this.props;
-    const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselect, searchParams } = this.props.relaxProps;
+    const { selectedRowKeys, selectedRows } = this.state;
+    const { onProductselect, searchParams, onSearchParams } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
@@ -74,17 +87,27 @@ export default class GoodsModal extends React.Component<any, any> {
           <div>
             Choose goods&nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedRowKeys.length}</span> items have been selected
             </small>
           </div>
         }
         width={1100}
         visible={visible}
         onOk={() => {
-          onProductselect(this.state.selectedRows.toJS());
+          const params = {
+            likeGoodsName: '',
+            likeGoodsInfoNo: ''
+          };
+          onSearchParams(params);
+          onProductselect(this.state.selectedRows);
           this.props.showModal(false);
         }}
         onCancel={() => {
+          const params = {
+            likeGoodsName: '',
+            likeGoodsInfoNo: ''
+          };
+          onSearchParams(params);
           this.props.showModal(false);
           //onCancelBackFun();
         }}
@@ -92,18 +115,26 @@ export default class GoodsModal extends React.Component<any, any> {
         cancelText="Cancel"
       >
         <SearchForm />
-        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedSkuIds={selectedSkuIds} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
+        {<ProductGrid visible={visible} showValidGood={showValidGood} skuLimit={skuLimit} isScroll={false} selectedRowKeys={selectedRowKeys} selectedRows={selectedRows} rowChangeBackFun={this.rowChangeBackFun} searchParams={searchParams} />}
       </Modal>
     );
   }
 
-  rowChangeBackFun = (selectedSkuIds, selectedRows) => {
-    this.setState(
-      {
-        selectedSkuIds: selectedSkuIds,
-        selectedRows: selectedRows
-      },
-      () => {}
-    );
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsInfoId === item));
+    });
+    return tempList;
+  };
+
+  rowChangeBackFun = (selectedRowKeys, selectedRow) => {
+    let { selectedRows } = this.state;
+    selectedRows = selectedRows.concat(selectedRow);
+    selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      selectedRows: selectedRow
+    });
   };
 }

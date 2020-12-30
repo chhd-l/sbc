@@ -63,7 +63,7 @@ export default class SearchHead extends Component<any, any> {
         <div>
           <Form className="filter-content" layout="inline">
             <Row style={{ width: '100vh', margin: '0 auto' }}>
-              <div style={{ width: '100vh', margin: '0 auto' }} className="space-around">
+              <div style={{ width: '100%', margin: '0 auto' }} className="space-around">
                 <Col>
                   <FormItem>
                     <Input

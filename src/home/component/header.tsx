@@ -77,25 +77,29 @@ export default class Header extends React.Component<any, any> {
       });
     }
   }
+  c;
 
   dateChange = (date, dateString) => {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
+    let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     let year = sessionStorage.getItem(cache.CURRENT_YEAR);
+    sessionStorage.setItem(cache.CURRENT_YEAR, date); //年
+
     this.setState({ week: date.week() });
     if (this.state.prescriber == '') {
       if (this.state.searchType == true) {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: moment(year).weekYear(),
-          prescriberId: this.state.prescriberId
+          year: moment(date).weekYear(),
+          prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
         };
         prescriberInit(obj);
       } else {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: moment(year).weekYear()
+          year: moment(date).weekYear()
         };
         newInit(obj);
       }
@@ -103,8 +107,8 @@ export default class Header extends React.Component<any, any> {
       let obj = {
         companyId: 2,
         weekNum: date.week(),
-        year: moment(year).weekYear(),
-        prescriberId: this.state.prescriberId
+        year: moment(date).weekYear(),
+        prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
       };
       prescriberInit(obj);
     }

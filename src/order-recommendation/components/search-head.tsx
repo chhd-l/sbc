@@ -58,7 +58,7 @@ export default class SearchHead extends Component<any, any> {
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
-      clinicSelectValue: '',
+      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
       numberSelectValue: '',
       tradeState: {
         deliverStatus: '',
@@ -190,32 +190,58 @@ export default class SearchHead extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderClinicSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        clinicSelectValue: (e.target as any).value
-                      });
-                    }}
-                    // value={
-                    //   JSON.parse(sessionStorage.getItem('s2b-employee@data'))
-                    //     .clinicsIds != null
-                    //     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
-                    //         .children
-                    //     : this.state.clinicSelectValue
-                    // }
-                    /* onChange={(e) => {
-                      let a = e.target.value.split(',');
-                      console.log(a.map(Number), 111);
+                  {sessionStorage.getItem('PrescriberSelect') ? (
+                    <Input
+                      addonBefore={this._renderClinicSelect()}
+                      value={this.state.clinicSelectValue}
+                      disabled
+                      // value={
+                      //   JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                      //     .clinicsIds != null
+                      //     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                      //         .children
+                      //     : this.state.clinicSelectValue
+                      // }
+                      /* onChange={(e) => {
+                        let a = e.target.value.split(',');
+                        console.log(a.map(Number), 111);
 
-                      this.setState({
-                        clinicSelectValue:
-                          this.state.clinicSelect == 'clinicsName'
-                            ? (e.target as any).value
-                            : e.target.value.split(',').map(Number)
-                      });
-                    }}*/
-                  />
+                        this.setState({
+                          clinicSelectValue:
+                            this.state.clinicSelect == 'clinicsName'
+                              ? (e.target as any).value
+                              : e.target.value.split(',').map(Number)
+                        });
+                      }}*/
+                    />
+                  ) : (
+                    <Input
+                      addonBefore={this._renderClinicSelect()}
+                      onChange={(e) => {
+                        this.setState({
+                          clinicSelectValue: (e.target as any).value
+                        });
+                      }}
+                      // value={
+                      //   JSON.parse(sessionStorage.getItem('s2b-employee@data'))
+                      //     .clinicsIds != null
+                      //     ? JSON.parse(sessionStorage.getItem('PrescriberType'))
+                      //         .children
+                      //     : this.state.clinicSelectValue
+                      // }
+                      /* onChange={(e) => {
+                        let a = e.target.value.split(',');
+                        console.log(a.map(Number), 111);
+
+                        this.setState({
+                          clinicSelectValue:
+                            this.state.clinicSelect == 'clinicsName'
+                              ? (e.target as any).value
+                              : e.target.value.split(',').map(Number)
+                        });
+                      }}*/
+                    />
+                  )}
                 </FormItem>
               </Col>
 
@@ -361,6 +387,7 @@ export default class SearchHead extends Component<any, any> {
         }}
         value={this.state.clinicSelect}
         style={styles.label}
+        disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
         <Option value="clinicsName">Prescriber name</Option>
         <Option value="clinicsIds">Prescriber id</Option>

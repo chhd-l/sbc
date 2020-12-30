@@ -56,7 +56,8 @@ export default class Header extends React.Component<any, any> {
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
-      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : ''
+      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : '',
+      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
     });
     if (searchData == '') {
       this.setState({
@@ -77,22 +78,22 @@ export default class Header extends React.Component<any, any> {
       });
     }
   }
-  c;
 
   dateChange = (date, dateString) => {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
-    let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
     let year = sessionStorage.getItem(cache.CURRENT_YEAR);
-    sessionStorage.setItem(cache.CURRENT_YEAR, date); //年
-
     this.setState({ week: date.week() });
+    console.log(date);
+    console.log(dateString);
+    console.log(date.isoWeek(), 11111111111);
+    console.log(date.weekYear(), 2222222222);
     if (this.state.prescriber == '') {
       if (this.state.searchType == true) {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
           year: moment(date).weekYear(),
-          prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
+          prescriberId: this.state.prescriberId
         };
         prescriberInit(obj);
       } else {
@@ -108,10 +109,11 @@ export default class Header extends React.Component<any, any> {
         companyId: 2,
         weekNum: date.week(),
         year: moment(date).weekYear(),
-        prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
+        prescriberId: this.state.prescriberId
       };
       prescriberInit(obj);
     }
+    return '222';
   };
 
   onSearch = (res) => {
@@ -196,7 +198,7 @@ export default class Header extends React.Component<any, any> {
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
           <Icon type="clock-circle" className="Header-date-icon" />
-          <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())} onChange={this.dateChange} placeholder="Select week" />
+          <WeekPicker defaultValue={moment('2020-10-30')} onChange={this.dateChange} placeholder="Select week" value={moment(sessionStorage.getItem(cache.CURRENT_YEAR))} />
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">
@@ -259,7 +261,7 @@ export default class Header extends React.Component<any, any> {
         </div>
         {this.state.prescriber.id ? (
           <div>
-            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriberId}>
               Manage Prescriber
             </Link>
           </div>

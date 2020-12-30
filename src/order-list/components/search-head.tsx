@@ -254,7 +254,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Order Category" />
+                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -530,6 +530,13 @@ const styles = {
   label: {
     width: 135,
     textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  leftLabel: {
+    width: 135,
+    textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
     cursor: 'text'

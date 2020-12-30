@@ -82,12 +82,16 @@ export default class Header extends React.Component<any, any> {
     const { newInit, prescriberInit } = this.props.relaxProps as any;
     let year = sessionStorage.getItem(cache.CURRENT_YEAR);
     this.setState({ week: date.week() });
+    console.log(date);
+    console.log(dateString);
+    console.log(date.isoWeek(), 11111111111);
+    console.log(date.weekYear(), 2222222222);
     if (this.state.prescriber == '') {
       if (this.state.searchType == true) {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: moment(year).weekYear(),
+          year: moment(date).weekYear(),
           prescriberId: this.state.prescriberId
         };
         prescriberInit(obj);
@@ -95,7 +99,7 @@ export default class Header extends React.Component<any, any> {
         let obj = {
           companyId: 2,
           weekNum: date.week(),
-          year: moment(year).weekYear()
+          year: moment(date).weekYear()
         };
         newInit(obj);
       }
@@ -103,11 +107,12 @@ export default class Header extends React.Component<any, any> {
       let obj = {
         companyId: 2,
         weekNum: date.week(),
-        year: moment(year).weekYear(),
+        year: moment(date).weekYear(),
         prescriberId: this.state.prescriberId
       };
       prescriberInit(obj);
     }
+    return '222';
   };
 
   onSearch = (res) => {
@@ -192,7 +197,7 @@ export default class Header extends React.Component<any, any> {
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
           <Icon type="clock-circle" className="Header-date-icon" />
-          <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())} onChange={this.dateChange} placeholder="Select week" />
+          <WeekPicker defaultValue={moment('2020-10-30')} onChange={this.dateChange} placeholder="Select week" value={moment(sessionStorage.getItem(cache.CURRENT_YEAR))} />
           <div className="Header-date-text">* The data is updated every 15 minutes</div>
         </div>
         <div className="home-prescriber flex-start-end">

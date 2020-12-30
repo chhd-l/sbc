@@ -56,7 +56,8 @@ export default class Header extends React.Component<any, any> {
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
-      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : ''
+      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : '',
+      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
     });
     if (searchData == '') {
       this.setState({
@@ -260,7 +261,7 @@ export default class Header extends React.Component<any, any> {
         </div>
         {this.state.prescriber.id ? (
           <div>
-            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriber.id}>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriberId}>
               Manage Prescriber
             </Link>
           </div>

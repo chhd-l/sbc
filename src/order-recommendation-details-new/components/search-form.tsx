@@ -142,7 +142,6 @@ export default class SearchHead extends Component<any, any> {
                         likeGoodsName: likeGoodsName,
                         likeGoodsInfoNo: likeGoodsInfoNo
                       };
-
                       onSearchParams(params);
                     }}
                   >

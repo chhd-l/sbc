@@ -24,14 +24,15 @@ export default class GoodsGrid extends React.Component<any, any> {
       prevPropSelectedRowKeys: [],
       total: 0,
       goodsInfoPage: {},
-      searchParams: props.searchParams ? props.searchParams : {},
+      searchParams: {},
       showValidGood: props.showValidGood,
       content: []
     };
   }
 
   componentDidMount() {
-    this.init({});
+    const { searchParams } = this.state;
+    this.init(searchParams ? searchParams : {});
   }
   static getDerivedStateFromProps(props, state) {
     // 当传入的值发生变化的时候，更新state
@@ -43,8 +44,20 @@ export default class GoodsGrid extends React.Component<any, any> {
         selectedRows: props.selectedRows.concat()
       };
     }
+    if (JSON.stringify(props.searchParams) !== JSON.stringify(state.searchParams)) {
+      return {
+        searchParams: props.searchParams
+      };
+    }
 
     return null;
+  }
+
+  componentDidUpdate(prevProps) {
+    // 典型用法（不要忘记比较 props）：
+    if (JSON.stringify(this.props.searchParams) !== JSON.stringify(prevProps.searchParams)) {
+      this.init(this.props.searchParams);
+    }
   }
 
   // UNSAFE_componentWillReceiveProps(nextProps) {
@@ -57,10 +70,6 @@ export default class GoodsGrid extends React.Component<any, any> {
   //     });
   //     this.init(nextProps.searchParams ? nextProps.searchParams : {});
   //   }
-  //   this.setState({
-  //     selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-  //     selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
-  //   });
   // }
 
   arrayFilter = (arrKey, arrList) => {
@@ -196,7 +205,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     });
   };
 
-  init = async (params) => {
+  init = (params) => {
     this.setState({
       loading: true
     });
@@ -252,28 +261,6 @@ export default class GoodsGrid extends React.Component<any, any> {
         });
         message.error(err.toString() || 'Operation failure');
       });
-
-    // let { res } = await webapi.fetchproductTooltip({ ...params });
-
-    // if ((res as any).code == Const.SUCCESS_CODE) {
-    //   let data = (res as any).context.goodsInfos;
-    //   let arr = data.content;
-    //   let a = arr;
-    //   let b = this.state.selectedRows.toJS();
-    //   b.reduce((pre, cur) => {
-    //     let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
-    //     if (target) {
-    //       Object.assign(target, cur);
-    //     } else {
-    //       pre.concat(arr);
-    //     }
-    //     return pre;
-    //   }, a);
-
-    //   this.setState({
-    //     goodsInfoPage: res,
-    //     loading: false
-    //   });
   };
 
   /**

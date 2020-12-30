@@ -24,6 +24,7 @@ export default class GoodsModal extends React.Component<any, any> {
       createLink: any;
       productselect: any;
       searchParams: any;
+      onSearchParams: Function;
     };
     showModal: Function;
     visible: boolean;
@@ -47,7 +48,8 @@ export default class GoodsModal extends React.Component<any, any> {
     loading: 'loading',
     productList: 'productList',
     createLink: 'createLink',
-    productselect: 'productselect'
+    productselect: 'productselect',
+    onSearchParams: noop
   };
   constructor(props) {
     super(props);
@@ -77,7 +79,7 @@ export default class GoodsModal extends React.Component<any, any> {
   render() {
     const { visible, onOkBackFun, onCancelBackFun, skuLimit, showValidGood, application } = this.props;
     const { selectedRowKeys, selectedRows } = this.state;
-    const { onProductselect, searchParams } = this.props.relaxProps;
+    const { onProductselect, searchParams, onSearchParams } = this.props.relaxProps;
     return (
       <Modal
         maskClosable={false}
@@ -92,10 +94,20 @@ export default class GoodsModal extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
+          const params = {
+            likeGoodsName: '',
+            likeGoodsInfoNo: ''
+          };
+          onSearchParams(params);
           onProductselect(this.state.selectedRows);
           this.props.showModal(false);
         }}
         onCancel={() => {
+          const params = {
+            likeGoodsName: '',
+            likeGoodsInfoNo: ''
+          };
+          onSearchParams(params);
           this.props.showModal(false);
           //onCancelBackFun();
         }}

@@ -171,7 +171,7 @@ export default class Header extends React.Component<any, any> {
 
   selectClick = (res) => {
     this.setState({
-      openType: true
+      openType: res
     });
   };
 

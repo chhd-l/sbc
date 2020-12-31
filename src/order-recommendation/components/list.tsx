@@ -232,7 +232,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={9}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -303,6 +303,7 @@ export default class ListView extends React.Component<any, any> {
                   <td style={{ width: '15.4%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
                   <td style={{ width: '18%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>
                   <td style={{ width: '14%' }}>
+                    {v.recommendationGoodsInfoRels && sessionStorage.getItem('s2b-supplier@systemGetConfig:')}
                     {v.recommendationGoodsInfoRels &&
                       v.recommendationGoodsInfoRels.reduce((sum, item) => {
                         let a = Number(sum) + Number(item.goodsInfo.marketPrice * item.recommendationNumber);

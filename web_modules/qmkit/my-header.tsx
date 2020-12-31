@@ -187,15 +187,17 @@ export default class MyHeader extends React.Component {
                   <span style={styles.dropdownText}>Preview</span>
                   {/* <Icon type="down" /> */}
                 </a>
-              ) : (
-                  <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#" onClick={() => this._handlePreview()}>
-                      <Icon type="eye-o" />
-                      <span style={styles.dropdownText}>Preview</span>
-                      <Icon type="down" />
-                    </a>
-                  </Dropdown>
-                ))}
+              ) : null
+                //   (
+                //   <Dropdown overlay={qrCodeLinkPreview} trigger={['click']}>
+                //     <a className="ant-dropdown-link" href="#" onClick={() => this._handlePreview()}>
+                //       <Icon type="eye-o" />
+                //       <span style={styles.dropdownText}>Preview</span>
+                //       <Icon type="down" />
+                //     </a>
+                //   </Dropdown>
+                // )
+              )}
           </div>
           <div style={styles.headerRight} className="flex-content-right">
             <div style={{ height: 20 }}>

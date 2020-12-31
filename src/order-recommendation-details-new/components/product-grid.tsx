@@ -136,10 +136,10 @@ export default class GoodsGrid extends React.Component<any, any> {
 
               rowChangeBackFun(selectedRowKeys, selectedRows);
             },
-            getCheckboxProps(record) {
-              console.log(record,11111111);
+            /*getCheckboxProps(record) {
+              //console.log(record,22222);
               //console.log(record);
-              /*let a = [];
+              /!*let a = [];
               let b = null;
               goodsNo.map((item) => {
                 return item.targetGoodsIds.map((i) => {
@@ -159,17 +159,17 @@ export default class GoodsGrid extends React.Component<any, any> {
               });
               return {
                 defaultChecked: b // 配置默认勾选的列
-              };*/
-            }
-            /*getCheckboxProps: (record) => ({
-              /!* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
-                      该情况下商品checkbox置灰,禁止选中 *!/
+              };*!/
+            }*/
+            getCheckboxProps: (record) => ({
+              /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
+                      该情况下商品checkbox置灰,禁止选中 */
 
               // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
               // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
               // 因此判断等于2的失效状态下禁用
               disabled: showValidGood ? !showValidGood : record.goodsStatus === 2
-            })*/
+            })
           }}
         >
           <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
@@ -181,7 +181,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             title="Weight"
             dataIndex="goodsInfoWeight"
             key="goodsInfoWeight"
-            render={(goodsInfoWeight) => {c
+            render={(goodsInfoWeight) => {
               return goodsInfoWeight != null ? goodsInfoWeight : '--';
             }}
           />

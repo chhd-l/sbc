@@ -286,7 +286,7 @@ export default class ListView extends React.Component<any, any> {
               <tbody>
                 <tr>
                   <td style={{ width: '1%' }} />
-                  <td
+                  {/*<td
                     style={{
                       textAlign: 'left',
                       display: 'flex',
@@ -299,6 +299,22 @@ export default class ListView extends React.Component<any, any> {
                     {img.map((item, index) => {
                       return <img key={index} src={item.goodsInfo.goodsInfoImg} width="40" />;
                     })}
+                  </td>*/}
+                  <td
+                    style={{
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexWrap: 'wrap',
+                      padding: '16px 0',
+                      width: '120px'
+                    }}
+                  >
+                    {img.length != 0
+                      ? img.map((item, index) => {
+                          return <div>{item.goodsInfo.goodsInfoName}</div>;
+                        })
+                      : '--'}
                   </td>
                   <td style={{ width: '15.4%' }}>{v.consumerLastName != null ? v.consumerFirstName + ' ' + v.consumerLastName : '--'}</td>
                   <td style={{ width: '18%' }}>{v.consumerEmail != null ? v.consumerEmail : '--'}</td>

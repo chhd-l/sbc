@@ -53,6 +53,8 @@ export default class Header extends React.Component<any, any> {
   componentDidMount() {
     const { searchData } = this.props.relaxProps;
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
+    console.log(JSON.parse(sessionStorage.getItem('s2b-employee@data')), 12222222222222);
+
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
@@ -66,12 +68,13 @@ export default class Header extends React.Component<any, any> {
       });
     }
     if (PrescriberSelectType == null && prescribers != null) {
-      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: prescribers[0].prescriberId, prescriberName: prescribers[0].prescriberName }));
+      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: prescribers[0].id, prescriberName: prescribers[0].prescriberName }));
     }
   }
 
   componentDidUpdate(prevProps, prevState: Readonly<any>, snapshot?: any) {
     const { searchData } = this.props.relaxProps;
+    console.log(searchData, 2233);
     if (prevProps.relaxProps.searchData != searchData) {
       this.setState({
         selectList: searchData
@@ -234,7 +237,7 @@ export default class Header extends React.Component<any, any> {
                 {this.state.selectList && this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
-                        <Option value={item.prescriberId} key={index}>
+                        <Option value={item.id} key={index}>
                           {item.prescriberName}
                         </Option>
                       );
@@ -248,7 +251,7 @@ export default class Header extends React.Component<any, any> {
                 {this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
-                        <Option value={item.prescriberId} val={item} key={index}>
+                        <Option value={item.id} val={item} key={index}>
                           {item.prescriberName}
                         </Option>
                       );

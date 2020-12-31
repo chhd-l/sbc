@@ -24,7 +24,8 @@ export default class Header extends React.Component<any, any> {
       buttonType: false,
       openType: false,
       prescriberId: '',
-      week: ''
+      week: '',
+      id: ''
     };
   }
 
@@ -53,13 +54,13 @@ export default class Header extends React.Component<any, any> {
   componentDidMount() {
     const { searchData } = this.props.relaxProps;
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
-    console.log(JSON.parse(sessionStorage.getItem('s2b-employee@data')), 12222222222222);
 
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
       prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : '',
-      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
+      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].prescriberId : '',
+      id: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
     });
     if (searchData == '') {
       this.setState({
@@ -68,13 +69,12 @@ export default class Header extends React.Component<any, any> {
       });
     }
     if (PrescriberSelectType == null && prescribers != null) {
-      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: prescribers[0].id, prescriberName: prescribers[0].prescriberName }));
+      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ id: prescribers[0].id, prescriberId: prescribers[0].id, prescriberName: prescribers[0].prescriberName }));
     }
   }
 
   componentDidUpdate(prevProps, prevState: Readonly<any>, snapshot?: any) {
     const { searchData } = this.props.relaxProps;
-    console.log(searchData, 2233);
     if (prevProps.relaxProps.searchData != searchData) {
       this.setState({
         selectList: searchData
@@ -174,7 +174,7 @@ export default class Header extends React.Component<any, any> {
 
   selectClick = (res) => {
     this.setState({
-      openType: true
+      openType: res
     });
   };
 
@@ -189,10 +189,18 @@ export default class Header extends React.Component<any, any> {
     this.setState({
       openType: false,
       prescriberId: res,
+      id: a.props.val.id,
       week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week()
     });
     sessionStorage.setItem('PrescriberSelectType', true);
-    sessionStorage.setItem('PrescriberSelect', JSON.stringify({ prescriberId: a.props.val.prescriberId, prescriberName: a.props.val.prescriberName }));
+    sessionStorage.setItem(
+      'PrescriberSelect',
+      JSON.stringify({
+        id: a.props.val.id,
+        prescriberId: a.props.val.prescriberId,
+        prescriberName: a.props.val.prescriberName
+      })
+    );
     message.success('Prescriber choosed here will be setted as default for other pages.');
   };
 
@@ -237,7 +245,7 @@ export default class Header extends React.Component<any, any> {
                 {this.state.selectList && this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
-                        <Option value={item.id} key={index}>
+                        <Option value={item.id} key={item.id}>
                           {item.prescriberName}
                         </Option>
                       );
@@ -251,7 +259,7 @@ export default class Header extends React.Component<any, any> {
                 {this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
-                        <Option value={item.id} val={item} key={index}>
+                        <Option value={item.id} val={item} key={item.id}>
                           {item.prescriberName}
                         </Option>
                       );
@@ -264,7 +272,7 @@ export default class Header extends React.Component<any, any> {
         </div>
         {this.state.prescriber.id ? (
           <div>
-            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.prescriberId}>
+            <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.id}>
               Manage Prescriber
             </Link>
           </div>

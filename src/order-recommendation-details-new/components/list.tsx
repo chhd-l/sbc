@@ -94,7 +94,18 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
           <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
           <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
-          <Column title="Price" dataIndex="marketPrice" key="marketPrice" />
+          <Column
+            title="Price"
+            dataIndex="marketPrice"
+            key="marketPrice"
+            render={(value) => {
+              if (value) {
+                return sessionStorage.getItem('s2b-supplier@systemGetConfig:') + value;
+              } else {
+                return '';
+              }
+            }}
+          />
 
           <Column
             title="Quantity"

@@ -44,7 +44,7 @@ export default class AppStore extends Store {
       const { res: countryDictRes } = (await queryDictionary({
         type: 'country'
       })) as any;
-      const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
+      // const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
@@ -55,7 +55,7 @@ export default class AppStore extends Store {
         this.dispatch('detail:setNeedAudit', needRes.context.audit);
         this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
-        this.dispatch('dict:refresh', refresh.context.tradeDelivers);
+        this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
       });
     } else {
       this.dispatch('loading:end');

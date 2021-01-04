@@ -265,7 +265,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -292,6 +292,8 @@ export default class ListView extends React.Component<any, any> {
         const buyerId = v.getIn(['buyer', 'id']);
 
         const orderSource = v.get('orderSource');
+
+        const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '$';
         let orderType = '';
         if (orderSource == 'WECHAT') {
           orderType = 'H5 order';
@@ -552,7 +554,7 @@ export default class ListView extends React.Component<any, any> {
                       {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
-                      ${tradePrice.toFixed(2)}
+                      {currencySymbol + ' ' + tradePrice.toFixed(2)}
                       <br />（{num} <FormattedMessage id="piece" />)
                     </td>
                     {/* <td style={{ width: '5%' }}> */}

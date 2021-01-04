@@ -76,7 +76,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
       gift
-        .set('skuName', `【赠品】${gift.get('skuName')}`)
+        .set('skuName', `【Giveaway】${gift.get('skuName')}`)
         .set('levelPrice', 0)
         .set('isGift', true)
     );

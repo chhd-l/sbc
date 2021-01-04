@@ -86,6 +86,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   componentDidMount() {
     this.getDict();
     this.getSubscriptionDetail();
+    this.getCurrencySymbol();
     // this.getBySubscribeId(this.state.subscriptionId);
   }
 

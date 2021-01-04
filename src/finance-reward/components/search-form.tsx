@@ -1,12 +1,10 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Button, Select, DatePicker, Row, Col } from 'antd';
-import { SelectGroup, noop, Const } from 'qmkit';
+import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import AppStore from '../store';
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RangePicker = DatePicker.RangePicker;
 
 @Relax
 export default class SearchForm extends React.Component<any, any> {
@@ -46,20 +44,11 @@ export default class SearchForm extends React.Component<any, any> {
         let prescribers = this.state.listData;
         prescribers.PrescriberList = employee.prescribers;
         this.setState({ listData: prescribers });
-      } else {
-        //this.onSearch();
       }
     }
   }
-  onFormChange = ({ field, value }) => {
-    /*let data = this.state.listData.PrescriberName;
-    data[field] = value;
-    this.setState({
-      PrescriberName: data
-    });*/
-  };
   render() {
-    const { onFormChange, searchForm, onSearch, rewardList } = this.props.relaxProps;
+    const { onFormChange, searchForm, onSearch } = this.props.relaxProps;
 
     const employeeData = JSON.parse(sessionStorage.getItem('PrescriberSelect'));
 
@@ -119,59 +108,7 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          {/*<FormItem>
-          <SelectGroup
-            defaultValue=""
-            label="Prescriber name"
-            onChange={(e) => {
-              onFormChange({
-                field: 'prescriberName',
-                value: e
-              });
-            }}
-          >
-            <Option value="">
-              <FormattedMessage id="all" />
-            </Option>
-            {this.state.listData.PrescriberList.map((item) => (
-              <Option value={item.prescriberName} key={item}>
-                {item.prescriberName}
-              </Option>
-            ))}
-          </SelectGroup>
-          <Input
-            addonBefore={
-              <Select
-                // style={{ width: 140 }}
-                defaultValue={searchForm.consumerOption}
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.onFormChange({
-                    field: 'consumerOption',
-                    value
-                  });
-                }}
-                style={{width:100}}
-              >
-                {this.state.listData.PrescriberList.map((item) => (
-                  <Option value={item.prescriberName} key={item}>
-                    {item.prescriberName}
-                  </Option>
-                ))}
-              </Select>
-            }
-            onChange={(e) => {
-              const value = (e.target as any).value;
-              onFormChange({
-                field: 'prescriberName',
-                value
-              });
-            }}
-            value={searchForm.get('prescriberName')}
-          />
-        </FormItem>*/}
 
-          {/* <br /> */}
           <Col span="3">
             <FormItem>
               <Button

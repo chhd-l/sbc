@@ -169,19 +169,6 @@ export default class Prescriber extends React.Component<any, any> {
                   </div>
                   <div className="line"></div>
                   <div className="mode">
-                    <div className="mode-text">Conversion</div>
-                    <div className="mode-num">
-                      <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
-                    </div>
-                    <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
-                      <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
-                        {tradeCustomerView && tradeCustomerView.conversionRate != null ? <CountUp end={Math.abs(tradeCustomerView.conversionRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="line"></div>
-                  <div className="mode">
                     <div className="mode-text">Traffic</div>
                     <div className="mode-num">{tradeCustomerView && tradeCustomerView.traffic != null ? <CountUp end={tradeCustomerView.traffic} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">

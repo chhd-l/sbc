@@ -1750,8 +1750,33 @@ export default class AppStore extends Store {
       if ('related' === activeKey && !this._validMainForms()) {
         return;
       }
+      this.dispatch('goodsActor: tabChange', activeKey);
     }
-    this.dispatch('goodsActor: tabChange', activeKey);
+  };
+
+  onTabChanges = (nextKey) => {
+    if (nextKey === 'price') {
+      if (!this._validMainForms()) {
+        return;
+      }
+    } else if (nextKey === 'inventory') {
+      if (!this._validMainForms() || !this._validPriceFormsNew()) {
+        return;
+      }
+    } else if (nextKey === 'related') {
+      if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
+        return;
+      } else {
+        this.saveAll();
+      }
+    } else if (nextKey === 'seo') {
+      if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
+        return;
+      }
+    }
+    if (nextKey !== 'related') {
+      this.dispatch('goodsActor: tabChange', nextKey);
+    }
   };
 
   /**

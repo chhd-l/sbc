@@ -110,7 +110,7 @@ export default class ListChart extends React.Component<any, any> {
             endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[
-              { title: 'Order number', key: 'orderQuantiry' },
+              { title: 'Order quantity', key: 'orderQuantiry' },
               { title: 'Reward mount', key: 'rewardMount' }
             ]}
             radioClickBack={() => {}}
@@ -127,7 +127,7 @@ export default class ListChart extends React.Component<any, any> {
             endTime={new Date(sessionStorage.getItem('defaultLocalDateTime'))}
             height="260"
             dataDesc={[
-              { title: 'Order number', key: 'orderQuantiry' },
+              { title: 'Order quantity', key: 'orderQuantiry' },
               { title: 'Order amount', key: 'orderMount' }
             ]}
             radioClickBack={() => {}}

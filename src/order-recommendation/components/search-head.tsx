@@ -48,7 +48,7 @@ export default class SearchHead extends Component<any, any> {
       recommendationId: '',
       goodsOptions: 'Product name',
       receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsIds',
+      clinicSelect: 'clinicsName',
       buyerOptions: 'Recipient name',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
@@ -58,7 +58,7 @@ export default class SearchHead extends Component<any, any> {
       buyerOptionsValue: '',
       goodsOptionsValue: '',
       receiverSelectValue: '',
-      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : '',
+      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
       numberSelectValue: '',
       tradeState: {
         deliverStatus: '',

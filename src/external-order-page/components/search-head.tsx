@@ -50,7 +50,7 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsIds',
+      clinicSelect: 'clinicsName',
       buyerOptions: 'buyerName',
       id: '',
       subscribeId: '',

@@ -117,13 +117,13 @@ export async function login(routerType, oktaToken: string) {
       //获取店铺ID
       const storeId = res.context.storeId;
       //获取店铺主页的小程序码
-      const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
+      /*const { res: qrcode } = (await webapi.fetchMiniProgramQrcode(
         storeId
       )) as any;
       if (qrcode.code == Const.SUCCESS_CODE) {
         //获取小程序码的地址，保存到本地
         localStorage.setItem(cache.MINI_QRCODE, qrcode.context);
-      }
+      }*/
 
       //Perscriber used
       const employee = (await webapi.employee()) as any;

@@ -124,26 +124,17 @@ export default class AppStore extends Store {
 
   newInit = async (data) => {
     this.dispatch('loading:start');
-    const { res: getTradeCustomerView } = await webapi.getTradeCustomerView(data);
-    const { res: getGoodsInfoTopView } = await webapi.getGoodsInfoTopView(data);
-    const { res: getConversionFunnelDashboardView } = await webapi.getConversionFunnelDashboardView(data);
-    const { res: getPrescriberTrendView } = await webapi.getPrescriberTrendView(data);
-    const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);
-    const { res: getTrafficDashboardView } = await webapi.getTrafficDashboardView(data);
-    const { res: getTransactionTrendView } = await webapi.getTransactionTrendView(data);
-    const { res: getTrafficTrendDashboardView } = await webapi.getTrafficTrendDashboardView(data);
-    //const { res: getListAll } = await webapi.getListAll(data);
-
-    if (getTradeCustomerView.code == Const.SUCCESS_CODE) {
+    const { res } = await webapi.getStoreDashboardCollectViewstore(data);
+    if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      this.dispatch('home:tradeCustomerView', getTradeCustomerView.context);
-      this.dispatch('home:goodsInfoTopView', getGoodsInfoTopView.context.goodsInfoTopViewItemList || []);
-      this.dispatch('home:conversionFunnelDashboardView', getConversionFunnelDashboardView.context);
-      this.dispatch('home:prescriberTrendView', getPrescriberTrendView.context);
-      this.dispatch('home:prescriberTopView', getPrescriberTopView.context);
-      this.dispatch('home:trafficDashboardView', getTrafficDashboardView.context);
-      this.dispatch('home:transactionTrendView', getTransactionTrendView.context);
-      this.dispatch('home:trafficTrendDashboardView', getTrafficTrendDashboardView.context);
+      this.dispatch('home:tradeCustomerView', res.context.tradeCustomerView);
+      this.dispatch('home:goodsInfoTopView', res.context.goodsInfoTopView.goodsInfoTopViewItemList || []);
+      this.dispatch('home:conversionFunnelDashboardView', res.context.conversionFunnelDashboardView);
+      this.dispatch('home:prescriberTrendView', res.context.prescriberTrendView);
+      this.dispatch('home:prescriberTopView', res.context.prescriberTopView);
+      this.dispatch('home:trafficDashboardView', res.context.trafficDashboardView);
+      this.dispatch('home:transactionTrendView', res.context.transactionTrendView);
+      this.dispatch('home:trafficTrendDashboardView', res.context.trafficTrendDashboardView);
       //this.dispatch('home:searchData', getListAll.context);
     } else {
       this.dispatch('loading:end');

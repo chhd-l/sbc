@@ -4,6 +4,14 @@ import { Fetch } from 'qmkit';
  * 首页1
  * @returns {Promise<IAsyncResult<T>>}
  */
+
+export const getStoreDashboardCollectViewstore = (params) => {
+  return Fetch('/dashboard/storeDashboardCollectView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
 export const getTradeCustomerView = (params) => {
   return Fetch('/dashboard/tradeCustomerView', {
     method: 'POST',

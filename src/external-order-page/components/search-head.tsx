@@ -1,26 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
-import {
-  Form,
-  Input,
-  Select,
-  Button,
-  Menu,
-  Dropdown,
-  Icon,
-  DatePicker,
-  Row,
-  Col
-} from 'antd';
-import {
-  noop,
-  ExportModal,
-  Const,
-  AuthWrapper,
-  checkAuth,
-  Headline,
-  SelectGroup
-} from 'qmkit';
+import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
@@ -69,7 +50,7 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsName',
+      clinicSelect: 'clinicsIds',
       buyerOptions: 'buyerName',
       id: '',
       subscribeId: '',
@@ -86,18 +67,9 @@ export default class SearchHead extends Component<any, any> {
   }
 
   render() {
-    const {
-      onSearch,
-      tab,
-      exportModalData,
-      onExportModalHide,
-      bulkExport
-    } = this.props.relaxProps;
+    const { onSearch, tab, exportModalData, onExportModalHide, bulkExport } = this.props.relaxProps;
     let hasMenu = false;
-    if (
-      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
-      checkAuth('fOrderList004')
-    ) {
+    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
       hasMenu = true;
     }
 
@@ -106,11 +78,7 @@ export default class SearchHead extends Component<any, any> {
         {tab.get('key') == 'flowState-INIT' && (
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
-              <a
-                target="_blank"
-                href="javascript:;"
-                onClick={() => this._showBatchAudit()}
-              >
+              <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
                 <FormattedMessage id="order.batchReview" />
               </a>
             </AuthWrapper>
@@ -345,9 +313,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8" id="Range-picker-width">
                 <FormItem style={{ width: '324px' }}>
                   <RangePicker
-                    getCalendarContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                    getCalendarContainer={() => document.getElementById('page-content')}
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';
@@ -425,13 +391,8 @@ export default class SearchHead extends Component<any, any> {
             </Row>
           </Form>
           <AuthWrapper functionName={'externalOrderExport'}>
-            <div
-              style={{ paddingBottom: '16px' }}
-              className="ant-form-inline filter-content"
-            >
-              <Button onClick={() => bulkExport()}>
-                {<FormattedMessage id="bulkExport" />}
-              </Button>
+            <div style={{ paddingBottom: '16px' }} className="ant-form-inline filter-content">
+              <Button onClick={() => bulkExport()}>{<FormattedMessage id="bulkExport" />}</Button>
             </div>
           </AuthWrapper>
           {/*{hasMenu && (
@@ -452,12 +413,7 @@ export default class SearchHead extends Component<any, any> {
           )}*/}
         </div>
 
-        <ExportModal
-          data={exportModalData}
-          onHide={onExportModalHide}
-          handleByParams={exportModalData.get('exportByParams')}
-          handleByIds={exportModalData.get('exportByIds')}
-        />
+        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
       </div>
     );
   }

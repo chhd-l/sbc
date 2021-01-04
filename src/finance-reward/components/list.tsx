@@ -10,22 +10,6 @@ import { FormattedMessage } from 'react-intl';
 type TList = List<any>;
 const Column = DataGrid;
 
-const invoiceStateDic = {
-  0: 'To be invoiced',
-  1: '已开票'
-};
-
-const invoiceTypeDic = {
-  0: 'Ordinary Invoice',
-  1: 'Vat Special Invoice'
-};
-const payOrderStatusDic = {
-  0: '已付款',
-  1: '未付款',
-  2: '待确认',
-  null: '未付款'
-};
-
 /**
  * 订单收款单列表
  */
@@ -73,7 +57,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
         rowKey="orderInvoiceId"
         pagination={{
           pageSize,
@@ -92,13 +76,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         <Column title={<FormattedMessage id="OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="11%" />
         <Column title={<FormattedMessage id="OrderAmount" />} dataIndex="orderAmount" width="11%" key="orderAmount" render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>} />
 
-        <Column
-          title={<FormattedMessage id="RewardType" />}
-          dataIndex="rewardType"
-          key="rewardType"
-          width="11%"
-          //render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
-        />
+        <Column title={<FormattedMessage id="RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
         <Column title={<FormattedMessage id="RewardAmount" />} dataIndex="rewardAmount" key="rewardAmount" width="11%" render={(rewardAmount) => <span>{rewardAmount != null ? `$${rewardAmount.toFixed(2)}` : '-'}</span>} />
 
         <Column

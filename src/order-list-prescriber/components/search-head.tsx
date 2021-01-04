@@ -49,7 +49,7 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsName',
+      clinicSelect: 'clinicsIds',
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
@@ -58,7 +58,7 @@ export default class SearchHead extends Component<any, any> {
       goodsOptionsValue: '',
       receiverSelectValue: '',
       numberSelectValue: '',
-      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
+      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : '',
       tradeState: {
         deliverStatus: '',
         payState: '',

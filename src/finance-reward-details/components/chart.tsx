@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, Button } from 'antd';
 import { Relax } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
-import { AuthWrapper, noop, util } from 'qmkit';
+import { AuthWrapper, cache, noop, util } from 'qmkit';
 import { List } from 'immutable';
 import '../style.css';
 import styled from 'styled-components';
@@ -65,12 +65,8 @@ export default class ListChart extends React.Component<any, any> {
   }
 
   render() {
-    const echartsData = this.props.relaxProps.EchartsData
-      ? this.props.relaxProps.EchartsData
-      : [];
-    const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal
-      ? this.props.relaxProps.PeriodAmountTotal
-      : [];
+    const echartsData = this.props.relaxProps.EchartsData ? this.props.relaxProps.EchartsData : [];
+    const getPeriodAmount = this.props.relaxProps.PeriodAmountTotal ? this.props.relaxProps.PeriodAmountTotal : [];
 
     let echartsVal1 = [];
     let echartsVal2 = [];
@@ -95,10 +91,10 @@ export default class ListChart extends React.Component<any, any> {
         <div className="chartDetails1">
           <div className="chartDetailsList flex-content">
             <div className="btn">
-              Reward amount <br /> $ {getPeriodAmount.totalRewardAmount}
+              Reward amount <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalRewardAmount}
             </div>
             <div className="btn">
-              Order amount <br /> $ {getPeriodAmount.totalOrderAmount}
+              Order amount <br /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {getPeriodAmount.totalOrderAmount}
             </div>
             <div className="btn">
               Order quantity

@@ -325,7 +325,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                             }
                           }
                         ],
-                        initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
+                        initialValue: marketingBean.get('firstSubscriptionOrderDiscount') * 10
                       })(
                         <Input
                           style={{ width: 200 }}
@@ -435,7 +435,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                 }
               ],
-              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
+              initialValue: marketingBean.get('restSubscriptionOrderDiscount') * 10
             })(
               <Input
                 style={{ width: 200 }}
@@ -495,7 +495,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
               Save
             </Button>
             &nbsp;&nbsp;
-            <Button onClick={() => history.push('/marketing-center')}>Cancle</Button>
+            <Button onClick={() => history.push('/marketing-center')}>Cancel</Button>
           </Col>
         </Row>
         <GoodsModal visible={this.state.goodsModal._modalVisible} selectedSkuIds={this.state.goodsModal._selectedSkuIds} selectedRows={this.state.goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
@@ -827,8 +827,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
                       marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 10))
                     );
                     let obj = {
-                      firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount'),
-                      restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount')
+                      firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 10,
+                      restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 10
                     };
 
                     marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);

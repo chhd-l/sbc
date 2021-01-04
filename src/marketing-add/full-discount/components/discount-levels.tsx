@@ -122,7 +122,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                           {' '}
                           &nbsp;
                           {!isFullCount ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
-                          ，&nbsp;&nbsp;&nbsp;&nbsp;discounted price&nbsp;&nbsp;
+                          ，&nbsp;&nbsp;&nbsp;&nbsp;discount price&nbsp;&nbsp;
                         </span>
                       </div>
                     ) : null}
@@ -151,7 +151,7 @@ export default class DiscountLevels extends React.Component<any, any> {
                           title={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           placeholder={'Input value between 0.1-9.9 e.g.9.0 means 90% of original price, equals to 10% off'}
                           onChange={(e) => {
-                            this.onChange(index, 'discount', e.target.value);
+                            this.onChange(index, 'discount', parseFloat(e.target.value));
                           }}
                         />
                       )}

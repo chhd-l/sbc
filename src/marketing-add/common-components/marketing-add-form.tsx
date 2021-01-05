@@ -325,7 +325,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                             }
                           }
                         ],
-                        initialValue: marketingBean.get('firstSubscriptionOrderDiscount') * 10
+                        initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                       })(
                         <Input
                           style={{ width: 200 }}
@@ -435,7 +435,7 @@ export default class MarketingAddForm extends React.Component<any, any> {
                   }
                 }
               ],
-              initialValue: marketingBean.get('restSubscriptionOrderDiscount') * 10
+              initialValue: marketingBean.get('restSubscriptionOrderDiscount')
             })(
               <Input
                 style={{ width: 200 }}
@@ -552,8 +552,8 @@ export default class MarketingAddForm extends React.Component<any, any> {
           } else if (subType === 7) {
             let bean = marketingBean.get('fullDiscountLevelList') ? marketingBean.get('fullDiscountLevelList').toJS() : null;
             if (bean && this.state.PromotionTypeValue === 1) {
-              marketingBean = marketingBean.set('firstSubscriptionOrderDiscount', bean[0].firstSubscriptionOrderDiscount);
-              marketingBean = marketingBean.set('restSubscriptionOrderDiscount', bean[0].restSubscriptionOrderDiscount);
+              marketingBean = marketingBean.set('firstSubscriptionOrderDiscount', bean[0].firstSubscriptionOrderDiscount ? bean[0].firstSubscriptionOrderDiscount * 10 : null);
+              marketingBean = marketingBean.set('restSubscriptionOrderDiscount', bean[0].restSubscriptionOrderDiscount ? bean[0].restSubscriptionOrderDiscount * 10 : null);
               this.setState({
                 marketingBean
               });

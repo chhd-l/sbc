@@ -358,6 +358,7 @@ export function logout() {
   sessionStorage.removeItem('PrescriberType');
   sessionStorage.removeItem('PrescriberSelect');
   sessionStorage.removeItem('PrescriberSelectType');
+  sessionStorage.removeItem('prescriberId');
 
 
 }

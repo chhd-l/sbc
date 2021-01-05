@@ -61,7 +61,7 @@ export default class Main extends React.Component<any, any> {
     this.setState({
       tabType: res
     });
-    this.store.onMainTabChange(res);
+    this.store.onTabChanges(res);
   };
 
   onPrev = (res) => {
@@ -139,7 +139,7 @@ export default class Main extends React.Component<any, any> {
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main" disabled>
+              <Tabs.TabPane tab="Product information" key="main">
                 <AlertInfo />
                 {/*商品基本信息*/}
                 <Goods />
@@ -162,12 +162,12 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price" disabled>
+            <Tabs.TabPane tab="Product price" key="price">
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory" disabled>
+            <Tabs.TabPane tab="Product inventory" key="inventory">
               <AlertInfo />
 
               <ProductInventory />
@@ -176,8 +176,6 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="Related product"
               key="related"
-              disabled
-
               //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo />
@@ -187,8 +185,6 @@ export default class Main extends React.Component<any, any> {
             <Tabs.TabPane
               tab="SEO setting"
               key="seo"
-              disabled
-
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo

@@ -246,7 +246,7 @@ class SkuForm extends React.Component<any, any> {
                 // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber min={0} max={9999999} />)}
+              })(<InputNumber min={0} max={9999999} formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />)}
             </FormItem>
           </Col>
         </Row>
@@ -320,9 +320,15 @@ class SkuForm extends React.Component<any, any> {
                     ],
 
                     onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                    initialValue: rowInfo.marketPrice || ''
+                    initialValue: rowInfo.marketPrice || 0
                   })(
-                    <InputNumber min={0} max={9999999.99} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                    <InputNumber
+                      min={0}
+                      max={9999999.99}
+                      precision={2}
+                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                   )}
                 </FormItem>
@@ -348,9 +354,15 @@ class SkuForm extends React.Component<any, any> {
                         }
                       ],
                       onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                      initialValue: rowInfo.subscriptionPrice || ''
+                      initialValue: rowInfo.subscriptionPrice || 0
                     })(
-                      <InputNumber min={0} max={9999999.99} precision={2} disabled={rowInfo.subscriptionStatus === 0} />
+                      <InputNumber
+                        min={0}
+                        max={9999999.99}
+                        precision={2}
+                        disabled={rowInfo.subscriptionStatus === 0}
+                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      />
                       // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
                     )}
                   </FormItem>
@@ -379,9 +391,15 @@ class SkuForm extends React.Component<any, any> {
                   ],
 
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                  initialValue: rowInfo.marketPrice || ''
+                  initialValue: rowInfo.marketPrice || 0
                 })(
-                  <InputNumber min={0} max={9999999.99} precision={2} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
+                  <InputNumber
+                    min={0}
+                    max={9999999.99}
+                    precision={2}
+                    disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                    formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  />
                   // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
                 )}
               </FormItem>
@@ -403,13 +421,13 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'basePrice',
-      render: (rowInfo,a,b) => {
+      render: (rowInfo, a, b) => {
         const { goodsList, goods } = this.props.relaxProps;
 
-        if(goodsList.toJS()[b].goodsInfoWeight != 0) {
-          this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight)
-        }else {
-          this._handleBasePriceChange('None')
+        if (goodsList.toJS()[b].goodsInfoWeight != 0) {
+          this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight);
+        } else {
+          this._handleBasePriceChange('None');
         }
         return (
           <Row>
@@ -428,8 +446,8 @@ class SkuForm extends React.Component<any, any> {
                   })(
                     selectedBasePrice != 'None' ? (
                       <div>
-                        <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
-                        <p>{rowInfo.subscriptionBasePrice}</p>
+                        <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.basePrice : ''}</p>
+                        <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
                       </div>
                     ) : (
                       <p></p>
@@ -449,7 +467,7 @@ class SkuForm extends React.Component<any, any> {
                     initialValue: rowInfo.basePrice || 0
                   })(
                     <div>
-                      <p>{rowInfo.basePrice ? rowInfo.basePrice : null}</p>
+                      <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.basePrice : ''}</p>
                     </div>
                   )}
                 </FormItem>

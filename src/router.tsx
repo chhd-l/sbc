@@ -53,6 +53,18 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./subscription-edit')
   },
+  {
+    path: '/subscription-plan',
+    asyncComponent: () => import('./subscription-plan')
+  },
+  {
+    path: '/subscription-plan-update/:id',
+    asyncComponent: () => import('./subscription-plan-update')
+  },
+  {
+    path: '/subscription-plan-add',
+    asyncComponent: () => import('./subscription-plan-update')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',

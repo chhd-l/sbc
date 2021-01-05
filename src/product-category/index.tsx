@@ -299,78 +299,78 @@ class PeoductCategory extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <div className="container-search">
-            <Headline title={title} />
-            <Alert message={description} type="info" />
 
+        <div className="container-search">
+          <Headline title={title} />
+          <Alert message={description} type="info" />
+          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
-          </div>
-          <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
-            <div>
-              <div style={{ marginBottom: 16 }}>
-                <Form className="filter-content" layout="inline">
-                  <Row>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input
-                          addonBefore={<p style={styles.label}>Attribute name</p>}
-                          value={searchForm.attributeName}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'attributeName',
-                              value
-                            });
-                          }}
-                        />
-                      </FormItem>
-                    </Col>
-                    <Col span={10}>
-                      <FormItem>
-                        <Input
-                          addonBefore={<p style={styles.label}>Attribute value</p>}
-                          value={searchForm.attributeValue}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'attributeValue',
-                              value
-                            });
-                          }}
-                        />
-                      </FormItem>
-                    </Col>
-                    <Col span={4} style={{ textAlign: 'center' }}>
-                      <FormItem>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          icon="search"
-                          shape="round"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            this.onSearch();
-                          }}
-                        >
-                          <span>
-                            <FormattedMessage id="search" />
-                          </span>
-                        </Button>
-                      </FormItem>
-                    </Col>
-                  </Row>
-                </Form>
+          </Spin>
+        </div>
+        <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+          <div>
+            <div style={{ marginBottom: 16 }}>
+              <Form className="filter-content" layout="inline">
+                <Row>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        value={searchForm.attributeName}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeName',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={10}>
+                    <FormItem>
+                      <Input
+                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        value={searchForm.attributeValue}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'attributeValue',
+                            value
+                          });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                    <FormItem>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.onSearch();
+                        }}
+                      >
+                        <span>
+                          <FormattedMessage id="search" />
+                        </span>
+                      </Button>
+                    </FormItem>
+                  </Col>
+                </Row>
+              </Form>
 
-                <Button type="primary" onClick={this.start} disabled={!hasSelected}>
-                  Reload
-                </Button>
-                <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
-              </div>
-              <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+              <Button type="primary" onClick={this.start} disabled={!hasSelected}>
+                Reload
+              </Button>
+              <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
-          </Modal>
-        </Spin>
+            <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
+          </div>
+        </Modal>
       </div>
     );
   }

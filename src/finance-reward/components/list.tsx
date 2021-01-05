@@ -72,8 +72,8 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       >
         <Column title={<FormattedMessage id="PrescriberType" />} key="prescriberType" width="12%" dataIndex="prescriberType" />
         <Column title={<FormattedMessage id="PrescriberID" />} key="prescriberId" dataIndex="prescriberId" width="11%" />
-        <Column title={<FormattedMessage id="PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="22%" />
-        <Column title={<FormattedMessage id="OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="11%" />
+        <Column title={<FormattedMessage id="PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="20%" />
+        <Column title={<FormattedMessage id="OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="10%" />
         <Column title={<FormattedMessage id="OrderAmount" />} dataIndex="orderAmount" width="11%" key="orderAmount" render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>} />
 
         <Column title={<FormattedMessage id="RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
@@ -81,7 +81,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
         <Column
           title={<FormattedMessage id="operation" />}
-          width="8%"
+          width="10%"
           render={(text, record: any, i) => {
             return (
               <Tooltip placement="top" title="Details">

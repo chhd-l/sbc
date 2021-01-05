@@ -29,6 +29,13 @@ export default class HelloApp extends React.Component<any, any> {
   componentDidMount() {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
+    let id = '';
+    if (Number(prescriberId) == JSON.parse(sessionStorage.getItem('prescriberId')) || JSON.parse(sessionStorage.getItem('prescriberId')) == null) {
+      id = prescriberId;
+    } else {
+      id = JSON.parse(sessionStorage.getItem('prescriberId'));
+    }
+    //sessionStorage.setItem('prescriberId', prescriberId);
     this.setState({
       prescriberId: prescriberId
     });
@@ -44,12 +51,14 @@ export default class HelloApp extends React.Component<any, any> {
         companyId: 2,
         weekNum: moment(date).week(),
         year: moment(date).weekYear(),
-        prescriberId: prescriberId
+        prescriberId: id
       });
     }
   }
 
   changePage(res) {
+    sessionStorage.setItem('prescriberId', res.getPrescriberId);
+
     this.setState(
       {
         changeMode: res.type,
@@ -63,7 +72,7 @@ export default class HelloApp extends React.Component<any, any> {
             companyId: 2,
             weekNum: this.state.week,
             year: moment(date).weekYear(),
-            prescriberId: res.getPrescriberId
+            prescriberId: JSON.parse(sessionStorage.getItem('prescriberId'))
           });
         } else {
           this.store.newInit({

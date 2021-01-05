@@ -25,6 +25,9 @@ export default class Line extends React.Component {
   componentDidMount() {}
   getOption = () => {
     const { data } = this.props as any;
+    if(!data) {
+      return {}
+    }
     let sum = 0;
     for (let i = 0, len = data.length; i < len; i++) {
       sum += data[i]

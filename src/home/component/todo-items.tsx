@@ -472,7 +472,7 @@ export default class TodoItems extends React.Component<any, any> {
                 <div className="item-mid-l-r">
                   <div className="r-text">Prescriber reward Top 3</div>
                   <div className="r-content">
-                    {prescriberTopView.prescriberDashboardViewItemList && prescriberTopView.prescriberDashboardViewItemList.length != 0 ? (
+                    {prescriberTopView && prescriberTopView.prescriberDashboardViewItemList && prescriberTopView.prescriberDashboardViewItemList.length != 0 ? (
                       prescriberTopView.prescriberDashboardViewItemList.map((item, i) => {
                         return (
                           <React.Fragment key={i}>

@@ -118,7 +118,6 @@ export default class ListView extends React.Component<any, any> {
       pageSize: number;
       currentPage: number;
       dataList: TList;
-      needAudit: boolean;
 
       onChecked: Function;
       onCheckedAll: Function;
@@ -144,7 +143,6 @@ export default class ListView extends React.Component<any, any> {
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
-    needAudit: 'needAudit',
 
     onChecked: noop,
     onCheckedAll: noop,
@@ -249,14 +247,14 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
+    const { onChecked, onAudit, verify } = this.props.relaxProps;
     return (
       dataList &&
       dataList.map((v, index) => {
@@ -404,7 +402,7 @@ export default class ListView extends React.Component<any, any> {
                               </AuthWrapper>
                             )} */}
                           {/*待发货状态显示*/}
-                          {needAudit && v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
+                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
                             <AuthWrapper functionName="fOrderList002_3pl">
                               <Tooltip placement="top" title="Review">
                                 <a

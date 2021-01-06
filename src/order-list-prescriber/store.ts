@@ -42,31 +42,28 @@ export default class AppStore extends Store {
     if (sessionStorage.getItem('PrescriberSelect')) {
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
     }
-    const { res: needRes } = await webapi.getOrderNeedAudit();
-    if (needRes.code == Const.SUCCESS_CODE) {
-      const { res: employeeRes } = await webapi.employee();
-      webapi
-        .fetchOrderList({
-          ...form,
-          pageNum,
-          pageSize,
-          clinicsId: employeeRes.clinicsId
-        })
-        .then(({ res }) => {
-          if (res.code == Const.SUCCESS_CODE) {
-            this.transaction(() => {
-              this.dispatch('loading:end');
-              this.dispatch('list:init', res.context);
-              this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-              this.dispatch('list:setNeedAudit', needRes.context.audit);
-              this.btnLoading = false;
-            });
-          } else {
-            message.error(res.message);
+
+    const { res: employeeRes } = await webapi.employee();
+    webapi
+      .fetchOrderList({
+        ...form,
+        pageNum,
+        pageSize,
+        clinicsId: employeeRes.clinicsId
+      })
+      .then(({ res }) => {
+        if (res.code == Const.SUCCESS_CODE) {
+          this.transaction(() => {
             this.dispatch('loading:end');
-          }
-        });
-    }
+            this.dispatch('list:init', res.context);
+            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+            this.btnLoading = false;
+          });
+        } else {
+          message.error(res.message);
+          this.dispatch('loading:end');
+        }
+      });
   };
 
   onTabChange = (key) => {

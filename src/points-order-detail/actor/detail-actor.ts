@@ -19,34 +19,13 @@ export default class DetailActor extends Actor {
     return state.update('detail', (detail) => detail.merge(res));
   }
 
-  @Action('detail:setNeedAudit')
-  setNeedAudit(state: IMap, need) {
-    return state.set('needAudit', need);
-  }
-
   @Action('detail-actor:changeDeliverNum')
   changeDeliverNum(state: IMap, { skuId, isGift, num }) {
     return state.update('detail', (detail) => {
       if (isGift) {
-        return detail.setIn(
-          [
-            'gifts',
-            detail.get('gifts').findIndex((item) => skuId == item.get('skuId')),
-            'deliveringNum'
-          ],
-          num
-        );
+        return detail.setIn(['gifts', detail.get('gifts').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
       } else {
-        return detail.setIn(
-          [
-            'tradeItems',
-            detail
-              .get('tradeItems')
-              .findIndex((item) => skuId == item.get('skuId')),
-            'deliveringNum'
-          ],
-          num
-        );
+        return detail.setIn(['tradeItems', detail.get('tradeItems').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
       }
     });
   }
@@ -78,9 +57,7 @@ export default class DetailActor extends Actor {
    */
   @Action('detail-actor:setSellerRemarkVisible')
   setSellerRemarkVisible(state: IMap, param: boolean) {
-    return state
-      .set('sellerRemarkVisible', param)
-      .set('remedySellerRemark', '');
+    return state.set('sellerRemarkVisible', param).set('remedySellerRemark', '');
   }
 
   /**

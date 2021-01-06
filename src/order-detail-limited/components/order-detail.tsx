@@ -146,7 +146,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       confirm: Function;
       retrial: Function;
       sellerRemarkVisible: boolean;
-      needAudit: boolean;
       setSellerRemarkVisible: Function;
       remedySellerRemark: Function;
       setSellerRemark: Function;
@@ -166,7 +165,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
     confirm: noop,
     retrial: noop,
     sellerRemarkVisible: 'sellerRemarkVisible',
-    needAudit: 'needAudit',
     orderRejectModalVisible: 'orderRejectModalVisible',
     setSellerRemarkVisible: noop,
     remedySellerRemark: noop,
@@ -382,7 +380,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
   }
 
   _renderBtnAction(tid: string) {
-    const { detail, onAudit, verify, needAudit, onDelivery, showRejectModal } = this.props.relaxProps;
+    const { detail, onAudit, verify, onDelivery, showRejectModal } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const paymentOrder = detail.get('paymentOrder');
@@ -422,7 +420,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
-              {!needAudit || payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
+              {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
                 <AuthWrapper functionName="fOrderList002">
                   <Tooltip placement="top" title="Re-review">
                     <a

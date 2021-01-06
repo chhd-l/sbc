@@ -39,24 +39,21 @@ export default class AppStore extends Store {
       form['tradeState'][state] = value;
     }
     form['orderType'] = 'NORMAL_ORDER';
-    const { res: needRes } = await webapi.getOrderNeedAudit();
-    if (needRes.code == Const.SUCCESS_CODE) {
-      webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('loading:end');
-            this.dispatch('list:init', res.context);
-            this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
-            this.dispatch('list:setNeedAudit', needRes.context.audit);
-            this.btnLoading = false;
-          });
-        } else {
-          message.error(res.message);
 
+    webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code == Const.SUCCESS_CODE) {
+        this.transaction(() => {
           this.dispatch('loading:end');
-        }
-      });
-    }
+          this.dispatch('list:init', res.context);
+          this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          this.btnLoading = false;
+        });
+      } else {
+        message.error(res.message);
+
+        this.dispatch('loading:end');
+      }
+    });
   };
 
   onTabChange = (key) => {

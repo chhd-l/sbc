@@ -25,13 +25,6 @@ export function addPay(params: TParams) {
 }
 
 /**
- * 查询订单是否需要审核
- */
-export const getOrderNeedAudit = () => {
-  return Fetch('/getSupplierOrderAudit');
-};
-
-/**
  * 查询订单下的所有收款记录
  * @param orderNo 订单号
  */

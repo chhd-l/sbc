@@ -66,12 +66,21 @@ export default class HelloApp extends React.Component<any, any> {
       () => {
         let date = sessionStorage.getItem(cache.CURRENT_YEAR);
         if (res.getPrescriberId != null) {
-          this.store.prescriberInit({
-            companyId: 2,
-            weekNum: this.state.week,
-            year: moment(date).weekYear(),
-            prescriberId: res.getPrescriberId
-          });
+          if (sessionStorage.getItem('PrescriberSelect')) {
+            this.store.prescriberInit({
+              companyId: 2,
+              weekNum: this.state.week,
+              year: moment(date).weekYear(),
+              prescriberId: res.getPrescriberId
+            });
+          } else {
+            this.store.newInit({
+              companyId: 2,
+              weekNum: this.state.week,
+              year: moment(date).weekYear(),
+              prescriberId: res.getPrescriberId
+            });
+          }
         } else {
           this.store.newInit({
             companyId: 2,

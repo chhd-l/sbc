@@ -30,17 +30,17 @@ export default class HelloApp extends React.Component<any, any> {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     let id = '';
-    if (Number(prescriberId) == JSON.parse(sessionStorage.getItem('prescriberId')) || JSON.parse(sessionStorage.getItem('prescriberId')) == null) {
-      id = prescriberId;
+    if (JSON.parse(sessionStorage.getItem('PrescriberSelect'))) {
+      id = JSON.parse(sessionStorage.getItem('PrescriberSelect')).id;
     } else {
-      id = JSON.parse(sessionStorage.getItem('prescriberId'));
+      id = prescriberId;
     }
     //sessionStorage.setItem('prescriberId', prescriberId);
     this.setState({
-      prescriberId: prescriberId
+      prescriberId: id
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
-    if (prescriberId == null) {
+    if (id == null) {
       this.store.newInit({
         companyId: 2,
         weekNum: moment(date).week(),
@@ -57,8 +57,6 @@ export default class HelloApp extends React.Component<any, any> {
   }
 
   changePage(res) {
-    sessionStorage.setItem('prescriberId', res.getPrescriberId);
-
     this.setState(
       {
         changeMode: res.type,
@@ -72,7 +70,7 @@ export default class HelloApp extends React.Component<any, any> {
             companyId: 2,
             weekNum: this.state.week,
             year: moment(date).weekYear(),
-            prescriberId: JSON.parse(sessionStorage.getItem('prescriberId'))
+            prescriberId: res.getPrescriberId
           });
         } else {
           this.store.newInit({

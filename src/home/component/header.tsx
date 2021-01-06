@@ -95,7 +95,7 @@ export default class Header extends React.Component<any, any> {
           companyId: 2,
           weekNum: date.week(),
           year: moment(date).weekYear(),
-          prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
+          prescriberId: this.state.id == '' ? prescribers[0].id : this.state.id
         };
         prescriberInit(obj);
       } else {
@@ -111,7 +111,7 @@ export default class Header extends React.Component<any, any> {
         companyId: 2,
         weekNum: date.week(),
         year: moment(date).weekYear(),
-        prescriberId: this.state.prescriberId == '' ? prescribers[0].prescriberId : this.state.prescriberId
+        prescriberId: this.state.id == '' ? prescribers[0].id : this.state.id
       };
       prescriberInit(obj);
     }

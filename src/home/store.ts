@@ -142,6 +142,7 @@ export default class AppStore extends Store {
   };
 
   prescriberInit = async (data) => {
+    console.log(data, '---------params');
     this.dispatch('loading:start');
     const { res: getTradeCustomerView } = await webapi.getPrescriberTradeAndCustomerData(data);
     const { res: getPrescriberTopView } = await webapi.getPrescriberTopView(data);

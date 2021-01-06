@@ -140,13 +140,8 @@ export default class AppStore extends Store {
     }
     const data = await spuDelete({ goodsIds: ids });
     if (data) {
-      const { res } = data;
-      if (res && res.code && res.code === Const.SUCCESS_CODE) {
-        message.success('Operation successful');
-        this.onSearch();
-      } else {
-        message.error(res.message || 'Operation failure');
-      }
+      this.message(data);
+      this.onSearch();
     }
   };
 

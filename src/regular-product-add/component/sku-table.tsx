@@ -365,27 +365,26 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'subscriptionStatus',
-      render: (rowInfo) => (
-        <Row
-          style={{
-            marginRight: '124px'
-          }}
-        >
-          <Col span={12}>
-            <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                initialValue: goods.get('subscriptionStatus') === '0' ? '0' : typeof rowInfo.subscriptionStatus === 'number' ? rowInfo.subscriptionStatus + '' : '1'
-              })(
-                <Select disabled={goods.get('subscriptionStatus') === '0' } getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-      )
+      render: (rowInfo) => {
+        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = 0 : rowInfo.subscriptionStatus
+        return(
+          <Row style={{marginRight: '124px'}}>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
+                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : typeof rowInfo.subscriptionStatus === 'number' ?  '0' : '1'
+                })(
+                  <Select disabled={goods.get('subscriptionStatus') == 0} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
+                    <Option value="1">Y</Option>
+                    <Option value="0">N</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )
+      }
     });
    /* let a = columns.toJS();
     let b = a.splice(a.length - 4, 1);

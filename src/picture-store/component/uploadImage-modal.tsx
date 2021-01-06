@@ -169,10 +169,11 @@ export default class uploadImageModal extends React.Component<any, any> {
 
     return (
       <Modal
+        className="uploadImage"
         maskClosable={false}
         title="Upload Image"
         visible={uploadVisible}
-        cancelText="Close"
+        okText="Upload completed"
         onCancel={this._handleCancel}
         onOk={this._handleOk}
       >

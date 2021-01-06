@@ -224,13 +224,13 @@ export default class Interaction extends React.Component<any, any> {
     this.clearFields(['navigationCateIds', 'keywords', 'filter', 'searchSort', 'paramsField']);
   }
   onSalesCategoryChange = (value) => {
-    let treeLowestIds = [];
-    value.map((item) => {
-      let childrenIds = this.getAllChildredIds(item, []);
-      treeLowestIds.push(childrenIds);
-      return item;
-    });
-    this.props.addField('navigationCateIds', treeLowestIds.join(','));
+    // let treeLowestIds = [];
+    // value.map((item) => {
+    //   let childrenIds = this.getAllChildredIds(item, []);
+    //   treeLowestIds.push(childrenIds);
+    //   return item;
+    // });
+    this.props.addField('navigationCateIds', value.join(','));
   };
   getAllChildredIds(id, chilidrenIds) {
     let children = this.state.treeSource.filter((x) => x.parentId === id);

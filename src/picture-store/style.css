@@ -1,3 +1,7 @@
 .c-tree-select .ant-form-explain {
     margin-top: 20px;
 }
+
+.uploadImage .ant-modal-footer .ant-btn:first-child {
+    display: none;
+}

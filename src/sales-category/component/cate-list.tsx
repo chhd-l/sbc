@@ -225,26 +225,6 @@ class CateList extends React.Component<any, any> {
         content: 'The current category is associated with the product, please modify and then delete.',
         okText: 'OK'
       });
-      // confirm({
-      // title: 'Prompt',
-      // content: 'The current category is associated with the product, please modify and then delete.',
-      // onOk() {
-      //   if (childFlag) {
-      //     //有子分类
-      //     confirm({
-      //       title: 'Prompt',
-      //       content: 'Delete the current category, and all categories under the category will also be deleted. Are you sure to delete this category?',
-      //       onOk() {
-      //         doDelete(storeCateId);
-      //       }
-      //     });
-      //   } else {
-      //     doDelete(storeCateId);
-      //   }
-      // },
-      // okText: 'Continue to delete',
-      // cancelText: 'Cancel'
-      // });
     } else if (childFlag) {
       //有子分类
       Modal.info({

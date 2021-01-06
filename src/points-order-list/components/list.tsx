@@ -59,7 +59,6 @@ export default class ListView extends React.Component<any, any> {
       pageSize: number;
       currentPage: number;
       dataList: TList;
-      needAudit: boolean;
 
       onChecked: Function;
       onCheckedAll: Function;
@@ -84,7 +83,6 @@ export default class ListView extends React.Component<any, any> {
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
-    needAudit: 'needAudit',
 
     onChecked: noop,
     onCheckedAll: noop,
@@ -100,16 +98,7 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      onCheckedAll,
-      allChecked,
-      init,
-      currentPage
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage } = this.props.relaxProps;
 
     return (
       <div>
@@ -117,9 +106,7 @@ export default class ListView extends React.Component<any, any> {
           <div className="ant-table ant-table-large ant-table-scroll-position-left">
             <div className="ant-table-content">
               <div className="ant-table-body">
-                <table
-                  style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}
-                >
+                <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '5%' }}>
@@ -137,16 +124,10 @@ export default class ListView extends React.Component<any, any> {
                       <th style={{ width: '10%' }}>Integral/quantity</th>
                       <th style={{ width: '10%' }}>Delivery status</th>
                       <th style={{ width: '10%' }}>Order starus</th>
-                      <th style={{ width: '10%', textAlign: 'right' }}>
-                        Payment status
-                      </th>
+                      <th style={{ width: '10%', textAlign: 'right' }}>Payment status</th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {!loading && total == 0 ? (
@@ -178,7 +159,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
         </td>
       </tr>
     );
@@ -206,10 +187,7 @@ export default class ListView extends React.Component<any, any> {
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={8} style={{ padding: 0 }}>
-              <table
-                className="ant-table-self"
-                style={{ border: '1px solid #ddd' }}
-              >
+              <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
                 <thead>
                   <tr>
                     <td colSpan={9} style={{ padding: 0, color: '#999' }}>
@@ -229,9 +207,7 @@ export default class ListView extends React.Component<any, any> {
                             }}
                           />
                         </span>
-                        <span style={{ marginLeft: 20 }}>
-                          Order number：{id}{' '}
-                        </span>
+                        <span style={{ marginLeft: 20 }}>Order number：{id} </span>
                         <span style={{ marginLeft: 60 }}>
                           Order time：
                           {v.getIn(['tradeState', 'createTime'])
@@ -242,39 +218,21 @@ export default class ListView extends React.Component<any, any> {
                         </span>
                         <span style={{ marginRight: 0, float: 'right' }}>
                           {/*待发货状态显示*/}
-                          {v.getIn(['tradeState', 'deliverStatus']) ===
-                            'NOT_YET_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="f_points_order_list_005">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  Delivery
-                                </a>
-                              </AuthWrapper>
-                            )}
+                          {v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                            <AuthWrapper functionName="f_points_order_list_005">
+                              <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }}>
+                                Delivery
+                              </a>
+                            </AuthWrapper>
+                          )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED_PART' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                              'PART_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
-                              <AuthWrapper functionName="f_points_order_list_005">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  Delivery
-                                </a>
-                              </AuthWrapper>
-                            )}
+                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                            <AuthWrapper functionName="f_points_order_list_005">
+                              <a onClick={() => this._toDeliveryForm(id)}>Delivery</a>
+                            </AuthWrapper>
+                          )}
                           {/*待收货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED' && (
+                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
                             <AuthWrapper functionName="f_points_order_list_002">
                               <a
                                 onClick={() => {
@@ -287,10 +245,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           <AuthWrapper functionName="f_points_order_list_004">
-                            <Link
-                              style={{ marginLeft: 20, marginRight: 18 }}
-                              to={`/points-order-detail/${id}`}
-                            >
+                            <Link style={{ marginLeft: 20, marginRight: 18 }} to={`/points-order-detail/${id}`}>
                               View details
                             </Link>
                           </AuthWrapper>
@@ -315,15 +270,7 @@ export default class ListView extends React.Component<any, any> {
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) =>
-                          k < 3 ? (
-                            <img
-                              src={v.get('pic') ? v.get('pic') : defaultImg}
-                              style={styles.imgItem}
-                              key={k}
-                            />
-                          ) : null
-                        )}
+                        .map((v, k) => (k < 3 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} style={styles.imgItem} key={k} /> : null))}
                       {
                         /*第4张特殊处理*/
                         //@ts-ignore
@@ -331,25 +278,11 @@ export default class ListView extends React.Component<any, any> {
                           <div style={styles.imgBg}>
                             <img
                               //@ts-ignore
-                              src={
-                                v
-                                  .get('tradeItems')
-                                  .concat(gifts)
-                                  .get(3)
-                                  .get('pic')
-                                  ? v
-                                      .get('tradeItems')
-                                      .concat(gifts)
-                                      .get(3)
-                                      .get('pic')
-                                  : defaultImg
-                              }
+                              src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
                               style={styles.imgFourth}
                             />
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              All{v.get('tradeItems').concat(gifts).size} items
-                            </div>
+                            <div style={styles.imgNum}>All{v.get('tradeItems').concat(gifts).size} items</div>
                           </div>
                         ) : null
                       }
@@ -370,13 +303,9 @@ export default class ListView extends React.Component<any, any> {
                       <br />（{num} items)
                     </td>
                     {/*发货状态*/}
-                    <td style={{ width: '10%' }}>
-                      {deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}
-                    </td>
+                    <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
-                    <td style={{ width: '10%' }}>
-                      {flowState(v.getIn(['tradeState', 'flowState']))}
-                    </td>
+                    <td style={{ width: '10%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
                     {/*支付状态*/}
                     <td
                       style={{

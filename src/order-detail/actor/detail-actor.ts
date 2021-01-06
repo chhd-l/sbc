@@ -12,45 +12,22 @@ export default class DetailActor extends Actor {
       // 卖家备注修改
       remedySellerRemark: '',
       //拒绝订单
-      orderRejectModalVisible: false,
-      // 订单是否需要审核
-      needAudit: false
+      orderRejectModalVisible: false
     };
   }
 
   @Action('detail:init')
   init(state: IMap, res: Object) {
-    return state.update('detail', detail => detail.merge(res));
-  }
-
-  @Action('detail:setNeedAudit')
-  setNeedAudit(state: IMap, need) {
-    return state.set('needAudit', need);
+    return state.update('detail', (detail) => detail.merge(res));
   }
 
   @Action('detail-actor:changeDeliverNum')
   changeDeliverNum(state: IMap, { skuId, isGift, num }) {
-    return state.update('detail', detail => {
+    return state.update('detail', (detail) => {
       if (isGift) {
-        return detail.setIn(
-          [
-            'gifts',
-            detail.get('gifts').findIndex(item => skuId == item.get('skuId')),
-            'deliveringNum'
-          ],
-          num
-        );
+        return detail.setIn(['gifts', detail.get('gifts').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
       } else {
-        return detail.setIn(
-          [
-            'tradeItems',
-            detail
-              .get('tradeItems')
-              .findIndex(item => skuId == item.get('skuId')),
-            'deliveringNum'
-          ],
-          num
-        );
+        return detail.setIn(['tradeItems', detail.get('tradeItems').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
       }
     });
   }
@@ -100,9 +77,7 @@ export default class DetailActor extends Actor {
    */
   @Action('detail-actor:setSellerRemarkVisible')
   setSellerRemarkVisible(state: IMap, param: boolean) {
-    return state
-      .set('sellerRemarkVisible', param)
-      .set('remedySellerRemark', '');
+    return state.set('sellerRemarkVisible', param).set('remedySellerRemark', '');
   }
 
   /**

@@ -134,7 +134,6 @@ export default class ListView extends React.Component<any, any> {
       pageSize: number;
       currentPage: number;
       dataList: TList;
-      needAudit: boolean;
 
       onChecked: Function;
       onCheckedAll: Function;
@@ -160,7 +159,6 @@ export default class ListView extends React.Component<any, any> {
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
-    needAudit: 'needAudit',
 
     onChecked: noop,
     onCheckedAll: noop,
@@ -272,7 +270,7 @@ export default class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, needAudit } = this.props.relaxProps;
+    const { onChecked, onAudit, verify } = this.props.relaxProps;
 
     return (
       dataList &&

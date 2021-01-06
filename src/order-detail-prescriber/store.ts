@@ -36,7 +36,6 @@ export default class AppStore extends Store {
     if (code == Const.SUCCESS_CODE) {
       const payRecordResult = (await payRecord(orderInfo.totalTid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
-      const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
 
       this.transaction(() => {
         this.dispatch('loading:end');
@@ -44,7 +43,6 @@ export default class AppStore extends Store {
         this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
-        this.dispatch('detail:setNeedAudit', needRes.context.audit);
       });
     } else {
       this.dispatch('loading:end');

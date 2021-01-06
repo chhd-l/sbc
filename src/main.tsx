@@ -30,7 +30,7 @@ export default class Main extends React.Component<any, any> {
           }
         }
       });
-      if (util.isLogin()) {
+      /*if (util.isLogin()) {
         Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
           if (resIco.res.code == Const.SUCCESS_CODE) {
             if ((resIco.res as any).context) {
@@ -42,7 +42,7 @@ export default class Main extends React.Component<any, any> {
             }
           }
         });
-      }
+      }*/
     }
   }
 

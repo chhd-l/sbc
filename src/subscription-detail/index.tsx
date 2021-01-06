@@ -306,9 +306,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } else {
       this.querySysDictionary('city');
     }
-    this.querySysDictionary('Frequency_week');
-
-    // this.querySysDictionary('Frequency');
+    this.querySysDictionary('Frequency_day');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -324,8 +322,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
-          if (type === 'Frequency_week') {
+          if (type === 'Frequency_day') {
             let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyList: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_week')
+            );
+          }
+          if (type === 'Frequency_week') {
+            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState(
               {
                 frequencyList: frequencyList

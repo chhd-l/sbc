@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Radio,
-  Row,
-  Select,
-  Tree,
-  TreeSelect
-} from 'antd';
+import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 
@@ -195,14 +183,7 @@ export default class CouponInfoForm extends Component<any, any> {
               rules: [
                 {
                   validator: (rule, value, callback) => {
-                    QMMethod.validatorTrimMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      '优惠券名称',
-                      1,
-                      10
-                    );
+                    QMMethod.validatorTrimMinAndMax(rule, value, callback, '优惠券名称', 1, 10);
                   }
                 }
               ]
@@ -219,7 +200,7 @@ export default class CouponInfoForm extends Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemSmall} label="优惠券分类">
+          {/*<FormItem {...formItemSmall} label="优惠券分类">
             <Col span={16}>
               {getFieldDecorator('couponCateIds', {
                 initialValue: couponCateIds.toJS(),
@@ -259,7 +240,7 @@ export default class CouponInfoForm extends Component<any, any> {
             <Col span={8}>
               <span style={styles.greyColor}>&nbsp;&nbsp;最多可选三个分类</span>
             </Col>
-          </FormItem>
+          </FormItem>*/}
           <FormItem {...formItemLayout} label="起止时间" required={true}>
             <RadioGroup
               value={rangeDayType}
@@ -270,8 +251,7 @@ export default class CouponInfoForm extends Component<any, any> {
               <FormItem>
                 <Radio value={0} style={styles.radioStyle}>
                   {getFieldDecorator('rangeDay', {
-                    initialValue: startTime &&
-                      endTime && [moment(startTime), moment(endTime)],
+                    initialValue: startTime && endTime && [moment(startTime), moment(endTime)],
                     rules: [
                       {
                         required: rangeDayType === 0,
@@ -282,9 +262,7 @@ export default class CouponInfoForm extends Component<any, any> {
                     <RangePicker
                       disabledDate={this.disabledDate}
                       disabled={rangeDayType === 1}
-                      getCalendarContainer={() =>
-                        document.getElementById('page-content')
-                      }
+                      getCalendarContainer={() => document.getElementById('page-content')}
                       format="YYYY-MM-DD"
                       placeholder={['起始时间', '结束时间']}
                       onChange={(e) => {
@@ -297,9 +275,7 @@ export default class CouponInfoForm extends Component<any, any> {
                       }}
                     />
                   )}
-                  <span style={styles.greyColor}>
-                    &nbsp;&nbsp;开始前可以领取但不能使用
-                  </span>
+                  <span style={styles.greyColor}>&nbsp;&nbsp;开始前可以领取但不能使用</span>
                 </Radio>
               </FormItem>
               <FormItem>
@@ -311,12 +287,7 @@ export default class CouponInfoForm extends Component<any, any> {
                       { required: rangeDayType === 1, message: '请输入天数' },
                       {
                         validator: (_rule, value, callback) => {
-                          if (
-                            rangeDayType == 1 &&
-                            (!ValidConst.noZeroNumber.test(value) ||
-                              value < 1 ||
-                              value > 365)
-                          ) {
+                          if (rangeDayType == 1 && (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 365)) {
                             callback('只允许输入1-365之间的整数');
                             return;
                           }
@@ -338,9 +309,7 @@ export default class CouponInfoForm extends Component<any, any> {
                       }}
                     />
                   )}
-                  <span style={styles.darkColor}>
-                    &nbsp;&nbsp;天内有效，填写1则领取当天24:00失效
-                  </span>
+                  <span style={styles.darkColor}>&nbsp;&nbsp;天内有效，填写1则领取当天24:00失效</span>
                 </Radio>
               </FormItem>
             </RadioGroup>
@@ -355,11 +324,7 @@ export default class CouponInfoForm extends Component<any, any> {
                       { required: true, message: '请输入优惠券面值' },
                       {
                         validator: (_rule, value, callback) => {
-                          if (
-                            !ValidConst.noZeroNumber.test(value) ||
-                            value < 1 ||
-                            value > 99999
-                          ) {
+                          if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
                             callback('只允许输入1-99999间的整数');
                             return;
                           }
@@ -389,12 +354,7 @@ export default class CouponInfoForm extends Component<any, any> {
               </Row>
             </FormItem>
             <FormItem {...formItemLayout} label="使用门槛" required={true}>
-              <RadioGroup
-                value={fullBuyType}
-                onChange={(e) =>
-                  this.changeFullBuyType((e as any).target.value)
-                }
-              >
+              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
                 <FormItem>
                   <Radio value={1} style={styles.radioStyle}>
                     <span style={styles.darkColor}>满&nbsp;&nbsp;</span>
@@ -408,11 +368,7 @@ export default class CouponInfoForm extends Component<any, any> {
                         {
                           validator: (_rule, value, callback) => {
                             if (fullBuyType == 1 && (value || value === 0)) {
-                              if (
-                                !ValidConst.noZeroNumber.test(value) ||
-                                value < 1 ||
-                                value > 99999
-                              ) {
+                              if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
                                 callback('只允许输入1-99999间的整数');
                                 return;
                               } else if (value <= parseInt(`${denomination}`)) {
@@ -442,10 +398,7 @@ export default class CouponInfoForm extends Component<any, any> {
                   </Radio>
                 </FormItem>
                 <FormItem>
-                  <Radio
-                    value={0}
-                    style={{ ...styles.lastRadioStyle, width: 80 }}
-                  >
+                  <Radio value={0} style={{ ...styles.lastRadioStyle, width: 80 }}>
                     <span style={styles.darkColor}>无门槛</span>
                   </Radio>
                 </FormItem>
@@ -453,29 +406,22 @@ export default class CouponInfoForm extends Component<any, any> {
             </FormItem>
           </ErrorDiv>
           <FormItem {...formItemLayout} label="选择商品" required={true}>
-            <RadioGroup
-              value={scopeType}
-              onChange={(e) => chooseScopeType((e as any).target.value)}
-            >
+            <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
               <Radio value={0}>
                 <span style={styles.darkColor}>全部商品</span>
               </Radio>
-              <Radio value={1}>
+              {/*<Radio value={1}>
                 <span style={styles.darkColor}>按品牌</span>
-              </Radio>
+              </Radio>*/}
               <Radio value={3}>
                 <span style={styles.darkColor}>按店铺分类</span>
               </Radio>
-              <Radio value={4}>
+              {/*<Radio value={4}>
                 <span style={styles.darkColor}>自定义选择</span>
-              </Radio>
+              </Radio>*/}
             </RadioGroup>
           </FormItem>
-          <FormItem
-            {...this._scopeBoxStyle(scopeType)}
-            label="已选商品"
-            id={'page-content'}
-          >
+          <FormItem {...this._scopeBoxStyle(scopeType)} label="已选商品" id={'page-content'}>
             {this.chooseGoods().dom}
           </FormItem>
           <FormItem {...formItemLayout} label="使用说明">
@@ -497,26 +443,14 @@ export default class CouponInfoForm extends Component<any, any> {
           </FormItem>
         </Form>
         <div className="bar-button">
-          <Button
-            disabled={btnDisabled}
-            type="primary"
-            onClick={() => this.saveCoupon()}
-            style={{ marginRight: 10 }}
-          >
+          <Button disabled={btnDisabled} type="primary" onClick={() => this.saveCoupon()} style={{ marginRight: 10 }}>
             保存
           </Button>
           <Button onClick={() => history.goBack()} style={{ marginLeft: 10 }}>
             取消
           </Button>
         </div>
-        <GoodsModal
-          showValidGood={true}
-          visible={goodsModalVisible}
-          selectedSkuIds={chooseSkuIds.toJS()}
-          selectedRows={goodsRows.toJS()}
-          onOkBackFun={this._onOkBackFun}
-          onCancelBackFun={onCancelBackFun}
-        />
+        <GoodsModal showValidGood={true} visible={goodsModalVisible} selectedSkuIds={chooseSkuIds.toJS()} selectedRows={goodsRows.toJS()} onOkBackFun={this._onOkBackFun} onCancelBackFun={onCancelBackFun} />
       </RightContent>
     );
   }
@@ -548,11 +482,7 @@ export default class CouponInfoForm extends Component<any, any> {
         mode="multiple"
         optionFilterProp="children"
         filterOption={(input, option: any) => {
-          return typeof option.props.children == 'string'
-            ? option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            : true;
+          return typeof option.props.children == 'string' ? option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 : true;
         }}
         onChange={(value) => {
           fieldsValue({ field: 'chooseBrandIds', value });
@@ -575,40 +505,22 @@ export default class CouponInfoForm extends Component<any, any> {
       .toSeq()
       .filter((cate) => cate.get('cateParentId') === parentCateId)
       .map((item) => {
-        const childCates = oldCateList.filter(
-          (cate) => cate.get('cateParentId') == item.get('storeCateId')
-        );
+        const childCates = oldCateList.filter((cate) => cate.get('cateParentId') == item.get('storeCateId'));
         if (childCates && childCates.count()) {
           return (
-            <Tree.TreeNode
-              key={item.get('storeCateId').toString()}
-              value={item.get('storeCateId').toString()}
-              title={item.get('cateName').toString()}
-            >
+            <Tree.TreeNode key={item.get('storeCateId').toString()} value={item.get('storeCateId').toString()} title={item.get('cateName').toString()}>
               {this.loop(oldCateList, childCates, item.get('storeCateId'))}
             </Tree.TreeNode>
           );
         }
-        return (
-          <Tree.TreeNode
-            key={item.get('storeCateId').toString()}
-            value={item.get('storeCateId').toString()}
-            title={item.get('cateName').toString()}
-          />
-        );
+        return <Tree.TreeNode key={item.get('storeCateId').toString()} value={item.get('storeCateId').toString()} title={item.get('cateName').toString()} />;
       });
 
   /**
    * 已选商品结构
    */
   chooseGoods = () => {
-    const {
-      scopeType,
-      chooseBrandIds,
-      chooseCateIds,
-      cates,
-      chooseSkuIds
-    } = this.props.relaxProps;
+    const { scopeType, chooseBrandIds, chooseCateIds, cates, chooseSkuIds } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     if (scopeType === 0) {
       return { dom: '全部商品' };
@@ -654,15 +566,7 @@ export default class CouponInfoForm extends Component<any, any> {
    * 保存优惠券
    */
   saveCoupon = () => {
-    const {
-      addCoupon,
-      editCoupon,
-      couponId,
-      changeBtnDisabled,
-      startTime,
-      rangeDayType,
-      dealErrorCode
-    } = this.props.relaxProps;
+    const { addCoupon, editCoupon, couponId, changeBtnDisabled, startTime, rangeDayType, dealErrorCode } = this.props.relaxProps;
     changeBtnDisabled();
     if (!couponId) {
       //强制校验创建时间

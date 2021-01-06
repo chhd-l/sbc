@@ -24,7 +24,7 @@ export default class AppStore extends Store {
   }
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
-  init = async (tid: string) => {
+  init2 = async (tid: string) => {
     this.transaction(() => {
       this.dispatch('loading:start');
       this.dispatch('tid:init', tid);
@@ -36,7 +36,7 @@ export default class AppStore extends Store {
     if (code == Const.SUCCESS_CODE) {
       const payRecordResult = (await payRecord(orderInfo.totalTid)) as any;
       const { context: logistics } = (await fetchLogistics()) as any;
-      const { res: needRes } = (await webapi.getOrderNeedAudit()) as any;
+
       const { res: payRecordResult2 } = (await webapi.getPaymentInfo(orderInfo.totalTid)) as any;
       const { res: cityDictRes } = (await webapi.queryCityById({
         id: [orderInfo.consignee.cityId]
@@ -52,10 +52,58 @@ export default class AppStore extends Store {
         this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
-        this.dispatch('detail:setNeedAudit', needRes.context.audit);
         this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
         this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
+      });
+    } else {
+      this.dispatch('loading:end');
+      message.error(errorInfo);
+    }
+  };
+  init = async (tid: string) => {
+    this.transaction(() => {
+      this.dispatch('loading:start');
+      this.dispatch('tid:init', tid);
+      this.dispatch('detail-actor:hideDelivery');
+    });
+    const { res } = (await fetchOrderDetail(tid)) as any;
+    let { code, context: orderInfo, message: errorInfo } = res;
+
+    if (code == Const.SUCCESS_CODE) {
+      await Promise.all([
+        payRecord(orderInfo.totalTid),
+        fetchLogistics(),
+        // webapi.getOrderNeedAudit(),
+        webapi.getPaymentInfo(orderInfo.totalTid),
+        webapi.queryCityById({
+          id: [orderInfo.consignee.cityId]
+        }),
+        queryDictionary({
+          type: 'country'
+        })
+        // webapi.refresh(orderInfo.totalTid)
+      ]).then((results) => {
+        console.log(results, 'results-------------------');
+        const { res: payRecordResult } = results[0] as any;
+        const { res: logistics } = results[1] as any;
+        // const { res: needRes } = results[2] as any;
+        const { res: payRecordResult2 } = results[2] as any;
+        const { res: cityDictRes } = results[3] as any;
+        const { res: countryDictRes } = results[4] as any;
+        // const { res: refresh } = (results[6]) as any;
+        this.transaction(() => {
+          this.dispatch('loading:end');
+          this.dispatch('detail:init', orderInfo);
+          this.dispatch('receive-record-actor:init', payRecordResult.payOrderResponses);
+          this.dispatch('receive-record-actor:initPaymentInfo', payRecordResult2.context);
+          this.dispatch('detail-actor:setSellerRemarkVisible', true);
+          this.dispatch('logistics:init', logistics.context);
+          // this.dispatch('detail:setNeedAudit', needRes.context.audit);
+          this.dispatch('dict:initCity', cityDictRes.context.systemCityVO);
+          this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
+          this.dispatch('dict:refresh', orderInfo.tradeDelivers ? orderInfo.tradeDelivers : []);
+        });
       });
     } else {
       this.dispatch('loading:end');

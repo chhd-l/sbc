@@ -14,13 +14,6 @@ type TResult = {
 };
 
 /**
- * 查询订单是否需要审核
- */
-export const getOrderNeedAudit = () => {
-  return Fetch<TResult>('/getSupplierOrderAudit');
-};
-
-/**
  * 批量审核
  * @param ids
  * @returns {Promise<IAsyncResult<T>>}

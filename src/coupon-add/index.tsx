@@ -37,7 +37,7 @@ export default class CouponInfo extends Component<any, any> {
       <div className="container" key="container">
         <Headline title={id ? '编辑优惠券' : '创建优惠券'} />
         <div style={styles.container}>
-          <MobileShowBox />
+          {/*<MobileShowBox />*/}
           <CouponInfoRelax />
         </div>
       </div>

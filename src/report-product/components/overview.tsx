@@ -196,10 +196,10 @@ export default class ProductOverView extends Component<any, any> {
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
                           <span className="goodsName line-clamp">{item.skuName}</span>
-                          <span className="price">{item.marketPrice?item.marketPrice:'--'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
                           <span className="price">
-                            {item.salesVolume?item.salesVolume:'--'} units
+                            {item.marketPrice ? item.marketPrice : '--'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </span>
+                          <span className="price">{item.salesVolume ? item.salesVolume : '--'} units</span>
                         </div>
                       </div>
                     </div>
@@ -235,7 +235,7 @@ export default class ProductOverView extends Component<any, any> {
                 })
               ) : (
                 <span style={{ width: '100%', textAlign: 'center', paddingTop: '30px' }}>
-                  <img src={nodataImg} width="180" height="137" className="no-data-img" />
+                  <img src={nodataImg} width="80" className="no-data-img" />
                 </span>
               )}
             </div>

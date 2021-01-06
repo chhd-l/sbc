@@ -190,9 +190,11 @@ class SkuForm extends React.Component<any, any> {
         let b = '';
         let c = 0;
         a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || '';
-        c = rowInfo.maxStock ? rowInfo.stock : a.minStock;
+        console.log(rowInfo.maxStock, 11111111111);
+        console.log(a.minStock, 22222222222);
+        c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock : a.minStock;
         if (a) {
-          b = a.minStock - rowInfo.maxStock ? rowInfo.maxStock : 0 >= 0 ? a.minStock : rowInfo.maxStock;
+          b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;
         } else {
           b = 999999;
         }

@@ -152,9 +152,9 @@ export default class Header extends React.Component<any, any> {
 
   onChange = (res) => {
     if (res == 'all') {
-      this.props.changePage({ type: false, getPrescriberId: null });
+      this.props.changePage({ type: false, getPrescriberId: null, week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     } else {
-      this.props.changePage({ type: true, getPrescriberId: res });
+      this.props.changePage({ type: true, getPrescriberId: res, week: moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     }
     this.setState({
       openType: false,
@@ -168,7 +168,7 @@ export default class Header extends React.Component<any, any> {
       buttonType: false
     });
     if (this.state.searchType == true) {
-      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week });
+      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week ? this.state.week : moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     }
   };
 

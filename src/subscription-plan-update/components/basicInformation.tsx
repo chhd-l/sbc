@@ -100,7 +100,7 @@ export default class basicInformation extends Component<any, any> {
                 initialValue: subscriptionPlan.frequency,
                 rules: [{ required: true, message: 'Please select Frequency' }]
               })(
-                <Row>
+                <Row style={{color: '#222222'}}>
                   <Col span={4}>
                     <span>Once every</span>
                   </Col>

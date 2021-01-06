@@ -8,7 +8,8 @@ export default class exitRules extends Component<any, any> {
     render() {
         return (
             <div>
-                
+                <h3>Step4</h3>
+        <h4>Exit Rules</h4>
             </div>
         )
     }

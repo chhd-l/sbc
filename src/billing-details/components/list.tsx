@@ -103,7 +103,7 @@ export default class List extends React.Component<any, any> {
         dataIndex: 'practicalPrice',
         key: 'practicalPrice',
         render: (value) => {
-          <p>{currencySymbol +''+ value}</p>
+          return <p>{currencySymbol +''+ value}</p>
         },
         width: 120
       },

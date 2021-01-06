@@ -128,10 +128,13 @@ export default class AppStore extends Store {
    * 检测商品分类是否有子类
    */
   validChild = async (storeCateId: string) => {
+    this.dispatch('loading:start');
     const result: any = await chkChild(Map({ storeCateId: storeCateId }));
     if (result.res.context == 0) {
+      this.dispatch('loading:end');
       this.dispatch('cateActor: child', false);
     } else if (result.res.context == 1) {
+      this.dispatch('loading:end');
       this.dispatch('cateActor: child', true);
     }
   };
@@ -140,10 +143,13 @@ export default class AppStore extends Store {
    * 检测商品分类是否有子类商品
    */
   validGoods = async (storeCateId: string) => {
+    this.dispatch('loading:start');
     const result: any = await chkGoods(Map({ storeCateId: storeCateId }));
     if (result.res.context == 0) {
+      this.dispatch('loading:end');
       this.dispatch('cateActor: goods', false);
     } else if (result.res.context == 1) {
+      this.dispatch('loading:end');
       this.dispatch('cateActor: goods', true);
     }
   };

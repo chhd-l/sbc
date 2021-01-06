@@ -63,7 +63,7 @@ export default class CustomerList extends React.Component<any, any> {
     const { evaluateDelete } = this.props.relaxProps;
     confirm({
       title: 'Prompt',
-      content: 'Are you sure you want to delete this evaluate?',
+      content: 'Are you sure you want to delete this evaluation?',
       onOk() {
         evaluateDelete(params);
       }

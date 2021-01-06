@@ -50,8 +50,7 @@ export default class SelectAttribute extends React.Component<any, any> {
       attributeValue: searchForm.attributeValue,
       attributeStatus: true,
       pageSize: pagination.pageSize,
-      pageNum: pagination.current - 1,
-      searchType: 'filter'
+      pageNum: pagination.current - 1
     };
     webapi
       .getAttributes(params)

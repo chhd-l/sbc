@@ -46,7 +46,6 @@ export default class AppStore extends Store {
       })) as any;
       // const { res: refresh } = (await webapi.refresh(orderInfo.totalTid)) as any;
       this.transaction(() => {
-        debugger;
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
         this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);

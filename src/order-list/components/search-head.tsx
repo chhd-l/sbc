@@ -176,10 +176,10 @@ export default class SearchHead extends Component<any, any> {
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
-                        let a = e.target.value.split(',');
+                        let a = e.target.value ? e.target.value.split(',') : null;
 
                         this.setState({
-                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
+                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
                         });
                       }}
                     />
@@ -325,7 +325,7 @@ export default class SearchHead extends Component<any, any> {
                         tradeState: ts,
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
-                        [clinicSelect]: clinicSelectValue,
+                        [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
                         beginTime,
                         endTime,
                         orderCategory

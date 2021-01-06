@@ -1,19 +1,26 @@
 import { Actor, IMap, Action } from 'plume2';
+import { cache } from 'qmkit';
 
 /**
  * 查询数据中心
  */
 export default class SearchActor extends Actor {
   defaultState() {
-    const employeeData = JSON.parse(sessionStorage.getItem('PrescriberSelect'));
+    const prescriberSelected = JSON.parse(sessionStorage.getItem('PrescriberSelect'));
+    const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
+    let exactMatchFlag = false;
+    if (employee && employee.roleName && employee.roleName.indexOf('Prescriber') > -1) {
+      exactMatchFlag = true;
+    }
     return {
       searchForm: {
         period: 60,
-        prescriberId: employeeData ? employeeData.prescriberId : '',
+        prescriberId: prescriberSelected ? prescriberSelected.prescriberId : '',
         prescriberName: '',
         //auditStatus: -1,
         pageNum: 0,
-        pageSize: 10
+        pageSize: 10,
+        exactMatchFlag: exactMatchFlag
       },
       searchList: ''
     };

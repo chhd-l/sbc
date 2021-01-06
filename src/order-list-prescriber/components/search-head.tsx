@@ -49,7 +49,7 @@ export default class SearchHead extends Component<any, any> {
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
-      clinicSelect: 'clinicsName',
+      clinicSelect: 'clinicsIds',
       buyerOptions: 'buyerName',
       numberSelect: 'orderNumber',
       statusSelect: 'paymentStatus',
@@ -58,7 +58,7 @@ export default class SearchHead extends Component<any, any> {
       goodsOptionsValue: '',
       receiverSelectValue: '',
       numberSelectValue: '',
-      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName : '',
+      clinicSelectValue: sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : '',
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -178,10 +178,10 @@ export default class SearchHead extends Component<any, any> {
                       <Input
                         style={styles.wrapper}
                         onChange={(e) => {
-                          let a = e.target.value.split(',');
+                          let a = e.target.value ? e.target.value.split(',') : null;
 
                           this.setState({
-                            clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : e.target.value.split(',').map(Number)
+                            clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
                           });
                         }}
                       />
@@ -328,7 +328,7 @@ export default class SearchHead extends Component<any, any> {
                         tradeState: ts,
                         [goodsOptions]: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
-                        [clinicSelect]: clinicSelectValue,
+                        clinicsIds: sessionStorage.getItem('PrescriberSelect') && JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null,
                         beginTime,
                         endTime,
                         orderCategory

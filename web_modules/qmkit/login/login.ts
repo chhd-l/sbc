@@ -87,9 +87,9 @@ export async function login(routerType, oktaToken: string) {
     sessionStorage.setItem('employeeId', res.context.employeeId);
 
     // 获取登录人拥有的菜单
-    const menusRes = (await webapi.fetchMenus()) as any;
+    const menusRes = (await webapi.menusAndFunctions()) as any;
     if (menusRes.res.code === Const.SUCCESS_CODE) {
-      let dataList = fromJS(menusRes.res.context);
+      let dataList = fromJS(menusRes.res.context.menuInfoResponseList);
       if (window.companyType == 0) {
         dataList = dataList.filterNot(
           (item) => item.get('title') == '业务员统计'
@@ -101,11 +101,10 @@ export async function login(routerType, oktaToken: string) {
         dataList
       );
 
-      sessionStorage.setItem(
-        cache.LOGIN_MENUS,
-        JSON.stringify(allGradeMenus)
-      );
-      const functionsRes = (await webapi.fetchFunctions()) as any;
+      sessionStorage.setItem(cache.LOGIN_MENUS, JSON.stringify(allGradeMenus));
+      const functionsRes = menusRes.res.context.functionList
+      sessionStorage.setItem(cache.LOGIN_FUNCTIONS, JSON.stringify(functionsRes));
+      /*const functionsRes = (await webapi.fetchFunctions()) as any;
       if (functionsRes.res.code === Const.SUCCESS_CODE) {
         sessionStorage.setItem(
           cache.LOGIN_FUNCTIONS,
@@ -113,7 +112,7 @@ export async function login(routerType, oktaToken: string) {
         );
       } else {
         message.error(functionsRes.res.message)
-      }
+      }*/
       //获取店铺ID
       const storeId = res.context.storeId;
       //获取店铺主页的小程序码
@@ -126,12 +125,12 @@ export async function login(routerType, oktaToken: string) {
       }*/
 
       //Perscriber used
-      const employee = (await webapi.employee()) as any;
+      /*const employee = (await webapi.employee()) as any;
       if (employee.res) {
         sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(employee.res));
       } else {
         message.error(employee.res.message)
-      }
+      }*/
 
       /**
        * 审核状态 0、待审核 1、已审核 2、审核未通过 -1、未开店
@@ -148,14 +147,18 @@ export async function login(routerType, oktaToken: string) {
           //登录成功之后，塞入baseConfig
           const config = (await webapi.getUserSiteInfo()) as any;
           if (config.res.code === Const.SUCCESS_CODE) {
-            sessionStorage.setItem(
-              cache.SYSTEM_BASE_CONFIG,
-              JSON.stringify(config.res.context)
-            );
+            sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(config.res.context.baseConfigRopResponse));
+            sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(config.res.context.employeeAccountByIdResponse));
+            let configResponse = config.res.context.configResponse
+            sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
+            sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
+            sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
+            sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
+            sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
           } else {
             message.error(config.res.message)
           }
-          let hasHomeFunction = functionsRes.res.context.includes('f_home');
+          let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');
           } else {

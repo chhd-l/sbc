@@ -20,7 +20,14 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       id: this.props.match.params.id,
       title: '',
       current: 0,
-      subscriptionPlan: {}
+      subscriptionPlan: {
+        targetProducts: [{
+          id: 1234,
+          goodsImg: 'https://d2cstgstorage.z13.web.core.windows.net/202012110249234685.png',
+          SKU: 'P780305080',
+          goodsName: 'Mature Consult Small Dog'
+        }]
+      }
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);

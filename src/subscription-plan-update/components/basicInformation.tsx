@@ -40,7 +40,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan name">
               {getFieldDecorator('name', {
                 initialValue: subscriptionPlan.name,
-                rules: [{ required: true, message: 'Please input Subscription Plan Name' }]
+                rules: [{ required: false, message: 'Please input Subscription Plan Name' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -53,13 +53,13 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Subscription Plan ID">
               {getFieldDecorator('subscriptionPlanId ', {
                 initialValue: subscriptionPlan.subscriptionPlanId,
-                rules: [{ required: true, message: 'Please input Subscription Plan ID' }]
+                rules: [{ required: false, message: 'Please input Subscription Plan ID' }]
               })(<Input disabled={true} />)}
             </FormItem>
             <FormItem {...layout} label="Quantity">
               {getFieldDecorator('quantity', {
                 initialValue: subscriptionPlan.quantity,
-                rules: [{ required: true, message: 'Please input Quantity' }]
+                rules: [{ required: false, message: 'Please input Quantity' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -72,7 +72,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Landing page">
               {getFieldDecorator('landingPage', {
                 initialValue: subscriptionPlan.landingPage,
-                rules: [{ required: true, message: 'Please input Landing page' }]
+                rules: [{ required: false, message: 'Please input Landing page' }]
               })(
                 <Input
                   onChange={(e) => {
@@ -85,7 +85,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Offer time period">
               {getFieldDecorator('offerTimePeriod', {
                 initialValue: subscriptionPlan.startDate && subscriptionPlan.end ? [subscriptionPlan.startDate, subscriptionPlan.endDate] : undefined,
-                rules: [{ required: true, message: 'Please select Offer time period' }]
+                rules: [{ required: false, message: 'Please select Offer time period' }]
               })(
                 <RangePicker
                   onChange={(dates, dateStrings) => {
@@ -98,7 +98,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Frequency">
               {getFieldDecorator('frequency', {
                 initialValue: subscriptionPlan.frequency,
-                rules: [{ required: true, message: 'Please select Frequency' }]
+                rules: [{ required: false, message: 'Please select Frequency' }]
               })(
                 <Row style={{color: '#222222'}}>
                   <Col span={4}>
@@ -123,7 +123,7 @@ export default class basicInformation extends Component<any, any> {
             <FormItem {...layout} label="Number of delivery">
               {getFieldDecorator('delivery', {
                 initialValue: subscriptionPlan.delivery,
-                rules: [{ required: true, message: 'Please input Number of delivery' }]
+                rules: [{ required: false, message: 'Please input Number of delivery' }]
               })(
                 <Input
                   onChange={(e) => {

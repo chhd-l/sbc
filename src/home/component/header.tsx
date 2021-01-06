@@ -168,7 +168,7 @@ export default class Header extends React.Component<any, any> {
       buttonType: false
     });
     if (this.state.searchType == true) {
-      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week });
+      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week ? this.state.week : moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     }
   };
 

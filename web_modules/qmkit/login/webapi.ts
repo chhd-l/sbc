@@ -26,6 +26,11 @@ export const fetchMenus = () => {
   return Fetch('/roleMenuFunc/menus');
 };
 
+export const menusAndFunctions = () => {
+  return Fetch('/api/roleMenuFunc/menusAndFunctions');
+};
+
+
 /**
  * 查询用户的功能信息
  * @returns {Promise<IAsyncResult<T>>}

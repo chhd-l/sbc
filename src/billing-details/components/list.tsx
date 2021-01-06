@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, Button, Tooltip } from 'antd';
 import { Relax } from 'plume2';
 import { IList } from 'typings/globalType';
-import { AuthWrapper, noop, util } from 'qmkit';
+import { AuthWrapper, cache, noop, util } from 'qmkit';
 
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -87,6 +87,7 @@ export default class List extends React.Component<any, any> {
   };
 
   _renderColumns = (): any[] => {
+    const currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '$';
     return [
       {
         title: 'Order number',
@@ -101,9 +102,9 @@ export default class List extends React.Component<any, any> {
         title: 'Payment credited',
         dataIndex: 'practicalPrice',
         key: 'practicalPrice',
-        /*render: (value) => {
-          return util.FORMAT_YUAN(value.toFixed(2));
-        },*/
+        render: (value) => {
+          <p>{currencySymbol +''+ value}</p>
+        },
         width: 120
       },
       /*{

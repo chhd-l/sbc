@@ -5,11 +5,11 @@ import { Actor, IMap, Action } from 'plume2';
  */
 export default class SearchActor extends Actor {
   defaultState() {
-    let employeeData = JSON.parse(sessionStorage.getItem('s2b-employee@data'));
+    const employeeData = JSON.parse(sessionStorage.getItem('PrescriberSelect'));
     return {
       searchForm: {
         period: 60,
-        prescriberId: employeeData.clinicsIds && !(Array.isArray(employeeData.clinicsIds) && employeeData.clinicsIds.length === 0) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : '',
+        prescriberId: employeeData ? employeeData.prescriberId : '',
         prescriberName: '',
         //auditStatus: -1,
         pageNum: 0,

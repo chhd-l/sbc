@@ -69,7 +69,7 @@ export default class Header extends React.Component<any, any> {
       });
     }
     if (PrescriberSelectType == null && prescribers != null) {
-      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ id: prescribers[0].id, prescriberId: prescribers[0].id, prescriberName: prescribers[0].prescriberName }));
+      sessionStorage.setItem('PrescriberSelect', JSON.stringify({ id: prescribers[0].id, prescriberId: prescribers[0].prescriberId, prescriberName: prescribers[0].prescriberName }));
     }
   }
 

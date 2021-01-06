@@ -345,22 +345,8 @@ export function logout() {
     .accountName : '';
   window.token = null
   localStorage.removeItem(cache.LOGIN_DATA);
-  sessionStorage.removeItem(cache.LOGIN_DATA);
-  sessionStorage.removeItem(cache.SYSTEM_BASE_CONFIG);
-  sessionStorage.removeItem(cache.SYSTEM_GET_CONFIG);
-  sessionStorage.removeItem(cache.LOGIN_MENUS);
-  sessionStorage.removeItem(cache.LOGIN_FUNCTIONS);
-  sessionStorage.removeItem(cache.FIRST_ACTIVE);
-  sessionStorage.removeItem(cache.SECOND_ACTIVE);
-  sessionStorage.removeItem(cache.THIRD_ACTIVE);
-  sessionStorage.removeItem(cache.SYSTEM_GET_WEIGHT); //weight
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
-  sessionStorage.removeItem('PrescriberType');
-  sessionStorage.removeItem('PrescriberSelect');
-  sessionStorage.removeItem('PrescriberSelectType');
-  sessionStorage.removeItem('prescriberId');
-
-
+  sessionStorage.clear()
 }
 
 

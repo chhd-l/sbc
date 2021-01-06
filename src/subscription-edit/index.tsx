@@ -71,7 +71,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       discountsPrice: '',
 
       isPromotionCodeValid: false,
-      promotionLoading: false,
       promotionDesc: 'Promotion',
       noStartOrder: [],
       completedOrder: [],
@@ -580,7 +579,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   applyPromotionCode = (promotionCode?: String) => {
     const { goodsInfo, promotionCodeInput } = this.state;
     this.setState({
-      promotionLoading: true
+      loading: true
     });
     let goodsInfoList = [];
     for (let i = 0; i < goodsInfo.length; i++) {
@@ -609,18 +608,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             promotionCodeShow: res.context.promotionCode,
             isPromotionCodeValid: res.context.promotionFlag,
             promotionDesc: res.context.promotionDesc,
-            promotionLoading: false
+            loading: false
           });
         } else {
           this.setState({
-            promotionLoading: false
+            loading: false
           });
           message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
-          promotionLoading: false
+          loading: false
         });
         message.error(err.message || 'Unsuccessful');
       });
@@ -1197,17 +1196,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
 
               <Col span={8} offset={16}>
-                <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-                  {' '}
-                  <div className="flex-between">
-                    <span>Subtotal</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + this.subTotal().toFixed(2)}</span>
-                  </div>
-                  <div className="flex-between">
-                    <span>{this.state.promotionDesc}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
-                  </div>
-                  {/* <div className="flex-between">
+                <div className="flex-between">
+                  <span>Subtotal</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + this.subTotal().toFixed(2)}</span>
+                </div>
+                <div className="flex-between">
+                  <span>Promotion</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.discountsPrice ? this.state.discountsPrice : 0).toFixed(2)}</span>
+                </div>
+                {/* <div className="flex-between">
                       <span>Promotion Code</span>
                       {promotionCodeShow ? (
                         <Tag
@@ -1218,54 +1215,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Tag>
                       ) : null}
                     </div> */}
-                  <div className="flex-between">
-                    <span>Shipping</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
-                  </div>
-                  <div className="flex-between">
-                    <span>
-                      <span>Total</span> (IVA Include):
-                    </span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
-                  </div>
-                  {/* <Row style={{ marginTop: 20 }}>
-                    <Col span={16}>
-                      <Input
-                        placeholder="Promotional code"
-                        onChange={(e) => {
-                          const value = (e.target as any).value;
-                          this.setState({
-                            promotionCodeInput: value
-                          });
-                        }}
-                      />
-                    </Col>
-                    <Col span={8}>
-                      <Button
-                        style={{ marginLeft: 20 }}
-                        onClick={() => this.applyPromotionCode()}
-                        type="primary"
-                      >
-                        Apply
-                      </Button>
-                    </Col>
-                    {this.state.isPromotionCodeValid && promotionCodeShow ? (
-                      <Col span={24}>
-                        <span
-                          style={{
-                            color: 'red',
-                            marginRight: '4px',
-                            fontSize: '12px'
-                          }}
-                        >
-                          {'Promotion Code (' +
-                            promotionCodeShow +
-                            ') is not valid'}
-                        </span>
-                      </Col>
-                    ) : null}
-                  </Row> */}
-                </Spin>
+                <div className="flex-between">
+                  <span>Shipping</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
+                </div>
+                <div className="flex-between">
+                  <span>
+                    <span>Total</span> (IVA Include):
+                  </span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice).toFixed(2)}</span>
+                </div>
               </Col>
             </Row>
 

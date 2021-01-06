@@ -40,19 +40,19 @@ export default class AppStore extends Store {
     }
     form['orderType'] = 'NORMAL_ORDER';
     if (sessionStorage.getItem('PrescriberSelect')) {
+      form['clinicsIds'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null;
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
     }
 
-    const { res: employeeRes } = await webapi.employee();
+    // const { res: employeeRes } = await webapi.employee();
     webapi
       .fetchOrderList({
         ...form,
         pageNum,
-        pageSize,
-        clinicsId: employeeRes.clinicsId
+        pageSize
       })
       .then(({ res }) => {
-        if (res.code == Const.SUCCESS_CODE) {
+        if (res && res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
             this.dispatch('loading:end');
             this.dispatch('list:init', res.context);
@@ -60,7 +60,7 @@ export default class AppStore extends Store {
             this.btnLoading = false;
           });
         } else {
-          message.error(res.message);
+          message.error((res && res.message) || 'Operation failure');
           this.dispatch('loading:end');
         }
       });

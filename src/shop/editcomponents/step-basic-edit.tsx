@@ -149,6 +149,7 @@ export default class StepOneEdit extends React.Component<any, any> {
 
     const companyInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     const companyInfoId = companyInfo.companyInfoId;
+
     return (
       <div>
         <Form>
@@ -514,6 +515,23 @@ export default class StepOneEdit extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
+              <Col span={12}>
+                <FormItem {...formItemLayout} required={false} label="City Select">
+                  {getFieldDecorator('citySelection', {
+                    initialValue: storeInfo.get('citySelection') === '0'  ? false : true // default checked
+                  })(
+                    <Switch
+                      checked={storeInfo.get('citySelection') === '0'  ? false : true}
+                      onChange={(value) =>
+                        onChange({
+                          field: 'citySelection',
+                          value: value ? '1' : '0'
+                        })
+                      }
+                    />
+                  )}
+                </FormItem>
+              </Col>
             </Row>
             <Row>
               <Col span={12}>
@@ -534,11 +552,14 @@ export default class StepOneEdit extends React.Component<any, any> {
    */
   _onSave = () => {
     const form = this.props.form;
-    const { onEditStoreInfo, company } = this.props.relaxProps;
+    const { onEditStoreInfo, company, onChange } = this.props.relaxProps;
     form.validateFields(null, (errs) => {
       //如果校验通过
       if (!errs) {
         let storeInfo = company.get('storeInfo');
+        if(!storeInfo.get('citySelection')) {
+          storeInfo = storeInfo.set('citySelection', '1')
+        }
         onEditStoreInfo(storeInfo);
       } else {
         this.setState({});

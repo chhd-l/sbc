@@ -681,10 +681,10 @@ class ClinicForm extends React.Component<any, any> {
                     {}
                   )(
                     <Select
-                      showSearch
+                      // showSearch
                       placeholder="Select a Order number"
                       notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                      onSearch={_.debounce(this.getCityList, 500)}
+                      // onSearch={_.debounce(this.getCityList, 500)}
                       filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={(value) => {
                         this.onFormChange({

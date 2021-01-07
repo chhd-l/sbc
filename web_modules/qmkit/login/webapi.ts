@@ -27,7 +27,7 @@ export const fetchMenus = () => {
 };
 
 export const menusAndFunctions = () => {
-  return Fetch('/api/roleMenuFunc/menusAndFunctions');
+  return Fetch('/roleMenuFunc/menusAndFunctions');
 };
 
 

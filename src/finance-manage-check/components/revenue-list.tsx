@@ -10,6 +10,7 @@ const Column = Table.Column;
 export default class RevenueList extends React.Component<any, any> {
   props: {
     relaxProps?: {
+      loading: boolean;
       incomeList: any;
       incomeTotal: any;
       payWaysObj: any;
@@ -19,6 +20,7 @@ export default class RevenueList extends React.Component<any, any> {
   };
 
   static relaxProps = {
+    loading: 'loading',
     incomeList: 'incomeList',
     incomeTotal: 'incomeTotal',
     payWaysObj: 'payWaysObj',
@@ -27,7 +29,7 @@ export default class RevenueList extends React.Component<any, any> {
   };
 
   render() {
-    const { incomeList, payWaysObj, incomeTotal, dateRange, payWay } = this.props.relaxProps;
+    const { incomeList, payWaysObj, incomeTotal, dateRange, payWay, loading } = this.props.relaxProps;
     let totalAmount = 0;
     return (
       <div>
@@ -92,7 +94,12 @@ export default class RevenueList extends React.Component<any, any> {
         </div>*/}
 
         <div>
-          <DataGrid dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []} rowKey={(record, index) => index} pagination={false}>
+          <DataGrid
+            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []}
+            rowKey={(record, index) => index}
+            pagination={false}
+          >
             <Column
               title="NO."
               dataIndex="index"

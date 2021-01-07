@@ -35,7 +35,7 @@ export default class SearchHead extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="优惠券名称"
+            addonBefore="Coupon Name"
             value={form.get('likeCouponName')}
             onChange={(e: any) => {
               onFormFieldChange('likeCouponName', e.target.value);
@@ -46,7 +46,7 @@ export default class SearchHead extends React.Component<any, any> {
         <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
-            label="使用范围"
+            label="Use range"
             defaultValue="不限"
             onChange={(value) => {
               onFormFieldChange('scopeType', value);
@@ -70,26 +70,10 @@ export default class SearchHead extends React.Component<any, any> {
           </SelectGroup>
         </FormItem>
         <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledStartDate}
-            format={Const.DAY_FORMAT}
-            value={startValue}
-            placeholder="开始时间"
-            onChange={this.onStartChange}
-            showToday={false}
-          />
+          <DatePicker allowClear={true} disabledDate={this.disabledStartDate} format={Const.DAY_FORMAT} value={startValue} placeholder="Start date" onChange={this.onStartChange} showToday={false} />
         </FormItem>
         <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledEndDate}
-            format={Const.DAY_FORMAT}
-            value={endValue}
-            placeholder="结束时间"
-            onChange={this.onEndChange}
-            showToday={false}
-          />
+          <DatePicker allowClear={true} disabledDate={this.disabledEndDate} format={Const.DAY_FORMAT} value={endValue} placeholder="End date" onChange={this.onEndChange} showToday={false} />
         </FormItem>
 
         <FormItem>
@@ -103,7 +87,7 @@ export default class SearchHead extends React.Component<any, any> {
               search();
             }}
           >
-            搜索
+            Search
           </Button>
         </FormItem>
       </Form>

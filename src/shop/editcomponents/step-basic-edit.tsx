@@ -518,14 +518,14 @@ export default class StepOneEdit extends React.Component<any, any> {
               <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label="City Select">
                   {getFieldDecorator('citySelection', {
-                    initialValue: storeInfo.get('citySelection') === '0'  ? false : true // default checked
+                    initialValue: storeInfo.get('citySelection') === 0  ? false : true // default checked
                   })(
                     <Switch
-                      checked={storeInfo.get('citySelection') === '0'  ? false : true}
+                      checked={storeInfo.get('citySelection') === 0  ? false : true}
                       onChange={(value) =>
                         onChange({
                           field: 'citySelection',
-                          value: value ? '1' : '0'
+                          value: value ? 1 : 0
                         })
                       }
                     />
@@ -557,9 +557,6 @@ export default class StepOneEdit extends React.Component<any, any> {
       //如果校验通过
       if (!errs) {
         let storeInfo = company.get('storeInfo');
-        if(!storeInfo.get('citySelection')) {
-          storeInfo = storeInfo.set('citySelection', '1')
-        }
         onEditStoreInfo(storeInfo);
       } else {
         this.setState({});

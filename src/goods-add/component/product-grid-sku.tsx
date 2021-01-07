@@ -28,7 +28,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
       prevPropSelectedRowKeys: [],
       total: 0,
       goodsInfoPage: {},
-      searchParams: props.searchParams ? props.searchParams : {},
+      searchParams: {},
       content: [],
       goodsNo: []
     };

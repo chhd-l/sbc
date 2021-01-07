@@ -24,6 +24,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
       createLink: any;
       getGoodsId: any;
       addSkUProduct: any;
+      onFormFieldChange:Function;
     };
     showModal: Function;
     selectedRows: IList;
@@ -51,7 +52,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     createLink: 'createLink',
     getGoodsId: 'getGoodsId',
     initCateList: 'initCateList',
-    addSkUProduct: 'addSkUProduct'
+    addSkUProduct: 'addSkUProduct',
+    onFormFieldChange:noop
   };
   constructor(props) {
     super(props);
@@ -128,6 +130,15 @@ class ProductTooltipSKU extends React.Component<any, any> {
       message.info('Maximum 10 products!');
     }
     this.props.form.resetFields();
+    this.clearSearchForm()
+  }
+  clearSearchForm =()=>{
+    const{onFormFieldChange} = this.props.relaxProps
+    onFormFieldChange({key: 'likeGoodsName',value: ''});
+    onFormFieldChange({key: 'likeGoodsNo',value: ''});
+    onFormFieldChange({key: 'goodsCateId',value: ''});
+    onFormFieldChange({key: 'storeCategoryIds',value: null});
+    onFormFieldChange({key: 'brandId',value: ''});
   }
 
   render() {
@@ -148,12 +159,15 @@ class ProductTooltipSKU extends React.Component<any, any> {
         }
         width={1100}
         visible={visible}
-        onOk={() => 
+        onOk={() => {
           this.handleOK()
+        }
+          
         }
         onCancel={() => {
           this.props.showModal({ type: 0 }, this.props.pid);
           this.props.form.resetFields();
+          this.clearSearchForm()
           //onCancelBackFun();
         }}
         okText="Confirm"

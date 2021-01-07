@@ -248,7 +248,7 @@ export default class StepOneEdit extends React.Component<any, any> {
               </Col>
               <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label="City Select">
-                  <Switch disabled={true} checked={storeInfo.get('citySelection') === '1' ? true : false} />
+                  <Switch disabled={true} checked={storeInfo.get('citySelection') === 1 ? true : false} />
                 </FormItem>
               </Col>
             </Row>

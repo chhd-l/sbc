@@ -173,10 +173,10 @@ export default class RevenueList extends React.Component<any, any> {
             /> */}
             <Column
               title="Payment Source"
-              dataIndex="totalAmount"
-              key="supplierId"
+              dataIndex="syncTotalAmount"
+              key="syncTotalAmount"
               render={(_text, rowData: any) => {
-                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text}</span>;
+                return <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + _text != '' ? _text : '--'}</span>;
               }}
             />
             {/*<Column

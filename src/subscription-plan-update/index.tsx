@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, history } from 'qmkit';
+import { Headline, BreadCrumb, history, Const } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import BasicInformation from './components/basicInformation';
@@ -21,13 +21,8 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       title: '',
       current: 0,
       subscriptionPlan: {
-        targetProducts: [{
-          id: 1234,
-          goodsImg: 'https://d2cstgstorage.z13.web.core.windows.net/202012110249234685.png',
-          SKU: 'P780305080',
-          goodsName: 'Mature Consult Small Dog'
-        }]
-      }
+      },
+      allSkuProduct: []
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -38,6 +33,19 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     const { id } = this.state;
     this.setState({
       title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)'
+    });
+    webapi.getAllSkuProducts() .then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          allSkuProduct: res.context.goodsInfos.content
+        });
+      } else {
+        message.error(res.message || 'Get data failed');
+      }
+    })
+    .catch(() => {
+      message.error('Get data failed');
     });
     if (id) {
       webapi
@@ -121,7 +129,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     });
   }
   render() {
-    const { current, title, subscriptionPlan } = this.state;
+    const { current, title, subscriptionPlan, allSkuProduct } = this.state;
     const steps = [
       {
         title: 'Basic Information',
@@ -129,7 +137,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       },
       {
         title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
       },
       {
         title: 'Entry Criteria',

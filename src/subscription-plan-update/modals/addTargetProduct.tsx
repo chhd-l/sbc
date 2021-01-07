@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { Modal, Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message, Table } from 'antd';
+import { noop, SelectGroup, TreeSelectGroup, util, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from './webapi';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -12,27 +13,143 @@ export default class addTargetProduct extends Component<any, any> {
     super(props);
     this.state = {
       visible: false,
+      selectedRowKeys: [],
+
       brandList: [],
       serchForm: {},
-      productCategories: []
+      productCategories: [],
+
+      loading: false,
+      skuProducts: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0
+      }
     };
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.onFormFieldChange = this.onFormFieldChange.bind(this);
-    this.searchProducts = this.searchProducts.bind(this);
     this.getProductCategoryNodes = this.getProductCategoryNodes.bind(this);
+    this.onSelectChange = this.onSelectChange.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+    this.handleTableChange = this.handleTableChange.bind(this);
+    this.getSkuProductList = this.getSkuProductList.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible } = nextProps;
+    const { visible, selectedRowKeys } = nextProps;
 
     if (visible !== prevState.visible) {
       return {
-        visible: visible
+        visible: visible,
+        selectedRowKeys: selectedRowKeys
       };
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    webapi
+      .getBrandList()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            brandList: res.context
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+
+    webapi
+      .getProductCategoryList()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          let newCategoryList = res.context.map((item) => {
+            return {
+              id: item.cateId,
+              parentId: item.cateParentId === 0 ? null : item.cateParentId,
+              cateName: item.cateName
+            };
+          });
+          let treeData = util.setChildrenData(newCategoryList);
+          this.setState({
+            productCategories: treeData
+          });
+        } else {
+          message.error(res.message || 'Get data failed');
+        }
+      })
+      .catch(() => {
+        message.error('Get data failed');
+      });
+
+    this.getSkuProductList();
+  }
+
+  handleTableChange(pagination: any) {
+    this.setState(
+      {
+        pagination: pagination
+      },
+      () => this.getSkuProductList()
+    );
+  }
+  onSearch() {
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getSkuProductList()
+    );
+  }
+  getSkuProductList() {
+    const { serchForm, pagination } = this.state;
+    let params = Object.assign(serchForm, {
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    });
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getSkuProducts(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          pagination.total = res.context.goodsInfos.total;
+          res.context.goodsInfos.content.map((item) => {
+            item.key = item.goodsInfoId;
+          });
+          this.setState({
+            skuProducts: res.context.goodsInfos.content,
+            pagination: pagination,
+            loading: false
+          });
+        } else {
+          message.error(res.message || 'Get Data Failed');
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Get Data Failed');
+        this.setState({
+          loading: false
+        });
+      });
   }
 
   onFormFieldChange(key, value) {
@@ -50,36 +167,83 @@ export default class addTargetProduct extends Component<any, any> {
       productCategories.map((item) => {
         if (item.children && item.children.length > 0) {
           return (
-            <TreeNode key={item.cateId} value={item.cateId} title={item.cateName} disabled={true}>
+            <TreeNode key={item.id} value={item.id} title={item.cateName} disabled={true}>
               {this.getProductCategoryNodes(item.children)}
             </TreeNode>
           );
         }
-        return <TreeNode key={item.cateId} value={item.cateId} title={item.cateName} />;
+        return <TreeNode key={item.id} value={item.id} title={item.cateName} />;
       })
     );
   }
 
-  searchProducts() {}
+  onSelectChange(selectedRowKeys) {
+    this.setState({selectedRowKeys });
+  }
 
   handleOk() {
-    this.setState({
-      visible: false
-    });
+    this.props.updateTable(this.state.selectedRowKeys);
   }
   handleCancel() {
-    this.setState({
-      visible: false
-    });
+    this.props.updateTable();
   }
   render() {
-    const { visible, brandList, productCategories } = this.state;
+    const { visible, loading, brandList, productCategories, skuProducts, selectedRowKeys } = this.state;
+    const columns = [
+      {
+        title: 'Image',
+        dataIndex: 'goodsInfoImg',
+        key: 'goodsInfoImg',
+        render: (text) => <img src={text} alt="" style={{ width: 20 }} />,
+        width: '10%'
+      },
+      {
+        title: 'SKU',
+        dataIndex: 'goodsInfoNo',
+        key: 'goodsInfoNo',
+        width: '15%'
+      },
+      {
+        title: 'Product name',
+        dataIndex: 'goodsInfoName',
+        key: 'goodsInfoName',
+        width: '20%'
+      },
+      {
+        title: 'Specification',
+        dataIndex: 'specName',
+        key: 'specName',
+        width: '15%'
+      },
+      {
+        title: 'Product category',
+        dataIndex: 'goodsCateName',
+        key: 'goodsCateName',
+        width: '15%'
+      },
+      {
+        title: 'Brand',
+        dataIndex: 'brandName',
+        key: 'brandName',
+        width: '15%'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'marketPrice',
+        key: 'marketPrice',
+        width: '10%'
+      }
+    ];
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange
+    };
     return (
       <div>
         <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add products" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
           <Form className="filter-content" layout="inline">
             <Row>
-              <Col span={8}> 
+              <Col span={8}>
                 <FormItem>
                   <Input
                     addonBefore={
@@ -89,7 +253,7 @@ export default class addTargetProduct extends Component<any, any> {
                     }
                     style={{ width: 300 }}
                     onChange={(e: any) => {
-                      this.onFormFieldChange('likeGoodsNo', e.target.value);
+                      this.onFormFieldChange('goodsInfoNo', e.target.value);
                     }}
                   />
                 </FormItem>
@@ -104,7 +268,7 @@ export default class addTargetProduct extends Component<any, any> {
                     }
                     style={{ width: 300 }}
                     onChange={(e: any) => {
-                      this.onFormFieldChange('likeGoodsName', e.target.value);
+                      this.onFormFieldChange('goodsName', e.target.value);
                     }}
                   />
                 </FormItem>
@@ -121,16 +285,17 @@ export default class addTargetProduct extends Component<any, any> {
                         </p>
                       }
                       defaultValue="All"
+                      style={{ width: '177px' }}
                       showSearch
                       optionFilterProp="children"
                       onChange={(value) => {
                         this.onFormFieldChange('brandId', value);
                       }}
                     >
-                      {brandList.map((v, i) => {
+                      {brandList.map((item, index) => {
                         return (
-                          <Option key={i} value={v.get('brandId') + ''}>
-                            {v.get('nickName')}
+                          <Option key={index} value={item.brandId + ''}>
+                            {item.nickName}
                           </Option>
                         );
                       })}
@@ -165,7 +330,7 @@ export default class addTargetProduct extends Component<any, any> {
                     shape="round"
                     onClick={(e) => {
                       e.preventDefault();
-                      this.searchProducts();
+                      this.onSearch();
                     }}
                   >
                     <span>
@@ -176,6 +341,14 @@ export default class addTargetProduct extends Component<any, any> {
               </Col>
             </Row>
           </Form>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={skuProducts}
+            pagination={this.state.pagination}
+            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            onChange={this.handleTableChange}
+          />
         </Modal>
       </div>
     );

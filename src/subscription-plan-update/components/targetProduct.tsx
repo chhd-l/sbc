@@ -10,10 +10,21 @@ export default class targetProduct extends Component<any, any> {
     };
     this.deleteProduct = this.deleteProduct.bind(this);
     this.addTargetProduct = this.addTargetProduct.bind(this);
+    this.updateTable = this.updateTable.bind(this);
   }
 
-  deleteProduct(id) {
-    const { subscriptionPlan, addField } = this.props;
+  deleteProduct(key) {
+    const { subscriptionPlan, addField, allSkuProduct } = this.props;
+
+    let newTargetProductIds = []
+    subscriptionPlan.targetProductIds.map((item) => {
+      if (item !== key) {
+        newTargetProductIds.push(item);
+      }
+    });
+    let targetProducts = allSkuProduct.filter((x) => newTargetProductIds.includes(x.goodsInfoId));
+    addField('targetProducts', targetProducts);
+    addField('targetProductIds', newTargetProductIds);
   }
 
   addTargetProduct() {
@@ -22,9 +33,21 @@ export default class targetProduct extends Component<any, any> {
     });
   }
 
+  updateTable(selectedRowKeys) {
+    const { addField, allSkuProduct } = this.props;
+    if (selectedRowKeys) {
+      let targetProducts = allSkuProduct.filter((x) => selectedRowKeys.includes(x.goodsInfoId));
+      addField('targetProducts', targetProducts);
+      addField('targetProductIds', selectedRowKeys);
+    }
+    this.setState({
+      visible: false
+    });
+  }
+
   render() {
     const { loading, visible } = this.state;
-    const { subscriptionPlan, addField } = this.props;
+    const { subscriptionPlan } = this.props;
     return (
       <div>
         <h3>Step2</h3>
@@ -51,11 +74,11 @@ export default class targetProduct extends Component<any, any> {
                       <tbody className="ant-table-tbody">
                         {subscriptionPlan.targetProducts &&
                           subscriptionPlan.targetProducts.map((item) => (
-                            <tr key={item.id}>
+                            <tr key={item.goodsInfoId}>
                               <td>
-                                <img src={item.goodsImg} />
+                                <img src={item.goodsInfoImg} />
                               </td>
-                              <td>{item.SKU}</td>
+                              <td>{item.goodsInfoNo}</td>
                               <td>
                                 <Tooltip
                                   overlayStyle={{
@@ -63,17 +86,17 @@ export default class targetProduct extends Component<any, any> {
                                     //height: 100
                                   }}
                                   placement="bottomLeft"
-                                  title={<div>{item.goodsName}</div>}
+                                  title={<div>{item.goodsInfoName}</div>}
                                 >
-                                  <p className="overflow">{item.goodsName}</p>
+                                  <p className="overflow">{item.goodsInfoName}</p>
                                 </Tooltip>
                               </td>
-                              <td>{item.specification}</td>
-                              <td>{item.productCategoryNames}</td>
+                              <td>{item.specName}</td>
+                              <td>{item.goodsCateName}</td>
                               <td>{item.brandName}</td>
-                              <td>{item.Price}</td>
+                              <td>{item.marketPrice}</td>
                               <td>
-                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.id)} okText="Confirm" cancelText="Cancel">
+                                <Popconfirm placement="topLeft" title="Are you sure to delete this product?" onConfirm={() => this.deleteProduct(item.goodsInfoId)} okText="Confirm" cancelText="Cancel">
                                   <Tooltip placement="top" title="Delete">
                                     <a className="iconfont iconDelete"></a>
                                   </Tooltip>
@@ -93,7 +116,7 @@ export default class targetProduct extends Component<any, any> {
               </div>
             </div>
           </Spin>
-          <AddTargetProduct visible={visible} />
+          <AddTargetProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetProductIds} />
         </div>
       </div>
     );

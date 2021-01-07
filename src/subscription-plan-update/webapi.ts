@@ -29,3 +29,14 @@ export function updateSubscriptionPlan(filterParams) {
     })
   });
 }
+
+
+export function getAllSkuProducts() {
+  return Fetch<TResult>('/goodsInfos/bundelPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      pageNum: 0,
+      pageSize: 9999999
+    })
+  });
+}

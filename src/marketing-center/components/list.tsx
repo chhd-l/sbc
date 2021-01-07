@@ -64,7 +64,7 @@ export default class List extends React.Component<any, any> {
               </Col>
             </Row>*/}
 
-            <h3>
+            {/*<h3>
               下单转化<span>更多订单和销量</span>
             </h3>
             <Row>
@@ -92,7 +92,7 @@ export default class List extends React.Component<any, any> {
                     <span className="miniTags">推荐</span>
                   </a>
                 </Col>
-              </AuthWrapper>
+              </AuthWrapper>*/}
 
               {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
@@ -119,7 +119,7 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>*/}
 
-              <AuthWrapper functionName={'f_create_all_coupon_activity'}>
+              {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -141,7 +141,7 @@ export default class List extends React.Component<any, any> {
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>
+              </AuthWrapper>*/}
 
               {/*<AuthWrapper functionName={'f_create_all_coupon_activity'}>
                 <Col span={6}>

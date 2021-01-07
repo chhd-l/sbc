@@ -36,33 +36,35 @@ export default class GoodsCate extends React.Component<any, any> {
   render() {
     return (
       <div>
-        <BreadCrumb />
-        {/* <Breadcrumb separator=">">
+        {/* this.store.get('loading') */}
+        <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <BreadCrumb />
+          {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
           <Breadcrumb.Item>商品管理</Breadcrumb.Item>
           <Breadcrumb.Item>店铺分类</Breadcrumb.Item>
         </Breadcrumb> */}
 
-        <div className="container-search">
-          <Headline title={<FormattedMessage id="product.salesCategory" />} />
-          <Alert message={<FormattedMessage id="product.salesCategoryInfo" />} type="info" />
+          <div className="container-search">
+            <Headline title={<FormattedMessage id="product.salesCategory" />} />
+            <Alert message={<FormattedMessage id="product.salesCategoryInfo" />} type="info" />
 
-          {/*工具条*/}
-          <Tool />
-        </div>
-        <div className="container">
-          {/*列表*/}
-          <Spin spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            {/*工具条*/}
+            <Tool />
+          </div>
+          <div className="container">
+            {/*列表*/}
+
             <CateList />
-          </Spin>
 
-          {/*弹框*/}
-          <CateModal />
+            {/*弹框*/}
+            <CateModal />
 
-          <PicModal />
+            <PicModal />
 
-          <SeoSettingModal />
-        </div>
+            <SeoSettingModal />
+          </div>
+        </Spin>
       </div>
     );
   }

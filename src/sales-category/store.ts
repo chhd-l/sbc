@@ -42,12 +42,31 @@ export default class AppStore extends Store {
     });
   };
 
+  getSalesCateList = () => {
+    this.dispatch('loading:start');
+    getCateList()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.dispatch('cateActor: init', fromJS(res.context));
+          this.dispatch('loading:end');
+        } else {
+          this.dispatch('loading:end');
+          message.error(res.message || 'Operation failure');
+        }
+      })
+      .catch((err) => {
+        this.dispatch('loading:end');
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   /**
    * 刷新需要延迟一下
    */
   refresh = () => {
     setTimeout(() => {
-      this.init();
+      this.getSalesCateList();
     }, 1000);
   };
 
@@ -96,6 +115,7 @@ export default class AppStore extends Store {
       formDataJs.cateImg = JSON.stringify(imagesJs);
     }
     let result: any;
+    this.dispatch('loading:start');
     if (formData.get('storeCateId')) {
       result = await editCate(formDataJs);
     } else {
@@ -104,8 +124,10 @@ export default class AppStore extends Store {
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       // 刷新
+      this.dispatch('cateActor: closeModal');
       this.refresh();
     } else {
+      this.dispatch('loading:end');
       message.error(result.res.message);
     }
   };
@@ -114,12 +136,14 @@ export default class AppStore extends Store {
    * 删除品牌
    */
   doDelete = async (storeCateId: string) => {
+    this.dispatch('loading:start');
     let result: any = await deleteCate(storeCateId);
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       // 刷新
       this.refresh();
     } else {
+      this.dispatch('loading:end');
       message.error(result.res.message);
     }
   };

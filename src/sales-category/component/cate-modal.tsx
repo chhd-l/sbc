@@ -49,6 +49,7 @@ export default class CateModal extends React.Component<any, any> {
       goods: IMap;
       modalVisibleFun: Function;
       petType: IList;
+      loading: boolean;
     };
   };
 
@@ -74,17 +75,18 @@ export default class CateModal extends React.Component<any, any> {
     modalVisibleFun: noop,
     clickImg: noop,
     removeImg: noop,
-    petType: 'petType'
+    petType: 'petType',
+    loading: 'loading'
   };
 
   render() {
-    const { modalVisible, formData } = this.props.relaxProps;
+    const { modalVisible, formData, loading } = this.props.relaxProps;
     const WrapperForm = this.WrapperForm;
     if (!modalVisible) {
       return null;
     }
     return (
-      <Modal maskClosable={false} title={formData.get('storeCateId') ? 'Edit' : 'Add'} visible={modalVisible} zIndex={100} width={700} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+      <Modal maskClosable={false} title={formData.get('storeCateId') ? 'Edit' : 'Add'} visible={modalVisible} zIndex={100} width={700} onCancel={this._handleModelCancel} onOk={this._handleSubmit} confirmLoading={loading}>
         <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );

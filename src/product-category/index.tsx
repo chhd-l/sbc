@@ -301,9 +301,10 @@ class PeoductCategory extends Component<any, any> {
         {/*导航面包屑*/}
 
         <div className="container-search">
-          <Headline title={title} />
-          <Alert message={description} type="info" />
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Headline title={title} />
+            <Alert message={description} type="info" />
+
             <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
           </Spin>
         </div>

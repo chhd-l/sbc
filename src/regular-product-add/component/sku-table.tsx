@@ -373,7 +373,7 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e),
-                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : typeof rowInfo.subscriptionStatus === 'number' ?  '0' : '1'
+                  initialValue:goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus === 0 ?  '0' : '1'
                 })(
                   <Select disabled={goods.get('subscriptionStatus') == 0} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '115px' }} placeholder="please select status">
                     <Option value="1">Y</Option>

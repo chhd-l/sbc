@@ -73,10 +73,10 @@ class ProductTooltipSKU extends React.Component<any, any> {
       if(Array.isArray(tempArr)&& tempArr.length>0){
         let selectedRows = [];
         let selectedRowKeys = [];
-        for (let i = 0; i < obj.length; i++) {
-          const element = obj[i];
+        for (let i = 0; i < tempArr.length; i++) {
+          const element = tempArr[i];
           selectedRows.push(element);
-          selectedRowKeys.push(element.goodsInfoNo);
+          selectedRowKeys.push(element.subGoodsInfoNo);
         }
         this.setState({ selectedRows, selectedRowKeys });
       }
@@ -95,9 +95,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
       });
     });
     selectedRows && selectedRows.map((item) => {
-      minStock.push(item.stock)
+      if(item.stock){
+        minStock.push(item.stock)
+      }else if(sessionStorage.getItem('minStock')){
+        minStock.push(sessionStorage.getItem('minStock'))
+      }
       targetGoodsIds.push({
-        subGoodsInfoId: item.goodsInfoId,
+        subGoodsInfoId: item.goodsInfoId || item.subGoodsInfoId,
         bundleNum: 1,
         goodsInfoNo: item.goodsInfoNo,
         subGoodsInfoNo: item.goodsInfoNo,
@@ -107,10 +111,12 @@ class ProductTooltipSKU extends React.Component<any, any> {
     let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
 
     targetGoodsList = [];
+    let tempMinStock = Math.min.apply(Math, minStock)
+    sessionStorage.setItem('minStock',tempMinStock)
     targetGoodsList.push({
       pid: this.props.pid,
       targetGoodsIds: goodsIds,
-      minStock: Math.min.apply(Math, minStock)
+      minStock: tempMinStock
     });
     if (targetGoodsIds.length <= 10) {
       if (targetGoodsIds.length != 0) {

@@ -120,13 +120,14 @@ export default class ProductGridSKU extends React.Component<any, any> {
           }}
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
-            onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
+            onChange: (selectedRowKeys, selectedTableRows) => {
+              let tempSelectedRowKeys = [...new Set(selectedRowKeys)]
               let { selectedRows } = this.state;
               selectedRows = selectedRows.concat(selectedTableRows);
-              selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
+              selectedRows = this.arrayFilter(tempSelectedRowKeys, selectedRows);
               this.setState({
                 selectedRows: selectedRows,
-                selectedRowKeys
+                selectedRowKeys:tempSelectedRowKeys
               });
 
               rowChangeBackFun(selectedRowKeys, selectedRows);

@@ -129,7 +129,6 @@ export default class GoodsModal extends React.Component<any, any> {
   };
 
   rowChangeBackFun = (selectedRowKeys, selectedRow) => {
-    debugger
     let { selectedRows } = this.state;
     selectedRows = selectedRows.concat(selectedRow);
     selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);

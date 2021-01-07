@@ -1874,7 +1874,6 @@ export default class AppStore extends Store {
         newJson.push(item1); //不重复的放入新数组。  新数组的内容会继续进行上边的循环。
       }
     }
-    debugger
     this.dispatch('sku:addSkUProduct', newJson);
   };
 

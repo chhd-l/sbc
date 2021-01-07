@@ -10,6 +10,7 @@ const Column = Table.Column;
 export default class RefundList extends React.Component<any, any> {
   props: {
     relaxProps?: {
+      loading: boolean;
       refundList: any;
       payWaysObj: any;
       refundTotal: any;
@@ -23,17 +24,12 @@ export default class RefundList extends React.Component<any, any> {
     payWaysObj: 'payWaysObj',
     refundTotal: 'refundTotal',
     dateRange: 'dateRange',
-    payWay: 'payWay'
+    payWay: 'payWay',
+    loading: 'loading'
   };
 
   render() {
-    const {
-      refundList,
-      payWaysObj,
-      refundTotal,
-      dateRange,
-      payWay
-    } = this.props.relaxProps;
+    const { refundList, payWaysObj, refundTotal, dateRange, payWay, loading } = this.props.relaxProps;
     return (
       <div>
         {/*<div className="totalAmount">
@@ -96,6 +92,7 @@ export default class RefundList extends React.Component<any, any> {
           </ul>
         </div> */}
         <DataGrid
+          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
           dataSource={refundList.toJS().length > 0 ? refundList.toJS() : []}
           rowKey={(record, index) => index}
           pagination={false}
@@ -154,11 +151,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
             }}
           /> */}
-          <Column
-            title="Total revenue"
-            dataIndex="totalAmount"
-            key="totalAmount"
-          />
+          <Column title="Total revenue" dataIndex="totalAmount" key="totalAmount" />
 
           {/*<Column
             title={<FormattedMessage id="balance" />}
@@ -209,12 +202,9 @@ export default class RefundList extends React.Component<any, any> {
                     <a
                       onClick={() =>
                         history.push({
-                          pathname: `/finance-manage-refund/${
-                            record.storeId
-                          }/${'refund'}`,
+                          pathname: `/finance-manage-refund/${record.storeId}/${'refund'}`,
                           state: {
-                            beginTime:
-                              dateRange.get('beginTime') + ' ' + '00:00:00',
+                            beginTime: dateRange.get('beginTime') + ' ' + '00:00:00',
                             endTime: dateRange.get('endTime') + ' ' + '23:59:59'
                           }
                         })

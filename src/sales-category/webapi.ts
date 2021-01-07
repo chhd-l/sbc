@@ -10,7 +10,7 @@ type TResult = {
  * 获取类目列表
  */
 export const getCateList = () => {
-  return Fetch('/store_cate/batch/cate', {
+  return Fetch<TResult>('/store_cate/batch/cate', {
     method: 'GET'
   });
 };

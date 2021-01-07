@@ -72,7 +72,7 @@ class SearchForm extends React.Component<any, any> {
     const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId } = this.props.relaxProps;
     let from = {
       goodsName: likeGoodsName,
-      goodsInfoNo: likeGoodsNo,
+      goodsNo: likeGoodsNo,
       storeCateIds: storeCategoryIds,
       goodsCateId: goodsCateId
     };

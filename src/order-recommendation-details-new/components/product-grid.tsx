@@ -136,31 +136,6 @@ export default class GoodsGrid extends React.Component<any, any> {
 
               rowChangeBackFun(selectedRowKeys, selectedRows);
             },
-            /*getCheckboxProps(record) {
-              //console.log(record,22222);
-              //console.log(record);
-              /!*let a = [];
-              let b = null;
-              goodsNo.map((item) => {
-                return item.targetGoodsIds.map((i) => {
-                  return a.push(i);
-                });
-              });
-              //console.log(a);
-              //console.log(record);
-              a.map((o) => {
-                if (o.subGoodsInfoNo == record.goodsInfoNo) {
-                  if (o.subGoodsInfoNo) {
-                    if (record.goodsInfoNo == o.subGoodsInfoNo) {
-                      b = 'checked';
-                    }
-                  }
-                }
-              });
-              return {
-                defaultChecked: b // 配置默认勾选的列
-              };*!/
-            }*/
             getCheckboxProps: (record) => ({
               /* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
                       该情况下商品checkbox置灰,禁止选中 */

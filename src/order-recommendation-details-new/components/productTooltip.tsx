@@ -123,12 +123,13 @@ export default class GoodsModal extends React.Component<any, any> {
   arrayFilter = (arrKey, arrList) => {
     let tempList = [];
     arrKey.map((item) => {
-      tempList.push(arrList.find((el) => el.goodsInfoId === item));
+      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
     });
     return tempList;
   };
 
   rowChangeBackFun = (selectedRowKeys, selectedRow) => {
+    debugger
     let { selectedRows } = this.state;
     selectedRows = selectedRows.concat(selectedRow);
     selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);

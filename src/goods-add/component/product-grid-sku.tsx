@@ -22,18 +22,23 @@ export default class ProductGridSKU extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: true,
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([]),
-      selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
+      selectedRows: [],
+      selectedRowKeys: [],
+      oldSelectedRowKeys: [],
+      prevPropSelectedRowKeys: [],
       total: 0,
       goodsInfoPage: {},
       searchParams: props.searchParams ? props.searchParams : {},
-      showValidGood: props.showValidGood,
       content: [],
       goodsNo: []
     };
   }
 
   props: {
+    rowChangeBackFun:Function,
+    visible:Boolean,
+    searchParams:Object,
+    pid:String,
     relaxProps?: {
       addSkUProduct: any;
     };
@@ -44,30 +49,53 @@ export default class ProductGridSKU extends React.Component<any, any> {
   };
 
   componentDidMount() {
+    const { searchParams } = this.state;
     const { addSkUProduct } = this.props.relaxProps;
-    this.init(this.props.searchParams ? this.props.searchParams : {});
+    this.init(searchParams ? searchParams : {});
     let pid = addSkUProduct.filter((item) => item.pid == this.props.pid);
     this.setState({
       goodsNo: pid
     });
   }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (!this.props.visible && nextProps.visible) {
-      this.setState({
-        searchParams: nextProps.searchParams ? nextProps.searchParams : {},
-        goodsInfoPage: nextProps.productTooltip
-      });
-      this.init(nextProps.searchParams ? nextProps.searchParams : {});
+  static getDerivedStateFromProps(props, state) {
+    // 当传入的值发生变化的时候，更新state
+    if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
+      return {
+        oldSelectedRowKeys: props.selectedRowKeys.concat(),
+        selectedRowKeys: props.selectedRowKeys.concat(),
+        prevPropSelectedRowKeys: props.selectedRowKeys.concat(),
+        selectedRows: props.selectedRows.concat()
+      };
     }
-    this.setState({
-      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
-    });
+    if (JSON.stringify(props.searchParams) !== JSON.stringify(state.searchParams)) {
+      return {
+        searchParams: props.searchParams
+      };
+    }
+
+    return null;
   }
 
+  componentDidUpdate(prevProps) {
+    // 典型用法（不要忘记比较 props）：
+    if (JSON.stringify(this.props.searchParams) !== JSON.stringify(prevProps.searchParams)) {
+      this.init(this.props.searchParams);
+    }
+  }
+
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
+    });
+    return tempList;
+  };
+
+
+
+
   render() {
-    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, goodsNo, showValidGood } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, goodsNo } = this.state;
     const { rowChangeBackFun } = this.props;
 
     return (
@@ -93,19 +121,15 @@ export default class ProductGridSKU extends React.Component<any, any> {
           rowSelection={{
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
-              const sRows = fromJS(selectedRows).filter((f) => f);
-              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              let rowsArr = [];
-              rows.toJS().map((item) => {
-                rowsArr.push(item.goodsInfoNo);
-              });
-              //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
+              let { selectedRows } = this.state;
+              selectedRows = selectedRows.concat(selectedTableRows);
+              selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
               this.setState({
-                selectedRows: rowsArr,
+                selectedRows: selectedRows,
                 selectedRowKeys
               });
 
-              rowChangeBackFun(selectedRowKeys, fromJS(rows));
+              rowChangeBackFun(selectedRowKeys, selectedRows);
             },
             getCheckboxProps(record) {
               //console.log(record);
@@ -131,35 +155,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
                 defaultChecked: b // 配置默认勾选的列
               };
             }
-            /*getCheckboxProps: (record) => {
-              console.log(this.state.goodsNo,22222222);
 
-              console.log(record,333333333);
-              let a = []
-              this.state.goodsNo.map(item=>{
-                return item.targetGoodsIds.map(i=>{
-                  return a.push(i)
-                })
-              })
-              a.map(o=>{
-                if(o.goodsInfoNo == record.goodsNo) {
-                  //return disabled
-                }
-              })
-
-              return record.disabled = 'disabled'
-
-              console.log(a,4444);
-            },*/
-            /*getCheckboxProps: (record) => ({
-              /!* old: 如果validFlag === 0 标识该商品不是有效的商品,可能存在情况是=>无货,起订量大于库存etc..
-                      该情况下商品checkbox置灰,禁止选中 *!/
-
-              // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
-              // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
-              // 因此判断等于2的失效状态下禁用
-              disabled: showValidGood ? !showValidGood : record.goodsInfoNo === '8068576583'
-            })*/
           }}
         >
           <Column
@@ -213,7 +209,8 @@ export default class ProductGridSKU extends React.Component<any, any> {
       res = (res as any).context.goodsInfos;
       let arr = res.content;
       let a = arr;
-      let b = this.state.selectedRows.toJS();
+      let b = this.state.selectedRows;
+
       b.reduce((pre, cur) => {
         let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
         if (target) {

@@ -23,9 +23,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
       loading: boolean;
       createLink: any;
       getGoodsId: any;
+      addSkUProduct: any;
     };
     showModal: Function;
-    selectedSkuIds: IList;
     selectedRows: IList;
     visible: boolean;
     onOkBackFun: Function;
@@ -39,7 +39,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
     application?: string;
     pid: any;
     initCateList: any;
-    addSkUProduct: any;
+    
   };
 
   static relaxProps = {
@@ -56,22 +56,78 @@ class ProductTooltipSKU extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
+      selectedRowKeys: [],
+      selectedRows: []
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
+  componentDidMount = () => {
+    this.init();
+  };
+
+  init = () => {
+    const { addSkUProduct } = this.props.relaxProps;
+    let obj = addSkUProduct;
+    if (Array.isArray(obj) && obj[0].targetGoodsIds) {
+      let tempArr = obj[0].targetGoodsIds
+      if(Array.isArray(tempArr)&& tempArr.length>0){
+        let selectedRows = [];
+        let selectedRowKeys = [];
+        for (let i = 0; i < obj.length; i++) {
+          const element = obj[i];
+          selectedRows.push(element);
+          selectedRowKeys.push(element.goodsInfoNo);
+        }
+        this.setState({ selectedRows, selectedRowKeys });
+      }
+      
+    }
+  };
+
+  handleOK=()=>{
+    const {selectedRowKeys,selectedRows} = this.state
+    const { onProductselectSku } = this.props.relaxProps;
+    let a = [];
+    let minStock = []
+    selectedRowKeys.map((item) => {
+      a.push({
+        goodsInfoNo: item
+      });
     });
+    selectedRows && selectedRows.map((item) => {
+      minStock.push(item.stock)
+      targetGoodsIds.push({
+        subGoodsInfoId: item.goodsInfoId,
+        bundleNum: 1,
+        goodsInfoNo: item.goodsInfoNo,
+        subGoodsInfoNo: item.goodsInfoNo,
+      })
+    }
+    );
+    let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
+
+    targetGoodsList = [];
+    targetGoodsList.push({
+      pid: this.props.pid,
+      targetGoodsIds: goodsIds,
+      minStock: Math.min.apply(Math, minStock)
+    });
+    if (targetGoodsIds.length <= 10) {
+      if (targetGoodsIds.length != 0) {
+        onProductselectSku(targetGoodsList);
+      }
+      targetGoodsIds = [];
+      this.props.showModal({ type: 0 }, this.props.pid);
+    } else {
+      message.info('Maximum 10 products!');
+    }
+    this.props.form.resetFields();
   }
 
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
-    const { selectedSkuIds, selectedRows } = this.state;
-    const { onProductselectSku, addSkUProduct } = this.props.relaxProps;
+    const { selectedRowKeys, selectedRows } = this.state;
+    
 
     return (
       <Modal
@@ -80,60 +136,15 @@ class ProductTooltipSKU extends React.Component<any, any> {
           <div>
             Choose goods&nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedRowKeys.length}</span> items have been selected
             </small>
           </div>
         }
         width={1100}
         visible={visible}
-        onOk={() => {
-          let a = [];
-          let minStock = []
-          selectedSkuIds.map((item) => {
-            a.push({
-              goodsInfoNo: item
-            });
-          });
-          let b = _.intersectionBy(this.state.selectedRows.toJS(), a, 'goodsInfoNo');
-          b&&b.map((item) =>{
-            minStock.push(item.stock)
-              targetGoodsIds.push({
-                subGoodsInfoId: item.goodsInfoId,
-                bundleNum: 1,
-                goodsInfoNo: item.goodsInfoNo,
-                subGoodsInfoNo: item.goodsInfoNo,
-              })
-            }
-          );
-          let goodsIds = _.uniqBy(targetGoodsIds, 'subGoodsInfoNo');
-          /*console.log(targetGoodsList,1111);
-          console.log(addSkUProduct,22222111);
-          console.log(a,3333333);
-          console.log(b,44444);*/
-
-          targetGoodsList = [];
-          targetGoodsList.push({
-            pid: this.props.pid,
-            targetGoodsIds: goodsIds,
-            minStock: Math.min.apply(Math, minStock)
-          });
-          if (targetGoodsIds.length <= 10) {
-            //let a = _.filter(targetGoodsList, (o) => o.pid != this.props.pid);
-            /*a.push({
-              pid: this.props.pid,
-              targetGoodsIds: targetGoodsIds
-            });*/
-            //console.log(targetGoodsList,123);
-            if(targetGoodsIds.length !=0) {
-              onProductselectSku(targetGoodsList);
-            }
-            targetGoodsIds = [];
-            this.props.showModal({ type: 0 }, this.props.pid);
-          } else {
-            message.info('Maximum 10 products!');
-          }
-          this.props.form.resetFields();
-        }}
+        onOk={() => 
+          this.handleOK()
+        }
         onCancel={() => {
           this.props.showModal({ type: 0 }, this.props.pid);
           this.props.form.resetFields();
@@ -147,10 +158,9 @@ class ProductTooltipSKU extends React.Component<any, any> {
             form={this.props.form}
             pid={this.props.pid}
             visible={visible}
-            showValidGood={showValidGood}
             skuLimit={skuLimit}
             isScroll={false}
-            selectedSkuIds={selectedSkuIds}
+            selectedRowKeys={selectedRowKeys}
             selectedRows={selectedRows}
             rowChangeBackFun={this.rowChangeBackFun}
             searchParams={searchParams}
@@ -159,15 +169,22 @@ class ProductTooltipSKU extends React.Component<any, any> {
       </Modal>
     );
   }
+  arrayFilter = (arrKey, arrList) => {
+    let tempList = [];
+    arrKey.map((item) => {
+      tempList.push(arrList.find((el) => el.goodsInfoNo === item));
+    });
+    return tempList;
+  };
 
-  rowChangeBackFun = (selectedSkuIds, selectedRows) => {
-    this.setState(
-      {
-        selectedSkuIds: selectedSkuIds,
-        selectedRows: selectedRows
-      },
-      () => {}
-    );
+  rowChangeBackFun = (selectedRowKeys, selectedRow) => {
+    let { selectedRows } = this.state;
+    selectedRows = selectedRows.concat(selectedRow);
+    selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
+    this.setState({
+      selectedRowKeys: selectedRowKeys,
+      selectedRows: selectedRows
+    });
   };
 }
 

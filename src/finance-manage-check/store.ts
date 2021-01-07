@@ -22,6 +22,7 @@ export default class AppStore extends Store {
 
   init = async () => {
     const { res } = await webapi.fetchAllPayWays();
+    this.dispatch('loading:start');
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:payWays', res.context);
     }
@@ -46,8 +47,7 @@ export default class AppStore extends Store {
 
     //获取收入对账明细
     const searchTime = {
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     };
     this.dispatch('finance:searchTime', fromJS(searchTime));
@@ -59,20 +59,20 @@ export default class AppStore extends Store {
    */
   fetchIncomeList = async () => {
     const { res: income } = await webapi.fetchIncomeList({
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     //总体
     const { res: incomeTotal } = await webapi.fetchIncomeTotal({
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     if (income.code == Const.SUCCESS_CODE) {
+      this.dispatch('loading:end');
       this.dispatch('finance:income', income.context.content);
     } else {
       message.error(income.message);
+      this.dispatch('loading:end');
     }
     if (incomeTotal.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:incomeTotal', incomeTotal.context);
@@ -92,8 +92,7 @@ export default class AppStore extends Store {
    */
   searchByDate = async () => {
     const searchTime = {
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     };
     this.dispatch('finance:searchTime', fromJS(searchTime));
@@ -127,13 +126,11 @@ export default class AppStore extends Store {
    */
   fetchRefundList = async () => {
     const { res: refund } = await webapi.fetchRefundList({
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     const { res: refundTotal } = await webapi.fetchRefundTotal({
-      beginTime:
-        this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
+      beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
     });
     if (refundTotal.code == Const.SUCCESS_CODE) {
@@ -167,8 +164,7 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/finance/bill/exportIncome/${encrypted}`;
+          const exportHref = Const.HOST + `/finance/bill/exportIncome/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

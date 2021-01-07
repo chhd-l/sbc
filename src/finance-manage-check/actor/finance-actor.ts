@@ -12,14 +12,10 @@ export default class FinanceActor extends Actor {
     return {
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId,
       dateRange: {
-        beginTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        beginTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString(),
-        endTime: moment(
-          new Date(sessionStorage.getItem('defaultLocalDateTime'))
-        )
+        endTime: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
           .format('YYYY-MM-DD')
           .toString()
       },
@@ -36,7 +32,8 @@ export default class FinanceActor extends Actor {
       tabKey: '1',
       //导出单独的时间参数
       searchTime: {},
-      payWay: []
+      payWay: [],
+      loading: true
     };
   }
 
@@ -138,5 +135,15 @@ export default class FinanceActor extends Actor {
   @Action('finance:searchTime')
   searchTime(state: IMap, searchTime: IMap) {
     return state.set('searchTime', searchTime);
+  }
+
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
+
+  @Action('loading:end')
+  start(state: IMap) {
+    return state.set('loading', false);
   }
 }

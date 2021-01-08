@@ -19,6 +19,7 @@ import relatedActor from './actor/related';
 import LoadingActor from './actor/loading-actor';
 
 import {
+  getEditProductResource,
   addAll,
   addBrand,
   addCate,
@@ -74,7 +75,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor(), new LoadingActor()];
+    return [ new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor(), new LoadingActor()];
   }
 
   /**
@@ -106,6 +107,24 @@ export default class AppStore extends Store {
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
+
+    let parma = {
+      resource:{
+        pageNum: 0,
+        pageSize: 10,
+        resourceName: '',
+        cateIds: [292],
+        resourceType: 0
+      },
+      enterpriseCheck:{
+        goodsId:'2c91808576db27860176dba409620000'
+      },
+      spu:'2c91808576db27860176dba409620000',
+      storeCateByCondition:{},
+      attribute:748
+    }
+    const EditProductResource:any = await getEditProductResource(parma);
+    console.log(EditProductResource,1111111111);
 
     let userList: any;
     if (util.isThirdStore()) {

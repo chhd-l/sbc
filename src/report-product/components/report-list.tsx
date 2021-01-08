@@ -71,10 +71,10 @@ export default class ReportList extends Component<any, any> {
 
           <Column
             title="Rating"
-            dataIndex="Rating"
+            dataIndex="rating"
             key="Rating"
-            render={(rowData) => {
-              return rowData ? rowData : '--';
+            render={(text) => {
+              return text ? text : '--';
             }}
           />
         </DataGrid>

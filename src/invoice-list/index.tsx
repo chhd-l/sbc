@@ -335,7 +335,7 @@ class InvoiceList extends Component<any, any> {
       });
   };
   onExport = (params) => {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
         let base64 = new util.Base64();
         const token = (window as any).token;
@@ -458,11 +458,17 @@ class InvoiceList extends Component<any, any> {
         render: (text) => <p>{text ? moment(text).format('YYYY-MM-DD') : '-'}</p>
       },
       {
-        title: 'Order number',
+        title: (<div>
+          <p>Order number</p>
+          <p>Subscription number</p>
+        </div>),
         dataIndex: 'orderNo',
         key: 'orderNo',
-        width: '8%',
-        render: (text) => <p>{text ? text : '-'}</p>
+        width: '13%',
+        render: (text,row) => <div>
+          <p>{row.orderNo ? row.orderNo : '-'}</p>
+          <p>{row.subscriptionId ? row.subscriptionId : '-'}</p>
+        </div> 
       },
       {
         title: 'Order amount',
@@ -480,8 +486,8 @@ class InvoiceList extends Component<any, any> {
       },
       {
         title: 'Consumer email',
-        dataIndex: 'email',
-        key: 'email',
+        dataIndex: 'consumerEmail',
+        key: 'consumerEmail',
         width: '8%',
         render: (text) => <p>{text ? text : '-'}</p>
       },

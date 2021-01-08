@@ -21,8 +21,8 @@ export default class AppStore extends Store {
   }
 
   init = async () => {
-    const { res } = await webapi.fetchAllPayWays();
     this.dispatch('loading:start');
+    const { res } = await webapi.fetchAllPayWays();
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:payWays', res.context);
     }
@@ -91,6 +91,7 @@ export default class AppStore extends Store {
    * 根据日期搜索
    */
   searchByDate = async () => {
+    this.dispatch('loading:start');
     const searchTime = {
       beginTime: this.state().get('dateRange').get('beginTime') + ' ' + '00:00:00',
       endTime: this.state().get('dateRange').get('endTime') + ' ' + '23:59:59'
@@ -138,8 +139,10 @@ export default class AppStore extends Store {
     }
     if (refund.code == Const.SUCCESS_CODE) {
       this.dispatch('finance:refund', refund.context.content);
+      this.dispatch('loading:end');
     } else {
       message.error(refund.message);
+      this.dispatch('loading:end');
     }
   };
 

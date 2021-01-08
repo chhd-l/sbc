@@ -19,8 +19,8 @@ export default class AppStore extends Store {
   }
 
   init = async () => {
-    const { res } = await webapi.getStoreInfo();
     this.dispatch('loading:start');
+    const { res } = await webapi.getStoreInfo();
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('settleStore:accountDay', res.context.accountDay);
     }
@@ -32,13 +32,10 @@ export default class AppStore extends Store {
    * @returns {Promise<void>}
    */
   fetchSettleList = async (pageNum = null, pageSize = null) => {
+    this.dispatch('loading:start');
     let queryParams = this.state().get('queryParams').toJS();
-    queryParams['startTime'] = queryParams['startTime']
-      .format('YYYY-MM-DD')
-      .toString();
-    queryParams['endTime'] = queryParams['endTime']
-      .format('YYYY-MM-DD')
-      .toString();
+    queryParams['startTime'] = queryParams['startTime'].format('YYYY-MM-DD').toString();
+    queryParams['endTime'] = queryParams['endTime'].format('YYYY-MM-DD').toString();
     if (pageNum) {
       queryParams['pageNum'] = pageNum;
     }
@@ -155,8 +152,7 @@ export default class AppStore extends Store {
           });
           const encrypted = base64.urlEncode(result);
           // 新窗口下载
-          const exportHref =
-            Const.HOST + `/finance/settlement/export/${encrypted}`;
+          const exportHref = Const.HOST + `/finance/settlement/export/${encrypted}`;
           window.open(exportHref);
         } else {
           message.error('请登录');

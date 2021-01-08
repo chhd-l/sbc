@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Button, Popconfirm, message, Tooltip, Row } from 'antd';
-import AddTargetProduct from '../modals/addTargetProduct';
+import AddProduct from '../modals/addProduct';
 export default class targetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -9,7 +9,7 @@ export default class targetProduct extends Component<any, any> {
       visible: false
     };
     this.deleteProduct = this.deleteProduct.bind(this);
-    this.addTargetProduct = this.addTargetProduct.bind(this);
+    this.showAddTargetProduct = this.showAddTargetProduct.bind(this);
     this.updateTable = this.updateTable.bind(this);
   }
 
@@ -27,7 +27,7 @@ export default class targetProduct extends Component<any, any> {
     addField('targetProductIds', newTargetProductIds);
   }
 
-  addTargetProduct() {
+  showAddTargetProduct() {
     this.setState({
       visible: true
     });
@@ -107,7 +107,7 @@ export default class targetProduct extends Component<any, any> {
                       </tbody>
                     </table>
                     <div className="noProduct">
-                      <div className="addProduct" onClick={this.addTargetProduct}>
+                      <div className="addProduct" onClick={this.showAddTargetProduct}>
                         <span> + Add product</span>
                       </div>
                     </div>
@@ -116,7 +116,7 @@ export default class targetProduct extends Component<any, any> {
               </div>
             </div>
           </Spin>
-          <AddTargetProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetProductIds} />
+          <AddProduct visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.targetProductIds} />
         </div>
       </div>
     );

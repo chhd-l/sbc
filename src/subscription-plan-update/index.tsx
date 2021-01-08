@@ -19,7 +19,7 @@ class SubscriptionPlanUpdate extends Component<any, any> {
     this.state = {
       id: this.props.match.params.id,
       title: '',
-      current: 0,
+      current: 2,
       subscriptionPlan: {
       },
       allSkuProduct: []

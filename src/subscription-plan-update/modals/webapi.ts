@@ -20,3 +20,11 @@ export function getSkuProducts(param) {
       body: JSON.stringify(param)
     });
 }
+
+
+export function getConsents(param = {}) {
+  return Fetch<TResult>('/consent/list', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}

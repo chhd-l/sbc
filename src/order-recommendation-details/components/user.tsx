@@ -34,63 +34,27 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <div className="user">
         <div className="text flex-start">
-          <span>
-            Recommendation NO:{' '}
-            {detailProductList.recommendationId
-              ? detailProductList.recommendationId
-              : '--'}
-          </span>
-          <span>
-            Recommendation reasons:{' '}
-            {detailProductList.recommendationReasons
-              ? detailProductList.recommendationReasons
-              : '--'}
-          </span>
+          <span>Recommendation NO: {detailProductList.recommendationId ? detailProductList.recommendationId : '--'}</span>
+          <span>Recommendation reasons: {detailProductList.recommendationReasons ? detailProductList.recommendationReasons : '--'}</span>
         </div>
         <div className="text flex-start">
-          <span>
-            First name:{' '}
-            {detailProductList.consumerFirstName
-              ? detailProductList.consumerFirstName
-              : '--'}
-          </span>
-          <span>
-            Last name:{' '}
-            {detailProductList.consumerLastName
-              ? detailProductList.consumerLastName
-              : '--'}
-          </span>
+          <span>First name: {detailProductList.consumerFirstName ? detailProductList.consumerFirstName : '--'}</span>
+          <span>Last name: {detailProductList.consumerLastName ? detailProductList.consumerLastName : '--'}</span>
         </div>
         <div className="text flex-start">
-          <span>
-            E-mail:{' '}
-            {detailProductList.consumerEmail
-              ? detailProductList.consumerEmail
-              : '--'}
-          </span>
-          <span>
-            Phone number:{' '}
-            {detailProductList.consumerPhoneNumber
-              ? detailProductList.consumerPhoneNumber
-              : '--'}
-          </span>
+          <span>E-mail: {detailProductList.consumerEmail ? detailProductList.consumerEmail : '--'}</span>
+          <span>Phone number: {detailProductList.consumerPhoneNumber ? detailProductList.consumerPhoneNumber : '--'}</span>
         </div>
 
         <div className="text flex-start">
-          <span>
-            Create time:{' '}
-            {detailProductList.createTime
-              ? moment(detailProductList.createTime).format('YYYY-MM-DD')
-              : '--'}
-          </span>
+          <span>Create time: {detailProductList.createTime ? moment(detailProductList.createTime).format('YYYY-MM-DD') : '--'}</span>
           <span>
             Link:{' '}
-            {
-              JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
-                .supplierWebsite
-            }
-            recommendation/
-            {detailProductList.base64Id ? detailProductList.base64Id : '--'}
+            <p style={{ display: 'contents', wordBreak: 'break-all' }}>
+              {JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).supplierWebsite}
+              recommendation/
+              {detailProductList.base64Id ? detailProductList.base64Id : '--'}
+            </p>
           </span>
         </div>
       </div>

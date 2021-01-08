@@ -346,7 +346,8 @@ class AttributeLibrary extends Component<any, any> {
       {
         title: 'Tagging type',
         dataIndex: 'taggingType',
-        key: 'taggingType'
+        key: 'taggingType',
+        render: (text) => <div>{text === 'Text' ? 'Text tag (Top left)' : 'Image tag (Top right)'}</div>
       },
       {
         title: 'Tagging fill color',
@@ -547,8 +548,8 @@ class AttributeLibrary extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value="Text">Text</Radio>
-                      <Radio value="Image">Image</Radio>
+                      <Radio value="Text">Text tag (Top left)</Radio>
+                      <Radio value="Image">Image tag (Top right)</Radio>
                     </Radio.Group>
                   )}
                 </FormItem>

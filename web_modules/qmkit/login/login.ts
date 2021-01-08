@@ -35,11 +35,11 @@ export async function login(routerType, oktaToken: string) {
     if (routerType === 'prescriber') {
       const resOkta  = await webapi.getJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
-      
+
     } else if (routerType === 'staff') {
       const resOkta  = await webapi.getRCJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
-    } 
+    }
   } else {
       let base64 = new util.Base64();
       const account = routerType.account;
@@ -51,7 +51,7 @@ export async function login(routerType, oktaToken: string) {
       res = resLocal.res as TResult;
   }
 
-  
+
   if ((res as any).code === Const.SUCCESS_CODE) {
     if(res.context.checkState === 1) { // need checked
       sessionStorage.setItem(
@@ -145,19 +145,19 @@ export async function login(routerType, oktaToken: string) {
         case 1:
           message.success('login successful');
           //登录成功之后，塞入baseConfig
-          const config = (await webapi.getUserSiteInfo()) as any;
-          if (config.res.code === Const.SUCCESS_CODE) {
-            sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(config.res.context.baseConfigRopResponse));
-            sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(config.res.context.employeeAccountByIdResponse));
-            let configResponse = config.res.context.configResponse
+          // const config = (await webapi.getUserSiteInfo()) as any;
+          // if (config.res.code === Const.SUCCESS_CODE) {
+            sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
+            sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
+            let configResponse = menusRes.res.context.configResponse
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
             sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
             sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
             sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
             sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight.valueEn); //weight
-          } else {
-            message.error(config.res.message)
-          }
+          // } else {
+          //   message.error(config.res.message)
+          // }
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');
@@ -198,7 +198,7 @@ export async function login(routerType, oktaToken: string) {
     });
   };
 
-  
+
   function _getUrl(allGradeMenus) {
     if (!allGradeMenus) {
       message.error('No Menus');

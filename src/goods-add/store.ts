@@ -359,6 +359,8 @@ export default class AppStore extends Store {
       }
 
       this.dispatch('goodsActor: editGoods', goods);
+
+      this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
       this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
 
       // 商品图片
@@ -1149,7 +1151,7 @@ export default class AppStore extends Store {
       });
       /*console.log(b,22232222);
       console.log(item,3333333333);*/
-      console.log(goods.get('subscriptionStatus'),11111222222);
+      console.log(goods.get('subscriptionStatus'), 11111222222);
       this.state().get('addSkUProduct');
       goodsList = goodsList.push(
         Map({

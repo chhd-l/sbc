@@ -38,7 +38,6 @@ export default class ProductInventory extends React.Component<any, any> {
       goods: IMap;
       baseSpecId: Number;
       subscriptionStatus: any;
-      addSkUProduct: any;
       updateBasePrice: Function;
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
@@ -61,7 +60,6 @@ export default class ProductInventory extends React.Component<any, any> {
     getGoodsId: 'getGoodsId',
     addSkUProduct: 'addSkUProduct',
     selectedBasePrice: 'selectedBasePrice',
-    addSkUProduct: 'addSkUProduct',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
     updateSkuForm: noop,
@@ -186,12 +184,10 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'stock',
       render: (rowInfo) => {
-        let a = '';
-        let b = '';
+        let a = null;
+        let b = null;
         let c = 0;
-        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || '';
-        console.log(rowInfo.maxStock, 11111111111);
-        console.log(a.minStock, 22222222222);
+        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
         c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock : a.minStock;
         if (a) {
           b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;

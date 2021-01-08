@@ -681,12 +681,14 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('company: store: merge', { field, value });
-      let a = zone.match(/\d+/g);
-      let b = Number(a[0] + '.' + a[1]);
-      if (zone.substring(4, 5) == '+') {
-        sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).subtract(1, 'days').format('YYYY-MM-DD hh:mm:ss'));
-      } else {
-        sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss'));
+      if(zone) {
+        let a = zone.match(/\d+/g);
+        let b = Number(a[0] + '.' + a[1]);
+        if (zone.substring(4, 5) == '+') {
+          sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).subtract(1, 'days').format('YYYY-MM-DD hh:mm:ss'));
+        } else {
+          sessionStorage.setItem('zoneDate', moment(this.GMTToStr(b)).format('YYYY-MM-DD hh:mm:ss'));
+        }
       }
     }
   };

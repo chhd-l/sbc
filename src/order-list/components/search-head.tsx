@@ -267,9 +267,9 @@ export default class SearchHead extends Component<any, any> {
                       <Option value="">
                         <FormattedMessage id="all" />
                       </Option>
-                      <Option value="SINGLE">Ordinary order</Option>
-                      <Option value="FIRST_AUTOSHIP">First subscription</Option>
-                      <Option value="RECURRENT_AUTOSHIP">After second subscription</Option>
+                      <Option value="SINGLE">Single purchase</Option>
+                      <Option value="FIRST_AUTOSHIP">1st autoship order</Option>
+                      <Option value="RECURRENT_AUTOSHIP">Recurrent orders of autoship</Option>
                     </Select>
                   </InputGroup>
                 </FormItem>

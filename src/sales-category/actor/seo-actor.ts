@@ -5,9 +5,9 @@ export default class SeoActor extends Actor {
   defaultState() {
     return {
       seoForm: {
-        titleSource: '{name}',
-        metaKeywordsSource: '{name}',
-        metaDescriptionSource: '{description}'
+        titleSource: '', //{name}
+        metaKeywordsSource: '', //{name}
+        metaDescriptionSource: '' //{description}
       },
       seoModalVisible: false,
       currentStoreCateId: null,

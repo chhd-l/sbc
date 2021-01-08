@@ -1,14 +1,5 @@
 import * as React from 'react';
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Modal,
-  Select,
-  Table
-} from 'antd';
+import { Button, DatePicker, Form, Input, message, Modal, Select, Table } from 'antd';
 import { AuthWrapper, Const, DataGrid, SelectGroup } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
@@ -63,21 +54,21 @@ export default class CouponsModal extends React.Component<any, any> {
         visible={true}
         title={
           <div>
-            选择优惠券&nbsp;
-            <small>
-              已选
-              <span style={{ color: 'red' }}>
-                {this.state.selectedRows.length}
-              </span>
-              张优惠券
-            </small>
+            Select coupons&nbsp;
+            {/*<small>*/}
+            {/*  已选*/}
+            {/*  <span style={{ color: 'red' }}>*/}
+            {/*    {this.state.selectedRows.length}*/}
+            {/*  </span>*/}
+            {/*  张优惠券*/}
+            {/*</small>*/}
           </div>
         }
         width={1200}
         onOk={() => this._onOk()}
         onCancel={() => this._onCancel()}
-        okText="确认"
-        cancelText="取消"
+        okText="Save"
+        cancelText="Delete"
       >
         {/*search*/}
         {this._renderSearchForm()}
@@ -94,22 +85,11 @@ export default class CouponsModal extends React.Component<any, any> {
       <div id="modal-head">
         <Form className="filter-content" layout="inline">
           <FormItem>
-            <Input
-              addonBefore="优惠券名称"
-              onChange={(e) =>
-                this._onSearchParamChange({ likeCouponName: e.target.value })
-              }
-            />
+            <Input addonBefore="Coupon name" onChange={(e) => this._onSearchParamChange({ likeCouponName: e.target.value })} />
           </FormItem>
 
           <FormItem>
-            <SelectGroup
-              getPopupContainer={() => document.getElementById('modal-head')}
-              label="使用范围"
-              dropdownStyle={{ zIndex: 1053 }}
-              defaultValue="不限"
-              onChange={(val) => this._onSearchParamChange({ scopeType: val })}
-            >
+            <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Use range" dropdownStyle={{ zIndex: 1053 }} defaultValue="Unlimited" onChange={(val) => this._onSearchParamChange({ scopeType: val })}>
               <Option value="">不限</Option>
               <Option value="0">{Const.couponScopeType[0]}</Option>
               <Option value="1">{Const.couponScopeType[1]}</Option>
@@ -120,9 +100,7 @@ export default class CouponsModal extends React.Component<any, any> {
 
           <FormItem>
             <RangePicker
-              getCalendarContainer={() =>
-                document.getElementById('page-content')
-              }
+              getCalendarContainer={() => document.getElementById('page-content')}
               onChange={(e) => {
                 let startTime = '';
                 let endTime = '';
@@ -144,18 +122,18 @@ export default class CouponsModal extends React.Component<any, any> {
             />
           </FormItem>
           <FormItem>
-            <Button
-              htmlType="submit"
-              type="primary"
-              shape="round"
-              icon="search"
-              onClick={(e) => {
-                e.preventDefault();
-                this._pageSearch(0);
-              }}
-            >
-              搜索
-            </Button>
+            {/*<Button*/}
+            {/*  htmlType="submit"*/}
+            {/*  type="primary"*/}
+            {/*  shape="round"*/}
+            {/*  icon="search"*/}
+            {/*  onClick={(e) => {*/}
+            {/*    e.preventDefault();*/}
+            {/*    this._pageSearch(0);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  搜索*/}
+            {/*</Button>*/}
           </FormItem>
         </Form>
       </div>
@@ -179,9 +157,7 @@ export default class CouponsModal extends React.Component<any, any> {
             this._onSelectRow(selectedTableRows);
           },
           getCheckboxProps: (record) => ({
-            disabled:
-              record.couponStatus == 'NOT_START' ||
-              record.couponStatus == 'ENDED'
+            disabled: record.couponStatus == 'NOT_START' || record.couponStatus == 'ENDED'
           })
         }}
         pagination={{
@@ -193,67 +169,35 @@ export default class CouponsModal extends React.Component<any, any> {
           }
         }}
       >
-        <Column
-          title="优惠券名称"
-          dataIndex="couponName"
-          key="couponName"
-          width="15%"
-        />
+        <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
+
+        <Column title="Face  value( € )" dataIndex="denominationStr" key="denominationStr" width="10%" />
+
+        <Column title="Valid period" dataIndex="validity" key="validity" width="15%" />
+
+        {/*<Column*/}
+        {/*  title="优惠券分类"*/}
+        {/*  key="cateNamesStr"*/}
+        {/*  dataIndex="cateNamesStr"*/}
+        {/*  width="15%"*/}
+        {/*  render={(value) =>*/}
+        {/*    value.length > 12 ? `${value.substring(0, 12)}...` : value*/}
+        {/*  }*/}
+        {/*/>*/}
+
+        <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} />
+
+        <Column title="Status" key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
 
         <Column
-          title="面值"
-          dataIndex="denominationStr"
-          key="denominationStr"
-          width="10%"
-        />
-
-        <Column
-          title="有效期"
-          dataIndex="validity"
-          key="validity"
-          width="15%"
-        />
-
-        <Column
-          title="优惠券分类"
-          key="cateNamesStr"
-          dataIndex="cateNamesStr"
-          width="15%"
-          render={(value) =>
-            value.length > 12 ? `${value.substring(0, 12)}...` : value
-          }
-        />
-
-        <Column
-          title="使用范围"
-          key="scopeNamesStr"
-          dataIndex="scopeNamesStr"
-          width="15%"
-          render={(value) =>
-            value.length > 12 ? `${value.substring(0, 12)}...` : value
-          }
-        />
-
-        <Column
-          title="优惠券状态"
-          key="couponStatusStr"
-          dataIndex="couponStatusStr"
-          width="15%"
-        />
-
-        <Column
-          title="操作"
+          title="Operation"
           key="operate"
           width="15%"
           render={(row) => {
             return (
               <div>
                 <AuthWrapper functionName={'f_coupon_detail'}>
-                  <a
-                    style={{ textDecoration: 'none' }}
-                    href={`/coupon-detail/${row.couponId}`}
-                    target="_blank"
-                  >
+                  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
                     详情
                   </a>
                 </AuthWrapper>
@@ -291,12 +235,8 @@ export default class CouponsModal extends React.Component<any, any> {
    */
   _onSelectRow = (selectedTableRows) => {
     // 1.找出非当前页的选中项
-    const currentPageCouponIds = this.state.couponInfos.content.map(
-      (coupon) => coupon.couponId
-    );
-    const otherPageSelectedRows = this.state.selectedRows.filter(
-      (selectRow) => !currentPageCouponIds.includes(selectRow.couponId)
-    );
+    const currentPageCouponIds = this.state.couponInfos.content.map((coupon) => coupon.couponId);
+    const otherPageSelectedRows = this.state.selectedRows.filter((selectRow) => !currentPageCouponIds.includes(selectRow.couponId));
     // 2.合并当前页选中项与非当前页选中项
     this.setState({
       selectedRows: otherPageSelectedRows.concat(selectedTableRows)
@@ -342,41 +282,24 @@ export default class CouponsModal extends React.Component<any, any> {
       let couponInfos = res.context.couponInfos;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
-        coupon.denominationStr =
-          coupon.fullBuyType == 0
-            ? `满0减${coupon.denomination}`
-            : `满${coupon.fullBuyPrice}减${coupon.denomination}`;
+        coupon.denominationStr = coupon.fullBuyType == 0 ? `满0减${coupon.denomination}` : `满${coupon.fullBuyPrice}减${coupon.denomination}`;
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间
-          let startTime = moment(coupon.startTime)
-            .format(Const.DAY_FORMAT)
-            .toString();
-          let endTime = moment(coupon.endTime)
-            .format(Const.DAY_FORMAT)
-            .toString();
+          let startTime = moment(coupon.startTime).format(Const.DAY_FORMAT).toString();
+          let endTime = moment(coupon.endTime).format(Const.DAY_FORMAT).toString();
           coupon.startTime = coupon.validity = `${startTime} 至 ${endTime}`;
         } else {
           // 按N天有效
           coupon.validity = `领取当天${coupon.effectiveDays}日内有效`;
         }
         // 3.3.优惠券分类
-        coupon.cateNamesStr =
-          coupon.cateNames.length != 0
-            ? coupon.cateNames.reduce((a, b) => `${a},${b}`, '').substr(1)
-            : '其他';
+        coupon.cateNamesStr = coupon.cateNames.length != 0 ? coupon.cateNames.reduce((a, b) => `${a},${b}`, '').substr(1) : '其他';
         // 3.4.使用范围
         if ([0, 4].indexOf(coupon.scopeType) != -1) {
-          coupon.scopeNamesStr =
-            Const.couponScopeType[coupon.scopeType] +
-            coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1);
+          coupon.scopeNamesStr = Const.couponScopeType[coupon.scopeType] + coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1);
         } else {
-          coupon.scopeNamesStr =
-            Const.couponScopeType[coupon.scopeType] +
-            ':' +
-            (coupon.scopeNames.length != 0
-              ? coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1)
-              : '-');
+          coupon.scopeNamesStr = Const.couponScopeType[coupon.scopeType] + ':' + (coupon.scopeNames.length != 0 ? coupon.scopeNames.reduce((a, b) => `${a},${b}`, '').substr(1) : '-');
         }
         // 3.5.优惠券状态
         coupon.couponStatusStr = Const.couponStatus[coupon.couponStatus];

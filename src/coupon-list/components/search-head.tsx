@@ -47,25 +47,29 @@ export default class SearchHead extends React.Component<any, any> {
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label="Use range"
-            defaultValue="不限"
+            defaultValue="Non-limitation"
             onChange={(value) => {
               onFormFieldChange('scopeType', value);
             }}
           >
             <Select.Option key="-1" value="-1">
-              不限
+              Non-limitation
             </Select.Option>
             <Select.Option key="0" value="0">
-              {Const.couponScopeType[0]}
+              {/* {Const.couponScopeType[0]} */}
+              All products
             </Select.Option>
             <Select.Option key="1" value="1">
-              {Const.couponScopeType[1]}
+              {/* {Const.couponScopeType[1]} */}
+              Brands
             </Select.Option>
             <Select.Option key="3" value="3">
-              {Const.couponScopeType[3]}
+              {/* {Const.couponScopeType[3]} */}
+              Product category
             </Select.Option>
             <Select.Option key="4" value="4">
-              {Const.couponScopeType[4]}
+              {/* {Const.couponScopeType[4]} */}
+              Partial products
             </Select.Option>
           </SelectGroup>
         </FormItem>

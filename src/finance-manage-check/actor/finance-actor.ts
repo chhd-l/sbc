@@ -143,7 +143,7 @@ export default class FinanceActor extends Actor {
   }
 
   @Action('loading:end')
-  start(state: IMap) {
+  end(state: IMap) {
     return state.set('loading', false);
   }
 }

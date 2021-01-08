@@ -255,7 +255,7 @@ export default class CouponInfoForm extends Component<any, any> {
                     rules: [
                       {
                         required: rangeDayType === 0,
-                        message: '请输入起止时间'
+                        message: 'Please input the start and end time'
                       }
                     ]
                   })(
@@ -321,11 +321,11 @@ export default class CouponInfoForm extends Component<any, any> {
                   {getFieldDecorator('denomination', {
                     initialValue: denomination,
                     rules: [
-                      { required: true, message: '请输入优惠券面值' },
+                      { required: true, message: 'Please input the face value of coupon' },
                       {
                         validator: (_rule, value, callback) => {
                           if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                            callback('只允许输入1-99999间的整数');
+                            callback('Integers between 1-99999 are allowed');
                             return;
                           }
                           callback();
@@ -363,7 +363,7 @@ export default class CouponInfoForm extends Component<any, any> {
                       rules: [
                         {
                           required: fullBuyType === 1,
-                          message: '请输入使用门槛'
+                          message: 'Please input the usage threshold'
                         },
                         {
                           validator: (_rule, value, callback) => {
@@ -421,7 +421,7 @@ export default class CouponInfoForm extends Component<any, any> {
               </Radio>
             </RadioGroup>
           </FormItem>
-          <FormItem {...this._scopeBoxStyle(scopeType)} label="已选商品" id={'page-content'}>
+          <FormItem {...this._scopeBoxStyle(scopeType)} label="Selected products" id={'page-content'}>
             {this.chooseGoods().dom}
           </FormItem>
           <FormItem {...formItemLayout} label="Instructions for use">
@@ -523,7 +523,7 @@ export default class CouponInfoForm extends Component<any, any> {
     const { scopeType, chooseBrandIds, chooseCateIds, cates, chooseSkuIds } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     if (scopeType === 0) {
-      return { dom: '全部商品' };
+      return { dom: 'All products' };
     } else if (scopeType === 1) {
       return {
         dom: getFieldDecorator('chooseBrandIds', {

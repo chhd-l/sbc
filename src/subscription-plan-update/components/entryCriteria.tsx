@@ -28,12 +28,18 @@ export default class entryCriteria extends Component<any, any> {
               </Checkbox>
               <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
             </FormItem>
+            {
+            subscriptionPlan.signOnSubscription === 1 ? 
+            <FormItem> </FormItem> 
+            : null
+            }
+
             <FormItem>
               <Checkbox
                 checked={subscriptionPlan.otherPromotion === 1 ? true : false}
                 onChange={(e) => {
                   subscriptionPlan.otherPromotion = e.target.checked ? 1 : 0;
-                  addField('signOnSubscription', subscriptionPlan.otherPromotion);
+                  addField('otherPromotion', subscriptionPlan.otherPromotion);
                 }}
               >
                 Subscription Plan

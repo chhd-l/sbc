@@ -413,9 +413,9 @@ export default class CouponInfoForm extends Component<any, any> {
               {/*<Radio value={1}>
                 <span style={styles.darkColor}>按品牌</span>
               </Radio>*/}
-              <Radio value={3}>
-                <span style={styles.darkColor}>Base on category</span>
-              </Radio>
+              {/*<Radio value={3}>*/}
+              {/*  <span style={styles.darkColor}>Base on category</span>*/}
+              {/*</Radio>*/}
               <Radio value={4}>
                 <span style={styles.darkColor}>Custom</span>
               </Radio>

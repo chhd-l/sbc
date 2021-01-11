@@ -153,7 +153,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     ];
     if (type === 'all') {
       columns.push({
-        title: 'Result No.',
+        title: 'Total # of pdt. found',
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'

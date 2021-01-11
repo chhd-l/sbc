@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Checkbox, Row, Col, Select, Button } from 'antd';
+import { Form, Input, Checkbox, Row, Col, Select, Button, Tooltip } from 'antd';
 import AddConsent from '../modals/addConsent';
 
 const FormItem = Form.Item;
@@ -43,12 +43,15 @@ export default class entryCriteria extends Component<any, any> {
   }
 
   updateTable(selectedRowKeys) {
-    const { addField } = this.props;
+    const { addField, form } = this.props;
     const { allConsents } = this.state;
     if (selectedRowKeys) {
       let consents = allConsents.filter((x) => selectedRowKeys.includes(x.id));
       addField('consentTypes', consents);
       addField('consentTypeIds', selectedRowKeys);
+      form.setFieldsValue({
+        consentTypeIds: selectedRowKeys
+      });
     }
     this.setState({
       visible: false
@@ -58,7 +61,7 @@ export default class entryCriteria extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { subscriptionPlan, addField } = this.props;
-    const { visible } = this.state;
+    const { visible, allConsents } = this.state;
     return (
       <div>
         <h3>Step3</h3>
@@ -78,32 +81,45 @@ export default class entryCriteria extends Component<any, any> {
             </FormItem>
             {subscriptionPlan.signOnSubscription === 1 ? (
               <FormItem {...layout} label="Consent type">
-                {getFieldDecorator('consentTypeIds', {
-                  initialValue: subscriptionPlan.consentTypeIds,
-                  rules: [{ required: true, message: 'Please select Consent type' }]
-                })(
-                  <Row>
-                    <Col span={16}>
+                <Row>
+                  <Col span={16}>
+                    {getFieldDecorator('consentTypeIds', {
+                      initialValue: subscriptionPlan.consentTypeIds,
+                      rules: [{ required: true, message: 'Please select Consent type' }]
+                    })(
                       <Select
                         mode="multiple"
                         onChange={(value: any) => {
                           addField('consentTypeIds', value);
+                          let consents = allConsents.filter((x) => value.includes(x.id));
+                          addField('consentTypes', consents);
                         }}
+                        dropdownStyle={{display: 'none'}}
                       >
                         {subscriptionPlan.consentTypes &&
                           subscriptionPlan.consentTypes.map((item, index) => (
                             <Option value={item.id} key={index}>
-                              <div className="businessEnter" dangerouslySetInnerHTML={{ __html: item.name }} />
+                              <Tooltip
+                                overlayStyle={{
+                                  overflowY: 'auto'
+                                }}
+                                placement="bottomLeft"
+                                title={<div dangerouslySetInnerHTML={{ __html: item.name }} />}
+                              >
+                                <div className="overflow" dangerouslySetInnerHTML={{ __html: item.name }} />
+                              </Tooltip>
                             </Option>
                           ))}
                       </Select>
-                    </Col>
-                    <Col span={1}></Col>
-                    <Col span={4}>
-                      <Button type="primary" onClick={this.showAddConsent}>Add</Button>
-                    </Col>
-                  </Row>
-                )}
+                    )}
+                  </Col>
+                  <Col span={1}></Col>
+                  <Col span={4}>
+                    <Button type="primary" onClick={this.showAddConsent}>
+                      Add
+                    </Button>
+                  </Col>
+                </Row>
               </FormItem>
             ) : null}
 
